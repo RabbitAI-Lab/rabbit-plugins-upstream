@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/weights-and-biases",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/weights-and-biases",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/weights-and-biases",
+  "branch": "main",
+  "pushedAt": "2026-09-26T12:12:57Z",
+  "contentHash": "4639449d1f1156f0ec699328f742e108656fe6b99298ff12076b446aa4bebd00",
+  "fetchedAt": "2026-09-26T12:17:29.480Z"
+}

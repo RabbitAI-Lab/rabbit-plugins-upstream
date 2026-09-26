@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/database-lookup",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/database-lookup",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/database-lookup",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "df872bf498d5b9b25df5217c86198d8ca58f25dac9e4f92483f5b2bdc667e419",
+  "fetchedAt": "2026-09-26T12:17:41.398Z"
+}

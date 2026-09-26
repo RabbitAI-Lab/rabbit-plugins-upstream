@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/statistical-mechanics",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/statistical-mechanics",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/statistical-mechanics",
+  "branch": "main",
+  "pushedAt": "2026-09-26T12:12:57Z",
+  "contentHash": "8dfcd7d8cea746a33a39992b89b6b8d794351dbfc7ccd53b658774cd1a0bde27",
+  "fetchedAt": "2026-09-26T12:17:29.447Z"
+}

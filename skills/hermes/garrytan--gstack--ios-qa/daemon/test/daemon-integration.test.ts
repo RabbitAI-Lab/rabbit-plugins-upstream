@@ -24,7 +24,7 @@ const STATE_SERVER_TOKEN = 'rotated-mock-token-XXXXXXXX';
 
 // Stub iOS StateServer running on loopback. Mimics the real Swift server's
 // behavior for the integration test.
-function startStubStateServer(): Promise<{ server: Server; port: number; receivedRequests: Array<{ method: string; path: string; headers: Record<string, string | string[] | undefined>; body: string }> }> {
+function startStubStateServer(opts: { onUnauthorized?: (reply: () => void) => void } = {}): Promise<{ server: Server; port: number; receivedRequests: Array<{ method: string; path: string; headers: Record<string, string | string[] | undefined>; body: string }> }> {
   return new Promise((resolve) => {
     const received: Array<{ method: string; path: string; headers: Record<string, string | string[] | undefined>; body: string }> = [];
     const server = createServer((req, res) => {
@@ -37,8 +37,12 @@ function startStubStateServer(): Promise<{ server: Server; port: number; receive
         const auth = req.headers['authorization'];
         // Validate the bearer is our rotated token.
         if (!auth || auth !== `Bearer ${STATE_SERVER_TOKEN}`) {
-          res.writeHead(401, { 'content-type': 'application/json' });
-          res.end(JSON.stringify({ error: 'unauthorized' }));
+          const reply = () => {
+            res.writeHead(401, { 'content-type': 'application/json' });
+            res.end(JSON.stringify({ error: 'unauthorized' }));
+          };
+          if (opts.onUnauthorized) opts.onUnauthorized(reply);
+          else reply();
           return;
         }
 
@@ -105,6 +109,83 @@ describe('daemon — loopback listener', () => {
     await daemon?.close();
     stub.server.close();
     rmSync(workDir, { recursive: true, force: true });
+  });
+
+  test('/auth/sessions returns salted-hash ids and metadata, never raw tokens', async () => {
+    const minted = daemon.tokenStore.mint({
+      identity: 'owner@example.com',
+      capability: 'interact',
+      deviceUdid: 'STUB-UDID',
+      origin: 'owner_granted',
+    });
+    if ('error' in minted) throw new Error(minted.error);
+    try {
+      const r = await fetchWith('GET', `http://127.0.0.1:${daemon.loopbackPort}/auth/sessions`);
+      expect(r.status).toBe(200);
+      // The harvest-and-replay primitive: any local process could read live
+      // bearer tokens off this endpoint. The raw token must never appear.
+      expect(r.bodyText).not.toContain(minted.token);
+
+      const { sessions } = JSON.parse(r.bodyText) as { sessions: Array<Record<string, unknown>> };
+      const row = sessions.find(s => s.identity === 'owner@example.com');
+      expect(row).toMatchObject({
+        capability: 'interact',
+        device_udid: 'STUB-UDID',
+        origin: 'owner_granted',
+        expires_at: minted.expires_at,
+      });
+      expect(row?.token_id).toMatch(/^[0-9a-f]{16}$/);
+      expect(row?.token).toBeUndefined();
+    } finally {
+      daemon.tokenStore.revoke(minted.token);
+    }
+  });
+
+  test('revoke by token_id from the hash-only list still works (list→revoke)', async () => {
+    const minted = daemon.tokenStore.mint({
+      identity: 'revoke-by-id@example.com',
+      capability: 'observe',
+      origin: 'owner_granted',
+    });
+    if ('error' in minted) throw new Error(minted.error);
+
+    const list = await fetchWith('GET', `http://127.0.0.1:${daemon.loopbackPort}/auth/sessions`);
+    const { sessions } = JSON.parse(list.bodyText) as { sessions: Array<Record<string, unknown>> };
+    const row = sessions.find(s => s.identity === 'revoke-by-id@example.com');
+    expect(row?.token_id).toBeDefined();
+
+    const revoke = await fetchWith('POST', `http://127.0.0.1:${daemon.loopbackPort}/auth/revoke`, {
+      body: JSON.stringify({ token_id: row!.token_id }),
+    });
+    expect(revoke.status).toBe(200);
+    expect(JSON.parse(revoke.bodyText).revoked).toBe(1);
+    expect(daemon.tokenStore.list().some(s => s.identity === 'revoke-by-id@example.com')).toBe(false);
+  });
+
+  test('revoke with an unknown token_id revokes nothing and leaves live sessions untouched', async () => {
+    const minted = daemon.tokenStore.mint({
+      identity: 'unknown-id-survivor@example.com',
+      capability: 'observe',
+      origin: 'owner_granted',
+    });
+    if ('error' in minted) throw new Error(minted.error);
+    try {
+      // Well-formed (16 hex chars) but matches no session's salted hash.
+      const revoke = await fetchWith('POST', `http://127.0.0.1:${daemon.loopbackPort}/auth/revoke`, {
+        body: JSON.stringify({ token_id: '0'.repeat(16) }),
+      });
+      expect(revoke.status).toBe(200);
+      expect(JSON.parse(revoke.bodyText).revoked).toBe(0);
+
+      // The minted session must survive: still in the token store...
+      expect(daemon.tokenStore.list().some(s => s.identity === 'unknown-id-survivor@example.com')).toBe(true);
+      // ...and still visible on the list endpoint.
+      const list = await fetchWith('GET', `http://127.0.0.1:${daemon.loopbackPort}/auth/sessions`);
+      const { sessions } = JSON.parse(list.bodyText) as { sessions: Array<Record<string, unknown>> };
+      expect(sessions.some(s => s.identity === 'unknown-id-survivor@example.com')).toBe(true);
+    } finally {
+      daemon.tokenStore.revoke(minted.token);
+    }
   });
 
   test('healthz returns 200 with mode=loopback', async () => {
@@ -219,49 +300,69 @@ describe('daemon — loopback listener', () => {
     let releaseRefresh!: () => void;
     const refreshStarted = new Promise<void>((resolve) => { markRefreshStarted = resolve; });
     const refreshGate = new Promise<void>((resolve) => { releaseRefresh = resolve; });
+    // Hold the actual 401 responses until all three stale attempts arrive.
+    // Otherwise a later request can correctly join the refresh without ever
+    // using the expired token, so elapsed time cannot establish concurrency.
+    let markFirstStale!: () => void;
+    let markAllStale!: () => void;
+    const firstStale = new Promise<void>((resolve) => { markFirstStale = resolve; });
+    const allStale = new Promise<void>((resolve) => { markAllStale = resolve; });
+    const staleReplies: Array<() => void> = [];
+    const releaseStale = () => { for (const reply of staleReplies.splice(0)) reply(); };
+    const relaunchStub = await startStubStateServer({
+      onUnauthorized: (reply) => {
+        staleReplies.push(reply);
+        if (staleReplies.length === 1) markFirstStale();
+        if (staleReplies.length === 3) markAllStale();
+      },
+    });
     const staleTunnel: DeviceTunnel = {
       udid: 'STUB-UDID',
       ipv6Addr: '127.0.0.1',
-      port: stub.port,
+      port: relaunchStub.port,
       bootTokenRotated: 'expired-after-relaunch',
     };
     const refreshedTunnel: DeviceTunnel = {
       ...staleTunnel,
       bootTokenRotated: STATE_SERVER_TOKEN,
     };
-    const d = await startDaemon({
-      loopbackPort: 0,
-      tailnetEnabled: false,
-      pidfilePath: join(workDir, 'daemon-relaunch-refresh.pid'),
-      tunnelProvider: async () => {
-        bootstraps++;
-        if (bootstraps === 1) return staleTunnel;
-        if (bootstraps === 2) {
-          markRefreshStarted();
-          await refreshGate;
-          return refreshedTunnel;
-        }
-        throw new Error('concurrent 401s caused duplicate bootstraps');
-      },
-    });
-    if ('error' in d) throw new Error(d.error);
-
-    const requestStart = stub.receivedRequests.length;
+    let d: RunningDaemon | undefined;
     try {
+      const started = await startDaemon({
+        loopbackPort: 0,
+        tailnetEnabled: false,
+        pidfilePath: join(workDir, 'daemon-relaunch-refresh.pid'),
+        tunnelProvider: async () => {
+          bootstraps++;
+          if (bootstraps === 1) return staleTunnel;
+          if (bootstraps === 2) {
+            markRefreshStarted();
+            await refreshGate;
+            return refreshedTunnel;
+          }
+          throw new Error('concurrent 401s caused duplicate bootstraps');
+        },
+      });
+      if ('error' in started) throw new Error(started.error);
+      d = started;
       const base = `http://127.0.0.1:${d.loopbackPort}`;
+      const first = fetchWith('GET', `${base}/screenshot`);
+      await firstStale;
       const requests = [
-        fetchWith('GET', `${base}/screenshot`),
+        first,
         fetchWith('GET', `${base}/screenshot`),
         fetchWith('GET', `${base}/screenshot`),
       ];
+      await allStale;
+      expect(bootstraps).toBe(1);
+      releaseStale();
       await refreshStarted;
-      await new Promise((resolve) => setTimeout(resolve, 25));
       expect(bootstraps).toBe(2);
       releaseRefresh();
 
       const responses = await Promise.all(requests);
       expect(responses.map((response) => response.status)).toEqual([200, 200, 200]);
-      const attempts = stub.receivedRequests.slice(requestStart);
+      const attempts = relaunchStub.receivedRequests;
       expect(attempts.filter((request) => request.headers.authorization === 'Bearer expired-after-relaunch')).toHaveLength(3);
       expect(attempts.filter((request) => request.headers.authorization === `Bearer ${STATE_SERVER_TOKEN}`)).toHaveLength(3);
 
@@ -269,8 +370,10 @@ describe('daemon — loopback listener', () => {
       expect(healthyReuse.status).toBe(200);
       expect(bootstraps).toBe(2);
     } finally {
+      releaseStale();
       releaseRefresh();
-      await d.close();
+      try { await d?.close(); }
+      finally { await new Promise<void>((resolve, reject) => relaunchStub.server.close((error) => error ? reject(error) : resolve())); }
     }
   });
 
@@ -389,7 +492,12 @@ describe('daemon — loopback listener', () => {
     await daemon.close();
     pidPath = join(workDir, 'daemon-2.pid');
     const d2 = await startDaemon({
-      loopbackPort: daemon.loopbackPort + 1,
+      // OS-assigned like every other start in this file — the old
+      // `daemon.loopbackPort + 1` bound a fixed neighbor port and flaked
+      // whenever another shard/TIME_WAIT socket held it (windows-free-tests:
+      // "Is port 55738 in use?"). The fetch below reads d2.loopbackPort, so
+      // nothing needs a predictable number.
+      loopbackPort: 0,
       tailnetEnabled: false,
       pidfilePath: pidPath,
       tunnelProvider: async () => null,

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scholar-evaluation",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scholar-evaluation",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scholar-evaluation",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "ca306bf88cd646c066adb914f16c39ace4469674d46d959a7257b29b998df8de",
+  "fetchedAt": "2026-09-26T12:17:41.522Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/molecular-optimization",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/molecular-optimization",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/molecular-optimization",
+  "branch": "main",
+  "pushedAt": "2026-09-26T12:12:57Z",
+  "contentHash": "a962fa47ae14d4d1cf84a631b53ae3931886358d7459020ea7a58ad495466b46",
+  "fetchedAt": "2026-09-26T12:17:29.273Z"
+}
