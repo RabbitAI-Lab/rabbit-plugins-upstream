@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-cloudformation",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-cloudformation",
+  "branch": "main",
+  "pushedAt": "2026-09-26T06:30:34Z",
+  "contentHash": "531340df8e6190b43898c46864c59bd9d17a65612ef4318cef766a07e3e0ee26",
+  "fetchedAt": "2026-09-26T12:19:15.948Z"
+}

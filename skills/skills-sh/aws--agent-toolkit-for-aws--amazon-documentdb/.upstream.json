@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-documentdb",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-documentdb",
+  "branch": "main",
+  "pushedAt": "2026-09-26T06:30:34Z",
+  "contentHash": "af18317db4cb45673242bbb5ce3af9219c6576e574330a960f3dc25aa5275802",
+  "fetchedAt": "2026-09-26T12:19:16.332Z"
+}

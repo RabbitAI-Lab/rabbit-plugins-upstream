@@ -1,0 +1,379 @@
+import type { Device, Orientation, SlideLayout, Theme, ThemeId } from "./types";
+
+// ---------- Canvas dimensions (design at largest required resolution) ----------
+export const CANVAS: Record<Device, { w: number; h: number; wL?: number; hL?: number }> = {
+  iphone:        { w: 1320, h: 2868 },
+  ipad:          { w: 2064, h: 2752 },
+  android:       { w: 1080, h: 1920 },
+  "android-7":   { w: 1200, h: 1920, wL: 1920, hL: 1200 },
+  "android-10":  { w: 1600, h: 2560, wL: 2560, hL: 1600 },
+  "feature-graphic": { w: 1024, h: 500 },
+};
+
+// ---------- Export sizes per device ----------
+export type ExportSize = { label: string; w: number; h: number };
+
+export const EXPORT_SIZES: Record<Device, ExportSize[]> = {
+  iphone: [
+    { label: '6.9"', w: 1320, h: 2868 },
+    { label: '6.5"', w: 1284, h: 2778 },
+    { label: '6.3"', w: 1206, h: 2622 },
+    { label: '6.1"', w: 1125, h: 2436 },
+  ],
+  ipad: [
+    { label: '13" iPad',       w: 2064, h: 2752 },
+    { label: '12.9" iPad Pro', w: 2048, h: 2732 },
+  ],
+  android:       [{ label: "Phone",          w: 1080, h: 1920 }],
+  "android-7":   [{ label: '7" Portrait',    w: 1200, h: 1920 }],
+  "android-10":  [{ label: '10" Portrait',   w: 1600, h: 2560 }],
+  "feature-graphic": [{ label: "Feature Graphic", w: 1024, h: 500 }],
+};
+
+// Landscape sizes (tablets only)
+export const EXPORT_SIZES_LANDSCAPE: Partial<Record<Device, ExportSize[]>> = {
+  "android-7":  [{ label: '7" Landscape',  w: 1920, h: 1200 }],
+  "android-10": [{ label: '10" Landscape', w: 2560, h: 1600 }],
+};
+
+export function supportsLandscape(device: Device): boolean {
+  return device in EXPORT_SIZES_LANDSCAPE;
+}
+
+export function getExportSizes(device: Device, orientation: Orientation): ExportSize[] {
+  if (orientation === "landscape") {
+    return EXPORT_SIZES_LANDSCAPE[device] || EXPORT_SIZES[device];
+  }
+  return EXPORT_SIZES[device];
+}
+
+// ---------- Frame aspect ratios ----------
+export const MK_RATIO    = 1022 / 2082; // iPhone PNG mockup
+export const TAB_P_RATIO = 0.667;        // tablet portrait
+export const TAB_L_RATIO = 1.5;          // tablet landscape
+export const IPAD_RATIO  = 0.770;        // iPad
+
+// iPhone mockup screen overlay (pre-measured)
+export const PHONE_SCREEN = {
+  L: (52 / 1022) * 100,
+  T: (46 / 2082) * 100,
+  W: (918 / 1022) * 100,
+  H: (1990 / 2082) * 100,
+  RX: (126 / 918) * 100,
+  RY: (126 / 1990) * 100,
+};
+
+// ---------- Width formula helpers ----------
+export function phoneW(cW: number, cH: number, clamp = 0.84) {
+  return Math.min(clamp, 0.72 * (cH / cW) * MK_RATIO);
+}
+export function phoneWSmall(cW: number, cH: number) {
+  return phoneW(cW, cH, 0.66);
+}
+export function tabletPW(cW: number, cH: number, clamp = 0.80) {
+  return Math.min(clamp, 0.72 * (cH / cW) * TAB_P_RATIO);
+}
+export function tabletLW(cW: number, cH: number, clamp = 0.62) {
+  return Math.min(clamp, 0.75 * (cH / cW) * TAB_L_RATIO);
+}
+export function ipadW(cW: number, cH: number, clamp = 0.75) {
+  return Math.min(clamp, 0.72 * (cH / cW) * IPAD_RATIO);
+}
+
+// ---------- Themes ----------
+export const DEFAULT_THEME_ID: ThemeId = "clean-light";
+
+export const THEMES: Record<string, Theme> = {
+  "clean-light": {
+    id: "clean-light",
+    name: "Clean Light",
+    bg: "#F6F1EA",
+    bgAlt: "#171717",
+    fg: "#171717",
+    fgAlt: "#F6F1EA",
+    accent: "#5B7CFA",
+    muted: "#6B7280",
+  },
+  "dark-bold": {
+    id: "dark-bold",
+    name: "Dark Bold",
+    bg: "#0B1020",
+    bgAlt: "#F8FAFC",
+    fg: "#F8FAFC",
+    fgAlt: "#0B1020",
+    accent: "#8B5CF6",
+    muted: "#94A3B8",
+  },
+  "warm-editorial": {
+    id: "warm-editorial",
+    name: "Warm Editorial",
+    bg: "#F7E8DA",
+    bgAlt: "#2B1D17",
+    fg: "#2B1D17",
+    fgAlt: "#F7E8DA",
+    accent: "#D97706",
+    muted: "#7C5A47",
+  },
+  "ocean-fresh": {
+    id: "ocean-fresh",
+    name: "Ocean Fresh",
+    bg: "#E0F2FE",
+    bgAlt: "#0C4A6E",
+    fg: "#0C4A6E",
+    fgAlt: "#E0F2FE",
+    accent: "#0284C7",
+    muted: "#475569",
+  },
+  "bloom-roast": {
+    id: "bloom-roast",
+    name: "Bloom Roast",
+    bg: "#F2ECE2",
+    bgAlt: "#24352F",
+    fg: "#1D2420",
+    fgAlt: "#FFF7EA",
+    accent: "#B8794A",
+    muted: "#65736B",
+  },
+  // Named style presets. Flat palettes for the basic renderer; the deep spec in
+  // style-prompts/<id>.md still drives fonts, backgrounds, and decoration.
+  "hand-drawn-editorial-tasks": {
+    id: "hand-drawn-editorial-tasks",
+    name: "Hand-Drawn Editorial",
+    bg: "#F5EFDF",
+    bgAlt: "#1B2336",
+    fg: "#1B2336",
+    fgAlt: "#F5EFDF",
+    accent: "#B53A24",
+    accentAlt: "#F26A50",
+    muted: "#5A6275",
+  },
+  "retro-rubberhose-mascot": {
+    id: "retro-rubberhose-mascot",
+    name: "Retro Rubberhose",
+    bg: "#F4E6CC",
+    bgAlt: "#5C3A1E",
+    fg: "#2A2118",
+    fgAlt: "#F4E6CC",
+    accent: "#B23A2A",
+    accentAlt: "#F2BB46",
+    muted: "#6E5236",
+  },
+  "moody-curated-dating": {
+    id: "moody-curated-dating",
+    name: "Moody Curated",
+    bg: "#1F1C1A",
+    bgAlt: "#F4EBDD",
+    fg: "#F4EBDD",
+    fgAlt: "#1F1C1A",
+    accent: "#E8B97A",
+    accentAlt: "#7A4F2A",
+    muted: "#B8AFA2",
+  },
+  "paper-sticker-skeuomorphic": {
+    id: "paper-sticker-skeuomorphic",
+    name: "Paper Sticker",
+    bg: "#F8F0E2",
+    bgAlt: "#8FBE7C",
+    fg: "#1F2A44",
+    fgAlt: "#1F2A44",
+    accent: "#2B6CB0",
+    accentAlt: "#1E3F7A",
+    muted: "#6B6457",
+  },
+  "dreamy-pastel-couples": {
+    id: "dreamy-pastel-couples",
+    name: "Dreamy Pastel",
+    bg: "#F5E0F0",
+    bgAlt: "#1B2240",
+    fg: "#1B2240",
+    fgAlt: "#F5E0F0",
+    accent: "#5B3FC8",
+    accentAlt: "#C9B6F2",
+    muted: "#5E5A7A",
+  },
+  "glossy-3d-kbeauty-creator": {
+    id: "glossy-3d-kbeauty-creator",
+    name: "Glossy 3D K-Beauty",
+    bg: "#3B266B",
+    bgAlt: "#F4EEFB",
+    fg: "#FFFFFF",
+    fgAlt: "#3B266B",
+    accent: "#FBE254",
+    accentAlt: "#7B3FD0",
+    muted: "#C9B8E8",
+  },
+  "liquid-glass-aurora": {
+    id: "liquid-glass-aurora",
+    name: "Liquid Glass Aurora",
+    bg: "#F4F1FB",
+    bgAlt: "#1B1730",
+    fg: "#16131F",
+    fgAlt: "#F4F1FB",
+    accent: "#4A2FC0",
+    accentAlt: "#B9A8FF",
+    muted: "#4A4660",
+  },
+  "swiss-grid-bold": {
+    id: "swiss-grid-bold",
+    name: "Swiss Grid Bold",
+    bg: "#F2F1EC",
+    bgAlt: "#0E0E0C",
+    fg: "#0E0E0C",
+    fgAlt: "#F2F1EC",
+    accent: "#C23B00",
+    accentAlt: "#FF4F00",
+    muted: "#5E5D57",
+  },
+  "neon-athletic-night": {
+    id: "neon-athletic-night",
+    name: "Neon Athletic Night",
+    bg: "#0A0B0D",
+    bgAlt: "#D4FF3A",
+    fg: "#F4F5F0",
+    fgAlt: "#0A0B0D",
+    accent: "#D4FF3A",
+    accentAlt: "#0A0B0D",
+    muted: "#A3A8AF",
+  },
+  "magazine-cover-editorial": {
+    id: "magazine-cover-editorial",
+    name: "Magazine Cover",
+    bg: "#F1EBE1",
+    bgAlt: "#7A2320",
+    fg: "#1A1714",
+    fgAlt: "#F6EFE3",
+    accent: "#7A2320",
+    accentAlt: "#F1D9C9",
+    muted: "#4A423A",
+  },
+  "candy-pop-social": {
+    id: "candy-pop-social",
+    name: "Candy Pop Social",
+    bg: "#C6F135",
+    bgAlt: "#2B44F0",
+    fg: "#16121F",
+    fgAlt: "#FFFFFF",
+    accent: "#2B44F0",
+    accentAlt: "#FFE23D",
+    muted: "#4A3F5C",
+  },
+  "soft-clay-wellness": {
+    id: "soft-clay-wellness",
+    name: "Soft Clay Wellness",
+    bg: "#EFE7DA",
+    bgAlt: "#3A2B3A",
+    fg: "#3A2E27",
+    fgAlt: "#F3EBDD",
+    accent: "#9A4B31",
+    accentAlt: "#E6A585",
+    muted: "#6E5A4C",
+  },
+  "midnight-glow-pro": {
+    id: "midnight-glow-pro",
+    name: "Midnight Glow Pro",
+    bg: "#07080B",
+    bgAlt: "#F4F5F8",
+    fg: "#F4F5F8",
+    fgAlt: "#0B0C12",
+    accent: "#B3AFFF",
+    accentAlt: "#3B38C8",
+    muted: "#B4B9C6",
+  },
+  "risograph-zine": {
+    id: "risograph-zine",
+    name: "Risograph Zine",
+    bg: "#F4F0E6",
+    bgAlt: "#321871",
+    fg: "#3255A4",
+    fgAlt: "#F4F0E6",
+    accent: "#C8006A",
+    accentAlt: "#FF8FD0",
+    muted: "#5E4E7A",
+  },
+  "bento-keynote-grid": {
+    id: "bento-keynote-grid",
+    name: "Bento Keynote",
+    bg: "#F5F5F7",
+    bgAlt: "#1D1D1F",
+    fg: "#1D1D1F",
+    fgAlt: "#F5F5F7",
+    accent: "#B4441C",
+    accentAlt: "#FF9F6B",
+    muted: "#5E5E63",
+  },
+  "toybox-primary": {
+    id: "toybox-primary",
+    name: "Toybox Primary",
+    bg: "#FFF6E6",
+    bgAlt: "#3FA9F5",
+    fg: "#1F1A4D",
+    fgAlt: "#1F1A4D",
+    accent: "#6236D9",
+    accentAlt: "#1F1A4D",
+    muted: "#5B5480",
+  },
+  "quiet-japandi": {
+    id: "quiet-japandi",
+    name: "Quiet Japandi",
+    bg: "#F3F0EA",
+    bgAlt: "#1E1D1B",
+    fg: "#1E1D1B",
+    fgAlt: "#F3F0EA",
+    accent: "#C8321E",
+    accentAlt: "#E8836F",
+    muted: "#4E4B46",
+  },
+  "vintage-travel-poster": {
+    id: "vintage-travel-poster",
+    name: "Vintage Travel Poster",
+    bg: "#4B2E4F",
+    bgAlt: "#F1E4C8",
+    fg: "#F1E4C8",
+    fgAlt: "#1C1A17",
+    accent: "#E8B04A",
+    accentAlt: "#A8401C",
+    muted: "#D8C6A6",
+  },
+};
+
+export function themeById(themeId: string | undefined): Theme {
+  return THEMES[themeId || ""] || THEMES[DEFAULT_THEME_ID];
+}
+
+export function hasTheme(themeId: string | undefined): boolean {
+  return !!themeId && !!THEMES[themeId];
+}
+
+export const STORAGE_KEY = "app-store-screenshots:project:v1";
+export const PROJECT_SCHEMA_VERSION = 2;
+
+export const DEVICE_LABEL: Record<Device, string> = {
+  iphone: "iPhone",
+  ipad: "iPad",
+  android: "Android Phone",
+  "android-7": 'Android 7" Tablet',
+  "android-10": 'Android 10" Tablet',
+  "feature-graphic": "Feature Graphic",
+};
+
+// Friendly labels for slide layouts (used in dropdowns)
+export const LAYOUT_LABEL: Record<SlideLayout, string> = {
+  hero: "Hero",
+  "device-bottom": "Device bottom",
+  "device-top": "Device top",
+  "two-devices": "Two devices",
+  "no-device": "No device",
+  "split-landscape": "Split (landscape)",
+  "feature-graphic": "Feature graphic",
+};
+
+// Short description shown under each layout name
+export const LAYOUT_HINT: Record<SlideLayout, string> = {
+  hero: "Headline above, device at bottom",
+  "device-bottom": "Headline top, device anchored below",
+  "device-top": "Flipped — device on top",
+  "two-devices": "Layered back + front phones",
+  "no-device": "Big standalone headline",
+  "split-landscape": "Caption left, device right",
+  "feature-graphic": "1024×500 Play Store banner",
+};
