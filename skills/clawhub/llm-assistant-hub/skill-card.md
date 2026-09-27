@@ -1,47 +1,58 @@
-## Description: <br>
-Llm Assistant Hub helps agents analyze long commercial and legal documents through layered review, assumption detection, structured compression, and document-version comparison. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+LLM助手中枢 helps agents analyze, compress, and compare long commercial or legal documents using tiered review, chunking, assumption checks, and risk-marked summaries.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Employees, external reviewers, and agent operators use this skill to prepare structured reviews of long contracts, business memoranda, proposals, policies, and revised document versions. It is intended to support analysis and triage, not to replace legal, tax, compliance, or commercial approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may receive sensitive commercial, legal, or client documents through read access. <br>
-Mitigation: Use it only with documents the operator is authorized to share, and avoid confidential material unless the execution environment and data handling are approved. <br>
-Risk: The optional callback_url can move analysis results or document-derived information outside the current agent environment. <br>
-Mitigation: Do not use callback_url for confidential material unless the platform clearly identifies the destination and the transfer is approved. <br>
-Risk: Potential shell execution authority can expand the impact of an unsafe or mistaken workflow. <br>
-Mitigation: Review any command before execution, run in a restricted workspace, and grant shell access only when required. <br>
-Risk: Documents submitted for analysis may contain API keys, credentials, or other secrets. <br>
-Mitigation: Remove secrets before analysis and do not place API keys or credentials in submitted documents. <br>
-Risk: Legal or business analysis may be incomplete or overconfident. <br>
-Mitigation: Treat outputs as review support and escalate legal, tax, compliance, or final business decisions to qualified reviewers. <br>
+## Use Case:
 
+External users, employees, and developers use this skill to review long contracts, memoranda, proposals, and policies; compare document versions; surface assumptions, contradictions, and risk signals; and produce decision-ready summaries. It is not a substitute for licensed legal advice or deterministic high-stakes decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/llm-assistant-hub) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, guidance] <br>
-**Output Format:** [Structured Markdown reports and JSON-style responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include document assessments, risk flags, assumptions, suggested next actions, metadata, and execution logs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence and target metadata) <br>
+Risk: The release requests exec, write, search, and file-globbing powers that are broader than the stated document-analysis purpose.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation and prefer a narrowed version that removes exec and write unless a concrete workflow requires them.
+
+Risk: Credential and integration guidance is inconsistent, with the artifact saying both that no API key is needed and that API keys or callbacks may be configured.
+
+Mitigation: Confirm whether credentials, network calls, callbacks, or file writes are required before use, and do not provide secrets unless the requirement is explicit and trusted.
+
+Risk: The skill targets commercial and legal documents, where model outputs can be mistaken for authoritative legal or business determinations.
+
+Mitigation: Use outputs as review support only, preserve uncertainty markers, and route legal, contractual, or regulated decisions to qualified reviewers.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/llm-assistant-hub)
+- [ClawHub publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, guidance]
+
+**Output Format:** [Markdown analysis reports with optional JSON, text, or CSV result structure.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include document assessment, core logic, risk markers, structural improvements, assumptions, next steps, and version-difference summaries.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

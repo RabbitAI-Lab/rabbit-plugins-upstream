@@ -1,43 +1,60 @@
-## Description: <br>
-帮带娃家庭轻松出行，提供儿童票政策查询、亲子友好景点推荐和年龄段出行打包清单，覆盖机票火车景点三大票务场景。暑期亲子游全流程，吃住行玩一站式 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮带娃家庭轻松出行，提供儿童票政策查询、亲子友好景点推荐和年龄段出行打包清单，覆盖机票火车景点三大票务场景。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Families and travel-planning agents use this skill to check child ticket policies, find child-friendly attractions, and generate age-aware packing guidance for trips with children. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Destination names, city names, attraction keywords, and weather lookup locations are sent to external proxy services. <br>
-Mitigation: Enter only the travel details needed for the query and avoid highly sensitive itinerary details. <br>
-Risk: The security guidance flags the hard-coded proxy token as a publisher security issue. <br>
-Mitigation: Prefer a publisher-managed environment token, rotate exposed tokens, and monitor proxy use for abuse. <br>
-Risk: Ticket policies, prices, and venue requirements may differ from the skill's general guidance. <br>
-Mitigation: Confirm child ticket rules and medical or safety decisions with the relevant carrier, railway operator, venue, or professional source before travel. <br>
+## Use Case:
 
+External family travelers and caregivers use this skill to check child ticket guidance, find child-friendly attractions, and generate age-aware packing checklists for family trips.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/family-travel-assistant) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Guidance] <br>
-**Output Format:** [JSON command results that an agent can summarize as text or markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include child ticket policy guidance, attraction recommendations, packing checklist items, weather notes, and travel tips.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Travel queries are sent to external proxy-backed travel and weather services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid entering unnecessary personal details and install only if this data sharing is acceptable.
+
+Risk: Ticket policies and prices may differ by provider, route, or attraction.
+
+Mitigation: Verify ticket policies with official providers before purchase.
+
+Risk: Packing and travel tips may mention child health supplies but are not medical advice.
+
+Mitigation: Consult a qualified clinician for child medication, dosing, or health decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/family-travel-assistant)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+- [Tuniu proxy service](https://1439498936-0junm3maxj.ap-guangzhou.tencentscf.com)
+- [Gaode weather proxy service](https://gaode-proxy-jerspxcked.cn-hangzhou.fcapp.run)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, JSON]
+
+**Output Format:** [Markdown-style travel guidance and JSON command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include child ticket policy summaries, attraction recommendations, weather-aware packing lists, and family travel tips.]
+
+## Skill Version(s):
+
+1.0.9 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

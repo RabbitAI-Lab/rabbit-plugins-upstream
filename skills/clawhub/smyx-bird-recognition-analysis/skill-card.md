@@ -1,45 +1,59 @@
-## Description: <br>
-Identifies bird species in images or videos, supports recognition of at least 500 common species, and can produce structured bird-recognition reports for ecological observation and birdwatching use cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies bird species in target-area images or videos, supports at least 500 common species and custom model training, and returns structured bird recognition reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze bird images, videos, or URLs, identify likely species, and retrieve prior cloud-generated recognition reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends bird images, videos, URLs, and an internal user identifier to a remote Life Emergence service for processing. <br>
-Mitigation: Install and use it only when remote processing of those inputs is acceptable for the user, organization, and data involved. <br>
-Risk: The skill can create local workspace data that may include reusable account or session tokens. <br>
-Mitigation: Prefer a release that documents storage and cleanup behavior, and review local workspace data handling before deployment. <br>
-Risk: The skill supports cloud history access for account-linked recognition reports. <br>
-Mitigation: Confirm that cloud history access is expected and appropriately disclosed before using report-listing features. <br>
+## Use Case:
 
+External users, developers, and ecological observers use this skill to identify bird species in supplied images or videos and retrieve structured recognition reports or report history through a cloud API.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-bird-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands] <br>
-**Output Format:** [Markdown or JSON text with report links and recognition results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report links and historical report listings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release metadata; SKILL.md frontmatter reports 1.0.7) <br>
+Risk: Bird images or videos are sent to the Life Emergence cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer non-sensitive media unless the publisher documents retention, deletion, and handling controls that meet the deployment requirements.
+
+Risk: The skill may silently create or reuse an external identity and store local access tokens in a workspace SQLite database.
+
+Mitigation: Review identity, account deletion, and token cleanup controls before installation or shared-workspace use.
+
+Risk: Cloud report history can be retrieved through the skill.
+
+Mitigation: Use account separation and access controls appropriate for the reports that may be available through the linked cloud account.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-bird-recognition-analysis)
+- [API 接口文档](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and text with JSON report content and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May write recognition results to a caller-specified output file.]
+
+## Skill Version(s):
+
+1.0.21 (source: server release metadata; artifact frontmatter reports 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

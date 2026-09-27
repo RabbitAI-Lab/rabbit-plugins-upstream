@@ -1,44 +1,57 @@
-## Description: <br>
-csv-handler-free helps agents inspect, read, clean, and export CSV files by detecting common encodings and delimiters, profiling row and column structure, normalizing column names, dropping empty rows, and writing UTF-8-SIG CSV output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+自动检测编码与分隔符，读取并清洗CSV数据，支持基础合并与导出。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers, analysts, and operations teams use this skill when an agent needs to inspect a single CSV file, detect its encoding and delimiter, perform basic cleanup, and export a cleaned CSV for downstream work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local CSV files and write exported CSV outputs. <br>
-Mitigation: Review input and output paths before allowing the agent to access files or write results. <br>
-Risk: The skill may run local processing commands while handling CSV data. <br>
-Mitigation: Approve only expected CSV-processing commands and review generated code before execution. <br>
-Risk: Supplying a callback URL could expose completion metadata or sensitive workflow context to an external endpoint. <br>
-Mitigation: Use callback URLs only for intended external notifications and avoid them for sensitive CSV work. <br>
-Risk: Malformed CSV rows may be skipped during parsing, which can make outputs incomplete. <br>
-Mitigation: Check row counts and parser warnings against the original file before relying on cleaned results. <br>
+## Use Case:
 
+Developers, analysts, and automation teams use this skill to inspect CSV files, detect encodings and delimiters, clean tabular data, and export results for reporting, analysis, or visualization workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/csv-handler-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with Python code snippets, shell configuration examples, JSON-style status results, and exported CSV files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads local CSV inputs, may run local processing commands, and may write cleaned CSV outputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill requests broad command execution for a workflow that is primarily local CSV processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands before execution and run only commands needed for local CSV inspection, cleaning, or export.
+
+Risk: The security evidence notes API key and external API language without a clear CSV-related need.
+
+Mitigation: Avoid providing API keys or other credentials unless a trusted workflow explicitly requires them.
+
+Risk: The security verdict is suspicious because unrestricted command execution could expose local files or sensitive data.
+
+Mitigation: Use the skill on trusted local CSV files in a sandboxed agent session with command approval enabled.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/csv-handler-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline Python and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose CSV profile summaries, cleaned data handling steps, export instructions, and error-handling guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,58 @@
-## Description: <br>
-Automate web browser interactions using natural language via CLI commands for browsing, page navigation, data extraction, screenshots, form filling, button clicks, and web application interaction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automate web browser interactions using natural language via CLI commands.
 
-## Publisher: <br>
-[peytoncasper](https://clawhub.ai/user/peytoncasper) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[peytoncasper](https://clawhub.ai/user/peytoncasper)
 
-## Use Case: <br>
-Developers and agents use this skill to drive a browser through a CLI, navigate websites, perform natural-language page actions, extract structured page data, take screenshots, and manage browser sessions. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill gives an agent broad browser-control authority, including persistent sessions, downloads, and possible remote Browserbase sessions. <br>
-Mitigation: Use isolated browser profiles, avoid saving passwords, and confirm before submissions, purchases, account changes, downloads, or remote browser sessions. <br>
-Risk: Stored browser profiles, screenshots, and downloads may retain sensitive browsing data after use. <br>
-Mitigation: Clear .chrome-profile, agent/browser_screenshots, and agent/downloads when the session is finished. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/peytoncasper/skills/agent-browser-stagehand) <br>
-- [Browser Automation Examples](EXAMPLES.md) <br>
-- [Browser Automation CLI Reference](REFERENCE.md) <br>
+## Use Case:
 
+Developers and agents use this skill to navigate websites, interact with page elements, extract structured web data, capture screenshots, and manage browser sessions through Stagehand CLI commands.
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance, files] <br>
-**Output Format:** [CLI commands, JSON or text command results, PNG screenshots, and downloaded files when browser actions create them] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands require setup of Chrome, Node.js dependencies, the browser CLI link, and ANTHROPIC_API_KEY; Browserbase is used when configured.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill grants broad browser automation authority, including web access, session reuse, downloads, and optional remote browser execution.
+
+Mitigation: Use it only in workspaces where broad browser automation is acceptable, isolate or clear browser profiles before sensitive account use, and treat downloaded files as untrusted.
+
+Risk: The reviewed artifact documents installing and linking an npm CLI, but the CLI implementation was not included in the artifact evidence.
+
+Mitigation: Verify the actual npm package or source before running npm install or npm link.
+
+Risk: Persistent Chrome profile behavior may retain saved passwords, cookies, and authenticated sessions between runs.
+
+Mitigation: Use isolated profiles for sensitive operations and clear session state when a task is complete.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/peytoncasper/skills/agent-browser-stagehand)
+- [Browser Automation Examples](EXAMPLES.md)
+- [Browser Automation CLI Reference](REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, text, files, guidance]
+
+**Output Format:** [Markdown guidance with CLI commands; browser commands return JSON and may create PNG screenshots or downloaded files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a persistent Chrome profile when local mode is selected; screenshots are written under ./agent/browser_screenshots/ and downloads under ./agent/downloads/.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

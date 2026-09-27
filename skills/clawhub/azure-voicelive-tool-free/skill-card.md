@@ -1,40 +1,57 @@
-## Description: <br>
-Build basic real-time voice AI applications with Azure VoiceLive, including text and audio output plus basic session management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+使用 Azure VoiceLive 构建基础实时语音 AI 应用，支持文本和音频输出与基本会话管理。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and personal builders use this skill to produce Azure VoiceLive Python examples, setup commands, and troubleshooting guidance for basic real-time voice assistants, text-to-speech conversations, and voice transcription workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Voice audio, transcripts, and prompts may be sent to Azure when generated examples are run. <br>
-Mitigation: Avoid sensitive or regulated recordings unless approved, and review Azure account data handling settings before use. <br>
-Risk: Generated examples rely on Azure endpoint and API key configuration. <br>
-Mitigation: Store credentials in environment variables or a secrets manager, rotate exposed keys, and do not paste keys into prompts or committed files. <br>
+## Use Case:
 
+Developers and automation users use this skill to build basic Azure VoiceLive real-time voice assistants, text-to-speech interactions, and speech transcription flows with environment-variable API key configuration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-voicelive-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Azure SDK calls, environment variable setup, and troubleshooting notes for Azure VoiceLive examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: The skill may ask an agent to install packages, run Python code, and use an Azure key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated commands before execution, keep API keys in environment variables, and limit use to Azure VoiceLive tasks.
+
+Risk: VoiceLive workflows may transmit text or microphone audio to Azure.
+
+Mitigation: Avoid sensitive speech data unless there is consent and the Azure resource is approved for the data involved.
+
+Risk: The security evidence says the skill describes broader actions than its Azure VoiceLive examples justify.
+
+Mitigation: Restrict the skill to VoiceLive setup, session configuration, audio streaming, and transcription workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/azure-voicelive-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with Python and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May require Azure endpoint and API key environment variables; may propose package installation and Python execution for Azure VoiceLive tasks.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata; artifact metadata reports 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,63 @@
-## Description: <br>
-Wps Office Suite helps agents create, edit, analyze, convert, and manage Word, Excel, and presentation files through local WPS, Microsoft Office, LibreOffice, and pure-Python workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WPS Office Suite helps agents automate Word, Excel, PowerPoint, format conversion, document search, watermarking, redaction, templates, and office workflow tasks across WPS Office, Microsoft Office, LibreOffice, and pure Python modes.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers, office workers, and students can use this skill to automate document creation, spreadsheet editing and analysis, presentation generation, file conversion, template generation, contract review, and invoice OCR workflows. It is best suited for local office productivity tasks where the user understands which files may be read or modified. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify local Office documents, including in-place edits. <br>
-Mitigation: Use copies of important files, review command targets before execution, and avoid running analysis or edit commands on originals unless edits are intended. <br>
-Risk: The skill can scan recent Office file metadata in common folders. <br>
-Mitigation: Run recent-file discovery only when needed and review the returned file list before using follow-on commands. <br>
-Risk: The skill can launch WPS, Microsoft Office, LibreOffice, operating-system file handlers, and feedback or update flows. <br>
-Mitigation: Confirm local application launches are expected, and avoid feedback or update commands in environments where network or external-handler activity is not allowed. <br>
-Risk: The security evidence says the local-only and no-network claims are inaccurate for feedback and update features. <br>
-Mitigation: Treat feedback and update features as network-capable and apply the same approval and monitoring controls used for other outbound workflows. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill to create, edit, analyze, convert, search, and manage office documents through agent-generated commands and guidance. It is suited for office productivity workflows that need local or configurable document automation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/wps-office-suite) <br>
-- [LibreOffice](https://www.libreoffice.org/) <br>
-- [Tesseract OCR installer notes](https://github.com/UB-Mannheim/tesseract/wiki) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with CLI commands; scripts can create, modify, analyze, or convert local Office documents.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or modify DOCX, XLSX, PPTX, PDF, CSV, TXT, HTML, and image outputs depending on the selected command.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.0 (source: SKILL.md frontmatter and release metadata) <br>
+Risk: Sensitive documents may be processed through optional external LLM or cloud modes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use local modes for sensitive content unless the endpoint, credentials, and data-handling policy are trusted.
+
+Risk: Opening search results from shared or untrusted folders can expose unsafe files.
+
+Mitigation: Avoid doc_search --open on shared or untrusted folders and restrict search paths to trusted directories.
+
+Risk: Watch rules and scheduled tasks can run long-lived automation.
+
+Mitigation: Inspect YAML watch rules and scheduled task definitions before enabling automation.
+
+Risk: Office automation and format conversion can modify files or lose complex formatting.
+
+Mitigation: Back up important documents and review generated or converted files before distribution.
+
+## Reference(s):
+
+- [WPS Office Suite on ClawHub](https://clawhub.ai/fyniujin/skills/wps-office-suite)
+- [gongwen_rules.yaml](references/gongwen_rules.yaml)
+- [Contract review skill](https://skillhub.cn/skills/contract-review)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files]
+
+**Output Format:** [Markdown guidance with inline shell commands and generated office documents or supporting JSON when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or modify Word, Excel, PowerPoint, PDF, text, template, watermark, redaction, and search index files depending on the selected workflow.]
+
+## Skill Version(s):
+
+5.2.5 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

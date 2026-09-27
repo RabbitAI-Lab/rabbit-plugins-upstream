@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claude-code-runner",
   "slug": "claude-code-runner",
   "ownerHandle": "lhl09120",
-  "version": "0.1.0",
-  "updatedAt": 1779077466400,
-  "contentHash": "0d1985a4e5346d4d9d09ad08c9360381c270baa75ff86cd2338c5ce01395f377",
-  "fetchedAt": "2026-07-26T18:05:53.458Z"
+  "version": "1.0.2",
+  "updatedAt": 1790017189472,
+  "contentHash": "6c669da44d05cec064c02600a6b2134a182c42029f08c66193724b425adee698",
+  "fetchedAt": "2026-09-27T13:35:31.713Z"
 }

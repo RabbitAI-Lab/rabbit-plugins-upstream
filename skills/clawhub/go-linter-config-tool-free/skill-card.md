@@ -1,40 +1,53 @@
-## Description: <br>
-为个人 Go 项目提供最小和标准两套 golangci-lint 配置模板，支持本地运行和基础 CI 错误排查。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Go developers create minimal or standard golangci-lint configurations and troubleshoot common local or CI lint failures.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and individual Go project maintainers use this skill to bootstrap golangci-lint configuration, run local lint checks, and troubleshoot common import, type-checking, and basic CI failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated golangci-lint configuration may change local lint results or CI behavior. <br>
-Mitigation: Review proposed .golangci.yml changes and run lint in the intended Go project before committing or deploying them. <br>
-Risk: The skill may suggest or run local Go and golangci-lint commands in a workspace. <br>
-Mitigation: Use it only in Go project workspaces where those command effects are expected, and review command intent before execution. <br>
+## Use Case:
 
+Developers working on personal Go projects use this skill to select golangci-lint templates, prepare .golangci.yml content, run lint commands, and troubleshoot import, type-checking, or CI failures.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/go-linter-config-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with YAML configuration and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces proposed .golangci.yml content and troubleshooting steps for review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
+Risk: The skill instructions claim broader powers than a Go lint configuration helper needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for golangci-lint configuration and troubleshooting, and disregard unrelated project-management or broad workflow claims.
+
+Risk: The skill may ask the agent to write .golangci.yml files or run installation and lint commands.
+
+Mitigation: Review proposed file changes and commands before allowing writes or execution, especially install commands and CI-related shell commands.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/go-linter-config-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with YAML and bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose .golangci.yml content and lint commands for user review before file writes or execution.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

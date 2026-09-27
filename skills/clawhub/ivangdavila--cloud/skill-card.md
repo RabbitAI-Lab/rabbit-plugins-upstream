@@ -1,45 +1,53 @@
-## Description: <br>
-Choose, organize, sync, share, and back up personal files across iCloud, Google Drive, Dropbox, and OneDrive. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Choose, organize, sync, share, and back up personal files across iCloud, Google Drive, Dropbox, and OneDrive.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-External users use this skill for consumer cloud storage decisions, cleanup, sharing, and backup guidance across iCloud, Google Drive, Dropbox, and OneDrive. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Cleanup guidance can lead users to delete files that then sync across devices or collaborators. <br>
-Mitigation: Confirm important files are backed up elsewhere before deletion, and review each cloud service's trash and sync behavior before permanent cleanup. <br>
-Risk: Broad cloud sharing settings can expose private files to unintended recipients. <br>
-Mitigation: Use restrictive sharing settings, prefer specific recipients over public links, set expirations where available, and review shared links regularly. <br>
-Risk: Sensitive documents stored unencrypted in consumer cloud services may create privacy or identity-theft exposure. <br>
-Mitigation: Avoid storing highly sensitive documents in cloud storage unless encrypted, and use strong account protection such as 2FA. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/cloud) <br>
-- [Cloud services comparison](artifact/services.md) <br>
-- [Cloud backup strategy](artifact/backup.md) <br>
-- [Freeing up cloud storage](artifact/cleanup.md) <br>
-- [Sharing files in the cloud](artifact/sharing.md) <br>
+## Use Case:
 
+External users use this skill to choose a consumer cloud storage service, organize syncing and sharing, plan backups, and clean up storage across iCloud, Google Drive, Dropbox, and OneDrive.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with checklists and comparison tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only; no code, shell commands, API calls, or credentials requested.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Cleanup guidance may lead users to permanently delete files, photos, backups, trash contents, or old versions.
+
+Mitigation: Confirm the items are backed up somewhere the user controls before emptying trash, deleting cloud data, removing photos from iCloud, or purging old versions.
+
+Risk: Cloud sync behavior can propagate deletions or account changes across devices.
+
+Mitigation: Verify how the selected service syncs deletions across devices and download or copy important files before disabling sync or switching services.
+
+## Reference(s):
+
+- [Cloud skill page](https://clawhub.ai/ivangdavila/skills/cloud)
+- [Publisher profile](https://clawhub.ai/user/ivangdavila)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration instructions]
+
+**Output Format:** [Markdown prose, checklists, comparison tables, and step-by-step instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable behavior; guidance may include cloud account settings and deletion-related cleanup steps.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 ## Description: <br>
-Canvas Json Handler helps agents process JSON Canvas files for batch updates, template-based canvas creation, automatic layout, cross-canvas merging, repair, benchmarking, snapshots, and rollback. <br>
+Canvas Json Handler helps agents generate, batch-update, merge, lay out, validate, repair, snapshot, and roll back JSON Canvas files for knowledge maps, workflows, boards, and related canvas structures. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,34 +11,32 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, knowledge engineers, process analysts, project managers, and operations teams use this skill to create, reorganize, merge, validate, and repair JSON Canvas workspaces with agent-assisted local file operations. <br>
+Developers, knowledge engineers, project managers, and operations teams use this skill to automate JSON Canvas creation, batch edits, layout, cross-canvas merge, repair, audit, and rollback workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to run local commands and change canvas-related files. <br>
-Mitigation: Use it only in a limited workspace and review proposed commands and file edits before applying them. <br>
-Risk: Batch edits, merges, repairs, rollback, and cache-clearing actions may alter or remove useful canvas data. <br>
-Mitigation: Request dry runs, backups, merge previews, or snapshots before applying broad changes. <br>
-Risk: Automated repair may make incorrect assumptions about missing references, ID conflicts, or overlapping layout. <br>
-Mitigation: Prefer conservative repair settings and manually review repair proposals before committing changes. <br>
+Risk: The skill may read and write .canvas or JSON files and run local layout or processing commands. <br>
+Mitigation: Install only for workspaces where those file operations and local commands are intended, and ask the agent to list affected files and preview diffs before changes are applied. <br>
+Risk: Merge, rollback, aggressive repair, or deletion behavior can change or remove canvas data. <br>
+Mitigation: Require explicit confirmation before merge, rollback, aggressive repair, or deletion operations, and keep snapshots or backups available before mutating files. <br>
+Risk: The API and network boundary is unclear in the release evidence. <br>
+Mitigation: Avoid generic API or network integrations unless they are explicitly configured for the task, and keep credentials scoped to the minimum required access. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/canvas-json-handler) <br>
-- [Publisher Profile](https://clawhub.ai/user/thcjp) <br>
-- [Skill Homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/canvas-json-handler) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, shell-command guidance, and generated or modified canvas-related files] <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON files] <br>
+**Output Format:** [Markdown guidance with JSON examples, command suggestions, and generated or modified .canvas/JSON files] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce execution logs, status data, canvas snapshots, merge previews, repair proposals, and rollback guidance.] <br>
+**Other Properties Related to Output:** [May propose file reads, writes, local layout commands, merge operations, repair actions, snapshots, and rollback steps.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+1.0.2 (source: server release metadata; artifact frontmatter says 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

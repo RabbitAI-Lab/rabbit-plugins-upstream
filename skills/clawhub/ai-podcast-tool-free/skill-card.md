@@ -1,42 +1,59 @@
-## Description: <br>
-Turns PDFs, text, and links into two-person conversational podcasts for personal creators who want to quickly produce audio content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+将PDF、文本、链接转为双人对话播客，适合个人创作者快速制作音频内容。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and creators use this skill to guide an agent through creating shareable two-person podcast audio from text, PDF URLs, notes, or links through MagicPodcast. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends user-provided text or PDF URLs to MagicPodcast for podcast generation, which may expose sensitive or confidential content to an external service. <br>
-Mitigation: Confirm before sending documents or links, avoid confidential material, and use the skill only when the user explicitly requests podcast creation. <br>
-Risk: The security review flags broader activation and vague modify, delete, import, and export language outside the stated podcast use case. <br>
-Mitigation: Treat those broad operations as out of scope unless the skill is updated with precise limits, and review commands before execution. <br>
+## Use Case:
 
+External creators, learners, and content distributors use this skill to turn PDFs, pasted text, notes, or links into a two-person conversational podcast through MagicPodcast.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-podcast-tool-free) <br>
-- [MagicPodcast skill platform](https://www.magicpodcast.app/skill-platform) <br>
-- [MagicPodcast app](https://www.magicpodcast.app/app) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Text] <br>
-**Output Format:** [Markdown guidance with bash and curl command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns podcast creation status and share links when the external API succeeds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Source text or PDF URLs may be sent to MagicPodcast for podcast generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this skill only with non-sensitive content unless external processing by MagicPodcast is approved.
+
+Risk: The trigger language may match broader document-processing tasks than this podcast tool should handle.
+
+Mitigation: Confirm the user wants podcast generation before requesting content or invoking MagicPodcast endpoints.
+
+Risk: MagicPodcast API credentials are required for command examples.
+
+Mitigation: Store API keys in environment variables or a local secrets mechanism and do not paste them into shared prompts, files, or logs.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/ai-podcast-tool-free)
+- [MagicPodcast skill platform](https://www.magicpodcast.app/skill-platform)
+- [MagicPodcast app](https://www.magicpodcast.app/app)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with inline bash commands and API request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return MagicPodcast job status, share URLs, and app URLs.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

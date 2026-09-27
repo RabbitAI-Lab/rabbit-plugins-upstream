@@ -1,43 +1,59 @@
-## Description: <br>
-Systeme.io API integration with managed OAuth for managing contacts, tags, courses, communities, and subscriptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Systeme.io API integration with managed OAuth for managing contacts, contact tags, custom fields, tags, course enrollments, community memberships, and subscriptions.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to manage Systeme.io account data through Maton-managed OAuth, including contacts, tags, course enrollments, community memberships, and subscriptions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, delete, enroll, remove memberships, and cancel subscriptions in a connected Systeme.io account. <br>
-Mitigation: Confirm the exact account, resource, and intended effect before any write operation, and specify the intended connection when multiple Systeme.io connections exist. <br>
-Risk: The skill requires a Maton API key and OAuth access to a Systeme.io account. <br>
-Mitigation: Install only if you trust Maton.ai, keep MATON_API_KEY secret, and revoke unneeded keys or connections. <br>
+## Use Case:
 
+Developers and operators use this skill to work with Systeme.io business data through Maton-managed authentication, including contact management, tag and custom-field updates, course enrollments, community memberships, subscriptions, and approved automation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/systeme) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Systeme.io API Reference](https://developer.systeme.io/reference) <br>
-- [Systeme.io API Overview](https://developer.systeme.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Maton-mediated access can affect Systeme.io customer data, billing or subscription state, paid-content access, and ongoing event forwarding.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton mediation is acceptable, and review every write, deletion, webhook, function, trigger, and destination before approving it.
+
+Risk: The skill depends on network access and valid Maton authentication to reach the user's authorized Systeme.io connection.
+
+Mitigation: Use the documented OAuth flow when possible, keep credentials out of logs and shared files, and limit actions to the connection and fields required for the task.
+
+## Reference(s):
+
+- [Systeme.io API Reference](https://developer.systeme.io/reference)
+- [Systeme.io API Overview](https://developer.systeme.io/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/systeme)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May result in authenticated API calls through Maton when the user approves the relevant action.]
+
+## Skill Version(s):
+
+1.2.4 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,77 @@
-## Description: <br>
-GetResponse API integration with managed OAuth for managing email marketing campaigns, contacts, newsletters, autoresponders, segments, workflows, ecommerce/shops, SMS, landing pages, webinars, transactional emails, forms, and account data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GetResponse API integration with managed OAuth for managing email marketing campaigns, contacts, newsletters, autoresponders, segments, workflows, ecommerce, SMS, landing pages, webinars, transactional emails, forms, and account data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to operate GetResponse accounts through Maton-managed OAuth, including reading account data and managing marketing, ecommerce, automation, messaging, and contact resources. It is intended for workflows where the user can review and approve actions before any create, update, delete, send, or publish operation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send newsletters, SMS, and transactional emails to real contacts. <br>
-Mitigation: Confirm the audience, message content, and send timing with the user before executing any messaging operation. <br>
-Risk: Write, publish, update, or delete operations can modify GetResponse account resources. <br>
-Mitigation: Keep confirmation prompts enabled and require explicit user approval with the target resource and intended effect before executing changes. <br>
-Risk: The skill requires a sensitive MATON_API_KEY credential and managed OAuth access. <br>
-Mitigation: Install only when Maton-mediated GetResponse access is intended, store credentials securely, and use the correct connection identifier when multiple GetResponse accounts are connected. <br>
+## Use Case:
 
+Marketing operators, developers, and automation builders use this skill to manage GetResponse accounts, campaigns, contacts, messaging, ecommerce, and approved automations through a Maton-authenticated connection.
 
-## Reference(s): <br>
-- [GetResponse Skill on ClawHub](https://clawhub.ai/byungkyu/getresponse) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [GetResponse API Documentation](https://apidocs.getresponse.com/v3) <br>
-- [GetResponse OpenAPI Spec](https://apireference.getresponse.com/open-api.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, API calls] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY credential, and explicit user approval for write, send, publish, update, or delete operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: GetResponse write actions can send messages, alter workflows, create or update records, delete resources, or change business automations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval for each write operation after confirming the target account, audience or resource, payload, timing, and intended effect.
+
+Risk: Newsletters, SMS, and transactional emails are delivered to real contacts and can affect recipients, cost, and sender reputation.
+
+Mitigation: Confirm the audience, message content, and send schedule before execution, and default to read/list calls until the user approves a send.
+
+Risk: Hosted functions, triggers, and destinations can create unattended or persistent automation.
+
+Mitigation: Approve each hosted function, trigger, and destination separately, keep network access and destinations narrowly scoped, and review whether the automation should remain enabled.
+
+Risk: API keys and OAuth-backed credentials can expose connected GetResponse account data if mishandled.
+
+Mitigation: Prefer OAuth and OS credential storage, avoid exporting long-lived API keys to child processes, and use raw HTTP with MATON_API_KEY only where the CLI cannot be installed.
+
+## Reference(s):
+
+- [GetResponse Skill Page](https://clawhub.ai/byungkyu/skills/getresponse)
+- [Publisher Profile](https://clawhub.ai/user/byungkyu)
+- [Maton Homepage](https://maton.ai)
+- [GetResponse API Documentation](https://apidocs.getresponse.com/v3)
+- [GetResponse OpenAPI Spec](https://apireference.getresponse.com/open-api.json)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, configuration, code, text]
+
+**Output Format:** [Markdown with inline shell, JSON, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Agent guidance defaults to read/list calls and requires explicit user approval before write operations, new connections, hosted functions, triggers, or persistent destinations.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -21,7 +21,7 @@ All snippets are pure Markdown and contain no rendering placeholders.
 | 🔴 Red | Alert / Blocked | Severe variance or blocker, immediate intervention required |
 
 Usage example:
-> Current health: 🟢 Green｜Cost performance: 🟡 Yellow｜Critical path: 🔴 Red
+> Current health: 🟢 Green | Cost performance: 🟡 Yellow | Critical path: 🔴 Red
 
 ---
 
@@ -46,7 +46,7 @@ Usage example:
 Risk register row example:
 | Level | Risk Description | Impact | Owner | Mitigation |
 |------|------------------|--------|-------|------------|
-| High | Key dependency party scheduling conflict | Milestone delayed 2 weeks | 张三 | Activate backup supplier + weekly sync |
+| High | Key dependency party scheduling conflict | Milestone delayed 2 weeks | Zhang San | Activate backup supplier + weekly sync |
 
 ---
 

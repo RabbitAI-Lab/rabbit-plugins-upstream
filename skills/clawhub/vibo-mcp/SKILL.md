@@ -64,9 +64,16 @@ config error only appears on the first tool call.
 - `vibo_list_notifications` / `vibo_get_notifications_count`.
 - `vibo_healthcheck` — confirm connectivity + auth.
 
-### Writes (confirm-gated)
-Each mutating tool makes **no** network call unless `confirm: true`; without it
-you get a dry-run preview of exactly what would be sent.
+### Writes (confirmation-gated)
+Each mutating tool asks the user to confirm before anything is sent. Where the
+client can show a confirmation prompt, it does. Otherwise the first call makes
+**no** network call and returns `status: "confirmation-required"` with a preview
+of exactly what would be sent (`preview.action` + `preview.willSend`) and a
+`confirmToken`. Show that preview to the user, and only after they approve in
+chat call the tool again with the **same arguments** plus `confirmToken`. A
+token works once; changing any argument is refused as `DRAFT_CHANGED` (with a
+fresh preview and token to re-approve), and a reused one as `TOKEN_REUSED`.
+`MCP_CONFIRM_MODE` (`ask-user` default / `auto` / `refuse`) controls this flow.
 
 - `vibo_add_song_to_section` — add a searched song to a section.
 - `vibo_remove_song_from_section` / `vibo_move_song` / `vibo_reorder_songs`.
@@ -80,14 +87,75 @@ you get a dry-run preview of exactly what would be sent.
 - `vibo_invite_users` / `vibo_change_user_role` / `vibo_remove_user` — manage who's on the event.
 - `vibo_update_section` — edit a section's name, time, or note.
 - `vibo_answer_question` — answer a planning question (text / option ids / link / image+file uploads).
-- `vibo_set_profile_photo` — set your profile photo from a local image.
+- `vibo_set_profile_photo` — set your profile photo from a local image in the upload directory (`VIBO_UPLOAD_DIR`, default `~/Downloads/vibo-mcp`).
 - `vibo_capture_session` — capture your login from a signed-in browser tab (SSO accounts).
 - `vibo_mark_notifications_read`.
 - `vibo_export_event_to_spotify` / `vibo_export_event_to_apple_music`.
+
+## Response shape (`view`)
+
+**Six of this server's 39 tools take `view: "compact" | "full"`**, and on every
+one of them **`compact` is the DEFAULT**. You get the slim rung without asking.
+
+They are exactly the six reads whose GraphQL document asks Vibo for media:
+
+| Tool | What compact drops |
+| --- | --- |
+| `vibo_search_songs` | `thumbnails { s180x180 original }` per track |
+| `vibo_get_section_songs` | `thumbnails { s180x180 original }` per song |
+| `vibo_list_song_ideas_songs` | `thumbnails { s180x180 original }` per song |
+| `vibo_list_event_users` | `email` + `imageUrl` per person — projected to `_id`/`firstName`/`lastName`/`role` on both exits (merged and filtered); `view: "full"` for emails |
+| `vibo_list_notifications` | `imageUrl` per notification |
+| `vibo_get_me` | `imageUrl` |
+
+That correspondence is not a coincidence to be maintained by hand: a test in
+`tests/view.test.ts` counts the media selections in `src/gql.ts` and asserts
+the roster of `view`-taking tools matches. Add a seventh selection and it fails.
+
+**Compact here is media stripping, not a field projection.** `src/view.ts`
+writes no field list, because this repo holds no captured Vibo payload to
+derive one from honestly; instead it removes keys whose value is a picture,
+which is subtractive and so cannot drop a field nobody knew about.
+
+The one exception is `vibo_list_event_users`: its query fixes the member field
+list, so compact projects each member to `_id`/`firstName`/`lastName`/`role`
+and keeps other people's email addresses out of the default answer (fleet-audit
+#1136). Ask for `view: "full"` only when an email is actually needed.
+
+What compact does **not** touch is the point of these tools: `songUrl`, the
+`links` block (`spotify` / `youtube` / `appleMusic`) and the `quality` verdict
+all survive. A streaming link is this server's product, not decoration —
+`vibo_add_song_to_section` cannot add anything without `songUrl`, and the
+quality verdict is computed from how many services carry a track. A `null` link
+survives too: an absent key and a null one are the same to `JSON.parse` but not
+to a reader deciding whether a service was checked.
+
+`view: "full"` returns Vibo's payload untouched, cover art included. There is
+deliberately **no `raw` rung**: nothing here re-serialises or normalises the
+GraphQL response, so `full` already IS the upstream payload and a third value
+would silently alias one that exists.
+
+### The other 33 tools have no `view`
+
+- **The 24 mutating tools** (every confirmation-gated write, plus
+  `vibo_capture_session`) answer with a confirmation preview or a receipt — an id,
+  a count, a status. Nothing in a receipt is decoration, and slimming one is
+  how you lose the field that says what actually happened.
+- **`vibo_healthcheck`** answers with a connectivity/auth diagnostic. It runs
+  the same `GET_ME` document as `vibo_get_me` and still takes no rung, because
+  it never returns Vibo's user object — it builds `{ok, userId, email}` here.
+  A `view` on it would be a parameter that changes nothing.
+- **The 8 remaining reads hand back Vibo's GraphQL payload as it arrived**, and
+  their documents select no media, so there is nothing for a rung to remove.
+
+A `view` passed to a tool that does not declare one is dropped by zod without a
+warning, so a successful call is never evidence the rung was honoured. Check
+the table above rather than assuming.
 
 ## Typical flow
 
 1. `vibo_list_events` → pick an event id.
 2. `vibo_list_sections` → pick a section id.
 3. `vibo_search_songs` → get a song's `songUrl`/`viboSongId`.
-4. `vibo_add_song_to_section` (with `confirm: true`).
+4. `vibo_add_song_to_section` — show the user the preview it returns, then call
+   again with the `confirmToken` once they approve.

@@ -1,45 +1,60 @@
-## Description: <br>
-Generate high-quality cinematic effects videos with Google Veo 3.1. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates cinematic video outputs with Google Veo 3.1 from text prompts, image inputs, or video extension requests through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative teams use this skill to invoke the dLazy CLI for text-to-video, image-to-video, reference-image, and video-extension generation with Google Veo 3.1. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local media can be sent to dLazy cloud endpoints and may consume paid credits. <br>
-Mitigation: Require explicit user confirmation before uploading media or running a non-dry-run generation; use dry-run mode when checking payloads and cost estimates. <br>
-Risk: The API key may be persisted in ~/.dlazy/config.json, and the evidence says the referenced CLI does not clearly support the skill's file-permission claim. <br>
-Mitigation: Prefer a per-invocation DLAZY_API_KEY or verify local permissions on the saved config file after login. <br>
-Risk: The skill can be triggered broadly for video-generation requests. <br>
-Mitigation: Confirm the user's intent, input files, generation mode, and cost-sensitive settings before starting a generation. <br>
+## Use Case:
 
+External users and developers use this skill to ask an agent to create or extend videos with Google Veo 3.1 via the dLazy hosted service. It supports prompt-based generation, first/last-frame generation, reference-image generation, asynchronous task polling, and saving generated assets.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted media URLs or an asynchronous generateId; dry-run can print payload and cost estimate without calling the API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server evidence release and SKILL.md frontmatter) <br>
+Risk: Prompts and local media paths supplied to the CLI can be uploaded to the dLazy cloud service for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media and prompts that are appropriate for a third-party hosted service, and avoid sending private or regulated content unless the service terms and account controls are acceptable.
+
+Risk: The CLI may store an API key in a local configuration file.
+
+Mitigation: Prefer per-invocation credentials or the pinned npx command when persistent installation is not desired, and rotate or revoke the API key from the dLazy dashboard if access changes.
+
+Risk: Generated assets are hosted by dLazy and may consume paid credits.
+
+Mitigation: Review the linked CLI package and service account settings before using paid credits or generating sensitive media.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1)
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and JSON responses from the dLazy CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is returned as hosted file URLs; async requests can return a task identifier for later polling.]
+
+## Skill Version(s):
+
+1.3.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

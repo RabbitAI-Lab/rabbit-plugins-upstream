@@ -1,44 +1,55 @@
-## Description: <br>
-Identifies fruit ripeness stages from crop-fruit images or videos using color, size, and gloss cues, then returns a standardized ripeness grade. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Grades the ripeness of crop fruits from images or videos using visual features and returns a report to support harvest timing decisions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External growers, agricultural operators, and developers use this skill to grade tomato, pepper, and similar crop-fruit ripeness from media or URLs and to review report history for harvest-window decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Crop images, videos, or submitted URLs are uploaded to configured LifeEmergence cloud services for analysis. <br>
-Mitigation: Use only media and URLs approved for cloud processing; avoid private/internal URLs and files containing unrelated sensitive content. <br>
-Risk: The skill may silently create or reuse an account-like identity and store returned service tokens locally. <br>
-Mitigation: Review whether silent identity handling is acceptable before installation and confirm how local workspace data and tokens can be deleted. <br>
-Risk: History-listing behavior retrieves cloud report history for the resolved identity. <br>
-Mitigation: Confirm report-history retention and deletion expectations before using the skill with sensitive operational records. <br>
+## Use Case:
 
+Growers and agricultural advisors use fruit images or videos to assess ripeness stages, review harvest guidance, and retrieve past grading reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crop-fruit-ripeness-grading-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON] <br>
-**Output Format:** [Markdown text containing structured JSON-style analysis and report links; optional local output file when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local file or URL input, report-history listing, and saved output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter is 1.0.2) <br>
+Risk: Fruit images and videos are uploaded to a cloud analysis service, and report history can be queried remotely.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain permission before uploading media, avoid sensitive imagery, and review the service's data handling before use.
+
+Risk: The skill may silently create or reuse an account, log in remotely, and store session tokens in a local SQLite database without clear inspection or deletion controls.
+
+Mitigation: Review the account and session model before installation; restrict access to the workspace and arrange separate credential and account cleanup.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crop-fruit-ripeness-grading-analysis)
+- [Skill API reference](references/api_doc.md)
+- [Analysis API reference](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured grading report or JSON; Markdown table for report history]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include harvest guidance and report links; results can optionally be saved to a file.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

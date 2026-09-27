@@ -1,50 +1,61 @@
-## Description: <br>
-Supports Chinese language teachers with writing task design, guided drafting and revision, three-dimensional feedback rubrics, style DNA tracking, and review-lesson planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese-language teachers in designing writing assignments, setting grading criteria, and planning feedback lessons while leaving final evaluations to teachers.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External Chinese language teachers use this skill to design writing assignments, guide student drafting and revision, apply structured feedback rubrics, track writing style development, and prepare review lessons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student writing profiles may contain sensitive classroom or learner data when shared between related teaching skills. <br>
-Mitigation: Use pseudonyms, obtain consent where required, and remove identifying details before storing, sharing, or reusing writing samples. <br>
-Risk: Writing guidance could be mistaken for direct AI grading or student ghostwriting. <br>
-Mitigation: Keep teachers as final reviewers, use the rubrics and templates as decision support, and do not produce finished student essays. <br>
-Risk: Writing prompts or examples may include copyrighted workbook, classroom, or online materials. <br>
-Mitigation: Track copyrightStatus for prompts and use original, adapted, licensed, or publicly reusable materials only. <br>
+## Use Case:
 
+Chinese-language teachers use this skill to plan writing tasks, guide drafting and revision, develop descriptive grading rubrics, track writing development, and prepare classroom feedback. Teachers retain responsibility for individual grading and any student- or parent-facing material.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-writing-guide) <br>
-- [Writing task design template](artifact/references/writing-task-template.md) <br>
-- [Three-dimensional correction rubric](artifact/references/three-dim-rubric.md) <br>
-- [Style DNA record template](artifact/references/style-dna-record.md) <br>
-- [Task design sample card](artifact/references/task-design-sample-card.md) <br>
-- [Three-dimensional scoring items](artifact/references/three-dim-scoring-items.md) <br>
-- [Correction sample template](artifact/references/correction-sample-template.md) <br>
-- [Style DNA profile template](artifact/references/style-dna-profile-template.md) <br>
-- [Review lesson scripts](artifact/references/review-lesson-scripts.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; other regions require localized curriculum, emergency contacts, and privacy practices.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured text templates and rubrics] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs require teacher review and privacy-aware handling of student writing records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student writing and writing profiles can expose sensitive personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aliases and minimal records; honor deletion and pause requests; check consent before parent sharing or writing back to a student profile.
+
+Risk: Curriculum, emergency contacts, and privacy assumptions are tailored to mainland China.
+
+Mitigation: Restrict deployment to the intended context or localize these elements before using the skill elsewhere.
+
+Risk: A student's writing may disclose self-harm, abuse, or other immediate safety concerns.
+
+Mitigation: Pause writing feedback, encourage contact with a trusted adult, and provide locally appropriate crisis resources.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-writing-guide)
+- [Writing task design template](references/writing-task-template.md)
+- [Writing assessment rubric](references/three-dim-rubric.md)
+- [Student writing style record](references/style-dna-record.md)
+- [Classroom feedback scripts](references/review-lesson-scripts.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Chinese-language Markdown and text templates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Assignment plans, grading criteria, diagnostic observations, and feedback lesson plans; teacher reviews all final decisions.]
+
+## Skill Version(s):
+
+2.7.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

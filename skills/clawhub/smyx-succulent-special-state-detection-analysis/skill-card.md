@@ -1,44 +1,56 @@
-## Description: <br>
-AI-powered succulent special-state detection from plant images or videos that identifies black rot, melting, and stretching, then reports condition type, severity, confidence, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered succulent image and video analysis that detects black rot, leaf melting, and stretching, then returns anomaly type, severity, confidence, and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, growers, greenhouse operators, and shop staff use this skill to analyze succulent plant images or videos for special abnormal states and review generated analysis reports. Agents can also query prior cloud-hosted reports for the associated internal user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded plant images, videos, and report-history queries are processed by LifeEmergence remote services. <br>
-Mitigation: Use the skill only when that remote processing is acceptable for the workspace and avoid submitting sensitive media. <br>
-Risk: The skill can create or reuse internal identity state and store token-bearing account records with limited user control. <br>
-Mitigation: Run it in a dedicated workspace where third-party skill code is allowed to consume only intended identity environment variables and local state. <br>
-Risk: The security verdict is suspicious even though no individual risk findings were listed. <br>
-Mitigation: Review the skill and its remote-service behavior before deployment, and monitor any generated local account or token records. <br>
+## Use Case:
 
+External users, plant-care operators, greenhouse staff, and developers use this skill to analyze succulent images or videos for special health states and review structured results or historical cloud reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-succulent-special-state-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Succulent special-state API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-oriented analysis text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include condition type, severity, confidence, suggested observations, historical report tables, and remote report URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Images, videos, or URLs submitted for analysis are processed by lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media and URLs that are appropriate for third-party cloud processing, and avoid confidential plant-location or operational imagery unless the service has been approved for that data.
+
+Risk: Cloud report history is tied to an internal identity and local workspace data can store account tokens.
+
+Mitigation: Review the local identity and token handling before use, isolate the workspace for sensitive environments, and remove or rotate stored credentials when access should end.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-succulent-special-state-detection-analysis)
+- [Skill Demo](https://lifeemergence.com/sample.html)
+- [API Interface Documentation](references/api_doc.md)
+- [Common Analysis API Documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Markdown text with JSON-style structured analysis results and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save output to a file and can list cloud report history for the resolved internal identity.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata; artifact frontmatter states 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

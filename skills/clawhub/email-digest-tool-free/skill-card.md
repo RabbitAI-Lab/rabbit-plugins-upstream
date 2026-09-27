@@ -1,42 +1,58 @@
-## Description: <br>
-邮件日报免费版 helps personal users use browser automation with an authenticated mailbox session to collect recent messages and generate a daily email statistics and summary report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+自动生成每日邮件摘要，支持主流邮箱，快速了解重要邮件。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal users, independent developers, and small teams can use this skill to review a live mailbox, count unread and visible messages, capture inbox screenshots, and produce a daily digest for faster triage. It is intended for mailbox summarization and notification workflows, not bulk or spam messaging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill operates an authenticated browser mailbox session. <br>
-Mitigation: Use an already logged-in browser session, avoid entering passwords through agent commands, and supervise the session when accessing live mail. <br>
-Risk: Inbox screenshots and summary reports may contain sensitive personal or business information. <br>
-Mitigation: Store generated outputs in a private directory, limit sharing, and delete screenshots and reports when they are no longer needed. <br>
-Risk: Browser automation over mailbox pages may select the wrong elements or expose more messages than intended. <br>
-Mitigation: Review proposed commands before execution, keep the workflow scoped to read-only summarization, and verify mailbox-specific selectors before relying on extracted data. <br>
+## Use Case:
 
+个人用户、独立开发者和企业团队 use this skill to access supported mailbox services through an agent/browser workflow and produce a daily digest with unread counts, sender and subject summaries, screenshots, and suggested follow-up actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/email-digest-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown and text reports with optional JSON, CSV, bash snippets, and PNG screenshots] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write inbox screenshots and local digest files that contain sensitive mailbox information.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence; artifact frontmatter reports 1.0.0) <br>
+Risk: The skill asks an agent and browser automation environment to access email accounts, which can expose private mailbox content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only accounts you are comfortable exposing to the agent environment and review the generated digest before sharing or storing it.
+
+Risk: Password-entry command examples can expose credentials in command history, logs, or prompts.
+
+Mitigation: Prefer an already logged-in browser session and do not type real passwords into command examples or agent prompts.
+
+Risk: Generated screenshots may contain private email content.
+
+Mitigation: Delete, encrypt, or otherwise protect generated screenshots and summary files after use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/email-digest-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions, Files]
+
+**Output Format:** [Markdown and text reports with optional shell commands, JSON snippets, and screenshot files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local mailbox screenshots and summary files that can contain private email content.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

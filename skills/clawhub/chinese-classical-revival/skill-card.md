@@ -1,44 +1,60 @@
-## Description: <br>
-让古人开口、让古诗词活起来的经典语文阅读辅导技能，用古人第一人称角色扮演、诗词理解、背诵游戏和写作引用练习帮助学生学习文言文和古诗词。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language tutor that uses historical-character role-play, guided recitation, and exam-style practice to help students understand classical Chinese prose and poetry.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and educators use this skill for classical Chinese and ancient poetry study, including first-person historical role play, poem and prose interpretation, memorization drills, and writing citation practice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill has broad activation wording for classical Chinese, ancient poetry, memorization, and related writing-help requests. <br>
-Mitigation: Review activation routing before deployment so the skill is invoked only for intended literature-study requests. <br>
-Risk: Companion-skill integrations may record study progress, quotation material, or review reminders. <br>
-Mitigation: Disable or review companion integrations when persistent study records or reminders are not appropriate. <br>
-Risk: Historical role-play and literary interpretation may present uncertain context too confidently. <br>
-Mitigation: Keep explanations tied to the bundled author profiles and ask a human educator to review high-stakes academic use. <br>
+## Use Case:
 
+Chinese-speaking middle-school students and their educators use this skill to explore specific classical texts, practice recitation and interpretation, and learn how to answer literature questions. Historical role-play is followed by explicit analysis rather than presented as a factual first-person account.
 
-## Reference(s): <br>
-- [重点古人历史背景与情感档案库](references/classical-author-profiles.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/chinese-classical-revival) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize crisis contacts, curriculum expectations, and minor-consent requirements before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational text or Markdown study guidance with exercises and explanations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate role-play explanations, quiz prompts, memorization feedback, study records, and writing citation suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1000000.0.0 (source: server release metadata; source skill frontmatter states 2.0.1) <br>
+Risk: Crisis contacts and curriculum assumptions may not fit students outside Mainland China.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize emergency referrals, grade-level expectations, and minor-consent rules before deployment in another region.
+
+Risk: Learning profiles and reminders can retain or share a minor's study information.
+
+Mitigation: Review profile and reminder permissions; require the appropriate consent and honor pause, deletion, and sharing controls.
+
+Risk: Historical role-play or generated exercises may contain inaccurate details or quotations.
+
+Mitigation: Check biographical facts and original text against the supplied reference guidance, and distinguish role-play from factual analysis.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/chinese-classical-revival)
+- [Classical author profiles and fact-checking guidance](references/classical-author-profiles.md)
+- [Chinese language error dimensions](shared/chinese-error-dimension-table.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Practice questions]
+
+**Output Format:** [Chinese-language conversational text and Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include role-play, interpretation, recitation prompts, model answers, and consent-gated learning progress or reminder suggestions.]
+
+## Skill Version(s):
+
+1000006.0.0 (source: ClawHub release; packaged skill metadata: 2.7.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

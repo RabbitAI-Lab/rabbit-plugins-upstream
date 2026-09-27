@@ -1,41 +1,59 @@
-## Description: <br>
-Analyze construction drawings to extract dimensions, annotations, symbols, and metadata. Support quantity takeoff and design review automation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze construction drawings to extract dimensions, annotations, symbols, and metadata. Support quantity takeoff and design review automation.
 
-## Publisher: <br>
-[datadrivenconstruction](https://clawhub.ai/user/datadrivenconstruction) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[datadrivenconstruction](https://clawhub.ai/user/datadrivenconstruction)
 
-## Use Case: <br>
-Construction project teams, developers, and engineers use this skill to analyze user-provided PDF or DWG drawing files, extract title block data, dimensions, annotations, and symbols, and support quantity takeoff or design review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided construction drawings may contain confidential project or client information. <br>
-Mitigation: Only provide files intended for analysis and review generated reports or exports before sharing them. <br>
-Risk: The skill uses filesystem access and a local Python dependency to process drawing files. <br>
-Mitigation: Install pdfplumber from a trusted Python package source and limit analysis to expected local drawing paths. <br>
+## Use Case:
 
+Construction project managers, estimators, designers, and automation developers use this skill to extract structured information from construction drawings, generate drawing analysis reports, and support quantity takeoff or design review workflows.
 
-## Reference(s): <br>
-- [Data Driven Construction homepage](https://datadrivenconstruction.io) <br>
-- [ClawHub Drawing Analyzer skill page](https://clawhub.ai/datadrivenconstruction/skills/drawing-analyzer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with structured tables, summary statistics, key findings, and optional export guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe extracted drawing metadata, dimensions, annotations, symbols, quality issues, and follow-up export options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: server release metadata) <br>
+Risk: Construction drawings and generated reports may contain sensitive project names, identifiers, design details, or internal notes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review drawings and generated outputs before sharing them outside the intended project team.
+
+Risk: Drawing extraction may miss or misread dimensions, symbols, title block fields, or quality issues.
+
+Mitigation: Validate extracted results against the original drawings before using them for takeoff, design review, or downstream project decisions.
+
+Risk: The skill depends on Python drawing-processing packages such as pdfplumber.
+
+Mitigation: Install dependencies in an isolated Python environment and consider pinning package versions for repeatable behavior.
+
+## Reference(s):
+
+- [Drawing Analyzer ClawHub page](https://clawhub.ai/datadrivenconstruction/skills/drawing-analyzer)
+- [Publisher profile](https://clawhub.ai/user/datadrivenconstruction)
+- [Data Driven Construction homepage](https://datadrivenconstruction.io)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown reports, structured tables, Python code examples, shell commands, and optional CSV, Excel, or JSON export guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses user-provided drawing files or project data and can report title block data, dimensions, annotations, symbols, summary statistics, and quality issues.]
+
+## Skill Version(s):
+
+2.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

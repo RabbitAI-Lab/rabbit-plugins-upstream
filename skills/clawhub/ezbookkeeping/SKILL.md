@@ -2,13 +2,21 @@
 name: ezbookkeeping
 description: Use ezBookkeeping API Tools script to record new transactions, query transactions, retrieve account information, retrieve categories, retrieve tags, and retrieve exchange rate data in the self hosted personal finance application ezBookkeeping.
 metadata:
-  {
-    "openclaw":
-      {
-        "requires": { "env": ["EBKTOOL_SERVER_BASEURL", "EBKTOOL_TOKEN"] },
-        "primaryEnv": "EBKTOOL_TOKEN"
-      }
-  }
+  openclaw:
+    requires:
+      env:
+        - EBKTOOL_SERVER_BASEURL
+        - EBKTOOL_TOKEN
+    primaryEnv: EBKTOOL_TOKEN
+    envVars:
+      - name: EBKTOOL_SERVER_BASEURL
+        required: true
+        description: ezBookkeeping server base URL.
+      - name: EBKTOOL_TOKEN
+        required: true
+        description: ezBookkeeping API token.
+    emoji: "\u{1F4D2}"
+    homepage: https://ezbookkeeping.mayswind.net/agent/openclaw
 ---
 
 # ezBookkeeping API Tools

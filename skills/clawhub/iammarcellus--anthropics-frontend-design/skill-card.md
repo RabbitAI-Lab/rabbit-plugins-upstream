@@ -1,41 +1,48 @@
-## Description: <br>
-Creates distinctive, production-grade frontend interfaces and UI code with strong visual direction while avoiding generic AI aesthetics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create distinctive, production-grade frontend interfaces and implementations for web components, pages, dashboards, React components, HTML/CSS layouts, and other web UI while avoiding generic AI aesthetics.
 
-## Publisher: <br>
-[IAmMarcellus](https://clawhub.ai/user/IAmMarcellus) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[iammarcellus](https://clawhub.ai/user/iammarcellus)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers, designers, and agents use this skill to create or improve frontend components, pages, dashboards, applications, and other web UI with a distinctive aesthetic direction and production-ready implementation.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Broad, assertive design guidance may affect routine frontend work or conflict with an existing product design system.
+
+Mitigation: Use when frontend design, build, or styling work is intended, and review generated UI against project design standards, accessibility needs, and maintainability requirements.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and designers use this skill to create or refine web components, pages, dashboards, landing pages, posters, and applications with polished visual design and implementable frontend code. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Code, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Generated UI code may include external assets, fonts, scripts, or packages. <br>
-Mitigation: Review generated frontend code and dependency choices before deployment. <br>
-Risk: Broad frontend activation can influence many UI tasks. <br>
-Mitigation: Apply normal relevance judgment and use the skill only when stronger frontend design guidance is appropriate. <br>
+**Output Format:** [Markdown with frontend code blocks or project file edits]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/IAmMarcellus/anthropics-frontend-design) <br>
-- [Publisher profile](https://clawhub.ai/user/IAmMarcellus) <br>
+**Other Properties Related to Output:** [May produce HTML, CSS, JavaScript, React, Vue, styling guidance, and UI implementation notes.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with implementation guidance and frontend code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose external assets, fonts, scripts, or packages for generated UI code.] <br>
+0.1.0 (source: server release evidence)
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,76 @@
-## Description: <br>
-Cognito Forms API integration with managed OAuth for accessing forms, entries, documents, and files through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cognito Forms API integration with managed OAuth for accessing forms, managing entries, and retrieving documents.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent access Cognito Forms through Maton, including listing forms, managing entries, and retrieving documents and files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and access to a connected Cognito Forms account. <br>
-Mitigation: Keep MATON_API_KEY private and install the skill only when agent access to Cognito Forms through Maton is intended. <br>
-Risk: Create, update, and delete requests can change or remove form entries. <br>
-Mitigation: Approve write operations only after checking the form ID, entry ID, target connection, and expected effect. <br>
-Risk: Multiple Cognito Forms connections can cause requests to target the wrong account. <br>
-Mitigation: Verify the selected connection and use the Maton-Connection header when more than one active connection exists. <br>
-Risk: Document and file retrieval can expose form submission data. <br>
-Mitigation: Confirm the form ID, entry ID, document template number, or file ID before retrieving documents or files. <br>
+## Use Case:
 
+Employees, external operators, and developers use this skill to manage Cognito Forms forms, entries, and documents through Maton-authenticated API calls, and to set up approved automation through functions or triggers when needed.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/cognito-forms) <br>
-- [Cognito Forms API Overview](https://www.cognitoforms.com/support/475/data-integration/cognito-forms-api) <br>
-- [Cognito Forms REST API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/rest-api-reference) <br>
-- [Cognito Forms API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/api-reference) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, bash, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Cognito Forms OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can access Cognito Forms account data through a Maton-managed connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth where possible, select only needed scopes, specify the intended connection when multiple connections exist, and revoke unused connections.
+
+Risk: Write, delete, connection, hosted function, or automation actions can change data or create ongoing behavior.
+
+Mitigation: Default to read and list calls, then require explicit user approval for the target resource, payload, and intended effect before any modifying operation.
+
+Risk: Raw HTTP fallback requires a long-lived Maton API key that can leak through environment variables, logs, shell history, or pasted output.
+
+Mitigation: Prefer the Maton CLI credential store; use raw HTTP only where the CLI cannot be installed, avoid printing secrets, and rotate the key if it is exposed.
+
+Risk: Trigger destinations can keep forwarding future event data until removed.
+
+Mitigation: Create persistent destinations only after the user approves the exact URL, data fields, persistence, and credential handling, and delete destinations that are no longer needed.
+
+## Reference(s):
+
+- [Cognito Forms API Overview](https://www.cognitoforms.com/support/475/data-integration/cognito-forms-api)
+- [Cognito Forms REST API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/rest-api-reference)
+- [Cognito Forms API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/api-reference)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Catalog](references/time/triggers.md)
+- [Google Mail Trigger Catalog](references/google-mail/triggers.md)
+- [GitHub Trigger Catalog](references/github/triggers.md)
+- [Slack Trigger Catalog](references/slack/triggers.md)
+- [Stripe Trigger Catalog](references/stripe/triggers.md)
+- [Calendly Trigger Catalog](references/calendly/triggers.md)
+- [HubSpot Trigger Catalog](references/hubspot/triggers.md)
+- [Linear Trigger Catalog](references/linear/triggers.md)
+- [Notion Trigger Catalog](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown guidance with CLI commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include authenticated API-call plans and least-privilege approval prompts.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata; artifact frontmatter reports 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

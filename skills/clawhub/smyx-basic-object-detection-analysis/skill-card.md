@@ -1,44 +1,59 @@
-## Description: <br>
-Detects people, vehicles, non-motorized vehicles, pets, and parcels in images or video streams for general security surveillance scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects people, vehicles, non-motorized vehicles, pets, and parcels appearing in the target area, with support for video streams and image detection in general security surveillance scenarios.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Security operators and developers use this skill to run basic object detection on surveillance images, videos, or URLs and produce structured detection reports, recommendations, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Surveillance images, videos, or URLs may be sent to configured lifeemergence.com cloud services. <br>
-Mitigation: Use only when the publisher's cloud processing, retention, and account controls are acceptable; avoid sensitive footage when those controls are not confirmed. <br>
-Risk: The skill can silently create or reuse an identity and store service tokens locally. <br>
-Mitigation: Review identity handling and token storage before deployment, and use a separate workspace for installations. <br>
-Risk: Keyword-triggered history retrieval can access cloud-stored analysis reports. <br>
-Mitigation: Limit use to authorized accounts and review report-history access controls before enabling the skill. <br>
+## Use Case:
 
+Developers and security operations users can use this skill to analyze surveillance images or video for common object classes such as people, vehicles, pets, and parcels. It can return structured detection results, report links, and cloud history report listings for security-monitoring workflows.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-basic-object-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands] <br>
-**Output Format:** [Markdown reports and structured JSON from command-line execution] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save report text to a user-specified output file; supports local media paths and public media URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: release metadata) <br>
+Risk: Surveillance images, videos, and remote media URLs may be sent to configured lifeemergence.com APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for media that is approved for external API processing, and confirm data-handling requirements before deployment.
+
+Risk: The skill can create or reuse an internal identity, store tokens locally, and retrieve cloud report history tied to that identity.
+
+Mitigation: Run it in a controlled environment, review stored identity and token handling, and clear local credentials or history when they are no longer needed.
+
+Risk: Cloud report history may expose prior detection report metadata or links associated with the resolved identity.
+
+Mitigation: Limit access to users authorized to view that identity's reports and review report links before sharing output.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-basic-object-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, json, files]
+
+**Output Format:** [Markdown reports, JSON detection results, and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links and cloud history tables associated with the internally resolved user identity.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata; artifact frontmatter reports 1.0.18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-Harvest helps agents read and manage Harvest users, clients, projects, tasks, assignments, and time entries through the OOMOL oo CLI connector. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Harvest (getharvest.com) support for reading, creating, updating, restarting, stopping, and deleting Harvest data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and teams with connected Harvest and OOMOL accounts use this skill to inspect Harvest records and perform time-entry workflows without handling raw credentials. It supports read actions as well as confirmed create, update, stop, restart, and delete operations for time entries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, stop, restart, or delete Harvest time entries. <br>
-Mitigation: Review the exact payload and user-visible effect before approving write operations, and require explicit approval for destructive actions. <br>
-Risk: The skill operates through the local oo CLI and can depend on installer or account-connection state. <br>
-Mitigation: Verify the CLI installer before running it, use setup commands only after authentication or connection failures, and confirm the Harvest account connection before retrying. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Harvest through the oo CLI, including listing users, clients, projects, tasks, task assignments, and time entries. It also supports time-entry create, update, restart, stop, and delete workflows with confirmation requirements for state-changing actions.
 
-## Reference(s): <br>
-- [Harvest on ClawHub](https://clawhub.ai/oomol/oo-harvest) <br>
-- [Harvest homepage](https://www.getharvest.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with oo CLI commands and JSON payloads or responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before actions; state-changing and destructive operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence and artifact metadata) <br>
+Risk: The oo CLI installer and subsequent shell commands can affect the user's local environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify trust in OOMOL and the oo CLI installer source before installation or command execution.
+
+Risk: Create, update, restart, stop, and delete actions can change or remove Harvest time-entry data.
+
+Mitigation: Confirm the exact Harvest account, target time entry, payload, and expected effect with the user before running state-changing actions.
+
+## Reference(s):
+
+- [ClawHub Harvest skill page](https://clawhub.ai/oomol/skills/oo-harvest)
+- [Harvest homepage](https://www.getharvest.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before building payloads; write and destructive Harvest actions require user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

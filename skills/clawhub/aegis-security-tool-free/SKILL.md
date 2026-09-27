@@ -1,33 +1,37 @@
 ---
+
 slug: aegis-security-tool-free
 name: aegis-security-tool-free
 version: 1.0.0
 displayName: 区块链安全扫描免费版
 summary: "区块链地址与代币安全检查工具,支持地址信誉查询、代币蜜罐检测,适合个人开发者日常交易前快速验证.。区块链安全扫描免费版,为个人用户提供地址信誉查询、代币安全检测等核心能力."
-license: Proprietary
+license: MIT
 edition: free
-description: '区块链安全扫描免费版,为个人用户提供地址信誉查询、代币安全检测等核心能力.
-  核心能力:地址风险检查、代币蜜罐检测、免费额度查询、风险等级分级.
-  适用场景:DeFi交易前验证、代币安全排查、收款地址风险评估.
-  差异化:免费版聚焦核心检查能力,每日100次免费额度,适合个人用户日常使用.
-  适用关键词: 区块链安全, 地址检查, 代币扫描, 蜜罐检测, blockchain, scan, token, address'
+description: "区块链安全扫描免费版,为个人用户包含地址信誉查询、代币安全查验等核心能力. 适用于需要aegis security tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 主要功能包括区块链安全扫描免费版、免费版与专业版对比. 适用于需要aegis security tool相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量."
 tags:
   - 安全
+  - aegis
+  - security
+  - automation
+  - productivity
   - 区块链
   - DeFi
   - 免费版
   - 加密
   - 工具
-  - bash
-  - chain_id
-  - curl
-  - https
 tools:
   - read
   - exec
 homepage: ""
 category: "Security"
+pricing_tier: free
+
+
+
+
+
 ---
+
 # 区块链安全扫描免费版
 
 ## 概述
@@ -59,7 +63,7 @@ category: "Security"
 
 ```bash
 # 查询以太坊地址信誉
-curl -s "https://aegis402.xyz/v1/check-address/0x742d35Cc6634C0532925a3b844Bc454e4438f44e?chain_id=1" | jq
+curl -s "https://api.example.com/v1/check-address/0x742d35Cc6634C0532925a3b844Bc454e4438f44e?chain_id=1" | jq
 # ...
 # 查询Base链地址信誉
 ```
@@ -74,7 +78,7 @@ curl -s "https://aegis402.xyz/v1/check-address/0x742d35Cc6634C0532925a3b844Bc454
   "is_safe": true,
   "flags": [],
   "_meta": {
-    "requestId": "uuid-xxx",
+    "requestId": "uuid-placeholder",
     "tier": "free",
     "latencyMs": 42
   }
@@ -90,7 +94,7 @@ curl -s "https://aegis402.xyz/v1/check-address/0x742d35Cc6634C0532925a3b844Bc454
 检测代币是否存在蜜罐风险(买入后无法卖出)、无限增发、隐藏转账等恶意行为.
 ```bash
 # 检测ERC20代币安全性
-xyz/v1/check-token/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48?chain_id=1" | jq
+xyz/v1/check-item/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48?chain_id=1" | jq
 ```
 
 **处理**: 解析代币蜜罐检测的输入参数,完成核心逻辑,返回结构化响应.
@@ -101,6 +105,8 @@ xyz/v1/check-token/0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48?chain_id=1" | jq
 
 实时查看当日剩余免费检查次数.
 ```bash
+# 在此执行相关操作
+echo "操作完成"
 ```
 
 返回示例:
@@ -136,12 +142,12 @@ TOKEN_ADDRESS="0xA0b86991c6218b36c1d19D4a2e9Eb0cE3606eB48"
 CHAIN_ID=1
 # ...
 echo "正在检查代币安全性..."
-RESULT=$(curl -s "https://aegis402.xyz/v1/check-token/${TOKEN_ADDRESS}?chain_id=${CHAIN_ID}")
+RESULT=$(curl -s "https://api.example.com/v1/check-${PARAM}/${ITEM_ADDRESS}?chain_id=${CHAIN_ID}")
 # ...
 RISK_LEVEL=$(echo "$RESULT" | jq -r '.risk_level')
 IS_SAFE=$(echo "$RESULT" | jq -r '.is_safe')
 # ...
-echo "代币地址: ${TOKEN_ADDRESS}"
+echo "代币地址: ${ITEM_ADDRESS}"
 echo "风险等级: ${RISK_LEVEL}"
 echo "是否安全: ${IS_SAFE}"
 # ...
@@ -186,7 +192,7 @@ ADDRESSES=(
 )
 # ...
 for addr in "${ADDRESSES[@]}"; do
-    RISK=$(curl -s "https://aegis402.xyz/v1/check-address/${addr}?chain_id=${CHAIN_ID}" | jq -r '.risk_level')
+    RISK=$(curl -s "https://api.example.com/v1/check-address/${addr}?chain_id=${CHAIN_ID}" | jq -r '.risk_level')
     echo "${addr} -> ${RISK}"
     sleep 1  # 免费版限速,每次间隔1秒
 done
@@ -205,10 +211,10 @@ done
 需要安全检测、合规审计、漏洞扫描、加密防护时使用。不适用于非本工具能力范围的需求.
 ## 快速开始
 
-### 第一步:验证服务可用性
+### 领先步:验证服务可用性
 
 ```bash
-curl -s https://aegis402.xyz/health
+curl -s https://api.example.com/health
 ```
 
 ### 第二步:查询免费额度
@@ -220,6 +226,8 @@ xyz/v1/usage" | jq '.freeTier'
 ### 第三步:执行首次地址检查
 
 ```bash
+# 在此执行相关操作
+echo "操作完成"
 ```
 
 **响应解析**: 完成完成后,查看输出响应确认任务状态。成功时输出包含解析摘要和响应数据;失败时根据错误信息排查问题,查阅错误解析章节获取恢复步骤.
@@ -260,7 +268,7 @@ curl -s -H "X-Client-Fingerprint: ${FINGERPRINT}" \
 | HIGH | 风险显著 | 不建议交互 |
 | CRITICAL | 极高风险,可能恶意 | 立即停止交互 |
 
-## 最佳实践
+## 优秀实践
 
 1. **交易前必查**:在发送任何链上交易前,先对目标地址和代币执行安全检查.
 2. **稳定指纹**:设置固定的 `X-Client-Fingerprint` 头,确保免费额度准确统计.
@@ -268,7 +276,7 @@ curl -s -H "X-Client-Fingerprint: ${FINGERPRINT}" \
 4. **结果留档**:对高风险交易保留检查结果的JSON输出,便于后续追溯.
 5. **多链注意**:`chain_id` 是被扫描的链,需与实际交易链一致.
 ```bash
-# 最佳实践:交易前完整检查流程
+# 优秀实践:交易前完整检查流程
 check_before_transact() {
     local to_addr=$1
     local chain=$2
@@ -279,7 +287,7 @@ check_before_transact() {
     echo "链 ID: ${chain}"
 # ...
     # 查询额度
-    USAGE=$(curl -s -H "X-Client-Fingerprint: ${fingerprint}" "https://aegis402.xyz/v1/usage")
+    USAGE=$(curl -s -H "X-Client-Fingerprint: ${fingerprint}" "https://api.example.com/v1/usage")
     REMAINING=$(echo "$USAGE" | jq -r '.freeTier.remainingChecks')
     echo "剩余免费额度: ${REMAINING}"
 # ...
@@ -289,7 +297,7 @@ check_before_transact() {
 # ...
     # 地址检查
     RESULT=$(curl -s -H "X-Client-Fingerprint: ${fingerprint}" \
-        "https://aegis402.xyz/v1/check-address/${to_addr}?chain_id=${chain}")
+        "https://api.example.com/v1/check-address/${to_addr}?chain_id=${chain}")
 # ...
     echo "地址风险等级: ${RISK}"
 # ...
@@ -325,7 +333,7 @@ Solana链使用字符串 `solana` 作为chain_id,而非数字.
 ### 运行环境
 - **Agent平台**: 支持SKILL.md的任意AI Agent(Claude Code / Cursor / Codex / Gemini CLI等)
 - **操作系统**: Windows / macOS / Linux
-- **网络**: 需可访问 `https://aegis402.xyz`
+- **网络**: 需可访问 `https://api.example.com`
 
 ### 依赖详情
 
@@ -340,7 +348,7 @@ Solana链使用字符串 `solana` 作为chain_id,而非数字.
 - 建议设置 `X-Client-Fingerprint` 请求头用于额度统计
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,部分功能需exec命令行执行)
+- **分类**: MD+EXEC模式纯Markdown指令,部分功能需exec命令行执行)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent执行区块链安全检查任务
 
 ## 错误处理

@@ -1,41 +1,60 @@
-## Description: <br>
-This skill helps students use a 52-week, weekly exploration framework to distinguish shallow preferences from durable interests by recording challenge responses, time perception, external feedback, and staged interest-DNA reflections. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过每周一次的引导式探索，帮助学生观察自己面对困难时的反应，区分短暂喜好与值得继续探索的兴趣。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill for structured interest exploration, self-understanding, and growth planning. It guides weekly exploration, records interest-DNA signals, and can summarize progress for parents when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The trigger scope may activate during broad self-discovery or growth-planning conversations. <br>
-Mitigation: Narrow activation to explicit interest-exploration, 52-week tracking, or interest-DNA recording requests. <br>
-Risk: Student reflections and parent-facing summaries may contain personal information. <br>
-Mitigation: Share, persist, or transfer these records only with clear consent and appropriate privacy handling. <br>
+## Use Case:
 
+面向中国大陆小学中高段至高中学生的兴趣探索对话；在获得相应同意后，可跨周记录探索经历，并生成阶段性兴趣回顾。小学低段不适用，也不提供升学或职业规划建议。
 
-## Reference(s): <br>
-- [兴趣探索档案与记录模板](references/interest-exploration-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize child-data consent and crisis support before use elsewhere
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Conversational guidance and structured Markdown-style summaries or records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce weekly exploration prompts, interest-DNA records, progress reports, and parent-facing summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Long-term records about minors could be retained or shared without valid consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the host implements student and applicable guardian consent, record deletion and export, and separate permissions for parent access and cross-skill sharing before enabling tracking.
+
+Risk: Reminders or parent summaries could reach others without the student's authorization.
+
+Mitigation: Keep reminders and parent summaries off by default; enable each only through its explicit consent flow and limit summaries to facts the student agrees to share.
+
+Risk: Mainland-China age rules and crisis contacts may not fit another region.
+
+Mitigation: Localize consent requirements and crisis referrals for the deployment region before use with students outside mainland China.
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer)
+- [兴趣探索记录模板](references/interest-exploration-template.md)
+- [平台适用地域与能力约定](shared/platform-conventions.md)
+- [危机转介协议](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language conversational text and structured interest summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional weekly interest records and milestone reports; persistence, parent summaries, sharing and reminders require the relevant consents and host-platform support.]
+
+## Skill Version(s):
+
+2.7.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
