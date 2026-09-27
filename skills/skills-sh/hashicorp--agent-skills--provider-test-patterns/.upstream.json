@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/provider-test-patterns",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "provider-test-patterns",
+  "branch": "main",
+  "pushedAt": "2026-09-24T17:29:47Z",
+  "contentHash": "1807cf3a33045dec822bc291b226771bd3f5773aecea567ad11e574f36d2669a",
+  "fetchedAt": "2026-09-27T13:10:08.480Z"
+}
