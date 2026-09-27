@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/litgpt",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/litgpt",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/litgpt",
+  "branch": "main",
+  "pushedAt": "2026-09-27T11:44:52Z",
+  "contentHash": "3e831049c8fb0d1f5101d6afaa31eb4ba1f82f45b35ea6a2c8efeab9071ac7ca",
+  "fetchedAt": "2026-09-27T13:08:11.448Z"
+}

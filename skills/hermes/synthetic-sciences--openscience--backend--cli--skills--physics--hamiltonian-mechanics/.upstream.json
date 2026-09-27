@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/hamiltonian-mechanics",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/hamiltonian-mechanics",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/hamiltonian-mechanics",
+  "branch": "main",
+  "pushedAt": "2026-09-27T11:44:52Z",
+  "contentHash": "e9044915d8ef43a5227e0f4df2f03d496471c6b75170f9ec2148149586d15a51",
+  "fetchedAt": "2026-09-27T13:08:11.436Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pathml",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pathml",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pathml",
+  "branch": "main",
+  "pushedAt": "2026-09-27T11:44:52Z",
+  "contentHash": "dbe4dae2c5e04f72b4fb9d564684dc6987ff8e7cd9167a1c9ec9f2d56eb0464a",
+  "fetchedAt": "2026-09-27T13:08:11.502Z"
+}
