@@ -1,41 +1,57 @@
-## Description: <br>
-Process multiple items with progress tracking, checkpointing, and failure recovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Process multiple items with progress tracking, checkpointing, and failure recovery.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and agents use this skill to plan and run batch work with dry runs, progress updates, checkpoints, retry handling, and recovery paths for partial failures. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Large batches or destructive operations can amplify mistakes across many items. <br>
-Mitigation: Use dry runs and item counts before execution, require explicit confirmation for deletes or modifications, and keep rollback backups until results are verified. <br>
-Risk: Checkpoint, backup, rollback, or failed-item files may contain private data. <br>
-Mitigation: Clean up these files after verification and handle them as sensitive artifacts while they exist. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/batch) <br>
-- [Batch Error Handling](artifact/errors.md) <br>
-- [Batch Strategies](artifact/strategies.md) <br>
+## Use Case:
 
+Developers and agents use this skill to run batch operations with dry runs, progress reporting, checkpoints, retries, and partial failure recovery.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands] <br>
-**Output Format:** [Markdown guidance with progress summaries, retry patterns, and checkpoint or rollback examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce checkpoint, backup, failed-item, or rollback files when the agent applies the guidance to a batch task.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Destructive batch operations can affect many items at once.
+
+Mitigation: Run a small dry run first, confirm destructive actions before execution, snapshot state, log undo information, and offer rollback on abort.
+
+Risk: Checkpoint and failed-item files may contain sensitive batch data.
+
+Mitigation: Review where checkpoint or failure files will be written, keep them scoped to the task, and avoid exposing sensitive contents.
+
+Risk: Timeouts, rate limits, or bad inputs can create partial failures.
+
+Mitigation: Use retries with backoff for transient failures, throttle rate-limited APIs, log skippable errors, and abort fatal failures such as authentication or disk issues.
+
+## Reference(s):
+
+- [Batch Strategies](artifact/strategies.md)
+- [Batch Error Handling](artifact/errors.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with code, command, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend temporary checkpoint or failure files for retries and recovery.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

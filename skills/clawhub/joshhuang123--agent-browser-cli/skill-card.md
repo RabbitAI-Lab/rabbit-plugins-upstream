@@ -1,42 +1,55 @@
-## Description: <br>
-Agent Browser CLI helps agents automate browser tasks such as check-ins, form filling, clicking, screenshots, and page-content capture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Agent Browser CLI helps agents use the agent-browser CLI for browser automation tasks such as check-ins, form filling, screenshots, and webpage content collection.
 
-## Publisher: <br>
-[Joshhuang123](https://clawhub.ai/user/Joshhuang123) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[joshhuang123](https://clawhub.ai/user/joshhuang123)
 
-## Use Case: <br>
-Developers and agent users use this skill when an agent needs to operate a browser through the agent-browser CLI for navigation, page inspection, clicking, form entry, screenshots, or scheduled check-in workflows. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill enables browser automation that can click controls, fill forms, take screenshots, and interact with logged-in websites. <br>
-Mitigation: Review pages before allowing clicks or submissions, avoid entering real credentials unless necessary, and be cautious with screenshots of logged-in pages. <br>
-Risk: The skill may be used to create scheduled check-in scripts. <br>
-Mitigation: Create scheduled scripts only intentionally, review their targets and actions, and close browser sessions when workflows finish. <br>
-Risk: The artifact depends on installing the external agent-browser npm package globally. <br>
-Mitigation: Install it only when the package source is trusted and the user accepts the risks of a global CLI dependency. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/Joshhuang123/agent-browser-cli) <br>
-- [Publisher profile](https://clawhub.ai/user/Joshhuang123) <br>
+## Use Case:
+
+Developers and agents use this skill to drive browser sessions through agent-browser commands for navigation, element interaction, screenshots, and lightweight web research workflows.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Browser automation can submit forms, click account-changing controls, or use existing browser sessions in ways that affect real accounts.
+
+Mitigation: Run the skill in a limited environment, avoid sensitive browser profiles and stored sessions, and confirm every submission or account-changing click.
+
+Risk: The artifact recommends installing a mutable global CLI with npm.
+
+Mitigation: Prefer a pinned or isolated local installation of agent-browser instead of a global latest-version install.
+
+Risk: Automated scripts may handle credentials or private form data.
+
+Mitigation: Do not paste real passwords into scripts and review commands before execution.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance centers on agent-browser CLI commands and browser automation workflows.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+**Output Type(s):** [text, shell commands, configuration, guidance]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include command examples for browser navigation, interaction, data extraction, screenshots, cron-based check-ins, and local installation.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

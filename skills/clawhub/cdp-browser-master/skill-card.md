@@ -1,43 +1,57 @@
-## Description: <br>
-CDP浏览器大师 helps agents automate logged-in Chrome or Edge sessions through Chrome DevTools Protocol for JavaScript-rendered pages, browser interactions, selector exploration, SPA navigation, and data extraction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CDP浏览器大师 guides agents through Chrome DevTools Protocol workflows for controlling logged-in Edge or Chrome browser sessions, navigating SPA pages, probing DOM selectors, waiting for network idle, taking screenshots, and extracting page data or cookies.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and automation operators use this skill when ordinary page fetches are insufficient and an agent needs to guide CDP-based browser automation for authenticated, JavaScript-rendered, or interactive websites. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to control a browser profile that may already be logged in, exposing active sessions and account data. <br>
-Mitigation: Use a dedicated browser profile with throwaway or limited accounts, and close remote debugging when automation is complete. <br>
-Risk: The skill includes guidance for extracting or reusing session cookies, including HttpOnly cookies. <br>
-Mitigation: Do not extract, store, or reuse cookies unless explicitly authorized; avoid the cookie workflow for routine automation. <br>
-Risk: Anti-detection and session-reuse guidance can be misused on sites where automation is not permitted. <br>
-Mitigation: Use the automation only on sites and accounts where you have explicit permission, and follow applicable site terms and policies. <br>
+## Use Case:
 
+Developers, QA engineers, and automation teams use this skill to operate existing logged-in local Chrome or Edge sessions for JS-rendered page inspection, data extraction, clicks and forms, screenshots, SPA navigation, and cookie retrieval when simpler fetch-based access is insufficient.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cdp-browser-master) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with JavaScript and PowerShell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Examples focus on Edge and Chrome remote debugging sessions, CDP commands, DOM extraction, screenshots, selector fallbacks, and troubleshooting; no additional API key is described.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Logged-in browser control can expose authenticated sessions or perform actions on behalf of the user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated temporary browser profile and restrict remote debugging to local trusted use.
+
+Risk: The skill can retrieve raw cookies, including HttpOnly cookies through CDP, which may disclose session credentials.
+
+Mitigation: Avoid exporting raw cookies and do not use the skill on accounts or sites where session disclosure could cause financial, business, or privacy harm.
+
+Risk: The artifact under-discloses or contradicts security implications of browser control and cookie extraction.
+
+Mitigation: Review the skill before installation and follow the server security guidance rather than relying on the artifact's generic safety claims.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/cdp-browser-master)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline PowerShell, JavaScript, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce extracted DOM data, cookie strings, screenshots as base64, execution logs, and error messages.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

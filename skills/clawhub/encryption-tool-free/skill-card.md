@@ -1,39 +1,56 @@
-## Description: <br>
-Helps developers choose encryption algorithms, run file encryption and decryption workflows, hash passwords, review basic cryptographic code risks, and inspect TLS certificate configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides file encryption, password hashing, encryption algorithm selection guidance, and basic compliance checks for developers protecting sensitive data.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and engineering teams use this skill to choose encryption approaches, encrypt or decrypt files with command-line tools, hash passwords, and run basic crypto-related code checks on systems and repositories they control.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Commands proposed by the skill can permanently delete original files after encryption.
+
+Mitigation: Require explicit confirmation before destructive commands, keep backups, and verify decrypted output before removing originals.
+
+Risk: The skill may handle keys, passwords, hashes, tokens, or decrypted sensitive data.
+
+Mitigation: Avoid printing secrets into chat or logs and prefer environment variables or a dedicated secret manager for key material.
+
+Risk: Broad security and network checks can run against unintended paths or domains.
+
+Mitigation: Limit execution to files, repositories, and domains the user controls, and review command scope before running.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and engineers use this skill to protect sensitive files, store user passwords safely, select appropriate cryptographic algorithms, and perform basic security checks during development. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Default examples may lead an agent to delete original sensitive files immediately after encryption. <br>
-Mitigation: Require explicit user confirmation before deleting plaintext, verify that encrypted files can be decrypted, and keep separate backups of files and keys. <br>
+**Output Format:** [Markdown with inline shell, Python, JavaScript, and YAML examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/encryption-tool-free) <br>
-- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
+**Other Properties Related to Output:** [May propose commands that modify or delete files; outputs should avoid exposing keys, passwords, hashes, tokens, or decrypted sensitive data.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with command examples, code snippets, configuration blocks, and JSON-style result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include executable shell commands and file-operation guidance for encryption workflows.] <br>
+1.0.3 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

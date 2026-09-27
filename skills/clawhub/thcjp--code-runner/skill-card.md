@@ -1,43 +1,58 @@
-## Description: <br>
-Code Runner helps development teams coordinate batch and concurrent code-execution tasks, CI/CD automation, and execution audit logging. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language code execution assistant for batch task execution, concurrent job management, execution audit logs, CI/CD workflows, and development automation.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to run and coordinate code tasks across projects, generate review or execution reports, and integrate automated work into CI/CD workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Code-execution automation can affect real development workspaces, CI jobs, or multiple repositories. <br>
-Mitigation: Review before installing in real development or CI environments, use isolated workspaces, and be especially cautious when running with sudo or root privileges. <br>
-Risk: Broad automatic prompt responses and generic password-prompt behavior can approve unintended actions or expose secrets. <br>
-Mitigation: Disable or tightly allowlist automatic prompt responses and avoid EXEC_PASSWORD-style generic secret entry. <br>
-Risk: Execution audit logs may capture sensitive stdout, stderr, file changes, or task context. <br>
-Mitigation: Configure audit logs to redact secrets and reduce retention before use. <br>
+## Use Case:
 
+Developers, engineering teams, and CI/CD operators use this skill to drive coding, testing, review, and deployment tasks through agent-executed commands and structured batch workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-runner) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with code blocks, shell commands, configuration snippets, and structured result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include execution status, result data, audit log locations, and improvement guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Broad automatic command execution can run unintended or unsafe commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a disposable or tightly controlled environment, restrict allowed workdirs and commands, and review external packages before use.
+
+Risk: Generic auto-confirm and password prompt automation can approve actions or disclose credentials unexpectedly.
+
+Mitigation: Disable generic auto-confirm and password prompt automation; avoid root or sudo unless absolutely necessary.
+
+Risk: Detailed execution and audit logs may capture sensitive code, outputs, or secrets.
+
+Mitigation: Configure audit logs to redact secrets and retain data briefly.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/code-runner)
+- [Declared homepage](https://skillhub.cn/skill/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with code blocks, shell commands, JSON examples, and audit/report text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include executable command suggestions, configuration snippets, code changes, logs, and structured reports.]
+
+## Skill Version(s):
+
+1.0.2 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

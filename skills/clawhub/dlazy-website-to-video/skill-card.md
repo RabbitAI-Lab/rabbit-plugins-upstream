@@ -1,45 +1,59 @@
-## Description: <br>
-Dlazy Website To Video turns a supplied website URL into a promo, social ad, or product demo video by using the dLazy CLI to run the hosted website-to-video template. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Website to video, URL to video, landing page to video, link to ad, web promo video: capture the site, derive brand, storyboard, voiceover, build, and validate on a Remotion template when the user provides a URL and wants a promo, social ad, or product demo.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, operators, and content teams use this skill when they have a website URL and want an agent to start or continue a dLazy website-to-video project for promo videos, social ads, or product demos. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts, supplied URLs, and any attached files to the third-party dLazy SaaS endpoints described in the evidence. <br>
-Mitigation: Install and use it only when that data transfer is acceptable for the user's content and organization policy. <br>
-Risk: Authentication requires a dLazy API key that may be saved in the local CLI configuration. <br>
-Mitigation: Use the documented login or environment-variable flow, protect the local config file, and rotate or revoke the key from the dLazy dashboard when needed. <br>
-Risk: A persistent global CLI install changes the local toolchain. <br>
-Mitigation: Use the pinned npx invocation when a non-persistent install is preferred. <br>
+## Use Case:
 
+External users and developers use this skill to turn website URLs or landing pages into promotional videos, social ads, or product demos through the dLazy CLI and website-to-video template.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-website-to-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and streamed CLI text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference dLazy project ids and uploaded file URLs returned through the third-party CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release metadata) <br>
+Risk: Prompt text, target URLs, project context, and attached files may be sent to dLazy as part of the hosted service workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when this SaaS data flow is acceptable, and avoid attaching sensitive files unless they are intended for upload.
+
+Risk: The dLazy CLI may store an API key in local configuration.
+
+Mitigation: Use scoped organization keys, rotate or revoke keys from the dLazy dashboard when needed, and prefer per-invocation credentials where appropriate.
+
+Risk: A global CLI install persists tooling on the system.
+
+Mitigation: Use the documented npx invocation when a persistent global install is not desired.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-website-to-video)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and CLI guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May stream hosted dLazy agent responses and may reference generated project outputs or uploaded files.]
+
+## Skill Version(s):
+
+1.3.20 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

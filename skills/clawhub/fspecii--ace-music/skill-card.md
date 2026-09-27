@@ -1,41 +1,63 @@
-## Description: <br>
-Generate AI music using ACE-Step 1.5 via ACE Music's hosted API, with support for lyrics, style prompts, covers, repainting, and instrumental or vocal tracks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate AI music using ACE-Step 1.5 via ACE Music's free API.
 
-## Publisher: <br>
-[fspecii](https://clawhub.ai/user/fspecii) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[fspecii](https://clawhub.ai/user/fspecii)
 
-## Use Case: <br>
-External users and developers use this skill to generate songs, beats, instrumentals, covers, and audio edits from prompts, lyrics, and music parameters through ACE Music's hosted API. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The helper script handles output paths and request parameters unsafely enough to require review before installation. <br>
-Mitigation: Review and fix the helper script before running it; write generated files only to a dedicated safe directory using simple filenames. <br>
-Risk: The skill uses an ACE Music API key and may submit prompts, lyrics, or audio to a third-party hosted API. <br>
-Mitigation: Use a dedicated API key, keep it out of shared files and source control, and avoid submitting confidential lyrics or audio. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ACE-Step OpenRouter API Reference](references/api-docs.md) <br>
-- [ACE Music API key page](https://acemusic.ai/playground/api-key) <br>
-- [ClawHub skill page](https://clawhub.ai/fspecii/ace-music) <br>
+## Use Case:
 
+External users and developers use this skill to generate songs, instrumentals, beats, covers, and edited audio from prompts, lyrics, style descriptions, and optional audio inputs through the ACE Music API.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, files] <br>
-**Output Format:** [Markdown guidance with bash commands and generated audio file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ACE_MUSIC_API_KEY; generated audio is saved as MP3 files by the helper script.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The generation script has a filename-based code execution flaw.
+
+Mitigation: Review the script before use and avoid user-supplied or unusual output filenames until the script is fixed.
+
+Risk: The skill uses an API key and has weak credential handling guidance.
+
+Mitigation: Store ACE_MUSIC_API_KEY in a proper secret store and do not place API keys in TOOLS.md or chat history.
+
+Risk: Changing ACE_MUSIC_BASE_URL can redirect prompts, lyrics, credentials, and audio requests to a different endpoint.
+
+Mitigation: Use the default API endpoint unless the alternate endpoint is fully trusted.
+
+Risk: Prompts, lyrics, and audio inputs may be sent to the ACE Music hosted API.
+
+Mitigation: Use the skill only with non-sensitive prompts, lyrics, and audio content.
+
+## Reference(s):
+
+- [ACE-Step OpenRouter API Reference](references/api-docs.md)
+- [ACE Music API Key Page](https://acemusic.ai/playground/api-key)
+- [ACE Music API Base URL](https://api.acemusic.ai)
+- [ClawHub Skill Page](https://clawhub.ai/fspecii/skills/ace-music)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Files, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands and generated MP3 audio file paths]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The bundled script writes MP3 files decoded from API responses and prints saved file paths.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,53 @@
-## Description: <br>
-Manages Feishu (Lark) calendars for listing calendars, searching schedules, checking availability, creating events with attendees, and syncing calendar state. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages Feishu/Lark calendars by listing calendars, searching schedules, checking availability, creating events with attendees, and syncing calendar state.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Personal users and lightweight automation agents use this skill to manage Feishu/Lark calendar workflows such as finding calendars, checking availability, creating reminders or events, and syncing local calendar state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create or modify calendar events and shared-calendar settings. <br>
-Mitigation: Use a least-privilege Feishu app and require confirmation before event creation, attendee changes, shared-calendar actions, or synchronization. <br>
-Risk: Calendar and contact data may be sent to Feishu APIs despite artifact claims about local-only storage. <br>
-Mitigation: Treat API communication as expected behavior, limit exposed calendars and contacts, and do not rely on local-only privacy claims. <br>
-Risk: Callback URLs may send results to a remote endpoint. <br>
-Mitigation: Avoid callback URLs unless the endpoint is trusted and necessary. <br>
+## Use Case:
 
+External users and developers use this skill to manage Feishu/Lark calendar workflows, including calendar discovery, schedule search, availability checks, event creation, attendee setup, and local schedule synchronization.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/feishu-calendar-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-formatted structured responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require Feishu app credentials, calendar/contact permissions, and network access to Feishu APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: The skill can read calendars and contacts, create events, add attendees, and store synced calendar data locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit credentials and Feishu/Lark scopes to the required calendar tasks, review requested actions before execution, and protect any local cache or environment files.
+
+Risk: Security evidence flags inconsistent routing, privacy claims, and collaboration scope for a calendar tool with write access.
+
+Mitigation: Use the skill only for Feishu/Lark calendar tasks and require publisher clarification before relying on local-only privacy claims or broader collaboration behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/feishu-calendar-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or structured text with inline shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include calendar operation status, returned schedule data, setup guidance, and error-handling guidance.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

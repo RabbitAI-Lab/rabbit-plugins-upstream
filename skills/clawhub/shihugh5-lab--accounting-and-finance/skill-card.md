@@ -1,44 +1,59 @@
-## Description: <br>
-Accounting and Finance is a Chinese-language suite of financial analysis skills for valuation modeling, financial statement analysis, risk assessment, portfolio tracking, and report drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a suite of accounting and finance analysis skills for valuation modeling, financial statement analysis, cash flow analysis, benchmarking, risk assessment, and investment report drafting.
 
-## Publisher: <br>
-[shihugh5-lab](https://clawhub.ai/user/shihugh5-lab) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shihugh5-lab](https://clawhub.ai/user/shihugh5-lab)
 
-## Use Case: <br>
-Finance analysts, investment researchers, and finance teams use this skill to structure accounting, valuation, cash-flow, peer-comparison, portfolio, and risk-analysis workflows. Outputs should be treated as draft analytical material and reviewed by qualified humans before financial decisions are made. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can generate concrete investment advice, including buy, sell, hold, or target-price style guidance. <br>
-Mitigation: Treat generated recommendations as draft analysis only; verify data, formulas, assumptions, and conclusions with qualified financial review before use. <br>
-Risk: The skill can store analysis memory without clear limits. <br>
-Mitigation: Do not allow MEMORY.md writes unless the user explicitly approves the content and retention purpose. <br>
-Risk: Financial statements, market data, and assumptions may be incomplete, stale, or misapplied by the agent. <br>
-Mitigation: Require source citation, date checks, independent recalculation, and sensitivity review for material financial outputs. <br>
+## Use Case:
 
+External users and analysts use this skill suite to structure accounting and finance workflows, including company valuation, financial statement review, peer comparison, cash flow analysis, risk detection, and report generation.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/shihugh5-lab/accounting-and-finance) <br>
-- [Financial Analysis Skills Suite overview](artifact/skill.md) <br>
-- [LibraQuant website](https://libraquant.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown reports with tables, formulas, checklists, and occasional code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language finance analysis outputs; may include valuation ranges, risk ratings, investment-thesis drafts, and report templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The release includes actionable finance and investment guidance, including ratings, target prices, and trading-oriented conclusions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as educational analysis and independently verify assumptions, market data, and recommendations before making financial decisions.
+
+Risk: Security evidence reports persistent memory write behavior.
+
+Mitigation: Disable or ignore MEMORY.md write behavior unless the user explicitly approves each entry.
+
+Risk: Security evidence gives the package a suspicious verdict and recommends review before installation.
+
+Mitigation: Review the skill package before installing or deploying it, with special attention to finance guidance and persistence behavior.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/shihugh5-lab/skills/accounting-and-finance)
+- [ClawHub publisher profile](https://clawhub.ai/user/shihugh5-lab)
+- [LibraQuant](https://libraquant.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with formulas, tables, checklists, and illustrative code or command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Finance outputs may include ratings, target prices, investment theses, and risk assessments that require independent verification with current data.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

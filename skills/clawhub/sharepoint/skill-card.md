@@ -1,44 +1,74 @@
-## Description: <br>
-SharePoint API integration via Microsoft Graph with managed OAuth for accessing SharePoint sites, lists, document libraries, and files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SharePoint API integration via Microsoft Graph with managed OAuth for accessing SharePoint sites, lists, document libraries, and files.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to make authenticated Microsoft Graph requests through Maton for SharePoint document management, list operations, site discovery, file handling, sharing, and permissions workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton-managed OAuth and MATON_API_KEY to access and modify SharePoint content. <br>
-Mitigation: Protect MATON_API_KEY like a password and use the least-privileged SharePoint account practical. <br>
-Risk: Write and sharing operations can change files, lists, folders, or permissions in the connected SharePoint account. <br>
-Mitigation: Confirm the target resource, intended effect, audience, link scope, and expiration or revocation plan before approving write or sharing operations. <br>
+## Use Case:
 
+Developers and business users use this skill to work with SharePoint content through Microsoft Graph, including reading sites, lists, libraries, files, permissions, versions, and selected write operations. It also guides approved SharePoint automation through Maton connections, hosted functions, and triggers.
 
-## Reference(s): <br>
-- [Microsoft SharePoint Sites API](https://learn.microsoft.com/en-us/graph/api/resources/sharepoint) <br>
-- [Microsoft Graph DriveItem API](https://learn.microsoft.com/en-us/graph/api/resources/driveitem) <br>
-- [Microsoft Graph List API](https://learn.microsoft.com/en-us/graph/api/resources/list) <br>
-- [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP examples, shell commands, Python snippets, JavaScript snippets, and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: SharePoint actions can read or modify business data through the user's authorized connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read and list calls, request explicit user approval before POST, PUT, PATCH, DELETE, new connections, sharing links, hosted functions, triggers, or destinations, and use the narrowest SharePoint scope available.
+
+Risk: Long-lived API keys and raw response bodies can expose credentials or sensitive SharePoint content.
+
+Mitigation: Prefer OAuth, store credentials through the Maton credential store, avoid exporting MATON_API_KEY except where the CLI cannot be installed, and extract only task-required response fields instead of logging or saving full payloads.
+
+Risk: Hosted functions and triggers can create ongoing automation that forwards data without repeated review.
+
+Mitigation: Use user-authored or user-reviewed handlers, deploy SharePoint functions with DENY_ALL network policy by default, prefer Maton destinations, minimize trigger payloads with body templates, and delete unused connections, functions, triggers, and destinations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/sharepoint)
+- [Maton homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [SharePoint Sites API](https://learn.microsoft.com/en-us/graph/api/resources/sharepoint)
+- [DriveItem API](https://learn.microsoft.com/en-us/graph/api/resources/driveitem)
+- [List API](https://learn.microsoft.com/en-us/graph/api/resources/list)
+- [Microsoft Graph Explorer](https://developer.microsoft.com/en-us/graph/graph-explorer)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API Calls, Code, Configuration instructions]
+
+**Output Format:** [Markdown with inline bash, JSON, and Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Maton CLI or raw HTTP examples and recommends OAuth, least-privilege scopes, and explicit approval for writes, connections, functions, triggers, and destinations.]
+
+## Skill Version(s):
+
+1.2.4 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,60 @@
-## Description: <br>
-Local vector memory system for agent recall using LanceDB and JavaScript embeddings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Local vector memory system with LanceDB and pure JavaScript embeddings for storing, searching, and recalling agent memories without native modules or required external APIs.
 
-## Publisher: <br>
-[LHMiles](https://clawhub.ai/user/LHMiles) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[lhmiles](https://clawhub.ai/user/lhmiles)
 
-## Use Case: <br>
-Developers and agent users use this skill to initialize, store, search, and manage durable local memories for an OpenClaw-style agent workspace. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Security evidence reports under-disclosed remote API and shell-download code paths that do not fit the skill's local-only claims. <br>
-Mitigation: Review or remove the unused Kimi and ONNX embedding helpers before installing in sensitive environments. <br>
-Risk: Stored memories are durable local records and may retain sensitive user or project information. <br>
-Mitigation: Avoid storing secrets or regulated data, review memory contents regularly, and disable autoRecall if automatic injection of prior memories is not wanted. <br>
+## Use Case:
 
+Developers and agent users use this skill to add local long-term memory to OpenClaw workflows, including storing user preferences, decisions, facts, and searching those memories for later context.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/LHMiles/elite-longterm-memory-local) <br>
-- [Ollama](https://ollama.com) <br>
-- [LanceDB Documentation](https://lancedb.github.io) <br>
-- [nomic-embed-text Model](https://ollama.com/library/nomic-embed-text) <br>
-- [Kimi API](https://api.kimi.com/coding) <br>
-- [Xenova all-MiniLM-L6-v2 Model Mirror](https://hf-mirror.com/Xenova/all-MiniLM-L6-v2/resolve/main) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create and update local memory files and vector-store data in the user's workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: frontmatter, package.json, server release metadata) <br>
+Risk: Stored memories can be automatically injected into future prompts, which may carry stale, sensitive, or untrusted text into later agent work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable autoRecall unless the stored memories are trusted, and review or delete memory entries before sensitive tasks.
+
+Risk: Dormant Kimi and ONNX embedding adapters can make network calls despite the normal local-only posture.
+
+Mitigation: Use the default pure JavaScript embedding path and avoid enabling the Kimi or ONNX adapters unless their network behavior has been reviewed and approved.
+
+Risk: Initialization commands create or overwrite local memory files in the current workspace.
+
+Mitigation: Back up existing SESSION-STATE.md, MEMORY.md, and memory/ data before running init commands.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/lhmiles/skills/elite-longterm-memory-local)
+- [Ollama](https://ollama.com)
+- [LanceDB](https://lancedb.github.io)
+- [nomic-embed-text Model](https://ollama.com/library/nomic-embed-text)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance, CLI text output, OpenClaw tool responses, and JSON-compatible tool details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The skill can create local memory files and a LanceDB-backed vector store in the current workspace.]
+
+## Skill Version(s):
+
+1.1.0 (source: SKILL.md frontmatter, package.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

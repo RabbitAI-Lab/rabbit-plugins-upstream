@@ -1,43 +1,57 @@
-## Description: <br>
-图像处理基础版 helps an agent inspect, convert, crop, resize, compress, and manage metadata for image files in lightweight personal workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps agents inspect image dimensions and color settings, crop and resize images, convert common formats, compress outputs, and manage EXIF/ICC metadata.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to guide common image processing work such as Web image optimization, screenshot cleanup, format conversion, compression, and EXIF or ICC metadata handling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill combines local privacy claims with unclear external API or network behavior. <br>
-Mitigation: Use it on non-sensitive images or local-only workflows until the publisher documents which features contact external services and what data is transmitted. <br>
-Risk: The artifact asks agents to use command execution and file writing for image operations. <br>
-Mitigation: Review proposed commands before execution and run them on copied input files in a controlled working directory. <br>
-Risk: API keys or callback URLs could expose credentials or image-processing results if used without clear data-flow documentation. <br>
-Mitigation: Do not provide API keys or callback URLs unless the publisher documents the receiving service, purpose, and transmitted data. <br>
+## Use Case:
 
+Developers, automation users, and individual creators use this skill to guide an agent through lightweight image inspection, format conversion, compression, and metadata handling for local image files. It is best suited to single-image or small workflow tasks that can be carried out with available image tooling.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/image-tool-free) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON examples, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce image-processing command suggestions and structured status-style responses for review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The trigger text is not clearly scoped to image-processing tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Narrow activation guidance to image inspection, conversion, compression, cropping, resizing, and metadata-management requests.
+
+Risk: The artifact includes an unnecessary credential-environment check.
+
+Mitigation: Remove commands that enumerate API, key, token, or secret environment variables before release or installation.
+
+Risk: Network or API behavior is mentioned without a clear scope.
+
+Mitigation: Document any required network access explicitly and keep default workflows local unless network use is required by the user.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/image-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text with shell command examples and optional JSON/text/CSV output descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on the agent runtime and locally available image tools.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

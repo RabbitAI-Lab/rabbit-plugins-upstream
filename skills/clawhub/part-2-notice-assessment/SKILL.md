@@ -265,7 +265,8 @@ The output is a map of element coverage, not a score.
     "elements_partial": 0,
     "elements_absent": 0,
     "part2_specific_omissions": ["string — element ids among C4, C7, C8, C10(C), C10(D) that are partial/absent"],
-    "headline": "string — one or two sentences: is a notice posted, and where is the gap"
+    "headline": "string — one or two sentences: is a notice posted, and where is the gap",
+    "professional_review_note": "This is an automated notice-content gap-check, not a compliance determination. Whether a gap is material enough to act on, and any remediation or outreach, is a decision for a compliance professional."
   }
 }
 ```

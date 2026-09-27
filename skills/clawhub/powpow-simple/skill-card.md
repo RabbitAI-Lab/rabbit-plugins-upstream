@@ -1,46 +1,62 @@
-## Description: <br>
-POWPOW 简化版 helps OpenClaw users create and manage POWPOW digital humans, including account registration, digital-human creation, location selection, avatar upload, renewal, and badge management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户把照片或旅行素材写成游记并发布到 PowPow，或创建可聊天并展示在公开地图上的数字人。
 
-## Publisher: <br>
-[durenzidu](https://clawhub.ai/user/durenzidu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[durenzidu](https://clawhub.ai/user/durenzidu)
 
-## Use Case: <br>
-External OpenClaw users use this skill to manage a POWPOW account and complete the interactive flow for creating, viewing, renewing, and locating POWPOW digital humans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles POWPOW account credentials and sends them to the configured POWPOW service. <br>
-Mitigation: Use a POWPOW-specific password and verify the configured POWPOW base URL before registering or logging in. <br>
-Risk: Avatar uploads and location searches may disclose local file choices, images, or location interests to external services. <br>
-Mitigation: Review avatar file paths before upload and treat AMap location search terms as data shared with a third-party map service. <br>
-Risk: Logs and feedback files may remain under ~/.powpow-simple on the local machine. <br>
-Mitigation: Delete local logs or feedback files if they contain information you do not want retained. <br>
+## Use Case:
 
+PowPow 用户可用此技能起草和预览游记、发布照片帖子，或创建会聊天的地图数字人；需要 PowPow 账号和配套的 powpow-cli，发布等操作须由用户明确确认。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/durenzidu/powpow-simple) <br>
-- [POWPOW website](https://global.powpow.online) <br>
-- [POWPOW map](https://global.powpow.online/map) <br>
-- [POWPOW Simple npm package](https://www.npmjs.com/package/powpow-simple) <br>
-- [AMap geocoding API](https://restapi.amap.com/v3/geocode/geo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, API calls, Files, Configuration] <br>
-**Output Format:** [JSON-like command responses and concise user-facing messages] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local logs and feedback files under ~/.powpow-simple and send account, avatar, and location data to configured POWPOW and AMap services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter, package.json, skill.json, and server release evidence) <br>
+Risk: The companion CLI performs login, uploads, publishing, deletion, and digital-human creation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review powpow-cli separately and inspect the proposed action before explicitly confirming it.
+
+Risk: Sharing a password in chat can expose account credentials.
+
+Mitigation: Log in directly from your own terminal; never send your password to the agent.
+
+Risk: Posts with locations and map-based digital humans are publicly visible.
+
+Mitigation: Review the location and preview before confirming publication; omit a post location if you do not want it shown on the public map.
+
+## Reference(s):
+
+- [PowPow Simple ClawHub release](https://clawhub.ai/durenzidu/skills/powpow-simple)
+- [PowPow website](https://global.powpow.online)
+- [PowPow public map](https://global.powpow.online/map)
+- [Security architecture](references/security.md)
+- [Product screenshots](references/screenshots.md)
+- [Changelog](references/changelog.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with draft text, previews, confirmation prompts, and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can provide local post previews and links to published posts or map-based digital humans.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter, ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

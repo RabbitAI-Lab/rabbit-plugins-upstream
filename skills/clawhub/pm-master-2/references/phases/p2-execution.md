@@ -2,7 +2,7 @@
 
 > The execution phase delivers increments/outcomes per the **baselined plan**. It runs **concurrently** with **P3 Monitoring** within the `operational` state
 > (execution is "doing," monitoring is "watching"); it is not sequential (execute first, then monitor).
-> State-machine placement: `执行` ⊆ `operational` (must first pass the G1→2 control gate, and waterfall/hybrid must have run `baseline.py --freeze`).
+> State-machine placement: `execution` ⊆ `operational` (must first pass the G1→2 control gate, and waterfall/hybrid must have run `baseline.py --freeze`).
 > The hard gate to enter this phase: G1→2 (see `p0-p1-initiation-planning.md §6` and `scripts/gate_engine.py`).
 
 ## 1. Objectives
@@ -33,7 +33,7 @@ Deliver acceptable increments or outcomes per plan/commitments; maintain baselin
 - Hard gate (automated checks, all required):
   - `consistency_check.py --project` **exit 0** (no fatal issues in plan baseline).
   - waterfall/hybrid: **`baseline.py --freeze` already run** (`baseline.file` exists).
-- Approver: sponsor (see `p0-p1-initiation-planning.md §6` `gate_engine.py --to 执行 --approve`).
+- Approver: sponsor (see `p0-p1-initiation-planning.md §6` `gate_engine.py --to execution --approve`).
 
 ## 5. Exit Criteria (Exit · Ready to Enter Monitoring/Closeout)
 
@@ -50,7 +50,7 @@ Deliver acceptable increments or outcomes per plan/commitments; maintain baselin
 
 ```bash
 SKILL_DIR=<this skill directory>
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 监控 --approve "李四(PM)"
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to monitoring --approve "Li Si (PM)"
 ```
 
 ## 7. Recommended Scripts
@@ -59,22 +59,22 @@ python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.ya
 - `evm.py`: Establish and roll EVM baseline (pv/ev/ac) during execution, compute CPI/SPI.
 - `schedule_health.py`: waterfall/hybrid tracks critical path/float.
 - `render.py` / `render_docx.py`: Produce increments, demo artifacts, formal documents.
-- `gate_engine.py --to 监控`: Soft-gate markers for monitoring cadence.
+- `gate_engine.py --to monitoring`: Soft-gate markers for monitoring cadence.
 
-## 7.1 Operational Artifact Guardrail (OAG) — 每次动作必须刷新交付物
+## 7.1 Operational Artifact Guardrail (OAG) — Refresh deliverables after every action
 
-> **Iron Rule #12，不可妥协。** 本阶段（operational）曾发生 `raid_log` / `risk_register` / `portfolio_dashboard`
-> 落后于事实源的护栏违规。每次执行动作都必须闭环交付物。
+> **Iron Rule #12, non-negotiable.** During this (operational) phase, guardrail violations have occurred where `raid_log` / `risk_register` / `portfolio_dashboard`
+> fell behind the source of truth. Every execution action must close the loop on its deliverables.
 
-**强制后置步骤（每次 operational 动作后）**：
-1. 修改 `project.yaml`（状态 / EVM / RAID / WBS / actuals）后，**重渲染**受影响交付物：
-   - RAID 变更 → `python3 $SKILL_DIR/scripts/build_subproject.py --project <yaml> --only raid`
-   - 状态/EVM 变更 → 重渲染 `status_report` / `portfolio_dashboard`（程序层）
-2. 手工/外部渲染的文档产出后：`python3 $SKILL_DIR/scripts/artifact_guard.py --project <yaml> --stamp <key>`
-3. 校验：`python3 $SKILL_DIR/scripts/artifact_guard.py --project <yaml>` → **必须 exit 0**；非零则回到第 1 步。
-4. `control_engine.py` 周期巡检会内置 OAG 检查，漂移即 RED 升级（exit 1）。
+**Mandatory follow-up steps (after every operational action)**:
+1. After modifying `project.yaml` (status / EVM / RAID / WBS / actuals), **re-render** the affected deliverables:
+   - RAID change → `python3 $SKILL_DIR/scripts/build_subproject.py --project <yaml> --only raid`
+   - status/EVM change → re-render `status_report` / `portfolio_dashboard` (program level)
+2. After a manually / externally rendered document is produced: `python3 $SKILL_DIR/scripts/artifact_guard.py --project <yaml> --stamp <key>`
+3. Validate: `python3 $SKILL_DIR/scripts/artifact_guard.py --project <yaml>` → **must exit 0**; if non-zero, return to step 1.
+4. `control_engine.py`'s periodic patrol has the OAG check built in; any drift triggers a RED escalation (exit 1).
 
-**违规后果**：交付物漂移 → `control_engine` RED / 收尾门（G3→4）硬准则不通过 → 禁止收尾。
+**Consequence of violation**: deliverable drift → `control_engine` RED / closeout gate (G3→4) hard criterion fails → closeout is forbidden.
 
 ## 8. Handoff
 

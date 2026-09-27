@@ -25,7 +25,7 @@ US only. The skill validates `+1` E.164 numbers and refuses to dial internationa
 ## Known Risks and Mitigations
 
 Risk: The voice agent may commit to a booking, cancellation, payment, or other binding action on the user's behalf based only on what's in the call instructions.
-Mitigation: Call instructions must explicitly state decision boundaries and what not to agree to. For sensitive or negotiable calls, the skill offers live handoff via `bridge_number` so the user joins before any commitment.
+Mitigation: Call instructions must explicitly state decision boundaries and what not to agree to. For sensitive or negotiable calls, the skill offers live handoff via `loop_in_user: true` to the verified account phone so the user can choose to join before any commitment.
 
 Risk: A phone agent could be asked to provide private user information (DOB, account numbers, OTPs, payment details) it does not have or should not disclose.
 Mitigation: The skill instructs agents to anticipate verification points up front, to refuse to fabricate identity details, and to bridge the user in for live verification rather than guess.
@@ -58,7 +58,7 @@ Output format: JSON over HTTPS. Terminal call responses include `lifecycle`, `ou
 
 Output parameters: `call_id` (UUID), `lifecycle` ∈ {`queued`, `dialing`, `answered`, `finalized`}, `outcome` (10-value phone-network enum — see the API contract reference).
 
-Other properties: Calls are billed against the user's ClawCall balance or trial allotment (10 calls / 10 minutes, whichever lasts later). Recordings are retained per the ClawCall Terms of Service. The agent should treat saved API keys as credentials.
+Other properties: Calls are billed against the user's ClawCall balance or trial allotment (30 calls / 30 minutes, whichever lasts later). Recordings are retained per the ClawCall Terms of Service. The agent should treat saved API keys as credentials.
 
 ## Skill Version
 

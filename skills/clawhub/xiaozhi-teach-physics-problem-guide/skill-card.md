@@ -1,48 +1,57 @@
-## Description: <br>
-Helps physics teachers turn problem explanation into systematic problem-solving instruction using question reading, modeling, process analysis, equation setup, solution checking, reflection, variation training, and student problem-solving profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助初中和高一物理老师用五步解题法设计建模讲解、过程分析和变式训练，并整理班级解题档案。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External physics teachers use this skill to guide students through structured physics problem-solving, model selection, process analysis, variation practice, and pseudonymous learning-profile updates. It is intended to support teacher-led instruction rather than provide complete answers, rankings, or unauthorized problem-bank copying. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may create persistent student learning profiles without explicit consent, retention, or scope controls. <br>
-Mitigation: Require teacher approval before creating or storing student-specific error history; use pseudonyms, minimize retained data, and define retention limits before deployment. <br>
-Risk: The skill may pass student summaries to parent-communication, resource-library, or other teaching workflows. <br>
-Mitigation: Require teacher approval before sharing profile summaries, disclose the destination workflow, and share only the minimum pseudonymous information needed. <br>
-Risk: Physics problems may include copyrighted textbook or tutoring-bank content. <br>
-Mitigation: Require copyrightStatus labeling and avoid copying unauthorized problem-bank text into generated materials. <br>
+## Use Case:
 
+Teachers use this skill to plan structured physics problem-solving instruction, diagnose common misconceptions, and prepare differentiated practice for Chinese middle-school and first-year high-school physics classes. It supplies teacher-reviewed drafts rather than student-facing answers or grades.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-problem-guide) <br>
-- [五步物理解题模板](artifact/references/five-step-template.md) <br>
-- [五步解题样板](artifact/references/five-step-worked-examples.md) <br>
-- [物理模型选择参考](artifact/references/model-selection.md) <br>
-- [一题多解样板](artifact/references/multi-solution-example.md) <br>
-- [学员物理解题档案模板](artifact/references/student-solving-profile-template.md) <br>
-- [物理解题变式设计](artifact/references/variation-physics.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localization of curriculum, minor-data safeguards, and crisis resources is needed elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured teaching templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include pseudonymous student problem-solving profile updates and variation-training templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Class or student records may expose minors' information or be shared without authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student pseudonyms, require teacher confirmation for class-workspace changes, and check teacherWritebackConsent before student-side writeback.
+
+Risk: Generated physics questions or teaching guidance may contain errors.
+
+Mitigation: Have a teacher review teaching drafts and verify AI-generated questions before adding them to a question bank.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-problem-guide)
+- [Five-step problem-solving template](artifact/references/five-step-template.md)
+- [Physics model selection](artifact/references/model-selection.md)
+- [First-year high-school physics teaching examples](artifact/references/physics-hs1-problem-teaching.md)
+- [Class teaching workspace schema](artifact/shared/class-teaching-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese-language Markdown teaching plans, question chains, and practice suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher review required before classroom use; AI-generated questions require human checking before inclusion in a question bank.]
+
+## Skill Version(s):
+
+2.7.0 (source: server-resolved release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

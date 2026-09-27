@@ -1,45 +1,57 @@
-## Description: <br>
-A math tutoring coach that guides students through problem solving with Socratic questions, CLAW prompts, photo-question workflows, error analysis, same-type practice, and exam review without directly giving answers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language math coach that guides middle- and high-school students through problems with graduated hints, practice questions, and pre-exam review.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and education agents use this skill to work through math questions, identify where a student is stuck, analyze mistakes, generate similar practice problems, and prepare focused exam review while avoiding direct answer-giving. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student photos may contain personal, school, or location information when the photo-question workflow is used. <br>
-Mitigation: Require clear consent and image-redaction guidance before OCR or multimodal processing, especially in environments with students or minors. <br>
-Risk: Learning-profile and error-history records may be read or written during tutoring workflows. <br>
-Mitigation: Provide controls to inspect, disable, limit access to, and delete learning-profile and error-history records. <br>
-Risk: Tutoring guidance and generated practice problems can be incomplete or misleading for a learner's level or curriculum. <br>
-Mitigation: Use teacher, parent, or administrator review for high-stakes learning contexts and encourage students to verify reasoning rather than rely on final answers. <br>
+## Use Case:
 
+Students in middle and high school use this skill to work through individual math problems, identify mistakes, practice similar questions, and review before exams. Educators can use its guided-question approach to support learning without immediately giving answers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-problem-solving-coach) <br>
-- [CLAW template extensions](references/claw-templates-extended.md) <br>
-- [Math Socratic guide](references/math-socrates-guide.md) <br>
-- [Photo four-step state machine](references/photo-4step-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style conversational tutoring guidance, diagnostic questions, prompt templates, review outlines, and practice problems.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use photo-question interpretation through multimodal or OCR-capable host systems and may read or update learning-profile and error-history records when those companion skills are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student profiles, wrong-answer records, cross-skill sharing, or reminders could expose or retain minors' learning data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep use session-only by default; require explicit consent in the current turn for reading, saving, sharing, or reminders, and enforce local guardian-consent requirements.
+
+Risk: Generated math practice or explanations may contain mistakes.
+
+Mitigation: Check generated questions for solvability and correctness before presenting them, and have an educator review consequential guidance.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-math-problem-solving-coach)
+- [Hint ladder](shared/hint-ladder.md)
+- [Practice-question quality checks](shared/ai-item-check.md)
+- [Math coaching guide](references/math-socrates-guide.md)
+- [Platform and consent conventions](shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language conversational text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Graduated hints, worked explanations when needed, similar practice questions, and optional consent-gated handoffs.]
+
+## Skill Version(s):
+
+2.7.0 (source: ClawHub release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

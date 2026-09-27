@@ -1,38 +1,13 @@
 ---
+
 slug: meeting-join-tool-free
 name: meeting-join-tool-free
 version: 1.0.0
 displayName: AI会议助手免费版
 summary: 让AI机器人以语音方式加入视频会议(Google Meet/Teams/Zoom),支持实时转写、问答与笔记,适合个人使用.
-license: Proprietary
+license: MIT
 edition: free
-description: AI会议助手免费版让AI机器人以语音方式加入视频会议平台，可自动提升工作效率
-
-  (Google Meet、Microsoft Teams、Zoom),实现实时会议转写、
-
-  智能问答与会议纪要生成。核心能力:
-
-  - 以语音机器人身份加入主流视频会议平台
-
-  - 实时语音转写与会议内容理解
-
-  - 基于会议上下文的智能问答
-
-  - 会议结束后自动生成纪要与待办事项
-
-  适用场景:
-
-  - 个人用户的日常会议记录与回溯
-
-  - 自由职业者的客户沟通会议
-
-  - 在线课程与培训的内容整理
-
-  差异化:
-
-  - 免费版提供基础语音加入与转写能力
-
-  - 适合单人使用,...'
+description: "AI会议助手(Meeting Join)免费版，让AI机器人以语音方式加入Google Meet、Microsoft Teams、Zoom等视频会议平台，支持实时语音转写、智能问答和会议纪要自动生成。机器人加入会议后可全程聆听并转写内容，会议结束后提取关键决策、待办事项与责任人，输出Markdown格式纪要便于归档与分享。适合需要自动记录和整理meeting内容的个人用户。"
 tags:
   - 会议
   - 语音转写
@@ -50,13 +25,15 @@ tools:
   - write
 homepage: ""
 category: "Automation"
+pricing_tier: free
 ---
+
 # AI会议助手免费版
 
 ## 概述
 
 AI会议助手免费版帮助个人用户让AI机器人以语音方式加入视频会议。机器人可以实时聆听会议内容、进行语音转写、回答基于会议上下文的问题,并在会议结束后生成结构化的会议纪要.
-本版本面向个人用户,提供基础的语音会议参与能力,支持Google Meet、Microsoft Teams与Zoom三大主流平台.
+本版本面向个人用户,提供基础的语音会议参与能力,支持Google Meet、Microsoft Teams与Zoom三大主流平台. 通过Meeting Join功能,用户可以快速让AI机器人加入(meeting join)各类在线会议并进行实时转写.
 ## 核心能力
 
 ### 会议接入
@@ -187,10 +164,10 @@ cd （请参考skill目录中的脚本文件） && npm install
 python （请参考skill目录中的脚本文件） send --email you@example.com
 python （请参考skill目录中的脚本文件） verify --email you@example.com --code 123456
 # ...
-# 方式二:手动配置
-mkdir -p ~/.agentcall
-cat > ~/.agentcall/config.json << 'EOF'
-{"api_key": "YOUR_API_KEY_HERE"}
+# 方式二:手动配置(使用当前目录下的配置文件)
+mkdir -p ./config/agentcall
+cat > ./config/agentcall/config.json << 'EOF'
+{"api_key": "your_api_key_here"}
 EOF
 ```
 
@@ -208,7 +185,7 @@ EOF
 
 ```json
 {
-  "api_key": "ak_ac_xxxxx",
+  "api_key": "ak_ac_your_api_key_here",
   "default_mode": "audio",
   "default_voice_strategy": "direct",
   "default_bot_name": "助手"
@@ -240,7 +217,7 @@ EOF
 # 不推荐: AI助手、机器人、会议助手
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 会议前准备
 
@@ -314,12 +291,12 @@ A: 会议转写内容作为Agent输入处理。建议在可信会议环境中使
 ### API Key 配置
 
 - 需要配置会议机器人服务的API Key
-- 通过 `~/.agentcall/config.json` 或 `AGENTCALL_API_KEY` 环境变量配置
+- 通过 `./config/agentcall/config.json` 或 `AGENTCALL_API_KEY` 环境变量配置
 - 新账户注册包含免费试用额度
 
 ### 可用性分类
 
-- **分类**: MD+EXEC(纯Markdown指令+脚本执行能力)
+- **分类**: MD+EXEC模式纯Markdown指令+脚本执行能力)
 - **说明**: 基于Markdown指令驱动Agent执行会议加入任务,通过Python/Node.js脚本实现会议机器人连接
 - **免费版限制**: 纯语音模式、单次会议时长受限、基础转写引擎、无视频画面
 

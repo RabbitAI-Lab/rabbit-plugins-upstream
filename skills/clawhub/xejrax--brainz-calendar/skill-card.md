@@ -1,40 +1,52 @@
-## Description: <br>
-Manage Google Calendar events using `gcalcli`. Create, list, and delete calendar events from the CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Google Calendar events using `gcalcli`. Create, list, and delete calendar events from the CLI.
 
-## Publisher: <br>
-[xejrax](https://clawhub.ai/user/xejrax) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[xejrax](https://clawhub.ai/user/xejrax)
 
-## Use Case: <br>
-Developers and calendar users use this skill to manage Google Calendar events from an agent workflow through gcalcli commands. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Calendar commands can access or change real calendar events. <br>
-Mitigation: Confirm the target calendar, event title, date, and time before creating or deleting events. <br>
-Risk: Calendar credentials or API keys could be exposed through prompts, logs, or shell history. <br>
-Mitigation: Keep credentials out of prompts, logs, and shared shell history, and use credentials only for the intended calendar account. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Calendar Skill on ClawHub](https://clawhub.ai/xejrax/skills/brainz-calendar) <br>
-- [Publisher Profile](https://clawhub.ai/user/xejrax) <br>
+## Use Case:
 
+Developers and agents use this skill to list, create, and delete Google Calendar events from the command line through gcalcli.
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires gcalcli and calendar credentials for the intended account.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Calendar credentials or event details may be exposed through careless handling or command output.
+
+Mitigation: Protect API keys and CalDAV passwords, avoid printing sensitive event details, and run the tool in an isolated environment when possible.
+
+Risk: Delete commands may remove unintended calendar events if a search term matches the wrong event.
+
+Mitigation: Require review of matched events before running any delete command.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/xejrax/skills/brainz-calendar)
+
+## Skill Output:
+
+**Output Type(s):** [shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires gcalcli and calendar credentials such as GOOGLE_CALENDAR_API_KEY or CalDAV credentials.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

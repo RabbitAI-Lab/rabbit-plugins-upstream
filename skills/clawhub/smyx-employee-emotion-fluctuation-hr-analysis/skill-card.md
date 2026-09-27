@@ -1,45 +1,58 @@
-## Description: <br>
-This skill helps an agent analyze consented enterprise office video or image inputs for anonymized employee emotion-fluctuation indicators, produce HR care-oriented reports, and query historical cloud reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps HR review employee emotion trends from office video against historical baselines and produces fluctuation alerts and supportive follow-up suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-HR and authorized enterprise administrators use this skill to generate anonymized workplace emotion fluctuation reports and supportive care suggestions from fixed-camera office footage. The skill is intended for consented, access-controlled internal HR review and historical report lookup, not for diagnosis, performance evaluation, promotion, or termination decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive workplace emotion monitoring and cloud report access can affect employee privacy and workplace rights. <br>
-Mitigation: Use only with legal and compliance approval, explicit employee notice, opt-out support, allowlisted enterprise camera sources, documented retention terms, and access limited to authorized HR administrators. <br>
-Risk: The skill may create or reuse a persistent account identity and send identity-linked video or report requests to external services without a clear runtime consent gate. <br>
-Mitigation: Require administrator-controlled authentication, document cloud processing and retention, and verify who can list or export historical reports before installation. <br>
-Risk: Emotion fluctuation outputs could be misused as medical diagnoses or employment-decision evidence. <br>
-Mitigation: Treat outputs as supportive HR care signals only; prohibit use for diagnosis, performance evaluation, promotion, or termination decisions. <br>
+## Use Case:
 
+Authorized HR staff use the skill to review consented office video, compare anonymized employee behavior trends with historical baselines, and receive alerts, care suggestions, or historical report listings for supportive follow-up.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-employee-emotion-fluctuation-hr-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration] <br>
-**Output Format:** [Markdown report text with structured JSON analysis data, HR care suggestions, historical report listings, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce optional output files when requested; report queries and analysis are backed by cloud API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.7) <br>
+Risk: Office video and employee emotion reports expose sensitive HR information, and anonymized identifiers may still allow employees to be identified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in an approved HR environment with employee notice and consent, opt-out, legal review, restricted administrator access, and audited report access; verify actual data retention and anonymization before deployment.
+
+Risk: Identity and access tokens persist locally while analysis and historical reports use vendor services.
+
+Mitigation: Review vendor endpoints, local SQLite token storage, workspace data/smyx-api-key.txt behavior, and historical report permissions before providing real employee data.
+
+Risk: Inferred emotion alerts can be misleading or misused in employment decisions.
+
+Mitigation: Require human review and contextual follow-up; do not treat alerts as medical diagnoses or use them for performance, promotion, or termination decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-employee-emotion-fluctuation-hr-analysis)
+- [HR report API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured JSON analysis or Markdown report listings and summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes emotion-trend alerts, suggested HR follow-up, and report links when available.]
+
+## Skill Version(s):
+
+1.0.10 (source: ClawHub release metadata; bundled frontmatter says 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

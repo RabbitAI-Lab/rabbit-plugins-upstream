@@ -1,44 +1,53 @@
-## Description: <br>
-Intelligent memory management for agents with short/long-term memory layering, semantic search, auto summarization, RAG enhancement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides intelligent memory management for agents with short- and long-term memory layers, search, summarization, and optional persistence.
 
-## Publisher: <br>
-[Ayalili](https://clawhub.ai/user/Ayalili) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ayalili](https://clawhub.ai/user/ayalili)
 
-## Use Case: <br>
-Developers and agent builders use this skill to add, search, summarize, list, clear, save, and load short-term, long-term, and important memories for long-running conversations, RAG applications, assistants, and customer-support agents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved memory files may contain private conversation context or other sensitive data. <br>
-Mitigation: Avoid storing secrets, credentials, regulated data, or sensitive conversation history, and keep memory files in a dedicated private directory. <br>
-Risk: Loading memory from local files may reintroduce stale, incorrect, or sensitive context into an agent session. <br>
-Mitigation: Review memory files before loading them and clear or edit entries that are no longer appropriate. <br>
-Risk: Saving memory can overwrite files that the runtime is allowed to write. <br>
-Mitigation: Use an explicit persistence path in a dedicated memory directory and verify the path before save operations. <br>
+## Use Case:
 
+Developers building long-running agents, chatbots, RAG applications, and assistant workflows can use this skill to add, search, summarize, clear, list, load, and save agent memories.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/Ayalili/smart-memory-manager) <br>
-- [Zod v3.22.4 for Deno](https://deno.land/x/zod@v3.22.4/mod.ts) <br>
-- [Deno standard encoding hex module](https://deno.land/std@0.214.0/encoding/hex.ts) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, configuration, guidance] <br>
-**Output Format:** [JSON result objects and Markdown summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns action-specific success flags, memory records, counts, summaries, error messages, and file paths for persistence actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Load and save operations accept filesystem paths that can expose or overwrite local JSON files when runtime permissions are broad.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run with tightly scoped Deno filesystem permissions, use a dedicated memory directory, and avoid load/save paths outside controlled application data locations.
+
+Risk: Persisted memory entries may contain sensitive user or task context.
+
+Mitigation: Do not store secrets or regulated data in memory entries, and review retention expectations before enabling persistence.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ayalili/skills/smart-memory-manager)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [JSON responses with memory identifiers, search/list results, status fields, and Markdown-formatted summaries.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Memory entries can be persisted to JSON files when load/save actions are invoked.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-framework-azure-ai-py",
   "slug": "agent-framework-azure-ai-py",
   "ownerHandle": "thegovind",
-  "version": "0.1.0",
-  "updatedAt": 1778485878349,
-  "contentHash": "1eaaf5b73bddec7198420d20420c34764535dea424e86f995ede6eb6d1fec0d5",
-  "fetchedAt": "2026-07-26T18:06:34.331Z"
+  "version": "1.0.2",
+  "updatedAt": 1790017209872,
+  "contentHash": "41fff3f42afae9157f401ed8272b200c295358eb824034dc37bcfd69d601c43e",
+  "fetchedAt": "2026-09-27T13:33:45.116Z"
 }

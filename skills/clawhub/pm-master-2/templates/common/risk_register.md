@@ -14,7 +14,7 @@
 | **2** | 2 🟢 green | 4 🟢 green | 6 🟡 yellow | 8 🟡 yellow | 10 🟠 orange |
 | **1** | 1 🟢 green | 2 🟢 green | 3 🟢 green | 4 🟢 green | 5 🟢 green |
 
-_Color bands: 🟢 green 1–4 ｜ 🟡 yellow 5–9 ｜ 🟠 orange 10–15 ｜ 🔴 red 16–25_
+_Color bands: 🟢 green 1–4 | 🟡 yellow 5–9 | 🟠 orange 10–15 | 🔴 red 16–25_
 
 ## Risk List
 

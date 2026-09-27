@@ -1,44 +1,58 @@
-## Description: <br>
-Analyzes fixed aquarium camera video to detect fish flashing and scraping behavior, count abnormal friction events, and produce ectoparasite risk warnings without diagnosing a specific disease. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes aquarium media for fish flashing and scraping, reporting behavior-based ectoparasite risk warnings and suggested follow-up observations.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze aquarium, quarantine tank, or aquaculture video for flashing and scraping events, warning levels, and structured follow-up guidance. It is intended for behavior-based risk screening and report retrieval, not veterinary diagnosis or treatment selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends aquarium videos or camera URLs to a cloud service and can query cloud report history. <br>
-Mitigation: Use only media and URLs that are acceptable for cloud processing, and review cloud upload, retention, and account-linking expectations before installation. <br>
-Risk: The skill silently creates or reuses local identity state and stores authentication tokens in workspace data. <br>
-Mitigation: Install and run it only in workspaces where local identity and token storage are acceptable, and review stored workspace data as part of operational controls. <br>
-Risk: Behavioral signals can be mistaken for parasitic disease or treatment advice. <br>
-Mitigation: Treat outputs as behavior-based risk warnings only; require close observation and professional veterinary microscopy for diagnosis and treatment decisions. <br>
+## Use Case:
 
+Aquarium keepers and aquaculture operators use this skill to review fish rubbing behavior in camera footage, receive possible ectoparasite warnings, and consult historical reports. Warnings are not a diagnosis and should be followed by direct observation and veterinary assessment when warranted.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fish-flashing-scraping-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON structured reports with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file and can return cloud report history when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Aquarium media or media URLs are sent to external cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share media only when acceptable under your privacy and data-handling requirements.
+
+Risk: The skill can create or reuse local account state and persist identity tokens while retrieving report history.
+
+Mitigation: Review or clear the workspace data database if persistent identity tokens are unacceptable, and check cloud history access before use.
+
+Risk: Behavior-based warnings may be mistaken for a definitive parasite diagnosis.
+
+Mitigation: Treat alerts as preliminary; inspect fish and seek veterinary microscopy for diagnosis and treatment decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-fish-flashing-scraping-detection-analysis)
+- [Skill API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured analysis reports and Markdown history tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include event counts, risk levels, recommended actions, and report links.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved ClawHub release; bundled SKILL.md states 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-Create, update, and publish websites with Revdoku buckets, including interactive app sites backed by a per-bucket server database, while storing files privately until the user asks for a public or protected link. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use Revdoku cloud storage and incoming email to store, share, and manage files and messages with authorized collaborators.
 
-## Publisher: <br>
-[emirn](https://clawhub.ai/user/emirn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[emirn](https://clawhub.ai/user/emirn)
 
-## Use Case: <br>
-Developers and agents use this skill to publish local folders or bucket files as Revdoku websites, including static sites, protected sites, and app sites with per-bucket database actions. It guides when to use the Revdoku CLI, MCP tools, or REST flows and when to require user confirmation for publishing or lifecycle actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish local folders live and may reuse saved Revdoku credentials. <br>
-Mitigation: Use draft publishing until ready, verify publication status before sharing a live URL, and require explicit user confirmation for publish, unpublish, archive, restore, grant exchange, and permanent delete actions. <br>
-Risk: The helper script can download and execute an unpinned Revdoku CLI. <br>
-Mitigation: Review the helper script before first use and prefer an already installed or pinned Revdoku CLI when available. <br>
-Risk: Published websites may include analytics or browser-side event tracking. <br>
-Mitigation: Disable analytics or tracking when the user does not want those signals collected. <br>
+## Use Case:
 
+People and agents with authorized Revdoku access use this skill to store and share files, manage bucket versions, and read incoming email and attachments.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/emirn/revdoku) <br>
-- [Revdoku app](https://app.revdoku.com) <br>
-- [Revdoku app templates](https://github.com/revdoku/revdoku/tree/main/templates) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and implementation notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to publish, draft, protect, unpublish, archive, restore, or delete Revdoku bucket content only with the user confirmations described by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Permanent bucket deletion is available without a separate local confirmation gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before deletion and restrict credentials from permanently deleting buckets unless necessary.
+
+Risk: Local file uploads and stored Revdoku credentials can expose data if used without authorization.
+
+Mitigation: Confirm selected files and account access before uploading; protect locally stored credentials.
+
+Risk: Archiving, restoring, or creating accounts can change shared data or access.
+
+Mitigation: Require approval before archive, restore, or account creation.
+
+## Reference(s):
+
+- [Revdoku homepage](https://revdoku.com)
+- [Revdoku API documentation](https://revdoku.com/api.md)
+- [ClawHub skill listing](https://clawhub.ai/emirn/skills/revdoku)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with command examples and references to files and messages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local CLI supports file uploads; hosted agent tools handle bucket text and incoming email.]
+
+## Skill Version(s):
+
+1.0.500 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

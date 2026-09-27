@@ -1,45 +1,61 @@
-## Description: <br>
-Monitor Reddit, Hacker News, X, and Bluesky for product or website keyword mentions with the RedReplier API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents monitor and triage keyword mentions across Reddit, Hacker News, X, and Bluesky using RedReplier.
 
-## Publisher: <br>
-[tarasshyn](https://clawhub.ai/user/tarasshyn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tarasshyn](https://clawhub.ai/user/tarasshyn)
 
-## Use Case: <br>
-Users who manage product monitoring use this skill to configure RedReplier websites and keywords, retrieve and filter AI-scored mentions, triage leads, and manage alert settings through the RedReplier API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a RedReplier API token. <br>
-Mitigation: Use a dedicated, revocable API token and keep REDREPLIER_API_KEY scoped to the agent runtime. <br>
-Risk: Activating pending keywords can charge for a plan upgrade. <br>
-Mitigation: Call the activation preview first, show the charge and target plan to the user, and require explicit confirmation before activation. <br>
-Risk: Deleting a monitored website stops monitoring for that website. <br>
-Mitigation: Confirm deletion with the user using the website domain, not only the resource ID. <br>
+## Use Case:
 
+Brand teams and developers use this skill to monitor social discussions about their products, review AI-scored leads, manage monitored sites and keywords, and configure mention alerts.
 
-## Reference(s): <br>
-- [RedReplier homepage](https://redreplier.com) <br>
-- [ClawHub skill page](https://clawhub.ai/tarasshyn/redreplier) <br>
-- [RedReplier API Reference](references/api-reference.md) <br>
-- [RedReplier Mention Filtering](references/mention-filtering.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with curl commands and API request guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDREPLIER_API_KEY; paid keyword activation and website deletion require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server-resolved release metadata) <br>
+Risk: The API token grants access to monitored sites, keywords, mention content, and triage state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated revocable token and send it only to the documented RedReplier service.
+
+Risk: Manual API keyword activation or re-enabling can charge the account.
+
+Mitigation: Preview any charge and obtain explicit approval before activating keywords.
+
+Risk: Manual deletion can stop website monitoring or remove keyword history.
+
+Mitigation: Confirm the named target with the user before deletion; disable a keyword instead when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/tarasshyn/skills/redreplier)
+- [RedReplier](https://redreplier.com)
+- [RedReplier API reference](references/api-reference.md)
+- [Mention filtering guide](references/mention-filtering.md)
+- [OpenClaw plugin guide](openclaw-plugin/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May summarize scored mentions and suggest actions for user approval.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

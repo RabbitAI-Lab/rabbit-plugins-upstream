@@ -1,39 +1,51 @@
-## Description: <br>
-Helps solopreneurs identify, design, test, and maintain no-code automation workflows across tools such as Zapier, Make, and n8n. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Design and implement automation workflows to save time and scale operations as a solopreneur.
 
-## Publisher: <br>
-[jk-0001](https://clawhub.ai/user/jk-0001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jk-0001](https://clawhub.ai/user/jk-0001)
 
-## Use Case: <br>
-External solopreneurs and operators use this skill to identify repetitive work, compare no-code automation tools, map triggers and actions, test workflows, monitor failures, and estimate automation ROI. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Business workflows can expose customer, payment, CRM, or usage data when connected across vendors or included in alerts. <br>
-Mitigation: Review data fields before building each automation, grant minimum required permissions, and avoid sending sensitive details through Slack or email notifications. <br>
-Risk: Untested or unmonitored automations can create incorrect records, missed tasks, duplicate runs, or silent failures. <br>
-Mitigation: Test triggers and actions with realistic edge cases, enable error notifications, review workflow logs, and document how to disable or audit each workflow. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jk-0001/skills/automation-workflows) <br>
+## Use Case:
+
+External users and business operators use this skill to identify repetitive tasks, design no-code workflows, select automation tools, test automations, and maintain them over time.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Workflow automations may access sensitive business, customer, or payment data when connected to real applications.
+
+Mitigation: Grant the minimum required permissions, review data handling before launch, and test with non-production or limited data first.
+
+Risk: Live automations can fail silently, duplicate work, or create incorrect records if triggers, field mappings, or API permissions change.
+
+Mitigation: Monitor workflow logs, configure error notifications, document each workflow, and ensure automations can be paused and rolled back.
+
+## Reference(s):
 
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with checklists, tables, formulas, and workflow templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code execution; recommendations should be adapted to the user's tool permissions and data sensitivity.] <br>
+## Skill Output:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+**Output Type(s):** [guidance, markdown, configuration]
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+**Output Format:** [Markdown guidance with workflow templates, checklists, tables, and example trigger-action configurations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Plain-language guidance; no code execution, install actions, or hidden persistence indicated by the security evidence.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

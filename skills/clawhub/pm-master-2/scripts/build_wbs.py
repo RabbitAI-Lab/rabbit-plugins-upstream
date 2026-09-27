@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · WBS 渲染器（两层颗粒度视图）
--------------------------------------------------
-`templates/waterfall/wbs.md` 需要 `wbs_groups` / `view_label` / `view_note` / `view_group_note`
-等数据键（由本脚本从 project.yaml 的 wbs 派生），不能直接用 render.py 渲染。
+PM Master · WBS renderer (two-level granularity view)
+----------------------------------------------------
+`templates/waterfall/wbs.md` needs data keys such as `wbs_groups` / `view_label` /
+`view_note` / `view_group_note` (derived by this script from project.yaml's wbs),
+and cannot be rendered directly with render.py.
 
-做什么：
-  1. 从 project.yaml 读取 wbs。
-  2. 按视图过滤 + 按领域(domain)分组，构造 wbs_groups（每个分组含 name + items，
-     每个 item 附带 gantt_name 供 mermaid 甘特使用）。
-  3. 渲染 templates/waterfall/wbs.md -> <项目根>/plans/wbs.md，并写回 artifacts.wbs。
+What it does:
+  1. Read wbs from project.yaml.
+  2. Filter by view + group by domain (domain), building wbs_groups (each group has
+     name + items, each item carries a gantt_name for the mermaid Gantt).
+  3. Render templates/waterfall/wbs.md -> <project root>/plans/wbs.md and write back artifacts.wbs.
 
-视图（--view）：
-  - full（默认）：全部工作包，按领域分组。
-  - program：仅项目群里程碑级（tier: program 的汇总/里程碑行），按领域分组。
-  - component：仅组件层最细叶子（非 program 层），按领域分组。
+Views (--view):
+  - full (default): all work packages, grouped by domain.
+  - program: program milestone level only (tier: program summary/milestone rows), grouped by domain.
+  - component: component-tier finest leaves only (non-program tier), grouped by domain.
 
-用法：
+Usage:
   python3 build_wbs.py --project /workspace/<slug>/project.yaml
   python3 build_wbs.py --project <yaml> --view program
 """
@@ -49,7 +50,7 @@ def _group_by_domain(rows):
     groups = []
     seen = {}
     for w in rows:
-        dom = w.get('domain') or '（未分类）'
+        dom = w.get('domain') or '(uncategorized)'
         if dom not in seen:
             seen[dom] = len(groups)
             groups.append({'name': dom, 'items': []})
@@ -60,9 +61,10 @@ def _group_by_domain(rows):
 
 
 def _build_tree(rows):
-    """把扁平 wbs 构造成层级分解树（parent 字段或 id 前缀 'X.Y' 决定父子）。
-    返回 list of 节点：{id, name, role, domain, children:[...]}。
-    用于模板渲染 mermaid 分解树（graph TD）。"""
+    """Build the flat wbs into a hierarchical decomposition tree (parent field or
+    id prefix 'X.Y' determines parent-child). Return a list of nodes:
+    {id, name, role, domain, children:[...]}. Used by the template to render the
+    mermaid decomposition tree (graph TD)."""
     nodes = {}
     for w in rows:
         pid = w.get('id')
@@ -80,7 +82,7 @@ def _build_tree(rows):
     roots = []
     for pid, n in nodes.items():
         par = n.get('parent')
-        # 无 parent 时，尝试用 id 前缀推断（如 SOW1.1 -> SOW1）
+        # When no parent, try to infer from id prefix (e.g. SOW1.1 -> SOW1)
         if not par and '.' in pid:
             cand = pid.rsplit('.', 1)[0]
             par = cand if cand in nodes else None
@@ -93,37 +95,37 @@ def _build_tree(rows):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master · WBS 渲染器（两层颗粒度）")
-    ap.add_argument('--project', required=True, help="单一事实源 project.yaml")
+    ap = argparse.ArgumentParser(description="PM Master · WBS renderer (two-level granularity)")
+    ap.add_argument('--project', required=True, help="Single source of truth: project.yaml")
     ap.add_argument('--view', default='full', choices=['full', 'program', 'component'],
-                    help="视图：full=全部 / program=项目群里程碑级 / component=组件叶子层")
-    ap.add_argument('--out', default=None, help="输出 .md 路径（缺省 <项目根>/plans/wbs.md）")
-    ap.add_argument('--template', default=None, help="WBS 模板路径（缺省取技能内 templates/waterfall/wbs.md）")
+                    help="View: full=all / program=program milestone level / component=component leaf level")
+    ap.add_argument('--out', default=None, help="Output .md path (default <project root>/plans/wbs.md)")
+    ap.add_argument('--template', default=None, help="WBS template path (default skill templates/waterfall/wbs.md)")
     a = ap.parse_args()
 
     if yaml is None:
-        raise SystemExit("需要 PyYAML：请先 `pip install pyyaml`")
+        raise SystemExit("PyYAML required: run `pip install pyyaml`")
 
     data = _load(a.project)
     wbs = data.get('wbs') or []
     if not wbs:
-        raise SystemExit("⚠ project.yaml 中未找到 wbs，无法渲染 WBS（请先完成 WBS 拆解）。")
+        raise SystemExit("⚠ No wbs found in project.yaml; cannot render WBS (complete the WBS decomposition first).")
 
     if a.view == 'program':
         rows = [w for w in wbs if w.get('tier') == 'program']
-        view_label = '项目群里程碑级'
-        view_note = '仅呈现各 SOW 汇总包 + 各阶段里程碑汇总包（组件叶子包在各自 component 项目持有）'
-        view_group_note = '领域（项目群里程碑级）'
+        view_label = 'Program milestone level'
+        view_note = 'Shows only each SOW summary package + each phase milestone summary package (component leaf packages are held in their respective component projects)'
+        view_group_note = 'Domain (program milestone level)'
     elif a.view == 'component':
         rows = [w for w in wbs if w.get('tier') != 'program']
-        view_label = '组件叶子层'
-        view_note = '呈现最细叶子工作包级（含领域专家拆解包）'
-        view_group_note = '领域（组件叶子层）'
+        view_label = 'Component leaf level'
+        view_note = 'Shows the finest leaf work-package level (including domain-expert decomposition packages)'
+        view_group_note = 'Domain (component leaf level)'
     else:
         rows = list(wbs)
-        view_label = '全部工作包'
-        view_note = '项目全生命周期工作包（汇总 + 叶子）'
-        view_group_note = '领域'
+        view_label = 'All work packages'
+        view_note = 'Work packages across the project lifecycle (summary + leaf)'
+        view_group_note = 'Domain'
 
     wbs_groups = _group_by_domain(rows)
     wbs_tree = _build_tree(rows)
@@ -131,7 +133,7 @@ def main():
     tpl_path = a.template or os.path.join(SCRIPT_DIR, '..', 'templates', 'waterfall', 'wbs.md')
     tpl_path = os.path.abspath(tpl_path)
     if not os.path.exists(tpl_path):
-        raise SystemExit(f"WBS 模板不存在：{tpl_path}")
+        raise SystemExit(f"WBS template not found: {tpl_path}")
     with open(tpl_path, 'r', encoding='utf-8') as f:
         tpl = f.read()
     from render import render
@@ -156,7 +158,7 @@ def main():
     data['artifacts']['wbs'] = rel
     _save(a.project, data)
 
-    print(f"[wbs] 已渲染 WBS（{a.view} 视图，{len(wbs_groups)} 个领域分组，{len(rows)} 个包）：{out_path}")
+    print(f"[wbs] WBS rendered ({a.view} view, {len(wbs_groups)} domain groups, {len(rows)} packages): {out_path}")
     print(f"[wbs] artifacts.wbs = {rel}")
 
 

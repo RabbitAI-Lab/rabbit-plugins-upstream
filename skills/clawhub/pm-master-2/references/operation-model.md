@@ -64,33 +64,39 @@ leaf actuals are the source; milestone actuals are derived.
 5. **Cadence = rollup → control.** Periodic program oversight is always: run rollup, then control engine, then
    render the dashboard. No manual "update the program status" step.
 
-## 4.6 Operational Artifact Guardrail (OAG) — 每次动作必须刷新交付物
+## 4.6 Operational Artifact Guardrail (OAG) — refresh deliverables on every action
 
-> **这是运营期不可妥协的护栏（Iron Rule #12）。** 示例客户项目曾因在运营期忽略该护栏，导致 `raid_log`
-> / `risk_register` / `portfolio_dashboard` 落后于事实源数周，直到人工发现 —— 属于护栏违规，不是小瑕疵。
+> **This is the non-negotiable guardrail during the operational period (Iron Rule #12).** A sample client
+> project once ignored this guardrail during operations, causing `raid_log` / `risk_register` /
+> `portfolio_dashboard` to fall weeks behind the source of truth, until discovered manually — this is a
+> guardrail violation, not a minor defect.
 
-**规则**：在 `operational` / `monitoring` 阶段，任何对 `project.yaml` 的变更动作（状态 / EVM / RAID /
-WBS / actuals）都必须伴随对应交付物的重新渲染，并通过 `scripts/artifact_guard.py` 校验（exit 0）。
+**Rule**: during the `operational` / `monitoring` phases, any change action against `project.yaml` (status /
+EVM / RAID / WBS / actuals) must be accompanied by re-rendering of the corresponding deliverables, validated
+by `scripts/artifact_guard.py` (exit 0).
 
-**机制（可执行，非口头）**：
-- 每次渲染（`build_subproject.py` / `rerender_docs.py`）会向 `project.yaml` 的 `artifacts_meta.<key>`
-  写入该交付物所依赖数据的 **content-hash（`source_hash`）+ 渲染时间**。
-- `artifact_guard.py` 用当前数据重算依赖哈希，与 `source_hash` 比对：
-  - 一致 → 新鲜（OK）；
-  - 不一致 → **数据漂移（STALE_HASH）**，视为护栏违规（exit 1）；
-  - 存量文档（本护栏启用前产出、无 `source_hash`）→ 仅给 ADVISORY，不记违规（避免误杀）。
-- 未登记 / 文件缺失 / 数据漂移 → 违规。
-- `control_engine.py` 周期巡检内置该检查：发现漂移即 RED 升级并 `exit 1`（可挂定时任务告警）。
-- `gate_engine.py` 收尾门（G3→4）将「交付物与事实源一致 (OAG)」列为**硬准则**：交付物漂移则禁止收尾。
+**Mechanism (executable, not verbal)**:
+- Each render (`build_subproject.py` / `rerender_docs.py`) writes to `project.yaml`'s `artifacts_meta.<key>`
+  the content-hash (`source_hash`) of the data the deliverable depends on, plus the render time.
+- `artifact_guard.py` recomputes the dependency hash from current data and compares it with `source_hash`:
+  - match → fresh (OK);
+  - mismatch → **data drift (STALE_HASH)**, treated as a guardrail violation (exit 1);
+  - legacy documents (produced before this guardrail was enabled, no `source_hash`) → only ADVISORY, not flagged
+    as a violation (to avoid false positives).
+- unregistered / missing file / data drift → violation.
+- `control_engine.py`'s periodic inspection has this check built in: on drift detected, escalates to RED and
+  `exit 1` (can be wired to a scheduled task for alerting).
+- `gate_engine.py`'s closure gate (G3→4) lists "deliverables consistent with source of truth (OAG)" as a
+  **hard criterion**: deliverable drift forbids closure.
 
-**编排器义务（每次 operational 动作后）**：
-1. 改完 `project.yaml` → 重渲染受影响交付物（`build_subproject.py --only <key>` 或 `rerender_docs.py`）；
-2. 手工/外部渲染的文档（如 `portfolio_dashboard`）产出后调用
-   `artifact_guard.py --project <yaml> --stamp <key>` 记录 `source_hash`；
-3. 跑 `artifact_guard.py --project <yaml>` 确认 exit 0；非零则回到第 1 步。
+**Orchestrator's obligation (after every operational action)**:
+1. After editing `project.yaml` → re-render affected deliverables (`build_subproject.py --only <key>` or `rerender_docs.py`);
+2. For manually / externally rendered documents (e.g. `portfolio_dashboard`), after production call
+   `artifact_guard.py --project <yaml> --stamp <key>` to record `source_hash`;
+3. Run `artifact_guard.py --project <yaml>` to confirm exit 0; if non-zero, return to step 1.
 
-**诊断（如何证明它能抓到违规）**：临时改动 `raid` 后直接跑 `artifact_guard.py`，会立即报
-`[数据漂移] raid_log` —— 这正是示例客户当初漏掉的环节。
+**Diagnostics (how to prove it catches violations)**: temporarily modify `raid` then run `artifact_guard.py`
+directly; it will immediately report `[data drift] raid_log` — exactly the step the sample client originally missed.
 
 ## 5. Why this is the default (anti-pattern it prevents)
 

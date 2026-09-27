@@ -1,45 +1,60 @@
-## Description: <br>
-帮助老师从凭经验判断学情升级为数据驱动的教学决策，基于成绩数据生成班级画像、共性弱项、个体诊断和差异化教学建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+将班级逐题测评数据转化为学情诊断、知识点弱项分析与分层教学调整建议。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External teachers use this skill to analyze class assessment data, identify common weak points, diagnose individual learning patterns, and turn findings into differentiated teaching actions. It is intended for authorized education data supplied by the teacher or connected teaching skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive student or class data could be exposed in reports or cross-skill sharing. <br>
-Mitigation: Use only authorized class data, prefer student IDs or aliases, avoid public reports with real names, and confirm before sharing or writing outputs into other skills. <br>
-Risk: Individual diagnoses may be overstated when the data sample is too small. <br>
-Mitigation: Require repeated evidence for stable conclusions and mark conclusions as evidence insufficient when history is limited. <br>
-Risk: Score analysis could turn into misleading forecasts, labels, or anxiety-inducing parent communication. <br>
-Mitigation: Do not predict future scores or rankings, avoid character judgments, and keep parent-facing output grounded in objective evidence and practical next steps. <br>
+## Use Case:
 
+面向中国大陆 K12 教师，分析班级和学生的测评数据，定位知识点弱项，并起草分层教学建议及经教师审核的家长沟通素材。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-analyzer) <br>
-- [学情分析框架与模板](references/analysis-framework.md) <br>
-- [班级学情报告模板](references/class-report-template.md) <br>
-- [学生个体诊断卡模板](references/student-diagnosis-card-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance] <br>
-**Output Format:** [Markdown reports and structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses teacher-provided class data; outputs should avoid real names in public reports and mark insufficient evidence when data is limited.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: 跨会话保存学生测评分析可能暴露未成年人信息。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 仅在教师认可保留记录时使用化名或学号；不需要留存时使用暂停、删除或导出控制。
+
+Risk: 未经同意的家长沟通或学生档案写回可能泄露敏感信息。
+
+Mitigation: 生成家长材料前确认相关分享同意，写回学生档案前确认写回同意；所有对外内容由教师审核。
+
+Risk: 单次测评或样本不足可能导致不可靠的趋势判断与固定分层。
+
+Mitigation: 不足三次测评时标注证据不足，不作稳定趋势判断或给学生贴长期标签。
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-analyzer)
+- [学情分析框架](references/analysis-framework.md)
+- [班级学情报告模板](references/class-report-template.md)
+- [学生个体诊断卡模板](references/student-diagnosis-card-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language Markdown reports and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [班级画像、逐题统计、知识点弱项、个体诊断和教学调整建议；可在平台支持且获得必要同意时保存去标识化分析记录。]
+
+## Skill Version(s):
+
+2.7.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

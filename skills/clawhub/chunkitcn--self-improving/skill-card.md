@@ -1,48 +1,58 @@
-## Description: <br>
-Self-reflection, self-criticism, self-learning, and self-organizing memory for agents that evaluate their own work, catch mistakes, and improve across tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Self-reflection, self-criticism, self-learning, and self-organizing memory help an agent evaluate its work, catch mistakes, and improve future behavior from explicit corrections and reusable lessons.
 
-## Publisher: <br>
-[chunkitcn](https://clawhub.ai/user/chunkitcn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chunkitcn](https://clawhub.ai/user/chunkitcn)
 
-## Use Case: <br>
-Developers and agent operators use this skill to add local, user-visible memory and correction handling so an agent can learn from explicit feedback, self-reflection, and recurring workflow patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent local memory can influence future agent behavior and preserve unwanted or sensitive context. <br>
-Mitigation: Review the memory files before and after installation, avoid storing sensitive information, and use the documented forget/export flows when memory should be removed. <br>
-Risk: Workspace steering edits can change how the agent behaves in later tasks. <br>
-Mitigation: Review proposed changes to AGENTS.md, SOUL.md, and HEARTBEAT.md before applying them. <br>
-Risk: The optional Proactivity companion is a separate skill with its own behavior and possible network access. <br>
-Mitigation: Install the companion only after explicit user approval and review it separately before use. <br>
+## Use Case:
 
+Developers and agent operators use this skill to add a local memory workflow for learning from explicit user corrections, self-reflection, and repeated work patterns. It is intended for agents that need transparent, user-controlled improvement across sessions without storing sensitive data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chunkitcn/skills/self-improving) <br>
-- [Skill homepage](https://clawic.com/skills/self-improving) <br>
-- [Setup guide](setup.md) <br>
-- [Security boundaries](boundaries.md) <br>
-- [Learning mechanics](learning.md) <br>
-- [Memory operations](operations.md) <br>
-- [Heartbeat rules](heartbeat-rules.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local memory files under ~/self-improving/ and optional workspace steering edits when installed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata; artifact frontmatter version 1.2.16) <br>
+Risk: Persistent local memory can affect future agent behavior across sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when persistent memory is desired, periodically inspect or export ~/self-improving/, and use the documented forget and export flows when needed.
+
+Risk: Workspace steering files and self-improving files can change how future agents operate.
+
+Mitigation: Review proposed AGENTS.md, SOUL.md, HEARTBEAT.md, and ~/self-improving/ changes before applying them.
+
+Risk: The optional Proactivity companion install may require trusting an additional resolved package.
+
+Mitigation: Decline the optional Proactivity install unless the package source and behavior are trusted.
+
+## Reference(s):
+
+- [Self Improving on ClawHub](https://clawhub.ai/chunkitcn/skills/self-improving)
+- [Self-Improving Homepage](https://clawic.com/skills/self-improving)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown instructions with shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local memory files under ~/self-improving/ and optional workspace steering snippets when installed.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

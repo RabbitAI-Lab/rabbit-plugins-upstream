@@ -1,42 +1,58 @@
-## Description: <br>
-A Discord voice-channel AI conversation skill that lets an agent join and leave voice channels and use local speech recognition and speech synthesis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基础 Discord 语音频道 AI 对话工具,支持加入/离开与本地语音识别合成。
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to add a Discord voice assistant to personal or small-team voice channels, with local Whisper speech recognition and Kokoro text-to-speech for offline voice interaction. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Voice-channel audio may be recorded and transcribed. <br>
-Mitigation: Use the skill only in Discord channels where participants know audio may be recorded and transcribed. <br>
-Risk: Open access in shared Discord servers can allow unintended users to trigger the assistant. <br>
-Mitigation: Configure allowedUsers for shared servers instead of leaving access open. <br>
-Risk: A Discord bot token or voice transcripts may be exposed through environment handling, logs, or screenshots. <br>
-Mitigation: Keep DISCORD_TOKEN in a private environment variable or secret manager, and avoid sharing logs or screenshots that expose credentials or transcripts. <br>
+## Use Case:
 
+External users and developers use this skill to operate a Discord voice-channel AI assistant that can join and leave voice channels, transcribe speech with local Whisper, and speak responses with local Kokoro TTS.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/discord-voice-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose Discord voice commands and local setup commands when the host agent has tool-use and exec capability.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: The skill requests command execution for live Discord voice-channel listening.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing, use it only for explicitly requested Discord voice-channel interactions, and verify the repository source before running npm or system install steps.
+
+Risk: The trigger guidance is broad and could lead to use outside the intended Discord voice workflow.
+
+Mitigation: Restrict use to Discord voice-channel join, leave, status, transcription, and TTS response tasks.
+
+Risk: Privacy controls for voice transcription are under-disclosed.
+
+Mitigation: Confirm participants know the bot listens and transcribes speech, and configure allowedUsers for any shared server.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/discord-voice-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces operational guidance for Discord voice-channel connection, local speech recognition, local speech synthesis, permissions, and troubleshooting.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

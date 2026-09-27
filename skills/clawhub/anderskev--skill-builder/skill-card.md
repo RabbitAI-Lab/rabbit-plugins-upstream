@@ -1,41 +1,54 @@
-## Description: <br>
-Skill Builder helps agents create, validate, and refine Agent Skills using best practices for structure, validation, testing, and supporting files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create Agent Skills with best practices, structure, validation, and testing. Use when designing or refining skills, prompts, references, or supporting files.
 
-## Publisher: <br>
-[anderskev](https://clawhub.ai/user/anderskev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[anderskev](https://clawhub.ai/user/anderskev)
 
-## Use Case: <br>
-Developers and agent authors use this skill to design or refine Agent Skills, prompts, references, and supporting files with validation and testing checkpoints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: New or revised skills can change future agent behavior when installed in a persistent skills directory. <br>
-Mitigation: Review requested tools, install location, and generated instructions before enabling the skill for agent use. <br>
-Risk: Poorly scoped skill guidance can produce misleading or brittle agent instructions. <br>
-Mitigation: Use the skill's validation gates and test with natural-language trigger phrases before publishing or relying on the generated skill. <br>
+## Use Case:
 
+Developers and agent builders use this skill to create, validate, and refine focused Agent Skills with clear triggers, concise instructions, reference structure, and testing checkpoints.
 
-## Reference(s): <br>
-- [Skill Builder Guide](references/skill-builder-guide.md) <br>
-- [ClawHub Skill Builder release page](https://clawhub.ai/anderskev/skills/skill-builder) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with YAML and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or revise skill files when used by an agent; no direct execution is required by the skill itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Generated or edited skills may contain unclear triggers, incorrect guidance, or unnecessary tool access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated skill files, validate YAML frontmatter and file references, and confirm any allowed tool entries before installation or reload.
+
+Risk: The skill explains installation locations and may cause an agent to place files where skills are loaded.
+
+Mitigation: Use it only when skill-building assistance is intended, and review generated skills before enabling them in an agent skills directory.
+
+## Reference(s):
+
+- [Skill Builder Guide](references/skill-builder-guide.md)
+- [ClawHub Skill Builder release page](https://clawhub.ai/anderskev/skills/skill-builder)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with examples, checklists, code blocks, and file-layout recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or edit skill files and installation paths; generated skills should be reviewed before installation or reload.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

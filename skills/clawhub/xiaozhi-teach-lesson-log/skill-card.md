@@ -1,43 +1,59 @@
-## Description: <br>
-Helps independent teachers turn post-class recollections into structured lesson records, learning-track updates, course-unit ledger entries, and follow-up planning notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps independent teachers turn post-lesson observations into structured learning records, topic-level mastery notes, and next-lesson guidance.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill after lessons to capture what was taught, assess mastery and reactions, update learning trajectories, record course-unit consumption, and prepare next-lesson or parent-summary material. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent lesson records may contain sensitive student information. <br>
-Mitigation: Use aliases, avoid real names and family details, and verify consent settings before creating profiles or sharing data across skills. <br>
-Risk: Course-unit ledger updates can affect lesson balances. <br>
-Mitigation: Treat lesson-unit deductions as pre-deductions, review them within the 24-hour adjustment window, and correct exceptions such as absences, cancellations, trials, or technical disruptions. <br>
-Risk: Parent-summary drafts could be inaccurate, premature, or too negative if sent without review. <br>
-Mitigation: Manually check parent summaries before sending, keep wording behavior-based, and do not let the skill automatically send messages to parents. <br>
+## Use Case:
 
+Independent teachers use this Chinese-language K12 skill to document lessons, review learning progress, prepare next-lesson priorities, and draft optional parent-facing factual summaries for teacher review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log) <br>
-- [Lesson log template](references/lesson-log-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize crisis contacts, curriculum, consent rules, and schema values before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown-style structured lesson records, learning-trajectory notes, ledger updates, and planning summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes lesson-log fields, mastery evidence, next-lesson focus, course-unit consumption notes, and optional parent-summary drafts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Records about minors may expose personal or sensitive family information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student aliases, avoid real names and sensitive family details, and check consent before drafting parent summaries or sharing records.
+
+Risk: Inaccurate observations or unapproved course-unit deductions may affect teaching records or billing.
+
+Mitigation: Record observable facts, show each lesson record to the teacher before saving, and require explicit teacher confirmation before changing course-unit totals.
+
+Risk: Mainland China crisis contacts and K12 conventions may be unsuitable elsewhere.
+
+Mitigation: Localize crisis contacts, curriculum assumptions, consent rules, and schema values before use outside Mainland China.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-log)
+- [Lesson log templates](references/lesson-log-template.md)
+- [Crisis exception guidance](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Structured lesson records, Guidance]
+
+**Output Format:** [Markdown responses and structured workspace records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Lesson records and course-unit changes require teacher confirmation; parent summaries remain internal drafts.]
+
+## Skill Version(s):
+
+2.7.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

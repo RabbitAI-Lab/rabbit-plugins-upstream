@@ -1,43 +1,63 @@
-## Description: <br>
-Github Flow guides agents through GitHub issue, pull request, review, merge, dependency, authentication, and publication workflows using GitHub CLI-first procedures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GitHub Flow guides agents through GitHub issue, pull request, review, merge, publishing, dependency, account-scope, and public-content sanitization workflows.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to convert plans into GitHub issues and PRs, manage review and merge flows, enforce public-repository hygiene, and handle GitHub CLI authentication and scope checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents through high-impact GitHub actions, including token refreshes, public posting, force-pushes, direct branch pushes, and merges. <br>
-Mitigation: Install only where agent-managed GitHub workflows are intended, and require explicit user confirmation before token refreshes, public posts, force-pushes, direct master pushes, or merges. <br>
-Risk: Hardcoded account mappings and scope rules can cause work to run under the wrong GitHub identity or with broader access than expected. <br>
-Mitigation: Replace the documented accounts and scope rules with the user's own policy, then verify gh CLI identity, repository owner, and token scope before live operations. <br>
-Risk: Home-directory and cache assumptions can affect how credentials or local workflow state are reused between agent runs. <br>
-Mitigation: Review local credential storage, cache dependencies, and gh CLI state before enabling the skill in shared or sensitive environments. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to convert plans and review findings into GitHub issues and pull requests, manage dependencies and publication flows, and perform gated review and merge operations with public-content sanitization.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/github-flow) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and GitHub CLI/API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires local GitHub repository context and configured gh CLI credentials for live GitHub operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: The skill can guide an agent to operate GitHub with substantial authority, including issue and pull request mutations, branch publication, and merge workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for agents authorized to operate the target repositories, require explicit user approval for publishing and merge actions, and review proposed GitHub CLI commands before execution.
+
+Risk: The evidence security summary flags a helper pattern that can post pull request approvals from a second GitHub account.
+
+Mitigation: Remove or disable alternate-account self-review helpers unless the organization explicitly permits that pattern and it cannot bypass required human-review protections.
+
+Risk: Stored GitHub identities and token-scoped commands can misuse repository access if the active account or token scope is wrong.
+
+Mitigation: Limit token scopes and accounts to the repositories needed, verify the active gh identity before operations, and prefer command-scoped token use for sensitive actions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/github-flow)
+- [Skill Overview](SKILL.md)
+- [Changelog](CHANGELOG.md)
+- [Authentication Scope Guide](auth-scope.md)
+- [Pull Request Guide](pr.md)
+- [Merge Guide](merge.md)
+- [Public Content Sanitization Guide](sanitize.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and structured GitHub issue, pull request, review, and merge content]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include GitHub CLI commands, checklist-style verification gates, and user-approval checkpoints for publishing or merge actions.]
+
+## Skill Version(s):
+
+0.11.2 (source: server release metadata and CHANGELOG, released 2026-09-24)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

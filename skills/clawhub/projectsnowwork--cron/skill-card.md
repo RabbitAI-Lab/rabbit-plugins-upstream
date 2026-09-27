@@ -1,41 +1,54 @@
-## Description: <br>
-Local-first recurring schedule engine for reminders, repeated tasks, and time-based execution plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Local-first recurring schedule engine for reminders, repeated tasks, and time-based execution plans.
 
-## Publisher: <br>
-[ProjectSnowWork](https://clawhub.ai/user/ProjectSnowWork) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[projectsnowwork](https://clawhub.ai/user/projectsnowwork)
 
-## Use Case: <br>
-Employees, developers, and personal automation users use this skill to capture recurring reminders, repeated tasks, routines, and time-based plans as local schedules with next-run visibility and pause/resume controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill records job titles, notes, tags, and schedule metadata in persistent local JSON files. <br>
-Mitigation: Avoid storing secrets in job text, review local file permissions, and clear or archive the cron memory files when the data is no longer needed. <br>
-Risk: The skill computes and stores schedules but is not itself a background runner or system cron replacement. <br>
-Mitigation: Use a separate reviewed execution service if jobs must run automatically, and treat this skill as schedule memory unless that service is added. <br>
+## Use Case:
 
+Developers and agent users use Cron to capture recurring intentions as local schedules, inspect upcoming runs, and pause or resume repeated jobs without external sync.
 
-## Reference(s): <br>
-- [Cron Philosophy](artifact/references/philosophy.md) <br>
-- [ClawHub skill page](https://clawhub.ai/ProjectSnowWork/cron) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with Python CLI command examples and JSON-backed schedule records.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces local schedule-management commands and status summaries; bundled scripts persist job, run, and stats JSON under ~/.openclaw/workspace/memory/cron.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact/skill.json) <br>
+Risk: Local schedule records can include job titles, notes, tags, timing, status, and stats that may be sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm job details before adding, pausing, or resuming schedules, and review local OpenClaw memory files according to the user's data handling expectations.
+
+Risk: The skill defaults new jobs to the Asia/Tokyo timezone when no timezone is specified.
+
+Mitigation: Ask for or provide an explicit timezone when creating schedules for users in other regions.
+
+## Reference(s):
+
+- [Cron Philosophy](references/philosophy.md)
+- [Cron on ClawHub](https://clawhub.ai/projectsnowwork/skills/cron)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and local JSON state descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stores disclosed local JSON state for jobs, runs, and stats under the OpenClaw memory directory.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and skill.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

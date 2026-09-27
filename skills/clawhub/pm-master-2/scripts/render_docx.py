@@ -1,13 +1,14 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · Markdown -> DOCX 渲染
+PM Master · Markdown -> DOCX rendering
 -------------------------------------------------
-双轨产出：Markdown 为单一事实源，本脚本把它渲染为正式 Word 文档。
-优先使用 pandoc；若不可用，则用 python-docx 做基础渲染
-（支持 #~###### 标题、段落、有序/无序列表、表格、粗体 **x**）。
+Dual-track output: Markdown is the single source of truth, and this script renders
+it into a formal Word document.
+Prefer pandoc; if unavailable, fall back to python-docx for basic rendering
+(supports #~###### headings, paragraphs, ordered/unordered lists, tables, bold **x**).
 
-用法：
+Usage:
   python3 render_docx.py <input.md> [--out output.docx]
 """
 import os
@@ -19,7 +20,7 @@ import re
 
 
 def _add_code(doc, body, size=9):
-    """以等宽字体把纯文本作为代码块写入（用于 mermaid 源码回退）。"""
+    """Write plain text as a code block in a monospace font (fallback for mermaid source)."""
     from docx.shared import Pt
     p = doc.add_paragraph()
     run = p.add_run(body)
@@ -28,8 +29,8 @@ def _add_code(doc, body, size=9):
 
 
 def _try_mermaid_png(src):
-    """若系统装有 mermaid CLI（mmdc），把 mermaid 源码渲染为 PNG 并返回路径；
-    否则返回 None（交由调用方回退为代码块）。失败也不抛错。"""
+    """If the mermaid CLI (mmdc) is installed, render the mermaid source to a PNG and return its path;
+    otherwise return None (the caller falls back to a code block). Failures do not raise."""
     mmdc = shutil.which('mmdc')
     if not mmdc:
         return None
@@ -74,7 +75,8 @@ def render_with_python_docx(md_path, out_path):
         if not line.strip():
             i += 1
             continue
-        # 围栏代码块（``` ... ```）：mermaid 优先渲染成图，否则以代码块输出，避免乱码
+        # Fenced code block (``` ... ```): prefer rendering mermaid as an image; otherwise output as a
+        # code block to avoid garbled text
         stripped = line.lstrip()
         if stripped.startswith('```'):
             lang = stripped.strip('`').strip().lower()
@@ -84,7 +86,7 @@ def render_with_python_docx(md_path, out_path):
                 fence_body.append(lines[i])
                 i += 1
             if i < n:
-                i += 1  # 跳过结束围栏
+                i += 1  # skip the closing fence
             body = '\n'.join(fence_body)
             if lang == 'mermaid':
                 img = _try_mermaid_png(body)
@@ -94,26 +96,26 @@ def render_with_python_docx(md_path, out_path):
                     except Exception:
                         img = None
                 if not img:
-                    doc.add_paragraph('[Mermaid 图源 · 本文档未渲染为图片]',
+                    doc.add_paragraph('[Mermaid source not rendered to image in this document]',
                                      style='Intense Quote')
                     _add_code(doc, body, 8)
             else:
                 _add_code(doc, body, 9)
             continue
-        # 标题
+        # Heading
         m = re.match(r'^(#{1,6})\s+(.*)$', line)
         if m:
             level = len(m.group(1))
             doc.add_heading(m.group(2).strip(), level=min(level, 6))
             i += 1
             continue
-        # 表格（连续 | 行）
+        # Table (consecutive | lines)
         if line.strip().startswith('|'):
             tbl_lines = []
             while i < n and lines[i].strip().startswith('|'):
                 tbl_lines.append(lines[i])
                 i += 1
-            # 去掉分隔行（---）
+            # drop the separator row (---)
             rows = [r for r in tbl_lines if not re.match(r'^\s*\|?[\s:\-\|]+\|?\s*$', r)]
             if rows:
                 cells = [c.strip() for c in rows[0].strip().strip('|').split('|')]
@@ -129,17 +131,17 @@ def render_with_python_docx(md_path, out_path):
                         if j < len(cells_row):
                             cells_row[j].text = _strip_inline(c)
             continue
-        # 无序列表
+        # Unordered list
         if re.match(r'^[-*]\s+', line):
             doc.add_paragraph(_strip_inline(re.sub(r'^[-*]\s+', '', line)), style='List Bullet')
             i += 1
             continue
-        # 有序列表
+        # Ordered list
         if re.match(r'^\d+\.\s+', line):
             doc.add_paragraph(_strip_inline(re.sub(r'^\d+\.\s+', '', line)), style='List Number')
             i += 1
             continue
-        # 普通段落（合并连续行直到空行）
+        # Plain paragraph (merge consecutive lines until a blank line)
         para = [line]
         i += 1
         while i < n and lines[i].strip() and not lines[i].lstrip().startswith(('#', '|', '-', '*')) and not re.match(r'^\d+\.\s', lines[i]):
@@ -157,21 +159,21 @@ def _strip_inline(text):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master MD->DOCX")
+    ap = argparse.ArgumentParser(description="PM Master MD->DOCX renderer")
     ap.add_argument('input')
     ap.add_argument('--out', default=None)
     a = ap.parse_args()
     out = a.out or (os.path.splitext(a.input)[0] + '.docx')
     if try_pandoc(a.input, out):
-        print(f"[docx] pandoc 渲染 -> {out}")
+        print(f"[docx] rendered with pandoc -> {out}")
     else:
         try:
             render_with_python_docx(a.input, out)
-            print(f"[docx] python-docx 渲染 -> {out}")
+            print(f"[docx] rendered with python-docx -> {out}")
         except ImportError:
-            print("[docx] 需要 python-docx：pip install python-docx", file=sys.stderr)
+            print("[docx] python-docx is required: pip install python-docx", file=sys.stderr)
             sys.exit(2)
-    print(f"[docx] 完成: {out}")
+    print(f"[docx] done: {out}")
 
 
 if __name__ == '__main__':

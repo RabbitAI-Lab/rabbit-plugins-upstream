@@ -1,56 +1,56 @@
-# SOW / Contract Parsing Playbook（基础布局加固）
+# SOW / Contract Parsing Playbook (Foundation-Layout Hardening)
 
-> **定位**：解析任何「合同 / 意向书 / SOW / 工作说明书」是项目群的基础布局。
-> 此步骤若粗放（套用泛化阶段、漏掉商业结构），后续排期、计费、风险全部失准。
-> 本 Playbook 把「专家级理解」固化为**可重复、可校验的流水线**，适配所有合同类型与所有方法论。
-
----
-
-## 0. 适用范围
-
-- **合同类型**：固定费率 SOW、T&M（工时上限）合同、混合（固定+里程碑+T&M）、意向书(LOI)、框架协议、分包合同。
-- **方法论**：waterfall（阶段/Wave）、agile（Epic/Sprint/Release）、T&M（工时上限包）、hybrid。
-- **层级**：单项目（project）与项目群（program，含多 SOW 子项目）均适用。
-
-本 Playbook 不依赖任何具体客户/项目；所有项目专属信息都来自输入的**理解记录(spec)**。
+> **Positioning**: Parsing any "contract / letter of intent / SOW / statement of work" is the foundation layout of a program.
+> If this step is done crudely (applying a generic phase, missing the commercial structure), all later scheduling, billing, and risk work will be inaccurate.
+> This Playbook hardens "expert-level understanding" into a **repeatable, verifiable pipeline** that fits all contract types and all methodologies.
 
 ---
 
-## 1. 可靠性循环（a + c）
+## 0. Scope of Application
 
-为「确保可靠」，解析走两条输入通道，二者互补：
+- **Contract types**: fixed-fee SOW, T&M (capped-effort) contract, hybrid (fixed + milestone + T&M), letter of intent (LOI), framework agreement, subcontract.
+- **Methodologies**: waterfall (stage/Wave), agile (Epic/Sprint/Release), T&M (capped-effort package), hybrid.
+- **Levels**: both single project (project) and program (program, with multiple SOW sub-projects) apply.
 
-- **(a) 文本抽取**：把 SOW PDF 文本 dump 为 `.txt`（或粘贴原文）喂给解析者。逐字读取**计费/交付、范围边界、进入条件、假设**四节——禁止凭印象推断。
-- **(c) 引导式 Q&A**：当文本含糊（金额币种、Wave 数量、进入条件、角色归属）时，解析者用 `render_ui`/直问向用户澄清，**不臆测**。
-
-产物是结构化的**理解记录（spec，JSON）**，再交给 `parse_sow.py` 生成 WBS。**WBS 自动写入 `project.yaml`，无需人工审批**——因为理解记录已通过 (a)+(c) 双重确认，人为审批只是重复。
-
----
-
-## 2. 专家级理解链路（CoT + Critic）
-
-解析者拿到文本后，**必须**执行以下思维链，禁止跳步：
-
-1. **商业结构优先**：逐字提取「<交付物> post sign-off / 完工证书 / 验收」类事件及其费用。每一个都是**计费里程碑**候选。
-2. **范围边界**：明确 in-scope / out-of-scope、逻辑 vs 物理、是否含 ETL 转换规则、语义层比例、归档/培训等特殊项。
-3. **进入条件 / 数据就绪门**：SME 可用性、真实数据、接口文档、基础设施就绪——这些是最大的返工风险，必须成为关键路径上的**显式前置包**。
-4. **假设即变更触发**：把「≤N 源表 / M 核心表 / 角色上限」写为 `raid.assumptions`，超界即走 CCB 变更单。
-5. **Wave / 工作流分解**：把每个计费里程碑映射到一个工作流（Wave / Phase / Epic），工作流内自含「分析→设计→构建→映射→签字」活动。
-6. **Critic 自审**（写完 spec 前必做，且落盘后须运行 `scripts/critic_review.py --strict` 通过）：
-   - 是否漏了某个计费事件？（缺里程碑 = 计划不可测）
-   - 排期是否只铺了前几周，没覆盖全部 Wave？（= 初级水平）
-   - 叶子包是否都 ≤10 人天（**双周 fortnight 颗粒度**，见 control.leaf_granularity）？（否则控制门硬失败）
-   - 进入条件是否显式成了前置包（entry_gate）？
-   - **6 因素拆解纪律**（scope / milestone / payment / assumptions / constraints / dependencies）必须全部可追溯：
-     每叶子须有 deliverable/scope 且归属某 milestone（milestone_ref）；每固定费率 SOW 有计费里程碑并挂在 sow_map 支付行；
-     raid.assumptions 须含可量化边界（≤N 源表/M 核心表）以便 CCB 触发；外部前置约束须有 entry_gate 叶子；依赖网络连通无孤立包。
-   - 落盘后须置 `decomposition.critic_passed: true`（consistency_check 在规划期会校验此标志，缺则致命）。
+This Playbook depends on no specific client/project; all project-specific information comes from the input **comprehension record (spec)**.
 
 ---
 
-## 3. 理解记录（spec）Schema
+## 1. Reliability Loop (a + c)
 
-`parse_sow.py --spec sow1.spec.json` 接受的 JSON：
+To "ensure reliability," parsing takes two complementary input channels:
+
+- **(a) Text extraction**: dump the SOW PDF text to `.txt` (or paste the original) and feed it to the parser. Read verbatim the four sections — **billing/deliverables, scope boundary, entry conditions, assumptions** — do not infer from impression.
+- **(c) Guided Q&A**: when the text is ambiguous (fee currency, number of Waves, entry conditions, role ownership), the parser uses `render_ui`/direct questions to clarify with the user — **do not guess**.
+
+The output is a structured **comprehension record (spec, JSON)**, which is then handed to `parse_sow.py` to generate the WBS. Writing to `project.yaml` is a **destructive, explicit action gated behind `--apply`**: `parse_sow.py` deletes the old SOW subtree and replaces it, only after writing a dated backup of `project.yaml`. `--dry-run` (or running with neither flag) only previews the packages. The comprehension record must pass the (a) text-extraction + (c) guided-Q&A double confirmation **before** `--apply` is issued — that double confirmation is the human checkpoint; `--apply` is the deliberate persist step, never automatic.
+
+---
+
+## 2. Expert-Level Comprehension Chain (CoT + Critic)
+
+After the parser receives the text, it **must** execute the following chain-of-thought, no step-skipping:
+
+1. **Commercial structure first**: extract verbatim events like "<Deliverable> post sign-off / completion certificate / acceptance" and their fees. Each is a candidate **billing milestone**.
+2. **Scope boundary**: clarify in-scope / out-of-scope, logical vs physical, whether ETL transformation rules are included, semantic-layer ratio, special items such as archival/training.
+3. **Entry conditions / data-readiness gate**: SME availability, real data, interface docs, infrastructure readiness — these are the biggest rework risk and must become explicit predecessor packages on the critical path.
+4. **Assumptions are change triggers**: write "≤N source tables / M core tables / role cap" as `raid.assumptions`; exceeding the bound goes through a CCB change request.
+5. **Wave / workflow decomposition**: map each billing milestone to a workflow (Wave / Phase / Epic); the workflow contains its own "analyze → design → build → map → sign-off" activities.
+6. **Critic self-review** (mandatory before writing the spec, and after persisting to disk you must run `scripts/critic_review.py --strict` to pass):
+   - Did you miss any billing event? (missing milestone = unmeasurable plan)
+   - Does the schedule only cover the first few weeks, not all Waves? (= junior level)
+   - Are all leaf packages ≤10 person-days (the **fortnight granularity**, see control.leaf_granularity)? (otherwise the control gate hard-fails)
+   - Are entry conditions explicitly predecessor packages (entry_gate)?
+   - The **6-factor decomposition discipline** (scope / milestone / payment / assumptions / constraints / dependencies) must all be traceable:
+     every leaf must have a deliverable/scope and belong to some milestone (milestone_ref); every fixed-fee SOW has a billing milestone linked to a sow_map payment row;
+     raid.assumptions must contain quantifiable bounds (≤N source tables / M core tables) so the CCB can trigger; external predecessor constraints must have an entry_gate leaf; the dependency network is connected with no orphan packages.
+   - After persisting to disk, set `decomposition.critic_passed: true` (consistency_check validates this flag during planning; missing = fatal).
+
+---
+
+## 3. Comprehension Record (spec) Schema
+
+`parse_sow.py --spec sow1.spec.json` accepts JSON:
 
 ```json
 {
@@ -60,27 +60,27 @@
   "objective": "...",
   "scope": "...",
   "out_of_scope": "...",
-  "assumptions": ["≤1600 源表...", "..."],
+  "assumptions": ["≤1600 source tables...", "..."],
   "roles": ["ba", "solution-architect", "etl-engineer", "domain-sme"],
   "entry_gates": [
-    {"id": "SOW1.0", "name": "源就绪门", "acceptance": "...", "role": "ba",
+    {"id": "SOW1.0", "name": "Source-Readiness Gate", "acceptance": "...", "role": "ba",
      "duration_days": 10, "estimate": 8, "dependsOn": ["SOW9"]}
   ],
   "waves": [
     {
-      "id": "SOW1.W1", "name": "Wave 1 — 源集1",
+      "id": "SOW1.W1", "name": "Wave 1 — Source Set 1",
       "billing": {"event": "Wave 1 Design Document post sign-off", "fee": 11645092,
                   "currency": "INR", "fee_type": "fixed"},
       "leaves": [
-        {"id": "SOW1.W1.1", "name": "源系统识别与需求剖析", "role": "ba",
+        {"id": "SOW1.W1.1", "name": "Source system identification and requirements analysis", "role": "ba",
          "duration_days": 8, "estimate": 6, "acceptance": "..."},
-        {"id": "SOW1.W1.2a", "name": "逻辑模型 FSDM", "role": "solution-architect",
+        {"id": "SOW1.W1.2a", "name": "Logical model FSDM", "role": "solution-architect",
          "duration_days": 8, "estimate": 6, "acceptance": "..."}
       ]
     }
   ],
   "deliverables_non_billing": [
-    {"id": "SOW1.AR", "name": "冷数据归档设计",
+    {"id": "SOW1.AR", "name": "Cold-data archival design",
      "billing": {"event": "Data Archival Design Document sign-off", "fee": 0, "fee_type": "none"},
      "leaves": [ {"id": "SOW1.AR.1a", "name": "...", "role": "nos-architect",
                   "duration_days": 9, "estimate": 7, "acceptance": "..."} ]}
@@ -88,70 +88,70 @@
 }
 ```
 
-字段规则：
-- `fee_type`：`fixed`（固定费率，fee>0 → 计费里程碑）| `tm`（工时上限，包带 `billing.cap`，里程碑为交付签字非固定费）| `none`（纯交付物，fee=0）。
-- `waves[].leaves[].estimate` 必填且 **>0 且 ≤10 人天**（控制门硬阈值）。`duration_days` 可选（用于排期；缺省=estimate）。
-- 未显式给 `dependsOn` 时，脚本按默认链生成：entry_gate → Wave1 → Wave1 叶链 → W1 里程碑 → Wave2 …；非计费交付物依赖首个 entry_gate，其内部叶链到交付里程碑。
-- summary / milestone 包的 `estimate` 由脚本**自底向上累计**子项，无需手写。
+Field rules:
+- `fee_type`: `fixed` (fixed-fee, fee>0 → billing milestone) | `tm` (capped effort, package carries `billing.cap`, milestone is delivery sign-off not a fixed fee) | `none` (pure deliverable, fee=0).
+- `waves[].leaves[].estimate` is required and **>0 and ≤10 person-days** (hard control-gate threshold). `duration_days` is optional (used for scheduling; default = estimate).
+- When `dependsOn` is not given explicitly, the script generates the default chain: entry_gate → Wave1 → Wave1 leaf chain → W1 milestone → Wave2 …; non-billing deliverables depend on the first entry_gate, their internal leaf chain reaching the delivery milestone.
+- summary / milestone packages' `estimate` is **rolled up bottom-up** by the script from children; no manual entry needed.
 
 ---
 
-## 4. 方法论变体
+## 4. Methodology Variants
 
-| 方法论 | 工作流命名 | 计费里程碑来源 | 叶子包含义 |
+| Methodology | Workflow naming | Billing milestone source | Leaf package meaning |
 |--------|-----------|---------------|-----------|
-| waterfall | Wave / Phase | 设计文档/完工证书签字 | ≤10人天领域活动 |
-| agile | Epic / Release | Sprint/Release 目标达成 | ≤10人天 Story/Sprint 任务 |
-| tm | 工时上限包 | 阶段验收（非固定费） | ≤10人天工时桶，estimate=cap 内 |
-| hybrid | Wave + 迭代 | 固定里程碑 + 迭代验收 | 混合 |
+| waterfall | Wave / Phase | Design document / completion certificate sign-off | domain activities ≤10 person-days |
+| agile | Epic / Release | Sprint/Release goal reached | ≤10 person-day Story/Sprint tasks |
+| tm | Capped-effort package | Stage acceptance (non-fixed fee) | ≤10 person-day effort buckets, estimate within cap |
+| hybrid | Wave + iteration | Fixed milestone + iteration acceptance | mixed |
 
-`parse_sow.py` 只忠实渲染 spec；方法论决定**解析者如何切分 waves/leaves**，不改变脚本逻辑。
+`parse_sow.py` only faithfully renders the spec; the methodology decides **how the parser splits waves/leaves**, not the script logic.
 
 ---
 
-## 5. 生成与校验
+## 5. Generation & Validation
 
 ```bash
-# 1) 导出空白 spec 模板
+# 1) Export a blank spec template
 python3 parse_sow.py --emit-spec-template > sow1.spec.json
 
-# 2) （解析者填 spec：来自文本抽取 + Q&A）
+# 2) (parser fills the spec: from text extraction + Q&A)
 
-# 3) 生成并自动写入 project.yaml
-python3 parse_sow.py --project program/project.yaml --spec sow1.spec.json
+# 3) Generate and persist to project.yaml (requires explicit --apply; a dated backup is written first)
+python3 parse_sow.py --project program/project.yaml --spec sow1.spec.json --apply
 
-# 4) 干跑（只打印将要写入的包，不落盘）
+# 4) Dry run (only print the packages to be written, do not persist)
 python3 parse_sow.py --project program/project.yaml --spec sow1.spec.json --dry-run
 ```
 
-脚本行为：
-- 删除 `project.yaml` 中该 SOW 的旧子树（`id == SOWn` 或 `id 以 "SOWn." 开头`），再追加新包 → **幂等可重跑**。
-- 累计 summary/milestone 估算；默认依赖链保证可正向排程。
-- 在 `sow_map` 写入/更新该 SOW 的 `fee` / `fee_type` / `methodology` / `status`。
-- 末尾自动跑 `consistency_check.py`；若固定费率 SOW 却无计费里程碑，一致性门**致命失败**（见下）。
+Script behavior:
+- **Destructive replacement is gated behind `--apply`** (see §1): `parse_sow.py` deletes the old subtree for that SOW in `project.yaml` (`id == SOWn` or `id starts with "SOWn."`), then appends new packages → **idempotent, re-runnable, and always preceded by a dated backup** (`project.yaml.bak-<date>`). With neither `--apply` nor `--dry-run` it only prints a preview and writes nothing.
+- Rolls up summary/milestone estimates; default dependency chain guarantees forward scheduling.
+- Writes/updates that SOW's `fee` / `fee_type` / `methodology` / `status` in `sow_map`.
+- Automatically runs `consistency_check.py` at the end; if a fixed-fee SOW has no billing milestone, the consistency gate **fails fatally** (see below).
 
 ---
 
-## 6. 基础布局一致性门（consistency_check 加固）
+## 6. Foundation-Layout Consistency Gate (consistency_check hardening)
 
-新增规则（控制级，致命）：
-- **计费里程碑完整性**：`sow_map` 中任一 SOW 若 `fee_type: fixed` 或任一子包 `billing.fee_type=='fixed' 且 fee>0`，则该 SOW 子树内**必须存在 ≥1 个 `milestone: true` 且 `billing.fee_type=='fixed'` 的包**，否则阻断。
-- **方法论一致性**：SOW summary 包的 `methodology`（若在 spec 提供）须与 `project.methodology` 兼容（program=waterfall 时子项目可为 waterfall/agile/hybrid；不允许凭空调换）。
-- 既有规则（叶子包 ≤10 人天、估算强制、依赖完整）继续生效。
+New rules (control level, fatal):
+- **Billing milestone completeness**: for any SOW in `sow_map` with `fee_type: fixed`, or any child package with `billing.fee_type=='fixed' and fee>0`, the SOW subtree **must contain ≥1 package with `milestone: true` and `billing.fee_type=='fixed'`**, otherwise it is blocked.
+- **Methodology consistency**: a SOW summary package's `methodology` (if provided in spec) must be compatible with `project.methodology` (when program=waterfall, sub-projects may be waterfall/agile/hybrid; swapping out of thin air is not allowed).
+- Existing rules (leaf package ≤10 person-days, mandatory estimate, complete dependencies) remain in effect.
 
-> 这些门禁保证：任何「基础布局」只要写入，就**必然**含计费里程碑、细粒度叶子、完整依赖——从机制上杜绝初级计划。
+> These gates guarantee: any "foundation layout" written will **necessarily** contain billing milestones, fine-grained leaves, and complete dependencies — structurally preventing junior-level plans.
 
-## 7. 排期联动（Pillar 2 + 4）
+## 7. Schedule Linkage (Pillar 2 + 4)
 
-基础布局解析后，排期阶段须保证「收款节奏 = 交付节奏」，杜绝“铺了任务却没把收费事件连到排期”。
+After foundation-layout parsing, the scheduling phase must ensure "collection cadence = delivery cadence", preventing "tasks laid out but billing events not connected to the schedule".
 
-- **Pillar 2 · 里程碑↔活动归集**：`parse_sow.py` 在生成每片 Wave 时，自动给其下所有叶子置 `milestone_ref: <WAVE>.M`（每叶子显式归属其结账里程碑）。`build_schedule.py` 据此渲染「Milestone Coverage」段，列出每个里程碑下直接归属的活动；一个支付里程碑可对应多个活动。
-- **Pillar 4 · 支付里程碑↔排期联动**：`parse_sow.py` 自动给每计费里程碑置 `billing.payment_id: {SOW}-P{n}`（n=该片在 spec.waves 中的 1-based 序号）。`build_schedule.py` 渲染「Payment Linkage」段，把每条固定费率支付行 → 其里程碑 → 排期日 vs 合同 `due_date` 对齐，状态：
-  - `linked`：排期日 ≤ 合同 due_date（一致）
-  - `drift`：排期日晚于合同 due（须纠偏或走变更单）
-  - `no-due`：合同未填 due_date（须补合同日期）
-- **一致性门禁（6d，仅规划期致命）**：
-  - **6d-1 里程碑覆盖缺口**：任一叶子既无 `milestone_ref`、其依赖末端也不落在任何里程碑 → 致命。
-  - **6d-2 支付↔里程碑缺失**：`sow_map`/`program.sows` 中任一固定费率支付行（fee>0），其 SOW 子树内却无 `milestone + billing.fee_type=fixed` 包 → 致命。
-  - **6d-3 支付顺序非单调**：同一 SOW 的计费里程碑排期日须升序（付款节奏与交付节奏同向）→ 否则致命。
-- 运营期（已冻结，如示例客户）自动跳过 6d，避免击穿已基线化项目。
+- **Pillar 2 · Milestone↔Activity rollup**: when `parse_sow.py` generates each Wave, it automatically sets `milestone_ref: <WAVE>.M` on all its leaves (each leaf explicitly belongs to its billing milestone). `build_schedule.py` renders the "Milestone Coverage" section accordingly, listing the activities directly attributed to each milestone; one payment milestone may correspond to multiple activities.
+- **Pillar 4 · Payment milestone↔schedule linkage**: `parse_sow.py` automatically sets `billing.payment_id: {SOW}-P{n}` on each billing milestone (n = 1-based index of that Wave in spec.waves). `build_schedule.py` renders the "Payment Linkage" section, mapping each fixed-fee payment row → its milestone → scheduled date vs contract `due_date`, with status:
+  - `linked`: scheduled date ≤ contract due_date (consistent)
+  - `drift`: scheduled date later than contract due (needs correction or a change request)
+  - `no-due`: contract due_date not filled (must supply contract date)
+- **Consistency gates (6d, fatal only during planning)**:
+  - **6d-1 milestone coverage gap**: any leaf has neither a `milestone_ref` nor its dependency tail landing on any milestone → fatal.
+  - **6d-2 payment↔milestone missing**: any fixed-fee payment row (fee>0) in `sow_map`/`program.sows` whose SOW subtree has no `milestone + billing.fee_type=fixed` package → fatal.
+  - **6d-3 payment order non-monotonic**: a single SOW's billing milestone scheduled dates must be ascending (payment cadence aligned with delivery cadence) → otherwise fatal.
+- During operations (already frozen, e.g. the example client), 6d is automatically skipped to avoid breaking a baselined project.

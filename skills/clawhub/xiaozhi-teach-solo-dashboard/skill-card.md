@@ -1,45 +1,61 @@
-## Description: <br>
-Helps independent teachers turn schedules, student records, homework, parent communication, and lesson-package status into a seven-section daily dashboard with risk flags and top priorities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates a read-only daily dashboard for independent teachers, bringing together schedules, student records, homework, parent follow-ups, lesson balances, and three prioritized actions.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to review daily classes, preparation tasks, homework follow-up, parent communication, lesson-package renewal points, and the three most important actions for the day. It is intended as a planning and triage dashboard, not as an automatic messaging or record-writing system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation phrases may route generic planning requests into a dashboard that reads student workspace data. <br>
-Mitigation: Narrow activation to explicit independent-teacher workspace requests or ask a clarification question before reading student, parent, course-package, or schedule data. <br>
-Risk: The dashboard may expose sensitive student or family information if raw workspace fields are copied directly. <br>
-Mitigation: Use aliases, summarize parent and lesson notes within the stated 500-character limits, and omit real names, contact details, family conflict, medical details, and payment information. <br>
-Risk: Suggested follow-up could be mistaken for an authorized external action or record update. <br>
-Mitigation: Keep messages, lesson-unit consumption, parent communication, renewal suggestions, and cross-skill sharing as teacher-confirmed actions only. <br>
+## Use Case:
 
+Independent K–12 teachers use this skill to review their daily teaching workload, identify students needing attention from recorded data, and prioritize three actions without changing records or contacting parents.
 
-## Reference(s): <br>
-- [Dashboard template](references/dashboard-template.md) <br>
-- [Daily dashboard block templates](references/daily-dashboard-block-templates.md) <br>
-- [Daily dashboard full sample](references/daily-dashboard-full-sample.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard) <br>
+### Deployment Geography for Use:
 
+Mainland China (localize language, grade conventions, crisis contacts, and privacy assumptions before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style daily dashboard with structured text sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses student aliases, concise summaries, risk labels with field-based rationale, and teacher-confirmed follow-up actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student information or parent-facing summaries could expose sensitive details without consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use student aliases, omit sensitive family and medical details, and confirm workspace consent fields are enforced before sharing parent-facing content.
+
+Risk: Mainland China grade conventions and crisis contacts may be inappropriate elsewhere.
+
+Mitigation: Use only for Chinese-language Mainland China K–12 workflows unless language, grade conventions, crisis contacts, and privacy assumptions are localized.
+
+Risk: Missing or incomplete teaching records can make student attention flags or priorities misleading.
+
+Mitigation: Base flags on recorded field values, distinguish subjective judgments, and have the teacher review priorities before acting.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard)
+- [Daily dashboard template](references/dashboard-template.md)
+- [Seven-block dashboard templates](references/daily-dashboard-block-templates.md)
+- [Daily dashboard example](references/daily-dashboard-full-sample.md)
+- [Teacher workspace schema](shared/solo-teacher-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown daily dashboard with seven sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only summary with data-based student attention flags and three prioritized actions; no messages sent or records modified.]
+
+## Skill Version(s):
+
+2.7.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

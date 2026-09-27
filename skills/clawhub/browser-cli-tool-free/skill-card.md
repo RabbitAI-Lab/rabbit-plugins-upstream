@@ -1,42 +1,62 @@
-## Description: <br>
-browser-cli-tool-free guides agents in using the agent-browser CLI to navigate web pages, interact with elements, extract page information, and capture screenshots. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill guides agents in using a Playwright-based browser automation CLI for navigation, form filling, screenshots, and page information extraction.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate browser pages for personal check-ins, form filling, page inspection, screenshots, and light web data collection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Browser automation can interact with sensitive logged-in pages and capture sensitive page content in screenshots. <br>
-Mitigation: Review each browser command before execution, avoid sensitive sessions unless necessary, and manage screenshot files as potentially sensitive local artifacts. <br>
-Risk: Recurring unattended web actions can submit forms or perform sign-ins without enough oversight. <br>
-Mitigation: Require explicit confirmation before automating submissions, sign-ins, or scheduled tasks, and confirm that the target site's rules allow the automation. <br>
-Risk: The security summary notes a mismatch between generic trigger text and the skill's real browser-control behavior. <br>
-Mitigation: Use the skill only for intentional browser-control tasks such as navigation, interaction, extraction, and screenshots. <br>
+## Use Case:
 
+Developers, automation builders, and personal users use this skill to drive browser workflows such as check-ins, form submission, visual inspection, and data capture through agent-browser commands.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/browser-cli-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with bash command examples and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js 18+, agent-browser CLI, and Chromium; may create screenshots or scheduled shell scripts when invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: The skill gives an agent browser-control and command-execution ability.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in environments where that level of automation is acceptable, and review planned commands before execution.
+
+Risk: Examples include password form submission and account actions.
+
+Mitigation: Avoid inline passwords, use approved secret-handling practices, and require confirmation before submitting forms or changing account state.
+
+Risk: Recurring unattended sign-ins may violate site rules or create unintended account activity.
+
+Mitigation: Do not schedule unattended sign-ins unless the site's rules and the user's authorization are clear.
+
+Risk: Screenshots and page snapshots may contain private information.
+
+Mitigation: Store screenshots only when needed, restrict access, and delete sensitive captures after review.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/browser-cli-tool-free)
+- [Publisher profile](https://clawhub.ai/user/thcjp)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Text, Files]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce browser screenshots and page snapshots through the referenced CLI.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

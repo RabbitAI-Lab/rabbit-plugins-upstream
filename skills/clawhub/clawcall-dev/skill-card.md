@@ -1,49 +1,66 @@
-## Description: <br>
-Use when the user wants an AI agent to place a US phone call, call a business, handle hold or phone menus, confirm/reschedule/cancel/book/follow up/check an order, reach a real person, leave voicemail, connect the user into a live call, configure ClawCall voice/personality/profile or inbound reserved-number answering, poll received inbound calls, or link a ClawCall API key. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent place US phone calls, navigate menus and hold queues, connect users to live calls, and configure ClawCall voice and inbound answering.
 
-## Publisher: <br>
-[clawcall-dev](https://clawhub.ai/user/clawcall-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[clawcall-dev](https://clawhub.ai/user/clawcall-dev)
 
-## Use Case: <br>
-External users and agent operators use ClawCall to delegate routine US phone work, including calling businesses, handling menus and hold time, booking or changing appointments, checking order status, comparing options, and configuring inbound reserved-number answering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can place real phone calls through ClawCall and send call details to that service. <br>
-Mitigation: Confirm destination numbers, call goals, and approval boundaries before initiating calls, especially for money, account, health, travel, or identity-related tasks. <br>
-Risk: The skill stores and reuses a ClawCall API key and the user's phone number locally. <br>
-Mitigation: Use in a single-user environment where possible, protect local configuration files, and review or delete ~/.config/clawcall/key.json when access should be reset. <br>
-Risk: A phone agent may encounter identity verification, payment, or other sensitive decision points during a call. <br>
-Mitigation: Use live handoff or stop-and-report behavior for private verification, payment approval, or decisions outside the user's explicit instructions. <br>
+## Use Case:
 
+Users and their assistants can delegate routine US business calls, follow-ups, bookings, and live handoffs, or set up voice preferences and inbound call answering.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/clawcall-dev/clawcall-dev) <br>
-- [Product site](https://clawcall.dev) <br>
-- [API contract](references/api-contract.md) <br>
-- [Outbound calls](references/outbound-calls.md) <br>
-- [Inbound reserved numbers](references/inbound-reserved-numbers.md) <br>
-- [Account linking and data](references/account-linking-and-data.md) <br>
-- [Errors and limits](references/errors-and-limits.md) <br>
-- [Examples](references/examples.md) <br>
+### Deployment Geography for Use:
 
+United States only (US phone numbers)
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, API Calls, configuration, text] <br>
-**Output Format:** [Natural-language guidance plus HTTPS JSON requests and structured call results with transcripts, outcomes, and recording links when available.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can store a reusable ClawCall API key and user phone number locally, place real US phone calls through https://api.clawcall.dev, and return terminal call details after polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Calls can incur charges or make commitments on the user's behalf.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the recipient and decision boundaries before calling; use live handoff for decisions the user must make.
+
+Risk: Call transcripts and recording links may expose personal information, including during live handoff.
+
+Mitigation: Share call records only with the intended user, minimize sensitive details, and do not assume handoff stops recording or transcription.
+
+Risk: The saved API key and sign-in link can grant account access.
+
+Mitigation: Protect the local key store and sign-in link; avoid using shared machines unless access is secured.
+
+Risk: A call may request credentials, payment data, medical information, or other sensitive identity details.
+
+Mitigation: Do not collect or relay restricted details in call instructions; let the user handle sensitive steps through live handoff.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/clawcall-dev/skills/clawcall-dev)
+- [ClawCall product site](https://clawcall.dev)
+- [API contract](artifact/references/api-contract.md)
+- [Outbound calling guide](artifact/references/outbound-calls.md)
+- [Inbound calling guide](artifact/references/inbound-reserved-numbers.md)
+- [Account linking and data guide](artifact/references/account-linking-and-data.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration instructions]
+
+**Output Format:** [Conversational text or Markdown with call results and setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include call outcomes, transcripts, and recording links when available.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

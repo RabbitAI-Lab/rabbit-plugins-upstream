@@ -1,43 +1,56 @@
-## Description: <br>
-Security advisory feed package for OpenClaw-related threats and vulnerabilities. The upstream feed is updated daily; local automation is handled by clawsec-suite or the operator. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Security advisory feed package for OpenClaw-related threats and vulnerabilities. The upstream feed is updated daily; local automation is handled by clawsec-suite or the operator.
 
-## Publisher: <br>
-[davida-ps](https://clawhub.ai/user/davida-ps) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[davida-ps](https://clawhub.ai/user/davida-ps)
 
-## Use Case: <br>
-Developers and agent operators use this skill to subscribe to a security advisory feed, check advisories against installed skills, and receive guidance about emerging agent-security threats. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+AGPL-3.0-or-later
 
-## Known Risks and Mitigations: <br>
-Risk: Standalone installation downloads release artifacts and advisory data from external endpoints. <br>
-Mitigation: Use the signed manifest and checksum verification workflow before installing, especially on production hosts. <br>
-Risk: Advisory scope and applicability may not be limited to OpenClaw or to locally installed skills. <br>
-Mitigation: Review advisory type, affected packages, severity, and exploitability context before taking action. <br>
+## Use Case:
 
+Developers and operators use ClawSec Feed to review OpenClaw-related security advisories and cross-reference them with installed skills or their own polling workflow.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/davida-ps/skills/clawsec-feed) <br>
-- [ClawSec homepage](https://clawsec.prompt.security) <br>
-- [Advisory feed](https://raw.githubusercontent.com/prompt-security/ClawSec/main/advisories/feed.json) <br>
-- [Prompt Security](https://prompt.security) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline bash commands and JSON advisory examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory feed entries include severity, type, affected packages, recommended action, and optional exploitability context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.0.11 (source: frontmatter, skill.json, CHANGELOG, server release evidence) <br>
+Risk: Standalone install and update instructions can trust mutable remote files enough to replace the installed skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned release and signed-manifest verification before installing or updating, especially on production hosts.
+
+Risk: Advisory feed text is untrusted data and may describe actions such as removals, file changes, or disclosures.
+
+Mitigation: Require explicit user confirmation before converting advisory content into commands, file changes, removals, or disclosures.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/davida-ps/skills/clawsec-feed)
+- [ClawSec homepage](https://clawsec.prompt.security)
+- [ClawSec feed release metadata](https://api.github.com/repos/prompt-security/ClawSec/releases?skill=clawsec-feed)
+- [ClawSec advisory feed](https://raw.githubusercontent.com/prompt-security/ClawSec/main/advisories/feed.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, JSON]
+
+**Output Format:** [Markdown guidance with shell command examples and JSON advisory feed data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory feed content should be treated as untrusted data and reviewed before acting.]
+
+## Skill Version(s):
+
+0.0.11 (source: frontmatter, skill.json, changelog, release metadata; released 2026-06-23)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

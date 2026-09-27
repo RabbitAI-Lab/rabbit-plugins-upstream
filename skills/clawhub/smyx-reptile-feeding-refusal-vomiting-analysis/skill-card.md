@@ -1,46 +1,58 @@
-## Description: <br>
-Through fixed enclosure cameras, the skill analyzes reptile feeding-time and post-feeding videos to detect prey attack behavior, successful swallowing, feeding refusal, and regurgitation or vomiting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes reptile feeding videos to identify prey attacks, swallowing, feeding refusal, and regurgitation and provide alerts and reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, reptile keepers, vivarium operators, and developers use this skill to analyze enclosure camera media for feeding refusal, swallowing, and vomiting events, then produce structured event reports and care-oriented alerts. The output is behavioral monitoring support, not veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile videos, video URLs, and account-linked identifiers may be sent to the publisher's cloud service. <br>
-Mitigation: Use only media approved for cloud processing and review the publisher's retention, access, and sharing practices before deployment. <br>
-Risk: The skill may silently create or reuse an internal identity and store local identity tokens. <br>
-Mitigation: Run it in an isolated environment, review local token storage, and require explicit operational approval before enabling it for shared users. <br>
-Risk: Cloud report history queries can expose account-linked historical feeding events. <br>
-Mitigation: Limit history access to authorized users and verify that report links and event lists are appropriate for the deployment context. <br>
-Risk: Behavioral detections and care suggestions could be mistaken for veterinary diagnosis. <br>
-Mitigation: Present outputs as visual monitoring records and route urgent vomiting or repeated abnormal refusal events to a qualified reptile veterinarian. <br>
+## Use Case:
 
+Reptile keepers and enclosure operators use feeding videos or video URLs to review feeding refusal and regurgitation alerts, examine analysis reports, and retrieve report history.
 
-## Reference(s): <br>
-- [API Interface Documentation](artifact/references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON report text with event classifications, confidence values, recommendations, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May query cloud-hosted history and may write an optional local output file when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Videos or supplied URLs are sent to an external cloud service, potentially exposing private household footage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain consent and confirm the service's retention and account controls before submitting sensitive footage or URLs.
+
+Risk: Cloud report history is associated with an automatically managed identity, and reusable service tokens are stored in a local SQLite database.
+
+Mitigation: Review installation and access controls, protect the local database, and use only if the account and retention behavior is acceptable.
+
+Risk: Poor camera coverage or missing feeding context may make refusal and vomiting alerts unreliable.
+
+Mitigation: Check footage quality and species-specific feeding context; seek a reptile veterinarian for health concerns rather than treating alerts as a diagnosis.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-reptile-feeding-refusal-vomiting-analysis)
+- [Skill API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured analysis report or Markdown history table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes feeding events, alerts, suggested actions, and report links when available.]
+
+## Skill Version(s):
+
+1.0.11 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

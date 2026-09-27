@@ -6,9 +6,9 @@ TTS语音合成工具（多人配音）。
 需要安装：pip install edge-tts
 
 用法:
-  python generate_tts_audio.py --text "王太平" --output speech.mp3
-  python generate_tts_audio.py --text "王太平" --voice zh-CN-YunxiNeural --output speech.mp3
-  python generate_tts_audio.py --text "王太平" --voices zh-CN-YunxiNeural,zh-CN-YunyangNeural --output speech.mp3 --mix
+  python generate_tts_audio.py --text "你好，欢迎使用语音合成" --output speech.mp3
+  python generate_tts_audio.py --text "你好，欢迎使用语音合成" --voice zh-CN-YunxiNeural --output speech.mp3
+  python generate_tts_audio.py --text "你好，欢迎使用语音合成" --voices zh-CN-YunxiNeural,zh-CN-YunyangNeural --output speech.mp3 --mix
 """
 
 import argparse
