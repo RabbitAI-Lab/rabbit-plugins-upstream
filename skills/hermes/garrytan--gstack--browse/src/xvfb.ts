@@ -57,12 +57,23 @@ export function shouldSpawnXvfb(env: NodeJS.ProcessEnv, platform: NodeJS.Platfor
  * on it (i.e., we can safely spawn a new Xvfb there).
  */
 export function isDisplayFree(displayNum: number): boolean {
+  for (const reservation of [`/tmp/.X11-unix/X${displayNum}`, `/tmp/.X${displayNum}-lock`]) {
+    try { if (fs.lstatSync(reservation, { throwIfNoEntry: false })) return false; }
+    catch { return false; }
+  }
   // xdpyinfo exits 0 if a display is reachable. Exit non-zero means no
-  // server, which is what we want.
-  const result = Bun.spawnSync(['xdpyinfo', '-display', `:${displayNum}`], {
-    stdout: 'ignore', stderr: 'ignore', timeout: 2000,
-  });
-  return result.exitCode !== 0;
+  // server, which is what we want. xdpyinfo ships in x11-utils, which some
+  // images with Xvfb still lack (first Linux CI run: ENOENT) — fall back to
+  // the X socket/lock files, the same signal X servers themselves use.
+  try {
+    const result = Bun.spawnSync(['xdpyinfo', '-display', `:${displayNum}`], {
+    windowsHide: true,
+      stdout: 'ignore', stderr: 'ignore', timeout: 2000,
+    });
+    return result.exitCode !== 0;
+  } catch {
+    return true;
+  }
 }
 
 /**
@@ -87,11 +98,20 @@ export function pickFreeDisplay(
  */
 export function readPidStartTime(pid: number): string {
   if (!isProcessAlive(pid)) return '';
-  const result = Bun.spawnSync(['ps', '-p', String(pid), '-o', 'lstart='], {
-    stdout: 'pipe', stderr: 'pipe', timeout: 2000,
-  });
-  if (result.exitCode !== 0) return '';
-  return result.stdout.toString().trim();
+  try {
+    const result = Bun.spawnSync(['ps', '-p', String(pid), '-o', 'lstart='], {
+      windowsHide: true,
+      stdout: 'pipe', stderr: 'pipe', timeout: 2000,
+    });
+    if (result.exitCode !== 0) return '';
+    return result.stdout.toString().trim();
+  } catch {
+    // Bun.spawnSync THROWS when the executable is missing (Windows shells
+    // without an MSYS `ps`). This function's contract is "empty string if
+    // ps fails" — a missing ps must not abort the caller (browser-manager
+    // now calls this on the universal launch path, #2709).
+    return '';
+  }
 }
 
 /**
@@ -102,20 +122,51 @@ export function readPidCmdline(pid: number): string {
   try {
     return fs.readFileSync(`/proc/${pid}/cmdline`, 'utf-8').replace(/\0/g, ' ').trim();
   } catch {
+    // No /proc on darwin — the platform #2709's reap actually targets. Fall
+    // back to ps (same pattern as readPidStartTime above); without this the
+    // reap's cmdline identity gate always saw '' on macOS and the reap was
+    // a structural no-op exactly where the spinning-GPU orphan lives.
+    try {
+      const result = Bun.spawnSync(['ps', '-p', String(pid), '-o', 'command='], {
+        windowsHide: true,
+        stdout: 'pipe', stderr: 'pipe', timeout: 2000,
+      });
+      if (result.exitCode !== 0) return '';
+      return result.stdout.toString().trim();
+    } catch {
+      return '';
+    }
+  }
+}
+
+/**
+ * Read argv[0] of a PID via /proc/<pid>/cmdline (NUL-separated). Returns
+ * empty string if the process is gone or the cmdline isn't readable.
+ */
+export function readPidArgv0(pid: number): string {
+  try {
+    const raw = fs.readFileSync(`/proc/${pid}/cmdline`, 'utf-8');
+    return raw.split('\0', 1)[0] ?? '';
+  } catch {
     return '';
   }
 }
 
 /**
  * Validate that PID is still our Xvfb child. Both checks must pass:
- *   1. /proc/<pid>/cmdline contains 'Xvfb' (string match — Xvfb's argv[0] is
- *      always 'Xvfb' or a full path ending in /Xvfb)
+ *   1. argv[0]'s basename IS the Xvfb binary. A substring match over the
+ *      whole cmdline is identity-kill poison: any process whose ARGUMENTS
+ *      mention xvfb (the test runner executing xvfb.test.ts, an editor with
+ *      the file open) would pass and become killable. First Linux CI run
+ *      caught exactly that — the suite identified itself as our Xvfb.
  *   2. Start time matches the recorded value (PID reuse defense)
  */
 export function isOurXvfb(pid: number, recordedStartTime: string): boolean {
   if (!pid || !recordedStartTime) return false;
-  const cmdline = readPidCmdline(pid);
-  if (!cmdline.toLowerCase().includes('xvfb')) return false;
+  const argv0 = readPidArgv0(pid);
+  if (!argv0) return false;
+  const base = argv0.split('/').pop() ?? '';
+  if (base.toLowerCase() !== 'xvfb') return false;
   const currentStart = readPidStartTime(pid);
   if (!currentStart) return false;
   return currentStart === recordedStartTime;
@@ -130,13 +181,17 @@ export function isOurXvfb(pid: number, recordedStartTime: string): boolean {
  */
 export async function spawnXvfb(displayNum: number): Promise<XvfbHandle> {
   const display = `:${displayNum}`;
+  if (!isDisplayFree(displayNum)) throw new Error(`X display ${display} is already reserved; refusing to replace it`);
+  if (!readPidStartTime(process.pid)) throw new Error('Cannot start Xvfb without process start-time ownership checks');
 
   // Spawn detached: Xvfb's lifetime is tied to whether we've explicitly
   // killed it via the handle's close() method, not to the parent process.
   const proc = Bun.spawn(['Xvfb', display, '-screen', '0', '1920x1080x24', '-ac'], {
+    windowsHide: true,
     stdio: ['ignore', 'ignore', 'ignore'],
   });
   proc.unref();
+  const startTime = readPidStartTime(proc.pid);
 
   // Wait for the X server to become reachable — Xvfb takes a few hundred ms
   // to bind. Probe via xdpyinfo with retries.
@@ -144,18 +199,27 @@ export async function spawnXvfb(displayNum: number): Promise<XvfbHandle> {
   let ready = false;
   while (Date.now() < deadline) {
     await Bun.sleep(100);
-    if (!isDisplayFree(displayNum)) { ready = true; break; }
     // If Xvfb crashed during startup, fail fast.
     if (proc.exitCode != null) {
       throw new Error(`Xvfb on ${display} exited during startup (code ${proc.exitCode}). Hint: install xvfb (apt-get install xvfb / yum install xorg-x11-server-Xvfb).`);
     }
+    let ownsLock = false;
+    try { ownsLock = Number(fs.readFileSync(`/tmp/.X${displayNum}-lock`, 'utf8').trim()) === proc.pid; } catch {}
+    if (!ownsLock || !isOurXvfb(proc.pid, startTime)) continue;
+    try {
+      ready = Bun.spawnSync(['xdpyinfo', '-display', display], {
+        windowsHide: true, stdout: 'ignore', stderr: 'ignore', timeout: 2000,
+      }).exitCode === 0;
+    } catch {
+      ready = fs.existsSync(`/tmp/.X11-unix/X${displayNum}`);
+    }
+    if (ready) break;
   }
   if (!ready) {
-    try { proc.kill('SIGKILL'); } catch { /* ignore */ }
+    cleanupXvfb({ pid: proc.pid, startTime, display });
     throw new Error(`Xvfb on ${display} never became reachable within 3s timeout`);
   }
 
-  const startTime = readPidStartTime(proc.pid);
   return {
     pid: proc.pid,
     startTime,
@@ -178,8 +242,9 @@ export function cleanupXvfb(state: { pid: number; startTime: string; display: st
   const deadline = Date.now() + 1000;
   while (Date.now() < deadline) {
     if (!isProcessAlive(state.pid)) break;
+    Bun.sleepSync(10);
   }
-  if (isProcessAlive(state.pid)) {
+  if (isOurXvfb(state.pid, state.startTime)) {
     try { safeKill(state.pid, 'SIGKILL'); } catch { /* swallow */ }
   }
 }

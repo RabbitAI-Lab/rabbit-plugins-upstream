@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pymc",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pymc",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pymc",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "1cbb1acaa649b516fc4fd5755273bd0beba144ab53a8571078830ff63480ebcc",
+  "fetchedAt": "2026-09-27T13:08:23.029Z"
+}

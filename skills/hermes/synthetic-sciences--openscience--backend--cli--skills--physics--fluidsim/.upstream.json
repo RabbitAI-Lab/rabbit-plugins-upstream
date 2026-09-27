@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/fluidsim",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/fluidsim",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/fluidsim",
+  "branch": "main",
+  "pushedAt": "2026-09-27T11:44:52Z",
+  "contentHash": "572e90b10d6d8b96ad4e459c6b379f6feb73051cb2f97294228efd4340cfe140",
+  "fetchedAt": "2026-09-27T13:08:11.422Z"
+}

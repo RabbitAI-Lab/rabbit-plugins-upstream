@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pysam",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pysam",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pysam",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "7dd041a87aee0a8677e3dc5f82bc28094b159748763fc9335118e85684b31b3e",
+  "fetchedAt": "2026-09-27T13:08:23.033Z"
+}

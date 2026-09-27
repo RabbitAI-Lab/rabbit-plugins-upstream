@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/dask",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/dask",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/dask",
+  "branch": "main",
+  "pushedAt": "2026-09-27T11:44:52Z",
+  "contentHash": "abc552fc163e6118ab28979661aabeb65f7651a4ea063dfc546dd339375b7d0f",
+  "fetchedAt": "2026-09-27T13:08:11.389Z"
+}

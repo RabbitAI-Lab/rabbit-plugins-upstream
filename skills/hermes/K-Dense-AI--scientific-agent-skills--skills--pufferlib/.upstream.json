@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pufferlib",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pufferlib",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pufferlib",
+  "branch": "main",
+  "pushedAt": "2026-09-21T09:27:50Z",
+  "contentHash": "efeb8fa7c57afb7425e07898f9ebffdf811358fd55f91e6297a5b8ec08ae77da",
+  "fetchedAt": "2026-09-27T13:08:23.023Z"
+}
