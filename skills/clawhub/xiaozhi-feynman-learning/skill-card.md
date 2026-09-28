@@ -1,40 +1,59 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过让学生用自己的话解释、举例和迁移知识，评估理解深度并指出卡住的环节。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+面向中文中小学学生及陪同的家长、教师，通过讲解与追问检验单个知识点的理解程度，给出掌握等级、薄弱环节及下一步建议。小学阶段需家长或教师在场。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+中国大陆；在其他地区使用前须本地化语言、课程、同意规则和危机求助信息。
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: 中国中小学的语言、课程和危机求助信息可能不适用于其他地区。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 仅在预期的中文中小学场景使用；扩大范围前本地化课程、语言、同意规则与危机求助方式。
+
+Risk: 未经同意共享学习记录或发送复测提醒可能暴露未成年人的学习信息。
+
+Mitigation: 平台须落实学生当次明确请求及相应共享、提醒同意门槛；否则只提供会话内反馈。
+
+Risk: 学习挫败表达可能掩盖需要立即帮助的危机信号。
+
+Mitigation: 遇到危机信号时停止学习流程，按所在地区的求助与转介指引处理。
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [费曼五跳状态机](references/feynman-5jump-statemachine.md)
+- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [中文对话及 Markdown 评估报告]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [给出 A–D 掌握等级、理解深度、卡住环节及下一步建议；默认仅在当前会话使用。]
+
+## Skill Version(s):
+
+2.7.1 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

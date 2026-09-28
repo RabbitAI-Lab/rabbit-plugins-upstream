@@ -1,42 +1,53 @@
-## Description: <br>
-Guides QA teams through identifying test automation and test asset technical debt, estimating maintenance and rewrite costs, and planning phased repayment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies QA automation and test-asset debt, estimates maintenance and remediation costs, and proposes a phased repayment plan.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test automation maintainers, and quality leaders use this skill to organize flaky automation, stale test cases, weak test architecture, and related QA debt into a traceable inventory with impact analysis and a repayment plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes examples about release blocking and production impact that could be mistaken for automatic go/no-go decisions. <br>
-Mitigation: Require human review with development and product stakeholders before blocking a release or changing production behavior. <br>
-Risk: The broad activation wording may be applied outside QA or test automation debt workflows. <br>
-Mitigation: Confirm the scope is QA or test automation debt before relying on the skill's prioritization and repayment guidance. <br>
-Risk: Debt priorities and cost estimates depend on the completeness and freshness of the supplied test reports, quality data, and baselines. <br>
-Mitigation: Validate findings against current evidence before committing repayment capacity or changing team plans. <br>
+## Use Case:
 
+QA engineers and development teams use this skill to inventory test automation, test-process, and testability debt, prioritize it by impact and cost, and plan remediation and prevention.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-tech-debt-management) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured debt inventory, impact analysis, repayment plan, and prevention strategies.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Debt items should preserve traceability to related defect IDs or automation architecture IDs when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Broad refactoring or maintenance-cost discussions may activate this Chinese-language QA workflow unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review whether the workflow fits the request before applying its recommendations.
+
+Risk: Debt priorities or production-impact estimates could be mistaken for a release-blocking decision.
+
+Mitigation: Confirm release or feature-removal decisions with development and product owners before acting.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-tech-debt-management)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown debt inventory, impact analysis, prioritized repayment plan, and prevention strategies]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include tabular test cases and a debt-tracking board; links debt items to related defect or architecture IDs where available.]
+
+## Skill Version(s):
+
+1.7.7 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

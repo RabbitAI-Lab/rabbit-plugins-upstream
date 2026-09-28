@@ -1,40 +1,56 @@
-## Description: <br>
-Git命令行助手免费版 helps developers use Git CLI workflows by providing command references, repository status checks, staging and commit guidance, branch management, and remote synchronization guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Git CLI quick references, repository status checks, staging and commit guidance, branch management, and remote sync guidance for developers working in command-line Git workflows.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers use this skill to get Git command guidance, inspect repository state, stage and commit changes, manage branches, and sync with remotes through an agent with shell command capability.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can lead an agent to run repository-changing Git commands such as staging, committing, pushing, branch deletion, or force-with-lease pushes.
+
+Mitigation: Require the agent to show status and diffs first, then confirm exact files, branch, remote, and commit message before any commit, push, or destructive branch operation.
+
+Risk: Broad trigger language may cause the skill to be used during general coding or deployment requests where Git changes were not explicitly requested.
+
+Mitigation: Use the skill only for explicit Git workflows and require confirmation before write, commit, push, or remote synchronization commands.
+
+Risk: Credential helper guidance can store HTTPS credentials globally.
+
+Mitigation: Avoid global credential storage unless the user understands how Git stores those credentials; prefer approved credential managers or SSH-based authentication.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers use this skill for day-to-day Git command-line support, including quick command lookup, repository diagnosis, staging and committing changes, branch management, and remote synchronization. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent through write-enabled Git operations and remote synchronization workflows. <br>
-Mitigation: Require the agent to show git status and git diff, list exact files to stage, confirm the commit message, and confirm the branch and remote URL before write actions. <br>
-Risk: Credential storage and force-style pushes can create avoidable repository or account risk. <br>
-Mitigation: Avoid global credential storage and force-style pushes unless the user explicitly confirms the intent and scope. <br>
+**Output Format:** [Markdown with inline shell commands and command output summaries]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/git-cli-tool-free) <br>
+**Other Properties Related to Output:** [May include repository-changing Git command proposals or execution results; users should review status and diffs before changes are made.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline Git commands, shell snippets, JSON examples, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include repository checks, exact Git commands, commit guidance, branch and remote synchronization steps, and safety reminders.] <br>
+1.0.3 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,51 +1,65 @@
-## Description: <br>
-Git Repo guides agents through Git repository and worktree management with SourceGit integration, including ghq cloning, repository conversion, multi-account credentials, conflict dry runs, and local cleanup workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Git repository and worktree management with SourceGit integration, covering cloning, worktree reuse, bare-repo conversion, hook diagnostics, rebase audits, and multi-account SSH or HTTPS credentials.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage local Git repositories, worktrees, ghq layouts, SourceGit registration, and GitHub multi-account access. It is intended for agent-assisted repository maintenance where the agent proposes or runs shell commands and configuration edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can affect persistent local Git state, including repository moves, worktree metadata, and SourceGit preferences. <br>
-Mitigation: Require explicit confirmation before repository moves, metadata rewrites, SourceGit preference edits, or deletions, and inspect current status before making changes. <br>
-Risk: Credential workflows can expose or persist sensitive GitHub authentication behavior if followed carelessly. <br>
-Mitigation: Prefer credential-helper or SSH flows, back up git configuration before changes, and avoid token-in-URL cloning unless the remote is immediately sanitized. <br>
-Risk: Some workflows proceed automatically, including cloning and SourceGit registration when conditions match. <br>
-Mitigation: Ask for user approval before cloning or writing application configuration, especially in private repositories or multi-account environments. <br>
+## Use Case:
 
+Developers and engineers use this skill to manage Git repositories and worktrees, diagnose hook and branch state, configure SourceGit integration, and handle multi-account GitHub access. It is intended for local repository operations where command review and workspace state checks matter.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/git-repo) <br>
-- [README](README.md) <br>
-- [Skill Definition](SKILL.md) <br>
-- [ghq Clone](clone.md) <br>
-- [Credential Helper](credential-helper.md) <br>
-- [SourceGit Integration](sourcegit.md) <br>
-- [Worktree](worktree.md) <br>
-- [To Bare](to-bare.md) <br>
-- [To Ghq](to-ghq.md) <br>
-- [Changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions, Code] <br>
-**Output Format:** [Markdown guidance with bash command blocks and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include file edits or repository operations when the user approves the workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: release metadata and changelog, released 2026-07-23) <br>
+Risk: A bundled staging workflow can automatically force-delete existing worktrees and branches.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid scripts/local-to-staging-pr.sh until its automatic cleanup is fixed; use dry-run cleanup flows first and review every worktree or branch removal before execution.
+
+Risk: The skill can move repositories and edit SourceGit preference files.
+
+Mitigation: Confirm target paths, keep backups or versioned config where practical, and close SourceGit before preference edits so changes are not overwritten.
+
+Risk: Credential-helper guidance can modify global Git authentication behavior.
+
+Mitigation: Review global gitconfig changes before applying them and scope credential helpers to the intended GitHub organization or repository path.
+
+## Reference(s):
+
+- [README](README.md)
+- [Skill overview and topic index](SKILL.md)
+- [Worktree guide](worktree.md)
+- [Repository doctor guide](doctor.md)
+- [SourceGit integration guide](sourcegit.md)
+- [Credential helper guide](credential-helper.md)
+- [SSH key guide](ssh-key.md)
+- [Changelog](CHANGELOG.md)
+- [ClawHub skill page](https://clawhub.ai/skills/git-repo)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, Code]
+
+**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, and helper script references]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose local Git, ghq, GitHub CLI, shell, and SourceGit configuration operations for user review before execution.]
+
+## Skill Version(s):
+
+0.12.0 (source: release metadata and CHANGELOG, released 2026-09-24)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

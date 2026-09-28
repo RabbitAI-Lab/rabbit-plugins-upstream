@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/huawei-cloud-ecs-passwordless-login",
   "slug": "huawei-cloud-ecs-passwordless-login",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1784669341868,
-  "contentHash": "1c59bbb0197d3b34a1a106d8415096ae5ae7ea229674ed8fa25be55edfc797dc",
-  "fetchedAt": "2026-07-26T18:08:46.676Z"
+  "version": "1.0.2",
+  "updatedAt": 1790215477667,
+  "contentHash": "41ddd1ebe64713008cace15af235cc403ba034d3fc1c492c7b4c1654f972a080",
+  "fetchedAt": "2026-09-28T17:34:33.396Z"
 }

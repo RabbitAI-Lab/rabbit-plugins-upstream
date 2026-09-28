@@ -1,48 +1,73 @@
-## Description: <br>
-WooCommerce REST API integration with managed OAuth for accessing products, orders, customers, coupons, shipping, taxes, reports, webhooks, payment gateways, store settings, and system status tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+WooCommerce REST API integration with managed OAuth for managing products, orders, customers, coupons, shipping, taxes, reports, webhooks, payment gateways, store settings, and system status.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Store operators and developers use this skill to manage WooCommerce e-commerce operations through Maton-mediated REST API calls. It supports catalog, order, customer, coupon, shipping, tax, reporting, webhook, payment, settings, and system-status workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make changes to a real WooCommerce store through Maton-mediated access. <br>
-Mitigation: Install only when store-management access is intended, use the least-privileged practical store account, and confirm write operations before execution. <br>
-Risk: Customer and order workflows may expose personal information. <br>
-Mitigation: Avoid retrieving or displaying customer or order PII unless it is needed for the specific task. <br>
-Risk: Refunds, deletes, payment gateway changes, store settings changes, webhook creation, and system maintenance actions can affect customers or store operations. <br>
-Mitigation: Carefully confirm the target resource, requested action, and expected store-wide impact before performing these operations. <br>
+## Use Case:
 
+Developers and e-commerce operators use this skill to manage WooCommerce stores, process orders, maintain catalog data, and build approved store automations through Maton.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/woocommerce) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [WooCommerce REST API Documentation](https://woocommerce.github.io/woocommerce-rest-api-docs/) <br>
-- [WooCommerce API Authentication Guide](https://woocommerce.github.io/woocommerce-rest-api-docs/#authentication) <br>
-- [WooCommerce Developer Resources](https://developer.woocommerce.com/) <br>
-- [Maton API](https://api.maton.ai) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, curl, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can affect a live WooCommerce store, including orders, payment gateways, settings, webhooks, and system status tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact store connection and review every write, webhook, payment, settings, or system-status action before execution.
+
+Risk: Customer, order, and payment-adjacent data may include personal or sensitive business information.
+
+Mitigation: Prefer read-only scopes when possible and avoid retrieving, displaying, or forwarding customer/order/payment data unless required for the approved task.
+
+Risk: Forwarding store data to third-party URLs can expose business or customer data outside the approved WooCommerce and Maton workflow.
+
+Mitigation: Forward data only to destinations the user explicitly approves, and confirm the destination host and exact data fields first.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/woocommerce)
+- [Maton Homepage](https://maton.ai)
+- [WooCommerce REST API Documentation](https://woocommerce.github.io/woocommerce-rest-api-docs/)
+- [WooCommerce API Authentication Guide](https://woocommerce.github.io/woocommerce-rest-api-docs/#authentication)
+- [WooCommerce Developer Resources](https://developer.woocommerce.com/)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Catalog](references/calendly/triggers.md)
+- [GitHub Trigger Catalog](references/github/triggers.md)
+- [Google Mail Trigger Catalog](references/google-mail/triggers.md)
+- [HubSpot Trigger Catalog](references/hubspot/triggers.md)
+- [Linear Trigger Catalog](references/linear/triggers.md)
+- [Notion Trigger Catalog](references/notion/triggers.md)
+- [Slack Trigger Catalog](references/slack/triggers.md)
+- [Stripe Trigger Catalog](references/stripe/triggers.md)
+- [Time Trigger Catalog](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with bash, JSON, and Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs authenticated WooCommerce REST API workflows through Maton; write operations, new connections, hosted functions, and trigger actions require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

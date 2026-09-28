@@ -1,40 +1,49 @@
-## Description: <br>
-Provides CI/CD testing guidance for layered pipeline quality gates, tool integration strategy, and fast feedback across commit checks, unit tests, API tests, UI tests, and regression tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language guidance for integrating layered tests and quality gates into CI/CD pipelines.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and DevOps teams use this skill to design CI/CD test stages, define quality gates, and tune feedback loops for reliable automated delivery pipelines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pipeline or deployment suggestions may affect production delivery if applied without review. <br>
-Mitigation: Review generated CI/CD, deployment, rollback, and quality-gate recommendations before use, especially in production environments. <br>
-Risk: The skill can propose CI/CD testing strategy but does not execute pipelines or validate environment-specific behavior. <br>
-Mitigation: Keep execution under explicit user control and validate changes in an authorized workspace or staging environment first. <br>
+## Use Case:
 
+Developers and QA engineers use this skill to plan CI/CD test stages, select testing tools, set quality gates, and improve feedback from commits through release.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-ci-cd-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown with structured pipeline design, test-stage, quality-gate, and feedback-loop sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Pipeline recommendations include traceability IDs and should be reviewed before applying to production CI/CD systems.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Applying suggested pipeline or deployment changes without review could affect a live environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated configuration and commands, obtain authorization before pipeline changes, and confirm rollout and rollback plans before deployment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-ci-cd-testing)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration guidance]
+
+**Output Format:** [Markdown guidance with pipeline stages, test checkpoints, and quality gates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language guidance; pipeline designs can include PIPE-XXXX identifiers and test-case tables.]
+
+## Skill Version(s):
+
+1.7.7 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

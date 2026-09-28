@@ -1,0 +1,30 @@
+{
+  "variant_id": "shadow_08_rounding",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "calculation_request",
+  "output_name": "rounding_guidance",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "currency": {
+        "type": "string"
+      },
+      "scale": {
+        "type": "integer"
+      },
+      "rounding_mode": {
+        "type": "string"
+      },
+      "round_stage": {
+        "type": "string"
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "string"
+  },
+  "effect": null
+}

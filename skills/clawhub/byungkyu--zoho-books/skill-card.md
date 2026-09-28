@@ -1,48 +1,74 @@
-## Description: <br>
-Zoho Books API integration with managed OAuth for reading, creating, updating, and deleting invoices, contacts, bills, expenses, sales orders, purchase orders, and other accounting records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Books API integration with managed OAuth for managing invoices, contacts, bills, expenses, and other accounting data.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Zoho Books through Maton's managed OAuth proxy and manage contacts, invoices, bills, expenses, orders, and other accounting records. It is intended for workflows that need authenticated Zoho Books API calls with explicit approval before write or delete actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete accounting records in Zoho Books. <br>
-Mitigation: Require explicit user approval for each write or delete action after confirming the target account, resource ID, and business effect. <br>
-Risk: MATON_API_KEY grants access through Maton's OAuth proxy. <br>
-Mitigation: Keep the key secret, avoid logging it, and revoke unused or compromised credentials promptly. <br>
-Risk: Requests may affect the wrong Zoho Books account when multiple connections exist. <br>
-Mitigation: Use the Maton-Connection header to select the intended connection and verify it before acting. <br>
+## Use Case:
 
+External users, developers, and agent operators use this skill to access Zoho Books through Maton-managed OAuth for approved accounting record reads and writes. It is intended for invoice, contact, bill, expense, order, credit note, and related Zoho Books workflows.
 
-## Reference(s): <br>
-- [Zoho Books API v3 Introduction](https://www.zoho.com/books/api/v3/introduction/) <br>
-- [Zoho Books Invoices API](https://www.zoho.com/books/api/v3/invoices/) <br>
-- [Zoho Books Contacts API](https://www.zoho.com/books/api/v3/contacts/) <br>
-- [Zoho Books Bills API](https://www.zoho.com/books/api/v3/bills/) <br>
-- [Zoho Books Expenses API](https://www.zoho.com/books/api/v3/expenses/) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-books) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API endpoints, Python and JavaScript examples, shell commands, and JSON response examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and explicit user approval before create, update, or delete operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill can access sensitive Zoho Books accounting records and can perform writes or deletions when authorized.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use OAuth, choose the narrowest Zoho scopes available, default to read/list operations, and confirm each write or deletion with the user before it runs.
+
+Risk: Hosted functions, triggers, and destinations can keep acting automatically after setup.
+
+Mitigation: Use them only when the user asks for hosted automation, require approval for each create/update/deploy/invocation, prefer DENY_ALL network policy for Zoho Books functions, and remove automations when they are no longer needed.
+
+Risk: Long-lived API keys can be exposed if passed through environment variables or copied into raw HTTP workflows.
+
+Mitigation: Prefer the documented OAuth flow and operating-system credential storage; use raw HTTP with MATON_API_KEY only where the CLI cannot be installed and avoid logging or persisting credentials.
+
+## Reference(s):
+
+- [Zoho Books API v3 Introduction](https://www.zoho.com/books/api/v3/introduction/)
+- [Zoho Books Invoices API](https://www.zoho.com/books/api/v3/invoices/)
+- [Zoho Books Contacts API](https://www.zoho.com/books/api/v3/contacts/)
+- [Zoho Books Bills API](https://www.zoho.com/books/api/v3/bills/)
+- [Zoho Books Expenses API](https://www.zoho.com/books/api/v3/expenses/)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline bash, Python, JSON, and HTTP examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces agent guidance for authenticated Zoho Books API use through Maton; write, delete, connection, function, and trigger actions require user confirmation.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

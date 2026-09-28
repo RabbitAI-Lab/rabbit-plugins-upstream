@@ -1,41 +1,55 @@
-## Description: <br>
-从“套公式”到“建模型”：通过识别现象、选择模型、数学表达三步法，训练学生先判断物理模型再列式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向初中至高一学生，通过识别现象、选择模型和数学表达三步训练物理建模思维。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to practice physics modeling instead of formula matching. It guides learners to identify physical phenomena, select an appropriate model, write the mathematical relationship, and transfer the same model across problem variants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Coordination with learning or reminder skills could persist study summaries or create reminders beyond the immediate tutoring exchange. <br>
-Mitigation: Use those related skills only after explicit user consent, matching the inspected skill instructions. <br>
-Risk: Some physics models include high-school extension content that may be inappropriate for an introductory middle-school lesson. <br>
-Mitigation: Respect the skill's grade-level markings and present high-school quantitative formulas only when the learner's level supports them. <br>
+## Use Case:
 
+Students in Mainland China's junior-secondary and first-year senior-secondary physics courses use this coach to identify physical phenomena, select applicable models, and express relationships mathematically rather than applying formulas by rote. Teachers and guardians can use its guided modeling exercises to support practice.
 
-## Reference(s): <br>
-- [物理建模模式详解](references/physics-modeling-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize curriculum, consent requirements, and emergency contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance and Socratic prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May coordinate with related learning or reminder skills when available and only with user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Curriculum, minor-consent rules, or emergency contacts may not suit students outside Mainland China.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use in a Chinese-language Mainland China K12 setting unless curriculum, consent rules, and emergency contacts have been localized.
+
+Risk: A student's modeling profile or reminder requests may persist or be shared beyond the immediate conversation.
+
+Mitigation: Review memory, sharing, and reminder permissions with the student or guardian; write profile updates and enqueue reminders only with the required consent.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach)
+- [Physics modeling patterns](artifact/references/physics-modeling-patterns.md)
+- [First-year senior-secondary physics models](artifact/references/physics-hs1-models.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, JSON]
+
+**Output Format:** [Chinese-language tutoring dialogue and modeling exercises; structured profile or reminder handoffs when consented]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides model selection rather than completing full solutions; first-year senior-secondary content covers the first compulsory physics volume.]
+
+## Skill Version(s):
+
+2.7.1 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

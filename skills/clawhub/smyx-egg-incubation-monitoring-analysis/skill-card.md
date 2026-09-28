@@ -1,44 +1,58 @@
-## Description: <br>
-Analyzes turtle or snake egg images or videos to identify shell, vascular, embryo, and quality signals and produce incubation monitoring reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes turtle and snake egg images or videos for visible incubation signals and produces developmental reports with access to cloud-based history.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile breeders, farm operators, and hobbyist keepers use this skill to review turtle or snake egg media, monitor fertilization and development signals, and retrieve incubation progress reports. The skill can support smart incubator or breeding-management workflows where users still make final husbandry decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Egg photos, videos, URLs, and history queries are sent to cloud services for analysis and report lookup. <br>
-Mitigation: Use only media intended for this service, avoid unrelated sensitive content, and confirm users understand that analysis and history retrieval rely on external services. <br>
-Risk: The skill creates or reuses a local identity and stores account tokens locally. <br>
-Mitigation: Review local token storage and account handling before deployment, and prefer a release that clearly documents identity creation, token retention, and user consent. <br>
-Risk: Incorrect incubation classifications could affect husbandry decisions. <br>
-Mitigation: Treat visual classifications as decision support and require users to combine reports with species guidance, temperature and humidity logs, and professional reptile breeding judgment. <br>
+## Use Case:
 
+Reptile breeders and incubator operators use egg images or videos to review visible development signals, receive incubation reports, and look up prior reports by egg.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-egg-incubation-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured report text with optional report links and Markdown tables for history queries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include incubation stage classifications, alert levels, recommended actions, disclaimers, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Egg images and videos are uploaded to a cloud service, rather than analyzed solely on the user's device.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that upload is acceptable before use and ask the publisher to document data retention and deletion.
+
+Risk: The skill silently creates or reuses identity records and stores authentication tokens locally.
+
+Mitigation: Review remote account creation and local token storage with the publisher before installing.
+
+Risk: History queries can access identity-linked cloud reports without a separate user confirmation.
+
+Mitigation: Require confirmation before history queries and limit access to authorized reports.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-egg-incubation-monitoring-analysis)
+- [Egg incubation monitoring API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured JSON reports or Markdown report summaries and history tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links or save results to a file.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release metadata; bundled SKILL.md says 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

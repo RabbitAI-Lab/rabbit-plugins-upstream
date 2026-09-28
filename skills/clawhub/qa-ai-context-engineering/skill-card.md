@@ -1,41 +1,58 @@
-## Description: <br>
-Packages completed QA analysis, including requirement breakdowns, scenario trees, boundary lists, and risk assessments, into a structured AI context package for downstream test-case generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Organizes requirements, scenarios, boundaries, and risks into a structured context package for AI-assisted test-case generation.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and test architects use this skill after requirement analysis and scenario modeling to assemble a complete business, functional, and technical context package before generating test prompts or test cases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded requirement files or fetched URLs may contain sensitive or untrusted content. <br>
-Mitigation: Review inputs before use, avoid including secrets, and treat fetched content as untrusted until checked. <br>
-Risk: Incomplete upstream analysis can lead to assumptions in the generated context package. <br>
-Mitigation: Review the context package before test-case generation and fill missing upstream analysis when assumptions affect coverage or risk. <br>
+## Use Case:
 
+QA engineers and testers use this skill after requirements and scenario analysis to prepare a structured business, functional, and technical context package for test-case generation. It identifies missing inputs and distinguishes supplied facts from assumptions.
 
-## Reference(s): <br>
-- [Output Template](references/output-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-ai-context-engineering) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown context package with labeled sections and traceability fields.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Carries upstream requirement IDs and scenario IDs; labels provided, inferred, and assumed information when inputs are incomplete.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Uploaded requirements may contain customer data, production secrets, or financial records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Redact or mask sensitive content before providing requirement files.
+
+Risk: User-provided URLs may expose material that was not intended for analysis.
+
+Mitigation: Provide only URLs that the agent is intended to fetch and analyze.
+
+Risk: Missing upstream analysis can produce incomplete or misleading test context.
+
+Mitigation: Label missing inputs and assumptions, and return to the upstream analysis steps to fill gaps.
+
+## Reference(s):
+
+- [Test-case output template](artifact/references/output-template.md)
+- [ClawHub skill listing](https://clawhub.ai/kokxi/skills/qa-ai-context-engineering)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Structured Markdown context package]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Organizes business goals, functional constraints, optional technical history, and test-output requirements; labels assumptions and missing inputs.]
+
+## Skill Version(s):
+
+1.7.7 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

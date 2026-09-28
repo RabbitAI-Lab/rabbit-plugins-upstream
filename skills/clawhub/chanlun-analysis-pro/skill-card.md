@@ -1,40 +1,57 @@
-## Description: <br>
-Chanlun Analysis Pro helps agents produce Chanlun-style technical analysis for A-share indexes, individual stocks, and sectors, including fractals, strokes, line segments, central hubs, divergence, multi-timeframe structure, and buy/sell point research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chanlun-based technical analysis for A-share market structures, divergence, multi-timeframe confirmation, and educational buy/sell point assessment.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, analysts, and market-research agents use this skill to draft Chanlun technical-analysis reports, algorithm notes, Python examples, and trading-plan templates for educational research. Generated signals should not be treated as personalized financial advice, and market data should be independently verified before trading. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/chanlun-analysis-pro) <br>
-- [Chanlun algorithm Python reference](references/chanlun_algorithm_python.md) <br>
-- [Chanlun analysis templates](references/chanlun_analysis_templates.md) <br>
-- [Chanlun practice guide](references/chanlun_practice_guide.md) <br>
+External users and developers use this skill to structure Chanlun technical-analysis prompts for A-share indices, individual stocks, and sectors. It supports morphology, divergence, multi-timeframe checks, and educational buy/sell point reasoning.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports with Python snippets, shell commands, checklists, and structured trading-analysis templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Financial-risk guidance applies: treat generated buy/sell points, price zones, stop-losses, and position sizes as educational research rather than personalized investment advice.] <br>
+Global
 
-## Skill Version(s): <br>
-5.2.1 (source: server release and SKILL.md frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill can produce concrete trading entries, exits, stop-losses, or target prices that a user could mistake for personalized financial advice.
+
+Mitigation: Treat outputs as non-personalized technical-analysis education and require separate user confirmation and appropriate financial controls before any trading action.
+
+Risk: Market examples and price/date case studies may be stale or illustrative rather than verified current market data.
+
+Mitigation: Independently verify all examples and signals with the user's authorized market data source before using them.
+
+Risk: Chanlun structure identification can be subjective, with different segmentations producing different conclusions.
+
+Mitigation: Document the segmentation assumptions, cross-check with higher timeframes, and prefer signals that remain consistent across levels.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/chanlun-analysis-pro)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown analysis with tables and Python or shell snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include educational market examples, technical-analysis tables, and illustrative Python snippets; does not provide live market data or trade execution.]
+
+## Skill Version(s):
+
+5.2.3 (source: server release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

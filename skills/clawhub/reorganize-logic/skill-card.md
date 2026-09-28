@@ -1,45 +1,56 @@
-## Description: <br>
-Rebuilds a project's design-contract layer when docs have drifted past sync by re-deriving architecture, structure, and interface contracts from code and gate-verifying them. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Rebuilds a project's architecture, structure, and interface contracts from code when existing documentation is too stale to synchronize, with structural verification and human-reviewed legacy deletion.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Developers and engineers use this skill when existing architecture, structure, or interface contract docs are too stale for incremental sync and need a code-derived rebuild with a review-gated deletion manifest. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is intended for a heavy documentation rebuild and prepares a deletion manifest for stale legacy contract docs. <br>
-Mitigation: Review the generated contracts and deletion manifest before applying any deletions; legacy files should not be deleted automatically. <br>
-Risk: The workflow reads project code and old contract docs, which can be broad in sensitive or very large repositories. <br>
-Mitigation: Use the scope option for sensitive or large repositories and review generated outputs before accepting them. <br>
-Risk: The local gate verifies structural ties between documented interfaces and code but does not prove all prose or diagrams are semantically faithful. <br>
-Mitigation: Run the verification script to PASS and complete the fresh-reader review against code before reporting completion. <br>
+## Use Case:
 
+Developers and engineers use this skill to re-derive design contracts from an existing codebase when legacy documentation has drifted beyond incremental repair.
 
-## Reference(s): <br>
-- [The rebuild protocol](references/protocol.md) <br>
-- [Contract format](references/contract-format.md) <br>
-- [Gate design](references/gate-design.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/vincentjiang06/skills/reorganize-logic) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown contract files with Mermaid diagrams, interface tables, shell commands, and a deletion manifest] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces docs/contracts/architecture.md, docs/contracts/structure.md, docs/contracts/interfaces.md, and docs/contracts/deletion-manifest.md; expected to pass local verification before completion.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: release evidence and frontmatter metadata) <br>
+Risk: Broad project reading may expose sensitive code or documentation to the agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the reviewed release and limit the project scope where appropriate.
+
+Risk: Rebuilt contracts or legacy-document changes may misrepresent or discard important behavior.
+
+Mitigation: Run the local verifier, review the new contracts, and personally approve the deletion manifest before deleting or overwriting legacy files.
+
+## Reference(s):
+
+- [ClawHub release: reorganize-logic](https://clawhub.ai/vincentjiang06/skills/reorganize-logic)
+- [Rebuild protocol](artifact/references/protocol.md)
+- [Contract format](artifact/references/contract-format.md)
+- [Verification gate design](artifact/references/gate-design.md)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Guidance, Shell commands]
+
+**Output Format:** [Markdown contracts and deletion manifest with verification results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Architecture, structure, and interface contracts; legacy deletion requires human approval.]
+
+## Skill Version(s):
+
+0.3.4 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,54 @@
-## Description: <br>
-Cluster and attribute related wallets across funding chains, shared signers, CEX deposit patterns, governance voters, and related address groups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents cluster and attribute related blockchain wallets using funding chains, shared signers, and counterparty patterns.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers, analysts, and investigators use this skill to guide Nansen CLI wallet-attribution workflows, compare related addresses, expand candidate clusters with human confirmation, and report confidence-scored ownership signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Wallet addresses, chain selections, and investigation patterns are sent to Nansen through the CLI. <br>
-Mitigation: Install only if the nansen-cli package and Nansen API usage are trusted, and avoid submitting sensitive addresses unless that disclosure is acceptable. <br>
-Risk: Trace, batch, and L2 expansion commands can consume API credits or broaden the investigation beyond the seed wallet. <br>
-Mitigation: Keep trace width at or below the documented limit, reserve counterparty expansion for the seed unless approved, and ask for human confirmation before querying newly found addresses. <br>
+## Use Case:
 
+Analysts and developers use this skill to trace wallet relationships and assess possible common ownership across supported chains.
 
-## Reference(s): <br>
-- [Wallet Attribution Reference](artifact/REFERENCE.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nansen-devops/nansen-wallet-clustering) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and confidence-scored attribution output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen CLI and NANSEN_API_KEY; outputs address, owner, confidence, signals, and role when following the reference format.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: release evidence) <br>
+Risk: Authenticated research calls, loops, and traces can consume credits or trigger permitted wallet payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm authentication and payment limits before calls; bound loops and trace width, and ask before expanding to new wallets.
+
+Risk: Weak wallet-link signals can lead to incorrect ownership attribution.
+
+Mitigation: Use multiple independent signals, report confidence, and exclude ENS-only, single-withdrawal, or single-deployer matches.
+
+## Reference(s):
+
+- [Nansen Wallet Clustering release](https://clawhub.ai/nansen-devops/skills/nansen-wallet-clustering)
+- [Wallet Attribution Reference](artifact/REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Shell commands, Guidance]
+
+**Output Format:** [Markdown with wallet attribution tables and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Wallet addresses, proposed owners, confidence levels, supporting signals, and roles]
+
+## Skill Version(s):
+
+0.1.3 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

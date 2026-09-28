@@ -1,49 +1,75 @@
-## Description: <br>
-Airtable API integration with managed OAuth for reading, creating, updating, deleting, and querying Airtable bases, tables, and records. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Airtable API integration with managed OAuth for reading, creating, updating, deleting, and querying Airtable bases, tables, and records through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent inspect Airtable schemas and records, query data with filters, and perform approved create, update, or delete operations through a Maton-managed OAuth connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, and delete Airtable records through the connected account. <br>
-Mitigation: Confirm the target base, table, records, and intended effect with the user before any write operation. <br>
-Risk: Requests are brokered through Maton and depend on the permissions of the connected Airtable account. <br>
-Mitigation: Install only when the user trusts Maton for Airtable access, keeps MATON_API_KEY private, and grants only the Airtable permissions needed for the task. <br>
-Risk: Multiple Airtable connections can route a request to the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one connection exists and verify the selected connection before changing data. <br>
+## Use Case:
 
+External users and developers use this skill to operate Airtable through a managed Maton connection, including listing bases, querying records, performing approved writes, and setting up approved hosted automations.
 
-## Reference(s): <br>
-- [Airtable API Overview](https://airtable.com/developers/web/api/introduction) <br>
-- [Airtable List Records](https://airtable.com/developers/web/api/list-records) <br>
-- [Airtable Create Records](https://airtable.com/developers/web/api/create-records) <br>
-- [Airtable Update Records](https://airtable.com/developers/web/api/update-record) <br>
-- [Airtable Delete Records](https://airtable.com/developers/web/api/delete-record) <br>
-- [Airtable Formula Reference](https://support.airtable.com/docs/formula-field-reference) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/airtable) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API calls, Shell commands, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown with HTTP paths, Python and JavaScript examples, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and the intended Maton Airtable connection when multiple connections exist] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0) <br>
+Risk: The skill mediates access to a user's Airtable account and may request scopes that expose business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Maton-mediated Airtable access is intended, review requested Airtable scopes carefully, and prefer read-only access when possible.
+
+Risk: Write, delete, connection, function, or trigger actions can change data or create ongoing automation.
+
+Mitigation: Confirm every write, delete, new connection, hosted function, and automation setup with the user before execution.
+
+Risk: Trigger destinations can continuously forward Airtable-derived or connected-app data outside the expected environment.
+
+Mitigation: Avoid third-party trigger destinations unless the user explicitly trusts the destination and understands what data will be forwarded continuously.
+
+## Reference(s):
+
+- [Airtable API Overview](https://airtable.com/developers/web/api/introduction)
+- [Airtable List Records](https://airtable.com/developers/web/api/list-records)
+- [Airtable Create Records](https://airtable.com/developers/web/api/create-records)
+- [Airtable Update Records](https://airtable.com/developers/web/api/update-record)
+- [Airtable Delete Records](https://airtable.com/developers/web/api/delete-record)
+- [Airtable Formula Reference](https://support.airtable.com/docs/formula-field-reference)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Time Trigger Reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with CLI commands, HTTP examples, JSON payloads, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses managed OAuth where available and requires explicit user confirmation before writes, connection creation, deletion, hosted functions, or trigger automation.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,396 @@
+---
+name: yotta-skills
+slug: yotta-skills
+version: 0.20.0
+displayName: 元阁·技能编排助手
+summary: 元阁全家技能编排：组合策划、路由建议、一键安装、技能盘点，装前摘要供用户决策。
+description: 元阁 -- 元阁全家技能的总编排策划 + 编排路由 + 一键安装器 + 技能盘点 + 运行时 hook 适配。路由层：--route / route_request 按需求摘要给出候选组合、调用顺序、角色、置信度、依据、已装/缺失状态与安装命令，只建议不自动安装；非元阁家族已装技能按 frontmatter description 机械匹配作并列候选（标注来源与未扫描状态，只读不自动调用）；策划层：按场景给出「该组合哪几个元技能、组合强在哪、怎么组合使用（安装与调用均由用户确认后执行）」；安装层：一条命令把 YottaMeta 已发布的全部 yotta-* 技能装进指定智能体或目录（默认 --pin 锁死清单精确版本）；盘点层：--inventory / --reindex 扫描本机已装技能生成/更新注册表，新装技能自动被发现（install/update 后自动 re-index，会话开工只建议跑本地 --reindex；更新检查走手动 --check 或后台 --check --scheduled）；运行时适配层：hook capabilities / evaluate / bind / unbind 按宿主能力矩阵执行六个统一事件并留证降级，元信 before_install 已接入安装管线；自包含零依赖，不依赖任何元技能；MCP 按需加载且需用户确认后写入配置（可选：list_installed_skills/describe_skill/reindex/route_request，不常驻，未加载降级 CLI）。支持 --list 清单 / --route 路由 / install / update / update --check（只读检查）/ update --check --scheduled（后台周检）/ update --auto（家族自动更新）/ hook 适配 / --inventory / --reindex / --dry-run 预览 / --pin（默认）/ --range。触发：需要批量安装或更新元阁全家技能、按场景组合多个元技能、路由或判断该用哪些技能、盘点或查看本机已装技能、重扫技能注册表、给某个智能体或目录一次性铺齐 yotta-* 技能、评估宿主 hook 能力、预览安装清单、锁版本安装、或用户说 元阁/装全家/一次装齐/yotta-skills/install-all/更新全家/检查更新/自动更新/hook 适配/该用哪个技能/路由技能/盘点技能/查看已装技能 等。边界（Do NOT trigger）：只做「组合策划 + 静态路由建议 + 清单 + 下载 + 落位 + 汇总 + 盘点 + re-index + hook 适配」，不含技能本体、不做技能内容开发、不 -g 污染全局、不自动安装缺失技能、不静默写宿主配置或全局记忆；家族安装先自举或调用元信装前门禁，DO NOT INSTALL 阻断，非元阁家族包不自动安装。
+tags: [技能编排, 路由, 一键安装, 技能盘点, orchestration, install]
+category: ai-agent
+license: MIT
+homepage: https://github.com/YottaMeta/yotta-skills
+metadata:
+  zh_name: 元阁
+---
+## 使用须知（先做这一步）
+
+本技能为**按需触发**技能，本身不常驻。「元阁总编排策划」这套组合决策如果想在**每个会话都可用**，
+可以由用户把它写进客户端的全局记忆文件（Codex 的 `AGENTS.md`、Claude Code 的 `CLAUDE.md`、
+其它智能体的全局/永久记忆），使下个会话自动注入。
+
+**这是可选步骤，且必须先获得用户明确同意。AI 不得静默写入，也不得把写入当作使用本技能的前提。**
+
+写入前按四步执行：
+
+1. **展示**：把**目标文件路径**（如 Codex 的 `$CODEX_HOME/AGENTS.md`）、
+   准备写入的**完整文本**、以及写入后的效果（下个会话会自动注入这段说明）一并展示给用户；
+2. **确认**：只有用户明确同意后才写入；**未获同意前不写任何文件**；
+3. **回读校验**：写入后回读确认；目标文件中已有同段内容 → 跳过，不重复堆叠；
+4. **拒绝不影响功能**：用户拒绝或文件不可写时，只说明「未写入全局记忆」，照常使用 CLI
+   （`--route` / `install` / `--inventory`），功能不受影响。
+
+**可选写入文本（逐字，需用户确认后写入）**：
+
+> **元阁编排**：单技能是零件，组合才是系统。接到需求先查「元阁编排策划」命中哪个组合
+> （输出呈现标准 / 长生命周期 / 交付质量门 / 装前安全门 / 造技能发版 / 安全事件响应 / 入口安装），
+> 由 AI 给出**建议**，**经用户确认后**再安装对应技能并调用。本技能不自动安装、不自动调用其他技能，
+> 安装与调用决定权始终在用户。需要时可运行 `yotta-skills --reindex` 重扫本机技能注册表（本地扫描），
+> `yotta-skills update --check` 做只读版本检查，或后台周检 `yotta-skills update --check --scheduled`
+> （未到期不联网，到期单次检查并写缓存）。完整决策表见技能 `yotta-skills/references/orchestration.md`。
+
+**写入位置**：客户端全局记忆文件（Codex = `$CODEX_HOME/AGENTS.md`，未设置时回退 `~/.codex/AGENTS.md` 的「通用方法论」节）。
+**写入时机**：仅当用户明确要求「让元阁编排在每个会话自动可用」时，按上面四步执行；否则只提供文本供用户自行粘贴。
+
+---
+
+# 元阁（yotta-skills）
+
+**元阁全家的总编排策划 + 编排路由 + 一键安装 + 技能盘点**，一句话四层：
+
+- **路由层（该用哪几个）**：`--route "<需求摘要>"` / MCP `route_request` 查本地注册表与静态编排 playbook，输出候选组合、调用顺序、每个技能角色、置信度、依据、已装/缺失状态与安装命令；非元阁家族已装技能按 frontmatter description 机械匹配作并列候选（标注来源与未扫描状态，只读不自动调用）；只建议安装，不自动安装。
+- **动态扩展口（v0.20.0，capability `o1.route`）**：可选调用用户显式配置的本地扩展提供方（provider），在已装注册表白名单内对路由结果增补 / 重排；静态 playbook 结果先算必算、永不缺席，未配置或调用失败时文本输出与历史一致，`--json` 仅多一个 `dynamic` 状态块。协议与配置见 `references/provider-protocol.md`。
+- **策划层（怎么用）**：接到需求，先按「编排策划」定位命中哪个组合——哪些元技能搭配起来最强、适合什么场景、AI 该给出什么安装与调用建议（**安装与调用均由用户确认后执行**）。
+- **安装层（怎么装）**：一条 `npx -y @yottameta/yotta-skills` 把组合/全家装进指定智能体或目录——`--list` 看清单、`install` 装、`update` 增量更新、`doctor` 只读自检、`rollback` 恢复快照、`--dry-run` 预览、`--pin` 锁版本。
+
+> **权限边界**：`install` / `update` 会写入目标技能目录，属于有副作用操作——执行前先用 `--dry-run`
+> 展示将写入的目录与技能清单，由用户确认后再执行；批量安装（多技能 / 多目录 / 装全家）不是一次性授权，
+> 新增目标目录要重新确认。不静默写宿主配置、不自动安装缺失技能、不 `-g` 污染全局；
+> 安装器拒绝对符号链接目标写入，批量安装需显式 `--yes`。
+
+- **盘点层（已装了什么）**：`--inventory` / `--reindex` 扫描本机各智能体技能目录，生成/更新本地注册表；装技能后自动 re-index，新装技能自动被发现——自包含扫描，不依赖任何元技能。
+
+每个技能仍走各自独立的 npm 包（版本源唯一）；本包只做「清单 + 下载 + 落位 + 汇总」，**不内置任何技能本体**。
+> **本包不含技能本体**：拿到它只代表有了「编排策划 + 安装工具」；真正装齐需运行 `install`。
+
+---
+
+## 编排策划（先看这个）
+
+**单技能是零件，组合才是系统。** 元阁的价值不只是「装齐全家」，更是告诉你**什么时候该用哪几个、为什么、怎么组合使用**。完整决策表见 `references/orchestration.md`。
+
+### 组合矩阵（哪些和哪些，强在哪）
+
+| 组合 | 成员（slug） | 一起用强在哪 | 单用缺什么 |
+|---|---|---|---|
+| **① 输出呈现标准** | yotta-present + yotta-humanize | 先判型渲染成规范可复制输出，再祛 AI 味，交付统一且读感自然 | 只规范化不祛 AI 味；只祛 AI 味不规整 |
+| **② 长生命周期智能体** | yotta-workflow + yotta-memory + yotta-learn + yotta-logs | 开工恢复、权限记忆、沉淀学习、检索历史，越用越懂你 | 状态无处放；记忆无边界；错不沉淀；历史查不到 |
+| **③ 交付质量门** | yotta-anti-shallow + yotta-code-quality + yotta-publish-guard | 防敷衍、结对评审、发布守门，交付前多层把关 | 容易停留表面；代码无人审；发版无守门 |
+| **④ 装前安全门** | yotta-verify（或元信MCP）+ yotta-vetter + yotta-security-audit | 确定性扫描 + 协议审查 + 深检，装其他来源技能前可信判定 | 无确定性扫描；无协议审查；无深检 |
+| **⑤ 造技能 / 发版** | yotta-skill-creator + yotta-publish-guard | 脚手架生成合规技能 + 发布守门 | 造技能无模板；造完不知能否发 |
+| **⑥ 安全事件响应** | yotta-logwatch + yotta-intel + yotta-triage + yotta-secret + yotta-chain + yotta-recon | 日志攻击链 + IOC + 样本初筛 + 密钥 + 供应链 + 侦察，看全链路 | 每项只管一环，单用看不到全貌 |
+| **⑦ 入口 + 安装** | yotta-prompt + yotta-skills | 元引澄清需求串联，元阁按场景把组合装好 | 需求模糊不知用哪个；要一个个装 |
+
+### 场景 → 组合映射（接到需求查表）
+
+| 用户场景 | 该组合 | 建议动作（经用户确认后执行） |
+|---|---|---|
+| 「让 AI 长期帮我做项目 / 别忘了我 / 跨会话」 | ② 长生命周期 | 装 yotta-workflow yotta-memory yotta-learn yotta-logs；开工恢复上下文、状态就近存、会话结束留记录 |
+| 「帮我写/润色，输出规范、别 AI 味」 | ① 输出呈现标准 | 装 yotta-present yotta-humanize；默认先判型渲染，检测 AI 味再改写 |
+| 「检查代码/报告质量，别糊弄」 | ③ 交付质量门 | 装 yotta-anti-shallow yotta-code-quality yotta-publish-guard；按对应协议执行 |
+| 「我要装其他来源技能/插件/MCP」 | ④ 装前安全门 | 装 yotta-verify(+MCP) yotta-vetter yotta-security-audit；装前必扫 |
+| 「我要造新 skill 并发布」 | ⑤ 造技能/发版 | 装 yotta-skill-creator yotta-publish-guard；生成 + 守门 |
+| 「我怀疑日志/资产有问题」 | ⑥ 安全事件响应 | 装 yotta-logwatch yotta-intel yotta-triage yotta-secret yotta-chain yotta-recon；按需调用 |
+| 「不知道怎么说 / 一堆技能该用哪个」 | ⑦ 入口+安装 | 装 yotta-prompt yotta-skills；元引澄清→串联→按组合装 |
+
+### AI 建议安装与组合规则
+
+1. **查表**：接到需求，先在「场景 → 组合映射」定位命中组合。
+2. **查已装**：检查当前智能体技能目录是否存在对应 `<slug>/SKILL.md`；存在即已装，缺失即待装。
+3. **建议装**：只列组合所需技能（不装全家）与安装命令
+   `npx -y @yottameta/yotta-skills install <slug>... [--agent <name> | --dir <path>]`（默认 `--pin` 锁死清单精确版本），
+   **先给出清单与命令，等用户确认后再执行**；用户未确认 → 不安装。
+4. **建议用**：说明命中组合的推荐动作（如输出按元呈判型渲染、开工恢复上下文 + 读状态文件），
+   **由用户确认后生效**。跨会话的默认行为需要写进客户端全局记忆，写入本身同样需要用户明确同意（见「使用须知」）；
+   **不得**把「无需提醒」「默认全走」当作常驻授权。
+5. **用户触发（高风险）**：命中「④ ⑥ ⑤」等高风险或目的不明时，AI 给出技能清单 + 执行方案，**先征询用户确认**再执行；拿不准就当未装，只给安装命令。
+6. **判断标准**：技能目录有对应 `SKILL.md` 即视为已装；拿不准 → 视为未装并给提示。
+
+---
+
+## 快速使用（安装层）
+
+```bash
+# 列出全家技能 + 版本 + 说明
+npx -y @yottameta/yotta-skills --list
+
+# 装全家到指定智能体默认用户级目录（推荐）
+npx -y @yottameta/yotta-skills install --agent codex
+
+# 装全家到任意目录（每个技能落在 <dir>/<slug>）
+npx -y @yottameta/yotta-skills install --dir ~/my-skills
+
+# 只装单个 / 多个技能（按编排策划选组合时常用）
+npx -y @yottameta/yotta-skills install yotta-memory yotta-verify --dir ~/my-skills
+
+# 增量更新已装技能（补齐缺失 / 版本不一致）
+npx -y @yottameta/yotta-skills update --agent codex
+
+# 只读检查有没有更新（联网对 npm 最新，不改动；0=全部最新 / 3=有更新 / 1=查失败）
+npx -y @yottameta/yotta-skills update --check --agent codex
+
+# 后台周检入口（未到期不联网；到期只检查一次并写 ~/.yottaskills/update-check.json）
+npx -y @yottameta/yotta-skills update --check --scheduled --agent codex
+
+# 检查到家族更新后自动更新（仅 yotta-* 自家家族，含装前安全扫描）
+npx -y @yottameta/yotta-skills update --auto --agent codex
+
+# 只读检查已装技能（不修改目录；可加 --json 输出机器可读结果）
+npx -y @yottameta/yotta-skills doctor --agent codex
+
+# 查看可用快照 / 回滚最近一次安装或更新
+npx -y @yottameta/yotta-skills rollback --list --agent codex
+npx -y @yottameta/yotta-skills rollback --slug yotta-memory --agent codex
+
+# 预览将安装清单（不联网、不改动）
+npx -y @yottameta/yotta-skills --dry-run
+
+# 盘点本机已装技能（自包含扫描，不依赖任何元技能）
+npx -y @yottameta/yotta-skills --inventory
+
+# 重扫注册表（会话开工 / 新装技能后，增量合并变化）
+npx -y @yottameta/yotta-skills --reindex
+
+# OpenClaw / QClaw（QClaw 基于 OpenClaw）：走宿主官方技能命令，保留安全审计与更新追踪
+openclaw skills install @yottameta/yotta-skills
+openclaw skills update @yottameta/yotta-skills
+```
+
+> **OpenClaw / QClaw 用户**：技能安装与更新走宿主官方命令 `openclaw skills install|update @yottameta/<slug>`，
+> 以保留宿主的 ClawHub 安全审计卡与更新追踪；元阁的 `--inventory` / `--reindex` 已能识别 `~/.openclaw/skills`（含 `OPENCLAW_STATE_DIR` 覆盖）。
+
+## 命令与选项
+
+| 命令 / 选项 | 作用 |
+|---|---|
+| `--list`（`-l`） | 列出全家技能 + 版本 + 说明；可加技能名过滤 |
+| `install --agent <name>` | 装全家到指定智能体默认用户级目录（推荐） |
+| `install --dir <path>` | 装全家到指定目录，每个技能落在 `<path>/<slug>` |
+| `install <skill>... [--agent <name> \| --dir <path>]` | 只装指定的一个或多个技能 |
+| `update [--agent <name> \| --dir <path>]` | 增量更新：补齐缺失技能、升级版本不一致的技能 |
+| `update --check [--agent <name> \| --dir <path>]` | 只读检查更新：联网对 npm 最新，不改动；退出码 0=全部最新 / 3=有更新 / 1=查失败 |
+| `update --check --scheduled [--agent <name> \| --dir <path>]` | 后台周检入口：未到期不联网；到期只检查一次并写本地缓存；文本失败静默，`--json` 保留诊断；始终退出 0 |
+| `update --auto [--agent <name> \| --dir <path>]` | 检查到家族更新后自动更新（仅 yotta-* 自家家族，含装前安全扫描） |
+| `doctor [--agent <name> \| --dir <path>] [--slug <slug>]` | 只读自检：SKILL / 版本 / manifest / 注册表 / 自定义 doctor；`--json` 输出稳定字段 |
+| `rollback [--agent <name> \| --dir <path>] [--slug <slug>]` | 校验并恢复最近一次快照；`--list` 只列快照；`--json` 输出机器可读结果 |
+| `hook capabilities --host <name>` | 查看宿主六个统一事件的能力等级；未知宿主默认 `unsupported` |
+| `hook evaluate --host <name> --event <event> --manifest <file> --context <json>` | 评估 manifest hook 声明，输出 allow / block / warn / unverified，并写结构化证据 |
+| `hook bind --host <name> --manifest <file>` | 幂等注册 hook 声明；`hook unbind <id>` 反注册 |
+| `--inventory` | 盘点本机已装技能：扫描技能目录生成/更新注册表（自包含，不依赖元技能）；`--json` 输出 JSON、`--project` 附扫项目级目录 |
+| `--reindex` | 重扫注册表：扫描技能目录并增量合并变化（install / update 完成后 CLI 自动重扫；也可在会话开工等时机手动运行）；`--json` 输出 JSON、`--project` 附扫项目级目录；`--rescan` 同义 |
+| `--route <需求摘要>` | 静态编排路由：输出组合、调用顺序、技能角色、置信度、依据、已装/缺失状态与安装建议；`--json` 输出 JSON、`--project` 附扫项目级目录 |
+| `--no-reindex` | 安装 / 更新后不自动重扫注册表 |
+| `--dry-run` | 预览将执行的安装 / 更新清单；不联网、不改动 |
+| `--pin` | 锁死清单精确版本（默认 range：跟随同 major 最新 patch） |
+| `--force` | 已是最新也重新安装 |
+| `--skip-scan` | 人工应急路径：跳过元信门禁并标记 `explicit-unverified`；不得用于 `update --auto` |
+| `--npm <path>` | 指定 npm 可执行文件 |
+| `--python <path>` | 指定 python 可执行文件（元信 scan 用） |
+| `--verify <path>` | 指定 yotta_verify.py 路径 |
+| `--slug <slug>` | doctor / rollback 时只处理指定技能 |
+| `-h, --help` / `-v, --version` | 帮助 / 版本 |
+
+不带命令直接给技能名时，等价于 `install <skill>`。
+
+## 运行时 hook 适配层
+
+技能 manifest 只声明六个统一事件的要求，元阁负责能力探测、确定性评估、证据留痕和降级标注：
+
+```bash
+npx -y @yottameta/yotta-skills hook capabilities --host codex
+npx -y @yottameta/yotta-skills hook evaluate --host codex --event before_send --manifest ./skill-manifest.json --context '{"checks":{}}'
+npx -y @yottameta/yotta-skills hook bind --host codex --manifest ./skill-manifest.json
+npx -y @yottameta/yotta-skills hook unbind <binding-id>
+```
+
+证据写入 `~/.yottaskills/hook-log.jsonl`，绑定注册表写入
+`~/.yottaskills/hook-bindings.json`。`native-audit` 只表示可审计和一次纠偏，不表示动作前强制；
+`unsupported` 必须显示 `explicit-unverified`。本层只做本地确定性判断，不联网、不执行下载。
+
+## 技能盘点（--inventory）
+
+元阁自带技能扫描核心（零依赖，不依赖任何元技能）：扫描各智能体技能目录，解析
+`SKILL.md` frontmatter，生成/更新本地注册表 `~/.yottaskills/registry.json`，数据不出本机。
+多 agent 宿主可用 `YOTTA_SKILLS_REGISTRY_FILE` 为每个 agent 指定独立注册表文件。
+适合「装了哪些技能、各干嘛、从哪来」的快速盘点。
+
+```bash
+# 盘点本机已装技能（文本表格）
+npx -y @yottameta/yotta-skills --inventory
+
+# 机器可读（JSON）
+npx -y @yottameta/yotta-skills --inventory --json
+
+# 追加扫描任意目录 / 当前项目级目录
+npx -y @yottameta/yotta-skills --inventory --dir ~/my-skills --project
+```
+
+注册表增量合并：新增（added）/ 更新（updated）/ 消失（gone）随输出列出；同名技能来自多个目录时合并来源，版本不一致记录冲突。
+
+### re-index：新装技能自动被发现
+
+- **装技能后自动**：`install` / `update` 完成后自动重扫注册表，把本次落位结果反映进
+  `~/.yottaskills/registry.json`（新增 / 更新 / 消失随输出列出）；`--no-reindex` 可关闭。
+- **会话开工**：建议每会话开工先跑一次 `yotta-skills --reindex`（快速增量，只合并变化），
+  让新装 / 更新的技能自动进入注册表。
+- **手动**：`yotta-skills --reindex`（`--rescan` 同义）；`--json` 机器可读、`--project` 附扫项目级目录。
+
+### update 增量更新与检查（--check / --auto）
+
+增量更新遍历清单，补齐缺失、升级版本不一致，默认跳过已最新。`--check` 只读联网
+（对 npm `dist-tags.latest`），按本地 `SKILL.md` 版本对比——无论技能源自哪个安装渠道
+（npm / git clone / 本地拷贝等）都兼容；`--auto` 检测到家族（`yotta-*` / 清单内）可更新时，走安装管线
+（含元信装前安全扫描）自动更新。**非元阁家族（非 yotta-*）技能绝不自动更新**（默认保守：`--check` 列清单，
+用户确认后再 `update`）。
+
+`--check --scheduled` 是后台周检入口：默认 7 天加 0 到 24 小时随机抖动，未到期不联网；
+到期只检查一次并把结果写入 `~/.yottaskills/update-check.json`。文本模式网络失败静默，
+`--json` 可读取 `error` / `cache` 诊断字段。它不作为会话开工默认动作。
+
+```bash
+# 只读检查（0=全部最新 / 3=有更新 / 1=查失败）
+npx -y @yottameta/yotta-skills update --check --agent codex
+
+# 后台周检入口（未到期不联网；到期单次检查并写缓存）
+npx -y @yottameta/yotta-skills update --check --scheduled --agent codex
+
+# 检查到家族更新后自动更新（仅自家家族）
+npx -y @yottameta/yotta-skills update --auto --agent codex
+```
+
+## doctor 与 rollback
+
+`doctor` 是只读自检，不会修改技能目录或注册表。它检查目标技能目录、`SKILL.md`、
+frontmatter 版本、manifest 身份、本地注册表记录，以及包内声明的自定义 doctor 脚本。
+`--json` 返回稳定字段，适合脚本和智能体消费。
+
+```bash
+npx -y @yottameta/yotta-skills doctor --agent codex --slug yotta-memory
+npx -y @yottameta/yotta-skills doctor --dir ~/my-skills --json
+```
+
+`rollback` 只恢复已经存在的本机快照。恢复前会校验快照（新快照校验 SHA-256 元数据，
+旧快照按结构校验）；恢复过程中先在同盘暂存，再替换目标，失败时保留当前目录。
+快照默认保留，不会被回滚操作删除。
+
+```bash
+# 查看当前有哪些快照（--slug 可只看一个技能）
+npx -y @yottameta/yotta-skills rollback --list --agent codex
+
+# 回滚最近一次安装或更新；也可用 --slug 指定技能
+npx -y @yottameta/yotta-skills rollback --slug yotta-memory --agent codex
+```
+
+包内 manifest 可声明 `install.setup`、`install.doctor`、`install.rollback`，
+值必须是包内相对路径。安装时先执行 setup，再执行内置 doctor 和自定义 doctor；
+任一步失败都会恢复旧版本并留下安装证据。元阁只执行元阁家族包内的生命周期脚本，
+不使用 shell，也不接受绝对路径或 `..` 路径。
+
+## 编排路由（--route）
+
+把需求摘要交给静态编排 playbook 和本地注册表，得到一组可执行建议：
+
+```bash
+# 文本输出：组合、调用顺序、角色、置信度、依据、缺失技能安装命令
+npx -y @yottameta/yotta-skills --route "帮我润色输出，要规范可复制，别有 AI 味"
+
+# 机器可读（JSON）
+npx -y @yottameta/yotta-skills --route "检查代码质量，别糊弄" --json
+```
+
+- **输出**：候选组合、调用顺序、每个技能的角色、置信度、命中依据、已装/缺失状态、安装命令与应用模式提醒。
+- **缺失技能**：只给安装命令，不自动安装；安装前应先做装前安全扫描，决定权在用户。
+- **应用模式**：默认用户显式调用；切换为「按场景自动调用」需要用户确认。
+- **无明确匹配**：低置信度回退到「入口 + 安装」组合，先澄清需求再继续。
+- **边界**：路由是建议，不保证完全正确；关键动作由用户确认，数据不出本机。
+
+### MCP：按需加载（可选）
+
+本技能自带一个 MCP server：`yotta-skills`（`scripts/yotta-skills-mcp.py`，零依赖、数据不出本机），
+基于 MCP 最新协议 2026-07-28（无状态时代；向后兼容 2025-11-25 及更早握手客户端）。
+提供 `list_installed_skills`（盘点）/ `describe_skill`（单技能详情）/ `reindex`（强制重扫）/ `route_request`（静态编排路由）四个工具。
+
+**按需加载，不走常驻**：本技能与 MCP 均为按需触发。默认以 CLI 为主
+（`npx -y @yottameta/yotta-skills --inventory`）；需要让 AI 通过工具直接调用时，再按下面配置启用。
+**写客户端配置前必须先获得用户明确同意**：先展示目标配置文件路径、将写入的完整配置与影响（客户端需重启 / 重载一次），
+用户确认后才写入；用户拒绝 → 不写配置，保持 CLI 用法，功能不受影响。
+
+1. **检查当前客户端的 `mcpServers`** 是否已有 `yotta-skills` 条目；已有 → 直接使用。
+2. **没有 → 先征得用户同意，再写入**下面这一条 server 配置（用后可移除，不要求常驻）：
+   ```json
+   {
+     "mcpServers": {
+       "yotta-skills": {
+         "command": "python",
+         "args": ["<技能目录>/scripts/yotta-skills-mcp.py"],
+         "env": {
+           "YOTTA_SKILLS_REGISTRY_FILE": "<配置目录>/yottaskills/<agentId>/registry.json"
+         }
+       }
+     }
+   }
+   ```
+   > `<技能目录>` = 本技能实际安装目录，**不要写死盘符路径**；Windows 用 `python`，Linux/macOS 用 `python3`。
+   > 单 agent 环境可不设 `YOTTA_SKILLS_REGISTRY_FILE`；同一宿主内多 agent 共用 MCP 时，应分别配置独立路径，避免注册表状态互相覆盖。
+3. **提醒用户**：改 `mcpServers` 后多数客户端需**重启 / 重载一次** MCP server 才生效；加载后应看到
+   `list_installed_skills` / `describe_skill` / `reindex` / `route_request` 四个工具。
+4. **降级兜底（重要）**：若客户端未暴露 MCP 工具 / 用户拒绝改配置 / 无法改配置 / server 未加载，**自动降级 CLI**
+   （同一套扫描与路由核心、结果一致）：`npx -y @yottameta/yotta-skills --inventory / --reindex / --route ...`。
+
+## 版本策略
+
+- 默认 **`pin`**：`npm pack` 使用清单中的精确版本（如 `@yottameta/yotta-present@0.6.2`），结果完全可复现，
+  不会静默跟随 npm 上的浮动版本；
+- `--range`（可选）：按清单 `major.x` 取 npm 最新 patch（如 `0.x`），仅在用户明确要求跟随 patch 时使用；
+- 是否「已是最新」由目标目录 `<slug>/SKILL.md` 的 frontmatter `version` 与清单比对，
+  一致即跳过（幂等）。
+
+## 元信装前门禁
+
+家族安装默认执行装前扫描。若本机没有元信（yotta-verify），元阁先按 `skills.json`
+安装元信自身，再扫描待装技能。安装前会先读取包内 manifest、校验身份，再进入元信门禁：
+
+- `SAFE TO INSTALL`：继续安装；
+- `INSTALL WITH CAUTION` / `REVIEW REQUIRED`：继续安装，但显示风险并写入证据；
+- `DO NOT INSTALL` 或扫描失败：阻断，不替换旧版本。
+
+引擎查找顺序（v0.19.13 收紧）：`--verify` 指定路径 → 环境变量 `YOTTA_SKILLS_VERIFY` →
+**受信安装记录**（`~/.yottaskills/trusted-verifier.json`，由安装管线在元信安装 / 更新成功后写入，
+记录包身份 + 引擎路径 + SHA-256）。候选引擎必须同时满足：路径不经符号链接跳转、
+包内 `SKILL.md` 与 `skill-manifest.json` 身份一致（slug / package / trust / 版本）、
+引擎摘要与记录一致；任一不满足即 fail-closed，改走自举安装。
+不再按本地注册表里 `name: yotta-verify` 的目录发现引擎。
+`--skip-scan` 只保留为人工应急路径，使用时输出 `explicit-unverified` 并写入
+`~/.yottaskills/install-log.jsonl`；`update --auto` 不会使用该开关。
+
+## 支持智能体
+
+17 个内置键名：`claude` `cursor` `codex` `gemini` `goose` `amp` `opencode` `windsurf`
+`workbuddy` `kiro` `trae` `trae-cn` `qwen` `comate` `codebuddy` `kimi` `agents`。
+未收录的智能体请用 `--dir` 指定其技能目录（`.agents/skills` 不是通用目录）。
+
+## 环境变量
+
+| 变量 | 作用 |
+|---|---|
+| `YOTTA_SKILLS_NPM` | 指定 npm 可执行文件（同 `--npm`） |
+| `YOTTA_SKILLS_NPM_FLAGS` | 追加传给 `npm pack` 的参数（按空白拆分，如 `--registry=...`） |
+| `YOTTA_SKILLS_PYTHON` | 指定 python 可执行文件（元信 scan 用，同 `--python`） |
+| `YOTTA_SKILLS_VERIFY` | 指定 yotta_verify.py 路径（同 `--verify`） |
+| `YOTTA_SKILLS_MANIFEST` | 指定技能清单 JSON 路径（默认随包 skills.json） |
+
+## 常见问题
+
+- **npmmirror 全新包 404**：镜像同步有延迟，通过 `YOTTA_SKILLS_NPM_FLAGS` 追加
+  `--registry=https://registry.npmjs.org/`（国内需代理）或等待镜像缓存后重试。
+- **未收录智能体**：`--agent <name>` 报未收录时，改用 `--dir` 指到它的技能目录。
+- **Windows 下 npm 报错**：CLI 已内置 npm-cli.js 解析，无需额外处理；如需覆盖用 `--npm`。
+- **某技能安装失败**：汇总报告会列出失败原因，可单装该技能排查。
+
+## 参考
+
+- **编排策划（组合决策表，先看这个）**：`references/orchestration.md`。
+- 全家技能清单（人工可读版）：`references/skill-list.md`（机器权威源为 `skills.json`）。
+- 内部机制：`references/install-flow.md`。
+- 新手中文教程：`references/tutorial.md`。
+- 常见问题：`references/faq.md`。
+- 复杂场景走查：`references/walkthroughs.md`。

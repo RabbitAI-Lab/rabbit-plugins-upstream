@@ -1,40 +1,53 @@
-## Description: <br>
-Qa Combination Strategy helps QA teams reduce combination-test explosion with Pairwise, orthogonal testing, and risk-weighted matrices while identifying coverage gaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams reduce combinatorial test cases with pairwise, orthogonal, and risk-weighted strategies while identifying coverage gaps.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and developers use this skill to turn scenario trees, requirement decompositions, and optional risk assessments into smaller combination coverage plans for parameter-heavy features and environment matrices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Examples or inputs may include customer, payment, identity, financial, screenshot, or production data. <br>
-Mitigation: Use masked or synthetic inputs and avoid pasting real customer, payment, identity, financial, or production data. <br>
-Risk: Reduced combination matrices can miss important high-risk interactions if used without review. <br>
-Mitigation: Review generated matrices, prioritize high-risk combinations, and supplement Pairwise or orthogonal coverage with full coverage where risk warrants it. <br>
+## Use Case:
 
+QA engineers and developers use this skill to plan reduced test matrices across input, environment, and state combinations, prioritize high-risk cases, and document coverage gaps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-combination-strategy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown with structured combination matrices, coverage gaps, traceability IDs, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces COMBO and scenario-linked matrix entries for human review; use masked or synthetic test data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and release evidence) <br>
+Risk: Payment, order, identity, phone, or customer examples may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use sanitized requirements and masked test data instead of real customer or production records.
+
+Risk: Generic testing requests may not specify the combinations or constraints needed for a reliable matrix.
+
+Mitigation: Clarify parameters, allowed values, constraints, and risk priorities before selecting a coverage strategy.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-combination-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown tables and text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Combination IDs, scenario links, risk-prioritized test cases, pairwise and N-way analysis, and stated coverage gaps.]
+
+## Skill Version(s):
+
+1.7.7 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

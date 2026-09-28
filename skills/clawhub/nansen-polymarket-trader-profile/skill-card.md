@@ -1,41 +1,53 @@
-## Description: <br>
-Analyzes a specific Polymarket wallet with Nansen CLI commands to show trader bets, trade history, PnL breakdown, and market context. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a Polymarket wallet's trades, profit and loss, and market context using the Nansen CLI.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External analysts, developers, and agents use this skill to inspect a Polymarket trader address, retrieve recent trades, compare resolved and unresolved PnL, and identify market context for the wallet's positions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs Nansen CLI research commands that require a Nansen API key and may consume API quota. <br>
-Mitigation: Confirm the NANSEN_API_KEY is appropriate for the environment, trust the installed nansen-cli package, and monitor API usage. <br>
-Risk: Wallet trade and PnL analysis depends on Nansen and Polymarket data returned for the supplied address. <br>
-Mitigation: Validate the wallet address, prefer addresses sourced from trades-by-market as documented, and review resolved versus unresolved market results before relying on conclusions. <br>
+## Use Case:
 
+Analysts and developers use this skill to review a Polymarket trader's activity, positions, and profit and loss across resolved and unresolved markets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-polymarket-trader-profile) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the NANSEN_API_KEY environment variable and the nansen CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Authenticated research calls may consume credits or trigger wallet-funded x402 payments, including repeated calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the wallet payment policy and spending limits before running research commands or loops.
+
+Risk: The workflow requires access to a Nansen API key or saved browser session.
+
+Mitigation: Use the skill only with a trusted Nansen CLI installation and an explicitly selected authenticated session or key.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/nansen-devops/skills/nansen-polymarket-trader-profile)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis]
+
+**Output Format:** [Plain text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Wallet trade history, market context, and profit-and-loss assessment]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

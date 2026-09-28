@@ -1,45 +1,55 @@
-## Description: <br>
-Analyzes meal videos or video URLs for eating behavior, dietary patterns, unhealthy habit indicators, and nutrition improvement recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes dining images or videos to assess eating speed, eating habits, dietary structure, and unhealthy eating tendencies, then returns structured reports and nutrition-improvement recommendations.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Users and agents use this skill to submit meal videos or video URLs to the Life Emergence cloud service for dietary behavior assessment, structured nutrition guidance, and historical diet report retrieval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded meal videos, URLs, and historical report requests are processed by a remote Life Emergence cloud service. <br>
-Mitigation: Use only with media appropriate for that service, review the service's privacy and retention claims, and avoid sensitive personal or health-related videos unless the deployment has approved the data handling. <br>
-Risk: The security scan reports that the skill silently creates or reuses a local identity and stores service tokens locally. <br>
-Mitigation: Review local workspace data files and token storage before installation, isolate the skill in a controlled workspace, and rotate or remove stored tokens when no longer needed. <br>
-Risk: The scanner verdict is suspicious because remote login, token storage, and historical report retrieval happen with limited user control or disclosure. <br>
-Mitigation: Require operator review before deployment and clearly disclose remote processing and historical report access to end users. <br>
+## Use Case:
 
+External users and agent operators use this skill to submit meal-related images, videos, or public URLs for dietary behavior analysis, structured health-reference reports, history lookup, and nutrition-improvement guidance.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-diet-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration] <br>
-**Output Format:** [Markdown and JSON-formatted analysis reports, Markdown tables for historical reports, report links, and shell commands for invoking the skill scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports mp4, avi, and mov inputs up to 10 MB; accepts local file paths or public video URLs; output detail can be basic, standard, or json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: Eating-behavior media and identifiers are sent to the Life Emergence cloud service, and report history is cloud-linked.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only in trusted workspaces where users understand this data flow, and avoid sensitive videos unless identity isolation is in place.
+
+Risk: Reusable tokens and default identities may be stored locally, which can mix private report history across users in shared workspaces.
+
+Mitigation: Run the skill in a single-user trusted workspace or isolate identities and token storage before shared deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-diet-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API interface documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, files, guidance]
+
+**Output Format:** [Markdown text with structured JSON excerpts, report links, and optional saved output files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud report history and report export links; analysis results are health references and not medical or nutritionist diagnosis.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata; artifact frontmatter lists 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

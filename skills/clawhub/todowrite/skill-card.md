@@ -1,43 +1,66 @@
-## Description: <br>
-Todowrite routes agent TODOs to session tasks, persistent checklist files, or GitHub Issues while enforcing task-reporting and synchronization discipline. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes TODO checklists to the appropriate storage medium and enforces task-list conversation, reporting, synchronization, priority, and media-separation discipline.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use Todowrite to decide whether TODO work belongs in session tracking, persistent checklist files, or team-shared GitHub Issues, and to keep related task records synchronized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update task and checklist records during task transfers, so ambiguous transfer language could move or close the wrong work item. <br>
-Mitigation: Confirm ambiguous transfer scope, require explicit direction before creating issues, and report both the source and destination updates. <br>
+## Use Case:
 
+Developers and agent operators use this skill to decide whether TODOs belong in session tasks, durable files, GitHub Issues, or local task JSON, and to keep those records visible and synchronized. It also provides guidance and utilities for task completion reports, conversation-safe task references, priority prefixes, and cleanup of local task ledgers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/todowrite) <br>
-- [Task Completion Report Format](completion-report.md) <br>
-- [TaskList Conversation IDs](conversation-id.md) <br>
-- [Task-Checklist Two-Way Sync](fix-plan-sync.md) <br>
-- [Priority Prefix](priority-prefix.md) <br>
-- [Work Record Media Separation](media-separation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with checklist and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update TaskList state, checklist files, and GitHub issue records when the user explicitly directs those routes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata and changelog, released 2026-07-23) <br>
+Risk: The skill may guide the agent toward persistent tracking actions in external systems such as GitHub Issues or Plane records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before creating or updating external records, posting comments, or changing issue state.
+
+Risk: The bundled local task CLI can create, update, delete, archive, or purge task JSON files.
+
+Mitigation: Confirm destructive operations before running them, prefer dry-run or archive modes when pruning, and show the resulting task output to the user.
+
+Risk: Hook registration and PATH wrappers can change how the agent asks questions or invokes local task utilities.
+
+Mitigation: Review hook registration and wrapper scripts before enabling the skill in an agent environment.
+
+Risk: Task state can diverge when the same work is tracked in both TaskList-style files and durable checklist files.
+
+Mitigation: Use the skill's two-way synchronization rules so completion, deletion, transfer, split, and merge actions update both media in the same turn.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/todowrite)
+- [Publisher profile](https://clawhub.ai/user/drumrobot)
+- [Task completion report guidance](completion-report.md)
+- [Task and checklist synchronization guidance](fix-plan-sync.md)
+- [TaskList conversation ID guidance](conversation-id.md)
+- [claude-task CLI guidance](claude-task.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, task-routing examples, and local CLI output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or invoke local task-file operations, hook checks, GitHub Issue commands, and checklist edits according to user intent and confirmation boundaries.]
+
+## Skill Version(s):
+
+0.9.3 (source: server release metadata; artifact frontmatter reports 0.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

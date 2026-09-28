@@ -29,16 +29,18 @@ curl -s -X POST "https://ima.qq.com/openapi/note/v1/import_doc" \
 # 返回: {"code": 0, "data": {"note_id": "xxx"}}
 ```
 
-### 1.3 笔记本管理
+### 1.3 笔记本管理（注意端点命名）
 
 ```bash
-# 列出笔记本
-curl -s -X POST "https://ima.qq.com/openapi/note/v1/list_notebooks" \
+# 列出笔记本（端点是 list_notebook 单数，不是 list_notebooks）
+curl -s -X POST "https://ima.qq.com/openapi/note/v1/list_notebook" \
   -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
-  -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" | python3 -m json.tool
+  -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
+  -H "Content-Type: application/json" \
+  -d '{"cursor": "0", "limit": 20}' | python3 -m json.tool
 
-# 创建笔记本
-curl -s -X POST "https://ima.qq.com/openapi/note/v1/create_notebook" \
+# 创建笔记本（端点是 add_notebook，不是 create_notebook）
+curl -s -X POST "https://ima.qq.com/openapi/note/v1/add_notebook" \
   -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
   -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
   -H "Content-Type: application/json" \
@@ -102,15 +104,16 @@ else:
 ### 3.1 列出笔记
 
 ```bash
-curl -s -X POST "https://ima.qq.com/openapi/note/v1/list_notes" \
+# 注意：端点是 list_note（单数），不是 list_notes
+curl -s -X POST "https://ima.qq.com/openapi/note/v1/list_note" \
   -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
   -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
   -H "Content-Type: application/json" \
-  -d '{"notebook_id": "<notebook_id>", "count": 100}' | python3 -c "
-import sys,json
-d=json.load(sys.stdin)
-for note in d.get('data',{}).get('notes',[]):
-    if '主题导览' in note.get('title',''):
+  -d '{"notebook_id": "<notebook_id>", "sort_type": 0, "cursor": "", "limit": 20}' | python3 -c "
+import sys, json
+d = json.load(sys.stdin)
+for note in d.get('data', {}).get('note_book_list', []):
+    if '主题导览' in note.get('title', ''):
         print(f\"Found: {note['title']} -> note_id: {note['note_id']}\")
 "
 ```

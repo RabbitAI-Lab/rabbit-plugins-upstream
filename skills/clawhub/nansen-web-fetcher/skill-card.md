@@ -1,44 +1,53 @@
-## Description: <br>
-Fetches and analyzes content from one or more URLs using Gemini 2.5 Flash so agents can answer questions about retrieved web pages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetches content from supplied URLs and answers questions about it using Gemini 2.5 Flash.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers and analysts use this skill to fetch up to 20 specific web pages with nansen-cli and get AI-generated answers to questions about their contents. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: URLs and questions are processed through Nansen and Gemini, which may expose private or access-controlled information if used with sensitive inputs. <br>
-Mitigation: Use only with URLs and questions that are acceptable under the user's data policy, and avoid private or confidential content unless external processing is approved. <br>
-Risk: The workflow requires a Nansen API key and broad access to the nansen CLI. <br>
-Mitigation: Install only if the nansen-cli package is trusted, scope the API key to the intended use, and review generated nansen commands before execution. <br>
-Risk: Paywalled, blocked, or unreachable pages can fail or return incomplete coverage. <br>
-Mitigation: Check failed_urls and retrieved_urls before relying on the generated analysis. <br>
+## Use Case:
 
+Agents and their users can retrieve and compare up to 20 specified web pages to answer a question or summarize their content.
 
-## Reference(s): <br>
-- [Nansen Web Fetcher on ClawHub](https://clawhub.ai/nansen-devops/nansen-web-fetcher) <br>
-- [Nansen](https://nansen.ai) <br>
-- [nansen-cli package](https://www.npmjs.com/package/nansen-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [JSON containing analysis, retrieved_urls, and failed_urls; optionally human-readable JSON with --pretty] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires NANSEN_API_KEY and the nansen CLI; accepts up to 20 URLs and a required question; CLI timeout is 30 seconds.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: Page content and questions may be sent to Nansen/Gemini for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review URLs and questions before use and avoid sharing sensitive content without authorization.
+
+Risk: Paywalled or bot-blocked pages may not be retrieved.
+
+Mitigation: Check failed_urls and verify that the answer is based on the intended pages.
+
+## Reference(s):
+
+- [Nansen Web Fetcher skill listing](https://clawhub.ai/nansen-devops/skills/nansen-web-fetcher)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes analysis, retrieved_urls and failed_urls; optional human-readable JSON with --pretty. Requests time out after 30 seconds.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

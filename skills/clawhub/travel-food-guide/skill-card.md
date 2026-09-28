@@ -1,40 +1,57 @@
-## Description: <br>
-帮旅行者找景点周边餐厅、当地必吃特色、生成多日餐饮计划，旅途中不踩雷、不错过当地特色。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮旅行者找景点周边餐厅、当地必吃特色、生成多日餐饮计划，旅途中不踩雷、不错过当地特色。暑期旅行美食探店，各地特色小吃推荐
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to find nearby restaurants, discover local specialty foods, and draft multi-day meal plans from locations, budgets, cuisines, and dietary preferences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel food searches and location terms are sent to the publisher proxy and the underlying map POI service. <br>
-Mitigation: Install only if this data flow is acceptable, and avoid highly sensitive home, workplace, or private itinerary locations. <br>
-Risk: The release includes an embedded fallback proxy token, which is a credential hygiene issue. <br>
-Mitigation: The publisher should remove or rotate the fallback token and rely on a securely provided PROXY_TOKEN. <br>
+## Use Case:
 
+Travelers and travel-planning agents use this skill to find restaurants near destinations, surface local specialty foods, and draft multi-day dining plans based on location, budget, preferences, and itinerary context.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-food-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance, Shell commands] <br>
-**Output Format:** [Natural-language or Markdown response backed by JSON restaurant, specialty-food, or meal-plan results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Live restaurant searches send city, location, cuisine, budget, and radius terms to the publisher proxy and map POI service; specialty-food and meal-plan responses may use bundled city food knowledge.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Travel locations, dining preferences, and restaurant search terms are sent to the skill proxy and downstream map POI service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when that data flow is acceptable and avoid entering sensitive personal details that are not needed for restaurant search or meal planning.
+
+Risk: The skill uses a proxy token for access to the restaurant search service.
+
+Mitigation: Scope the proxy token specifically to this service and do not reuse it for unrelated accounts or infrastructure.
+
+Risk: Restaurant details and availability may be incomplete or stale because the skill provides POI information and does not support booking, queue status, delivery lookup, or live review verification.
+
+Mitigation: Treat recommendations as planning guidance and verify critical restaurant details directly before travel or purchase decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-food-guide)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, JSON, guidance]
+
+**Output Format:** [Natural-language guidance derived from JSON tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include restaurant names, addresses, distances, ratings when available, average cost estimates, local specialty lists, food streets, and day-by-day meal plans.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

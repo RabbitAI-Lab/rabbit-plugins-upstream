@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/skill-for-ragflow",
   "slug": "skill-for-ragflow",
   "ownerHandle": null,
-  "version": "1.6.0",
-  "updatedAt": 1783557536431,
-  "contentHash": "d40d97260a6b49bb6390a9a41934eb34992fe6838e9f28c81fc3944d8ea3716b",
-  "fetchedAt": "2026-07-26T18:17:54.331Z"
+  "version": "3.0.0",
+  "updatedAt": 1790304081259,
+  "contentHash": "a507a602b4b28f2279ef34c09d0adccef1b4e24b511a95c67d5c19acc0458dc1",
+  "fetchedAt": "2026-09-28T17:31:53.579Z"
 }

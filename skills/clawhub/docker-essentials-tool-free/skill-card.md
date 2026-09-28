@@ -1,39 +1,53 @@
-## Description: <br>
-Provides Docker container lifecycle, image, Docker Compose, network, and volume management guidance for developer workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Docker基础工具免费版 helps developers manage Docker containers, images, Docker Compose projects, networks, and volumes through Docker CLI guidance and commands.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers use this skill to have an agent propose or run Docker CLI and Docker Compose commands for local containerized development, single-host multi-container applications, and container troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad Docker CLI authority, including destructive cleanup operations that may remove containers, images, networks, or volumes. <br>
-Mitigation: Before prune, rm -f, rmi, volume rm, or docker compose down -v actions, require the agent to show the exact target resources and obtain explicit confirmation. <br>
-Risk: Docker commands may mount local directories, expose ports, enter containers, or interact with private registry credentials. <br>
-Mitigation: Review generated commands before execution, restrict mounts and ports to the intended development scope, and handle private registry credentials outside shared prompts or logs. <br>
+## Use Case:
 
+Developers and engineers use this skill for local containerized development, single-host Docker Compose orchestration, and container troubleshooting. It is intended for explicit Docker management tasks where the agent can propose or run Docker CLI commands.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Docker CLI commands, Docker Compose YAML, Dockerfile snippets, and troubleshooting guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on local Docker Engine and Docker Compose availability; command execution depends on the host agent's tool permissions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill metadata) <br>
+Risk: Docker removal, prune, down -v, and volume deletion commands can delete containers, images, networks, or saved data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require the agent to list the exact targets and obtain explicit approval before running destructive Docker commands.
+
+Risk: Docker commands can affect important local development or single-host deployment environments.
+
+Mitigation: Review proposed commands before execution and use the skill only for explicit Docker tasks in environments where changes are acceptable.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/docker-essentials-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with inline shell, YAML, and Dockerfile code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include executable Docker CLI commands that affect containers, images, networks, and volumes.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

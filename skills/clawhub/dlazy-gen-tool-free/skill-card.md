@@ -1,43 +1,64 @@
-## Description: <br>
-Lightweight AI image generation helper for text-to-image workflows and basic image editing for personal creative prototyping. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language agent skill that guides use of the dlazy CLI for text-to-image generation, basic image editing, foreground segmentation, and super-resolution.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External creators and developers use this skill to generate social media images, product concept visuals, personal project assets, and simple post-processing commands through the dlazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts or selected images may be sent to dlazy's cloud service. <br>
-Mitigation: Use only prompts and images that are acceptable for external cloud processing; avoid confidential, regulated, or personal content. <br>
-Risk: The skill requires a dlazy account/API key and a globally installed dlazy CLI. <br>
-Mitigation: Install the CLI only in trusted environments and keep the API key out of chats, logs, screenshots, and source repositories. <br>
-Risk: The free edition supports only image generation, foreground separation, super-resolution, and common aspect ratios. <br>
-Mitigation: Confirm the requested task is within the free-edition image workflow before running commands. <br>
+## Use Case:
 
+External creators and developers use this skill to generate or edit images through the dlazy CLI for social media visuals, product concept images, personal project assets, foreground extraction, and super-resolution enhancement.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/dlazy-gen-tool-free) <br>
-- [Publisher Profile](https://clawhub.ai/user/thcjp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and occasional code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include dlazy CLI result status and cloud-hosted image URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+Risk: The skill asks agents to activate for broader AI, chat, orchestration, and automation tasks than its stated image-generation purpose supports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for dlazy image generation or image editing tasks, and do not route general chat, agent orchestration, file search, or arbitrary automation requests to it.
+
+Risk: Installing @dlazy/cli globally and running dlazy commands executes third-party code and calls an external service.
+
+Mitigation: Review the package and commands before installation or execution, run them in a restricted environment where practical, and confirm that prompts and files may be sent to the external service.
+
+Risk: The skill requires a dlazy API key, which can be exposed through hardcoded values, shared config files, shell history, or logs.
+
+Mitigation: Prefer the DLAZY_API_KEY environment variable or an approved secret store, avoid committing credentials, and keep local config files limited to the current user.
+
+Risk: Reference images and prompts may contain sensitive or unintended content.
+
+Mitigation: Restrict reference images to intended files and avoid sending sensitive prompts or images unless the deployment policy allows that external processing.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/dlazy-gen-tool-free)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/thcjp)
+- [Artifact Skill Definition](artifact/SKILL.md)
+- [dlazy API Key Dashboard](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash and Python code blocks plus dlazy CLI result references.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Node.js 16+, the @dlazy/cli package, a dlazy API key, network access to the dlazy service, and user-provided prompts or reference images.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

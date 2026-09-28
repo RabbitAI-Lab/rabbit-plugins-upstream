@@ -18,10 +18,10 @@
 {{/each}}
 {{/if}}
 
-## Milestone Coverage (Pillar 2 · 里程碑↔活动归集)
+## Milestone Coverage (Pillar 2 · Milestone ↔ Activity Rollup)
 
-> 每个里程碑下直接归属的活动（按叶子 `milestone_ref` 或依赖末端落在里程碑上）。
-> 一个支付里程碑可对应多个活动；支付顺序见下节 Payment Linkage。
+> The activities directly attributed to each milestone (via the leaf `milestone_ref`, or a dependency endpoint landing on the milestone).
+> A payment milestone may map to multiple activities; payment order is covered in the Payment Linkage section below.
 
 | Milestone | Payment ID | Scheduled | # Activities | Activities |
 |-----------|------------|-----------|-------------|------------|
@@ -29,10 +29,10 @@
 | {{this.id}} {{this.name}} | {{this.payment_id}} | {{this.date}} | {{this.leaf_count}} | {{this.leaves}} |
 {{/each}}
 
-## Payment Linkage (Pillar 4 · 支付里程碑↔排期联动)
+## Payment Linkage (Pillar 4 · Payment Milestone ↔ Schedule Linkage)
 
-> 收款节奏须等于交付节奏：每条固定费率支付行 → 其里程碑 → 排期日 vs 合同 due_date。
-> 一致=linked；排期晚于合同 due=drift（须纠偏或走变更）；无合同 due=no-due（须补合同日期）。
+> Collection cadence must equal delivery cadence: each fixed-fee payment row → its milestone → scheduled date vs contract due_date.
+> Aligned = linked; schedule later than contract due = drift (must be corrected or go through a change); no contract due = no-due (contract date must be supplied).
 
 | SOW | Payment | Milestone | Scheduled | Contract Due | Fee | Status |
 |-----|---------|-----------|-----------|-------------|-----|--------|

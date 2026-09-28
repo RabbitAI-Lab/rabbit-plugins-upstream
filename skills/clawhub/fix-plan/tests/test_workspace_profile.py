@@ -1,0 +1,310 @@
+#!/usr/bin/env python3
+"""Tests for workspace_profile.detect_workspace path matching.
+
+Regression under test: `cwd_match` tokens are written as path fragments
+("ghq/github.com/<org>"), but the matcher compared them against single path
+components. No multi-segment token could ever match, so every workspace fell
+through to "default" — meaning localhost endpoints and the wrong collections
+for every consumer, silently.
+
+The fix must stay segment-exact so a token still cannot match a longer
+component that merely contains it.
+
+Run: python3 skills/fix-plan/tests/test_workspace_profile.py
+"""
+
+import json
+import sys
+import tempfile
+from pathlib import Path
+
+sys.path.insert(0, str(Path(__file__).resolve().parent.parent / "scripts"))
+import workspace_profile  # noqa: E402
+
+PASS = 0
+FAIL = 0
+
+
+def check(name, expected, actual):
+    global PASS, FAIL
+    if expected == actual:
+        PASS += 1
+        print(f"PASS  {name}")
+    else:
+        FAIL += 1
+        print(f"FAIL  {name}\n        expected=[{expected}]\n        actual  =[{actual}]")
+
+
+# Checked before any test below monkeypatches CONFIG_FILE_AGENTS away from
+# its real default.
+check(
+    "T18 CONFIG_FILE_AGENTS constant points at ~/.agents/config.json",
+    str(Path.home() / ".agents" / "config.json"),
+    str(getattr(workspace_profile, "CONFIG_FILE_AGENTS", None)),
+)
+
+CONFIG = {
+    "profiles": {
+        "wsMulti": {
+            "cwd_match": ["ghq/github.com/wsMulti", "WSMULTI"],
+            "qdrant_url": "http://example.invalid:30333",
+            "workspace_name": "wsMulti",
+        },
+        "wsSingle": {
+            "cwd_match": ["wsSingle"],
+            "workspace_name": "wsSingle",
+        },
+    }
+}
+
+tmp = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
+json.dump(CONFIG, tmp)
+tmp.close()
+workspace_profile.CONFIG_FILE = Path(tmp.name)
+# Point the v2 and agents locations at paths that cannot exist so the v1
+# cases below are not silently served by whatever real config happens to be
+# on this machine. CONFIG_FILE_AGENTS outranks both — the guard exists for
+# it too, or a live ~/.agents/config.json on the running machine leaks into
+# every case below that doesn't explicitly override it.
+setattr(workspace_profile, "CONFIG_FILE_V2", Path(tmp.name + ".absent-v2"))
+setattr(workspace_profile, "CONFIG_FILE_AGENTS", Path(tmp.name + ".absent-agents"))
+
+check(
+    "T1 multi-segment cwd_match matches",
+    "wsMulti",
+    workspace_profile.detect_workspace("/Users/x/ghq/github.com/wsMulti/repo"),
+)
+check(
+    "T2 single-component token still matches",
+    "wsSingle",
+    workspace_profile.detect_workspace("/Users/x/ghq/github.com/wsSingle/repo"),
+)
+check(
+    "T3 substring-only component does not match",
+    "default",
+    workspace_profile.detect_workspace("/Users/x/ghq/github.com/not-wsSingle-scratch"),
+)
+check(
+    "T4 unrelated path falls back to default",
+    "default",
+    workspace_profile.detect_workspace("/Users/x/somewhere/else"),
+)
+check(
+    "T5 matched profile resolves real endpoint (not the localhost default)",
+    "http://example.invalid:30333",
+    workspace_profile.get_profile(
+        target_path="/Users/x/ghq/github.com/wsMulti/repo"
+    )["qdrant_url"],
+)
+
+# --- v2 schema (roles + kind) -----------------------------------------
+# The v2 config names roles rather than vendors, so a vendor swap is a
+# one-line edit. Consumers here still read the flat vendor-named keys, so
+# v2 must be translated back down to them — otherwise adopting v2 silently
+# hands every consumer the placeholder defaults.
+CONFIG_V2 = {
+    "version": 2,
+    "defaults": {
+        "backlog": {"kind": "none"},
+        "checklist": {"kind": "file", "path": ".agents/fix_plan.md"},
+        "rag": {"kind": "none"},
+        "wiki": {"kind": "none"},
+    },
+    "profiles": {
+        "wsV2": {
+            "match": {"path_components": ["ghq/github.com/wsV2"]},
+            "roles": {
+                "backlog": {
+                    "kind": "plane",
+                    "endpoint": "https://plane.v2.invalid",
+                    "project": "proj-v2",
+                    "token_env": "V2_TOKEN",
+                },
+                "checklist": {"kind": "file", "path": ".agents/fix_plan.md"},
+                "rag": {
+                    "kind": "qdrant",
+                    "endpoint": "http://v2.invalid:30333",
+                    "collections": {
+                        "memory": "v2-memory",
+                        "task": "v2-task",
+                        "wiki": "v2-wiki",
+                    },
+                },
+                "wiki": {"kind": "git", "path": "/tmp/wsV2/llm-wiki"},
+            },
+        },
+        "wsV2NoRag": {
+            "match": {"path_components": ["wsV2NoRag"]},
+            "roles": {"rag": {"kind": "none"}},
+        },
+    },
+}
+
+tmp2 = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
+json.dump(CONFIG_V2, tmp2)
+tmp2.close()
+setattr(workspace_profile, "CONFIG_FILE_V2", Path(tmp2.name))
+
+V2_PATH = "/Users/x/ghq/github.com/wsV2/repo"
+check(
+    "T6  v2 config takes precedence over v1",
+    "wsV2",
+    workspace_profile.detect_workspace(V2_PATH),
+)
+p = workspace_profile.get_profile(target_path=V2_PATH)
+check("T7  v2 rag endpoint -> qdrant_url",        "http://v2.invalid:30333", p["qdrant_url"])
+check("T8  v2 collections -> flat keys",          "v2-wiki",                 p["qdrant_wiki_collection"])
+check("T9  v2 backlog -> plane_host",             "https://plane.v2.invalid", p["plane_host"])
+check("T10 v2 backlog token_env -> plane_token_env", "V2_TOKEN",             p["plane_token_env"])
+check("T11 v2 wiki path -> llm_wiki_path",        "/tmp/wsV2/llm-wiki",      p["llm_wiki_path"])
+check("T12 v2 checklist path -> tracker_root",    ".agents",                 p["tracker_root"])
+
+# DEFAULT_PROFILE already carries workspace_name="default", so a setdefault
+# cannot correct it. v1 configs hid this by naming workspace_name explicitly
+# in every profile; a translated v2 profile must supply it too, or the report
+# claims "default" while serving a matched profile's real endpoints.
+check("T15 v2 profile reports its own workspace_name", "wsV2", p["workspace_name"])
+
+# kind "none" must not fabricate an endpoint — it means "not configured".
+pn = workspace_profile.get_profile(target_path="/Users/x/wsV2NoRag/repo")
+check("T13 v2 kind=none leaves qdrant_url unset", "",                        pn["qdrant_url"])
+
+# --- v2 config whose only profile omits `roles` (top-level defaults only) ---
+# Regression: v2 was detected per-profile via `roles` presence. When no profile
+# carries `roles`, the whole config was read as v1 and translated through
+# v1_to_roles, replacing every top-level default receiver with the v1
+# placeholder. version==2 alone must translate it.
+CONFIG_V2_BARE = {
+    "version": 2,
+    "defaults": {
+        "backlog": {
+            "kind": "plane",
+            "endpoint": "https://plane.bare.invalid",
+            "project": "bare-proj",
+            "token_env": "BARE_TOKEN",
+        },
+        "checklist": {"kind": "file", "path": ".bare/fix_plan.md"},
+        "rag": {"kind": "none"},
+        "wiki": {"kind": "none"},
+    },
+    "profiles": {"wsBare": {"match": {"path_components": ["wsBare"]}}},
+}
+tmp3 = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
+json.dump(CONFIG_V2_BARE, tmp3)
+tmp3.close()
+setattr(workspace_profile, "CONFIG_FILE_V2", Path(tmp3.name))
+pb = workspace_profile.get_profile(target_path="/tmp/wsBare/repo")
+check("T16 no-roles v2 keeps default backlog", "https://plane.bare.invalid", pb["plane_host"])
+check("T17 no-roles v2 keeps default tracker", ".bare",                      pb["tracker_root"])
+
+# v1 remains readable when no v2 file is present (migration window).
+setattr(workspace_profile, "CONFIG_FILE_V2", Path(tmp2.name + ".absent"))
+check(
+    "T14 falls back to v1 when v2 absent",
+    "wsMulti",
+    workspace_profile.detect_workspace("/Users/x/ghq/github.com/wsMulti/repo"),
+)
+
+# --- CONFIG_FILE_AGENTS priority (~/.agents/config.json, the Syncthing-synced
+# canonical copy) ---------------------------------------------------------
+# Regression under test: two independently-edited config copies
+# (~/.agents/config.json and ~/.config/agent-workspace/config.json) can
+# diverge, and only the latter was ever actually read — an edit to the
+# former had no effect while looking identically valid. CONFIG_FILE_AGENTS
+# must be consulted first, ahead of both older paths. (T18, checking the
+# constant's real default, runs earlier in this file — before this section's
+# monkeypatching starts.)
+
+CONFIG_AGENTS_WINS = {
+    "profiles": {
+        "wsAgents": {
+            "cwd_match": ["wsAgentsPriority"],
+            "qdrant_url": "http://agents-wins.invalid:1",
+            "workspace_name": "wsAgents",
+        },
+    }
+}
+tmp_agents = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
+json.dump(CONFIG_AGENTS_WINS, tmp_agents)
+tmp_agents.close()
+
+CONFIG_V2_LOSES = {
+    "profiles": {
+        "wsAgents": {
+            "cwd_match": ["wsAgentsPriority"],
+            "qdrant_url": "http://v2-loses.invalid:2",
+            "workspace_name": "wsAgents",
+        },
+    }
+}
+tmp_v2_loses = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
+json.dump(CONFIG_V2_LOSES, tmp_v2_loses)
+tmp_v2_loses.close()
+
+setattr(workspace_profile, "CONFIG_FILE_AGENTS", Path(tmp_agents.name))
+setattr(workspace_profile, "CONFIG_FILE_V2", Path(tmp_v2_loses.name))
+check(
+    "T19 CONFIG_FILE_AGENTS outranks CONFIG_FILE_V2 when both exist",
+    "http://agents-wins.invalid:1",
+    workspace_profile.get_profile(
+        target_path="/Users/x/wsAgentsPriority/repo"
+    )["qdrant_url"],
+)
+
+# When CONFIG_FILE_AGENTS is absent, the older CONFIG_FILE_V2 path must still
+# be read — the new priority tier is additive, not a replacement.
+setattr(workspace_profile, "CONFIG_FILE_AGENTS", Path(tmp_agents.name + ".absent"))
+check(
+    "T20 falls back to CONFIG_FILE_V2 when CONFIG_FILE_AGENTS absent",
+    "http://v2-loses.invalid:2",
+    workspace_profile.get_profile(
+        target_path="/Users/x/wsAgentsPriority/repo"
+    )["qdrant_url"],
+)
+
+# --- k3s target keys survive the CONFIG_FILE_AGENTS -> flat translation ---
+# A config declared only at the new highest-priority path must still carry
+# k3s_workload / k3s_namespace / plane_host through v2_profile_to_flat, the
+# same defect class that previously dropped token_file and workspace_slug.
+CONFIG_AGENTS_K3S = {
+    "version": 2,
+    "profiles": {
+        "wsAgentsK3s": {
+            "match": {"path_components": ["wsAgentsK3s"]},
+            "roles": {
+                "backlog": {
+                    "kind": "plane",
+                    "endpoint": "https://plane.agents-k3s.invalid",
+                    "k3s_namespace": "plane",
+                    "k3s_workload": "deploy/plane-api-wl",
+                }
+            },
+        }
+    },
+}
+tmp_agents_k3s = tempfile.NamedTemporaryFile("w", suffix=".json", delete=False, encoding="utf-8")
+json.dump(CONFIG_AGENTS_K3S, tmp_agents_k3s)
+tmp_agents_k3s.close()
+
+setattr(workspace_profile, "CONFIG_FILE_AGENTS", Path(tmp_agents_k3s.name))
+setattr(workspace_profile, "CONFIG_FILE_V2", Path(tmp_agents_k3s.name + ".absent-v2"))
+p_agents_k3s = workspace_profile.get_profile(target_path="/tmp/wsAgentsK3s/repo")
+check(
+    "T21 CONFIG_FILE_AGENTS-sourced profile keeps plane_host",
+    "https://plane.agents-k3s.invalid",
+    p_agents_k3s["plane_host"],
+)
+check(
+    "T22 CONFIG_FILE_AGENTS-sourced profile keeps k3s_namespace",
+    "plane",
+    p_agents_k3s.get("k3s_namespace"),
+)
+check(
+    "T23 CONFIG_FILE_AGENTS-sourced profile keeps k3s_workload",
+    "deploy/plane-api-wl",
+    p_agents_k3s.get("k3s_workload"),
+)
+
+print("---")
+print(f"pass={PASS} fail={FAIL}")
+sys.exit(1 if FAIL else 0)

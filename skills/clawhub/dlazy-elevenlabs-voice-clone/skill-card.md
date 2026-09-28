@@ -1,44 +1,60 @@
-## Description: <br>
-ElevenLabs Instant Voice Cloning (IVC) uploads a clean voice sample to create a custom voice usable with ElevenLabs text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use dLazy's ElevenLabs Instant Voice Cloning to create a custom voice from a clean voice sample for text-to-speech.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke the pinned dLazy CLI for ElevenLabs voice cloning from an authorized clean voice sample. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-supplied audio may be uploaded to dLazy-hosted services for processing. <br>
-Mitigation: Use only audio that is appropriate to send to dLazy services and review the service terms before using sensitive material. <br>
-Risk: Voice cloning can misuse a person's voice if authorization is unclear. <br>
-Mitigation: Clone only voices the user is authorized to clone. <br>
-Risk: The skill depends on a third-party CLI package and hosted API. <br>
-Mitigation: Review the pinned @dlazy/cli package before installation in sensitive environments. <br>
+## Use Case:
 
+Creators and developers use this skill to guide voice-cloning requests using a permitted voice sample and a dLazy account.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown instructions with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and the pinned @dlazy/cli 1.2.3 package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Voice samples are sensitive and may be sent to dLazy or ElevenLabs-related services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only your own voice or a voice you have explicit permission to clone, and confirm you are comfortable uploading the sample before use.
+
+Risk: Saved API credentials on shared machines may be exposed to other users.
+
+Mitigation: Prefer per-invocation credentials on shared machines.
+
+Risk: Published command examples and the sample output schema are inconsistent with voice cloning.
+
+Mitigation: Check the installed CLI's help and actual response before relying on examples or automating the output.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-voice-clone)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package (listed in skill metadata)](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown with shell commands and JSON result guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI may return result metadata or an asynchronous task ID; verify its actual response.]
+
+## Skill Version(s):
+
+1.3.21 (source: ClawHub release evidence; skill frontmatter lists 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

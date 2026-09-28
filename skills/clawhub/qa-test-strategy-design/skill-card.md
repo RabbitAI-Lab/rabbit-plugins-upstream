@@ -1,39 +1,48 @@
-## Description: <br>
-Helps QA teams design layered, risk-based test strategies for new projects, iterations, refactors, and urgent fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs risk-based, layered test strategies for new projects and iterations, covering scope, testing methods, resources, and entry and exit criteria.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA leads, testers, developers, and project teams use this skill to plan testing around project risks and resource constraints, including coverage priorities, test levels, and release-readiness criteria.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: A generated test strategy could be mistaken for approval to change CI/CD pipelines or authorize a release.
+
+Mitigation: Review the strategy with the responsible team and obtain authorization before changing pipelines or making release decisions.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to turn risk assessments and requirement analysis into an actionable test strategy covering scope, layered test approach, resource allocation, and entry and exit criteria. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can be triggered by broad Chinese testing-planning phrases, which may produce a test strategy when the request is not actually about QA strategy. <br>
-Mitigation: Confirm that the user is asking for test strategy design before relying on the generated plan. <br>
-Risk: Generated release, CI/CD, and testing recommendations could be mistaken for approved operational actions. <br>
-Mitigation: Treat outputs as planning guidance only and review them before any release decision, pipeline change, or production action. <br>
+**Output Format:** [Chinese-language Markdown test strategy document]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
+**Other Properties Related to Output:** [Includes a risk matrix, layered test plan, resource allocation, entry and exit criteria, and traceability IDs.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown strategy document with structured sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs risk matrices, strategy IDs, requirement traceability, scope definitions, test approach guidance, resource plans, and entry and exit criteria.] <br>
+1.7.7 (source: frontmatter and ClawHub release)
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

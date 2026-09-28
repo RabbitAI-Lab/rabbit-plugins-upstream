@@ -1,40 +1,53 @@
-## Description: <br>
-Provides QA teams with guidance for managing authorized non-production test environments, diagnosing environment issues, and preparing traceable test data checklists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides QA teams through test-environment setup, health checks, troubleshooting, and test-data preparation and cleanup.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and development teams use this skill when a test environment is unstable, unavailable, newly deployed, or requires prepared test data. It helps structure environment requirements, health checks, configuration guidance, maintenance planning, and data preparation for non-production testing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated cleanup, restart, or configuration guidance could be applied to the wrong environment. <br>
-Mitigation: Use only in authorized non-production environments and confirm the target environment name or address before acting. <br>
-Risk: Data cleanup or reset guidance could remove useful test data or affect shared testing workflows. <br>
-Mitigation: Confirm backups and approvals before data changes, prefer a dry run first, and coordinate shared-environment windows with affected teams. <br>
+## Use Case:
 
+QA engineers and developers use this skill to plan and check authorized test environments, troubleshoot environment issues, and prepare and maintain test data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-env-data) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown checklist and structured guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Environment configurations should include traceable ENV-XXXX identifiers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: Changes or cleanup may affect the wrong environment or disrupt shared test services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact target is an authorized non-production environment; obtain human approval for restarts, configuration changes, or data modifications and coordinate shared-environment changes.
+
+Risk: Test-data cleanup may remove needed data.
+
+Mitigation: Confirm a usable backup before cleanup and trial bulk operations on a limited scope first.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/kokxi/skills/qa-test-env-data)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Configuration guidance, Checklists]
+
+**Output Format:** [Markdown with environment health and data-preparation checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Environment configurations use unique ENV-XXXX identifiers; guidance includes environment requirements, design, configuration, and maintenance plans.]
+
+## Skill Version(s):
+
+1.7.7 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,70 @@
-## Description: <br>
-Google Classroom API integration with managed OAuth for managing courses, assignments, students, teachers, announcements, and submissions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Classroom API integration with managed OAuth for managing courses, assignments, students, teachers, announcements, and submissions.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Google Classroom data through a Maton-managed OAuth connection, including course, coursework, submission, roster, invitation, topic, and announcement workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton-mediated OAuth access to Google Classroom data and requires a sensitive MATON_API_KEY. <br>
-Mitigation: Keep MATON_API_KEY private, install only when this access is intended, and revoke unused Google Classroom connections. <br>
-Risk: Write operations can create, update, delete, grade, return, or invite resources in the connected Google Classroom account. <br>
-Mitigation: Confirm the target resource, selected connection, and intended effect with the user before any create, update, delete, grade, return, or invitation action. <br>
-Risk: Multiple active Google Classroom connections can route requests to the wrong account if no connection is selected. <br>
-Mitigation: Include the Maton-Connection header when multiple connections exist and verify the selected connection before acting. <br>
+## Use Case:
 
+Developers and agents use this skill to operate Google Classroom through Maton-managed OAuth, including reading classroom data and performing user-approved course, coursework, roster, submission, and announcement actions.
 
-## Reference(s): <br>
-- [Google Classroom API Documentation](https://developers.google.com/workspace/classroom/reference/rest) <br>
-- [Course Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses) <br>
-- [CourseWork Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork) <br>
-- [StudentSubmissions Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork.studentSubmissions) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with API examples and inline Bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Google Classroom connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Authorizing the integration can grant access to the selected Google Classroom account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, review requested scopes, and connect only the account needed for the current task.
+
+Risk: Writes, new connections, hosted functions, triggers, and persistent forwarding can change classroom data or continue moving event data after setup.
+
+Mitigation: Confirm each write or automation with the user, review destinations and scopes, and delete unused connections, functions, or triggers when the task is complete.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-classroom)
+- [Maton homepage](https://maton.ai)
+- [Google Classroom API Documentation](https://developers.google.com/workspace/classroom/reference/rest)
+- [Course Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses)
+- [CourseWork Resource Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork)
+- [StudentSubmissions Reference](https://developers.google.com/workspace/classroom/reference/rest/v1/courses.courseWork.studentSubmissions)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, Code, API Calls]
+
+**Output Format:** [Markdown guidance with inline shell, Python, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce Maton CLI commands, raw HTTP examples, or hosted function snippets for user-approved Google Classroom workflows.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

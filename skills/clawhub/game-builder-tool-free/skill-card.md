@@ -1,46 +1,59 @@
-## Description: <br>
-用自然语言生成可玩的浏览器 3D 小游戏，支持迭代修改与本地预览。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates playable browser-based 3D mini-games from natural-language Chinese prompts, with iterative edits and local preview support.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External developers, personal creators, and game enthusiasts use this skill to turn natural-language game ideas into playable browser-based Three.js prototypes and iterate on them locally. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent may create or modify local game files while building or iterating on a prototype. <br>
-Mitigation: Run the skill in a scoped workspace and review changed files before reuse or publication. <br>
-Risk: Local preview can start a localhost server for generated browser games. <br>
-Mitigation: Bind preview use to local development only and stop the server when review is complete. <br>
-Risk: Generated games load Three.js from jsdelivr, which requires network access on first load. <br>
-Mitigation: Confirm network policy allows the CDN or replace the dependency with an approved local copy before deployment. <br>
-Risk: Broad trigger wording could activate the skill outside focused game-building tasks. <br>
-Mitigation: Keep use scoped to browser game generation, iteration, and preview workflows. <br>
+## Use Case:
 
+External developers, game hobbyists, and creative prototypers use this skill to turn Chinese natural-language game concepts into browser-playable Three.js prototypes, then iterate on mechanics, controls, HUDs, and local preview behavior.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/game-builder-tool-free) <br>
-- [Three.js module CDN](https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js) <br>
-- [Three.js addons CDN](https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks and generated browser game files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or modify local game files, start a localhost preview server, and load Three.js from jsdelivr.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter says 1.0.0) <br>
+Risk: The ClawHub security summary flags unsupported temporary sharing-link claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill for local browser preview only unless the publisher documents where shared files are hosted, who can access them, and how links expire.
+
+Risk: The ClawHub security guidance says the trigger wording is broader than the skill's actual 3D game prototyping purpose.
+
+Mitigation: Narrow activation to local browser 3D game generation, Three.js learning prototypes, and iterative mini-game edits.
+
+Risk: The artifact can produce shell commands and local files during preview workflows.
+
+Mitigation: Review commands before execution, avoid passing untrusted user input into shell commands, and inspect generated HTML before reuse or publication.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/game-builder-tool-free)
+- [Three.js 0.160.0 module CDN](https://cdn.jsdelivr.net/npm/three@0.160.0/build/three.module.js)
+- [Three.js 0.160.0 addon CDN](https://cdn.jsdelivr.net/npm/three@0.160.0/examples/jsm/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with HTML, JavaScript, and shell command blocks; generated game output is usually a single self-contained HTML file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local files such as index.html and progress.md and preview them through a local browser server; generated games load Three.js from jsDelivr CDN.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

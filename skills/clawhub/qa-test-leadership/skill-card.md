@@ -1,42 +1,53 @@
-## Description: <br>
-This skill helps QA leaders manage testing teams, set goals and performance standards, define growth plans, evaluate staff, design interview standards, and build team structure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language guidance and templates for leading QA teams, assessing performance, hiring testers, and planning team development.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA managers, test leads, and engineering leaders use this skill to create structured management plans for testing teams, including team assessments, capability models, performance evaluation, hiring standards, and improvement roadmaps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on generic management terms such as goals. <br>
-Mitigation: Confirm the request is about QA or testing leadership before applying the skill's recommendations. <br>
-Risk: Management, hiring, or performance guidance can affect people decisions if used without review. <br>
-Mitigation: Use the output as planning support and review it against organizational policy, applicable employment requirements, and manager judgment before action. <br>
-Risk: A management plan may omit relevant team roles or assessment context. <br>
-Mitigation: Apply the artifact's recovery guidance: supplement the team capability assessment, then redesign the plan. <br>
+## Use Case:
 
+QA leads and managers use this skill to plan team structure, set goals and performance criteria, assess skills, and design hiring interviews and development plans.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-leadership) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or structured text with LEAD-XXXX traceability identifiers] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include team assessments, improvement roadmaps, stakeholder plans, metrics frameworks, interview standards, and recovery guidance for missing roles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: SKILL.md frontmatter and server release) <br>
+Risk: Chinese-language guidance may not fit non-Chinese workflows or management topics outside QA.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check language and scope fit, and adapt recommendations to the team's context before use.
+
+Risk: Generic performance metrics and hiring criteria may be inappropriate for individual personnel decisions.
+
+Mitigation: Have a responsible manager review and tailor criteria to the role, team, and applicable HR policies before making decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-test-leadership)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Chinese-language Markdown plans, assessment frameworks, and interview guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Management plans may use LEAD-XXXX identifiers and include team assessment, improvement roadmap, stakeholder plan, and metrics framework.]
+
+## Skill Version(s):
+
+1.7.7
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

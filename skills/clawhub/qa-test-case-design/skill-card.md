@@ -1,44 +1,57 @@
-## Description: <br>
-Transforms completed QA analysis inputs into structured, prioritized, traceable test case designs with coverage notes and review guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns completed requirements, scenario, and boundary analyses into prioritized, traceable Chinese-language QA test cases.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test leads use this skill after requirements, scenario, boundary, or combination analysis to turn those inputs into P0-P3 test case sets with traceability, coverage summaries, and review-ready expected results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill before enough upstream QA analysis is available. <br>
-Mitigation: Provide clear requirements and, when possible, completed scenario, boundary, or combination analysis before using the generated case design. <br>
-Risk: Generated test cases can miss product-specific details or include assumptions that do not match the target system. <br>
-Mitigation: Have a QA owner review the cases, fill in system-specific test steps, and verify traceability and coverage before execution. <br>
+## Use Case:
 
+QA engineers and testers use this skill to turn completed requirement and scenario analysis into reviewable test-case sets with P0–P3 priorities, expected results, and coverage notes. Testers supply execution steps for their actual system.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-test-case-design) <br>
-- [Coverage and Quality Standards](references/coverage-and-quality.md) <br>
-- [Design Methods Reference](references/design-methods.md) <br>
-- [Output Template](references/output-template-full.md) <br>
-- [Review Standards](references/review-standards.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reports and tables with structured test case fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Leaves test steps for the user to complete and emphasizes requirement-based design rather than code inspection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Chinese-only output and fixed templates may not fit an English-language or differently formatted QA workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm language and test-management format requirements before adoption; adapt or review the cases before importing them.
+
+Risk: Broad activation for testing-related requests may produce cases before the underlying requirements and scenarios are ready.
+
+Mitigation: Complete requirements, scenario, and boundary analysis first; review coverage and fill in system-specific execution steps.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-test-case-design)
+- [Test-case design methods](references/design-methods.md)
+- [Coverage and quality standards](references/coverage-and-quality.md)
+- [Full output template](references/output-template-full.md)
+- [Review standards](references/review-standards.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese-language Markdown tables and reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Traceable case IDs, P0–P3 priorities, coverage notes, and test steps left for testers to complete.]
+
+## Skill Version(s):
+
+1.7.7 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

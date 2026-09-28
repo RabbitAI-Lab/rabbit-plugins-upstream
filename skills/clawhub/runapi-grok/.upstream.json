@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-grok",
   "slug": "runapi-grok",
   "ownerHandle": null,
-  "version": "0.2.1",
-  "updatedAt": 1784619635436,
-  "contentHash": "f9a9593b31abd1b4fddfd1092d581a608e52165d1ade1156e8e1b8af5fe1bdfe",
-  "fetchedAt": "2026-07-26T18:09:18.521Z"
+  "version": "0.2.6",
+  "updatedAt": 1790574671664,
+  "contentHash": "4b47edaf12bec1f0c9ee637d98ba60cb6b2d82f19ecc7c91124db187ca20896a",
+  "fetchedAt": "2026-09-28T17:22:40.698Z"
 }

@@ -1,44 +1,61 @@
-## Description: <br>
-A Chinese reading-comprehension tutoring skill that helps learners analyze modern prose questions through common error diagnosis, close-reading steps, examiner-perspective reasoning, and guided review rather than direct answer delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向中文中小学生的现代文阅读教练，引导学生先理解文本，再练习依据原文组织规范答案。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and tutors use this skill for Chinese modern-reading practice, especially diagnosing why a learner loses points, identifying the examiner's intended test point, and improving answer structure without simply giving the final answer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may encourage recording recurring mistakes, useful passages, and review reminders as part of an education profile. <br>
-Mitigation: Use clear consent and data-minimization practices, avoid saving sensitive personal content, and allow learners or guardians to review and remove stored learning notes. <br>
-Risk: Reading-comprehension feedback can be incomplete or mismatched to a specific teacher, exam board, or rubric. <br>
-Mitigation: Treat guidance as tutoring support, compare final answers against the assigned rubric or teacher feedback, and keep the learner's own reasoning visible before revision. <br>
+## Use Case:
 
+Students in upper primary and junior secondary school use this skill to understand Chinese reading passages, practice exam-style responses, and review mistakes; younger pupils need an accompanying parent or teacher.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-reading-decoder) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Chinese error dimension table](references/chinese-error-dimension-table.md) <br>
-- [Reading-comprehension pit training](references/pit-training.md) <br>
-- [Modern prose question-type library](references/question-type-library.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localized emergency contacts, curriculum assumptions, and minor-consent handling.
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with structured feedback, diagnostic prompts, answer-framework checklists, and review questions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill is designed to prompt learner reasoning and revision instead of directly supplying final reading-comprehension answers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student reading profiles or reminders could be shared without permission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profile sharing and reminders off unless the student or guardian explicitly enables them; honor access, deletion, and pause requests.
+
+Risk: Crisis referrals may give inappropriate contacts outside Mainland China.
+
+Mitigation: Localize emergency contacts before deployment elsewhere; ask the student's region when uncertain and direct them to a trusted adult.
+
+Risk: AI-generated questions or feedback may be inaccurate or encourage answer copying.
+
+Mitigation: Check generated questions, ground feedback in the passage, and prompt students to attempt the original question before offering examples.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-reading-decoder)
+- [Chinese reading error dimensions](references/chinese-error-dimension-table.md)
+- [Reading pit training](references/pit-training.md)
+- [Question type library](references/question-type-library.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese-language text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Short tutoring turns; optional consent-gated reading progress records.]
+
+## Skill Version(s):
+
+2.7.1 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

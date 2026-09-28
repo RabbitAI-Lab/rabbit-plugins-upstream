@@ -1,45 +1,59 @@
-## Description: <br>
-Automatically identifies wet clothing and abnormal excretion via visual AI. Instantly notifies caregivers to improve care for incontinent elderly, bedridden patients, and infants, reducing skin issues and complications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes care images and videos for wet clothing or excretion and provides alerts, care suggestions, and report links.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External caregivers and care operations teams use this skill to analyze care images, videos, or media URLs for wet clothing, abnormal excretion, alert level, care suggestions, and report history. It is intended as a caregiver alert and record-review aid, not a substitute for professional medical judgment or manual inspection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive care images, videos, media URLs, identity metadata, and report history may be sent to the publisher cloud service. <br>
-Mitigation: Use only with consent and authorization, restrict access to caregivers who need the data, and confirm privacy and compliance requirements before deployment. <br>
-Risk: The skill silently handles account identity and tokens and can retrieve cloud history for the current identity. <br>
-Mitigation: Review local token storage and automatic report-history access before installation, and run it only in workspaces where that identity behavior is acceptable. <br>
-Risk: Visual analysis can be wrong due to lighting, angle, clothing thickness, image quality, or scene ambiguity. <br>
-Mitigation: Require caregiver confirmation before acting on alerts and do not use the output as a replacement for professional medical judgment or manual checks. <br>
+## Use Case:
 
+Caregivers and care teams use the skill to review images or videos of elderly, bedridden, or infant care recipients for possible incontinence and to retrieve past care reports. Results support, but do not replace, direct checks and professional care.
 
-## Reference(s): <br>
-- [Incontinence Alert Analysis API Documentation](references/api_doc.md) <br>
-- [SMYX Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-incontinence-alert-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Markdown, JSON, Files, Shell commands] <br>
-**Output Format:** [Markdown or JSON text reports with optional saved output files and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can analyze local media files or media URLs, list cloud report history, and save results when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: evidence release and skill frontmatter) <br>
+Risk: Sensitive care images or videos and identity-linked reports may be processed by lifeemergence.com cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain consent before uploading, and confirm the provider's retention, access controls, and report-sharing practices.
+
+Risk: Account and token management and report-history lookup happen automatically.
+
+Mitigation: Review local token storage and the identity associated with cloud reports before using the skill.
+
+Risk: Visual alerts may be inaccurate due to lighting, angle, or clothing thickness.
+
+Mitigation: Have a caregiver check alerts directly; do not substitute the results for professional care.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-incontinence-alert-analysis)
+- [Incontinence analysis API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis results or a Markdown report list with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save analysis results to a file; supports basic, standard, and JSON detail levels.]
+
+## Skill Version(s):
+
+1.0.14 (source: server-resolved ClawHub release metadata; bundled SKILL.md frontmatter says 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

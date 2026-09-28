@@ -1,40 +1,57 @@
-## Description: <br>
-Guides agents through critical triage of PR/MR review feedback, including verifying suggestions, pushing back with evidence when needed, and implementing only confirmed fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents assess PR and MR review feedback against code and evidence before accepting, challenging, or implementing suggestions.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to respond to PR/MR review comments, triage automated or human suggestions, and decide whether to fix, clarify, or push back with evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use an existing GitHub CLI session to read PR comments or draft and post review-thread replies when asked. <br>
-Mitigation: Review the target repository, comments, and reply text before allowing commands that read or post PR review content. <br>
-Risk: Incorrect triage could accept bad review feedback or dismiss valid feedback. <br>
-Mitigation: Require evidence-backed verification, escalate ambiguous or security-related suggestions, and test each implemented fix individually. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to triage review comments, verify claims, explain disagreements, and implement verified changes within authorized scope.
 
-## Reference(s): <br>
-- [Headless Mode](references/headless-mode.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Text, Markdown, Shell commands] <br>
-**Output Format:** [Markdown guidance with optional structured triage summaries and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Headless mode returns AUTO-FIX, AUTO-DECLINE, ESCALATE, and PRIOR FEEDBACK sections.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Unverified reviewer suggestions could result in incorrect code changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify each claim against the current code and test each authorized fix before reporting it resolved.
+
+Risk: Review replies or thread resolution could be published without approval.
+
+Mitigation: Draft replies first and obtain authorization before posting or resolving threads.
+
+## Reference(s):
+
+- [Skill release](https://clawhub.ai/iliaal/skills/compound-eng-receiving-code-review)
+- [Feedback triage](references/feedback-triage.md)
+- [Evidence and disagreement](references/evidence-and-disagreement.md)
+- [Fix and handoff](references/fix-and-handoff.md)
+- [Headless mode](references/headless-mode.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Code, Markdown]
+
+**Output Format:** [Markdown findings and replies, with code changes when authorized]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return structured triage in headless mode; posting replies and resolving threads require authorization.]
+
+## Skill Version(s):
+
+5.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

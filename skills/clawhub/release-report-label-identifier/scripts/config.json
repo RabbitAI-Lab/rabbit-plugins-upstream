@@ -1,0 +1,53 @@
+{
+  "variant_id": "cap_04_config_to_report",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "config_note",
+  "output_name": "configuration_entry",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string",
+        "format": "configuration-entry",
+        "minLength": 1
+      },
+      {
+        "type": "object",
+        "required": [
+          "retention.label"
+        ],
+        "properties": {
+          "retention.label": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "config_key",
+      "config_value",
+      "config_label"
+    ],
+    "properties": {
+      "config_key": {
+        "type": "string",
+        "minLength": 1
+      },
+      "config_value": {
+        "type": "string",
+        "minLength": 1
+      },
+      "config_label": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

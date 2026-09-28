@@ -1,41 +1,57 @@
-## Description: <br>
-语文写作全流程AI教练，面向作文构思、提纲检查、作文批改、议论文论证和辩论训练，通过追问、指出问题和给出修改方向来帮助学生保留自己的表达。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese K12 students through planning, drafting, and revising their own writing without writing assignments for them.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and their guardians or educators use this skill for Chinese writing coaching: brainstorming original ideas, checking essay logic, reviewing drafts, practicing argumentation, and receiving focused revision guidance without having the agent write the essay for the student. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student essay topics, drafts, writing-style profiles, grammar weaknesses, or progress records may be stored for future tutoring. <br>
-Mitigation: Install only where users can clearly consent to, disable, delete, and understand these records, with extra review before use by minors. <br>
+## Use Case:
 
+Students in mainland China's upper-primary and middle-school Chinese courses use the skill to develop ideas, check outlines, and receive targeted feedback on their own narrative, argumentative, and explanatory writing. Younger students require an adult or teacher present.
 
-## Reference(s): <br>
-- [语文错因维度表](references/chinese-error-dimension-table.md) <br>
-- [AI 辩论赛话术与赛制详解](references/debate-script-guide.md) <br>
-- [写作5步流程 · 状态机定义](references/writing-5step-statemachine.md) <br>
-- [三文体评分维度与追问问题库](references/writing-rubric.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (localization required elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style conversational Chinese coaching responses with questions, critique, rubrics, and revision directions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured feedback, staged workflow prompts, debate turns, and consent-gated writing-style memory summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence, released 2026-07-17) <br>
+Risk: Children's writing profiles may retain personal information or be shared across skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the required adult or guardian context and obtain consent before enabling long-term memory or cross-skill sharing; offer profile review and deletion controls.
+
+Risk: Mainland-China-specific curriculum and crisis contacts may not suit other regions.
+
+Mitigation: Localize curriculum, child-safety requirements, and emergency contacts before use elsewhere; ask the student's location when uncertain.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-writing-coach)
+- [Five-step writing workflow](artifact/references/writing-5step-statemachine.md)
+- [Writing feedback rubric](artifact/references/writing-rubric.md)
+- [Debate coaching guide](artifact/references/debate-script-guide.md)
+- [Safety and crisis guidance](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, JSON]
+
+**Output Format:** [Conversational writing prompts and feedback; optional structured profile handover]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writing-profile updates and cross-skill sharing require consent; the student writes the final prose.]
+
+## Skill Version(s):
+
+2.7.1 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

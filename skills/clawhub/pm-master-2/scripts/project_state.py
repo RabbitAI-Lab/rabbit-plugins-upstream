@@ -1,23 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 单一事实源读写（project.yaml）
+PM Master · Single source of truth read/write (project.yaml)
 -------------------------------------------------
-每个项目/项目群一个 project.yaml，主控 Agent 与子 Agent 都通过本脚本读写，
-保证状态一致、跨会话/跨 Agent 连续。
+Each project/program has one project.yaml. The main controller agent and sub-agents
+both read/write through this script, ensuring consistent state across sessions/agents.
 
-命令：
-  get  <key>            读取（支持点路径，如 project.name）
-  set  <key> <value>    写入（自动按类型推断；list/dict 用 JSON 串）
-  exists                判断 project.yaml 是否存在
-  show                  打印整份 yaml
+Commands:
+  get  <key>            Read (supports dot paths, e.g. project.name)
+  set  <key> <value>    Write (auto type inference; list/dict via JSON string)
+  exists               Check whether project.yaml exists
+  show                Print the whole yaml
   init <name> [--type project|program] [--methodology ...] [--framework ...]
-                        （仅当文件不存在时）初始化骨架
-  migrate               v1.x -> v2 平滑迁移（补 _checkpoint / schema_version=2 / last_control_check）
-  checkpoint [<step>]   读取当前工作流检查点；传 <step> 则写回并更新 last_step_at
-  config [<key>]        读取安装期 config.yaml（如 execution.subagent_mode）
+                       Initialize a skeleton (only if the file does not exist)
+  migrate             Smooth v1.x -> v2 migration (add _checkpoint / schema_version=2 / last_control_check)
+  checkpoint [<step>]  Read the current workflow checkpoint; pass <step> to write back and update last_step_at
+  config [<key>]       Read the install-time config.yaml (e.g. execution.subagent_mode)
 
-设计：v2 在 v1 基础上引入 Agent 层检查点(_checkpoint)，用于防跳步与跨会话续跑。
+Design: v2 adds an agent-layer checkpoint (_checkpoint) on top of v1, used to prevent
+step-skipping and resume across sessions.
 """
 import os
 import sys
@@ -63,8 +64,9 @@ def _save(path, data, _backup_ok=True):
         except Exception:
             existing = {}
         if isinstance(existing, dict) and len(existing) > 0:
-            print(f"✗ 拒绝写入：将用空数据覆盖非空 project.yaml（疑似 PyYAML/加载失败）。"
-                  f" 已中止，未改动原文件。", file=sys.stderr)
+            print(f"✗ Refusing to write: would overwrite a non-empty project.yaml with empty data "
+                  f"(possible PyYAML/load failure). Aborted; original file untouched.",
+                  file=sys.stderr)
             sys.exit(5)
     if _backup_ok:
         _backup(path)
@@ -92,7 +94,7 @@ def _set(data, key, value):
     for part in parts[:-1]:
         cur = cur.setdefault(part, {})
         if not isinstance(cur, dict):
-            raise ValueError(f"路径 {part} 不是 dict")
+            raise ValueError(f"path {part} is not a dict")
     last = parts[-1]
     if isinstance(value, str) and (value.startswith('[') or value.startswith('{')):
         try:
@@ -114,8 +116,8 @@ def _set(data, key, value):
 
 
 def load_config():
-    """读取安装期 config.yaml（skills 目录下的策略/护栏层）。
-    优先顺序：env PM_MASTER_CONFIG -> <SKILL_DIR>/../config.yaml -> 内建默认。"""
+    """Read the install-time config.yaml (policy/guardrail layer under the skills dir).
+    Precedence: env PM_MASTER_CONFIG -> <SKILL_DIR>/../config.yaml -> built-in default."""
     req = os.environ.get('PM_MASTER_CONFIG')
     candidates = []
     if req:
@@ -133,9 +135,9 @@ def load_config():
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master 单一事实源读写")
+    ap = argparse.ArgumentParser(description="PM Master single source of truth read/write")
     ap.add_argument('cmd', choices=['get', 'set', 'exists', 'show', 'init', 'migrate', 'checkpoint', 'config'])
-    ap.add_argument('args', nargs='*', help="key / value / name / step 等")
+    ap.add_argument('args', nargs='*', help="key / value / name / step etc.")
     ap.add_argument('--file', default=DEFAULT_PROJECT_YAML)
     ap.add_argument('--type', default='project')
     ap.add_argument('--methodology', default='agile')
@@ -164,14 +166,14 @@ def main():
 
     if a.cmd == 'get':
         if not a.args:
-            print("用法: get <key>", file=sys.stderr); sys.exit(2)
+            print("Usage: get <key>", file=sys.stderr); sys.exit(2)
         val = _get(_load(path), a.args[0])
         print('' if val is None else (json.dumps(val, ensure_ascii=False) if isinstance(val, (list, dict)) else val))
         return
 
     if a.cmd == 'set':
         if len(a.args) < 2:
-            print("用法: set <key> <value>", file=sys.stderr); sys.exit(2)
+            print("Usage: set <key> <value>", file=sys.stderr); sys.exit(2)
         data = _load(path)
         _set(data, a.args[0], a.args[1])
         _save(path, data)
@@ -193,11 +195,11 @@ def main():
 
     if a.cmd == 'migrate':
         if not os.path.exists(path):
-            print(f"✗ 未找到 project.yaml: {path}", file=sys.stderr); sys.exit(2)
+            print(f"✗ project.yaml not found: {path}", file=sys.stderr); sys.exit(2)
         data = _load(path)
         ver = data.get('schema_version', 1)
         if ver >= 2:
-            print(f"[migrate] 已是最新 schema (v{ver})，无需迁移")
+            print(f"[migrate] already on latest schema (v{ver}), no migration needed")
             return
         data['schema_version'] = 2
         cp = data.setdefault('_checkpoint', {})
@@ -207,14 +209,14 @@ def main():
         if 'last_control_check' not in data:
             data['last_control_check'] = None
         _save(path, data)
-        print(f"[migrate] v{ver} -> v2 完成（补 _checkpoint / last_control_check，schema_version=2）")
+        print(f"[migrate] v{ver} -> v2 done (added _checkpoint / last_control_check, schema_version=2)")
         return
 
     if a.cmd == 'init':
         if os.path.exists(path):
-            print(f"[state] 已存在，跳过: {path}")
+            print(f"[state] already exists, skipped: {path}")
             return
-        name = a.args[0] if a.args else '未命名项目'
+        name = a.args[0] if a.args else 'Unnamed project'
         skeleton = {
             'schema_version': 2,
             '_checkpoint': {'step': 'init', 'last_step_at': datetime.date.today().isoformat()},
@@ -225,8 +227,8 @@ def main():
                 'type': a.type,
                 'methodology': a.methodology,
                 'framework': a.framework if a.methodology == 'agile' else None,
-                'phase': '启动' if a.type == 'project' else '组合定义',
-                'status': '规划中',
+                'phase': 'initiation' if a.type == 'project' else 'program-definition',
+                'status': 'planning',
                 'lifecycle_state': 'planning',
                 'baselined_on': None,
                 'domain': '',
@@ -251,7 +253,7 @@ def main():
             'program': {'projects': [], 'dependencies': [], 'benefits': []} if a.type == 'program' else None,
         }
         _save(path, skeleton)
-        print(f"[state] 初始化 project.yaml: {path} (type={a.type}, methodology={a.methodology}, schema=v2)")
+        print(f"[state] initialized project.yaml: {path} (type={a.type}, methodology={a.methodology}, schema=v2)")
 
 
 if __name__ == '__main__':

@@ -1,5 +1,5 @@
 ## Description: <br>
-Api Magic Gen helps Java backend teams generate and configure magic-api based API services with multi-data-source support, interceptors, OpenAPI export, monitoring, version management, collaboration, and deployment guidance. <br>
+Api Magic Gen helps Java backend teams generate and configure magic-api interfaces with multi-data-source routing, interceptors, OpenAPI export, monitoring, and team collaboration guidance. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,29 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, architects, and operations teams use this skill to create magic-api configurations, examples, and guidance for API gateway, SaaS API, multi-team collaboration, and multi-data-source scenarios. The skill is also positioned for monitoring, log analysis, operational alerting, and deployment management workflows. <br>
+Developers and platform teams use this skill to produce configuration guidance, code snippets, and structured output for building and operating magic-api based API interfaces. It is aimed at API integration, interface development, monitoring, alerting, deployment management, and team collaboration workflows. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The security evidence rates the skill as suspicious because it may be routed into operational and deployment tasks with broad command-execution authority and weak scope controls. <br>
-Mitigation: Keep command execution user-confirmed, review proposed commands before running them, and avoid direct use against production systems without a separate deployment review. <br>
-Risk: The security evidence notes that the artifact mixes API-generation guidance with a mismatched code-review output schema. <br>
-Mitigation: Treat generated review scores and findings as unreliable unless they are separately checked against the requested API-generation task. <br>
+Risk: The security evidence marks the release as suspicious because the documentation mixes API-generation behavior with unrelated review and scoring behavior while granting broad read, write, and command-execution capabilities. <br>
+Mitigation: Review the skill before installation, use it only in a limited development workspace, and require explicit approval before command execution, file writes, deployment changes, or external API calls. <br>
+Risk: The security guidance warns against broad access to production credentials or broad filesystem permissions. <br>
+Mitigation: Avoid granting production credentials, scope filesystem access narrowly, and keep execution permissions to the minimum needed for a reviewed task. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/api-magic-gen) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON, YAML, and JavaScript code blocks] <br>
+**Output Format:** [Markdown with JSON, YAML, and JavaScript code blocks] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured review-style JSON when following the artifact's declared output format.] <br>
+**Other Properties Related to Output:** [The artifact describes structured JSON result objects and human-readable setup, troubleshooting, and security guidance.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and artifact frontmatter) <br>
+1.0.2 (source: server-resolved release metadata; artifact frontmatter lists 1.0.1) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

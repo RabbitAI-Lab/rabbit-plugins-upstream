@@ -1,41 +1,60 @@
-## Description: <br>
-This skill helps students create personalized 30-day study plans, execution check-ins, parent-facing dashboards, and exam-prep schedules from their stated goals and authorized learning-profile data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates practical 30-day study plans for Chinese-speaking secondary students and weekly plans for upper-primary students, then helps adjust tasks based on progress.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and guardians use this skill to turn learning goals, weak areas, time constraints, and authorized learning-profile summaries into practical study plans, weekly adjustment prompts, printable family dashboards, and exam-prep schedules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive student learning-profile, emotional-profile, or progress details in parent-facing outputs. <br>
-Mitigation: Use parent-facing dashboards only with clear student and guardian consent, and avoid emotional or diagnostic summaries unless there is explicit agreement and a real need. <br>
-Risk: Plans based on historical learning data may overstate what a student can complete or create pressure through family monitoring. <br>
-Mitigation: Confirm time limits with the student, preserve the skill's iteration step before execution, and frame family dashboard guidance as supportive actions rather than performance judgment. <br>
+## Use Case:
 
+Chinese-speaking students in upper-primary, middle, and high school use this skill to turn learning goals and exam dates into manageable study schedules. Upper-primary students use a weekly version with an adult present; optional learning-profile access, parent-facing boards, and reminders require separate consent.
 
-## Reference(s): <br>
-- [Plan Templates](references/plan-templates.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan) <br>
+### Deployment Geography for Use:
 
+Mainland China; use elsewhere only after localizing student safeguards and crisis referrals.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text plans] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces study-plan schedules, learning-profile analyses, weekly review prompts, parent dashboard text, and exam-prep guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Access to minors' learning profiles or sharing task boards with parents without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep profile access and parent sharing off by default; require separate, explicit student consent and guardian consent where age rules require it.
+
+Risk: Unwanted reminders or changes to a student's stored study plan.
+
+Mitigation: Require explicit consent before adding tasks to the reminder queue, and write a plan back only after a separate request to save it.
+
+Risk: Mainland China-specific safeguarding and crisis referrals may not fit other regions.
+
+Mitigation: Limit deployment to Chinese-speaking mainland China K-12 settings unless student safeguards and referral resources have been localized.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan)
+- [Study-plan templates](references/plan-templates.md)
+- [Grade-band guidance](shared/grade-bands.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language study schedules and optional parent-facing task boards in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Upper-primary plans cover one week; middle- and high-school plans cover 30 days.]
+
+## Skill Version(s):
+
+2.7.1 (source: server-resolved release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

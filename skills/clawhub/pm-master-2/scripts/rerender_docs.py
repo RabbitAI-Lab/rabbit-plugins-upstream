@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 单一事实源重渲染器（SSOT 防漂移）
+PM Master · Single-source-of-truth re-renderer (SSOT drift prevention)
 -------------------------------------------------
-保证所有产物都由 project.yaml（单一事实源）重新渲染，杜绝"改了事实源、文档没跟上"的漂移。
+Ensure all artifacts are re-rendered from project.yaml (single source of truth), eliminating
+drift where "the source changed but the document did not follow".
 
-支持重渲染的工件（从 project.yaml 直接取数，不依赖外部 _data.yaml）：
-  - wbs（build_wbs.py --view full，并连带 program/component 视图）
-  - risk_register（templates/common/risk_register.md <- data.risks）
-  - program_charter（templates/program/program_charter.md <- data.program，仅 program 类型）
+Artifacts supported for re-rendering (read directly from project.yaml, not relying on an external _data.yaml):
+  - wbs (build_wbs.py --view full, plus program/component views)
+  - risk_register (templates/common/risk_register.md <- data.risks)
+  - program_charter (templates/program/program_charter.md <- data.program, program type only)
 
-用法：
-  python3 rerender_docs.py --project <yaml>            # 重渲染所有已知工件
-  python3 rerender_docs.py --project <yaml> --only wbs # 仅重渲染 WBS
-  python3 rerender_docs.py --project <yaml> --dry-run  # 只列出会重渲染什么
+Usage:
+  python3 rerender_docs.py --project <yaml>            # re-render all known artifacts
+  python3 rerender_docs.py --project <yaml> --only wbs # re-render WBS only
+  python3 rerender_docs.py --project <yaml> --dry-run  # only list what would be re-rendered
 
-设计原则：文档 = 事实源(project.yaml) + 模板 的纯函数。任何手工改动文档都应在下次重渲染被覆盖，
-因此真正要改的是事实源（用 sync_wbs.py / project_state.py set），再 rerender。
+Design principle: document = source(project.yaml) + template as a pure function. Any manual edit to a
+document is overwritten on the next re-render, so the real change should be made to the source
+(use sync_wbs.py / project_state.py set) and then re-render.
 """
 import argparse
 import os
@@ -52,7 +54,7 @@ def _render_doc(project_yaml, tpl_rel, ctx, out_rel, project_data, art_key=None,
     root = os.path.dirname(os.path.abspath(project_yaml))
     tpl = os.path.join(SCRIPT_DIR, '..', tpl_rel)
     if not os.path.exists(tpl):
-        return f"⚠ 模板不存在 {tpl_rel}"
+        return f"⚠ template not found {tpl_rel}"
     with open(tpl, 'r', encoding='utf-8') as f:
         tpl_text = f.read()
     rendered = render(tpl_text, ctx)
@@ -60,7 +62,7 @@ def _render_doc(project_yaml, tpl_rel, ctx, out_rel, project_data, art_key=None,
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     with open(out_path, 'w', encoding='utf-8') as f:
         f.write(rendered)
-    # OAG：记录 source_hash，启用交付物漂移检测（art_key+deps 由调用方传入）
+    # OAG: record source_hash to enable artifact drift detection (art_key+deps passed by caller)
     if art_key and deps is not None and project_data is not None:
         import datetime as _dt
         meta = project_data.setdefault('artifacts_meta', {})
@@ -83,7 +85,7 @@ def rerender_wbs(project_yaml, data, dry):
         else:
             subprocess.run(cmd, check=False)
             out.append(f"build_wbs --view {view}")
-    # 清除 dirty 标记
+    # clear dirty flag
     if not dry and data.get('artifacts', {}).get('wbs_dirty'):
         data['artifacts'].pop('wbs_dirty', None)
         _save_yaml(project_yaml, data)
@@ -92,7 +94,7 @@ def rerender_wbs(project_yaml, data, dry):
 
 def rerender_risk(project_yaml, data, dry):
     if not (data.get('risks') or (data.get('raid') or {}).get('risks')):
-        return ["（无 risks，跳过 risk_register）"]
+        return ["(no risks, skip risk_register)"]
     root = os.path.dirname(os.path.abspath(project_yaml))
     out_rel = data.get('artifacts', {}).get('risk_register') or os.path.join('plans', 'risk_register.md')
     if dry:
@@ -100,7 +102,7 @@ def rerender_risk(project_yaml, data, dry):
     ctx = {'project': data.get('project', {}), 'risks': data.get('risks') or (data.get('raid') or {}).get('risks', []) or []}
     p = _render_doc(project_yaml, 'templates/common/risk_register.md', ctx, out_rel, data,
                     art_key='risk_register', deps=_AG_DEPS['risk_register'])
-    # OAG：持久化 source_hash（重渲染即刷新漂移检测基线）
+    # OAG: persist source_hash (re-rendering refreshes the drift-detection baseline)
     if not dry:
         _save_yaml(project_yaml, data)
     return [f"risk_register -> {p}"]
@@ -108,7 +110,7 @@ def rerender_risk(project_yaml, data, dry):
 
 def rerender_charter(project_yaml, data, dry):
     if (data.get('project', {}).get('type') or '').lower() != 'program':
-        return ["（非 program 类型，跳过 program_charter）"]
+        return ["(not program type, skip program_charter)"]
     root = os.path.dirname(os.path.abspath(project_yaml))
     out_rel = data.get('artifacts', {}).get('program_charter') or os.path.join('plans', 'program_charter.md')
     if dry:
@@ -119,11 +121,13 @@ def rerender_charter(project_yaml, data, dry):
 
 
 def rerender_change_log(project_yaml, data, dry):
-    """change_log 模板读 this.description，但事实源常存 title —— 在此做 title→description 映射，
-    杜绝"事实源有 CR、渲染出空壳"的字段错配漂移。"""
+    """The change_log template reads this.description, but the source often stores title -- map
+    title->description here to avoid field-mismatch drift where "the source has the CR but the
+    rendered doc is empty".
+    """
     changes = data.get('change_log') or data.get('changes') or []
     if not changes:
-        return ["（无 change_log，跳过）"]
+        return ["(no change_log, skip)"]
     out_rel = data.get('artifacts', {}).get('change_log') or os.path.join('plans', 'change_log.md')
     if dry:
         return [f"[dry] change_log -> {out_rel}"]
@@ -144,10 +148,10 @@ def rerender_change_log(project_yaml, data, dry):
 
 
 def rerender_raid(project_yaml, data, dry):
-    """raid_log: assumptions 必须是纯字符串列表（模板 - {{this}}）；dict 自动展平。"""
+    """raid_log: assumptions must be a plain string list (template uses - {{this}}); dicts are flattened automatically."""
     raid = data.get('raid') or {}
     if not raid:
-        return ["（无 raid，跳过 raid_log）"]
+        return ["(no raid, skip raid_log)"]
     out_rel = data.get('artifacts', {}).get('raid_log') or os.path.join('risks', 'raid_log.md')
     if dry:
         return [f"[dry] raid_log -> {out_rel}"]
@@ -166,11 +170,11 @@ def rerender_raid(project_yaml, data, dry):
 
 
 def rerender_evm_report(project_yaml, data, dry):
-    """evm_report.txt: 由 evm.py 依据 metrics.evm 现值重算，杜绝 EVM 报告与事实源脱节。"""
+    """evm_report.txt: recomputed by evm.py from the current metrics.evm values, preventing the EVM report from diverging from the source."""
     import subprocess as sp
     evm = (data.get('metrics') or {}).get('evm') or {}
     if not evm:
-        return ["（无 metrics.evm，跳过 evm_report）"]
+        return ["(no metrics.evm, skip evm_report)"]
     root = os.path.dirname(os.path.abspath(project_yaml))
     out_rel = data.get('artifacts', {}).get('evm_report') or os.path.join('metrics', 'evm_report.txt')
     if dry:
@@ -192,8 +196,7 @@ def rerender_evm_report(project_yaml, data, dry):
 
 
 def rerender_baseline_record(project_yaml, data, dry):
-    """baseline_record + control_register: 按 project.yaml 现值重渲染（绝不改 lifecycle_state），
-    适合收尾后刷新。与 baseline.py 内部渲染同源，但此处只渲染、不落状态。"""
+    """baseline_record + control_register: re-render from the current project.yaml values (never change lifecycle_state), suitable for refreshing after closeout. Shares the same rendering as baseline.py internally, but here it only renders, it does not persist state."""
     out = []
     arts = data.get('artifacts', {}) or {}
     br = arts.get('baseline_record') or os.path.join('artifacts', 'baseline_record.md')
@@ -207,7 +210,7 @@ def rerender_baseline_record(project_yaml, data, dry):
                              ('templates/common/control_register.md', cr)):
         tpl = os.path.join(SCRIPT_DIR, '..', tpl_rel)
         if not os.path.exists(tpl):
-            out.append(f"⚠ 模板不存在 {tpl_rel}")
+            out.append(f"⚠ template not found {tpl_rel}")
             continue
         op = os.path.join(root, out_rel)
         os.makedirs(os.path.dirname(os.path.abspath(op)), exist_ok=True)
@@ -218,7 +221,7 @@ def rerender_baseline_record(project_yaml, data, dry):
 
 
 def rerender_schedules(project_yaml, data, dry):
-    """P1-5: 重渲染排期甘特 + 排期健康度（调用 build_schedule / schedule_health / render_docx）。"""
+    """P1-5: re-render the schedule gantt + schedule health (calls build_schedule / schedule_health / render_docx)."""
     import subprocess as sp
     out = []
     root = os.path.dirname(os.path.abspath(project_yaml))
@@ -233,7 +236,7 @@ def rerender_schedules(project_yaml, data, dry):
     if os.path.isfile(sh):
         r = sp.run([sys.executable, sh, '--project', project_yaml], capture_output=True, text=True)
         out.append(f"schedule_health: rc={r.returncode}")
-    # 渲染 docx（若存在 gantt 模板）
+    # render docx (if a gantt template exists)
     sg = data.get('artifacts', {}).get('schedule_gantt') or os.path.join('plans', 'schedule_gantt.md')
     sgp = os.path.join(root, sg)
     if os.path.isfile(sgp) and os.path.isfile(rd):
@@ -243,7 +246,7 @@ def rerender_schedules(project_yaml, data, dry):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master · SSOT 重渲染器")
+    ap = argparse.ArgumentParser(description="PM Master · SSOT re-renderer")
     ap.add_argument('--project', required=True)
     ap.add_argument('--only', default=None,
                     choices=['wbs', 'risk_register', 'program_charter', 'change_log',
@@ -252,7 +255,7 @@ def main():
     a = ap.parse_args()
 
     if yaml is None:
-        raise SystemExit("需要 PyYAML")
+        raise SystemExit("PyYAML is required")
     data = _load(a.project)
     done = []
     targets = [a.only] if a.only else ['wbs', 'risk_register', 'program_charter',
