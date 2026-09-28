@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-deploy",
+  "repo": "google/skills",
+  "skillId": "agent-platform-deploy",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:19:09Z",
+  "contentHash": "3c7616f6f1531525a061db52bb1f8f55d54b8fc85021cdc98153f22428ee9009",
+  "fetchedAt": "2026-09-28T15:46:14.182Z"
+}
