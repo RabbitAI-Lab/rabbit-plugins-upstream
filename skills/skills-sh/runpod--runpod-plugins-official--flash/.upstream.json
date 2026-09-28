@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/flash",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "flash",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:39:48Z",
+  "contentHash": "f1273d87079677dc5c461a2af9db60f898ff7d89a477f38dd4b86b7e54365e42",
+  "fetchedAt": "2026-09-28T15:46:36.721Z"
+}
