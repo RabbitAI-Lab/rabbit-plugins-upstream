@@ -1,40 +1,53 @@
-## Description: <br>
-Qa Output Validation performs a final anti-hallucination check on generated test cases by verifying requirement IDs, consistency, executability, and source traceability before final output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Validates generated test cases against requirements for factual accuracy, consistency, executability, and traceability before final delivery.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and development teams use this skill as a final quality gate after AI-generated test cases are produced. It checks whether cases are grounded in the requirement decomposition, internally consistent, executable, and traceable before release or reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad requests to verify or check quality. <br>
-Mitigation: Use it as a final QA gate for generated test cases and confirm that the requested validation scope matches the available source materials. <br>
-Risk: Recommendations to delete or mark test cases could remove valid coverage if the source material is incomplete. <br>
-Mitigation: Review deletion or marking recommendations manually, confirm source traceability, and back up source data before changing test assets. <br>
+## Use Case:
 
+QA teams and developers use this skill to check AI-generated test cases against requirements and report unsupported claims or cases needing revision before release.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-output-validation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown validation report with pass/fail status, check results, issue tables, and traceability notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Issue lists are tied to original test case IDs and the skill does not assign new unique IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Broad natural-language triggers may invoke validation for a task that is not final test-case QA.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that test cases and requirements are available and that the task calls for final validation before applying the checks.
+
+Risk: Suggestions to revise, mark, or remove cases may affect valid test coverage.
+
+Mitigation: Verify the case against source requirements and back up the original data before changing or removing it.
+
+## Reference(s):
+
+- [QA Output Validation on ClawHub](https://clawhub.ai/kokxi/skills/qa-output-validation)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown validation report with test-case tables and pass/fail findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes fact, consistency, executability, and traceability checks; findings reference original test-case IDs.]
+
+## Skill Version(s):
+
+1.7.7 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

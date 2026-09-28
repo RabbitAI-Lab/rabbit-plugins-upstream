@@ -1,40 +1,53 @@
-## Description: <br>
-This skill helps individual bloggers and lightweight content teams create SEO-oriented blog content, including keyword-aware titles, meta descriptions, structured outlines, keyword integration, link suggestions, and image alt text. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates SEO-optimized blog content with keyword integration, meta descriptions, structured headings, SEO titles, outlines, internal and external link suggestions, and image alt text.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users and individual content creators use this skill to draft SEO-friendly blog posts or product-page content from target keywords. They should review and refine generated titles, outlines, meta descriptions, link suggestions, and image alt text before publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requests broad read, exec, glob, and grep tool access while privacy and network-access claims are inconsistent. <br>
-Mitigation: Review the skill before installation, restrict tool permissions where possible, and avoid running commands or sharing API keys unless the publisher clarifies required local and network behavior. <br>
-Risk: Prompts, drafts, or SEO inputs may be sent to an LLM or external API despite the local-data claim. <br>
-Mitigation: Avoid entering sensitive unpublished business content and manually review generated drafts before publishing. <br>
+## Use Case:
 
+External creators, personal bloggers, and marketing teams use this skill to draft SEO blog structures, titles, meta descriptions, keyword variants, link suggestions, and image alt text in Chinese or English.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/blog-seo-writer-tool-free) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and JSON snippets with optional shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Free edition is described as single-task use with max_concurrent 1; generated SEO content should be reviewed before publication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and frontmatter) <br>
+Risk: The security summary marks the skill suspicious because it asks for broad command execution and includes an unrelated secret-environment check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing, avoid running the environment-variable check, and only allow command execution when it is needed for the SEO drafting task.
+
+Risk: The security guidance notes inconsistent privacy and network guidance.
+
+Mitigation: Do not provide API keys or send drafts to external services unless the user understands which service is being used.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/blog-seo-writer-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or plain text, with optional JSON, text, or CSV output formats described by the skill.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single-topic SEO drafting; the free release describes no batch operation support.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

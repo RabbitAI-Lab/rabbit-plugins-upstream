@@ -1,47 +1,57 @@
-## Description: <br>
-Systematizes mathematical conjecture proof work by decomposing conjectures, identifying proof gaps, generating lemma chains and proof pipelines, applying analytic and numerical checks, and drafting proof-oriented papers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Conjecture-Prover guides agents through a Chinese-language workflow for decomposing conjectures, converting them to equivalent or reduced forms, validating intermediate claims, and packaging proof-style reports.
 
-## Publisher: <br>
-[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng)
 
-## Use Case: <br>
-Developers, researchers, and mathematically oriented agents use this skill to structure conjecture-analysis workflows, draft proof attempts, build verification checklists, and produce Markdown proof or paper artifacts. Outputs should be treated as drafts requiring qualified mathematical review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may present speculative or unaccepted mathematical claims as completed proofs. <br>
-Mitigation: Treat generated proofs and bundled proof examples as drafts until independently reviewed by qualified mathematicians. <br>
-Risk: Generated papers or proof summaries may contain incorrect, incomplete, or misleading reasoning. <br>
-Mitigation: Require explicit verification of each lemma, bridge step, citation, numerical claim, and stated proof boundary before relying on the output. <br>
-Risk: The bundled Riemann Hypothesis proof materials could be mistaken for established mathematical results. <br>
-Mitigation: Label RH-related outputs as speculative unless they have passed independent scholarly validation. <br>
+## Use Case:
 
+External users and developers can use this skill to structure conjecture-proof attempts, document reductions, separate verified claims from open gaps, and produce proof reports or supporting verification artifacts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wangjiaocheng/skills/conjecture-prover) <br>
-- [Conjecture prover task catalog](references/conjecture-prover-catalog.md) <br>
-- [Conjecture prover requirements](references/conjecture-prover-requirements.md) <br>
-- [Conjecture prover exemplars](references/exemplars.md) <br>
-- [Riemann Hypothesis proof package overview](assets/RH_README.md) <br>
-- [Riemann Hypothesis auto-review](assets/RH_AUTO_REVIEW.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with optional Python verification code and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate conjecture decompositions, lemma chains, proof drafts, review reports, papers, and verification commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server-resolved release metadata) <br>
+Risk: Generated mathematical claims or proof routes may be incomplete or misleading, especially where the artifact marks the key RH inequality as open.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat outputs as drafts and require expert review before relying on proofs, reductions, or validation results.
+
+Risk: The skill presents broad cross-domain proof capabilities that are not backed by domain-specific implementations in the package evidence.
+
+Mitigation: Use it as a workflow template and calibrate each result against the standards and evidence practices of the target domain.
+
+## Reference(s):
+
+- [Conjecture-Prover ClawHub page](https://clawhub.ai/wangjiaocheng/skills/conjecture-prover)
+- [Conjecture-Prover catalog](artifact/references/conjecture-prover-catalog.md)
+- [Conjecture-Prover requirements](artifact/references/conjecture-prover-requirements.md)
+- [Conjecture-Prover exemplars](artifact/references/exemplars.md)
+- [RH artifact overview](artifact/assets/RH_README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands]
+
+**Output Format:** [Markdown guidance with optional code and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include proof status labels, reductions, validation notes, reports, and verifier scripts.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

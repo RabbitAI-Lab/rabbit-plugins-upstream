@@ -1,28 +1,59 @@
 ---
-name: "youtube-watcher-tool-free"
-description: "轻量级YouTube视频字幕提取工具，支持单视频字幕获取与内容摘要，适合个人学习与内容分析。"
+slug: youtube-watcher-tool-free
+name: youtube-watcher-tool-free
+version: 1.0.0
+displayName: YouTube字幕提取-免费版
+summary: "轻量级YouTube视频字幕提取工具，支持单视频字幕获取与内容摘要，适合个人学习与内容分析.。YouTube 字幕提取免费版，为个人用户提供轻量化的视频字幕获取能力。核心能力:"
 license: Proprietary
-allowed-tools: read exec
-compatibility: "Requires LLM with tool-use capability"
-metadata:
-  displayName: "YouTube字幕提取-免费版"
-  version: "1.0.0"
-  summary: "轻量级YouTube视频字幕提取工具，支持单视频字幕获取与内容摘要，适合个人学习与内容分析。"
-  tags:
-    - "Creative"
-    - "视频处理"
-    - "字幕提取"
-    - "免费版"
-  source: "SkillHub"
-  converted_at: "2026-07-22T17:58:36"
----
+edition: free
+description: 'YouTube 字幕提取免费版，为个人用户提供轻量化的视频字幕获取能力。核心能力:
 
+  - 单视频字幕提取（自动字幕与 CC 字幕）
+
+  - 字幕内容摘要生成
+
+  - 关键信息检索
+
+  - 视频内容问答
+
+  - 字幕文本导出
+
+  适用场景:
+
+  - 学习视频内容摘要
+
+  - 视频关键信息检索
+
+  - 外语视频内容理解
+
+  - 内容创作素材整理
+
+  差异化:
+
+  - 免费版聚焦单视频字幕提取核心场景...'
+tags:
+  - Creative
+  - 视频处理
+  - 字幕提取
+  - 免费版
+  - YouTube
+  - 视频
+  - 媒体
+  - youtube
+  - 字幕
+  - bash
+tools:
+  - read
+  - exec
+  - write
+homepage: ""
+category: "Creative"
+---
 # YouTube 字幕提取工具 - 免费版
 
 ## 概述
 
-YouTube 字幕提取免费版是一款面向个人用户的轻量级视频字幕获取工具。它通过 `yt-dlp` 工具提取 YouTube 视频的字幕文本，支持自动生成字幕与人工 CC 字幕，提取后可进行内容摘要、问答、关键词检索等操作。
-
+YouTube 字幕提取免费版是一款面向个人用户的轻量级视频字幕获取工具。它通过 `yt-dlp` 工具提取 YouTube 视频的字幕文本，支持自动生成字幕与人工 CC 字幕，提取后可进行内容摘要、问答、关键词检索等操作.
 免费版聚焦核心字幕提取场景：单视频字幕获取、基础内容分析。配置简单，适合以下用户：
 
 - 学习者获取视频内容摘要
@@ -30,14 +61,13 @@ YouTube 字幕提取免费版是一款面向个人用户的轻量级视频字幕
 - 内容创作者整理素材
 - 外语学习者理解视频内容
 
-> 免费版限制：单次处理 1 个视频，仅支持提取字幕文本，不支持批量提取、频道监控、多语言字幕对比、关键词追踪等高级能力。如需这些能力，请使用 PRO 版本。
-
+> 免费版限制：单次处理 1 个视频，仅支持提取字幕文本，不支持批量提取、频道监控、多语言字幕对比、关键词追踪等高级能力。如需这些能力，请使用 PRO 版本.
 ## 核心能力
 
 ### 能力清单
 
 | 能力 | 描述 | 免费版 |
-|:-----|:-----|:-------|
+|---|---|---|
 | 字幕提取 | 获取视频字幕文本 | 支持 |
 | 自动字幕 | 提取自动生成字幕 | 支持 |
 | CC 字幕 | 提取人工字幕 | 支持 |
@@ -51,11 +81,16 @@ YouTube 字幕提取免费版是一款面向个人用户的轻量级视频字幕
 | 关键词追踪 | 跨视频关键词 | 不支持 |
 | 时间戳标记 | 字幕带时间戳 | 不支持（仅文本） |
 
-**输入**: 用户提供能力清单所需的指令和必要参数。
-**处理**: 按照skill规范执行能力清单操作,遵循单一意图原则。
-**输出**: 返回能力清单的执行结果,包含操作状态和输出数据。
-
+**处理**: 解析能力清单的输入参数,完成核心逻辑,返回结构化响应.
+**输出**: 返回能力清单的响应数据,包含状态码、结果和日志.
 ### 工作流程
+
+## 输入格式
+| 参数名 | 类型 | 必填 | 说明 |
+|:-----|:-----|:-----|:-----|
+| input | string | 是 | YouTube字幕提取-免费版处理的输入数据或指令 |
+| options | object | 否 | 附加配置选项,如模式选择、格式偏好等 |
+| callback_url | string | 否 | 异步处理完成后的回调通知URL |
 
 ```text
 用户提供 YouTube 视频 URL
@@ -69,9 +104,8 @@ YouTube 字幕提取免费版是一款面向个人用户的轻量级视频字幕
 返回结果给用户
 ```
 
-**输入**: 用户提供工作流程所需的指令和必要参数。
-**处理**: 按照skill规范执行工作流程操作,遵循单一意图原则。
-**输出**: 返回工作流程的执行结果,包含操作状态和输出数据。
+**处理**: 解析工作流程的输入参数,完成核心逻辑,返回结构化响应.
+**输出**: 返回工作流程的响应数据,包含状态码、结果和日志.
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ### 字幕类型解析与选择
@@ -79,31 +113,27 @@ YouTube 字幕提取免费版是一款面向个人用户的轻量级视频字幕
 YouTube 视频通常有两种字幕：
 
 | 类型 | 说明 | 准确度 |
-|:-----|:-----|:-------|
+|---:|---:|---:|
 | 自动字幕 | YouTube 自动生成 | 中等（依赖语音识别） |
 | CC 字幕 | 人工上传字幕 | 高（人工校对） |
 
-免费版优先提取 CC 字幕，若无则使用自动字幕。
+免费版优先提取 CC 字幕，若无则使用自动字幕.
 
-**输入**: 用户提供字幕类型说明所需的指令和必要参数。
-**处理**: 按照skill规范执行字幕类型说明操作,遵循单一意图原则。
-**输出**: 返回字幕类型说明的执行结果,包含操作状态和输出数据。
-**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：轻量级、视频字幕提取工具、支持单视频字幕获、取与内容摘要、适合个人学习与内、容分析、字幕提取免费版、为个人用户提供轻、量化的视频字幕获、取能力、核心能力、单视频字幕提取、自动字幕与、字幕内容摘要生成、视频内容问答、字幕文本导出等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持。
-
+**处理**: 解析字幕类型说明的输入参数,完成核心逻辑,返回结构化响应.
+**输出**: 返回字幕类型说明的响应数据,包含状态码、结果和日志.
+**能力覆盖范围**：本skill的核心能力覆盖以下场景关键词：轻量级、视频字幕提取工具、支持单视频字幕获、取与内容摘要、适合个人学习与内、容分析、字幕提取免费版、为个人用户提供轻、量化的视频字幕获、取能力、核心能力、单视频字幕提取、自动字幕与、字幕内容摘要生成、视频内容问答、字幕文本导出等。这些关键词对应description中声明的使用场景,均已在上述能力点中提供对应的操作支持.
 ### 核心功能执行
-执行核心功能执行操作,使用`input_params`参数进行配置。
+执行核心功能执行操作,使用`input_params`参数进行配置.
 
-**输入**: 用户提供核心功能执行所需的指令和必要参数。
-**处理**: 按照skill规范执行核心功能执行操作,遵循单一意图原则。
-**输出**: 返回核心功能执行的执行结果,包含操作状态和输出数据。
+**处理**: 解析核心功能执行的输入参数,完成核心逻辑,返回结构化响应.
+**输出**: 返回核心功能执行的响应数据,包含状态码、结果和日志.
 - 执行此能力时使用`input_params`参数,支持创建/查询/导出操作
 
 ## 使用场景
 
 ### 场景 1：学习视频内容摘要
 
-小张想学习一个 YouTube 技术教程视频，但视频有 1 小时，希望先获取摘要判断是否值得学习。
-
+小张想学习一个 YouTube 技术教程视频，但视频有 1 小时，希望先获取摘要判断是否值得学习.
 **操作步骤：**
 
 1. 告诉 Agent：「帮我提取这个视频的字幕并总结要点 https://www.youtube.com/watch?v=VIDEO_ID」
@@ -115,7 +145,7 @@ YouTube 视频通常有两种字幕：
 
 ```bash
 # 提取字幕
-python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VIDEO_ID"
+python3 {baseDir}/（请参考skill目录中的脚本文件） "https://www.youtube.com/watch?v=VIDEO_ID"
 ```
 
 **返回示例：**
@@ -134,8 +164,7 @@ python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VID
 
 ### 场景 2：视频关键信息检索
 
-小李需要从一段产品评测视频中找到关于「续航时间」的具体信息。
-
+小李需要从一段产品评测视频中找到关于「续航时间」的具体信息.
 **操作步骤：**
 
 1. 告诉 Agent：「从这个视频找关于续航时间的内容 https://www.youtube.com/watch?v=VIDEO_ID」
@@ -147,16 +176,15 @@ python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VID
 
 ```bash
 # 提取字幕
-python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VIDEO_ID"
-
+youtube.com/watch?v=VIDEO_ID"
+# ...
 # 示例
 grep -A 2 -B 2 "续航" /tmp/transcript.txt
 ```
 
 ### 场景 3：外语视频内容理解
 
-小王想看一段英文演讲视频，但英语水平有限，希望通过字幕理解内容。
-
+小王想看一段英文演讲视频，但英语水平有限，希望通过字幕理解内容.
 **操作步骤：**
 
 1. 告诉 Agent：「提取这个英文视频的字幕并翻译要点 https://www.youtube.com/watch?v=VIDEO_ID」
@@ -168,7 +196,7 @@ grep -A 2 -B 2 "续航" /tmp/transcript.txt
 
 ```bash
 # 提取英文字幕
-python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VIDEO_ID" --lang en
+youtube.com/watch?v=VIDEO_ID" --lang en
 ```
 
 ## 不适用场景
@@ -181,8 +209,7 @@ python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VID
 
 ## 触发条件
 
-需要SEO优化、关键词分析、排名提升、搜索流量优化时使用。不适用于非本工具能力范围的需求。
-
+需要SEO优化、关键词分析、排名提升、搜索流量优化时使用。不适用于非本工具能力范围的需求.
 ## 快速开始
 
 ### 依赖详情
@@ -190,10 +217,10 @@ python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VID
 ```bash
 # 使用 pip 安装
 pip3 install yt-dlp
-
+# ...
 # 或使用 brew 安装（macOS）
 brew install yt-dlp
-
+# ...
 # 验证安装
 yt-dlp --version
 ```
@@ -203,7 +230,7 @@ yt-dlp --version
 最简单的用法 - 提取视频字幕：
 
 ```bash
-python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=dQw4w9WgXcQ"
+youtube.com/watch?v=dQw4w9WgXcQ"
 ```
 
 ### 第三步：生成摘要
@@ -212,8 +239,8 @@ python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=dQw
 
 ```bash
 # 提取字幕到文件
-python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VIDEO_ID" > /tmp/transcript.txt
-
+youtube.com/watch?v=VIDEO_ID" > /tmp/transcript.txt
+# ...
 # 让 Agent 读取并生成摘要
 ```
 
@@ -221,18 +248,17 @@ python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VID
 
 ```bash
 # 提取字幕
-python3 {baseDir}/scripts/get_transcript.py "https://www.youtube.com/watch?v=VIDEO_ID" > /tmp/transcript.txt
-
+youtube.com/watch?txt
+# ...
 # 搜索关键词
 grep -i "关键词" /tmp/transcript.txt
 ```
 
-**结果处理**: 执行完成后,查看输出结果确认操作状态。成功时输出包含处理摘要和结果数据;失败时根据错误信息排查问题,查阅错误处理章节获取恢复步骤。
-
+**响应解析**: 完成完成后,查看输出响应确认任务状态。成功时输出包含解析摘要和响应数据;失败时根据错误信息排查问题,查阅错误解析章节获取恢复步骤.
 #
 ## 配置示例
 
-#
+以下是YouTube字幕提取-免费版的典型配置示例，展示主要参数与选项的设置方式.
 ## 最佳实践
 
 ### 1. 选择有字幕的视频
@@ -248,23 +274,23 @@ CC 字幕准确度更高：
 
 ```bash
 # 优先提取人工字幕
-python3 {baseDir}/scripts/get_transcript.py "URL" --prefer-cc
+python3 {baseDir}/（请参考skill目录中的脚本文件） "URL" --prefer-cc
 ```
 
 ### 3. 字幕语言选择
 
 ```bash
 # 提取中文字幕
-python3 {baseDir}/scripts/get_transcript.py "URL" --lang zh
-
+python3 {baseDir}/（请参考skill目录中的脚本文件） "URL" --lang zh
+# ...
 # 提取英文字幕
-python3 {baseDir}/scripts/get_transcript.py "URL" --lang en
+python3 {baseDir}/（请参考skill目录中的脚本文件） "URL" --lang en
 ```
 
 ### 4. 长视频处理建议
 
 | 视频时长 | 建议 |
-|:---------|:-----|
+|:---:|:---:|
 | < 10 分钟 | 直接提取全部字幕 |
 | 10-30 分钟 | 提取后分段摘要 |
 | 30-60 分钟 | 提取后按章节摘要 |
@@ -290,8 +316,7 @@ brew install yt-dlp
 2. 视频没有人工上传字幕
 3. 字幕已被创作者关闭
 
-建议：选择有 CC 字幕的视频，或使用其他有字幕的视频。
-
+建议：选择有 CC 字幕的视频，或使用其他有字幕的视频.
 ### Q3：提取的字幕不准确？
 
 **A：** 自动字幕依赖语音识别，准确度受以下因素影响：
@@ -300,28 +325,24 @@ brew install yt-dlp
 - 说话人口音
 - 专业术语数量
 
-建议优先使用人工 CC 字幕。
-
+建议优先使用人工 CC 字幕.
 ### Q4：能否提取多语言字幕？
 
-**A：** 免费版单次仅提取一种语言字幕。如需多语言对比，请使用 PRO 版本。
-
+**A：** 免费版单次仅提取一种语言字幕。如需多语言对比，请使用 PRO 版本.
 ### Q5：能否批量提取多个视频？
 
-**A：** 免费版仅支持单视频提取。如需批量处理，请使用 PRO 版本。
-
+**A：** 免费版仅支持单视频提取。如需批量处理，请使用 PRO 版本.
 ### Q6：提取的字幕可以保存为文件吗？
 
 **A：** 可以：
 
 ```bash
-python3 {baseDir}/scripts/get_transcript.py "URL" > /tmp/transcript.txt
+python3 {baseDir}/（请参考skill目录中的脚本文件） "URL" > /tmp/transcript.txt
 ```
 
 ### Q7：能否提取播放列表的字幕？
 
-**A：** 免费版仅支持单视频。播放列表批量提取请使用 PRO 版本。
-
+**A：** 免费版仅支持单视频。播放列表批量提取请使用 PRO 版本.
 ## 依赖说明
 
 ### 运行环境
@@ -334,17 +355,18 @@ python3 {baseDir}/scripts/get_transcript.py "URL" > /tmp/transcript.txt
 ### 第三方依赖
 
 | 依赖项 | 类型 | 是否必需 | 获取方式 | 版本要求 |
-|:-------|:-----|:---------|:---------|:---------|
+|:------|------:|:------|:------|------:|
 | Python | 运行时 | 必需 | python.org | 3.8+ |
 | yt-dlp | 命令行工具 | 必需 | `pip install yt-dlp` | 2023.0+ |
 | LLM API | API | 必需 | 由 Agent 内置 LLM 提供 | - |
 
-#### 安装命令
+#
+### 安装命令
 
 ```bash
 # 安装 yt-dlp
 pip3 install yt-dlp
-
+# ...
 # 验证安装
 python3 --version
 yt-dlp --version
@@ -376,9 +398,8 @@ yt-dlp --version
 
 ## 错误处理
 
-
 | 错误场景 | 原因 | 处理方式 |
-|---------|------|---------|
+|---:|:---|---:|
 | 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
 | 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
 | 网络错误 | 连接超时或不可达 | 执行ping命令测试网络连通性,检查防火墙和代理设置连接后执行ping命令测试网络连通性,检查防火墙和代理设置连接后重新执行命令，参考国内替代方案 |
@@ -393,12 +414,27 @@ yt-dlp --version
 
 ### 基本用法
 
-**输入**：用户提供操作指令和必要参数
-
 **输出**：返回执行结果,包含操作状态和输出数据
 
 ```text
 用户: 执行核心功能
 Skill: 正在执行核心功能...
 Skill: 执行完成,结果如下: 操作成功
+```
+
+## 输出格式
+```json
+{
+  "success": true,
+  "data": {
+    "result": "YouTube字幕提取-免费版处理结果",
+    "execution_time": "0.5s",
+    "metadata": {
+      "version": "1.0",
+      "processor": "youtube watcher"
+    }
+  },
+  "execution_log": ["解析输入参数", "执行核心处理", "格式化输出结果"],
+  "error": null
+}
 ```

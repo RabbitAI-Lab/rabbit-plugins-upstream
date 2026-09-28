@@ -1,41 +1,58 @@
-## Description: <br>
-This skill helps an agent use Gmail through gogcli for mailbox reading, organization, drafts, forwarding, autoreplies, attachments, and bulk message operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Gmail tools for reading and organizing messages, managing drafts and attachments, sending mail, and changing account settings.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to work with a selected Gmail account in depth, including threads, labels, drafts, attachments, forwarding, autoreplies, and bulk archive, trash, or mark-read operations. It is appropriate only when the user intends to grant broad Gmail mailbox and account-setting authority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad access to Gmail messages and account settings. <br>
-Mitigation: Review before installing for sensitive personal or business mail, and authorize only the Gmail account the user intends to expose. <br>
-Risk: The skill can support permanent deletion, forwarding, delegates, forwarding settings, filters, send-as settings, vacation responders, watch notifications, tracking, sending mail, and downloading message content. <br>
-Mitigation: Require explicit confirmation before any destructive action, message sending, forwarding, settings change, tracking action, or message-content download. <br>
+## Use Case:
 
+People and developers using an agent to work with Gmail can read and organize conversations, prepare and send drafts, handle attachments, and manage labels or settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-gmail) <br>
-- [gogcli project](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON MCP server configuration and Gmail tool-use instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can lead an agent to invoke Gmail MCP tools that read, send, modify, delete, forward, download, or change Gmail account settings after authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: Some permanent deletions and account-settings changes can run without a separate user-confirmation step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact action and affected messages or settings before invoking destructive tools; restrict access where possible.
+
+Risk: Broad Gmail read/write/settings access and stored Google authentication data expose sensitive mail and credentials.
+
+Mitigation: Use GOG_READONLY=1 for read-only or shared deployments and protect the authentication and data directories.
+
+Risk: Anyone holding a signed attachment link may access the attachment until the link expires.
+
+Mitigation: Treat signed links as sensitive and share them only with intended recipients.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/gogcli-mcp-gmail)
+- [gogcli project](https://github.com/openclaw/gogcli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files]
+
+**Output Format:** [Gmail tool responses with message content, metadata, and attachment files or links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Attachment delivery may return inline content, a file path, or a signed link.]
+
+## Skill Version(s):
+
+4.5.2 (source: ClawHub release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

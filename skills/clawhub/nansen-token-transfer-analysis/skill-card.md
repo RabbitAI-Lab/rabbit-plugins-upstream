@@ -1,44 +1,53 @@
-## Description: <br>
-Where is this token moving and why? Large transfers, flow trends over time, and breakdown by wallet label. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides token-transfer analysis with Nansen to identify large transfers, flow trends, and wallet-label patterns.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External users and developers use this skill to investigate token movement, large transfers, flow trends, and wallet-label breakdowns through Nansen CLI research commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a Nansen API key. <br>
-Mitigation: Install and use it only where the agent is allowed to access NANSEN_API_KEY, and avoid exposing the key in prompts, logs, or shared output. <br>
-Risk: The skill depends on the nansen-cli package and permits Nansen CLI commands. <br>
-Mitigation: Use it only if you trust the nansen-cli package source, keep usage to the documented token research commands, and review commands before execution. <br>
-Risk: Token flow analysis can fail for stablecoins. <br>
-Mitigation: Use non-stablecoin token addresses for token flows, and skip the flow command for stablecoin tokens as documented by the skill. <br>
+## Use Case:
 
+Analysts and developers use this skill to examine token transfers, flow trends, and wallet-label breakdowns across supported chains.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nansen-devops/nansen-token-transfer-analysis) <br>
-- [Publisher Profile](https://clawhub.ai/user/nansen-devops) <br>
-- [nansen-cli package](https://www.npmjs.com/package/nansen-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and concise analytical guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires NANSEN_API_KEY and the nansen CLI; token flow analysis excludes stablecoins.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server-resolved release metadata) <br>
+Risk: Research calls may use an API key or saved browser session with account API permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only trusted credentials, confirm the selected authentication state before research, and stop on authentication or renewal failure.
+
+Risk: Supported x402 challenges may spend wallet funds on each call, including repeated calls in loops.
+
+Mitigation: Review wallet authorization, payment policy, and spending limits before running calls or loops.
+
+## Reference(s):
+
+- [Nansen Token Transfer Analysis on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-token-transfer-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Analysis]
+
+**Output Format:** [Markdown with bash command examples and interpretive guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a selected Nansen API key or saved browser session; token-flow queries do not support stablecoins.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

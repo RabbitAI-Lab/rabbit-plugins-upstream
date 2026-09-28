@@ -1,40 +1,52 @@
-## Description: <br>
-Provides QA guidance for bulk test data generation, data masking, compliance-aware data handling, and test data factory design. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language guidance for generating bulk test data, masking sensitive data, and managing the test-data lifecycle.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[kokxi](https://clawhub.ai/user/kokxi)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+QA engineers and developers use this skill to plan and generate repeatable test datasets, specify masking rules for sensitive data, and design cleanup and data-management workflows.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Sensitive production data may remain identifiable in test datasets.
+
+Mitigation: Prefer synthetic data; use only approved, properly de-identified production data under applicable data-governance controls.
+
+Risk: Example data-generation or cleanup commands could affect unintended records.
+
+Mitigation: Use isolated test environments and scoped credentials; review cleanup queries and preview affected rows before execution.
+
+## Reference(s):
 
 
-## Use Case: <br>
-QA engineers, test automation developers, and data engineers use this skill to plan repeatable test data construction, masking, cleanup, lifecycle management, and traceability for test environments. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Guidance, Code, SQL commands]
 
-## Known Risks and Mitigations: <br>
-Risk: Database cleanup examples could delete real data if applied to production or shared environments. <br>
-Mitigation: Use them only in isolated test environments, preview affected rows, wrap changes in transactions, require clear test-data markers, and obtain DBA approval before execution. <br>
-Risk: Production-data masking guidance could be applied without confirming compliance requirements or sensitive-field coverage. <br>
-Mitigation: Validate masking rules against the applicable privacy and compliance requirements before using production-derived data in tests. <br>
+**Output Format:** [Markdown with Python and SQL examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-data-engineering) <br>
+**Other Properties Related to Output:** [Test-data plans use DATA-XXXX identifiers and address generation, masking, and management.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with structured sections, checklists, and inline SQL/Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include DATA-XXXX traceability identifiers and structured data_strategy, data_generation, data_mask_rules, and data_management sections.] <br>
+1.7.7 (source: skill frontmatter and server release)
 
-## Skill Version(s): <br>
-1.6.0 (source: release evidence and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,20 +1,38 @@
 #!/usr/bin/env python3
 """
-image_with_comfyui.py - Call local ComfyUI for T2I / I2I image generation.
+image_with_comfyui.py - Call a ComfyUI server for T2I / I2I / I2V media generation.
+
+Modes:
+    t2i      Text-to-Image (Z-Image or SD3.5 Medium via --model)
+    i2i      Image-to-Image / edit (Qwen Image Edit)
+    wan2.2   Image-to-Video (Wan2.2)
+    test     Quick health check
 
 Usage:
-    python3 image_with_comfyui.py t2i --prompt "..." [--aspect 16:9] [--model z-image]
+    python3 image_with_comfyui.py t2i --prompt "..." [--aspect 1:1] [--model z-image]
     python3 image_with_comfyui.py t2i --prompt "..." --model sd35
     python3 image_with_comfyui.py i2i --prompt "..." --image image.jpg
-    python3 image_with_comfyui.py test                       # Quick health check
+    python3 image_with_comfyui.py wan2.2 --prompt "..." --image image.jpg
+    python3 image_with_comfyui.py test
 
 Configuration:
     Reads config from this SKILL's config.json (relative to this script).
-    Environment variable COMFYUI_URL overrides comfyui_url in config.
+    The bundled default endpoint is loopback-only (http://127.0.0.1:8188).
+    Environment overrides:
+      COMFYUI_URL            endpoint (non-loopback hosts print a warning)
+      COMFYUI_TIMEOUT        global generation timeout in seconds
+      COMFYUI_POLL_INTERVAL  polling interval in seconds
+      COMFYUI_OUTPUT_DIR     output directory
+
+Data flow:
+    Prompts and workflow JSON are sent to the configured endpoint; i2i/i2v
+    additionally upload the full source image. Generated media is written
+    to the output directory (config output_dir / COMFYUI_OUTPUT_DIR).
 """
 
 import argparse
 import base64
+import io
 import json
 import os
 import sys
@@ -52,6 +70,39 @@ def _find_workspace_dir() -> Path:
 
 WORKSPACE_DIR = _find_workspace_dir()
 
+def _apply_timeout_override(cfg: dict, timeout: int) -> None:
+    """Apply a global generation timeout override to every model entry."""
+    cfg["timeout_seconds"] = timeout
+    for section in ("image", "video"):
+        for model in cfg.get(section, {}).values():
+            if isinstance(model, dict):
+                model["timeout_seconds"] = timeout
+
+
+def _endpoint_disclosure(cfg: dict) -> None:
+    """Disclose data flow when the endpoint is not loopback.
+
+    Prints a one-time warning (stderr) if comfyui_url points at a
+    non-local host, so users are aware prompts and (for i2i/i2v) full
+    source images will be transmitted there.
+    """
+    url = cfg.get("comfyui_url", "")
+    try:
+        parsed = urllib.parse.urlparse(url)
+    except ValueError:
+        return
+    host = (parsed.hostname or "").lower()
+    if host in ("127.0.0.1", "localhost", "local", "0.0.0.0", "::1"):
+        return
+    scheme = (parsed.scheme or "http").upper()
+    print(
+        f"⚠️  Non-local ComfyUI endpoint: {url} — prompts and (for i2i/i2v) full "
+        f"source images will be sent to this host via {scheme}. "
+        "Only point COMFYUI_URL at a server you control.",
+        file=sys.stderr,
+    )
+
+
 def load_config() -> dict:
     """Load config from config.json, then apply env overrides."""
     config_path = SCRIPT_DIR / "config.json"
@@ -63,6 +114,16 @@ def load_config() -> dict:
     env_poll = os.environ.get("COMFYUI_POLL_INTERVAL")
     if env_poll:
         cfg["poll_interval_seconds"] = int(env_poll)
+    env_timeout = os.environ.get("COMFYUI_TIMEOUT")
+    if env_timeout:
+        _apply_timeout_override(cfg, int(env_timeout))
+    env_out = os.environ.get("COMFYUI_OUTPUT_DIR")
+    if env_out:
+        cfg["output_dir"] = env_out
+    env_keep = os.environ.get("COMFYUI_KEEP_MODELS_RESIDENT")
+    if env_keep is not None:
+        cfg["keep_models_resident"] = env_keep.strip().lower() in ("1", "true", "yes", "on")
+    _endpoint_disclosure(cfg)
     return cfg
 
 # ---------------------------------------------------------------------------
@@ -359,9 +420,15 @@ def send_prompt(cfg: dict, workflow: dict, timeout: int = 30) -> str:
         result = json.loads(resp.read().decode())
     return result.get("prompt_id", result.get("error", "unknown"))
 
-def send_prompt_with_errors(cfg: dict, workflow: dict, timeout: int = 30, retry_count: int = 0, max_retries: int = 1) -> tuple[str | None, str | None, list[str]]:
+def send_prompt_with_errors(cfg: dict, workflow: dict, timeout: int = 30, retry_count: int = 0, max_retries: int = 1, skip_autosubstitute: bool = False) -> tuple[str | None, str | None, list[str]]:
     """Send workflow to ComfyUI with automatic error handling.
-    
+
+    Args:
+        skip_autosubstitute: When True, the `value_not_in_list` automatic model
+            substitution branch is skipped so the caller can decide how to react
+            (e.g. descend the runtime fallback chain instead of silently swapping
+            the model). Defaults to False (keep the existing auto-substitute behavior).
+
     Returns: (prompt_id_or_None, error_message_or_None, warning_messages)
     """
     warnings = []
@@ -393,7 +460,7 @@ def send_prompt_with_errors(cfg: dict, workflow: dict, timeout: int = 30, retry_
                 f"🔄 Auto-bypassed — generation continues"
             )
             bypassed = bypass_node(workflow, node_id)
-            b_pid, b_err, b_warns = send_prompt_with_errors(cfg, bypassed, timeout, retry_count + 1, max_retries)
+            b_pid, b_err, b_warns = send_prompt_with_errors(cfg, bypassed, timeout, retry_count + 1, max_retries, skip_autosubstitute)
             return b_pid, b_err, warnings + b_warns
 
         pkg_info = find_node_package(class_type)
@@ -427,7 +494,7 @@ def send_prompt_with_errors(cfg: dict, workflow: dict, timeout: int = 30, retry_
                             param_name = param
                             loader_node = nd.get("class_type", "")
             
-            if requested and loader_node:
+            if requested and loader_node and not skip_autosubstitute:
                 obj_info = fetch_object_info(cfg)
                 available = get_available_models(obj_info)
                 sub = find_model_substitute(requested, available)
@@ -439,8 +506,13 @@ def send_prompt_with_errors(cfg: dict, workflow: dict, timeout: int = 30, retry_
                         f"📦 Loader: {sub_loader}.{sub_param}"
                     )
                     new_workflow = update_workflow_model(workflow, loader_node, param_name, substitute_model)
-                    sub_pid, sub_err, sub_warns = send_prompt_with_errors(cfg, new_workflow, timeout, retry_count + 1, max_retries)
+                    sub_pid, sub_err, sub_warns = send_prompt_with_errors(cfg, new_workflow, timeout, retry_count + 1, max_retries, skip_autosubstitute)
                     return sub_pid, sub_err, warnings + sub_warns
+
+            # With substitute disabled (or no usable substitute), hand the raw
+            # prompt_id/None back to the caller. For the runtime fallback chain a
+            # None here (missing node/file) is treated as a config problem and is
+            # NOT retried at a different tier — see error-handling.md §4.
     
     prompt_id = result.get("prompt_id")
     error_msg = result.get("error", {}).get("message", "") if "error" in result else ""
@@ -555,6 +627,33 @@ ASPECT_RATIOS = {
     "2:3": (1024, 1536),
 }
 
+# Qwen-Image 2.1: skill aspect keys -> ResolutionSelector preset names
+QWEN21_ASPECT_PRESETS = {
+    "1:1": "1:1 (Square)",
+    "2:3": "2:3 (Portrait Photo)",
+    "3:2": "3:2 (Photo)",
+    "3:4": "3:4 (Portrait Standard)",
+    "4:3": "4:3 (Standard)",
+    "9:16": "9:16 (Portrait Widescreen)",
+    "16:9": "16:9 (Widescreen)",
+}
+QWEN21_MAX_IMAGES = 16
+
+# Runtime fallback chains — see references/error-handling.md §4.
+# If a tier fails at RUNTIME (timeout / server sampling error / no output images),
+# the next tier is tried. Config problems (missing model file / missing node =>
+# prompt_id is None) are NOT retried at other tiers.
+FALLBACK_TIERS: dict[str, list[str]] = {
+    "t2i": ["qwen21", "z-image", "sd35"],
+    "i2i": ["qwen21", "qwen_imageedit"],
+}
+
+
+def get_qwen21_model_cfg(cfg: dict) -> dict:
+    """qwen21 config lives in both image.t2i and image.i2i; take t2i first."""
+    image_cfg = cfg.get("image", {})
+    return image_cfg.get("t2i", {}).get("qwen21") or image_cfg.get("i2i", {}).get("qwen21")
+
 # WAN2.2 I2V resolution reference (fast_ok, user_fav, native)
 WAN2_2_RES = {
     "3:4": [(560, 720), (720, 912), (848, 1088)],
@@ -606,6 +705,8 @@ def find_closest_wan2_2_resolution(iw: int, ih: int) -> tuple[int, int]:
 def find_nodes_by_class(workflow: dict, class_type: str) -> list[dict]:
     results = []
     for node_id, node_data in workflow.items():
+        if not isinstance(node_data, dict):
+            continue  # tolerate non-node top-level keys (e.g. metadata)
         if node_data.get("class_type") == class_type:
             results.append((node_id, node_data))
     return results
@@ -622,7 +723,31 @@ def resolve_workspace_path(p: str) -> str:
         p = str(WORKSPACE_DIR / p)
     return p
 
-def prepare_t2i_workflow(cfg: dict, prompt: str, aspect: str = "16:9",
+def strip_unload_nodes(workflow: dict) -> dict:
+    """When keep_models_resident is enabled, remove the workflow's VRAM-cleanup
+    nodes (UnloadModel / UnloadAllModels) so the model stays resident between
+    runs and successive images skip the cold-reload tax.
+
+    UnloadModel and UnloadAllModels are terminal 'sink' nodes: nothing depends on
+    their outputs, so simply dropping them is safe (unlike the producer-style
+    nodes that need rerouting via bypass_node).
+    """
+    import copy
+    modified = copy.deepcopy(workflow)
+    for nid, nd in list(modified.items()):
+        if nd.get("class_type") in ("UnloadAllModels", "UnloadModel"):
+            modified.pop(nid, None)
+    return modified
+
+
+def apply_keep_resident(cfg: dict, workflow: dict) -> dict:
+    """Return the workflow unchanged unless keep_models_resident is explicitly on."""
+    if cfg.get("keep_models_resident", False):
+        return strip_unload_nodes(workflow)
+    return workflow
+
+
+def prepare_t2i_workflow(cfg: dict, prompt: str, aspect: str = "1:1",
                          seed: int = None, steps: int = None,
                          model_type: str = "z-image") -> tuple[dict, str, int]:
     """Prepare T2I workflow from config, return (workflow, prompt_type, seed)."""
@@ -651,6 +776,10 @@ def prepare_t2i_workflow(cfg: dict, prompt: str, aspect: str = "16:9",
         for node_id, node_data in find_nodes_by_class(workflow, "EmptySD3LatentImage"):
             workflow[node_id]["inputs"]["width"] = w
             workflow[node_id]["inputs"]["height"] = h
+
+    # Timestamped output prefix (filename scheme: zt2i)
+    for node_id, node_data in find_nodes_by_class(workflow, "SaveImage"):
+        node_data["inputs"]["filename_prefix"] = _save_prefix("zt2i")
     
     if seed is None:
         import random
@@ -664,6 +793,7 @@ def prepare_t2i_workflow(cfg: dict, prompt: str, aspect: str = "16:9",
         if steps is not None:
             workflow[node_id]["inputs"]["steps"] = steps
     
+    workflow = apply_keep_resident(cfg, workflow)
     return workflow, "Z-Image T2I", seed
 
 def prepare_sd35_workflow(cfg: dict, prompt: str, aspect: str = "1:1",
@@ -691,6 +821,10 @@ def prepare_sd35_workflow(cfg: dict, prompt: str, aspect: str = "1:1",
     for node_id, _ in find_nodes_by_class(workflow, "EmptySD3LatentImage"):
         workflow[node_id]["inputs"]["width"] = w
         workflow[node_id]["inputs"]["height"] = h
+
+    # Timestamped output prefix (filename scheme: st2i)
+    for node_id, node_data in find_nodes_by_class(workflow, "SaveImage"):
+        node_data["inputs"]["filename_prefix"] = _save_prefix("st2i")
     
     # Fill prompts
     pos_found = False
@@ -712,6 +846,7 @@ def prepare_sd35_workflow(cfg: dict, prompt: str, aspect: str = "1:1",
         if cfg_cfg is not None:
             workflow[node_id]["inputs"]["cfg"] = cfg_cfg
     
+    workflow = apply_keep_resident(cfg, workflow)
     return workflow, "SD3.5 Medium T2I", seed
 
 def _build_multipart_body(parts: list[tuple[str, str]], files: list[tuple[str, str, str]]) -> tuple[bytes, str]:
@@ -749,6 +884,83 @@ def upload_image_to_comfyui(cfg: dict, local_path: str, filename: str = None) ->
         result = json.loads(resp.read().decode())
     return result.get("name", filename)
 
+def prepare_qwen21_workflow(cfg: dict, prompt: str, aspect: str = "1:1",
+                            seed: int = None, steps: int = None,
+                            negative: str = "", images: list = None) -> tuple[dict, str, int]:
+    """Prepare the Qwen-Image 2.1 dual-mode workflow (T2I / I2I / multi-image).
+
+    images: list of local image paths. Empty = pure T2I (reference switch OFF).
+            1..16 = edit/multi-image (switch ON; image N -> <imageN> in prompt).
+    """
+    import random
+    model_cfg = get_qwen21_model_cfg(cfg)
+    workflow_path = resolve_skill_path(model_cfg["workflow_path"])
+    with open(workflow_path, "r", encoding="utf-8") as f:
+        workflow = json.load(f)
+
+    images = list(images or [])
+    if len(images) > QWEN21_MAX_IMAGES:
+        raise ValueError(f"qwen21 supports at most {QWEN21_MAX_IMAGES} reference images, got {len(images)}")
+    if seed is None:
+        seed = random.randint(0, 2**63 - 1)
+
+    # Master switch: OFF = pure T2I, ON = reference image(s)
+    for node_id, node_data in find_nodes_by_class(workflow, "PrimitiveBoolean"):
+        node_data["inputs"]["value"] = len(images) > 0
+
+    # Aspect ratio -> ResolutionSelector preset
+    preset = QWEN21_ASPECT_PRESETS.get(aspect)
+    for node_id, node_data in find_nodes_by_class(workflow, "ResolutionSelector"):
+        if preset:
+            node_data["inputs"]["aspect_ratio"] = preset
+        node_data["inputs"]["megapixels"] = model_cfg.get("default_megapixels", 1.0)
+
+    # Text encoder: prompt, negative, reference resize target, extra image slots
+    for node_id, node_data in find_nodes_by_class(workflow, "TextEncodeQwenImage21"):
+        node_data["inputs"]["prompt"] = prompt
+        node_data["inputs"]["negative_prompt"] = negative or ""
+        node_data["inputs"]["resolution"] = model_cfg.get("default_ref_resolution", 1024)
+        if not images:
+            # T2I: drop the slot-1 link entirely (placeholder file won't exist server-side)
+            node_data["inputs"].pop("images.image_1", None)
+        else:
+            for i in range(2, len(images) + 1):
+                node_data["inputs"][f"images.image_{i}"] = [str(90 + i), 0]
+
+    if not images:
+        # Remove reference-image branch nodes (LoadImage 11 + switch 13)
+        for nid in ("11", "13"):
+            if workflow.get(nid, {}).get("class_type") in ("LoadImage", "ComfySwitchNode"):
+                workflow.pop(nid)
+    else:
+        uploaded = upload_image_to_comfyui(cfg, images[0])
+        for node_id, node_data in find_nodes_by_class(workflow, "LoadImage"):
+            node_data["inputs"]["image"] = uploaded
+        for i in range(2, len(images) + 1):
+            fn = upload_image_to_comfyui(cfg, images[i - 1])
+            nid = str(90 + i)
+            workflow[nid] = {
+                "class_type": "LoadImage",
+                "inputs": {"image": fn},
+                "_meta": {"title": f"Reference image (slot {i})"},
+            }
+
+    # KSampler: cfg locked to model default (1.0 — distilled model)
+    for node_id, node_data in find_nodes_by_class(workflow, "KSampler"):
+        node_data["inputs"]["seed"] = seed
+        node_data["inputs"]["steps"] = steps if steps is not None else model_cfg.get("default_steps", 25)
+        node_data["inputs"]["cfg"] = model_cfg.get("default_cfg", 1.0)
+
+    # Timestamped output prefix (filename scheme: qt2i / qi2i / qei2i / zt2i / st2i)
+    mode = "qi2i" if images else "qt2i"
+    for node_id, node_data in find_nodes_by_class(workflow, "SaveImage"):
+        node_data["inputs"]["filename_prefix"] = _save_prefix(mode)
+
+    label = f"Qwen-Image 2.1 Edit ({len(images)} ref image)" if images else "Qwen-Image 2.1 T2I"
+    workflow = apply_keep_resident(cfg, workflow)
+    return workflow, label, seed
+
+
 def prepare_i2i_workflow(cfg: dict, prompt: str, image_path: str,
                          seed: int = None, steps: int = None) -> tuple[dict, str, str, int]:
     model_cfg = get_model_cfg(cfg, "qwen_imageedit")
@@ -785,12 +997,34 @@ def prepare_i2i_workflow(cfg: dict, prompt: str, image_path: str,
         workflow[node_id]["inputs"]["seed"] = seed
         if steps is not None:
             workflow[node_id]["inputs"]["steps"] = steps
-    
+
+    # Timestamped output prefix (filename scheme: qei2i)
+    for node_id, node_data in find_nodes_by_class(workflow, "SaveImage"):
+        node_data["inputs"]["filename_prefix"] = _save_prefix("qei2i")
+
     return workflow, "Qwen Image Edit", uploaded_filename, seed
 
 # ---------------------------------------------------------------------------
 # Output helpers
 # ---------------------------------------------------------------------------
+
+def _save_prefix(base: str) -> str:
+    """Server-side SaveImage filename prefix: base + '_' + timestamp (no trailing '_').
+
+    ComfyUI appends '_NNNNN_' after the prefix, so the final filename ends with
+    an underscore; save_b64_image() strips that trailing '_' client-side.
+    """
+    ts = time.strftime("%Y%m%d_%H%M%S")
+    return f"{base}_{ts}"
+
+
+def _strip_trailing_underscore(name: str) -> str:
+    """Remove a trailing '_' from a filename, handling both `name_` and `name_.ext`."""
+    stem, _, ext = name.rpartition(".")
+    if ext and stem.endswith("_"):
+        return stem.rstrip("_") + "." + ext
+    return name.rstrip("_")
+
 
 def ensure_output_dir(cfg: dict, model_id: str = None, cmd_output_dir: str = None) -> Path:
     """Get output directory: output_dir + output_subdir.
@@ -816,22 +1050,347 @@ def ensure_output_dir(cfg: dict, model_id: str = None, cmd_output_dir: str = Non
     
     return base
 
-def save_b64_image(b64_data: str, filename: str, output_dir: Path) -> Path:
+def save_b64_image(b64_data: str, filename: str, output_dir: Path,
+                   fmt: str = "png", jpg_quality: int = 95) -> Path:
+    """Save a base64 image, converting to JPG on the client side when fmt='jpg'.
+
+    ComfyUI's SaveImage node always writes PNG server-side; the JPG conversion
+    happens here after download (Pillow), so it works with any server setup.
+    Falls back to PNG if conversion fails.
+    """
     safe_name = sanitize_filename(filename, output_dir)
     if safe_name is None:
         safe_name = f"image_{int(time.time())}.png"  # fallback name
-    output_path = output_dir / safe_name
+    safe_name = _strip_trailing_underscore(safe_name)  # ComfyUI saves as prefix_NNNNN_.ext — drop the '_'
+    raw = base64.b64decode(b64_data)
+    if fmt == "jpg":
+        if Path(safe_name).suffix.lower() != ".jpg":
+            safe_name = Path(safe_name).stem + ".jpg"
+        output_path = output_dir / safe_name
+        try:
+            from PIL import Image
+            img = Image.open(io.BytesIO(raw))
+            img.load()
+            if img.mode not in ("RGB", "L"):
+                # JPEG has no alpha channel — composite onto white
+                rgba = img.convert("RGBA")
+                bg = Image.new("RGB", rgba.size, (255, 255, 255))
+                bg.paste(rgba, mask=rgba.split()[-1])
+                img = bg
+            else:
+                img = img.convert("RGB")
+            img.save(output_path, "JPEG", quality=jpg_quality, optimize=True)
+            return output_path
+        except Exception as e:
+            print(f"⚠️ JPG conversion failed ({e}) — falling back to PNG", file=sys.stderr)
+            output_path = output_dir / Path(safe_name).stem + ".png"
+    else:
+        output_path = output_dir / safe_name
     with open(output_path, "wb") as f:
-        f.write(base64.b64decode(b64_data))
+        f.write(raw)
     return output_path
 
+
+def get_output_fmt_args(cfg: dict, args) -> tuple:
+    """Resolve (fmt, jpg_quality) from CLI flags, then config.json, then defaults."""
+    image_cfg = cfg.get("image", {})
+    fmt = getattr(args, "format", None) or image_cfg.get("output_format", "png")
+    if fmt not in ("png", "jpg"):
+        fmt = "png"
+    quality = getattr(args, "jpg_quality", None) or image_cfg.get("jpg_quality", 89)
+    return fmt, int(quality)
+
 def print_result(prompt_type: str, prompt: str, images: list[dict],
-                 local_paths: list[Path], output_dir: Path, cfg: dict = None):
+                 local_paths: list[Path], output_dir: Path, cfg: dict = None,
+                 seed: int = None):
     for i, img, path in zip(range(1, len(local_paths)+1), images, local_paths):
         sz = path.stat().st_size / 1024
         print(f"✅ Image {i}: {path.name} ({sz:.0f} KB)")
         print(f"   Prompt: {prompt[:80]}")
         print(f"   File: {path}")
+        if seed is not None:
+            print(f"   Seed: {seed}")
+
+# ---------------------------------------------------------------------------
+# Runtime fallback chain (see references/error-handling.md §4)
+#
+# Tiers fail on RUNTIME signals only: server timeout / status=error /
+# no output images. Config problems (prompt_id is None: missing model file
+# or missing node) are NOT retried at another tier — the existing
+# missing-model / missing-node paths stay authoritative.
+# ---------------------------------------------------------------------------
+
+FAIL_CONFIG = "config problem (missing model file / node) — no fallback"
+
+
+def _execute_tier(cfg: dict, workflow: dict, timeout: int, output_dir: Path):
+    """Send one prepared workflow and collect the result.
+
+    Returns (prompt_id_or_None, failure_reason_or_None, images_or_None).
+    failure_reason is None on success.
+    """
+    prompt_id, err_msg, warns = send_prompt_with_errors(cfg, workflow, timeout, skip_autosubstitute=True)
+    for w in warns:
+        print(w)
+    if prompt_id is None:
+        return None, FAIL_CONFIG, None
+    try:
+        history = wait_for_completion(cfg, prompt_id, timeout)
+    except TimeoutError:
+        return prompt_id, f"server timeout (>{timeout}s)", None
+    except urllib.error.URLError as e:
+        # Server unreachable mid-run — every tier on the same server would
+        # fail identically, so treat as environment problem, not a model failure.
+        return prompt_id, f"cannot connect to ComfyUI ({e}) — config/environment problem, no fallback", None
+    status_str = history.get(prompt_id, {}).get("status", {}).get("status_str", "")
+    if status_str == "error":
+        return prompt_id, "server sampling error", None
+    images = get_output_images(history, prompt_id, output_dir)
+    if not images:
+        return prompt_id, "no output images", None
+    return prompt_id, None, images
+
+
+def _prepare_tier(cfg: dict, args, tier: str, kind: str, seed: int, steps: int):
+    """Build one fallback tier with the existing prepare_* functions.
+
+    Returns (workflow, timeout, output_dir, label), or None when the tier is
+    not applicable (e.g. qwen_imageedit with multi-image input).
+    """
+    if kind == "t2i":
+        aspect = args.aspect
+        if tier == "qwen21":
+            model_cfg = get_qwen21_model_cfg(cfg)
+            aspect = aspect or model_cfg.get("default_aspect", "1:1")
+            if steps is None:
+                steps = model_cfg.get("default_steps", 25)
+            output_dir = ensure_output_dir(cfg, "qwen21", args.output_dir)
+            output_dir.mkdir(parents=True, exist_ok=True)
+            timeout = model_cfg.get("timeout_seconds", 600)
+            workflow, label, _ = prepare_qwen21_workflow(
+                cfg, args.prompt, aspect=aspect, seed=seed, steps=steps,
+                negative=getattr(args, 'negative', '') or "")
+        elif tier == "sd35":
+            model_cfg = get_model_cfg(cfg, "sd35")
+            aspect = aspect or "1:1"
+            if steps is None:
+                steps = model_cfg.get("default_steps", 20)
+            cfg_val = args.cfg if args.cfg is not None else model_cfg.get("default_cfg", 4.01)
+            negative = getattr(args, "negative", "") or ""
+            output_dir = ensure_output_dir(cfg, "sd35", args.output_dir)
+            output_dir.mkdir(parents=True, exist_ok=True)
+            timeout = model_cfg.get("timeout_seconds", 100)
+            workflow, label, _ = prepare_sd35_workflow(cfg, args.prompt, aspect, seed, steps, cfg_val, negative)
+        else:  # z-image
+            model_cfg = get_model_cfg(cfg, "z-image")
+            aspect = aspect or "1:1"
+            if steps is None:
+                steps = model_cfg.get("default_steps", 9)
+            output_dir = ensure_output_dir(cfg, "z-image", args.output_dir)
+            output_dir.mkdir(parents=True, exist_ok=True)
+            timeout = model_cfg.get("timeout_seconds", 100)
+            workflow, label, _ = prepare_t2i_workflow(cfg, args.prompt, aspect, seed, steps, "z-image")
+        return workflow, timeout, output_dir, label
+
+    # i2i
+    raw_images = args.image if isinstance(args.image, list) else [args.image]
+    image_paths = [str(Path(p).expanduser()) for p in raw_images]
+    if tier == "qwen21":
+        model_cfg = get_qwen21_model_cfg(cfg)
+        if steps is None:
+            steps = model_cfg.get("default_steps", 25)
+        output_dir = ensure_output_dir(cfg, "qwen21", args.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        timeout = model_cfg.get("timeout_seconds", 600)
+        workflow, label, _ = prepare_qwen21_workflow(
+            cfg, args.prompt,
+            aspect=args.aspect or model_cfg.get("default_aspect", "1:1"),
+            seed=seed, steps=steps, images=image_paths,
+            negative=getattr(args, 'negative', '') or "")
+        return workflow, timeout, output_dir, label
+
+    # qwen_imageedit — single input image only
+    if len(image_paths) != 1:
+        print(f"⚠️ tier {tier} — skipped: this model supports a single input image only")
+        return None
+    model_cfg = get_model_cfg(cfg, "qwen_imageedit")
+    if steps is None:
+        steps = model_cfg.get("default_steps", 4)
+    output_dir = ensure_output_dir(cfg, "qwen_imageedit", args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    timeout = model_cfg.get("timeout_seconds", 600)
+    workflow, label, _fn, _ = prepare_i2i_workflow(cfg, args.prompt, image_paths[0], seed, steps)
+    return workflow, timeout, output_dir, label
+
+
+def _deliver_fallback(cfg: dict, args, images: list[dict], output_dir: Path,
+                      label: str, seed: int, used_tier: str, failed: list[str]) -> None:
+    """Download + save + print the result of a successful tier, reporting any descent."""
+    b64_images = [image_b64_from_comfyui(cfg, img) for img in images]
+    fmt, jpg_quality = get_output_fmt_args(cfg, args)
+    local_paths = [save_b64_image(b64, img["filename"], output_dir, fmt, jpg_quality)
+                   for b64, img in zip(b64_images, images)]
+    print_result(label, args.prompt, images, local_paths, output_dir, cfg, seed)
+    if failed:
+        print(f"🔄 used {used_tier} — fell back because {' / '.join(failed)} failed this run.")
+        print("   👉 Want a different model / prompt / seed, or a retry? Just say so.")
+
+
+def _known_tier_model_files() -> set[str]:
+    """Model filenames referenced by the built-in tier workflows (excluded from tier 4)."""
+    used: set[str] = set()
+    for wf_rel in ("workflows/qwen_image_2.1_api.json", "workflows/z-image_t2i_api.json",
+                   "workflows/sd3.5-med_t2i_api.json", "workflows/qwen_image-edit_api.json"):
+        try:
+            with open(resolve_skill_path(wf_rel), "r", encoding="utf-8") as f:
+                wf = json.load(f)
+        except Exception:
+            continue
+        for nd in wf.values():
+            if not isinstance(nd, dict):
+                continue
+            for p in ("unet_name", "ckpt_name"):
+                v = nd.get("inputs", {}).get(p)
+                if isinstance(v, str) and v:
+                    used.add(v)
+    return used
+
+
+def _build_minimal_ckpt_workflow(ckpt_name: str, prompt: str, aspect: str, seed: int, steps: int) -> dict:
+    """Minimal standard topology: checkpoint + CLIP x2 + latent + KSampler + VAE + save."""
+    w, h = ASPECT_RATIOS.get(aspect, (1024, 1024))
+    ts = time.strftime("%Y%m%d_%H%M%S")
+    return {
+        "1": {"class_type": "CheckpointLoaderSimple",
+             "inputs": {"ckpt_name": ckpt_name},
+             "_meta": {"title": "Checkpoint (fallback)"}},
+        "2": {"class_type": "CLIPTextEncode",
+             "inputs": {"text": prompt, "clip": ["1", 1]},
+             "_meta": {"title": "Positive (fallback)"}},
+        "3": {"class_type": "CLIPTextEncode",
+             "inputs": {"text": "", "clip": ["1", 1]},
+             "_meta": {"title": "Negative (fallback)"}},
+        "4": {"class_type": "EmptySD3LatentImage",
+             "inputs": {"width": w, "height": h, "batch_size": 1},
+             "_meta": {"title": "Latent (fallback)"}},
+        "5": {"class_type": "KSampler",
+             "inputs": {"seed": seed, "steps": steps, "cfg": 7.0,
+                        "sampler_name": "euler", "scheduler": "normal", "denoise": 1.0,
+                        "model": ["1", 0], "positive": ["2", 0],
+                        "negative": ["3", 0], "latent_image": ["4", 0]},
+             "_meta": {"title": "Sampler (fallback)"}},
+        "6": {"class_type": "VAEDecode",
+             "inputs": {"samples": ["5", 0], "vae": ["1", 2]},
+             "_meta": {"title": "VAEDecode (fallback)"}},
+        "7": {"class_type": "SaveImage",
+             "inputs": {"filename_prefix": f"fallback/{ts}", "images": ["6", 0]},
+             "_meta": {"title": "Save (fallback)"}},
+    }
+
+
+def _print_available_models(cfg: dict) -> None:
+    try:
+        avail = get_available_models(fetch_object_info(cfg))
+        ckpt = [m for m in avail.get("CheckpointLoaderSimple", {}).get("ckpt_name", []) if isinstance(m, str)]
+        unet = [m for m in avail.get("UNETLoader", {}).get("unet_name", []) if isinstance(m, str)]
+        print(f"   Available checkpoints: {', '.join(ckpt) or '(none)'}")
+        print(f"   Available UNet models: {', '.join(unet) or '(none)'}")
+    except Exception as e:
+        print(f"   (could not fetch the available model list: {e})")
+
+
+def _attempt_any_available(cfg: dict, args, seed: int, steps: int, failed: list[str]) -> None:
+    """Tier 4 (t2i only): try any remaining checkpoint model with the standard topology.
+
+    If none work (or none exist), print the full candidate list for manual choice.
+    """
+    print("🔎 All configured models failed — probing the server for any available checkpoint model ...")
+    try:
+        obj_info = fetch_object_info(cfg)
+    except Exception as e:
+        print(f"❌ Could not fetch the available model list: {e}", file=sys.stderr)
+        sys.exit(1)
+    avail = get_available_models(obj_info)
+    ckpt_names = [m for m in avail.get("CheckpointLoaderSimple", {}).get("ckpt_name", []) if isinstance(m, str)]
+    unet_names = [m for m in avail.get("UNETLoader", {}).get("unet_name", []) if isinstance(m, str)]
+    used = _known_tier_model_files()
+    candidates = [m for m in ckpt_names if m not in used]
+    if not candidates:
+        print(f"❌ No remaining checkpoint models. Available (for manual choice): {', '.join(ckpt_names) or '(none)'}")
+        print(f"   Available UNet models: {', '.join(unet_names) or '(none)'}")
+        print("   👉 Tell me a model name and I can retry with --model or a custom workflow.")
+        sys.exit(1)
+
+    aspect = args.aspect or "1:1"
+    if steps is None:
+        steps = 20
+    output_dir = ensure_output_dir(cfg, None, args.output_dir)
+    output_dir.mkdir(parents=True, exist_ok=True)
+    timeout = 300
+
+    for m in candidates:
+        print(f"⚠️ trying {m} (any available) ...")
+        wf = _build_minimal_ckpt_workflow(m, args.prompt, aspect, seed, steps)
+        pid, reason, images = _execute_tier(cfg, wf, timeout, output_dir)
+        if reason is None:
+            _deliver_fallback(cfg, args, images, output_dir, f"any available: {m}", seed, m, failed)
+            return
+        if reason.startswith("config problem"):
+            print(f"   skipped {m}: {reason} (topology/file mismatch for this model)")
+            continue
+        print(f"   failed: {reason}")
+
+    print("❌ All candidate models failed. Available models (for manual choice):")
+    _print_available_models(cfg)
+    print("   👉 Tell me a model name or prompt adjustment and I can continue.")
+    sys.exit(1)
+
+
+def _run_with_fallback(cfg: dict, args, kind: str) -> None:
+    """Dispatch a t2i/i2i request through the runtime fallback chain."""
+    import random
+    base_tier = args.model or cfg.get("default_model", {}).get(kind)
+    if not base_tier:
+        base_tier = "qwen21" if kind == "t2i" else "qwen_imageedit"
+    tiers = [base_tier] + [t for t in FALLBACK_TIERS[kind] if t != base_tier]
+
+    seed = args.seed
+    if seed is None:
+        seed = random.randint(0, 2**63 - 1)
+    steps = args.steps
+
+    failed: list[str] = []
+    for tier in tiers:
+        print(f"🎨 trying {tier} ...")
+        try:
+            prepared = _prepare_tier(cfg, args, tier, kind, seed, steps)
+        except Exception as e:
+            print(f"⚠️ tier {tier} — failed during preparation: {e}")
+            failed.append(tier)
+            continue
+        if prepared is None:
+            failed.append(tier)  # inapplicable tier (e.g. multi-image on qwen_imageedit)
+            continue
+        workflow, timeout, output_dir, label = prepared
+        pid, reason, images = _execute_tier(cfg, workflow, timeout, output_dir)
+        if reason is None:
+            _deliver_fallback(cfg, args, images, output_dir, label, seed, tier, failed)
+            return
+        print(f"⚠️ tier {tier} — failed: {reason}")
+        failed.append(tier)
+        if reason.startswith("config problem") or "no fallback" in reason:
+            print(f"❌ {reason} — not degrading to another model (see references/error-handling.md).")
+            sys.exit(1)
+
+    if kind == "t2i":
+        _attempt_any_available(cfg, args, seed, steps, failed)
+    # i2i: no blind generic topology — a plain T2I model cannot honor the source image.
+    print("❌ All edit models failed this run — i2i never degrades blindly without the reference image.")
+    print("   Available models (for reference):")
+    _print_available_models(cfg)
+    print("   👉 Want to retry / switch model / adjust the prompt? Just say so.")
+    sys.exit(1)
+
 
 # ---------------------------------------------------------------------------
 # CLI commands
@@ -878,56 +1437,82 @@ def save_b64_video(b64_data: str, filename: str, output_dir: Path) -> str:
     safe_name = sanitize_filename(filename, output_dir)
     if safe_name is None:
         safe_name = f"video_{int(time.time())}.mp4"  # fallback name
+    else:
+        safe_name = _strip_trailing_underscore(safe_name)  # drop ComfyUI's trailing '_'
     output_path = output_dir / safe_name
     with open(output_path, "wb") as f:
         f.write(base64.b64decode(b64_data))
     return str(output_path)
 
 def print_result_video(prompt_type: str, prompt: str, video_items: list,
-                       local_paths: list, output_dir: Path, cfg: dict) -> None:
+                       local_paths: list, output_dir: Path, cfg: dict,
+                       seed: int = None) -> None:
     for i, v, p in zip(range(1, len(local_paths)+1), video_items, local_paths):
         p = Path(p) if isinstance(p, str) else p
         sz = p.stat().st_size / 1024
         print(f"✅ Video {i}: {p.name} ({sz:.0f} KB)")
         print(f"   Prompt: {prompt[:80]}")
         print(f"   File: {p}")
+        if seed is not None:
+            print(f"   Seed: {seed}")
 
 def cmd_t2i(cfg: dict, args: argparse.Namespace) -> None:
+    default_model = cfg.get("default_model", {}).get("t2i", "z-image")
+    model_type = args.model or default_model
+    if model_type not in ("qwen21", "z-image", "sd35"):
+        print(f"❌ Unknown t2i model: {model_type} (expected qwen21 / z-image / sd35)", file=sys.stderr)
+        sys.exit(1)
+
+    if getattr(args, "no_fallback", False):
+        # Single-model mode: existing behavior, no runtime fallback.
+        _run_t2i_single(cfg, args, model_type)
+        return
+    _run_with_fallback(cfg, args, "t2i")
+
+def _run_t2i_single(cfg: dict, args, model_type: str) -> None:
+    """Single-model t2i run (used with --no-fallback)."""
     prompt = args.prompt
-    aspect = args.aspect
     seed = args.seed
     steps = args.steps
-    model_type = args.model or "z-image"
-    
-    # Determine model config and defaults
-    if model_type == "sd35":
-        model_cfg = get_model_cfg(cfg, "sd35")
-        default_steps = model_cfg.get("default_steps", 20)
-        default_cfg = model_cfg.get("default_cfg", 4.01)
-        cfg_val = args.cfg if args.cfg is not None else default_cfg
-        negative = getattr(args, 'negative', '') or ''
-        print_type = "SD3.5"
-    else:
-        model_cfg = get_model_cfg(cfg, "z-image")
-        default_steps = model_cfg.get("default_steps", 9)
-        cfg_val = None
-        negative = ""
-        print_type = "T2I"
-    
-    if steps is None:
-        steps = default_steps
+
+
     if seed is None:
         import random
         seed = random.randint(0, 2**63 - 1)
-    
-    output_dir = ensure_output_dir(cfg, model_type, args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    timeout = model_cfg.get("timeout_seconds", 100)
-    
-    if model_type == "sd35":
+
+    if model_type == "qwen21":
+        model_cfg = get_qwen21_model_cfg(cfg)
+        aspect = args.aspect or model_cfg.get("default_aspect", "1:1")
+        if steps is None:
+            steps = model_cfg.get("default_steps", 25)
+        if args.cfg is not None:
+            print("⚠️ qwen21 is a distilled model — ignoring --cfg, keeping CFG 1.0", file=sys.stderr)
+        output_dir = ensure_output_dir(cfg, "qwen21", args.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        timeout = model_cfg.get("timeout_seconds", 600)
+        workflow, prompt_type_str, seed_used = prepare_qwen21_workflow(
+            cfg, prompt, aspect=aspect, seed=seed, steps=steps,
+            negative=getattr(args, 'negative', '') or "")
+    elif model_type == "sd35":
+        model_cfg = get_model_cfg(cfg, "sd35")
+        aspect = args.aspect or "1:1"
+        if steps is None:
+            steps = model_cfg.get("default_steps", 20)
+        cfg_val = args.cfg if args.cfg is not None else model_cfg.get("default_cfg", 4.01)
+        negative = getattr(args, 'negative', '') or ''
+        output_dir = ensure_output_dir(cfg, "sd35", args.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        timeout = model_cfg.get("timeout_seconds", 100)
         workflow, prompt_type_str, seed_used = prepare_sd35_workflow(cfg, prompt, aspect, seed, steps, cfg_val, negative)
     else:
-        workflow, prompt_type_str, seed_used = prepare_t2i_workflow(cfg, prompt, aspect, seed, steps, model_type)
+        model_cfg = get_model_cfg(cfg, "z-image")
+        aspect = args.aspect or "1:1"
+        if steps is None:
+            steps = model_cfg.get("default_steps", 9)
+        output_dir = ensure_output_dir(cfg, "z-image", args.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        timeout = model_cfg.get("timeout_seconds", 100)
+        workflow, prompt_type_str, seed_used = prepare_t2i_workflow(cfg, prompt, aspect, seed, steps, "z-image")
     
     prompt_id, err_msg, errs = send_prompt_with_errors(cfg, workflow, timeout)
     if prompt_id is None:
@@ -942,25 +1527,63 @@ def cmd_t2i(cfg: dict, args: argparse.Namespace) -> None:
         sys.exit(1)
     
     b64_images = [image_b64_from_comfyui(cfg, img) for img in images]
-    local_paths = [save_b64_image(b64, img["filename"], output_dir)
+    fmt, jpg_quality = get_output_fmt_args(cfg, args)
+    local_paths = [save_b64_image(b64, img["filename"], output_dir, fmt, jpg_quality)
                    for b64, img in zip(b64_images, images)]
-    print_result(prompt_type_str, prompt, images, local_paths, output_dir, cfg)
+    print_result(prompt_type_str, prompt, images, local_paths, output_dir, cfg, seed_used)
 
 def cmd_i2i(cfg: dict, args: argparse.Namespace) -> None:
+    import random
+    raw_images = args.image if isinstance(args.image, list) else [args.image]
+    image_paths = [Path(p).expanduser() for p in raw_images]
+    for p in image_paths:
+        if not p.exists():
+            print(f"❌ Image not found: {p}", file=sys.stderr)
+            sys.exit(1)
+
+    default_model = cfg.get("default_model", {}).get("i2i", "qwen_imageedit")
+    model_id = args.model or default_model
+
+    if getattr(args, "no_fallback", False):
+        _run_i2i_single(cfg, args, model_id)
+        return
+    _run_with_fallback(cfg, args, "i2i")
+
+def _run_i2i_single(cfg: dict, args, model_id: str) -> None:
+    """Single-model i2i run (used with --no-fallback)."""
+    import random
     prompt = args.prompt
-    image_path = Path(args.image).expanduser()
-    if not image_path.exists():
-        print(f"❌ Image not found: {image_path}", file=sys.stderr)
-        sys.exit(1)
-    
-    model_cfg = get_model_cfg(cfg, "qwen_imageedit")
+    raw_images = args.image if isinstance(args.image, list) else [args.image]
+    image_paths = [Path(p).expanduser() for p in raw_images]
     seed = args.seed
     steps = args.steps
-    output_dir = ensure_output_dir(cfg, "qwen_imageedit", args.output_dir)
-    output_dir.mkdir(parents=True, exist_ok=True)
-    
-    workflow, prompt_type_str, uploaded_fn, seed_used = prepare_i2i_workflow(cfg, prompt, str(image_path), seed, steps)
-    timeout = model_cfg.get("timeout_seconds", 600)
+    if seed is None:
+        seed = random.randint(0, 2**63 - 1)
+
+    if model_id == "qwen21":
+        model_cfg = get_qwen21_model_cfg(cfg)
+        if steps is None:
+            steps = model_cfg.get("default_steps", 25)
+        output_dir = ensure_output_dir(cfg, "qwen21", args.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        timeout = model_cfg.get("timeout_seconds", 600)
+        if len(image_paths) > 1:
+            print(f"   Multi-image mode: {len(image_paths)} reference images")
+        workflow, prompt_type_str, seed_used = prepare_qwen21_workflow(
+            cfg, prompt, aspect=args.aspect or model_cfg.get("default_aspect", "1:1"),
+            seed=seed, steps=steps, images=[str(p) for p in image_paths],
+            negative=getattr(args, 'negative', '') or "")
+    else:
+        if len(image_paths) != 1:
+            print(f"❌ Model '{model_id}' supports a single input image only", file=sys.stderr)
+            sys.exit(1)
+        model_cfg = get_model_cfg(cfg, model_id)
+        output_dir = ensure_output_dir(cfg, model_id, args.output_dir)
+        output_dir.mkdir(parents=True, exist_ok=True)
+        timeout = model_cfg.get("timeout_seconds", 600)
+        if steps is None:
+            steps = model_cfg.get("default_steps", 4)
+        workflow, prompt_type_str, _uploaded_fn, seed_used = prepare_i2i_workflow(cfg, prompt, str(image_paths[0]), seed, steps)
     prompt_id, err_msg, errs = send_prompt_with_errors(cfg, workflow, timeout)
     if prompt_id is None:
         for w in errs:
@@ -974,9 +1597,10 @@ def cmd_i2i(cfg: dict, args: argparse.Namespace) -> None:
         sys.exit(1)
     
     b64_images = [image_b64_from_comfyui(cfg, img) for img in images]
-    local_paths = [save_b64_image(b64, img["filename"], output_dir)
+    fmt, jpg_quality = get_output_fmt_args(cfg, args)
+    local_paths = [save_b64_image(b64, img["filename"], output_dir, fmt, jpg_quality)
                    for b64, img in zip(b64_images, images)]
-    print_result(prompt_type_str, prompt, images, local_paths, output_dir)
+    print_result(prompt_type_str, prompt, images, local_paths, output_dir, seed=seed_used)
 
 def cmd_test(cfg: dict, args: argparse.Namespace) -> None:
     url = cfg["comfyui_url"].rstrip("/") + "/history"
@@ -1039,6 +1663,7 @@ def prepare_wan2_2_i2v_workflow(cfg: dict, prompt: str, image_path: str,
     for node_id, node_data in find_nodes_by_class(workflow, "VHS_VideoCombine"):
         workflow[node_id]["inputs"]["filename_prefix"] = f"ComfyUI_{timestamp}"
     
+    workflow = apply_keep_resident(cfg, workflow)
     return workflow, "Wan2.2 I2V", uploaded_filename, seed
 
 def cmd_wan2_2_i2v(cfg: dict, args: argparse.Namespace) -> None:
@@ -1090,7 +1715,7 @@ def cmd_wan2_2_i2v(cfg: dict, args: argparse.Namespace) -> None:
     b64_videos = [video_b64_from_comfyui(cfg, v) for v in videos]
     local_paths = [save_b64_video(b64, v["filename"], output_dir)
                    for b64, v in zip(b64_videos, videos)]
-    print_result_video(prompt_type_str, prompt, videos, local_paths, output_dir, cfg)
+    print_result_video(prompt_type_str, prompt, videos, local_paths, output_dir, cfg, seed_used)
 
 # ---------------------------------------------------------------------------
 # CLI entry point
@@ -1098,7 +1723,7 @@ def cmd_wan2_2_i2v(cfg: dict, args: argparse.Namespace) -> None:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="ComfyUI image generation client (T2I / I2I)",
+        description="ComfyUI media generation client (T2I / I2I / I2V)",
         formatter_class=argparse.RawDescriptionHelpFormatter,
     )
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -1106,23 +1731,45 @@ def main():
     # t2i
     p_t2i = subparsers.add_parser("t2i", help="Text-to-Image generation")
     p_t2i.add_argument("--prompt", required=True, help="Text prompt")
-    p_t2i.add_argument("--aspect", default="16:9", choices=list(ASPECT_RATIOS.keys()),
-                         help="Aspect ratio")
-    p_t2i.add_argument("--model", default="z-image", choices=["z-image", "sd35"],
-                         help="Model: z-image (Z-Image, default) or sd35 (SD3.5)")
+    p_t2i.add_argument("--aspect", default="1:1", choices=list(ASPECT_RATIOS.keys()),
+                         help="Aspect ratio (optional; default 1:1 = 1024x1024)")
+    p_t2i.add_argument("--model", default=None,
+                         choices=["qwen21", "z-image", "sd35"],
+                         help="Model: qwen21 (Qwen-Image 2.1, default) / z-image / sd35")
     p_t2i.add_argument("--seed", type=int, default=None)
     p_t2i.add_argument("--steps", type=int, default=None)
     p_t2i.add_argument("--cfg", type=float, default=None, help="CFG scale (SD3.5 only)")
-    p_t2i.add_argument("--negative", default="", help="Negative prompt (SD3.5 only)")
+    p_t2i.add_argument("--negative", default="",
+                        help="Negative prompt (Qwen-Image 2.1 and SD3.5; ignored by z-image)")
     p_t2i.add_argument("--output-dir", default=None)
+    p_t2i.add_argument("--format", default=None, choices=["png", "jpg"],
+                        help="Output image format (jpg is converted client-side, PNG fallback)")
+    p_t2i.add_argument("--jpg-quality", type=int, default=None,
+                        help="JPG quality 1-100 (default: config image.jpg_quality or 89)")
+    p_t2i.add_argument("--no-fallback", action="store_true",
+                        help="Disable the runtime fallback chain (run only the requested model)")
 
     # i2i
-    p_i2i = subparsers.add_parser("i2i", help="Image-to-Image / Edit generation")
-    p_i2i.add_argument("--prompt", required=True, help="Edit instructions")
-    p_i2i.add_argument("--image", required=True, help="Source image file path")
+    p_i2i = subparsers.add_parser("i2i", help="Image-to-Image / Edit generation (multi-image capable)")
+    p_i2i.add_argument("--prompt", required=True,
+                        help="Edit instructions; for multi-image, reference images as <image1>, <image2>, ...")
+    p_i2i.add_argument("--image", required=True, nargs="+",
+                        help="Source image file path(s). Pass 2..16 paths for multi-image reference mode")
+    p_i2i.add_argument("--model", default=None, choices=["qwen21", "qwen_imageedit"],
+                        help="Model: qwen21 (Qwen-Image 2.1, default) or qwen_imageedit (2511 legacy)")
+    p_i2i.add_argument("--aspect", default=None, choices=list(QWEN21_ASPECT_PRESETS.keys()),
+                        help="Aspect ratio (optional, qwen21 only; default 1:1 = 1024x1024, edit output follows reference size)")
     p_i2i.add_argument("--seed", type=int, default=None)
     p_i2i.add_argument("--steps", type=int, default=None)
+    p_i2i.add_argument("--negative", default="",
+                        help="Negative prompt (qwen21 only; qwen_imageedit is positive-only)")
     p_i2i.add_argument("--output-dir", default=None)
+    p_i2i.add_argument("--format", default=None, choices=["png", "jpg"],
+                        help="Output image format (jpg is converted client-side, PNG fallback)")
+    p_i2i.add_argument("--jpg-quality", type=int, default=None,
+                        help="JPG quality 1-100 (default: config image.jpg_quality or 89)")
+    p_i2i.add_argument("--no-fallback", action="store_true",
+                        help="Disable the runtime fallback chain (run only the requested model)")
 
     # wan2.2
     p_wan22 = subparsers.add_parser("wan2.2", help="Wan2.2 Image-to-Video generation")

@@ -1,41 +1,53 @@
-## Description: <br>
-Polymarket screeners — discover trending events, top markets by volume, and search for specific markets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps browse Polymarket prediction markets to find trending events, top markets by volume, and specific markets.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External users and developers use this skill to browse Polymarket prediction-market activity through Nansen CLI screeners, including trending events, high-volume markets, keyword searches, closed markets, and market categories. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a NANSEN_API_KEY credential and invokes the nansen CLI. <br>
-Mitigation: Review the requested environment variable, CLI installation metadata, and generated commands before installation or execution. <br>
-Risk: The security summary notes that the supplied artifact was not available for full verification. <br>
-Mitigation: Review the artifact contents and install metadata before deployment; the supplied scan telemetry gives no supported reason to block the release. <br>
+## Use Case:
 
+Prediction-market analysts and other users browse Polymarket events, search markets, and compare volume, liquidity, and open interest through the Nansen CLI.
 
-## Reference(s): <br>
-- [Nansen Prediction Markets on ClawHub](https://clawhub.ai/nansen-devops/nansen-prediction-markets) <br>
-- [nansen-devops publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen CLI and NANSEN_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: Research calls may consume credits or trigger wallet-backed payments, especially when repeated in loops.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review payment settings and spending limits before running calls; keep queries and loops bounded.
+
+Risk: Research requires an API key or saved browser session with appropriate account permissions.
+
+Mitigation: Confirm the selected authentication state before research and stop if authentication fails; do not retry anonymously.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/nansen-devops/skills/nansen-prediction-markets)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Text or Markdown with shell commands and market data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Market screeners can include volume, liquidity, open interest, and trader activity.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

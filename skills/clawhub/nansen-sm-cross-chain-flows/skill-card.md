@@ -1,40 +1,58 @@
-## Description: <br>
-Is SM buying this token on one chain but selling on another? Detect capital rotation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides cross-chain smart-money netflow analysis to identify potential token capital rotation.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External users and analysts use this skill to run Nansen smart-money netflow checks across Ethereum, Solana, Base, and BNB, then compare 24h and 7d flow divergence for potential cross-chain capital rotation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs Nansen CLI research commands and may consume Nansen API quota. <br>
-Mitigation: Confirm the user trusts the nansen-cli package, has configured NANSEN_API_KEY intentionally, and is comfortable using API quota before running the commands. <br>
-Risk: Interpreting absent token results as lack of support can be misleading. <br>
-Mitigation: Treat absent results as possible low smart-money activity on that chain, and focus on 24h and 7d divergence rather than 1h movement. <br>
+## Use Case:
 
+Researchers and analysts use this skill to compare smart-money token netflows across chains and spot possible capital rotation over 24-hour and seven-day periods.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-sm-cross-chain-flows) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen CLI and NANSEN_API_KEY; analyzes netflow windows including 1h, 24h, 7d, and 30d.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server-resolved release evidence) <br>
+Risk: Research calls, especially in loops, can consume API credits or trigger configured wallet payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review payment policy, wallet authorization, spending limits, and expected call volume before running the workflow.
+
+Risk: Missing or failed account authentication can prevent research calls.
+
+Mitigation: Select an authorized API key or browser session and check authentication status before starting; stop on authentication failures rather than switching to anonymous paid access.
+
+Risk: A token absent from chain results may have activity below the reporting threshold.
+
+Mitigation: Avoid treating absent results as zero activity or an unsupported chain; use the documented result limit when comparing chains.
+
+## Reference(s):
+
+- [Nansen SM Cross-Chain Flows on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-sm-cross-chain-flows)
+- [nansen-devops publisher profile](https://clawhub.ai/user/nansen-devops)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with bash examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Compares 24-hour and seven-day netflows; missing results do not prove no activity.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

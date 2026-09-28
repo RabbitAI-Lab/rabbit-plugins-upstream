@@ -1,36 +1,53 @@
-## Description: <br>
-Project management guide for vx. Use when setting up a new project, configuring vx.toml, or managing project-level tool versions and scripts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through setting up vx projects and managing project tools, scripts, and environments.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to configure vx projects, manage tool versions, define project scripts, set up runtime test matrices, and keep local project environments reproducible. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
+Developers use this guide to initialize vx projects, configure vx.toml, manage tool versions and environments, and run project scripts.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash, TOML, and Makefile examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may include commands that install tools, run scripts, create lock files, or activate local environments.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Project setup and tool synchronization can change the development environment; vx sync --clean can remove unlisted tools.
+
+Mitigation: Review the project configuration and proposed commands before running them, especially vx sync --clean and setup commands that install or update tools.
+
+Risk: Configured hooks and scripts can run commands during project workflows.
+
+Mitigation: Inspect hook and script definitions before enabling or running them in an existing project.
+
+## Reference(s):
+
+- [vx-project ClawHub release](https://clawhub.ai/loonghao/skills/vx-project)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with bash and TOML examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands and configuration examples should be reviewed for the target project before use.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,66 @@
-## Description: <br>
-Vercel API integration with managed OAuth for managing projects, deployments, domains, teams, and environment variables. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Vercel API integration with managed OAuth for managing projects, deployments, domains, teams, and environment variables.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to interact with Vercel through Maton-managed OAuth, including checking deployments, managing projects, configuring domains, handling teams, and updating environment variables. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can affect live Vercel projects, deployments, domains, teams, and environment variables through a connected account. <br>
-Mitigation: Use the narrowest practical Vercel connection and approve write actions only after confirming the exact project, deployment, domain, team, or environment variable being changed. <br>
-Risk: Multiple Vercel connections can cause requests to target the wrong account. <br>
-Mitigation: Specify the intended connection when more than one Vercel account is connected. <br>
-Risk: Access depends on Maton brokering Vercel OAuth credentials. <br>
-Mitigation: Install the skill only if you trust Maton to broker access to the target Vercel account. <br>
+## Use Case:
 
+Developers and operators use this skill to connect an agent to their Vercel account through Maton and perform approved Vercel API tasks such as checking deployments, managing projects, configuring domains, and updating environment variables.
 
-## Reference(s): <br>
-- [Vercel REST API Documentation](https://vercel.com/docs/rest-api) <br>
-- [Vercel API Reference](https://vercel.com/docs/rest-api/endpoints) <br>
-- [Maton](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/vercel-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Vercel OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The skill can guide actions that modify Vercel projects, deployments, domains, environment variables, functions, triggers, or destinations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only calls first and require explicit user confirmation before any write, deployment, domain, environment-variable, function, trigger, or destination change.
+
+Risk: OAuth or API-key access may expose Vercel account data beyond the immediate task if scopes or connections are too broad.
+
+Mitigation: Review OAuth scopes, choose the least-privilege connection available, and revoke unused connections when work is complete.
+
+Risk: Raw API responses and logs can contain user business data.
+
+Mitigation: Return only the fields needed for the task and avoid writing raw responses to logs or files unless the user specifically asks for them.
+
+## Reference(s):
+
+- [Vercel REST API Documentation](https://vercel.com/docs/rest-api)
+- [Vercel API Reference](https://vercel.com/docs/rest-api/endpoints)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton Homepage](https://maton.ai)
+- [Time Trigger Reference](references/time/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, code, configuration]
+
+**Output Format:** [Markdown with shell, HTTP, JSON, and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and a user-approved Vercel connection; responses may contain user business data.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,21 @@
+{
+    "display_name":  "PowPow रजिस्ट्रेशन — बुलबुला रजिस्टर करें, नक्शे पर यात्रा वृत्तांत पिन करें, डिजिटल ह्यूमन से चैट करें",
+    "categories":  [
+                       "communication",
+                       "lifestyle"
+                   ],
+    "search_keywords":  [
+                            "बुलबुला रजिस्ट्रेशन",
+                            "PowPow रजिस्ट्रेशन",
+                            "मैप सोशल",
+                            "AGENT सोशल",
+                            "यात्रा वृत्तांत"
+                        ],
+    "language":  "hi",
+    "author":  {
+                   "name":  "durenzidu",
+                   "email":  "dongtao@outlook.com"
+               },
+    "homepage":  "https://global.powpow.online",
+    "notes":  "ClawHub 上架表单填写用。display_name 可按商店字数限制截短为「PowPow Register — 注册泡泡，玩地图社交与数字人」；categories 弃用 creative（创作属于 powpow-simple 的范畴）。"
+}

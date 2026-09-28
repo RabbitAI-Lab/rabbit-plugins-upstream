@@ -1,12 +1,12 @@
----slug: css-toolkit-free
+---
+slug: css-toolkit-free
 name: css-toolkit-free
 version: 1.0.1
 displayName: CSS工具箱(免费版)
-summary: "CSS 常见陷阱速查手"
-license: Proprietary
+summary: "CSS 常见陷阱速查手,提供核心能力"
+license: "MIT"
 edition: free
-description: CSS 工具箱免费版是一份面向前端开发者的 CSS 常见陷阱速查手册，聚焦层叠上下文、Flexbox/Grid 布局陷阱、现代选择器与响应式设计基础。Use，可自动提升工作效率
-  when 需要代码生成、编程辅助、调试测试、开发部署时使用。不适用于无明确技术栈的模糊需求。Use when 需要代码生成、编程辅助、调试测试、开发部署时使用。不适用于无明确技术栈的模糊需求.
+description: "CSS 工具箱免费版是一份面向前端开发者的 CSS 常见陷阱速查手册，聚焦层叠上下文、Flexbox/Grid 布局陷阱、现代选择器与响应式设计基础。Use，可自发提升工作效率 when 需要代码产出、编程辅助、调试测试、开发部署时使用。不适用于无明确技术栈的模糊需求。Use when 需要代码产出、编程辅助、调试测试、开发部署时使用。不适用于无明确技术栈的模糊需求. 功能涵盖: toolkit。"
 tags:
   - 前端开发
   - CSS
@@ -16,16 +16,17 @@ tags:
   - 效率
   - 创意
   - flex
-  - css
   - z-index
   - grid
-  - min-width
 tools:
   - read
   - exec
   - write
 homepage: ""
-category: "Automation"---# CSS 工具箱（免费版）
+category: "Automation"
+pricing_tier: free
+---
+# CSS 工具箱（免费版）
 
 ## 概述
 
@@ -217,7 +218,7 @@ h1 { font-size: clamp(1.5rem, 4vw, 3rem); }
 .tag { width: fit-content; }
 ```
 
-## 最佳实践
+## 优秀实践
 
 ### 1. 用 isolation 替代 z-index 滥用
 

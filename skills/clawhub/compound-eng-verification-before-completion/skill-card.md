@@ -1,42 +1,56 @@
-## Description: <br>
-Enforces fresh verification evidence before any completion claim. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Requires fresh, claim-matched verification before an agent reports engineering work as complete.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this discipline skill to require immediate, command-backed verification before claiming work is complete. It also helps agents confirm ambiguous change scope before editing and select verification strategies suited to the change type. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can cause agents to propose or run broad verification commands on large projects or long-running suites. <br>
-Mitigation: Review proposed verification commands when they touch large projects, long-running test suites, or broad filesystem scope. <br>
-Risk: Incorrect or stale verification guidance could lead an agent to overstate completion confidence. <br>
-Mitigation: Require fresh command output and explicit failure reporting before accepting any completion claim. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to check the relevant requirements, tests, and other project gates before claiming a change is finished or ready to hand off.
 
-## Reference(s): <br>
-- [Isolated Verification](references/isolated-verification.md) <br>
-- [System-Wide Test Check](references/system-wide-test-check.md) <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured completion reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the agent to provide fresh verification evidence, scope confirmation, and command results before completion claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Verification suites or migrations could affect non-disposable databases or external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm targets are disposable before running checks; request a safe environment when they are not.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion)
+- [Change strategies](references/change-strategies.md)
+- [Claims and failures](references/claims-and-failures.md)
+- [Isolated verification](references/isolated-verification.md)
+- [Proof integrity](references/proof-integrity.md)
+- [Scope and sweeps](references/scope-and-sweeps.md)
+- [System-wide test check](references/system-wide-test-check.md)
+- [Verification oracles](references/verification-oracles.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Markdown text with verification results and commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports the evidence supporting each completion claim, skipped checks, and remaining risks.]
+
+## Skill Version(s):
+
+5.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

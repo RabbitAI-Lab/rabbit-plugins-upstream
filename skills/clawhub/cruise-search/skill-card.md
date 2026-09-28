@@ -1,44 +1,55 @@
-## Description: <br>
-Searches and recommends cruise itineraries using Tuniu real-time data, with support for destination, departure city, date, price, product-detail, cabin, ship-information, and booking-link queries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+全球邮轮航线实时搜索与智能推荐，接入途牛实时API，覆盖日韩、东南亚、地中海、加勒比海、长江三峡等航线，并支持按目的地、出发地、日期、价格筛选，查询产品详情、舱位房型、船舶信息和预订链接。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users and travel-planning agents use this skill to find cruise options, compare prices and cabins, review product and ship details, and open booking links on Tuniu. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cruise searches, departure cities, dates, route keywords, and product IDs are sent to a Tencent Cloud proxy and then to Tuniu. <br>
-Mitigation: Avoid entering sensitive personal information in search text, and disclose the data flow before using the skill. <br>
-Risk: A proxy token fallback is present in the artifact behavior. <br>
-Mitigation: Configure the proxy token through secure runtime configuration and rotate any embedded or exposed token before production use. <br>
-Risk: Cruise prices, cabin availability, promotions, and booking terms can change after the skill returns a result. <br>
-Mitigation: Verify final pricing, availability, cancellation terms, and payment rules on the Tuniu booking page before purchase. <br>
+## Use Case:
 
+Travel agents, consumer travel assistants, and external users use this skill to search and compare cruise routes, retrieve cruise product details, inspect cabin and ship information, and open external Tuniu booking links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/cruise-search) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
-- [Tuniu cruise booking pages](https://m.tuniu.com/cruise/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown-formatted text or JSON objects] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cruise product IDs, prices, date ranges, cabin details, ship facilities, images, and booking links when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; bundled skill frontmatter reports 3.0.0) <br>
+Risk: Cruise search criteria, dates, departure cities, destination keywords, and product IDs are sent to the configured Tuniu proxy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if this data sharing is acceptable, and avoid sending sensitive personal information in search queries.
+
+Risk: Returned booking links lead to an external checkout flow where prices, availability, and terms may change.
+
+Mitigation: Verify final prices, cancellation terms, booking notices, and payment conditions on Tuniu before purchase.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/travel-skills/skills/cruise-search)
+- [Publisher Profile](https://clawhub.ai/user/travel-skills)
+- [Tuniu Cruise Booking](https://m.tuniu.com/cruise/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown travel results or JSON records, depending on the selected output mode]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results can include prices, dates, product IDs, route details, cabin information, ship amenities, images, and external booking links.]
+
+## Skill Version(s):
+
+3.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

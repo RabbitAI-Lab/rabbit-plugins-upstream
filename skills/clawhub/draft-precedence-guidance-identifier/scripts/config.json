@@ -1,0 +1,27 @@
+{
+  "variant_id": "shadow_14_version",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "release_profile",
+  "output_name": "selection_guidance",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "current_major": {
+        "type": "integer"
+      },
+      "require_approved": {
+        "type": "boolean"
+      },
+      "allow_prerelease": {
+        "type": "boolean"
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "string"
+  },
+  "effect": null
+}

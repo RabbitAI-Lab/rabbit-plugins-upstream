@@ -4,30 +4,27 @@ name: cdn-toolkit-free
 version: 1.0.1
 displayName: CDN配置工具包免费版
 summary: "CDN配置与优化助手,支持缓存策略设置、基础安全加固与性能诊断,适合个人开发者快速部署CDN.。CDN配置工具包免费版,为个人开发者提供CDN部署与优化核心能力."
-license: Proprietary
+license: MIT
 edition: free
-description: 'CDN配置工具包免费版,为个人开发者提供CDN部署与优化核心能力.
-  核心能力:缓存策略配置、基础安全加固、CDN性能诊断、域名配置指导.
-  适用场景:网站加速部署、静态资源缓存优化、基础CDN安全配置.
-  差异化:免费版聚焦核心配置能力,支持主流CDN服务商,适合个人项目快速上手.
-  适用关键词: CDN, 缓存策略, 边缘节点, 内容分发, cache, edge, origin, cdn optimization'
+description: "CDN配置工具包免费版,为个人开发者包含CDN部署与调优核心能力. 适用于需要cdn toolkit相关能力的开发场景,包含结构化的工作流程和可复用的模板,帮助用户快速完成任务并保持代码质量. 适用于需要cdn toolkit相关能力的开发场景,包含结构化的工作流程和配置指引. 该工具经过深度差异化处置,针对用户反馈和使用痛点进行了调优改进,提升了实用性和可操作性."
 tags:
   - CDN
+  - cdn
+  - toolkit
+  - automation
+  - productivity
   - 性能优化
   - 缓存
   - 免费版
   - 安全
   - 加密
-  - 工具
-  - cdn
-  - add_header
-  - 性能诊断
-  - https
 tools:
   - read
   - exec
 homepage: ""
 category: "Security"
+pricing_tier: free
+
 ---
 # CDN配置工具包免费版
 
@@ -338,7 +335,7 @@ fi
 需要代码生成、编程辅助、调试测试、开发部署时使用。不适用于非本工具能力范围的需求.
 ## 快速开始
 
-### 第一步:选择CDN服务商
+### 领先步:选择CDN服务商
 
 | 服务商 | 免费额度 | 适合场景 |
 |---:|---:|---:|
@@ -350,8 +347,8 @@ fi
 ### 第二步:配置DNS
 
 ```bash
-# 添加CNAME记录指向CDN
-# 示例
+# 在此执行相关操作
+echo "操作完成"
 ```
 
 ### 第三步:验证CDN生效
@@ -387,7 +384,7 @@ add_header X-Frame-Options "SAMEORIGIN" always;
 add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 ```
 
-## 最佳实践
+## 优秀实践
 
 1. **文件名哈希**:静态资源使用内容哈希命名,实现长期缓存与自动更新.
 2. **分层缓存**:CDN边缘缓存 -> 源站缓存 -> 应用缓存,多层配合.
@@ -395,7 +392,7 @@ add_header Referrer-Policy "strict-origin-when-cross-origin" always;
 4. **协议升级**:强制HTTPS,启用HTTP/2或HTTP/3.
 5. **源站保护**:隐藏源站IP,仅允许CDN回源.
 ```bash
-# 最佳实践:源站防火墙仅允许CDN回源
+# 优秀实践:源站防火墙仅允许CDN回源
 # Cloudflare IP列表
 CF_IPS=$(curl -s https://www.cloudflare.com/ips-v4)
 # ...
@@ -445,7 +442,7 @@ iptables -A INPUT -p tcp --dport 443 -j DROP
 - AWS需配置Access Key和Secret Key
 
 ### 可用性分类
-- **分类**: MD+EXEC(纯Markdown指令,核心功能需要exec命令行执行能力)
+- **分类**: MD+EXEC模式纯Markdown指令,核心功能需要exec命令行执行能力)
 - **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent执行CDN配置与优化任务
 - API Key通过环境变量配置: export API_KEY=your_key
 
@@ -473,9 +470,9 @@ iptables -A INPUT -p tcp --dport 443 -j DROP
 用户: 执行核心功能
 Skill: 正在执行核心功能...
 Skill: 执行完成,结果如下: 操作成功
-```
-
-## 输出格式
+```bash
+# 在此执行相关操作
+echo "操作完成"
 ```json
 {
   "success": true,

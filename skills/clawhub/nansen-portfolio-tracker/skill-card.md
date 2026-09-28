@@ -1,42 +1,53 @@
-## Description: <br>
-How has a wallet's portfolio changed over time? Historical balances, current snapshot, and per-token PnL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps track a wallet's portfolio over time using historical balances, current holdings, and per-token profit and loss.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers, analysts, and other external users use this skill to inspect how a blockchain wallet's portfolio changed over time, compare historical and current balances, and review per-token profit and loss through the Nansen CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on the nansen-cli package and a Nansen API key. <br>
-Mitigation: Install nansen-cli only from a trusted source and provide the API key through the NANSEN_API_KEY environment variable. <br>
-Risk: Wallet address lookups can reveal sensitive research interests or link searched addresses to the user's account. <br>
-Mitigation: Avoid querying addresses when the lookup itself, or its association with the account, would be sensitive. <br>
-Risk: CLI output may be incomplete or misunderstood when used to compare historical balances, current holdings, and per-token PnL. <br>
-Mitigation: Review the returned fields and compare historical-balances, balance, and pnl outputs before making decisions from the results. <br>
+## Use Case:
 
+Wallet holders and analysts use this skill to compare historical and current token balances and review per-token trading performance through Nansen.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-portfolio-tracker) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and CLI result-field descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the NANSEN_API_KEY environment variable and the nansen CLI from the nansen-cli Node package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: Research calls may consume API credits or trigger x402 payments, particularly in loops.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm account entitlements and existing wallet authorization, payment policy, and spending limits before running calls.
+
+Risk: Research requires access to a Nansen API key or browser session.
+
+Mitigation: Check authentication status, use an explicitly selected credential, and stop on authentication failure rather than retrying anonymously.
+
+## Reference(s):
+
+- [Nansen Portfolio Tracker on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-portfolio-tracker)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell commands and portfolio analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected wallet, chain, time window, and account access.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,55 @@
-## Description: <br>
-Analyzes seedling tray images or videos with AI object detection to count emerged seedlings and estimate germination rate for incubators, greenhouse trays, home pots, and seed-company tests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes seed tray images or videos to count emerged seedlings, estimate germination rates, and provide structured reports and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze seed tray images or videos, estimate germinated seed counts and rates, and retrieve cloud-hosted history reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Seed tray media may be uploaded to or processed by a cloud-backed service. <br>
-Mitigation: Use the skill only with media approved for external cloud processing and avoid private or sensitive media unless that processing is acceptable. <br>
-Risk: The skill can use or create an internal identity and store authentication tokens locally. <br>
-Mitigation: Review identity and token storage behavior before installation, and avoid shared workspaces unless local credential persistence is acceptable. <br>
-Risk: The skill can fetch account-associated history reports. <br>
-Mitigation: Confirm the account context and report-retention expectations before using history-report features. <br>
+## Use Case:
 
+Growers, seed companies, and nursery operators can analyze seed tray imagery to estimate germination rates, review seedling counts, and access historical reports. Results are visual estimates for seed-quality reference, not agricultural planting advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-seed-germination-rate-prediction-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands] <br>
-**Output Format:** [Markdown text with JSON payloads and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; SKILL.md frontmatter says 1.0.5) <br>
+Risk: Seed tray images or URLs are sent to the vendor's cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are comfortable sharing with the vendor; check for sensitive content before submission.
+
+Risk: The skill can silently create or reuse a local identity and retain service tokens for cloud report history.
+
+Mitigation: Review persistent account linkage before use; remove data/smyx-api-key.txt and the workspace SQLite database when that linkage is not wanted.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-seed-germination-rate-prediction-analysis)
+- [Seed germination analysis API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis report or Markdown table of historical reports, with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include emerged-seedling counts, germination-rate estimates, alerts, and links to cloud reports.]
+
+## Skill Version(s):
+
+1.0.15 (source: ClawHub release; bundled frontmatter says 1.0.12)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

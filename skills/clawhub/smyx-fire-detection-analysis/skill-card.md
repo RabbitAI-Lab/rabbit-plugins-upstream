@@ -1,45 +1,55 @@
-## Description: <br>
-Real-time detection of flames and smoke in video and image scenes, suitable for fire early warning in industrial parks, forests, warehouses, and other locations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects flames and smoke in images or video for fire early warning in industrial parks, forests, warehouses, and similar sites.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, safety teams, and developers use this skill to submit surveillance images, video files, or media URLs for fire and smoke analysis, receive structured detection reports, and query account-linked historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded fire or smoke imagery, video URLs, and account-linked report history are sent to a vendor cloud service. <br>
-Mitigation: Use only with media approved for vendor processing, and review retention, deletion, billing, and account-control expectations before deployment. <br>
-Risk: The skill can create or reuse an internal account identity and store service tokens in a local workspace database. <br>
-Mitigation: Run it in a controlled workspace, restrict access to workspace data, and review local credential-storage expectations before use. <br>
-Risk: Fire and smoke detections are advisory and may not be sufficient for emergency confirmation. <br>
-Mitigation: Treat results as safety-warning support and require professional site confirmation and emergency response procedures for suspected fires. <br>
+## Use Case:
 
+Security, safety, and operations teams use this skill to analyze monitoring images, videos, or URLs for flame and smoke indicators, structured findings, warnings, report links, and historical report lookup.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fire-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Fire detection API documentation](references/api_doc.md) <br>
-- [Common analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands] <br>
-**Output Format:** [Markdown report text or JSON, with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include detection results, risk notes, report links, and historical report tables; documented media inputs are jpg/jpeg/png/mp4/avi/mov up to 10MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release metadata) <br>
+Risk: The security scan reports that the skill sends media or URLs to lifeemergence.com cloud APIs, stores local identity or token data, and may reuse a fallback identity in ways that could mix report history between users.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation, use only where cloud processing and local credential persistence are acceptable, and avoid shared or multi-user workspaces until identity isolation is fixed.
+
+Risk: Fire and smoke detection output is for safety warning support and may require on-site confirmation.
+
+Mitigation: Treat results as an aid to monitoring workflows and rely on professional emergency confirmation and response procedures when fire is suspected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fire-detection-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-like structured text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include detection findings, warnings, report links, and historical report tables.]
+
+## Skill Version(s):
+
+1.0.21 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

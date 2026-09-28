@@ -1,0 +1,39 @@
+[
+  {
+    "id": "document-assistant",
+    "period": "2024",
+    "title": "Dokumentenassistent",
+    "subtitle": "Python / AI / LLM",
+    "organization": "Northstar Digital GmbH (fiktiv)",
+    "context": "employment",
+    "context_label": "Im Rahmen der Anstellung",
+    "description": [
+      "Entwickelte einen prototypischen Assistenten zur strukturierten Auswertung freigegebener Dokumente mit nachvollziehbaren Quellenhinweisen."
+    ],
+    "tags": [
+      "python",
+      "ai",
+      "llm",
+      "automation"
+    ]
+  },
+  {
+    "id": "cloud-automation-dashboard",
+    "period": "2025",
+    "title": "Cloud-Automatisierungsdashboard",
+    "subtitle": "Python / SQL / Cloud",
+    "organization": "Mira Data Studio (fiktiv)",
+    "context": "own_company",
+    "context_label": "Eigenes Unternehmen",
+    "description": [
+      "Entwickelte eigenständig ein fiktives Dashboard zur Überwachung automatisierter Datenprozesse und bereitete Statusinformationen für Stakeholder auf."
+    ],
+    "tags": [
+      "python",
+      "sql",
+      "automation",
+      "cloud",
+      "stakeholder"
+    ]
+  }
+]

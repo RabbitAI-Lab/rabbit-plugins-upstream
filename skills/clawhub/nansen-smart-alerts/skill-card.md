@@ -1,41 +1,53 @@
-## Description: <br>
-Manage smart alerts - list, create, update, toggle, delete. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Nansen smart alerts for token flows, smart money activity, transfers, and contract interactions.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers and operators use this skill to set up and manage Nansen smart alerts for token flows, smart money activity, contract interactions, and notification rules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can delete or modify Nansen smart alerts when used with a NANSEN_API_KEY. <br>
-Mitigation: Confirm alert IDs before deletion or update, and prefer disabling alerts when the intended change is uncertain. <br>
-Risk: Webhook alert payloads may reveal monitored tokens, addresses, or operational strategy. <br>
-Mitigation: Send webhooks only to trusted HTTPS endpoints and use webhook secrets when configuring webhook delivery. <br>
+## Use Case:
 
+Nansen users and developers use this skill to list, create, update, enable, disable, and delete account smart alerts and configure their notification channels.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-smart-alerts) <br>
-- [Publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the nansen CLI and NANSEN_API_KEY to manage alert configuration and state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: Updating, toggling, or deleting the wrong alert changes account notification rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target alert and double-check its ID before changing it.
+
+Risk: Webhooks send alert payloads to the configured endpoint.
+
+Mitigation: Use trusted HTTPS endpoints and a webhook secret when available.
+
+## Reference(s):
+
+- [Nansen Smart Alerts on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-smart-alerts)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with bash commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands manage alerts through the Nansen CLI and may configure Telegram, Slack, Discord, or webhook notifications.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

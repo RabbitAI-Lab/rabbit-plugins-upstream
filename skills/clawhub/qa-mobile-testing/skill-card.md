@@ -1,42 +1,52 @@
-## Description: <br>
-Provides mobile QA planning guidance and categorized test checklists for iOS and Android apps, H5/mobile web pages, and mini-program releases, with emphasis on interruptions, network changes, permissions, compatibility, and performance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps plan mobile QA testing for iOS and Android apps, mobile web pages, and mini-programs across interruptions, connectivity, permissions, compatibility, and performance.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and developers use this skill to plan mobile release testing and produce structured coverage for device compatibility, interruption handling, weak-network behavior, permissions, performance, and platform-specific scenarios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Desktop and PC web reference files may be mistaken for primary mobile coverage. <br>
-Mitigation: Use the mobile app, mobile web, and mini-program references as the primary planning sources, and treat desktop and PC web references as supplemental cross-platform material. <br>
+## Use Case:
 
+QA engineers and developers use this skill to draft Chinese-language mobile test plans, traceable test cases, device coverage matrices, and platform-specific checklists before release.
 
-## Reference(s): <br>
-- [Mobile App Testing](references/platform-mobile-app.md) <br>
-- [Mobile Web/H5 Testing](references/platform-mobile-web.md) <br>
-- [Mini Program Testing](references/platform-mini-program.md) <br>
-- [Desktop Testing](references/platform-desktop.md) <br>
-- [PC Web Testing](references/platform-pc-web.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance] <br>
-**Output Format:** [Markdown checklists and structured QA planning guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include mobile test plans, device coverage matrices, platform-specific checklists, performance checks, and traceable test case IDs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Bundled PC Web and desktop references may introduce off-scope testing guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit requests to iOS, Android, H5/mobile web, or mini-program testing, and review the generated plan for unrelated desktop coverage.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-mobile-testing)
+- [Mobile app testing reference](artifact/references/platform-mobile-app.md)
+- [Mobile web and H5 testing reference](artifact/references/platform-mobile-web.md)
+- [Mini-program testing reference](artifact/references/platform-mini-program.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Testing guidance]
+
+**Output Format:** [Markdown test-case tables, checklists, plans, and device coverage matrices]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language output with test IDs, requirement traceability, and stated coverage assumptions]
+
+## Skill Version(s):
+
+1.7.7 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

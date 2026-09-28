@@ -1,46 +1,77 @@
-## Description: <br>
-ClickUp API integration with managed OAuth for accessing and managing tasks, lists, folders, spaces, workspaces, users, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+ClickUp API integration with managed OAuth for accessing ClickUp tasks, lists, folders, spaces, workspaces, users, and webhooks through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, project managers, and agent operators use this skill to query and manage ClickUp work items, project hierarchy, users, OAuth connections, and webhooks through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform write, delete, connection, and webhook actions in a connected ClickUp account. <br>
-Mitigation: Confirm the exact ClickUp account, connection, target resource, intended effect, and webhook destination before approving those actions. <br>
-Risk: MATON_API_KEY grants access through Maton-managed OAuth and must remain private. <br>
-Mitigation: Store MATON_API_KEY only in the agent environment or approved secret storage, and do not paste or log the key in prompts, commands, or output. <br>
-Risk: Maton brokers access to the user's ClickUp account. <br>
-Mitigation: Install and use the skill only when the user trusts Maton for the relevant ClickUp account and workflow. <br>
+## Use Case:
 
+Developers and operations teams use this skill to manage ClickUp work items, inspect project hierarchy, and build approved ClickUp automations through Maton-authenticated API calls.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/clickup-api) <br>
-- [ClickUp API Overview](https://developer.clickup.com/docs/Getting%20Started.md) <br>
-- [ClickUp LLM Reference](https://developer.clickup.com/llms.txt) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API endpoint snippets and Python, JavaScript, and shell command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY. Generated requests can read, create, update, delete, and manage webhooks in the connected ClickUp account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can read and modify ClickUp work data through user-authorized connections.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, review connected accounts and scopes, default to read/list operations, and require explicit approval before any write or deletion.
+
+Risk: Webhooks, trigger destinations, and hosted functions can keep forwarding data or acting on future events after setup.
+
+Mitigation: Confirm the exact destination, scope, data flow, and persistence before creation; review existing automations and remove any that are no longer needed.
+
+Risk: Raw API responses and webhook payloads can include personal or sensitive work data.
+
+Mitigation: Return only fields needed for the task and avoid logging, storing, or echoing full responses unless the user explicitly requests it.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/clickup-api)
+- [Maton Homepage](https://maton.ai)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [ClickUp API Overview](https://developer.clickup.com/docs/Getting%20Started.md)
+- [ClickUp Get Tasks](https://developer.clickup.com/reference/gettasks.md)
+- [ClickUp Create Task](https://developer.clickup.com/reference/createtask.md)
+- [ClickUp Update Task](https://developer.clickup.com/reference/updatetask.md)
+- [ClickUp Delete Task](https://developer.clickup.com/reference/deletetask.md)
+- [ClickUp Create Webhook](https://developer.clickup.com/reference/createwebhook.md)
+- [ClickUp Rate Limits](https://developer.clickup.com/docs/rate-limits.md)
+- [Calendly Trigger Reference](artifact/references/calendly/triggers.md)
+- [GitHub Trigger Reference](artifact/references/github/triggers.md)
+- [Gmail Trigger Reference](artifact/references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](artifact/references/hubspot/triggers.md)
+- [Linear Trigger Reference](artifact/references/linear/triggers.md)
+- [Notion Trigger Reference](artifact/references/notion/triggers.md)
+- [Slack Trigger Reference](artifact/references/slack/triggers.md)
+- [Stripe Trigger Reference](artifact/references/stripe/triggers.md)
+- [Time Trigger Reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration, API calls]
+
+**Output Format:** [Markdown with inline bash, JSON, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should favor read/list calls first, require explicit user approval for writes, and avoid exposing raw credentials or unnecessary response data.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

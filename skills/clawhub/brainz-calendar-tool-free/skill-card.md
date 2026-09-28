@@ -1,46 +1,56 @@
-## Description: <br>
-Google 日历基础版 helps an agent manage personal Google Calendar events with gcalcli, including listing date ranges, creating events, deleting matched events, and using CalDAV backup paths. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google 日历基础版 helps an agent use gcalcli to list, create, search, delete, and back up calendar events for personal calendar management.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[thcjp](https://clawhub.ai/user/thcjp)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users and developers use this skill to manage Google Calendar or CalDAV-backed schedules through an agent, including listing events, creating events, deleting matching events, and preparing basic calendar backups.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The skill can create or delete calendar events after receiving calendar credentials.
+
+Mitigation: Use it only for explicit calendar tasks and require confirmation before any event creation or deletion.
+
+Risk: The artifact claims local-only privacy even though calendar operations may contact Google Calendar or CalDAV services.
+
+Mitigation: Verify the target account and service before use, and treat calendar data as data shared with the configured external calendar provider.
+
+Risk: Broad trigger language could activate the skill for project management or reporting requests outside calendar operations.
+
+Mitigation: Limit use to calendar scheduling, lookup, deletion, and backup tasks.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and personal productivity users use this skill to have an agent inspect, create, and clean up calendar events from natural-language requests. It is suited to lightweight personal calendar workflows that can tolerate command-line calendar tooling and manual review before destructive changes. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Calendar deletion authority can remove matched events without enough confirmation context. <br>
-Mitigation: Require the agent to preview matched events and obtain explicit user approval before deletion. <br>
-Risk: Calendar and CalDAV operations contact external services despite artifact text claiming local-only privacy. <br>
-Mitigation: Treat Google Calendar or CalDAV access as external data sharing and approve only trusted service endpoints. <br>
-Risk: Calendar credentials and command-line tooling may expose sensitive schedule data to the agent runtime. <br>
-Mitigation: Install only when command-line access to calendar tooling and credentials is acceptable, and keep credentials out of logs and shared files. <br>
-Risk: Optional callback URLs may send completion data to untrusted destinations. <br>
-Mitigation: Avoid untrusted callback URLs and review any callback destination before use. <br>
+**Output Format:** [Markdown guidance with inline shell commands and calendar operation results]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page: brainz-calendar-tool-free](https://clawhub.ai/thcjp/skills/brainz-calendar-tool-free) <br>
-- [Publisher profile: thcjp](https://clawhub.ai/user/thcjp) <br>
-- [Source skill definition](artifact/SKILL.md) <br>
+**Other Properties Related to Output:** [May require calendar credentials and user confirmation before creating or deleting calendar events.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured JSON result examples, execution logs, and command-line calendar operations.] <br>
+1.0.4 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

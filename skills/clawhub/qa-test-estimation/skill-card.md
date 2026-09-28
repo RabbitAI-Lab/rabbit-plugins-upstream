@@ -1,40 +1,53 @@
-## Description: <br>
-Helps QA teams estimate testing effort from requirement complexity, change scope, historical baselines, and risk factors, producing phased estimates with confidence intervals and risk buffers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Estimates QA testing effort from scope, complexity, historical baselines, and risk factors, with phased estimates and confidence ranges.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and project managers use this skill during release planning to estimate testing person-hours or person-days for smoke, functional, regression, and specialized testing. It is intended to turn scoped requirements and test strategy inputs into traceable estimates rather than approved schedule changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Testing estimates could be mistaken for approved release schedules or staffing commitments. <br>
-Mitigation: Treat outputs as planning estimates and require project manager confirmation before changing schedules, release plans, or resource allocations. <br>
-Risk: The skill may activate on broad scheduling or resource-planning requests that are not specifically about QA test effort. <br>
-Mitigation: Confirm the request is about testing effort before relying on the estimate for project planning. <br>
+## Use Case:
 
+QA teams and project managers use this skill to estimate testing person-hours, person-days, staffing, and schedules for a release or iteration. It breaks work into testing activities and accounts for complexity, historical data, and risk buffers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-estimation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured estimation report sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include an EST-XXXX traceability ID, estimation result, work breakdown, risk buffer, confidence level, and safety guidance for human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Estimates based on incomplete scope or unrepresentative historical data may misstate staffing and release timelines.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm scope and assumptions with the QA lead and project owner; review confidence ranges and risk buffers before changing a plan.
+
+Risk: Broad scheduling and effort-estimation phrases may invoke the skill outside a QA planning task.
+
+Mitigation: Confirm that the request concerns QA testing effort before applying the estimate.
+
+## Reference(s):
+
+- [QA Test Estimation on ClawHub](https://clawhub.ai/kokxi/skills/qa-test-estimation)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown estimate report and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Module-level and activity-level effort breakdowns, estimate ID, confidence range, adjustment factors, and risk buffer.]
+
+## Skill Version(s):
+
+1.7.7 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

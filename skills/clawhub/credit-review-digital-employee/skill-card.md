@@ -1,43 +1,53 @@
-## Description: <br>
-Provides a credit review reference framework covering admission rule scans, risk planning, case intake review, collateral risk management, related-party transaction detection, pre-loan analysis, and review memoranda. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps credit-review staff draft structured analyses of lending eligibility, application completeness, pre-loan risk, collateral, related-party transactions, review memoranda, and risk planning.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Credit review employees and banking risk teams use this skill to structure admission checks, intake validation, pre-loan risk analysis, collateral and related-party review, visit memoranda, and risk-planning tasks for loan applications. Outputs are reference materials that require qualified human review before use in real credit decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be used with sensitive customer, credit, banking, public-record, and collateral data in an operational credit-review workflow. <br>
-Mitigation: Use it only where data access, retention, audit logging, and human approval controls are explicitly authorized. <br>
-Risk: Server security review says the skill under-discloses sensitive API access, stored notes or audit logs, and workflow-gating behavior. <br>
-Mitigation: Review deployment integrations before installation and require manual approval for external-system access, retained records, or gating decisions. <br>
-Risk: Generated analyses could be mistaken for final credit decisions or regulated financial, legal, or compliance advice. <br>
-Mitigation: Treat outputs as reference materials and require qualified credit, risk, and compliance reviewers before business action. <br>
+## Use Case:
 
+Credit-review staff and risk managers use this reference workflow to prepare draft screening reports, pre-loan risk assessments, collateral and related-party reviews, and credit-review memoranda. Authorized personnel verify source materials and make all operational and approval decisions in institutional systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/credit-review-digital-employee) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown reports and structured JSON task plans] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-only credit review outputs, report sections, missing-data prompts, and audit-log structures; requires human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Credit-review materials may contain sensitive customer or banking information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only authorized, desensitized material in chat; keep system queries, storage, archiving, and external sharing within approved institutional systems and human approval processes.
+
+Risk: Draft risk assessments could be mistaken for verified findings or final lending decisions.
+
+Mitigation: Have qualified staff check source evidence and institutional rules before using any draft; make approval and operational decisions through the institution's authorized processes.
+
+## Reference(s):
+
+- [Credit Review Digital Employee release](https://clawhub.ai/gechengling/skills/credit-review-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Structured Markdown drafts and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts require human review; the skill does not query systems, save files, or submit decisions.]
+
+## Skill Version(s):
+
+2.0.9 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

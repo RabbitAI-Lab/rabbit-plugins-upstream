@@ -1,16 +1,53 @@
 # Authentication (shared)
 
-Shared by every `xcloud-*` domain skill. The xCloud Public API authenticates via
-[Sanctum personal access tokens](https://laravel.com/docs/sanctum) (Bearer auth).
+> **Packaged REST boundary (v4.4.2):** `xcloud.sh` enforces GET-only requests with no body and has no write override. Non-GET examples below describe upstream API operations, not executable commands for this fallback. For mutations, use the corresponding connected xCloud MCP tool only after the required concrete user approval and server confirmation. If that tool/confirmation is unavailable, stop and direct the user to the dashboard; do not bypass this boundary with direct curl, SDKs, alternate scripts or by editing the wrapper. Configure REST credentials with read-only scopes.
+
+
+Shared by every `xcloud-*` domain skill.
+
+## Two ways to connect — MCP first
+
+1. **xCloud MCP (recommended).** If `mcp__xcloud__*` tools are available in
+   the session, the account is already connected via OAuth — **no token setup is
+   needed** and the rest of this file does not apply. Use the MCP tools directly;
+   see `reference/mcp.md` for the transport rule, tool naming, and the
+   confirm-before-destructive contract. If the user has no connection yet,
+   onboard them with the MCP connect instructions in `reference/mcp.md`
+   **before** falling back to a raw API token.
+2. **REST API token (fallback).** For agents without MCP support, and for the
+   REST-only operations (`/health`, API-token list/revoke). The Public API
+   authenticates via [Sanctum personal access tokens](https://laravel.com/docs/sanctum)
+   (Bearer auth) — everything below covers this path.
 
 ## Environment variables
 
 ```bash
 export XCLOUD_API_TOKEN="..."                         # required
 export XCLOUD_API_BASE_URL="https://app.xcloud.host"  # default (live)
-# Local development:
+# Local development (plaintext http needs the explicit override):
 export XCLOUD_API_BASE_URL="http://xcloud.test"
+export XCLOUD_ALLOW_INSECURE_HTTP=1
+# Per call, optional:
+XCLOUD_TEAM_ID="team-uuid"      # run against a non-default granted team (X-Team-Id)
+XCLOUD_IDEMPOTENCY_KEY="$KEY"   # make a create safe to retry (Idempotency-Key)
 ```
+
+A token can be granted several teams when it is created; `GET /teams` lists
+them, and `XCLOUD_TEAM_ID` selects one per call. Set both per call (prefix the
+command), not globally, so a later request never runs against the wrong team or
+reuses a key.
+
+Make the idempotency key **once per create and keep it** — a retry after a
+timeout must send the same key, or it is a second create. Generate it with
+tools every supported runtime has (no `uuidgen` needed):
+
+```bash
+KEY=$(od -An -N16 -tx1 /dev/urandom | tr -d ' \n')
+```
+
+The wrapper refuses a set-but-empty `XCLOUD_IDEMPOTENCY_KEY` or
+`XCLOUD_TEAM_ID` (exit 64), so a failed generation or lookup stops the write
+instead of silently dropping the header.
 
 The base URL is the **only** thing that changes between local and live — never
 hardcode a host in a skill body.
@@ -18,9 +55,12 @@ hardcode a host in a skill body.
 ## Proactive token onboarding
 
 If `XCLOUD_API_TOKEN` is missing or a request returns `401`, stop before any
-write operation and guide the user through setup. Be proactive and helpful, but
-do **not** ask the user to paste a raw production token into the chat by default.
-Direct them to the runtime's environment, settings file, or secret store.
+write operation and guide the user through setup. **Offer the xCloud MCP
+connector first** (`reference/mcp.md` → Connecting) — OAuth, no secret to
+store. Only if MCP isn't an option for their client, walk them through the
+token path below. Be proactive and helpful, but do **not** ask the user to
+paste a raw production token into the chat by default. Direct them to the
+runtime's environment, settings file, or secret store.
 
 Use this wording pattern:
 
@@ -79,10 +119,14 @@ Alternative — shell profile (only affects terminals the user launches manually
 echo "export XCLOUD_API_TOKEN='your-token-here'" >> ~/.zshrc && source ~/.zshrc
 ```
 
-> **Browser/chat-only agents:** if no settings file, environment variable, or
-> secret-store integration is available, explain the risk before accepting a
-> temporary token in chat. Recommend a narrow, short-lived token and tell the
-> user to revoke it after the session. Never echo the token back.
+> **Browser/chat-only agents:** use the xCloud MCP connector or the host secret store. Never request production credentials in chat. If secure credential injection is unavailable, stop authenticated work and explain how to connect securely.
+>
+> **If a token is exposed (pasted in the wrong place, shared transcript,
+> committed):** revoke it immediately — xCloud dashboard → **Profile → API
+> Tokens** → delete it, or via the API: `GET /user/tokens` to find its `uuid`,
+> then `DELETE /user/tokens/{tokenUuid}` (`xcloud:account`; needs a `*`-scope
+> token). Then generate a fresh scoped token and update the runtime. Rotate
+> routinely, not only after incidents.
 
 ## Generating a token
 
@@ -96,7 +140,10 @@ xCloud dashboard → **Profile → API Tokens → Generate New Token** → choos
 | `read:sites` | All `GET` under `/sites/*` and `/ssl-certificates/*` |
 | `write:sites` | All write methods under `/sites/*` |
 | `read:servers` | All `GET` under `/servers/*` |
-| `write:servers` | All write methods under `/servers/*` |
+| `write:servers` | All write methods under `/servers/*` (incl. buying a server) |
+| `read:billing` | Plan, overview, invoices, bills, subscriptions, payment methods |
+| `read:addons` | Mailbox and mail-delivery reads |
+| `write:addons` | Add-on purchases and deletion, paying an invoice |
 | `*` | Full access (incl. token management) |
 
 ## Fine-grained authorization

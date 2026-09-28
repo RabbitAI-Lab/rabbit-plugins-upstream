@@ -23,7 +23,10 @@ def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 def _direction(p, did, sdid):
     """Server-provided direction (v474+) with legacy fallback."""
@@ -148,6 +151,73 @@ def grant_status(cfg, target_sd, capability='send_peck', scope=None):
     with urllib.request.urlopen(req, timeout=10) as r:
         return json.loads(r.read())
 
+def nudge_expiring_grants(cfg):
+    """0.9.1 [PERMS-B item 2] — once-per-window nudge for active OUTBOUND
+    send_peck grants nearing expiry. Iterates connected peers, best-effort
+    reads each grant's expiry via /beak/grants/check (dry_run), and prints ONE
+    nudge per grant per expiry window (de-duped in
+    ~/.space-duck/expiry_nudges.json, keyed by grant_id+window).
+
+    FAIL-OPEN: no expiry signal from the server (today's reality — the endpoint
+    does not yet return expires_at) → prints nothing. Never raises, never
+    blocks the primary check_pending output."""
+    try:
+        import _grant_meta
+    except Exception:
+        return
+    did = cfg.get('duckling_id', '')
+    sdid = (cfg.get('spaceduck_id', '') or '').upper()
+    if not did:
+        return
+    try:
+        payload = json.dumps({'duckling_id': did}).encode()
+        req = urllib.request.Request(
+            f"{API_BASE}/beak/spaceducks", data=payload,
+            headers={'Content-Type': 'application/json'}, method='POST')
+        with urllib.request.urlopen(req, timeout=10) as r:
+            data = json.loads(r.read())
+    except Exception:
+        return
+    records = data.get('connections', data.get('pecks', [])) or []
+    peers, seen = [], set()
+    for c in records:
+        # Only established connections have an active grant to warn about.
+        if str(c.get('status', '')).lower() not in (
+                'active', 'connected', 'approved', 'flock', 'bound',
+                'bonded', 'bond'):
+            continue
+        # We are the sender; any connected peer is a candidate recipient.
+        pid = (c.get('peer_id') or c.get('target_spaceduck_id')
+               or c.get('requester_spaceduck_id') or c.get('spaceduck_id') or '')
+        pid = (pid or '').upper()
+        if pid and pid != sdid and pid not in seen:
+            seen.add(pid)
+            peers.append(pid)
+    if not peers:
+        return
+    # Cost guard: bound the sweep on large flocks (oldest-connection peers
+    # beyond the cap wait for the next run — nudges are advisory, not urgent).
+    peers = peers[:25]
+    state = _grant_meta.load_nudges()
+    changed = False
+    for pid in peers:
+        resp = _grant_meta.fetch_grant_check(cfg, pid, 'send_peck')
+        if resp is None:
+            continue
+        # Capability probe: an allow-response WITHOUT expires_at means the
+        # server doesn't surface grant expiry yet (today's prod) — stop the
+        # sweep instead of burning one dry-run call + audit row per peer.
+        if resp.get('allowed') is True and 'expires_at' not in resp:
+            break
+        msg, new_state = _grant_meta.evaluate_nudge(resp, pid, state)
+        if msg:
+            print(f'[grants] {msg}')
+            state = new_state
+            changed = True
+    if changed:
+        _grant_meta.save_nudges(state)
+
+
 if __name__ == '__main__':
     cfg = load_config()
     if '--approve' in sys.argv:
@@ -172,3 +242,4 @@ if __name__ == '__main__':
         sys.exit(3)
     else:
         check_pending(cfg)
+        nudge_expiring_grants(cfg)

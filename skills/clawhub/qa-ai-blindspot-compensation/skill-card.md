@@ -1,41 +1,54 @@
-## Description: <br>
-Helps QA reviewers find AI-generated test-case blind spots across sequencing, concurrency, resource contention, state accumulation, data consistency, and third-party integration, then produce supplemental test cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews AI-generated QA test cases against six common blind spots and proposes traceable scenarios to address gaps.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and test reviewers use this skill after AI-generated test cases have been reviewed to identify missing coverage and generate traceable supplemental cases for known AI blindspot categories. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad coverage prompts and add a fixed six-category review structure when a lighter answer would be enough. <br>
-Mitigation: Use it for post-review blindspot analysis or explicit omission checks, and keep the response scoped to categories relevant to the user's request. <br>
-Risk: Supplemental test cases may not be directly executable without product-specific requirements, environments, or constraints. <br>
-Mitigation: Have QA reviewers validate generated cases against the requirements, system behavior, and available test environment before adding them to a test suite. <br>
+## Use Case:
 
+QA engineers and developers use this Chinese-language checklist after reviewing AI-generated test cases to find missing scenarios involving ordering, concurrency, resource limits, accumulated state, data consistency, and external integrations.
 
-## Reference(s): <br>
-- [Six Blindspot Details](references/blindspot-details.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-ai-blindspot-compensation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown report with tables and traceable supplemental test-case entries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supplemental cases are expected to include blindspot IDs and related requirement or original test-case IDs when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and release evidence) <br>
+Risk: Broad coverage questions may activate the skill outside a test-case review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it when reviewing test cases or requirements, and confirm the requested scope before generating additions.
+
+Risk: Suggested scenarios may be irrelevant or create a misleading impression of complete coverage.
+
+Mitigation: Check proposals against requirements and existing cases, retain traceability, and state the basis and limits of any coverage claim.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-ai-blindspot-compensation)
+- [Six blind spots reference](artifact/references/blindspot-details.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Test case guidance]
+
+**Output Format:** [Chinese-language Markdown report and test-case tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Identifies blind-spot categories, proposed cases, risk levels, and links to original cases and requirements.]
+
+## Skill Version(s):
+
+1.7.7 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

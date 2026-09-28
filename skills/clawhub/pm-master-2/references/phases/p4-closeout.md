@@ -22,7 +22,7 @@ Confirm deliverables are accepted, capture knowledge, hand over assets, verify b
 
 - `common/closure_report`: Scope completion, acceptance conclusions, handover checklist, metrics, lessons references.
 - `common/lessons_learned`: What went well / to improve / action items (action items go to RAID issues tracking).
-- Program extra: **benefits verification** for `program/benefits_realization` (realized/实现日/status closed).
+- Program extra: **benefits verification** for `program/benefits_realization` (realized/achieved/status closed).
 - Handover artifacts: Assets/document checklist listed in `closure_report.handover[]`.
 
 ## 4. Entry Criteria (Entry · G3→4 Closeout Gate)
@@ -42,7 +42,7 @@ Once the 5 exit conditions in `references/lifecycle.md §5.3` are met, the proje
 2. `lessons_learned` captured.
 3. Program: Benefits verified/realized (`program.benefits[].realized` and `status` closed).
 4. No pending RED escalation (`control_engine.py` exit 0) and no open change requests (`change_log` all closed).
-5. Main controller sets `lifecycle_state` to `closed` (via `gate_engine.py --to 收尾 --approve`).
+5. Main controller sets `lifecycle_state` to `closed` (via `gate_engine.py --to closeout --approve`).
 
 > waterfall/hybrid that is still not baselined (missing `baseline`) must not enter operational; operational but not meeting
 > the above exit conditions **must not** be set to closed — the state machine cannot skip steps.
@@ -56,14 +56,14 @@ Once the 5 exit conditions in `references/lifecycle.md §5.3` are met, the proje
 ```bash
 SKILL_DIR=<this skill directory>
 # Assess whether closeout can be entered (list gaps)
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 收尾
-# Approve: lifecycle_state → closed, phase → 收尾, record phase gate, produce review report
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 收尾 --approve "张三(sponsor)"
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to closeout
+# Approve: lifecycle_state → closed, phase → closeout, record phase gate, produce review report
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to closeout --approve "Zhang San (sponsor)"
 ```
 
 ## 7. Recommended Scripts
 
-- `gate_engine.py --to 收尾`: Closeout-gate assessment/approval (flips `closed`).
+- `gate_engine.py --to closeout`: Closeout-gate assessment/approval (flips `closed`).
 - `consistency_check.py`: Final consistency verification before closeout (exit 1 = blocking).
 - `control_engine.py`: Final inspection before closeout (exit 0 = no RED).
 - `render_docx.py`: Formal documents for closure_report / lessons_learned.

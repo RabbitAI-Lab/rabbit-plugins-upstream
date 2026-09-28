@@ -1,44 +1,56 @@
-## Description: <br>
-Call a local ComfyUI instance for text-to-image (T2I), image-to-image/edit (I2I), and image-to-video (I2V) generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate, edit, and animate images through a configured ComfyUI server using bundled image and video workflows.
 
-## Publisher: <br>
-[sunshinejnjn](https://clawhub.ai/user/sunshinejnjn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sunshinejnjn](https://clawhub.ai/user/sunshinejnjn)
 
-## Use Case: <br>
-Developers and external users use this skill to generate images from text, edit supplied images, or create short videos from an image and prompt through an existing ComfyUI server. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The default configuration can send prompts and user images to a non-local ComfyUI server. <br>
-Mitigation: Review config.json before installation and set COMFYUI_URL to a ComfyUI server you control, preferably localhost. <br>
-Risk: Sensitive images or generated outputs may be stored in the configured media directory. <br>
-Mitigation: Do not use sensitive images unless that endpoint and output location are acceptable for the use case. <br>
+## Use Case:
 
+Agents and their users use this skill to generate images from prompts, edit or combine source images, and animate images as short videos with a configured ComfyUI server.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sunshinejnjn/skills/image-with-comfyui) <br>
-- [README.md](README.md) <br>
-- [ComfyUI Impact Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) <br>
-- [ComfyUI WAS Nodes](https://github.com/WASasquatch/ComfyUI-WAS-Nodes.git) <br>
-- [ComfyUI Manager](https://github.com/comfyanonymous/ComfyUI-Manager.git) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Text, Shell commands, Guidance] <br>
-**Output Format:** [Generated image or video files with brief text status and Markdown command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are saved under the configured media directory; image-edit and image-to-video modes send source images and prompts to the configured ComfyUI endpoint.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: server release and openclaw metadata) <br>
+Risk: Prompts and workflows are sent to the configured ComfyUI server; editing and animation also upload source images.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the default loopback endpoint or use only a trusted server you control; avoid sending sensitive source material to an untrusted endpoint.
+
+Risk: Generated media and delivery staging copies may contain sensitive content.
+
+Mitigation: Review output and staging directories and remove sensitive media when no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/sunshinejnjn/skills/image-with-comfyui)
+- [Setup and usage](artifact/README.md)
+- [Model download sources](artifact/MODEL_URL.txt)
+- [Workflow attribution](artifact/references/attribution.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with generated image or video attachments]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is saved locally before delivery.]
+
+## Skill Version(s):
+
+2.3.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

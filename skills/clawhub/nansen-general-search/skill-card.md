@@ -1,40 +1,49 @@
-## Description: <br>
-Search for tokens or entities by name. Use when you have a token name and need the full address, or want to find an entity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search for tokens or entities by name to find token addresses or matching entities.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers and analysts use this skill to run Nansen searches for token or entity names, including optional filters for type, chain, result limit, and selected fields. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires access to a Nansen API key. <br>
-Mitigation: Use a dedicated or limited key if available and keep it scoped to the documented Nansen search workflow. <br>
-Risk: The skill depends on the third-party nansen-cli package. <br>
-Mitigation: Install it only in environments where the package is trusted and review proposed nansen commands before execution. <br>
+## Use Case:
 
+Agents and their users search Nansen for tokens and entities by name, including finding a token's full address or narrowing results by chain.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/nansen-devops/nansen-general-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance] <br>
-**Output Format:** [Markdown with bash command examples and an option table] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the nansen CLI and requires NANSEN_API_KEY for the documented search workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release metadata) <br>
+Risk: Search calls can consume credits or trigger configured wallet payments, particularly when repeated in loops.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the selected API key or session, wallet authorization, payment policy, and spending limits before searching or running loops.
+
+## Reference(s):
+
+- [Nansen General Search on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-general-search)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Text and Markdown with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Token and entity name searches support optional chain, result limit, and selected fields.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

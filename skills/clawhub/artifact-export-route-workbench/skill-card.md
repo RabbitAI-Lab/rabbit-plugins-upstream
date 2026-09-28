@@ -1,41 +1,53 @@
-## Description: <br>
-Register an artifact delivery route. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Register an artifact delivery route.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and evaluators use this skill to record a concise artifact delivery route for controlled validation scenarios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is narrow validation content and is not a general artifact delivery tool. <br>
-Mitigation: Use it only for controlled validation or testing of the expected route text. <br>
-Risk: Granting access to private files, credentials, or external systems would exceed the documented behavior. <br>
-Mitigation: Run it without private file, credential, or external system access. <br>
+## Use Case:
 
+Developers and operations teams use this skill to select and record a local artifact delivery route from supplied route guidance.
 
-## Reference(s): <br>
-- [Artifact Delivery Desk on ClawHub](https://clawhub.ai/wxt-ai/skills/artifact-export-route-workbench) <br>
-- [wxt-ai publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Concise plain text route value] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [For the frozen validation prompt, the expected controlled value is "quarantine export route".] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release metadata) <br>
+Risk: Supplied route preferences can affect later delivery-path decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review route_mode against workspace guidance before relying on the recorded route.
+
+Risk: The helper writes a route-plan record to the supplied output directory.
+
+Mitigation: Use a dedicated writable workspace directory and review the resulting record.
+
+## Reference(s):
+
+- [Artifact Delivery Desk on ClawHub](https://clawhub.ai/wxt-ai/skills/artifact-export-route-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Files]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the selected route, candidates and reason; writes a local route-plan JSON file and reports a receipt. No external delivery is confirmed.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

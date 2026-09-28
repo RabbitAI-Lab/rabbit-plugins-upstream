@@ -1,45 +1,58 @@
-## Description: <br>
-Enables AI agents to generate images using the Character Select Stand Alone App (SAA) image generation backend via command-line interface. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables AI agents to generate images through the Character Select Stand Alone App (SAA) image-generation backend using a command-line client.
 
-## Publisher: <br>
-[mirabarukaso](https://clawhub.ai/user/mirabarukaso) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[mirabarukaso](https://clawhub.ai/user/mirabarukaso)
 
-## Use Case: <br>
-Developers and AI-agent users use this skill to drive a local or reachable SAA image-generation backend from CLI commands, including standard and regional prompt workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WSS connections weaken transport security when certificate and hostname verification are disabled. <br>
-Mitigation: Install only when the SAA backend and network path are trusted; prefer local or private-network use. <br>
-Risk: Credentials can be exposed through command-line arguments, transcripts, or logs. <br>
-Mitigation: Avoid passing real passwords on the command line when possible and redact credentials from transcripts and logs. <br>
-Risk: The skeleton-key option can forcefully unlock the backend while another generation is active. <br>
-Mitigation: Use --skeleton-key only after confirming no other generation is active and the user explicitly approves the unlock. <br>
-Risk: Automatic retries can worsen backend congestion when SAA reports a busy state. <br>
-Mitigation: Do not chain retries; wait 20-60 seconds and let the user decide when to retry. <br>
+## Use Case:
 
+Developers and other agent users generate images with an accessible SAA backend, including ComfyUI or WebUI workflows, by supplying prompts and image settings.
 
-## Reference(s): <br>
-- [Character Select Stand Alone App project](https://github.com/mirabarukaso/character_select_stand_alone_app) <br>
-- [SAA Agent ClawHub listing](https://clawhub.ai/mirabarukaso/saa-agent) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands; generated images are saved as PNG files or emitted as base64 when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a running SAA backend, SAAC enabled, a WebSocket address, and Python dependencies for websockets and aiohttp.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Connecting to an untrusted SAA backend can expose prompts and other data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only a trusted backend and prefer a local trusted endpoint.
+
+Risk: WSS connections may not verify the server's TLS certificate, exposing credentials to interception.
+
+Mitigation: Avoid real credentials over WSS until certificate verification is fixed; review any command that includes usernames or passwords.
+
+Risk: Force-unlocking a backend can disrupt another generation, and a chosen output path can overwrite an existing file.
+
+Mitigation: Require explicit user confirmation before using the skeleton key or overwriting an important output file.
+
+## Reference(s):
+
+- [SAA Agent ClawHub release](https://clawhub.ai/mirabarukaso/skills/saa-agent)
+- [SAA setup documentation](https://github.com/mirabarukaso/character_select_stand_alone_app)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, Text]
+
+**Output Format:** [PNG image saved to a local path; optional base64-encoded image on stdout with generation status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a running SAA 2.9.0+ backend with SAAC enabled; accepts prompts and generation settings.]
+
+## Skill Version(s):
+
+1.2.0 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

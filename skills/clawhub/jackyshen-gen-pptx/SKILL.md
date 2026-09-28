@@ -2,18 +2,58 @@
 name: jackyshen-gen-pptx
 description: "Use this skill any time a .pptx file is involved in any way — as input, output, or both. This includes: creating slide decks, pitch decks, or presentations, with color palettes of UPerform company; reading, parsing, or extracting text from any .pptx file (even if the extracted content will be used elsewhere, like in an email or summary); editing, modifying, or updating existing presentations; combining or splitting slide files; working with templates, layouts, speaker notes, or comments. Trigger whenever the user mentions \"deck,\" \"slides,\" \"presentation,\" \"幻灯片,\" \"PPT,\" or references a .pptx filename, regardless of what they plan to do with the content afterward. If a .pptx file needs to be opened, created, or touched, use this skill."
 author: JackyShen
-argument-hint: "[-t THEME] [-noIMG] [-noQA]"
+argument-hint: "[-t THEME] [-IMG] [-QA]"
 ---
 
 
-# /pptx [-t THEME] [-noIMG] [-noQA] 
+# /jackyshen-gen-pptx [-t THEME] [-IMG] [-QA] 
 
-生成指定风格的pptx格式幻灯片。
+生成指定风格的 pptx 格式幻灯片。
 
-- 不带参数：调度所有任务步骤。
-- 参数`-t THEME`：指定[配色方案](#配色方案)
-- 参数`-noIMG`：不使用文生图skill进行配图
-- 参数`-noQA`：跳过QA步骤
+> 🟢 **默认行为：只生成 PPTX 文件，不生图、不做 QA**。
+> 这是为了让你快速拿到可编辑的 .pptx 后立刻进入你自己的设计/审阅流程。
+> 如果你需要更完整的交付（自动配图 + 视觉质检），显式传 `-IMG` 和 `-QA`。
+
+- 不带参数：**只生成 .pptx**（不生图、不做 QA）。
+- 参数 `-t THEME`：指定 [配色方案](#配色方案)。
+- 参数 `-IMG`：**显式启用配图**——调用文生图 skill 为 PPT 配图。
+- 参数 `-QA`：**显式启用 QA**——生成后做内容 + 视觉质检。
+
+---
+
+## ⚠️ 当 `-IMG` 被传入时：图片先行流程（来自真实事故的反思）
+
+> **本节规则只在用户传了 `-IMG` 时才生效**。默认不带 `-IMG`，本节不触发。
+
+**【事故复盘 2026-07-01 】**
+
+用户在使用本 skill 生成 30 页某敏捷转型方案书时，我**漏掉了全部 6 张配图**——直接生成了一份纯文字+图表+形状的 PPT。用户当场质问："为什么没有配图？" 我补救后用户再次强调："将你的反思 backfill 到 skill 里，防止下次再放这个不配图的毛病。"
+
+**根因（为什么会犯错）：**
+
+- 我把"内容很密集、文本就够用"当成了不配图的理由。这是错的——B2B 投标书、项目方案书、年度汇报、产品发布等**所有正式商务场景一旦决定配图，就必须配到位**。
+- 我先写完 519 个元素的 PPT 代码，再想加图，结果布局已经写死，只能事后硬塞，导致第一次集成时图片和文字严重重叠（slide 11 的 ALPHA 图片盖住了第 5 个圆圈、slide 22 同时放了两张金字塔）。
+
+**强制规则（仅当传入 `-IMG` 时，写入 Task 0，不允许跳过）：**
+
+1. **一旦启用 `-IMG`，整份 PPT 至少出 2 张图**——这是底线，不是目标。5 页以上的演示应配 4-6 张图（封面 1 + 概念页 1-2 + 收尾 1 + 关键流程/数据页 1-2）。**禁止只出 0 张或 1 张图就交付**。
+2. **图片是规划出来的，不是事后补救的**。在写任何 PPT 代码之前，必须先列出每张幻灯片放什么图、图的 x/y/w/h，以及图占多大比例（半出血 / 1/3 栏 / 装饰角落 / 全屏背景）。
+3. **必配图页面**：封面页、章节页、概念页（方法论/模型/流程）、收尾页——这些是"四金刚"。其余页面按内容需要酌情加图。
+4. **图必须在 Task 0 完成生成和下载**——文案大纲 → 图片清单 → 批量生图 → 下载到本地 → 再开始写 PPT 代码。绝对禁止写完代码再补图。
+5. **图与文字必须分层规划**：用 PPT 时不要把图塞到文字中间；要么左图右文（双栏）、要么上半图下半文（半出血）、要么图做背景文字浮在上（透明叠层）。
+6. **集成图后必须做一次 slide-by-slide 视觉 QA**（同时启用 `-QA`），检查是否压字、压框、压边距——尤其是图片放右上角时，容易和最右侧的元素冲突。
+
+**自检清单（每次启用 `-IMG` 写完 PPT 代码后过一遍）：**
+
+- [ ] **总图数 ≥ 2？**（5 页以上演示应 ≥ 4 张）
+- [ ] 封面页有图吗？
+- [ ] 章节页有图吗？
+- [ ] 每个核心概念（方法论、流程模型、关键数据可视化）配图了吗？
+- [ ] 结尾页有图吗？
+- [ ] 图片的 x/y/w/h 在写代码前就定好了吗？
+- [ ] 渲染后用 `pdftoppm` 转图肉眼检查过图片区域和文字区域不冲突？
+
+未启用 `-IMG` 时 = 走"纯文字 + 形状/图表"路线 = 用户拿到 .pptx 后自行决定是否补图 = 这是默认的、合理的快速交付模式。
 
 ## 快速参考
 
@@ -22,6 +62,8 @@ argument-hint: "[-t THEME] [-noIMG] [-noQA]"
 | 读取/分析内容 | `python -m markitdown presentation.pptx` |
 | 编辑或从模板创建 | 阅读 [editing.md](editing.md) |
 | 从零开始创建 | 阅读 [creating.md](creating.md) |
+| 为单页幻灯片选布局（咨询/汇报类 PPT 8 大类） | 阅读 [references/slide-layouts.md](references/slide-layouts.md) |
+| 为信息选关系图形（Hierarchy / Process / Cycle / Matrix / Framework…） | 阅读 [references/diagrams.md](references/diagrams.md) |
 
 ---
 
@@ -72,11 +114,12 @@ python scripts/office/unpack.py presentation.pptx unpacked/
 
 选择与主题匹配的配色——不要默认使用通用蓝色。用这些配色方案作为灵感：
 
-缺省默认主题色是**优普丰(UPerform)**
+缺省默认主题色是**优普丰(UPerform)蓝粉系**
 
 | 主题 | 主色 | 辅助色 | 强调色 |
 |-------|---------|-----------|--------|
-| **优普丰(UPerform)** | `#0A2540` (深海蓝) | `#1E4976` （海洋蓝）  | `#D4AF37` (尊贵金) |
+| **优普丰(UPerform)之蓝金系** | `#0A2540` (深海蓝) | `#EABA1D` (金色) | `#F2D677` (浅金) | 
+| **优普丰(UPerform)之蓝粉系** | `#0A2540` (深海蓝) | `#CE6E7B` (粉橙) | `#FFC7B9` (浅粉橙) | 
 | **午夜高管** #1E2761`（藏青） #CADCFC`（冰蓝） #FFFFFF`（白） |
 | **森林与苔藓** #2C5F2D`（森林绿） #97BC62`（苔藓绿） #F5F5F5`（奶油白） |
 | **珊瑚活力** #F96167`（珊瑚红） #F9E795`（金色） #2F3C7E`（藏青） |
@@ -87,6 +130,8 @@ python scripts/office/unpack.py presentation.pptx unpacked/
 | **浆果与奶油** #6D2E46`（浆果紫） #A26769`（暗玫瑰） #ECE2D0`（奶油色） |
 | **鼠尾草宁静** #84B59F`（鼠尾草绿） #69A297`（桉树绿） #50808E`（石板灰） |
 | **樱桃大胆** #990011`（樱桃红） #FCF6F5`（米白） #2F3C7E`（藏青） |
+
+
 
 
 **配色原则：**
@@ -114,6 +159,10 @@ python scripts/office/unpack.py presentation.pptx unpacked/
 **视觉打磨：**
 - 章节标题旁的小彩色圆形图标
 - 斜体强调文字用于关键数据或标语
+
+**更多视觉参考（按结构选型，别凭感觉画）：**
+- 页面布局（上下 / 左右 / 三栏 / 矩阵 / 中心辐射 / 时间 / 数据型）：[references/slide-layouts.md](references/slide-layouts.md)
+- 智能图形（Hierarchy / Process / Cycle / Comparison / Matrix / Framework / Strategy / Architecture）：[references/diagrams.md](references/diagrams.md)
 
 ### 字体排版
 
@@ -156,13 +205,16 @@ python scripts/office/unpack.py presentation.pptx unpacked/
 - **不要忘记文本框内边距**——当用文本边缘对齐线条或形状时，在文本框上设置 `margin: 0` 或偏移形状以留出内边距
 - **不要使用低对比度元素**——图标和文字都需要与背景形成强对比；避免浅色文字配浅色背景或深色文字配深色背景
 - **绝对不要在标题下使用强调线**——这是 AI 生成幻灯片的标志；使用留白或背景色代替
-- **不要先生成PPT代码再想起来加图片** — 图片是规划出来的，不是事后补救的。如果先写了代码再加水印式图片，布局必然混乱。必须在Task 0阶段就完成所有图片的规划、生成、下载。
-- **不要随意放置图片** — 每张图片必须有固定的x/y/w/h，必须在写代码之前就确定位置，而不是写代码时随手一摆。
+- **如果启用 `-IMG`，不要先生成 PPT 代码再想起来加图片** — 图片是规划出来的，不是事后补救的。如果先写了代码再加水印式图片，布局必然混乱。必须在 Task 0 阶段就完成所有图片的规划、生成、下载。详见顶部「⚠️ 当 `-IMG` 被传入时：图片先行流程」一节。
+- **如果启用 `-IMG`，不要随意放置图片** — 每张图片必须有固定的 x/y/w/h，必须在写代码之前就确定位置，而不是写代码时随手一摆。
 - **不要让元素超出边界** — 所有元素（包括装饰性元素）必须完全位于幻灯片内（x≥0, y≥0, x+w≤10, y+h≤5.625）。延伸到边界外可能引发渲染问题。
 - **不要让主标题换行** - 规划布局时要考虑主标题尽量是在同一行，文本框宽度要足够容纳
+- **不要把"内容密集"当成不配图的借口** — 默认行为（不传 `-IMG`）下生成纯文字/形状/图表的 PPT 是合法的；只有当用户**显式启用 `-IMG`** 时，才进入"图片先行"硬约束（封面/章节/概念/收尾四金刚 + 整份 ≥ 2 张图）。详见顶部「⚠️ 当 `-IMG` 被传入时：图片先行流程」。
 ---
 
-## QA（质检必做）
+## QA（仅当传入 `-QA` 时执行）
+
+> **本节默认不执行**。只有在用户显式传 `-QA` 时才进入 QA 流程；否则直接交付 .pptx，由用户自行检查。
 
 **假设存在问题。你的工作是找到它们。**
 

@@ -1,40 +1,54 @@
-## Description: <br>
-Token deep dive for Nansen research commands covering token info, OHLCV, holders, flows, DEX trades, PnL, and perp market views. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides in-depth token research across prices, holders, flows, trades, PnL, and perpetual markets using Nansen commands.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers, analysts, and OpenClaw users use this skill to research a specific token through Nansen CLI token endpoints, including price history, holders, wallet flows, DEX trades, PnL, and perp leaderboards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill allows the agent to run any nansen command, not only token research commands. <br>
-Mitigation: Install only in environments where broad Nansen CLI access is acceptable, and prefer a version scoped to nansen research token commands for routine research. <br>
-Risk: The skill requires a NANSEN_API_KEY and may expose broader Nansen account access than needed. <br>
-Mitigation: Use a limited Nansen API key and avoid sharing wallet secrets or funded wallet context unless trading or payment actions are intended. <br>
+## Use Case:
 
+Analysts and developers use this skill to investigate a specific token's market activity, holders, flows, trades, and PnL through the Nansen CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-token-research) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline Nansen CLI commands, command options, and natural-language guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include token research command suggestions, endpoint usage notes, table or CSV export guidance, and warnings for unsupported filters or all-zero flow results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: Research calls, especially loops or large queries, can consume credits or trigger configured wallet payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the payment policy and spending limits before running calls or loops.
+
+Risk: Research requires an authorized API key or browser session, and the installed CLI handles account access.
+
+Mitigation: Check authentication before research and review the nansen-cli package source before installation.
+
+## Reference(s):
+
+- [Nansen Token Research on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-token-research)
+- [nansen-cli package](https://www.npmjs.com/package/nansen-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Markdown with Nansen CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CLI results can be displayed as tables or exported as CSV.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

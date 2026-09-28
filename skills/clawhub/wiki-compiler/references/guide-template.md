@@ -1,8 +1,31 @@
 # 主题导览笔记撰写规范
 
-> 适用于：阶段 4 编译生成的导览笔记。所有导览笔记应遵循统一的 4 章节结构。
+> 适用于：Ingest 操作中的 Compile 子任务。所有导览笔记应遵循统一的 4 章节结构 + schema frontmatter。
 
-## 1. 结构模板
+## 1. 完整 frontmatter（强制）
+
+> 详见 [schema.md](schema.md) — 这是强制契约，所有导览必须遵守。
+
+```yaml
+---
+title: 📖 主题导览：[主题名称]
+type: guide
+confidence: high | medium | low
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+version: 1.0
+changelog:
+  - v1.0: 初始版本，基于知识库资料编译
+sources:
+  - [《文章1》](URL)
+  - 《文章2》
+  - 《文章3》— 请在知识库查看
+related_guides:
+  - [《主题导览：相关主题》](URL)
+---
+```
+
+## 2. 结构模板
 
 > 模板来源：基于"交易策略与系统"主题导览的专业实践版本
 

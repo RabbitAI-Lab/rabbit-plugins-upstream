@@ -1,0 +1,31 @@
+'use strict'
+
+module.exports = {
+  region: 'global',
+  apiBase: 'https://openapi.vibbit.ai/openapi/v1',
+  webBase: 'https://app.vibbit.ai',
+  lang: 'en',
+  text: {
+    title: 'Set up your Vibbit API key',
+    intro: 'Set it up once, then return to your conversation and keep creating.',
+    step1: 'Create a key',
+    create: 'Open Vibbit API Keys',
+    step2: 'Paste and verify',
+    label: 'API key',
+    placeholder: 'Paste your key here',
+    privacy: 'Your key is used only to authenticate with Vibbit. It stays out of the conversation.',
+    storageTitle: 'How is my key stored?',
+    storage: 'Stored in a private file for this OS user on this computer. The file is not encrypted. On shared devices, use the host credential manager.',
+    submit: 'Verify and save',
+    pending: 'Verifying…',
+    success: 'Setup complete. Switch back to your chat window to continue your task.',
+    cancel: 'Cancel',
+    cancelled: 'Cancelled. Your previous configuration is unchanged.',
+    expired: 'This page has expired. Return to your conversation to open a new setup page.',
+    authentication: 'The key was not accepted. Check the complete key, account, and region.',
+    forbidden: 'Access was denied. Check the IP allowlist and account permissions.',
+    transport: 'Cannot reach the service. Check your connection and retry. Your previous configuration is unchanged.',
+    saveFailed: 'Cannot save to the private user directory. Use your host credential settings.',
+    invalid: 'Enter a valid API key.',
+  },
+}

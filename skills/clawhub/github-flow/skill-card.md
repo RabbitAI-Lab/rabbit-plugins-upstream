@@ -1,43 +1,56 @@
-## Description: <br>
-Github Flow guides agents through GitHub issue, pull request, review, merge, dependency, authentication, and publication workflows using GitHub CLI-first procedures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides GitHub issue, pull request, review, and merge workflows with checks for authentication, verification, and public content.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to convert plans into GitHub issues and PRs, manage review and merge flows, enforce public-repository hygiene, and handle GitHub CLI authentication and scope checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents through high-impact GitHub actions, including token refreshes, public posting, force-pushes, direct branch pushes, and merges. <br>
-Mitigation: Install only where agent-managed GitHub workflows are intended, and require explicit user confirmation before token refreshes, public posts, force-pushes, direct master pushes, or merges. <br>
-Risk: Hardcoded account mappings and scope rules can cause work to run under the wrong GitHub identity or with broader access than expected. <br>
-Mitigation: Replace the documented accounts and scope rules with the user's own policy, then verify gh CLI identity, repository owner, and token scope before live operations. <br>
-Risk: Home-directory and cache assumptions can affect how credentials or local workflow state are reused between agent runs. <br>
-Mitigation: Review local credential storage, cache dependencies, and gh CLI state before enabling the skill in shared or sensitive environments. <br>
+## Use Case:
 
+Developers use this skill to plan and publish GitHub issues and pull requests, manage reviews and dependencies, and coordinate guarded merges across accounts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/github-flow) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and GitHub CLI/API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires local GitHub repository context and configured gh CLI credentials for live GitHub operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: Broad GitHub permissions and token handling could expose credentials or allow unintended account actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review authentication and account-switching guidance, limit granted scopes, and confirm the active account before use.
+
+Risk: Automated language rules or GitHub state changes may be inappropriate for some repositories.
+
+Mitigation: Check repository policies and review proposed public content, pull requests, and merge actions before execution.
+
+## Reference(s):
+
+- [GitHub Flow on ClawHub](https://clawhub.ai/drumrobot/skills/github-flow)
+- [Authentication scope guidance](./auth-scope.md)
+- [Account identity and authentication guidance](./identity-auth.md)
+- [Public content sanitization guidance](./sanitize.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with GitHub issue and pull request text and inline commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide changes to GitHub issues, pull requests, reviews, and merge status.]
+
+## Skill Version(s):
+
+0.11.3 (source: ClawHub release and CHANGELOG, released 2026-09-27)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

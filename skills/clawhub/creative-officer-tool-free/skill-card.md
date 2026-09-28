@@ -1,39 +1,53 @@
-## Description: <br>
-Provides creative consulting, brainstorming, concept evaluation, creative brief generation, and basic brand direction for individual creators, freelancers, students, and founders. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Chinese-language creative consulting, brainstorming, concept evaluation, and creative brief drafting for personal creators and marketing work.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-External users can use this skill to generate creative directions, evaluate campaign or brand ideas, draft project creative briefs, and get basic brand tone or visual direction suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security summary reports that the skill declares read, write, and shell execution permissions that are not needed for its documented creative-advice behavior. <br>
-Mitigation: Install only with those tool permissions removed or tightly constrained, and review requests before allowing file or shell access. <br>
-Risk: Creative and marketing suggestions may be inaccurate, misleading, or unsuitable for a specific brand, audience, market, or legal context. <br>
-Mitigation: Have a human reviewer validate generated ideas, claims, and campaign recommendations before using them in public materials. <br>
+## Use Case:
 
+External creators, freelancers, students, and marketing teams use this skill to brainstorm campaign ideas, evaluate creative concepts, and draft structured creative briefs in Chinese.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or structured text with brainstorming lists, scoring rubrics, creative briefs, and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs depend on the hosting agent's LLM and user-provided project context.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The skill requests shell and write permissions that are broader than its documented Markdown-only creative-advice behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a version without shell/write access, or require explicit user approval before any file write, diagnostic command, or shell action.
+
+Risk: Creative and marketing recommendations may be inaccurate, misleading, or unsuitable for regulated or sensitive campaigns.
+
+Mitigation: Review generated concepts for factual accuracy, brand fit, legal compliance, and platform policy requirements before use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/creative-officer-tool-free)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Chinese natural-language Markdown with structured lists, brief outlines, and scoring tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce creative suggestions, campaign evaluations, and brief templates; no external API output is required.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata; artifact metadata lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

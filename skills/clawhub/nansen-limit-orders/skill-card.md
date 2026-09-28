@@ -1,44 +1,55 @@
-## Description: <br>
-Guides users through native Solana limit orders with `nansen trade limit-order` and alert-based settlement signals for chains without native support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides price-triggered trading with native Solana limit orders and settlement alerts for other chains.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External users and developers use this skill to have an agent prepare or run Nansen CLI commands for creating, listing, canceling, and updating Solana limit orders, or to configure settlement-signal alerts on other chains. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent assistance can affect real wallet-backed crypto orders. <br>
-Mitigation: Confirm wallet, token pair, side, amount, trigger price, slippage, expiry, and order ID before create, cancel, or update commands. <br>
-Risk: API keys, wallet configuration, alert metadata, and the temporary Nansen JWT are sensitive. <br>
-Mitigation: Use private notification channels or dedicated webhooks, avoid shared machines, and protect NANSEN_API_KEY and ~/.nansen/limit-order-auth.json. <br>
-Risk: Alert-based fallback signals are not authoritative order tracking for non-Solana chains. <br>
-Mitigation: Treat alerts as best-effort settlement signals and verify fills with the trading venue or on-chain records. <br>
+## Use Case:
 
+Traders and their agents use this skill to create, review, update, and cancel Solana limit orders, or set up best-effort settlement alerts for orders placed on other chains.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-limit-orders) <br>
-- [Nansen CLI npm package](https://www.npmjs.com/package/nansen-cli) <br>
-- [Nansen CLI GitHub repository](https://github.com/nansen-ai/nansen-cli) <br>
+### Deployment Geography for Use:
 
+Global, subject to applicable sanctions and geographic restrictions.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Nansen CLI commands requiring NANSEN_API_KEY and wallet configuration; users should verify trade details before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Trading commands can place, modify, or cancel real orders and require wallet signing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the wallet, tokens, amount, trigger price, slippage, and expiry before approving commands or signatures.
+
+Risk: Settlement alerts can miss fills or match unrelated transfers, and notifications may reach an unintended destination.
+
+Mitigation: Verify the alert filters and notification destination, and check order status on the trading venue.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/nansen-devops/skills/nansen-limit-orders)
+- [Nansen CLI package](https://www.npmjs.com/package/nansen-cli)
+- [Nansen CLI repository (linked in skill)](https://github.com/nansen-ai/nansen-cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with bash command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Order details and settlement-alert guidance; alerts are not authoritative fill tracking.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

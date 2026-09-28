@@ -1,40 +1,58 @@
-## Description: <br>
-搜索万豪集团旗下W酒店，返回实时价格与预订链接，支持酒店详情查询和套餐优惠搜索，多旅游平台数据直连。暑期潮流旅行打卡，全球W酒店查询预订 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches W Hotels in the Fliggy Marriott catalog and returns current prices, hotel details, package offers, and booking links.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search W Hotels by destination, review hotel details and package offers, and return booking links for follow-up purchase. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search details are sent to the skill's proxy and downstream travel services. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, and avoid submitting sensitive personal or itinerary details unless the publisher's terms cover that use. <br>
-Risk: The release evidence reports an embedded shared proxy token and an environment-defined proxy URL. <br>
-Mitigation: The publisher should replace shared credentials with managed per-deployment credentials and document the expected proxy endpoint before broad use. <br>
+## Use Case:
 
+External travelers and travel agents use this skill to search W Hotels by destination, inspect hotel details, and compare package offers with booking links from the Fliggy Marriott catalog.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/whotels-booking) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown-formatted Chinese text with hotel search results, details, package offers, prices, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prices, availability, and booking completion depend on the proxy and downstream travel services; users should verify final terms on the booking page.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release metadata) <br>
+Risk: The skill can send a local PROXY_TOKEN to a hardcoded external Tencent SCF proxy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proxy behavior before installation, scope or omit PROXY_TOKEN in the agent environment, and avoid using credentials that are not intended for this service.
+
+Risk: Hotel search parameters and booking queries are sent to an external proxy service.
+
+Mitigation: Use the skill only when that network disclosure is acceptable, and document the proxy dependency for users and operators.
+
+Risk: Hotel prices, ratings, amenities, and booking links could be misrepresented if the agent embellishes script output.
+
+Mitigation: Preserve the script output as the source of truth and do not add unsupported hotels, prices, ratings, amenities, or booking links.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/whotels-booking)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown text with hotel listings, booking links, details, package offers, and inline command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results should preserve script output without adding unsupported prices, ratings, amenities, or hotels.]
+
+## Skill Version(s):
+
+1.1.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

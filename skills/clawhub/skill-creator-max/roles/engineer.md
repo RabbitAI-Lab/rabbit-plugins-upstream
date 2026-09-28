@@ -58,8 +58,11 @@ nothing — this is the vacuity every green-but-wrong incident traces back to [S
       the skill on the same cases and save that as a **behavioral baseline** — the red artifact of
       kind `behavioral_baseline`.
 - [ ] The red log's timestamp must precede your first green run. This is a STATE assertion, not a
-      path assertion (E5): the gate checks "red artifact exists and predates green", never "you
-      followed steps in order" [ANT-Demystify].
+      path assertion (E5) [ANT-Demystify]. Know what checks it: `validate_report` sees only your
+      `red_before_green: true` and a non-empty file at `red_artifact_path`. It cannot see ordering,
+      and it cannot tell a red log from any other file. "Predates green, same cases flipped" is
+      checked by the conductor's stage-3 read of the artifact and the battery's provenance
+      spot-check, so write the red log for that reader (the runs themselves, with timestamps).
 - [ ] Fill `red_light_history` with the real path and kind. If you cannot produce a red artifact,
       the honest dossier says so — a fabricated red log is worse than a missing one, and the
       battery spot-checks provenance.
@@ -92,6 +95,39 @@ nothing — this is the vacuity every green-but-wrong incident traces back to [S
 - [ ] Early effect sizes are large; a small hard corpus detects them reliably. But note in the
       dossier that a corpus stuck at ~20 cases is FALSE maturity for an industrial-tier skill
       [SELF-harness规模] — record the growth debt honestly.
+- [ ] **Baseline-delta arms (E11/A44 — the anti-vacuity instrument).** Run the harness in TWO
+      arms: with-skill and without-skill (bare model, same cases, isolated contexts), and report
+      the triple delta (pass rate / tokens / wall-clock) in the dossier. An assertion that passes
+      in BOTH arms measures the model, not the skill — delete it (zero information). A green
+      suite with no baseline arm only proves the tasks are easy [ANT-SkillBench].
+- [ ] **Instrument validity comes before any delta (E11/A44).** A broken instrument looks like a
+      finished experiment. Before reading a delta, tick every item — one missing = zero
+      information, and the dossier says which: WITHOUT arm explicitly forbids loading the skill
+      (skills auto-trigger by description, so an unforbidden bare arm silently becomes a second
+      WITH arm) · each arm works in its own directory copy · targets/fixtures prepared BEFORE any
+      arm starts · paths inlined, never passed through a workflow `args` string · the judge reads
+      full output files, never truncations · judge vocabulary includes `unsure` · arms blinded (no
+      key, mapping or directory shape leaks the arm) · the bare prompt carries only a neutral
+      task + deliverable description (report its vocabulary overlap with SKILL.md) · the bare arm
+      is asked for the SAME artifact · trigger evals have their materials at hand · ≥1 rubric
+      dimension is not derived from the skill's own rules · verdicts written to disk and
+      existence-checked.
+- [ ] Classify the skill BEFORE seeing arm results, and bind the class to the skill version
+      (changing class = new version, new pre-registration): `capability-uplift` (accept on a
+      positive delta; the baseline arm is its expiry detector — delta→0 means retirement review)
+      or `encoded-preference` (encodes team-specific workflow/taste; accept on FIDELITY: behaviour
+      non-inferior with 0 negatives + a positive ARTIFACT delta against a bare arm asked for the
+      same artifact + a cost cap). Behaviour and artifact delta both ≈0 → the third branch:
+      retire, or shrink to the artifact-producing core. The classification is a proposal the
+      conductor confirms at the stage-3 gate (K3), not self-declared.
+- [ ] Report resolution honestly: an MDE or confidence interval against a third arm (placebo /
+      same-length unrelated skill) or a wording-perturbation floor; without one, write
+      "directional only" and list the missing validity items as partial compliance. List
+      task-level negative deltas on their own line. Injection sentinels (cases carrying an
+      injected payload where the WITH arm must downgrade authority) are reported separately,
+      outside the delta denominator — both arms resisting is expected, not zero information.
+- [ ] If pass rate plateaus while rules keep growing, the skill is over-constrained: delete rules
+      and re-test BEFORE adding more.
 
 ---
 
@@ -171,14 +207,28 @@ any score swing: grader bug > environment drift > target regression.
 For EVERY judge, linter, or grader in your harness, produce an `evaluator_calibration` entry.
 First fork on its kind (the C5 objective/subjective fork):
 
-- [ ] **Deterministic evaluator** (a byte/numeric comparator — exact-diff, `abs(x-y)<ε`, a lint
-      exit code): set `evaluator_kind: deterministic`. The L0 gate then requires only a real
-      `golden_sample_count > 0` (your test-case count) and EXEMPTS the four judge-bias fields
-      (`different_source_from_builder`, `has_unknown_exit`, non-empty `model_baseline`, a
-      style/verbosity `audit_dimensions` entry) — they are vacuous for a comparator that has no
-      model and no opinion. Fill them with honest neutral values (`false` / `""` / `"n/a"` /
-      `[]`); do NOT fabricate a judge-calibration story to fill shape. The bias discipline below
-      does not apply to you.
+- [ ] **Deterministic evaluator — a SKELETON check only** (P13/S14): the verdict information is
+      in the string — existence, count, verbatim match, structural isomorphism, hash, a byte or
+      numeric comparison (exact-diff, `abs(x-y)<ε`, JSON-schema validity, sha256). The question is
+      whether the verdict is in the string, NOT whether the evaluator is a script: a script's exit
+      code over an approximation of meaning (LCS/similarity ≥ threshold, a regex or word list
+      standing in for "same item", "kept the claim", "reads like AI") is a SEMANTIC check. A
+      semantic check is `llm_judge` (full discipline below) or D→L report-only evidence, unless
+      you show the A50 three items: (i) a separability witness from the battery or a golden set
+      you did not author — no input pair with equal features and opposite verdicts; (ii) false
+      positives measured on ALL existing real corpus; (iii) lineage to a line of the skill's
+      philosophy/design contract. Precedent: an "action item kept" LCS≥0.8 checker is semantic
+      ("follow up with legal" vs "loop in counsel" = same item at LCS 0.3); a JSON-schema check
+      labelled deterministic is correct — demoting it to llm_judge is over-correction. If a
+      deterministic comparator scores an LLM's verdicts (exact-match of a reader's labels), the
+      comparator is deterministic AND the LLM that produced the verdicts gets its OWN llm_judge
+      entry. Your `deterministic` label is a PROPOSAL: the conductor confirms or rejects it at the
+      stage-3 gate and records the ruling in the Decision Record; a disputed label takes the strict
+      llm_judge path until the owner rules (K3). A confirmed deterministic entry needs only a real
+      `golden_sample_count > 0` (your test-case count); the four judge-bias fields
+      (`different_source_from_builder`, `has_unknown_exit`, `model_baseline`, a style/verbosity
+      `audit_dimensions` entry) are vacuous for it — fill them with honest neutral values
+      (`false` / `""` / `"n/a"` / `[]`), never a fabricated calibration story.
 - [ ] **LLM-judge evaluator**: set `evaluator_kind: llm_judge` and apply the FULL E6 discipline
       below — every field is load-bearing and the gate enforces all four.
 
@@ -198,14 +248,33 @@ For an llm_judge:
       output it grades — self-preference bias is quantified, and a stronger same-family judge is
       NOT the fix [WEB-SelfPrefBias]. Set `different_source_from_builder` honestly; `false` is a
       flag the conductor weighs, not a field to fudge.
-- [ ] **model_baseline stamp**: record the base model the calibration ran on. On base-model
-      change the record auto-expires and must be re-verified.
+- [ ] **model_baseline stamp** (A37): the resolved model ID + effort + harness version the
+      calibration ran on (e.g. `claude-opus-5-5 · effort=high · claude-code 2.x`); an alias
+      (`opus`, `fable`) is not a legal value. On base-model change the record auto-expires and
+      must be re-verified.
 - [ ] Exact-match assertions: justify each one ("why can no equivalent solution be killed
       here?") or replace with tolerance/equivalence-class checks (`abs(x-96.12)<0.01`, with a
       sourced comment). Prefer pairwise/pass-fail over absolute scores; median of multiple
       samples for noisy judges [OAI-Judge校准].
 - Regress cutoff (don't spiral into auditing the audit): evaluator ← golden samples ← two experts
   independently reproducing the same pass/fail. Stop there [ANT-Demystify].
+
+**E12 — three operating rules for the verifier layer itself:**
+
+- [ ] **Total wipeout indicts the target first.** A 0%-pass suite (the pass@100 shape) most
+      commonly means the harness/fixture is broken, not that the skill is weak [ANT-Demystify].
+      Before changing one line of the skill, prove the harness can score a KNOWN-GOOD input green
+      and that a degenerate output (empty string, no-op) scores RED — the "empty answer counted as
+      success" bug is the same family. Only then read the failures as evidence about the skill.
+- [ ] **Judge one case per call.** Handing a judge N outputs to score in one batch is the default
+      token-saving move and it has a measured accuracy cost [WEB-RubricAudit]. Score case-by-case
+      (one judgment card, one call); if cost forces batching, record it in the layer notes as a
+      known accuracy discount, don't hide it.
+- [ ] **Non-overlapping rubric items are the first principle of false-positive control**
+      [WEB-VerifierEng]: two items that can both fire on one defect double-count it and manufacture
+      FPs. Audit overlap BEFORE reporting agreement — inter-judge agreement is blind to
+      manipulability (exploit rate can drop 10pp with the agreement coefficient unmoved
+      [WEB-RubricAudit]), so "our judge agrees with humans at 0.85" is not rubric validation.
 
 ---
 
@@ -222,6 +291,36 @@ For an llm_judge:
       absent from the notes (schema-valid ≠ true).
 - Shadow: probes test retention, not task completion — they replace re-runs done FOR retention,
   never §8's checkpoint assertions.
+
+---
+
+## 10b. Conditional — if the BUILT skill is itself a >1-round autonomous loop (A45/H1)
+
+Fires only when the skill you just built runs more than one self-directed round (a runbook that
+iterates, a self-restarting agent, a "keep going until done" workflow). If it does not, skip this
+section — do not fabricate a charter.
+
+- [ ] Ship a **loop-charter attachment** with the dossier (`loop_charter` in
+      `schemas/evidence-dossier.json`; the conductor gates on it at stage 3). Four items, all four
+      or the loop does not get to run autonomously:
+      (i) **runnable checks** — machine-gradable assertions sized to the surface (function/endpoint
+      >=8, module >=12, application >=20; upper bound 3x the floor so nobody pads), and they were
+      RUN before the loop, producing red. A check that judges a proxy ("the SQL contains LIMIT")
+      instead of the result is not a check;
+      (ii) **adjudication separation** — name who calls the final verdict: a runnable check or an
+      independent evaluator, never the generator. If no separate evaluator is bought, say why, and
+      then the check's execution and its result file must sit OUTSIDE the generator's write surface
+      (otherwise the generator can fix the door instead of the defect);
+      (iii) **on-disk state** — contract / progress / append-only log, passing a cold-restart test:
+      delete the session, hand a fresh agent only those files, and it can say what to do next;
+      (iv) **structured stop condition** — a round/budget cap written INTO the condition plus both
+      stop sides (done AND abandon); multiple sub-conditions are legal if each is typed and any one
+      firing stops the loop. Quantify the failure-routing thresholds up front ("N consecutive rounds
+      of the same failure class ⇒ restart or escalate") instead of judging staleness by feel each
+      round.
+- Shadow: the existence of a check is forgeable (a human-verify rubber stamp padding the assertion
+  floor). The count is machine-checkable; whether the checks discriminate is not — expect the
+  battery to probe exactly that.
 
 ---
 

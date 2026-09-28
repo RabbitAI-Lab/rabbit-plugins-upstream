@@ -1,43 +1,54 @@
-## Description: <br>
-Analyzes fixed-camera workplace video or video URLs to produce anonymous, zone-level group stress indices, heatmap colors, trend summaries, and manager-facing recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes workplace camera footage to produce zone-level stress heatmaps, reports, and suggestions for managers.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Workplace health, facilities, and operations teams use this skill to analyze office-area camera footage and review aggregate stress distribution by workstation zone. It is intended for organizational health monitoring and environment optimization, not individual employee identification, diagnosis, or performance evaluation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes sensitive employee camera footage or video URLs through cloud APIs and may create or reuse persistent operator identity and token state. <br>
-Mitigation: Before installation, confirm employee notice and consent, an approved workplace-camera stress-inference policy, explicit approval for sending video or video URLs plus operator identifiers to lifeemergence.com services, and reviewed retention, access control, and token storage expectations. <br>
-Risk: Stress heatmap outputs could be misused as individual performance-management evidence or psychological diagnosis. <br>
-Mitigation: Treat outputs as sensitive organizational health data, limit use to aggregate workplace-health monitoring, and prohibit individual identification, diagnosis, or performance evaluation. <br>
+## Use Case:
 
+Workplace managers and organizational health teams use fixed-camera footage to review aggregated stress indicators by office zone, view heatmaps, and consult historical reports when planning workplace improvements.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-workplace-stress-heatmap-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON containing structured stress-analysis results, heatmap/report links, and historical report listings.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended to be aggregate and zone-level; areas with fewer than three people are documented as insufficient sample cases.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter lists 1.0.6) <br>
+Risk: Workplace camera footage or video URLs may be sent to an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain clear employee notice and consent before use, limit retention, and approve the external service and its access controls.
+
+Risk: Persistent internal user and report identities may undermine expectations of anonymous group-only analysis.
+
+Mitigation: Verify that the service enforces anonymous, zone-level processing and restrict access to identities and historical reports.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-workplace-stress-heatmap-analysis)
+- [API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured report or JSON; Markdown table for historical reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Zone-level stress indicators, heatmap links, and manager suggestions; historical report links when requested.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

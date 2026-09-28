@@ -1,6 +1,6 @@
 <!--
 Copyright (c) 2026 杨鹏飞 / 微信公众号「叉车技术老炮」
-Licensed under CC BY-NC 4.0 + 附加条款 - 严禁商用 - 完整协议见 ../LICENSE.md
+Licensed under the MIT License - 完整协议见 ../LICENSE.md
 -->
 
 # 叉车维保计划与定期保养

@@ -1,0 +1,13 @@
+{
+  "interview_plan": {
+    "candidate_id": "CANDIDATE-JULIET-1673",
+    "matched_required": [
+      "Python"
+    ],
+    "missing_required": [],
+    "matched_optional": [],
+    "topics": [
+      "Applied discussion: Python"
+    ]
+  }
+}

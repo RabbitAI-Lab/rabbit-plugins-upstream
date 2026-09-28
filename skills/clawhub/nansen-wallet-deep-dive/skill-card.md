@@ -1,39 +1,53 @@
-## Description: <br>
-Who is this wallet and what have they been doing? Identity labels, balance, PnL summary, recent transactions, perp positions, and counterparties. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps analyze a wallet's identity, holdings, trading performance, recent transactions, perpetual positions, and counterparties with Nansen.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External users and analysts use this skill to profile Ethereum wallet activity with Nansen CLI commands, including identity labels, token balances, PnL, recent transactions, perpetual positions, and counterparties. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs Nansen CLI commands that require a configured Nansen API key. <br>
-Mitigation: Confirm the nansen-cli package is trusted, configure NANSEN_API_KEY only in the intended environment, and review unexpected nansen commands before execution. <br>
+## Use Case:
 
+Analysts and developers use this skill to investigate a wallet's labels, balances, profit and loss, recent activity, open perpetual positions, and counterparties through Nansen CLI.
 
-## Reference(s): <br>
-- [Nansen Wallet Deep Dive on ClawHub](https://clawhub.ai/nansen-devops/nansen-wallet-deep-dive) <br>
-- [nansen-cli package](https://www.npmjs.com/package/nansen-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Guidance, Text] <br>
-**Output Format:** [Markdown with bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen binary and NANSEN_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release metadata) <br>
+Risk: Research calls, especially in loops, can consume credits or trigger authorized x402 payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review available credits, wallet authorization, payment policy, and spending limits before running calls or loops.
+
+Risk: Cached authentication status may not prove that a selected credential is usable.
+
+Mitigation: Check authentication status before research and stop on anonymous selection or authentication failures rather than retrying anonymously.
+
+## Reference(s):
+
+- [Nansen Wallet Deep Dive on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-wallet-deep-dive)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Wallet analysis depends on a selected Nansen API key or saved browser session and available account entitlements.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

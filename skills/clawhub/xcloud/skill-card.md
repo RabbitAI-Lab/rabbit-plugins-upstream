@@ -1,50 +1,60 @@
-## Description: <br>
-Official xCloud Public API plugin for agents: manage servers, sites, WordPress, SSL, account data, and API-driven hosting operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploy Git repositories, diagnose errors and slow sites, and manage xCloud servers, sites, SSL, backups, billing and teams through nine capability skills.
 
-## Publisher: <br>
-[asif2bd](https://clawhub.ai/user/asif2bd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[asif2bd](https://clawhub.ai/user/asif2bd)
 
-## Use Case: <br>
-Developers, site operators, and hosting teams use this skill to let an agent inspect and operate xCloud hosting resources through the xCloud Public API. It supports server, site, WordPress, SSL, account, token, and deployment workflows when an authorized xCloud API token is configured. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: An agent with a persistent xCloud API token can make real hosting and account changes. <br>
-Mitigation: Use the narrowest scoped token available, prefer short-lived tokens, store tokens in the runtime secret store, and revoke exposed tokens promptly. <br>
-Risk: Destructive or high-impact operations can affect production resources, including deletes, restores, reboots, token revocation, sudo or firewall changes, SSL provider changes, and deployments. <br>
-Mitigation: Require explicit user confirmation before those actions and restate the target resource and operation before execution. <br>
-Risk: Secrets and sensitive URLs may be exposed if users paste production tokens, private keys, passwords, or magic-login URLs into chat. <br>
-Mitigation: Avoid pasting sensitive values into chat; use environment variables or secret stores and do not echo credentials or magic-login URLs back in responses. <br>
+## Use Case:
 
+Developers and site operators use this skill to deploy and troubleshoot applications and manage xCloud hosting resources, WordPress, certificates, accounts and billing with an AI agent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/asif2bd/skills/xcloud) <br>
-- [xCloud](https://xcloud.host) <br>
-- [xCloud Dashboard](https://app.xcloud.host) <br>
-- [User Guide](https://github.com/xCloudDev/xcloud-agent-skills/blob/main/docs/USER_GUIDE.md) <br>
-- [Install Guide](https://github.com/xCloudDev/xcloud-agent-skills/blob/main/docs/SKILLS-GUIDE.md) <br>
-- [Official GitHub](https://github.com/xCloudDev/xcloud-agent-skills) <br>
-- [API Docs](https://app.xcloud.host/api/v1/docs) <br>
-- [OpenClaw Tutorial](https://xcloud.host/openclaw-skills-and-clawhub-on-xcloud-openclaw-agent/) <br>
-- [Tutorial Video](https://www.youtube.com/watch?v=oEE9OHo3_48) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and summarized xCloud API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires bash, curl, jq, and XCLOUD_API_TOKEN for authenticated operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.3 (source: server release and skill frontmatter) <br>
+Risk: Agent actions could modify or delete live infrastructure, interrupt services, or incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target and impact, verify permissions, and require explicit confirmation for deployments, deletions, server changes and payments.
+
+Risk: API credentials or sensitive account data could be exposed.
+
+Mitigation: Prefer secure MCP OAuth or least-privilege read-only credentials, use a trusted connection, and keep tokens and sensitive responses out of chat and logs.
+
+Risk: Historical REST examples may be mistaken for permission to make sensitive changes.
+
+Mitigation: Treat non-GET REST examples as documentation; use approved MCP tools or the xCloud dashboard for changes.
+
+## Reference(s):
+
+- [xCloud MCP documentation](https://app.xcloud.host/mcp/docs)
+- [xCloud API documentation](https://app.xcloud.host/api/v1/docs)
+- [Authentication guidance](plugins/xcloud/reference/auth.md)
+- [Capability map](plugins/xcloud/reference/capability-map.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose actions for connected xCloud tools; actual infrastructure changes require user approval.]
+
+## Skill Version(s):
+
+4.4.2 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

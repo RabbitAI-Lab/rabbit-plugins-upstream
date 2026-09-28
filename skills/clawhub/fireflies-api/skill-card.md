@@ -1,44 +1,77 @@
-## Description: <br>
-Fireflies.ai GraphQL API integration with managed OAuth for accessing meeting transcripts, summaries, users, contacts, and AI-powered meeting analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fireflies.ai GraphQL API integration with managed OAuth for accessing meeting transcripts, summaries, users, contacts, and AI-powered meeting analysis through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect agents to Fireflies.ai through Maton so they can retrieve meeting transcripts, summaries, participant, user, and contact data, and perform AskFred meeting analysis. It also provides examples for approved GraphQL mutations such as transcript updates, audio uploads, user role changes, and live-meeting actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Fireflies meeting transcripts, audio, video URLs, participant data, and account metadata through Maton. <br>
-Mitigation: Install only when that access is acceptable, keep MATON_API_KEY private, and request only the transcript or account fields needed for the user task. <br>
-Risk: GraphQL mutations can create, update, delete, change roles, or affect live-meeting resources. <br>
-Mitigation: Require explicit user confirmation of the target resource and intended effect before any create, update, delete, role-change, or live-meeting action. <br>
+## Use Case:
 
+Developers and operators use this skill to connect a Fireflies.ai account through Maton, retrieve and analyze meeting data, and create narrowly approved Fireflies automations when needed.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/fireflies-api) <br>
-- [Fireflies API Documentation](https://docs.fireflies.ai/) <br>
-- [Fireflies GraphQL API Reference](https://docs.fireflies.ai/graphql-api) <br>
-- [Fireflies Developer Program](https://docs.fireflies.ai/getting-started/developer-program) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, GraphQL, JSON, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Fireflies connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Meeting transcripts, summaries, contacts, and AskFred queries can expose sensitive business or personal data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only the intended Fireflies connection and account, prefer read-only or scoped access, extract only the fields needed for the task, and avoid dumping full raw responses.
+
+Risk: Writes, connection changes, hosted functions, triggers, and destinations can modify data or create persistent automation.
+
+Mitigation: Get explicit user approval for the exact target, payload, destination, and intended effect; start with read or list calls before changes.
+
+Risk: Long-lived Maton API keys can leak through environment variables, logs, shell history, command lines, or persisted files.
+
+Mitigation: Prefer OAuth through the Maton CLI, never print or persist credentials, and use raw HTTP with MATON_API_KEY only where the CLI cannot be installed.
+
+Risk: Trigger destinations can continuously forward event data from connected applications to another URL.
+
+Mitigation: Confirm the destination host and transmitted fields with the user, minimize payloads with templates, and prefer Maton-controlled destinations when possible.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/fireflies-api)
+- [Maton homepage](https://maton.ai)
+- [Fireflies API Documentation](https://docs.fireflies.ai/)
+- [Fireflies GraphQL API Reference](https://docs.fireflies.ai/graphql-api)
+- [Fireflies Developer Program](https://docs.fireflies.ai/getting-started/developer-program)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Calendly Trigger Reference](artifact/references/calendly/triggers.md)
+- [GitHub Trigger Reference](artifact/references/github/triggers.md)
+- [Gmail Trigger Reference](artifact/references/google-mail/triggers.md)
+- [HubSpot Trigger Reference](artifact/references/hubspot/triggers.md)
+- [Linear Trigger Reference](artifact/references/linear/triggers.md)
+- [Notion Trigger Reference](artifact/references/notion/triggers.md)
+- [Slack Trigger Reference](artifact/references/slack/triggers.md)
+- [Stripe Trigger Reference](artifact/references/stripe/triggers.md)
+- [Time Trigger Reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, API calls, Configuration]
+
+**Output Format:** [Markdown with bash, JSON, GraphQL, Python, and JavaScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are task-scoped instructions and examples for authenticated Fireflies requests; raw API responses may contain sensitive meeting data and should be minimized.]
+
+## Skill Version(s):
+
+1.2.3 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

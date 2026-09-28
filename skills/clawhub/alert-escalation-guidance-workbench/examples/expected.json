@@ -1,0 +1,8 @@
+{
+  "assignment_result": {
+    "alert_id": "ALERT-6384",
+    "severity": "P2",
+    "assignment": "response-lead",
+    "matched_rule": true
+  }
+}

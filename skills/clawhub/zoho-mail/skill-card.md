@@ -1,48 +1,77 @@
-## Description: <br>
-Zoho Mail API integration with managed OAuth for sending, receiving, searching, and managing email messages, folders, labels, and attachments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zoho Mail API integration with managed OAuth for sending, receiving, searching, and managing emails, folders, and labels.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent work with a connected Zoho Mail account through Maton-managed OAuth, including reading mail, sending replies, searching messages, and organizing folders and labels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive email, folder, account, and organization information through the connected Zoho Mail account. <br>
-Mitigation: Install only when Maton-mediated Zoho Mail access is acceptable, keep MATON_API_KEY out of shared logs, and remove the Maton connection when it is no longer needed. <br>
-Risk: Write operations can send email or modify messages, folders, labels, and attachments. <br>
-Mitigation: Confirm the target resource and intended effect with the user before every send, delete, move, label, folder, or attachment action. <br>
-Risk: Multiple Zoho Mail connections can route actions to the wrong account if the connection is ambiguous. <br>
-Mitigation: Use the Maton-Connection header when more than one active Zoho Mail connection exists. <br>
+## Use Case:
 
+Employees, external users, developers, and agents use this skill to access a user-authorized Zoho Mail account through Maton, read and search messages, send mail, and manage folders or labels. It can also guide user-approved hosted functions and triggers for Zoho Mail-related automation.
 
-## Reference(s): <br>
-- [Zoho Mail API Overview](https://www.zoho.com/mail/help/api/overview.html) <br>
-- [Zoho Mail API Index](https://www.zoho.com/mail/help/api/) <br>
-- [Email Messages API](https://www.zoho.com/mail/help/api/email-api.html) <br>
-- [Getting Started with Zoho Mail API](https://www.zoho.com/mail/help/api/getting-started-with-api.html) <br>
-- [Maton](https://maton.ai) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-mail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with API paths, JSON examples, and Python or JavaScript code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Zoho Mail OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: The skill can access mailbox data through the selected Zoho Mail connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, select the narrowest available scopes, specify the intended connection when multiple accounts exist, and revoke unused connections.
+
+Risk: Send, delete, update, and folder or label operations can change user mail data.
+
+Mitigation: Default to read/list operations and require explicit user confirmation of the target resource, payload, and intended effect before any write.
+
+Risk: Triggers, hosted functions, and destinations can create persistent automation or data forwarding.
+
+Mitigation: Create them only for a specific user-approved purpose, keep function network access denied unless separately approved, review destinations before use, and remove automation when it is no longer needed.
+
+Risk: Raw HTTP fallback requires a long-lived Maton API key in the process environment.
+
+Mitigation: Use the CLI with OAuth when possible; if raw HTTP is required, do not print, log, persist, or pass the key on a command line, and send it only to api.maton.ai.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-mail)
+- [Zoho Mail API Overview](https://www.zoho.com/mail/help/api/overview.html)
+- [Zoho Mail API Index](https://www.zoho.com/mail/help/api/)
+- [Email Messages API](https://www.zoho.com/mail/help/api/email-api.html)
+- [Getting Started with Zoho Mail API](https://www.zoho.com/mail/help/api/getting-started-with-api.html)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton API Reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Time Trigger Reference](references/time/triggers.md)
+- [Gmail Trigger Reference](references/google-mail/triggers.md)
+- [GitHub Trigger Reference](references/github/triggers.md)
+- [Slack Trigger Reference](references/slack/triggers.md)
+- [Stripe Trigger Reference](references/stripe/triggers.md)
+- [Notion Trigger Reference](references/notion/triggers.md)
+- [Linear Trigger Reference](references/linear/triggers.md)
+- [HubSpot Trigger Reference](references/hubspot/triggers.md)
+- [Calendly Trigger Reference](references/calendly/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON examples, and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce authenticated API-call guidance, function examples, trigger setup steps, and safety confirmations for user-approved Zoho Mail operations.]
+
+## Skill Version(s):
+
+1.2.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
