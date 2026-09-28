@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/bids",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/bids",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/bids",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "6b0ecb901c7cd4ae7dbc0cb351584c780323eb9fe90a4c536923fa4408033c8b",
+  "fetchedAt": "2026-09-28T15:43:10.620Z"
+}

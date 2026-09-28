@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/web-development/har-derived-api-client",
+  "identifier": "official/web-development/har-derived-api-client",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/web-development/har-derived-api-client",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:37:23Z",
+  "contentHash": "edc5f8c3b213307281f2ddeac59fcb2a8491976c632818ec62152bdb25adf446",
+  "fetchedAt": "2026-09-28T15:43:54.917Z"
+}

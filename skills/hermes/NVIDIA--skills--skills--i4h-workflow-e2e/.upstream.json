@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-e2e",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-e2e",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-e2e",
+  "branch": "main",
+  "pushedAt": "2026-09-25T03:14:56Z",
+  "contentHash": "57712c318bcd7c5686992b2cd7b17e0d36161e453bea54296a51a7149c2f466c",
+  "fetchedAt": "2026-09-28T15:42:55.422Z"
+}

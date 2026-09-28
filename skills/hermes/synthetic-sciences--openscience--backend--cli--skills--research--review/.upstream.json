@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/review",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/review",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/review",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:30:54Z",
+  "contentHash": "bf0b948b5e2fe6b474be6181e65dc833043fe43c5eb0d87d88364f50e79d0a17",
+  "fetchedAt": "2026-09-28T15:42:57.183Z"
+}

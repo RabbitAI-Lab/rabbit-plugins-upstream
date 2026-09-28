@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/paperzilla",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/paperzilla",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/paperzilla",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "7e0da7c25d7bcbe9ead5d2c56cb3de0de9a8eface5524285cf420a2e900e28da",
+  "fetchedAt": "2026-09-28T15:43:10.716Z"
+}

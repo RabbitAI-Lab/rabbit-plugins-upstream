@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/dask",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/dask",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/dask",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "976d730c8cde7c023701edd9f0cd78c6a068de0008a891ceae8a90c21b692c76",
+  "fetchedAt": "2026-09-28T15:43:10.632Z"
+}
