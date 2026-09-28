@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-dataset-mimic",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-dataset-mimic",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-dataset-mimic",
+  "branch": "main",
+  "pushedAt": "2026-09-25T03:14:56Z",
+  "contentHash": "fff2ca00d9b3060d42d8b7efb8a047ecda6befd8c6768e6999194a79a5317a0f",
+  "fetchedAt": "2026-09-28T15:42:55.420Z"
+}

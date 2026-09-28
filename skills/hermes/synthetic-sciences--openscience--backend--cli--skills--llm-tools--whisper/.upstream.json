@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/whisper",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/whisper",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/whisper",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:30:54Z",
+  "contentHash": "04459d67b38e3654b5ecda655c186c4ac6b77f81db28b0df29132d28edc78615",
+  "fetchedAt": "2026-09-28T15:42:57.231Z"
+}

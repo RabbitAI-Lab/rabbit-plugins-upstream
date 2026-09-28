@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-convert-lightning",
+  "identifier": "NVIDIA/skills/skills/nvflare-convert-lightning",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-convert-lightning",
+  "branch": "main",
+  "pushedAt": "2026-09-25T03:14:56Z",
+  "contentHash": "83499836f6dd543e5fbb3fd768c0dce531b5595966538c76e7c8b1be7f30f2d4",
+  "fetchedAt": "2026-09-28T15:42:55.529Z"
+}

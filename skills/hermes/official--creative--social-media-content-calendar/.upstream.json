@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/social-media-content-calendar",
+  "identifier": "official/creative/social-media-content-calendar",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/social-media-content-calendar",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:37:23Z",
+  "contentHash": "e72220273986e69027f129e48289af15bbe0a764f0ddf0ff063f1d4f62fcc9e3",
+  "fetchedAt": "2026-09-28T15:43:54.978Z"
+}

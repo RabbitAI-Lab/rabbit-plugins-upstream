@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/pptx-posters",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/pptx-posters",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/pptx-posters",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:30:54Z",
+  "contentHash": "5127f35f1ba16699a7c9fb0fc1cf9d501d9b08e92e685a6a3b9dd0a509e9447c",
+  "fetchedAt": "2026-09-28T15:42:57.160Z"
+}

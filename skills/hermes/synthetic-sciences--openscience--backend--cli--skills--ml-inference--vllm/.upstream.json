@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/vllm",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/vllm",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/vllm",
+  "branch": "main",
+  "pushedAt": "2026-09-28T15:30:54Z",
+  "contentHash": "d1bacf2365f0d5e01b6c2981d3eb3be1d2f1a50e4a2812ce539bb4157fc02ec7",
+  "fetchedAt": "2026-09-28T15:42:57.192Z"
+}

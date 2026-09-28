@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/docx",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/docx",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/docx",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "297eabe17185286e63696c5e99cc263838e00cffb9ad5e44add9b0455487307f",
+  "fetchedAt": "2026-09-28T15:43:10.649Z"
+}
