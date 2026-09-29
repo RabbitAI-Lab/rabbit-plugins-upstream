@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scvelo",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scvelo",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scvelo",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "6e750228a4b6b51976bb6f093b4b96262fbb336df63541056db90c498a9f001e",
+  "fetchedAt": "2026-09-29T14:08:25.535Z"
+}

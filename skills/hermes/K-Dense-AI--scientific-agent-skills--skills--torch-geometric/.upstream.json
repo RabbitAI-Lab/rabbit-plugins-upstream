@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/torch-geometric",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/torch-geometric",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/torch-geometric",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "0383037b7cda50d91540f9ca14f7e875dab69dd1ccf630d1a7509922e53e6a1a",
+  "fetchedAt": "2026-09-29T14:08:25.550Z"
+}

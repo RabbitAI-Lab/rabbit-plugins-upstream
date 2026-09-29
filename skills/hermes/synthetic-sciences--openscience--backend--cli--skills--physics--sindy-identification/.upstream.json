@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/sindy-identification",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/sindy-identification",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/sindy-identification",
+  "branch": "main",
+  "pushedAt": "2026-09-29T02:49:55Z",
+  "contentHash": "e7b95c1772ed5207dd0cb77d0f2e02224ec2a735cb160d998872951a81a1c21d",
+  "fetchedAt": "2026-09-29T14:08:11.704Z"
+}

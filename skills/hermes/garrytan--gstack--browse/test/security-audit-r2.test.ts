@@ -6,7 +6,7 @@
  * that could silently remove a fix without breaking compilation.
  */
 
-import { describe, it, expect, beforeAll, afterAll } from 'bun:test';
+import { describe, it, expect, beforeAll, afterAll, spyOn } from 'bun:test';
 import * as fs from 'fs';
 import * as path from 'path';
 import * as os from 'os';
@@ -339,15 +339,18 @@ describe('frame --url ReDoS fix', () => {
 // ─── Task 7: watch-mode guard in chain command ───────────────────────────────
 
 describe('chain command watch-mode guard', () => {
-  it('chain loop contains isWatching() guard before write dispatch', () => {
-    // Post-alias refactor: loop iterates over canonicalized `c of commands`.
-    const block = sliceBetween(META_SRC, 'for (const c of commands)', 'Wait for network to settle');
-    expect(block).toContain('isWatching');
+  // The direct-dispatch fallback (which carried its own isWatching() guard)
+  // was deleted — it skipped every OTHER server gate. Chain subcommands now
+  // route exclusively through executeCommand -> handleCommandInternal, whose
+  // watch-mode write gate covers them. Pin both halves of that contract.
+  it('chain has no direct-dispatch fallback (executeCommand is mandatory)', () => {
+    const block = sliceBetween(META_SRC, 'const executeCmd = opts?.executeCommand', 'Wait for network to settle');
+    expect(block).toContain('chain requires the browse server (no executeCommand context)');
+    expect(block).not.toContain('handleWriteCommand(');
   });
 
-  it('chain loop BLOCKED message appears for write commands in watch mode', () => {
-    const block = sliceBetween(META_SRC, 'for (const c of commands)', 'Wait for network to settle');
-    expect(block).toContain('BLOCKED: write commands disabled in watch mode');
+  it('server pipeline blocks write commands in watch mode (covers chain subcommands)', () => {
+    expect(SERVER_SRC).toMatch(/isWatching\(\)\s*&&\s*isWriteInvocation\(command, args\)/);
   });
 });
 
@@ -361,11 +364,38 @@ describe('cookie-import domain validation', () => {
     expect(block).toContain('does not match current page domain');
   });
 
-  it('cookie-import-browser handler validates --domain against page hostname', () => {
-    const block = sliceBetween(WRITE_SRC, "case 'cookie-import-browser':", "case 'style':");
-    expect(block).toContain('normalizedDomain');
-    expect(block).toContain('pageHostname');
-    expect(block).toContain('does not match current page domain');
+  it('cookie-import-browser handler validates --domain against page hostname', async () => {
+    const operation = await import('../src/cookie-import-operation');
+    const { handleWriteCommand } = await import('../src/write-commands');
+    const imported = spyOn(operation, 'runCookieImport').mockResolvedValue({
+      browser: 'chromium', profile: 'Profile 2', imported: 2, failed: 0,
+      domainCounts: { '.example.test': 2 }, failureReasons: {}, outcome: 'imported',
+      reset: 'not_requested', verification: { verified: false, reason: 'not_requested' }, message: 'Cookie copy complete.',
+    });
+    let currentUrl = 'https://example.test';
+    const page = { url: () => currentUrl, isClosed: () => false };
+    const session = { getPage: () => page, getActiveFrameOrPage: () => page, getFrame: () => null } as any;
+    const manager = { trackCookieImportDomains() {} } as any;
+    try {
+      for (const [target, domain] of [
+        ['https://example.test', 'unrelated.test'],
+        ['https://example.test.evil.invalid', 'example.test'],
+        ['https://badexample.test', 'example.test'],
+      ]) {
+        currentUrl = target;
+        await expect(handleWriteCommand('cookie-import-browser', ['chromium', '--domain', domain], session, manager))
+          .rejects.toMatchObject({ code: 'target_mismatch' });
+      }
+      expect(imported).not.toHaveBeenCalled();
+      currentUrl = 'https://sub.example.test/protected';
+      const result = await handleWriteCommand('cookie-import-browser', ['chromium', '--domain', '.Example.Test.', '--profile', 'Profile 2'], session, manager);
+      expect(imported).toHaveBeenCalledTimes(1);
+      expect(imported.mock.calls[0][0]).toMatchObject({ browser: 'chromium', domains: ['example.test'], profile: 'Profile 2' });
+      expect(imported.mock.calls[0][1]).toEqual({ page, url: currentUrl });
+      expect(result).toContain('Imported 2 cookies from chromium (profile: Profile 2)');
+    } finally {
+      imported.mockRestore();
+    }
   });
 });
 

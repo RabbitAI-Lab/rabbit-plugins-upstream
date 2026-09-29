@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/networkx",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/networkx",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/networkx",
+  "branch": "main",
+  "pushedAt": "2026-09-29T02:49:55Z",
+  "contentHash": "883e7c142d097ec2bd0bf1dafca12b6683d58306876810884dcda266210b9a03",
+  "fetchedAt": "2026-09-29T14:08:11.633Z"
+}

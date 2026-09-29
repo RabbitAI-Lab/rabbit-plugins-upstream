@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/primekg",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/primekg",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/primekg",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "5bb2a84385bbc305ef2268d00082a9cb785abf03a1a0ca1f47583394aa5fb0c0",
+  "fetchedAt": "2026-09-29T14:08:25.496Z"
+}

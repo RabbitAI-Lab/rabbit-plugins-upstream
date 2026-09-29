@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/relsa-severity-assessment",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/relsa-severity-assessment",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/relsa-severity-assessment",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "d1c4ccab3e0846cad6e49571860505488f5202d2d5a89d2acfde3c10a44c21b5",
+  "fetchedAt": "2026-09-29T14:08:25.517Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/peer-review",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/peer-review",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/peer-review",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "49f4513a1269eb6cd3dda608d982cc7a9d4fb9ba04ec9c757116752e322d0655",
+  "fetchedAt": "2026-09-29T14:08:25.481Z"
+}

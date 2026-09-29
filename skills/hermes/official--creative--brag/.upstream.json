@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/brag",
+  "identifier": "official/creative/brag",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/brag",
+  "branch": "main",
+  "pushedAt": "2026-09-29T13:59:31Z",
+  "contentHash": "92f2ad711b8e7c7bba54710d6f29bd8e5ac5653a58a788521b63427e18d8b676",
+  "fetchedAt": "2026-09-29T14:08:36.904Z"
+}

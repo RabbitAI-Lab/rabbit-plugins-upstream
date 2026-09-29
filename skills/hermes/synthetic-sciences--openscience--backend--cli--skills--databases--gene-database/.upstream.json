@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/gene-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/gene-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/gene-database",
+  "branch": "main",
+  "pushedAt": "2026-09-29T02:49:55Z",
+  "contentHash": "92594d9a2ce025419d2d8c8527438ee6919b1b13e70e15dc723de12a9317bb19",
+  "fetchedAt": "2026-09-29T14:08:11.573Z"
+}

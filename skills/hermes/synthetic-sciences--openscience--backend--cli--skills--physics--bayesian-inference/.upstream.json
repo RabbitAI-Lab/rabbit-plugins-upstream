@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/bayesian-inference",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/bayesian-inference",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/bayesian-inference",
+  "branch": "main",
+  "pushedAt": "2026-09-29T02:49:55Z",
+  "contentHash": "3149ee186c11268c01039b5e1d35b1dbf89ad50089d0335696241aa3a93c6f87",
+  "fetchedAt": "2026-09-29T14:08:11.513Z"
+}
