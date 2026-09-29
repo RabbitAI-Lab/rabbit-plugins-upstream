@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-gpt",
   "slug": "runapi-gpt",
   "ownerHandle": null,
-  "version": "0.2.10",
-  "updatedAt": 1784761719058,
-  "contentHash": "2c915ccf7ff4ee63b9c875e231808fe6809b7a091e4dd491762aa8520333db0a",
-  "fetchedAt": "2026-07-26T18:07:41.286Z"
+  "version": "0.2.16",
+  "updatedAt": 1790672725949,
+  "contentHash": "bd76124e56ee2280c13f471aaacae98569db433f3ebfff863b2b53f5ff31a197",
+  "fetchedAt": "2026-09-29T14:13:21.532Z"
 }

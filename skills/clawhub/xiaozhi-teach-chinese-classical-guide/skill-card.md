@@ -1,47 +1,62 @@
-## Description: <br>
-帮助语文老师把文言文教学组织为诵读正音、训诂、串讲、主题分析、文化背景和学员积累档案的系统化流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为语文老师设计文言文与古诗词课程的诵读、训诂、主题讨论及文化联结框架。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-语文老师和教学助手使用该技能设计文言文、古诗词和诗词鉴赏课程，生成诵读、字词句式、串讲、主题讨论、文化背景和学员积累档案方面的课堂指导。 <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Learner progress records may contain sensitive educational data if teachers enter real names, contact details, or identifiable classroom notes. <br>
-Mitigation: Use pseudonyms, avoid real names and contact details, store records only in approved school systems, and delete records when they are no longer needed. <br>
-Risk: Classroom use could unintentionally copy protected modern textbook notes, translations, or lesson designs. <br>
-Mitigation: Use public-domain classical originals as the base, keep outputs to frameworks and key-sentence scaffolds, and have the teacher supply and review any edition-specific notes or translations. <br>
+## Use Case:
 
+语文老师用它起草中国大陆小学高段至初中的文言文和古诗词教学框架、讨论问题及班级积累记录；课堂使用前由老师审定。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-classical-guide) <br>
-- [古文积累档案模板](references/classical-accumulation-profile-template.md) <br>
-- [文言词汇速查](references/classical-vocab-quick-ref.md) <br>
-- [训诂方法卡](references/exegesis-method-card.md) <br>
-- [诗词意象目录](references/poetry-image-catalog.md) <br>
-- [诵读节奏指南](references/recitation-rhythm-guide.md) <br>
-- [串讲样板模板](references/serial-explain-sample-template.md) <br>
-- [主题讨论问题题库](references/theme-discussion-question-bank.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize curriculum, student-data practices, and emergency contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with structured workflows, tables, checklists, and classroom templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; guidance is intended for teacher review before classroom use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student progress records may expose minors' learning information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm school permission, use pseudonyms without direct identifiers, limit retention, and require consent before sharing or writing back records.
+
+Risk: Mainland China curriculum and safety-contact defaults may be inappropriate elsewhere.
+
+Mitigation: Adapt grade expectations, data rules, and local emergency contacts before deployment outside Mainland China.
+
+Risk: Generated lesson content may contain inaccuracies or reproduce protected textbook commentary.
+
+Mitigation: Have teachers check examples and questions before classroom use; avoid copying modern textbook notes and translations.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-chinese-classical-guide)
+- [Classical vocabulary quick reference](artifact/references/classical-vocab-quick-ref.md)
+- [Recitation and rhythm guide](artifact/references/recitation-rhythm-guide.md)
+- [Exegesis method card](artifact/references/exegesis-method-card.md)
+- [Theme discussion question bank](artifact/references/theme-discussion-question-bank.md)
+- [Classical-text accumulation profile template](artifact/references/classical-accumulation-profile-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown or plain text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-facing lesson frameworks, discussion prompts, and optional progress-record drafts; no full translations or automated student evaluation.]
+
+## Skill Version(s):
+
+2.7.1 (source: skill frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

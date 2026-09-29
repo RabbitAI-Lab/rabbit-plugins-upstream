@@ -1,45 +1,62 @@
-## Description: <br>
-Coda API integration with managed OAuth for managing docs, pages, tables, rows, formulas, controls, permissions, and analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in reading and managing Coda docs, pages, tables, rows, and formulas through a user-authorized Maton connection, with optional hosted automation.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Coda through Maton-managed OAuth, including reading, creating, updating, and deleting Coda docs, pages, tables, rows, and related resources. It is intended for workflows where the user has a Maton API key and an authorized Coda connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can edit or delete Coda content and change document sharing through the connected Coda account. <br>
-Mitigation: Before approving write, delete, connection, or sharing changes, verify the exact account, document, table, page, row, principal, permission level, and intended effect. <br>
-Risk: Using the wrong Maton connection can send requests to an unintended Coda account. <br>
-Mitigation: When multiple Coda connections exist, specify the intended connection with the Maton-Connection header. <br>
-Risk: The Maton API key is a sensitive credential for access through the gateway. <br>
-Mitigation: Provide MATON_API_KEY only in trusted environments and install the skill only if Maton is trusted with access to the connected Coda account. <br>
+## Use Case:
 
+People and developers use this skill to inspect and, with approval, change Coda content and sharing settings. They can also request scheduled or event-driven Coda actions through Maton functions and triggers.
 
-## Reference(s): <br>
-- [ClawHub Coda Skill](https://clawhub.ai/byungkyu/coda-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Related API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Coda API Reference](https://coda.io/apis/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with endpoint references and Python, JavaScript, JSON, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, and an authorized Coda OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Coda writes and sharing changes can alter or expose user data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account, target resource, payload, and intended effect before each write or permissions change.
+
+Risk: Hosted functions, triggers, and destinations can run persistently or forward event data.
+
+Mitigation: Approve each automation separately after reviewing its code, schedule or event scope, destination host, data fields, and cleanup plan.
+
+Risk: Broad connections or event scopes can expose more data than the task needs.
+
+Mitigation: Use least-privilege access and narrowly scoped triggers, and remove unused connections and automation.
+
+## Reference(s):
+
+- [Coda API documentation](https://coda.io/developers/apis/v1)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Coda skill listing](https://clawhub.ai/byungkyu/skills/coda-api)
+- [Time trigger reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Maton account and network access; modifying resources or enabling automation requires user approval.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

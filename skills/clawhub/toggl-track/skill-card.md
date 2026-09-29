@@ -1,51 +1,56 @@
-## Description: <br>
-Toggl Track API integration with managed OAuth for tracking time and managing projects, clients, tags, workspaces, and time entries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using Toggl Track to manage time entries, projects, clients, and tags through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to operate Toggl Track through Maton-managed OAuth, including reading account and workspace data and creating, updating, stopping, or deleting time-tracking records with user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Toggl Track resources through Maton-managed OAuth. <br>
-Mitigation: Install only when Maton access to the connected Toggl Track account is acceptable. <br>
-Risk: Write and delete requests can affect time entries, projects, clients, tags, or workspace data. <br>
-Mitigation: Confirm the workspace, connection, target resource, and exact intended change before approving create, update, stop, archive, restore, or delete actions. <br>
-Risk: The Maton API key can expose access if shown in shared terminals, prompts, or logs. <br>
-Mitigation: Store MATON_API_KEY as an environment variable or secret and avoid echoing it or pasting it into shared contexts. <br>
-Risk: Multiple Toggl Track connections may route requests to the wrong account. <br>
-Mitigation: Use the Maton-Connection header when multiple active connections exist and verify the selected connection before taking action. <br>
+## Use Case:
 
+Employees and developers use this skill to read and manage their Toggl Track time entries, projects, clients, and tags, with approval before connecting accounts or changing data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/toggl-track) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Toggl Track API documentation](https://engineering.toggl.com/docs/) <br>
-- [Toggl Track API authentication reference](https://engineering.toggl.com/docs/api/authentication) <br>
-- [Time Entries API](https://engineering.toggl.com/docs/api/time_entries) <br>
-- [Projects API](https://engineering.toggl.com/docs/api/projects) <br>
-- [Clients API](https://engineering.toggl.com/docs/api/clients) <br>
-- [Tags API](https://engineering.toggl.com/docs/api/tags) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline HTTP paths, JSON examples, Python examples, JavaScript examples, and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY environment variable, and a connected Toggl Track account through Maton-managed OAuth.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Account connections and changes to time entries or other records can grant access or modify user data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm each new connection and every write with the user; identify the target account, resource, and intended change first.
+
+Risk: Hosted functions, triggers, destinations, and local event handlers can run persistently or forward data.
+
+Mitigation: Require explicit approval of the exact code, destination URL, data fields, persistence, and deletion plan before enabling automation; avoid local event execution unless the user supplies and approves its handler.
+
+## Reference(s):
+
+- [Toggl Track skill on ClawHub](https://clawhub.ai/byungkyu/skills/toggl-track)
+- [Maton homepage](https://maton.ai)
+- [Toggl Track API documentation](https://engineering.toggl.com/docs/)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Text and Markdown with command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [API results depend on the user's authorized Toggl Track connection.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,65 @@
+# ci-java.yml — Tencent org Java CI 骨架（oss-scaffold settings profile）
+# 形态蒸馏自：Tencent/Shadow check-build-test.yml（commit 消息检查 → 代码格式检查 →
+#           gradle 构建/测试 needs 链；setup-java temurin + gradle cache；
+#           本地 composite action ./.github/actions/*）+ Shadow release.yml
+#           （release published 事件 → maven/gradle 发布）。
+name: Check & Build & Test
+
+on:
+  push:
+    branches: [master]
+  pull_request:
+    branches: [master]
+
+jobs:
+  check-commit-message:
+    # Shadow 形态：commitlint 把关提交日志（「提交日志格式化检查」）
+    name: commit message check
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: wagoid/commitlint-github-action@v6
+        with:
+          configFile: ./.commitlintrc.yml
+
+  build-and-test:
+    needs: [check-commit-message]
+    name: build & test
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+
+      - name: build
+        run: ./gradlew build -S
+
+      - name: test
+        run: ./gradlew test
+
+  # 发布流形态 B（Shadow release.yml）：GitHub Release published 事件触发 maven 发布，
+  # 显式 PUBLISH_RELEASE 开关 + GITHUB_TOKEN。
+  publish:
+    if: github.event_name == 'release'
+    needs: [build-and-test]
+    runs-on: ubuntu-latest
+    env:
+      PUBLISH_RELEASE: true
+      GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+          cache: 'gradle'
+      - name: publish to maven
+        run: ./gradlew publish -S

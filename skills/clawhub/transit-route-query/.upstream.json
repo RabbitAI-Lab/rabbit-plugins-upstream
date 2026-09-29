@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/transit-route-query",
   "slug": "transit-route-query",
   "ownerHandle": null,
-  "version": "1.0.8",
-  "updatedAt": 1783492181940,
-  "contentHash": "0897ea29262a72a91e0a4d69e5d6955e44aefe8d816105fdb2306ca98d95cc68",
-  "fetchedAt": "2026-07-26T18:18:07.332Z"
+  "version": "1.0.19",
+  "updatedAt": 1790125706642,
+  "contentHash": "17bcc92fff303f9e4e1d586e07b853308f4c4d4c188eca3e41745dec1fdcb24a",
+  "fetchedAt": "2026-09-29T14:34:31.781Z"
 }

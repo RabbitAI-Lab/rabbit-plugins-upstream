@@ -1,49 +1,66 @@
-## Description: <br>
-LinkedIn API integration with managed OAuth for sharing posts, managing profile and organization data, uploading media, accessing the Ad Library, and managing advertising features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use LinkedIn through a connected Maton account to retrieve profile and organization information, share content, and manage advertising workflows.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to connect agents to LinkedIn through Maton-managed OAuth, retrieve LinkedIn profile or organization information, publish content, upload media, and work with advertising workflows after user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill gives Maton-mediated access to the connected LinkedIn account. <br>
-Mitigation: Install only when comfortable with that access model, keep MATON_API_KEY protected, and verify the connected account and granted OAuth scopes before use. <br>
-Risk: Public posts, organization actions, and profile changes can affect reputation. <br>
-Mitigation: Show the exact operation and request body or key parameters, then wait for explicit user confirmation before any create, update, or delete request. <br>
-Risk: Advertising operations can change budgets, targeting, campaigns, or ad accounts and may spend money. <br>
-Mitigation: Confirm budget amounts, targeting criteria, ad account identifiers, and campaign status with the user before sending advertising requests. <br>
-Risk: Destructive LinkedIn operations may be irreversible. <br>
-Mitigation: Confirm the resource identifier and explain that deletion may not be recoverable before sending DELETE requests. <br>
+## Use Case:
 
+Developers and other authorized users can guide an agent to read LinkedIn account information, prepare and share posts, or manage campaigns through their approved connection. The skill also describes optional scheduled or event-driven automation.
 
-## Reference(s): <br>
-- [ClawHub LinkedIn skill listing](https://clawhub.ai/byungkyu/skills/linkedin-api) <br>
-- [LinkedIn API Overview](https://learn.microsoft.com/en-us/linkedin/) <br>
-- [Share on LinkedIn Guide](https://learn.microsoft.com/en-us/linkedin/consumer/integrations/self-serve/share-on-linkedin) <br>
-- [LinkedIn Marketing API](https://learn.microsoft.com/en-us/linkedin/marketing/) <br>
-- [LinkedIn Advertising Policies](https://www.linkedin.com/legal/ads-policy) <br>
-- [Maton settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline code blocks and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, LinkedIn-Version: 202606, and appropriate LinkedIn OAuth scopes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata, released 2026-07-24) <br>
+Risk: Connecting an unintended LinkedIn account could grant Maton access to its data and actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended account and obtain explicit approval before creating a connection.
+
+Risk: Posts, account changes, and advertising budget changes can have public or financial consequences.
+
+Mitigation: Default to reading; review each write and budget change with the user before proceeding.
+
+Risk: Hosted functions, triggers, or third-party destinations may run actions or send data unexpectedly.
+
+Mitigation: Review and approve each automation and destination; use external recipients only when the user controls and trusts the host.
+
+Risk: Local execution workflows can run commands on the user's machine.
+
+Mitigation: Review and explicitly approve local --exec workflows before running them.
+
+## Reference(s):
+
+- [ClawHub LinkedIn skill](https://clawhub.ai/byungkyu/skills/linkedin-api)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [LinkedIn API documentation](https://learn.microsoft.com/en-us/linkedin/)
+- [LinkedIn Marketing API documentation](https://learn.microsoft.com/en-us/linkedin/marketing/)
+- [Scheduled trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access and an authorized Maton connection; advertising actions may require additional LinkedIn permissions.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

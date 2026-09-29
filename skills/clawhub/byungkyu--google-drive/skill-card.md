@@ -1,44 +1,60 @@
-## Description: <br>
-Google Drive API integration with managed OAuth for listing, searching, creating, uploading, exporting, updating, deleting, and sharing files and folders. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents find, read, upload, share, and organize files and folders in a user's connected Google Drive.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with a user-authorized Google Drive account through Maton, including file discovery, downloads, exports, uploads, metadata updates, deletion, and sharing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google Drive requests are routed through Maton and require Google OAuth permissions for the connected account. <br>
-Mitigation: Install only if that routing and permission model is acceptable, and verify the intended Google account before use. <br>
-Risk: Write operations can create, update, delete, move, upload, or share Drive resources. <br>
-Mitigation: Confirm the connection, target file or folder, sharing recipient, and intended effect before approving any write operation. <br>
+## Use Case:
 
+People and teams use this skill to find and manage files and folders in their own connected Google Drive, including downloads, uploads, and sharing. It also documents optional hosted functions and triggers for approved automation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-drive) <br>
-- [Google Drive API Reference](https://developers.google.com/drive/api/reference/rest/v3) <br>
-- [Google Drive Uploads Guide](https://developers.google.com/drive/api/guides/manage-uploads) <br>
-- [Google Drive Search Query Syntax](https://developers.google.com/drive/api/guides/search-files) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, HTTP endpoints, and Python or JavaScript code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a user-authorized Google Drive connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: Connecting Google Drive grants access to sensitive files within the authorized account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm account authorization and prefer read-only, least-privilege scopes when possible.
+
+Risk: Uploads, edits, sharing, and deletions can expose or change files.
+
+Mitigation: Confirm the target and effect of every write, share, or delete before execution.
+
+Risk: API keys and hosted functions or triggers can enable persistent access or recurring actions.
+
+Mitigation: Prefer the OAuth CLI over API-key mode, and review and separately approve any hosted automation before enabling it.
+
+## Reference(s):
+
+- [Google Drive skill release](https://clawhub.ai/byungkyu/skills/google-drive)
+- [Maton](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Google Drive API overview](https://developers.google.com/drive/api/reference/rest/v3)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include file metadata and downloaded or exported file contents.]
+
+## Skill Version(s):
+
+1.2.10 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

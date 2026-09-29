@@ -1,45 +1,58 @@
-## Description: <br>
-PDF.co API integration with managed OAuth for converting, merging, splitting, editing PDFs, and extracting data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use PDF.co through a user-authorized Maton connection to convert, assemble, edit, and extract data from PDFs.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to call PDF.co through Maton for PDF conversion, merging, splitting, editing, text and table extraction, invoice parsing, barcode operations, and connection management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Documents and extracted content are processed by Maton and PDF.co external services. <br>
-Mitigation: Install only if third-party document processing is allowed for the intended files; avoid sensitive or regulated documents unless approved. <br>
-Risk: The MATON_API_KEY grants access to the user's Maton-connected PDF.co workflow. <br>
-Mitigation: Keep MATON_API_KEY private and supply it only through the expected environment variable or secret-management path. <br>
-Risk: Write operations can modify PDFs, change passwords, or delete connections. <br>
-Mitigation: Confirm the target file, selected connection, operation, and intended effect with the user before executing write, password, parsing, or deletion actions. <br>
+## Use Case:
 
+Developers and other users can direct an agent to convert, merge, split, edit, or extract information from PDFs using their authorized PDF.co connection. Optional automation can run approved PDF.co actions on a schedule or supported external events.
 
-## Reference(s): <br>
-- [PDF.co ClawHub Listing](https://clawhub.ai/byungkyu/pdf-co) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [PDF.co API Documentation](https://docs.pdf.co) <br>
-- [PDF.co API Reference](https://docs.pdf.co/api-reference) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP, Python, JavaScript, shell, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and PDF.co connection selection when multiple connections exist.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: PDF documents and extracted data may be sent to an external processor or exposed through output links.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain approval for each document and avoid sensitive or regulated material; do not share output links for sensitive documents.
+
+Risk: Automations and event destinations can continue processing or forwarding data after setup.
+
+Mitigation: Use direct API calls for routine work; separately approve the connection, destination, and any code before enabling automation.
+
+## Reference(s):
+
+- [PDF.co API documentation](https://docs.pdf.co)
+- [PDF.co API reference](https://docs.pdf.co/api-reference)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [ClawHub PDF.co skill](https://clawhub.ai/byungkyu/skills/pdf-co)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [API results may include temporary document links.]
+
+## Skill Version(s):
+
+1.2.4 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

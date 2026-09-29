@@ -1,42 +1,61 @@
-## Description: <br>
-Helps agents search, browse, view details for, and install Huawei Cloud agent skills. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search, browse, view, and install Huawei Cloud agent skills from public Huawei Cloud skill indexes.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to discover Huawei Cloud agent skills by keyword or category, inspect candidate skill details, and install a selected skill for a management task. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installing a matched skill can add remote code-backed instructions to the local agent environment. <br>
-Mitigation: Confirm the exact skill name and source repository before running an install command, then review the installed skill before using it. <br>
+## Use Case:
 
+Developers and agent users use this skill to discover Huawei Cloud skills by keyword or category, review matching skill details, and install selected skills for later execution.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-find-skills) <br>
-- [Huawei Cloud skills repository](https://github.com/huaweicloud/huaweicloud-skills) <br>
-- [GitCode skill index API](https://gitcode.com/api/v5/repos/2501_91318609/skills-for-index/contents/skills-index/index.json?ref=main) <br>
-- [GitCode Chinese-English map API](https://gitcode.com/api/v5/repos/2501_91318609/skills-for-index/contents/skills-index/cn-en-map.json?ref=main) <br>
-- [Local search script](scripts/search-skills.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with command examples and script output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include network-fetched search results and install commands for a selected skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata) <br>
+Risk: The skill uses default-on anonymous telemetry and may install persistent telemetry tooling in the user's environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the telemetry behavior before use and set SKILL_QUALITY_REPORT=0 if telemetry is not acceptable.
+
+Risk: The skill can guide remote installation of additional Huawei Cloud skills through npx commands.
+
+Mitigation: Review the matched skill and installation command before allowing installation.
+
+Risk: The security verdict is suspicious because telemetry tooling and broad remote install commands deserve review before use.
+
+Mitigation: Scan and review the skill before deployment, especially in restricted or enterprise environments.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-find-skills)
+- [CLI Installation Guide](artifact/references/cli-installation-guide.md)
+- [IAM Policies](artifact/references/iam-policies.md)
+- [Acceptance Criteria](artifact/references/acceptance-criteria.md)
+- [Verification Method](artifact/references/verification-method.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, shell commands, configuration]
+
+**Output Format:** [Markdown with inline shell commands and command output summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May install additional Huawei Cloud skills through remote package commands when the user chooses a result.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

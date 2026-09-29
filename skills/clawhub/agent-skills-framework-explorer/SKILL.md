@@ -1,12 +1,33 @@
 ---
 name: "Agent Skills Framework Explorer"
 description: "AI-powered assistant for exploring, understanding, and building with AI agent skills frameworks — covers Anthropic agent-skills, OpenAI agent SDKs, LangChain tools, CrewAI protocols, and open-source agent skill marketplaces. Built for AI developers and agent builders. Keywords: agent-skills, AI agent framework, LangChain tools, CrewAI, OpenAI Agents SDK, Claude Agent SDK, agent tool ecosystem, skills marketplace, MCP tools, n8n agent nodes, agent protocol."
-version: "1.0.0"
+version: "1.0.2"
 ---
 
 # Agent Skills Framework Explorer
 
 ## Overview
+
+## Scope and Safety Policy (read first)
+
+This skill is **advisory only**. It does not install packages, does not execute
+shell commands on your behalf, and holds no credentials. Every command block
+below is a copy-paste reference for you to run in your own environment after
+review.
+
+| Policy | What this means in practice |
+|---|---|
+| Scope | Framework selection, comparison, migration and integration design for AI agent tooling |
+| Out of scope (SQP-1) | General programming help, model training/fine-tuning, non-agent software architecture, and any request unrelated to agent frameworks or tool protocols |
+| Version pinning (RP1/T08) | Every `npm`/`npx`/`pip` command below carries an explicit version placeholder. Resolve it to a concrete version from the project's official release page and commit the lockfile. Never rely on a floating `latest` tag in CI. |
+| Credential scope (SQP-2) | Use the narrowest token that works: read-only where possible, single-repo rather than org-wide, short-lived rather than permanent. Never paste a real token into a skill file, prompt or issue. |
+| Write actions | Any call that creates or mutates a remote resource (e.g. `create_issue`, `send_message`, `merge_pr`) must sit behind an explicit human confirmation step in your own code. Do not wire these directly to autonomous agent output. |
+| Data minimisation | Pass the minimum fields a tool needs. Do not forward whole customer records, logs containing PII, or source trees into an agent context to "be safe". |
+| Verification | Version numbers, star counts and repository paths here are point-in-time. Verify against upstream before use.
+
+> The trigger list below is deliberately narrow: if your question is not about
+> agent frameworks, tool protocols or skill marketplaces, this skill should not
+> fire.
 
 A comprehensive guide and assistant for navigating the rapidly evolving AI agent skills framework ecosystem. Whether you're exploring addyosmani/agent-skills (40K+ stars), building with Anthropic's Claude Agent SDK, designing multi-agent pipelines with CrewAI/LangGraph, or connecting tools via MCP protocol — this skill helps you understand, compare, and implement the right framework for your use case.
 
@@ -80,6 +101,38 @@ Provide structured comparison and guidance for the relevant framework:
 - **Use when**: Connecting agents to real-world data and services
 - **Reference**: https://modelcontextprotocol.io
 
+#### Per-framework worked examples (3 each)
+
+**agent-skills**
+1. *Release-notes bot*: a `run.sh` that diffs two git tags, pipes the diff to the CLI agent, and posts the summary to Slack. No long-running process, no state — ideal for CI.
+2. *Repo hygiene sweeper*: scheduled weekly, checks for stale branches and large binaries, opens issues. Fails safe because each run is independent.
+3. *Pre-commit policy gate*: a `run.sh` that validates that no secret-looking string and no >1 MB binary enters the diff. Runs in seconds and needs no model call, which makes it the cheapest control in the stack.
+
+**OpenAI Agents SDK**
+1. *Support triage with handoffs*: triage agent classifies intent, then hands off to billing / technical / retention specialists; guardrails block prompt-injection from pasted logs.
+2. *Traced batch pipeline*: same agent run over 5,000 rows with built-in tracing so every output is auditable — useful when compliance asks "why did it answer that".
+3. *Guardrailed refund agent*: the agent may look up an order and draft a refund, but the final call is a tool that requires a staff approval token, so autonomy stops exactly where money starts.
+
+**Claude Agent SDK**
+1. *Long-context contract review*: sessions + context management let you keep a 200-page policy in context while comparing clauses across versions.
+2. *Computer-use back-office*: driving a legacy desktop underwriting terminal that has no API, with an approval gate before any submit action.
+3. *Clause library builder*: one session ingests 40 contracts and emits a normalised clause table. Context management is what makes this affordable; without it you re-send the corpus every turn.
+
+**LangGraph**
+1. *Underwriting decision graph*: nodes for intake → rules → model score → human approval, with a conditional edge that loops back when documents are missing.
+2. *Retry-and-escalate workflow*: explicit state machine for API flakiness, with a bounded retry counter that raises
+3. *Reconsideration loop with audit*: a conditional edge returns a declined case to the analyst with the reason attached, and every cycle is persisted so the regulator can replay the exact path. and escalates when the cap is hit. The bound is a configured number, not a guarantee: review the cap value and the escalation path as part of your design, and add a hard wall-clock timeout as a second line of defence.
+
+**CrewAI**
+1. *Weekly market-research crew*: Researcher + Analyst + Writer agents with distinct backstories; the writer agent never calls external tools, which keeps the final text grounded.
+2. *RFP response crew*: one agent extracts requirements, one maps them to product capabilities, one drafts; a human reviews before send.
+3. *Data-quality crew*: a profiler agent surfaces anomalies, a steward agent proposes rules, and a reviewer agent rejects any rule that would silently drop rows — the disagreement is the output, not a failure.
+
+**MCP**
+1. *One connector, many agents*: expose your internal policy database once as an MCP server; every framework above can then consume it without bespoke integrations.
+2. *Least-privilege data access*: give the agent a read-only MCP server with row-level filtering rather than raw database credentials.
+3. *Tool-surface review*: before enabling a third-party server, enumerate its declared tools and disable every mutating one. Most integrations need read and search, not delete.
+
 ### Step 3: Hands-On Implementation
 
 For each framework, provide starter code and best practices:
@@ -91,7 +144,7 @@ git clone https://github.com/addyosmani/agent-skills
 
 # Register a new skill
 cd agent-skills/skills
-npx create-skill my-skill
+npx create-skill@<PINNED_VERSION> my-skill   # resolve from the project's release page
 
 # skill.yaml example
 name: my-skill
@@ -148,7 +201,32 @@ result = await client.call_tool("github", "create_issue", {
 | Production-ready | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
 | Customization | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
 | Tool ecosystem | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐⭐ |
+| Observability / tracing | ⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| Human-in-the-loop | ⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐ |
+| Cost & token control | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐ | ⭐⭐⭐ |
+| On-prem / data residency | ⭐⭐⭐⭐⭐ | ⭐ | ⭐⭐ | ⭐⭐⭐⭐ | ⭐⭐⭐ | ⭐⭐⭐⭐ |
+| Time to first demo | < 1 h | 2–4 h | 2–4 h | 1–2 d | 1–2 h | 2–4 h |
+| Typical failure mode | Shell escaping bugs | Runaway handoffs | Context overflow | Graph debugging pain | Role prompt drift | Server trust/permissions |
 | Best for | Dev tools, CLI | Product agents | Claude-native | Complex workflows | Business teams | Tool integration |
+| Credential scope required | CI job token | Model API key + tracing key | Model API key | Model API key | Model API key(s) | Per-server token, least privilege |
+
+**How to read the added rows**
+
+- *Cost & token control*: agent-skills runs deterministic shell steps, so cost is predictable; multi-agent frameworks can multiply token spend by agent count × turns. Always cap `max_turns`.
+- *On-prem / data residency*: matters for regulated industries (insurance, banking). Shell-based skills and self-hosted MCP servers keep data local; hosted SDKs usually require an egress review.
+- *Typical failure mode*: pick your framework by which failure you are willing to debug — this is more predictive than star counts.
+
+### Step 4b: Scenario → Stack Decision Table
+
+| Scenario | Recommended stack | Why this, not that | Team size | Ops burden | First milestone | Guardrail to add first |
+|---|---|---|---|---|---|---|
+| CLI / CI automation, no LLM state | agent-skills alone | No orchestration needed; shell is enough | 1 | Very low | One working `run.sh` in CI | Pin script deps; run on a least-privilege CI token |
+| Customer-facing chat agent | OpenAI Agents SDK | Built-in tracing + guardrails | 2–4 | Medium | Handoff between 2 agents with traces | Cap max_turns; redact PII before it reaches tracing |
+| Deep document / long-context analysis | Claude Agent SDK | Session + context management | 2–3 | Medium | Compare 2 versions of one document | Context-window budget; block outbound network by default |
+| Regulated multi-step decisioning | LangGraph + MCP | Explicit state, auditable branches, local data | 3–6 | High | Graph with one human-approval node | Human-approval node before any customer-affecting action |
+| Business-team prototype, low code | CrewAI | Role prompts instead of graph code | 1–2 | Low | 3-agent crew producing one artifact | Tool allowlist; no filesystem writes by default |
+| Connect N internal systems | MCP layer first | Solve integration once, reuse across agents | 1–2 | Medium | One read-only server in production | Read-only service account + row-level filters |
+| Migration off a bespoke framework | MCP for tools, then swap orchestrator | Tools outlive orchestrators | 2–4 | Medium | Tools extracted and re-used | Shadow mode: run both paths, compare, no auto-cutover |
 
 ### Step 5: Skill Discovery
 
@@ -200,23 +278,153 @@ I need to connect my agent to PostgreSQL and Slack. Which MCP servers should I u
 Recommended MCP Servers:
 
 1. PostgreSQL MCP Server
-   - npm install @modelcontextprotocol/server-postgres
+   - npm install @modelcontextprotocol/server-postgres@<PINNED_VERSION>
    - Capabilities: query, schema inspection, backup
    - Config: DATABASE_URL env var
 
 2. Slack MCP Server
-   - npm install @modelcontextprotocol/server-slack
+   - npm install @modelcontextprotocol/server-slack@<PINNED_VERSION>
    - Capabilities: send messages, read channels, manage threads
    - Config: SLACK_BOT_TOKEN, SLACK_TEAM_ID
+   - Scope note: a bot token that can post to all channels is a write
+     credential. Scope it to the specific channels the agent needs and keep
+     message-sending behind a human confirmation step.
 
 Quick setup:
 ```bash
-npx mcp install @modelcontextprotocol/server-postgres
-npx mcp install @modelcontextprotocol/server-slack
+npx mcp install @modelcontextprotocol/server-postgres@<PINNED_VERSION>
+npx mcp install @modelcontextprotocol/server-slack@<PINNED_VERSION>
 ```
 
-Security note: Store tokens in environment variables, never hardcode.
+Security note: Store tokens in environment variables, never hardcode. Pin the
+package version in your lockfile, and review the server's declared tool list
+before enabling it - an MCP server can expose more tools than its name suggests.
+
+Write-action note: `create_issue` below is a mutating call. In production it
+should be gated by a human confirmation step and a narrow token (single repo,
+`issues:write` only), not an org-wide personal access token.
 ```
+
+### Example 3: Cost blow-up in a multi-agent crew
+
+**Input:**
+```
+Our 4-agent crew costs $40 per run. How do we cut it?
+```
+
+**Output:**
+```
+Diagnosis order (cheapest fix first):
+
+1. Turn count, not agent count, is usually the multiplier.
+   - Cap max_turns per agent (e.g. 8) and add an explicit "done" condition.
+2. Context is re-sent every turn.
+   - Drop the full backstory from later turns; move static context into a short system note.
+3. Tool results are the hidden cost.
+   - Truncate tool output to the fields the agent actually uses; never paste whole web pages.
+4. Model tiering.
+   - Use a small model for routing/classification agents, a large one only for the writer.
+5. Cache identical subtasks.
+   - Weekly reports repeat the same lookups; cache by (tool, args, date).
+
+Expected outcome: 3–5x reduction without changing agent roles.
+Measure before/after with the framework's own tracing, not with estimates.
+```
+
+### Example 4: On-prem deployment for a regulated insurer
+
+**Input:**
+```
+We cannot send policyholder data to a hosted API. What can we still build?
+```
+
+**Output:**
+```
+Constraints accepted: no external LLM egress, all data stays in the VPC.
+
+Viable stack:
+1. Self-hosted / VPC-endpoint model for generation (check your provider's
+   data-processing terms before assuming — verify with the vendor).
+2. agent-skills for deterministic pre/post processing: redaction, schema
+   validation, audit logging. Shell steps never leave the network.
+3. MCP servers deployed inside the VPC for policy DB and document store,
+   read-only service accounts, row-level filters.
+4. LangGraph (or any framework you can self-host) for the decision graph,
+   with a mandatory human-approval node before any customer-affecting action.
+
+What to avoid:
+- Browser/computer-use agents against internal portals unless explicitly approved
+- Writing raw PII into agent memory or trace storage
+
+Audit requirements to design in from day one:
+- Immutable trace store (who/which model/which tool/which input hash)
+- Per-decision reproducibility: same input → same path, replayable
+- Human-override logging
+
+Note: this is architectural guidance, not legal advice. Confirm specifics
+against your regulator's latest guidance and your internal data policy.
+```
+
+### Example 5: Migration from a bespoke agent framework
+
+**Input:**
+```
+We built everything on our own framework 2 years ago. Should we migrate?
+```
+
+**Output:**
+```
+Don't migrate the whole thing. Migrate in this order:
+
+Phase 1 — Extract tools to MCP (2–3 weeks)
+  Your bespoke tool adapters are the durable asset. Expose them as an MCP
+  server. Now any framework can call them. Zero behaviour change.
+
+Phase 2 — Move one low-risk workflow (2 weeks)
+  Pick a non-critical, well-understood flow. Rebuild it on the target
+  framework. Compare outputs side by side on 100 historical cases.
+
+Phase 3 — Keep both running (ongoing)
+  Route traffic by percentage. Don't do a flag day.
+
+Phase 4 — Retire the old path only when the new one has 4 weeks of parity data
+
+Migration kill-criteria (stop and reassess if any hit):
+- Output parity below an agreed threshold on the historical set
+- Cost per run increases without a capability gain
+- The team cannot debug failures without the original authors
+
+Honest answer: if your bespoke framework works and is maintained, the
+strongest move is often MCP-only (Phase 1) and nothing else.
+```
+
+### Example 6: Reviewing a third-party skill before installing it
+
+**Input:**
+```
+A marketplace skill promises to "auto-fix my repos". Can I just install it?
+```
+
+**Output:**
+```
+Treat it as untrusted code until reviewed. Minimum checklist:
+
+1. Read the whole skill file, not just the description. Look for anything that
+   writes files, calls a network endpoint, or reads credentials.
+2. Check what the declared capabilities actually are. "No executable code" in a
+   description is a claim, not a guarantee - verify against the body.
+3. Pin the version you install and record it. A skill that is safe today can
+   change tomorrow if you install from a floating tag.
+4. Run it in a sandbox or a throwaway repo first, with no production
+   credentials in the environment.
+5. Decide who owns updates. An unreviewed auto-update path is the real risk,
+   more than the initial install.
+
+Refuse-and-replace rule: if a skill asks for broader permissions than the task
+requires, look for a narrower alternative rather than granting them.
+```
+
+
 
 ## Key Frameworks Reference
 
@@ -224,10 +432,43 @@ Security note: Store tokens in environment variables, never hardcode.
 |-----------|-----------|-------|-----------------|---------|
 | agent-skills | addyosmani/agent-skills | 40K+ | Shell | MIT |
 | OpenAI Agents SDK | openai/openai-agents-python | Growing | Python | Apache 2.0 |
-| Claude Agent SDK | anthropics/anthropic-cookbook | - | Python | - |
+| Claude Agent SDK | anthropics/claude-agent-sdk-python | Growing | Python | Apache 2.0 |
 | LangGraph | langchain-ai/langgraph | - | Python | MIT |
-| CrewAI | crewAI同事/crewai | - | Python | MIT |
+| CrewAI | crewAIInc/crewAI | - | Python | MIT |
 | MCP | modelcontextprotocol/spec | - | Multi | Apache 2.0 |
+
+## Ecosystem Status (as of 2026-09-28)
+
+The agent framework landscape moves fast. Treat every item below as a starting
+point to verify, not as settled fact — check each project's official releases
+and changelogs before making a decision.
+
+| Area | What to verify before choosing | Why it matters for selection |
+|---|---|---|
+| MCP governance & spec | Current spec version and governance home | Determines how stable your tool layer is |
+| SDK release cadence | Latest release notes of your chosen SDK | Fast-moving SDKs break pinned code |
+| Skill registry / marketplace | Whether the registry you rely on is still active | Dead registries strand your skills |
+| Model-provider pricing & terms | Current pricing, rate limits, data-processing terms | Drives unit economics and compliance |
+| Security scanning of third-party skills | Whether the marketplace scans published skills | Supply-chain risk for agent tooling |
+
+**Recent dynamics (as of 2026-09-28, verify against official sources)**
+1. MCP has continued to mature as the de-facto tool-integration layer, with
+   governance moving toward a neutral foundation structure — confirm current
+   status from the official MCP specification repository before citing it.
+2. The centre of gravity has shifted from "which orchestrator" to "which tool
+   layer": teams increasingly standardise on MCP first and treat the
+   orchestration framework as swappable.
+3. Marketplaces for pre-built agent skills have grown, and with them the
+   practice of security-scanning published skills before installation —
+   treat any third-party skill as untrusted code until reviewed.
+4. Version pinning has become a routine review item for agent tooling: floating
+   `latest` installs are increasingly treated as a supply-chain finding in their
+   own right, on par with an unreviewed dependency.
+5. Marketplace-side security scanning of published agent skills is now common,
+   and "declared capability vs actual content" mismatches are among the most
+   frequently flagged issues - worth self-checking before you publish.
+6. All version numbers, star counts and repository paths in this document are
+   point-in-time; verify against upstream before use.
 
 ## Best Practices
 
@@ -236,3 +477,27 @@ Security note: Store tokens in environment variables, never hardcode.
 3. **Combine frameworks** — use CrewAI for orchestration + MCP for tools + agent-skills for deployment
 4. **Monitor agent behavior** — all major frameworks support tracing (OpenAI, LangSmith, etc.)
 5. **Design for failure** — agents can hallucinate; add guardrails and human-in-the-loop for critical actions
+
+## Changelog
+
+- **1.0.1** (2026-09-10): Extended comparison matrix with 6 new dimensions
+  (observability, human-in-the-loop, cost control, data residency, time-to-first-demo,
+  typical failure mode). Added per-framework worked examples (2 each). Added
+  Scenario → Stack decision table (7 scenarios, 6 columns). Added Examples 3–5
+  (cost control, on-prem for regulated industry, migration strategy). Added
+  "Ecosystem Status (as of 2026-09-10)" with verification checklist. Corrected
+  CrewAI and Claude Agent SDK repository paths.
+- **1.0.2** (2026-09-28): Added a "Scope and Safety Policy" section stating the
+  skill is advisory-only, listing explicit out-of-scope topics (SQP-1) and
+  covering version pinning, credential scope, write-action confirmation and data
+  minimisation (SQP-2, RP1, T08). Pinned every npm/npx invocation to an explicit
+  version placeholder. Replaced the "can never loop forever" claim with a precise
+  statement about configured retry caps plus wall-clock timeouts (EA4). Added a
+  credential-scope row to the comparison matrix and a "Guardrail to add first"
+  column to the scenario table. Added a third worked example for all six
+  frameworks and a new Example 6 on reviewing third-party skills. Ecosystem
+  status updated to 2026-09-28 with two additional dynamics.
+
+- **1.0.0** (2026-05-19): Initial version.
+
+**Last Updated**: 2026-09-28

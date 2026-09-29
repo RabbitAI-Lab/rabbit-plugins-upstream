@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cctv-news-fetcher",
   "slug": "cctv-news-fetcher",
   "ownerHandle": "yuhangch",
-  "version": "1.0.0",
-  "updatedAt": 1778485987525,
-  "contentHash": "5e10a734ff552a86847a14bb8118cb73b351ed05dfb1fe19bb33ac4a3ec8c455",
-  "fetchedAt": "2026-07-26T18:06:02.473Z"
+  "version": "1.0.2",
+  "updatedAt": 1790017192060,
+  "contentHash": "079d321c5df3083dcd9ef5027f880927d131f8e8731c1b8dcffcc4da1d6ec7a2",
+  "fetchedAt": "2026-09-29T14:40:50.065Z"
 }

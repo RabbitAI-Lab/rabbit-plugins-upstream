@@ -1,46 +1,59 @@
-## Description: <br>
-Turns product specifications, manuals, catalogs, or Amazon, Shopify, eBay, and Temu listings into conversion-focused ecommerce videos with multi-language voiceover and an optional virtual host. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns product specifications, manuals, catalogs, or store listings into ecommerce videos with multilingual voiceover and an optional virtual host.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, marketers, and ecommerce operators use this skill to drive the dLazy hosted product-to-video workflow from an agent or terminal. It is intended for producing product ads and cross-border selling videos from product links or supplied product materials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses dLazy's hosted service and stores a dLazy API key locally for authenticated CLI calls. <br>
-Mitigation: Use the documented dLazy login or auth flow, keep the local config file limited to the current OS user, and rotate or revoke the API key from the dLazy dashboard when needed. <br>
-Risk: Files attached with the CLI are uploaded to dLazy-managed storage before being referenced by the hosted agent. <br>
-Mitigation: Attach only files that are appropriate to send to the dLazy service and review sensitive product materials before upload. <br>
-Risk: A global CLI install persists the package on the user's system. <br>
-Mitigation: Use the pinned npx command for one-off use when a persistent global install is not desired. <br>
+## Use Case:
 
+Sellers and marketing teams use this skill to turn product materials and ecommerce listings into short shopping videos for ads and cross-border sales.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-product-to-ecommerce-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [npm package: @dlazy/cli](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub publisher profile: dlazyai](https://clawhub.ai/user/dlazyai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the pinned @dlazy/cli 1.2.3 package and requires a dLazy API key; attached files are uploaded to dLazy-managed storage by the CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached files may be sent to dLazy's service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit prompts and files you are comfortable sharing with dLazy.
+
+Risk: The dLazy API key may be stored locally.
+
+Mitigation: Protect local credentials and rotate or revoke the key if needed.
+
+Risk: Installing a third-party CLI adds locally executable software.
+
+Mitigation: Review the pinned package before use, and use npx if a persistent global install is unwanted.
+
+## Reference(s):
+
+- [dLazy CLI repository (publisher-listed)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Video results]
+
+**Output Format:** [Streaming text response with ecommerce video results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports multilingual voiceover and an optional virtual host.]
+
+## Skill Version(s):
+
+1.3.20 (source: ClawHub release; supplied skill frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,60 @@
-## Description: <br>
-Google Meet API integration with managed OAuth for creating meeting spaces, listing conference records, and managing meeting participants. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use a connected Google Meet account to manage meeting spaces and retrieve conference records and participant information through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and automation agents use this skill to access Google Meet through Maton-managed OAuth, including meeting spaces, conference records, participants, recordings, and transcripts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Google Meet meeting data through Maton-managed OAuth, including participants, recordings, and transcripts. <br>
-Mitigation: Install only when Maton is trusted to broker OAuth access, keep MATON_API_KEY private, and retrieve meeting data only with a legitimate need and appropriate consent. <br>
-Risk: Multiple connected Google accounts can cause requests to target the wrong account. <br>
-Mitigation: Select the intended connection explicitly with the Maton-Connection header when more than one Google Meet connection is available. <br>
-Risk: Create, update, delete, or conference-ending operations can change Google Meet resources. <br>
-Mitigation: Confirm the target resource and intended effect with the user before executing any write operation. <br>
+## Use Case:
 
+People and teams using Google Meet can ask an agent to create meeting spaces, review conference records, and retrieve participant details from an authorized account. With separate approval, they can also set up scheduled actions through Maton.
 
-## Reference(s): <br>
-- [ClawHub Google Meet skill page](https://clawhub.ai/byungkyu/skills/google-meet) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Google Meet API overview](https://developers.google.com/meet/api/reference/rest) <br>
-- [Google Meet spaces reference](https://developers.google.com/meet/api/reference/rest/v2/spaces) <br>
-- [Google Meet conference records reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords) <br>
-- [Google Meet participants reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.participants) <br>
-- [Google Meet recordings reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.recordings) <br>
-- [Google Meet transcripts reference](https://developers.google.com/meet/api/reference/rest/v2/conferenceRecords.transcripts) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, API calls, configuration] <br>
-**Output Format:** [Markdown with inline HTTP, Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and a MATON_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Connecting an account or making changes can grant access or alter meeting data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the connection and each write with the user; use only the access needed for the task.
+
+Risk: Hosted functions, triggers, and destinations can persist and forward sensitive meeting or event data.
+
+Mitigation: Review their scope and destination with the user before approval, and avoid forwarding data to unapproved hosts.
+
+Risk: Using a raw API key can expose a long-lived credential.
+
+Mitigation: Prefer the managed login; if raw access is necessary, keep the key secret and never print or store it in logs or files.
+
+## Reference(s):
+
+- [Google Meet API documentation](https://developers.google.com/meet/api/reference/rest)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton homepage](https://maton.ai)
+- [Google Meet skill on ClawHub](https://clawhub.ai/byungkyu/skills/google-meet)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include meeting or participant information from the authorized connection.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,33 @@
+## 0.1.11 (2026-09-29)
+- scripts/client-x402.js: when the seller answers 402 after the payment with a note saying the block was broadcast but not yet confirmed (pursekeeper.dev waits up to 8 s for confirmation before serving since api 6bb658a), the client re-presents the same PAYMENT-SIGNATURE every 2 s for up to a minute instead of failing; it never signs a new block there, which would pay twice.
+- scripts/no-node.js: landed() asks `/v1/verify?hash=H&any=1` (existence only). `/v1/verify` without a minimum now answers ok:false with the reason; landed() reads `found`, so older copies keep working, but the call now says what it asks.
+- references/no-node.md: the verify line names min_raw and any=1.
+- SKILL.md: the newcomer seller credit is paused until the 2026-10-07 review (granted credits honoured); the line that said a new seller can ask for it was stale since 2026-09-29 07:24 UTC.
+Mirrors api commit 6bb658a.
+
+## 0.1.10 (2026-09-29)
+- scripts/no-node.js: when a retry's /v1/process call fails and the follow-up read (account_info, or /v1/verify inside landed()) fails too, the stop message names every block hash this run handed to /v1/process, says which were not on the chain when checked and which one is unknown, and asks for the account history of all of them. Until 0.1.9 it named only the current hash and said "nothing rebuilt, nothing resent", which was false once a second block had been built and posted (uknwplayer, 2026-09-29). Mirrors api examples/no-node.js.
+
+## 0.1.9 (2026-09-29)
+- scripts/no-node.js: the follow-up account_info read after a failed /v1/process call is protected; when that read fails too the command stops with the full hash and "nothing rebuilt, nothing resent" instead of exiting on the read error, after which a rerun of `send` built on the landed block and paid twice (Ops Control HQ, 2026-09-28 22:28 UTC). Mirrors api examples/no-node.js.
+
+## 0.1.8 (2026-09-28)
+- references/no-node.md: paid work has no per-minute limit but at most four proofs are generated at once; a fifth call answers 503 with nothing charged (PlatinumVera). Mirrors api commit b438d56.
+
+# Changelog
+
+The version is the `version:` line in SKILL.md's frontmatter and the `--version` given to
+`clawhub skill publish`. `references/no-node.md`, `references/buy-from-nanogpt.md`,
+`scripts/no-node.js` and `scripts/client-x402.js` are byte-for-byte the files at
+https://pursekeeper.dev/examples/; they are copied from github.com/pursekeeper/api by its
+`scripts/sync-skill.sh`, and its test suite fails when the two drift.
+
+- 0.1.7 (2026-09-28): scripts/no-node.js: publish() now asks the chain whether the block landed after every failed /v1/process call, not only after a stale-frontier answer; a timeout, a 5xx or a dropped connection ("fetch failed") used to be rethrown before landed(), so a rerun of `send` could pay twice, the class 0.1.4 and 0.1.5 were meant to close (Ops Control HQ first, Enrico second, 2026-09-28, later-fix reports). references/buy-from-nanogpt.md: the Notes bullet for an agent with no Nano points at get-nano-from-stablecoins.md (the acquisition route) and then at no-node.md, instead of at no-node.md alone, which has no route to a first Nano (Enrico first, PlatinumVera second, 2026-09-28).
+- 0.1.6 (2026-09-28): references/buy-from-nanogpt.md: the last Notes bullet no longer sends an agent with no Nano to the agent-pair bounty, which closed 2026-09-10 and prepays nothing; it names the research wanted list and the no-node routes (llmrt, 2026-09-28). No script change.
+- 0.1.5 (2026-09-28): scripts/no-node.js: the landed() check added in 0.1.4 treated a /v1/verify that was unreachable, rate-limited or answering without a `found` field as "did not land" whenever the frontier had moved on, so a lost reply followed by a concurrent receive and a flaky API rebuilt the send and paid twice, the class 0.1.4 was meant to close (Ops Control HQ, 2026-09-28, later-fix report). landed() now answers true, false only on a positive `found: false`, and otherwise throws with the hash and "nothing rebuilt, nothing resent"; the command exits and the operator checks the account history. references/no-node.md: the "Where to spend it" line no longer says the agent-pair bounty is claimable; it closed 2026-09-10 (Philip Wright / Bird 02 and llmrt, 2026-09-28).
+- 0.1.4 (2026-09-28): two fixes reported by pyfile-toolkit the same day, both with a local reproducer. scripts/no-node.js: a retry after a "frontier moved" answer first asks the node whether the block it just broadcast landed (/v1/verify, or the frontier being that block); when it did, the hash is returned instead of a second block being built at the new frontier, which for `send` paid the amount twice when only the reply was lost (pursekeeper/skill#3). scripts/client-x402.js: `HEADERS` keys are lowercased before merging, so a caller's `Content-Type` replaces the default instead of being joined to it with ", ", and a caller's `Payment-Signature` can no longer be glued to the real payload (pursekeeper/skill#4); the caller's content-type wins, the payment header is always the script's. references/no-node.md: the free-work limits sentence now says the 6 per minute per IP cap applies to every caller, paid before or not, and that a prior payer's free calls only skip the shared GPU budget (pyfile-toolkit, 2026-09-28).
+- 0.1.3 (2026-09-28): references/ and scripts/ resynced with pursekeeper.dev/examples; the repo copies had missed every fix since 0.1.0 (reported by pyfile-toolkit, 2026-09-28): x402 v2 wording in no-node.md, stillValid re-check and unreceivable term in no-node.js, single-use-quote note in buy-from-nanogpt.md; the site copy of client-x402.js gains the NANO_MAX_PAY cap.
+  - Also from the site copy: client-x402.js reads `HEADERS` (a JSON object of extra request headers, e.g. a Bearer token), and no-node.md carries the corrected free-work limits sentence (uknwplayer 2026-09-25 and 2026-09-27, Ops Control HQ 2026-09-27) and the `extra`/`maxTimeoutSeconds` notes (pyfile-toolkit and Ops Control HQ, 2026-09-27/28).
+- 0.1.2 (2026-09-26): client-x402.js: NANO_MAX_PAY parsed as decimal text to raw, never through a float; a cap below 0.000001 no longer becomes zero, and a value that is not a decimal amount falls back to 0.01 with a warning instead of a BigInt RangeError (pyfile-toolkit, pursekeeper/skill#1).
+- 0.1.1 (2026-09-21): client-x402.js: spending cap NANO_MAX_PAY (default 0.01 NANO); a higher 402 quote is refused with nothing signed. SKILL.md documents it (prompted by ClawHub's security scan).
+- 0.1.0 (2026-09-12, published on ClawHub 2026-09-21): no-node wallet, x402 exact client for nano:mainnet, verified seller directory, the routes to a first Nano.

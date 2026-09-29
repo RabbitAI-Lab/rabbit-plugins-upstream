@@ -1,46 +1,62 @@
-## Description: <br>
-Google BigQuery API integration with managed OAuth for running SQL queries, managing datasets and tables, and analyzing data at scale. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in querying and managing Google BigQuery datasets, tables, and jobs through a Maton-connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and data analysts use this skill to access BigQuery through Maton-managed OAuth, run SQL queries, inspect projects, datasets, and tables, manage resources, and retrieve analytics results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on a Maton API key and OAuth-brokered access to a connected Google BigQuery account. <br>
-Mitigation: Install only if Maton is trusted to broker access, store the API key securely, and use least-privilege Google permissions. <br>
-Risk: BigQuery requests can read sensitive data, modify datasets or tables, write query results, or incur usage costs. <br>
-Mitigation: Verify the intended project, dataset, table, connection ID, and operation before requests; require explicit review for create, update, delete, write, or high-cost queries. <br>
+## Use Case:
 
+Developers and analysts use this skill to query BigQuery data, manage datasets and tables, and run analytics jobs. With separate approval, they can set up scheduled or event-driven BigQuery actions through Maton.
 
-## Reference(s): <br>
-- [ClawHub Google BigQuery Skill](https://clawhub.ai/byungkyu/google-bigquery) <br>
-- [Maton](https://maton.ai) <br>
-- [BigQuery API Overview](https://cloud.google.com/bigquery/docs/reference/rest) <br>
-- [BigQuery Datasets API](https://cloud.google.com/bigquery/docs/reference/rest/v2/datasets) <br>
-- [BigQuery Tables API](https://cloud.google.com/bigquery/docs/reference/rest/v2/tables) <br>
-- [BigQuery Jobs API](https://cloud.google.com/bigquery/docs/reference/rest/v2/jobs) <br>
-- [BigQuery Standard SQL Reference](https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API paths and inline code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a BigQuery OAuth connection; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The Maton connection can access BigQuery resources within the permissions the user grants.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Authorize only the needed account and scopes, and keep credentials out of logs and outputs.
+
+Risk: Writes, deletions, and hosted functions can change data or run actions without further interaction.
+
+Mitigation: Start with read-only calls and confirm each target, payload, and intended effect before making a change or deploying a function.
+
+Risk: Triggers and destinations can run repeatedly or forward event data to another service.
+
+Mitigation: Approve each trigger and destination separately; avoid third-party forwarding unless the user explicitly requests it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/byungkyu/skills/google-bigquery)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [BigQuery REST API](https://cloud.google.com/bigquery/docs/reference/rest)
+- [GoogleSQL query syntax](https://cloud.google.com/bigquery/docs/reference/standard-sql/query-syntax)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, SQL, Shell commands, Code]
+
+**Output Format:** [Markdown with SQL, shell, and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Maton account and an authorized BigQuery connection.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

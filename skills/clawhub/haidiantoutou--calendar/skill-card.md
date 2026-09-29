@@ -1,38 +1,48 @@
-## Description: <br>
-Calendar management and scheduling. Create events, manage meetings, and sync across calendar providers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Calendar management and scheduling. Create events, manage meetings, and sync across calendar providers.
 
-## Publisher: <br>
-[haidiantoutou](https://clawhub.ai/user/haidiantoutou) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[haidiantoutou](https://clawhub.ai/user/haidiantoutou)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users can use this skill to coordinate calendar work such as creating events, scheduling meetings, setting reminders, checking availability, and syncing across supported providers.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Calendar reads, event creation, reminders, or sync actions can expose private scheduling data or change a user's calendar.
+
+Mitigation: Confirm provider access with the user and ask for review before creating or editing events, reminders, or sync actions.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to view availability, schedule meetings, set reminders, create events, and coordinate calendar sync across supported providers. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Guidance, Shell commands]
 
-## Known Risks and Mitigations: <br>
-Risk: Calendar creation, edits, deletion, or sync actions could change user scheduling data. <br>
-Mitigation: Keep user confirmation in place before executing calendar-changing actions. <br>
+**Output Format:** [Markdown or plain text with optional shell commands for calendar-provider coordination]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/haidiantoutou/skills/calendar) <br>
+**Other Properties Related to Output:** [Requires curl and jq when shell-based provider interactions are used.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance, API calls] <br>
-**Output Format:** [Markdown or plain text responses with proposed calendar actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require user confirmation for calendar event creation, edits, deletion, or sync actions.] <br>
+1.0.0 (source: release metadata)
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact _meta.json) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

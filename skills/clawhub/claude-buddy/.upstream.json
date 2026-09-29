@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/claude-buddy",
   "slug": "claude-buddy",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492335556,
-  "contentHash": "d9600dd04c76a91b9efdf4ec0cd8e0ff9ecdae1ab996e6e1d7607cd13254d9c5",
-  "fetchedAt": "2026-07-26T19:40:06.232Z"
+  "version": "1.0.1",
+  "updatedAt": 1790645959974,
+  "contentHash": "441d52d112c73e13aa50f218753c59c1587e0a93d4ec762136a9dba97a993189",
+  "fetchedAt": "2026-09-29T14:15:13.838Z"
 }

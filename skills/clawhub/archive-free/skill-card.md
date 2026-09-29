@@ -1,5 +1,5 @@
 ## Description: <br>
-Archive Free helps agents capture articles, webpages, videos, tweets, and PDFs as local Markdown snapshots with basic metadata, summaries, tags, and keyword search. <br>
+archive-free helps agents capture external articles, videos, tweets, and PDFs as local Markdown snapshots with summaries, tags, metadata, and keyword search. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to collect research and personal knowledge materials into a local archive, then retrieve saved items by keyword or tag. <br>
+Developers, researchers, and knowledge workers use this skill to archive external URLs or text into local Markdown files for personal knowledge management and research collection. It is intended for basic content extraction, metadata capture, tag management, and keyword search. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Archived content and metadata are saved persistently under ~/archive/. <br>
-Mitigation: Avoid archiving private documents, secret-bearing URLs, or content that should not be retained locally; periodically review and remove archived files that are no longer needed. <br>
-Risk: The optional callback_url may disclose processing status or archive-related metadata. <br>
-Mitigation: Use callback URLs only from trusted endpoints and avoid callbacks for sensitive archive requests. <br>
-Risk: The skill can propose shell commands for creating archive directories. <br>
-Mitigation: Review shell commands before execution and confirm that paths point only to the intended local archive location. <br>
+Risk: The release asks for broad command execution permissions. <br>
+Mitigation: Install only when local archive setup commands are needed, review proposed commands before execution, and prefer a later version that narrows command execution. <br>
+Risk: The skill advertises unrelated activation claims outside basic archiving. <br>
+Mitigation: Treat the supported behavior as local content archiving and verify any media processing, SEO, or unrelated workflow claims before relying on them. <br>
+Risk: Archived content may include sensitive local research notes or third-party material. <br>
+Mitigation: Restrict access to the archive directory, avoid storing secrets, and review copyright or site terms before archiving protected content. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thcjp/skills/archive-free) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON-style processing results and local file paths] <br>
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
+**Output Format:** [Markdown files and structured JSON-style status output with occasional shell setup commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Archives are described as local Markdown files under ~/archive/.] <br>
+**Other Properties Related to Output:** [Archived items are described as local files under ~/archive/items/{date}_{slug}.md; media binaries are not saved.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata and skill frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

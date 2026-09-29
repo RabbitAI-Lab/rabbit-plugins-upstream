@@ -1,49 +1,61 @@
-## Description: <br>
-Acuity Scheduling API integration with managed OAuth for managing appointments, calendars, clients, and availability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Acuity Scheduling appointments, availability, clients, and calendars through an authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to connect an Acuity Scheduling account through Maton and perform scheduling workflows such as checking availability, booking, rescheduling, canceling appointments, and managing clients or calendars. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, cancel, or delete appointments, clients, blocks, and connections in a connected Acuity Scheduling account. <br>
-Mitigation: Before approving write operations, confirm the exact account, resource, and intended effect with the user. <br>
-Risk: Requests could affect the wrong Acuity Scheduling account when multiple connections are available. <br>
-Mitigation: Use the Maton-Connection header to target the intended connection whenever more than one account is connected. <br>
-Risk: The skill requires a Maton API key and access to scheduling and client data. <br>
-Mitigation: Install only if you trust Maton, keep MATON_API_KEY protected, and limit use to the intended connected account. <br>
+## Use Case:
 
+People and teams managing appointments use this skill to check availability and client or calendar details, then schedule, reschedule, or cancel appointments with explicit approval for changes. It also explains optional user-approved scheduling automations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/acuity-scheduling) <br>
-- [Acuity Scheduling API Quick Start](https://developers.acuityscheduling.com/reference/quick-start) <br>
-- [Appointments API](https://developers.acuityscheduling.com/reference/get-appointments) <br>
-- [Availability API](https://developers.acuityscheduling.com/reference/get-availability-dates) <br>
-- [Calendars API](https://developers.acuityscheduling.com/reference/get-calendars) <br>
-- [Clients API](https://developers.acuityscheduling.com/reference/clients) <br>
-- [OAuth2 Documentation](https://developers.acuityscheduling.com/docs/oauth2) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown with HTTP endpoints, Python and JavaScript examples, and shell configuration snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Acuity Scheduling connection; use the Maton-Connection header when multiple accounts are connected.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release evidence) <br>
+Risk: Appointment changes or new connections may affect the wrong account or notify clients.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended account, appointment, and action before connecting or making any change; default to read-only requests.
+
+Risk: Automations and event destinations can keep running or forwarding data until removed.
+
+Mitigation: Get separate approval for functions, triggers, and destinations; review their scope and recipients and remove them when no longer needed.
+
+Risk: Copied API keys or untrusted event data can expose credentials or lead to unsafe local execution.
+
+Mitigation: Prefer device login over API keys; do not place credentials in event destinations, and review any local event handler before enabling it.
+
+## Reference(s):
+
+- [Acuity Scheduling skill release](https://clawhub.ai/byungkyu/skills/acuity-scheduling)
+- [Maton homepage](https://maton.ai)
+- [Acuity Scheduling API Quick Start](https://developers.acuityscheduling.com/reference/quick-start)
+- [Acuity Scheduling OAuth2 documentation](https://developers.acuityscheduling.com/docs/oauth2)
+- [Maton documentation](https://docs.maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON]
+
+**Output Format:** [Markdown guidance and command examples; JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the authorized connection and its Acuity permissions.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

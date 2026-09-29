@@ -1,43 +1,54 @@
-## Description: <br>
-Automation Workflow Builder designs and executes cross-platform automation workflows with triggers, conditions, and multi-step actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds and runs cross-platform automation workflows with scheduled, file-watch, webhook, manual trigger, conditional, and multi-step operation support.
 
-## Publisher: <br>
-[careytian-ai](https://clawhub.ai/user/careytian-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[careytian-ai](https://clawhub.ai/user/careytian-ai)
 
-## Use Case: <br>
-Developers, operations teams, and business users use this skill to define repeatable workflows for data synchronization, content publishing, report generation, monitoring alerts, and file-based automation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated workflows may run shell commands, move or overwrite files, upload data, post publicly, or send messages with broad permissions. <br>
-Mitigation: Review each workflow before execution, keep it scoped to a specific workspace, and require explicit approval for shell commands, file writes, uploads, public posting, and messaging. <br>
-Risk: Unauthenticated webhooks or recurring jobs can execute unexpectedly or continue after they are no longer needed. <br>
-Mitigation: Use authenticated triggers, document how to disable each recurring job, and avoid unattended schedules unless the owner and rollback path are clear. <br>
+## Use Case:
 
+Operations, content, data, support, and project teams can use this skill to design repeatable workflows for data sync, content publishing, report generation, monitoring alerts, and similar recurring business tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/careytian-ai/automation-workflow-builder) <br>
-- [Publisher profile](https://clawhub.ai/user/careytian-ai) <br>
-- [Skill source documentation](artifact/SKILL.md) <br>
-- [Release changelog](artifact/CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with structured workflow examples and inline code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose scheduled jobs, file operations, network requests, notifications, and command execution steps for review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata, config.json, metadata.json, and changelog, released 2026-03-29) <br>
+Risk: The skill requests broad command, file, and network authority for automation workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each workflow before running it, restrict working directories and network destinations, and require explicit approval for command execution, uploads, publishing, file moves or deletes, scheduled runs, and file-watching workflows.
+
+Risk: Scheduled or file-watching workflows can repeat unintended actions without direct supervision.
+
+Mitigation: Use auditable logs, narrow triggers, clear stop controls, and conservative timeouts before enabling unattended workflows.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/careytian-ai/skills/automation-workflow-builder)
+- [Publisher profile](https://clawhub.ai/user/careytian-ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or structured workflow examples with code and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May describe workflows that use command execution, file operations, network requests, scheduling, webhooks, notifications, and publishing actions.]
+
+## Skill Version(s):
+
+1.0.0 (source: release evidence, config.json, metadata.json, CHANGELOG.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

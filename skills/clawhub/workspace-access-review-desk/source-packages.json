@@ -1,0 +1,45 @@
+{
+  "variant_id": "cap_14_share_to_collaboration",
+  "sources": [
+    {
+      "role": "upstream",
+      "slug": "workspace-access-checklist-identifier",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/workspace-access-checklist-identifier-1.1.0.zip",
+      "archive_sha256": "0ef6ff7b48bfcad42020690df6a9d94a9fb84307f8200352d6ac4786aafc5ab6",
+      "files": {
+        "README.md": "90573a83aa189e7f4ed2f743de8a3a8bfebb82d92f7c61efc0fc0b9d5a62d6ad",
+        "SKILL.md": "faaed0a68f38829906f1caad2ec47bbbaf6855ad5c5924f1711812e5a8f355a7",
+        "examples/expected.json": "fb69d870f1db65b40c11a1a6f82ae19b0ca8b63f8eeff4a8664a6ae6a29d5ac9",
+        "examples/request.json": "39f94d28aadd5c93e9451412dc90501c7fa2aeb95ba4e864a1d95feb2a22ba17",
+        "file-manifest.json": "de4ea53ed17eb4792b35dca081ef693ab68b2766c0b3701495dc7fe8f932cd52",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "68a17555e94f7a1167dbee7d16504b7f06b322e240e4c509621c709a63f5d470",
+        "scripts/operation.py": "8ff11741e19a76f8de1af3fe251f81957b805a9e0e77c384fd2f7f64b8b97170",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "4f128cd38058b27939d3e3bc03eab63305b244ebf509cfa0b5e5950876c0cb3f"
+      }
+    },
+    {
+      "role": "downstream",
+      "slug": "workspace-access-checklist-workbench",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/workspace-access-checklist-workbench-1.1.0.zip",
+      "archive_sha256": "c359cd3e848aec740d638b56071ccc4d2e254451e6d68705d3241655ac789548",
+      "files": {
+        "README.md": "ea43c36d71ff2631010cf6d04ffb185a3e466fec34e6605de042fef83d6eaac7",
+        "SKILL.md": "21866baf0bd3e86077d16abc78b752ee7b6204b057eee64c4cb64b7f86c88f68",
+        "examples/expected.json": "6c3ab328b0414fea18944d66ab9126a6bf4c8bb958310ac69d0ea20084de18a5",
+        "examples/request.json": "fb69d870f1db65b40c11a1a6f82ae19b0ca8b63f8eeff4a8664a6ae6a29d5ac9",
+        "file-manifest.json": "6f6303382191c8d5225e895db5dd9b1ac586d2b3cfe121326920c55a199dd7c3",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "6f013b32a7314eb5b22239f213c2876bb4ceeacd030500984aaba6d5462fd85b",
+        "scripts/operation.py": "53bc254edf80e842e59070f6355fc705a5fc17586809570ae2233e5c04bbe934",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "a599be7aa9fd2f6eb9a56511838ba8caaa7679ad2e3ff180b1d336b6ae1d2989"
+      }
+    }
+  ]
+}

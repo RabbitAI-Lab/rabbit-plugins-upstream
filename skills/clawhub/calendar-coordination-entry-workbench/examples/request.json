@@ -1,0 +1,12 @@
+{
+  "event_digest": {
+    "event_id": "EVENT-GOLF-7315",
+    "starts_at": "2026-09-04T01:30:00Z",
+    "ends_at": "2026-09-04T02:00:00Z",
+    "timezone": "UTC",
+    "duration_minutes": 30,
+    "location": "Room 8",
+    "raw_start": "20260904T013000Z",
+    "raw_end": "20260904T020000Z"
+  }
+}

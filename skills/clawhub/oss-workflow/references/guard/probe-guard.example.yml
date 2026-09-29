@@ -1,0 +1,7 @@
+# 一次性探针补丁：验证 penguin-guard 能否在会话启动即注册（不依赖 skill 加载）
+- insert:
+    - id: penguin-guard
+      name: '@deepseek-ai/dsh-hooks-claude-code'
+      config:
+        configPath: D:/xiangmu/dsh/skills-src/local/oss-workflow/references/guard/hooks.json
+        pluginRoot: D:/xiangmu/dsh/skills-src/local/oss-workflow/references/guard

@@ -1,5 +1,5 @@
 ## Description: <br>
-Api Scaffold Gen is an API scaffolding agent skill for developers that generates project scaffolds, DDD and microservice templates, ORM and migration code, OpenAPI reverse-generation guidance, Docker and Kubernetes manifests, and CI/CD configurations. <br>
+API Scaffold Gen helps developers generate API project scaffolds, including REST and GraphQL routes, ORM and migration files, DDD layers, microservice templates, OpenAPI artifacts, WebSocket endpoints, Docker files, and CI/CD configuration. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,30 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-Developers, platform engineers, and technical leads use this skill to start or standardize API projects across Node.js, Python, Java, and Go stacks. It helps generate API scaffolds, DDD layers, microservice infrastructure templates, ORM models and migrations, WebSocket endpoints, deployment manifests, and CI/CD configuration for review and adaptation. <br>
+Developers, architects, and platform engineers use this skill to start API projects quickly and standardize framework, domain layering, service, deployment, and automation templates across teams. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can produce code, Docker/Kubernetes manifests, and CI/CD files that may change application or infrastructure behavior. <br>
-Mitigation: Treat all generated files as reviewable templates; run normal code review, tests, security scans, and deployment review before use. <br>
-Risk: The security evidence notes unclear privacy and control guidance for remote LLM use and token requirements. <br>
-Mitigation: Avoid sharing proprietary source, secrets, credentials, or sensitive infrastructure details unless the deployment path and data handling are acceptable. <br>
-Risk: Generated scaffold choices can encode incorrect framework, database, or service configuration assumptions. <br>
-Mitigation: Verify stack-specific settings such as ORM mappings, database URLs, service discovery, tracing, Kubernetes resources, and CI/CD credentials before execution. <br>
+Risk: The skill may request broad workspace read, write, and command execution authority. <br>
+Mitigation: Run it in a bounded workspace, review proposed file changes, and confirm commands before execution. <br>
+Risk: Deployment-oriented generation may touch infrastructure configuration or sensitive project context. <br>
+Mitigation: Avoid production credentials, review generated Docker, Kubernetes, and CI/CD files before use, and verify how repository content is handled by the agent environment. <br>
 
 
 ## Reference(s): <br>
 - [ClawHub skill page](https://clawhub.ai/thcjp/skills/api-scaffold-gen) <br>
-- [Skill homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples and generated project files or configuration templates] <br>
+**Output Format:** [Markdown guidance with generated project files, configuration snippets, and inline shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API scaffolds, ORM and migration files, Docker and Kubernetes manifests, CI/CD workflows, OpenAPI files, and microservice or WebSocket templates for user-selected stacks.] <br>
+**Other Properties Related to Output:** [May read and write workspace files and propose or run commands when the agent environment permits those tools.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release metadata and skill frontmatter) <br>
+1.0.2 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

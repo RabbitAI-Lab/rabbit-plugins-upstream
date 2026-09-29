@@ -5,12 +5,19 @@ description: SSL certificates and HTTPS for xCloud sites — view, list, install
 
 # xCloud SSL
 
+> **Packaged REST boundary (v4.4.2):** `xcloud.sh` enforces GET-only requests with no body and has no write override. Non-GET examples below describe upstream API operations, not executable commands for this fallback. For mutations, use the corresponding connected xCloud MCP tool only after the required concrete user approval and server confirmation. If that tool/confirmation is unavailable, stop and direct the user to the dashboard; do not bypass this boundary with direct curl, SDKs, alternate scripts or by editing the wrapper. Configure REST credentials with read-only scopes.
+
+
 Owns every SSL/certificate operation in the xCloud Public API. For auth, base
 URL, the response envelope, pagination, and rate limits, read the shared layer
 first — this skill does not repeat it:
 
 - `${CLAUDE_PLUGIN_ROOT}/reference/auth.md`
 - `${CLAUDE_PLUGIN_ROOT}/reference/conventions.md`
+- `${CLAUDE_PLUGIN_ROOT}/reference/mcp.md` — **prefer the MCP tools when
+  connected**: `sites_ssl`, `sites_sslCertificates`, `sites_sslCertificates_create`,
+  `sites_ssl_renew`, `ssl-certificates_show`, `ssl-certificates_status`,
+  `ssl-certificates_destroy`; the `$XC` calls below are the REST fallback.
 
 All calls go through the shared wrapper:
 
@@ -18,7 +25,9 @@ All calls go through the shared wrapper:
 XC="${CLAUDE_PLUGIN_ROOT}/scripts/xcloud.sh"
 ```
 
-Set `XCLOUD_API_BASE_URL=http://xcloud.test` for local, unset (or
+Set `XCLOUD_API_BASE_URL=http://xcloud.test` (plus
+`XCLOUD_ALLOW_INSECURE_HTTP=1` — plaintext http is refused without it) for
+local, unset (or
 `https://app.xcloud.host`) for live.
 
 ## Response format
@@ -91,14 +100,14 @@ Install a Let's Encrypt (xCloud-managed) certificate:
 "$XC" POST "/sites/$SITE_UUID/ssl-certificates" '{"provider":"xcloud"}' | jq '.data'
 ```
 
-Install a custom certificate (PEM body + key required):
+Install a custom certificate (PEM body + key required). The private key is a
+secret — build the JSON with `jq -n` from files and pipe it on **stdin** (`-`)
+so it never appears in any process argument list:
 
 ```bash
-"$XC" POST "/sites/$SITE_UUID/ssl-certificates" '{
-  "provider": "custom",
-  "certificate": "-----BEGIN CERTIFICATE-----\n...\n-----END CERTIFICATE-----",
-  "private_key": "-----BEGIN PRIVATE KEY-----\n...\n-----END PRIVATE KEY-----"
-}' | jq '.data'
+jq -n --rawfile cert cert.pem --rawfile key key.pem \
+  '{provider: "custom", certificate: $cert, private_key: $key}' \
+  | "$XC" POST "/sites/$SITE_UUID/ssl-certificates" - | jq '.data'
 ```
 
 Use the team's Cloudflare integration:

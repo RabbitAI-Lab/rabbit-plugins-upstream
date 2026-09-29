@@ -358,6 +358,40 @@ def _poll_until_bound(code):
     sys.exit(1)
 
 
+def _ask_auto_update_consent():
+    """[AUTOUP-075] One-time consent for automatic skill updates.
+
+    "auto"  — the duck self-updates when Spaceduckling ships a new skill
+              version (daily version check + update-trigger pecks).
+    "ask"   — default: owner gets a notification and updates manually.
+
+    Env override for non-interactive installs: SPACEDUCK_AUTO_UPDATE=auto|ask.
+    Consent lives only in the duck's local config.json — the platform never
+    sets it and never executes on this box.
+    """
+    env = (os.environ.get('SPACEDUCK_AUTO_UPDATE') or '').strip().lower()
+    if env in ('auto', 'ask'):
+        return env
+    # [AUTOUP-077] Re-pair must not silently reset a prior consent choice:
+    # keep the existing auto_update value when one is already on disk.
+    for d in _writable_dirs():
+        try:
+            prior = json.loads((d / 'config.json').read_text())
+            prev = str(prior.get('auto_update') or '').lower()
+            if prev in ('auto', 'ask'):
+                return prev
+        except (OSError, ValueError):
+            continue
+    if not sys.stdin.isatty():
+        return 'ask'
+    try:
+        ans = input('🦆 Approve automatic skill updates from Spaceduckling? '
+                    '[y/N] ').strip().lower()
+    except (EOFError, KeyboardInterrupt):
+        return 'ask'
+    return 'auto' if ans in ('y', 'yes') else 'ask'
+
+
 def _write_config(bound, webhook_url, workspace_dir=''):
     # 2026-05-17 — capture workspace_dir at pair time so sync.py
     # defaults to the agent's actual working directory instead of cwd
@@ -376,6 +410,7 @@ def _write_config(bound, webhook_url, workspace_dir=''):
         'api_base': API_BASE,
         'openclaw_webhook_url': webhook_url or bound.get('webhook_url', ''),
         'workspace_dir': workspace_dir,
+        'auto_update': _ask_auto_update_consent(),  # [AUTOUP-075]
     }
     body = json.dumps(config, indent=2)
     written = []
@@ -674,9 +709,11 @@ def _finalise(bound, webhook_url, spawn_listener=False, tg_token='', tg_chat='',
     # Push-mode (HTTP webhook) is the right path for hosts with a public URL,
     # but the laptop default is poll. Best-effort — failure does not break
     # pairing (see DESIGN-POLLING-LISTENER-2026-05-09.md).
+    _listener_live = False
     if spawn_listener:
         channels = _detect_forward_channels()
         pid, msg = _spawn_listener(forward_channels=channels)
+        _listener_live = bool(pid)
         if pid:
             extra = f' (forward → {",".join(channels)})' if channels else ''
             print(f'👂 Listener {msg}{extra}')
@@ -696,12 +733,29 @@ def _finalise(bound, webhook_url, spawn_listener=False, tg_token='', tg_chat='',
     has_webhook = bool(config.get('openclaw_webhook_url'))
     print()
     print('Next steps:')
-    print(f'  1. Add a brain    → https://spaceduckling.com/the-inlet.html?duckling={duckling_id}')
-    if not has_webhook:
-        print(f'  2. Add a channel  → https://spaceduckling.com/hatch.html?duckling={duckling_id}')
-        print('Until both are done, this duck cannot receive messages.')
+    # 0.8.9 [LANE-089] — this block used to print "Add a brain -> the-inlet"
+    # unconditionally. That is HOSTED-duck (Lane B) boilerplate: the Inlet
+    # attaches a Spaceduckling-run runtime. Running it on a self-hosted /
+    # BYOB (Lane A) duck is a LANE CHANGE, not a setup step, and it is
+    # destructive — the duck's brain already runs on its owner's machine.
+    # pair.py also auto-spawns a poll listener a few lines above, so in the
+    # common self-hosted case the duck can ALREADY receive and the old text
+    # was telling people to break a working install.
+    if _listener_live:
+        print('  This duck is self-hosted (Lane A): it receives pecks through the')
+        print('  poll listener just started here. Nothing else is required.')
+        print('  Make it survive reboot →  python3 install_service.py')
     else:
-        print('Channel is wired (OpenClaw webhook on file). Add a brain to start receiving.')
+        print('  Self-hosted (Lane A) — start your own receiver:')
+        print(f'     python3 {LISTENER_SCRIPT} --poll')
+        print('     then  python3 install_service.py   (survives reboot)')
+    print()
+    print('  Hosted (Lane B) ducks ONLY — a Spaceduckling-run runtime:')
+    print(f'     Add a brain    -> https://spaceduckling.com/the-inlet.html?duckling={duckling_id}')
+    if not has_webhook:
+        print(f'     Add a channel  -> https://spaceduckling.com/hatch.html?duckling={duckling_id}')
+    print('  ⚠️  Do NOT use the Inlet on a self-hosted duck. Attaching a hosted')
+    print('     brain to a Lane A duck is a lane change and will break it.')
     return config
 
 

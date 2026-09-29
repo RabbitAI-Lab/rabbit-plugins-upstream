@@ -1,39 +1,51 @@
-## Description: <br>
-Clawdbot documentation expert with decision tree navigation, search scripts, doc fetching, version tracking, and config snippets for all Clawdbot features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clawdbot documentation expert with decision tree navigation, search scripts, doc fetching, version tracking, and config snippets for all Clawdbot features
 
-## Publisher: <br>
-[nicholasspisak](https://clawhub.ai/user/nicholasspisak) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[nicholasspisak](https://clawhub.ai/user/nicholasspisak)
 
-## Use Case: <br>
-Developers, operators, and external users use this skill to navigate Clawdbot documentation, find setup and troubleshooting pages, fetch relevant docs, and draft configuration guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Clawdbot Documentation](https://docs.clawd.bot) <br>
-- [Clawdbot Discord Provider Documentation](https://docs.clawd.bot/providers/discord) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nicholasspisak/skills/clawddocs) <br>
+Developers and operators use this skill to find, summarize, and apply Clawdbot documentation for setup, troubleshooting, provider configuration, automation, deployment, and common gateway patterns.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May cite Clawdbot documentation URLs and summarize security guidance from ClawHub evidence.] <br>
+Global
 
-## Skill Version(s): <br>
-1.2.2 (source: package.json and ClawHub release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Copying the gateway example with host 0.0.0.0 can expose a local service if network controls are not in place.
+
+Mitigation: Use 127.0.0.1 for local-only use, or require authentication, firewalling, and TLS or reverse-proxy controls for remote access.
+
+## Reference(s):
+
+- [Clawdbot documentation](https://docs.clawd.bot/)
+- [Clawdbot Discord provider documentation](https://docs.clawd.bot/providers/discord)
+- [Common Config Snippets](snippets/common-configs.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Full-text indexing guidance depends on qmd; other helper scripts are simple local shell commands.]
+
+## Skill Version(s):
+
+1.2.2 (source: package.json and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

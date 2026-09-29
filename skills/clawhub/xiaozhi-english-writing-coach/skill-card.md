@@ -1,41 +1,56 @@
-## Description: <br>
-Guides English learners through targeted writing feedback, sentence and vocabulary upgrades, scenario-based practice, and consent-gated progress tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coaches Chinese-speaking students through English paragraph and essay revision with targeted feedback on grammar, vocabulary, and organization, plus guided practice for high-school writing tasks.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English learners use this skill to improve written English through grammar, vocabulary, and logic feedback that asks them to revise rather than simply receiving rewritten answers. It can also guide practical writing exercises, track progress when the user consents, and produce monthly writing-development summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can remember writing-development patterns when the user allows progress tracking. <br>
-Mitigation: Ask for consent before updating writing profiles, DNA records, reminders, or cross-session progress notes, and let the user decline tracking. <br>
-Risk: Writing feedback may be misleading if treated as authoritative scoring or a complete rewrite. <br>
-Mitigation: Use the skill as coaching guidance, focus on the most important issues, and have the learner review and revise the work themselves. <br>
+## Use Case:
 
+Chinese-speaking upper-primary and secondary students use this skill to review their own English writing, practice revising sentences, and track progress when they consent to a writing profile. Teachers and guardians can support younger students' use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach) <br>
-- [Low-to-high vocabulary upgrade reference](references/vocabulary-upgrade.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (adapt curriculum, minor-consent requirements, and crisis contacts before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style coaching feedback, revision prompts, practice scripts, and progress summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include consent-gated progress notes for writing habits, sentence-level development, and monthly summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student writing profiles and cross-skill sharing involve minors' learning data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain the applicable student or guardian consent before reading, retaining, or sharing profiles; honor pause, deletion, and sharing controls.
+
+Risk: Mainland China curriculum assumptions and crisis contacts may be unsuitable elsewhere.
+
+Mitigation: Localize grade expectations, minor-consent rules, and referral contacts before deployment outside Mainland China; confirm location before giving emergency numbers.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach)
+- [High-school English writing guidance](references/english-hs-writing.md)
+- [Vocabulary upgrade guide](references/vocabulary-upgrade.md)
+- [English error dimensions](shared/english-error-dimension-table.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Writing guidance]
+
+**Output Format:** [Chinese-language conversational feedback, practice prompts, and progress summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Feedback focuses on a few actionable issues; cross-session progress depends on consent and available platform capabilities.]
+
+## Skill Version(s):
+
+2.7.1 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

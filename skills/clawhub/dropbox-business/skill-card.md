@@ -1,47 +1,61 @@
-## Description: <br>
-Dropbox Business provides managed OAuth access for administering Dropbox Business teams, including members, groups, folders, devices, audit logs, sharing, file requests, and member file access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps administrators manage Dropbox Business teams, files, and audit activity through an authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Dropbox Business administrators and operations teams use this skill to inspect and administer team resources through a Maton-managed OAuth connection. It supports guarded Dropbox Business API workflows where write, delete, and member file access actions require explicit user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants a third-party gateway admin-level access to a Dropbox Business team. <br>
-Mitigation: Install only when that access is intended, use the least-privileged admin account available, review Dropbox OAuth permissions, and keep MATON_API_KEY protected. <br>
-Risk: Write, delete, and member-file-access actions can change team resources or expose sensitive member files. <br>
-Mitigation: Require explicit user confirmation with specific resource identifiers and a business justification before those actions are executed. <br>
-Risk: High-impact operations such as member removal, device revocation, admin-role changes, and permanent folder deletion may be difficult or impossible to reverse. <br>
-Mitigation: Summarize consequences before execution, prefer reversible actions where available, and confirm destructive flags such as wipe_data and keep_account. <br>
+## Use Case:
 
+Dropbox Business administrators use this skill to inspect and manage team members, groups, folders, devices, sharing, audit logs, and member files, with approval before changes or sensitive access.
 
-## Reference(s): <br>
-- [Dropbox Business on ClawHub](https://clawhub.ai/byungkyu/dropbox-business) <br>
-- [Maton](https://maton.ai) <br>
-- [Dropbox Business API Documentation](https://www.dropbox.com/developers/documentation/http/teams) <br>
-- [Dropbox Team Administration Guide](https://developers.dropbox.com/dbx-team-administration-guide) <br>
-- [Dropbox Team Files Guide](https://developers.dropbox.com/dbx-team-files-guide) <br>
-- [Dropbox Authentication Types](https://www.dropbox.com/developers/reference/auth-types) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell and Python request examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a Dropbox Business OAuth connection; high-impact actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Admin access can alter or permanently delete team resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the least-privileged admin account, review OAuth scopes, and confirm exact resource identifiers and consequences before writes or deletes.
+
+Risk: Access to individual members' files and audit data can expose sensitive information.
+
+Mitigation: Access member files only on explicit request with a stated business justification; limit retrieved data to what the task needs.
+
+Risk: Unused connections and automations may retain access or continue acting on events.
+
+Mitigation: Remove unused connections, functions, triggers, and destinations when finished.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/byungkyu/skills/dropbox-business)
+- [Maton homepage](https://maton.ai)
+- [Dropbox Business API documentation](https://www.dropbox.com/developers/documentation/http/teams)
+- [Dropbox team administration guide](https://developers.dropbox.com/dbx-team-administration-guide)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with shell examples and optional JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an authorized Dropbox Business connection and network access.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

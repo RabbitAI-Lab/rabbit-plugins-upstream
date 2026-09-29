@@ -1,46 +1,67 @@
-## Description: <br>
-Configure passwordless SSH login to Huawei Cloud ECS instances using COC by automating IAM agency authorization, SSH key generation, COC script deployment, SSH connection testing, and timed key cleanup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configure passwordless SSH login to Huawei Cloud ECS instances using COC, including IAM agency authorization, Ed25519 key generation, COC script deployment across one or many ECS instances, SSH testing, and timed key cleanup.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operators use this skill to set up short-lived passwordless SSH access to Huawei Cloud ECS instances through COC, verify connectivity, and clean up deployed keys after the workflow completes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill creates temporary root SSH credentials and may preserve active SSH access after key cleanup through ControlMaster. <br>
-Mitigation: Require explicit opt-in for ControlMaster persistence, prefer a least-privileged SSH user where possible, keep ControlPersist short, and verify remote authorized_keys cleanup succeeds. <br>
-Risk: The workflow changes local SSH behavior by appending an SSH config entry and creating a ControlMaster socket. <br>
-Mitigation: Review the SSH config entry before use, remove the entry and socket after the session is no longer needed, and keep persistence settings aligned with the operational need. <br>
-Risk: Huawei Cloud AK/SK credentials and generated private keys could be exposed through shared shells, logs, or agent output. <br>
-Mitigation: Avoid shared shell history and logs, never print private key content, store keys only in the temporary location for the cleanup window, and confirm local key deletion. <br>
+## Use Case:
 
+Developers, cloud operators, and administrators use this skill to set up temporary passwordless SSH access to Huawei Cloud ECS instances through COC-managed script execution. It is intended for deliberate administrative workflows that need batch target resolution, connection verification, and post-use key cleanup.
 
-## Reference(s): <br>
-- [CLI Installation Guide](references/cli-installation-guide.md) <br>
-- [IAM Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Huawei Cloud KooCLI documentation](https://support.huaweicloud.com/intl/en-us/usermanual-hcli/hcli_01_001.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Structured Markdown progress reports with inline shell commands, JSON command files, SSH configuration snippets, status values, and cleanup guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ECS instance or IP, region, SSH user, cleanup delay, and ControlPersist timeout; creates temporary SSH keys and COC JSON files during execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The workflow grants the agent Huawei Cloud COC/IAM authority and SSH access to selected ECS hosts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only for deliberate administrative workflows, use the least-privileged practical IAM user, avoid root SSH where possible, and keep batches small.
+
+Risk: SSH ControlMaster persistence intentionally keeps sessions usable after the temporary key is removed.
+
+Mitigation: Remove or opt out of ControlMaster persistence when it is not required, and clean up SSH config entries and control sockets after the workflow.
+
+Risk: Disabling strict host key checking can make SSH connections easier to misdirect.
+
+Mitigation: Verify SSH host keys before use when operating in sensitive environments.
+
+Risk: Temporary SSH keys or reusable COC scripts could linger if cleanup fails or the process is interrupted.
+
+Mitigation: Validate or create a unique per-run COC script, confirm remote key removal, delete local key files, delete COC scripts, and use the documented fallback cleanup path for failed hosts.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-ecs-passwordless-login)
+- [CLI Installation Guide](references/cli-installation-guide.md)
+- [IAM Policies](references/iam-policies.md)
+- [Verification Method](references/verification-method.md)
+- [Acceptance Criteria](references/acceptance-criteria.md)
+- [Huawei Cloud KooCLI Documentation](https://support.huaweicloud.com/intl/en-us/usermanual-hcli/hcli_01_001.html)
+- [Huawei Cloud KooCLI Linux Binary](https://hwcloudcli.obs.cn-north-1.myhuaweicloud.com/cli/latest/hcloud_linux_amd64)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, Markdown]
+
+**Output Format:** [Markdown with inline shell commands, status summaries, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports per-step progress, target resolution, SSH test results, cleanup timer details, and connection commands without exposing private key contents.]
+
+## Skill Version(s):
+
+1.0.2 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

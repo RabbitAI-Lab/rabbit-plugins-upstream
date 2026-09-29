@@ -1,41 +1,53 @@
-## Description: <br>
-Create SEO-optimized blog posts that rank higher on Google. Includes keyword integration, meta descriptions, and content structure for maximum visibility. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create SEO-optimized blog posts that rank higher on Google. Includes keyword integration, meta descriptions, and content structure for maximum visibility.
 
-## Publisher: <br>
-[huajianjiu000](https://clawhub.ai/user/huajianjiu000) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huajianjiu000](https://clawhub.ai/user/huajianjiu000)
 
-## Use Case: <br>
-External content and marketing users use this skill to draft SEO-oriented blog posts from a target keyword or topic, audience, desired coverage, and word count. It helps structure articles with headings, metadata, link suggestions, related questions, and keyword guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated SEO content may contain factual inaccuracies, outdated search guidance, or originality issues. <br>
-Mitigation: Review drafts for accuracy, originality, and current SEO expectations before publishing. <br>
-Risk: Prompts may include confidential business details intended for content planning. <br>
-Mitigation: Avoid sharing confidential details unless they are appropriate for use in the generated draft. <br>
+## Use Case:
 
+External users, marketers, and content writers use this skill to draft SEO-oriented blog posts from a keyword or topic, including headlines, structure, meta descriptions, related questions, and link or image-alt-text suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huajianjiu000/blog-seo-writer) <br>
-- [Publisher profile](https://clawhub.ai/user/huajianjiu000) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prose with headings, metadata suggestions, and structured SEO recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include SEO headline ideas, meta descriptions, H2/H3 outlines, image alt text suggestions, internal and external link suggestions, related questions, conclusions, and calls to action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Generated articles may contain inaccurate facts, outdated dates, unsupported SEO recommendations, or unsuitable external links.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review factual claims, dates, SEO guidance, and all suggested links before publishing.
+
+Risk: The skill can help structure content for search visibility, but it does not guarantee search ranking outcomes.
+
+Mitigation: Treat output as a drafting aid and validate it against current editorial, brand, and search-quality standards.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/huajianjiu000/skills/blog-seo-writer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown article draft with SEO guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include suggested headings, meta descriptions, keyword usage guidance, link suggestions, image alt text, related questions, and calls to action.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

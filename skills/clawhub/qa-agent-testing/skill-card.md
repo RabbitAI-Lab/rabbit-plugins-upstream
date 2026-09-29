@@ -1,43 +1,57 @@
-## Description: <br>
-Provides Chinese-language guidance for designing AI agent test plans that cover functionality, safety, controllability, reliability, hallucination checks, reasoning validation, and tool-call behavior. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese-language test planning for AI agents, covering behavior, tool use, hallucinations, prompt injection, and safety controls.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and AI safety reviewers use this skill to create structured test plans and test cases for AI agents, chatbots, and assistants. It helps evaluate reasoning behavior, tool invocation, prompt-injection resistance, hallucination risk, role boundaries, memory consistency, and human-control safeguards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate on broad AI-assistant-related phrases and produce testing guidance when the user's intent is ambiguous. <br>
-Mitigation: Confirm the target agent, scope, and testing objective before applying the generated plan. <br>
-Risk: The artifact declares Bash and WebFetch tool access, which can affect local projects or fetch external content if allowed by the host agent. <br>
-Mitigation: Review proposed shell commands and web fetches before execution, and run tests in a controlled environment. <br>
-Risk: Generated test plans and safety audit suggestions may miss product-specific controls or overstate coverage. <br>
-Mitigation: Map each test case to product requirements, risk assessments, and human review before release decisions. <br>
+## Use Case:
 
+Developers and QA teams use this skill to design AI-agent test plans and traceable cases for tool calls, factuality, prompt-injection resistance, and human oversight.
 
-## Reference(s): <br>
-- [Agent nine-dimension test framework](references/test-framework.md) <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-agent-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown with structured test plans, test cases, checklists, and risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include requirement traceability IDs, tool-call test cases, hallucination checks, safety audit items, and reasoning validation guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: server release and SKILL.md frontmatter) <br>
+Risk: Broad agent-testing triggers may activate the skill during general discussions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that the user wants a testing plan before following its workflow.
+
+Risk: Declared Bash and WebFetch access may run commands or retrieve external content.
+
+Mitigation: Use these tools only for explicit validation or research tasks the user approves.
+
+## Reference(s):
+
+- [Testing dimensions and checklists](references/dimensions.md)
+- [Typical test cases](references/typical-cases.md)
+- [Agent testing scenarios](references/scenarios.md)
+- [Test case template](assets/case-template.md)
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-agent-testing)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Chinese-language Markdown test plans, case tables, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Nine testing dimensions; traceable case identifiers and coverage notes.]
+
+## Skill Version(s):
+
+1.8.0 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

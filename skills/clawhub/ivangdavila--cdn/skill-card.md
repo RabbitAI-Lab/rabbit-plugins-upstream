@@ -1,45 +1,54 @@
-## Description: <br>
-Configure, optimize, and troubleshoot CDN deployments with caching strategies, security hardening, and multi-provider management. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Configure, optimize, and troubleshoot CDN deployments with caching strategies, security hardening, and multi-provider management.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and engineers use this skill to select CDN providers, configure caching, harden CDN security, plan invalidation, monitor performance, and troubleshoot CDN behavior across common production web delivery scenarios. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: CDN command examples and configuration guidance can affect live services if applied to the wrong zone, distribution, pull zone, path, or environment. <br>
-Mitigation: Confirm the exact target resource and environment before running commands, prefer targeted purges over full cache purges, and test changes in a non-production environment when feasible. <br>
-Risk: API tokens used for CDN automation can grant broad control over production delivery settings. <br>
-Mitigation: Use least-privilege provider tokens, keep credentials out of shared prompts and logs, and rotate tokens according to the provider's operational policy. <br>
-Risk: Firewall, WAF, and rate-limit guidance can block legitimate traffic if thresholds or allowlists are misconfigured. <br>
-Mitigation: Roll out security rules in log or challenge mode where supported, validate expected user and bot traffic, and monitor edge and origin errors after enforcement. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/cdn) <br>
-- [CDN provider comparison and CLI examples](artifact/providers.md) <br>
-- [CDN caching strategies](artifact/caching.md) <br>
-- [CDN security hardening](artifact/security.md) <br>
-- [CDN troubleshooting](artifact/troubleshooting.md) <br>
+## Use Case:
 
+Developers and site reliability engineers use this skill to choose CDN providers, configure caching and invalidation, harden CDN deployments, and troubleshoot cache, origin, TLS, and performance issues.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with command examples and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Copy-ready purge commands can clear broad CDN caches and increase origin load.
+
+Mitigation: Prefer targeted invalidation, test in staging, confirm provider identifiers, monitor origin capacity, and prepare rollback before production execution.
+
+Risk: Firewall examples may block legitimate traffic if copied without current provider IP ranges and a recovery path.
+
+Mitigation: Verify current CDN IP ranges from the provider, apply changes incrementally, keep administrative access outside the rule path, and document rollback steps.
+
+## Reference(s):
+
+- [CDN Skill Page](https://clawhub.ai/ivangdavila/skills/cdn)
+- [Publisher Profile](https://clawhub.ai/user/ivangdavila)
+- [Cloudflare IP Ranges](https://www.cloudflare.com/ips/)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documentation-only guidance; users must validate provider IDs, current CDN IP ranges, origin capacity, staging behavior, monitoring, and rollback steps before production use.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

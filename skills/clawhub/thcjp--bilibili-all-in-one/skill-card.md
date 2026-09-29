@@ -1,5 +1,5 @@
 ## Description: <br>
-Bilibili All In One helps agents monitor Bilibili trends, download and analyze videos, process subtitles and danmaku, inspect playback data, and assist with authenticated publishing workflows. <br>
+Bilibili-all-in-one helps agents monitor Bilibili trends, download videos or audio, track video metrics, process subtitles, retrieve playback and danmaku information, and manage video publishing workflows. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,33 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External users and developers use this skill to direct an agent through Bilibili content operations: trend monitoring, video download and format extraction, statistics tracking, subtitle and danmaku handling, playback inspection, and account-authenticated publishing. <br>
+Content operators, creators, and developers use this skill to automate Bilibili monitoring, media retrieval, subtitle workflows, video analytics, and upload or publishing tasks through an agent. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Authenticated features require Bilibili session cookies that can provide full account access. <br>
-Mitigation: Prefer a test account, provide cookies only for features that need login, and delete or rotate cookies after use on shared or synced machines. <br>
-Risk: Optional credential persistence can store Bilibili cookies in .credentials.json. <br>
-Mitigation: Keep persistence off unless necessary, never commit .credentials.json, and verify local file permissions before reuse. <br>
-Risk: High-frequency monitoring or batch downloading may trigger Bilibili rate limits or anti-abuse controls. <br>
-Mitigation: Use conservative intervals and batch sizes, and review requests before execution when account state or publishing actions are involved. <br>
+Risk: The skill can use password-equivalent Bilibili session cookies for uploads and other account actions. <br>
+Mitigation: Use a secondary Bilibili account when possible, provide cookies only through environment variables, and review upload or publish actions before execution. <br>
+Risk: Credential persistence can save Bilibili session material to a local .credentials.json file. <br>
+Mitigation: Avoid enabling BILIBILI_PERSIST or persist=True unless local storage is required, keep .credentials.json out of shared or synced folders, and verify file permissions. <br>
+Risk: Automated uploads or high-frequency requests can affect a Bilibili account session or trigger platform controls. <br>
+Mitigation: Keep request rates conservative and review publishing actions, account credentials, and target content before running the workflow. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/thcjp/skills/bilibili-all-in-one) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/bilibili-all-in-one) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON response examples and inline shell or Python commands] <br>
+**Output Format:** [Markdown guidance with JSON examples and shell commands] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured success/error responses and setup guidance for Bilibili cookies, ffmpeg, and optional dependencies.] <br>
+**Other Properties Related to Output:** [May guide an agent to call Bilibili APIs, run Python commands, configure credentials, download media files, or publish account content.] <br>
 
 ## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+1.0.3 (source: server release evidence) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

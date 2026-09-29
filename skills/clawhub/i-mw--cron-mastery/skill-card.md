@@ -1,41 +1,57 @@
-## Description: <br>
-Master OpenClaw's timing systems. Use for scheduling reliable reminders, setting up periodic maintenance (janitor jobs), and understanding when to use Cron vs Heartbeat for time-sensitive tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cron Mastery guides agents in using OpenClaw cron scheduling for precise reminders, recurring maintenance jobs, and choosing Cron instead of Heartbeat for time-sensitive tasks.
 
-## Publisher: <br>
-[i-mw](https://clawhub.ai/user/i-mw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[i-mw](https://clawhub.ai/user/i-mw)
 
-## Use Case: <br>
-Developers, agent operators, and OpenClaw users use this skill to schedule reliable reminders, recurring jobs, and maintenance tasks with cron instead of heartbeat-based polling. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Ready-to-copy examples include hard-coded external delivery targets. <br>
-Mitigation: Replace all Telegram IDs and external delivery settings with user-approved destinations before scheduling jobs. <br>
-Risk: Recurring task examples can read email or send summaries externally. <br>
-Mitigation: Require explicit user approval before any scheduled job accesses email or sends summaries outside the current session. <br>
-Risk: Maintenance and recovery guidance can remove cron jobs or cron state. <br>
-Mitigation: Run cleanup with a preview or narrow scope, and back up cron state before any manual jobs.json deletion. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Cron Examples & Templates](references/templates.md) <br>
+## Use Case:
 
+Developers and OpenClaw agents use this skill to create reliable scheduled reminders, recurring reports, and maintenance sweeps while choosing the appropriate timing mechanism for urgency.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, code] <br>
-**Output Format:** [Markdown guidance with JSON cron job examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Examples may include delivery targets, email access, and maintenance actions that should be reviewed before use.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and changelog) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Reusable scheduling examples may contain fixed Telegram recipients or example timezones.
+
+Mitigation: Replace delivery recipients and timezones with user-confirmed values before creating cron jobs.
+
+Risk: Recurring summaries or reminders may send information through external delivery channels.
+
+Mitigation: Require explicit user consent before scheduling email summaries or external delivery.
+
+Risk: Troubleshooting guidance includes deleting global cron state.
+
+Mitigation: Do not delete cron state unless a backup exists and a supported recovery procedure is available.
+
+## Reference(s):
+
+- [Cron Examples & Templates](references/templates.md)
+- [ClawHub Skill Page](https://clawhub.ai/i-mw/skills/cron-mastery)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with JSON cron examples and inline shell-style troubleshooting commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cron schedule payloads, timezone assumptions, delivery-channel settings, and maintenance actions that require user confirmation.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

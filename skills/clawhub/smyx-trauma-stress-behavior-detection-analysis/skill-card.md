@@ -1,44 +1,63 @@
-## Description: <br>
-Analyzes fixed-camera video from emergency shelters or temporary resettlement sites to detect visual acute-stress behavior signals and produce psychological-crisis alerts for authorized response teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera emergency shelter video to identify visual behavior signals associated with acute stress, generate psychological crisis alerts, and guide authorized on-site responders toward human-reviewed support actions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External emergency-command teams and authorized psychological-rescue staff use this skill to analyze shelter video, locate visual behavior signals such as prolonged motionlessness, tremor, unresponsiveness, or hypervigilance, and review crisis alerts before dispatch. The skill is intended to support field triage and reporting, not to provide clinical diagnosis or medication guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China; reviewers should confirm jurisdictional fit before use elsewhere. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive shelter footage and mental-health-adjacent reports. <br>
-Mitigation: Deploy only in an authorized emergency-response environment with a clear legal basis, operator approval, privacy controls, and role-based access to reports. <br>
-Risk: Automatic identity creation, token persistence, and history access may create account-linkage and retention risk. <br>
-Mitigation: Confirm where video and reports are sent, who can access historical reports, how long raw footage and derived records are retained, and whether automatic identity creation is acceptable before deployment. <br>
-Risk: Behavioral alerts could be mistaken for clinical diagnoses or trigger unnecessary escalation. <br>
-Mitigation: Require human review before high-risk dispatch, present results as visual behavior observations only, and keep clinical assessment and medication decisions with qualified responders. <br>
+## Use Case:
 
+Emergency-response operators and authorized psychological-rescue teams use this skill to triage fixed-camera shelter footage for visual behavior observations, location markers, crisis alert levels, PFA-oriented response guidance, and historical report lookup. It is intended to support human-reviewed field response, not clinical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-trauma-stress-behavior-detection-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, JSON, files, guidance] <br>
-**Output Format:** [Markdown text containing structured JSON-style analysis results, report links, and optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include crisis level, zone or relative location, temporary tracking ID, responder dispatch suggestion, PFA quick reference, referral resources, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: The skill processes highly sensitive emergency-scene footage and behavior observations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Deploy only in controlled emergency-response environments with documented legal authority, role-based access, retention limits, and face-blurring or other required privacy protections.
+
+Risk: Cloud upload and cloud history lookup can expose sensitive reports or personal context if used without operator awareness.
+
+Mitigation: Require explicit operator approval for cloud processing and history retrieval, and limit access to authorized emergency-command or licensed psychological-rescue personnel.
+
+Risk: Behavior alerts could be mistaken for clinical mental-health diagnoses or automatic dispatch decisions.
+
+Mitigation: Treat outputs as triage signals only; require human review before escalating high-risk alerts and route interventions through qualified responders.
+
+Risk: Persistent identity, token, or profile data may remain on local storage.
+
+Mitigation: Define a plan for clearing local SQLite token and profile data, and enforce retention and access controls on the deployment host.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-trauma-stress-behavior-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown or JSON structured analysis reports with crisis alert levels, behavior observations, response guidance, report links, and optional saved files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May query cloud-hosted history reports and may write an output file when requested.]
+
+## Skill Version(s):
+
+1.0.12 (source: server release metadata and target metadata; artifact frontmatter reports 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

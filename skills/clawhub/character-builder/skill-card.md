@@ -1,44 +1,53 @@
-## Description: <br>
-Character Builder generates complete character Skill files from arbitrary character concepts by filling a three-layer, twelve-dimension character model and assembling reusable role-generation materials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Character-Builder helps agents turn a character concept into a complete reusable role skill using a 12-dimension character model, type and use-case classification, staged validation, and output assembly.
 
-## Publisher: <br>
-[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wangjiaocheng](https://clawhub.ai/user/wangjiaocheng)
 
-## Use Case: <br>
-External users and developers use this skill to turn character concepts into reusable character Skill files with a structured twelve-dimension profile, consistency checks, and downgrade behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated characters may be persisted as local skills without a clear confirmation or overwrite boundary. <br>
-Mitigation: Review the target path before writing, avoid overwriting existing skill folders, and install only when a reusable Skill file is intended. <br>
-Risk: Broad invocation phrases can cause unintended auto-routing in environments that trigger skills by text match. <br>
-Mitigation: Narrow invocation phrases and review generated skill triggers before deployment. <br>
+## Use Case:
 
+Creators, developers, and agents use this skill to expand loose character ideas into structured character Skill files for roleplay, fiction or game design, interactive personas, teaching characters, or brand personification.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wangjiaocheng/skills/character-builder) <br>
-- [Character Catalog](references/character-catalog.md) <br>
-- [Character Requirements](references/character-requirements.md) <br>
-- [Exemplars Index](references/exemplars.md) <br>
-- [Combined Character Builder Prompt](references/character-builder-prompt.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown Skill files with supporting reference material] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist generated Skill files locally when file-system writing is available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill can create persistent skill files or add files under a skills directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated skill contents, choose the destination explicitly, and require confirmation before saving, overwriting, or installing files.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/wangjiaocheng/skills/character-builder)
+- [Character catalog](references/character-catalog.md)
+- [Character requirements](references/character-requirements.md)
+- [Character exemplars](references/character-exemplars.md)
+- [Combined prompt reference](references/character-builder-prompt.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, configuration, guidance]
+
+**Output Format:** [Markdown Skill files and structured guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated character skills may be saved as persistent files only after the user reviews the contents, chooses the destination, and confirms any overwrite.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

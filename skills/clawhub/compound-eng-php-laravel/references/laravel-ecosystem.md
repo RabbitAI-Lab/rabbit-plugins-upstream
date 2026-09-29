@@ -1,10 +1,10 @@
 # Laravel Ecosystem Patterns
 
-> When to read: when reaching for ecosystem features — notifications, queues, broadcasting, scheduling, file storage, mail — and needing the canonical Laravel approach.
+> When to read: when reaching for ecosystem features (notifications, queues, broadcasting, vector search, scheduling, file storage, mail) and needing the canonical Laravel approach.
 
 ## Notifications
 
-Multi-channel dispatch -- mail, SMS, Slack, database -- from a single notification class.
+Multi-channel dispatch (mail, SMS, Slack, database) from a single notification class.
 
 ```php
 // Create: php artisan make:notification OrderShipped
@@ -42,10 +42,20 @@ $user->notify(new OrderShipped($order));
 Notification::send($users, new OrderShipped($order));
 ```
 
-- Always implement `ShouldQueue` -- notifications are side effects, never block the request
-- Use `toArray()` for database channel -- powers in-app notification feeds
+- Always implement `ShouldQueue`; notifications are side effects, never block the request
+- Use `toArray()` for database channel; it powers in-app notification feeds
 - Read: `$user->unreadNotifications`, mark: `$notification->markAsRead()`
 - Rate limit with `ShouldBeUnique` to prevent notification spam
+
+## Broadcasting
+
+Server-side drivers in Laravel 13: Reverb (first-party WebSocket server, `php artisan install:broadcasting --reverb`), Pusher Channels, Ably, plus `log` for local debugging and `null` for tests. All three real-time drivers speak the Pusher channel protocol to Echo over a persistent WebSocket.
+
+- **Mercure driver** (`MercureBroadcaster`, merged into the 13.x branch after 13.31.0; confirm the installed release ships `Illuminate\Broadcasting\Broadcasters\MercureBroadcaster` before depending on it, and expect the published docs to lag). Transport is Server-Sent Events: the app publishes updates over HTTP to a Mercure hub (a standalone hub, or FrankenPHP's built-in one, which needs no `url`), and browsers subscribe with `EventSource`, so the application stack runs no WebSocket server process. Channel authorization is a JWT the hub validates (`secret`/`subscribe_secret` config; the hub multiplexes every joined channel over one connection under one token), `private-encrypted-*` channels are end-to-end encrypted with an `encryption_key` the hub never sees, and presence channels are never encrypted because member payloads go through the hub's subscription API.
+
+## Vector Search
+
+- **Vector search** (Laravel 13, needs the Laravel AI SDK): `whereVectorSimilarTo('embedding', $queryEmbeddingOrText, minSimilarity: 0.4)` filters by cosine similarity (0.0-1.0) and orders most-similar first (`order: false` disables that); `selectVectorDistance(..., as: 'distance')`, `whereVectorDistanceLessThan()`, and `orderByVectorDistance()` expose raw distance. A string argument is embedded on the fly; pass a pre-computed array to skip the provider call. Supported on PostgreSQL with `pgvector` (`Schema::ensureVectorExtensionExists()`, `$table->vector('embedding', dimensions: 1536)->index()`), MariaDB 11.7+, and MongoDB via the Laravel MongoDB package; not MySQL or SQLite.
 
 ## Task Scheduling
 
@@ -67,16 +77,16 @@ $schedule->job(new ProcessDailyMetrics)->dailyAt('01:00');
 ```
 
 Key methods:
-- `->withoutOverlapping()` -- prevent concurrent runs (uses cache lock)
-- `->onOneServer()` -- run only on one server in multi-server setup
-- `->evenInMaintenanceMode()` -- critical tasks that must run during `php artisan down`
-- `->runInBackground()` -- don't block scheduler for long tasks
-- `->emailOutputOnFailure('ops@example.com')` -- alert on failures
+- `->withoutOverlapping()`: prevent concurrent runs (uses cache lock)
+- `->onOneServer()`: run only on one server in multi-server setup
+- `->evenInMaintenanceMode()`: critical tasks that must run during `php artisan down`
+- `->runInBackground()`: don't block scheduler for long tasks
+- `->emailOutputOnFailure('ops@example.com')`: alert on failures
 - Requires system cron: `* * * * * cd /path && php artisan schedule:run >> /dev/null 2>&1`
 
 ## Custom Casts
 
-Value objects for model attributes -- encapsulate formatting, validation, and behavior.
+Value objects for model attributes: encapsulate formatting, validation, and behavior.
 
 ```php
 class Money implements CastsAttributes
@@ -103,11 +113,11 @@ protected function casts(): array
 ```
 
 Built-in casts to prefer over manual accessors:
-- `AsEncryptedCollection::class` -- encrypt JSON columns at rest
-- `AsEnumCollection::class` -- array of enums stored as JSON
-- `AsStringable::class` -- fluent string operations on attribute
-- Enum casts: `'status' => OrderStatus::class` -- automatic PHP enum <-> DB value
-- Encrypted cast: `'api_token' => 'encrypted'` -- transparent encrypt/decrypt for sensitive fields
+- `AsEncryptedCollection::class`: encrypt JSON columns at rest
+- `AsEnumCollection::class`: array of enums stored as JSON
+- `AsStringable::class`: fluent string operations on attribute
+- Enum casts: `'status' => OrderStatus::class` gives automatic PHP enum <-> DB value
+- Encrypted cast: `'api_token' => 'encrypted'` gives transparent encrypt/decrypt for sensitive fields
 
 ## Security Hardening
 
@@ -115,7 +125,7 @@ Built-in casts to prefer over manual accessors:
 
 - `SESSION_HTTP_ONLY=true`, `SESSION_SAME_SITE=strict` in `.env`
 - Regenerate session on login: `$request->session()->regenerate()` in auth controller
-- `SESSION_LIFETIME` -- set appropriate timeout (120 min default is often too long)
+- `SESSION_LIFETIME`: set appropriate timeout (120 min default is often too long)
 
 ### Security Headers Middleware
 
@@ -155,7 +165,7 @@ Password::min(12)->letters()->mixedCase()->numbers()->symbols()
 
 ### Dependency Audit
 
-`composer audit` -- check for known CVEs in dependencies. Run in CI.
+`composer audit` checks for known CVEs in dependencies. Run in CI.
 
 ### Logging PII
 

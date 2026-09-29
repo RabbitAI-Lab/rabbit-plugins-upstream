@@ -1,46 +1,62 @@
-## Description: <br>
-Gumroad API integration with managed OAuth for accessing products, sales, subscribers, licenses, and webhooks for a digital storefront. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage a connected Gumroad storefront, review sales and subscribers, verify licenses, and configure approved webhooks and automation.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and storefront operators use this skill to query and manage Gumroad account data through Maton-managed OAuth, including product, sales, subscriber, license, offer code, variant, custom field, and webhook workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and Maton-managed OAuth to access Gumroad account data. <br>
-Mitigation: Install only if you trust Maton as the OAuth proxy and keep MATON_API_KEY private. <br>
-Risk: The skill can perform write actions against Gumroad resources such as products, licenses, offer codes, variants, custom fields, connections, and webhooks. <br>
-Mitigation: Confirm the target resource and intended effect before allowing any create, update, or delete request. <br>
-Risk: When multiple Gumroad connections exist, requests may affect the wrong account if no connection is specified. <br>
-Mitigation: Use the Maton-Connection header to select the intended Gumroad connection. <br>
+## Use Case:
 
+Storefront owners and their agents use this skill to inspect Gumroad products, sales, and subscribers, verify licenses, and set up user-approved webhook notifications or automation.
 
-## Reference(s): <br>
-- [ClawHub Gumroad Skill](https://clawhub.ai/byungkyu/skills/gumroad) <br>
-- [Gumroad API Overview](https://gumroad.com/api) <br>
-- [Create API Application](https://help.gumroad.com/article/280-create-application-api) <br>
-- [License Keys Help](https://help.gumroad.com/article/76-license-keys) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP examples and Python or JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Access to connected storefront data may expose sensitive business or customer information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only, narrowly scoped access and return only the fields needed for the task.
+
+Risk: Writes can change storefront records or create lasting webhooks and automation.
+
+Mitigation: Confirm each write, target account, and persistent destination with the user before proceeding.
+
+Risk: Raw API keys can be exposed when handled outside the login flow.
+
+Mitigation: Use the CLI login flow when possible and avoid raw API keys unless the CLI cannot be used.
+
+## Reference(s):
+
+- [Gumroad skill release](https://clawhub.ai/byungkyu/skills/gumroad)
+- [Gumroad API overview](https://gumroad.com/api)
+- [Gumroad license keys help](https://help.gumroad.com/article/76-license-keys)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Text or Markdown with command examples and selected API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the authorized Gumroad connection; writes and persistent automation require user approval.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

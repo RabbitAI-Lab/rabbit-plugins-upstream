@@ -1,47 +1,61 @@
-## Description: <br>
-ClickSend API integration with managed authentication for sending SMS, MMS, and voice messages, managing contacts and lists, managing verified email addresses, and viewing account configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through authenticated ClickSend messaging, contact management, delivery tracking, and optional automation via Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to make user-approved ClickSend requests through Maton, including sending SMS, MMS, and voice messages and managing contacts, lists, verified email addresses, and account settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive credentials are required for ClickSend access through Maton. <br>
-Mitigation: Keep MATON_API_KEY in trusted environment variables and avoid printing API keys in shared logs or screenshots. <br>
-Risk: Messaging and voice operations can contact real recipients and may incur charges. <br>
-Mitigation: Review recipient, content, timing, and cost impact before approving any send operation. <br>
-Risk: Write operations can modify contacts, lists, verified email addresses, or other account data. <br>
-Mitigation: Approve create, update, or delete requests only after confirming the target resource and intended effect. <br>
-Risk: Accounts with multiple ClickSend connections can route a request to the wrong account. <br>
-Mitigation: Specify the intended connection when multiple active connections exist. <br>
+## Use Case:
 
+Agents and their users use this skill to send ClickSend SMS, MMS, or voice messages, manage contacts and sender identities, and check delivery through an authorized Maton connection. It also describes optional scheduled or event-driven automations.
 
-## Reference(s): <br>
-- [ClickSend on ClawHub](https://clawhub.ai/byungkyu/clicksend) <br>
-- [Maton](https://maton.ai) <br>
-- [ClickSend Developer Portal](https://developers.clicksend.com/) <br>
-- [ClickSend REST API v3 Documentation](https://developers.clicksend.com/docs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline code blocks, shell commands, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Sending messages or voice calls can reach unintended recipients and incur costs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm recipient, message content, and timing with the user before each send.
+
+Risk: Contact, list, and verified sender changes can expose personal data or disrupt messaging.
+
+Mitigation: Review the exact target and proposed change, and obtain explicit approval before modifying records.
+
+Risk: Hosted functions, triggers, and destinations can create persistent automated forwarding.
+
+Mitigation: Review each automation and destination separately, including what data is sent and where, before approval.
+
+## Reference(s):
+
+- [ClickSend skill on ClawHub](https://clawhub.ai/byungkyu/skills/clicksend)
+- [Maton](https://maton.ai)
+- [ClickSend REST API v3 documentation](https://developers.clicksend.com/docs)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with CLI examples and JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only by default; obtain explicit user approval before writes or new connections.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

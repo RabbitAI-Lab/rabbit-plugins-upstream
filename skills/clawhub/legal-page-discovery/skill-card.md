@@ -1,40 +1,56 @@
-## Description: <br>
-Discover and classify a live website's legal and compliance pages by triangulating sitemap.xml, robots.txt, footer and navigation links, and common compliance path guesses, then recording verbatim-grounded page classifications, controlling entities, mismatches, and observations for downstream routing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover and classify a live website's legal/compliance pages, including privacy policies, HIPAA/Part 2 notices, terms of use, informed consents, and similar documents, by triangulating sitemap.xml, robots.txt, footer and navigation links, and common compliance path guesses.
 
-## Publisher: <br>
-[dangsllc](https://clawhub.ai/user/dangsllc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dangsllc](https://clawhub.ai/user/dangsllc)
 
-## Use Case: <br>
-Compliance, legal operations, and engineering users can use this skill to discover posted legal and compliance documents on a public website and prepare a manifest for later review or routing. It helps identify candidate privacy, HIPAA, terms, consent, accessibility, and similar pages without performing a compliance assessment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill fetches public pages from a user-provided domain and tries common legal-page paths, including public robots.txt-disallowed paths. <br>
-Mitigation: Run it only against domains you are authorized to inspect and review the generated manifest before relying on it. <br>
-Risk: The skill is designed for discovery and classification, not legal or compliance judgment. <br>
-Mitigation: Use the manifest as routing evidence for a qualified downstream review rather than as a compliance conclusion. <br>
+## Use Case:
 
+Developers, compliance operators, and legal operations teams use this skill to inventory a live website's legal and compliance pages before routing them for separate review. It records page classification, controlling entity, discoverability, and mismatch observations without assessing compliance sufficiency.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/dangsllc/skills/legal-page-discovery) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown manifest and JSON manifest] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes local discovery manifests and includes URLs, source signals, classifications, controlling entities, mismatch flags, salient observations, and discoverability notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence) <br>
+Risk: Live URL discovery can be influenced by the target website and may lead the agent to fetch unintended internal or third-party locations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the skill in a network-restricted environment, keep discovered URLs and redirects on the approved domain, block private and loopback addresses, and ask before contacting any other origin.
+
+Risk: Default manifest filenames may overwrite existing files in the working directory.
+
+Mitigation: Choose an explicit output directory or filename before running the skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dangsllc/skills/legal-page-discovery)
+- [Rote Compliance Skills](https://github.com/Rote-Compliance/rote-compliance-skills)
+- [Dang's Solutions](https://dangssolutions.com)
+- [Rote Compliance](https://rotecompliance.com)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown manifest and JSON manifest]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes legal-page-manifest.md and legal-page-manifest.json to the current working directory or an operator-specified output path.]
+
+## Skill Version(s):
+
+1.0.4 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

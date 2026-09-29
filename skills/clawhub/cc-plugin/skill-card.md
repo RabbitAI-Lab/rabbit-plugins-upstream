@@ -1,40 +1,66 @@
-## Description: <br>
-Claude Code plugin lifecycle management for creating, installing, updating, maintaining, and troubleshooting plugins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Claude Code plugin lifecycle management for creating, managing, reflecting, troubleshooting, and cleaning plugin and marketplace state.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineers use this skill to manage Claude Code plugin authoring, marketplace setup, cache cleanup, local development reflection, HUD configuration, plugin clustering, and plugin troubleshooting workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide persistent changes to local Claude Code plugin state. <br>
-Mitigation: Use dry-run paths first, review backups before enabling plugins, and inspect changes before applying them. <br>
-Risk: Plugin troubleshooting guidance may involve running build code from installed plugin content. <br>
-Mitigation: Run cache sync only for trusted marketplace content and inspect package.json or lockfiles before following npm install or build instructions. <br>
+## Use Case:
 
+Developers and engineers use this skill to author Claude Code plugins, manage marketplace clones, troubleshoot plugin loading issues, configure HUD statusline behavior, and clean plugin cache state.
 
-## Reference(s): <br>
-- [Cc Plugin on ClawHub](https://clawhub.ai/drumrobot/skills/cc-plugin) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code snippets, and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Some workflows can propose or run local plugin-state changes; use dry-run options and review generated changes before applying them.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.1 (source: ClawHub release metadata) <br>
+Risk: The dev-reflect helper can bulk-sync or delete plugin files in marketplace clones and cached plugin version directories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run with --dry-run first, review source and marketplace paths, and confirm the marketplace clone is not the source repository or a worktree of the same repository before syncing.
+
+Risk: The optional --enable flow persistently changes Claude Code settings.
+
+Mitigation: Use --enable only when intentionally enabling a plugin, review the resulting settings.json change, and keep the generated backup until the plugin behavior is verified.
+
+Risk: Cache cleanup can remove old plugin cache versions and temporary marketplace directories.
+
+Mitigation: Use --dry-run to preview deletions and confirm the cache path and retained latest version before allowing cleanup.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/cc-plugin)
+- [SKILL.md](artifact/SKILL.md)
+- [Cache Cleanup](artifact/cache.md)
+- [Plugin Clustering Recommendation](artifact/clustering.md)
+- [Plugin Creation](artifact/create.md)
+- [Dev Reflect](artifact/dev-reflect.md)
+- [OMC HUD Statusline Configuration](artifact/hud.md)
+- [Marketplace Management](artifact/marketplace.md)
+- [Plugin Troubleshooting](artifact/troubleshoot.md)
+- [Changelog](artifact/CHANGELOG.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and configuration snippets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May recommend or run local filesystem operations for Claude Code plugin directories when the agent is given appropriate tools.]
+
+## Skill Version(s):
+
+0.8.0 (source: server release metadata, released 2026-09-24)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

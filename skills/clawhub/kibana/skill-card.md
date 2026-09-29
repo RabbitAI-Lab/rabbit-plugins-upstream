@@ -1,48 +1,62 @@
-## Description: <br>
-Kibana is a Maton-authenticated API integration that helps agents read and manage saved objects, dashboards, data views, spaces, alerts, Fleet resources, connectors/actions, security roles, and cases in a connected Kibana instance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Kibana through Maton to inspect and manage observability, security, and search resources with user-approved changes.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, operators, and security teams use this skill to inspect and administer Kibana resources through the Maton API gateway. It is suited for observability, security, and search analytics workflows that require authenticated Kibana API access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and a connected Kibana API key, so credentials could grant access to sensitive observability or security data. <br>
-Mitigation: Use dedicated least-privilege Kibana credentials, keep MATON_API_KEY out of logs and shared prompts, prefer non-production connections for exploration, and remove unused connections. <br>
-Risk: Write-capable Kibana API calls can create, update, or delete dashboards, saved objects, data views, spaces, alert rules, Fleet resources, roles, and cases. <br>
-Mitigation: Default to read-only requests, retrieve and display target resources first, describe the intended effect, and require explicit user approval with exact resource identifiers before POST, PUT, or DELETE requests. <br>
-Risk: Connector execution can trigger external side effects such as sending email, posting messages, or invoking webhooks. <br>
-Mitigation: Do not execute connectors proactively; confirm the connector ID, action type, target, and full payload with the user before execution. <br>
+## Use Case:
 
+Developers and operations teams use this skill to inspect Kibana resources and, with explicit approval, manage dashboards, alerts, saved objects, and related integrations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/kibana) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Kibana REST API documentation](https://www.elastic.co/docs/api/doc/kibana/) <br>
-- [Saved Objects API](https://www.elastic.co/guide/en/kibana/current/saved-objects-api.html) <br>
-- [Alerting API](https://www.elastic.co/guide/en/kibana/current/alerting-apis.html) <br>
-- [Fleet API](https://www.elastic.co/guide/en/fleet/current/fleet-apis.html) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, text] <br>
-**Output Format:** [Markdown with API paths, shell commands, Python and JavaScript examples, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable; generated API calls may read or modify resources in the connected Kibana instance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Write operations can change or delete Kibana resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege credentials and confirm each write against the exact resource ID before execution.
+
+Risk: Executing connectors can send data or trigger external effects.
+
+Mitigation: Confirm the connector ID, destination, and payload with the user before execution.
+
+Risk: Functions, triggers, and destinations may run repeatedly or forward data continuously.
+
+Mitigation: Require explicit approval and scope each automation to the intended resources and recipients.
+
+## Reference(s):
+
+- [ClawHub Kibana skill release](https://clawhub.ai/byungkyu/skills/kibana)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Kibana REST API documentation](https://www.elastic.co/docs/api/doc/kibana/)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with inline shell and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Kibana access requires a Maton connection and user approval for writes.]
+
+## Skill Version(s):
+
+1.2.8 (source: ClawHub release metadata; skill frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

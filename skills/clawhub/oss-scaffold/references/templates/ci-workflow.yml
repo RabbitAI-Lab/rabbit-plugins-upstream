@@ -1,0 +1,21 @@
+# CI 骨架：最简 lint + test 占位。无依赖也能语法正确（每步默认可跑；无命令可执行时该步直接通过）。
+# 实例化时把 {{lint_cmd}} / {{test_cmd}} 换成项目真实命令；未定则保留 echo 占位，不要虚构工具。
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  check:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Lint
+        run: "{{lint_cmd}}"
+
+      - name: Test
+        run: "{{test_cmd}}"

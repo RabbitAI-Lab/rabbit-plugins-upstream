@@ -1,45 +1,64 @@
-## Description: <br>
-Detects baby cries via audio AI in real time, analyzes likely causes, and identifies needs such as hunger, tiredness, pain, discomfort, or irritability to assist new parents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects baby cries via audio AI in real time, analyzes likely causes, and identifies needs such as hunger, tiredness, pain, discomfort, or irritability to assist caregivers.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents assisting caregivers use this skill to analyze baby cry audio or video from local files or URLs, return structured observations about likely needs, and retrieve prior cloud analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Infant audio, video, local files, or media URLs may be sent to the Life Emergence cloud service for analysis. <br>
-Mitigation: Use the skill only when cloud processing of the submitted media is acceptable, and avoid submitting sensitive media unless that processing is approved. <br>
-Risk: The skill can create or reuse a local service identity and persist identity material, tokens, reports, or workspace data across sessions. <br>
-Mitigation: Review and delete the workspace data database and smyx-api-key.txt identity material when reports or tokens should not persist. <br>
-Risk: Baby cry analysis is parenting support and may be incorrect or incomplete for health-related concerns. <br>
-Mitigation: Treat outputs as reference guidance and seek medical care when crying persists or the baby appears ill, injured, or uncomfortable. <br>
+## Use Case:
 
+External caregivers and agent operators use this skill to submit infant cry audio or video for structured analysis of likely needs and to query cloud-hosted historical analysis reports. The results are parenting-support guidance and should not replace medical evaluation for persistent crying or distress.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-cry-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Infant cry analysis API documentation](references/api_doc.md) <br>
-- [Common analysis API error documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON] <br>
-**Output Format:** [Markdown reports or JSON responses summarizing cloud-backed infant cry analysis and history queries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include recognition results, parenting suggestions, report links, and Markdown tables for historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter says 1.0.9) <br>
+Risk: Sensitive baby media may be sent through broad cloud network code beyond the narrow audio-only description.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only after the publisher narrows the skill to disclosed media types and documents the cloud data flow clearly.
+
+Risk: The skill silently links user identity and may create or reuse an account without explicit user consent.
+
+Mitigation: Require explicit consent and clear disclosure before account creation, identity linking, or historical report lookup.
+
+Risk: Cloud tokens may be stored persistently.
+
+Mitigation: Protect token storage with appropriate local controls or avoid persistent token storage before deployment.
+
+Risk: Non-production or non-HTTPS endpoints may be present in configuration.
+
+Mitigation: Use HTTPS production endpoints only and remove development endpoint configurations from release packages.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-infant-cry-analysis)
+- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration]
+
+**Output Format:** [Markdown or JSON analysis text, with optional file output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include structured recognition results, risk prompts, suggestions, historical report lists, and report export links.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata; artifact frontmatter says 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

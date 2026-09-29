@@ -1,53 +1,57 @@
-## Description: <br>
-Comprehensive R-based meta-analysis skill covering RevMan 5.x equivalents, Stata-style meta-analysis workflows, effect-size conversion, robust variance estimation, Bayesian and network meta-analysis, survival meta-analysis, trial sequential analysis, diagnostic meta-analysis, systematic-review workflow support, and reproducible R outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports systematic reviews and R-based medical meta-analysis, from literature screening and data extraction through statistical analysis, figures, and manuscript drafting.
 
-## Publisher: <br>
-[medstatstar](https://clawhub.ai/user/medstatstar) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[medstatstar](https://clawhub.ai/user/medstatstar)
 
-## Use Case: <br>
-Clinical researchers, evidence reviewers, and analysts use this skill to turn natural-language meta-analysis requests into reproducible local R workflows, including model selection, effect-size handling, visualization, and structured result summaries. It is intended to assist statistical analysis and reporting, not to replace clinical or statistical judgment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs local R analysis code and may generate R files and output artifacts in the workspace. <br>
-Mitigation: Review the generated scripts and run the skill only in the intended working directory before executing analyses. <br>
-Risk: Manual R package installation can use external package repositories and write to the user's R library. <br>
-Mitigation: Install packages from trusted sources in a controlled R environment and review package installation prompts. <br>
-Risk: PDF batch download uses external services when explicitly requested and may retrieve copyrighted full text. <br>
-Mitigation: Use PDF retrieval only for DOI or PMID lists the user is authorized to access. <br>
-Risk: The skill may read local R configuration from ~/.workbuddy/MEMORY.md. <br>
-Mitigation: Keep that memory file free of unrelated sensitive information before using the skill. <br>
-Risk: Statistical outputs can be misleading if interpreted without study context or domain expertise. <br>
-Mitigation: Have qualified statistical or clinical reviewers interpret model assumptions, heterogeneity, bias, and conclusions. <br>
+## Use Case:
 
+Clinicians, clinical researchers, and medical statisticians use this skill to plan systematic reviews, synthesize study data, generate meta-analysis results and figures, and draft research reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/medstatstar/skills/meta-analysis) <br>
-- [Project Homepage](https://github.com/medstatstar/meta-analysis) <br>
-- [Interactive Menu](references/interactive_menu.md) <br>
-- [Advanced API](references/advanced_api.md) <br>
-- [RevMan Complete](references/revman_complete.md) <br>
-- [Stata to R Mapping](references/stata_to_r_mapping.md) <br>
-- [R Packages](references/r_packages.md) <br>
-- [Citations](references/citations.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with inline shell and R code; generated workspace artifacts may include R scripts, SVG/PNG plots, CSV tables, Markdown summaries, and optional reports.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs locally in the user's R environment and writes analysis artifacts to workspace directories.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.7.0 (source: server release metadata; skill frontmatter reports 1.7) <br>
+Risk: Remote workflow responses can trigger local file uploads without sufficiently narrow file selection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review remote transfer paths before use; avoid sensitive datasets or credentials unless uploads require user-approved file allowlists, trusted destinations, and consent for each transfer.
+
+Risk: Remote workflow responses can direct local file writes outside intended outputs.
+
+Mitigation: Require output paths to stay within a contained, user-approved directory before using the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/medstatstar/skills/meta-analysis)
+- [ClawHub publisher profile](https://clawhub.ai/user/medstatstar)
+- [Project homepage listed in skill metadata](https://github.com/medstatstar/meta-analysis)
+- [Meta-analysis workbench](https://meta.app.workbuddy.host/)
+- [Analysis reference index](references/references.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Files]
+
+**Output Format:** [HTML reports with figures and tables; reproducible R code and written guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return SVG/PNG figures and CSV tables; numerical analysis requires access to the remote service.]
+
+## Skill Version(s):
+
+2.20.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

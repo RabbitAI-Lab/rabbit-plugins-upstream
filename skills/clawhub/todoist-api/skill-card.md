@@ -1,46 +1,62 @@
-## Description: <br>
-Todoist API integration with managed OAuth for managing tasks, projects, sections, labels, and comments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Todoist through Maton to manage tasks, projects, sections, labels, and comments with user-approved changes.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to read and modify Todoist tasks, projects, sections, labels, and comments through Maton-managed OAuth. It is suited for creating, updating, completing, organizing, and troubleshooting Todoist work items from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton proxies Todoist requests and manages OAuth for the connected Todoist account. <br>
-Mitigation: Install only if you trust Maton for Todoist access and keep MATON_API_KEY private. <br>
-Risk: Write operations can create, update, complete, reopen, or delete Todoist resources. <br>
-Mitigation: Approve only specific intended changes and confirm the target resource before executing write calls. <br>
-Risk: Multiple Todoist connections can route requests to the wrong account. <br>
-Mitigation: Use the Maton-Connection header when multiple active Todoist connections exist. <br>
+## Use Case:
 
+Todoist users and developers can ask an agent to find, organize, create, update, complete, or delete tasks and related resources in their connected account. They can also configure user-approved automations through Maton.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/todoist-api) <br>
-- [Todoist API v1 Documentation](https://developer.todoist.com/api/v1) <br>
-- [Todoist Filter Syntax](https://todoist.com/help/articles/introduction-to-filters) <br>
-- [Todoist OAuth Documentation](https://developer.todoist.com/guides/#oauth) <br>
-- [Related ClawHub API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with API endpoints and inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Todoist OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Todoist changes or deletions may affect the wrong resource or cause data loss.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read/list calls and confirm each write with the exact resource ID and intended effect.
+
+Risk: Raw API keys may expose a long-lived credential.
+
+Mitigation: Prefer Maton CLI login; use a raw API key only when the CLI cannot be used, and do not expose it in logs.
+
+Risk: Hosted functions, triggers, and destinations can continue acting or forwarding events after setup.
+
+Mitigation: Review their downstream effects and require separate explicit approval before enabling persistent automation or event forwarding.
+
+## Reference(s):
+
+- [Todoist skill on ClawHub](https://clawhub.ai/byungkyu/skills/todoist-api)
+- [Todoist API v1 documentation](https://developer.todoist.com/api/v1)
+- [Todoist filter syntax](https://todoist.com/help/articles/introduction-to-filters)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with command and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses an authorized Todoist connection; changes require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
