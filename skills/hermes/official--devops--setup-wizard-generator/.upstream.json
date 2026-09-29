@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/setup-wizard-generator",
+  "identifier": "official/devops/setup-wizard-generator",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/devops/setup-wizard-generator",
+  "branch": "main",
+  "pushedAt": "2026-09-29T13:59:31Z",
+  "contentHash": "fe9a3e31c5932d0511555bb205d2e6c9af0d111029e3311c764614b03f2c319c",
+  "fetchedAt": "2026-09-29T14:08:36.988Z"
+}

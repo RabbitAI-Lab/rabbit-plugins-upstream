@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/research-workflows",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/research-workflows",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/research-workflows",
+  "branch": "main",
+  "pushedAt": "2026-09-29T02:49:55Z",
+  "contentHash": "e5bc5bc620a9cab40a2c3077f6bb5a359c23da6f1aaff4d0a4676b800c569798",
+  "fetchedAt": "2026-09-29T14:08:11.692Z"
+}

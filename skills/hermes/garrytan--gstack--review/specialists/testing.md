@@ -6,9 +6,45 @@ Output: JSON objects, one finding per line. Schema:
 Optional: line, fix, fingerprint, evidence, test_stub.
 If no findings: output `NO FINDINGS` and nothing else.
 
+If the caller explicitly asks for an ASCII coverage diagram, first read the
+named source and test files directly in a dedicated tool call. Keep that tool
+call limited to those two file reads, using either native Read calls or a simple
+shell display such as `cat -n src/file && echo ---- && cat -n test/file`. Read
+diffs, package files, configs, or other context in separate tool calls. Then
+output the diagram before any JSON findings. Use one function root per public or
+changed function, put the `[OK]` or `[GAP]` marker on the same branch row as the
+tested or missing path, and keep the legend inside the same diagram block:
+
+```text
+src/billing.ts
+processPayment(amount, currency)
+├── valid USD happy path returns success [OK]
+└── invalid amount / unsupported currency branches [GAP]
+refundPayment(paymentId, reason)
+└── refund success and guard branches not imported or untested [GAP]
+Legend: [OK] tested [GAP] no test
+```
+
+Do not rely on a summary table, prose paragraph, or distant nested marker as the
+only coverage evidence. Covered happy-path rows must name the successful, valid,
+or concrete tested input path; gap rows must stay under the function that owns
+the missing path.
+
 ---
 
 ## Categories
+
+### Exploratory hypotheses
+
+The parent runs one shared exploratory QA pass before Fix-First, including small diffs
+that skip specialists. Supply high-risk changed contracts, adverse scenarios and native
+test candidates to that pass; do not launch another explorer, edit product/tests or
+commit. A test proposal uses `test_stub` and keeps the caller's approval requirements.
+Check real request/queue/storage effects, retries, duplicates and interrupted recovery
+where applicable. A diagram or test count is not executed proof. For discoveries promoted
+to regressions, require failure for the reproduced bug before repair and green plus
+original/adjacent probes afterward; never accept buggy-output goldens or discarded valid
+red tests. Unit tests suit logic; real integration/E2E tests protect boundaries mocks hide.
 
 ### Missing Negative-Path Tests
 - New code paths that handle errors, rejections, or invalid input with NO corresponding test

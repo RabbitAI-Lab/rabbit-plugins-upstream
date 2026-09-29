@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/uncertainty-and-units",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/uncertainty-and-units",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/uncertainty-and-units",
+  "branch": "main",
+  "pushedAt": "2026-09-28T09:31:56Z",
+  "contentHash": "e7253f6fee1212dec6fbdd8b9161c8d37647bb94dd9520cb38d264ff04e3cba0",
+  "fetchedAt": "2026-09-29T14:08:25.555Z"
+}

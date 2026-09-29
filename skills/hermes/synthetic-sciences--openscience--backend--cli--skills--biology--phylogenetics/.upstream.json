@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/phylogenetics",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/phylogenetics",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/phylogenetics",
+  "branch": "main",
+  "pushedAt": "2026-09-29T02:49:55Z",
+  "contentHash": "102b98743cf6e1c0249bd1154176c75443dda30d9473a7e646f15e03e52fb9bf",
+  "fetchedAt": "2026-09-29T14:08:11.657Z"
+}
