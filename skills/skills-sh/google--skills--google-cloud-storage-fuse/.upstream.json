@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-storage-fuse",
+  "repo": "google/skills",
+  "skillId": "google-cloud-storage-fuse",
+  "branch": "main",
+  "pushedAt": "2026-09-29T13:51:32Z",
+  "contentHash": "1703ac040bbc2f256e2cbdc18a077884281d85711d2baf88318002625663bb3c",
+  "fetchedAt": "2026-09-29T14:12:16.830Z"
+}
