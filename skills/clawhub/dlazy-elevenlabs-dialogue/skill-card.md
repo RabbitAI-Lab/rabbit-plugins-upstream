@@ -1,43 +1,60 @@
-## Description: <br>
-Dlazy Elevenlabs Dialogue helps an agent invoke the pinned dLazy CLI to generate ElevenLabs eleven_v3 multi-voice dialogue audio from per-line voice assignments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps generate multi-voice ElevenLabs dialogue audio from voice-assigned lines, with optional emotion tags.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to create character dialogue, podcast segments, and short skits by sending dialogue lines, voice IDs, and generation options through the dLazy CLI to a hosted audio-generation service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dialogue text and local files explicitly passed to supported media fields may be sent to dLazy or ElevenLabs infrastructure. <br>
-Mitigation: Review user inputs before invocation and avoid sending confidential or restricted content unless the deployment has approved the external service use. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use per-invocation credentials or npx when persistence is not desired, restrict local credential access, and rotate or revoke the key from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Creators and developers use this skill to prepare and generate character dialogue, podcasts, or short skits with distinct voices and optional delivery cues.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-dialogue) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown instructions with bash examples and JSON result envelopes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted generated-output URLs or an async generateId; requires dLazy API credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Running an external npm package or installing it globally exposes the environment to third-party code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the @dlazy/cli package and source before installing; use the documented npx option to avoid a persistent global install.
+
+Risk: CLI authentication can save an API key in local configuration.
+
+Mitigation: Pass DLAZY_API_KEY per invocation if you do not want the key stored in ~/.dlazy/config.json.
+
+Risk: Prompts and supplied media files are sent to dLazy endpoints.
+
+Mitigation: Review inputs before submission and avoid sending sensitive material unless the service is approved for it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-dialogue)
+- [dLazy CLI source (listed in metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The service may return an audio asset URL or a task ID for asynchronous generation; the CLI can save the result locally.]
+
+## Skill Version(s):
+
+1.3.21 (source: ClawHub release metadata; artifact frontmatter lists 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

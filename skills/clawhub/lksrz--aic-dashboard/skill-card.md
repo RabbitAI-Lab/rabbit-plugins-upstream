@@ -1,43 +1,58 @@
-## Description: <br>
-AI Commander Management Dashboard is a lightweight companion web UI for monitoring inbound emails received via the email-webhook skill and browser session status created by the browser-auth skill. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI Commander Management Dashboard. A lightweight companion web UI for monitoring inbound emails received via the email-webhook skill and browser session status created by the browser-auth skill.
 
-## Publisher: <br>
-[lksrz](https://clawhub.ai/user/lksrz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[lksrz](https://clawhub.ai/user/lksrz)
 
-## Use Case: <br>
-Developers and AI Commander users use this skill to view recent inbound emails and browser session status from companion local skills in a token-protected dashboard. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The dashboard can display sensitive email and session data through a local web server. <br>
-Mitigation: Use a strong DASHBOARD_TOKEN and bind DASHBOARD_HOST to 127.0.0.1 unless remote access is intentional. <br>
-Risk: The printed dashboard URL includes an access token that could grant access if shared. <br>
-Mitigation: Avoid sharing terminal logs or screenshots containing the printed URL. <br>
-Risk: The browser UI loads assets from external CDNs while viewing potentially sensitive mail. <br>
-Mitigation: Consider replacing CDN-loaded UI assets before viewing sensitive mail. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [AI Commander Dashboard on ClawHub](https://clawhub.ai/lksrz/aic-dashboard) <br>
-- [email-webhook companion skill](https://clawhub.ai/lksrz/email-webhook) <br>
-- [browser-auth companion skill](https://clawhub.ai/lksrz/browser-auth) <br>
+## Use Case:
 
+Developers and operators use this skill to run a local companion dashboard that monitors recent inbound emails from email-webhook and browser session status from browser-auth.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown guidance with shell commands and local web dashboard output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs a local Node.js web server that displays email and browser session data from local JSON files.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The dashboard exposes sensitive recent inbound email and browser session status data if reachable by untrusted clients.
+
+Mitigation: Run it only on a trusted machine or network, set DASHBOARD_HOST=127.0.0.1 unless remote access is deliberate, and avoid sharing token URLs.
+
+Risk: The default host can bind to 0.0.0.0, making the dashboard reachable beyond localhost.
+
+Mitigation: Prefer localhost binding or a secured HTTPS/tunnel setup for remote access.
+
+Risk: The browser UI loads third-party frontend code at runtime.
+
+Mitigation: Review the dependency behavior before deployment and prefer packaging frontend assets locally for stricter environments.
+
+## Reference(s):
+
+- [AI Commander Dashboard ClawHub page](https://clawhub.ai/lksrz/skills/aic-dashboard)
+- [email-webhook companion skill](https://clawhub.ai/lksrz/email-webhook)
+- [browser-auth companion skill](https://clawhub.ai/lksrz/browser-auth)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell commands and configuration details for running a token-gated web dashboard.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Serves read-only dashboard data from local inbox and session files; refreshes the UI periodically.]
+
+## Skill Version(s):
+
+1.8.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

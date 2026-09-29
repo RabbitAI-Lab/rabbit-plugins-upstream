@@ -1,42 +1,48 @@
-## Description: <br>
-Builds automation workflows from repetitive tasks. Use when user mentions "automate", "save time", "reduce manual work", or has repeated tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds automation workflows from repetitive tasks. Use when user mentions "automate", "save time", "reduce manual work", or has repeated tasks.
 
-## Publisher: <br>
-[xaiohuangningde](https://clawhub.ai/user/xaiohuangningde) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[xaiohuangningde](https://clawhub.ai/user/xaiohuangningde)
 
-## Use Case: <br>
-Developers, operators, and productivity-focused users use this skill to identify repeated manual work and turn it into automation workflows, scripts, and configuration. It is suited for tasks such as recurring report generation, scheduled data collection, and repeatable operational routines. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill may encourage an agent to create or run automation scripts without clear approval gates. <br>
-Mitigation: Require explicit user confirmation before executing generated scripts or applying generated configuration. <br>
-Risk: Automation workflows may include scheduled jobs or automatic email/message sending. <br>
-Mitigation: Review schedules, recipients, message content, and rollback steps before enabling any recurring or outbound action. <br>
-Risk: Generated workflows may touch credentials, private files, or operational systems. <br>
-Mitigation: Limit file and credential access to the minimum required scope and verify each data source before use. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xaiohuangningde/auto-workflow) <br>
-- [Publisher profile](https://clawhub.ai/user/xaiohuangningde) <br>
+## Use Case:
 
+Developers and automation-minded users use this skill to identify repetitive manual tasks and produce automation workflows, scripts, and configuration steps for small-scale validation and iteration.
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown plans with script, command, or configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose executable automation, scheduled jobs, or message-sending workflows; review and approve before execution.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and skill.json) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill may proactively create scripts or workflows for repeated tasks, which can lead to unintended file, email, scheduling, or sensitive-data actions.
+
+Mitigation: Constrain the agent to propose plans first and require explicit approval before writing files, running tests, sending email, using sensitive data, or creating recurring schedules.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/xaiohuangningde/skills/auto-workflow)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with workflow steps, scripts, shell commands, and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose automation plans and executable artifacts that should be reviewed before use.]
+
+## Skill Version(s):
+
+1.0.0 (source: skill.json and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

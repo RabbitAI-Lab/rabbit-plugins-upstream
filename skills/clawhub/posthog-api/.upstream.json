@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/posthog-api",
   "slug": "posthog-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739753410,
-  "contentHash": "ccfd5baf6a1638119bf665ea17fd16e61f31facb7620e76b455a499971c73835",
-  "fetchedAt": "2026-07-26T18:27:36.054Z"
+  "version": "1.2.5",
+  "updatedAt": 1790677528150,
+  "contentHash": "afd5c71ff434be47c602d536b96970aa85f4db81a88e1a2d2e77f78c5ca1152b",
+  "fetchedAt": "2026-09-29T14:12:14.065Z"
 }

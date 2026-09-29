@@ -1,40 +1,52 @@
-## Description: <br>
-Chat-based AWS infrastructure assistance using AWS CLI and console context for querying, auditing, and monitoring AWS resources, with explicit confirmation required before write or destructive actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chat-based AWS infrastructure assistance using AWS CLI and console context. Use for querying, auditing, and monitoring AWS resources (EC2, S3, IAM, Lambda, ECS/EKS, RDS, CloudWatch, billing, etc.), and for proposing safe changes with explicit confirmation before any write/destructive action.
 
-## Publisher: <br>
-[bmdhodl](https://clawhub.ai/user/bmdhodl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[bmdhodl](https://clawhub.ai/user/bmdhodl)
 
-## Use Case: <br>
-Developers, cloud engineers, and operators use this skill to inspect AWS account state, troubleshoot resources, review security posture, check costs, and prepare safe AWS CLI actions for explicit approval. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can inspect AWS resources through the user's local AWS CLI, which may expose sensitive account, resource, billing, or configuration details to the agent session. <br>
-Mitigation: Use a dedicated read-only or least-privileged AWS profile, confirm the intended account and region before queries, and avoid sharing secrets or session tokens. <br>
-Risk: Incorrectly approved write, delete, IAM, billing, or scaling commands could change production AWS resources. <br>
-Mitigation: Review exact proposed commands before approval, prefer dry-run modes when available, and require explicit confirmation before any write or destructive action. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [AWS CLI Query Patterns](references/aws-cli-queries.md) <br>
-- [ClawHub AWS Infra skill page](https://clawhub.ai/bmdhodl/skills/aws-infra) <br>
+## Use Case:
 
+Developers and cloud operators use this skill to inspect, audit, and monitor AWS infrastructure through local AWS CLI context. It supports read-only investigation by default and frames write or destructive changes as commands requiring explicit confirmation.
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline AWS CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only AWS CLI queries are preferred; write, delete, IAM, billing, and scaling actions require explicit user confirmation.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can use the local AWS CLI identity to inspect cloud account data.
+
+Mitigation: Use least-privilege AWS profiles and prefer read-only roles for routine questions.
+
+Risk: Approved commands could change, delete, scale, or modify IAM, billing, or production resources.
+
+Mitigation: Review exact commands carefully and require explicit confirmation before any write or destructive action.
+
+## Reference(s):
+
+- [AWS CLI Query Patterns](references/aws-cli-queries.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-first AWS CLI guidance; write or destructive commands require explicit confirmation.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,52 @@
+{
+  "variant_id": "relay_14_processing_profile",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "processing_profile",
+  "output_name": "recorded_profile",
+  "input_schema": {
+    "type": "string",
+    "enum": [
+      "latency-first",
+      "batch-balanced",
+      "throughput-first"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "queue_entry_id",
+      "processing_profile",
+      "queue_lane",
+      "chunk_count"
+    ],
+    "properties": {
+      "queue_entry_id": {
+        "type": "string",
+        "pattern": "^job_[0-9a-f]{12}$"
+      },
+      "processing_profile": {
+        "type": "string",
+        "enum": [
+          "latency-first",
+          "batch-balanced",
+          "throughput-first"
+        ]
+      },
+      "queue_lane": {
+        "type": "string",
+        "enum": [
+          "interactive",
+          "standard-batch",
+          "bulk"
+        ]
+      },
+      "chunk_count": {
+        "type": "integer",
+        "minimum": 1
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "job_queue_record"
+}

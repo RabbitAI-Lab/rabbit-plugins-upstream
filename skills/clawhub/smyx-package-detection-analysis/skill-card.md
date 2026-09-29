@@ -1,45 +1,64 @@
-## Description: <br>
-Detects delivery packages in surveillance images or videos for inventory checks, package-count review, and unattended alerts at community stations, residential entrances, and office lobbies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects the presence of delivery packages within the target surveillance area; suitable for inventory checks and unattended alerts at community stations, residential entrances, and office building lobbies. | 包裹检测技能，检测目标监控区域内是否出现快递包裹，适用于社区驿站、小区门口、写字楼前台快递盘点和无人值守提醒
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and operations teams use this skill to analyze surveillance images, videos, or media URLs for package presence, counts, locations, overdue pickup alerts, structured reports, and cloud report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded surveillance media, media URLs, user or tenant identifiers, and generated account tokens may be sent to and stored by the provider's cloud service. <br>
-Mitigation: Use only with explicit consent for the media and identifiers involved, and confirm retention, access, and deletion terms with the publisher before deployment. <br>
-Risk: The skill silently creates or reuses an internal user identity and stores returned tokens with limited user-facing control. <br>
-Mitigation: Run in a controlled workspace, review local data and token storage before and after use, and prefer a release with explicit identity and token-handling controls. <br>
-Risk: The skill contacts configured remote service endpoints for analysis and historical report lookup. <br>
-Mitigation: Allowlist expected provider endpoints and avoid running the skill in environments where outbound media or report metadata transfer is not permitted. <br>
+## Use Case:
 
+Developers and operations teams use this skill to analyze surveillance images, videos, or media URLs for delivery-package presence, counts, positions, retention status, and related report links. It also supports querying prior package-detection reports from the connected cloud service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-package-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Package detection API documentation](references/api_doc.md) <br>
-- [Analysis API error-code documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-formatted structured analysis reports, with optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include package-detection results, report links, historical report lists, and user-facing status or error messages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: ClawHub release metadata) <br>
+Risk: Package-surveillance media or URLs may be sent to lifeemergence.com cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media approved for that service and avoid submitting sensitive surveillance content unless data-handling requirements are satisfied.
+
+Risk: The skill may silently create or reuse local account state and store authentication tokens locally.
+
+Mitigation: Run the skill in an isolated workspace or account context, review local state before reuse, and remove stored credentials when the deployment ends.
+
+Risk: Shared workspaces may expose report history through reused identity state.
+
+Mitigation: Avoid shared workspaces until identity isolation is verified, and use dedicated identities for separate users or tenants.
+
+Risk: The hidden open-id option could affect identity association if exposed or relied on directly.
+
+Mitigation: Do not expose the hidden identity option to end users; restrict operator access and validate identity behavior before deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-package-detection-analysis)
+- [Skill usage demo](https://lifeemergence.com/sample.html)
+- [API interface documentation](artifact/references/api_doc.md)
+- [Analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown reports, Markdown tables, JSON analysis output, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include package detection findings, counts, locations, reminders, status messages, and report links.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

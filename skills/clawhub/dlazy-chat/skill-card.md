@@ -1,45 +1,60 @@
-## Description: <br>
-Chat with the dlazy sandbox agent, a project-scoped assistant that runs skills end-to-end over multiple turns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chat with dLazy's project-scoped sandbox agent to run skills across multiple turns and continue existing projects.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to start or continue project-scoped conversations with dLazy's hosted sandbox agent, discover available skills and projects, and run multi-turn work through the dlazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger words could route ordinary chat or attached files to dLazy unintentionally. <br>
-Mitigation: Use explicit requests such as 'use dlazy chat' and review attached files before invocation. <br>
-Risk: Prompts and files passed with --files are sent to dLazy's hosted API and media storage. <br>
-Mitigation: Avoid attaching sensitive files unless use of the dLazy hosted service is acceptable for that data. <br>
-Risk: The CLI may store a dLazy API key in the local user configuration. <br>
-Mitigation: Use npx for on-demand execution when preferred, and rotate or revoke stored API keys when access should change. <br>
+## Use Case:
 
+Developers and other dLazy users can start or resume project-based conversations with a hosted agent to complete multi-turn tasks using available skills.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-chat) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or terminal text with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Streams replies through the dlazy CLI; local files attached with --files are uploaded before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: frontmatter and server release evidence) <br>
+Risk: Broad chat requests could invoke dLazy without clear intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit dLazy wording and confirm the intended service before invoking the skill.
+
+Risk: Prompts and attached files are sent to dLazy's hosted service.
+
+Mitigation: Review prompts and files before sending; avoid attaching sensitive material unless appropriate for that service.
+
+Risk: The CLI uses or stores a local dLazy API key.
+
+Mitigation: Protect the key and revoke it if it may have been exposed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-chat)
+- [dLazy CLI repository (listed in metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Streamed conversational text; content varies by selected skill]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped conversations can preserve context across turns.]
+
+## Skill Version(s):
+
+1.2.24 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

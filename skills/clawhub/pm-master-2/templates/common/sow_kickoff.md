@@ -38,7 +38,7 @@
 | {{this.name}} | {{this.role}} |
 {{/each}}
 
-> Domain Expert (role): {{ join(experts, "、") }}
+> Domain Expert (role): {{ join(experts, ", ") }}
 
 ## 5. Kick-off Decisions
 

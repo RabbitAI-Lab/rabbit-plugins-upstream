@@ -1,0 +1,86 @@
+{
+  "variant_id": "relay_06_window",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "capacity_window",
+  "output_name": "capacity_ledger_entry",
+  "input_schema": {
+    "type": "string",
+    "format": "date-time",
+    "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "capacity_entry_id",
+      "start_at",
+      "end_at",
+      "duration_minutes",
+      "total_slots",
+      "requested_slots",
+      "reserved_slots",
+      "available_slots",
+      "capacity_status",
+      "overlap_status"
+    ],
+    "properties": {
+      "capacity_entry_id": {
+        "type": "string",
+        "pattern": "^capacity_[0-9a-f]{12}$"
+      },
+      "start_at": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+      },
+      "end_at": {
+        "type": "string",
+        "format": "date-time",
+        "pattern": "^[0-9]{4}-[0-9]{2}-[0-9]{2}T[0-9]{2}:[0-9]{2}:[0-9]{2}(?:Z|[+-][0-9]{2}:[0-9]{2})$"
+      },
+      "duration_minutes": {
+        "type": "integer",
+        "minimum": 15,
+        "maximum": 480
+      },
+      "total_slots": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100
+      },
+      "requested_slots": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 100
+      },
+      "reserved_slots": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "available_slots": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 100
+      },
+      "capacity_status": {
+        "type": "string",
+        "enum": [
+          "available",
+          "insufficient"
+        ]
+      },
+      "overlap_status": {
+        "type": "string",
+        "enum": [
+          "clear",
+          "reservation-overlap",
+          "freeze-overlap",
+          "reservation-and-freeze-overlap"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "capacity_window_ledger"
+}

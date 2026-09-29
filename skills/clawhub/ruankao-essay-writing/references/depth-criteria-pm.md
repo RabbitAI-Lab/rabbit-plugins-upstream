@@ -1,6 +1,6 @@
 # 应用深度标准详解：信息系统项目管理师（信管）
 
-本文档配合 `scoring-rubric-pm.md` 使用，说明信管论文"维度二·应用深度"的评分要点与常见写法。
+本文档配合 `SKILL.md` Phase 4「技术深度要求」与 `writing-principles.md` 使用，说明信管论文"维度二·应用深度"的评分要点与常见写法。ruankao-essay-scoring 技能评分时维度二同以此为准。
 
 ---
 

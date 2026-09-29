@@ -1,54 +1,60 @@
-## Description: <br>
-Zoho Recruit API integration with managed OAuth for managing candidates, job openings, interviews, applications, and recruitment workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read and manage Zoho Recruit candidates, job openings, interviews, applications, and recruiting workflows through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, recruiters, and recruiting operations teams use this skill to read, search, create, update, and delete Zoho Recruit records through a managed OAuth connection. It is suited for candidate, job opening, interview, application, and recruitment workflow automation when the user has a valid Maton API key and authorized Zoho Recruit connection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change recruiting records in the connected Zoho Recruit account. <br>
-Mitigation: Install only when Maton is trusted with that account and use the least-privileged Zoho or Maton connection available. <br>
-Risk: Write or delete API calls could affect the wrong module or records. <br>
-Mitigation: Require explicit user approval before create, update, or delete calls, and review the target module, record IDs, and intended effect. <br>
-Risk: Requests may use the wrong Zoho Recruit account when multiple connections are available. <br>
-Mitigation: Include the Maton-Connection header for the intended connection when more than one connection exists. <br>
-Risk: Exposure of MATON_API_KEY could allow unauthorized use through the connected Maton account. <br>
-Mitigation: Keep MATON_API_KEY secret and avoid printing, logging, or committing it. <br>
+## Use Case:
 
+Recruiting teams use this skill to find and manage candidate records, job openings, applications, and interviews in Zoho Recruit. With explicit approval, they can also set up hosted functions and triggers for ongoing workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-recruit) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Zoho Recruit API v2 Overview](https://www.zoho.com/recruit/developer-guide/apiv2/) <br>
-- [Zoho Recruit Get Records API](https://www.zoho.com/recruit/developer-guide/apiv2/get-records.html) <br>
-- [Zoho Recruit Insert Records API](https://www.zoho.com/recruit/developer-guide/apiv2/insert-records.html) <br>
-- [Zoho Recruit Update Records API](https://www.zoho.com/recruit/developer-guide/apiv2/update-records.html) <br>
-- [Zoho Recruit Delete Records API](https://www.zoho.com/recruit/developer-guide/apiv2/delete-records.html) <br>
-- [Zoho Recruit Search Records API](https://www.zoho.com/recruit/developer-guide/apiv2/search-records.html) <br>
-- [Zoho Recruit Modules API](https://www.zoho.com/recruit/developer-guide/apiv2/modules-api.html) <br>
-- [Maton](https://maton.ai) <br>
-- [Related ClawHub API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API paths, JSON examples, and Python or JavaScript code snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Zoho Recruit connection. Read and write behavior depends on the connected account permissions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Candidate and recruiting records may contain sensitive personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Access only the records needed for the task and avoid exposing full responses in logs or files.
+
+Risk: Writes and bulk deletions can change or irreversibly remove recruiting records.
+
+Mitigation: Default to reading; obtain explicit approval for every write and approve each record separately before deletion.
+
+Risk: Hosted functions, triggers, and destinations can continue running or forwarding future events.
+
+Mitigation: Create them only with explicit user approval after reviewing their behavior, access, and destination.
+
+## Reference(s):
+
+- [ClawHub Zoho Recruit release](https://clawhub.ai/byungkyu/skills/zoho-recruit)
+- [Maton homepage](https://maton.ai)
+- [Zoho Recruit API v2 overview](https://www.zoho.com/recruit/developer-guide/apiv2/)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Maton account and network access; confirm changes before execution.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

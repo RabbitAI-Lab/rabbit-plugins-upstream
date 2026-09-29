@@ -1,42 +1,58 @@
-## Description: <br>
-Automates reading, writing, merging, transforming, and validating Excel (.xlsx/.xls) files for spreadsheet, CSV-to-Excel, batch processing, and report-generation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates reading, writing, merging, transforming, and validating Excel (.xlsx/.xls) files for spreadsheet, Excel data, CSV-to-Excel conversion, batch processing, and report generation workflows.
 
-## Publisher: <br>
-[zways](https://clawhub.ai/user/zways) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[zways](https://clawhub.ai/user/zways)
 
-## Use Case: <br>
-Developers, analysts, and operations teams use this skill to automate routine Excel and CSV tasks such as merging sheets, converting files, filtering rows, deduplicating data, aggregating tables, validating workbooks, applying formatting, and filling report templates. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Spreadsheet files may be overwritten when scripts are run without explicit output paths. <br>
-Mitigation: Use explicit --output paths where supported and keep backups of important workbooks before running write or formatting operations. <br>
-Risk: The skill reads and writes local Excel and CSV files as part of normal operation. <br>
-Mitigation: Run the skill only on intended local files and review paths, sheet names, and filters before execution. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zways/automate-excel) <br>
-- [Publisher profile: zways](https://clawhub.ai/user/zways) <br>
-- [Reference guide](reference.md) <br>
-- [Examples](examples.md) <br>
+## Use Case:
 
+Developers, analysts, and operations teams use this skill to automate Excel and CSV batch processing, including merging sheets, converting formats, filtering, deduplicating, aggregating, validating, formatting, and generating reports.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Files] <br>
-**Output Format:** [Markdown guidance with command examples and generated Excel or CSV files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs local spreadsheet operations and may write output workbooks or CSV files.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-0.1.3 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can overwrite workbooks when commands are run without a distinct output path.
+
+Mitigation: Use explicit output paths, keep backups before formatting or renaming workbooks, and review command arguments before execution.
+
+Risk: Generated Excel files can carry unsafe formula-like values from untrusted CSV, Excel, or template data.
+
+Mitigation: Review untrusted inputs before conversion or template fill, escape formula-like values where needed, and avoid opening generated files from untrusted sources.
+
+Risk: Dependency versions are specified as minimums, which may vary across environments.
+
+Mitigation: Pin and review dependencies before using the skill in sensitive or controlled environments.
+
+## Reference(s):
+
+- [Automate Excel ClawHub listing](https://clawhub.ai/zways/skills/automate-excel)
+- [API and parameter reference](artifact/reference.md)
+- [Usage examples](artifact/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Files, Configuration]
+
+**Output Format:** [Markdown guidance with Python and shell command snippets; scripts produce Excel, CSV, and validation output files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The bundled scripts operate on local spreadsheet files and may write or overwrite output workbooks depending on the selected command and output path.]
+
+## Skill Version(s):
+
+0.1.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

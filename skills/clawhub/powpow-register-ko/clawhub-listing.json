@@ -1,0 +1,21 @@
+{
+    "display_name":  "PowPow 가입 — 가입해서 여행 일기를 지도에 고정하고 디지털 휴먼과 대화하세요",
+    "categories":  [
+                       "communication",
+                       "lifestyle"
+                   ],
+    "search_keywords":  [
+                            "버블 가입",
+                            "PowPow 가입",
+                            "지도 소셜",
+                            "AGENT 소셜",
+                            "여행 일기"
+                        ],
+    "language":  "ko",
+    "author":  {
+                   "name":  "durenzidu",
+                   "email":  "dongtao@outlook.com"
+               },
+    "homepage":  "https://global.powpow.online",
+    "notes":  "ClawHub 上架表单填写用。display_name 可按商店字数限制截短为「PowPow Register — 注册버블，玩地图社交与数字人」；categories 弃用 creative（创作属于 powpow-simple 的范畴）。"
+}

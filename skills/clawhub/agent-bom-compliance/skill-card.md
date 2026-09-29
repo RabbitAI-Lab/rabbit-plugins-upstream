@@ -1,43 +1,56 @@
-## Description: <br>
-AI compliance and policy engine that evaluates scan results against OWASP, NIST, SOC 2, ISO 27001, CMMC, EU AI Act, AISVS v1.0, and related frameworks, and generates SBOMs and compliance reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates AI infrastructure scan results against security and regulatory frameworks, applies policy checks, and generates compliance reports and SBOMs.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, security engineers, and compliance teams use this skill to check AI infrastructure scan results against security and regulatory frameworks, enforce policy-as-code rules, and produce SBOM or compliance-reporting outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional CIS benchmark checks can query cloud accounts using local cloud credentials. <br>
-Mitigation: Run CIS checks only when intended, use least-privilege read-only credentials, and rely on locally configured cloud SDK credentials rather than pasted secrets. <br>
-Risk: The installed agent-bom package is an external package source. <br>
-Mitigation: Verify that the package source and publisher are trusted before installation. <br>
+## Use Case:
 
+Developers and security teams use this skill to review AI infrastructure findings against compliance frameworks, enforce policies, and produce software bills of materials.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-compliance) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, text guidance, shell commands, policy configuration examples, and SBOM or compliance report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can generate CycloneDX or SPDX SBOMs and framework-oriented compliance reports; optional CIS checks may query cloud provider APIs when explicitly invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release and frontmatter) <br>
+Risk: Installing an untrusted package or source could expose the operator's environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the package and publisher before installing.
+
+Risk: Optional CIS checks access cloud-account settings using configured credentials.
+
+Mitigation: Confirm each cloud check, use least-privilege read-only profiles, and never share secrets in chat.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/msaad00/skills/agent-bom-compliance)
+- [Publisher-listed project page](https://github.com/msaad00/agent-bom)
+- [Publisher-listed PyPI package](https://pypi.org/project/agent-bom/)
+- [Publisher-listed security scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance and command examples; compliance reports and CycloneDX or SPDX SBOMs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Cloud benchmark checks are optional and require explicit confirmation.]
+
+## Skill Version(s):
+
+0.106.1 (source: ClawHub release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

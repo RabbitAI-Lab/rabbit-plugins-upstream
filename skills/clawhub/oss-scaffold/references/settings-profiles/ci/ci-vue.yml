@@ -1,0 +1,119 @@
+# ci-vue.yml — Tencent org Vue / 组件库 CI 骨架（oss-scaffold settings profile）
+# 形态蒸馏自：tdesign 家族（tdesign、tdesign-vue-next、tdesign-miniprogram 等词频：
+#           pull-request.yml 13 / preview-publish.yml 12 / pkg-pr-new.yml 9 /
+#           auto-release.yml 10；pnpm 工具链；主仓守卫
+#           if: github.repository == 'Tencent/xxx' 防止 fork 误跑）
+#           tmagic-editor pages.yml（push dev → 部署文档站）。
+name: ci
+
+on:
+  push:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci-vue.yml'
+  pull_request:
+    branches: [main]
+    paths:
+      - 'src/**'
+      - 'package.json'
+      - 'pnpm-lock.yaml'
+      - '.github/workflows/ci-vue.yml'
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    # tdesign 家族特征：pnpm + 主仓守卫（fork / 镜像仓不跑发布性质步骤）
+    name: build & test
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v7
+
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+
+      - name: install
+        run: pnpm install --frozen-lockfile
+
+      - name: lint
+        run: pnpm lint
+
+      - name: build
+        run: pnpm build
+
+      - name: unit test
+        run: pnpm test:unit -- --coverage
+
+      - name: upload coverage
+        if: github.repository == 'Tencent/REPO_NAME'   # tdesign 主仓守卫形态
+        uses: actions/upload-artifact@v4
+        with:
+          name: coverage
+          path: coverage/
+
+  # tdesign 家族 preview 模式简化版：PR 构建产物供预览（完整形态为
+  # preview-build + workflow_run 触发的 preview-publish，依赖 TDesignOteam/workflows）
+  pr-preview:
+    if: github.event_name == 'pull_request' && github.repository == 'Tencent/REPO_NAME'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      pull-requests: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+      - run: pnpm install --frozen-lockfile
+      - name: build site preview
+        run: pnpm build:site
+      - uses: actions/upload-artifact@v4
+        with:
+          name: site-preview
+          path: site-dist/
+
+  # 发布流（tdesign 家族 auto-publish.yml / publish-site-components.yml 形态）：
+  # release/* 分支合入 main 后发 npm，仅主仓执行
+  publish-npm:
+    if: |
+      github.event_name == 'push' && github.ref == 'refs/heads/main' &&
+      github.repository == 'Tencent/REPO_NAME'
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+    steps:
+      - uses: actions/checkout@v7
+      - uses: pnpm/action-setup@v4
+        with:
+          version: 9
+      - uses: actions/setup-node@v6
+        with:
+          node-version: 20
+          cache: pnpm
+          registry-url: https://registry.npmjs.org
+      - run: pnpm install --frozen-lockfile
+      - run: pnpm publish -r --no-git-checks
+        env:
+          NPM_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

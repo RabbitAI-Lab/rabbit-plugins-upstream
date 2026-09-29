@@ -1,11 +1,13 @@
-﻿<!--
+<!--
 Copyright (c) 2026 杨鹏飞 / 微信公众号「叉车技术老炮」
-Licensed under CC BY-NC 4.0 + 附加条款 - 严禁商用 - 完整协议见 ../LICENSE.md
+Licensed under the MIT License - 完整协议见 ../LICENSE.md
 -->
 # 叉车基础知识库(综合问答)
 
 > 按主题分类:分类/选购/技术/法规/经济性。
-> 数据以 2024-2026 国标和 2025-2026 行业数据为基准。
+> 数据以 2024-2026 国标和 2025-2026 行业数据为基准;**知识库时间戳 2026-09**。
+> 深度专题另见:`tech-battery.md`(动力电池)、`heavy-spec-electric.md`(6-8 吨级电叉参数)、
+> `safety-management.md`(安全管理实务)。
 > 不确定的细分参数(如某品牌某型号的电池容量)请用 web_search 实时查证,本表不给编造值。
 
 ---

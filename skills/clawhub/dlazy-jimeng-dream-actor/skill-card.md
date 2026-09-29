@@ -1,45 +1,59 @@
-## Description: <br>
-Convert static character images into vivid action videos with Jimeng Dream Actor. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a static character image into an action video using Jimeng Dream Actor through the dLazy service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy CLI for Jimeng Dream Actor image-to-video generation from prompts and image or video references. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected media files are sent to the dLazy hosted API and media storage for generation. <br>
-Mitigation: Use only prompts and media approved for third-party processing, review dLazy service terms, and avoid sending sensitive or restricted content. <br>
-Risk: The skill requires a dLazy API key and may consume billable credits. <br>
-Mitigation: Prefer scoped organization keys, rotate or revoke keys from the dLazy dashboard when no longer needed, and use dry-run or balance checks before costly runs. <br>
-Risk: A globally installed CLI persists on the local system. <br>
-Mitigation: Use the pinned npx invocation for occasional use and review the CLI source before persistent installation. <br>
+## Use Case:
 
+Creators and developers use this skill to turn a character image and text prompt into a generated action video through dLazy.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-dream-actor) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [JSON response with generated media URLs or async task status, plus concise guidance for authentication, balance, and execution errors.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload selected prompts and media files to dLazy endpoints and may use billable API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Selected local media and prompts may be sent to dLazy's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm media paths and content before invoking the skill; use the service only if its data handling is acceptable.
+
+Risk: Generation may consume paid API credits.
+
+Mitigation: Check the cost estimate with dry-run and confirm available credits before generating.
+
+Risk: A saved API key persists in local configuration.
+
+Mitigation: Prefer a per-run API key or review the local credential configuration before saving a key.
+
+## Reference(s):
+
+- [dLazy CLI repository (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Asset links]
+
+**Output Format:** [Markdown with commands and generated asset links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generation may return a task ID for asynchronous requests; output files can be downloaded locally.]
+
+## Skill Version(s):
+
+1.3.22 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

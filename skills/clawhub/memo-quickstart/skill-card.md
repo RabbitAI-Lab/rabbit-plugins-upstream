@@ -1,43 +1,57 @@
-## Description: <br>
-Memo Quickstart helps agents set up a zero-dependency local memory layer with three-tier storage, weighted TF-IDF retrieval, WAL-style persistence steps, relationship links, and migration commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+记忆快速启动 helps agents initialize and operate a local memory workflow using session state, JSON memory storage, markdown archives, and CLI-based retrieval commands.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and agent users use this skill to initialize and operate a local memory layer for preferences, decisions, facts, lessons, and context, especially in offline or privacy-sensitive workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores conversation-derived preferences, decisions, deadlines, corrections, and other context on local disk. <br>
-Mitigation: Avoid storing secrets, credentials, health, financial, or other sensitive personal data; review where files are written and how to delete or export them before use. <br>
-Risk: Optional callback or GitHub Gist sync features can share memory data outside the local machine. <br>
-Mitigation: Confirm the destination before enabling callbacks or sync, and keep network sharing disabled for local-only use. <br>
-Risk: Stored memory can become stale, inaccurate, or too large for effective local retrieval. <br>
-Mitigation: Use the documented archive, cleanup, deduplication, and export commands, and review stored memory before relying on it. <br>
+## Use Case:
 
+Developers and agent users use this skill to add local memory routines to ClawHub-compatible coding or assistant workflows. It provides setup steps, storage conventions, retrieval commands, and maintenance guidance for session state and long-term memory records.
 
-## Reference(s): <br>
-- [Memo Quickstart ClawHub Page](https://clawhub.ai/thcjp/skills/memo-quickstart) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples and bash command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local memory files when the agent follows the described CLI workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.1) <br>
+Risk: The skill encourages persistent storage of conversation details in local memory files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid storing secrets, regulated data, or sensitive personal information, and review memory files as persistent records before using the skill in private or business-sensitive workspaces.
+
+Risk: The artifact gives inconsistent guidance about local-only behavior, callback URLs, and optional Gist-style cloud sync.
+
+Mitigation: Keep callback and cloud-sync features disabled unless external transmission is explicitly acceptable for the workspace.
+
+Risk: The workflow requires installing and running the external npm package simple-local-memory.
+
+Mitigation: Verify the package source, version, and install command before global installation or execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/memo-quickstart)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline bash code blocks and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes local file conventions for SESSION-STATE.json, MEMORY.md, and memories/.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release metadata; artifact frontmatter says 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

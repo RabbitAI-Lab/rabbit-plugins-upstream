@@ -1,38 +1,49 @@
-## Description: <br>
-Create a new OpenClaw skill with a short eval-driven loop for requests to create a skill, turn a repeated workflow into a skill, or build a reusable procedure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create a new OpenClaw skill with a short eval-driven loop.
 
-## Publisher: <br>
-[9438190](https://clawhub.ai/user/9438190) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[9438190](https://clawhub.ai/user/9438190)
 
-## Use Case: <br>
-Developers and agent operators use this skill to define, document, test, and refine reusable OpenClaw skills from repeated workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated or revised SKILL.md guidance can persist in a personal or shared skill directory and influence future agent behavior. <br>
-Mitigation: Review and scan any generated SKILL.md before saving or deploying it. <br>
+## Use Case:
 
+Developers and agent users use this skill to define, document, test, and refine reusable OpenClaw skills from repeated workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/9438190/skills/skill-builder) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with templates, checklists, and examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces human-reviewed skill documentation guidance; no API calls or credential handling are described.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Generated reusable skill instructions may persist in a workspace or personal skills directory and influence future agent behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated SKILL.md content before saving or installing it, especially when the skill would involve credentials, network access, shell commands, or private files.
+
+## Reference(s):
+
+- [Skill Builder release page](https://clawhub.ai/9438190/skills/skill-builder)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with examples, checklists, and inline code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces skill authoring guidance and SKILL.md templates for human review before saving.]
+
+## Skill Version(s):
+
+1.0.0 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

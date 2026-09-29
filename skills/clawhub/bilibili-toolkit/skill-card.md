@@ -1,5 +1,5 @@
 ## Description: <br>
-Bilibili Toolkit helps agents guide Bilibili video publishing, high-resolution downloads, batch operations, analytics tracking, and credential handling for creator and operations workflows. <br>
+bilibili-toolkit helps agents assist with Bilibili creator operations such as video uploads, scheduled publishing, batch downloads, credential handling, and performance tracking. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,33 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External creators, operations teams, and developers use this skill to guide Bilibili account automation tasks such as video upload, scheduled publishing, batch downloading, metrics tracking, comparison analysis, and credential handling. <br>
+External creators, operators, and developers use this skill to guide Bilibili video publishing, scheduled releases, batch downloads, data tracking, and related account workflows. The skill is intended for agent-assisted operation where users review account-changing actions before execution. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: The skill can guide account actions that publish, edit, schedule, or download Bilibili content through an agent with exec capability. <br>
-Mitigation: Review commands and parameters before execution, use the least capable account suitable for the task, and confirm account-impacting actions before running them. <br>
-Risk: The skill uses Bilibili session cookies, including SESSDATA and bili_jct, that can act like account passwords. <br>
-Mitigation: Provide credentials only in trusted environments, avoid persistence unless necessary, protect persisted files, and clear credentials after use. <br>
-Risk: The artifact includes inconsistent LLM and security-review instructions that may confuse what data is required or where it is sent. <br>
-Mitigation: Do not provide unrelated LLM or API keys unless the publisher clarifies why they are needed and what data will be transmitted. <br>
+Risk: The skill may handle sensitive Bilibili session credentials and account-changing operations. <br>
+Mitigation: Treat SESSDATA and bili_jct as passwords, keep them out of LLM prompts and unrelated tools, avoid credential persistence unless necessary, and require manual confirmation before upload, edit, draft, or scheduled publish actions. <br>
+Risk: The skill requests command execution and file access for workflows that can affect local files and a Bilibili account. <br>
+Mitigation: Install only in trusted agent environments, review requested commands and file paths before execution, and run with the least access needed for the specific task. <br>
 
 
 ## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/thcjp/skills/bilibili-toolkit) <br>
-- [Skill homepage](https://skillhub.cn) <br>
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/bilibili-toolkit) <br>
+- [Publisher profile](https://clawhub.ai/user/thcjp) <br>
 
 
 ## Skill Output: <br>
 **Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with Python and shell command examples plus JSON-shaped result examples] <br>
+**Output Format:** [Markdown guidance with code blocks, shell commands, configuration notes, and JSON examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may involve Bilibili session cookies, local command execution, optional credential persistence, and account actions such as publishing or editing content.] <br>
+**Other Properties Related to Output:** [May require Bilibili session credentials and manual confirmation for upload, edit, draft, or scheduled publish actions.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

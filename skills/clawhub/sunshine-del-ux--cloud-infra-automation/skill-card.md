@@ -1,38 +1,53 @@
-## Description: <br>
-Automates cloud infrastructure provisioning and management across AWS, Google Cloud Platform, and Azure using infrastructure-as-code tooling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates provisioning and management of AWS, Google Cloud Platform, and Azure infrastructure using infrastructure-as-code workflows with Terraform, Ansible, and CloudFormation.
 
-## Publisher: <br>
-[Sunshine-del-ux](https://clawhub.ai/user/Sunshine-del-ux) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[sunshine-del-ux](https://clawhub.ai/user/sunshine-del-ux)
 
-## Use Case: <br>
-Developers and cloud engineers use this skill to plan and automate infrastructure setup, server provisioning, configuration management, and deployment workflows for multi-cloud environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill documents powerful production cloud actions that can create, change, or destroy infrastructure without enough scoping or safeguards. <br>
-Mitigation: Review the script source, selected cloud account, target environment, infrastructure plan, approvals, backups, and rollback steps before running apply or destroy commands. <br>
+## Use Case:
 
+Developers, DevOps engineers, and platform teams use this skill for cloud infrastructure automation guidance across AWS, Google Cloud Platform, and Azure. It helps agents draft infrastructure-as-code workflows, command examples, and configuration guidance for provisioning, configuration management, deployment pipelines, and common cloud templates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/Sunshine-del-ux/cloud-infra-automation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown with shell command examples and infrastructure configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include commands for cloud initialization, infrastructure apply, and infrastructure destroy workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release metadata and artifact metadata) <br>
+Risk: Production infrastructure commands could create, modify, or destroy cloud resources without adequate safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require plans or dry runs, explicit human confirmation, state backups, target environment verification, and least-privilege cloud credentials before executing apply or destroy operations.
+
+Risk: Sparse guidance may omit provider-specific safety checks for AWS, Google Cloud Platform, Azure, Terraform, Ansible, or CloudFormation workflows.
+
+Mitigation: Have a qualified operator review generated commands and configurations against provider documentation, organization policy, and the intended environment before use.
+
+## Reference(s):
+
+- [Cloud Infra Automation on ClawHub](https://clawhub.ai/sunshine-del-ux/skills/cloud-infra-automation)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline bash command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include infrastructure apply or destroy command examples; production use should require plan review, explicit confirmation, state backups, environment checks, and least-privilege cloud credentials.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

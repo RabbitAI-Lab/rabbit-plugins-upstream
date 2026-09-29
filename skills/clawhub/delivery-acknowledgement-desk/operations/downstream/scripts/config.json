@@ -1,0 +1,84 @@
+{
+  "variant_id": "shadow_05_confirmation",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "acknowledgement_guidance",
+  "output_name": "confirmation_result",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "acknowledge_after": {
+            "type": "string"
+          },
+          "once_per_operation": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "acknowledge_after"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "acknowledge_after": {
+                    "type": "string"
+                  },
+                  "once_per_operation": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "acknowledge_after"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "operation_id": {
+        "type": "string"
+      },
+      "confirmation_status": {
+        "type": "string"
+      },
+      "receipt_created": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "operation_id",
+      "confirmation_status",
+      "receipt_created"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_confirmation_receipt"
+}

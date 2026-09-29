@@ -1,45 +1,61 @@
-## Description: <br>
-Clockify API integration with managed OAuth for tracking time and managing projects, clients, tasks, workspaces, and workspace members. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents track time and manage Clockify projects, clients, tasks, and workspaces through a Maton-managed connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Clockify through Maton-managed OAuth, including reading user, workspace, project, client, tag, task, and time-entry data. With explicit user approval, it can help create, update, or delete Clockify resources through API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Maton API key is a sensitive credential that grants access to connected Clockify data. <br>
-Mitigation: Keep MATON_API_KEY private, avoid logging it, and install only if you trust Maton as the OAuth proxy. <br>
-Risk: When multiple Clockify connections exist, requests may target the wrong account. <br>
-Mitigation: Use the Maton-Connection header to select the intended Clockify connection before sending account-specific requests. <br>
-Risk: Create, update, and delete operations can change billing, project, task, workspace, or time-tracking records. <br>
-Mitigation: Confirm the target resource and intended effect with the user before any write or delete request. <br>
+## Use Case:
 
+Individuals and teams use this skill to inspect time entries and manage projects, clients, tasks, and workspaces in a connected Clockify account. With explicit approval, they can also set up hosted functions and triggers for ongoing automation.
 
-## Reference(s): <br>
-- [Clockify API Documentation](https://docs.clockify.me/) <br>
-- [Clockify Time Entry API Reference](https://docs.clockify.me/#tag/Time-entry) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Clockify Skill on ClawHub](https://clawhub.ai/byungkyu/clockify) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with HTTP examples and inline Python, JavaScript, and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Clockify OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Changes or deletions may affect the wrong Clockify account or resource.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the connected account, target resource, and intended effect with the user before each write or deletion.
+
+Risk: Functions, triggers, and destinations may continue acting or forwarding event data after setup.
+
+Mitigation: Obtain explicit approval for each automation and third-party destination, including what data is sent and how often; remove it when no longer needed.
+
+Risk: A long-lived API key can be exposed when used outside the OAuth-backed CLI.
+
+Mitigation: Prefer OAuth through the CLI and keep any API key out of logs, commands, and persisted files.
+
+## Reference(s):
+
+- [Clockify skill release](https://clawhub.ai/byungkyu/skills/clockify)
+- [Maton homepage](https://maton.ai)
+- [Clockify API documentation](https://docs.clockify.me/)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Shell commands]
+
+**Output Format:** [Markdown with command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include requested Clockify records or instructions for approved changes and automation.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

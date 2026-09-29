@@ -1,0 +1,30 @@
+{
+  "variant_id": "shadow_03_sensitivity",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "content_profile",
+  "output_name": "handling_guidance",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "fields": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "contains_personal_fields": {
+        "type": "boolean"
+      },
+      "requested_tier": {
+        "type": "string"
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "string"
+  },
+  "effect": null
+}

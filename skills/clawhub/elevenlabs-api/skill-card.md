@@ -1,47 +1,60 @@
-## Description: <br>
-ElevenLabs API integration with managed authentication for text-to-speech, voice cloning, sound effects, and audio processing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use an authenticated ElevenLabs connection to generate speech, clone voices, create sound effects, and process audio.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call ElevenLabs through Maton-managed authentication for speech generation, voice management, audio cleanup, transcription, and related audio workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive MATON_API_KEY that can authorize access to connected ElevenLabs accounts. <br>
-Mitigation: Keep the key private, pass it through a secure environment variable, and install the skill only if Maton is trusted to proxy the account. <br>
-Risk: User-provided text, audio, recordings, and voice samples may be sent to Maton and ElevenLabs for processing. <br>
-Mitigation: Avoid confidential recordings, regulated data, private text, and third-party voice samples unless consent and processing approval are clear. <br>
-Risk: When multiple ElevenLabs connections exist, requests may target the wrong connected account. <br>
-Mitigation: Include the intended Maton-Connection header and confirm the selected connection before making requests. <br>
-Risk: Write operations can create, update, or delete voices, projects, history items, and related resources. <br>
-Mitigation: Confirm the target resource and intended effect with the user before executing create, update, or delete calls. <br>
+## Use Case:
 
+Developers and other ElevenLabs users can guide an agent to list voices, generate speech or sound effects, clone voices, and process audio through their connected account. Optional hosted functions and triggers support user-approved automation.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [ElevenLabs API Documentation](https://elevenlabs.io/docs/api-reference) <br>
-- [ElevenLabs Developer Portal](https://elevenlabs.io/developers) <br>
-- [ElevenLabs Models Overview](https://elevenlabs.io/docs/overview/models) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with HTTP endpoint examples and bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; examples may return JSON metadata, binary audio, streaming audio, or downloaded files when executed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Voice clones, uploaded audio, and generated speech may expose sensitive content or consume paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the content, voice, files, and expected charges before approving each action.
+
+Risk: Connecting an account grants access within the connection's authorization.
+
+Mitigation: Approve connections explicitly and limit their access to the task at hand.
+
+Risk: Hosted functions, triggers, and destinations can automate actions or forward events persistently.
+
+Mitigation: Review and approve each function, trigger, destination, and recipient before enabling automation.
+
+## Reference(s):
+
+- [ClawHub ElevenLabs skill](https://clawhub.ai/byungkyu/skills/elevenlabs-api)
+- [Maton](https://maton.ai)
+- [ElevenLabs API reference](https://elevenlabs.io/docs/api-reference)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with inline commands and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may generate or process audio in the connected ElevenLabs account; the agent's output is primarily text and code.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

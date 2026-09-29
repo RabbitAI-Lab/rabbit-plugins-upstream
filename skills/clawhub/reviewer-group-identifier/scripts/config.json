@@ -1,0 +1,42 @@
+{
+  "variant_id": "relay_11_reviewer_group",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "review_request",
+  "output_name": "reviewer_group",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "request_category",
+      "risk_level"
+    ],
+    "properties": {
+      "request_category": {
+        "type": "string",
+        "enum": [
+          "supplier_onboarding",
+          "access_request",
+          "purchase_exception"
+        ]
+      },
+      "risk_level": {
+        "type": "string",
+        "enum": [
+          "low",
+          "medium",
+          "high"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "string",
+    "enum": [
+      "vendor-risk-reviewers",
+      "access-governance-reviewers",
+      "procurement-reviewers"
+    ]
+  },
+  "effect": null
+}

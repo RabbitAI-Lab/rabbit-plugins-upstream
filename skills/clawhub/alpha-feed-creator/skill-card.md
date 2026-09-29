@@ -1,5 +1,5 @@
 ## Description: <br>
-Alpha Feed Creator helps content and operations teams collect AI-related content from multiple sources, rank it by semantic quality and engagement, schedule runs, and push reports to team channels. <br>
+Alpha Feed Creator helps content and operations teams collect AI-related content from multiple platforms, rank it by semantic quality and engagement, and generate scheduled reports or team-channel updates. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -11,31 +11,31 @@ MIT-0 <br>
 
 
 ## Use Case: <br>
-External content teams, enterprise operations teams, and researchers use this skill to gather AI content, prepare topic materials, monitor competitors, and distribute scheduled summary reports. <br>
+Content teams, brand operations teams, and research teams use this skill to gather AI-related posts from configured sources, rank the results, and produce recurring daily or weekly reports. It supports scheduled collection, structured report output, and optional delivery to team channels. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Known Risks and Mitigations: <br>
-Risk: Misconfigured sources, push channels, group targets, schedules, or shared vault paths could send reports to the wrong place or repeat them unexpectedly. <br>
-Mitigation: Confirm all configured sources, push targets, schedule entries, and output paths before enabling recurring runs. <br>
-Risk: The skill may use API credentials and channel tokens for source collection and team notifications. <br>
-Mitigation: Use least-privilege tokens, keep credentials out of committed configuration, and start with dry-run or push-test modes. <br>
+Risk: The skill can collect content from external sources and send reports to team channels. <br>
+Mitigation: Review configured sources, push targets, and report destinations before enabling delivery. <br>
+Risk: Recurring schedules can repeatedly publish incorrect or unwanted reports if configured too broadly. <br>
+Mitigation: Use dry-run or test modes before enabling cron or recurring delivery. <br>
+Risk: API keys and webhook tokens are required for some integrations. <br>
+Mitigation: Keep credentials in environment variables or a secrets manager and avoid hardcoding them in configuration files. <br>
 
 
 ## Reference(s): <br>
-- [Alpha Feed Creator on ClawHub](https://clawhub.ai/thcjp/skills/alpha-feed-creator) <br>
-- [SkillHub homepage](https://skillhub.cn) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, YAML configuration examples, and JSON result examples] <br>
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
+**Output Format:** [Markdown guidance with shell command, YAML configuration, and JSON response examples] <br>
 **Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include scheduled report paths, push-channel settings, ranking configuration, and validation steps.] <br>
+**Other Properties Related to Output:** [May produce report files or push summaries to configured team channels when the user enables those integrations.] <br>
 
 ## Skill Version(s): <br>
-1.0.1 (source: server release evidence and frontmatter) <br>
+1.0.2 (source: server release metadata) <br>
 
 ## Ethical Considerations: <br>
 Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>

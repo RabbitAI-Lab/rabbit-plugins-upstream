@@ -50,7 +50,7 @@
 - `consistency_check.py` exit 0.
 - `baseline.py --freeze` (waterfall/hybrid) → `baselined`.
 - **Charter finalized**: plan sections (WBS/schedule/risk/quality) appended/locked; the P0 draft becomes the **final** charter, now gate-ready.
-- `G1→2` control gate (`gate_engine.py --to 执行 --approve "<sponsor>"`) → `operational`.
+- `G1→2` control gate (`gate_engine.py --to execution --approve "<sponsor>"`) → `operational`.
 
 ## 2. Key Activities (Methodology Adaptation)
 
@@ -100,9 +100,9 @@
 ```bash
 SKILL_DIR=<this skill directory>
 # Assess whether execution can be entered (does not change state)
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 执行
-# Approve: flip lifecycle_state → operational, phase → 执行, record phase gate, produce review report
-python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to 执行 --approve "张三(sponsor)"
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to execution
+# Approve: flip lifecycle_state → operational, phase → execution, record phase gate, produce review report
+python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.yaml --to execution --approve "Zhang San (sponsor)"
 ```
 
 ## 7. Recommended Scripts
@@ -116,7 +116,7 @@ python3 $SKILL_DIR/scripts/gate_engine.py --project /workspace/<slug>/project.ya
 - `schedule_health.py`: waterfall/hybrid computes critical path/float (must run during planning).
 - `consistency_check.py`: Pre-delivery quality gate (exit 1 = blocking).
 - `baseline.py --freeze`: Freeze plan as baseline (must run for waterfall/hybrid before entering execution).
-- `gate_engine.py --to 执行`: Control-gate assessment/approval.
+- `gate_engine.py --to execution`: Control-gate assessment/approval.
 
 ## 8. Handoff
 

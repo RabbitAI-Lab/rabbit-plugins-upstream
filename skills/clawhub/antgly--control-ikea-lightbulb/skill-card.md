@@ -1,42 +1,53 @@
-## Description: <br>
-Control IKEA/TP-Link Kasa smart bulbs on a local network by IP address, including power, brightness, color, and light-show actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Control IKEA/TP-Link Kasa smart bulbs (set on/off, brightness, and color). Use when you want to programmatically control a local smart bulb by IP on the LAN.
 
-## Publisher: <br>
-[antgly](https://clawhub.ai/user/antgly) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[antgly](https://clawhub.ai/user/antgly)
 
-## Use Case: <br>
-Developers and automation users can use this skill to have an agent generate or run commands that control a Kasa-compatible smart bulb on the same LAN. It is useful for local smart-home control when the bulb IP address is known and cloud credentials are not required. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can send commands to a user-specified smart bulb on the local network. <br>
-Mitigation: Verify the bulb IP address before running commands and use it only on trusted local networks. <br>
-Risk: Light-show modes can rapidly change brightness or color. <br>
-Mitigation: Use caution with flashing or light-show modes, especially around people sensitive to flashing lights. <br>
-Risk: The skill depends on uv and python-kasa from the Python package ecosystem. <br>
-Mitigation: Install dependencies from trusted package sources and keep the local Python environment under user control. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/antgly/skills/control-ikea-lightbulb) <br>
-- [Publisher profile](https://clawhub.ai/user/antgly) <br>
+## Use Case:
 
+Developers and smart-home users use this skill to control a local Kasa-compatible smart bulb by IP address, including power, brightness, color, and short light-show sequences on the LAN.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and Python script invocation examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires uv, Python 3.11+, python-kasa, and a reachable local bulb IP address.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Commands can visibly change the wrong local smart bulb if the provided IP address points to an unintended device.
+
+Mitigation: Confirm the target IP belongs to the bulb you intend to control before running commands.
+
+Risk: Dependency resolution may vary because the artifact does not include a reviewed lockfile or pinned exact dependency versions.
+
+Mitigation: Use a reviewed lockfile or pinned dependency set when reproducible installation is required.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/antgly/skills/control-ikea-lightbulb)
+- [Publisher profile](https://clawhub.ai/user/antgly)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command examples and Python script behavior descriptions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Controls are executed against a user-specified LAN IP address and may visibly change the target bulb.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release metadata; pyproject.toml declares 0.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

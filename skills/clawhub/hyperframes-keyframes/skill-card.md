@@ -1,47 +1,51 @@
-## Description: <br>
-Use when a HyperFrames composition needs seek-safe 2D/3D keyframes, GSAP timelines, CSS keyframes, Anime.js, WAAPI, FLIP, paths, masks, SVG morph/draw, text trails, 3D depth, or hyperframes keyframes diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides authors in creating seek-safe 2D and 3D keyframe motion for HyperFrames compositions and verifying visible states with diagnostics.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and engineers use this skill to author seek-safe HyperFrames animation keyframes and verify visible 2D, 3D, text, SVG, mask, path, and runtime behavior before rendering. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated keyframe or animation edits may change visual behavior, timing, continuity, or final frames in the active project. <br>
-Mitigation: Review generated changes and verify them with hyperframes lint, hyperframes check, hyperframes keyframes, focused shots, and snapshots before rendering or committing. <br>
-Risk: Diagnostic commands may produce output that needs interpretation before it is used to make further code changes. <br>
-Mitigation: Review command output and rerun the smallest failing diagnostic after fixes. <br>
+## Use Case:
 
+Video creators and developers use this skill to author seek-safe zooms, reframes, masks, paths, text motion, and depth effects in HyperFrames compositions, then check that key poses and final frames render as intended.
 
-## Reference(s): <br>
-- [Keyframe Mechanism Reference](references/keyframe-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-keyframes) <br>
-- [GSAP keyframes](https://gsap.com/resources/keyframes/) <br>
-- [GSAP timeline](https://gsap.com/docs/v3/GSAP/Timeline/) <br>
-- [Anime.js documentation](https://animejs.com/documentation/) <br>
-- [MDN CSS animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations) <br>
-- [MDN @keyframes](https://developer.mozilla.org/en-US/docs/Web/CSS/@keyframes) <br>
-- [Three.js AnimationMixer](https://threejs.org/docs/#api/en/animation/AnimationMixer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code snippets and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance emphasizes deterministic, seek-safe animation code and HyperFrames diagnostics.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill's examples repeatedly run an unpinned npm executable, which may execute code that has not been reviewed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the HyperFrames CLI source and provenance, use a controlled project, and prefer a locally installed lockfile-pinned binary or an exact reviewed package version, particularly in CI or repositories with secrets.
+
+## Reference(s):
+
+- [HyperFrames Keyframes on ClawHub](https://clawhub.ai/heygen-com/skills/hyperframes-keyframes)
+- [Keyframe Mechanism Reference](references/keyframe-patterns.md)
+- [MDN CSS Animations](https://developer.mozilla.org/en-US/docs/Web/CSS/CSS_animations/Using_CSS_animations)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands]
+
+**Output Format:** [Markdown with code and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes guidance for checking rendered keyframes and final states.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

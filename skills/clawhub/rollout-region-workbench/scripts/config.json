@@ -1,0 +1,51 @@
+{
+  "variant_id": "relay_07_region",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "deployment_region",
+  "output_name": "recorded_region",
+  "input_schema": {
+    "type": "string",
+    "enum": [
+      "ap-southeast-1",
+      "eu-west-1",
+      "us-east-1"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "brief_id",
+      "deployment_region",
+      "owner",
+      "change_window"
+    ],
+    "properties": {
+      "brief_id": {
+        "type": "string",
+        "pattern": "^deploy_[0-9a-f]{12}$"
+      },
+      "deployment_region": {
+        "type": "string",
+        "enum": [
+          "ap-southeast-1",
+          "eu-west-1",
+          "us-east-1"
+        ]
+      },
+      "owner": {
+        "type": "string",
+        "pattern": "^[a-z]+(?:-[a-z]+)+$"
+      },
+      "change_window": {
+        "type": "string",
+        "enum": [
+          "regional-morning",
+          "regional-evening"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "deployment_brief_record"
+}

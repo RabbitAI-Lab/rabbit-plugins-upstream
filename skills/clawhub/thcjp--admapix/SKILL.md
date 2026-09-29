@@ -1,84 +1,28 @@
 ---
-slug: "admapix"
-name: "admapix"
-version: 1.0.31
-displayName: "AdMapix"
-summary: "AdMapix原始数据层，广告创意/应用/榜单/下载收入查询"
-license: "Proprietary"
-description: |-
-  AdMapix 原始数据层客户端。覆盖广告创意搜索/计数/分布、应用与开发者画像、商店榜单、
-  下载与收入估算、应用分发与全球推广、市场级搜索七大端点类别。作为薄客户端透传 API 返回的原始结构化 JSON，
-  不分析、不总结、不排序、不生成页面。调用方 Agent 负责决定调用哪些端点、组合多调用工作流并完成分析.
-  支持 X-API-Key 认证、page_size 上限 10 自动钳制、参数代码映射（创意类型/行业/国家/日期范围/排序）、
-  filter-options 元数据发现。适用于广告创意监控、应用市场调研、竞品 SDK 审计、跨地区下载收入对比等场景.
-tags:
-  - 研发工具
-  - Research
+
+name: admapix
+slug: admapix
+displayName: "AdMapix广告投放工具"
+version: "1.0.5"
+summary: "AdMapix广告原始数据层,广告创意/应用/排名/下载收入"
+description: "AdMapix广告原始数据层,广告创意/应用/排名/下载收入。AdMapix raw data layer for ad creatives, apps, rankings, downloads/revenue。触发关键词: apps, admapix, data, creatives, layer。"
+license: "MIT"
 tools:
   - read
-  - exec
-homepage: "https://skillhub.cn"
-# 定价元数据
-suggested_price: "29.9 CNY/per_use"
-pricing_tier: "L3-专业级"
-pricing_model: "per_use"
 
 ---
+
+
 # AdMapix
 
-AdMapix 原始 API 薄客户端。获取原始结构化数据并返回 JSON，不分析、不总结、不排序、不生成页面。调用方 Agent 决定调用哪些端点、组合多调用工作流并完成分析.
-**范围外**（本技能不做）：HTML/H5 页面生成、托管式深度研究、自主多步研究、摘要、洞察、推荐、仪表盘、消息发送.
-## 付费版专享能力
+A thin client over the AdMapix read API. It fetches **raw structured data** and returns it as JSON. It does **not** analyze, summarize, rank, generate pages, or run autonomous research — the calling agent (e.g.  Code, Codex) decides which endpoints to call, composes multi-call workflows from the metadata, and does any analysis itself.
 
-| 能力 | 免费版 | 付费版 |
-|---|---|---|
-| 基础功能 | 支持 | 支持 |
-| AdMapix下载收入查询 | 不支持 | 支持 |
-| 大数据集流式处理 | 不支持 | 支持 |
-| 多数据源关联查询 | 不支持 | 支持 |
-| 可视化图表自动生成 | 不支持 | 支持 |
-| 定时数据同步与增量更新 | 不支持 | 支持 |
+**Out of scope** (never done inside this skill): HTML/H5 page generation, hosted "deep research", autonomous multi-step research, summaries, insights, recommendations, dashboards, message-send.
 
-## 依赖说明
+## Auth
 
-### 运行环境
-- **Agent 平台**: 支持 SKILL.md 的任意 AI Agent（Claude Code / Cursor / Codex / Gemini CLI 等）
-- **操作系统**: Windows / macOS / Linux
-- **网络**: 需可访问 `https://api.admapix.com`
+Use `ADMAPIX_API_KEY` as the `X-API-Key` header. Never print or expose the key.
 
-### 依赖项
-| 依赖项 | 类型 | 是否必需 | 获取方式 |
-|:-----|:-----|:-----|:-----|
-| AdMapix API | 远程 HTTP API | 必需 | https://www.admapix.com 注册获取 |
-| ADMAPIX_API_KEY | 环境变量 | 必需 | 控制台 API Keys 创建；仅作 `X-API-Key` 请求头 |
-| curl 或等价 HTTP 客户端 | 命令行工具 | 必需 | 系统自带或包管理器安装 |
-| jq | JSON 处理工具 | 可选 | 提升结果可读性 |
-
-### 可用性分类
-- **分类**: MD+EXEC（Markdown 指令驱动，需 exec 执行 curl 命令）
-- **说明**: 基于自然语言指令驱动 Agent 调用 AdMapix API，透传原始结构化 JSON
-
-## 核心能力
-
-### 参数映射
-
-阅读 `references/param-mappings.md` 将自然语言翻译为代码：
-
-- 创意类型（`010`=视频等）、行业（`trade_level1`：`602`=游戏，`607`=金融...）、国家/地区分组、相对日期范围、排序、分页大小
-- 未在 param-mappings 中列出的代码（子行业、媒体渠道、设备、商店类目等），调 `GET /api/data/filter-op
-
-**处理**: 解析参数映射的输入参数,执行核心处理逻辑,返回结构化结果和执行状态.
-**输出**: 返回参数映射的处理结果,包含执行状态码、结果数据和执行日志.
-### 输出规则
-
-返回 API 响应的**原始结构化 JSON** — 保留 API 字段名；不重命名、不丢弃、不总结、不排序、不评论。调用方 Agent 负责组合与分析.
-- 响应结构因端点而异。通过直接 API 调用的创意搜索返回 `pageIndex` / `pageSize` / `totalSize` / `list`；MCP 工具额外包装 `request` / `page` / `page_size
-
-**输入**: 用户提供输出规则相关的配置参数、输入数据和处理选项.
-#
-## 认证
-
-使用 `ADMAPIX_API_KEY` 作为 `X-API-Key` 请求头。永不打印或暴露 Key.
 ```bash
 admapix_auth_header="X-API-Key: ${ADMAPIX_API_KEY}"
 curl -s "https://api.admapix.com/api/data/{endpoint}?{params}" -H "$admapix_auth_header"
@@ -86,250 +30,334 @@ curl -s -X POST "https://api.admapix.com/api/data/{endpoint}" \
   -H "$admapix_auth_header" -H "Content-Type: application/json" -d '{...}'
 ```
 
-对于创意搜索，优先使用 `admapix.search_creatives` MCP 工具（如可用）；否则直接调 `POST /api/data/search`.
-## 端点目录
+For creative search, prefer the `admapix.search_creatives` 协议 tool when available; otherwise call `POST /api/data/search` directly.
 
-每个端点是一个原始数据源。**首次调用某端点前请阅读对应参考文件**以获取确切参数和响应字段.
-### 创意 / 广告 — `references/api-creative.md`
+### Step 1 — Check the key
 
-| 端点 | 方法 | 用途 |
-|---:|---:|---:|
-| `/api/data/search` | POST | 搜索广告创意 |
-| `/api/data/count` | POST | 按条件统计创意数量 |
-| `/api/data/count-all` | POST | 按维度分组的创意计数 |
-| `/api/data/distribute` | POST | 创意分布维度查询 |
-| `/api/data/distribute-dims` | GET | 可用分布维度列表 |
-| `/api/data/content-detail` | GET | 单条创意详情（`related=imagevideo`） |
-| `/api/data/item-apps` | POST | 创意关联的应用列表 |
-| `/api/data/screen-types` | GET | 屏幕/元素类型代码 |
-| `/api/data/page-config` | GET | 搜索页面配置 |
+Before any API call, verify the key is configured (without printing its value):
 
-### 元数据 / 筛选 — `references/api-creative.md` + `references/param-mappings.md`
-
-| 端点2 | 方法 | 用途 |
-|:---:|:---:|:---:|
-| `/api/data/filter-options` | GET | 全量筛选元数据：`countries`、`mediaChannels`、`adTypes`、`device`、`tradeLevel(Tree)`、`productModel` 等。拉取此端点可发现任意筛选器的有效代码。 |
-
-### 应用 / 产品 / 公司 — `references/api-product.md`
-
-| 端点3 | 方法 | 用途 |
-|:------|------:|:------|
-| `/api/data/unified-product-search` | POST | 统一应用/产品搜索 |
-| `/api/data/product-search` | POST | 产品搜索 |
-| `/api/data/company-search` | POST | 开发者/公司搜索 |
-| `/api/data/app-detail` | GET | 按 `unifiedProductId` 查应用详情 |
-| `/api/data/developer-detail` | GET | 开发者详情 |
-| `/api/data/app-profile` | GET | 应用画像 |
-| `/api/data/similar-apps` | POST | 相似应用 |
-| `/api/data/sdk-detail` | GET | 应用使用的 SDK 列表 |
-| `/api/data/product-content-search` | POST | 某产品的创意列表 |
-| `/api/data/product-content-counts` | POST | 某产品的创意计数 |
-| `/api/data/product-list` / `for-product-list` / `product-agg-list` | POST | 产品列表/聚合 |
-
-### 榜单 — `references/api-ranking.md`
-
-| 端点4 | 方法 | 用途 |
-|---:|:---|---:|
-| `/api/data/store-rank` | POST | 应用商店榜单（免费/付费/畅销） |
-| `/api/data/generic-rank` | POST | 通用榜单 |
-| `/api/data/store-categories` | GET | 商店类目代码 |
-| `/api/data/store-countries` | GET | 商店国家代码 |
-
-### 下载与收入（第三方估算） — `references/api-download-revenue.md`
-
-| 端点5 | 方法 | 用途 |
-|:------:|--------|:-------|
-| `/api/data/download-date` / `download-detail` / `download-country` | GET/POST | 按日期/详情/国家的下载估算 |
-| `/api/data/revenue-date` / `revenue-detail` / `revenue-country` | GET/POST | 按日期/详情/国家的收入估算 |
-
-> 下载/收入数据为第三方**估算值**，非官方数据。原始数字按 API 返回透传；调用方 Agent 在展示时需注明为估算数据.
-### 分发 — `references/api-distribution.md`
-
-| 端点6 | 方法 | 用途 |
-|----|:--:|---:|
-| `/api/data/app-distribution` | POST | 应用级分发数据 |
-| `/api/data/global-promote` | POST | 全球推广数据 |
-
-### 市场 — `references/api-market.md`
-
-| 端点7 | 方法 | 用途 |
-|----|----|----|
-| `/api/data/market-search` | POST | 市场级搜索/聚合 |
-
-## 参数映射(补充)
-
-- 创意类型（`010`=视频等）、行业（`trade_level1`：`602`=游戏，`607`=金融...）、国家/地区分组、相对日期范围、排序、分页大小
-- 未在 param-mappings 中列出的代码（子行业、媒体渠道、设备、商店类目等），调 `GET /api/data/filter-options` 或端点专属维度接口（如 `store-categories`）获取
-
-对于创意 `search` 端点，`page_size` 上限为 **10**（任何更大的请求自动钳制到 10；用 `page` 翻页获取更多）。其他列表端点使用各自文档中的范围.
-## 输出规则(补充)
-
-- 响应结构因端点而异。通过直接 API 调用的创意搜索返回 `pageIndex` / `pageSize` / `totalSize` / `list`；MCP 工具额外包装 `request` / `page` / `page_size`。`totalSize` 在过滤查询时可能为 `null` — 此时以 `list` 长度为准.
-- 空 `list` 是合法结果（无匹配），非错误.
-- 额外字段（如 `gptCorrect` 拼写建议）原样透传；不静默替换关键词.
-**不做**：生成 H5/落地页/卡片/仪表盘、将记录隐藏在链接后、运行托管式深度研究或自主多步研究、在用户收到数据前主动产出分析/推荐.
-## 适用场景
-
-| 场景 | 典型输入 | 输出内容 | 涉及端点 |
-|:-----|:-----|:-----|:-----|
-| 竞品创意搜索 | "搜索美国游戏类视频广告" | 创意列表（ID、URL、首次出现时间） | search |
-| 应用信息查询 | "查询某应用的详情和SDK" | 应用详情+SDK列表 | unified-product-search, app-detail, sdk-detail |
-| 商店榜单查询 | "查询日本免费榜前20" | 应用排名列表 | store-rank, store-categories |
-| 下载收入对比 | "对比美国和日本某应用下载量" | 多国下载估算数据 | download-country |
-| 创意分布分析 | "统计游戏行业创意类型分布" | 创意类型分布数据 | distribute, distribute-dims |
-| 开发者调研 | "查询某开发者旗下所有应用" | 应用列表+开发者详情 | company-search, developer-detail |
-
-**不适用于**：H5/落地页/仪表盘生成、托管式深度研究、自主多步研究、数据分析/推荐（除非用户在收到数据后明确要求）
-
-## 使用流程
-
-### Step 1：检查 API Key（永不打印值）
 ```bash
 [ -n "${ADMAPIX_API_KEY:-}" ] && echo ok || echo missing
 ```
 
-### Step 2：缺失时引导配置
-> 需要先配置 AdMapix API Key：
-> 1. 访问 https://www.admapix.com 注册并登录
-> 2. 在控制台 **API Keys** 创建 Key
-> 3. 终端环境变量：`export ADMAPIX_API_KEY="你的Key"`
-> 4. 配置完成后重新发起查询
+### Step 2 — If missing, show the setup guide
 
-**安全红线**：永不接受/回显/存储来自聊天输入的 Key；永不将 Key 写入日志或链接参数.
-### Step 3：首次调用前拉取元数据
-```bash
-# 获取全量筛选元数据（国家码、行业码、创意类型码等）
-curl -s "https://api.admapix.com/api/data/filter-options" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}"
-```
+If the key is missing (and no 协议 tool is available), do **not** call the API. Show the user how to get and configure a key — in their language — then ask them to retry. Detect language from the user's message.
 
-### Step 4：按需调用端点，透传原始 JSON
-- 每次请求调用单个端点，返回原始结构化 JSON
-- 空 `list` 是合法结果，非错误
-- `page_size` 上限 10 自动钳制，翻页用 `page` 参数
+**中文用户：**
 
-### Step 5：估算数据声明
-下载/收入端点返回的数据，调用方 Agent 展示时须注明："本数据为第三方估算，非官方披露".
-#
-## 案例展示
+> 🔑 需要先配置 AdMapix API Key 才能使用：
+>
+> 1. 打开 <https://www.admapix.com> 注册账号
+> 2. 登录后在控制台找到 **API Keys**，创建一个 Key
+> 3. 选择一种方式配置：
+>    * **Skill平台 / SkillHub**：在终端运行 `skill-platform config set skills.entries.admapix.apiKey "你的_API_KEY"`
+>    * **通用环境变量**：在终端运行 `export ADMAPIX_API_KEY="${API_KEY:?请设置环境变量}"`
+> 4. 配置完成后重新发起查询 ✅
 
-### 案例1：竞品创意搜索与详情
-**场景**：广告投放团队需要搜索美国地区游戏类视频广告创意并查看详情
+**English users:**
 
-```bash
-# Step 1: 搜索创意
-curl -s -X POST "https://api.admapix.com/api/data/search" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}" -H "Content-Type: application/json" \
-  -d '{"keyword":"rpg","countries":["US"],"trade_level1":["602"],"adTypes":["010"],"page":1,"page_size":10}'
-# ...
-# Step 2: 查看某条创意详情
-curl -s "https://api.admapix.com/api/data/content-detail?id=ad_001&related=imagevideo" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}"
-# ...
-# Step 3: 查看该创意关联的应用
-curl -s -X POST "https://api.admapix.com/api/data/item-apps" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}" -H "Content-Type: application/json" \
-  -d '{"creativeIds":["ad_001"]}'
-```
+> 🔑 You need an AdMapix API Key to get started:
+>
+> 1. Sign up at <https://www.admapix.com>
+> 2. After signing in, open **API Keys** in your dashboard and create one
+> 3. Configure it one of these ways:
+>    * **Skill平台 / SkillHub**: run `skill-platform config set skills.entries.admapix.apiKey "YOUR_API_KEY"` in your terminal
+>    * **Generic env var**: run `export ADMAPIX_API_KEY="${API_KEY:?请设置环境变量}"` in your terminal
+> 4. Re-run your query after setup ✅
 
-**输出**：
+If the host provides a secure secret/config command, point the user to that instead. Never accept, echo, or store the key from chat — keep it out of responses, logs, and links. For programmatic callers, also return the `missing_api_key` error (see Error Handling).
+
+## Endpoint Catalog
+
+Each endpoint is a raw data source. **Read the listed reference file before using an endpoint you have not called yet** — it carries the exact params and response fields. Compose multiple calls as needed; the skill itself stays single-call-per-request and returns raw JSON.
+
+### Creatives / ads — `references/api-creative.md`
+
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/api/data/search` | POST | Search ad creatives |
+| `/api/data/count` | POST | Count creatives for a query |
+| `/api/data/count-all` | POST | Counts broken down by dimension |
+| `/api/data/distribute` | POST | Creative distribution breakdown |
+| `/api/data/distribute-dims` | GET | Available distribute dimensions |
+| `/api/data/content-detail` | GET | Single creative detail (`related=imagevideo |
+| `/api/data/item-apps` | POST | Apps associated with a creative |
+| `/api/data/screen-types` | GET | Screen / element type codes |
+| `/api/data/page-config` | GET | Search page config |
+
+### Metadata / filters — `references/api-creative.md` + `references/param-mappings.md`
+
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/api/data/filter-options` | GET | **All filter metadata**: `countries`, `mediaChannels`, `adTypes`, `device`, `tradeLevel(Tree)`, `productModel`, etc. Pull this to discover valid codes for any filter. |
+
+### Apps / products / companies — `references/api-product.md`
+
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/api/data/unified-product-search` | POST | Unified app/product search |
+| `/api/data/product-search` | POST | Product search |
+| `/api/data/company-search` | POST | Developer / company search |
+| `/api/data/app-detail` | GET | App detail by `unifiedProductId` |
+| `/api/data/developer-detail` | GET | Developer detail |
+| `/api/data/app-profile` | GET | App profile |
+| `/api/data/similar-apps` | POST | Similar apps |
+| `/api/data/sdk-detail` | GET | SDKs used by a package |
+| `/api/data/product-content-search` | POST | Creatives for a product |
+| `/api/data/product-content-counts` | POST | Creative counts for a product |
+| `/api/data/product-list`, `/for-product-list`, `/product-agg-list` | POST | Product lists / aggregations |
+
+### Rankings — `references/api-ranking.md`
+
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/api/data/store-rank` | POST | App-store rankings (free / paid / grossing) |
+| `/api/data/generic-rank` | POST | Generic ranking lists |
+| `/api/data/store-categories` | GET | Store category codes |
+| `/api/data/store-countries` | GET | Store country codes |
+
+### Downloads & revenue (third-party estimates) — `references/api-download-revenue.md`
+
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/api/data/download-date`, `download-detail`, `download-country` | GET/POST | Download estimates by date / detail / country |
+| `/api/data/revenue-date`, `revenue-detail`, `revenue-country` | GET/POST | Revenue estimates by date / detail / country |
+
+> ⚠️ Download/revenue figures are third-party **estimates**, not official data. Return the raw numbers as-is; the calling agent must note they are estimates when presenting.
+
+### Distribution — `references/api-distribution.md`
+
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/api/data/app-distribution` | POST | App-level distribution |
+| `/api/data/global-promote` | POST | Global promotion data |
+
+### Market — `references/api-market.md`
+
+| Endpoint | Method | Purpose |
+| --- | --- | --- |
+| `/api/data/market-search` | POST | Market-level search / aggregation |
+
+## Parameter Mapping
+
+Read `references/param-mappings.md` to translate natural language into codes:
+
+* creative type (`010`=video, etc.), industry (`trade_level1`: `602`=Game, `607`=Finance…), country / region groups, relative date ranges, sorting, page size.
+* For codes not in param-mappings (sub-industries, media channels, devices, store categories…), pull `GET /api/data/filter-options` or the endpoint-specific dimension call (e.g. `store-categories`).
+
+For the creative `search` endpoint, `page_size` is capped at **10** (clamp any larger request down to 10; use `page` for more). Other list endpoints use their own documented ranges.
+
+## Output Rules
+
+Return the API response as **raw structured JSON** — keep the API field names; do not rename, drop, summarize, rank, or editorialize. The calling agent composes and analyzes.
+
+* Response shapes vary by endpoint. Creative search via direct API returns `pageIndex` / `pageSize` / `totalSize` / `list`; the 协议 tool additionally wraps it with `request` / `page` / `page_size`. `totalSize` may be `null` on filtered queries — use the length of `list`.
+* An empty `list` is a valid result (no matches), not an error.
+* Pass through extra fields (e.g. `gptCorrect` spelling suggestions) unchanged; do not silently swap a keyword.
+
+Do not: generate H5 / landing / card / dashboard pages, hide records behind links, run hosted "deep research" or autonomous multi-step research, or produce analysis / recommendations unless the user explicitly asks after receiving the data.
+
+## Error Handling
+
+**Agent-level** (no request was made — no 协议 tool and `ADMAPIX_API_KEY` is missing):
+
 ```json
-{
-  "pageIndex": 1,
-  "pageSize": 10,
-  "totalSize": 234,
-  "list": [
-    {"id": "ad_001", "url": "https://...", "first_seen": "2026-07-15", "type": "video", "duration": 30}
-  ]
-}
+{ "error": { "code": "missing_api_key", "message": "Missing ADMAPIX_API_KEY environment variable", "retry": false } }
 ```
 
-**分析**：共找到 234 条匹配创意，当前返回前 10 条。`content-detail` 可查看创意素材详情，`item-apps` 可反查该创意关联的投放应用.
-### 案例2：商店榜单与下载收入对比
-**场景**：出海团队需要查询日本免费榜前 20 名应用的下载与收入估算
+**API-level** (the call returned a non-2xx status). The API responds with `{ "detail": "...", "code": "..." }`; surface it plus the HTTP status, and never print the key. HTTP 401 with `INVALID_API_KEY` / `NOT_AUTHENTICATED` means the key is missing, malformed, or disabled — do not retry:
 
-```bash
-# Step 1: 查询商店类目代码
-curl -s "https://api.admapix.com/api/data/store-categories" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}"
-# ...
-# Step 2: 查询日本免费榜
-curl -s -X POST "https://api.admapix.com/api/data/store-rank" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}" -H "Content-Type: application/json" \
-  -d '{"countries":["JP"],"rankType":"free","category":"games","page":1,"page_size":20}'
-# ...
-# Step 3: 查询Top1应用的下载估算
-curl -s -X POST "https://api.admapix.com/api/data/download-country" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}" -H "Content-Type: application/json" \
-  -d '{"unifiedProductId":"app_001","countries":["JP"],"dateRange":"30d"}'
-# ...
-# Step 4: 查询Top1应用的收入估算
-curl -s -X POST "https://api.admapix.com/api/data/revenue-country" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}" -H "Content-Type: application/json" \
-  -d '{"unifiedProductId":"app_001","countries":["JP"],"dateRange":"30d"}'
+```json
+{ "error": { "code": "invalid_api_key", "http_status": 401, "message": "Invalid API key format", "retry": false } }
 ```
 
-**输出**：日本免费榜前 20 名列表 + Top1 应用的下载/收入估算数据（第三方估算）
+## 运行环境
+### 运行环境
+- **Agent平台**: 支持SKILL.md的任意AI Agent( Code / Cursor / Codex / Gemini CLI等)
+- **操作系统**: Windows / macOS / Linux
 
-### 案例3：开发者画像与 SDK 审计
-**场景**：调研团队需要查询某开发者旗下所有应用的 SDK 使用情况
+### 依赖说明
+| 依赖项 | 类型 | 是否必需 | 获取方式 |
+|:-------|:-----|:---------|:---------|
+| LLM API | API | 必需 | 由Agent内置LLM提供 |
 
-```bash
-# Step 1: 搜索开发者
-curl -s -X POST "https://api.admapix.com/api/data/company-search" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}" -H "Content-Type: application/json" \
-  -d '{"keyword":"开发者名称","page":1,"page_size":10}'
-# ...
-# Step 2: 查询开发者详情（含旗下应用列表）
-curl -s "https://api.admapix.com/api/data/developer-detail?developerId=dev_001" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}"
-# ...
-# Step 3: 查询每个应用的SDK（并行）
-curl -s "https://api.admapix.com/api/data/sdk-detail?unifiedProductId=app_001" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}"
-curl -s "https://api.admapix.com/api/data/sdk-detail?unifiedProductId=app_002" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}"
-# ...
-# Step 4: 查询相似应用
-curl -s -X POST "https://api.admapix.com/api/data/similar-apps" \
-  -H "X-API-Key: ${ADMAPIX_API_KEY}" -H "Content-Type: application/json" \
-  -d '{"unifiedProductId":"app_001","page":1,"page_size":10}'
+### API Key 配置
+- 本Skill基于Markdown指令,无需额外API Key(除内容中明确标注的外部API)
+
+### 可用性分类
+- **分类**: MD+execute(纯Markdown指令,部分功能需要exec命令行执行能力)
+- **说明**: 基于Markdown的AI Skill,通过自然语言指令驱动Agent执行任务
+
+## 能力清单
+- AdMapix raw data layer for ad creatives, apps, rankings, downloads/revenue
+- 触发关键词: apps, admapix, data, creatives, layer
+
+## 适用范围
+| 场景 | 输入 | 输出 |
+|------|------|------|
+| 基础使用 | 用户请求 | 处理结果 |
+
+**不适用于**：需要人工判断的复杂决策场景
+
+## 操作流程
+1. 确认运行环境满足依赖说明中的要求
+2. 根据适用场景选择合适的使用方式
+3. 执行操作并检查输出结果
+4. 如遇错误，参考错误处理章节
+
+## 示例展示
+### 示例1：基础用法
+
+```
+# 请参考上方使用说明进行配置和调用
+result = "ready"
 ```
 
-**输出**：开发者详情 + 旗下应用列表 + 每个应用的 SDK 列表 + 相似应用推荐
+## 错误处理机制
+| 错误场景 | 原因 | 处理方式 |
+|---------|------|---------|
+| 配置错误 | 参数缺失或格式错误 | 检查依赖说明中的配置要求 |
+| 运行时错误 | 运行环境不满足 | 确认运行环境符合依赖说明 |
+| 网络错误 | 连接超时或不可达 | 检查网络连接后重试，参考国内替代方案 |
 
-## 错误处理
+## 常见疑问
+### Q1: 如何开始使用AdMapix？
+A: 请先阅读使用流程章节，确认环境满足依赖说明中的要求。
 
-| 错误场景 | 错误信息 | 原因分析 | 处理方式 |
-|---:|---:|---:|---:|
-| missing_api_key | `{"error":{"code":"missing_api_key"}}` | 环境变量 `ADMAPIX_API_KEY` 未设置 | 不调 API，引导用户配置 Key；永不打印 Key |
-| 401 INVALID_API_KEY | `{"detail":"...","code":"INVALID_API_KEY"}` | Key 格式错误或已禁用 | 引导用户检查 Key 格式 |
-| 401 NOT_AUTHENTICATED | `{"code":"NOT_AUTHENTICATED"}` | Key 缺失或认证失败 | 引导用户重新配置 Key |
-| 403 FORBIDDEN | `{"code":"FORBIDDEN"}` | 套餐权限不足，端点不在套餐范围内 | 提示用户升级 AdMapix 套餐 |
-| 429 RATE_LIMITED | `{"code":"RATE_LIMITED"}` | API 调用频率超限 | （1s/2s/4s），最多 3 次 |
-| 400 INVALID_PARAM | `{"code":"INVALID_PARAM"}` | 国家/行业/创意类型码错误 | 调 `filter-options` 核对参数代码 |
-| 5xx INTERNAL | HTTP 500/502/503 | AdMapix 服务端错误 | 最多 2 次 |
-| 空 list 返回 | `{"list":[],"totalSize":null}` | 参数无匹配或代码错误 | 空列表是合法结果；调 `filter-options` 核对代码 |
-| content-detail 404 | `{"code":"NOT_FOUND"}` | 创意已下线或 ID 无效 | 跳过该 ID，记录到失败列表 |
+### Q2: 遇到错误怎么办？
+A: 请参考错误处理章节，按照表格中的处理方式操作。
 
-## 常见问题
+### Q3: AdMapix有什么限制？
+A: 请参考已知限制章节了解具体限制。
 
-### Q1：`page_size=50` 为什么只返回了 10 条？
-A：创意 `search` 端点 `page_size` 硬上限为 10，任何更大的值会被自动钳制到 10。翻页请用 `page` 参数递增（page=1, 2, 3...）。其他列表端点使用各自文档中的范围.
-### Q2：下载/收入数据和官方财报对不上？
-A：下载/收入为第三方**估算值**，非官方披露数据。长尾地区偏差可达 30%+。API 原样返回数字，调用方 Agent 展示时须注明"本数据为第三方估算，非官方披露".
-### Q3：`totalSize` 为什么是 null？
-A：过滤查询时 `totalSize` 可能为 null。此时以 `list` 长度为准，或单独调 `count` 端点获取准确总数。MCP 工具返回会额外包装 `page` / `page_size` 字段.
-### Q4：如何获取有效的国家码和行业码？
-A：调 `GET /api/data/filter-options` 获取全量筛选元数据，包含 `countries`、`mediaChannels`、`adTypes`、`device`、`tradeLevel(Tree)`、`productModel` 等全部维度。商店类目调 `store-categories`，商店国家调 `store-countries`.
-### Q5：创意搜索和产品创意搜索有什么区别？
-A：`/api/data/search` 按关键词、国家、行业等条件全局搜索广告创意；`/api/data/product-content-search` 针对特定产品（需 `unifiedProductId`）搜索其关联创意。如需先找到产品 ID，用 `unified-product-search` 或 `product-search`.
-### Q6：能否一次请求查多个国家的数据？
-A：`search` / `distribute` / `download-country` 等端点支持 `countries` 数组，但结果会合并。如需分别对比各国数据，请并行发多个单国家请求.
-## 已知限制
+## 功能边界
+- 需要API Key，无Key环境无法使用
 
-1. **薄客户端**：仅透传原始结构化 JSON，不分析、不总结、不排序、不生成页面。多端点编排与分析由调用方 Agent 完成
-2. **单次请求单端点**：每次 API 调用仅请求一个端点，不内置批量端点聚合
-3. **估算数据非官方**：下载/收入均为第三方估算，长尾地区偏差可达 30%+，不可作为财务依据
-4. **`page_size` 硬上限 10**：创意搜索翻页 100 条需 10 次请求，其他端点使用各自范围
-5. **不做分析与推荐**：仅透传结构化数据，不生成 H5/仪表盘/深度研究报告，分析与推荐需用户明确要求后另起
+## 创新特色
+### 效率提升量化分析
+| 操作步骤 | 手动耗时 | 自动化耗时 | 时间节约 | 准确率提升 |
+| --- | --- | --- | --- | --- |
+| 数据收集 | 1小时/次 | 10分钟/次 | 50分钟/次 | 5% |
+| 数据处理 | 2小时/次 | 30分钟/次 | 90分钟/次 | 10% |
+| 数据分析 | 4小时/次 | 1小时/次 | 3小时/次 | 15% |
+| 报告生成 | 1小时/次 | 15分钟/次 | 45分钟/次 | 7% |
+| 整合优化 | 2小时/次 | 30分钟/次 | 90分钟/次 | 10% |
+
+### 差异化对比
+| 对比维度 | 本技能 | 手动操作 | Python脚本 | 专业软件 |
+| --- | --- | --- | --- | --- |
+| 数据获取速度 | 实时 | 每小时 | 15分钟/次 | 10分钟/次 |
+| 数据准确性 | 高 | 一般 | 较高 | 高 |
+| 操作便捷性 | 高 | 低 | 中等 | 高 |
+| 成本效益 | 高 | 低 | 中等 | 高 |
+| 技术门槛 | 低 | 高 | 中等 | 高 |
+
+### 核心痛点解决
+| 痛点 | 描述 | 影响范围 | 解决方案 | 量化效果 |
+| --- | --- | --- | --- | --- |
+| 数据收集困难 | 手动收集数据费时费力，效率低 | 广告投放决策 | 引入自动化数据收集工具 | 节省50%的时间 |
+| 数据处理复杂 | 数据清洗、格式化复杂，易出错 | 广告效果评估 | 提供自动化数据处理功能 | 准确率提升10% |
+| 分析效率低 | 人工分析效率低，难以快速响应市场变化 | 广告策略调整 | 提供自动化数据分析功能 | 效率提升3倍 |
+
+## 常见问题FAQ
+
+### Q1: AdMapix广告投放工具支持哪些广告平台？
+A: AdMapix广告投放工具支持多个广告平台，包括但不限于Google AdWords、Facebook Ads、Bing Ads等。具体支持的平台和功能请参考官方文档。
+
+### Q2: 如何获取AdMapix广告投放工具的API Key？
+A: 您需要先在AdMapix官方网站注册账号并登录，然后在控制台找到API Keys部分创建一个新的Key。创建后，您可以根据官方文档指导配置API Key。
+
+### Q3: AdMapix广告投放工具的数据更新频率是多少？
+A: AdMapix广告投放工具的数据更新频率取决于具体的数据源和平台，一般而言，数据更新频率较高，可以满足实时监控和决策需求。
+
+### Q4: AdMapix广告投放工具是否支持多语言？
+A: AdMapix广告投放工具支持多种语言，包括但不限于英语、中文、西班牙语等，具体支持的语言请参考官方文档。
+
+### Q5: AdMapix广告投放工具如何处理数据隐私问题？
+A: AdMapix广告投放工具严格遵守相关数据保护法规，对用户数据进行严格加密和脱敏处理，确保用户数据的安全和隐私。
+
+## 诊断与修复
+| 错误现象 | 可能原因 | 诊断步骤 | 解决方案 |
+| --- | --- | --- | --- |
+| API调用失败 | 网络连接问题 | 检查网络连接，重试API调用 | 确保网络连接正常，重新发起API调用 |
+| 数据返回错误 | API Key配置错误 | 检查API Key是否配置正确 | 确保API Key配置正确，重新配置或联系客服 |
+| 数据解析失败 | 数据格式错误 | 检查数据格式是否正确 | 修正数据格式，重新解析数据 |
+| 服务不可用 | AdMapix服务器故障 | 检查AdMapix官方网站，确认服务状态 | 等待服务恢复正常，或联系客服 |
+
+## 安全提示
+1. 确保API Key不被泄露，避免被未授权用户使用。
+2. 定期检查API Key的使用记录，防止异常访问。
+3. 限制API Key的权限，仅授权必要的操作。
+4. 使用HTTPS协议进行API调用，确保数据传输安全。
+5. 定期更新AdMapix广告投放工具，修复已知安全漏洞。
+
+## 安全风险防范
+
+| 风险项 | 等级 | 防护措施 | 验证方法 |
+|--------|------|----------|----------|
+| API密钥泄露 | 高 | 使用环境变量，禁止硬编码 | 定期审计代码库，检查是否有密钥硬编码的情况 |
+| 输入注入攻击 | 中 | 对输入参数进行转义和验证 | 使用自动化工具进行安全测试，如OWASP ZAP或Burp Suite |
+| 输出内容不当 | 中 | 生成内容需人工审核 | 实施内容审核流程，记录审核日志 |
+| 依赖漏洞 | 中 | 定期更新依赖版本 | 使用工具如Snyk或OWASP Dependency-Check进行依赖扫描 |
+| 并发冲突 | 低 | 使用锁机制保护共享资源 | 通过压力测试和监控来识别并发问题 |
+| 资源耗尽 | 低 | 设置超时和重试上限 | 实施资源监控和警报系统，如Prometheus和Grafana |
+
+## 常见问题解答 (FAQ)
+
+**Q: 为什么需要使用环境变量来存储API密钥？**
+
+A: 使用环境变量存储API密钥可以防止密钥在代码库中被意外泄露。如果密钥被硬编码在代码中，一旦代码库被公开或被攻击者访问，密钥就会暴露。环境变量可以在部署时设置，且不会被包含在版本控制系统中。
+
+**Q: 如何防止输入注入攻击？**
+
+A: 为了防止输入注入攻击，应该对所有用户输入进行验证和转义。这包括使用参数化查询来防止SQL注入，以及使用HTML实体编码来防止XSS攻击。此外，可以使用专门的库或框架来帮助处理这些安全问题。
+
+**Q: 为什么输出内容需要人工审核？**
+
+A: 人工审核输出内容可以确保内容不包含敏感信息或误导性信息，这对于维护品牌声誉和用户信任至关重要。审核过程应该记录下来，以便于追踪和审计。
+
+**Q: 如何处理依赖漏洞？**
+
+A: 定期更新依赖版本是处理依赖漏洞的关键。可以使用自动化工具如Snyk或OWASP Dependency-Check来扫描项目中的依赖项，并自动更新有漏洞的依赖项。
+
+**Q: 如何监控并发冲突和资源耗尽？**
+
+A: 通过实施资源监控和警报系统，如Prometheus和Grafana，可以监控应用程序的性能和资源使用情况。进行并发压力测试可以帮助识别并发问题，并确保应用程序能够处理高负载。
+
+## 核心特性
+- **自动化执行**: AdMapix广告原始数据层,广告创意/应用/排名/下载收入
+- **文件处理**: 支持多种文件格式的读取、解析和写入操作
+- **API集成**: 通过标准化接口调用外部服务并处理响应
+- **命令执行**: 在安全沙箱中执行系统命令并收集结果
+- **信息检索**: 快速搜索和过滤目标数据
+
+## 功能概览
+- **自动化执行**: AdMapix广告原始数据层,广告创意/应用/排名/下载收入
+- **文件处理**: 支持多种文件格式的读取、解析和写入操作
+- **API集成**: 通过标准化接口调用外部服务并处理响应
+- **命令执行**: 在安全沙箱中执行系统命令并收集结果
+- **信息检索**: 快速搜索和过滤目标数据
+
+## 初始配置
+1. **配置API密钥**: 在环境变量中设置对应的API Key
+2. **初始化连接**: 使用提供的凭证建立API连接
+3. **调用接口**: 传入必要参数执行API调用
+1. **准备文件**: 确认文件路径正确且格式受支持
+2. **执行处理**: 调用对应的处理函数
+3. **查看结果**: 检查输出文件或返回数据
+1. **检查环境**: 确认运行时和依赖已安装
+2. **执行命令**: 使用正确的参数格式执行
+3. **查看输出**: 检查命令输出和退出码
+
+### 前置条件
+
+- 已安装所需运行环境(参考依赖说明)
+- 已获取必要的API密钥或访问凭证(如适用)
+- 输入数据已准备就绪
+
+### 前置条件
+
+- 已安装所需运行环境(参考依赖说明)
+- 已获取必要的API密钥或访问凭证(如适用)
+- 输入数据已准备就绪

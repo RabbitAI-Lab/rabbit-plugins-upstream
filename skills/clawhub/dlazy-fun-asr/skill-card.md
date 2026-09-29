@@ -1,43 +1,55 @@
-## Description: <br>
-Alibaba Bailian Fun-ASR recording transcription supports Chinese, English and other languages, with auto language detection and speaker diarization for subtitles, transcription, and meeting notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Transcribes recordings with Fun-ASR for subtitles, transcripts, and meeting notes, with language and speaker options.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to send recording files to dLazy's hosted Fun-ASR service for multilingual transcription, speaker diarization, subtitle preparation, and meeting notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided audio, video, image, and parameters may be sent to dLazy as a third-party cloud processor. <br>
-Mitigation: Use the skill only when that processing is acceptable for the data involved, avoid sensitive recordings unless policy permits it, and review dLazy service terms for retention and access practices. <br>
-Risk: Authentication can store a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-session credentials when a saved config key is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Individuals and teams use this skill to transcribe recordings for subtitles, written transcripts, and meeting notes, with optional speaker diarization.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-fun-asr) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, JSON, Guidance] <br>
-**Output Format:** [JSON responses and agent-facing command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task identifiers when invoked with no-wait behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Audio or other local media selected by the user may be uploaded to dLazy's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review recordings and obtain appropriate authorization before sending them to the service.
+
+Risk: Authentication may persist a dLazy API key in local configuration.
+
+Mitigation: Use the DLAZY_API_KEY environment variable if a persistent local key is undesirable.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-fun-asr)
+- [dLazy CLI project (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [JSON response containing transcription output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional speaker diarization and audio-event tagging; asynchronous requests return a task ID.]
+
+## Skill Version(s):
+
+1.3.22 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,55 @@
-## Description: <br>
-Video search tool: queries Pixabay video API by keywords and returns stock video URLs and metadata for footage sourcing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches for stock video footage by keyword and returns video URLs and metadata.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to search for stock video footage by keyword and retrieve video URLs and metadata for media sourcing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to dLazy and a dLazy API key may be stored locally by the CLI. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation credentials when local key storage is not desired, and rotate or revoke keys from dLazy if needed. <br>
-Risk: The --save option writes returned assets to a caller-provided local path. <br>
-Mitigation: Use explicit trusted output paths and review downloaded files before reuse. <br>
+## Use Case:
 
+Creators and agents use this skill to find stock video footage by keyword and review video links and metadata for sourcing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-video) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Guidance] <br>
-**Output Format:** [JSON result envelope with video result metadata and URLs; optional local asset file when --save is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async mode can return a generateId and status for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Search inputs are sent to dLazy, and use requires a locally stored dLazy API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive search inputs, protect the API key, and rotate or revoke it if exposed.
+
+Risk: The documentation also describes local media uploads, although their relevance to video search is unclear.
+
+Mitigation: Do not pass local media paths until the publisher clarifies when files are uploaded and why.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-search-video)
+- [dLazy CLI repository (skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Video search results with URLs and metadata in JSON or summarized text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a dLazy API key; searches may return an asynchronous task identifier.]
+
+## Skill Version(s):
+
+1.3.23 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

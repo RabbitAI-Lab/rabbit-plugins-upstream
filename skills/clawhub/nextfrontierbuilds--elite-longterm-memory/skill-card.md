@@ -1,45 +1,63 @@
-## Description: <br>
-Ultimate AI agent memory system for Cursor, Claude, ChatGPT & Copilot. WAL protocol + vector search + git-notes + cloud backup. Never lose context again. Vibe-coding ready. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Elite Longterm Memory helps AI coding agents keep durable context using a write-ahead log, vector search, git-notes storage, file archives, and optional cloud memory services.
 
-## Publisher: <br>
-[nextfrontierbuilds](https://clawhub.ai/user/nextfrontierbuilds) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[nextfrontierbuilds](https://clawhub.ai/user/nextfrontierbuilds)
 
-## Use Case: <br>
-Developers and AI-agent users use this skill to set up persistent project memory, including session state, curated Markdown archives, vector recall, Git-notes decisions, and optional cloud memory integrations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent memory can capture sensitive prompts, code, business context, or personal details. <br>
-Mitigation: Require explicit approval before saving sensitive information, minimize what is stored, and periodically review memory files and vector entries. <br>
-Risk: Optional Mem0 and SuperMemory integrations may upload or retain conversation-derived facts with third-party services. <br>
-Mitigation: Enable those integrations only after reviewing data-handling terms and confirming that the intended content may be sent to those services. <br>
-Risk: The documented cleanup command deletes the local LanceDB vector store. <br>
-Mitigation: Back up memory data and confirm deletion intent before running destructive cleanup commands. <br>
+## Use Case:
 
+Developers and engineers use this skill to add persistent memory practices to AI coding agents, including active session state, curated memory files, semantic recall, git-notes decisions, and optional external memory integrations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nextfrontierbuilds/skills/elite-longterm-memory) <br>
-- [README.md](README.md) <br>
-- [SKILL.md](SKILL.md) <br>
-- [npm package](https://www.npmjs.com/package/elite-longterm-memory) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON configuration snippets, JavaScript examples, and generated memory files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires OPENAI_API_KEY for OpenAI-backed memory search; optional Mem0 and SuperMemory integrations use their own API keys.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: SKILL.md frontmatter, package.json, server release evidence) <br>
+Risk: Durable memory can retain conversation details, project decisions, secrets, or personal data longer than the user intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review memory files and vector stores regularly, avoid storing secrets or personal data, and clear or redact entries before syncing or sharing a workspace.
+
+Risk: Optional cloud and Mem0 integrations can upload memory content to third-party services.
+
+Mitigation: Keep those integrations disabled until upload scope, consent, and redaction controls have been reviewed.
+
+Risk: Unpinned or floating package versions can change behavior after installation.
+
+Mitigation: Prefer pinned package versions and review release changes before deploying the skill in a managed environment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/nextfrontierbuilds/skills/elite-longterm-memory)
+- [npm package](https://www.npmjs.com/package/elite-longterm-memory)
+- [bulletproof-memory](https://clawdhub.com/skills/bulletproof-memory)
+- [lancedb-memory](https://clawdhub.com/skills/lancedb-memory)
+- [git-notes-memory](https://clawdhub.com/skills/git-notes-memory)
+- [memory-hygiene](https://clawdhub.com/skills/memory-hygiene)
+- [supermemory](https://clawdhub.com/skills/supermemory)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, JSON configuration snippets, JavaScript examples, and generated memory files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The bundled CLI can create SESSION-STATE.md, MEMORY.md, and dated Markdown logs in the current workspace.]
+
+## Skill Version(s):
+
+1.2.3 (source: SKILL.md frontmatter, package.json, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

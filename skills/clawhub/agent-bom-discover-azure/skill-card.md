@@ -1,42 +1,55 @@
-## Description: <br>
-Discover Azure-hosted AI agent and MCP-relevant assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived Azure credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discovers Azure-hosted AI and agent-related assets, writes agent-bom inventory JSON, and optionally scans that inventory when requested.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and cloud security engineers use this skill to inventory Azure OpenAI, Container Apps, AKS, Functions, ML, and related agentic Azure infrastructure as canonical agent-bom inventory. It supports discovery-first workflows that can optionally scan the resulting local inventory when the operator asks for findings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads Azure identity configuration and token-cache files when using the operator's existing Azure credential chain. <br>
-Mitigation: Use a read-only Azure account or scoped service principal, avoid environments where Azure token-cache access is not acceptable, and do not paste or print secrets. <br>
-Risk: Inventory output can describe Azure resources and service metadata. <br>
-Mitigation: Write inventory only to an operator-selected path and review the local JSON before sharing or scanning it. <br>
+## Use Case:
 
+Developers and operators use this skill to inventory AI and agent-related resources in approved Azure subscriptions and optionally scan the resulting inventory with agent-bom.
 
-## Reference(s): <br>
-- [agent-bom homepage](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-azure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and JSON inventory guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-reviewed commands and guidance for writing canonical local inventory JSON and optional agent-bom scan findings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: frontmatter and server release metadata) <br>
+Risk: Azure discovery accesses subscription metadata through the operator's identity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an approved, least-privilege read-only Azure identity and limit discovery to approved subscriptions.
+
+Risk: Generated inventory may contain sensitive resource metadata.
+
+Mitigation: Choose the local output path and review the inventory before sharing or scanning it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/msaad00/skills/agent-bom-discover-azure)
+- [agent-bom project homepage](https://github.com/msaad00/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Shell commands and canonical inventory JSON; optional JSON scan findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Discovery writes inventory to an operator-selected local path; scanning is optional and requires an explicit request.]
+
+## Skill Version(s):
+
+0.106.1 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

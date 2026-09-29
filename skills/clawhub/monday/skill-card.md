@@ -1,46 +1,61 @@
-## Description: <br>
-Monday.com API integration with managed OAuth for managing boards, items, columns, groups, and workspaces using GraphQL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents query and manage Monday.com boards, items, and workspaces through a Maton-managed account connection, with optional workflow automation.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to query and manage Monday.com workspaces, boards, items, columns, and groups through Maton's managed OAuth proxy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Monday.com data through Maton when a valid API key and OAuth connection are available. <br>
-Mitigation: Keep MATON_API_KEY private and approve create, update, or delete operations only after checking the exact target and intended effect. <br>
-Risk: Requests may use the wrong Monday.com account when multiple connections are linked. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header when multiple Monday.com connections exist. <br>
+## Use Case:
 
+Teams and developers use this skill to inspect and update Monday.com workspaces, boards, and tasks, and to set up approved scheduled or event-driven actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/monday) <br>
-- [Monday.com API Basics](https://developer.monday.com/api-reference/docs/basics) <br>
-- [Monday.com GraphQL Overview](https://developer.monday.com/api-reference/docs/introduction-to-graphql) <br>
-- [Monday.com Boards Reference](https://developer.monday.com/api-reference/reference/boards) <br>
-- [Monday.com Items Reference](https://developer.monday.com/api-reference/reference/items) <br>
-- [Monday.com Columns Reference](https://developer.monday.com/api-reference/reference/columns) <br>
-- [Monday.com API Changelog](https://developer.monday.com/api-reference/changelog) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline JSON, Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Monday.com OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Account access and data-changing operations can affect Monday.com boards, items, and users.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Authorize the connection explicitly, use only the access needed, and confirm each write and its target before execution.
+
+Risk: Deployed functions, triggers, and destination URLs can create persistent actions or forward event and business data.
+
+Mitigation: Review each deployment, trigger, and destination separately; send data only to destinations the user controls and trusts.
+
+Risk: A local event handler can run code against untrusted event payloads.
+
+Mitigation: Require a user-authored or reviewed handler and separate approval before using local --exec execution.
+
+## Reference(s):
+
+- [Monday.com skill release](https://clawhub.ai/byungkyu/skills/monday)
+- [Maton homepage](https://maton.ai)
+- [Monday.com GraphQL API overview](https://developer.monday.com/api-reference/docs/introduction-to-graphql)
+- [Maton documentation](https://docs.maton.ai)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with GraphQL, JSON, and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include account or business data; limit disclosure to what the task requires.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

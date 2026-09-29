@@ -1,42 +1,55 @@
-## Description: <br>
-Generate AI podcast episodes from PDFs, text, notes, and links using MagicPodcast in OpenClaw. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate AI podcast episodes from PDFs, text, notes, and links using MagicPodcast in OpenClaw.
 
-## Publisher: <br>
-[mogens9](https://clawhub.ai/user/mogens9) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[mogens9](https://clawhub.ai/user/mogens9)
 
-## Use Case: <br>
-External users and developers use this skill to turn PDF URLs, pasted text, notes, or links into two-person podcast episodes and retrieve dashboard or share links from MagicPodcast. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The selected PDF URL or pasted text is sent to MagicPodcast for processing. <br>
-Mitigation: Submit only content you have permission to share, and avoid confidential documents unless MagicPodcast privacy and retention terms are acceptable. <br>
-Risk: The skill requires a MagicPodcast API key for generation and status checks. <br>
-Mitigation: Store the key in the MAGICPODCAST_API_KEY environment variable and avoid exposing it in prompts, shared logs, or generated output. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [MagicPodcast](https://www.magicpodcast.app) <br>
-- [MagicPodcast OpenClaw API Key](https://www.magicpodcast.app/openclaw) <br>
-- [MagicPodcast Dashboard](https://www.magicpodcast.app/app) <br>
-- [ClawHub Skill Page](https://clawhub.ai/mogens9/ai-podcast) <br>
+## Use Case:
 
+External users and developers use this skill to turn PDF URLs, pasted text, notes, and links into two-person podcast episodes, then track progress and retrieve the finished share link from MagicPodcast.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, API calls, Guidance] <br>
-**Output Format:** [Markdown-style guidance with curl command templates, status text, and podcast URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl, jq, MAGICPODCAST_API_URL, and MAGICPODCAST_API_KEY; generated podcast links are returned when available.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: User-provided PDF URLs or pasted text are sent to MagicPodcast for processing.
+
+Mitigation: Avoid confidential documents unless third-party processing is approved.
+
+Risk: The skill requires a MagicPodcast API key.
+
+Mitigation: Set the API key as an environment variable and avoid sharing it directly in chat.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/mogens9/skills/ai-podcast)
+- [MagicPodcast Homepage](https://www.magicpodcast.app)
+- [MagicPodcast OpenClaw API Key Setup](https://www.magicpodcast.app/openclaw)
+- [MagicPodcast Dashboard](https://www.magicpodcast.app/app)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with bash command templates, status summaries, and podcast links.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns the MagicPodcast dashboard link after creation and a share URL, app URL fallback, or surfaced API error details when status is checked.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

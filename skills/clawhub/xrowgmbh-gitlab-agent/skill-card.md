@@ -1,44 +1,67 @@
-## Description: <br>
-An agent for interacting with GitLab. Supports gitlab.com and self-hosted instances. Requires no GitLab DUO. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate assigned GitLab work with owner-verified project access and guarded MR delivery.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to let an agent triage assigned GitLab issues and merge requests, create branches and merge requests, manage labels and status comments, inspect pipelines, and coordinate review through the glab CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is designed to act on a GitLab account and may perform recurring write actions with broad authority. <br>
-Mitigation: Install only when that automation is intended, use a least-privilege GitLab token limited to the target projects, and review a manual run before enabling the recurring job. <br>
-Risk: The skill can push commits, create comments and labels, manage merge requests, trigger pipelines, set variables, create releases, and merge changes with limited confirmation. <br>
-Mitigation: Require explicit approval for high-impact actions such as pushes, comments, labels, merge requests, merges, variable changes, releases, and pipeline actions unless the operating environment already provides equivalent review controls. <br>
+## Use Case:
 
+Developers and engineering teams use this skill to let an autonomous agent process assigned GitLab issues and merge requests, apply project access checks, create branches and MRs, update labels, and move work through review.
 
-## Reference(s): <br>
-- [ClawHub GitLab Agent](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent) <br>
-- [GitLab default roles and permissions](https://docs.gitlab.com/user/permissions/#default-roles) <br>
-- [CI Tools Components Catalog for GitLab](https://ci-tools.xrow.de/) <br>
-- [OpenClaw creating skills guidance](https://docs.openclaw.ai/tools/creating-skills) <br>
-- [xrow public skills project](https://gitlab.com/xrow-public/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, GitLab API examples, JSON cron configuration, and code snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires glab and GITLAB_TOKEN; may perform GitLab write actions when deliberately enabled by the user.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: server release evidence) <br>
+Risk: The skill is designed to make recurring GitLab changes without confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only for intended GitLab accounts and projects, keep the recurring job disabled during initial testing, and review the no-confirmation workflow before enabling scheduled runs.
+
+Risk: A GitLab token can allow broad read and write access to assigned issues, merge requests, branches, labels, and discussions.
+
+Mitigation: Use a narrowly scoped GitLab token and project membership that match the intended automation account and repositories.
+
+Risk: The workflow can push branches with ci.skip and later trigger pipelines through glab.
+
+Mitigation: Review the ci.skip and pipeline-triggering behavior against project policy before allowing the agent to push or update merge requests.
+
+Risk: Project access and reviewer decisions depend on helper scripts and GitLab membership data.
+
+Mitigation: Keep the owner-created membership gate enabled, review failed-closed outcomes, and require deterministic reviewer selection through the bundled helper.
+
+## Reference(s):
+
+- [GitLab default roles](https://docs.gitlab.com/user/permissions/#default-roles)
+- [CI Tools Components Catalog](https://ci-tools.xrow.de/)
+- [CI Tools label component](https://ci-tools.xrow.de/Components/label)
+- [OpenClaw creating skills](https://docs.openclaw.ai/tools/creating-skills)
+- [xrow public skills project](https://gitlab.com/xrow-public/skills)
+- [Documentation style](references/documentation-style.md)
+- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with GitLab CLI commands, code changes, merge request and issue updates, labels, and status comments]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires GitLab CLI access through glab, jq, and a GitLab token supplied as GITLAB_TOKEN.]
+
+## Skill Version(s):
+
+1.94.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

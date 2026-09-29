@@ -1,6 +1,6 @@
 ---
 name: aigate
-description: Self-hosted AI platform — one `docker-compose up`, one OpenAI-compatible endpoint at http://localhost:4000. Bundles inference (Groq/Cerebras/OpenRouter/HuggingFace/Mistral/Cohere/Ollama/vLLM/llama.cpp/claudebox/pibox-zai/Anthropic/OpenAI), MCP tool use, a stealth browser cluster, image generation (FLUX/DALL-E/SD), speech synthesis (Kokoro/Qwen3-TTS/OpenAI TTS), transcription (Whisper/Parakeet), S3-compatible object storage, agentic code execution (Claude Code + pi-coding-agent + sandboxed piston), web search (SearXNG), an email gateway (mailbox), a Telegram client (Telethon), time-series forecasting + tabular ML (predictalot), audio/video production (audiolla/flickies), an async job queue (proxq), and a web UI (LibreChat) — all reachable through one bearer token and automatic per-model fallback routing. Use when the user wants a one-command self-hosted OpenAI-compatible stack that aggregates many providers/tools behind a single endpoint instead of wiring each service up individually.
+description: Self-hosted AI platform — one `docker-compose up`, one OpenAI-compatible endpoint at http://localhost:4000. Bundles inference (Groq/Cerebras/OpenRouter/HuggingFace/Mistral/Cohere/Ollama/vLLM/llama.cpp/claudebox/pibox-zai/Anthropic/OpenAI), MCP tool use, a stealth browser cluster, image generation (FLUX/DALL-E/SD), speech synthesis (Kokoro/Qwen3-TTS/Chatterbox/OpenAI TTS), transcription (Whisper/Parakeet), S3-compatible object storage, agentic code execution (Claude Code + pi-coding-agent + sandboxed piston), web search (SearXNG), an email gateway (mailbox), a Telegram client (Telethon), time-series forecasting + tabular ML (predictalot), audio/video production (audiolla/flickies), an async job queue (proxq), and a web UI (LibreChat) — all reachable through one bearer token and automatic per-model fallback routing. Use when the user wants a one-command self-hosted OpenAI-compatible stack that aggregates many providers/tools behind a single endpoint instead of wiring each service up individually.
 homepage: https://github.com/psyb0t/aigate
 user-invocable: true
 permissions:
@@ -28,13 +28,13 @@ A self-hosted AI platform. One `docker-compose up` stands up inference, tool use
 
 **This is a very high-capability, very high-blast-radius stack. Treat the endpoint and its token like root on the host.** A single `AIGATE_TOKEN` bearer can, depending on what's enabled:
 
-- Hold API keys/credentials for many cloud model providers (Groq, Cerebras, OpenRouter, HuggingFace, Mistral, Cohere, Anthropic, OpenAI) plus flat-rate agent backends (Claude Code OAuth/API key, z.ai).
-- Execute arbitrary code — two full agentic coding agents (claudebox, pibox-zai) with shell + file access, plus sandboxed multi-language execution (piston).
+- Hold API keys/credentials for many cloud model providers (Groq, Cerebras, OpenRouter, HuggingFace, Mistral, Cohere, Anthropic, OpenAI) plus subscription agent backends (Claude Code OAuth/API key, z.ai GLM Coding Plan).
+- Execute arbitrary code — three full agentic coding agents (claudebox, pibox-zai, pibox) with shell + file access, plus sandboxed multi-language execution (piston).
 - Drive a real browser (stealth Camoufox cluster) that can log into sites, fill forms, and act as the user across the open web.
 - Send email and Telegram messages on the user's behalf (mailbox, Telethon) — mailbox additionally holds plaintext IMAP/SMTP credentials in its YAML config.
 - Read/write S3-compatible object storage with a public-read bucket.
 
-**No per-tool scoping by default.** `AIGATE_TOKEN` is a single all-or-nothing capability grant — every per-service token (`CLAUDEBOX_API_TOKEN`, `PIBOX_ZAI_API_TOKEN`, `PREDICTALOT_AUTH_TOKEN`, `AUDIOLLA_AUTH_TOKEN`, `FLICKIES_AUTH_TOKEN`, `STEALTHY_AUTO_BROWSE_AUTH_TOKEN`, `HYBRIDS3_MASTER_KEY`, `MCP_TOOLS_AUTH_TOKEN`, `TELETHON_AUTH_KEY`, etc.) defaults to it unless the operator explicitly overrides each one separately. Handing an agent the token is not "give it chat access" — it's granting code execution, browser automation, and messaging in one shot, with no way to grant a narrower subset unless the operator has pre-split the per-service tokens. An agent must only be given `AIGATE_TOKEN` when it is fully trusted and only for the specific action the user explicitly requested — never pass it to an agent "just in case it needs something."
+**No per-tool scoping by default.** `AIGATE_TOKEN` is a single all-or-nothing capability grant — every per-service token (`CLAUDEBOX_API_TOKEN`, `PIBOX_ZAI_API_TOKEN`, `PREDICTALOT_AUTH_TOKEN`, `DECIDEALOT_AUTH_TOKEN`, `AUDIOLLA_AUTH_TOKEN`, `FLICKIES_AUTH_TOKEN`, `STEALTHY_AUTO_BROWSE_AUTH_TOKEN`, `HYBRIDS3_MASTER_KEY`, `MCP_TOOLS_AUTH_TOKEN`, `TELETHON_AUTH_KEY`, etc.) defaults to it unless the operator explicitly overrides each one separately. Handing an agent the token is not "give it chat access" — it's granting code execution, browser automation, and messaging in one shot, with no way to grant a narrower subset unless the operator has pre-split the per-service tokens. An agent must only be given `AIGATE_TOKEN` when it is fully trusted and only for the specific action the user explicitly requested — never pass it to an agent "just in case it needs something."
 
 Treat aigate as a **trusted host only**. Concretely:
 - Never expose port `4000` directly to the public internet. Use Cloudflare Tunnel (`CLOUDFLARED=1`) or Tailscale (`TAILSCALE=1`) — both keep no ports open on the host — or put a real authenticating gateway/reverse-proxy in front of it.
@@ -45,7 +45,7 @@ Treat aigate as a **trusted host only**. Concretely:
 
 ## When to use
 
-- The user wants a single self-hosted endpoint that speaks the OpenAI API and routes across many providers with automatic fallback (free-tier cloud → flat-rate → pay-per-token → local).
+- The user wants a single self-hosted endpoint that speaks the OpenAI API and routes across many providers with automatic fallback (free-tier cloud → subscription → pay-per-token → local).
 - The user wants bundled AI tooling (browser automation, image/speech/transcription, code execution, storage, search, email, Telegram, forecasting) reachable via MCP tools or REST without standing up each service by hand.
 - The user wants to run models fully locally (CPU or NVIDIA GPU) with no external calls, or mix local + cloud with automatic fallback between them.
 - The user needs a chat web UI (LibreChat) pre-wired to every enabled model and tool.
@@ -61,9 +61,11 @@ Treat aigate as a **trusted host only**. Concretely:
 ```bash
 git clone https://github.com/psyb0t/aigate
 cd aigate
-cp .env.example .env
+make bootstrap # creates .env from .env.example (any target does this)
 # edit .env: set AIGATE_TOKEN, flip the flags for the providers/services you want to 1
-make limits    # writes .env.limits sized to this machine's RAM/CPU
+# .env is gitignored. docker-compose.yml is tracked, so put compose changes in
+# docker-compose.override.yml, which is gitignored and merges last
+make limits    # checks enabled services fit this machine, writes CPU caps to .env.limits
 make run-bg    # start the stack in the background
 ```
 
@@ -82,17 +84,18 @@ curl http://localhost:4000/chat/completions \
 
 Everything below sits behind the same `http://localhost:4000` endpoint and the same `AIGATE_TOKEN` bearer — aigate's job is exposing them, not reimplementing them. Enable each with its `.env` flag; disabled services are excluded from routing/fallback entirely.
 
-- **Inference + routing** — `/chat/completions`, `/embeddings`, `/images/generations`, `/audio/*` (OpenAI-compatible, via LiteLLM). Model name picks the provider: free-tier cloud (Groq, Cerebras, OpenRouter, HuggingFace, Mistral, Cohere), flat-rate agents (claudebox = Claude Code, pibox-zai = pi-coding-agent/z.ai), pay-per-token (Anthropic, OpenAI), or fully local CPU/CUDA (Ollama, vLLM, llama.cpp, talkies, sd.cpp). Fallback chains retry the next provider automatically on 429/5xx.
-- **MCP tool use** — any function-calling model can autonomously invoke `generate_image`, `generate_tts`, `search_web`, `execute_code`, and per-service MCP tools (browser, storage, mailbox, Telethon, predictalot, audiolla, flickies, claudebox/pibox-zai agent tools). Auto-enabled with the underlying service.
+- **Inference + routing** — `/chat/completions`, `/embeddings`, `/images/generations`, `/audio/*` (OpenAI-compatible, via LiteLLM). Model name picks the provider: free-tier cloud (Groq, Cerebras, OpenRouter, HuggingFace, Mistral, Cohere), subscription agents (claudebox = Claude Code, pibox-zai = pi-coding-agent on a GLM Coding Plan), pay-per-token (Anthropic, OpenAI), or fully local CPU/CUDA (Ollama, vLLM, llama.cpp, talkies, sd.cpp). `pibox` runs the same pi agent on whichever of these models you point it at, so it costs whatever that model costs. Fallback chains retry the next provider automatically on 429/5xx.
+- **MCP tool use** — any function-calling model can autonomously invoke `generate_image`, `generate_tts`, `search_web`, `execute_code`, and per-service MCP tools (browser, storage, mailbox, Telethon, predictalot, decidealot, audiolla, flickies, claudebox/pibox-zai/pibox agent tools). Auto-enabled with the underlying service.
 - **Browser automation** — `stealthy-auto-browse`, 5-replica stealth Camoufox cluster behind HAProxy. REST + MCP (`BROWSER=1`).
 - **Agentic code execution** — claudebox (Claude Code) and pibox-zai (pi-coding-agent/z.ai) for full shell+file agentic tasks; piston at `/piston/` for sandboxed nsjail-isolated one-shot code execution (`CLAUDEBOX=1`, `PIBOX_ZAI=1`, `PISTON=1`).
 - **Object storage** — `hybrids3` at `/storage/`, S3-compatible, plain HTTP + boto3, public-read uploads, presigned URLs (`HYBRIDS3=1`).
 - **Image generation** — cloud (FLUX, DALL-E, SD) and local CPU/CUDA (`SDCPP=1` / `SDCPP_CUDA=1`) via `/images/generations` or MCP.
-- **Speech synthesis + transcription** — `talkies` unifies both under `/audio/speech` and `/audio/transcriptions` (Kokoro, Qwen3-TTS, Whisper, Parakeet, Canary — `TALKIES=1` / `TALKIES_CUDA=1`); cloud TTS/ASR routes through the same endpoints.
+- **Speech synthesis + transcription** — `talkies` unifies both under `/audio/speech` and `/audio/transcriptions` (Kokoro, Qwen3-TTS, Chatterbox Turbo, Whisper, Parakeet, Canary, Sherpa-ONNX, Vosk, wav2vec2/ZIPA phoneme ASR — `TALKIES=1` / `TALKIES_CUDA=1`); cloud TTS/ASR routes through the same endpoints.
 - **Web search** — SearXNG at `/searxng/`, plus MCP `search_web` (`SEARXNG=1`).
 - **Email gateway** — `mailbox` at `/mailbox/`, stateless IMAP+SMTP across N accounts from one YAML config, REST + MCP (`MAILBOX=1`, needs `MAILBOX_CONFIG` + `MAILBOX_AUTH_TOKEN`).
 - **Telegram client** — `telethon` at `/telethon/`, REST + MCP (`TELETHON=1`, needs API ID/hash + string session).
 - **Time-series forecasting + tabular ML** — `predictalot` at `/predictalot/` (CPU) and `/predictalot-cuda/` (GPU), REST + MCP (`PREDICTALOT=1` / `PREDICTALOT_CUDA=1`).
+- **Typed decisions**: `decidealot` at `/decidealot/` (CPU) and `/decidealot-cuda/` (GPU), REST + MCP (`DECIDEALOT=1` / `DECIDEALOT_CUDA=1`). Local Laya and Von models return `choice` / `score` / `noul` answers with probabilities. Set `DECIDEALOT_CLM_ENABLED=true` with `LLAMACPP_CUDA=1` to add CLM through AIGate's local Qwen3-8B embeddings route. The caller owns the threshold and the action that follows.
 - **Audio production** — `audiolla` at `/audiolla/` / `/audiolla-cuda/` — stem separation, mastering, MIDI, text-to-audio, REST + MCP (`AUDIOLLA=1` / `AUDIOLLA_CUDA=1`).
 - **Video toolkit** — `flickies` at `/flickies/` / `/flickies-cuda/` — lipsync, face restore, ffmpeg ops, REST + MCP (`FLICKIES=1` / `FLICKIES_CUDA=1`).
 - **Async job queue** — `proxq` at `/q/` — queue any OpenAI-path request, poll `/q/__jobs/{id}`, avoids client-side timeouts on long inference.

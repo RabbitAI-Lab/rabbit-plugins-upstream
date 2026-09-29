@@ -1,41 +1,65 @@
-## Description: <br>
-Azure helps agents architect, debug, secure, operate, and cost-optimize Azure infrastructure across compute, networking, identity, storage, databases, monitoring, governance, and infrastructure as code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Azure helps agents architect, debug, secure, operate, and cost-optimize Azure estates across compute, networking, identity, storage, databases, monitoring, infrastructure as code, and migration work.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers, cloud engineers, and operators use this skill to plan and review Azure deployments, diagnose platform failures, reduce spend, harden cloud exposure, and produce Azure CLI, KQL, IaC, and runbook guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can ask an agent to persist and reorganize local Azure operational records under ~/Clawic/data, including inventory, spend, contacts, and incident or runbook notes. <br>
-Mitigation: Protect the directory, review generated files periodically, and require the agent to show diffs or ask for confirmation before writing, moving, or deleting records. <br>
-Risk: Some guidance can affect live Azure resources, cost, access, or availability when converted into CLI or infrastructure-as-code changes. <br>
-Mitigation: Keep commands read-only by default, name the subscription and region, state cost and blast radius, preview IaC changes, and require explicit confirmation before destructive operations. <br>
+## Use Case:
 
+Developers, platform engineers, and cloud operators use this skill to deploy and review Azure resources, diagnose cloud failures, reduce spend, harden identity and network exposure, write infrastructure-as-code guidance, and maintain operational runbooks or inventory notes.
 
-## Reference(s): <br>
-- [Azure skill on ClawHub](https://clawhub.ai/ivangdavila/skills/azure) <br>
-- [Azure skill homepage](https://clawic.com/skills/azure) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline Azure CLI, KQL, Bicep, ARM, and Terraform snippets when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local files under ~/Clawic/data/azure/ for preferences, memory, inventory, spend history, and runbooks; credentials are represented only as pointers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The skill can build a durable plaintext local knowledge base containing Azure inventory, billing history, resource names, tenant or subscription details, and related contact notes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only on trusted machines and in environments where local persistence under the configured Clawic data folders is acceptable; protect or exclude those folders according to the sensitivity of the tenant.
+
+Risk: Cloud guidance and generated commands can affect production availability, access control, or spend if applied without review.
+
+Mitigation: Review proposed commands and changes before execution, verify the intended subscription, region, price, and blast radius, and require explicit confirmation for destructive operations.
+
+Risk: The skill is marked suspicious by the authoritative security evidence because it stores and reuses detailed cloud estate notes, even though no exfiltration or hidden code was reported.
+
+Mitigation: Review the skill before installation for sensitive tenants, regulated environments, client work, or shared machines.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/azure)
+- [Clawic skill page](https://clawic.com/skills/azure)
+- [Skill definition](artifact/SKILL.md)
+- [az toolkit](artifact/commands.md)
+- [Cost control](artifact/costs.md)
+- [Security guidance](artifact/security.md)
+- [Identity and RBAC](artifact/identity.md)
+- [Networking and Private Link](artifact/networking.md)
+- [Working file templates](artifact/memory-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline Azure CLI commands, infrastructure snippets, configuration tables, and local working-file templates.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce durable local notes such as inventory, spend history, saved queries, runbooks, address plans, and deployment records under configured Clawic data paths; credentials are represented by pointers, not secret values.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,68 @@
+{
+  "variant_id": "cap_08_vendor_to_procurement",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "purchase_terms",
+  "output_name": "purchase_draft_id",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "supplier_id",
+      "currency",
+      "lead_days",
+      "incoterm",
+      "renewal_month"
+    ],
+    "properties": {
+      "supplier_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "currency": {
+        "type": "string",
+        "minLength": 1
+      },
+      "lead_days": {
+        "type": "integer"
+      },
+      "incoterm": {
+        "type": "string",
+        "minLength": 1
+      },
+      "renewal_month": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "draft_id",
+      "status",
+      "supplier_id",
+      "summary"
+    ],
+    "properties": {
+      "draft_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "status": {
+        "type": "string",
+        "minLength": 1
+      },
+      "supplier_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "summary": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_purchase_draft_insert"
+}

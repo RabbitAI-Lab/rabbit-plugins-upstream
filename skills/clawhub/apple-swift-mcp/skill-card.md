@@ -1,44 +1,54 @@
-## Description: <br>
-This skill helps an agent work with local Apple app data through a native Swift MCP server for Calendar, Reminders, Contacts, Maps, Mail, Messages, Notes, and Photos on macOS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent read and manage local Apple app data, including calendars, reminders, contacts, mail, messages, notes, photos, and Music playlists on macOS.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and macOS users use this skill to let an agent search, read, create, update, send, organize, import, export, or delete data in local Apple apps. It is intended for macOS 14+ on Apple Silicon, with some operations requiring Apple TCC permissions or app automation access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive local Apple app data including calendar entries, contacts, emails, messages, notes, photos, and reminders. <br>
-Mitigation: Grant only the app and disk permissions needed for the current task, and review requested data access before allowing the agent to proceed. <br>
-Risk: The skill supports write or state-changing actions such as sending messages or mail, creating or deleting events and reminders, exporting photos, and changing photo metadata. <br>
-Mitigation: Require explicit user confirmation before send, delete, update, export, import, or metadata-changing actions. <br>
-Risk: Messages history may require direct local database access, and AppleScript-backed app automation can operate on personal application data. <br>
-Mitigation: Avoid broad full-disk or automation permissions unless the user understands which local data stores will be readable. <br>
+## Use Case:
 
+People using an agent on macOS can look up information in Apple apps and, with suitable permissions, manage events, reminders, contacts, messages, notes, photos, and local Music playlists.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/apple-swift-mcp) <br>
-- [apple-swift-mcp GitHub repository](https://github.com/chrischall/apple-swift-mcp) <br>
-- [apple-swift-mcp GitHub releases](https://github.com/chrischall/apple-swift-mcp/releases) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with tool-use guidance, commands, and configuration notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on macOS 14+, Apple Silicon, local app permissions, and user confirmation for sensitive read or write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: Access to sensitive local Apple app data can expose private information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review macOS permission prompts and allow only the read-only tools needed for the task.
+
+Risk: Write-capable tools can send messages or modify and delete personal data.
+
+Mitigation: Keep confirmation mode at ask-user and approve each sensitive action before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/apple-swift-mcp)
+- [Installation releases](https://github.com/chrischall/apple-swift-mcp/releases)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, API calls]
+
+**Output Format:** [Text and structured MCP tool responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Access depends on macOS permissions; sensitive changes can require user confirmation.]
+
+## Skill Version(s):
+
+2.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

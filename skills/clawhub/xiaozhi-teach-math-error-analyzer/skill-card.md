@@ -1,49 +1,57 @@
-## Description: <br>
-Helps math teachers turn wrong-answer review into structured class and student error analysis by classifying mistakes, linking them to a knowledge map, and producing teaching intervention suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助初高中数学教师分析作业和测评错题，识别班级与学生的共性错因，并提出下节课的教学干预建议。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External math teachers use this skill to analyze homework, test, or classroom mistakes across a class and individual students. It produces error categories, knowledge-map links, class and student profiles, and intervention suggestions for teacher review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student performance data or real names could be exposed in reports or downstream profiles. <br>
-Mitigation: Use aliases or student IDs by default, avoid real names unless authorized, and review reports before sharing or writing them to downstream systems. <br>
-Risk: Error analysis and intervention suggestions could be mistaken for grading, ranking, or final teaching decisions. <br>
-Mitigation: Keep outputs as teacher-reviewed analysis and suggestions; do not use the skill to replace teacher grading, rank students, or make unsupervised instructional decisions. <br>
-Risk: Cross-skill handoff fields could fail or lose meaning if the seven teacher-side error categories are not mapped to the supported four-category schema. <br>
-Mitigation: Map teacher-side categories to the documented standard categories before writing data into downstream student-analysis or handoff workflows. <br>
+## Use Case:
 
+初高中数学教师可根据作业或测评的逐题作答数据，识别高频错因与薄弱知识点，形成班级及个体分析和教学干预建议。分析结果须经教师确认后再用于教学或学生档案。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-error-analyzer) <br>
-- [Error Classification Rubric](references/error-classification-rubric.md) <br>
-- [Knowledge Map Template](references/knowledge-map-template.md) <br>
-- [Intervention Design Template](references/intervention-design.md) <br>
-- [Class Error Report Template](references/class-error-report-template.md) <br>
-- [Student Error Profile Template](references/student-error-profile-template.md) <br>
-- [Error-Knowledge Link Template](references/error-knowledge-link-template.md) <br>
-- [Intervention Report Template](references/intervention-report-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance, Files] <br>
-**Output Format:** [Markdown reports, structured teaching profiles, and text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses teacher-provided mistake data and should use aliases or IDs for student records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server evidence) <br>
+Risk: 持续保存或跨技能共享学生表现数据可能暴露个人学习记录。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 使用化名，仅在取得相应授权并经教师确认后写回学生档案或共享；核对家长分享设置。
+
+Risk: 抽样错因或生成的教学建议可能不准确，尤其在样本很小时。
+
+Mitigation: 标明样本范围与全班数据的区别；小样本不报告百分比，由教师复核分析和练习题后再使用。
+
+## Reference(s):
+
+- [班级错因分析：ClawHub 发布页](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-error-analyzer)
+- [错因分类细则](artifact/references/error-classification-rubric.md)
+- [知识图谱模板](artifact/references/knowledge-map-template.md)
+- [教学干预设计](artifact/references/intervention-design.md)
+- [班级错因报告模板](artifact/references/class-error-report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [中文文本或 Markdown 报告与教学建议]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [区分全班统计与抽样结论；学生档案使用化名，写回前需教师确认及相应授权。]
+
+## Skill Version(s):
+
+2.7.1 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

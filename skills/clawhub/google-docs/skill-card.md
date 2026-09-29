@@ -1,52 +1,66 @@
-## Description: <br>
-Google Docs API integration with managed OAuth for creating documents, inserting text, applying formatting, and managing document content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read, create, and format Google Docs through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to access Google Docs through Maton's managed OAuth proxy for document reads, creation, text insertion, formatting, and batch updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google Docs document content and requests are routed through Maton's API proxy. <br>
-Mitigation: Use only the Google account intended for the task and avoid sending content that should not be processed through Maton. <br>
-Risk: MATON_API_KEY grants access through the connected Maton account. <br>
-Mitigation: Store MATON_API_KEY as a secret, rotate it if exposed, and do not paste it into chat or logs. <br>
-Risk: Write or delete operations can change Google Docs content. <br>
-Mitigation: Confirm the target document, selected connection, and intended change before approving any create, update, or delete action. <br>
-Risk: Multiple Google Docs connections can cause requests to affect the wrong account. <br>
-Mitigation: Specify the intended connection ID whenever more than one Google Docs connection is active. <br>
+## Use Case:
 
+People and teams use this skill to retrieve Google Docs content and, with approval, create documents or update text and formatting. Optional automations can run approved document actions on a schedule or in response to supported external events.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-docs) <br>
-- [Google Docs API overview](https://developers.google.com/docs/api/how-tos/overview) <br>
-- [Get document](https://developers.google.com/docs/api/reference/rest/v1/documents/get) <br>
-- [Create document](https://developers.google.com/docs/api/reference/rest/v1/documents/create) <br>
-- [Batch update](https://developers.google.com/docs/api/reference/rest/v1/documents/batchUpdate) <br>
-- [Request types](https://developers.google.com/docs/api/reference/rest/v1/documents/request) <br>
-- [Document structure](https://developers.google.com/docs/api/concepts/structure) <br>
-- [Maton CLI manual](https://cli.maton.ai/manual) <br>
-- [Maton community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Google Docs OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: Connecting an account gives Maton access to Google Docs within the authorized scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get consent before connecting, choose the least-privilege scopes available, and remove unused connections.
+
+Risk: Document writes can change or expose user content.
+
+Mitigation: Start with read-only checks and confirm the target document, changes, and intended effect before each write.
+
+Risk: Trigger destinations can continuously forward matching event data to another service.
+
+Mitigation: Require separate explicit approval for each destination and avoid external destinations unless the user requests them.
+
+Risk: A raw API key can leak through logs, files, or subprocesses.
+
+Mitigation: Prefer managed OAuth and the CLI; if a key is necessary, keep it out of commands, logs, and persistent files.
+
+## Reference(s):
+
+- [Google Docs skill release](https://clawhub.ai/byungkyu/skills/google-docs)
+- [Maton](https://maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Google Docs API overview](https://developers.google.com/docs/api/how-tos/overview)
+- [Google Docs batch update reference](https://developers.google.com/docs/api/reference/rest/v1/documents/batchUpdate)
+- [Scheduled trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with API examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Document content may contain personal information; return only what the user needs.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-Session retrospective and skill audit for reflecting on sessions, reviewing lessons learned, and auditing what went well or wrong. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through a session retrospective and skill audit to identify lessons and actionable improvements.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and agent users use this skill to review a completed session, identify mistakes, friction, wasted effort, and wins, and decide which lessons should be preserved. It also audits invoked skills and proposes concrete improvements or diffs when skill changes are warranted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved memories or skill edits can influence future agent behavior if approved without review. <br>
-Mitigation: Review each proposed memory entry or skill diff before approving persistence. <br>
-Risk: Session retrospectives may quote or summarize sensitive conversation content. <br>
-Mitigation: Do not persist secrets, credentials, private URLs, customer data, unredacted personal information, or machine-specific paths. <br>
+## Use Case:
 
+Developers and other agent users use this skill to review a session, identify mistakes and wins, and propose prioritized improvements or skill updates.
 
-## Reference(s): <br>
-- [ia-reflect on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-reflect) <br>
-- [Skill specification](artifact/SPEC.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with findings, prioritized improvements, review prompts, and proposed diffs when skill audits are requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose memory entries or skill edits for user approval; review proposed changes before they are persisted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.1 (source: server release evidence) <br>
+Risk: The retrospective may review sensitive conversation content and existing project memory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only where review of that context is appropriate, and check summaries before sharing them.
+
+Risk: Saved learnings or skill edits can persist unwanted or inaccurate guidance.
+
+Mitigation: Approve specific memory writes and skill edits before they are applied; review proposed changes for accuracy.
+
+## Reference(s):
+
+- [ia-reflect on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-reflect)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Cites session moments and prioritizes concrete improvements; approved learnings or skill edits may be saved.]
+
+## Skill Version(s):
+
+5.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

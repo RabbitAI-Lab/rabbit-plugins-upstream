@@ -1,41 +1,52 @@
-## Description: <br>
-查询目的地疫苗和健康风险，覆盖黄热病、疟疾、伤寒等9种核心旅行疫苗，支持目的地健康要求查询和个性化疫苗接种方案推荐，零配置即装即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询目的地疫苗和健康风险，覆盖黄热病、疟疾、伤寒等9种核心旅行疫苗，支持目的地健康要求查询和个性化疫苗接种方案推荐，零配置即装即用。暑期出境疫苗准备，各国接种要求查询
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[travel-skills](https://clawhub.ai/user/travel-skills)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External travelers and travel planners use this skill to look up destination vaccine requirements, common travel health risks, and preliminary vaccination timing guidance before consulting official health sources.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Static travel vaccine and health-risk guidance can become outdated or incomplete.
+
+Mitigation: Verify destination requirements with an official travel clinic or public-health source before acting on the advice.
+
+Risk: The skill provides preliminary health guidance and does not replace professional medical advice.
+
+Mitigation: Consult a qualified medical professional, especially for travelers who are pregnant, children, immunocompromised, or managing existing health conditions.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External travelers and travel-planning agents use this skill to look up destination vaccine requirements, common travel vaccine information, malaria risk notes, and pre-trip vaccination timing guidance. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Travel vaccine and entry requirements can change, and the skill states that it cannot guarantee real-time data. <br>
-Mitigation: Verify recommendations with official travel health sources or a clinician before making travel or medical decisions. <br>
-Risk: The skill provides medical-adjacent guidance that may not account for pregnancy, children, immune status, allergies, or individual health history. <br>
-Mitigation: Treat outputs as convenience references and consult a qualified clinician or international travel health clinic for personal advice. <br>
+**Output Format:** [JSON-formatted text]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-vaccine-guide) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+**Other Properties Related to Output:** [Chinese-language responses with static travel vaccine and health-risk data.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, guidance] <br>
-**Output Format:** [JSON-formatted text in Chinese] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns destination lookups, vaccine lists, and recommendation summaries; responses are informational and should be checked against official travel health sources.] <br>
+1.0.19 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
