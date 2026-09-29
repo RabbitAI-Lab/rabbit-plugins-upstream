@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-database",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-database",
+  "branch": "main",
+  "pushedAt": "2026-09-29T09:40:31Z",
+  "contentHash": "46b7d8d0e85657b53add987c5a1348dd5a92a9bbcf9f8d3ab4fc2eb4ac0feacc",
+  "fetchedAt": "2026-09-29T14:13:00.533Z"
+}
