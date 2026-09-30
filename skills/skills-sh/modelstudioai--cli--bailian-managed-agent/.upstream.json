@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/modelstudioai/cli/bailian-managed-agent",
+  "repo": "modelstudioai/cli",
+  "skillId": "bailian-managed-agent",
+  "branch": "main",
+  "pushedAt": "2026-09-30T02:54:34Z",
+  "contentHash": "7c5db1099a7452e07ee5a656cc50be2a9f36ed12f4d92e0a15e4243f68535b4c",
+  "fetchedAt": "2026-09-30T13:51:03.902Z"
+}

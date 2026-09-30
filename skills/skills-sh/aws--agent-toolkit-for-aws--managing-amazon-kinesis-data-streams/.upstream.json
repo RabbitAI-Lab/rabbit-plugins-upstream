@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/managing-amazon-kinesis-data-streams",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "managing-amazon-kinesis-data-streams",
+  "branch": "main",
+  "pushedAt": "2026-09-30T13:12:19Z",
+  "contentHash": "7b0f9ca39d000d876d3ee28560c8e7e44f465af1e1f356b4892a4de1bb47baa0",
+  "fetchedAt": "2026-09-30T13:52:59.072Z"
+}
