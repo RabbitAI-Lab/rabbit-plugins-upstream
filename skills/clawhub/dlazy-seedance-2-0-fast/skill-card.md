@@ -1,45 +1,59 @@
-## Description: <br>
-Fast version of ByteDance's Seedance 2.0 for generating videos from text prompts, reference media, or first and last frame inputs through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate videos from text, reference media, or first and last frames using dLazy's Seedance 2.0 Fast service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to generate short videos with Seedance 2.0 Fast through the dLazy CLI. It supports text-to-video, multimodal reference inputs, first/last frame workflows, selectable aspect ratios, durations, and asynchronous polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths provided to the CLI may be uploaded to dLazy for processing. <br>
-Mitigation: Avoid submitting sensitive or unauthorized content, and review dLazy service terms before use. <br>
-Risk: The dLazy API key can be stored locally in the CLI configuration. <br>
-Mitigation: Use OS account protections, prefer per-invocation credentials when appropriate, and rotate or revoke the organization API key if exposure is suspected. <br>
-Risk: Generated outputs are hosted by dLazy. <br>
-Mitigation: Review generated media URLs and sharing practices before distributing outputs. <br>
+## Use Case:
 
+Creators and developers use this skill to request fast video generation with text prompts, reference images, videos, or audio, or specified first and last frames.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON responses containing generated media URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is hosted by dLazy; local media paths supplied to the CLI may be uploaded for processing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: server release metadata and skill frontmatter) <br>
+Risk: Installing the external dLazy CLI runs third-party software on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the pinned @dlazy/cli package before global installation; use npx for on-demand execution if a persistent binary is not wanted.
+
+Risk: Reference media supplied as local files is uploaded to dLazy's hosted service.
+
+Mitigation: Only submit media that the user is comfortable uploading to dLazy.
+
+Risk: Logging in can save the dLazy API key in local CLI configuration.
+
+Mitigation: Use DLAZY_API_KEY for per-run access if the user does not want the key stored locally.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-seedance-2-0-fast)
+- [dLazy CLI homepage (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package (listed in skill metadata)](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Text guidance and JSON CLI responses with generated media URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Asynchronous requests may return a task ID instead of an immediate media URL.]
+
+## Skill Version(s):
+
+1.3.22 (source: ClawHub release metadata; artifact frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

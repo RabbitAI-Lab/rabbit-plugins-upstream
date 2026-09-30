@@ -9,6 +9,28 @@ var os = require("node:os");
 
 var SCRIPT_DIR = __dirname;
 
+// Argument checks stay at the top for two reasons: loading the config exits when it is
+// missing, so a check below it is unreachable for anyone who has not configured yet; and a
+// run's first act is deploying the server files, so validating late meant a typo in the local
+// path cost a full round of uploads before failing with an ENOENT about the file alone.
+var args = process.argv.slice(2);
+var usage = "Usage: node " + path.basename(process.argv[1]) + " <local-file> <remote-key>";
+if (args.length < 2) {
+  console.log(usage);
+  process.exit(1);
+}
+if (args[0].charAt(0) === "-") {
+  console.log(usage);
+  console.error('UPLOAD_FAILED: "' + args[0] + '" looks like an option; this script takes two positional arguments and has no flags.');
+  process.exit(1);
+}
+var localStat = null;
+try { localStat = fs.statSync(args[0]); } catch (e) { /* reported below */ }
+if (!localStat || !localStat.isFile()) {
+  console.error("UPLOAD_FAILED: not a readable file: " + args[0]);
+  process.exit(1);
+}
+
 // ── User data dir: upgrade-safe location in home dir ──
 var USER_CONFIG_DIR = path.join(os.homedir(), ".md-web");
 var USER_CONFIG_PATH = path.join(USER_CONFIG_DIR, "config.json");
@@ -186,9 +208,13 @@ function s3Fetch(method, resourcePath, query, payload, extraHeaders) {
         headers: reqHeaders,
       },
       function (res) {
-        var body = "";
-        res.on("data", function (c) { body += c; });
+        // Collect the chunks and decode once. Appending a Buffer to a string decodes each
+        // chunk separately, so a multibyte character straddling a chunk boundary turns into
+        // mojibake — and R2 echoes the key back in its error XML, where keys are not ASCII.
+        var chunks = [];
+        res.on("data", function (c) { chunks.push(c); });
         res.on("end", function () {
+          var body = Buffer.concat(chunks).toString("utf-8");
           if (res.statusCode >= 200 && res.statusCode < 300) resolve({ status: res.statusCode, body: body });
           else reject(new Error("HTTP " + res.statusCode + " — " + parseR2Error(body)));
         });
@@ -267,9 +293,14 @@ function setLifecycleRule() {
   var days = expireDays();
 
   if (days === 0) {
+    // Report the failure like the days > 0 branch does. Swallowing it meant a token
+    // without lifecycle permission produced no output at all here, so the bucket kept
+    // whatever expiry rule it already had while the config said there was none.
     return s3Fetch("DELETE", "/" + CONFIG.bucket, "lifecycle")
       .then(function () { console.log("  Lifecycle: no expiry"); })
-      .catch(function () {});
+      .catch(function (e) {
+        console.error("  Warning: could not clear the lifecycle rule — " + (e.message || e));
+      });
   }
 
   // Scope expiry to md-web's own uploads (the "md-web/" key prefix) only — never
@@ -371,20 +402,19 @@ function timestamp() {
 // rule (and any future cleanup) only ever touches md-web's own files.
 var UPLOAD_PREFIX = "md-web/";
 
+var DOC_EXTS = [".md", ".markdown", ".txt"];
+
 function addTimestamp(key) {
   var ext = path.extname(key);
   var base = key.slice(0, key.length - ext.length);
-  if (ext.toLowerCase() !== ".md") { ext = ".md"; }
-  return timestamp() + "-" + base + ext;
+  // Strip only an extension we recognise. path.extname() calls everything after the last
+  // dot an extension, so "v1.2-release-notes" reported ".2-release-notes" and dropping it
+  // shipped the document as "v1.md" — silently truncated, with a 200 on the URL to hide it.
+  if (DOC_EXTS.indexOf(ext.toLowerCase()) === -1) base = key;
+  return timestamp() + "-" + base + ".md";
 }
 
 // ── Main ──
-var args = process.argv.slice(2);
-if (args.length < 2) {
-  console.log("Usage: node " + path.basename(process.argv[1]) + " <local-file> <remote-key>");
-  process.exit(1);
-}
-
 var localPath = args[0];
 var remoteKey = UPLOAD_PREFIX + addTimestamp(args[1]);
 
@@ -397,7 +427,9 @@ serverDeployed()
   })
   .then(function () {
     var name = remoteKey.replace(/\.md$/i, "");
-    console.log("\n" + CONFIG.public_url + "/index.html#/" + name);
+    // The key is percent-encoded on the way in (uriEncodePath in s3Fetch), so it has to be
+    // encoded on the way out too: a raw space ends the link the moment anything parses it.
+    console.log("\n" + CONFIG.public_url + "/index.html#/" + name.split("/").map(encodeURIComponent).join("/"));
     agent.destroy();
   })
   .catch(function (e) {

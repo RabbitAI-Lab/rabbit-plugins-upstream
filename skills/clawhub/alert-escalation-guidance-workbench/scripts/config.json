@@ -1,0 +1,90 @@
+{
+  "variant_id": "shadow_13_escalation",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "assignment_guidance",
+  "output_name": "assignment_result",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "routing_table": {
+            "type": "object"
+          },
+          "default_assignment": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "routing_table",
+          "default_assignment"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "routing_table": {
+                    "type": "object"
+                  },
+                  "default_assignment": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "routing_table",
+                  "default_assignment"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "alert_id": {
+        "type": "string"
+      },
+      "severity": {
+        "type": "string"
+      },
+      "assignment": {
+        "type": "string"
+      },
+      "matched_rule": {
+        "type": "boolean"
+      }
+    },
+    "required": [
+      "alert_id",
+      "severity",
+      "assignment",
+      "matched_rule"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_incident_assignment"
+}

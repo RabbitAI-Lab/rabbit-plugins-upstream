@@ -1,44 +1,60 @@
-## Description: <br>
-Extracts TikTok Shop product search results by keyword and country region, returning product identifiers, titles, prices, seller and shop details, ratings, review and sold counts, images, SKU variants, brand data, and product URLs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search TikTok Shop products by keyword with the official Gecho Bridge MCP tool and return structured product data, prices, ratings, sales signals, and links.
 
-## Publisher: <br>
-[browseract-cli](https://clawhub.ai/user/browseract-cli) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gecho-ai](https://clawhub.ai/user/gecho-ai)
 
-## Use Case: <br>
-Developers, analysts, and commerce operators use this skill to collect publicly visible TikTok Shop search listing data for market research, competitor tracking, product discovery, and pricing analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to TikTok Shop regional availability and applicable local requirements. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Browser automation that collects TikTok Shop listing data may be subject to TikTok Shop rules and applicable law. <br>
-Mitigation: Use the skill only when the intended collection is permitted, and review site terms, legal requirements, and organizational policy before execution. <br>
-Risk: The artifact includes guidance involving stealth browsers, proxies, multi-session collection, and CAPTCHA handling. <br>
-Mitigation: Avoid those tactics unless they have been specifically reviewed and approved for compliance with TikTok Shop rules and applicable law. <br>
-Risk: The skill may read or append operational notes in a local memory file when unexpected execution conditions occur. <br>
-Mitigation: Review the memory-file behavior before use if local working-directory notes are not desired. <br>
+## Use Case:
 
+External users, ecommerce researchers, and developers use this skill to route TikTok Shop product-discovery requests through Gecho Bridge and summarize structured product results, prices, ratings, sales signals, and links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/browseract-cli/skills/tiktok-shop-search) <br>
-- [Publisher profile](https://clawhub.ai/user/browseract-cli) <br>
-- [TikTok Shop search URL pattern](https://shop.tiktok.com/{country_code_lower}/s?q={keyword}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON extraction output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces paginated product search records with product, seller, pricing, rating, image, SKU, and URL fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version) <br>
+Risk: The workflow depends on a third-party MCP server and Chrome extension operating with a logged-in TikTok Shop browser session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use the Gecho Bridge MCP server and Chrome extension only when that trust model is acceptable, and remove the MCP configuration or extension when the workflow is no longer needed.
+
+Risk: Using an unpinned MCP package can change the executed Gecho Bridge version over time.
+
+Mitigation: Prefer a pinned and reviewed Gecho Bridge package version when configuring the MCP server.
+
+Risk: Browser login, CAPTCHA, verification, region, or cookie prompts can block or alter product-search results.
+
+Mitigation: Resolve platform prompts manually in Chrome before running the skill, and stop rather than retrying repeatedly if the tool reports a timeout or error.
+
+## Reference(s):
+
+- [Gecho Bridge README](https://github.com/gecho-ai/gecho-bridge/blob/main/README.md)
+- [Gecho Website](https://gecho.ai/)
+- [Gecho Chrome Extension](https://chromewebstore.google.com/detail/pjkaeenpekolahdbccjfenjcmanemlbj?utm_source=item-share-cb)
+- [ClawHub Skill Page](https://clawhub.ai/gecho-ai/skills/tiktok-shop-search)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command blocks and summarized product-result text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a saved local result path when the Gecho MCP tool writes raw TikTok Shop search results.]
+
+## Skill Version(s):
+
+1.1.38 (source: server release evidence and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

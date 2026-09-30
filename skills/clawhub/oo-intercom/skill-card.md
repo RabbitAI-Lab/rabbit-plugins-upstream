@@ -1,45 +1,61 @@
-## Description: <br>
-Intercom (intercom.com). Use this skill for ANY Intercom request: reading, creating, and updating data through an OOMOL-connected Intercom account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps an agent handle Intercom requests through OOMOL's oo CLI, including reading, creating, updating, and deleting Intercom data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Support, operations, and developer teams use this skill to let an agent inspect Intercom workspace data and perform confirmed contact or conversation updates through the oo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update Intercom contacts and reply to, close, or reopen conversations. <br>
-Mitigation: Confirm the exact target, payload, and expected effect with the user before running any write action. <br>
-Risk: The skill can read workspace data such as contacts, companies, conversations, tickets, events, tags, and admin records. <br>
-Mitigation: Install only for Intercom workspaces where agent access to this data is intended. <br>
-Risk: Connector schemas can change over time. <br>
-Mitigation: Fetch the live action schema before constructing each payload. <br>
+## Use Case:
 
+Support, operations, and engineering teams use this skill to read and manage Intercom workspace data through OOMOL-connected Intercom actions, including contacts, conversations, tickets, articles, tags, events, counts, and admin records.
 
-## Reference(s): <br>
-- [ClawHub Intercom skill page](https://clawhub.ai/oomol/skills/oo-intercom) <br>
-- [Intercom homepage](https://www.intercom.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [oo CLI install guide](https://cli.oomol.com/install-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before building action payloads; write actions require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Setup instructions include piping remote installer scripts directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package-manager or installer path, and review any remote script locally before execution.
+
+Risk: Write actions can change Intercom contacts or conversations.
+
+Mitigation: Confirm the exact action, target, payload, and expected effect with the user before execution.
+
+Risk: The close conversation action is destructive.
+
+Mitigation: Require explicit approval for the specific conversation target before running the action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-intercom)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Intercom homepage](https://www.intercom.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON payloads]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands are intended for the OOMOL oo CLI and may return JSON responses from Intercom connector actions.]
+
+## Skill Version(s):
+
+1.0.6 (source: server evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

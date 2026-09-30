@@ -1,47 +1,60 @@
-## Description: <br>
-帮助英语老师把听力课从放录音和刷题转为围绕目标、材料、听前预测、听中分层、听后任务、微技能训练和学员档案的系统化教学设计。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为英语教师设计分层听力课，包括材料选编、听前预测、听中任务、听后活动与微技能训练。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design listening lessons, choose appropriately licensed materials, create pre-listening and while-listening tasks, plan micro-skill practice, and maintain pseudonymous listening profiles for students. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student listening profiles may contain identifiable or sensitive learning information. <br>
-Mitigation: Use pseudonyms, avoid sensitive student identifiers, and require teacher confirmation before saving profile data to shared records. <br>
-Risk: Listening materials may have copyright or licensing restrictions. <br>
-Mitigation: Confirm copyright status before use and rely on textbook, original, Creative Commons, or authorized materials rather than copying unauthorized audio. <br>
-Risk: Assessment suggestions could be mistaken for automated grading. <br>
-Mitigation: Use the skill's rubrics and frameworks as teacher-reviewed guidance; keep dictation scoring and final listening grades under teacher control. <br>
+## Use Case:
 
+英语教师使用本技能为小学高段、初中和高中学生规划分层听力教学、编选合规素材、设计练习和微技能训练，并在教师确认后更新班级记录。
 
-## Reference(s): <br>
-- [Listening Material Sources](references/listening-material-sources.md) <br>
-- [Listening Rubric](references/listening-rubric.md) <br>
-- [Micro-Skill Training](references/micro-skill-training.md) <br>
-- [Pre-Listening Prediction Sample](references/pre-listening-prediction-sample.md) <br>
-- [Student Listening Profile Template](references/student-listening-profile-template.md) <br>
-- [While-Listening Task Sample](references/while-listening-task-sample.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown-style teaching plans, task templates, rubrics, and profile guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces teaching design guidance and structured templates; it does not execute code, grade dictation, or assign final listening scores.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Unreviewed listening exercises or lesson plans could mislead students.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a teacher verify AI-generated questions and approve materials before classroom use or storage.
+
+Risk: Student listening records could expose identifiable or sensitive information.
+
+Mitigation: Use aliases, honor pause and delete controls, and require teacherWritebackConsent before student-profile updates.
+
+Risk: Audio and exam materials may be reused beyond their permitted scope.
+
+Mitigation: Check source permissions, retain only an index for restricted materials, and keep confidential pre-exam questions out of the skill.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-listening-designer)
+- [听力材料来源清单](references/listening-material-sources.md)
+- [听力微技能训练法](references/micro-skill-training.md)
+- [听力评估评分细则](references/listening-rubric.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Teaching guidance]
+
+**Output Format:** [Markdown and structured classroom-record drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Audio is unavailable without speech synthesis; generated questions require teacher review before classroom use.]
+
+## Skill Version(s):
+
+2.8.0 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

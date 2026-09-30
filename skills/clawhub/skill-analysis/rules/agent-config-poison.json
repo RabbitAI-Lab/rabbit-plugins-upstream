@@ -1,0 +1,70 @@
+{
+  "family": "agent-config-poison",
+  "version": 1,
+  "description": "v3.2.8 情报补强（2026-08 Hades 供应链战役，投毒 14 款 AI 编码助手的配置文件，打开项目即执行攻击者代码；Claude/VS Code 等配置持久化 hooks）：检测 Skill 包是否携带 Agent/IDE 级配置文件并在其中嵌入命令执行或自动触发钩子。正常工具 Skill 不会随包分发 .claude/settings.json / .vscode/tasks.json / .cursor 规则等；携带即高可疑。",
+  "config_files": [
+    ".claude/settings.json",
+    ".claude/settings.local.json",
+    ".claude.json",
+    ".cursor/mcp.json",
+    ".cursor/rules",
+    ".windsurf/rules",
+    ".codeium/config.json",
+    ".continue/config.json",
+    ".aider.conf.yml",
+    ".aider.model.settings.yml",
+    ".vscode/tasks.json",
+    ".vscode/launch.json",
+    ".vscode/extensions.json",
+    ".idea/workspace.xml",
+    ".gemini/settings.json",
+    ".github/copilot-instructions.md",
+    ".clinerules",
+    ".roomodes",
+    ".roo/rules",
+    ".windsurfrules",
+    ".codeium/windsurf/mcp_config.json",
+    ".goosehints",
+    ".rules",
+    "AGENTS.md",
+    "AGENT.md",
+    "GEMINI.md",
+    "QWEN.md",
+    "TRAE.md",
+    "CRUSH.md",
+    "claude_desktop_config.json",
+    ".trae/rules"
+  ],
+  "rules": [
+    {
+      "id": "acp-01",
+      "re": "\"(?:command|cmd|run|args|preLaunchTask|postDebugTask|options|hooks)\"\\s*:\\s*(\"|\\[)[^\\n]{0,200}?(?:curl|wget|bash|sh\\s+-c|powershell|pwsh|cmd\\.exe|node\\s+-e|python\\s+-c|\\|\\s*sh|\\|\\s*bash|Invoke-|/bin/zsh)",
+      "label": "Agent/IDE 配置含命令执行（随包分发=克隆即触发）",
+      "sev": "P1"
+    },
+    {
+      "id": "acp-02",
+      "re": "\"(?:PostToolUse|PreToolUse|UserPromptSubmit|SessionStart|Notification|Stop)\"\\s*:|runOn|onStartup|onOpen",
+      "label": "Agent 配置含自动触发钩子（信息：需人工核对绑定命令；runOn 打开即执行另见 acp-005）",
+      "sev": "P3"
+    },
+    {
+      "id": "acp-03",
+      "re": "\"(?:permissions|allow|allowedTools|tools)\"\\s*:\\s*\\[[^\\]]{0,200}?(?:Bash\\(\\*|\\*\\*|All\\)|\\*)",
+      "label": "Agent 配置放宽工具权限为通配",
+      "sev": "P2"
+    },
+    {
+      "id": "acp-004",
+      "re": "\\\"(?:command|cmd|run|args)\\\"\\s*:\\s*\\\"?node\\s+[^\\\"\\n]{0,80}\\.(?:mjs|cjs|js)\\b",
+      "label": "生命周期脚本链：配置直接执行捆绑脚本（node setup.mjs 形态）",
+      "sev": "P1"
+    },
+    {
+      "id": "acp-005",
+      "re": "\\\"runOn\\\"\\s*:\\s*\\\"(?:folderOpen|open|startup)\\\"|\\\"onStartupFinished\\\"\\s*:",
+      "label": "Agent/IDE 配置含打开即执行触发（runOn folderOpen——克隆即自动运行）",
+      "sev": "P2"
+    }
+  ]
+}

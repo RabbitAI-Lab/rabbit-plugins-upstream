@@ -1,6 +1,8 @@
 # Command Reference
 
-Full CLI reference for `scripts/ragflow.js`, organized by workflow scenario rather than resource type.
+Deletion commands, metadata removal or unscoped metadata updates, and ingestion with `--delete` require `--confirm-destructive` after the target operation is authorized. Missing or false confirmation fails before the destructive HTTP request. Ordinary reads and stopping parsing do not require it.
+
+Practical CLI reference for `scripts/ragflow.js`, organized around common RAGFlow workflows. It intentionally prioritizes daily operations over exhaustive REST API coverage.
 
 Use `--json` on any command to suppress status text and print only machine-readable JSON.
 JSON-valued options such as `--parser-config`, `--prompt-config`, and `--dsl` accept either inline JSON or `@path/to/file.json`.
@@ -43,8 +45,8 @@ On command failure with `--json`, the CLI exits non-zero and prints a structured
 | [RAG Assistant Operation](#rag-assistant-operation) | Create chat assistants, manage sessions, and run Q&A |
 | [Agent Operation](#agent-operation) | Create tool-capable agents, manage sessions, and run agent chat |
 | [Embedded Website Access](#embedded-website-access) | Generate iframe/widget code and call shared chatbots/agentbots |
-| [Discovery and Configuration](#discovery-and-configuration) | Inspect available LLM models, and manage model providers/instances (v0.26.4) |
-| [System Operations](#system-operations) | Read version and log-level settings |
+| [Discovery and Configuration](#discovery-and-configuration) | Inspect available LLM models, and manage model providers/instances (v0.27.2) |
+| [System Operations](#system-operations) | Check health/version and inspect log-level settings |
 
 ## Knowledge Base Setup
 
@@ -56,10 +58,10 @@ node {baseDir}/scripts/ragflow.js create-dataset --name "Tech Docs" --embedding-
 node {baseDir}/scripts/ragflow.js list-datasets
 node {baseDir}/scripts/ragflow.js get-dataset --id <id>
 node {baseDir}/scripts/ragflow.js update-dataset --id <id> --name "New Name"
-node {baseDir}/scripts/ragflow.js delete-datasets --ids <id1> <id2>
+node {baseDir}/scripts/ragflow.js delete-datasets --ids <id1> <id2> --confirm-destructive
 ```
 
-When you provide `--embedding-model` to a real v0.26.4 server, use the tenant model identifier format `<model_name>@<provider>`, for example `text-embedding-v4@Tongyi-Qianwen`. Use `list-models` to discover available model/provider pairs.
+When you provide `--embedding-model` to a real v0.27.2 server, use the tenant model identifier format `<model_name>@<provider>`, for example `text-embedding-v4@Tongyi-Qianwen`. Use `list-models` to discover available model/provider pairs.
 
 Typical flow:
 
@@ -70,19 +72,33 @@ Typical flow:
 
 ### `list-connectors`
 
-List connectors for a dataset.
+List connectors (tenant scope; no dataset required).
 
-**Options**: `--dataset`, `--page`, `--pageSize`, `--json`
+**Options**: `--page`, `--page-size`, `--json`
 
 ### `create-connector`
 
-Create a connector.
+Create a connector (tenant scope; no dataset required).
 
-**Options**: `--dataset`, `--config` (JSON file), `--json`
+**Options**: `--config` (JSON file), `--json`
 
-**Example**: `node ragflow.js create-connector --dataset <id> --config @connector.json --json`
+**Example**: `node ragflow.js create-connector --config @connector.json --json`
 
-The connector `--config` is passed through verbatim, so new v0.26.4 connector types work without a CLI change. v0.26.4 adds connectors for OneDrive, Outlook, Microsoft Teams, Slack, SharePoint, Salesforce, and Azure Blob Storage, alongside the existing types (e.g. GitHub). Set the type and auth fields inside the config JSON.
+The `--config` file is the complete request body, passed through verbatim. Use `name`, `source`, and nested `config` (not `type`). For example, v0.27.2's Sitemap connector:
+
+```json
+{
+  "name": "Documentation sitemap",
+  "source": "sitemap",
+  "config": {
+    "sitemap_url": "https://example.com/sitemap.xml",
+    "follow_pdf_links": false,
+    "restrict_pdf_to_domain": true
+  }
+}
+```
+
+Optional Sitemap settings include `url_filter` (regex), `batch_size`, and `user_agent`. For WebDAV, `config.ca_cert_path` points to a custom CA bundle **inside the RAGFlow container**, not on the CLI machine. Creating a connector does not attach it to a dataset or start ingestion; configure the dataset connection separately in RAGFlow.
 
 ### `get-connector`, `update-connector`, `delete-connector`
 
@@ -103,12 +119,13 @@ node {baseDir}/scripts/ragflow.js get-document --dataset <id> --id <doc_id>
 node {baseDir}/scripts/ragflow.js update-document --dataset <id> --id <doc_id> --name "New Name"
 node {baseDir}/scripts/ragflow.js update-document --dataset <id> --id <doc_id> --parser-config @parser_config.json --meta-fields @meta_fields.json
 node {baseDir}/scripts/ragflow.js metadata-summary --dataset <id> --doc-ids <doc_id1> <doc_id2>
-node {baseDir}/scripts/ragflow.js delete-documents --dataset <id> --ids <doc_id1>
-node {baseDir}/scripts/ragflow.js download-document --dataset <id> --id <doc_id>
-node {baseDir}/scripts/ragflow.js preview-document --id <doc_id>
+node {baseDir}/scripts/ragflow.js update-metadata --dataset <id> --config @metadata_update.json
+node {baseDir}/scripts/ragflow.js delete-documents --dataset <id> --ids <doc_id1> --confirm-destructive
+node {baseDir}/scripts/ragflow.js download-document --dataset <id> --id <doc_id> --output ./document.pdf
+node {baseDir}/scripts/ragflow.js preview-document --id <doc_id> --output ./preview.pdf
 ```
 
-`update-document` follows the current v0.26.4 RAGFlow route and sends `PATCH /api/v1/datasets/{dataset_id}/documents/{document_id}`. It accepts `name`, `parser_config`, `chunk_method`, `enabled`, and `meta_fields`.
+`update-document` follows the current v0.27.2 RAGFlow route and sends `PATCH /api/v1/datasets/{dataset_id}/documents/{document_id}`. It accepts `name`, `parser_config`, `chunk_method`, `enabled`, and `meta_fields`.
 
 `ingest-documents` wraps `POST /api/v1/documents/ingest` for datasets configured with an ingestion pipeline. Use `--run 1` to start/rerun ingestion, `--run 2` to cancel ingestion, and `--delete` when rerunning should delete existing tasks and chunks first. Built-in chunking datasets should keep using `start-parsing` and `stop-parsing`.
 
@@ -127,6 +144,8 @@ Use this when you need to:
 
 Use this section after document upload, or when the user wants to control chunk generation directly.
 
+Downloads and previews return file bytes. With `--output <path>`, the CLI writes the bytes to a new file and returns metadata/path; existing files are never overwritten. Without `--output`, JSON contains `{ content, encoding: "base64", name, content_type, size }`. Choose a filename appropriate to the returned MIME type; previews can differ from the original file.
+
 ### Parsing workflow
 
 ```bash
@@ -143,15 +162,16 @@ The `run` filter accepts either numeric values (`0`-`4`) or these text labels.
 ```bash
 node {baseDir}/scripts/ragflow.js list-chunks --dataset <id> --document <doc_id>
 node {baseDir}/scripts/ragflow.js list-chunks --dataset <id> --document <doc_id> --id <chunk_id>
+node {baseDir}/scripts/ragflow.js get-chunk --dataset <id> --document <doc_id> --chunk <chunk_id>
 node {baseDir}/scripts/ragflow.js add-chunk --dataset <id> --document <doc_id> --content "chunk content"
 node {baseDir}/scripts/ragflow.js update-chunk --dataset <id> --document <doc_id> --chunk <chunk_id> --content "updated content"
-node {baseDir}/scripts/ragflow.js delete-chunks --dataset <id> --document <doc_id> --chunk-ids <id1>
+node {baseDir}/scripts/ragflow.js delete-chunks --dataset <id> --document <doc_id> --chunk-ids <id1> --confirm-destructive
 node {baseDir}/scripts/ragflow.js get-document-graph --dataset <id> --document <doc_id>
-node {baseDir}/scripts/ragflow.js delete-document-graph --dataset <id> --document <doc_id>
-node {baseDir}/scripts/repro-delete-chunks.js
+node {baseDir}/scripts/ragflow.js delete-document-graph --dataset <id> --document <doc_id> --confirm-destructive
+node {baseDir}/scripts/repro-delete-chunks.js --confirm-destructive
 ```
 
-`update-chunk` uses the current `PATCH /api/v1/datasets/{dataset_id}/documents/{document_id}/chunks/{chunk_id}` route. `get-document-graph` and `delete-document-graph` wrap the v0.26.4 document structure graph routes under `/structure/graph`.
+`update-chunk` uses the current `PATCH /api/v1/datasets/{dataset_id}/documents/{document_id}/chunks/{chunk_id}` route. `get-document-graph` and `delete-document-graph` wrap the document structure graph routes under `/structure/graph`.
 
 `add-chunk` writes directly to the document store and returns the generated chunk ID immediately. On Elasticsearch/OpenSearch-style stores, exact `GET` by ID can see a new chunk before search/delete-by-query can see it because insert uses the store refresh cycle. `delete-chunks` handles this by retrying the transient response `rm_chunk deleted chunks 0, expect N` only after an exact ID lookup confirms the target chunk still exists. Tune this with `RAGFLOW_DELETE_CHUNK_RETRIES` and `RAGFLOW_DELETE_CHUNK_RETRY_DELAY_MS`.
 
@@ -179,7 +199,7 @@ With `--json`, `delete-chunks` returns a structured envelope instead of the bare
 
 If exact-ID checks prove that a target chunk is missing, the command exits non-zero and emits JSON containing `error`, `requested_chunk_ids`, `existing_chunk_ids`, `missing_chunk_ids`, `retry_count`, `retries`, and `delete_chunk_diagnostics`.
 
-If a real server still returns `rm_chunk deleted chunks 0, expect 1` after retries, run `scripts/repro-delete-chunks.js`. The repro creates temporary resources, tries immediate deletion and retry/backoff without the client-side retry wrapper, prints a JSON diagnosis, and removes its dataset.
+If a real server still returns `rm_chunk deleted chunks 0, expect 1` after retries, run `scripts/repro-delete-chunks.js --confirm-destructive`. The repro creates temporary resources, tries immediate deletion and retry/backoff without the client-side retry wrapper, prints a JSON diagnosis, and removes its dataset.
 
 ### Chunk methods
 
@@ -207,6 +227,17 @@ Start RAPTOR processing for a dataset.
 Check RAPTOR processing status.
 
 **Options**: `--dataset`, `--json`
+
+### GraphRAG lifecycle
+
+```bash
+node {baseDir}/scripts/ragflow.js run-graphrag --dataset <id>
+node {baseDir}/scripts/ragflow.js trace-graphrag --dataset <id>
+node {baseDir}/scripts/ragflow.js get-knowledge-graph --dataset <id>
+node {baseDir}/scripts/ragflow.js delete-knowledge-graph --dataset <id> --confirm-destructive
+```
+
+Use `delete-knowledge-graph` only after confirming the target dataset.
 ## Information Retrieval
 
 Use this section when the user wants retrieval results directly instead of creating a chat assistant or agent.
@@ -233,13 +264,22 @@ node {baseDir}/scripts/ragflow.js retrieve \
 | `--question` | `-q` | - | Search question (required) |
 | `--datasets` | `-d` | - | Dataset IDs |
 | `--similarity` | `-s` | 0.2 | Similarity threshold (0-1) |
-| `--top-n` | `-n` | 5 | Number of retrieved chunks; sent as RAGFlow `page_size` |
-| `--top-k` | `-k` | 1024 | Number of candidates |
+| `--top-n` | `-n` | 30 | Number of retrieved chunks; sent as RAGFlow `page_size` |
+| `--knn-top-k` | | 1024 | Vector-neighbor count; preferred in v0.27.2 |
+| `--knn-num-candidates` | | max(2048, knn_top_k) | ANN candidate pool; must be at least knn_top_k |
+| `--rerank-candidates-count` | | 64 | Candidate count; must be at least page × page_size |
+| `--page` | | 1 | Result page (positive integer) |
+| `--doc-ids` | | - | Restrict to document IDs |
+| `--metadata-condition` | | - | JSON or @file metadata filter; intersects document IDs |
+| `--highlight` | | false | Include highlighted matches; accepts false |
+| `--include-knowledge-compilation` | | true | Include compiled chunks; pass false for raw document chunks |
 | `--vector-weight` | `-w` | 0.3 | Vector similarity weight (0-1) |
 | `--rerank` | `-r` | - | Rerank model ID |
 | `--keyword` | | false | Enable keyword search |
 | `--kg` | | false | Enable knowledge graph; sent as RAGFlow `use_kg` |
 | `--cross-langs` | | - | Cross-language targets |
+
+Defaults above are server defaults; omitted flags are not sent. For example, `--page 3 --top-n 30 --rerank-candidates-count 90` covers the requested page. The API still expects similarity and vector weights on a 0–1 scale even though the UI displays percentages. Results are an object with `chunks`, `total`, and `doc_aggs`.
 
 ## RAG Assistant Operation
 
@@ -254,17 +294,19 @@ node {baseDir}/scripts/ragflow.js get-chat --id <chat_id>
 node {baseDir}/scripts/ragflow.js update-chat --id <chat_id> --name "New Name"
 node {baseDir}/scripts/ragflow.js update-chat --id <chat_id> --prompt-config @prompt_config.json
 node {baseDir}/scripts/ragflow.js patch-chat --id <chat_id> --prompt "Use the dataset"
-node {baseDir}/scripts/ragflow.js delete-chats --ids <id1> <id2>
+node {baseDir}/scripts/ragflow.js delete-chats --ids <id1> <id2> --confirm-destructive
 ```
 
-Use the tenant model identifier format `<model_name>@<provider>` for `--llm-id`. Some deployments return numeric model row IDs from `/v1/llm/my_llms`; do not pass those numeric IDs to `create-chat`.
+Use the tenant model identifier format `<model_name>@<provider>` for `--llm-id`. The current model catalog can return numeric model row IDs; do not pass those numeric IDs to `create-chat`.
 
 ### Session management
 
 ```bash
 node {baseDir}/scripts/ragflow.js list-sessions --chat <chat_id>
 node {baseDir}/scripts/ragflow.js create-session --chat <chat_id> --name "New Session"
-node {baseDir}/scripts/ragflow.js delete-sessions --chat <chat_id> --ids <session_id1>
+node {baseDir}/scripts/ragflow.js get-session --chat <chat_id> --session <session_id>
+node {baseDir}/scripts/ragflow.js update-session --chat <chat_id> --session <session_id> --name "Reviewed Session"
+node {baseDir}/scripts/ragflow.js delete-sessions --chat <chat_id> --ids <session_id1> --confirm-destructive
 ```
 
 ### Ask the assistant
@@ -273,14 +315,12 @@ node {baseDir}/scripts/ragflow.js delete-sessions --chat <chat_id> --ids <sessio
 node {baseDir}/scripts/ragflow.js chat --chat <chat_id> --session <session_id> --question "Hello"
 node {baseDir}/scripts/ragflow.js chat-session --chat <chat_id> --session <session_id> --messages @session_messages.json
 node {baseDir}/scripts/ragflow.js chat-session --chat <chat_id> --session <session_id> --question "Hello"
-node {baseDir}/scripts/ragflow.js chat-session --chat <chat_id> --session <session_id> --question "Hello" --legacy
 ```
 
 `chat-session` uses `POST /api/v1/chat/completions` with `chat_id` and `session_id` in the body. When `--messages` is provided, the CLI extracts the last `role: "user"` message as `question`; use `--question` when you already have a single user prompt.
 
-`--pass-all-history` sets `pass_all_history_messages: true`, which replaces the entire stored history with the submitted messages array instead of appending only the latest message (the default behavior in v0.26.4).
+`--pass-all-history` sets `pass_all_history_messages: true`, which replaces the entire stored history with the submitted messages array instead of appending only the latest message (the default behavior in v0.27.2).
 
-`--legacy` forwards `legacy: true` to v0.26.4 chat completions. Use it only for callers that still expect cumulative streaming chunks with literal `<think>` tags instead of delta-style thinking markers.
 
 Use this path when the user wants multi-turn Q&A over documents without building a full agent workflow.
 
@@ -300,7 +340,7 @@ node {baseDir}/scripts/ragflow.js create-agent --title "Assistant" --dsl @agent_
 node {baseDir}/scripts/ragflow.js get-agent --id <agent_id>
 node {baseDir}/scripts/ragflow.js update-agent --id <agent_id> --title "New Name"
 node {baseDir}/scripts/ragflow.js update-agent --id <agent_id> --canvas-type "flow"
-node {baseDir}/scripts/ragflow.js delete-agents --ids <id1> <id2>
+node {baseDir}/scripts/ragflow.js delete-agents --ids <id1> <id2> --confirm-destructive
 ```
 
 **Options for `list-agents`**:
@@ -413,7 +453,7 @@ Update tags for an agent.
 ```bash
 node {baseDir}/scripts/ragflow.js list-agent-sessions --agent <agent_id>
 node {baseDir}/scripts/ragflow.js create-agent-session --agent <agent_id>
-node {baseDir}/scripts/ragflow.js delete-agent-sessions --agent <agent_id> --ids <session_id1>
+node {baseDir}/scripts/ragflow.js delete-agent-sessions --agent <agent_id> --ids <session_id1> --confirm-destructive
 ```
 
 ### Ask the agent
@@ -437,8 +477,8 @@ Use this section when the user wants the same website embed behavior as RAGFlow'
 ```bash
 node {baseDir}/scripts/ragflow.js list-system-tokens
 node {baseDir}/scripts/ragflow.js create-system-token
-node {baseDir}/scripts/ragflow.js delete-system-token --token-file token.txt
-cat token.txt | node {baseDir}/scripts/ragflow.js delete-system-token --token-stdin
+node {baseDir}/scripts/ragflow.js delete-system-token --token-file token.txt --confirm-destructive
+cat token.txt | node {baseDir}/scripts/ragflow.js delete-system-token --token-stdin --confirm-destructive
 ```
 
 `delete-system-token` reads the token from stdin or a file so the secret never needs to appear in argv. Prefer `--token-stdin` for ad hoc use and `--token-file` when you already store the token in a local file.
@@ -496,18 +536,18 @@ Use this section when the user needs to inspect available models before creating
 node {baseDir}/scripts/ragflow.js list-models
 node {baseDir}/scripts/ragflow.js list-models --include-details
 node {baseDir}/scripts/ragflow.js list-models --group-by factory
-node {baseDir}/scripts/ragflow.js list-models --all
+node {baseDir}/scripts/ragflow.js list-models --type embedding
 ```
 
-This is usually the first stop when the user is troubleshooting model availability or deciding which model to use downstream.
+`list-models` lists configured models, grouped by type or factory. Use its `identifier` (`<model>@<instance>@<provider>`) directly in create operations; the two-part `<model>@<provider>` form selects the default instance. Distinct instances remain separate even when model names match. `--include-details` adds returned tenant/provider/instance IDs and rank locally; it does not send an unsupported `include_details` query. `--all` retains rows explicitly marked unavailable, but the catalog may omit availability state: `configured` is not a successful connection test. Use `verify-provider` for a connection check.
 
-RAGFlow v0.26.4 exposes model discovery at `/v1/llm/my_llms`. Authentication uses `RAGFLOW_API_KEY`.
+RAGFlow v0.27.2 exposes model discovery at `/api/v1/models` (the legacy `/v1/llm/my_llms` route was removed in v0.27.0; the CLI no longer calls it). Authentication uses `RAGFLOW_API_KEY`.
 
-For create operations, use model names plus provider suffixes such as `qwen-turbo@Tongyi-Qianwen` or `text-embedding-v4@Tongyi-Qianwen`. If `list-models --include-details` shows numeric `id` fields, treat them as server row IDs, not values for `--llm-id` or `--embedding-model`.
+For create operations, use model names plus provider suffixes such as `qwen-turbo@Tongyi-Qianwen` or `text-embedding-v4@Tongyi-Qianwen`. If `list-models` shows numeric `model_id` fields, treat them as server row IDs, not values for `--llm-id` or `--embedding-model`.
 
-### Tenant models (v0.26.4)
+### Tenant models (v0.27.2)
 
-These commands use the `/api/v1/models` routes (separate from the legacy `list-models` discovery above).
+These commands use the `/api/v1/models` routes (the same routes `list-models` uses).
 
 | Command | Purpose | Options |
 |---------|---------|---------|
@@ -517,9 +557,9 @@ These commands use the `/api/v1/models` routes (separate from the legacy `list-m
 
 `set-default-model` requires `--model-type` (one of `chat`, `embedding`, `rerank`, `asr`, `vision`, `tts`, `ocr`). Provide `--model-provider`, `--model-instance`, and `--model-name` to set a default; omit them to clear it.
 
-### Model providers (v0.26.4)
+### Model providers (v0.27.2)
 
-v0.26.4 adds provider/instance/model management under `/api/v1/providers`. An "instance" holds one set of credentials, and a provider can have multiple instances (multiple API keys).
+v0.27.2 provides provider/instance/model management under `/api/v1/providers`. An "instance" holds one set of credentials, and a provider can have multiple instances (multiple API keys). Instances are now individually addressable as `/instances/<id_or_name>` with `GET`/`PUT` support.
 
 | Command | Purpose | Options |
 |---------|---------|---------|
@@ -527,25 +567,26 @@ v0.26.4 adds provider/instance/model management under `/api/v1/providers`. An "i
 | `get-provider` | Get provider details | `--name` (required), `--json` |
 | `add-provider` | Add a provider for the tenant | `--name` (required), `--json` |
 | `delete-provider` | Remove a provider | `--name` (required), `--json` |
-| `list-provider-models` | List a provider's available models | `--name` (required), `--api-key`, `--base-url`, `--json` |
+| `list-provider-models` | List a provider's available models | `--name` (required), `--api-key-file`, `--base-url`, `--json` |
 | `list-provider-instances` | List a provider's instances | `--name` (required), `--json` |
 | `get-provider-instance` | Get one instance | `--name`, `--instance` (both required), `--json` |
-| `create-provider-instance` | Create an instance with credentials | `--name`, `--instance`, `--api-key` (required), `--base-url`, `--region`, `--model-info` (JSON), `--json` |
+| `create-provider-instance` | Create an instance with credentials | `--name`, `--instance`, provider key via env/file, `--base-url`, `--region`, `--model-info` (JSON), `--json` |
 | `delete-provider-instances` | Remove instances | `--name` (required), `--instances` (multiple, required), `--json` |
-| `verify-provider` | Test a connection / API key without persisting | `--name`, `--api-key` (required), `--base-url`, `--region`, `--json` |
+| `verify-provider` | Test a connection / API key without persisting | `--name`, provider key via env/file, `--base-url`, `--region`, `--json` |
 | `list-instance-models` | List models on an instance | `--name`, `--instance` (required), `--supported`, `--json` |
 | `add-instance-model` | Add a model to an instance | `--name`, `--instance`, `--model-name`, `--model-type` (required), `--max-tokens`, `--extra` (JSON), `--json` |
 | `set-model-status` | Enable or disable an instance model | `--name`, `--instance`, `--model-name`, `--status` (required), `--json` |
 
-**Example**: `node ragflow.js create-provider-instance --name OpenAI --instance default --api-key sk-... --json`
+**Example**: `node ragflow.js create-provider-instance --name OpenAI --instance default --api-key-file provider-key.txt --json`
 
-Treat `--api-key` values as sensitive. Pass them when needed, but do not echo them back to the user. The skill does not wrap the provider "chat to model" test endpoint (`POST /providers/<name>/instances/<instance>/models/<model_name>`); use `chat-session` or `agent-chat` to exercise a configured model instead.
+Prefer `RAGFLOW_PROVIDER_API_KEY` or `--api-key-file`; both keep provider credentials out of the process command line. The command-line `--api-key` parameter is not supported. The skill does not wrap the provider "chat to model" test endpoint (`POST /providers/<name>/instances/<instance>/models/<model_name>`); use `chat-session` or `agent-chat` to exercise a configured model instead.
 
 ## System Operations
 
-Use this section when the user needs version or log-level configuration.
+Use this section when the user needs a quick connectivity check, version information, or log-level configuration.
 
 ```bash
+node {baseDir}/scripts/ragflow.js system-health --json
 node {baseDir}/scripts/ragflow.js system-version
 node {baseDir}/scripts/ragflow.js get-log-levels
 node {baseDir}/scripts/ragflow.js set-log-level --pkg-name ragflow --level INFO

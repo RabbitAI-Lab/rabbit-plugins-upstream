@@ -16,7 +16,9 @@ clawhub install md-web
 npx skills add rockbenben/aishort-skills
 ```
 
-或手动安装 —— 将本仓库克隆到 agent 的 skills 目录（如 `~/.claude/skills/md-web`）。
+或手动安装 —— clone 本仓库，把 `skills/md-web/` 拷贝（或软链）进 agent 的 skills 目录：
+Claude Code 为 `~/.claude/skills/`，Codex 与 Gemini CLI 等通用约定为 `~/.agents/skills/`，
+其他 agent 按各自目录放即可。
 
 ## 快速开始
 
@@ -62,7 +64,7 @@ npx skills add rockbenben/aishort-skills
 | bucket      | 是   | 存储桶名称                                               | `md-web`                              |
 | public_url  | 是   | 公共访问 URL（推荐自定义域名）                           | `https://pub-XXXX.r2.dev`             |
 | region      | 否   | S3 区域（R2 用 `auto`，AWS S3 填实际区域如 `us-east-1`） | `auto`                                |
-| expire_days | 否   | 上传文件自动删除天数（默认 `30`，`0` = 永久保留）        | `30`                                  |
+| expire_days | 否   | 上传文件自动删除天数（默认 `30`；`0` = 永久保留，注意下方警告） | `30`                            |
 
 > **提示**：R2.dev 子域有速率限制，生产环境建议为桶绑定自定义域名作为 `public_url`。
 
@@ -87,7 +89,8 @@ AI 会返回一个链接，点击即可在浏览器中阅读渲染后的文档�
 
 - **上传的内容通过返回的 URL 公开可访问** —— 切勿上传密钥、API token、个人隐私等敏感内容。
 - S3 凭证以**明文**保存在 `~/.md-web/config.json`，请妥善保护该文件 —— 不要提交到仓库或外泄。
-- **使用专用存储桶。** 上传文件统一放在 `md-web/` 键前缀下，自动过期规则也只作用于该前缀，所以本 skill 只会过期自己的文件；专用桶能进一步确保不影响你的其他对象或生命周期规则。
+- **使用专用存储桶。** 上传文件统一放在 `md-web/` 键前缀下，自动过期规则也只作用于该前缀，所以本 skill 只会过期自己的文件。有一个例外，也正是专用桶的意义所在：`expire_days: 0` 删除的不只是本 skill 那条规则，而是**整个桶的生命周期配置**，包括你自己设的规则。
+- **自动过期需要「管理员读和写」权限的令牌。** 只有「对象读和写」时上传照常成功，只是规则设不上——输出里会一闪而过一条警告，`expire_days: 0` 时也一样有。仍想用窄权限令牌的话，去控制台手动设置规则。
 
 ## 文件结构
 
@@ -110,6 +113,8 @@ md-web/                     # Skill 目录（由 ClawHub 管理，升级时可�
 ├── config.json           # 存储桶凭证与配置（首次使用时创建）
 └── .deployed             # 部署指纹（跟踪服务端部署状态）
 ```
+
+`.nojekyll` 到不了安装出来的那份：ClawHub 打包时会跳过所有点号开头的文件，所以它只存在于本仓库的工作副本里。`upload.js` 是把整个 `docsify-server/` 目录喂进哈希来生成 `.deployed` 里的指纹的，于是工作副本与安装副本的指纹不同，在两者之间切换后的第一次上传会把服务端文件重新部署一遍。这不损失什么——`.nojekyll` 只对 GitHub Pages 有意义，而本 skill 发布到 R2 或其他 S3 兼容存储桶。
 
 ## 其他 S3 兼容服务
 

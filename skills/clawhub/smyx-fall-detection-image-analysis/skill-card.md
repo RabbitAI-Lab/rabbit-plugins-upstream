@@ -1,47 +1,64 @@
-## Description: <br>
-Detects whether anyone has fallen within a specified target area and supports image and short video analysis for home-care and nursing-home safety monitoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects whether anyone has fallen within a specified target area, supports image and short video analysis, and returns structured safety-monitoring results for elder-care and nursing-home scenarios.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, family members, and care-facility operators use this skill to analyze existing images or short clips for suspected falls and review structured safety reports. The output is a screening aid and should be confirmed by a human before emergency or care decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Private home, elder-care, or medical-adjacent images and videos may be uploaded to remote services for analysis. <br>
-Mitigation: Use the skill only with media you are authorized to upload, avoid unnecessary personal or sensitive content, and confirm that remote processing is acceptable for the deployment. <br>
-Risk: The skill can create or reuse an identity automatically and associate cloud report history with that identity. <br>
-Mitigation: Run it only in workspaces where automatic account association is acceptable, and review report-history access expectations before use. <br>
-Risk: Local token persistence in the workspace data directory may expose account-linked access if the workspace is shared. <br>
-Mitigation: Restrict workspace access, clear persisted data when rotating users or environments, and avoid using shared workspaces for sensitive deployments. <br>
-Risk: Fall-detection output may be incomplete or wrong and is not suitable as the sole basis for emergency decisions. <br>
-Mitigation: Treat results as safety screening, require human confirmation, and follow established care or emergency response procedures for suspected falls. <br>
+## Use Case:
 
+External caregivers, family members, and safety-monitoring operators use this skill to analyze uploaded images or short videos for potential falls, abnormal activity, and related elder-care risks. It can also query cloud-hosted fall-detection report history for the current resolved user identity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fall-detection-image-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API reference](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown text with structured analysis content, JSON report data, report links, and optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return current analysis results or cloud report-history listings; results are safety references and not a substitute for human confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: evidence.json release and SKILL.md frontmatter) <br>
+Risk: Caregiving images, videos, and report-history queries are sent to the lifeemergence.com cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when cloud processing of sensitive caregiving media is acceptable, and avoid submitting unnecessary personal or identifying content.
+
+Risk: The skill silently manages user identity and stores tokens locally in smyx-common-claw.db.
+
+Mitigation: Limit who can run the skill, protect the workspace data directory, and review token storage expectations before deployment.
+
+Risk: Report-history queries can expose sensitive prior analysis records associated with the resolved user identity.
+
+Mitigation: Do not pass or expose open-id values, and run the skill only in workspaces where report access is appropriate for the current user.
+
+Risk: Fall-detection results may be incomplete or incorrect and are not a substitute for direct emergency verification.
+
+Mitigation: Treat results as safety reference only, and require human confirmation and emergency response when a possible fall is detected.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fall-detection-image-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Fall detection API documentation](references/api_doc.md)
+- [Common AI analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Markdown or plain text containing structured JSON analysis results, report links, or a report-history table; optionally saved to a user-specified output file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include cloud report export links and safety guidance; analysis results are for safety reference and do not replace human confirmation.]
+
+## Skill Version(s):
+
+1.0.15 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,18 @@
+{
+  "inventory_lots_json": {
+    "request_id": "fulfillment-6384",
+    "requested_quantity": 8,
+    "lots": [
+      {
+        "lot_id": "LOT-OSCAR-6384",
+        "available": 5,
+        "expires_on": "2026-09-30"
+      },
+      {
+        "lot_id": "LOT-PAPA-7410",
+        "available": 9,
+        "expires_on": "2026-12-31"
+      }
+    ]
+  }
+}

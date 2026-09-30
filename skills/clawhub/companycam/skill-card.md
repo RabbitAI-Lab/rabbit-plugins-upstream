@@ -1,44 +1,60 @@
-## Description: <br>
-CompanyCam API integration with managed OAuth for managing projects, photos, users, tags, groups, documents, checklists, labels, collaborators, webhooks, and company information for contractor photo documentation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage CompanyCam projects, photos, documents, and related resources through an authorized connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to manage CompanyCam resources through Maton's managed OAuth connector. It supports account, project, media, metadata, checklist, collaborator, and webhook workflows for contractor photo documentation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and access to a connected CompanyCam account. <br>
-Mitigation: Install only if Maton is trusted with the CompanyCam connection, keep MATON_API_KEY out of shared terminal output, and scope access to the intended account. <br>
-Risk: Create, update, delete, upload, user/group, and webhook actions can change CompanyCam account data or send event data to external URLs. <br>
-Mitigation: Confirm the target resource, intended effect, webhook destination URL, and event scopes with the user before allowing the agent to act. <br>
+## Use Case:
 
+Contractors and their teams use this skill to review and manage CompanyCam photo documentation, projects, collaborators, and related records. With approval, they can also set up webhooks or automations that act on their CompanyCam account.
 
-## Reference(s): <br>
-- [CompanyCam Skill on ClawHub](https://clawhub.ai/byungkyu/companycam) <br>
-- [Maton](https://maton.ai) <br>
-- [CompanyCam API Documentation](https://docs.companycam.com) <br>
-- [CompanyCam API Reference](https://docs.companycam.com/reference) <br>
-- [CompanyCam Getting Started](https://docs.companycam.com/docs/getting-started) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration, API calls] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May perform CompanyCam API requests through Maton when the user provides credentials and approves write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Connecting CompanyCam grants access to business photo documentation and account resources within the user's authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended connection and limit access to the scopes needed for the task.
+
+Risk: Writes, deletes, webhooks, hosted functions, and persistent triggers can change records or send data to destinations.
+
+Mitigation: Get explicit approval for each intended action and confirm any webhook or trigger destination before creating it.
+
+Risk: API-key fallback requires handling a credential outside the preferred authenticated CLI flow.
+
+Mitigation: Use the authenticated CLI when available and reserve API-key fallback for environments where it cannot be used.
+
+## Reference(s):
+
+- [CompanyCam skill release](https://clawhub.ai/byungkyu/skills/companycam)
+- [Maton](https://maton.ai)
+- [CompanyCam API documentation](https://docs.companycam.com)
+- [Maton documentation](https://docs.maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Text or Markdown with command examples and API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the user's authorized CompanyCam connection.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

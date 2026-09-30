@@ -1,40 +1,49 @@
-## Description: <br>
-Assemble a reporting export row. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assemble a reporting export row.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-External users and reporting teams use this skill to turn an approved cell_value supplied in the current request into a concise exported_cell for a reporting export row. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unapproved or unintended input could be formatted into a reporting export cell. <br>
-Mitigation: Use only approved cell_value input that the user intentionally provides in the current request. <br>
-Risk: The exported cell could be copied into reports without review. <br>
-Mitigation: Review exported_cell before adding it to downstream reporting exports. <br>
+## Use Case:
 
+Customer reporting teams use this skill to turn a supplied record field into a reporting export row and append it to a local CSV.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/record-export-field-workbench) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Concise text field value] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces the exported_cell field from the user-supplied cell_value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Supplied reporting field values are appended to a local CSV in the chosen output directory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated output directory and avoid shared or sensitive locations unless the export is intended there.
+
+## Reference(s):
+
+- [Reporting Export Assembler on ClawHub](https://clawhub.ai/wxt-ai/skills/record-export-field-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Files]
+
+**Output Format:** [JSON export row and locally appended CSV]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The export row includes columns, row values, and a row digest; execution also returns a local file receipt.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

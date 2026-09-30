@@ -1,0 +1,217 @@
+name: headhunter-pro
+version: 25.0.0
+description: 猎头工具包 v24.0：AI 驱动的端到端招聘工作流——12 阶段商业闭环，快速指令全覆盖
+description_en: >-
+  AI-powered end-to-end recruiting workflow toolkit covering 12 stages
+  from talent mapping to onboarding, with 12 quick commands, 36 core
+  principles, 9-dimension scoring, BEI evaluation, PMCC outreach scripts,
+  and a full compliance ecosystem for China's recruiting market.
+
+# ─── 输入契约 ───────────────────────────────────────────────
+input:
+  required:
+    - field: task_type
+      type: string
+      description: "任务类型：对应 12 阶段工作流中的具体阶段"
+      accepted_values:
+        [resume_screen, write_recommendation, generate_outreach,
+         interview_assess, client_manage, talent_mapping,
+         offer_negotiation, onboarding_support, data_optimization,
+         ai_workflow, compliance_ecosystem, workflow_sop]
+    - field: candidate_info
+      type: object
+      description: "候选人信息（简历文本或结构化数据）"
+      when: task_type in [resume_screen, write_recommendation, interview_assess]
+  optional:
+    - field: job_description
+      type: string
+      description: "职位描述（JD）文本"
+    - field: company_name
+      type: string
+      description: "目标公司名称"
+    - field: industry
+      type: string
+      description: "行业"
+      accepted_values: [快消零售, 金融, 新能源, 医疗, 其他]
+    - field: output_format
+      type: string
+      description: "输出格式偏好"
+      default: "markdown"
+
+# ─── 输出契约（按 task_type 独立 schema）────────────────────
+output:
+  format: markdown
+  task_schemas:
+
+    resume_screen:
+      description: "简历筛选 — 9 维度评分 + 风险评估"
+      required_sections:
+        - "候选人基本信息"
+        - "9 维度评分表"
+        - "JD 对标分析"
+        - "风险评估"
+        - "推荐结论（通过/待定/淘汰）"
+      rules:
+        - "9 维度必须每项有分数（1-10）和一句话理由"
+        - "不编造简历中没有的信息；缺失标注 N/A"
+        - "JD 对标用 ✅/⚠️/❌ 标注匹配度"
+
+    write_recommendation:
+      description: "五段式推荐报告"
+      required_sections:
+        - "基本信息"
+        - "JD 对标分析 + 岗位任务反推"
+        - "职业亮点深度叙述"
+        - "求职动机分析（PMCC 模型）"
+        - "9 维度匹配评分"
+        - "风险评估"
+        - "薪酬架构建议"
+      rules:
+        - "9 维度综合评分必须给出 X/10"
+        - "围绕与职位最相关的 1-2 个职业阶段做深度叙述，不罗列简历"
+        - "薪酬建议包含市场基准分位和可谈项"
+
+    generate_outreach:
+      description: "个性化触达话术"
+      required_sections:
+        - "候选人画像摘要"
+        - "触达时机分析"
+        - "个性化话术（按渠道：微信/邮件/LinkedIn/电话）"
+        - "后续跟进建议"
+      rules:
+        - "必须引用候选人具体项目/经历，禁止套用模板"
+        - "首次触达须提供价值（行业趋势/竞争力报告）"
+        - "中间阶层候选人为主战场，语气不施压"
+
+    interview_assess:
+      description: "BEI/STAR 面试评估报告"
+      required_sections:
+        - "面试轮次与时间线"
+        - "BEI 行为验证记录"
+        - "STAR 维度评分"
+        - "面试官反馈汇总"
+        - "录用建议"
+      rules:
+        - "BEI 必须记录具体行为证据，非主观印象"
+        - "STAR 维度：Situation → Task → Action → Result 逐项验证"
+        - "录用建议分：强烈推荐/推荐/待定/不推荐"
+
+    client_manage:
+      description: "目标公司分析与 Hiring Signals"
+      required_sections:
+        - "公司基本面"
+        - "组织架构分析"
+        - "Hiring Signals（招聘动机/紧急度/文化偏好）"
+        - "关键岗位 Mapping"
+        - "客户沟通策略建议"
+      rules:
+        - "Hiring Signals 基于公开信息+行业情报，标注信息来源"
+        - "关键岗位 Mapping 覆盖：汇报线 → 团队规模 → 核心职责"
+
+    talent_mapping:
+      description: "人才寻访 — Longlist + Boolean 搜索"
+      required_sections:
+        - "寻访策略（渠道优先级）"
+        - "Boolean 搜索词（按平台）"
+        - "Longlist（10-30 人）"
+        - "GitHub/开源贡献分析（技术岗）"
+        - "触达优先级排序"
+      rules:
+        - "Longlist 必须含：姓名、当前公司、职位、核心技能、触达渠道"
+        - "Boolean 搜索词需区分平台（LinkedIn/脉脉/GitHub/Google X-Ray）"
+        - "技术岗附加 GitHub Proof of Work 信号"
+
+    offer_negotiation:
+      description: "薪酬架构设计与谈判策略"
+      required_sections:
+        - "候选人当前薪酬包"
+        - "市场基准分位对标"
+        - "竞对薪酬参考"
+        - "建议薪酬架构（现金+短期激励+长期激励+福利）"
+        - "谈判策略与话术"
+        - "挽留成本 vs 招聘成本分析"
+      rules:
+        - "薪酬架构必须区分固定/浮动/长期激励/福利四大板块"
+        - "挽留成本 = 年薪 × 2-3 倍（高管选错成本）"
+        - "谈判策略区分候选人类型：积极/中间阶层/锁定"
+
+    onboarding_support:
+      description: "90 天入职护航计划"
+      required_sections:
+        - "候选人入职信息"
+        - "90 天跟踪时间表（第 1 周/第 2-4 周/第 2 月/第 3 月）"
+        - "回访话术（按阶段定制）"
+        - "风险预警等级（🔴/🟡/🟢）"
+        - "Silver Medalist 标记（如未入职）"
+      rules:
+        - "回访话术必须具体，禁止'你还好吗'等宽泛问题"
+        - "风险预警必须给出具体行动建议"
+        - "Silver Medalist 须标注原因及下次触达时间"
+
+    data_optimization:
+      description: "漏斗转化与 Pipeline 分析"
+      required_sections:
+        - "招聘漏斗指标"
+        - "各阶段转化率"
+        - "渠道 ROI 分析"
+        - "候选人参与度评分"
+        - "优化建议"
+      rules:
+        - "参与度评分：5 维度 × 5 分 = 25 分（高/中/低/沉睡）"
+        - "转化率 = 上阶段人数 / 本阶段人数 × 100%"
+        - "优化建议必须可执行，附预期效果"
+
+    ai_workflow:
+      description: "AI 工作流与多 Agent 协同建议"
+      required_sections:
+        - "当前 AI 工具矩阵"
+        - "可复用工作流设计"
+        - "人工认知注入点"
+        - "数据驱动迭代计划"
+      rules:
+        - "AI 工具矩阵按四维度评估：被动触达/个性化质量/ATS 整合/性价比"
+        - "工作流必须明确 AI 做苦力 vs 人做决策的边界"
+        - "迭代计划需含基准指标和目标指标"
+
+    compliance_ecosystem:
+      description: "合规检查清单与供应商评估"
+      required_sections:
+        - "劳动法合规检查"
+        - "数据隐私（PIPL）检查"
+        - "竞业协议风险评估"
+        - "供应商/AI 工具选型矩阵"
+      rules:
+        - "合规检查必须覆盖：劳动合同/背调授权/个人信息保护"
+        - "IQVIA 相关人员全部排除（璞睿红线）"
+        - "供应商评估含 7 维度矩阵 + 推荐场景"
+
+    workflow_sop:
+      description: "标准操作流程"
+      required_sections:
+        - "新职位 SOP"
+        - "候选人 Pipeline 状态迁移"
+        - "交付物清单"
+      rules:
+        - "SOP 必须明确每阶段的输入、动作、输出、SLA"
+        - "Pipeline 状态迁移需含：标准动作 + 交付物 + SLA"
+
+  general_rules:
+    - "不编造缺失事实；明确标注假设"
+    - "候选人个人信息不输出到文件外"
+    - "推荐报告必须包含 9+1 维度评分"
+    - "触达话术必须个性化，不使用模板"
+
+# ─── 权限边界 ───────────────────────────────────────────────
+permissions:
+  file_access:
+    read: ["workspace/candidates/**", "workspace/memory/*.md"]
+    write: ["workspace/candidates/*/profile.md", "workspace/candidates/*/recommendation.md"]
+  connectors: []
+  external_api: false
+
+# ─── 已知限制 ───────────────────────────────────────────────
+limitations:
+  - "无法访问外部招聘平台（LinkedIn/猎聘/Boss直聘）的实时数据"
+  - "候选人联系方式需由用户手动提供"
+  - "行业趋势数据需联网搜索支持"
+  - "背调需人工执行，AI 仅提供检查清单"

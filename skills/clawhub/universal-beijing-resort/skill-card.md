@@ -1,41 +1,55 @@
-## Description: <br>
-北京环球影城一站式游园助手，提供实时排队查询、下一步推荐、路线规划、演出时间、营业时间、餐厅推荐和门票价格查询。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+北京环球影城一站式游园助手，7项工具覆盖实时排队查询、智能推荐下一步、路线规划、演出时间、营业时间、餐厅推荐、门票价格，零配置即装即用。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to plan visits to Universal Beijing Resort, including checking public wait-time and schedule data, choosing attractions, planning one-day routes, estimating ticket options, and finding dining suggestions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Live wait-time and operating-hours answers depend on themeparks.wiki public API availability and freshness. <br>
-Mitigation: Treat live schedule and wait-time responses as planning guidance and confirm time-sensitive details with Universal Beijing Resort's official channels before acting. <br>
-Risk: Route, dining, show, and ticket recommendations are partly based on local preset data and may not reflect current prices, closures, or event changes. <br>
-Mitigation: Use the skill for itinerary planning, then verify purchases, reservations, prices, and same-day park rules through official Universal Beijing Resort sources. <br>
+## Use Case:
 
+External travelers and trip planners use this skill to plan a Beijing Universal Resort visit, including ride wait checks, next-step recommendations, show times, daily routing, dining suggestions, operating hours, and ticket-price guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/universal-beijing-resort) <br>
-- [ThemeParks.wiki public API](https://api.themeparks.wiki/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance, API calls] <br>
-**Output Format:** [Plain text or Markdown-style Chinese guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Tool outputs may combine public themeparks.wiki live data with local preset estimates for routes, dining, shows, and ticket guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.2 (source: server release metadata) <br>
+Risk: Live wait-time and schedule lookups contact themeparks.wiki, which may receive normal request metadata such as IP address and User-Agent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inform installers and users about the external data request and avoid including sensitive personal information in queries.
+
+Risk: Ticket prices and some recommendations are local preset guidance and may be outdated or incomplete for purchase or travel decisions.
+
+Mitigation: Verify pricing, availability, and travel-critical details with official Beijing Universal Resort channels before buying tickets or finalizing plans.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/universal-beijing-resort)
+- [ThemeParks.wiki live park data endpoint](https://api.themeparks.wiki/v1/entity/68e1d8f0-ed42-4351-af25-160421e37ce0/live)
+- [ThemeParks.wiki park schedule endpoint](https://api.themeparks.wiki/v1/entity/68e1d8f0-ed42-4351-af25-160421e37ce0/schedule)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Plain text with Markdown-style lists in Chinese]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May combine live themeparks.wiki wait-time and schedule data with local preset trip-planning, dining, route, and ticket guidance.]
+
+## Skill Version(s):
+
+1.1.19 (source: evidence.release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

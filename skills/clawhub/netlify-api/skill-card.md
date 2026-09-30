@@ -1,46 +1,62 @@
-## Description: <br>
-Netlify API integration with managed OAuth for viewing sites, deploys, builds, DNS zones, environment variables, webhooks, forms, and related Netlify resources, with administrative write operations gated by explicit user approval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents inspect Netlify sites, deploys, builds, DNS, and environment variables through a connected Maton account, with approval required for administrative changes.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, site operators, and teams with Netlify accounts use this skill to inspect Netlify sites, deploys, builds, DNS zones, environment variables, webhooks, forms, functions, and related account resources through Maton-managed OAuth. Administrative changes such as creating sites, triggering builds, modifying DNS, or changing environment variables require exact resource identifiers and explicit user approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and OAuth access to Netlify resources. <br>
-Mitigation: Keep MATON_API_KEY private, connect only the intended Netlify account, and review OAuth scopes before authorizing access. <br>
-Risk: Administrative actions can affect live Netlify sites, builds, DNS records, environment variables, webhooks, forms, or deploys. <br>
-Mitigation: Default to read-only operations and require exact resource identifiers, a consequence summary, and explicit user confirmation before write operations. <br>
-Risk: Requests may target the wrong Netlify account when multiple Maton connections are active. <br>
-Mitigation: Use the Maton-Connection header with the intended connection ID when more than one Netlify connection exists. <br>
+## Use Case:
 
+Developers and site administrators use this skill to check Netlify site information, deploy status, and build activity, and to request approved changes to sites, DNS, and environment variables. It can also guide explicitly approved hosted functions and event-triggered workflows through Maton.
 
-## Reference(s): <br>
-- [ClawHub Netlify Skill](https://clawhub.ai/byungkyu/netlify-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Netlify API Documentation](https://open-api.netlify.com/) <br>
-- [Netlify CLI Documentation](https://docs.netlify.com/cli/get-started/) <br>
-- [Netlify Build Hooks Documentation](https://docs.netlify.com/configure-builds/build-hooks/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with endpoint references and inline Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Netlify OAuth connection; API responses are JSON from Maton and Netlify endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Administrative writes may change or delete Netlify resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit approval and verify exact site, account, and resource identifiers before each change.
+
+Risk: Environment variable values, build hook URLs, and credentials may be exposed.
+
+Mitigation: Limit OAuth scopes, do not reveal sensitive values, and keep credentials out of logs and shared output.
+
+Risk: Webhooks, event destinations, hosted functions, and local event handlers can create persistent data flows or unattended actions.
+
+Mitigation: Require separate approval for automation and destinations; review recipients, forwarded fields, and any --exec handler before enabling them.
+
+## Reference(s):
+
+- [Netlify API documentation](https://open-api.netlify.com/)
+- [Netlify build hooks](https://docs.netlify.com/configure-builds/build-hooks/)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton homepage](https://maton.ai)
+- [Netlify skill release](https://clawhub.ai/byungkyu/skills/netlify-api)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Text or Markdown with command and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Netlify API responses may be JSON; commands require a connected Maton account and network access.]
+
+## Skill Version(s):
+
+1.2.6 (source: server-resolved ClawHub release; artifact frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

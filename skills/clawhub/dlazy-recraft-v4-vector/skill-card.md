@@ -1,43 +1,55 @@
-## Description: <br>
-Text-to-vector model that outputs SVG results for logos, icons, and scalable design assets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate graphics with Recraft V4 Vector through dLazy, although the documented result is PNG rather than editable SVG.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and external agents use this skill to invoke the dLazy Recraft V4 Vector model for generating vector-style design assets from text prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party dLazy CLI and sends prompts, parameters, and explicitly referenced files to dLazy hosted services. <br>
-Mitigation: Review the dLazy CLI and service terms before use, and avoid sending sensitive prompts or files unless approved for that service. <br>
-Risk: Authentication stores a dLazy API key in local CLI configuration unless a per-invocation environment variable is used. <br>
-Mitigation: Use organization-scoped keys, rotate or revoke keys when needed, and prefer npx @dlazy/cli@1.2.3 when avoiding a persistent global install. <br>
+## Use Case:
 
+Designers and developers use this skill to request logos, icons, and other graphics from dLazy's hosted generation service. Check the delivered format before relying on an editable vector asset.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-vector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [Shell command output as JSON containing generated media result URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task IDs when --no-wait is used; generated URLs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: The skill advertises SVG/vector output, but its example result is PNG.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the actual output format before using the asset where editable or scalable SVG is required.
+
+Risk: Using the service requires a dLazy API key and sends prompts and explicitly supplied local media to dLazy.
+
+Mitigation: Only submit prompts and files you are comfortable sharing with dLazy, and protect your API key.
+
+## Reference(s):
+
+- [dLazy CLI repository (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with CLI examples and JSON result examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The documented generated asset is hosted as image/png; editable SVG output is not established.]
+
+## Skill Version(s):
+
+1.3.21 (source: ClawHub release metadata; bundled skill frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

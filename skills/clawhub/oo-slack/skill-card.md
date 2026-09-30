@@ -1,45 +1,56 @@
-## Description: <br>
-Provides Slack access for reading conversations, messages, threads, files, reactions, and users, and for confirmed write or destructive Slack actions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Slack lets an agent read, create, update, and delete Slack data through an OOMOL-connected account instead of calling Slack APIs directly.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to inspect Slack data and, with confirmation, create, update, schedule, or delete Slack messages, reactions, and files through an OOMOL-connected Slack account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Slack data visible to the connected account. <br>
-Mitigation: Review Slack scopes during connection and install only when that account visibility is acceptable. <br>
-Risk: Write actions can post, reply, update, schedule, upload, or open conversations in Slack. <br>
-Mitigation: Confirm the exact payload and expected Slack effect with the user before executing write actions. <br>
-Risk: Destructive actions can delete Slack files or messages or remove reactions. <br>
-Mitigation: Require explicit approval for the specific target before running destructive actions. <br>
+## Use Case:
 
+Developers, operators, and workspace users use this skill to let an agent inspect Slack workspace data, search messages, and perform approved Slack write or delete actions through the connected OOMOL Slack account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-slack) <br>
-- [Slack homepage](https://slack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Slack connection](https://console.oomol.com/app-connections?provider=slack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses an OOMOL-connected Slack account; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence and skill metadata) <br>
+Risk: The security evidence reports a suspicious fallback setup path because it tells the agent to run a remote CLI installer without an integrity check or clear user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the OOMOL CLI installer through an official guide, prefer a package-manager or verified release path when available, and do not let the agent run the installer automatically.
+
+Risk: Slack write and destructive actions can modify or remove workspace messages, reactions, and files.
+
+Mitigation: Confirm the exact channel, message, file, target, and payload with the user before running write or destructive actions.
+
+## Reference(s):
+
+- [ClawHub Slack skill release](https://clawhub.ai/oomol/skills/oo-slack)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [Slack homepage](https://slack.com)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the oo CLI to inspect live action schemas before constructing Slack connector payloads.]
+
+## Skill Version(s):
+
+1.0.10 (source: release evidence and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

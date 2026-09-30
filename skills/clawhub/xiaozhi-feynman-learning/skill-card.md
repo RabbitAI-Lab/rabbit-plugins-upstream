@@ -1,40 +1,55 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过让学生用自己的话讲解、举例和迁移知识点，检验理解深度并指出卡住的位置。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+Chinese-speaking K–12 students use guided explanations and follow-up questions to check whether they can explain, apply, and critically examine a concept. The skill returns a mastery level and the point where understanding breaks down, rather than teaching new material or generating a full practice set.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Global (designed for mainland China; localize language, curriculum, consent, and crisis resources elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: A student's mastery record or reminder could be shared without the intended permission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep results in the current session by default; check the student's explicit request and the relevant sharing or reminder consent before any handoff.
+
+Risk: Chinese-language curriculum assumptions or mainland China crisis resources may not fit students elsewhere.
+
+Mitigation: Localize language, curriculum, consent rules, and crisis-support resources before use outside mainland China or with non-Chinese-speaking students.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [Five-jump assessment state machine](references/feynman-5jump-statemachine.md)
+- [Feynman dialogue patterns](references/feynman-dialogue-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese-language conversational text with a mastery level and identified sticking point]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A minimal mastery record or retest reminder may be handed off only with the required student request and sharing or reminder consent.]
+
+## Skill Version(s):
+
+2.8.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

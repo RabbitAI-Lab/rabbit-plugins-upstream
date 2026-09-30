@@ -1,47 +1,65 @@
-## Description: <br>
-YouTube Reporting API integration with managed OAuth for scheduling and downloading bulk YouTube Analytics reports as CSV files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage YouTube Reporting jobs and download bulk channel or playlist analytics reports through a Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to manage YouTube Reporting API jobs, list report types, retrieve generated reports, and download daily CSV analytics for connected YouTube channels or playlists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton API key and managed OAuth to access YouTube Reporting data for the connected Google account. <br>
-Mitigation: Install only when comfortable authorizing Maton to proxy YouTube Reporting API requests, and treat MATON_API_KEY as a secret. <br>
-Risk: Requests may target the wrong YouTube account when multiple connections exist. <br>
-Mitigation: Verify the intended YouTube connection and use the Maton-Connection header when more than one connection is available. <br>
-Risk: Creating or deleting reporting jobs changes the set of reports generated for a channel or playlist. <br>
-Mitigation: Confirm the report type and intended effect with the user before creating or deleting a reporting job. <br>
+## Use Case:
 
+YouTube channel owners and their agents use this skill to list report types, schedule or manage reporting jobs, and download daily analytics reports as CSV files.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/youtube-reporting) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [YouTube Reporting API Overview](https://developers.google.com/youtube/reporting) <br>
-- [YouTube Reporting API Reference](https://developers.google.com/youtube/reporting/v1/reference/rest) <br>
-- [Bulk Reports](https://developers.google.com/youtube/reporting/v1/reports) <br>
-- [Report Types](https://developers.google.com/youtube/reporting/v1/reports/full_report_list) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY, and an authorized YouTube Reporting connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Connecting an account lets Maton mediate access to its YouTube Reporting data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Approve the connection explicitly and review the requested OAuth scopes; use only the accounts and scopes needed.
+
+Risk: Creating or deleting reporting jobs or changing connections can affect report availability.
+
+Mitigation: Confirm the exact job, connection, and intended effect with the user before making changes.
+
+Risk: API-key fallback can expose a long-lived credential.
+
+Mitigation: Prefer device-flow login through the CLI; use the API key only when the CLI cannot be installed, and never log or persist it.
+
+Risk: Hosted functions, triggers, and destinations can continue operating after the immediate task.
+
+Mitigation: Require explicit approval, narrowly scope the automation, and remove it when no longer needed.
+
+## Reference(s):
+
+- [YouTube Reporting skill release](https://clawhub.ai/byungkyu/skills/youtube-reporting)
+- [YouTube Reporting API overview](https://developers.google.com/youtube/reporting)
+- [YouTube Reporting API reference](https://developers.google.com/youtube/reporting/v1/reference/rest)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, CSV files]
+
+**Output Format:** [Markdown guidance and downloadable CSV reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Daily reports require an authorized connection and an active reporting job.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata; skill frontmatter states 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

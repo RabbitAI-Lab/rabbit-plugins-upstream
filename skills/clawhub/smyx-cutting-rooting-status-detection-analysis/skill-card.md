@@ -1,45 +1,60 @@
-## Description: <br>
-AI-powered non-invasive rooting-stage detection for plant cuttings in transparent containers, using image or video inputs to identify root primordia, estimate rooting stage, and suggest transplant timing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes images or videos of plant cuttings in transparent containers to detect visible root primordia or early roots, classify rooting stage, and return transplant-timing guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, growers, propagation operators, and agricultural researchers use this skill to analyze images or videos of cuttings in transparent containers, monitor visible root development, and decide when continued observation or transplanting is appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Media files or remote media URLs are sent to a remote Life Emergence service for analysis. <br>
-Mitigation: Use only media appropriate for that service and review organizational data-sharing requirements before deployment. <br>
-Risk: The skill may silently create or reuse an account identity and read workspace identity data. <br>
-Mitigation: Run it in a controlled workspace and verify identity-linkage behavior before using it with sensitive accounts or shared environments. <br>
-Risk: Cloud API tokens may be persisted in a local SQLite database. <br>
-Mitigation: Limit filesystem access, inspect local token storage after use, and remove stored credentials or data when no longer needed. <br>
+## Use Case:
 
+External users and propagation teams use this skill to monitor cutting-rooting progress from transparent-container images or videos without disturbing the plant. It reports rooting stage, visible root-point distribution, rough early-root development, and related management suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-cutting-rooting-status-detection-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/smyx-sunjinhui) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-style structured analysis report with status, observations, recommendations, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image or video paths, remote media URLs, and a history-list mode; documented media limit is 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
+Risk: Plant images, videos, and report metadata are sent to the lifeemergence.com cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media that is acceptable to process with that third-party cloud service, and avoid including sensitive background details in submitted images or videos.
+
+Risk: The skill can create or reuse local identity state and store service tokens in a workspace SQLite database.
+
+Mitigation: Avoid shared workspaces unless operators understand how to clear the workspace data directory and revoke related service-side session or account state.
+
+Risk: Rooting-stage outputs are visual assessments and may be affected by container glare, water spots, lighting, or occluded roots.
+
+Mitigation: Treat results as propagation-management guidance and verify important transplant decisions with repeat observations or direct inspection.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-cutting-rooting-status-detection-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API reference](references/api_doc.md)
+- [Shared API reference](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, guidance]
+
+**Output Format:** [Markdown text containing structured JSON-like analysis results and report links; optional output file writes the same text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts local image/video paths or public media URLs; history queries return structured report-list text from the cloud service.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

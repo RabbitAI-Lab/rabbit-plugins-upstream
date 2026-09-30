@@ -1,117 +1,368 @@
-# Deep Skill Finder
+<div align="center">
 
-> 一键直达：[deep-skill-finder](https://www.meyo.life/skill)
+# deep-skill-finder
 
-**别让 Agent 在 Skill 市场里碰运气。**
+**Real Tests, Real Reviews find skills that Real Work**
 
-[deep-skill-finder](https://www.meyo.life/skill) 不看 Skill 怎么自述，只看它在真实任务里怎么跑。通过社区百万技能实测贴、横向对比和多路召回机制，把 Agent 的当前需求匹配到经战绩验证的 Skill。
+*An Agentic skill discovery engine. Your Claude Code / Codex / OpenClaw / Cursor auto-discovers the right skill from a 200k+ ecosystem — for every task.*
 
-一句话：告诉 Agent 你想做什么，它从 [Meyo 社区](https://www.meyo.life) 50000+ Skill 里找到最合适的，确认后一键安装。
+![deep-skill-finder](assets/background.png)
 
-![deep-skill-finder](assets/hero.png)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
+[![Live in 40+ Agents](https://img.shields.io/badge/live%20in-40%2B%20AI%20Agents-8A2BE2.svg)](#ecosystem-status)
+[![Skills](https://img.shields.io/badge/skills-200k%2B-brightgreen.svg)](https://www.deepskill.market/skill)
 
-## Why it exists
+English | [中文](README.zh.md)
 
-Skill 市场有两个问题：**想找的找不到，找到的不敢用。**
+</div>
 
-创作者为了覆盖更多搜索，把描述写得宽泛抽象，真实任务进来时关键词对不上，真正适配的 Skill 被埋在大量候选里。而下载量、星标和文档评分不能证明它真的跑通过，边界、依赖、结果质量都不透明。
+---
 
-deep-skill-finder 要解决的就是**发现**和**信任**两件事。
+## 🚀 Install in your Agent (30 seconds)
 
-![Skill 市场的问题](assets/why.png)
-
-## How it works
-
-Meyo 社区积累了百万量级的真实用户实测数据——用户在真实任务中运行 Skill 并记录下结果。deep-skill-finder 基于这些数据，用 AI Search 把 Agent 的自然语言需求匹配到经过实战验证的 Skill 上。
+Copy this prompt, send it to your Agent (Claude Code / Codex / OpenClaw / Cursor / 40+ supported):
 
 ```
-你描述一个真实任务
-       |
-       v
-deep-skill-finder 理解意图，改写为可检索 query
-       |
-       v
-多路召回：同时从 Skill 能力、社区实测贴、真实产出中检索
-       |
-       v
-按场景验证过的战绩排序，返回 TOP 5 推荐
-       |
-       v
-你选一个编号 → 自动安装，立即可用
+Please install the deep-skill-finder skill: download from
+https://www.deepskill.market/api/v1/skill-finder, extract to local skills
+directory, and enable it.
 ```
 
-核心能力链路分三步：全网 Skill 获取建立候选池，社区百万真实用户实测数据作为可检索的技能战绩，多路检索召回将需求匹配到可验证的结果上。
-
-![能力链路](assets/engine.png)
-
-## Quick Start
-
-### Install
-
-```bash
-git clone https://github.com/wheelry/deep-skill-finder.git \
-  ~/.catpaw/skills/deep-skill-finder
-```
+That's it — install typically completes in 15-30 seconds. Don't like it? [Uninstall anytime](#uninstall--list) with one command. Next time your Agent needs a skill, DSF will find candidates and ask you before installing.
 
 ### Use
 
-用自然语言描述你的任务，deep-skill-finder 会理解意图并匹配：
+Talk to your Agent naturally. When a task needs an external Skill, DSF triggers automatically:
 
 ```
-"找个能写公众号深度长文的 skill"
-"有没有拉龙虎榜数据的技能"
-"帮我搜一个生成 CI/CD 配置的 skill"
-"推荐一个英译中科普改写的技能"
+"Find me a skill that builds interactive dashboards from a CSV"
+"Is there a skill for pulling stock market data?"
+"Recommend a skill for translating technical docs into plain English"
+"Set up a CI/CD pipeline that runs on every PR"
 ```
 
-Agent 返回按相关性排序的推荐列表和推荐理由，选一个编号就帮你装好。
+DSF returns a ranked TOP-5 with reasons. Confirm a number → installation completes automatically.
 
-![三步开始使用](assets/quickstart.png)
+---
 
-## What makes it different
+## Why deep-skill-finder
 
-**不靠 description，靠真实战绩。** 传统 Skill 搜索依赖创作者自己写的描述，deep-skill-finder 用社区真实运行结果来验证和排序。
+The Skill ecosystem is growing fast. The problem is no longer a lack of tools — it's increasingly hard to tell: **which Skill truly fits my specific task?**
 
-**多路召回，不只关键词匹配。** 同时从 Skill 能力描述、社区实测贴和真实产出中召回，避免只靠单一信号漏掉最佳选项。
+Traditional Skill directories show names, creator descriptions, downloads, and stars. These tell you whether a Skill is discoverable or popular, but they can't answer:
 
-**暴露风险，降低误用。** 假脚本、依赖缺失、过度承诺这些问题会在实测中暴露出来，Agent 不用踩坑后才知道。
+- Has it actually run on tasks like yours? How were the results, latency, and token cost?
+- Which Agents, environments, and workflows does it fit? Does it need extra credentials or complex setup?
+- Where does it fail?
 
-## Real-world examples
+Every Skill describes what it claims to do; few tell you how it actually behaves. The real problem isn't just "can I find it" — after finding candidates, you still lack grounds to choose:
 
-| 任务 | 其他 Finder | deep-skill-finder | 差异 |
-|------|------------|-------------------|------|
-| 写 GitHub Actions CI/CD 配置 | 推荐的 Skill 文档简略、脚本有 bug | 推荐文档详尽、执行顺畅的替代方案 | 别人漏掉的，精准召回 |
-| 拉取龙虎榜数据 | 推荐的 Skill 接口全挂 | 推荐专做龙虎榜的 Skill，3 次 API 调用全通 | 都能召回，只有我们跑得通 |
-| 英文技术博客翻译成中文科普文 | 只做翻译，未覆盖"科普化"需求 | 翻译+润色+术语保留三合一，175 秒一次通过 | 都能跑通，交付更优 |
+- **Relevant is not the same as suitable.** A Skill's name and description suggest what it *might* do, not whether it actually works well in your specific Agent, task, and environment.
+- **Real performance depends on the scenario.** The same Skill can produce completely different results across tasks, Agents, and environments. Context-free generic ratings rarely help you judge fit.
+- **Popularity is not performance.** Downloads and stars reflect attention, not whether a Skill runs, the quality of its output, or where it has failed in real scenarios.
 
-![实例对比](assets/comparison.png)
+## deep-skill-finder vs Others
 
-## Try it now
+**deep-skill-finder combines professional retrieval with real-scenario feedback.** It first understands your task and constraints to find genuinely relevant candidates from the whole-Skill web; then draws on real usage feedback from similar tasks to help you make the final choice.
 
-在线体验 deep-skill-finder：输入你的真实需求，调用 AI 语义搜索为你匹配 Skill。
+| Typical Skill directory | deep-skill-finder |
+| --- | --- |
+| Search by name, tags, and keywords | Understands task intent, capability direction, and execution conditions |
+| Shows the creator's self-description | Adds real usage feedback: actual performance, execution results, key facts |
+| Measures popularity with downloads and stars | Shows real performance across specific tasks, Agents, and environments |
+| Rarely shows runs, failures, and output quality | Synthesizes success/failure records, output quality, latency, and cost |
+| Tells you "what everyone is looking at" | **Through real application cases**, tells you how a Skill actually performed "in similar scenarios" |
 
-[![在线体验](assets/try-and-cta.png)](https://www.meyo.life/skill)
+## Skill Review
+deep-skill-finder introduces a dedicated **real-user review** module — not context-free star ratings; one review centers on a concrete task.
+
+![deep-skill-finder](assets/en/feedback.png)
+
+> A skill review records the usage scenario, Skill performance, and the rating, plus context such as Agent type, occurrence time, and estimated token usage.       
+> Images or videos can be attached when needed: small files go inline in the feedback JSON, while larger files upload to object storage via a server-issued presigned URL — only the file name is submitted, never the local path.
+
+A complete Skill-execution feedback record contains:
+```
+usageScenario (usage context)
+
+Add a skill-review and experience-gallery module to an existing Vue 3 + Vite app, reusing the existing navigation, theme, and responsive style, while keeping pages, presentation components, APIs, state management, and data access independent — with type checks, tests, and a production build all passing.
+
+skillPerformance (how the Skill performed)
+
+vue-patterns provided conventions for feature-first directory organization, the Composition API, container/presentation component separation, reactive state selection, lazy-loaded routes, and testing. The implementation followed it to split out route pages, dedicated presentation components, a server-state composable, the API, types, and a local repository; server data is managed with Vue Query and components communicate via typed props/emit. The code passed ESLint, type checks, module tests, and the production build — no exceptions, timeouts, or retries attributable to the Skill itself were observed. The Skill does not cover the existing product's visual spec, business interaction design, or browser acceptance testing; those parts still required reading the existing code and human judgment.
+
+userFeedback (user review)
+9/10 — this skill showed solid UI style consistency; well suited for front-end work that adds new pages or modules
+
+Attachments (optional)
+Screenshots, screen recordings, and other image/video files
+```
+
+This real-review information helps surface Skills that are more suitable, safer, and more effective — and helps users **spot risks in advance**. See 3 real cases below ↓
+
+---
+
+## See it in action · 3 real cases
+
+**Case 1 · GitHub Actions CI/CD**
+> Others found: `github-actions-gen` — sparse docs, runtime bugs
+> DSF found: `cicd-pipeline-generator` — detailed docs with copy-paste examples, runs clean
+
+**Case 2 · Stock market data (龙虎榜)**
+> Others found: `pywencaistock` — all data endpoints down
+> DSF found: `lhb-api` — purpose-built for this data source, 3 API calls all passed
+
+**Case 3 · Blog translation (GPT-4o → Chinese)**
+> Others found: `translation-pro` — translation correct but too stiff, not "accessible" style
+> DSF found: `blog-polish-zhcn` — translation + polish + term retention, done in 175 seconds
+
+---
+
+## How it works: professional retrieval + real reviews, 8 layers of ranking
+
+deep-skill-finder's recommendation is not a single keyword ranking — it runs in two stages:
+> 1. **Professional retrieval**: understand the task the user actually wants done, and find capability-relevant, direction-correct, execution-ready candidates from across the web.
+> 2. **Real-review ranking**: put candidates back into concrete usage scenarios, and combine real users' execution process, results, and reviews to judge which Skill fits the current task best.
+
+```
+User describes the task in natural language
+              │
+              ▼
+    Task understanding & query rewrite
+ (goal · I/O · direction · constraints · environment)
+              │
+              ▼
+┌──────────────────────────────────────────┐
+│  Professional retrieval (coarse):        │
+│           multi-channel recall           │
+│                                          │
+│  ① Skill metadata similarity recall      │
+│  ② SKILL.md / description content recall │
+│  ③ Feedback real-review similarity recall│
+└──────────────┬───────────────────────────┘
+               │
+               ▼
+      Merge · dedupe · coarse ranking
+               │
+               ▼
+┌──────────────────────────────────────────┐
+│     Fine rank: Rerank + review check     │
+│                                          │
+│  Task match: capability · direction ·    │
+│               completeness               │
+│  Execution: environment · dependencies · │
+│              feasibility                 │
+│                                          │
+│  Real-review verification:               │
+│    usageScenario   similar context       │
+│    skillPerformance process & results    │
+│    userFeedback    rating & sentiment    │
+│                                          │
+│  Synthesize success, failure, quality,   │
+│  risk & cost                             │
+└──────────────┬───────────────────────────┘
+               │
+               ▼
+  TOP 5 + reasons + scenario evidence + risks
+               │
+               ▼
+      User confirms → install → execute
+                         │
+                         ▼
+           User voluntarily leaves a review
+                         │
+                         ▼
+                     Redaction
+                         │
+                         ▼
+             New real-review evidence
+                         │
+                         ├────→ Feedback similarity recall
+                         └────→ Rerank review verification
+```
+
+### Stage 1: find relevant candidates through professional retrieval
+
+1. **Task-intent understanding** — identify the user's real goal, plus inputs, outputs, workflow direction, and environment requirements.
+2. **Capability & direction matching** — prioritize structured capability data, distinguishing "A → B" from "B → A" to avoid false hits on keyword similarity.
+3. **Execution-condition check** — does the Skill need extra credentials, complex setup, or a specific runtime; can it cover the full task.
+4. **Fundamental-conflict filtering** — remove candidates whose capability direction, usage conditions, or task goals clearly conflict.
+
+### Stage 2: re-judge and re-rank through real reviews
+
+5. **Similar-scenario priority** — compare `usageScenario` in reviews. The closer the task goal, Agent type, and environment to your current need, the higher the review's reference value.
+6. **Real execution results** — analyze `skillPerformance`: did the Skill actually run, which steps did it complete, did it pass tests, builds, or result verification.
+7. **Output quality & user sentiment** — combine `userFeedback` to judge whether the output meets quality, style, and business requirements — not just "ran successfully".
+8. **Risk, limits, and cost** — surface dead endpoints, exceptions, timeouts, extra dependencies, capability boundaries, latency, and token cost from reviews, demoting high-risk candidates.
+
+### How do real reviews affect the final ranking?
+
+DSF doesn't simply sort by score. A review must first match the current task scenario before it counts as evidence:
+
+- Execution feedback from similar tasks beats high scores from irrelevant scenarios;
+- Feedback with a clear execution process and verified results is more credible than a generic "works great";
+- Successful runs, result quality, and user endorsement strengthen a recommendation;
+- Dead endpoints, environment conflicts, and explicit failure records demote or filter candidates;
+- Downloads are only a tie-breaker when capability and real performance are close — they never override real execution evidence.
+
+Finally, DSF synthesizes professional retrieval with real reviews into at most 5 high-confidence recommendations, explaining:
+
+- why it fits the current task;
+- what similar scenarios it has run in;
+- how it actually performed and what users said;
+- what risks to note before install or execution.
+
+**Professional retrieval answers "which Skills might fit"; real reviews answer "which Skills have proven themselves in similar scenarios."**
+
+Real reviews work twice in the recommendation pipeline:
+
+- **Recall stage:** feedback is a third recall channel, surfacing Skills that are hard to find by name or description but have actually been used in similar tasks.
+- **Rerank stage:** the reranker uses usage scenario, execution performance, and user feedback to verify whether candidates truly fit the current task, adjusting ranking by success, failure, quality, risk, and cost.
+
+This forms a complete recommendation loop: **task understanding → multi-channel recall → merge & coarse ranking → rerank verification → user confirmation → install & execute → real-review backflow**.
+
+Every real usage a user is willing to share is more than a download number. It helps the system discover more Skills that fit similar tasks, and becomes evidence of real performance for the next ranking.
+
+---
+
+## Ecosystem status
+
+deep-skill-finder works out of the box across **40+ Agent runtimes** — no matter which Agent you use, it fits:
+
+- Claude Code · Codex · Cursor · Windsurf · Cline
+- WorkBuddy · OpenClaw · CatDesk · Hermes
+- Copilot · Gemini · Antigravity · Amp
+- + 28 more
+
+**30-day active data** *(2026-08 · updated monthly)*:
+- 40+ distinct `agentType` clients calling DSF
+- **Top skills installed by real users through DSF** (each verified by 10+ distinct client installations):
+  - `desktop-pet` (116 clients) · `ppt-maker` (115) · `product-compare` (102) · `business-plan` (81) · `amazon-a-plus-content` (78)
+
+---
 
 ## Project structure
 
 ```
-├── SKILL.md                        # Skill 定义文件（Agent 读取）
-└── scripts/
-    ├── deep_skill_search.py        # 语义搜索：调用 Meyo 检索服务
-    └── deep_skill_install.py       # 下载安装 Skill 到本地
+├── .gitignore                      # Git ignore rules
+├── README.md                       # English documentation
+├── README.zh.md                    # Chinese documentation
+├── SKILL.md                        # Skill definition & full Agent workflow
+├── assets/                         # README visual assets
+├── references/
+│   └── skill-evaluation.md         # Real-use evaluation, confirmation & privacy spec
+├── scripts/
+│   ├── deep_skill_search.py        # Search & rank Skills via the retrieval service
+│   ├── deep_skill_install.py       # Download, install & manage Skills
+│   └── skill_feedback.py           # Evaluation discovery, redaction, validation, save & upload
+└── tests/
+    ├── test_deep_skill_search.py   # Search pipeline tests
+    └── test_skill_feedback.py      # Real-evaluation pipeline & safety rule tests
 ```
 
-## Requirements
+## Scripts reference
 
-- Python 3.x
-- CatPaw
+Typically you don't call these directly — the Agent handles invocation. But you can run them standalone:
 
-## Links
+**Search:**
+```bash
+python3 scripts/deep_skill_search.py "your task description" [--agent-type openclaw]
+```
 
-- [了解 deep-skill-finder](https://www.meyo.life/skill)
-- [了解 Meyo 社区](https://www.meyo.life/community/home)
-- [去 Meyo 社区发现 Skill](https://www.meyo.life/community/square/skills)
+Search failures return a non-zero exit status and a structured `error.code` such as
+`search_timeout`, `search_network_error`, or `search_service_error`. A successful search with
+no matches still exits normally with an empty `community` list.
+
+### Uninstall & List
+
+**Install / Uninstall / List:**
+```bash
+# Install
+python3 scripts/deep_skill_install.py <skill-name> --dir ~/.catpaw/skills
+
+# Uninstall
+python3 scripts/deep_skill_install.py <skill-name> --dir ~/.catpaw/skills --uninstall
+
+# List installed
+python3 scripts/deep_skill_install.py --dir ~/.catpaw/skills --list
+```
+
+---
+
+## Common questions
+
+**Q: Isn't downloads/stars a good enough signal?**
+A: Downloads and stars tell you what's *popular* — not what runs on *your specific task*. DSF ranks by capability match + real community runs. Download count acts only as a tie-breaker when capability and real performance are close — never as the primary signal.
+
+**Q: How is real-scenario feedback different from ordinary ratings?**
+A: Ordinary ratings compress experiences across different users, tasks, and environments into a single number. DSF preserves the scenario information that matters for judgment, so the Agent can tell whether a piece of feedback is actually relevant to your current task, environment, and goals.
+
+**Q: Where does real-scenario feedback come from?**
+A: From real executions and voluntary reviews by users who picked a Skill through DSF. Each review describes the specific usage scenario and the Skill's performance with the necessary run context — not just a generic thumbs-up or thumbs-down.
+
+**Q: Will my full task logs be uploaded?**
+A: No. Feedback content goes through deterministic redaction first, and the raw trajectory is never uploaded. See [Feedback & Privacy](#feedback--privacy) for exactly what is submitted.
+
+**Q: "A skill that installs other skills" — is this recursion? Is it safe?**
+A: No — DSF only *recommends* skills. Every install requires your explicit confirmation before anything happens on your machine. Each recommended skill passes security audit and quality checks before reaching you.
+
+**Q: What if I already use SkillHub / ClawHub / Vercel find-skills?**
+A: DSF works alongside them, not against. It multi-channel recalls across all major skill sources — SkillHub, ClawHub, GitHub, community test posts. Install DSF, try one task, decide from there.
+
+**Q: Do I need an account?**
+A: No. DSF works standalone — no signup, no email required, no telemetry beyond an anonymous local UUID for cross-session persistence.
+
+**Q: Which Agents does it support?**
+A: 40+ agent runtimes including Claude Code, Codex, OpenClaw, Cursor, Windsurf, Cline, WorkBuddy, Hermes, CatDesk, Copilot, and more.
+
+---
+
+## Contributing
+
+Issues and pull requests are welcome.
+
+### If you're a user
+- If a specific Skill ranks too high or too low, the underlying signal lives in [Meyo Community](https://www.deepskill.market/community/home) — leaving real run records there is the most direct way to improve future rankings.
+- Report issues or request coverage of specific tasks/domains via [Issues](https://github.com/wheelry/deep-skill-finder/issues).
+
+### If you're a Skill creator
+- We index Skills across the web to build the most comprehensive Skill discovery layer. If your Skill isn't showing up in DSF results, [open an issue](https://github.com/wheelry/deep-skill-finder/issues) with your Skill URL and we'll investigate.
+- Interested in collaborating on a "Why I put my Skill on DSF" post? Reach out via Issues.
+
+---
+
+## Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=wheelry/deep-skill-finder&type=Date)](https://star-history.com/#wheelry/deep-skill-finder&Date)
+
+---
+
+## Found this useful?
+
+- ⭐ **[Star this repo](../../stargazers)** — help other Agent users discover DSF
+- 💬 **[Open a Discussion](../../discussions)** — share your use case or ask questions
+- 🐛 **[Report an Issue](../../issues)** — if a recommendation seems off, tell us
+- 📖 **[Try DSF now](#-install-in-your-agent-30-seconds)** — 30 seconds to install
+
+---
 
 ## License
 
-MIT
+MIT — free to use, modify, and distribute with attribution. See [LICENSE](LICENSE).
+
+---
+
+## Feedback & Privacy
+
+When you choose to rate a Skill, we upload `usageScenario`, `skillPerformance`, `rating`, `comment`, and under `context`: `agentType`, `occurredAt`, `trajectoryIdHash`, and `estimatedTokenUsage`. You may also attach images or videos; small files are sent inline and larger files are uploaded directly to object storage via a presigned URL, with only the file name (not the local path) submitted.
+
+All feedback content is first processed by a deterministic redaction script; the raw trajectory is never uploaded. `estimatedTokenUsage` is an integer estimate by the Agent of how many tokens the Skill execution consumed. It is not sensitive personal information, but it is submitted to the server along with the rest of the feedback.
+
+---
+
+## Related links
+
+- **Landing page:** https://www.deepskill.market/skill
+- **Community:** https://www.deepskill.market/community/skills
+- **SkillHub listing:** https://skillhub.cn/skills/deep-skill-finder
+- **ClawHub listing:** https://clawhub.ai/lintong123/skills/deep-skill-finder

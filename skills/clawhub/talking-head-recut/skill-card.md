@@ -1,42 +1,58 @@
-## Description: <br>
-Packages an existing talking-head, interview, or podcast video with timed graphic overlay cards synced to the transcript while leaving the underlying clip intact. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Packages existing talking-head, interview, or podcast videos with transcript-timed graphic overlays while preserving the original clip.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content teams use this skill to turn an existing talking-head clip into a polished recut with titles, lower-thirds, quote cards, data callouts, side panels, or picture-in-picture overlays. It is suited for agent-assisted video packaging workflows that can run local media tools and review generated files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the skill instructs agents to run a silent skill-package update before use, which can change trusted code without clear user approval. <br>
-Mitigation: Run updates only explicitly, review the installed skill content before execution, and avoid automatic update steps in controlled workflows. <br>
-Risk: The workflow runs local media tooling and npx hyperframes, then writes generated files under videos/<project>/. <br>
-Mitigation: Run it in a workspace where generated media files are acceptable, review commands before execution, and inspect generated HTML and MP4 outputs before relying on them. <br>
+## Use Case:
 
+Video editors and content creators use this skill to add designed, transcript-synchronized titles, quotes, and data callouts to existing footage and render a finished video.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/talking-head-recut) <br>
-- [Design reference index](artifact/references/DESIGN_INDEX.md) <br>
-- [Attribution notice](artifact/NOTICE.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON planning artifacts, and HTML/CSS card fragments] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces media workflow instructions and generated project files under videos/<project>/, including metadata, transcript, storyboard, card HTML, composition HTML, and output MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Running video tools and HyperFrames through npx can execute software in the local environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands and use a pinned or pre-vetted HyperFrames version where reproducible builds are required.
+
+Risk: Missing referenced font assets may change the appearance of rendered overlays.
+
+Mitigation: Check available font assets and inspect a snapshot before the final render.
+
+Risk: The skill may update itself when requested.
+
+Mitigation: Confirm any skill update explicitly before running it.
+
+## Reference(s):
+
+- [Talking Head Recut on ClawHub](https://clawhub.ai/heygen-com/skills/talking-head-recut)
+- [Visual design library](references/DESIGN_INDEX.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Files]
+
+**Output Format:** [Markdown guidance, HTML composition and cards, JSON storyboard and transcript, and rendered MP4]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates intermediate files and a rendered video in videos/<project>.]
+
+## Skill Version(s):
+
+1.0.12 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

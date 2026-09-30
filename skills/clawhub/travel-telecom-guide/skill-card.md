@@ -1,40 +1,54 @@
-## Description: <br>
-帮旅行者对比漫游、当地SIM、eSIM和WiFi蛋方案，并给出出境上网、通话和省流量建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助旅行者比较漫游、当地 SIM、eSIM 和 WiFi 蛋方案，并根据目的地、天数、流量和通话需求生成中文出境通讯建议。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers use this skill to compare roaming, local SIM, eSIM, and pocket WiFi options for international trips and receive destination-specific connectivity guidance. It helps choose plans based on destination, trip length, expected data use, and whether voice calls are needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Telecom prices, roaming terms, and provider availability may change after the skill's built-in data was published. <br>
-Mitigation: Verify current costs and package terms with carriers or eSIM providers before purchasing or relying on a recommendation. <br>
-Risk: The skill provides guidance and comparisons but cannot complete purchases or check real-time usage. <br>
-Mitigation: Use the recommendations as planning support and complete purchases, activation, and usage checks through the relevant provider. <br>
+## Use Case:
 
+External travelers and travel-support agents use this skill to compare outbound connectivity options, get eSIM activation guidance, and receive data-saving tips before or during international trips.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-telecom-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with command examples and JSON-backed results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local built-in travel telecom data and does not require API keys, credentials, or network access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Telecom prices, carrier coverage, and eSIM offers can change after the built-in reference data was prepared.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current offers with carriers, eSIM providers, or official sales channels before purchasing or relying on a quoted plan.
+
+Risk: The skill provides guidance and comparisons but does not complete purchases or check live usage.
+
+Mitigation: Use the output as planning guidance and complete purchase, activation, and usage checks through the relevant provider.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-telecom-guide)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown guidance derived from local JSON command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language guidance; local built-in reference data; no external requests reported by security evidence.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

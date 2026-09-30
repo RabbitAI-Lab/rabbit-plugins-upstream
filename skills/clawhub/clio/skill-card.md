@@ -1,45 +1,62 @@
-## Description: <br>
-Clio API integration with managed OAuth for reading, creating, updating, and deleting legal practice data such as matters, contacts, activities, tasks, documents, calendar entries, time entries, and billing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Clio Manage to retrieve legal-practice records and, with explicit approval, update records or configure automations.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Legal operations users and their agents use this skill to work with Clio Manage records through Maton's managed OAuth gateway, including matter, contact, task, document, calendar, time, and billing workflows. It is appropriate when the user can provide a valid Maton API key and explicitly approve write or delete operations against specific records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access and change sensitive legal practice data through Maton, including matters, contacts, documents, billing, and time entries. <br>
-Mitigation: Install only if the organization permits this third-party OAuth gateway, keep MATON_API_KEY private, and use the narrowest Clio permissions available. <br>
-Risk: Write and delete operations can modify or remove legal records when given the wrong target account or record identifier. <br>
-Mitigation: Default to read-only lookup first, specify the intended connection when multiple Clio accounts exist, and approve writes or deletes only after checking exact record IDs and consequences. <br>
+## Use Case:
 
+Legal-practice staff and authorized agents use this skill to look up Clio matters, contacts, documents, tasks, and billing records, and to perform approved updates or set up related automation.
 
-## Reference(s): <br>
-- [ClawHub Clio skill page](https://clawhub.ai/byungkyu/clio) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [Clio API Documentation](https://docs.developers.clio.com/api-reference/) <br>
-- [Clio Fields Guide](https://docs.developers.clio.com/api-docs/clio-manage/fields/) <br>
-- [Clio Rate Limits](https://docs.developers.clio.com/api-docs/clio-manage/rate-limits/) <br>
-- [Clio Permissions](https://docs.developers.clio.com/api-docs/permissions/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with API endpoint guidance and Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Clio OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Broad Clio access could expose privileged client and legal-practice data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Trust the Maton broker before connecting; use read-only scopes and a narrowly scoped Clio account when possible.
+
+Risk: Write or delete requests could alter matters, contacts, or billing records.
+
+Mitigation: Confirm each action with the user and verify the exact resource identifiers before execution.
+
+Risk: Automations or external trigger destinations could disclose legal data or continue acting unattended.
+
+Mitigation: Avoid third-party destinations for legal data, approve automation explicitly, and revoke unused connections, functions, and triggers promptly.
+
+## Reference(s):
+
+- [Clio API documentation](https://docs.developers.clio.com/api-reference/)
+- [Maton](https://maton.ai)
+- [Clio skill release](https://clawhub.ai/byungkyu/skills/clio)
+- [Time trigger reference](references/time/triggers.md)
+- [Gmail trigger reference](references/google-mail/triggers.md)
+- [Slack trigger reference](references/slack/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with shell and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Proposed writes and automation require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.8 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

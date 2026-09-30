@@ -1,18 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 专家调度计划生成器（Expert Dispatch Planner）
---------------------------------------------------------------
-读取 project.yaml，审计每个 WBS 工作包：
-  - 是否为领域活动却缺少 role 标签（应由专家产出）
-  - 颗粒度是否过粗（estimate > granularity_threshold）→ 须调度专家拆解
-依据 project.domain / project.product 把 role_id 特化为推荐专家名，
-输出「调度计划」（Markdown + JSON），每项含可直接派给子 Agent 的 brief。
+PM Master · Expert Dispatch Planner
+-----------------------------------
+Read project.yaml and audit every WBS work package:
+  - Is it a domain activity but missing a role tag (should be produced by an expert)?
+  - Is the granularity too coarse (estimate > granularity_threshold) -> needs expert decomposition?
+Based on project.domain / project.product, specialize the role_id into a recommended expert
+name, and output a "dispatch plan" (Markdown + JSON), where each item carries a brief that can
+be handed directly to a sub-Agent.
 
-实际拆解由主控按计划派出领域专家子 Agent 完成（见 references/expert-roles.md /
-activity-expert-map.md）。本脚本只做审计与计划，不改动 project.yaml。
+The actual decomposition is done by the main controller dispatching domain-expert sub-Agents
+per the plan (see references/expert-roles.md / activity-expert-map.md). This script only audits
+and plans; it does not modify project.yaml.
 
-角色/域路由来自 `role_catalog.py`（单一事实源，域无关，支持从合同/SOW 自动对齐）。
+Role/domain routing comes from `role_catalog.py` (single source of truth, domain-agnostic, with
+auto-alignment from contract/SOW).
 """
 import os
 import sys
@@ -24,7 +27,7 @@ try:
 except ImportError:
     yaml = None
 
-# 单一事实源：领域 + 专家角色目录（域无关，自动从 SOW/合同对齐）
+# Single source of truth: domain + expert role catalog (domain-agnostic, auto-aligned from SOW/contract)
 HERE = os.path.dirname(os.path.abspath(__file__))
 if HERE not in sys.path:
     sys.path.insert(0, HERE)
@@ -35,7 +38,7 @@ PM_GENERALIST = rc.PM_GENERALIST
 
 def load(path):
     if yaml is None:
-        raise RuntimeError("需要 PyYAML，请先 pip install pyyaml")
+        raise RuntimeError("PyYAML required; run: pip install pyyaml")
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
@@ -48,7 +51,7 @@ def to_float(v):
 
 
 def infer_role(row, name):
-    """先取显式 role；否则按名称关键词（域专属 -> 跨域 -> 中立回退）。"""
+    """Take the explicit role first; otherwise infer by name keywords (domain-specific -> cross-domain -> neutral fallback)."""
     return rc.infer_role(name, row.get('domain'), explicit_role=row.get('role'))
 
 
@@ -82,20 +85,21 @@ def build_plan(data, threshold):
             continue
         expert = specialize(role, domain, product)
         pid = w.get('id')
-        # 幂等：role 已存在且未超阈值 -> 视为已解决，标记 done（避免重复派专家）
+        # Idempotent: role already present and within threshold -> treat as resolved, mark done
         already_done = bool(w.get('role')) and est <= threshold and not (is_domain_activity(role, name, dom) and not role)
         if already_done:
-            brief = (f"『{name}』已具备 role={role} 且颗粒度达标（{est:g}≤{threshold:g} 人天），"
-                     f"无需再调度；如仍需细化可由专家增量拆解。")
+            brief = (f"'{name}' already has role={role} and is within granularity ({est:g}<={threshold:g} person-days); "
+                     f"no further dispatch needed; if further refinement is required, an expert can decompose incrementally.")
             plan.append({
                 'id': pid, 'name': name, 'estimate': est,
                 'domain': dom, 'role': role, 'expert': expert,
                 'actions': ['done'], 'brief': brief,
             })
             continue
-        brief = (f"调度 {expert or '领域专家'}：把『{name}』（当前 {est:g} 人天）拆成叶子工作包"
-                 f"（每个 ≤{threshold:g} 人天），含 唯一ID(前缀 {pid}.x)、交付物、责任人角色、估算、"
-                 f"验收准则(DoD)、依赖(dependsOn)；回写 project.yaml 的 wbs 列表。")
+        brief = (f"Dispatch {expert or 'domain expert'}: decompose '{name}' (currently {est:g} person-days) into leaf "
+                 f"work packages (each <= {threshold:g} person-days), including unique ID (prefix {pid}.x), deliverable, "
+                 f"responsible-role, estimate, acceptance criteria (DoD), and dependencies (dependsOn); write back to "
+                 f"the wbs list in project.yaml.")
         plan.append({
             'id': pid, 'name': name, 'estimate': est,
             'domain': dom, 'role': role, 'expert': expert,
@@ -106,44 +110,45 @@ def build_plan(data, threshold):
 
 def render_md(plan, domain, product, threshold):
     lines = []
-    lines.append("# 专家调度计划 · Expert Dispatch Plan")
+    lines.append("# Expert Dispatch Plan")
     lines.append("")
-    lines.append(f"> 依据 `project.domain={domain}` / `product={product}` 特化；"
-                 f"叶子包阈值 = {threshold:g} 人天。")
+    lines.append(f"> Specialized based on `project.domain={domain}` / `product={product}`; "
+                 f"leaf-package threshold = {threshold:g} person-days.")
     lines.append("")
     if not plan:
-        lines.append("✓ 无需调度：所有 WBS 包均已角色标注且颗粒度达标。")
+        lines.append("✓ No dispatch needed: all WBS packages are role-tagged and within granularity.")
         return "\n".join(lines)
-    # 按角色分组
+    # Group by role
     by_role = {}
     for it in plan:
-        by_role.setdefault(it['role'] or '未定', []).append(it)
+        by_role.setdefault(it['role'] or 'unset', []).append(it)
     for role, items in by_role.items():
-        lines.append(f"## 角色：{role}")
+        lines.append(f"## Role: {role}")
         lines.append("")
-        lines.append("| WBS ID | 名称 | 估算(人天) | 领域 | 动作 | 推荐专家 |")
-        lines.append("|--------|------|------------|------|------|----------|")
+        lines.append("| WBS ID | Name | Estimate (person-days) | Domain | Action | Recommended Expert |")
+        lines.append("|--------|------|------------------------|--------|--------|--------------------|")
         for it in items:
             acts = ", ".join(it['actions'])
             lines.append(f"| {it['id']} | {it['name']} | {it['estimate']:g} | {it['domain'] or '—'} "
                          f"| {acts} | {it['expert'] or '—'} |")
         lines.append("")
         for it in items:
-            lines.append(f"- **{it['id']} {it['name']}**：{it['brief']}")
+            lines.append(f"- **{it['id']} {it['name']}**: {it['brief']}")
         lines.append("")
     lines.append("---")
-    lines.append("*由 `dispatch.py` 生成；实际拆解请用 `expert-roles.md` 对应角色的 system_prompt "
-                 "派出子 Agent（或路由至 WorkBuddy 专家中心已安装的对应专家）。*")
+    lines.append("*Generated by `dispatch.py`; for the actual decomposition, dispatch a sub-Agent using the "
+                 "system_prompt of the corresponding role in `expert-roles.md` (or route to the matching expert "
+                 "installed in the WorkBuddy Expert Center).*")
     return "\n".join(lines)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master 专家调度计划生成器")
+    ap = argparse.ArgumentParser(description="PM Master Expert Dispatch Plan generator")
     ap.add_argument('--project', required=True)
     ap.add_argument('--threshold', type=float, default=10.0,
-                    help="叶子包人天阈值，超过须拆解（默认 10）")
-    ap.add_argument('--out', default=None, help="输出 Markdown 计划路径")
-    ap.add_argument('--json', action='store_true', help="仅输出 JSON")
+                    help="Leaf-package person-day threshold; above this, decompose (default 10)")
+    ap.add_argument('--out', default=None, help="Output Markdown plan path")
+    ap.add_argument('--json', action='store_true', help="Output JSON only")
     a = ap.parse_args()
 
     data = load(a.project)
@@ -163,10 +168,11 @@ def main():
         os.makedirs(os.path.dirname(os.path.abspath(a.out)), exist_ok=True)
         with open(a.out, 'w', encoding='utf-8') as f:
             f.write(md)
-        print(f"[dispatch] 计划已写入 {a.out}（{len(pending)} 项待调度 / {len(done)} 项已达标）")
+        print(f"[dispatch] Plan written to {a.out} ({len(pending)} pending / {len(done)} already within granularity)")
     else:
         print(md)
-    print(f"\n共 {len(pending)} 个工作包需调度专家（阈值 {threshold:g} 人天），{len(done)} 项已达标可跳过。", file=sys.stderr)
+    print(f"\nTotal {len(pending)} work packages need expert dispatch (threshold {threshold:g} person-days), "
+          f"{len(done)} already within granularity and skippable.", file=sys.stderr)
 
 
 if __name__ == '__main__':

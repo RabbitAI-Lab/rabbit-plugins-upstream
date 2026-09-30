@@ -1,0 +1,297 @@
+---
+name: codeql-local-triage
+slug: codeql-local-triage
+version: 1.0.1
+displayName: 本地 CodeQL 告警定位与修复验收
+summary: 在本地复现 CodeQL 告警、用变体二分定位 taint 源并验证修复，给出可复现的因果结论。
+homepage: https://github.com/Elisabeth15501/codeql-local-triage
+tags: [CodeQL 误报, taint source 定位, false positive triage, 静态分析告警复现, data flow 复现, SARIF, codeFlows]
+metadata:
+  openclaw:
+    requires:
+      bins: [python3]
+description: 不替你跑扫描，而是回答「这条 CodeQL 告警为什么报、改哪一行才会消失」——用变体二分给出可复现的因果结论。当用户说「确认 taint 源 / 复现这个 CodeQL 告警 / 为什么 CodeQL 报这个 / 本地跑一次 CodeQL / 验证安全告警是否修好 / 这个告警是不是误报」，或需要判断某个 Code Scanning 告警是真漏洞还是误报时使用。也适用于给任意仓库做单条 CodeQL 查询的本地验收。它**不用于**整库安全审计、不替代 GitHub 原生扫描、也不用于非 CodeQL 类（如 SAST/SCA 商业工具）扫描结果的判定。We don't run the scan for you. Instead we answer "why did CodeQL flag this, and which line must change for it to stop" — variant bisection yields a reproducible causal conclusion. Use this when asked to confirm a taint source, to triage whether an alert is a false positive, or to validate a security alert fix locally. It is NOT for whole-repo security audits, replacing GitHub's native scanning, or triaging non-CodeQL scanners (SAST/SCA vendors). 关键词／keywords：CodeQL、Code Scanning、taint source、数据流、SARIF、codeFlows、误报、false positive、py/clear-text-storage-sensitive-data、CWE-312。
+agent_created: true
+---
+
+# 本地 CodeQL 告警定位与修复验收
+# Local CodeQL alert triage and fix verification
+
+> **文档为中英对照：英文在前、中文在后，讲的是同一件事。**
+> **This document is bilingual: English first, 中文 follows. Both cover the same content.**
+> 所有示例均为**模拟代码**，不含任何真实项目源码。
+> **All examples are synthetic sample code**; no real project source is included.
+
+> **卖点：两个脚本零依赖 / Zero-dependency selling point.** `scan_sensitive_sources.py`（预筛）与 `read_sarif.py`（读 SARIF）**不装 CodeQL 也能跑**——只有 `bisect_taint.py` 建库时才需要 CodeQL CLI（~400 MB）。Try the triage in seconds; install the CLI only when you want the controlled experiment.
+
+GitHub's alert page **gives you no data flow** (it only marks the sink), remote scans take minutes, and
+you cannot run a controlled experiment there. Running a single query locally plus variant bisection
+gives you a **reproducible causal conclusion** in about ten minutes.
+
+GitHub 的告警页面**不给数据流**（只标 sink 那一行），远端扫描要等几分钟，还不能做对照实验。
+本地跑单条查询 + 变体二分，十几分钟内就能给出**可复现的因果结论**。
+
+All scripts live in `scripts/` inside this skill directory; `scripts/xxx.py` below refers to them.
+脚本都在本技能目录下的 `scripts/`，下文的 `scripts/xxx.py` 均指这里。
+
+> **示例与 fixture 均为刻意构造的模拟样本 / All samples are synthetic by design.**
+> `tests/fixtures/repro/scan.py` 里的 `SECRET_PATTERNS` **不是真凭据**——它只是一组「`sk-…` / `ghp_…` 形状」的**正则 pattern 字符串**，里面**没有任何真实 token 或密钥**（free of any real credential）。
+> 它是为复现「名字命中 CodeQL 名字启发式（`maybeSecret()`）」这一**最小误报**而**故意保留**的：用途是教学与可复现验证，不是任何真实凭据的流转。
+> 下游只把扫描结果落盘到**临时目录**（`bisect_taint.py --workdir` 指定，默认 `/tmp/taint_bisect`），不会写出任何真实凭据。
+
+## 适用范围与边界 / Scope & boundaries
+
+本技能**不替代**整套 Code Scanning 扫描。它的定位是**单条查询的因果定位**：把一条具体告警的
+source → sink 路径完整复现出来，并回答「为什么报、改哪一行才会消失」。它**不适用于**对整库做
+完整的安全告警排查（那是整套 suite 的职责）。
+
+**运行期依赖 / Runtime dependencies**：
+
+- 三个脚本由 `python` / `python3` 执行（已在 frontmatter 声明 `metadata.openclaw.requires.bins`）。
+- **CodeQL CLI 是可选依赖**：只在 `bisect_taint.py` 真正建库跑查询时需要；预筛
+  （`scan_sensitive_sources.py`）与读 SARIF（`read_sarif.py`）两步**零依赖**，不装 CodeQL 也能跑。
+
+**当前深耕 / Currently focused**：
+
+- **语言**：Python（预筛脚本 `scan_sensitive_sources.py` 只覆盖 `py/*` 查询；`read_sarif.py`
+  与 `bisect_taint.py` 与语言无关）。
+  **多语言 roadmap**：Java / JavaScript / Go 的等价预筛与变体二分是后续规划，不是当前能力。
+- **规则**：以 `py/clear-text-storage-sensitive-data`（CWE-312，名字启发式误报）为主战场——
+  因为它的 source 判定**不看内容、只看名字**，最适合用变体二分证伪。
+
+**不做的事 / Out of scope**：
+
+- 不做 LLM 判读或告警优先级排序——结论来自可复现的对照实验，而非模型主观判断。
+- 不替代 CI：告警的最终 `state` 由 GitHub 自己的扫描决定，本技能只负责在推送前把因果查清楚。
+
+本技能**适用于**：你手上已有一条具体 CodeQL / Code Scanning 告警，想确认它是真漏洞还是误报，
+或想在推送前本地验证修复是否生效。
+
+## 权限与可用性声明 / Permissions & availability
+
+**最小权限 / Least privilege.** 本技能只做三件事，不越界：
+
+- 读你指定的**本地源码文件**（只读，不修改待查仓库）；
+- 把扫描产物写到你指定的**临时目录**（`bisect_taint.py --workdir`，默认 `/tmp/taint_bisect`），不写项目目录；
+- 执行本地 **`python`** 子进程，以及（仅当真正建库跑查询时）可选的 **`codeql`** 子进程。
+
+它**不联网、不读凭据、不改仓库、不写除临时目录外的任何位置**。所有样例数据均为模拟样本（见上「适用范围与边界」）。
+
+**可用性降级路径 / Availability fallback.** CodeQL CLI 是**可选依赖**：
+
+- 若 CodeQL CLI 因网络或环境原因暂不可得，`scan_sensitive_sources.py`（预筛）与 `read_sarif.py`（读 SARIF）两步**仍零依赖可用**，足以完成「是否命中名字启发式」「数据流长什么样」两类判定；
+- `bisect_taint.py` 不强制联网下载——可直接指向你本机已安装的 `codeql` 可执行文件（`--codeql /path/to/codeql`），无需任何额外网络配置即可跑对照实验。
+
+换言之，**核心判定不依赖一次海外大体积下载**；CLI 只是把「可复现因果结论」从两步推进到第三步的增强项。
+
+## 相关技能与取舍 / Related skills & tradeoffs
+
+**跨技能分工 / Division of labour.** 本技能只做**本地因果定位**。如果你要**在 GitHub 上直接管理告警本身**（列出、改状态、批量处理 Code Scanning 告警），交给 GitHub 官方的告警管理能力（如 `github-security-codescanning-alerts-skill` 或 `gh api code-scanning`）；本技能负责在推送前把「为什么报、改哪行消失」查清楚——二者互补而非竞争。
+This skill does **local causal triage** only. To *manage* alerts on GitHub (list / change state / bulk-handle Code Scanning alerts), use GitHub's official alert-management capability (e.g. `github-security-codescanning-alerts-skill` or `gh api code-scanning`); the two are complementary, not competing.
+
+**「无 LLM 判读」是取舍，不是缺失 / "No LLM judgment" is a tradeoff, not a gap.** 结论来自**可复现的对照实验**（变体二分 + 实测数据流），而非模型主观判断——这让结果可审计、可复核。若你确实需要**语义层判读 / 告警优先级排序**这类 LLM 能力，去看 `li-codeql-llm` 之类的技能；本技能**刻意不做**那一层。
+Conclusions come from a **reproducible controlled experiment**, not model intuition — which keeps them auditable. If you specifically need *semantic triage / prioritisation* (LLM-based), look at skills like `li-codeql-llm`; this skill deliberately stops at the mechanical layer.
+
+## 0. When to use / 何时用
+
+- An alert "makes no sense" or "still fires after I fixed it"
+  告警「看不懂为什么报」或「改了还在报」
+- You must tell a **real vulnerability** from a **false positive** (especially name-heuristic rules)
+  需要区分**真漏洞**与**误报**（尤其名字启发式类规则）
+- You want to prove/disprove a fix locally before pushing, instead of waiting for CI
+  修复后想在推送前**本地先证伪/证实**，而不是推上去等 CI
+- You need to know whether this alert was introduced by *your* change
+  想判断「这条告警是不是我这次改动引入的」
+
+## 1. The three commands / 三条命令的总览
+
+```bash
+python scripts/scan_sensitive_sources.py <src>   # 1. prefilter, saves a 9-min DB build / 免建库预筛
+python scripts/read_sarif.py <out.sarif>         # 2. print the full source→sink path / 打印数据流
+python scripts/bisect_taint.py --source f.py --tree . \
+    --variant t2=OLD:NEW --codeql <codeql>       # 3. change one thing at a time / 一次只改一个变量
+```
+
+All three have `--help`. `scan_sensitive_sources.py` and `read_sarif.py` are **zero-dependency** and
+run without CodeQL.
+
+三个脚本都带 `--help`。前两个是**零依赖**的，没装 CodeQL 也能跑。
+
+## 2. Installing the CodeQL CLI / 安装 CodeQL CLI
+
+一次性下载 ~400 MB（只含提取器，查询包首次 `analyze` 时自动拉）。平台包名、校验与最新版本查询的**完整步骤见 `references/running-codeql-cli.md`**。CodeQL CLI 是可选依赖——预筛与读 SARIF 不需要它。
+One-off ~400 MB download (extractors only; query packs auto-pull on first `analyze`). Full steps, platform zips, validation and "latest version" lookup: **`references/running-codeql-cli.md`**. The CLI is optional — the prefilter and SARIF reader do not need it.
+
+## 3. Build a database + run a single query / 建库 + 跑单条查询
+
+`codeql database create` + `codeql database analyze` 的**精确命令、耗时实测与查询路径语法见 `references/running-codeql-cli.md`**。只跑目标那一条规则，别跑整个 suite。
+`codeql database create` + `codeql database analyze`: **exact commands, measured cost, and query-path syntax in `references/running-codeql-cli.md`**. Run only the one rule you care about, never the whole suite.
+
+## 4. Read `codeFlows` from the SARIF (the key step) / 读 SARIF 的 codeFlows（关键一步）
+
+```bash
+python scripts/read_sarif.py "$T/out.sarif"              # full path / 全路径
+python scripts/read_sarif.py "$T/out.sarif" --json       # machine-readable / 机器可读
+python scripts/read_sarif.py "$T/out.sarif" --expect 0   # assert zero, CI-friendly / 断言清零
+```
+
+`codeFlows[].threadFlows[].locations[]` **is** the complete source → … → sink path, with the line
+number and node semantics of every step. `results` count = 0 means "clean" — the most direct
+acceptance signal there is.
+
+`codeFlows[].threadFlows[].locations[]` 就是 **source → … → sink** 的完整路径，含每步行号与节点语义。
+`results` 条数 = 0 即「干净」，这是最直接的验收信号。
+
+> Do not use the SARIF file size, and do not stop at the sink line — that is information you already
+> had on the GitHub page, and it adds nothing.
+>
+> 别用 SARIF 文件大小当判断依据，也别只看 sink 行号——那是 GitHub 页面上就能看到的信息，对定位零增量。
+
+## 5. Variant bisection: find out which step is responsible / 变体二分：定位到底是哪一步
+
+Change exactly one thing at a time, rebuild each variant, rerun the same query, and see whether the
+alert disappears.
+
+一次只改一个变量，各自建库跑同一条查询，看告警是否消失。
+
+> **「变体二分」≠ Trail of Bits 的 `variant-analysis`。** 我们的 **variant bisection** 是**一次只改一个变量、用对照实验定位单条告警的 taint 成因**（归因 / root-cause）；`variant-analysis` 是在多个项目里**找同一 bug 的其他实例**（普查 / sweep）。两者方向相反，别装错、也别归类错。
+> **variant bisection ≠ Trail of Bits' variant-analysis.** We locate the *cause* of **one** alert by a controlled experiment; variant-analysis finds *other instances* of the same bug across codebases. Opposite goals.
+
+```bash
+# Inspect the change without building anything / 先确认改动对不对（不建库）
+python scripts/bisect_taint.py --source scan.py --tree . --dry-run \
+    --variant t2_rename=SECRET_PATTERNS:CREDENTIAL_PATTERNS
+
+# Full run: stage + build + analyse + verdict table / 完整跑
+python scripts/bisect_taint.py --source scan.py --tree . \
+    --variant t2_rename=SECRET_PATTERNS:CREDENTIAL_PATTERNS \
+    --codeql /path/to/codeql --workdir /tmp/taint_bisect
+```
+
+### 参数与产物命名 / Parameters & artifact naming
+
+- `--workdir <dir>`（可选）：变体目录与产物的落地目录。**不给时默认 `<--tree>/_bisect`**（包根下的 `_bisect/`，已被拷贝时的 ignore 列表排除，不会污染待查仓库）；示例常显式传 `/tmp/taint_bisect` 把它放到系统临时区。
+  **覆盖行为**：每次运行会**清空并重建**各变体目录（含其中的 `_db`），所以重复运行是幂等的、不会累积旧产物。
+- `--codeql <path>`（可选）：指向本机已安装的 `codeql` 可执行文件。**不给则只生成变体、不跑查询**（退出码 0，并打印等价建库/分析命令模板），方便先 `--dry-run` 核对改动对不对。
+- 产物命名规则 / Artifact naming：
+  - 变体目录：`workdir/<NAME>/`（如 `workdir/t1_control/`、`workdir/t2_rename/`）
+  - 每变体数据库：`workdir/<NAME>/_db`
+  - 每变体 SARIF：`workdir/<NAME>.sarif`（**与变体目录同级、同名加 `.sarif` 后缀**，不在目录内）
+  - 判定表：直接打印到 stdout，不落盘
+
+When a change is too complex for a literal replacement (regex surgery), produce the edited file by
+hand and swap the whole file in: `--variant-file t3=/tmp/t3.py`.
+
+复杂改动（正则手术）做不了字面量替换时，手工产出一份改好的文件再整份替换：`--variant-file t3=/tmp/t3.py`。
+
+| Variant / 变体 | Meaning / 含义 | How to read it / 结果解读 |
+| --- | --- | --- |
+| `t1_control` (added automatically / 自动添加) | unchanged / 原样 | **must reproduce**; if it does not, local and remote disagree and every conclusion is invalid (the script exits 1)<br>**必须复现**；不复现说明本地与远端不一致，结论全部不可信（脚本会 exit 1） |
+| `t2_xxx` | suspect A removed / 去掉嫌疑 A | 0 results ⇒ A is the cause<br>0 处 ⇒ A 是成因 |
+| `t3_xxx` | suspect B removed / 去掉嫌疑 B | still fires ⇒ B is **not** the cause<br>仍命中 ⇒ B **不是**成因 |
+
+> Lesson: reading the QL source and *inferring* the cause is unreliable. Guessing wrong on the first
+> hypothesis is normal — a `base64` decode, a `json.dumps` or an f-string on the path all look like
+> plausible sources until you test them. **Run the controlled experiment before you write down the
+> conclusion.**
+>
+> 教训：**读 QL 源码推断成因很容易错**。首选假设猜错是常态——路径上的 `base64` 解码、`json.dumps`、
+> f-string 都看着像污染源，直到你用变体去测。**先做对照实验，再下结论。**
+
+## 6. Name-heuristic rules (the most common false-positive source in Python security queries)
+## 6. 名字启发式类规则（Python 安全查询最常见的误报源）
+
+Rules such as `py/clear-text-storage-sensitive-data` pick their source **by name, never by content**.
+
+`py/clear-text-storage-sensitive-data` 等规则的 source **不看内容、只看名字**。
+
+**Cheat sheet: `references/sensitive-data-heuristics.md`** (5 regex groups, the exclusion regex,
+7 source categories, the source/sink special cases of CWE-312). The three things to remember:
+
+**速查表见 `references/sensitive-data-heuristics.md`**（5 组正则、反向排除器、7 类 source、
+CWE-312 的 source/sink 特例）。最需要记住的三条：
+
+1. `maybeSecret()` = `(?is).*((?<!is|is_)secret|(?<!un|un_|is|is_)trusted(?!_iter)|confidential).*`
+   — a `secret` substring anywhere in the name is enough; the word in front of it grants no exemption
+   (unless it is exactly `is` / `is_`).
+   变量名里含 `secret` 子串就够，前面的词不构成豁免（除非正好是 `is` / `is_`）。
+2. **`"[REDACTED_SECRET]"`-style placeholders are not sensitive** (the exclusion regex contains
+   `redact`). So redacting a field is a valid fix — **do not go hunting for placeholders as sources**.
+   **`"[REDACTED_SECRET]"` 这类占位符不会判敏感**（`notSensitiveRegexp` 里有 `redact`）。
+   所以「把字段脱敏」是有效修复，**别把占位符当污染源去查**。
+3. CWE-312 only treats `secret` / `password` / `private` as sources; **`id` and `certificate` are
+   explicitly excluded** (`CleartextStorageCustomizations.qll`). The sink is "data written to a file"
+   (`FileSystemWriteAccess.getADataNode()`).
+   CWE-312 只把 `secret` / `password` / `private` 当 source，**`id` 与 `certificate` 被显式排除**；
+   sink 是「写入文件的数据」。
+
+**Therefore: any variable whose name *looks like* a key, as soon as it flows into a "write file / write
+log" sink, will fire.** The usual fix is a **rename** (zero behavioural change) — not a suppression
+comment, and definitely not a dismissal.
+
+**所以：任何「名字像密钥的变量」只要流向「写文件/写日志」sink 就会触发。**
+修法通常是**改名**（逻辑零变更），不需要抑制注释、更不该 dismiss。
+
+## 7. Post-fix acceptance checklist / 修复后验收清单
+
+1. Prefilter: `scripts/scan_sensitive_sources.py <file>` drops to zero sources
+   预筛：该文件的 source 数归零
+2. Functional regression: only a name changed, so **the tool's behaviour must not change** (run its
+   fixtures, including exit-code semantics)
+   功能回归：改的是名字，**被测工具本身行为必须不变**（跑 fixture，含退出码语义）
+3. Real CodeQL over the tree: the target query returns **0 results** (`read_sarif.py --expect 0`)
+   变体/整仓真 CodeQL：目标查询 **0 处**
+4. Leave a comment at the source saying **"do not rename this back"** plus the rule that caused it —
+   otherwise the next person will helpfully revert it
+   源码注释写清「**勿改回去**」+ 规则出处
+5. Once pushed, **let GitHub's own scan close the alert**: wait for the CodeQL workflow and check
+   whether the alert closed. Do **not** use `code-scanning/alerts/<n> --jq .updated_at` to decide
+   whether a rescan happened — that field only refreshes when the state changes, so a stale timestamp
+   proves nothing. The only valid signals are `state` or whether the position moved.
+   推上去后**关单由 GitHub 自己的扫描做**：等 CodeQL workflow 跑完再看告警是否 closed。
+   不要用 `--jq .updated_at` 判断是否重扫（该字段只在状态变化时刷新）；
+   判断依据只能是 `state` 或位置行号是否变。
+
+## 8. Two pitfalls when porting QL regexes to Python `re` / 移植 QL 正则到 Python re 的两个坑
+
+The prefilter is an "equivalent port"; when you touch it you will hit these:
+
+预筛脚本做的是「等价移植」，改它的时候会遇到：
+
+1. QL supports **variable-width lookbehind**: `(?<!is|is_)` raises
+   `PatternError: look-behind requires fixed-width pattern` in Python. Rewrite it as **several
+   fixed-width assertions in series**: `(?<!is)(?<!is_)` (all must pass for the exclusion to apply).
+   QL 支持**变长 lookbehind**：`(?<!is|is_)` 在 Python 抛
+   `PatternError: look-behind requires fixed-width pattern`；
+   等价改写为**多个定长断言串联**：`(?<!is)(?<!is_)`（须同时通过才排除）。
+2. **An inline `(?is)` cannot appear mid-expression** (`global flags not at the start of the
+   expression`). Pass the flags to `re.compile(pattern, re.I | re.S)`; when one regex has branches
+   with different flags, split them into separate patterns and take the union.
+   **内联 `(?is)` 不能出现在表达式中间**（`global flags not at the start of the expression`）。
+   把 flags 作为参数传给 `re.compile(pattern, re.I | re.S)`；
+   同一正则有多个分支且 flag 不同时，拆成多条 pattern 分别编译再取并集。
+
+After any change, run `python scripts/scan_sensitive_sources.py --self-test` to confirm the classifier
+still agrees with the QL definitions.
+
+改动后跑 `python scripts/scan_sensitive_sources.py --self-test` 验证分类器仍与 QL 定义一致。
+
+## 9. Common pitfalls / 常见坑汇总
+
+- Alert line numbers drift as you edit; only `most_recent_instance.location` reflects the latest scan
+  告警位置行号会随改动漂移；`most_recent_instance.location` 才反映最近一次扫描
+- CMake / compiled languages need a build before `database create`; **Python does not**
+  CMake/编译型语言建库要跑构建；**Python 不需要**
+- Before a whole-repo build, make sure no **concurrent edits** are happening (another process writing
+  files will desynchronise your conclusion). Cross-check mtime against the build time with
+  `ls --time-style=full-iso`.
+  整仓建库前确认工作区没有**并发改动**；用 `ls --time-style=full-iso` 对 mtime 与建库时间做时序核对
+- A variant must change **exactly one thing**. If two fixture/variant copies differ in anything else,
+  the experiment is void (`tests/run_tests.py` has an assertion guarding exactly this).
+  变体要**只改一处**；若两份 fixture/变体除目标变量外还有别的差异，对照实验就失效了
+  （`tests/run_tests.py` 里有一项断言专门守这件事）
+- `git archive HEAD` only reads the `.gitattributes` **in the HEAD tree**; if the file is untracked,
+  `export-ignore` silently does nothing. Verify with `git archive HEAD | tar -t | grep <path>` (expect
+  no output) and `git check-attr export-ignore -- <path>` (expect `export-ignore: set`).
+  `git archive HEAD` 只读 **HEAD 树里的** `.gitattributes`；文件未跟踪时 `export-ignore` 静默失效。
+  自检：前者须无输出，后者须返回 `export-ignore: set`

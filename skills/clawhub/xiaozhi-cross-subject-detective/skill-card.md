@@ -1,41 +1,54 @@
-## Description: <br>
-Guides Chinese-speaking learners through a week-long cross-disciplinary inquiry project that connects a real-world theme across subjects and summarizes the work as project DNA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+引导中文 K12 学生用一周时间从多个学科探究真实主题、发现知识联结，并整理项目记录。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and learning assistants use this skill to plan and run a cross-subject project around a real topic, explore it from several academic perspectives, and turn the results into reusable study notes and a project DNA summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect with related learning-note skills and may read or update study records such as Cornell notes and a knowledge accumulation tree. <br>
-Mitigation: Use it only in learning-note workspaces where those records are expected to be available, and review generated note or knowledge-tree updates before keeping them. <br>
-Risk: Cross-subject project guidance can produce broad connections that may need validation for a student's curriculum or age level. <br>
-Mitigation: Review the proposed subject perspectives, prompts, and project DNA summary before treating them as study material. <br>
+## Use Case:
 
+中文小学高段至高中学生在家长或教师适当支持下开展跨学科主题探究：选择主题、逐科提问、发现联结并整理一周的项目记录；不代写研究报告。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective) <br>
-- [跨学科侦探周项目模板](references/detective-project-template.md) <br>
+### Deployment Geography for Use:
 
+Global (Chinese-language learning; configure local crisis contacts and guardian consent)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and structured project notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces subject-view prompts, connection maps, project DNA summaries, and learning-note updates when paired with the related note-taking skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student project records and cross-skill sharing may expose a minor's learning history without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure learning-DNA storage and guardian consent; limit sharing to approved settings and honor pause, export and deletion requests.
+
+Risk: Crisis-related messages need locally relevant support rather than continued study prompts.
+
+Mitigation: Configure local crisis contacts and route crisis disclosures to trusted adults or local emergency support.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective)
+- [Project record template](references/detective-project-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language conversational guidance and structured Markdown project records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes subject perspectives, daily inquiry prompts, cross-subject connections and concept-map summaries; persistent records depend on consent and platform support.]
+
+## Skill Version(s):
+
+2.8.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

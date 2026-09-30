@@ -1,41 +1,51 @@
-## Description: <br>
-Generates personalized travel packing checklists using destination weather, trip length, trip type, traveler makeup, packing progress, and travel tips. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据目的地实时天气、行程天数、出行类型和旅行者构成，智能生成个性化打包清单，支持打包进度检查和出行贴士提醒。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers and travel-planning agents use this skill to generate weather-aware packing lists, check packed items against the list, and produce a quick checklist when live weather is not needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Destination and travel-context inputs may be sent to an external weather proxy despite contradictory privacy language in the artifact. <br>
-Mitigation: Install only if that data flow is acceptable, use quick mode when live weather is unnecessary, and prefer a corrected release with consistent privacy disclosure. <br>
-Risk: The manifest and actual commands are not fully aligned. <br>
-Mitigation: Confirm command wiring before deployment and prefer a corrected release whose manifest matches the generate, check, and quick commands. <br>
+## Use Case:
 
+External travelers use this skill to generate weather-aware packing lists, quick packing lists, travel tips, and progress checks for packed items before a trip.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/smart-packing-list) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Guidance] <br>
-**Output Format:** [JSON objects with weather summaries, categorized checklist items, essential/optional flags, packing progress, alerts, and travel tips.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The generate command may use an external weather proxy for destination weather; quick mode produces a checklist from local rules.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Weather-enabled generation sends trip destinations to an external proxy while the artifact also states that no external requests occur.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Correct the privacy and data-flow description before deployment, document the proxy operator and retention expectations, and use quick mode when destinations are sensitive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/smart-packing-list)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+- [Gaode weather proxy used by weather-enabled mode](https://gaode-proxy-jerspxcked.cn-hangzhou.fcapp.run)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, guidance]
+
+**Output Format:** [JSON objects containing weather summaries, categorized packing lists, essential/optional markers, progress checks, alerts, and travel tips.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The generate mode uses destination weather data; quick and check modes use local checklist logic.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release metadata; artifact frontmatter says 1.0.3 and artifact _meta.json says 1.0.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,53 @@
-## Description: <br>
-市内公交地铁路线查询，自动规划最优换乘方案，地铁优先展示，支持最快/少换乘/少步行三种策略，零配置即装即用。暑期城市出行导航。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+市内公交地铁路线查询，自动规划最优换乘方案，地铁优先展示，支持最快/少换乘/少步行三种策略，零配置即装即用。暑期城市出行导航。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to query same-city bus and metro routes, compare transfer options, and choose fastest, fewer-transfer, or shorter-walking transit plans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Route queries include origin, destination, and city and are sent through the publisher's cloud proxy. <br>
-Mitigation: Use the skill only when that data sharing is acceptable for the intended users and environment. <br>
-Risk: Transit times, fares, and operating details are estimates that may differ from current local service conditions. <br>
-Mitigation: Confirm time-sensitive travel details with the local transit operator or a live maps application before relying on the result. <br>
+## Use Case:
 
+External users use this skill to ask for same-city public transit routes between an origin and destination. It returns route options for bus and metro travel, with strategy choices for fastest travel, fewer transfers, or less walking.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/transit-route-query) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown text with route summaries, transit segments, walking distances, estimated duration, and estimated fare] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns estimated same-city bus and metro route guidance; route results depend on the publisher cloud proxy and upstream map data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: Route queries send origin, destination, and city details to the skill's cloud proxy and map provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid highly sensitive home, workplace, or routine-location queries unless that data sharing is acceptable.
+
+Risk: Transit times, fares, and route options may differ from current local operations.
+
+Mitigation: Treat route details as estimates and check local transit or map apps for real-time service changes.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/transit-route-query)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown text with route summaries, step-by-step transit segments, estimated duration, walking distance, and fare where available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Route details are estimates and do not include real-time arrival information.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

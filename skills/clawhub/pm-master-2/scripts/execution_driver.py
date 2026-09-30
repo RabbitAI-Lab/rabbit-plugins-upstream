@@ -1,22 +1,24 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master v2 · 执行驱动引擎（Execution Driver）
-==============================================
-执行期核心驱动脚本。解决 v1.x 中"规划期自动化强、执行期全靠Agent自行推理"的断层。
+PM Master v2 · Execution Driver
+==============================
+Core execution-phase driver script. Closes the gap in v1.x where "planning-phase
+automation was strong but the execution phase relied entirely on the Agent's own
+reasoning".
 
-职责：
-  1. 读取 project.yaml，确定当前应执行的工作包
-  2. 生成执行清单（按优先级、依赖、状态过滤）
-  3. 追踪 Sprint/迭代进度（agile/iteration/hybrid）
-  4. 自动触发 control_engine.py 巡检（如果距上次巡检已过 cadence）
-  5. 产出执行状态摘要
+Responsibilities:
+  1. Read project.yaml and determine the work packages that should execute now
+  2. Generate an execution checklist (filtered by priority, dependencies, status)
+  3. Track Sprint/iteration progress (agile/iteration/hybrid)
+  4. Auto-trigger control_engine.py inspection (if cadence since last inspection elapsed)
+  5. Produce an execution status summary
 
-用法：
+Usage:
   python3 execution_driver.py --project /workspace/<slug>/project.yaml
-  python3 execution_driver.py --project <yaml> --sprint 3           # 指定Sprint
-  python3 execution_driver.py --project <yaml> --check-control       # 仅检查是否需要巡检
-  python3 execution_driver.py --project <yaml> --json                # JSON输出
+  python3 execution_driver.py --project <yaml> --sprint 3           # specify a sprint
+  python3 execution_driver.py --project <yaml> --check-control       # only check whether inspection is needed
+  python3 execution_driver.py --project <yaml> --json                # JSON output
 """
 import os
 import sys
@@ -36,7 +38,7 @@ CONSISTENCY_CHECK = os.path.join(SCRIPT_DIR, 'consistency_check.py')
 
 def load(path):
     if yaml is None:
-        raise RuntimeError("需要 PyYAML，请先 pip install pyyaml")
+        raise RuntimeError("PyYAML required; run: pip install pyyaml")
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
@@ -47,7 +49,7 @@ def save(data, path):
 
 
 def parse_deps(dep):
-    """解析 dependsOn 字段"""
+    """Parse the dependsOn field."""
     if dep is None:
         return []
     if isinstance(dep, list):
@@ -56,23 +58,23 @@ def parse_deps(dep):
     if s in ('', '—', '-'):
         return []
     import re
-    return [p.strip() for p in re.split(r'[,;，；]', s) if p.strip()]
+    return [p.strip() for p in re.split(r'[,;]', s) if p.strip()]
 
 
 def get_wbs_status(w):
-    """推断WBS工作包状态"""
+    """Infer the WBS work-package status."""
     status = (w.get('status') or '').lower()
-    if status in ('done', 'completed', '完成', '已完成'):
+    if status in ('done', 'completed'):
         return 'done'
-    if status in ('in_progress', 'in progress', '进行中'):
+    if status in ('in_progress', 'in progress'):
         return 'in_progress'
-    if status in ('blocked', '阻塞'):
+    if status in ('blocked',):
         return 'blocked'
     return 'pending'
 
 
 def is_ready(w, wbs_map, done_ids):
-    """检查工作包是否就绪（所有依赖已完成）"""
+    """Check whether a work package is ready (all dependencies completed)."""
     deps = parse_deps(w.get('dependsOn'))
     if not deps:
         return True
@@ -80,7 +82,7 @@ def is_ready(w, wbs_map, done_ids):
 
 
 def get_executable_work(wbs, methodology):
-    """获取当前可执行的工作包清单"""
+    """Get the list of work packages executable right now."""
     wbs_map = {w.get('id'): w for w in wbs if w.get('id')}
     done_ids = {wid for wid, w in wbs_map.items() if get_wbs_status(w) == 'done'}
     in_progress_ids = {wid for wid, w in wbs_map.items() if get_wbs_status(w) == 'in_progress'}
@@ -92,7 +94,7 @@ def get_executable_work(wbs, methodology):
         wid = w.get('id', '?')
         status = get_wbs_status(w)
 
-        # 跳过summary/里程碑/done
+        # Skip summary/milestone/done
         if w.get('summary') or w.get('milestone'):
             continue
         if status == 'done':
@@ -127,9 +129,9 @@ def get_executable_work(wbs, methodology):
 
 
 def check_control_needed(project_yaml_path, data):
-    """检查是否需要运行 control_engine 巡检。
-    优先读取 data['last_control_check']（与 project_state 约定一致），
-    其次 control.last_control_check。"""
+    """Check whether control_engine inspection should run.
+    Prefer reading data['last_control_check'] (consistent with the project_state convention),
+    otherwise fall back to control.last_control_check."""
     ctrl = data.get('control') or {}
     cadence_days = ctrl.get('cadence_days', 7)
     last_check = data.get('last_control_check') or ctrl.get('last_control_check')
@@ -147,17 +149,17 @@ def check_control_needed(project_yaml_path, data):
 
 
 def stamp_control_check(data, path):
-    """巡检后写入 last_control_check，避免重复巡检（E4）。"""
+    """After inspection, write last_control_check to avoid redundant inspections (E4)."""
     data['last_control_check'] = datetime.date.today().isoformat()
     save(data, path)
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master v2 执行驱动引擎")
-    ap.add_argument('--project', required=True, help="project.yaml 路径")
-    ap.add_argument('--sprint', type=int, default=None, help="指定Sprint编号(agile)")
-    ap.add_argument('--check-control', action='store_true', help="仅检查是否需要巡检")
-    ap.add_argument('--json', action='store_true', help="JSON输出")
+    ap = argparse.ArgumentParser(description="PM Master v2 Execution Driver")
+    ap.add_argument('--project', required=True, help="Path to project.yaml")
+    ap.add_argument('--sprint', type=int, default=None, help="Specify sprint number (agile)")
+    ap.add_argument('--check-control', action='store_true', help="Only check whether inspection is needed")
+    ap.add_argument('--json', action='store_true', help="Output JSON")
     a = ap.parse_args()
 
     data = load(a.project)
@@ -166,10 +168,10 @@ def main():
     methodology = (proj.get('methodology') or '').lower()
     lifecycle = (proj.get('lifecycle_state') or '')
 
-    # 状态机检查
+    # State-machine check
     if lifecycle not in ('operational',):
-        print(f"[execution_driver] 项目不在 operational 状态（当前：{lifecycle}），无法驱动执行")
-        print("  请先完成：规划 → 评审 → baseline.py --freeze → gate_engine.py --to 执行")
+        print(f"[execution_driver] Project is not in the operational state (current: {lifecycle}); cannot drive execution")
+        print("  First complete: planning -> review -> baseline.py --freeze -> gate_engine.py --to execution")
         sys.exit(1)
 
     wbs = data.get('wbs') or []
@@ -177,24 +179,26 @@ def main():
     if a.check_control:
         needed, days = check_control_needed(a.project, data)
         if needed:
-            print(f"[execution_driver] 需要运行 control_engine 巡检")
+            print(f"[execution_driver] Need to run control_engine inspection")
             print(f"  python3 {CONTROL_ENGINE} --project {a.project}")
             sys.exit(0)
         else:
-            print(f"[execution_driver] 距上次巡检 {days} 天，无需巡检")
+            print(f"[execution_driver] {days} days since last inspection; no inspection needed")
             sys.exit(0)
 
-    # 获取可执行工作
+    # Get executable work
     executable, blocked, in_progress = get_executable_work(wbs, methodology)
 
-    # 检查是否需要巡检
+    # Check whether inspection is needed
     ctrl_needed, days_since = check_control_needed(a.project, data)
 
-    # 巡检后回写时间戳（幂等：仅当确实触发时才在真实巡检分支落盘；此处仅声明）
-    if ctrl_needed and not a.json:
-        stamp_control_check(data, a.project)
+    # SECURITY (ClawHub SDI-4): execution_driver never writes last_control_check.
+    # The timestamp is stamped ONLY by control_engine.py after a genuine inspection
+    # (control_engine.py:631). Previously this driver stamped it the moment an
+    # inspection was *deemed necessary*, which let a deemed-necessary-but-not-run
+    # inspection suppress the next real control check. We only report here.
 
-    # 输出
+    # Output
     if a.json:
         import json as _json
         result = {
@@ -205,27 +209,27 @@ def main():
             'in_progress_count': len(in_progress),
             'blocked_count': len(blocked),
             'control_check_needed': ctrl_needed,
-            'executable': executable[:20],  # 限制输出
+            'executable': executable[:20],  # limit output
             'blocked': blocked[:20],
         }
         print(_json.dumps(result, ensure_ascii=False, indent=2))
     else:
-        print(f"=== 执行驱动报告 ===")
-        print(f"项目：{proj.get('name')} | 方法论：{methodology} | 状态：{lifecycle}")
-        print(f"可执行工作包：{len(executable)} | 进行中：{len(in_progress)} | 阻塞：{len(blocked)}")
+        print(f"=== Execution Driver Report ===")
+        print(f"Project: {proj.get('name')} | Methodology: {methodology} | State: {lifecycle}")
+        print(f"Executable: {len(executable)} | In progress: {len(in_progress)} | Blocked: {len(blocked)}")
         if ctrl_needed:
-            print(f"⚠ 需要运行 control_engine.py 巡检（距上次 {days_since} 天）")
+            print(f"⚠ Need to run control_engine.py inspection ({days_since} days since last)")
 
         if executable:
-            print(f"\n## 可执行工作包（建议优先执行）")
+            print(f"\n## Executable work packages (prioritize)")
             for i, w in enumerate(executable[:10]):
                 status_tag = '🆕' if w['status'] == 'pending' else '🔄'
-                print(f"  {i+1}. [{w['id']}] {w['name']} ({w['estimate']}人天) - {w['owner'] or '(待指派)'} {status_tag}")
+                print(f"  {i+1}. [{w['id']}] {w['name']} ({w['estimate']} person-days) - {w['owner'] or '(unassigned)'} {status_tag}")
 
         if blocked:
-            print(f"\n## 阻塞项")
+            print(f"\n## Blocked items")
             for i, w in enumerate(blocked[:10]):
-                reason = '等待依赖完成' if w['status'] == 'waiting_deps' else w['status']
+                reason = 'waiting for dependencies' if w['status'] == 'waiting_deps' else w['status']
                 print(f"  {i+1}. [{w['id']}] {w['name']} - {reason}")
 
 
