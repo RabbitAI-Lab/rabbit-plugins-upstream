@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-instrument",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-instrument",
+  "branch": "main",
+  "pushedAt": "2026-09-29T11:18:54Z",
+  "contentHash": "7f8ebaf21deb569f2404e32f91db706e18cba0df59f298e2f7268e601c90ff06",
+  "fetchedAt": "2026-09-30T13:53:00.836Z"
+}
