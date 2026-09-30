@@ -1,41 +1,52 @@
-## Description: <br>
-语文写作全流程AI教练，面向作文构思、提纲检查、作文批改、议论文论证和辩论训练，通过追问、指出问题和给出修改方向来帮助学生保留自己的表达。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Simplified Chinese writing coach that helps students develop and revise their own compositions through questions and targeted feedback rather than writing for them.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and their guardians or educators use this skill for Chinese writing coaching: brainstorming original ideas, checking essay logic, reviewing drafts, practicing argumentation, and receiving focused revision guidance without having the agent write the essay for the student. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student essay topics, drafts, writing-style profiles, grammar weaknesses, or progress records may be stored for future tutoring. <br>
-Mitigation: Install only where users can clearly consent to, disable, delete, and understand these records, with extra review before use by minors. <br>
+## Use Case:
 
+Students in upper primary and secondary school use this skill to plan, draft, and improve Chinese compositions themselves. Guardians and educators can support age-appropriate practice and review feedback.
 
-## Reference(s): <br>
-- [语文错因维度表](references/chinese-error-dimension-table.md) <br>
-- [AI 辩论赛话术与赛制详解](references/debate-script-guide.md) <br>
-- [写作5步流程 · 状态机定义](references/writing-5step-statemachine.md) <br>
-- [三文体评分维度与追问问题库](references/writing-rubric.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style conversational Chinese coaching responses with questions, critique, rubrics, and revision directions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured feedback, staged workflow prompts, debate turns, and consent-gated writing-style memory summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence, released 2026-07-17) <br>
+Risk: Writing-style records and student compositions may contain sensitive personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review profile-memory settings with the student or guardian; require consent for tracking, cross-skill sharing, reminders, and parent sharing, and honor pause, export, correction, and deletion requests.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-writing-coach)
+- [Five-step writing workflow](artifact/references/writing-5step-statemachine.md)
+- [Writing assessment rubric](artifact/references/writing-rubric.md)
+- [Debate practice guide](artifact/references/debate-script-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Markdown]
+
+**Output Format:** [Simplified Chinese conversational text and structured writing feedback]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional writing-style profile updates require consent; the student writes and revises the composition.]
+
+## Skill Version(s):
+
+2.8.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

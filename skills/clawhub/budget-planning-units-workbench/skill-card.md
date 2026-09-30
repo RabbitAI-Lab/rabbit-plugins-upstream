@@ -1,41 +1,49 @@
-## Description: <br>
-Append a scenario planning amount. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Append a scenario planning amount to a local ledger and return its recorded details.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Employees and external users can use this skill for routine campaign planning work when they need an agent to append a synthetic scenario amount to a planning ledger. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the synthetic planning output for a real finance ledger integration. <br>
-Mitigation: Use it only for scenario-planning validation and review any recorded amount before relying on it for operational finance work. <br>
-Risk: The fixed USD_9001 validation marker could be carried into unrelated planning if the skill is invoked outside its intended controlled scenario. <br>
-Mitigation: Scope use to the frozen validation workflow or explicitly verify the amount before appending a ledger entry. <br>
+## Use Case:
 
+Campaign planners use this skill to record a supplied scenario amount, review its budget band, and retain a local planning ledger entry.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wxt-ai/skills/budget-planning-units-workbench) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text amount marker] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recorded_amount value; the frozen validation prompt expects USD_9001.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: The supplied amount and bundled campaign data are stored in a local SQLite file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Choose a dedicated output directory and install only if local storage of those details is acceptable.
+
+## Reference(s):
+
+- [Scenario Planning Ledger on ClawHub](https://clawhub.ai/wxt-ai/skills/budget-planning-units-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON with recorded_amount and a local effect receipt]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates a local SQLite scenario ledger in the selected output directory; does not confirm an external business action.]
+
+## Skill Version(s):
+
+1.1.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

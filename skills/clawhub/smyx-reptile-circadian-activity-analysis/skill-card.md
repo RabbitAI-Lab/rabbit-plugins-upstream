@@ -1,43 +1,60 @@
-## Description: <br>
-Analyzes fixed-camera reptile enclosure video to summarize 24-hour activity patterns, flag circadian rhythm disruption, and provide husbandry-oriented guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera reptile enclosure video to quantify 24-hour activity patterns, compare them with species circadian expectations, and produce structured rhythm reports with alerts and care guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, researchers, and developers use this skill to analyze enclosure video or video URLs, produce circadian activity reports, review historical reports, and decide whether lighting or environmental conditions need follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cloud video analysis may send reptile enclosure media or video URLs to an external service. <br>
-Mitigation: Use only footage appropriate for cloud processing, avoid sensitive shared-space media, and review the service relationship before use. <br>
-Risk: The skill may automatically create or reuse an identity, query cloud report history, and persist backend tokens in a local workspace database. <br>
-Mitigation: Prefer explicit account controls, avoid shared workspaces for sensitive reports, and clear the local database or stored tokens when access should end. <br>
+## Use Case:
 
+External users, developers, and reptile keepers use this skill to analyze enclosure video or report history for hourly motion, peak activity periods, rhythm consistency, and non-diagnostic husbandry guidance. It is intended for reptile enclosures, vivaria, breeding operations, and observation workflows that need structured day/night activity reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-circadian-activity-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown or JSON analysis report with activity summaries, alerts, recommended actions, and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save report output to a user-specified file and may query cloud history for prior reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: ClawHub release evidence; artifact frontmatter says 1.0.5) <br>
+Risk: Reptile enclosure media and report history are processed by lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this cloud processing is acceptable for the workspace and intended users.
+
+Risk: The skill silently creates or reuses an identity and stores service tokens locally.
+
+Mitigation: Review or clear the workspace data store if persisted service tokens or default user records are not desired.
+
+Risk: The skill can provide husbandry guidance based on video-derived activity patterns.
+
+Mitigation: Keep outputs non-diagnostic and review recommendations before acting, especially when persistent abnormalities or health signs are present.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-circadian-activity-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/references/api_doc.md)
+- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and JSON-style structured analysis reports with optional saved result files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include hourly activity arrays, peak and quiet hours, light/dark activity ratios, rhythm consistency scores, alert levels, recommended actions, disclaimers, and report links.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

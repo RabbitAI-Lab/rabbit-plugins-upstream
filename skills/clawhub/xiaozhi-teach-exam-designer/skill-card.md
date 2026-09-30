@@ -1,44 +1,58 @@
-## Description: <br>
-帮助老师设计科学测评方案，包括确认测评目标、设计双向细目表、控制难度梯度、生成评分标准和提供考后分析建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese K–12 teachers design assessments using test blueprints, balanced question difficulty, and clear scoring rubrics.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers and education-support agents use this skill to plan classroom assessments, build exam blueprints, align items to knowledge points and cognitive levels, draft scoring rubrics, and prepare aggregate post-exam analysis guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Assessment outputs may use classroom context from related teaching skills and write back score-rate or item-quality data. <br>
-Mitigation: Use aggregate score-rate and item-quality data only; avoid publishing named student results, rankings, or individual score records. <br>
-Risk: Exam materials may include copied or insufficiently licensed questions. <br>
-Mitigation: Require each item to include copyrightStatus and use teacher-owned, adapted, publicly citable, or index-only sources rather than unauthorized copied exam questions. <br>
-Risk: Generated scoring or analysis guidance could be treated as final judgment without teacher review. <br>
-Mitigation: Have a teacher review the blueprint, rubric, difficulty targets, and post-exam recommendations before classroom use. <br>
+## Use Case:
 
+Teachers use this skill to draft test blueprints, select or adapt questions, set difficulty targets, prepare scoring rubrics, and identify questions for revision from existing post-exam statistics. Teachers review all generated questions before formal use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Exam blueprint reference](references/exam-blueprint.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; adapt curriculum, privacy practices, and crisis contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance, structured tables, templates, and scoring rubric text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assessment blueprints, two-way specification tables, item metadata templates, scoring standards, and aggregate post-exam analysis suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: AI-generated questions may have incorrect answers, unsuitable difficulty, or unclear scoring.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a teacher solve and verify each question, answer, and rubric before adding it to a formal paper.
+
+Risk: Entering unreleased exam material or student personal data could expose sensitive information.
+
+Mitigation: Do not enter unreleased exam secrets or student personal data; use only appropriate, authorized source material.
+
+Risk: Chinese curriculum and crisis-contact assumptions may not fit other regions.
+
+Mitigation: Localize curriculum, privacy requirements, and emergency contacts before deploying outside the intended Chinese K–12 context.
+
+## Reference(s):
+
+- [Assessment blueprint and scoring templates](artifact/references/exam-blueprint.md)
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Guidance]
+
+**Output Format:** [Chinese-language assessment blueprints, question drafts, scoring rubrics, and review lists in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [AI-generated questions require teacher verification before use in formal exams; post-exam statistics are read, not calculated.]
+
+## Skill Version(s):
+
+2.8.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

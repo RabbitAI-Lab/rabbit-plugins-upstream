@@ -1,48 +1,62 @@
-## Description: <br>
-Organizes raw materials in Tencent IMA into structured wiki-style knowledge bases with folder classification, guide-note generation, tagging, and maintenance workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Organizes Tencent IMA source material into linked wiki guides, with folder and tag management and knowledge-base health checks.
 
-## Publisher: <br>
-[cookfish1979](https://clawhub.ai/user/cookfish1979) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cookfish1979](https://clawhub.ai/user/cookfish1979)
 
-## Use Case: <br>
-Developers, knowledge workers, and knowledge-base maintainers use this skill to turn Tencent IMA source materials into navigable wiki guides, organize scattered files into folder structures, manage tags, and maintain existing knowledge bases over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make real Tencent IMA knowledge-base changes when API credentials are available. <br>
-Mitigation: Review proposed source lists, destination knowledge base IDs, folder IDs, note IDs, and tag changes before approving write operations. <br>
-Risk: Knowledge-base moves, note deletion, tag deletion, and tag renaming can remove or reorganize user content in ways that are difficult to reverse. <br>
-Mitigation: Use the documented backup, verification, and explicit confirmation steps before destructive or bulk operations, and prefer preserving old notes when possible. <br>
-Risk: Processing confidential or regulated content may expose that content to Tencent IMA, web search, or LLM processing paths. <br>
-Mitigation: Run the skill on sensitive data only when those services and workflows are approved for the data involved. <br>
+## Use Case:
 
+IMA knowledge-base users and teams use this skill to compile source documents into linked topic guides, organize folders and tags, update guides, and identify structural or stale-content issues.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cookfish1979/skills/wiki-compiler) <br>
-- [API reference](references/api-reference.md) <br>
-- [Folder organization](references/folder-organization.md) <br>
-- [Link handling](references/link-handling.md) <br>
-- [Write and verify](references/write-and-verify.md) <br>
-- [Security guidance](references/security.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include proposed API write operations, confirmation checkpoints, and verification steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Organizing a knowledge base can change remote notes, folders, and tags.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a test or noncritical knowledge base and approve proposed moves, tag changes, and cascade updates before execution.
+
+Risk: IMA API credentials could be exposed through shared logs, repositories, or transcripts.
+
+Mitigation: Keep API keys out of shared logs, repositories, and transcripts.
+
+Risk: Moving knowledge may clear its tags.
+
+Mitigation: Back up existing tags before moving items and verify or restore tags afterward.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/cookfish1979/skills/wiki-compiler)
+- [Tencent IMA agent interface](https://ima.qq.com/agent-interface)
+- [Ingest and guide updates](references/ingest.md)
+- [Knowledge-base health checks](references/lint.md)
+- [Guide schema](references/schema.md)
+- [Safety guidance](references/security.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown wiki guides, lint reports, and organization plans]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can create or update remote IMA notes, folders, and tags.]
+
+## Skill Version(s):
+
+5.0.2 (source: ClawHub release; SKILL.md frontmatter lists 5.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

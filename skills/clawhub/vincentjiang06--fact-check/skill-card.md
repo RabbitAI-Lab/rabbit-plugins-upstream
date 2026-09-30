@@ -1,49 +1,57 @@
-## Description: <br>
-Fact Check gives a fast, source-backed answer to a factual question or claim within a bounded time budget. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides concise, source-backed answers to factual questions and claims using bounded web searches and explicit confidence labels.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Developers and agents use this skill to quickly verify factual questions or claims with bounded web search and return a concise cited answer. It is intended for bottom-line fact checks, not exhaustive research reports or subjective recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fast web-search answers can be incorrect or stale if source quality is weak. <br>
-Mitigation: Use the skill's source bars, freshness checks, citations, confidence labels, and uncertain path instead of guessing. <br>
-Risk: The release does not include server-resolved GitHub import provenance. <br>
-Mitigation: When publisher provenance matters, review the ClawHub publisher profile and the external source named in the security guidance before deployment. <br>
-Risk: Citation structure can be incomplete even when the answer prose looks plausible. <br>
-Mitigation: Run scripts/check_answer.mjs on saved answers when practical to confirm the required answer structure and resolving citations. <br>
+## Use Case:
 
+Employees, developers, and other users can quickly check a factual question or claim and receive a short answer with sources, supporting evidence, and a confidence rating. It is not intended for exhaustive research reports or subjective recommendations.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/vincentjiang06/skills/fact-check) <br>
-- [SKILL.md](SKILL.md) <br>
-- [Triage rules](rules/triage.md) <br>
-- [Search protocol](rules/search-protocol.md) <br>
-- [Output contract](rules/output-contract.md) <br>
-- [Source reliability and freshness](references/source-reliability.md) <br>
-- [Metrics](references/metrics.md) <br>
-- [Answer template](assets/answer-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, shell commands] <br>
-**Output Format:** [Markdown with a bottom-line answer, confidence label, tier, cited evidence bullets, numbered sources, and optional caveats.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses simple and complex time budgets; optional structural validation is available through scripts/check_answer.mjs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill metadata) <br>
+Risk: An unpinned remote installation command in the README may fetch an unreviewed release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the reviewed ClawHub artifact or pin a known release.
+
+Risk: The advertised speed targets are not established by the bundled comparison against a baseline.
+
+Mitigation: Treat the time targets as goals rather than guaranteed performance.
+
+Risk: Fact-checking may send search queries to external web services; a structurally valid answer may still cite unsupported claims.
+
+Mitigation: Avoid putting sensitive data in search queries and read each cited page to confirm it supports the answer.
+
+## Reference(s):
+
+- [ClawHub fact-check skill listing](https://clawhub.ai/vincentjiang06/skills/fact-check)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Bottom-line answer with tier, confidence, cited evidence, numbered sources, and caveats when needed. The optional validator checks format and citation resolution, not factual support.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release, skill metadata, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

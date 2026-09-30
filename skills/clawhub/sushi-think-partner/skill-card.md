@@ -1,41 +1,57 @@
-## Description: <br>
-Sushi Think Partner is a Chinese-first Su Shi-inspired reflection skill for emotional adjustment, adversity reframing, meaning exploration, and poetic self-inquiry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses Su Shi's poetry and life philosophy to help people reflect on setbacks, emotions, and meaning through literary perspectives and practical questions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Chinese-speaking users use this skill as a Su Shi-inspired thinking partner for emotional regulation, difficult life moments, loss, uncertainty, and values reflection. It responds with literary framing, reflective questions, and practical suggestions grounded in Su Shi's poetry and life philosophy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat reflective mental-health or life-decision guidance as professional advice. <br>
-Mitigation: Present outputs as informal reflection and direct users to qualified professionals or emergency support for therapy, crisis, medical, legal, or financial needs. <br>
-Risk: Poetic reframing can oversimplify decisions that require concrete facts, constraints, or expert input. <br>
-Mitigation: Pair Su Shi-inspired framing with practical fact gathering, user-specific constraints, and human review for consequential decisions. <br>
+## Use Case:
 
+External users seeking literary reflection on everyday emotional setbacks, relationships, career changes, or questions of meaning use this skill to explore Su Shi-inspired perspectives and small next steps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/sushi-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured reflection, quoted poetry, questions, and actionable suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first responses with selected English concepts retained.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+Risk: Literary reflection could delay help during a mental health crisis or be mistaken for clinical care.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not use for crisis support, diagnosis, or treatment; direct users to emergency or qualified professional help.
+
+Risk: Reflective guidance could be mistaken for legal, financial, or technical decision support.
+
+Mitigation: Use appropriate professional advice and factual analysis for consequential decisions.
+
+Risk: Dated social-context examples may not reflect current conditions.
+
+Mitigation: Treat those examples as illustrative and verify current facts with authoritative sources.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/sushi-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Simplified Chinese by default, with other languages on request; may include poetry, reflective questions, and suggested actions.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release and skill identity)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

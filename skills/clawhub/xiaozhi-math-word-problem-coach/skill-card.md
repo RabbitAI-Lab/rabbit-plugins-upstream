@@ -1,40 +1,61 @@
-## Description: <br>
-A Chinese-language tutoring skill that guides students through math word-problem modeling by identifying quantities, describing relationships in words, and translating those relationships into equations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese middle- and high-school students through identifying quantities, explaining their relationships, and translating word problems into mathematical models without solving the resulting equations for them.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to practice converting math word problems into models and equations through guided questioning instead of direct answer giving. It focuses on travel, work-rate, concentration, profit, and growth-rate problem patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally steers word-problem sessions through questions instead of directly solving equations, which may frustrate users expecting immediate answers. <br>
-Mitigation: Set user expectations that the skill is for modeling practice and guided reasoning, not direct answer generation. <br>
-Risk: The skill depends on companion learning and error-tracking skills for student progress workflows. <br>
-Mitigation: Review companion skills separately before using progress storage or error-history behavior. <br>
+## Use Case:
 
+Chinese-speaking middle- and high-school students use this coach to turn word problems into equations, functions, sequences, geometry, statistics, or probability models through graduated hints. Teachers or guardians should supervise use by younger children.
 
-## Reference(s): <br>
-- [五大应用题题型建模框架与数量关系速查表](references/modeling-patterns.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (Simplified Chinese K12 context); localize curriculum and emergency resources before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversational guidance and prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code, shell commands, network calls, or configuration changes are produced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Optional learning records and cross-skill or guardian sharing may expose a minor's educational information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm memory and profile-sharing settings before use; honor pause, deletion, and sharing controls.
+
+Risk: Mainland China curriculum assumptions and emergency resources may be inappropriate in other regions.
+
+Mitigation: Localize curriculum and help channels before regional deployment; confirm the learner's location before suggesting emergency numbers.
+
+Risk: AI-generated practice problems or modeling hints may be mathematically incorrect.
+
+Mitigation: Check generated problems and equations before classroom or assessment use, especially when sharing them with students.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-math-word-problem-coach)
+- [Modeling patterns and quantity relationships](references/modeling-patterns.md)
+- [High-school function models](references/math-hs1-function-models.md)
+- [High-school compulsory-course models](references/math-hs2-models.md)
+- [High-school elective-course models](references/math-hs3-models.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Mathematical modeling guidance, Example equations]
+
+**Output Format:** [Simplified Chinese conversational text with mathematical expressions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stepwise questions and graduated hints; optional learning records and text export subject to user controls.]
+
+## Skill Version(s):
+
+2.8.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,42 @@
+{
+  "variant_id": "relay_13_signature_requirement",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "requires_signature",
+  "output_name": "delivery_document_section",
+  "input_schema": {
+    "type": "boolean"
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "section_id",
+      "requires_signature",
+      "signature_section",
+      "document_count"
+    ],
+    "properties": {
+      "section_id": {
+        "type": "string",
+        "pattern": "^delivery_section_[0-9a-f]{12}$"
+      },
+      "requires_signature": {
+        "type": "boolean"
+      },
+      "signature_section": {
+        "type": "string",
+        "enum": [
+          "recipient-signature",
+          "standard-handoff"
+        ]
+      },
+      "document_count": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "delivery_documentation_record"
+}

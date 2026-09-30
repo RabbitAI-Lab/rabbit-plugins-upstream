@@ -1,47 +1,69 @@
-## Description: <br>
-Google Slides API integration with managed OAuth for creating presentations, adding slides, inserting content, and managing slide formatting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create, edit, and format Google Slides presentations through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call Google Slides through Maton-managed OAuth, including creating presentations, managing slides, inserting text or images, and applying formatting changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Maton-managed OAuth to access a connected Google Slides account or workspace. <br>
-Mitigation: Install only after confirming trust in Maton, connect the least-privileged Google account practical, and review requested access before authorizing the connection. <br>
-Risk: Create, update, and delete requests can change presentations, slides, and slide content. <br>
-Mitigation: Require explicit user approval before write operations and confirm the target presentation, resource, and intended effect before execution. <br>
-Risk: MATON_API_KEY grants access to the integration and could be misused if exposed. <br>
-Mitigation: Store MATON_API_KEY as a secret, do not include it in logs or shared prompts, and avoid using it in untrusted projects. <br>
+## Use Case:
 
+People and teams use this skill to read and update presentations, add slides and content, and set up approved automations through their Google Slides connection.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-slides) <br>
-- [Google Slides API overview](https://developers.google.com/slides/api/reference/rest) <br>
-- [Presentations API](https://developers.google.com/slides/api/reference/rest/v1/presentations) <br>
-- [Pages API](https://developers.google.com/slides/api/reference/rest/v1/presentations.pages) <br>
-- [BatchUpdate API](https://developers.google.com/slides/api/reference/rest/v1/presentations/batchUpdate) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API endpoint examples and inline bash, Python, JavaScript, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The Google Slides connection grants access according to the OAuth scopes the user approves.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requested scopes, select only what is needed, and prefer read-only access when possible.
+
+Risk: Writes, new connections, and hosted automation can change presentations or account behavior.
+
+Mitigation: Default to reading and listing; get explicit user confirmation before any write, connection, function, or automation.
+
+Risk: Persistent triggers and destinations can keep forwarding event data until removed.
+
+Mitigation: Confirm the destination, data, and duration before enabling forwarding; review and delete destinations when no longer needed.
+
+## Reference(s):
+
+- [Google Slides skill on ClawHub](https://clawhub.ai/byungkyu/skills/google-slides)
+- [Maton](https://maton.ai)
+- [Google Slides API reference](https://developers.google.com/slides/api/reference/rest)
+- [Related API gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+- [Time trigger reference](references/time/triggers.md)
+- [Google Mail trigger reference](references/google-mail/triggers.md)
+- [Calendly trigger reference](references/calendly/triggers.md)
+- [GitHub trigger reference](references/github/triggers.md)
+- [HubSpot trigger reference](references/hubspot/triggers.md)
+- [Linear trigger reference](references/linear/triggers.md)
+- [Notion trigger reference](references/notion/triggers.md)
+- [Slack trigger reference](references/slack/triggers.md)
+- [Stripe trigger reference](references/stripe/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code]
+
+**Output Format:** [Markdown with commands and code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Google Slides actions require a user-authorized connection; confirm writes and automations before execution.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata; skill frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

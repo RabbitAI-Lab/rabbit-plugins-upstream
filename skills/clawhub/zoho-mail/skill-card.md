@@ -1,48 +1,68 @@
-## Description: <br>
-Zoho Mail API integration with managed OAuth for sending, receiving, searching, and managing email messages, folders, labels, and attachments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read, send, search, and organize Zoho Mail through a connected Maton account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent work with a connected Zoho Mail account through Maton-managed OAuth, including reading mail, sending replies, searching messages, and organizing folders and labels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive email, folder, account, and organization information through the connected Zoho Mail account. <br>
-Mitigation: Install only when Maton-mediated Zoho Mail access is acceptable, keep MATON_API_KEY out of shared logs, and remove the Maton connection when it is no longer needed. <br>
-Risk: Write operations can send email or modify messages, folders, labels, and attachments. <br>
-Mitigation: Confirm the target resource and intended effect with the user before every send, delete, move, label, folder, or attachment action. <br>
-Risk: Multiple Zoho Mail connections can route actions to the wrong account if the connection is ambiguous. <br>
-Mitigation: Use the Maton-Connection header when more than one active Zoho Mail connection exists. <br>
+## Use Case:
 
+People using an agent with Zoho Mail can retrieve and search messages, send replies, and manage folders and labels. With separate approval, they can set up Maton-hosted automations using a connected account.
 
-## Reference(s): <br>
-- [Zoho Mail API Overview](https://www.zoho.com/mail/help/api/overview.html) <br>
-- [Zoho Mail API Index](https://www.zoho.com/mail/help/api/) <br>
-- [Email Messages API](https://www.zoho.com/mail/help/api/email-api.html) <br>
-- [Getting Started with Zoho Mail API](https://www.zoho.com/mail/help/api/getting-started-with-api.html) <br>
-- [Maton](https://maton.ai) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-mail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with API paths, JSON examples, and Python or JavaScript code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Zoho Mail OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Connecting Maton grants access to the authorized Zoho Mail account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get approval before connecting, prefer device OAuth, grant only needed scopes, and remove unused connections.
+
+Risk: Sending, changing, or deleting mail can affect recipients and account data.
+
+Mitigation: Default to reads and confirm the target and effect of every write before proceeding.
+
+Risk: Automations and trigger destinations may forward matching events persistently.
+
+Mitigation: Obtain separate approval, narrowly scope destinations, and remove them when no longer needed.
+
+Risk: A long-lived API key or untrusted event content could expose credentials or trigger unsafe actions.
+
+Mitigation: Prefer device OAuth, keep keys out of outputs, and run local event handlers only after separate review and approval.
+
+## Reference(s):
+
+- [ClawHub Zoho Mail release](https://clawhub.ai/byungkyu/skills/zoho-mail)
+- [Maton homepage](https://maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Zoho Mail API overview](https://www.zoho.com/mail/help/api/overview.html)
+- [Zoho Mail email API](https://www.zoho.com/mail/help/api/email-api.html)
+- [Time trigger catalog](references/time/triggers.md)
+- [Google Mail trigger catalog](references/google-mail/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown guidance with commands, code examples, and API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may contain private email content; share only the fields needed for the task.]
+
+## Skill Version(s):
+
+1.2.4 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

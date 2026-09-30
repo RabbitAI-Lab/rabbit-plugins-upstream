@@ -1,0 +1,23 @@
+{
+  "group_report": {
+    "report_id": "report_472df48d67b3",
+    "groups": [
+      {
+        "group_key": "APAC",
+        "account_count": 2,
+        "aggregate_value": 16700000
+      },
+      {
+        "group_key": "US",
+        "account_count": 1,
+        "aggregate_value": 8800000
+      }
+    ],
+    "row_count": 3,
+    "projected_columns": [
+      "group_key",
+      "account_count",
+      "aggregate_value"
+    ]
+  }
+}

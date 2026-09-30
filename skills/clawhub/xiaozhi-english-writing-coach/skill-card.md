@@ -1,41 +1,55 @@
-## Description: <br>
-Guides English learners through targeted writing feedback, sentence and vocabulary upgrades, scenario-based practice, and consent-gated progress tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向中国小学高段至高中学生，针对英语段落和作文提供语法、用词及逻辑反馈，并通过追问引导学生自行修改。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English learners use this skill to improve written English through grammar, vocabulary, and logic feedback that asks them to revise rather than simply receiving rewritten answers. It can also guide practical writing exercises, track progress when the user consents, and produce monthly writing-development summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can remember writing-development patterns when the user allows progress tracking. <br>
-Mitigation: Ask for consent before updating writing profiles, DNA records, reminders, or cross-session progress notes, and let the user decline tracking. <br>
-Risk: Writing feedback may be misleading if treated as authoritative scoring or a complete rewrite. <br>
-Mitigation: Use the skill as coaching guidance, focus on the most important issues, and have the learner review and revise the work themselves. <br>
+## Use Case:
 
+学生在教师或监护人适当支持下练习英语段落与作文写作，获得具体的语法、词汇和篇章逻辑反馈，并通过提示自行修改。高中学生也可练习应用文和读后续写。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach) <br>
-- [Low-to-high vocabulary upgrade reference](references/vocabulary-upgrade.md) <br>
+### Deployment Geography for Use:
 
+Global; outside mainland China, localize curriculum, minor-consent requirements, and crisis support contacts before use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style coaching feedback, revision prompts, practice scripts, and progress summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include consent-gated progress notes for writing habits, sentence-level development, and monthly summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student writing profiles or reminders may expose minors' learning data without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable profiles, cross-skill sharing, parent summaries and reminders only with the relevant student or guardian permissions; otherwise give session-only feedback.
+
+Risk: Mainland China curriculum assumptions or crisis contacts may be inappropriate in other locations.
+
+Mitigation: Adapt curriculum and local emergency guidance before deployment outside mainland China, and confirm the student's location before providing local crisis numbers.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-english-writing-coach)
+- [Vocabulary upgrade reference](references/vocabulary-upgrade.md)
+- [High-school English writing reference](references/english-hs-writing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Sentence-specific feedback and revision prompts; optional progress reports only when relevant records and consent are available.]
+
+## Skill Version(s):
+
+2.8.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

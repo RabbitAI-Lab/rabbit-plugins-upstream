@@ -1,44 +1,63 @@
-## Description: <br>
-here.now lets agents publish websites and files to live URLs in seconds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+here.now lets agents publish websites and files to live URLs in seconds.
 
-## Publisher: <br>
-[adamludwin](https://clawhub.ai/user/adamludwin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[adamludwin](https://clawhub.ai/user/adamludwin)
 
-## Use Case: <br>
-Developers, agents, and teams use here.now to publish selected files or folders as websites, raw file viewers, workspace-owned sites, or private Drive storage. It helps create live URLs, manage access controls, update existing publishes, and share persistent private files through shell workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can upload selected local files and create public links. <br>
-Mitigation: Confirm the intended files and access mode before publishing; use password, restricted access, workspace access, or private Drive storage when content should not be public. <br>
-Risk: Account credentials and claim tokens may persist across sessions. <br>
-Mitigation: Treat ~/.herenow/credentials and .herenow/state.json as sensitive, avoid passing API keys as command-line flags in interactive use, and do not commit credential or state files. <br>
-Risk: Anonymous published sites expire unless claimed or updated with an authenticated account. <br>
-Mitigation: Share the current site URL and claim URL only from the latest script output, and tell users when an anonymous site expires in 24 hours. <br>
+## Use Case:
 
+Developers, agents, and teams use here.now to publish websites and static files, manage site access, work with custom domains or workspace URLs, and store or share private Drive files through documented shell and API workflows.
 
-## Reference(s): <br>
-- [here.now Documentation](https://here.now/docs) <br>
-- [here.now Access Control Documentation](https://here.now/docs#access-control) <br>
-- [here.now Workspace Documentation](https://here.now/docs#workspaces) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands, URLs, and JSON/API output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Publishing workflows return live site URLs and publish result details; Drive workflows return JSON metadata or file content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.18.0 (source: evidence release version and artifact SKILL.md) <br>
+Risk: The skill can direct agents to persist a here.now API key under ~/.herenow/credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user's intent before login persistence and avoid exposing API keys in command arguments, logs, or generated content.
+
+Risk: The skill supports private Drive sharing, mutation, deletes, overwrites, and scoped token creation.
+
+Mitigation: Require explicit user approval for Drive sharing, destructive changes, overwrites, and broad token scopes; prefer narrow prefixes and short token lifetimes.
+
+Risk: The skill can publish selected local files to public or controlled-access URLs.
+
+Mitigation: Review the target path and access mode before publishing, and use restricted or password access when content should not be public.
+
+Risk: The skill can initiate domain purchases, which evidence and artifact behavior describe as final.
+
+Mitigation: Show the quoted purchase and renewal prices and obtain explicit user confirmation before any purchase action.
+
+## Reference(s):
+
+- [here.now documentation](https://here.now/docs)
+- [here.now OpenAPI specification](https://here.now/openapi.json)
+- [ClawHub skill release](https://clawhub.ai/adamludwin/skills/here-now)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands, URLs, and API request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce live site URLs, private Drive guidance, access-control instructions, and configuration steps for here.now credentials or domains.]
+
+## Skill Version(s):
+
+1.32.0 (source: server release evidence and SKILL.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

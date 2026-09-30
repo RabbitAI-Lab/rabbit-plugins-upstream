@@ -1,0 +1,11 @@
+{
+  "reconciliation_summary": {
+    "summary_id": "reconcile_bb5f4d21f974",
+    "threshold": 0.92,
+    "matched_count": 2,
+    "matched_invoice_ids": [
+      "INV-1001",
+      "INV-1002"
+    ]
+  }
+}

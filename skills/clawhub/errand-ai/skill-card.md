@@ -1,42 +1,59 @@
-## Description: <br>
-Post errands using natural language, track status, review submissions, and automate USDC payments through the ErrandAI task marketplace. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent send a local worker to check, photograph, verify, queue, or pick up something in Seoul and report answers with GPS and photo evidence.
 
-## Publisher: <br>
-[ChloePark85](https://clawhub.ai/user/ChloePark85) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[chloepark85](https://clawhub.ai/user/chloepark85)
 
-## Use Case: <br>
-OpenClaw users can use this skill to create, track, and review paid errands for human workers through ErrandAI. It supports tasks such as photography, product verification, price research, translation, research, delivery, and general custom errands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create paid errands and approve submissions that release USDC without a clear confirmation guardrail. <br>
-Mitigation: Require manual confirmation outside the skill before posting paid errands or approving submissions, and avoid auto-approval or scheduled paid workflows unless spending limits and audit controls are in place. <br>
-Risk: A misconfigured ErrandAI API endpoint could send credentials or payment-related actions to an unintended service. <br>
-Mitigation: Keep ERRANDAI_API_URL pointed at the official ErrandAI service and use a scoped or revocable API key where possible. <br>
+## Use Case:
 
+People who need an on-site check in Seoul can ask an agent to obtain a quote, dispatch a local worker after approving the total price, and receive verified answers and photos. Tasks include checking business hours, queues, signage, and product availability.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ChloePark85/errand-ai) <br>
-- [ErrandAI documentation](https://docs.errand.be) <br>
-- [ErrandAI dashboard](https://errand.be/dashboard) <br>
+### Deployment Geography for Use:
 
+Seoul, South Korea (initially Gangnam / Yeoksam; check live coverage)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown] <br>
-**Output Format:** [Markdown-formatted status, confirmation, error, and review messages.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May trigger ErrandAI API actions that create paid errands or approve submitted work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact manifest) <br>
+Risk: Dispatch spends prepaid balance and sends a person to a physical location.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Show the exact total price and wait for the user's explicit approval before dispatch; use a capped or limited key if available.
+
+Risk: Optional source reporting links usage milestones to the Errand account.
+
+Mitigation: Explain the reporting and enable ERRANDAI_CLIENT only with the user's explicit consent.
+
+Risk: MCP setup may store an authorization header in the client's configuration.
+
+Mitigation: Review how the MCP client stores credentials and protect its configuration before enabling the connection.
+
+## Reference(s):
+
+- [Errand AI on ClawHub](https://clawhub.ai/chloepark85/skills/errand-ai)
+- [Errand setup and account](https://errand.be/clawhub)
+- [Errand analytics and privacy](https://errand.be/privacy#clawhub-analytics)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands]
+
+**Output Format:** [Markdown with price quotes, status updates, structured answers, and photo links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes GPS/photo verification verdicts; signed photo links expire after one hour.]
+
+## Skill Version(s):
+
+2.0.1 (source: release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

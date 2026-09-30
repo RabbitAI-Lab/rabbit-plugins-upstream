@@ -1,41 +1,58 @@
-## Description: <br>
-Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage Sendmux domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers, operators, and team administrators use this skill to manage Sendmux account resources, including domains, mailboxes, mailbox keys, sending accounts, webhooks, logs, billing, and account-level setup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sendmux root credentials can administer account-level resources and expose sensitive one-time secrets. <br>
-Mitigation: Use scoped Sendmux credentials where possible, keep root keys and generated secrets in a secret store, and do not paste secrets into chat. <br>
-Risk: Administrative actions can delete, suspend, rotate, test, or expose account resources, billing data, and logs. <br>
-Mitigation: Review confirmations carefully and verify target resources before destructive, high-impact, billing, log, or secret-rotation operations. <br>
+## Use Case:
 
+Developers and account administrators use this skill to guide Sendmux team administration, including domain and mailbox setup, sending accounts, webhooks, billing, and delivery monitoring.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sendmux.ai/skills/sendmux-management) <br>
-- [Sendmux Skills Homepage](https://github.com/Sendmux/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, TypeScript code examples, MCP tool names, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes guidance for handling Sendmux credentials, confirmations, pagination, idempotency keys, and concurrency headers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Broad management credentials can change account resources and permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer scoped OAuth or a limited profile; check access before each operation.
+
+Risk: Root keys and one-time secrets could be exposed during setup.
+
+Mitigation: Store secrets securely and never request or reveal them in chat.
+
+Risk: Deletion, suspension, provider changes, secret rotation, and webhook tests can disrupt service.
+
+Mitigation: Confirm the target and review the action with the user before execution.
+
+## Reference(s):
+
+- [Sendmux Management on ClawHub](https://clawhub.ai/sendmux.ai/skills/sendmux-management)
+- [Sendmux skills homepage (skill metadata)](https://github.com/Sendmux/skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with CLI and SDK examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires appropriate Sendmux access for account-management operations.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release metadata; skill frontmatter lists 1.7.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

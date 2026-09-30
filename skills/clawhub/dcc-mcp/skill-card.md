@@ -1,45 +1,65 @@
-## Description: <br>
-DCC-MCP helps agents connect to and operate live DCC applications through structured DCC-MCP tools, with CLI-first marketplace discovery and setup guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operates named supported creative applications through DCC-MCP, discovers available tools and marketplace skills, and verifies resulting work.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers, technical artists, and agent operators use this skill to route DCC control requests to live Maya, Blender, Houdini, Photoshop, 3ds Max, Nuke, Unreal, Godot, RenderDoc, Substance 3D, and related DCC tooling. It also guides marketplace search, package inspection, consent-gated installs or updates, and gateway troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to control live DCC applications and change active creative sessions. <br>
-Mitigation: Use the skill only when DCC-MCP control is intended, inspect tool schemas before calls, prefer structured tools, and verify results after actions. <br>
-Risk: CLI installs, marketplace installs or updates, adapter setup, remote gateway profiles, and daemon actions can change local tools or installed skills. <br>
-Mitigation: Require explicit user consent before these actions and follow the artifact's consent-gated setup and marketplace inspection steps. <br>
-Risk: A missing CLI may trigger a binary installation path. <br>
-Mitigation: Use only the documented verified installer path, which checks the official release manifest and SHA-256 digest and fails closed on mismatch. <br>
+## Use Case:
 
+Artists, developers, and production teams use this skill to discover application tools, create or edit creative projects in supported software, and check the resulting scene, document, or artifact.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/skills/dcc-mcp) <br>
-- [Clawdis Homepage](https://github.com/dcc-mcp/dcc-mcp-core/blob/main/skills/dcc-mcp/SKILL.md) <br>
-- [CLI Cheatsheet](references/CLI_CHEATSHEET.md) <br>
-- [Zero Instances CLI Setup Guide](references/ZERO_INSTANCES_CLI.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include consent-gated setup steps, CLI command sequences, gateway profile guidance, DCC tool-call arguments, and bounded troubleshooting summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.79 (source: frontmatter metadata and server release evidence) <br>
+Risk: Live application control and project edits can change or overwrite user work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended target and review authorization prompts before launches or edits; verify resulting state after each operation.
+
+Risk: Marketplace actions or software installation can introduce unwanted packages or executables.
+
+Mitigation: Review and approve installs and updates, including the exact package or release, before proceeding.
+
+Risk: Remote gateway use can expose project data to an unintended destination.
+
+Mitigation: Approve the remote gateway origin explicitly, share only necessary project data, and never include credentials in tool payloads.
+
+Risk: Cached application paths may point to an unintended program when a launch is requested.
+
+Mitigation: Review the saved path and obtain explicit confirmation before starting the application.
+
+## Reference(s):
+
+- [ClawHub DCC-MCP release](https://clawhub.ai/loonghao/skills/dcc-mcp)
+- [Skill homepage (release metadata)](https://github.com/dcc-mcp/dcc-mcp-agent-plugins/blob/main/plugins/dcc-mcp/skills/dcc-mcp/SKILL.md)
+- [Supported products](artifact/references/PRODUCTS.json)
+- [Tool execution and verification](artifact/references/TOOL_EXECUTION.md)
+- [Application UI workflows](artifact/references/UI_WORKFLOWS.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Files]
+
+**Output Format:** [Markdown guidance and application project artifacts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports observed application results after post-action verification.]
+
+## Skill Version(s):
+
+0.19.107 (source: skill metadata and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

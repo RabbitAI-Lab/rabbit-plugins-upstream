@@ -1,0 +1,6 @@
+{
+  "workload_note": {
+    "record_count": 250000,
+    "deadline_minutes": 240
+  }
+}

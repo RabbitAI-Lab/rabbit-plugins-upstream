@@ -1,41 +1,59 @@
-## Description: <br>
-This skill helps students use a 52-week, weekly exploration framework to distinguish shallow preferences from durable interests by recording challenge responses, time perception, external feedback, and staged interest-DNA reflections. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+引导中国中小学学生每周探索兴趣，通过面对困难时的反应区分短暂喜好与值得继续探索的兴趣，并在取得同意后记录进展。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill for structured interest exploration, self-understanding, and growth planning. It guides weekly exploration, records interest-DNA signals, and can summarize progress for parents when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The trigger scope may activate during broad self-discovery or growth-planning conversations. <br>
-Mitigation: Narrow activation to explicit interest-exploration, 52-week tracking, or interest-DNA recording requests. <br>
-Risk: Student reflections and parent-facing summaries may contain personal information. <br>
-Mitigation: Share, persist, or transfer these records only with clear consent and appropriate privacy handling. <br>
+## Use Case:
 
+Students in Chinese middle and upper primary school, junior high, and high school use guided weekly activities to explore interests. With appropriate student and guardian consent, the agent can track interest signals across weeks and prepare progress summaries; without consent, it supports a one-time conversation without retaining records.
 
-## Reference(s): <br>
-- [兴趣探索档案与记录模板](references/interest-exploration-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer) <br>
+### Deployment Geography for Use:
 
+Chinese K–12 context; localize language, consent rules, and crisis referral contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Conversational guidance and structured Markdown-style summaries or records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce weekly exploration prompts, interest-DNA records, progress reports, and parent-facing summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Long-term interest records about minors may be retained or shared without their informed permission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Explain retention and sharing before tracking, obtain student and applicable guardian consent, and honor pause, deletion, and sharing controls.
+
+Risk: Consent requirements and crisis referral contacts may not fit users outside the intended Chinese K–12 context.
+
+Mitigation: Localize school-stage assumptions, guardian-consent rules, language, and crisis contacts before deployment elsewhere.
+
+Risk: Brief exploration histories may be mistaken for definitive judgments about a student's interests.
+
+Mitigation: Describe early signals as tentative, avoid definitive conclusions for the eight-week primary-school track, and share parent summaries only with the student's permission.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer)
+- [Interest exploration record template](artifact/references/interest-exploration-template.md)
+- [Grade-band guidance](artifact/shared/grade-bands.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language conversational text and structured interest summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional weekly records and milestone summaries require consent; no executable code.]
+
+## Skill Version(s):
+
+2.8.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

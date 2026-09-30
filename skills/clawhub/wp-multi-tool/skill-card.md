@@ -1,42 +1,58 @@
-## Description: <br>
-WordPress site health audit, performance optimization, database cleanup, autoload tuning, slow query detection, wp-config management, image size control, frontend speed fixes, and server diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides WordPress site health checks and performance diagnostics, with optional WP Multitool monitoring and confirmed cleanup or configuration changes.
 
-## Publisher: <br>
-[marcindudekdev](https://clawhub.ai/user/marcindudekdev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[marcindudekdev](https://clawhub.ai/user/marcindudekdev)
 
-## Use Case: <br>
-Developers, site owners, and WordPress operators use this skill to inspect site health, diagnose performance bottlenecks, and apply WP-CLI based optimization or cleanup actions with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WP-CLI commands can inspect or change a live WordPress site. <br>
-Mitigation: Use the skill only on sites where the operator is authorized to run WP-CLI, and review proposed commands before execution. <br>
-Risk: Cleanup, configuration edits, frontend toggles, or plugin activation can modify data or site behavior. <br>
-Mitigation: Require explicit user confirmation for write operations and take a database backup before destructive cleanup commands. <br>
+## Use Case:
 
+WordPress site administrators and developers use this skill to diagnose database and performance issues, review optional plugin monitoring, and plan confirmed optimization steps.
 
-## Reference(s): <br>
-- [WP Multitool Homepage](https://wpmultitool.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool) <br>
-- [Publisher Profile](https://clawhub.ai/user/marcindudekdev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with WP-CLI command blocks and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostics can be proposed directly; write operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release metadata) <br>
+Risk: Activating the plugin changes a live site, although its troubleshooting command does not explicitly request confirmation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat plugin activation as a write action and obtain explicit user confirmation before running it.
+
+Risk: Cleanup and forced revision deletion can permanently remove data; table optimization may briefly lock tables.
+
+Mitigation: Review the target site, make a database backup, and obtain explicit confirmation before cleanup or optimization.
+
+Risk: Changing wp-config.php or enabling frontend optimizations can alter production behavior.
+
+Mitigation: Back up configuration, review the proposed change, and require explicit confirmation before applying it.
+
+## Reference(s):
+
+- [WP Multitool website and documentation](https://wpmultitool.com)
+- [WP Multitool ClawHub release](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline WP-CLI and SQL commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only diagnostics work without the paid plugin; plugin monitoring requires installation. Site changes require confirmation.]
+
+## Skill Version(s):
+
+1.9.9 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

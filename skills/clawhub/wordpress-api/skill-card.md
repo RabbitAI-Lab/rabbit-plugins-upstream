@@ -1,46 +1,60 @@
-## Description: <br>
-WordPress.com API integration with managed OAuth for managing posts, pages, sites, and site content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage WordPress.com posts, pages, and site content through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to interact with WordPress.com through Maton-managed OAuth, including listing, creating, updating, and deleting posts and pages and managing site and account content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API keys and WordPress.com OAuth connections can authorize broad account and content access. <br>
-Mitigation: Install only if you trust Maton to mediate OAuth access, keep MATON_API_KEY private, and review the connected WordPress.com account before use. <br>
-Risk: Write-capable endpoints can publish, edit, delete, like or unlike content, list site users, or change account settings. <br>
-Mitigation: Require explicit user confirmation before any write operation or sensitive account action, including the target resource and intended effect. <br>
-Risk: When multiple WordPress.com connections exist, requests may affect the wrong account or site. <br>
-Mitigation: Use the Maton-Connection header for multi-account setups and confirm the target connection, site, and resource before executing requests. <br>
+## Use Case:
 
+WordPress.com site owners and their agents use this skill to inspect and manage posts, pages, and site content, with approval before changes or automations.
 
-## Reference(s): <br>
-- [ClawHub WordPress Skill](https://clawhub.ai/byungkyu/wordpress-api) <br>
-- [WordPress.com REST API Overview](https://developer.wordpress.com/docs/api/) <br>
-- [WordPress.com REST API Getting Started](https://developer.wordpress.com/docs/api/getting-started/) <br>
-- [WordPress.com REST API Reference](https://developer.wordpress.com/docs/api/rest-api-reference/) <br>
-- [WordPress.com OAuth Authentication](https://developer.wordpress.com/docs/oauth2/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid WordPress.com OAuth connection mediated by Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: The connection grants access to WordPress.com account content, and writes can publish, change, or delete it.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only checks, limit authorization to the needed account and scopes, and obtain explicit approval for every write.
+
+Risk: Functions, triggers, and destinations can continue acting or forwarding data after setup.
+
+Mitigation: Require explicit approval for automation and review its function, trigger, and destination before enabling it.
+
+Risk: API-key authentication can expose a long-lived credential if mishandled.
+
+Mitigation: Prefer device login and use API-key mode only when necessary; do not disclose or store credentials in commands or destinations.
+
+## Reference(s):
+
+- [ClawHub WordPress.com skill release](https://clawhub.ai/byungkyu/skills/wordpress-api)
+- [Maton](https://maton.ai)
+- [WordPress.com REST API documentation](https://developer.wordpress.com/docs/api/)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with CLI commands and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a user-authorized WordPress.com connection and network access.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

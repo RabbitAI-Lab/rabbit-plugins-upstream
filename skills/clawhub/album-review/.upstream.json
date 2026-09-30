@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/album-review",
   "slug": "album-review",
   "ownerHandle": null,
-  "version": "0.1.2",
-  "updatedAt": 1783337209523,
-  "contentHash": "24c126c2db9c258ac308694458153396c220538fee5ee51c72cdafe718e777ad",
-  "fetchedAt": "2026-07-26T18:19:44.477Z"
+  "version": "0.3.0",
+  "updatedAt": 1790563949527,
+  "contentHash": "3743da8206c50b84996b348f7e2a8dfe4f0246de560cf6a6ad17d0c1112d2b2c",
+  "fetchedAt": "2026-09-30T14:08:13.027Z"
 }

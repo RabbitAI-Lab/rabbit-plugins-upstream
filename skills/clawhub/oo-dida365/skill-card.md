@@ -1,44 +1,56 @@
-## Description: <br>
-Dida365 (dida365.com) skill for reading, creating, updating, and deleting Dida365 data through the OOMOL oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Dida365 lets an agent read, create, update, complete, move, and delete Dida365 projects, tasks, and habit data through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-External users and developers use this skill to manage Dida365 tasks, projects, and habits through an OOMOL-connected account, including read, write, and delete workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Write and destructive actions can change or remove Dida365 tasks, projects, or habit data. <br>
-Mitigation: Confirm the exact payload, target identifiers, and user approval before running actions tagged write or destructive. <br>
-Risk: Using the skill requires installing or signing into the OOMOL oo CLI and connecting a Dida365 account. <br>
-Mitigation: Approve setup only when the user trusts OOMOL and intends to let an agent manage Dida365 data through that connection. <br>
-Risk: Connector inputs may differ by action or change over time. <br>
-Mitigation: Fetch the live action schema with the oo CLI before constructing each payload. <br>
+## Use Case:
 
+External users and developers use this skill to let an agent manage Dida365 task, project, and habit workflows from a connected OOMOL account. It supports both read-only lookups and state-changing actions that require confirmation before execution.
 
-## Reference(s): <br>
-- [Dida365 homepage](https://dida365.com) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-dida365) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payload examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live connector schemas before constructing JSON payloads; connector responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup instructions can run a remote install script on the user's machine.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the setup steps before installing, prefer a verified documented source with version and integrity checks, and only run setup after an actual missing-CLI or authentication failure.
+
+Risk: Write and destructive actions can change, move, or delete Dida365 projects, tasks, and habit check-ins.
+
+Mitigation: Confirm the exact target item, payload, and expected effect with the user before running actions marked write or destructive.
+
+## Reference(s):
+
+- [Dida365 homepage](https://dida365.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-dida365)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration, Guidance, JSON]
+
+**Output Format:** [Markdown guidance with bash commands and JSON payloads or responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands use the oo CLI and may read or change Dida365 account data depending on the selected action.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

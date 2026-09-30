@@ -1,17 +1,17 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 挣值管理 (EVM) 计算
--------------------------------------------------
-输入 metrics.yaml（或 .json），至少包含：
-  pv: 计划价值 (Planned Value)
-  ev: 挣值     (Earned Value)
-  ac: 实际成本 (Actual Cost)
-  bac: 完工预算 (Budget At Completion)   # 可选，默认 = pv 总和
+PM Master · Earned Value Management (EVM) calculation
+---------------------------------------------------
+Input metrics.yaml (or .json), containing at least:
+  pv: Planned Value
+  ev: Earned Value
+  ac: Actual Cost
+  bac: Budget At Completion   # optional, defaults to sum of pv
 
-输出 CPI / SPI / CV / SV / EAC / ETC / VAC 与健康旗标。
+Output CPI / SPI / CV / SV / EAC / ETC / VAC and a health flag.
 
-用法：
+Usage:
   python3 evm.py --data metrics.yaml
 """
 import argparse
@@ -40,14 +40,14 @@ def compute(pv, ev, ac, bac=None):
     eac = bac / cpi if cpi else float('inf')
     etc = eac - ac
     vac = bac - eac
-    # 健康旗标
+    # Health flag
     flags = []
     if cpi < 0.95:
-        flags.append("成本超支(CPI<0.95)")
+        flags.append("cost overrun (CPI<0.95)")
     if spi < 0.95:
-        flags.append("进度落后(SPI<0.95)")
+        flags.append("schedule slippage (SPI<0.95)")
     if not flags:
-        flags.append("健康")
+        flags.append("healthy")
     return {
         'PV': pv, 'EV': ev, 'AC': ac, 'BAC': bac,
         'CPI': round(cpi, 3), 'SPI': round(spi, 3),
@@ -59,17 +59,17 @@ def compute(pv, ev, ac, bac=None):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master EVM 计算")
+    ap = argparse.ArgumentParser(description="PM Master EVM calculation")
     ap.add_argument('--data', required=True)
     a = ap.parse_args()
     d = load(a.data)
     pv, ev, ac = d.get('pv', 0), d.get('ev', 0), d.get('ac', 0)
     bac = d.get('bac')
     r = compute(pv, ev, ac, bac)
-    print("=== 挣值管理 (EVM) 报告 ===")
+    print("=== Earned Value Management (EVM) Report ===")
     for k in ['PV', 'EV', 'AC', 'BAC', 'CPI', 'SPI', 'CV', 'SV', 'EAC', 'ETC', 'VAC']:
         print(f"  {k:<4}: {r[k]}")
-    print(f"  健康: {' | '.join(r['flags'])}")
+    print(f"  Health: {' | '.join(r['flags'])}")
 
 
 if __name__ == '__main__':

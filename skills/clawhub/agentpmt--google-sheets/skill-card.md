@@ -1,42 +1,59 @@
-## Description: <br>
-Google Sheets helps agents create, read, update, format, share, and export spreadsheets through AgentPMT-hosted remote tool calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Sheets: Work with Google Sheets using safe short actions for creating and finding spreadsheets, listing tabs, reading data, appending rows or columns at the data edge, updating selected fields by key, formatting, sharing, and exporting sheets through AgentPMT-hosted remote tool calls.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Google Sheets through short, schema-defined actions for spreadsheet creation, tab management, safe row and column appends, selected row updates, formatting, sharing, and exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read, edit, share, delete, and export Google Sheets through a remote integration. <br>
-Mitigation: Install only if the publisher is trusted with the relevant spreadsheets, and confirm the exact spreadsheet, recipient, role, and retention need before sharing, domain, anyone, owner, delete, or export actions. <br>
-Risk: Spreadsheet updates or exports may affect business data or expose file contents if the wrong tab, range, recipient, or format is selected. <br>
-Mitigation: Scope inputs to the minimum data needed, prefer schema-defined append and selected-field update actions, and review returned warnings or correction targets before retrying. <br>
+## Use Case:
 
+Developers and external agents use this skill to operate Google Sheets through AgentPMT workflows, including safe table appends, keyed row updates, tab management, formatting, sharing, and exports. It is intended for agents that need the tool behavior, invocation schema, and supported action names for Google Sheets automation.
 
-## Reference(s): <br>
-- [ClawHub Google Sheets skill page](https://clawhub.ai/agentpmt/skills/google-sheets) <br>
-- [AgentPMT Google Sheets marketplace page](https://www.agentpmt.com/marketplace/google-sheets-api) <br>
-- [Google Sheets action schema](artifact/schema.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, API calls, JSON] <br>
-**Output Format:** [Markdown instructions with JSON action examples and schema references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Remote AgentPMT tool calls return JSON responses; CSV, TSV, PDF, XLSX, ODS, HTML, or ZIP exports may be stored in File Manager.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill frontmatter) <br>
+Risk: The skill can authorize broad Google Sheets actions, including sharing, deletion, export, and changes to protected ranges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit human approval before share, delete, export, owner or writer permission, and unprotect actions.
+
+Risk: Unpinned setup commands can install changed dependency or setup behavior after publication.
+
+Mitigation: Prefer the OpenClaw install path or pinned setup references over unpinned npx commands.
+
+Risk: Spreadsheet exports and broad reads can expose sensitive sheet data outside the original document context.
+
+Mitigation: Keep tool inputs scoped to the minimum needed range or tab and review export destinations before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/agentpmt/skills/google-sheets)
+- [AgentPMT Google Sheets marketplace page](https://www.agentpmt.com/marketplace/google-sheets-api)
+- [Generated Google Sheets action schema](schema.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, configuration, API calls, JSON]
+
+**Output Format:** [Markdown guidance with JSON MCP and REST call examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [AgentPMT-hosted Google Sheets actions may read, create, update, format, share, delete, protect, unprotect, and export spreadsheet content.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

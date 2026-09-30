@@ -1,47 +1,60 @@
-## Description: <br>
-Attacks a skill, design, argument, codebase, or knowledge base with a fresh independent attacker rotating five lenses, recording only proven reproducible breakages and separate unproven flags. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs independent red-team reviews of skills, designs, arguments, code, and knowledge bases through five lenses, separating reproducible findings from unproven flags without editing the target.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Developers, security reviewers, and maintainers use this skill to red-team artifacts with independent lens-based review and receive reproducible findings, flags, stop reasons, and coverage gaps. It is intended for authorized defensive review of owned artifacts or sandboxed targets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can direct agents to test real targets and produce runnable bypass steps without clear authorization limits. <br>
-Mitigation: Use it only for authorized defensive review of owned artifacts or sandboxed targets; define the allowed target before use and supervise execution and web access. <br>
-Risk: Gaming and Reality lens runs can affect live third-party systems or real controls if aimed outside an approved scope. <br>
-Mitigation: Do not use those lenses against live third-party systems or real controls unless explicit permission and scope are documented. <br>
-Risk: A weak or insufficiently independent attacker can miss known defects and create false confidence. <br>
-Mitigation: Use the SEED gate, void runs that miss planted known defects, and record coverage gaps; prefer a different-vendor attacker and judge for high-stakes targets. <br>
+## Use Case:
 
+Developers and reviewers use this skill to probe authorized targets for overlooked defects and receive reproducible findings, separate suspicions, and explicit coverage gaps.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/vincentjiang06/skills/attacker) <br>
-- [README.en.md](README.en.md) <br>
-- [PROVE-OR-FLAG rubric](references/prove-or-flag.md) <br>
-- [SEED recipes](references/seed-recipes.md) <br>
-- [Output schema](schemas/output.json) <br>
-- [Shadow-map extractor](scripts/extract_shadow_map.py) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, code, shell commands, guidance] <br>
-**Output Format:** [Markdown findings and flags, with optional JSON matching schemas/output.json] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Findings include lens, location, claim, reproduction, severity, and independence tier; unproven suspicions remain flags and coverage gaps report lens and independence limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: frontmatter, CHANGELOG, server release evidence) <br>
+Risk: Reproduction steps may act on systems or sensitive data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only authorized targets and run reproductions on copies or branches, not production data.
+
+Risk: Evidence checks may disclose search queries or fetched-source context to external services.
+
+Mitigation: Review sensitive material before enabling web search or external evidence checks.
+
+Risk: Some question-list formats can be silently omitted from extracted shadow maps.
+
+Mitigation: Check extracted maps against source lists, especially when questions follow blank lines or use uncommon numbering.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/vincentjiang06/skills/attacker)
+- [Proof and flag adjudication](references/prove-or-flag.md)
+- [Seed recipes](references/seed-recipes.md)
+- [Fix-audit guidance](references/fix-audit.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown]
+
+**Output Format:** [Structured findings, flags, and coverage notes in Markdown or JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings include reproduction steps and severity; flags remain separate from proven findings.]
+
+## Skill Version(s):
+
+0.8.2 (source: frontmatter, server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

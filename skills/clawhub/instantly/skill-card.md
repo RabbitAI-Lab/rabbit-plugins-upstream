@@ -1,47 +1,62 @@
-## Description: <br>
-Instantly API integration with managed OAuth for managing cold email campaigns, leads, sending accounts, email workflows, and analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Instantly outreach campaigns, leads, email accounts, and analytics through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to operate Instantly through Maton's managed API gateway, including managing campaigns, leads, sending accounts, email workflows, and analytics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Approved write actions can create, modify, delete, send, reply to, or forward business email and lead data in the connected Instantly workspace. <br>
-Mitigation: Confirm the target connection, resource, recipient or campaign, and intended effect with the user before any write request. <br>
-Risk: Using the wrong Instantly connection can apply actions to the wrong account or workspace. <br>
-Mitigation: When multiple connections exist, require the intended connection and include the documented Maton-Connection header. <br>
-Risk: The Maton API key grants access to connected Instantly resources. <br>
-Mitigation: Keep MATON_API_KEY in the environment only, do not print it in outputs, and install the skill only when the user intends Maton-mediated Instantly access. <br>
+## Use Case:
 
+Sales and operations teams use this skill to review Instantly outreach data and, with approval, manage campaigns, leads, accounts, emails, and related automation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/instantly) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Instantly API V2 documentation](https://developer.instantly.ai/api-reference) <br>
-- [Instantly API introduction](https://developer.instantly.ai/) <br>
-- [Instantly Help Center](https://help.instantly.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Python, JavaScript, HTTP, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY environment variable, and user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Campaign changes, email sends, forwarding, or new connections can have unintended effects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to reading data; confirm the target and effect of each write, send, forward, or connection with the user before acting.
+
+Risk: Functions, triggers, or destinations can repeatedly act or forward events after setup.
+
+Mitigation: Request separate approval for deployments, triggers, and destinations; scope event sources and recipients narrowly.
+
+Risk: Mailbox passwords or API keys may be exposed if pasted into a conversation or command.
+
+Mitigation: Prefer device authentication and provider authorization; never request secrets in chat, and use the documented fallback only when necessary.
+
+## Reference(s):
+
+- [Instantly skill on ClawHub](https://clawhub.ai/byungkyu/skills/instantly)
+- [Maton homepage](https://maton.ai)
+- [Instantly API v2 documentation](https://developer.instantly.ai/api-reference)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton API gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with CLI and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Maton account, network access, and authorization for the requested Instantly actions.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

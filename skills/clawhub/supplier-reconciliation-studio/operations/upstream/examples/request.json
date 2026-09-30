@@ -1,0 +1,6 @@
+{
+  "matching_request": {
+    "strict": false,
+    "remove_company_suffixes": true
+  }
+}

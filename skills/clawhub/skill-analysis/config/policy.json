@@ -1,0 +1,28 @@
+{
+  "pack_version": "2.5.3",
+  "active": "standard",
+  "description": "策略引擎配置：按档位决定准入卡点与 CI 退出码阈值。修改本文件即可调整判定，无需改动引擎代码。",
+  "profiles": {
+    "standard": {
+      "description": "务实默认：P0 阻止准入，P1 需人工复核；数据外传仅告警",
+      "block_at": ["P0"],
+      "review_at": ["P1"],
+      "network_upload": "warn",
+      "require_manifest": false
+    },
+    "strict": {
+      "description": "严格：P0/P1 阻止准入，P2 需复核；检出数据外传即阻止",
+      "block_at": ["P0", "P1"],
+      "review_at": ["P2"],
+      "network_upload": "block",
+      "require_manifest": true
+    },
+    "paranoid": {
+      "description": "零信任：P0/P1/P2 全部阻止；任何数据外传特征即阻止；要求提供意图/权限清单",
+      "block_at": ["P0", "P1", "P2"],
+      "review_at": ["P3"],
+      "network_upload": "block",
+      "require_manifest": true
+    }
+  }
+}

@@ -1,44 +1,62 @@
-## Description: <br>
-Mailgun API integration with managed OAuth for sending, receiving, tracking, and managing email resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Mailgun through Maton to send and track email and manage domains, routes, templates, mailing lists, suppressions, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Mailgun through Maton-managed OAuth for sending messages and managing domains, routes, templates, mailing lists, suppressions, events, tracking settings, webhooks, and credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send email and change Mailgun routing, webhook, tracking, and credential settings when given access. <br>
-Mitigation: Confirm the exact domain, recipient, route destination, webhook URL, tracking setting, or credential change before approving any write operation. <br>
-Risk: The MATON_API_KEY grants access through Maton to the connected Mailgun account. <br>
-Mitigation: Install only when Maton is trusted for this account, store the key as a protected secret, and use the intended Maton connection when multiple connections exist. <br>
+## Use Case:
 
+Developers and other authorized users use this skill to manage a connected Mailgun account, send transactional email, review delivery activity, and set up user-approved email automations.
 
-## Reference(s): <br>
-- [ClawHub Mailgun Skill](https://clawhub.ai/byungkyu/mailgun-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Mailgun API Documentation](https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview) <br>
-- [Mailgun API Reference](https://mailgun-docs.redoc.ly/docs/mailgun/api-reference/intro/) <br>
-- [Mailgun Postman Collection](https://www.postman.com/mailgun/mailgun-s-public-workspace/documentation/ik8dl61/mailgun-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and a valid MATON_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: Email sends and account changes can affect recipients, account configuration, and stored data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only requests and confirm the exact recipients, target, payload, and effect before every write or deletion.
+
+Risk: Webhooks and triggers can continuously forward data or perform actions after setup.
+
+Mitigation: Get explicit approval for the destination and ongoing behavior; review who controls the destination and remove unneeded automations.
+
+Risk: Exposed Mailgun or Maton credentials can grant account access.
+
+Mitigation: Prefer managed login and least-privilege connections; do not expose, log, or embed credentials in commands or destinations.
+
+## Reference(s):
+
+- [Mailgun skill on ClawHub](https://clawhub.ai/byungkyu/skills/mailgun-api)
+- [Maton homepage](https://maton.ai)
+- [Mailgun API documentation](https://documentation.mailgun.com/docs/mailgun/api-reference/api-overview)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Related API gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with CLI commands and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Maton account and an authorized Mailgun connection; the gateway defaults to Mailgun's US region.]
+
+## Skill Version(s):
+
+1.2.7 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

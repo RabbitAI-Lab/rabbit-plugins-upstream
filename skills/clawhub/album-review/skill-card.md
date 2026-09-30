@@ -1,45 +1,54 @@
-## Description: <br>
-Deep, source-traceable long-form Chinese album review for a named music credit and album, producing one comprehensive critique while routing away gear, buying, and lyric-only requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Produces a long-form, source-traceable Chinese album review with an accompanying evidence record.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-External users and reviewers use this skill to produce source-traceable Chinese long-form critiques for albums when they can provide a primary artist, composer, conductor, band, or performer plus an album name. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use external search for album research, which can expose private or unreleased music materials if the user provides them. <br>
-Mitigation: Avoid using the skill with private or unreleased materials, or run it in offline/caller-supplied mode when external search is not acceptable. <br>
-Risk: Album reviews can contain incorrect discographic facts if public sources are thin or conflicting. <br>
-Mitigation: Use the backing JSON and validation scripts to require source IDs for fact-class claims, and record unresolved gaps instead of inventing missing details. <br>
+## Use Case:
 
+Music writers and listeners use this skill to research an album and write a detailed Chinese-language critique with traceable discographic claims.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/vincentjiang06/skills/album-review) <br>
-- [Skill specification](artifact/SKILL.md) <br>
-- [Research protocol](artifact/rules/research-protocol.md) <br>
-- [Output template](artifact/rules/output-template.md) <br>
-- [Music source roster](artifact/references/source-roster.md) <br>
-- [Backing JSON schema](artifact/schemas/backing.schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Chinese Markdown review plus backing JSON and an evidence appendix] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Targets a 10,000-15,000 CJK-character review; fact-class claims are expected to trace to evidence[] in the backing JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: server release metadata and SKILL.md metadata) <br>
+Risk: An installation using a mutable npx source could retrieve code that differs from the reviewed release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the install source before installing.
+
+Risk: Passing review validators does not establish that the prose is substantive or its citations support each claim.
+
+Mitigation: Read the review and check consequential factual claims against their cited sources.
+
+## Reference(s):
+
+- [ClawHub album-review release](https://clawhub.ai/vincentjiang06/skills/album-review)
+- [Music source roster](artifact/references/source-roster.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON]
+
+**Output Format:** [Chinese long-form Markdown review with a source appendix and companion evidence JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Targets 10,000–15,000 Chinese characters; marks factual claims with source references.]
+
+## Skill Version(s):
+
+0.3.0 (source: SKILL.md metadata, ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

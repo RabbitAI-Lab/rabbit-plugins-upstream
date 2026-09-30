@@ -1,50 +1,70 @@
-## Description: <br>
-ActiveCampaign API integration with managed OAuth for marketing automation, CRM, contacts, deals, email campaigns, automations, tags, lists, users, accounts, custom fields, notes, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage ActiveCampaign contacts, deals, campaigns, and automations through a connected Maton account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Marketing, CRM, and operations teams, plus developers assisting them, use this skill to inspect and manage ActiveCampaign resources through Maton-managed OAuth. It supports contact, deal, list, campaign, automation, tag, account, custom field, note, and webhook workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton API key and ActiveCampaign OAuth access can read or manage data in the connected account. <br>
-Mitigation: Install only if you trust Maton to proxy ActiveCampaign access, keep MATON_API_KEY in the environment, and specify the intended connection when multiple accounts are available. <br>
-Risk: Create, update, and delete calls can change CRM and marketing resources. <br>
-Mitigation: Confirm the exact resource, account, and intended effect with the user before every write operation. <br>
-Risk: Webhook creation can send ActiveCampaign account event data to an external URL. <br>
-Mitigation: Confirm the destination URL, subscribed events, and business intent before creating a webhook. <br>
-Risk: User and account management actions can affect shared resources and team access. <br>
-Mitigation: Treat user and account changes as administrative actions and require explicit confirmation before modifying them. <br>
+## Use Case:
 
+People managing an ActiveCampaign account use this skill to look up and, with explicit approval, change CRM records, campaigns, and account settings. They can also configure approved functions and triggers to automate related actions.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [ActiveCampaign API Overview](https://developers.activecampaign.com/reference/overview) <br>
-- [ActiveCampaign Developer Portal](https://developers.activecampaign.com/) <br>
-- [ActiveCampaign API Base URL](https://developers.activecampaign.com/reference/url) <br>
-- [Contacts API](https://developers.activecampaign.com/reference/list-all-contacts) <br>
-- [Tags API](https://developers.activecampaign.com/reference/contact-tags) <br>
-- [Deals API](https://developers.activecampaign.com/reference/list-all-deals) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP, Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, and explicit user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata) <br>
+Risk: Changes to contacts, campaigns, or shared account resources can have unintended effects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only queries; confirm the target and effect with the user before every write or new connection.
+
+Risk: Webhooks, triggers, functions, and destinations can create ongoing data flows or automated changes.
+
+Mitigation: Confirm the event scope, destination, and intended automation separately before enabling them; forward only necessary data.
+
+Risk: CRM records and event payloads may contain personal or sensitive data.
+
+Mitigation: Keep credentials in the supported credential store and avoid exposing full responses or event payloads unnecessarily.
+
+## Reference(s):
+
+- [ClawHub ActiveCampaign skill release](https://clawhub.ai/byungkyu/skills/active-campaign)
+- [Maton homepage](https://maton.ai)
+- [ActiveCampaign API overview](https://developers.activecampaign.com/reference/overview)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Calendly trigger reference](references/calendly/triggers.md)
+- [GitHub trigger reference](references/github/triggers.md)
+- [Gmail trigger reference](references/google-mail/triggers.md)
+- [HubSpot trigger reference](references/hubspot/triggers.md)
+- [Linear trigger reference](references/linear/triggers.md)
+- [Notion trigger reference](references/notion/triggers.md)
+- [Slack trigger reference](references/slack/triggers.md)
+- [Stripe trigger reference](references/stripe/triggers.md)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions require network access and an authorized Maton connection.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

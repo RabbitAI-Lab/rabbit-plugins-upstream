@@ -1,41 +1,55 @@
-## Description: <br>
-A Chinese writing-material library skill that helps students save, tag, retrieve, recommend, and review useful quotes, literary examples, and self-written sentences for composition work. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助学生保存并标注语文写作素材，按主题检索适用的句子和写作建议。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners, parents, and education agents use this skill to maintain a Chinese composition material library, surface matching examples before writing, capture useful language during reading practice, and summarize material usage over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved quotes, self-written sentences, usage history, and monthly summaries may contain student information or learning history. <br>
-Mitigation: Before using the skill with students, especially minors, define how stored materials are reviewed, retained, deleted, and shared. <br>
-Risk: Automatically recommended writing materials may include inaccurate sources, weak attribution, or generic examples. <br>
-Mitigation: Review recommended materials and prefer items with reliable sources before using them in student writing. <br>
+## Use Case:
 
+小学高段和初中学生用它积累写作素材、按主题查找引文，并按需查看素材使用小结；小学阶段须有家长或老师陪同。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-material-library) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize crisis contacts, curriculum assumptions, and consent requirements for use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured storage confirmations, material recommendations, tagging guidance, and monthly summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Chinese-language quote records, tags, suggested writing placements, usage tracking summaries, and review prompts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Student writing materials may be retained or shared across learning tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review memory and sharing controls before use with minors; honor opt-out, correction, deletion, and sharing choices.
+
+Risk: Crisis contacts and consent assumptions may not fit locations outside Mainland China.
+
+Mitigation: Localize crisis contacts, curriculum assumptions, and consent requirements before deploying elsewhere.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-material-library)
+- [Platform and privacy controls](artifact/shared/platform-conventions.md)
+- [Crisis response guidance](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language conversational text and structured lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tagged materials, themed retrieval suggestions, optional monthly summaries, and text exports; without cross-session memory or statistics, only current-session records are available.]
+
+## Skill Version(s):
+
+2.8.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

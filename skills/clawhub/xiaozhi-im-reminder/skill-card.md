@@ -1,43 +1,60 @@
-## Description: <br>
-AI reminder system based on the Ebbinghaus forgetting curve that activates only with explicit student or guardian consent and supports pause, cancel, minimal sharing, and do-not-disturb boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Schedules and combines consented study-review and task reminders into a daily summary for Chinese-speaking students.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External students, guardians, and education agents use this skill to set consent-based study, task, exploration, and follow-up reminders in IM workflows. It helps schedule spaced review prompts, manage reminder queues, and explain fallback behavior when the host platform cannot wake the agent proactively. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repeated non-response could still lead to ongoing weekly reminders. <br>
-Mitigation: Require renewed confirmation or pause the reminder series after repeated silence, and make pause and cancel controls visible in every reminder flow. <br>
-Risk: Reminder timing may depend on learning-profile signals from another skill. <br>
-Mitigation: Use learning-profile timing only after explicit sharing consent and limit exchanged data to the minimum timing summary needed. <br>
-Risk: Active push reminders depend on a host platform with scheduled wake-up capability. <br>
-Mitigation: When scheduled wake-up is unavailable, disclose the limitation and fall back to user-triggered checks or catch-up prompts when the user next opens a conversation. <br>
+## Use Case:
 
+Chinese-speaking K–12 students and their caregivers use this skill to schedule and manage opted-in review, practice, and learning-task reminders. It combines due items into a daily digest and offers controls to view, change, pause, or delete reminders.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-im-reminder) <br>
-- [Ebbinghaus schedule reference](references/ebbinghaus-schedule.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize school stages, consent, quiet hours, and crisis contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and conversational text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces reminder plans, reminder message templates, queue summaries, consent prompts, pause or cancel guidance, and platform fallback guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Unsolicited or excessive reminders may disrupt students.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit student or guardian consent, respect school-stage quiet hours and daily limits, and provide pause and deletion controls.
+
+Risk: Sharing students' learning details across skills may expose more data than needed.
+
+Mitigation: Share only the minimum reminder details when cross-skill sharing is authorized; do not expose a full learning profile.
+
+Risk: Mainland-China school, consent, and crisis-contact defaults may be inappropriate elsewhere.
+
+Mitigation: Before deployment outside mainland China, localize school-stage assumptions, consent requirements, quiet hours, and crisis-help contacts.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-im-reminder)
+- [Spaced-review schedule](references/ebbinghaus-schedule.md)
+- [School-stage quiet hours](shared/grade-bands.md)
+- [Crisis-response guidance](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese-language reminder messages and text summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scheduled delivery requires platform timer support; without it, due items can be summarized when the student next starts a conversation.]
+
+## Skill Version(s):
+
+2.8.0 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

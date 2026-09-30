@@ -1,47 +1,61 @@
-## Description: <br>
-Brevo API integration with managed OAuth for email marketing, transactional emails, SMS, contacts, CRM, campaigns, lists, and templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using Brevo through Maton to manage contacts and campaigns and send transactional email or SMS.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Brevo through Maton-managed OAuth, including sending email, managing contacts and lists, creating campaigns, and working with templates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive MATON_API_KEY and uses Maton to proxy Brevo API traffic and manage OAuth for the connected Brevo account. <br>
-Mitigation: Keep MATON_API_KEY private, avoid sharing terminal output that may reveal it, and install only when the user trusts Maton for Brevo API access. <br>
-Risk: Write, send, update, and delete operations can affect contacts, lists, campaigns, templates, senders, and outgoing email. <br>
-Mitigation: Require explicit user approval before write or send actions, and confirm recipients, lists, campaign IDs, resource IDs, and expected effects first. <br>
-Risk: Requests may target the wrong Brevo account when multiple OAuth connections exist. <br>
-Mitigation: Use the Maton-Connection header to specify the intended connection when multiple Brevo accounts are available. <br>
+## Use Case:
 
+Developers and other Brevo account users can use this skill to retrieve account data, manage contacts and lists, prepare campaigns, and send messages through an authorized Maton connection. It also describes optional automations using hosted functions and supported event or schedule triggers.
 
-## Reference(s): <br>
-- [ClawHub Brevo release](https://clawhub.ai/byungkyu/brevo-api) <br>
-- [Brevo API Overview](https://developers.brevo.com/) <br>
-- [Brevo API Key Concepts](https://developers.brevo.com/docs/how-it-works) <br>
-- [Brevo OAuth 2.0](https://developers.brevo.com/docs/integrating-oauth-20-to-your-solution) <br>
-- [Manage Contacts](https://developers.brevo.com/docs/synchronise-contact-lists) <br>
-- [Send Transactional Email](https://developers.brevo.com/docs/send-a-transactional-email) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API examples and inline shell or Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Brevo OAuth connection managed by Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Connecting an account or granting excessive access may expose Brevo data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the new connection with the user and review requested authorization scopes.
+
+Risk: Contact changes, deletions, campaign sends, and hosted functions can have lasting effects.
+
+Mitigation: Confirm the target and intended effect with the user before each write or send.
+
+Risk: Trigger destinations may forward events persistently, and raw API keys can be exposed.
+
+Mitigation: Approve destination hosts and payloads separately; prefer CLI-managed credentials over raw MATON_API_KEY use.
+
+## Reference(s):
+
+- [Brevo skill on ClawHub](https://clawhub.ai/byungkyu/skills/brevo-api)
+- [Maton](https://maton.ai)
+- [Brevo API documentation](https://developers.brevo.com/)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, JSON]
+
+**Output Format:** [Markdown with CLI examples, API requests, and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Brevo connection.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

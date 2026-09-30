@@ -4,6 +4,8 @@
 > **CLI 负责拉数**；**6 模块 × 29 子项评分**由 Agent 按规则 + 采集数据生成 JSON。  
 > **最终交付**：与线上一致，为**一份可浏览器打开、含 ECharts 图表的单文件 HTML 报告**（雷达图、模块得分条形图、Lighthouse 对比图等）。**用户未指定格式时默认交付 HTML**；Skill/CLI **Agent 只写诊断 JSON，HTML 一律由 `website-diagnosis render` 生成**（禁止 Agent 手写 HTML，禁止仅 Markdown/JSON 充当终稿）。
 
+> **硬约束（100% CLI）**：凡 P8（含「诊断网站 / 是否符合广告投放要求 / 能不能投」+ URL），**必须**执行 `siluzan-tso website-diagnosis collect`（及后续 prepare/render）。**禁止**仅用 WebFetch / 浏览器打开官网 / 通用搜索写「是否符合 Google 广告」结论当交付。
+
 ---
 
 ## CLI 命令
@@ -11,7 +13,7 @@
 ```bash
 # 推荐：一次采集 Lighthouse + 首页 HTML（落盘含 signals / dataAvailability）
 siluzan-tso website-diagnosis collect --url https://www.example.com --json-out ./snap-web
-# 建议加 --include-html，避免仅 8KB preview 导致信号不全
+# --include-html 仅把完整 HTML 写入落盘；signals 已按完整 HTML 抽取
 
 # 从 collect 生成脚手架：Lighthouse 缺失项已预填 Absent，其余 needsAgent=true
 siluzan-tso website-diagnosis prepare --collect ./snap-web/<collect>.json --out ./snap-web/diagnosis.scaffold.json
@@ -45,7 +47,7 @@ siluzan-tso website-diagnosis render --data ./diagnosis.json --collect ./snap-we
 ## Agent 标准流程（P8）
 
 1. 确认 `website_url`（须可访问，建议含 `https://`；CLI 可自动补全）。
-2. `website-diagnosis collect --url <url> --json-out ./snap-web`（**必须** `--json-out`；推荐 `--include-html`）。
+2. `website-diagnosis collect --url <url> --json-out ./snap-web`（**必须** `--json-out`）。`--include-html` 仅把完整 HTML 写入 JSON，**不**影响 `signals`。
 3. 读落盘 `signals` / `dataAvailability`（CLI 已抽好：HTTPS、表单、CTA、GTM、社媒、Lighthouse 分数等）。
 4. `website-diagnosis prepare --collect <collect.json>` → `diagnosis.scaffold.json`（**推荐**）。
 5. Read `assets/website-diagnosis-rules.md`；**只补全**脚手架里 `needsAgent=true` 的子项（依据 `signals` 写 issue/suggestion/score）；`needsAgent=false`（含 Lighthouse 不可用项）**禁止**改成虚构分。
@@ -62,16 +64,16 @@ siluzan-tso website-diagnosis render --data ./diagnosis.json --collect ./snap-we
 
 ## 数据缺失降级（Lighthouse 等）
 
-**统一策略（P8 / P1 着陆页共用）**：先打 TSO `WebsiteDiagnosisReports/performance`；失败则降级 **CLI 内置简易诊断**（下载 HTML → `signals` / `simpleDiagnosis`，含下载耗时与结构信号）。**不**编造官方 Lighthouse score/FCP。落盘字段 `lighthouseSource` / `landingPageAnalysis.source`：`api` | `simple` | `none`。
+**统一策略（P8 / P1 着陆页共用）**：打 TSO `WebsiteDiagnosisReports/performance`（失败自动重试，最多 3 次）。**不再**用 HTML 下载耗时冒充 Lighthouse。拿不到分则 `lighthouseSource` / `landingPageAnalysis.source` = `none`，`m2i1`/`m5i1` 标 Absent。**禁止**编造 score/FCP。表单/导航等结构信号来自 collect 的 `signals`（完整 HTML），与测速成败无关。
 
 `collect` **不会**因 Lighthouse 失败而中止；落盘含 `lighthouseWarning` 与：
 
-| 字段 | 含义 |
-| ---- | ---- |
-| `signals.lighthouseOk` | 是否拿到桌面/移动 score |
-| `dataAvailability.lighthouse` | `ok` / `missing` / `error` / `partial` |
-| `dataAvailability.unavailableItemIds` | 默认含 `m2i1`、`m5i1`（依赖性能分） |
-| `dataAvailability.agentHint` | 给 Agent 的硬约束文案 |
+| 字段                                  | 含义                                   |
+| ------------------------------------- | -------------------------------------- |
+| `signals.lighthouseOk`                | 是否拿到桌面/移动 score                |
+| `dataAvailability.lighthouse`         | `ok` / `missing` / `error` / `partial` |
+| `dataAvailability.unavailableItemIds` | 默认含 `m2i1`、`m5i1`（依赖性能分）    |
+| `dataAvailability.agentHint`          | 给 Agent 的硬约束文案                  |
 
 **Agent 必遵**：
 

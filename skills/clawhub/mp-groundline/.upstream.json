@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/mp-groundline",
   "slug": "mp-groundline",
   "ownerHandle": null,
-  "version": "0.1.1",
-  "updatedAt": 1783337369281,
-  "contentHash": "edb770dd3fefb959d285bd831abd2270cdca8d7336470709497bcb5759de937d",
-  "fetchedAt": "2026-07-26T18:19:44.255Z"
+  "version": "0.2.3",
+  "updatedAt": 1790564101091,
+  "contentHash": "37fa4ca4f51523f4fb0cf9983e851b7b400cade68be7d2b05a376545ba30e6fd",
+  "fetchedAt": "2026-09-30T14:08:04.049Z"
 }

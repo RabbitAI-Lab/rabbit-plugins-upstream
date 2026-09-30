@@ -1,48 +1,54 @@
-## Description: <br>
-Manus AI Agent API integration with managed API key authentication for creating and managing AI agent tasks, projects, files, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to the Manus API through Maton to manage tasks, projects, files, and webhooks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to call the Manus API through Maton, manage Manus connections, create and inspect tasks, manage projects and files, and configure task lifecycle webhooks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses sensitive Maton and Manus credentials and can expose prompts, files, task metadata, and outputs through the API. <br>
-Mitigation: Install only if you trust Maton and Manus, keep MATON_API_KEY secret, and avoid sending data that should not leave the current environment. <br>
-Risk: Create, delete, upload, and webhook actions can change resources in the connected Manus account. <br>
-Mitigation: Approve write actions only after checking the target account, target resource, and intended effect. <br>
-Risk: Requests may target the wrong Manus account when multiple connections are active. <br>
-Mitigation: Include the Maton-Connection header when multiple connections exist so each request targets the intended account. <br>
-Risk: Webhook setup can send task lifecycle data to an external destination URL. <br>
-Mitigation: Use webhook endpoints you control and trust, and verify the destination URL before registering it. <br>
+## Use Case:
 
+Developers and other Manus users can ask an agent to run tasks, manage projects and files, and set up webhooks or approved automations through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/manus-api) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [Manus API Overview](https://open.manus.im/docs) <br>
-- [Manus API Reference](https://open.manus.im/docs/api-reference) <br>
-- [Manus Website](https://manus.im) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include API requests that require MATON_API_KEY and explicit user approval for write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Connection or write actions could affect Manus tasks, files, and webhooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the specific connection and each requested write; review the connection's authorization scope.
+
+Risk: Hosted functions, triggers, and destinations can run persistent actions through the connected account.
+
+Mitigation: Approve each function, trigger, and destination explicitly before creating or enabling it.
+
+## Reference(s):
+
+- [Manus skill on ClawHub](https://clawhub.ai/byungkyu/skills/manus-api)
+- [Maton](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command and code blocks; API results may be JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Maton account, network access, and an authorized Manus connection.]
+
+## Skill Version(s):
+
+1.2.7 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

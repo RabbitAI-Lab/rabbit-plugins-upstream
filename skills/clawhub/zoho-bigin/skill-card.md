@@ -1,48 +1,60 @@
-## Description: <br>
-Zoho Bigin API integration with managed OAuth for managing contacts, companies, pipelines, and products in Bigin CRM. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Zoho Bigin CRM records and approved sales automations through a Maton-connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read, search, create, update, and delete Zoho Bigin CRM records through Maton-managed OAuth when working with contacts, companies, products, and sales pipelines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access connected Zoho Bigin CRM data through Maton-managed OAuth. <br>
-Mitigation: Review the Zoho and Maton OAuth scopes before use and install only for accounts whose CRM data the agent is allowed to access. <br>
-Risk: Create, update, and delete operations can mutate business CRM records. <br>
-Mitigation: Require explicit user approval before executing write operations, including confirmation of the target resource and intended effect. <br>
-Risk: Using the wrong connection when multiple Zoho Bigin accounts are configured could affect unintended CRM data. <br>
-Mitigation: Use the Maton-Connection header to select the intended active connection when more than one account is available. <br>
+## Use Case:
 
+Sales teams and their agents use this skill to find and manage Zoho Bigin contacts, companies, pipelines, and products, and to set up explicitly approved CRM automations.
 
-## Reference(s): <br>
-- [Zoho Bigin Skill on ClawHub](https://clawhub.ai/byungkyu/skills/zoho-bigin) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Bigin API Overview](https://www.bigin.com/developer/docs/apis/v2/) <br>
-- [Bigin REST API Documentation](https://www.bigin.com/developer/docs/apis/) <br>
-- [Modules API](https://www.bigin.com/developer/docs/apis/modules-api.html) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable for authenticated requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: CRM writes or deletions could change business records unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Default to read-only actions and confirm the exact connection, module, and intended change with the user before writing or deleting.
+
+Risk: Broad OAuth permissions could expose more CRM data than the task requires.
+
+Mitigation: Obtain approval before connecting and select the narrowest available OAuth scopes.
+
+Risk: Functions, triggers, or destinations can continue performing actions or forwarding data after setup.
+
+Mitigation: Require explicit approval for automation and destinations, confirm where data will flow, and remove automations when no longer needed.
+
+## Reference(s):
+
+- [Zoho Bigin skill on ClawHub](https://clawhub.ai/byungkyu/skills/zoho-bigin)
+- [Zoho Bigin API documentation](https://www.bigin.com/developer/docs/apis/v2/)
+- [Maton](https://maton.ai)
+- [Time trigger reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command, code, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include CRM record summaries and instructions for approved automations.]
+
+## Skill Version(s):
+
+1.2.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,57 @@
-## Description: <br>
-Helps teachers turn lecture-heavy lessons into thinking-focused interactive classrooms by designing Bloom-layered question chains, Socratic follow-ups, group activities, cold-room recovery moves, feedback scripts, and aggregate post-class observations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为中小学教师提供分层提问、候场追问、小组活动与课后课堂观察记录的互动指导。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External educators and teaching assistants use this skill to plan classroom interaction for a specific lesson, including question design, group collaboration, quiet-classroom recovery, participation pathways, feedback moves, and aggregate reflection after class. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Teachers may include student names or sensitive individual performance details in classroom observations. <br>
-Mitigation: Use aggregate classroom signals for post-class records unless school policy explicitly permits identifiable details. <br>
-Risk: Very short prompts can omit lesson goals, student distribution, class size, or classroom constraints needed for reliable interaction planning. <br>
-Mitigation: Confirm missing context before tailoring the plan, or clearly mark the output as a generic interaction template. <br>
-Risk: The skill could be mistaken for an automated student-monitoring or student-calling tool. <br>
-Mitigation: Use it as a teacher-facing planning aid only; teachers retain final decisions and the skill should not point-name or require students to speak. <br>
+## Use Case:
 
+中小学教师用它根据教学目标和班级情况设计参与路径、追问及小组活动，并在课后整理课堂观察供下次教学参考；教师审定建议和记录。
 
-## Reference(s): <br>
-- [课堂提问策略与互动话术库](references/questioning-strategies.md) <br>
-- [小组合作任务卡模板与话术模板](references/group-task-card-and-scripts.md) <br>
-- [课后 5 分钟观察记录模板](references/post-class-record-template.md) <br>
-- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-classroom-coach) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown lesson-planning guidance with reusable templates and classroom scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires lesson goals, student distribution, class size, and classroom constraints for tailored output; otherwise it should label the result as a generic interaction template.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Classroom observations could reveal student information or be shared beyond the teacher's intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep names out of observation logs, review each pending writeback, and use pause, delete, or sharing controls when records should not be retained or shared.
+
+Risk: Classroom suggestions or student-facing materials may be inaccurate or inappropriate for the class.
+
+Mitigation: Have the teacher review and adapt suggestions before using them with students or families.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-classroom-coach)
+- [课堂提问策略与互动话术库](artifact/references/questioning-strategies.md)
+- [小组合作任务卡模板与话术模板](artifact/references/group-task-card-and-scripts.md)
+- [课后 5 分钟观察记录模板](artifact/references/post-class-record-template.md)
+- [危机例外与转介指引](artifact/shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance, activity cards, and classroom observation notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Classroom observations are aggregated; record writeback requires teacher confirmation.]
+
+## Skill Version(s):
+
+2.8.0 (source: server-resolved release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -15,6 +15,8 @@ import base64
 from typing import Any, Dict, List, Optional, Union
 
 from . import _config, _http
+from ._const import IMAGE_EXTENSIONS, MAX_INLINE_BYTES
+from ._coerce import require_confirm
 from ._errors import RecameraError
 
 __all__ = [
@@ -27,8 +29,6 @@ __all__ = [
 PATH_FILE = "/api/v1/file"
 PATH_EVENTS = "/api/v1/intellisense/events"
 PATH_EVENTS_CLEAR = "/api/v1/intellisense/events/clear"
-_MAX_INLINE_BYTES = 5 * 1024 * 1024
-_IMAGE_EXT = {".jpg", ".jpeg", ".png", ".webp", ".bmp", ".gif"}
 
 
 def _validate_absolute_path(path: Any) -> str:
@@ -52,10 +52,10 @@ def _validate_absolute_path(path: Any) -> str:
 
 
 def fetch_file(
-    device_name: str,
+    device_name: Optional[str] = None,
     *,
     path: str,
-    max_inline_bytes: int = _MAX_INLINE_BYTES,
+    max_inline_bytes: int = MAX_INLINE_BYTES,
     raw: bool = False,
 ) -> Union[bytes, Dict[str, Any]]:
     """Fetch an on-device file.
@@ -68,7 +68,7 @@ def fetch_file(
     body, ct = _http.get_bytes(dev, PATH_FILE, params={"path": path})
     if raw:
         return body
-    is_image = any(path.lower().endswith(ext) for ext in _IMAGE_EXT)
+    is_image = any(path.lower().endswith(ext) for ext in IMAGE_EXTENSIONS)
     if is_image or len(body) <= max_inline_bytes:
         return {
             "path": path,
@@ -85,15 +85,16 @@ def fetch_file(
     }
 
 
-def delete_file(device_name: str, *, path: str) -> None:
-    """Delete an on-device file via the daemon."""
+def delete_file(device_name: Optional[str] = None, *, path: str, confirm: bool = False) -> None:
+    """Delete an on-device file via the daemon. Destructive: requires `confirm=True`."""
     path = _validate_absolute_path(path)
+    require_confirm(confirm, f"delete file {path!r}")
     dev = _config.resolve(device_name)
     _http.delete(dev, PATH_FILE, params={"path": path})
 
 
 def get_intellisense_events(
-    device_name: str,
+    device_name: Optional[str] = None,
     *,
     start_unix_ms: Optional[int] = None,
     end_unix_ms: Optional[int] = None,
@@ -118,11 +119,12 @@ def get_intellisense_events(
     return []
 
 
-def clear_intellisense_events(device_name: str) -> None:
-    """Clear all buffered intellisense events on the daemon.
+def clear_intellisense_events(device_name: Optional[str] = None) -> None:
+    """Clear all buffered intellisense events on the daemon (irreversible).
 
     Calls `POST /api/v1/intellisense/events/clear` (the daemon does not
-    support `DELETE` on the events collection).
+    support `DELETE` on the events collection). Ungated by design: the buffer
+    is transient telemetry that refills itself.
     """
     dev = _config.resolve(device_name)
     resp = _http.post_json(dev, PATH_EVENTS_CLEAR)
@@ -139,16 +141,4 @@ COMMANDS = {
     "delete_file": delete_file,
     "get_intellisense_events": get_intellisense_events,
     "clear_intellisense_events": clear_intellisense_events,
-}
-COMMAND_SCHEMAS = {
-    "fetch_file": {
-        "required": {"device_name", "path"},
-        "optional": {"max_inline_bytes"},
-    },
-    "delete_file": {"required": {"device_name", "path"}, "optional": set()},
-    "get_intellisense_events": {
-        "required": {"device_name"},
-        "optional": {"start_unix_ms", "end_unix_ms"},
-    },
-    "clear_intellisense_events": {"required": {"device_name"}, "optional": set()},
 }

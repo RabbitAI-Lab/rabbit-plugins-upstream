@@ -1,45 +1,60 @@
-## Description: <br>
-帮助独立教师基于真实学习档案生成阶段报告、进步展示、续课建议和教师确认后的续费沟通话术。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps independent teachers draft evidence-based student progress reports and renewal suggestions for parents to consider.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External independent teachers use this skill to turn lesson logs and learning records into stage reports, renewal recommendations, and parent-ready communication drafts for teacher review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use sensitive student workspace records when drafting reports and renewal messages. <br>
-Mitigation: Keep student aliases enabled, avoid real names or family details, and use only records the teacher is permitted to share. <br>
-Risk: Parent-facing reports could become misleading if progress is exaggerated, unsupported by records, or framed as guaranteed score improvement. <br>
-Mitigation: Base report content on actual lesson logs, student analysis, dashboard records, and progress evidence; avoid score, ranking, or admission promises. <br>
-Risk: Renewal messages could be sent before a teacher checks factual accuracy and tone. <br>
-Mitigation: Require teacher confirmation before sending any report or renewal communication through parent communication workflows. <br>
+## Use Case:
 
+Independent teachers in Mainland China use the skill to turn one student's recorded lessons, homework and progress into a factual stage report, learning plan and optional renewal talking points. The teacher reviews any parent-facing draft and sends it personally.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-renewal-report) <br>
-- [阶段报告与续课沟通模板](references/renewal-report-template.md) <br>
-- [阶段报告模板（中期 / 续费 / 期末）](references/stage-report-templates.md) <br>
-- [续费沟通话术库](references/renewal-communication-scripts.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Chinese Markdown reports, tables, templates, and parent communication scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires teacher review before parent-facing use; drafts should use student aliases and recorded learning data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: A report could expose a minor's longitudinal learning records or classroom state without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Scope access to the named student, check current consent before creating parent-facing content, and omit classroom state unless separately authorized.
+
+Risk: Unsupported progress claims could mislead families making renewal decisions.
+
+Mitigation: Trace figures and claims to recorded evidence, use qualitative descriptions when scores are absent, and have the teacher review every report before sharing.
+
+Risk: A generated renewal draft could be mistaken for an approved message or an instruction to change student records.
+
+Mitigation: Keep sending and student-record lifecycle changes in separate teacher-controlled workflows.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-renewal-report)
+- [Stage report templates](references/stage-report-templates.md)
+- [Renewal communication scripts](references/renewal-communication-scripts.md)
+- [Shared terminology and consent fields](shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language stage report and draft renewal talking points]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports are drafts for teacher review; the skill does not send messages.]
+
+## Skill Version(s):
+
+2.8.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

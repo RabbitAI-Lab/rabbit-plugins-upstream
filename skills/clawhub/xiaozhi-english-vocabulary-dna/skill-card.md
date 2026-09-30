@@ -1,41 +1,56 @@
-## Description: <br>
-Helps English learners save vocabulary, schedule consent-based spaced repetition reminders, preview upcoming lesson words, and track vocabulary retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助中国 K12 学生按间隔重复复习英语词汇，生成每日到期词卡、课前预热内容和词汇学习报告。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to capture English vocabulary from photos, conversations, or manual entries, then run consent-based spaced review through flashcards, sentence practice, contextual dialogue, and progress reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores vocabulary history, example sentences, and learning performance in local memory, which may resurface personal details during later reviews or reports. <br>
-Mitigation: Use the skill only with user consent, avoid sensitive personal details in practice sentences, and review local memory behavior before installation. <br>
-Risk: IM reminders may interrupt users or run outside expectations if enabled without clear consent. <br>
-Mitigation: Enable reminders only after explicit consent and use the documented fallback of session-time review or user-initiated practice when timed reminders are unavailable. <br>
+## Use Case:
 
+Students, families, and educators use the skill to save English vocabulary, practice due words with one daily card, prepare for upcoming lessons, and review learning progress.
 
-## Reference(s): <br>
-- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna) <br>
+### Deployment Geography for Use:
 
+Mainland China; other regions require localization of curriculum, consent, reminder windows, and crisis-referral channels before use.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and conversational text with review prompts, vocabulary cards, reports, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local memory for vocabulary history and learning performance when available; OCR and timed reminders can fall back to manual input or session-time review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Vocabulary profiles and daily reminders may expose a minor's learning activity or send unwanted messages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require consent before storing or sharing vocabulary and before reminders; allow viewing, deletion, and pausing, and limit reminders to one consolidated daily card.
+
+Risk: China-specific curriculum, consent practices, reminder windows, and crisis contacts may be inappropriate elsewhere.
+
+Mitigation: Deploy in a Chinese K12 context only, or localize those settings and referral channels before student use.
+
+## Reference(s):
+
+- [Vocabulary radar topic templates](artifact/references/vocabulary-radar-topics.md)
+- [High-school vocabulary levels](artifact/references/english-hs-vocabulary.md)
+- [Spaced review scheduling](artifact/shared/ebbinghaus-schedule.md)
+- [Vocabulary consent and reminder conventions](artifact/shared/vocab.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language vocabulary cards, lesson previews, and progress reports in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [At most one consolidated due-word card per day; reminders and vocabulary-profile storage require the relevant consent.]
+
+## Skill Version(s):
+
+2.8.0 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

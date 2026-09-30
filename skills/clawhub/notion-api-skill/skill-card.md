@@ -1,46 +1,65 @@
-## Description: <br>
-Notion API integration with managed OAuth for querying databases, searching pages, reading workspace content, and performing confirmed write operations against selected Notion resources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search, read, and update Notion workspaces through an authorized connection, with optional user-approved automations.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to connect an agent to a Notion workspace through Maton OAuth, search and read Notion content, and make explicit user-approved changes to pages, blocks, databases, or data sources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton-mediated Notion access can expose workspace pages, databases, blocks, users, and search results through the selected connection. <br>
-Mitigation: Use the least-privileged Notion connection available and install only when Maton-mediated access to the selected workspace is acceptable. <br>
-Risk: Write operations can create, update, archive, or delete Notion resources, including shared workspace content. <br>
-Mitigation: Confirm the exact page, database, block, or data source and the intended connection before executing any write operation. <br>
-Risk: Bulk updates or changes to shared pages can disrupt team workflows. <br>
-Mitigation: Require explicit approval for each batch and use extra caution for shared or destructive changes. <br>
+## Use Case:
 
+People and teams use this skill to search and read Notion pages and databases, make explicitly approved changes, or set up approved Notion automations.
 
-## Reference(s): <br>
-- [ClawHub Notion Skill](https://clawhub.ai/byungkyu/skills/notion-api-skill) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [Notion API Introduction](https://developers.notion.com/reference/intro) <br>
-- [Notion LLM Reference](https://developers.notion.com/llms.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI, HTTP, Python, and JavaScript examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, a valid Notion OAuth connection, and explicit confirmation before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: Broad OAuth permissions can expose more Notion workspace content than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the least-privilege connection and scopes needed for the task; obtain approval before connecting.
+
+Risk: Writes can change or delete the wrong page, database, or block.
+
+Mitigation: Confirm the exact target ID, connection, and proposed change with the user before each write.
+
+Risk: Persistent triggers can continuously forward sensitive event data.
+
+Mitigation: Require approval for automations, scope triggers to specific resources, and confirm their destinations.
+
+Risk: Direct API-key handling can leak a long-lived credential.
+
+Mitigation: Prefer the CLI's managed login; use a raw API key only when the CLI is unavailable, and never log or persist it.
+
+## Reference(s):
+
+- [ClawHub Notion skill](https://clawhub.ai/byungkyu/skills/notion-api-skill)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Notion API introduction](https://developers.notion.com/reference/intro)
+- [Notion trigger reference](references/notion/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Code]
+
+**Output Format:** [Markdown guidance with optional commands, code, or structured Notion results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may contain workspace content accessible to the authorized connection.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

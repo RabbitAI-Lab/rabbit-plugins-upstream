@@ -2,7 +2,7 @@
 
 > A **project + program** management skill for PMs in the tech industry. Builder philosophy, executable, with a built-in template library and multi-Agent orchestration, supporting four delivery methodologies: **waterfall / agile / iteration / hybrid**.
 
-- **Version**: 2.2.15
+- **Version**: 2.2.17
 - **License**: MIT
 - **Positioning**: Every project/program request must produce a real artifact (file); advice-only responses are prohibited.
 - **Discipline additions since 2.1.0**: SOW/contract parsing pipeline, executable WBS-decomposition Critic (6-factor self-audit), domain-agnostic role catalog, Operational Artifact Guardrail (OAG), bottom-up authoring & rollup, and a penetrating pre-publish confidentiality scan.
@@ -52,7 +52,7 @@ Place the skill directory under CodeBuddy's `skills/`:
 
 ```bash
 # for example
-cp -r pm-master /root/.codebuddy/skills/pm-master
+cp -r pm-master <SKILLS_DIR>/pm-master   # <SKILLS_DIR> = your agent's skills directory (e.g. ~/.codebuddy/skills)
 ```
 
 The skill is automatically available per session, no extra installation needed. You can also extract the distributed `pm-master.zip` directly into that directory.
@@ -62,7 +62,7 @@ The skill is automatically available per session, no extra installation needed. 
 ### 3.2 Minimal Three-Step Workflow (Command Line)
 
 ```bash
-SKILL_DIR=/root/.codebuddy/skills/pm-master
+SKILL_DIR=<SKILLS_DIR>/pm-master   # <SKILLS_DIR> = your agent's skills directory (e.g. ~/.codebuddy/skills)
 
 # 1) Build the workspace (the single source of truth project.yaml is generated here)
 python3 $SKILL_DIR/scripts/init_project.py "Payment Refactor" --type project --methodology agile --framework scrum
@@ -77,6 +77,18 @@ python3 $SKILL_DIR/scripts/render_docx.py /workspace/Payment Refactor/risks/risk
 ```
 
 > Natural-language triggers are simpler: just tell the Agent "Use agile to help me initiate the payment refactor project" — no need to type commands manually.
+
+> **Activation scope (bounded)**: activate only on **explicit intent to create, plan, execute, monitor, close, or govern** a project/program and its artifacts. Examples that SHOULD activate:
+> - "Initiate the payment refactor project (agile)"
+> - "Build the WBS for SOW1 and run the consistency gate"
+> - "Run the stage-gate review to move into execution"
+> - "Produce the risk register / RAID log for this program"
+>
+> **Negative examples (do NOT activate this skill)**:
+> - "What is a Gantt chart?" / "Explain agile vs waterfall" (general PM theory, not a task on a project)
+> - "Summarize this meeting note" (generic writing/summarization)
+> - "Help me write a status-update email" (general composition, not the PM workflow)
+> - "Plan my vacation / organize my photos" (unrelated planning language)
 
 ---
 
@@ -282,10 +294,10 @@ All 28 scripts are under `scripts/`, run with `python3`. Grouped by function.
 
 ## 12. Version & Changes
 
-Full changelog history is in [`CHANGELOG.md`](CHANGELOG.md). Current version **2.2.15**.
+Full changelog history is in [`CHANGELOG.md`](CHANGELOG.md). Current version **2.2.17**.
 
 **v2.1.x → v2.2.x arc (highlights):**
-- **v2.1.0** — Merged refactor: v1.3.6 enforced framework + v2 architecture; restored expert-dispatch workflow (Step 2.5); wired the sub-agent protocol (`subagent_check.py`), execution driver, and config knobs; bilingual dual-package (`SKILL.md` / `SKILL.en.md`).
+- **v2.1.0** — Merged refactor: v1.3.6 enforced framework + v2 architecture; restored expert-dispatch workflow (Step 2.5); wired the sub-agent protocol (`subagent_check.py`), execution driver, and config knobs; unified single English package (`SKILL.md`).
 - **v2.1.1–2.1.8** — Production hardening from live use: `sync_wbs.py` decomposition write-back, WBS decomposition-tree mermaid, program-charter contract/SOW coverage, drift-proof `rerender_docs.py`, `project_state.py` data-loss guard (backup-on-overwrite), severity color icons, and multiple mermaid `&`/invalid-date fixes.
 - **v2.2.0–2.2.6** — SOW/contract parsing pipeline (`sow-parsing-playbook.md` + `parse_sow.py`), billing-milestone integrity gate, WBS→schedule engine (`build_schedule.py` fortnight/coverage/payment-linkage), and scheduling-engine fixes (dependency chains, summary-package zero-duration).
 - **v2.2.2–2.2.4** — Operating model (`operation-model.md`) with Iron Rule #11 (bottom-up authoring & rollup); P0/P1 method-agnostic skeleton; WBS decomposition discipline Pillar 1 (`critic_review.py` 6-factor self-audit) + Pillar 3 (fortnight granularity).
@@ -294,6 +306,6 @@ Full changelog history is in [`CHANGELOG.md`](CHANGELOG.md). Current version **2
 - **v2.2.12** — Domain-agnostic role catalog (`role_catalog.py`, 10 tech domains) — removed data-domain default bias.
 - **v2.2.13** — Control-engine robustness (unified status normalization, skip summary/cancelled packages, terminal-lifecycle GREEN) + expanded re-render coverage (change_log / raid_log / evm_report / baseline_record) + rollup None-guards.
 
-> **Doc sync rule**: Every skill change must keep `README.md`, `SKILL.md` / `SKILL.en.md`, `CHANGELOG.md`, `_user_meta.json`, and the version number consistent, and must pass `confidentiality_check.py` (exit 0) before publishing to a shared branch. (Note: a separate `README.en.md` is not currently maintained — this `README.md` is the single English reference.)
+> **Doc sync rule**: Every skill change must keep `README.md`, `SKILL.md`, `CHANGELOG.md`, `_user_meta.json`, and the version number consistent, and must pass `confidentiality_check.py` (exit 0) before publishing to a shared branch. This OpenClaw (ClawHub) edition ships a **single English `SKILL.md`** (`SKILL.en.md` was removed in the v2.2.16 English-only unification); `README.md` is the single English reference.
 
 _PM Master · Making project management truly "executable."_

@@ -1,0 +1,123 @@
+---
+name: push-server
+display_name: 一封传话推送
+display_name_en: Aggregated Push
+description: Send push notifications (head + Markdown/JSON body, optional jump link) to users via the push server MCP
+description_zh: 通过 push server MCP 向用户推送消息通知或者将抓取内容推送至业务服务器。当需要向用户IM客户端、浏览器或webhook API发送 Markdown/json 格式的重要通知时使用本技能。（标题 + Markdown/json 正文，可选跳转链接）
+description_en: Push message notifications to users through the push server MCP, or push scraped content to a business server. Use this skill when an important notification in Markdown or JSON format needs to reach the user's IM client, browser, or webhook API. (Head + Markdown/JSON body, optional jump link.)
+category: utilities
+version: 1.0.0
+author: teakong
+---
+
+# Push 消息推送技能
+
+本技能让 AI 通过 `push-server` MCP 向用户汇报任务成果，或向用户的通知通道（IM 客户端、浏览器、webhook API）发送重要通知，也可把抓取到的内容以 JSON 推送到用户自己的业务服务器。
+
+## 何时调用
+- 完成重要的编码任务或里程碑之后。
+- 当用户明确要求发送通知或汇报执行结果时。
+- 需要将 Markdown 格式的结果推送到用户的通知通道时。
+- 需要把抓取/采集到的结构化内容以 JSON 推送到用户自己的服务器（webhook 通道）时。
+
+## 配置说明 (用户必读)
+**安装 skill ≠ 配置通道**，必须先完成以下两步，否则无法推送：
+
+1. 在 [一封传话](https://push.phprm.com/mcp.html) 注册账号并创建推送通道，获取 32 位通道码。
+2. 在 AI 助手中手动添加远程 MCP 服务器（以 Trae CN 为例：AI 侧边对话框右上角「设置 → MCP → + 添加 → 手动添加」，选择 Streamable HTTP 类型），填入以下 JSON，并把通道码替换为你自己的：
+
+```json
+{
+  "mcpServers": {
+    "push-server": {
+      "url": "https://www.phprm.com/services/push/mcp",
+      "headers": {
+        "X-Push-Channel-Code": "${PHPRM_CHANNEL_CODE}",
+        "X-Mcp-Source": "trae"
+      }
+    }
+  }
+}
+```
+
+字段说明：
+- **名称**: `push-server`（固定，必须与本技能中调用的服务器名一致）
+- **URL**: `https://www.phprm.com/services/push/mcp`
+- **Headers**:
+    - `X-Push-Channel-Code`: `您的32位通道码` (必须配置，否则无法接收推送)
+    - `X-Mcp-Source`: `客户端标识` (可选，仅用于服务端日志区分来源，可填 trae、workbuddy、coze 等任意值)
+
+Claude Code、Cursor 等其他客户端同理，在各自的 MCP 配置中添加同名 HTTP 服务器即可。配置保存在用户本地客户端，不会进入任何代码仓库。
+
+## 执行步骤
+
+1. 确认 ${PHPRM_CHANNEL_CODE}：占位符未解析（header 未生效）且用户没给时，先向用户索取换成你自己的32位通道码，不要猜测、不要用别人的通道码。
+2. 组装 head（≤200，纯文本）与 body（Markdown 或 JSON，≤50000）；有相关链接时附 url（≤500）。
+3. 发送前清洗（强制）：接收端 H5 用 showdown 渲染 body，URL 外层一旦包了反引号，转换后会污染 href/src，导致链接点不动、图片裂图。对 body 和 url 依次执行三条替换：
+    - 链接语法内的反引号去掉：](`URL`) → ](URL)
+    - 裸 URL 外层的反引号去掉：`URL` → URL
+    - url 字段同样去掉外层反引号
+
+   反例：点[「详情」](`https://push.phprm.com/message/x`)；正例：点[「详情」](https://push.phprm.com/message/x)。反引号只用于文件名、命令、代码标识等非 URL 内容。
+
+## 安全红线（务必遵守）
+
+- 通道码即推送凭证：只允许出现在 MCP header 或调用参数里，不得硬编码进代码/配置并提交 git，也不得写进 head/body/url。
+- 推送内容中禁止出现密码、token、私钥、Cookie、完整环境变量等敏感信息原文；需要提及时只做脱敏描述（如「令牌已刷新」而不是令牌值）。
+- 只能使用用户本人提供的通道码，禁止向其他通道发送。
+
+## 使用规范
+1. **内容要求**:
+   - **标题 (`head`)**: 必填，必须为纯文本，支持 Unicode，长度限制 200 字符以内。
+   - **内容 (`body`)**: (可选) 支持 **Markdown/JSON**（不支持 HTML，请勿使用 `<br>`、`<table>` 等 HTML 标签）；JSON 用于把抓取到的结构化内容推送到 webhook/业务服务器，接收方按原文解析、不做 Markdown 渲染。长度限制 50,000 字符以内。
+   - **跳转 (`url`)**: (可选) 如果有相关的网页链接（如 PR 地址、构建日志等），请提供 URL 供用户点击跳转，长度限制 500 字符以内。
+   - **指定通道码 (`channelCode`)**: (可选) 覆盖 Header 中的通道码，不指定时将以 Header 中预设的 X-Push-Channel-Code 进行推送。
+
+2. **识别结果**: 任务完成后，自动将核心成果总结为符合上述规范的推送内容。如果任务非常简单，可以只提供 `head`。
+3. **格式化**: 如果提供 `body`，请确保 Markdown 语法正确，以提供最佳的阅读体验。
+4. **URL 与反引号规范（强制，发送前必须清洗）**:
+   - 消息接收端（H5 聊天页）会使用 showdown 将 `body` 转换为 HTML，**URL 外层的反引号**（Markdown 行内代码语法）经转换后会残留进 `href`/`src`，导致链接不可点击、头像/图片裂图。
+   - **禁止**用反引号包裹任何 URL（`http://`、`https://`、协议相对 `//` 或以域名开头的链接）；文件名、命令、代码标识等非 URL 内容仍可正常使用反引号。
+   - 调用工具前，必须对 `body` 和 `url` 两个字段按顺序执行以下清洗：
+
+     body = body.replace(/\]\(`(https?:\/\/[^`]+)`\)/g, ']($1)')   // ① 链接语法内 URL 的反引号: ](`URL`) → ](URL)
+     body = body.replace(/`(https?:\/\/[^`\s)]+)`/g, '$1')          // ② 裸 URL 外层反引号: `URL` → URL
+     url  = url.replace(/`(https?:\/\/[^`\s]+)`/g, '$1')            // ③ url 字段同样清洗
+
+   - 反例（禁止）: 点[「详情」](`https://push.phprm.com/message/x`)、裸写 `https://a.com/x.png` 外层再包一层反引号
+   - 正例: 点[「详情」](https://push.phprm.com/message/x)、裸写 https://a.com/x.png
+5. **调用工具**: 必须调用已注册的 `push-server` MCP 服务器提供的 `send_push_message` 工具（注意：本 skill 本身不是 MCP 服务器，不能把 skill 名称当作 server 调用）：
+   - `head`: 任务简述。
+   - `body`: (可选) Markdown/JSON 的详细内容（JSON 用于 webhook 推送到业务服务器）。
+   - `url`: (可选) 目标链接。
+   - `channelCode`: (可选) 指定通道码进行推送，不指定时将以 Header 中预设的 X-Push-Channel-Code 进行推送。
+6. **成功判定与失败处理**:
+   - 服务端返回 `{"code":0, ...}` 且包含 `messageIdList` 即表示发送成功。
+   - 若 `push-server` MCP 不可用（未配置/未连接）或返回非 `code:0`，必须明确告知用户推送失败及原因（如未配置通道码、通道码无效等）；**不得改用 HTTP 直接调用接口，也不得在未收到成功响应时谎称已发送**。
+
+## 示例
+**任务汇报（含跳转链接）的工具调用参数：**
+```json
+{
+  "head": "代码优化完成",
+  "body": "**优化清单**\n- **性能**: 减少了冗余的会话查找\n- **稳定性**: 增加了异常捕获",
+  "url": "https://example.com/pr/123"
+}
+```
+**简单通知（仅标题）：**
+```json
+{
+  "head": "构建已完成"
+}
+```
+**抓取内容推送到业务服务器（webhook JSON）：**
+```json
+{
+  "head": "采集结果已就绪",
+  "body": "{\"title\":\"xxx\",\"items\":[{\"id\":1,\"name\":\"示例\"}]}"
+}
+```
+**成功响应示例：**
+```json
+{"code": 0, "message": "请求成功", "data": {"messageIdList": ["1680030476695388161"]}}
+```

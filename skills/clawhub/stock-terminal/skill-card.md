@@ -1,47 +1,61 @@
-## Description: <br>
-Stock Terminal turns chat commands and natural-language market questions into read-only financial terminal reports across price, sentiment, smart-money flows, analyst ratings, AI insights, options, and news. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Answers stock research questions with compact, sourced market views and provides a guide for building a local financial terminal on explicit request.
 
-## Publisher: <br>
-[thesentitrader](https://clawhub.ai/user/thesentitrader) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thesentitrader](https://clawhub.ai/user/thesentitrader)
 
-## Use Case: <br>
-External users, developers, and financial research agents use this skill to answer stock-market questions with dense, data-grounded terminal screens or concise text replies. It is for informational market research and implementation guidance, not trading execution or personalized investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: SENTISENSE_API_KEY exposure through prompts, tool arguments, logs, or user-visible output. <br>
-Mitigation: Keep the key in host environment state, inject it only inside read-only handlers, and never pass it to the model or display it to users. <br>
-Risk: Market output could be mistaken for personalized financial advice. <br>
-Mitigation: Frame responses as informational, data-grounded context only; do not present buy, sell, solicitation, or personalized recommendation language. <br>
-Risk: Stale or fabricated market numbers can mislead users. <br>
-Mitigation: Require a read-only data call or trusted screen cache before quoting prices, ratings, headlines, or dates, annotate batch freshness, and say when data is unavailable instead of guessing. <br>
-Risk: Optional headline or social embeds can introduce untrusted third-party fetch and markup behavior. <br>
-Mitigation: Use only a narrow hardened fetcher for URLs returned by SentiSense, sanitize or sandbox embeds, and fall back to URL slugs when that protection is not available. <br>
+## Use Case:
 
+Investors and researchers use the skill to explore sourced prices, sentiment, news, filings, earnings, and options data without placing trades. Developers can use its reference contracts and guide to build a local chat-and-canvas research terminal when explicitly requested.
 
-## Reference(s): <br>
-- [Stock Terminal on ClawHub](https://clawhub.ai/thesentitrader/skills/stock-terminal) <br>
-- [SentiSense Website](https://sentisense.ai) <br>
-- [SentiSense API Reference](https://sentisense.ai/skill.md) <br>
-- [SentiSense API Key](https://app.sentisense.ai/get-api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown terminal screens, concise prose, implementation guidance, API examples, and inline bash or code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SENTISENSE_API_KEY for read-only SentiSense API calls; no trading, purchasing, wallet access, or write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.0 (source: server release evidence) <br>
+Risk: A SentiSense API key is required for market-data calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the key in the environment and out of chat, URLs, and generated app interfaces.
+
+Risk: Short ticker-like inputs or broad market questions may trigger data requests.
+
+Mitigation: Confirm ambiguous intent before fetching data and keep requests scoped to the question.
+
+Risk: An optional local app build can expose credentials or introduce dependency risks.
+
+Mitigation: Keep credentials in the main process, review pinned dependencies, and never place keys in renderer configuration.
+
+## Reference(s):
+
+- [Stock Terminal release on ClawHub](https://clawhub.ai/thesentitrader/skills/stock-terminal)
+- [SentiSense API reference](https://sentisense.ai/skill.md)
+- [SentiSense API key setup](https://app.sentisense.ai/get-api-key)
+- [Commands and data](artifact/references/commands-and-data.md)
+- [Local terminal build guide](artifact/references/build-in-an-afternoon.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration guidance]
+
+**Output Format:** [Sourced text or Markdown; optional canvas XML and local app code for explicit build requests]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only market data; delayed prices and dated observations should be labeled.]
+
+## Skill Version(s):
+
+2.0.1 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
