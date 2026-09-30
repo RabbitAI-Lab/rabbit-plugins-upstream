@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-fabric-build-adapter",
+  "identifier": "NVIDIA/skills/skills/nemo-fabric-build-adapter",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-fabric-build-adapter",
+  "branch": "main",
+  "pushedAt": "2026-09-30T13:24:06Z",
+  "contentHash": "43a3a36fa8bef779e8ca6cda66089dc48b5e8625791c39214b2f0d377936fb97",
+  "fetchedAt": "2026-09-30T14:00:34.377Z"
+}

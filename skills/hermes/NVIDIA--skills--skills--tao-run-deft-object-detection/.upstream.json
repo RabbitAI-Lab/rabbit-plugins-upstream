@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-deft-object-detection",
+  "identifier": "NVIDIA/skills/skills/tao-run-deft-object-detection",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-deft-object-detection",
+  "branch": "main",
+  "pushedAt": "2026-09-30T13:24:06Z",
+  "contentHash": "1f3b4dea087a3b614c5c85e34e1e6f695d87cf4b67a45366f483f7ec02a9fcf7",
+  "fetchedAt": "2026-09-30T14:00:34.586Z"
+}

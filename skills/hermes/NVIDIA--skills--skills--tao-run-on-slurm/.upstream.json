@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/tao-run-on-slurm",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "1257c6df102f72d4257ad134de954ad0d50cd69274fa23f6d68ed5aa72976956",
-  "fetchedAt": "2026-07-26T17:03:52.411Z"
+  "pushedAt": "2026-09-30T13:24:06Z",
+  "contentHash": "81fb4c615c271948c672ff8f3834dc6b2507cdb2d924d6bec2fc7a5c652eb289",
+  "fetchedAt": "2026-09-30T14:00:34.598Z"
 }

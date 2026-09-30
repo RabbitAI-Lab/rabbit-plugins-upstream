@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/deepspot-m",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/deepspot-m",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/deepspot-m",
+  "branch": "main",
+  "pushedAt": "2026-09-30T08:12:07Z",
+  "contentHash": "ea807d6ef8d82b3ad228f46a3297686a40527603fbb777086a83db00405f2190",
+  "fetchedAt": "2026-09-30T14:00:35.643Z"
+}

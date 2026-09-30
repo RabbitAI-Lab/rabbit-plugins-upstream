@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/experimental-design",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/experimental-design",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/experimental-design",
+  "branch": "main",
+  "pushedAt": "2026-09-30T08:12:07Z",
+  "contentHash": "9bb2c3f877752cdb08cb8f83809cc5777c2066ade89c7fd1107b8d6c7d3f6a70",
+  "fetchedAt": "2026-09-30T14:00:35.661Z"
+}
