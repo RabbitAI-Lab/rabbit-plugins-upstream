@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/synthetic-biology",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/synthetic-biology",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/synthetic-biology",
+  "branch": "main",
+  "pushedAt": "2026-09-30T08:12:07Z",
+  "contentHash": "e861f3d70056818414d2ec2be7cef91a0fe8e4a43d3ae7942a5baa13cbd2654e",
+  "fetchedAt": "2026-09-30T14:00:35.815Z"
+}

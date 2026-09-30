@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/literature-review",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/literature-review",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/literature-review",
+  "branch": "main",
+  "pushedAt": "2026-09-29T23:34:26Z",
+  "contentHash": "df783facfa45eec9c00cd51a28ccf3fd0ad74fb294c405f4e322a523de559854",
+  "fetchedAt": "2026-09-30T14:00:48.797Z"
+}

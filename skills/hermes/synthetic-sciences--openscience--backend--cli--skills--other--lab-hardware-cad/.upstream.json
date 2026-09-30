@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/lab-hardware-cad",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/lab-hardware-cad",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/lab-hardware-cad",
+  "branch": "main",
+  "pushedAt": "2026-09-30T08:12:07Z",
+  "contentHash": "e759da84ad25ac3fe74c624dbb6ba659614ddf54bc12ba69531af0d3f6c51852",
+  "fetchedAt": "2026-09-30T14:00:35.702Z"
+}

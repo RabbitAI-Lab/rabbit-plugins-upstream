@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/model-merging",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/model-merging",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/model-merging",
+  "branch": "main",
+  "pushedAt": "2026-09-30T08:12:07Z",
+  "contentHash": "81e4961f975607836c8fcada4a4075ac824e0112f929695e23c5acb206592595",
+  "fetchedAt": "2026-09-30T14:00:35.722Z"
+}
