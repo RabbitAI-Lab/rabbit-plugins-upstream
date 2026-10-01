@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/nmrglue",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/nmrglue",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/nmrglue",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "89782855e6b11219594bfc6f41b527fe63f09af7aab4142646ef738985850d5f",
+  "fetchedAt": "2026-10-01T14:45:08.202Z"
+}

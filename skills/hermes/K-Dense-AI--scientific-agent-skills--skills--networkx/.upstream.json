@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/networkx",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/networkx",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/networkx",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "43e6283a8010e67308585f3a52159e2e617c62c9f630925865c14e8ac027fab1",
+  "fetchedAt": "2026-10-01T14:45:08.198Z"
+}

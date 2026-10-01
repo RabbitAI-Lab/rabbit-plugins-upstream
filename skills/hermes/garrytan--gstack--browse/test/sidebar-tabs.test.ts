@@ -157,7 +157,9 @@ describe('sidepanel-terminal.js: eager auto-connect + injection API', () => {
   test('forceRestart helper closes ws, disposes xterm, returns to IDLE', () => {
     expect(TERM_JS).toContain('function forceRestart');
     const fn = TERM_JS.slice(TERM_JS.indexOf('function forceRestart'));
-    expect(fn).toContain('ws && ws.close()');
+    // close() carries an intentional-restart close code so the agent's
+    // close handler can distinguish user restarts from network drops.
+    expect(fn).toContain("ws && ws.close(4001, 'intentional-restart')");
     expect(fn).toContain('term.dispose()');
     expect(fn).toContain('STATE.IDLE');
     expect(fn).toContain('tryAutoConnect()');
@@ -196,18 +198,6 @@ describe('server.ts: chat / sidebar-agent endpoints are gone', () => {
     expect(SERVER_SRC).not.toMatch(/^interface ChatEntry/m);
     expect(SERVER_SRC).not.toMatch(/^interface SidebarSession/m);
   });
-
-  test('/health no longer surfaces agentStatus or messageQueue length', () => {
-    const health = SERVER_SRC.slice(SERVER_SRC.indexOf("url.pathname === '/health'"));
-    const slice = health.slice(0, 2000);
-    expect(slice).not.toContain('agentStatus');
-    expect(slice).not.toContain('messageQueue');
-    expect(slice).not.toContain('agentStartTime');
-    // chatEnabled is hardcoded false now (older clients still see the field).
-    expect(slice).toMatch(/chatEnabled:\s*false/);
-    // terminalPort survives.
-    expect(slice).toContain('terminalPort');
-  });
 });
 
 describe('cli.ts: sidebar-agent is no longer spawned', () => {
@@ -222,19 +212,18 @@ describe('cli.ts: sidebar-agent is no longer spawned', () => {
   });
 
   test('Terminal-agent spawn survives', () => {
-    expect(CLI_SRC).toContain('terminal-agent.ts');
-    expect(CLI_SRC).toMatch(/Bun\.spawn\(\['bun',\s*'run',\s*termAgentScript\]/);
-  });
-});
-
-describe('files: sidebar-agent.ts and its tests are deleted', () => {
-  test('browse/src/sidebar-agent.ts is gone', () => {
-    expect(fs.existsSync(path.join(import.meta.dir, '../src/sidebar-agent.ts'))).toBe(false);
-  });
-
-  test('sidebar-agent test files are gone', () => {
-    expect(fs.existsSync(path.join(import.meta.dir, 'sidebar-agent.test.ts'))).toBe(false);
-    expect(fs.existsSync(path.join(import.meta.dir, 'sidebar-agent-roundtrip.test.ts'))).toBe(false);
+    // v1.44 moved the raw Bun.spawn into the shared spawnTerminalAgent
+    // helper (terminal-agent-control.ts) so cli.ts, the supervisor respawn
+    // loop, and the watchdog all share identity-based process control.
+    // cli.ts must still route through that helper.
+    expect(CLI_SRC).toContain('spawnTerminalAgent');
+    const CONTROL_SRC = fs.readFileSync(
+      path.join(import.meta.dir, '../src/terminal-agent-control.ts'),
+      'utf-8',
+    );
+    expect(CONTROL_SRC).toContain('terminal-agent.ts');
+    expect(CONTROL_SRC).toMatch(/\.spawn\(\['bun',\s*'run',\s*script,\s*`--agent-gen=\$\{gen\}`\]/);
+    expect(CONTROL_SRC).toContain('BROWSE_OWNER_PID: String(opts.ownerPid)');
   });
 });
 

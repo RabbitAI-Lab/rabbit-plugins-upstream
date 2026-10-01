@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/paperclip",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/paperclip",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/paperclip",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "7dc2d6ecd68518a6a80591e9796e8cb79e4c03b38c9ae16f9caba4deab66308d",
+  "fetchedAt": "2026-10-01T14:45:08.216Z"
+}

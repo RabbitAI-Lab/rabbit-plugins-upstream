@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/segment-anything",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/segment-anything",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/segment-anything",
+  "branch": "main",
+  "pushedAt": "2026-10-01T01:16:26Z",
+  "contentHash": "b6fa09b4b60a66221c5400854f4c966a96e5c13a5145d73e05e275e575c4218a",
+  "fetchedAt": "2026-10-01T14:44:53.787Z"
+}

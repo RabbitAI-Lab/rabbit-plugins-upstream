@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/matplotlib",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/matplotlib",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/matplotlib",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "af2a9953ddb07bb36e1822f125a7768fd389183619839d4ab2e97300d0009705",
+  "fetchedAt": "2026-10-01T14:45:08.194Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-plugin-observability",
+  "identifier": "NVIDIA/skills/skills/nemo-relay-plugin-observability",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-relay-plugin-observability",
+  "branch": "main",
+  "pushedAt": "2026-10-01T14:40:41Z",
+  "contentHash": "38af3dfa33521e83eb3234519a4a73d53175f75ea8f01b6e678e02b9c95e5c35",
+  "fetchedAt": "2026-10-01T14:44:52.328Z"
+}

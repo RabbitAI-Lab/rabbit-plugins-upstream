@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/document-parsing/pptx",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/document-parsing/pptx",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/document-parsing/pptx",
+  "branch": "main",
+  "pushedAt": "2026-10-01T01:16:26Z",
+  "contentHash": "58c9ff41aca9d4ad5091078298e4657ca2fa1e7bb6deebf40c7e0faa0a8cabb6",
+  "fetchedAt": "2026-10-01T14:44:53.754Z"
+}

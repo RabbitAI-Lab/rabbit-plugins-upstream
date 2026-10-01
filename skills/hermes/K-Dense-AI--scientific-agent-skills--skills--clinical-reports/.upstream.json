@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/clinical-reports",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/clinical-reports",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/clinical-reports",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "43b3a41819e6efab3b9c11bf260e0215934b4f3826a08efa2c5a3f7d9da7535e",
+  "fetchedAt": "2026-10-01T14:45:08.125Z"
+}

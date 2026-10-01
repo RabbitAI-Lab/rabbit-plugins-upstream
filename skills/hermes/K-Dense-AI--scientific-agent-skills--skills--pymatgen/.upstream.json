@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pymatgen",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pymatgen",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pymatgen",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "87f79c371f4088fe1551e8d93da31b2ab0cbe090a47f05a7ffc89203e7b3de21",
+  "fetchedAt": "2026-10-01T14:45:08.248Z"
+}

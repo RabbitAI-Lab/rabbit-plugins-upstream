@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/mageck",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/mageck",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/mageck",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "455eb6e66e80b7d46227e7af7af2d668a7913cf0036783429e3a174d594bb25b",
+  "fetchedAt": "2026-10-01T14:45:08.184Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/cosmic-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/cosmic-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/cosmic-database",
+  "branch": "main",
+  "pushedAt": "2026-10-01T01:16:26Z",
+  "contentHash": "c400f720e17a1a6db3e668985c7847040160d56235b6349220ecb77f5f589369",
+  "fetchedAt": "2026-10-01T14:44:53.617Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pacsomatic",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pacsomatic",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pacsomatic",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "7d60d06bf150d77a33df1dc17b684a1623c625c43d5d1e0df4d9fd77777b56e4",
+  "fetchedAt": "2026-10-01T14:45:08.213Z"
+}

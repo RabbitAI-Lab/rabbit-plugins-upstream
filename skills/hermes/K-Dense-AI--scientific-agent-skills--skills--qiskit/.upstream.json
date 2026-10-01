@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/qiskit",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/qiskit",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/qiskit",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "f895a58f525351b6ca379a2d802da98c7e80f158f0f7f117391f4ddbdc7e9a8b",
+  "fetchedAt": "2026-10-01T14:45:08.258Z"
+}

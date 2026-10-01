@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/experimental-design",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/experimental-design",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/experimental-design",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "c2ad2ddd00e9b62c2011dd21c39446a3cd53232e8cfe7e235e95f32fbd1004d3",
+  "fetchedAt": "2026-10-01T14:45:08.148Z"
+}

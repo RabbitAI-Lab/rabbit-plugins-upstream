@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/citation-management",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/citation-management",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/citation-management",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "66d33447d82215fa966315aa0d9321ca7614851fe70f94c43da798ad77bd453f",
+  "fetchedAt": "2026-10-01T14:45:08.120Z"
+}

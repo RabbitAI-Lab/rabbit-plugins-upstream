@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/flowio",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/flowio",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/flowio",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "375e9a163d863f7454fc846e42e665e8907cd0807879023e2cfdb6184d167c3a",
+  "fetchedAt": "2026-10-01T14:45:08.152Z"
+}

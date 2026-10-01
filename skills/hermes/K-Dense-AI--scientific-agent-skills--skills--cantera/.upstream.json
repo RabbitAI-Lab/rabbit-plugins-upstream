@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/cantera",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/cantera",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/cantera",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "579cacc046d33e51d62ced12eb35106625d57d45c4d540735b92fb6837961ce8",
+  "fetchedAt": "2026-10-01T14:45:08.117Z"
+}

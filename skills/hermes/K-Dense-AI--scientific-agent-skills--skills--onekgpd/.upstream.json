@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/onekgpd",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/onekgpd",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/onekgpd",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "ac91551ed61f5f9c1a6fd03645bc4a6b1003c82d87d10a39c6b7467dc906b288",
+  "fetchedAt": "2026-10-01T14:45:08.206Z"
+}

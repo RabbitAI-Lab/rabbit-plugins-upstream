@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pyzotero",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pyzotero",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pyzotero",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "56bf98ad147d1476e30bf5973213912d1d78dd44f763959bb826113ffeeaac36",
+  "fetchedAt": "2026-10-01T14:45:08.257Z"
+}

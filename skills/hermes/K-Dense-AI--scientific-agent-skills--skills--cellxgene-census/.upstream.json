@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/cellxgene-census",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/cellxgene-census",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/cellxgene-census",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "68068c0f8d72ed8e50bc711e00eaa97a0a4fe41c8f62747a6c36cb20aae5f0bc",
+  "fetchedAt": "2026-10-01T14:45:08.118Z"
+}

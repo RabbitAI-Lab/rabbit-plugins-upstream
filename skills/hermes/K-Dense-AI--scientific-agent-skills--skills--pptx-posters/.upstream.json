@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pptx-posters",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pptx-posters",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pptx-posters",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "6ced4f5cf3f375c3091339f8f359dffd81110e5d692b3ed6856480863aa8a958",
+  "fetchedAt": "2026-10-01T14:45:08.237Z"
+}

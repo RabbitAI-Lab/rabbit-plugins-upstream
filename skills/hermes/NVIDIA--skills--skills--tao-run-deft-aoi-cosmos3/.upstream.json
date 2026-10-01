@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-deft-aoi-cosmos3",
+  "identifier": "NVIDIA/skills/skills/tao-run-deft-aoi-cosmos3",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-deft-aoi-cosmos3",
+  "branch": "main",
+  "pushedAt": "2026-10-01T14:40:41Z",
+  "contentHash": "dca1ded6fe8ea355c1da1af4394606e8b2a4bb28cf128172ec33b3a82a1601ac",
+  "fetchedAt": "2026-10-01T14:44:52.523Z"
+}

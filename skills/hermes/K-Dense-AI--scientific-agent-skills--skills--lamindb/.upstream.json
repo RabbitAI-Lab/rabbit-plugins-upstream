@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/lamindb",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/lamindb",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/lamindb",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "043cd0cbe3e3e12827272914aca35b2f260b9d64b4158383335a96780de98316",
+  "fetchedAt": "2026-10-01T14:45:08.179Z"
+}

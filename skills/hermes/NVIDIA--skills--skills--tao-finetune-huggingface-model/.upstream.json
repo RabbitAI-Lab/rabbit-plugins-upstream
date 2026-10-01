@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/tao-finetune-huggingface-model",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "3a7272bbb7ba72fe265f98a6961283e0dc897bd0c23e8a7967ce9be14d0f995f",
-  "fetchedAt": "2026-07-26T17:03:52.401Z"
+  "pushedAt": "2026-10-01T14:40:41Z",
+  "contentHash": "41f7f81a357f5d1efcecedcd258dfa6c382dbee99211556b8f4a25a6227f7d53",
+  "fetchedAt": "2026-10-01T14:44:52.487Z"
 }

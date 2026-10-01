@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/hypogenic",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/hypogenic",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/hypogenic",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "f8327764dae4ab2db46fbf0367e71d2ecf2aed994012a02e1d8de045cb60870e",
+  "fetchedAt": "2026-10-01T14:45:08.168Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/glycoengineering",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/glycoengineering",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/glycoengineering",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "a234dfa0ac535015eaffb9b827b59053bdf682bc9f35bfab3ec0948380174946",
+  "fetchedAt": "2026-10-01T14:45:08.164Z"
+}

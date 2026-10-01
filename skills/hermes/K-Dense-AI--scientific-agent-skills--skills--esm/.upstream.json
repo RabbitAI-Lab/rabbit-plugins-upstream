@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/esm",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/esm",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/esm",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "d5a4488bb39786131107014349016fa738b19222eea37e2e01b650390f0bb296",
+  "fetchedAt": "2026-10-01T14:45:08.146Z"
+}

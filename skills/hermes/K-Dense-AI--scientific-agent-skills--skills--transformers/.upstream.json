@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/transformers",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/transformers",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/transformers",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "68ad85ba71a002f8108657f99158de3f13ade71e84960b00a0b2c87648e61d1b",
+  "fetchedAt": "2026-10-01T14:45:08.298Z"
+}

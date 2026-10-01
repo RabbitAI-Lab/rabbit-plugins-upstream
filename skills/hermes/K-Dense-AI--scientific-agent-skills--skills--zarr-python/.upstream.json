@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/zarr-python",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/zarr-python",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/zarr-python",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "1b53d38619ad82648f5f4cc3041545a5b0ed26ef1d6e3c668df1110bf3318ddf",
+  "fetchedAt": "2026-10-01T14:45:08.314Z"
+}
