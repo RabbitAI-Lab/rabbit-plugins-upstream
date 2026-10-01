@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-well-architected-review",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-well-architected-review",
+  "branch": "main",
+  "pushedAt": "2026-10-01T02:14:38Z",
+  "contentHash": "8b923ea459446923f6acb1af7b6964842664063e0439cba3a73b15198ddaf745",
+  "fetchedAt": "2026-10-01T14:37:30.894Z"
+}
