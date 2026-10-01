@@ -1,40 +1,58 @@
-## Description: <br>
-Provides advisory templates, checklists, and decision-support frameworks for insurance claim OCR, liability review, anti-fraud assessment, and claim reporting, with human review required for every decision. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Advisory skill for insurance claims processing workflows that provides templates, checklists, and decision-support frameworks for medical OCR, liability determination, anti-fraud assessment, and claims reporting.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance claims teams, reviewers, and developers use this skill to draft claim analysis reports, OCR integration guidance, liability review checklists, anti-fraud review prompts, and standardized claim notices. Outputs are decision-support drafts and require licensed human review before customer, payment, denial, or fraud actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Insurance Claims Intelligence release page](https://clawhub.ai/gechengling/insurance-claims-intelligence) <br>
-- [Claims OCR technical reference](references/claims_ocr_tech.md) <br>
-- [Claims liability engine reference](references/claims_liability_engine.md) <br>
-- [Claims report templates](references/claims_report_templates.md) <br>
+External insurance operations teams, claims reviewers, and developers use this skill to draft claims workflow guidance, OCR review checklists, liability review notes, anti-fraud triage prompts, and claims report templates. All claim decisions, payout amounts, denial language, and fraud labels require qualified human review.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with checklists, report templates, structured draft outputs, and example code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Draft-only decision support; OCR examples require user-provided credentials and data, and claim decisions require licensed human review.] <br>
+Global
 
-## Skill Version(s): <br>
-5.0.3 (source: server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Claims guidance may affect sensitive insurance outcomes if used as a final decision.
+
+Mitigation: Use outputs only as drafts and require a qualified insurance professional to review all claim decisions, payout amounts, denial language, and fraud labels before use.
+
+Risk: Claims workflows may involve personal, medical, or identifying data.
+
+Mitigation: Do not paste unnecessary personal or medical data; redact identifiers where possible and follow data minimization practices before OCR or analysis.
+
+Risk: Regulatory references and compliance practices can change over time.
+
+Mitigation: Verify regulatory references against current official sources before relying on them in claims handling or reporting.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/gechengling/skills/insurance-claims-intelligence)
+- [Skill source artifact](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown drafts with checklists, tables, report templates, and illustrative code snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are advisory drafts and must include a human-review disclaimer before operational use.]
+
+## Skill Version(s):
+
+5.0.5 (source: frontmatter, release metadata, changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

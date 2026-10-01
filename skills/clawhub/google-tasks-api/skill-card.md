@@ -1,46 +1,58 @@
-## Description: <br>
-Google Tasks API integration with managed OAuth for managing task lists and tasks with full CRUD operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read and manage Google Tasks lists and tasks through a connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read, create, update, move, clear, and delete Google Tasks task lists and tasks through Maton's managed OAuth gateway. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses configured service credentials to access Google Tasks through Maton. <br>
-Mitigation: Use scoped API tokens where available, keep MATON_API_KEY out of shared repositories and skill memory, and install the skill only when that account access is intended. <br>
-Risk: Create, update, move, clear, and delete operations can change or remove task data in the connected Google Tasks account. <br>
-Mitigation: Require explicit user approval for write operations and confirm the target task list, task, and intended effect before execution. <br>
-Risk: If multiple Google Tasks OAuth connections exist, requests may affect the wrong account or task list. <br>
-Mitigation: Specify the intended connection ID when more than one connection is active and verify opaque task list and task IDs before write operations. <br>
+## Use Case:
 
+People and teams use this skill to view, create, update, and delete Google Tasks lists and tasks. With separate approval, they can set up scheduled or event-driven task actions.
 
-## Reference(s): <br>
-- [Google Tasks API Overview](https://developers.google.com/workspace/tasks) <br>
-- [Google Tasks Tasks Reference](https://developers.google.com/workspace/tasks/reference/rest/v1/tasks) <br>
-- [Google Tasks TaskLists Reference](https://developers.google.com/workspace/tasks/reference/rest/v1/tasklists) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
-- [ClawHub Google Tasks Skill](https://clawhub.ai/byungkyu/skills/google-tasks-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Code, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write operations should be explicitly approved before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: ClawHub release evidence) <br>
+Risk: A connected account grants access to read and change tasks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth and confirm each write and new connection with the user.
+
+Risk: Approved automations can continue acting on tasks or forward matching events to third-party destinations.
+
+Mitigation: Confirm the automation target and forwarded data before approval; delete unused connections, functions, and triggers.
+
+## Reference(s):
+
+- [Google Tasks skill release](https://clawhub.ai/byungkyu/skills/google-tasks-api)
+- [Google Tasks API overview](https://developers.google.com/workspace/tasks)
+- [Google Tasks API reference](https://developers.google.com/workspace/tasks/reference/rest/v1/tasks)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with commands and task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Task data may include personal information; automation requires separate approval.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence; skill metadata lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

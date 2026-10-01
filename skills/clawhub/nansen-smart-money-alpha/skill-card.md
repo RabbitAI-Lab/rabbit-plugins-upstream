@@ -1,42 +1,51 @@
-## Description: <br>
-Token screener with a smart money filter cross-referenced against netflow to identify tokens showing early accumulation signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses the Nansen CLI to find tokens with smart-money activity by cross-referencing screener results with netflow.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External users and developers use this skill to run Nansen CLI token research commands, compare smart money screener results with Smart Trader netflow, and identify candidate tokens for further analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an external Nansen CLI package with a Nansen API key and may consume account quota. <br>
-Mitigation: Use a revocable or dedicated NANSEN_API_KEY and confirm expected CLI behavior before broad deployment. <br>
-Risk: Token accumulation output can be mistaken for investment advice. <br>
-Mitigation: Treat results as research signals only and review them with independent market, liquidity, and risk checks. <br>
+## Use Case:
 
+Crypto researchers use Nansen CLI commands to screen tokens for smart-money activity and compare candidates with netflow and token flow data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-smart-money-alpha) <br>
-- [nansen-cli npm package](https://www.npmjs.com/package/nansen-cli) <br>
-- [nansen-cli GitHub repository](https://github.com/nansen-ai/nansen-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, guidance, text] <br>
-**Output Format:** [Markdown with inline bash code blocks and command-result guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen binary and NANSEN_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: Authenticated research calls may consume paid credits or trigger wallet payments, including in loops.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the selected API key or saved session, available credits, wallet payment policy and spending limits before making calls; avoid repeated calls without cost review.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/nansen-devops/skills/nansen-smart-money-alpha)
+- [Nansen CLI npm package](https://www.npmjs.com/package/nansen-cli)
+- [Nansen CLI browser login platform scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with bash commands and research guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Screener candidates are compared with smart-money netflow and token flow data.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -12,7 +12,7 @@
       "schema": "schemas/captions.schema.json",
       "expect": "invalid",
       "expectedErrorSignatures": [
-        "const@/pages/0/lines"
+        "maximum@/pages/0/lines"
       ]
     },
     {
@@ -39,6 +39,16 @@
       "expectedErrorSignatures": [
         "pattern@/requiredProbes/0/evidence",
         "if@/"
+      ]
+    },
+    {
+      "path": "fixtures/runtime/negative/high-risk-auto.invalid.json",
+      "schema": "schemas/runtime/decision-log.schema.json",
+      "expect": "invalid",
+      "expectedErrorSignatures": [
+        "const@/decisions/0/risk",
+        "const@/decisions/0/approvalRequired",
+        "if@/decisions/0"
       ]
     }
   ]

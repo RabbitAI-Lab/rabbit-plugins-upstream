@@ -1,49 +1,67 @@
-## Description: <br>
-GitHub CLI for remote repository analysis, file fetching, codebase comparison, and discovering trending code/repos. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+GitHub CLI for remote repository analysis, file fetching, codebase comparison, and discovering trending code/repos.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect GitHub repositories remotely, compare codebases, fetch files, search code, and discover repository patterns without cloning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill documents GitHub CLI operations that can expose tokens or change and delete GitHub resources. <br>
-Mitigation: Use a narrowly scoped or read-only GitHub token where possible, and approve mutating, token-printing, extension, workflow, release, or deletion commands only when the user explicitly requested that action. <br>
-Risk: Repository inference from the current working directory can silently target the wrong repository in scripted agent workflows. <br>
-Mitigation: Pass --repo OWNER/REPO for GitHub CLI commands in agent or CI workflows. <br>
+## Use Case:
 
+Developers and engineers use this skill to guide GitHub CLI workflows for repository analysis, file retrieval, codebase comparison, search, pull requests, issues, actions, and releases without cloning repositories.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/gh-cli) <br>
-- [Publisher Profile](https://clawhub.ai/user/tenequm) <br>
-- [Skill Homepage](https://github.com/tenequm/skills/tree/main/skills/gh-cli) <br>
-- [Official GitHub CLI Manual](https://cli.github.com/manual/) <br>
-- [GitHub CLI Repository](https://github.com/cli/cli) <br>
-- [GitHub Search Documentation](https://docs.github.com/en/search-github) <br>
-- [Remote Repository Analysis](references/remote-analysis.md) <br>
-- [Compare Two Codebases](references/comparison.md) <br>
-- [Discovering Trending Content](references/discovery.md) <br>
-- [Special Syntax & Command Quirks](references/syntax.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, markdown, configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the GitHub CLI binary and optionally GH_TOKEN, GITHUB_TOKEN, or GH_HOST environment variables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.1 (source: frontmatter, changelog, server release metadata) <br>
+Risk: The skill includes guidance for broad GitHub CLI operations, including write, admin, token, extension, and codespace commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege GitHub tokens, prefer read-only scopes for analysis, and require explicit approval before executing mutating or administrative commands.
+
+Risk: Commands that inspect authentication state, secrets, or token-backed resources can expose sensitive access details.
+
+Mitigation: Avoid printing tokens or secrets, redact command output before sharing, and review any command that manages credentials, secrets, or keys before execution.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tenequm/skills/gh-cli)
+- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/gh-cli)
+- [GitHub CLI manual](https://cli.github.com/manual/)
+- [GitHub CLI repository](https://github.com/cli/cli)
+- [GitHub search documentation](https://docs.github.com/en/search-github)
+- [Remote repository analysis](references/remote-analysis.md)
+- [Compare two codebases](references/comparison.md)
+- [Discovering trending content](references/discovery.md)
+- [Search reference](references/search.md)
+- [Special syntax and command quirks](references/syntax.md)
+- [Repositories reference](references/repositories.md)
+- [Pull requests reference](references/pull_requests.md)
+- [Issues reference](references/issues.md)
+- [Actions reference](references/actions.md)
+- [Releases reference](references/releases.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown, Configuration]
+
+**Output Format:** [Markdown guidance with inline shell commands and CLI examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may include GitHub CLI commands that require authentication and repository-specific review before execution.]
+
+## Skill Version(s):
+
+1.4.0 (source: frontmatter, changelog, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

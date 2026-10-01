@@ -1,0 +1,72 @@
+{
+  "variant_id": "relay_03_amount",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "amount",
+  "output_name": "recorded_amount",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "currency",
+      "minor_units"
+    ],
+    "properties": {
+      "currency": {
+        "type": "string",
+        "enum": [
+          "USD",
+          "CNY",
+          "EUR"
+        ]
+      },
+      "minor_units": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 1000000000
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "scenario_id",
+      "currency",
+      "minor_units",
+      "display_amount",
+      "budget_band"
+    ],
+    "properties": {
+      "scenario_id": {
+        "type": "string",
+        "pattern": "^budget_[0-9a-f]{12}$"
+      },
+      "currency": {
+        "type": "string",
+        "enum": [
+          "USD",
+          "CNY",
+          "EUR"
+        ]
+      },
+      "minor_units": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "display_amount": {
+        "type": "string",
+        "pattern": "^[A-Z]{3} [0-9]+\\.[0-9]{2}$"
+      },
+      "budget_band": {
+        "type": "string",
+        "enum": [
+          "small",
+          "standard",
+          "large"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "finance_planning_ledger_entry"
+}

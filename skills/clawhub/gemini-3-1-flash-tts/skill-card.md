@@ -1,43 +1,54 @@
-## Description: <br>
-Helps an agent prepare and run spoken narration or voiceover generation with Gemini 3.1 Flash TTS through Replicate. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in generating spoken narration and voiceovers from scripts using Gemini 3.1 Flash TTS through Replicate.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creators use this skill to collect text, voice, style prompt, and language inputs, then guide a Replicate text-to-speech request for narration, documentary lines, explainer voiceover, or audio to pair with generated video. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A Replicate API token is required to generate audio. <br>
-Mitigation: Keep REPLICATE_API_TOKEN in the local environment and do not include it in prompts, generated files, or shared logs. <br>
-Risk: Optional related PrunaAI skills may broaden the installed skill set. <br>
-Mitigation: Install only the companion skills needed for the workflow and review them before adding the full suite. <br>
-Risk: Generated narration may not match the intended text, tone, voice, or language. <br>
-Mitigation: Confirm text, voice, prompt, and language_code before generation, then review the downloaded audio before using it. <br>
+## Use Case:
 
+Creators and developers use this skill to prepare scripts and generate spoken narration or voiceovers for explainers, documentaries, and videos.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/gemini-3-1-flash-tts) <br>
-- [Replicate model readme](https://replicate.com/google/gemini-3.1-flash-tts/readme) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown guidance with bash and curl examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REPLICATE_API_TOKEN; ffmpeg and ffprobe are needed for trimming, concatenating scene voiceover, or mixing with a music bed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: Narration text and style prompts are sent to Replicate with an API token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit content you are comfortable sharing with Replicate and keep the token private.
+
+Risk: Suggested skill installation commands may fetch additional third-party code.
+
+Mitigation: Review or pin the suggested npx skill installs before running them, especially the full-suite install.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/pruna-ai/skills/gemini-3-1-flash-tts)
+- [Gemini 3.1 Flash TTS model documentation on Replicate](https://replicate.com/google/gemini-3.1-flash-tts/readme)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Audio]
+
+**Output Format:** [Text guidance and commands; generated audio URL or downloaded audio file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a Replicate API token; narration text and style prompt are sent to Replicate.]
+
+## Skill Version(s):
+
+1.0.14 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

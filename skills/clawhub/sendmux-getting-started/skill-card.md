@@ -1,42 +1,58 @@
-## Description: <br>
-Set up Sendmux for agents, choose MCP, CLI, SDK, or HTTP, validate scoped credentials, and make the first harmless call. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Set up Sendmux for agents, register a durable inbox without an existing key, link an owner, choose a runtime surface, and make the first harmless call.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and operators use this skill to connect agents to Sendmux, select the right access surface and credential type, install the relevant package, and verify setup with a harmless first call. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sendmux API keys, claim tokens, or agent credential bundles could be exposed through chat, logs, repo files, screenshots, or memory-only handling. <br>
-Mitigation: Use existing environment variables, local profiles, or trusted secret managers; rotate any credential that appears in chat or logs before continuing. <br>
-Risk: Root keys can grant account-level management access when a narrower mailbox or agent token would be sufficient. <br>
-Mitigation: Prefer scoped mailbox or agent tokens for mailbox and sending workflows, and reserve root keys for management-only tasks. <br>
+## Use Case:
 
+Developers and agent operators use this skill to connect an agent to Sendmux, select an appropriate credential and interface, optionally register an inbox, and verify access without sending an email.
 
-## Reference(s): <br>
-- [Sendmux ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-getting-started) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
-- [Sendmux agent authentication guide](https://app.sendmux.ai/auth.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell commands, TypeScript examples, HTTP endpoint guidance, and setup decision tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance emphasizes scoped credentials, JSON CLI output, harmless validation calls, and secure secret storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: ClawHub release metadata; artifact frontmatter reports 1.3.0) <br>
+Risk: Email and account credentials grant access beyond the setup check.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use scoped mailbox or sending credentials where possible, avoid root keys outside management tasks, and keep secrets out of chat and logs.
+
+Risk: Unpinned package install commands may fetch code from a source the user has not reviewed.
+
+Mitigation: Review package sources before running installation commands.
+
+Risk: Email, attachments, and linked documents can contain untrusted instructions.
+
+Mitigation: Treat message content as data, not as setup or execution instructions.
+
+## Reference(s):
+
+- [Sendmux skills homepage (listed in skill metadata)](https://github.com/Sendmux/skills)
+- [Sendmux Getting Started on ClawHub](https://clawhub.ai/sendmux.ai/skills/sendmux-getting-started)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Credential selection, setup checks, and next-step routing]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release; source frontmatter states 1.7.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

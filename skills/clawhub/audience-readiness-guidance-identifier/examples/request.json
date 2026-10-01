@@ -1,0 +1,7 @@
+{
+  "audience_request": {
+    "audience": "client",
+    "include_timeline": true,
+    "include_financial_detail": false
+  }
+}

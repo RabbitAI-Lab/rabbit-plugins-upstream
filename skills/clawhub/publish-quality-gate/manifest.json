@@ -1,0 +1,14 @@
+{
+  "schema": "lgd-skill-manifest/v1",
+  "name": "publish-quality-gate",
+  "slug": "publish-quality-gate",
+  "version": "1.0.1",
+  "author": "诺声(Logos)@SynomosAI",
+  "copyright": "SynomosAI",
+  "license": "MIT",
+  "category": "办公效率",
+  "origin": "https://github.com/zhaoxinghua09-cell/agent-skills/tree/main/skills/publish-quality-gate",
+  "homepage": "https://zhaoxinghua09-cell.github.io/lgd-hub/",
+  "agent_created": true,
+  "packaged_at": "2026-09-08"
+}

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/miao-vision-skill",
   "slug": "miao-vision-skill",
   "ownerHandle": null,
-  "version": "0.1.26",
-  "updatedAt": 1784797827208,
-  "contentHash": "c7f6cae39a7a1f714b4a5468d414b4df735c56bc76a007b7529d92126558bd09",
-  "fetchedAt": "2026-07-26T18:07:16.525Z"
+  "version": "0.10.1",
+  "updatedAt": 1790574796970,
+  "contentHash": "c7b496cb7ff087f4c3f5017c83987fd051d334184817ad9699d42a42513000ac",
+  "fetchedAt": "2026-10-01T14:51:35.784Z"
 }

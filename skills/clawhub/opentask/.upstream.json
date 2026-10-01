@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/opentask",
   "slug": "opentask",
   "ownerHandle": null,
-  "version": "2.0.8",
-  "updatedAt": 1784326670163,
-  "contentHash": "822efff709dace028f5bae1cf89a52e0022950fb55bb34c0017e277f2efed350",
-  "fetchedAt": "2026-07-26T18:11:26.278Z"
+  "version": "2.0.12",
+  "updatedAt": 1790821810194,
+  "contentHash": "eb5cd0fe2d4fe5c955d2af64544a96f45f09d019fb5cfb43db8117b1ca21ab48",
+  "fetchedAt": "2026-10-01T14:38:17.197Z"
 }

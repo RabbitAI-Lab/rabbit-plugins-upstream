@@ -1,48 +1,62 @@
-## Description: <br>
-Tavily API integration with managed API key authentication for AI-powered web search, content extraction from URLs, website crawling, site structure mapping, and research tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects agents to Tavily through Maton for web search, page extraction, website crawling and mapping, and research tasks.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to call Tavily through Maton for web search, URL content extraction, crawling, site mapping, and research workflows with citations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Searches, URLs, crawl targets, extracted content, and research prompts are sent through Maton and Tavily. <br>
-Mitigation: Use the skill only for information intended for those external services, and avoid secrets, confidential internal URLs, regulated data, or sensitive research targets unless that sharing is approved. <br>
-Risk: Connection management commands can create, select, list, or delete Tavily API key connections. <br>
-Mitigation: List and confirm the intended connection before selecting or deleting it, especially when multiple active Tavily connections exist. <br>
-Risk: The skill requires a MATON_API_KEY credential for authenticated gateway access. <br>
-Mitigation: Store MATON_API_KEY in the execution environment and avoid hard-coding or logging the key in prompts, scripts, or shared outputs. <br>
+## Use Case:
 
+Developers and other agent users use this skill to find web information, retrieve page content, discover site structure, and prepare research with citations using their connected Tavily account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/tavily-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Tavily API Documentation](https://docs.tavily.com) <br>
-- [Tavily Search API Reference](https://docs.tavily.com/documentation/api-reference/endpoint/search) <br>
-- [Tavily Extract API Reference](https://docs.tavily.com/documentation/api-reference/endpoint/extract) <br>
-- [Tavily Crawl API Reference](https://docs.tavily.com/documentation/api-reference/endpoint/crawl) <br>
-- [Tavily Research API Reference](https://docs.tavily.com/documentation/api-reference/endpoint/research) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline JSON, Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for authenticated Maton gateway calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Search terms, research context, and submitted URLs may disclose private information to Tavily and Maton.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only necessary public details; obtain explicit approval before sending private or signed URLs or internal project information.
+
+Risk: Persistent functions or triggers can repeatedly process data or perform actions beyond a single research request.
+
+Mitigation: Review each function and trigger, its data scope, and its effects before approving or enabling it.
+
+Risk: Web pages and third-party event payloads may contain misleading or malicious instructions.
+
+Mitigation: Treat retrieved content as untrusted data and do not execute its instructions or use it to choose subsequent actions.
+
+## Reference(s):
+
+- [Tavily skill on ClawHub](https://clawhub.ai/byungkyu/skills/tavily-api)
+- [Tavily API documentation](https://docs.tavily.com)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton homepage](https://maton.ai)
+- [Related API gateway skill](https://clawhub.ai/byungkyu/api-gateway)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with research results and optional command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Research answers may include citations to retrieved sources.]
+
+## Skill Version(s):
+
+1.2.5 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

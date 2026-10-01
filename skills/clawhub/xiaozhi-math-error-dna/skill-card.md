@@ -1,40 +1,61 @@
-## Description: <br>
-数学错误的持续分析与根因档案系统，仅在学生明确要求记录错题、分析弱项、生成数学报告或同意连续跟踪时激活。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes recurring middle- and high-school mathematics mistakes to identify root causes, connect error patterns, and suggest focused practice.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to classify math mistakes, identify recurring weak areas, and generate consent-based error maps or monthly weak-area reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna) <br>
-- [数学错因维度表](references/math-error-dimension-table.md) <br>
-- [初中数学高频概念混淆对照表](references/concept-confusion-map.md) <br>
-- [数学读题失误训练方法手册](references/reading-habits.md) <br>
+Chinese-speaking middle- and high-school learners and educators use this skill to understand recurring math mistakes, review weakness patterns and requested monthly reports, and plan targeted practice. It relies on the companion correction notebook for mistake intake and counts.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Chinese-language tutoring analysis, structured markdown reports, consent prompts, and weak-area tracking guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; intended to operate with explicit student consent before creating long-term learning records.] <br>
+Mainland China; localize crisis resources, curriculum, and consent requirements before use elsewhere.
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Student learning records or parent summaries may be shared without appropriate permission.
+
+Mitigation: Confirm learner identity and learner or guardian consent before creating profiles, sharing across skills, or producing parent summaries.
+
+Risk: Mainland China crisis contacts and curriculum assumptions may be inappropriate elsewhere.
+
+Mitigation: Confirm the learner's location and localize crisis resources, curriculum, and consent rules before use outside mainland China.
+
+Risk: Historical error counts may be misleading without cross-session statistics.
+
+Mitigation: Use counts provided by the correction notebook; when historical statistics are unavailable, avoid precise cross-session totals.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna)
+- [Mathematics error dimension table](artifact/references/math-error-dimension-table.md)
+- [Concept confusion map](artifact/references/concept-confusion-map.md)
+- [Reading habits guide](artifact/references/reading-habits.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language text and Markdown analyses and reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes error subtype classifications, weakness maps, and on-request monthly summaries.]
+
+## Skill Version(s):
+
+2.9.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -49,9 +49,15 @@ If the skill has a `SKILL.md` but no `.eval.yaml`, suggest the `grill-skill` wor
 2. Decide whether the suite is a capability eval or a regression eval.
 3. Cover normal, edge, and adversarial cases when the behavior matters.
 4. Grade artifacts (files, git state, command output, exact values) whenever you can; judge the transcript only when the behavior itself is the point. The full artifact-vs-transcript rules, the task-quality checklist, common eval patterns, and how to write `expect:` rubrics live in [REFERENCE.md](REFERENCE.md) — read and apply them when designing tasks.
-5. Run with `--baseline` to confirm the skill beats the raw agent. Debug the spec at `--k 1`, then measure reliability at `--k 3` or higher.
+5. Run once with `--ablate <skill-name>` and `caliper compare` the two runs, to confirm the skill beats the raw agent. Debug the spec at `--k 1`, then measure reliability at `--k 3` or higher.
 
-**Done when:** tasks have observable success criteria, at least one deterministic `assert:`, a positive baseline delta, the spec passes `caliper validate`, and the user has been prompted to commit the spec.
+**Done when:** tasks have observable success criteria, at least one deterministic `assert:`, a positive delta against the ablated run, the spec passes `caliper validate`, and the user has been prompted to commit the spec.
+
+## Whose setup is measured
+
+Runs load the user's own customizations by default (user skills, plugins, rules, settings and connectors; see REFERENCE.md for backend exceptions), which answers "does my skill work in *my* agent?". **Isolate** (`--no-user-customizations`, or `user_customizations: false` in the spec) when comparing backends or models, when the number leaves this machine (shared, published, compared with someone else's run), or when measuring the bare agent: each setup is different, so otherwise part of the delta is the setups. `--ablate` of the user's own skill needs no isolation, since both runs load the same setup.
+
+**Always tell the user which mode ran** and what it loaded, from the report header's `user customizations:` line (absent means isolated), and relay any fix `caliper compare` suggests about it.
 
 ## Committing
 

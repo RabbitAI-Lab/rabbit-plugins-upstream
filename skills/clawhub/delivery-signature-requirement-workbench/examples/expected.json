@@ -1,0 +1,8 @@
+{
+  "delivery_document_section": {
+    "section_id": "delivery_section_ac3da70a10a3",
+    "requires_signature": true,
+    "signature_section": "recipient-signature",
+    "document_count": 3
+  }
+}

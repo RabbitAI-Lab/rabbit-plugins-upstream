@@ -1,44 +1,56 @@
-## Description: <br>
-Call a local ComfyUI instance for text-to-image (T2I), image-to-image/edit (I2I), and image-to-video (I2V) generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates and edits images, animates images into videos, and turns character images into 3D meshes using a user-configured ComfyUI server.
 
-## Publisher: <br>
-[sunshinejnjn](https://clawhub.ai/user/sunshinejnjn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sunshinejnjn](https://clawhub.ai/user/sunshinejnjn)
 
-## Use Case: <br>
-Developers and external users use this skill to generate images from text, edit supplied images, or create short videos from an image and prompt through an existing ComfyUI server. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The default configuration can send prompts and user images to a non-local ComfyUI server. <br>
-Mitigation: Review config.json before installation and set COMFYUI_URL to a ComfyUI server you control, preferably localhost. <br>
-Risk: Sensitive images or generated outputs may be stored in the configured media directory. <br>
-Mitigation: Do not use sensitive images unless that endpoint and output location are acceptable for the use case. <br>
+## Use Case:
 
+Creators and developers use this skill to generate or edit images, turn images into short videos, and create downloadable 3D character meshes through a ComfyUI server they configure.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sunshinejnjn/skills/image-with-comfyui) <br>
-- [README.md](README.md) <br>
-- [ComfyUI Impact Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) <br>
-- [ComfyUI WAS Nodes](https://github.com/WASasquatch/ComfyUI-WAS-Nodes.git) <br>
-- [ComfyUI Manager](https://github.com/comfyanonymous/ComfyUI-Manager.git) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Text, Shell commands, Guidance] <br>
-**Output Format:** [Generated image or video files with brief text status and Markdown command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are saved under the configured media directory; image-edit and image-to-video modes send source images and prompts to the configured ComfyUI endpoint.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: server release and openclaw metadata) <br>
+Risk: Prompts and source images may be sent to the configured ComfyUI endpoint.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use localhost or a server you control; avoid secrets in prompts and URLs.
+
+Risk: Generated media and delivery copies may persist on local storage.
+
+Mitigation: Review output locations and clean output and staging directories after handling sensitive media.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/sunshinejnjn/skills/image-with-comfyui)
+- [ComfyUI setup and model requirements](artifact/README.md)
+- [CLI usage reference](artifact/references/cli-reference.md)
+- [Model download sources](artifact/MODEL_URL.txt)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, Video files, 3D mesh files, Text guidance]
+
+**Output Format:** [JPG or PNG images, video files, ZIP archives containing GLB meshes, and text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is saved locally; 3D meshes are scaled and packaged for delivery.]
+
+## Skill Version(s):
+
+3.2.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

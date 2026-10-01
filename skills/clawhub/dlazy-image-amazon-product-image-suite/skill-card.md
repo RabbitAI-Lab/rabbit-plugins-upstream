@@ -1,44 +1,59 @@
-## Description: <br>
-A professional product image generation skill for Amazon product detail pages, covering main images, secondary images, and A+ modules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in planning and generating Amazon product listing images and A+ content with the dLazy image-generation CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External sellers, marketplace operators, and ecommerce designers use this skill to plan and generate Amazon product image suites. It guides the agent through main-image baselining, secondary image selection, A+ module planning, and one-at-a-time image generation via the dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Use of the third-party dLazy CLI may send prompts and supplied local media to dLazy services. <br>
-Mitigation: Install only if the user accepts dLazy hosted processing, and avoid sending sensitive product data or media unless approved for that service. <br>
-Risk: The CLI may store or use a dLazy API key on the local system. <br>
-Mitigation: Prefer npx or the DLAZY_API_KEY environment variable for temporary use, and rotate or revoke keys from the dLazy dashboard when no longer needed. <br>
-Risk: Some runtime instructions and disclosures are Chinese-only metadata. <br>
-Mitigation: Review the Chinese instructions before use, especially command execution and API-key handling guidance. <br>
+## Use Case:
 
+E-commerce sellers and designers use this skill to plan and generate main images, secondary images, and A+ content for Amazon product pages.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-amazon-product-image-suite) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy CLI authentication and user confirmation before each generation command.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Prompts and selected product media are sent to dLazy's cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and media for sensitive content before using the CLI.
+
+Risk: The CLI can store the API key in local configuration.
+
+Mitigation: Protect the local configuration or use the DLAZY_API_KEY environment-variable option.
+
+Risk: The artifact frontmatter version differs from the ClawHub release version.
+
+Mitigation: Ask the publisher to reconcile the version metadata before relying on the artifact version.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-image-amazon-product-image-suite)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Image URLs]
+
+**Output Format:** [Markdown with image links and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stepwise main, secondary, and A+ image planning and delivery.]
+
+## Skill Version(s):
+
+1.3.24 (source: ClawHub release evidence; artifact frontmatter lists 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

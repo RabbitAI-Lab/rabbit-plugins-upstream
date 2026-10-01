@@ -1,40 +1,57 @@
-## Description: <br>
-Use when someone wants one short video clip from text or images: B-roll, start/end frame animation, or a quick motion shot. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in creating one short video clip from text, images, or frame anchors with Pruna's p-video model.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External developers and creators use this skill to have an agent prepare and submit one short Pruna p-video generation request from text, image anchors, and optional audio. It is intended for single-clip B-roll, image-to-video, frame-pair animation, or a quick motion shot, not multi-scene films or lip-synced avatars. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated-video requests can send user prompts, images, and audio to Pruna's external API using PRUNA_API_KEY. <br>
-Mitigation: Avoid submitting sensitive media or private text unless the user intends to send it to Pruna, and confirm the API key is available only for the authorized account. <br>
+## Use Case:
 
+Creators and developers use this skill to draft a single short B-roll clip or animate an image or start/end frame pair through Pruna. It is not intended for multi-scene assembly or tightly lip-synced hosts.
 
-## Reference(s): <br>
-- [ClawHub p-video skill page](https://clawhub.ai/pruna-ai/skills/p-video) <br>
-- [Pruna file upload API endpoint](https://api.pruna.ai/v1/files) <br>
-- [Pruna predictions API endpoint](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request bodies and curl command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces one p-video prediction workflow per invocation; image, last-frame image, audio, duration, resolution, fps, aspect ratio, draft, and save-audio settings may shape the request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill metadata) <br>
+Risk: Prompts, images, or audio may be sent to Pruna.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are willing to share with Pruna; obtain approval before using sensitive or regulated content.
+
+Risk: Unpinned network installation commands may run unverified tooling.
+
+Mitigation: Pin or otherwise verify the install tooling before running the documented npx commands.
+
+Risk: The optional safety-filter bypass can disable content safeguards.
+
+Mitigation: Do not enable disable_safety_filter without an explicit, governed reason.
+
+## Reference(s):
+
+- [p-video on ClawHub](https://clawhub.ai/pruna-ai/skills/p-video)
+
+## Skill Output:
+
+**Output Type(s):** [Text guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides one video-generation request; the generated clip is returned by Pruna's service.]
+
+## Skill Version(s):
+
+1.0.14 (source: skill frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

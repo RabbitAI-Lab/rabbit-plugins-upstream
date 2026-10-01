@@ -1,42 +1,57 @@
-## Description: <br>
-AI-powered customer service guidance for banking and securities workflows, including FAQ answering, account inquiry, transaction guidance, complaint handling, and 24/7 support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides banking and securities customer-service teams in China with FAQ templates, complaint-handling scripts, intent-routing guidance, and compliance checks.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, customer service teams, and financial institution support operators use this skill to draft banking and securities customer-service responses, classify intents, and follow complaint-handling workflows. It is aimed at China financial institution call centers and digital customer-service teams. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger terms may cause the skill to activate for banking-adjacent requests that are not explicit customer-support workflows. <br>
-Mitigation: Invoke the skill only for explicit banking or securities customer-support questions. <br>
-Risk: Banking support workflows can involve account numbers, credentials, or sensitive personal information. <br>
-Mitigation: Avoid sharing sensitive personal or account information unless the workflow clearly explains why it is needed and how it is handled. <br>
-Risk: Customer-service guidance may be inaccurate or out of date for regulated financial services. <br>
-Mitigation: Review generated responses against applicable regulations, institutional policies, and current official guidance before use. <br>
+## Use Case:
 
+Banking and securities customer-service staff, supervisors, and configuration teams use this skill to draft FAQs and service scripts, route requests, and plan complaint escalation. It offers guidance and templates, not live account access or customer transactions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-intelligent-cs) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with embedded Python examples and structured response guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include customer-service scripts, FAQ responses, intent classifications, and compliance reminders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Example scripts or code may be mistaken for approved customer-service procedures or live account actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat examples as templates; obtain institutional legal, compliance, and technical review before configuring or running them in a customer-service system.
+
+Risk: Customer account or identity information could be disclosed through service conversations.
+
+Mitigation: Use approved identity checks and data-minimization procedures; never solicit passwords or verification codes, and mask account and identity numbers.
+
+Risk: Inaccurate financial guidance or delayed escalation could harm customers.
+
+Mitigation: Confirm institution-specific rules and current requirements, avoid investment or outcome guarantees, and route urgent account-security issues to official human support.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/security-intelligent-cs)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown prose, tables, example scripts, and Python reference code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Templates and examples require institutional review before use; no live account operations.]
+
+## Skill Version(s):
+
+3.0.4 (source: server-resolved release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

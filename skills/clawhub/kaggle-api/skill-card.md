@@ -1,48 +1,56 @@
-## Description: <br>
-Kaggle API integration with managed authentication for accessing datasets, models, competitions, and kernels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents access Kaggle datasets, models, competitions, and notebooks through Maton-managed authentication.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[maton](https://clawhub.ai/user/maton)
 
-## Use Case: <br>
-Developers and agents use this skill to search, download, and interact with Kaggle resources through Maton-managed authentication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on Maton brokering Kaggle requests and handling authentication. <br>
-Mitigation: Install only if you trust Maton for this workflow and connect only the Kaggle account intended for agent use. <br>
-Risk: MATON_API_KEY grants access to Maton-managed Kaggle operations. <br>
-Mitigation: Store MATON_API_KEY securely, avoid exposing it in prompts or logs, and rotate it if disclosure is suspected. <br>
-Risk: Deleting a connection can remove access needed by later Kaggle operations. <br>
-Mitigation: Verify the connection id before using delete examples or automating connection cleanup. <br>
+## Use Case:
 
+Developers and other Kaggle users can search and access datasets, models, competitions, and notebooks using their authorized Kaggle connection. The skill also describes optional, user-approved automations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/kaggle-api) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Maton](https://maton.ai) <br>
-- [Kaggle API documentation](https://www.kaggle.com/docs/api) <br>
-- [Kaggle datasets](https://www.kaggle.com/datasets) <br>
-- [Kaggle models](https://www.kaggle.com/models) <br>
-- [Kaggle competitions](https://www.kaggle.com/competitions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell, Python, JavaScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live Kaggle operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Broad account access or exposure of a long-lived API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth with only the required scopes; avoid raw MATON_API_KEY use unless necessary.
+
+Risk: Writes or persistent automation may modify data or forward events without ongoing review.
+
+Mitigation: Confirm the specific write, function, trigger, and destination with the user before enabling them; review any forwarding destination separately.
+
+## Reference(s):
+
+- [Kaggle API documentation](https://www.kaggle.com/docs/api)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton homepage](https://maton.ai)
+- [Kaggle skill release](https://clawhub.ai/maton/skills/kaggle-api)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with shell and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access and an authorized Maton account and Kaggle connection.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

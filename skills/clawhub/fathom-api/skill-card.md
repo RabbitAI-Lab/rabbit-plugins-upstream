@@ -1,44 +1,58 @@
-## Description: <br>
-Fathom API integration with managed OAuth for accessing meeting recordings, transcripts, summaries, action items, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Fathom through Maton to retrieve meeting recordings, transcripts, and summaries and manage approved automations.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agent users use this skill to retrieve and search Fathom meeting content, manage OAuth-backed Fathom connections, and create or delete webhook notifications for new meeting data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access Fathom meeting recordings, transcripts, summaries, action items, and related account data. <br>
-Mitigation: Install only for the intended Fathom account, keep MATON_API_KEY private, and confirm the active connection before retrieving meeting content. <br>
-Risk: Webhook and destination_url callbacks can send meeting content to external endpoints. <br>
-Mitigation: Before approving callbacks, verify the destination URL, endpoint ownership, fields to be sent, and how to delete the webhook later. <br>
-Risk: Create, update, and delete operations can change Fathom connections or webhooks. <br>
-Mitigation: Require explicit user approval for every write operation and confirm the target resource and intended effect. <br>
+## Use Case:
 
+People and teams using Fathom can ask an agent to find meeting content and retrieve summaries or transcripts. With their approval, they can also configure webhooks or scheduled workflows through Maton.
 
-## Reference(s): <br>
-- [Fathom API Documentation](https://developers.fathom.ai) <br>
-- [Fathom LLM Reference](https://developers.fathom.ai/llms.txt) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown with endpoint descriptions, JSON examples, and Python or shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY for live API requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Meeting transcripts and summaries can disclose sensitive conversations to unintended recipients.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit retrieved content to what the task needs and confirm the exact destination and data shared before forwarding it.
+
+Risk: Webhooks, callbacks, functions, and triggers can continue forwarding meeting data after setup.
+
+Mitigation: Obtain explicit approval for the destination, payload, scope, and ongoing delivery; disable unused automations.
+
+## Reference(s):
+
+- [ClawHub Fathom skill](https://clawhub.ai/byungkyu/skills/fathom-api)
+- [Maton](https://maton.ai)
+- [Fathom API documentation](https://developers.fathom.ai)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Scheduled trigger reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with commands, code examples, and meeting-data summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs may contain sensitive meeting information; automations require user approval.]
+
+## Skill Version(s):
+
+1.2.7 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,57 @@
-## Description: <br>
-Searches Westin hotels under Marriott, returns current prices and booking links, and helps retrieve hotel details and package offers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Westin hotels under Marriott and returns live prices, booking links, hotel details, and package offers.
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and travel-planning agents use this skill to search Westin hotel availability, compare prices and locations, inspect hotel details, and find package offers before following external booking links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hotel search terms, dates, and keywords are sent to the publisher cloud proxy and downstream travel APIs. <br>
-Mitigation: Avoid entering sensitive personal details in search keywords and review the disclosed data flow before deployment. <br>
-Risk: The artifact uses a configurable proxy endpoint and a hardcoded fallback token. <br>
-Mitigation: Use a trusted PROXY_URL and PROXY_TOKEN from the environment, and prefer a version that validates the proxy endpoint and removes the fallback token. <br>
+## Use Case:
 
+External users and travel-booking assistants use this skill to search Westin hotels by destination, compare current prices, retrieve property details, and surface booking or package links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/westin-hotel-booking) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API Calls, guidance] <br>
-**Output Format:** [Markdown text with hotel results, prices, details, package summaries, and booking links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns search results and guidance only; it does not complete bookings directly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence) <br>
+Risk: Hotel search terms, travel dates, destinations, and any configured PROXY_TOKEN may be sent to a hardcoded external proxy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and use this skill only when the operator accepts that disclosure path, and configure PROXY_TOKEN only in environments approved for Westin hotel search.
+
+Risk: Broad trigger wording may invoke the skill for general Westin mentions when the user did not intend a booking search.
+
+Mitigation: Confirm the user wants Westin hotel search, pricing, details, or package links before running network-backed queries.
+
+Risk: Generated answers could misstate live hotel data if they supplement or alter script results.
+
+Mitigation: Present only values returned by the script and avoid adding unsourced prices, ratings, amenities, or booking options.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/westin-hotel-booking)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, API Calls]
+
+**Output Format:** [Markdown-formatted hotel search, detail, or package results with booking links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results should preserve script-returned hotel data without adding unsupported prices, ratings, facilities, or properties.]
+
+## Skill Version(s):
+
+1.1.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

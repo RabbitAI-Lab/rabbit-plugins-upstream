@@ -5,7 +5,6 @@
 
 ---
 
-
 ## Contents
 
 - 文件命名规则
@@ -140,11 +139,15 @@ const snap = './snap-p3';
 const d = require(path.join(snap, 'accounts-digest-google.json'));
 const rows = d.data?.items || [];
 const meta = d.meta || {};
-console.log('区间:', meta.window?.startDate, '~', meta.window?.endDate);
-console.log('返回', rows.length, '户，扫描', meta.scanned);
-rows.slice(0, 10).forEach((r) =>
-  console.log(' ', r.mediaCustomerId, r.spend, r.currencyCode, 'CTR%', r.ctr),
-);
+if (d.agentBrief?.userDelivery) {
+  console.log(d.agentBrief.userDelivery);
+} else {
+  console.log('区间:', meta.window?.startDate, '~', meta.window?.endDate);
+  console.log('返回', rows.length, '户，扫描', meta.scanned, 'totalsScope', meta.totalsScope);
+  rows.slice(0, 10).forEach((r) =>
+    console.log(' ', r.mediaCustomerId, r.spend, r.currencyCode, 'CTR%', r.ctr),
+  );
+}
 "
 ```
 
@@ -312,3 +315,12 @@ console.log('可用字段：', first && Object.keys(first));
 - **用 `process.stdout.write` 而不是 `console.log` 提取单个值**：前者不带换行符，方便直接赋给 shell 变量。
 - **节点代码复杂时拆分写法**：不要写超过 10 行的 `node -e` 单行，改用 `node -e "$(cat <<'EOF'\n...\nEOF\n)"` 或多行 `.mjs` 脚本文件。
 - 同一运行目录、同一"查询 id"的多次拉数会合并到 `cli-manifest-<id>.json` 的 `artifacts[]`；不同账户/实体写入各自的 manifest，互不覆盖。
+- **投影 Markdown 表**：公司名等字段可能含 `|`，必须消毒后再拼 `| col |`。JSON 原值保持不动。
+
+```javascript
+const mdCell = (v) => String(v ?? "-").replace(/\r\n|\r|\n/g, " ").replace(/\|/g, "｜");
+const line = (cells) => `| ${cells.map(mdCell).join(" | ")} |`;
+console.log(line(["账户ID", "公司", "余额"]));
+console.log(line(["---", "---", "---"]));
+for (const x of items) console.log(line([x.mediaCustomerId, x.advertiserName, x.balance]));
+```

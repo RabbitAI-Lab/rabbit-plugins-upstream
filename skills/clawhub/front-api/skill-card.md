@@ -1,48 +1,62 @@
-## Description: <br>
-Front API integration with managed OAuth for managing conversations, messages, contacts, tags, inboxes, teammates, and teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Front conversations, messages, contacts, tags, inboxes, teammates, and teams through a connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees and developers use this skill to let an agent inspect and manage Front workspace data through Maton-managed OAuth, including customer conversations, messages, contacts, tags, inboxes, teammates, and teams. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires MATON_API_KEY and uses OAuth-backed Front access through Maton. <br>
-Mitigation: Keep MATON_API_KEY secret, store it in an environment or secrets manager, and install only if you trust Maton to proxy Front requests. <br>
-Risk: Requests can target the wrong Front workspace when multiple Front connections are active. <br>
-Mitigation: Use the Maton-Connection header to select the intended Front connection before making API calls. <br>
-Risk: Send, create, update, and delete operations can alter shared customer communications and workspace resources. <br>
-Mitigation: Review and confirm the target resource and intended effect before every write operation. <br>
-Risk: Front workspace data may include sensitive customer, teammate, or account information. <br>
-Mitigation: Limit use to authorized workspaces and handle retrieved data according to the organization's customer data policies. <br>
+## Use Case:
 
+Teams and developers use this skill to retrieve and manage customer communications and workspace records in Front. It also documents user-approved automations using connected accounts.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/front-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Front API Reference](https://dev.frontapp.com/reference/introduction) <br>
-- [Front API Authentication](https://dev.frontapp.com/docs/authentication) <br>
-- [Front API Rate Limits](https://dev.frontapp.com/docs/rate-limiting) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP endpoint examples, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; may perform OAuth-backed Front API calls when authorized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter metadata.version is 1.0) <br>
+Risk: Connecting a Front workspace grants Maton access to authorized customer communications and records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Approve new connections explicitly, review requested OAuth scopes, and prefer the OAuth CLI flow.
+
+Risk: Writes or outgoing messages can change shared records or contact external recipients.
+
+Mitigation: Default to read-only calls and confirm the target, content, and effect before each write or send.
+
+Risk: Hosted functions, triggers, and destinations can run repeatedly or forward event data until removed.
+
+Mitigation: Review automation scope and destination with the user before approval, and remove automations when no longer needed.
+
+## Reference(s):
+
+- [Front skill on ClawHub](https://clawhub.ai/byungkyu/skills/front-api)
+- [Maton homepage](https://maton.ai)
+- [Front API reference](https://dev.frontapp.com/reference/introduction)
+- [Front API authentication](https://dev.frontapp.com/docs/authentication)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Time trigger reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Front API responses may contain customer data; review actions before execution.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

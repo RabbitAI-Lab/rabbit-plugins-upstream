@@ -1,41 +1,51 @@
-## Description: <br>
-Simplifies, polishes, and declutters code without changing behavior for requests to clean up, refactor, remove dead code or AI slop, or improve readability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to simplify and declutter requested code while preserving behavior and interfaces.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to make scoped, behavior-preserving simplification changes to authorized codebases. It is intended for cleanup and refactoring work where readability and maintainability improve without changing public APIs, side effects, or error behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Behavior-preserving cleanup can still change runtime behavior if edge cases, public APIs, side effects, or error paths are misunderstood. <br>
-Mitigation: Review diffs, preserve documented invariants, and run tests or type checks covering touched files and importers before accepting changes. <br>
-Risk: The skill may remove dead-looking code or simplify defensive checks that encode domain constraints. <br>
-Mitigation: Require evidence before removals, ask when intent is unclear, and keep domain-specific complexity or API changes out of scope unless explicitly authorized. <br>
+## Use Case:
 
+Developers use this skill to make focused code simplifications, remove unnecessary clutter, and verify that behavior remains unchanged.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-simplifying-code) <br>
-- [SPEC.md](artifact/SPEC.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [code, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown status reports with code edits and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports scope touched, key simplifications, verification performed, and residual risks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release evidence) <br>
+Risk: Code simplification could inadvertently change behavior, particularly when removing guards or renaming internal identifiers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the diff and test results; retain guards without evidence that their triggering condition is handled, and check affected callers after renames.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-simplifying-code)
+- [Simplification patterns](references/simplification-patterns.md)
+- [Orchestrated simplification](references/orchestrated-simplification.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown]
+
+**Output Format:** [Scoped code edits and a concise written summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports changed scope, simplifications, verification, and residual risks.]
+
+## Skill Version(s):
+
+5.0.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-Plan capacity handling for a task. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Set service-class guidance for a task.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and evaluators use this skill to classify a synthetic operations scheduling note into a concise queue-priority mode during controlled validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the skill as a full scheduling assistant even though evidence describes it as a narrow synthetic validation helper. <br>
-Mitigation: Use it only for controlled validation or simple queue-priority labeling, and review the returned priority mode before applying it to real operations work. <br>
-Risk: The validation prompt may produce a fixed manual-review queue label rather than context-sensitive capacity planning. <br>
-Mitigation: Confirm that the fixed label is appropriate for the current evaluation before using it as guidance. <br>
+## Use Case:
 
+Operations planners and task coordinators use a supplied task profile to determine a service class and earliest-start guidance.
 
-## Reference(s): <br>
-- [Capacity Queue Planner on ClawHub](https://clawhub.ai/wxt-ai/skills/task-priority-guidance-identifier) <br>
-- [wxt-ai publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Plain text priority-mode label] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise priority mode; the frozen validation prompt expects "defer manual-review queue".] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Service-class guidance may not reflect all due-date or staffing constraints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the proposed class and start time against the full task profile before scheduling.
+
+Risk: Generic documentation refers to output directories and effect receipts that this operation does not use.
+
+Mitigation: Use the default local invocation and its returned guidance; review changes before enabling downstream behavior.
+
+## Reference(s):
+
+- [Service Class Planner on ClawHub](https://clawhub.ai/wxt-ai/skills/task-priority-guidance-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [JSON object containing a scheduling_guidance string]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Computed locally without persisting a business artifact.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

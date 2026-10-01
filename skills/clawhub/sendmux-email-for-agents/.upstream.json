@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/sendmux-email-for-agents",
   "slug": "sendmux-email-for-agents",
   "ownerHandle": null,
-  "version": "1.0.4",
-  "updatedAt": 1783569498844,
-  "contentHash": "69a8191d6e2cbc85d302d7b83f41a8e7a329bd3453ef3dfd398a66761f6338b3",
-  "fetchedAt": "2026-07-26T18:17:41.973Z"
+  "version": "1.0.10",
+  "updatedAt": 1790769897725,
+  "contentHash": "eb454d8fc2eb7eb7f0c26d85ce6525b53d44223816372bb417a0e677a58d22de",
+  "fetchedAt": "2026-10-01T14:40:34.603Z"
 }

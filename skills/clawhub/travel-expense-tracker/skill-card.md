@@ -1,41 +1,58 @@
-## Description: <br>
-多币种记录旅行消费、汇率自动换算、分类统计与预算管理，帮助旅行者跟踪支出并进行AA分摊。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+多币种记录旅行消费、汇率自动换算、分类统计与预算管理，旅行花钱心里有数。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-Travelers and trip planners use this skill to record expenses across currencies, review category/date/currency summaries, and check total or daily budgets during travel. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel expense details are stored in local JSON files inside the skill directory. <br>
-Mitigation: Install only if local storage is acceptable, avoid entering unnecessary sensitive payment details, and manage or delete local expense files according to privacy needs. <br>
-Risk: Currency conversion uses built-in reference exchange rates rather than live market rates. <br>
-Mitigation: Treat converted totals as estimates and verify current exchange rates before making financial decisions. <br>
+## Use Case:
 
+Travelers and agents use this skill to record trip expenses in multiple currencies, summarize spending by category, date, or currency, and check spending against trip budgets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-expense-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/travel-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Natural-language responses grounded in JSON outputs from the expense tracker script.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local JSON expense files and built-in reference exchange rates; no external API key is required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The skill stores trip expense data in local JSON files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only where local-file storage is acceptable and avoid entering sensitive financial details beyond what is needed for trip tracking.
+
+Risk: Exchange rates are fixed reference values, not live market rates.
+
+Mitigation: Treat converted totals as planning estimates and verify exchange rates before making financial decisions.
+
+Risk: The short description mentions AA splitting, but the security guidance says shared splitting should not be expected.
+
+Mitigation: Use the skill for single-trip expense tracking and budget checks, not as a shared settlement system.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-expense-tracker)
+- [ClawHub publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Natural-language responses based on JSON command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local JSON files for expense data and fixed reference exchange rates.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

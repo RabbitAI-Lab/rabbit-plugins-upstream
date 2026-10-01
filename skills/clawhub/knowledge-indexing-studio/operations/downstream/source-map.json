@@ -1,0 +1,173 @@
+{
+  "module": "business_logic_capability",
+  "source_sha256": "7a3d05d9a1616541ae6ca8120b9fbb1e7818b57499f5da1a5a662c78f1188e84",
+  "operation_symbols": {
+    "Any": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 21,
+      "end_line": 21
+    },
+    "CONTRACTS": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 688,
+      "end_line": 900
+    },
+    "Callable": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 21,
+      "end_line": 21
+    },
+    "Dict": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 21,
+      "end_line": 21
+    },
+    "Iterable": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 21,
+      "end_line": 21
+    },
+    "List": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 21,
+      "end_line": 21
+    },
+    "Mapping": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 21,
+      "end_line": 21
+    },
+    "Path": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 20,
+      "end_line": 20
+    },
+    "REVISIONS": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 24,
+      "end_line": 460
+    },
+    "_DOWNSTREAM_EXECUTORS": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 2101,
+      "end_line": 2117
+    },
+    "_as_mapping": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 923,
+      "end_line": 933
+    },
+    "_canonical_json": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 903,
+      "end_line": 904
+    },
+    "_digest": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 907,
+      "end_line": 908
+    },
+    "_down_cap02": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 1101,
+      "end_line": 1161
+    },
+    "_effect_target": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 2137,
+      "end_line": 2160
+    },
+    "_require_reference": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 944,
+      "end_line": 948
+    },
+    "_require_text": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 911,
+      "end_line": 920
+    },
+    "_unique_text": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 979,
+      "end_line": 989
+    },
+    "_write_knowledge_index": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 2302,
+      "end_line": 2417
+    },
+    "execute": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 2120,
+      "end_line": 2134
+    },
+    "hashlib": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 12,
+      "end_line": 12
+    },
+    "json": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 15,
+      "end_line": 15
+    },
+    "materialize_effect": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 2420,
+      "end_line": 2487
+    },
+    "re": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 17,
+      "end_line": 17
+    },
+    "sqlite3": {
+      "source": "experiments/business_logic_capability.py",
+      "line": 18,
+      "end_line": 18
+    }
+  },
+  "validation_symbols": {
+    "Any": {
+      "source": "experiments/business_logic.py",
+      "line": 11,
+      "end_line": 11
+    },
+    "Dict": {
+      "source": "experiments/business_logic.py",
+      "line": 11,
+      "end_line": 11
+    },
+    "_type_ok": {
+      "source": "experiments/business_logic.py",
+      "line": 95,
+      "end_line": 112
+    },
+    "date": {
+      "source": "experiments/business_logic.py",
+      "line": 9,
+      "end_line": 9
+    },
+    "math": {
+      "source": "experiments/business_logic.py",
+      "line": 7,
+      "end_line": 7
+    },
+    "re": {
+      "source": "experiments/business_logic.py",
+      "line": 8,
+      "end_line": 8
+    },
+    "urlparse": {
+      "source": "experiments/business_logic.py",
+      "line": 12,
+      "end_line": 12
+    },
+    "validate_schema": {
+      "source": "experiments/business_logic.py",
+      "line": 115,
+      "end_line": 196
+    }
+  }
+}

@@ -1,41 +1,46 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · 跨产物一致性校验（交付前质量门 · 控制级）
---------------------------------------------------------------
-读取 project.yaml（单一事实源），执行两层校验：
+PM Master · Cross-artifact consistency check (pre-delivery quality gate · control grade)
+---------------------------------------------------------------------------------------
+Read project.yaml (single source of truth) and run a two-layer validation:
 
-  [致命问题 problems]  ->  存在则 exit 1，阻断交付
-    1. 风险登记：每条风险须有 owner 与 mitigation/response
-    2. 问题日志：每条 issue 须有 owner 与 due
-    3. 依赖：每条依赖须有 from 与 to
-    4. 治理：项目须指定 pm 与 sponsor
-    5. 产物索引：artifacts 中引用的文件须真实存在
-    6. 估算强制（控制级）：WBS / backlog / iteration 的每行须有数值化估算(>0)，
-       不可用 "—" / 空 / 非数字（P0）
-    7. 排期网络（控制级）：waterfall / hybrid 的 WBS 多行时必须形成依赖网络，
-       不允许所有行都无依赖（P0）
-    8. EVM 基线（控制级）：waterfall / hybrid 进入 执行/监控/收尾 阶段时，
-       metrics.evm 必须含 pv / ev / ac（P0）
-    9. 混合微计划（控制级）：methodology=hybrid 时须至少存在一个微层计划
-       （sprint / backlog / iteration）（P0）
-   10. 风险 5×5 校准（控制级）：每条风险 likelihood/impact 须为 1-5 数值，
-       score == likelihood×impact，且 severity 与 score 所处色带一致（P0）
-   11. 收益责任人（P1）：项目群的每条收益须有 owner
-   12. 基线化纪律（控制级）：waterfall / hybrid 处于 执行/监控/收尾 阶段但缺 baseline 指针，
-       必须先 规划→评审→baseline.py --freeze 再经控制门进入执行（references/lifecycle.md §5）
+  [Fatal problems]  -> present -> exit 1, blocks delivery
+    1. Risk register: every risk must have an owner and mitigation/response
+    2. Issue log: every issue must have an owner and due
+    3. Dependencies: every dependency must have from and to
+    4. Governance: the project must specify a pm and a sponsor
+    5. Artifact index: files referenced in artifacts must actually exist
+    6. Mandatory estimates (control grade): every WBS / backlog / iteration row must have a
+       numeric estimate (>0); "-" / blank / non-numeric are not allowed (P0)
+    7. Schedule network (control grade): a multi-row waterfall / hybrid WBS must form a
+       dependency network; not all rows may be dependency-free (P0)
+    8. EVM baseline (control grade): when a waterfall / hybrid project enters the
+       execution/monitoring/closeout phase, metrics.evm must contain pv / ev / ac (P0)
+    9. Hybrid micro-plan (control grade): when methodology=hybrid, at least one micro-level
+       plan (sprint / backlog / iteration) must exist (P0)
+   10. Risk 5x5 calibration (control grade): every risk likelihood/impact must be a 1-5
+       number, score == likelihood x impact, and severity must match the score's band (P0)
+   11. Benefit owners (P1): every program benefit must have an owner
+   12. Baselining discipline (control grade): a waterfall / hybrid project in the
+       execution/monitoring/closeout phase but missing a baseline pointer must first go
+       planning -> review -> baseline.py --freeze (freeze plan as baseline) -> control gate
+       -> execution (references/lifecycle.md section 5)
 
-  [告警 warnings]  ->  仅提示，不阻断（exit 仍可为 0）；`--strict` 下升级为致命
-    - 项目群 / hybrid 建议具备 change_log（变更控制）
-    - 执行/监控阶段建议具备 status_report
-    - 执行/监控阶段建议配置 control 块 + control_register（运营控制引擎）
-    - 建议具备 communication_plan
-    - 非领域活动的 WBS 估算超过叶子包颗粒度阈值（通用颗粒度提示，建议拆解）
-    - 领域活动 WBS 缺 role 标签 / 超阈值：**默认致命**（见下方 7b，强制走专家拆解，不可由主控自拆绕过）
+  [Warnings]  -> advisory only, do not block (exit may still be 0); `--strict` upgrades them
+    - Program / hybrid should have a change_log (change control)
+    - execution/monitoring phase should have a status_report
+    - execution/monitoring phase should configure a control block + control_register
+      (operational control engine)
+    - should have a communication_plan
+    - Non-domain WBS estimate exceeds the leaf-package granularity threshold (generic
+      granularity hint, suggest decomposing)
+    - Domain-activity WBS missing a role tag / over threshold: **fatal by default** (see 7b
+      below; forces expert decomposition, cannot be bypassed by the main controller)
 
-用法：
+Usage:
   python3 consistency_check.py --project /workspace/<slug>/project.yaml
-  python3 consistency_check.py --project ... --strict  # 把告警也升级为致命
+  python3 consistency_check.py --project ... --strict  # also upgrade warnings to fatal
 """
 import os
 import re
@@ -52,13 +57,13 @@ except ImportError:
 
 if SCRIPT_DIR not in sys.path:
     sys.path.insert(0, SCRIPT_DIR)
-import role_catalog as rc  # 单一事实源：领域 + 专家角色目录（域无关）
+import role_catalog as rc  # Single source of truth: domain + expert role catalog (domain-agnostic)
 
 PM_GENERALIST = rc.PM_GENERALIST
 
 
 def load_config():
-    """读取安装期 config.yaml；不存在时返回空 dict（惰性，避免循环依赖）。"""
+    """Read the install-time config.yaml; return an empty dict if absent (lazy, avoids circular import)."""
     for cand in (os.path.join(SCRIPT_DIR, '..', 'config.yaml'),
                  os.path.join(SCRIPT_DIR, 'config.yaml')):
         if os.path.exists(cand):
@@ -70,10 +75,10 @@ def load_config():
     return {}
 
 
-# ---------- 风险 5×5 色带 ----------
+# ---------- Risk 5x5 bands ----------
 def risk_band(score):
-    """score = likelihood(1-5) × impact(1-5) ∈ [1,25]。色带：
-    1-4 低(绿) | 5-9 中(黄) | 10-15 高(橙) | 16-25 严重(红)"""
+    """score = likelihood(1-5) x impact(1-5) in [1,25]. Bands:
+    1-4 low(green) | 5-9 medium(yellow) | 10-15 high(orange) | 16-25 critical(red)"""
     if score <= 4:
         return 'low'
     if score <= 9:
@@ -84,10 +89,10 @@ def risk_band(score):
 
 
 SEV_MAP = {
-    '绿': 'low', 'green': 'low', 'low': 'low', 'l': 'low',
-    '黄': 'medium', 'yellow': 'medium', 'medium': 'medium', 'm': 'medium',
-    '橙': 'high', 'orange': 'high', 'high': 'high', 'h': 'high',
-    '红': 'critical', 'red': 'critical', 'critical': 'critical', 'c': 'critical',
+    'green': 'low', 'low': 'low', 'l': 'low',
+    'yellow': 'medium', 'medium': 'medium', 'm': 'medium',
+    'orange': 'high', 'high': 'high', 'h': 'high',
+    'red': 'critical', 'critical': 'critical', 'c': 'critical',
 }
 
 
@@ -99,19 +104,19 @@ def norm_sev(s):
 
 def load(path):
     if yaml is None:
-        raise RuntimeError("需要 PyYAML，请先 pip install pyyaml")
+        raise RuntimeError("PyYAML required; run: pip install pyyaml")
     with open(path, 'r', encoding='utf-8') as f:
         return yaml.safe_load(f)
 
 
 def has_estimate(est):
-    """估算必须能解析出 >0 的数值；'—' / 空 / 非数字 / 0 均视为缺失。"""
+    """An estimate must parse to a number > 0; '-' / blank / non-numeric / 0 count as missing."""
     if est is None:
         return False
     if isinstance(est, (int, float)):
         return est > 0
     s = str(est).strip()
-    if s in ('', '—', '-', 'TBD', '待定', 'N/A', 'NA', 'none', 'null'):
+    if s in ('', '—', '-', 'TBD', 'N/A', 'NA', 'none', 'null'):
         return False
     m = re.search(r'\d+(\.\d+)?', s)
     if not m:
@@ -120,7 +125,7 @@ def has_estimate(est):
 
 
 def parse_deps(dep):
-    """dependsOn 兼容 列表 与 逗号分隔字符串 两种写法。"""
+    """dependsOn accepts both list and comma-separated string forms."""
     if dep is None:
         return []
     if isinstance(dep, list):
@@ -133,11 +138,11 @@ def parse_deps(dep):
     s = str(dep)
     if s.strip() in ('', '—', '-'):
         return []
-    return [p.strip() for p in re.split(r'[,;，；]', s) if p.strip()]
+    return [p.strip() for p in re.split(r'[,;]', s) if p.strip()]
 
 
 def collect_risks(data):
-    """合并顶层 risks 与 raid.risks（按 id 去重，优先顶层）。"""
+    """Merge top-level risks and raid.risks (de-dupe by id, top-level wins)."""
     seen = {}
     for r in (data.get('risks') or []):
         if r.get('id'):
@@ -148,7 +153,7 @@ def collect_risks(data):
     return list(seen.values())
 
 
-# ---------- 角色推断（单一事实源：role_catalog.py，域无关，支持 SOW 自动对齐） ----------
+# ---------- Role inference (single source of truth: role_catalog.py, domain-agnostic, supports SOW auto-align) ----------
 
 def infer_role(row, name):
     return rc.infer_role(name, row.get('domain'), explicit_role=row.get('role'))
@@ -159,13 +164,13 @@ def is_domain_activity(role, name, domain):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master 一致性校验（控制级）")
+    ap = argparse.ArgumentParser(description="PM Master Consistency Check (control grade)")
     ap.add_argument('--project', required=True)
     ap.add_argument('--strict', action='store_true',
-                    help="将告警(warnings)也升级为致命问题（覆盖 config 默认）")
+                    help="Upgrade warnings to fatal problems (overrides the config default)")
     a = ap.parse_args()
     data = load(a.project)
-    # 配置优先：config.quality_gate.consistency_check_strict，CLI --strict 可覆盖
+    # Config takes priority: config.quality_gate.consistency_check_strict; CLI --strict can override
     cfg = load_config()
     strict_cfg = bool((cfg.get('quality_gate') or {}).get('consistency_check_strict'))
     strict = a.strict or strict_cfg
@@ -176,70 +181,71 @@ def main():
     raid = data.get('raid', {}) or {}
     for r in raid.get('risks', []) or []:
         if not r.get('owner'):
-            problems.append(f"风险 {r.get('id','?')} 缺少责任人(owner)")
+            problems.append(f"Risk {r.get('id','?')} is missing an owner")
         if not (r.get('mitigation') or r.get('response')):
-            problems.append(f"风险 {r.get('id','?')} 缺少应对措施(mitigation/response)")
+            problems.append(f"Risk {r.get('id','?')} is missing a mitigation/response")
     for i in raid.get('issues', []) or []:
         if not i.get('owner'):
-            problems.append(f"问题 {i.get('id','?')} 缺少责任人(owner)")
+            problems.append(f"Issue {i.get('id','?')} is missing an owner")
         if not i.get('due'):
-            problems.append(f"问题 {i.get('id','?')} 缺少截止日期(due)")
+            problems.append(f"Issue {i.get('id','?')} is missing a due date")
     for dep in raid.get('dependencies', []) or []:
         if not (dep.get('from') and dep.get('to')):
-            problems.append(f"依赖 {dep.get('id','?')} 缺少 from/to")
+            problems.append(f"Dependency {dep.get('id','?')} is missing from/to")
 
     proj = data.get('project', {}) or {}
     if not proj.get('pm'):
-        problems.append("项目未指定项目经理(pm)")
+        problems.append("Project has no project manager (pm) specified")
     if not proj.get('sponsor'):
-        problems.append("项目未指定发起人(sponsor)")
+        problems.append("Project has no sponsor specified")
 
     artifacts = data.get('artifacts', {}) or {}
     for key, rel in artifacts.items():
         if not rel:
             continue
-        # 支持 list 型产物索引（如 sow_kickoffs 多文件）；逐条校验存在性
+        # Support list-type artifact indexes (e.g. sow_kickoffs multiple files); verify each
         rels = rel if isinstance(rel, list) else [rel]
         for r in rels:
             if not r:
                 continue
             full = r if os.path.isabs(r) else os.path.join(root, r)
             if not os.path.exists(full):
-                problems.append(f"产物索引 {key} 指向的文件不存在: {r}")
-    # 单一事实源防漂移：wbs 曾回写但尚未重渲染，提示重跑 build_wbs.py
+                problems.append(f"Artifact index {key} points to a non-existent file: {r}")
+    # Single source of truth drift guard: wbs was written back but not re-rendered; suggest re-running build_wbs.py
     if artifacts.get('wbs_dirty'):
         warnings.append(
-            "project.yaml.wbs 已更新但 wbs 文档(artifacts.wbs)未重渲染（wbs_dirty 标记）。"
-            "请重跑 `build_wbs.py` 保持文档与事实源一致。")
+            "project.yaml.wbs was updated but the wbs document (artifacts.wbs) was not re-rendered (wbs_dirty flag). "
+            "Re-run `build_wbs.py` to keep the document consistent with the source of truth.")
 
     methodology = (proj.get('methodology') or '').lower()
     ptype = (proj.get('type') or '').lower()
     phase = (proj.get('phase') or '')
 
-    # ---- 6. 估算强制 ----
+    # ---- 6. Mandatory estimates ----
     wbs = data.get('wbs') or []
     if wbs:
         missing = [w.get('id', '?') for w in wbs if not has_estimate(w.get('estimate'))]
         if missing:
             problems.append(
-                f"WBS 估算缺失（控制级）：以下工作包无数值化估算(>0)：{', '.join(missing)}"
-                f" —— 不允许 '—'/空/非数字")
+                f"WBS estimate missing (control grade): the following work packages have no numeric estimate (>0): "
+                f"{', '.join(missing)} -- '-'/blank/non-numeric are not allowed")
     if methodology == 'agile':
         for bk in (data.get('backlog') or []):
             if not has_estimate(bk.get('estimate')):
-                problems.append(f"Backlog {bk.get('id','?')} 缺少估算(estimate)")
+                problems.append(f"Backlog {bk.get('id','?')} is missing an estimate")
         for sp in (data.get('sprints') or data.get('sprint') or []):
             for t in (sp.get('tasks') or [] if isinstance(sp, dict) else []):
                 if not has_estimate(t.get('estimate')):
-                    problems.append(f"Sprint 任务 {t.get('id','?')} 缺少估算")
+                    problems.append(f"Sprint task {t.get('id','?')} is missing an estimate")
     if methodology == 'iteration':
         for bk in (data.get('backlog') or []):
             if not has_estimate(bk.get('estimate')):
-                problems.append(f"迭代 Backlog {bk.get('id','?')} 缺少估算")
+                problems.append(f"Iteration backlog {bk.get('id','?')} is missing an estimate")
 
-    # ---- 6b. 计费里程碑完整性（基础布局门禁） ----
-    # 固定费率 SOW（sow_map.fee_type=='fixed' 或子树含 billing.fee_type=='fixed' 且 fee>0）
-    # 必须存在 ≥1 个 milestone + billing.fee_type=='fixed' 的包，否则计划不可测、收入无法确认。
+    # ---- 6b. Billing-milestone completeness (basic-layout gate) ----
+    # Fixed-fee SOW (sow_map.fee_type=='fixed' or subtree with billing.fee_type=='fixed' and fee>0)
+    # must have >= 1 milestone + billing.fee_type=='fixed' package, otherwise the plan is
+    # unmeasurable and revenue cannot be recognized.
     def _num(x):
         if isinstance(x, (int, float)):
             return x
@@ -250,13 +256,14 @@ def main():
     sow_map = data.get('sow_map') or []
     fee_sows = set()
     for e in sow_map:
-        # 仅固定费率 SOW 强制计费里程碑；T&M（fee_type=='tm'，fee 为工时上限）不要求
+        # Only fixed-fee SOWs require a billing milestone; T&M (fee_type=='tm', fee is the
+        # labor cap) does not.
         if e.get('fee_type') == 'fixed':
             fee_sows.add(e.get('sow'))
     for w in wbs:
         b = w.get('billing') or {}
         if b.get('fee_type') == 'fixed' and _num(b.get('fee_inr') or b.get('fee')) > 0:
-            # 从包的 SOW 前缀推断归属
+            # Infer ownership from the package's SOW prefix
             wid = str(w.get('id', ''))
             m = re.match(r'^(SOW\d+)', wid)
             if m:
@@ -271,18 +278,19 @@ def main():
                 for w in wbs)
             if not has_billing_ms:
                 problems.append(
-                    f"基础布局缺陷（致命）：固定费率 SOW {sow} 子树缺少计费里程碑"
-                    f"（milestone + billing.fee_type=='fixed' 且 fee>0）。"
-                    f"解析 SOW 时必须把每个 'post sign-off/完工证书' 计费事件建模为里程碑包，"
-                    f"否则排期与收入确认不可测。参见 references/sow-parsing-playbook.md。")
+                    f"Basic-layout defect (fatal): fixed-fee SOW {sow} subtree is missing a billing milestone "
+                    f"(milestone + billing.fee_type=='fixed' and fee>0). "
+                    f"Every 'post sign-off/certificate of completion' billing event must be modeled as a "
+                    f"milestone package when parsing the SOW, otherwise scheduling and revenue recognition "
+                    f"are unmeasurable. See references/sow-parsing-playbook.md.")
 
-
-    # ---- 6c. 拆解纪律（Pillar 1 · 6 因素，仅规划期致命） ----
-    # 进入运营(执行/监控/收尾)后不再阻断（保护已冻结项目，如示例客户），
-    # 但规划/启动期须强制 6 因素拆解 + Critic 自审通过。
-    planning_now = phase in ('启动', '规划', '') or (proj.get('lifecycle_state') in (None, 'planning', 'review', 'baselined'))
+    # ---- 6c. Decomposition discipline (Pillar 1 · 6 factors, fatal only in planning) ----
+    # Once operational (execution/monitoring/closeout), stop blocking (protect frozen projects,
+    # e.g. the example client), but planning/initiation must enforce 6-factor decomposition +
+    # Critic self-review pass.
+    planning_now = phase in ('initiation', 'planning', '') or (proj.get('lifecycle_state') in (None, 'planning', 'review', 'baselined'))
     if planning_now:
-        # 6c-1 拆解 Critic 自审（scope/milestone/payment/assumptions/constraints/dependencies）
+        # 6c-1 decomposition Critic self-review (scope/milestone/payment/assumptions/constraints/dependencies)
         cc = os.path.join(SCRIPT_DIR, 'critic_review.py')
         if os.path.exists(cc) and wbs:
             try:
@@ -290,42 +298,45 @@ def main():
                 r = _sp.run([sys.executable, cc, '--project', a.project, '--strict'],
                             capture_output=True, text=True)
                 for line in (r.stdout or '').splitlines():
-                    if line.strip().startswith('✗') or '致命' in line:
+                    if line.strip().startswith('✗') or 'FATAL' in line:
                         pass
                 if r.returncode != 0:
-                    # 把 critic 的致命项逐条引入一致性门
+                    # Pull the Critic's fatal items into the consistency gate one by one
                     for line in (r.stdout or '').splitlines():
                         m = re.match(r'\s*-\s+\[(scope|milestone|payment|dependency)\]\s*(.*)', line)
                         if m:
-                            problems.append(f"拆解 Critic({m.group(1)}): {m.group(2)}")
+                            problems.append(f"Decomposition Critic({m.group(1)}): {m.group(2)}")
             except Exception:
                 pass
-        # 6c-2 decomposition.critic_passed 标志（专家回写后须置 true）
+        # 6c-2 decomposition.critic_passed flag (must be set true after the expert writes back)
         decomp = data.get('decomposition') or {}
         if wbs and not decomp.get('critic_passed'):
             problems.append(
-                "拆解 Critic 未确认（decomposition.critic_passed != true）："
-                "WBS 经专家拆解后须运行 critic_review.py 并置 critic_passed=true，否则视为未自审。")
-        # 6c-3 假设可量化边界（charter 估算基准的一部分）
+                "Decomposition Critic not confirmed (decomposition.critic_passed != true): "
+                "after the WBS is decomposed by experts, critic_review.py must be run and "
+                "critic_passed set to true, otherwise it is considered not self-reviewed.")
+        # 6c-3 assumptions must have a quantifiable bound (part of the charter estimate baseline)
         for ar in (raid.get('assumptions') or []):
             txt = ar.get('text') if isinstance(ar, dict) else str(ar)
-            if not re.search(r'(≤|>=|<=|不大于|不超过|至少|最多|上限|封顶)\s*\d', str(txt or '')) and \
-               not re.search(r'\d+\s*(个|张|表|人天|人月|周|天|%|倍)', str(txt or '')):
+            if not re.search(r'(≤|>=|<=|no more than|not exceeding|at least|at most|cap|capped)\s*\d', str(txt or '')) and \
+               not re.search(r'\d+\s*(units?|tables?|source tables?|person-days?|person-months?|weeks?|days?|percent|%|times?)', str(txt or '')):
                 problems.append(
-                    f"假设缺少可量化边界：『{(str(txt)[:50])}』——须改为 '≤N 源表/M 核心表' 等，否则 CCB 变更触发不可执行。")
+                    f"Assumption lacks a quantifiable bound: '{(str(txt)[:50])}' -- change it to e.g. "
+                    f"'<=N source tables / M core tables', otherwise CCB change triggers are not executable.")
 
-    # ---- 6d. 排期联动（Pillar 2 + 4 · 仅规划期致命） ----
+    # ---- 6d. Schedule linkage (Pillar 2 + 4 · fatal only in planning) ----
     if planning_now:
-        # 6d-1 milestone 归属：每叶子须归属某里程碑（Critic 已覆盖，这里补「里程碑非空覆盖」）
+        # 6d-1 milestone attribution: every leaf must belong to a milestone
+        # (Critic already covers this; here we add "milestone non-empty coverage")
         ms_ids = {w.get('id') for w in wbs if w.get('milestone')}
         uncovered = [w.get('id') for w in wbs
                      if not (w.get('summary') or w.get('milestone') or w.get('tier') == 'program')
                      and not w.get('milestone_ref') and not any(d in ms_ids for d in parse_deps(w.get('dependsOn')))]
         if uncovered:
             problems.append(
-                f"里程碑覆盖缺口（Pillar 2）：{len(uncovered)} 个叶子未归属任何里程碑"
-                f"（{', '.join(uncovered[:6])}…），须置 milestone_ref 或让依赖末端落在里程碑。")
-        # 6d-2 支付↔里程碑顺序：固定费率支付行须有对应计费里程碑
+                f"Milestone coverage gap (Pillar 2): {len(uncovered)} leaves are not attributed to any milestone "
+                f"({', '.join(uncovered[:6])}...), set milestone_ref or let the dependency endpoint land on a milestone.")
+        # 6d-2 payment<->milestone ordering: every fixed-fee payment line needs a matching billing milestone
         pay_lines = []
         for s in ((data.get('program') or {}).get('sows') or []) + (data.get('sow_map') or []):
             fee = s.get('fee')
@@ -345,9 +356,10 @@ def main():
                          for w in wbs)
             if not has_pm:
                 problems.append(
-                    f"支付↔里程碑缺失（Pillar 4）：固定费率 SOW {sow} 有支付行但 WBS 无对应计费里程碑"
-                    f"（须把 'post sign-off' 事件建模为 milestone + billing.fee_type=fixed）。")
-        # 6d-3 支付顺序单调：同一 SOW 的计费里程碑按排期日须单调（付款节奏有序）
+                    f"Payment<->milestone missing (Pillar 4): fixed-fee SOW {sow} has a payment line but the WBS "
+                    f"has no matching billing milestone (model the 'post sign-off' event as milestone + "
+                    f"billing.fee_type=fixed).")
+        # 6d-3 payment ordering monotonic: billing milestones of the same SOW must be monotonic by schedule date
         for sow in set(pay_lines):
             prefix = sow + '.'
             dates = []
@@ -365,10 +377,10 @@ def main():
                 mono = all(dates[i] <= dates[i+1] for i in range(len(dates)-1))
                 if not mono:
                     problems.append(
-                        f"支付顺序非单调（Pillar 4）：SOW {sow} 计费里程碑排期日不升序，"
-                        f"付款节奏与交付节奏不一致，须修正依赖/顺序。")
+                        f"Payment ordering non-monotonic (Pillar 4): SOW {sow} billing-milestone schedule dates are "
+                        f"not ascending; payment rhythm and delivery rhythm are inconsistent, fix the dependencies/order.")
 
-    # ---- 7. 排期网络 ----
+    # ---- 7. Schedule network ----
     if wbs and len(wbs) > 1 and methodology in ('waterfall', 'hybrid'):
         ids = {w.get('id') for w in wbs}
         linked = 0
@@ -379,25 +391,29 @@ def main():
                 linked += 1
             for d in deps:
                 if d not in ids:
-                    bad.append(f"{w.get('id','?')}→{d}")
+                    bad.append(f"{w.get('id','?')}->{d}")
         if linked == 0:
             problems.append(
-                "排期未形成依赖网络（控制级）：waterfall/hybrid 的多行 WBS 须至少存在依赖关系，"
-                "否则无法计算关键路径。请为每个工作包填写 dependsOn。")
+                "Schedule does not form a dependency network (control grade): a multi-row waterfall/hybrid WBS "
+                "must have at least one dependency, otherwise the critical path cannot be computed. Fill in "
+                "dependsOn for each work package.")
         if bad:
-            warnings.append(f"WBS 依赖指向未知 ID（建议核对）：{', '.join(bad)}")
+            warnings.append(f"WBS dependency points to unknown ID (suggest verifying): {', '.join(bad)}")
 
-    # ---- 7b. 专家角色标注 + 颗粒度 ----
-    # 领域活动必须由对应专家产出并拆到叶子包，否则 WBS 会停在 SOW 级粗粒度。
-    # 关键修复：凡「领域活动缺 role 标签」或「领域活动超阈值」，默认即致命（exit 1 阻断交付），
-    # 强制走 dispatch.py -> 领域专家子 Agent 拆解，主控不得直接拆分绕过（见 SKILL.md Step 2.5 / §6）。
-    # program 级 summary 汇总包（SOW/P0 父包）跳过，由组件层叶子包承担。
+    # ---- 7b. Expert role tagging + granularity ----
+    # Domain activities must be produced by the corresponding expert and decomposed to leaf
+    # packages, otherwise the WBS stalls at SOW-level coarse granularity.
+    # Key fix: any "domain activity missing a role tag" or "domain activity over threshold" is
+    # fatal by default (exit 1 blocks delivery), forcing dispatch.py -> domain-expert sub-agent
+    # decomposition; the main controller must not split it directly (see SKILL.md Step 2.5 / section 6).
+    # program-level summary packages (SOW/P0 parent) are skipped; component-level leaves carry it.
     ctrl_blk = data.get('control') or {}
     gran_thr = float(ctrl_blk.get('granularity_threshold') or 10)
     for w in wbs:
-        # program 级汇总/里程碑行（SOW/P0 父包、tier:program、milestone）不检查：
-        # 项目群颗粒度本就到里程碑级（见 references/program-management.md），由组件层叶子包承担；
-        # 主控不得在项目群层把里程碑行当领域包去拆。
+        # program-level summary/milestone rows (SOW/P0 parent, tier:program, milestone) are not checked:
+        # program granularity is naturally at milestone level (see references/program-management.md),
+        # carried by component-level leaf packages; the main controller must not split milestone rows
+        # as domain packages at the program level.
         if w.get('summary') or w.get('milestone') or (w.get('tier') == 'program'):
             continue
         wid = w.get('id', '?')
@@ -412,21 +428,24 @@ def main():
         over = est_v > gran_thr
         if is_da and not w.get('role'):
             problems.append(
-                f"WBS {wid}『{name}』为领域活动但缺少 role 标签（致命）："
-                f"须由对应领域专家（{role or '见 references/expert-roles.md'}）产出并写回 wbs，"
-                f"主控不得直接拆分。参考 references/activity-expert-map.md §3-§4。")
+                f"WBS {wid} '{name}' is a domain activity but is missing a role tag (fatal): "
+                f"it must be produced by the corresponding domain expert ({role or 'see references/expert-roles.md'}) "
+                f"and written back to wbs; the main controller must not split it directly. "
+                f"See references/activity-expert-map.md sections 3-4.")
         if is_da and over:
             problems.append(
-                f"WBS {wid}『{name}』估算 {est_v:g} 人天超过叶子包阈值 {gran_thr:g}（致命）："
-                f"须调度领域专家进一步拆为 ≤{gran_thr:g} 人天的叶子包（ID 前缀 {wid}.x），"
-                f"防止 SOW 级粗粒度 WBS 当交付。")
+                f"WBS {wid} '{name}' estimate {est_v:g} person-days exceeds the leaf-package threshold "
+                f"{gran_thr:g} (fatal): dispatch a domain expert to further decompose it into leaf packages "
+                f"of <= {gran_thr:g} person-days (ID prefix {wid}.x) to prevent SOW-level coarse WBS from "
+                f"being delivered as-is.")
         if (not is_da) and over:
             warnings.append(
-                f"WBS {wid}『{name}』估算 {est_v:g} 人天超过叶子包阈值 {gran_thr:g}，"
-                f"建议进一步拆解（非领域活动，仅告警）。")
+                f"WBS {wid} '{name}' estimate {est_v:g} person-days exceeds the leaf-package threshold "
+                f"{gran_thr:g}; suggest further decomposition (non-domain activity, warning only).")
 
-    # ---- 7c. 项目群：SOW 映射 ↔ WBS 一致（合同边界防漂移） ----
-    # 仅在项目群类型校验：program.sow_map[].sow 必须对应 wbs 中的 tier:program / summary 汇总包。
+    # ---- 7c. Program: SOW mapping <-> WBS consistency (contract-boundary drift guard) ----
+    # Only checked for program type: program.sow_map[].sow must map to a tier:program / summary
+    # package in wbs.
     if ptype == 'program':
         wbs_ids = {w.get('id') for w in wbs}
         sow_map = (data.get('program') or {}).get('sow_map') or []
@@ -434,45 +453,48 @@ def main():
             for m in sow_map:
                 sid = m.get('sow')
                 if not sid:
-                    problems.append("program.sow_map 存在无 sow 字段的映射条目")
+                    problems.append("program.sow_map has a mapping entry without a sow field")
                     continue
                 tgt = next((w for w in wbs if w.get('id') == sid), None)
                 if tgt is None:
                     problems.append(
-                        f"合同边界漂移（致命）：program.sow_map 的 SOW『{sid}』"
-                        f"在 wbs 中找不到对应汇总包（tier:program 或 summary:true）。")
+                        f"Contract-boundary drift (fatal): SOW '{sid}' in program.sow_map has no matching "
+                        f"summary package in wbs (tier:program or summary:true).")
                 elif not (tgt.get('tier') == 'program' or tgt.get('summary')):
                     problems.append(
-                        f"合同边界漂移（致命）：SOW『{sid}』在 wbs 中不是汇总包"
-                        f"（须 tier:program 或 summary:true），与项目群两层颗粒度约定冲突。")
-            # 反向：wbs 中【顶层】项目群汇总包（tier:program 且 id 不含 '.'）应至少被一个 sow_map 引用
-            # 组件层 phase 汇总包（如 SOW1.1 阶段组，tier:component）不算，避免误报。
+                        f"Contract-boundary drift (fatal): SOW '{sid}' in wbs is not a summary package "
+                        f"(must be tier:program or summary:true), conflicting with the program two-level "
+                        f"granularity convention.")
+            # Reverse: top-level program summary packages (tier:program and id has no '.') should be
+            # referenced by at least one sow_map. Component-phase summary packages (e.g. SOW1.1 phase
+            # groups, tier:component) do not count, to avoid false positives.
             mapped = {m.get('sow') for m in sow_map}
             orphans = [w.get('id') for w in wbs
                        if w.get('tier') == 'program' and not str(w.get('id', '')).count('.')
                        and w.get('id') not in mapped]
             if orphans:
                 warnings.append(
-                    f"以下项目群汇总包未被 program.sow_map 引用（建议补映射，避免合同边界遗漏）："
-                    f"{', '.join(orphans)}")
-        # Extract 外包须绑定合同
+                    f"The following program summary packages are not referenced by program.sow_map "
+                    f"(suggest adding the mapping to avoid missing contract boundaries): {', '.join(orphans)}")
+        # Extract outsourcing must be bound to a contract
         for ex in ((data.get('program') or {}).get('extracts') or []):
-            if (ex.get('mode') or '').lower() in ('外包', 'outsource', 'out') and not ex.get('contract'):
+            if (ex.get('mode') or '').lower() in ('outsourced', 'outsource', 'out') and not ex.get('contract'):
                 problems.append(
-                    f"Extract『{ex.get('id')}』标记为外包但无绑定合同（contract 为空）："
-                    f"外包范围须有合同依据。")
-        # 7d. SOW 费用必填（禁止整表（待定）/TBD/空）
+                    f"Extract '{ex.get('id')}' is marked outsourced but has no bound contract (contract is empty): "
+                    f"outsourced scope must have a contractual basis.")
+        # 7d. SOW fee required (no whole-table (TBD)/TBD/blank)
         for s in ((data.get('program') or {}).get('sows') or []):
             fee = (s.get('fee') or '').strip()
-            if not fee or fee in ('（待定）', '待定', 'TBD', 'tbd', 'N/A', '-'):
+            if not fee or fee in ('(TBD)', 'TBD', 'tbd', 'N/A', '-'):
                 problems.append(
-                    f"SOW『{s.get('sow')}』费用(fee)未填或仍为（待定）/TBD："
-                    f"合同锁定后填金额，未锁定须写『TBC — 原因』。")
+                    f"SOW '{s.get('sow')}' fee is unfilled or still (TBD)/TBD: fill the amount after the "
+                    f"contract is locked; if not locked, write 'TBC -- reason'.")
 
-    # ---- 8. EVM 基线 ----
-    # 计划价值(PV/BAC)属于计划基线，须在 metrics.evm；当前挣值/实际成本(ev/ac)
-    # 在运营期可位于 actuals 块（control_engine.py 的单一现状源），亦兼容旧式 metrics.evm.ev/ac。
-    if methodology in ('waterfall', 'hybrid') and phase in ('执行', '监控', '收尾'):
+    # ---- 8. EVM baseline ----
+    # Planned Value (PV/BAC) belongs to the plan baseline and lives in metrics.evm; current
+    # Earned Value / Actual Cost (ev/ac) may live in the actuals block during operations
+    # (control_engine.py's single current-state source), and also compatibly in metrics.evm.ev/ac.
+    if methodology in ('waterfall', 'hybrid') and phase in ('execution', 'monitoring', 'closeout'):
         evm = data.get('metrics', {}).get('evm') or {}
         actuals = data.get('actuals') or {}
         miss = []
@@ -480,77 +502,82 @@ def main():
         ev_val = evm.get('ev') if isinstance(evm.get('ev'), (int, float)) else actuals.get('ev')
         ac_val = evm.get('ac') if isinstance(evm.get('ac'), (int, float)) else actuals.get('ac')
         if not has_plan:
-            miss.append('pv/bac (计划基线, 置于 metrics.evm)')
+            miss.append('pv/bac (planned baseline, in metrics.evm)')
         if not isinstance(ev_val, (int, float)):
-            miss.append('ev (置于 actuals 或 metrics.evm)')
+            miss.append('ev (in actuals or metrics.evm)')
         if not isinstance(ac_val, (int, float)):
-            miss.append('ac (置于 actuals 或 metrics.evm)')
+            miss.append('ac (in actuals or metrics.evm)')
         if miss:
             problems.append(
-                f"EVM 基线缺失（控制级）：{methodology} 项目处于'{phase}'阶段，"
-                f"缺少数值化 {', '.join(miss)}。请先建立完工预算(PV/BAC)基线，并在 actuals 填报 ev/ac（运行 evm.py）。")
+                f"EVM baseline missing (control grade): {methodology} project is in the '{phase}' phase but "
+                f"lacks numeric {', '.join(miss)}. First establish the budget-at-completion (PV/BAC) baseline, "
+                f"then report ev/ac in actuals (run evm.py).")
 
-    # ---- 8b. 基线化纪律（控制级） ----
-    # 规划 ≠ 运营化：waterfall / hybrid 进入 执行/监控/收尾 前必须先基线化（冻结计划为对照基准）。
-    if methodology in ('waterfall', 'hybrid') and phase in ('执行', '监控', '收尾'):
+    # ---- 8b. Baselining discipline (control grade) ----
+    # Planning is not operation; a waterfall / hybrid project must be baselined (frozen plan as
+    # reference) before entering execution/monitoring/closeout.
+    if methodology in ('waterfall', 'hybrid') and phase in ('execution', 'monitoring', 'closeout'):
         bl = data.get('baseline') or {}
         if not (isinstance(bl, dict) and bl.get('file')):
             problems.append(
-                f"未基线化即进入运营/执行阶段（控制级）：{methodology} 项目处于'{phase}'阶段但缺少 baseline 指针。"
-                "须遵循 规划→评审→baseline.py --freeze（冻结计划为基线）→控制门→执行 的强制串行状态机"
-                "（详见 references/lifecycle.md §5）。")
+                f"Entered operations/execution without baselining (control grade): {methodology} project is in "
+                f"the '{phase}' phase but is missing a baseline pointer. Follow the mandatory serial state "
+                f"machine: planning -> review -> baseline.py --freeze (freeze plan as baseline) -> control gate "
+                f"-> execution (see references/lifecycle.md section 5).")
 
-    # ---- 9. 混合微计划 ----
+    # ---- 9. Hybrid micro-plan ----
     if methodology == 'hybrid':
         micro_keys = ('sprint', 'sprints', 'backlog', 'iteration', 'iterations')
         has_micro = any(k in data for k in micro_keys)
         if not has_micro:
-            # 退而求其次：artifacts 中是否挂了微层计划
+            # Fallback: is a micro-level plan hung off artifacts
             joined = ' '.join(str(v) for v in artifacts.values())
             if not any(t in joined for t in ('sprint_plan', 'backlog', 'iteration_plan')):
                 problems.append(
-                    "混合交付缺少微层计划（控制级）：methodology=hybrid 须至少具备一个微层计划"
-                    "（sprint / backlog / iteration），用于承载宏阶段内的增量交付。")
+                    "Hybrid delivery is missing a micro-level plan (control grade): methodology=hybrid must have "
+                    "at least one micro-level plan (sprint / backlog / iteration) to carry incremental delivery "
+                    "within the macro phases.")
 
-    # ---- 10. 风险 5×5 校准 ----
+    # ---- 10. Risk 5x5 calibration ----
     for r in collect_risks(data):
         rid = r.get('id', '?')
         lk = r.get('likelihood')
         im = r.get('impact')
         sc = r.get('score')
         if not isinstance(lk, (int, float)) or not (1 <= lk <= 5):
-            problems.append(f"风险 {rid} 可能性(likelihood)须为 1-5 数值，当前：{lk}")
+            problems.append(f"Risk {rid} likelihood must be a 1-5 number, currently: {lk}")
             continue
         if not isinstance(im, (int, float)) or not (1 <= im <= 5):
-            problems.append(f"风险 {rid} 影响(impact)须为 1-5 数值，当前：{im}")
+            problems.append(f"Risk {rid} impact must be a 1-5 number, currently: {im}")
             continue
         if not isinstance(sc, (int, float)) or sc != lk * im:
             problems.append(
-                f"风险 {rid} 评分(score)应为 likelihood×impact = {lk*im}，当前：{sc}")
+                f"Risk {rid} score should be likelihood x impact = {lk*im}, currently: {sc}")
             continue
         band = risk_band(lk * im)
         sev = norm_sev(r.get('severity'))
         if sev is None:
             problems.append(
-                f"风险 {rid} 缺少校准严重度(severity)，应为 绿/黄/橙/红（score={sc} 应属"
-                f"{ {'low':'绿','medium':'黄','high':'橙','critical':'红'}[band] }）")
+                f"Risk {rid} is missing a calibrated severity; should be green/yellow/orange/red "
+                f"(score={sc} should be { {'low':'green','medium':'yellow','high':'orange','critical':'red'}[band] })")
         elif sev != band:
             problems.append(
-                f"风险 {rid} 严重度(severity)与评分不符：score={sc} 应属"
-                f"{ {'low':'绿','medium':'黄','high':'橙','critical':'红'}[band] }，"
-                f"当前标注：{r.get('severity')}")
+                f"Risk {rid} severity does not match the score: score={sc} should be "
+                f"{ {'low':'green','medium':'yellow','high':'orange','critical':'red'}[band] }, "
+                f"currently labeled: {r.get('severity')}")
 
-    # ---- 11. 收益责任人（项目群） ----
+    # ---- 11. Benefit owners (program) ----
     program = data.get('program')
     if isinstance(program, dict):
         for b in (program.get('benefits') or []):
             if not b.get('owner'):
-                problems.append(f"收益 {b.get('id','?')} 缺少责任人(owner)")
+                problems.append(f"Benefit {b.get('id','?')} is missing an owner")
 
-    # ---- 11b. 意图路由交付物强制（对齐 SKILL.md §3 intent→deliverable） ----
-    # 在规划/启动期（planning_now）且为 plan* 意图时，缺少对应交付物 = 致命阻断。
-    # 用法：project.intent 显式声明（plan / plan_program / risk / change / report 等）；
-    # 未声明时按 type+methodology 推断最小集合。
+    # ---- 11b. Intent-routed deliverable enforcement (aligns with SKILL.md section 3 intent->deliverable) ----
+    # During planning/initiation (planning_now) and for plan* intents, a missing corresponding
+    # deliverable = fatal block.
+    # Usage: project.intent explicitly declared (plan / plan_program / risk / change / report etc.);
+    # when undeclared, infer the minimal set from type+methodology.
     intent = str((data.get('project') or {}).get('intent') or '').lower()
     required_artifacts = []
     if ptype == 'program':
@@ -570,44 +597,45 @@ def main():
         required_artifacts += ['risk_register', 'raid_log']
     if intent in ('change',):
         required_artifacts += ['change_request', 'change_log']
-    # 去重 + 仅检查存在的 key（artifacts 可能用别的 key 名，做宽松匹配）
+    # De-dupe + only check existing keys (artifacts may use other key names; loose match)
     required_artifacts = list(dict.fromkeys(required_artifacts))
     if planning_now and required_artifacts:
         for req in required_artifacts:
             present = any(req in str(k) for k in artifacts) or (req in artifacts)
-            # 同时检查磁盘上是否有对应渲染文件（artifact 指向的文件存在即视为已产出）
+            # Also check whether the corresponding rendered file exists on disk
             if not present:
-                # 宽容：若 project.yaml 里 wbs 非空且要求 wbs/raid_log/schedule 但 key 名不同，给告警而非致命
+                # Tolerant: if project.yaml has non-empty wbs and requires wbs/raid_log/schedule but
+                # with a different key name, warn rather than fail
                 warnings.append(
-                    f"意图路由交付物可能缺失：{req}（plan 阶段应产出；"
-                    f"若已用其他 key 渲染请忽略，或显式登记到 artifacts.{req}）")
+                    f"Intent-routed deliverable may be missing: {req} (should be produced in the plan phase; "
+                    f"ignore if already rendered under another key, or explicitly register it as artifacts.{req})")
 
-    # ---- 告警（非致命） ----
+    # ---- Warnings (non-fatal) ----
     if ptype == 'program' or methodology == 'hybrid':
         if 'change_log' not in artifacts:
-            warnings.append("建议补充变更日志 change_log（项目群/hybrid 须有变更控制 CCB）")
-    if phase in ('执行', '监控'):
+            warnings.append("Suggest adding a change log change_log (program/hybrid needs change control CCB)")
+    if phase in ('execution', 'monitoring'):
         if 'status_report' not in artifacts:
-            warnings.append("建议补充状态报告 status_report（执行/监控阶段应定期汇报）")
+            warnings.append("Suggest adding a status report status_report (execution/monitoring phase should report periodically)")
         if 'control' not in data:
-            warnings.append("建议配置 control 块（cadence/阈值/收件人），以驱动 control_engine.py 周期巡检")
+            warnings.append("Suggest configuring a control block (cadence/thresholds/recipients) to drive control_engine.py periodic inspection")
         if 'control_register' not in artifacts:
-            warnings.append("建议补充控制登记册 control_register（运营期常规控制清单，由 baseline.py 生成）")
+            warnings.append("Suggest adding a control register control_register (operational routine control checklist, generated by baseline.py)")
     if 'communication_plan' not in artifacts:
-        warnings.append("建议补充沟通计划 communication_plan（标准启动套件之一）")
+        warnings.append("Suggest adding a communication plan communication_plan (part of the standard kick-off kit)")
 
-    # ---- 输出 ----
-    print("=== 一致性校验（控制级） ===")
+    # ---- Output ----
+    print("=== Consistency Check (control grade) ===")
     if warnings:
-        print(f"⚠ 告警 {len(warnings)} 条（不阻断交付）：")
+        print(f"⚠ Warnings: {len(warnings)} (do not block delivery):")
         for w in warnings:
             print("  -", w)
     if not problems:
-        print("✓ 通过：无致命一致性问题")
+        print("✓ Passed: no fatal consistency problems")
         sys.exit(0)
     if strict:
-        problems = problems + [f"[strict] 告警升级: {w}" for w in warnings]
-    print(f"✗ 发现 {len(problems)} 个致命问题（阻断交付）：")
+        problems = problems + [f"[strict] warning escalated: {w}" for w in warnings]
+    print(f"✗ {len(problems)} fatal problems found (block delivery):")
     for p in problems:
         print("  -", p)
     sys.exit(1)

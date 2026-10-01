@@ -1,8 +1,11 @@
 {
-  "comfyui_url": "http://10.71.253.215:31577",
-  "poll_interval_seconds": 3,
+  "comfyui_url": "http://127.0.0.1:8188",
+  "poll_interval_seconds": 1,
+  "keep_models_resident": false,
   "output_dir": "media/comfyui",
   "image": {
+    "output_format": "jpg",
+    "jpg_quality": 89,
     "t2i": {
       "z-image": {
         "workflow_path": "workflows/z-image_t2i_api.json",
@@ -20,6 +23,14 @@
         "default_steps": 20,
         "default_cfg": 4.01,
         "output_subdir": "images"
+      },
+      "qwen21": {
+        "workflow_path": "workflows/qwen_image_2.1_api.json",
+        "timeout_seconds": 300,
+        "default_aspect": "1:1",
+        "default_steps": 25,
+        "default_cfg": 1.0,
+        "output_subdir": "images"
       }
     },
     "i2i": {
@@ -28,6 +39,32 @@
         "timeout_seconds": 600,
         "default_steps": 4,
         "output_subdir": "images"
+      },
+      "qwen21": {
+        "workflow_path": "workflows/qwen_image_2.1_api.json",
+        "timeout_seconds": 600,
+        "default_aspect": "1:1",
+        "default_steps": 25,
+        "default_cfg": 1.0,
+        "output_subdir": "images"
+      }
+    }
+  },
+  "mesh": {
+    "hunyuan3d_v2.1": {
+      "workflow_path": "workflows/hunyuan3d-v2.1_i2m_api.json",
+      "timeout_seconds": 900,
+      "default_resolution": 4096,
+      "default_steps": 30,
+      "default_cfg": 5.0,
+      "default_scale": 3000,
+      "output_subdir": "meshes",
+      "extract": {
+        "enabled": true,
+        "workflow": "i2i",
+        "model": "qwen21",
+        "aspect": "1:1",
+        "prompt_suffix": "isolate the main character, full body, centered, plain transparent background, nothing else"
       }
     }
   },
@@ -42,7 +79,11 @@
       "default_cfg": 4.5,
       "frame_rate": 16,
       "output_subdir": "video",
-      "keep_interpolated_only": true
+      "keep_interpolated_only": false
     }
+  },
+  "default_model": {
+    "t2i": "qwen21",
+    "i2i": "qwen21"
   }
 }

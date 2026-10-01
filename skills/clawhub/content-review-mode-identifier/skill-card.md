@@ -1,41 +1,49 @@
-## Description: <br>
-Triage a workspace content item. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Sets handling guidance for a supplied content profile.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Content operations users use this skill to classify a supplied workspace content note, planning draft, or internal checklist into a concise review mode. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unnecessary sensitive context could be included in the content note during triage. <br>
-Mitigation: Provide only the specific content note needed for review, and avoid unrelated private files, credentials, or sensitive material. <br>
-Risk: A concise review mode may be too limited for ambiguous content decisions. <br>
-Mitigation: Review the returned review_mode against the supplied content note before using it in content operations workflows. <br>
+## Use Case:
 
+Employees and external users can use this skill to determine handling guidance for a content item from its supplied field inventory and personal-data indicators.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/content-review-mode-identifier) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Concise text value for the review_mode field] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the supplied content_note and does not require credentials or private file access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Content profiles may include personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only the content_profile data intended for classification and review the guidance before applying it.
+
+## Reference(s):
+
+- [Content Handling Guide on ClawHub](https://clawhub.ai/wxt-ai/skills/content-review-mode-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance]
+
+**Output Format:** [JSON object with a handling_guidance string]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns handling guidance without persisting a business artifact.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,87 @@
+{
+  "variant_id": "shadow_04_priority",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "scheduling_guidance",
+  "output_name": "task_schedule",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "service_class": {
+            "type": "string"
+          },
+          "earliest_start": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "service_class"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "service_class": {
+                    "type": "string"
+                  },
+                  "earliest_start": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "service_class"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "ordered_task_ids": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "scheduled_task_id": {
+        "type": "string"
+      },
+      "scheduled_start": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "ordered_task_ids",
+      "scheduled_task_id",
+      "scheduled_start"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_task_schedule"
+}

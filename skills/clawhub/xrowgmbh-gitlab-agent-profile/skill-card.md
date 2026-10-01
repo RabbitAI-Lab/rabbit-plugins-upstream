@@ -1,42 +1,57 @@
-## Description: <br>
-Maintain the GitLab agent profile page and static contribution performance chart. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Maintain the GitLab agent profile page and static contribution performance chart.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to keep a GitLab profile repository updated with monthly contribution charts and proof records for owner and agent activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses GitLab credentials that may read configured projects. <br>
-Mitigation: Use a least-privilege GitLab token and limit configured projects to repositories needed for the profile update. <br>
-Risk: The skill can run unattended and commit or push generated profile assets. <br>
-Mitigation: Run it in a dedicated profile repository and review the cron configuration before enabling scheduled execution. <br>
-Risk: Output paths and image conversion tooling can affect local files or invoke optional external converters. <br>
-Mitigation: Keep output paths relative to the intended workspace and avoid the npm or ImageMagick conversion fallback unless the tooling is pinned or sandboxed. <br>
+## Use Case:
 
+Developers and GitLab account owners use this skill to update an agent profile with monthly contribution charts and a supporting activity record across selected projects.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Files] <br>
-**Output Format:** [Markdown guidance plus generated SVG, WebP, and JSON asset files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses GitLab CLI authentication and configurable environment variables for project selection, output paths, owner, agent, and month count.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: release evidence) <br>
+Risk: Profile assets may expose aggregate private/internal contribution activity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only where publishing those totals is approved; review generated SVG, WebP, and JSON before pushing.
+
+Risk: Broad GitLab project access and recurring updates can publish unintended activity.
+
+Mitigation: Restrict project or root-group selection to approved repositories and review the scheduled job before enabling it.
+
+Risk: Image conversion may execute a package acquired at runtime.
+
+Mitigation: Run with pinned, preinstalled image-conversion tooling rather than runtime package execution.
+
+## Reference(s):
+
+- [GitLab Agent Profile on ClawHub](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile)
+
+## Skill Output:
+
+**Output Type(s):** [Files, JSON, SVG, WebP]
+
+**Output Format:** [Static SVG and WebP charts plus a JSON activity record]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Completed-month totals include aggregated private/internal activity; changed profile assets may be committed and pushed.]
+
+## Skill Version(s):
+
+1.95.1 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

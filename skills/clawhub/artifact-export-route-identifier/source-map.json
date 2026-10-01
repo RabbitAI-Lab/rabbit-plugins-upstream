@@ -1,0 +1,138 @@
+{
+  "module": "business_logic_shadow",
+  "source_sha256": "c6baf7ec7d03b18172c3e597628660a6e2438d1b85a53f9542ab2e3d637e93b2",
+  "operation_symbols": {
+    "Any": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 22,
+      "end_line": 22
+    },
+    "CONTRACTS": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 507,
+      "end_line": 891
+    },
+    "Callable": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 22,
+      "end_line": 22
+    },
+    "Dict": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 22,
+      "end_line": 22
+    },
+    "JsonObject": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 26,
+      "end_line": 26
+    },
+    "Mapping": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 22,
+      "end_line": 22
+    },
+    "RENAMED_IDS": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 965,
+      "end_line": 968
+    },
+    "RoleHandler": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 27,
+      "end_line": 27
+    },
+    "Sequence": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 22,
+      "end_line": 22
+    },
+    "UPSTREAM_HANDLERS": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 1690,
+      "end_line": 1706
+    },
+    "_as_bool": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 993,
+      "end_line": 1004
+    },
+    "_as_mapping": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 971,
+      "end_line": 986
+    },
+    "_as_string_list": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 1029,
+      "end_line": 1034
+    },
+    "_text": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 989,
+      "end_line": 990
+    },
+    "_upstream_route": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 1100,
+      "end_line": 1112
+    },
+    "execute": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 1728,
+      "end_line": 1743
+    },
+    "json": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 14,
+      "end_line": 14
+    },
+    "re": {
+      "source": "experiments/business_logic_shadow.py",
+      "line": 15,
+      "end_line": 15
+    }
+  },
+  "validation_symbols": {
+    "Any": {
+      "source": "experiments/business_logic.py",
+      "line": 11,
+      "end_line": 11
+    },
+    "Dict": {
+      "source": "experiments/business_logic.py",
+      "line": 11,
+      "end_line": 11
+    },
+    "_type_ok": {
+      "source": "experiments/business_logic.py",
+      "line": 95,
+      "end_line": 112
+    },
+    "date": {
+      "source": "experiments/business_logic.py",
+      "line": 9,
+      "end_line": 9
+    },
+    "math": {
+      "source": "experiments/business_logic.py",
+      "line": 7,
+      "end_line": 7
+    },
+    "re": {
+      "source": "experiments/business_logic.py",
+      "line": 8,
+      "end_line": 8
+    },
+    "urlparse": {
+      "source": "experiments/business_logic.py",
+      "line": 12,
+      "end_line": 12
+    },
+    "validate_schema": {
+      "source": "experiments/business_logic.py",
+      "line": 115,
+      "end_line": 196
+    }
+  }
+}

@@ -1,0 +1,17 @@
+{
+  "publisher_id": "user_ee0c0d25",
+  "algorithm": "SHA256-chain (publisher offline fingerprint anchor)",
+  "issued_at": "2026-09-29T07:20:09Z",
+  "version": "3.3.6",
+  "engine_sha256": "d3059c3fe4d80674014f64c630637ae8b178e8b7a4d0108cd36ed7653c3eacb3",
+  "note": "发布者离线签名锚：engine_sha256 为明文引擎源码 scripts/analyze_skill.txt 的 SHA-256，anchors 为随包关键文件的 SHA-256（引擎 b64 / 两个完整性库 / 规则包清单 / 指令文件 / 加载器与入口脚本）。scripts/verify_signature.py 与 selfcheck「发布者签名链」门禁逐项核验，任一不符即报错。签名决策为完整性防护（检出篡改/未同步改动），根信任请以对外公布的 engine_sha256 为准；明文源码独立为源码核验包分发。",
+  "anchors": {
+    "scripts/analyze_skill.txt": "d3059c3fe4d80674014f64c630637ae8b178e8b7a4d0108cd36ed7653c3eacb3",
+    "rules/engine_hashes.json": "1e7f5eeba6a6c77e597faf7d20dbaf6a7cbd312af2b10177c14cbb367de3d76b",
+    "rules/manifest.json": "54fc8f8b416742d946803e7dc8fa337a2cfb950ea55b5e22903038552367d481",
+    "SKILL.md": "5acb8303a3120ff9b600943cbdc7cd4cf79aa889bb7eb7e4941fc4e2494a67cb",
+    "scripts/_load_engine.py": "ee8038c09dddcc19d337827d662e3751782b7715605a1a859dbcd53e96b492e9",
+    "scripts/sandbox_run.py": "594f10124beab3973b42868f0e2e03cb5bd1a2de1276cac41be290ff4760f8e4"
+  },
+  "signature_digest": "26e255b5512493d95e0bab17e36475deed6c4e975f2897071e86ee508cfd21ed"
+}

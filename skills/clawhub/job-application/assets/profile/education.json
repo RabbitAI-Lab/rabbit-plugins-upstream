@@ -1,0 +1,18 @@
+[
+  {
+    "id":"msc-data-science",
+    "period":"2017–2019",
+    "title":"M.Sc. Data Science",
+    "subtitle":"Beispiel-Universität Berlin (fiktiv)",
+    "description":["Schwerpunkte: statistische Modellierung, maschinelles Lernen und Datenethik."],
+    "tags":["data","ai","machine learning"]
+  },
+  {
+    "id":"bsc-business-informatics",
+    "period":"2013–2017",
+    "title":"B.Sc. Wirtschaftsinformatik",
+    "subtitle":"Musterhochschule Hamburg (fiktiv)",
+    "description":["Schwerpunkte: Softwareentwicklung, Datenbanken und Geschäftsprozesse."],
+    "tags":["software","sql","business"]
+  }
+]

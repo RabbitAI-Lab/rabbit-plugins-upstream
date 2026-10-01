@@ -1,43 +1,63 @@
-## Description: <br>
-A professional pipeline for building everything from a core mark to a complete brand visual system, ensuring creative quality, execution consistency, and shippable delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through staged logo design and development of a consistent brand visual system, from core mark to applications.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, designers, and creative agents use this skill to plan and execute a stepwise logo and brand identity workflow, from requirement gathering through core mark design, derivatives, and brand system delivery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local media files may be sent to dLazy's cloud service. <br>
-Mitigation: Avoid submitting sensitive brand assets unless cloud processing is acceptable for the project. <br>
-Risk: The dLazy CLI can save an API key under ~/.dlazy/config.json. <br>
-Mitigation: Use npx or DLAZY_API_KEY for temporary use, and rotate or revoke keys when they are no longer needed. <br>
+## Use Case:
 
+Designers, brand teams, and other agents use this skill to plan logo concepts, obtain approval, and develop consistent variants and brand applications with dLazy image generation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-logo-branding-system) <br>
-- [dLazy CLI Homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands, phased design rationale, confirmation prompts, and generated asset URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Stepwise execution with user confirmation before image generation and downstream brand derivatives.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.3 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected local media are sent to dLazy's cloud service for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the service only when this data transfer is acceptable; do not upload sensitive media unless intended.
+
+Risk: Installing the third-party CLI introduces a software supply-chain dependency.
+
+Mitigation: Review the @dlazy/cli package source when assurance matters and confirm the installed version is 1.2.3.
+
+Risk: A version typo in the skill documentation could cause installation confusion.
+
+Mitigation: Check the installation command and confirm the intended CLI version before running it.
+
+Risk: The dLazy API key grants access to the user's dLazy organization.
+
+Mitigation: Keep the key private and rotate or revoke it in the dLazy dashboard if needed.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-logo-branding-system)
+- [dLazy CLI repository (linked in skill metadata; not verified release provenance)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Shell commands]
+
+**Output Format:** [Markdown with design concepts, brand-system guidance, and CLI commands; generated image URLs when used]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Staged deliverables and confirmation between design phases]
+
+## Skill Version(s):
+
+1.2.19 (source: ClawHub release metadata; bundled skill frontmatter says 1.2.3)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

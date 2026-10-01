@@ -1,52 +1,65 @@
-## Description: <br>
-帮助独立教师把试听体验组织为系统化诊断、学员建档、试听记录、转化判断和后续跟进流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps independent teachers plan diagnostic trial lessons, document observations, and create minimal student profiles with guardian consent.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External independent teachers use this skill to collect minimal student intake information, guide parent or student needs interviews, plan diagnostic trial lessons, record observations, and prepare formal student profiles. It also helps the teacher draft follow-up timing and wording for conversion, renewal, or attrition cases while keeping teacher confirmation in the loop. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles student and minor intake records, which may include identifiable or sensitive information. <br>
-Mitigation: Require guardian consent for identifiable minor data, prefer pseudonyms, and avoid writing real names or contacts into shared dashboards unless strictly necessary. <br>
-Risk: Security evidence notes ambiguity about whether risk labels are stored or only derived. <br>
-Mitigation: Decide before use whether risk markers may be stored or must remain derived-only, and document that choice in the shared workspace policy. <br>
-Risk: Follow-up wording could be mistaken for automatic outreach or pressure to convert. <br>
-Mitigation: Keep all follow-up messages as teacher-reviewed suggestions and require teacher confirmation before any communication is sent. <br>
+## Use Case:
 
+Independent teachers use this Chinese-language K12 workflow to interview families, assess a learner during a trial lesson, draft teacher-reviewed feedback, and establish a pseudonymized student profile and learning baseline. It covers trial-to-enrollment follow-up, not scheduling, lesson logs, or renewals.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-intake) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Intake interview guide](artifact/references/intake-interview-guide.md) <br>
-- [Student basic information form](artifact/references/student-basic-info-form.md) <br>
-- [Needs interview 5W checklist](artifact/references/needs-interview-5w-checklist.md) <br>
-- [Needs profile card](artifact/references/needs-profile-card.md) <br>
-- [Diagnosis card template](artifact/references/diagnosis-card-template.md) <br>
-- [Trial lesson 5-segment structure](artifact/references/trial-lesson-5-segment-structure.md) <br>
-- [Trial observation record](artifact/references/trial-observation-record.md) <br>
-- [Follow-up scripts for three stages](artifact/references/followup-scripts-three-stages.md) <br>
-- [Formal student profile template](artifact/references/formal-student-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (Chinese-language K12 defaults; localize consent and crisis resources for other regions)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, structured templates, and workspace field guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include student intake templates, interview questions, diagnostic lesson structure, observation notes, follow-up wording, and profile fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student profiles and diagnostic notes contain sensitive information about minors even when pseudonymized.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm guardian consent before storing a profile, retain only necessary learning information, and keep real names and contact details out of the workspace.
+
+Risk: Trial records or consent status may persist longer than intended or be shared without permission.
+
+Mitigation: Honor sharing controls, set the stated retention window, and have the teacher review and confirm deletion of expired records.
+
+Risk: Chinese-language K12 assumptions and mainland China crisis contacts may be inappropriate elsewhere.
+
+Mitigation: Localize templates, consent practices, and crisis-referral channels before use outside mainland China.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-intake)
+- [Student basic information form](artifact/references/student-basic-info-form.md)
+- [5W needs interview checklist](artifact/references/needs-interview-5w-checklist.md)
+- [Diagnosis card template](artifact/references/diagnosis-card-template.md)
+- [Trial lesson structure](artifact/references/trial-lesson-5-segment-structure.md)
+- [Trial observation record](artifact/references/trial-observation-record.md)
+- [Formal student profile template](artifact/references/formal-student-profile-template.md)
+- [Trial conversion follow-up scripts](artifact/references/followup-scripts-trial-conversion.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Teacher-reviewed drafts, structured student-profile records, and trial-lesson guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Profiles use pseudonyms and require guardian consent; no contact details are collected or stored.]
+
+## Skill Version(s):
+
+2.9.0 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

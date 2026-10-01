@@ -42,17 +42,17 @@ Response:
 
 ## Find a play's workflow UUID
 
-Plays have names — workflows don't. Use the play to find the right workflow and segment.
+Plays have names — workflows don't. Use the play to find the right workflow and model.
 
 ```bash
 # 1. Find the play
 cargo-ai orchestration play list
-# → Extract play.workflowUuid and play.segmentUuid
+# → Extract play.workflowUuid and play.modelUuid
 
-# 2. Create a batch using the play's own segment
+# 2. Create a batch over the play's model (empty filter = all rows)
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"segment","segmentUuid":"<play.segmentUuid>"}'
+  --data '{"kind":"filter","modelUuid":"<play.modelUuid>","filter":{"conjonction":"and","groups":[]}}'
 
 # 3. Poll until done
 cargo-ai orchestration batch get <batch-uuid>
@@ -60,9 +60,18 @@ cargo-ai orchestration batch get <batch-uuid>
 # Or block until finished — returns the final batch result without a separate poll step
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"segment","segmentUuid":"<play.segmentUuid>"}' \
+  --data '{"kind":"filter","modelUuid":"<play.modelUuid>","filter":{"conjonction":"and","groups":[]}}' \
   --wait-until-finished
 ```
+
+An empty filter (`{"conjonction":"and","groups":[]}`) enrols every row in the model;
+add conditions to narrow it — see `references/filter-syntax.md` for the full shape.
+
+> **Never pass `play.segmentUuid` to `{"kind":"segment"}`.** That UUID points at
+> the play's internally generated segment, whose record count is never
+> populated — the batch is rejected (`segmentLinkedToPlay`, or `noRecords` on
+> older backends) no matter how many rows the model holds. `{"kind":"segment"}`
+> is only for standalone segments from `segmentation segment list`.
 
 ## Update a play's workflow
 
@@ -76,11 +85,11 @@ cargo-ai orchestration play list
 # → Find "Enrich new companies", extract play.workflowUuid
 
 # Step 2 — Get the current draft release (contains the current node graph)
-cargo-ai orchestration draft-release get --workflow-uuid <play.workflowUuid>
+cargo-ai orchestration release get-draft --workflow-uuid <play.workflowUuid>
 # → Copy the "nodes" array and make your changes
 
 # Step 3 — Update the draft release with your new nodes
-cargo-ai orchestration draft-release update \
+cargo-ai orchestration release update-draft \
   --workflow-uuid <play.workflowUuid> \
   --nodes '[...your updated node graph...]'
 
@@ -89,16 +98,16 @@ cargo-ai orchestration node validate --nodes '[...your updated node graph...]'
 # → { "outcome": "valid" }
 
 # Step 5 — Deploy the draft release
-cargo-ai orchestration draft-release deploy \
+cargo-ai orchestration release deploy-draft \
   --workflow-uuid <play.workflowUuid> \
   --nodes '[...your updated node graph...]' \
   --form-fields 'null' \
   --description "Your release description"
 ```
 
-> **Do not skip validation.** Deploying an invalid node graph will cause runs to fail. Always run `node validate` before `draft-release deploy`.
+> **Do not skip validation.** Deploying an invalid node graph will cause runs to fail. Always run `node validate` before `release deploy-draft`.
 
-> **Do not pass `--version` to `draft-release deploy`.** The deploy-specific `--version` flag is shadowed by the global `--version` flag — passing it causes the command to print the CLI version (e.g. `1.0.11`) and exit 0 **without deploying**. Omit it and let the server auto-assign (first deploy → `1.0.0`, then `1.0.1`, etc.). Always confirm the deploy worked with `release get-deployed --workflow-uuid <uuid>` — the response should show `status: "deployed"`, not `draft`.
+> **Do not pass `--version` to `release deploy-draft`.** The deploy-specific `--version` flag is shadowed by the global `--version` flag — passing it causes the command to print the CLI version (e.g. `1.0.11`) and exit 0 **without deploying**. Omit it and let the server auto-assign (first deploy → `1.0.0`, then `1.0.1`, etc.). Always confirm the deploy worked with `release get-deployed --workflow-uuid <uuid>` — the response should show `status: "deployed"`, not `draft`.
 
 ---
 
@@ -214,14 +223,14 @@ cargo-ai orchestration node validate --nodes '[
 ]'
 # → { "outcome": "valid" }
 
-# Step 5 — Find the play's workflowUuid and segmentUuid
+# Step 5 — Find the play's workflowUuid and modelUuid
 cargo-ai orchestration play list
-# → Find "Lead Scoring", extract workflowUuid and segmentUuid
+# → Find "Lead Scoring", extract workflowUuid and modelUuid
 
-# Step 6 — Run the template nodes against the play's segment
+# Step 6 — Run the template nodes against the play's model (empty filter = all rows)
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"segment","segmentUuid":"<play.segmentUuid>"}' \
+  --data '{"kind":"filter","modelUuid":"<play.modelUuid>","filter":{"conjonction":"and","groups":[]}}' \
   --nodes '[...validated nodes from step 4...]'
 # → Extract batch.uuid
 
@@ -232,7 +241,7 @@ cargo-ai orchestration batch get <batch-uuid>
 # Alternative to steps 6+7 — block until finished in one command
 cargo-ai orchestration batch create \
   --workflow-uuid <play.workflowUuid> \
-  --data '{"kind":"segment","segmentUuid":"<play.segmentUuid>"}' \
+  --data '{"kind":"filter","modelUuid":"<play.modelUuid>","filter":{"conjonction":"and","groups":[]}}' \
   --nodes '[...validated nodes from step 4...]' \
   --wait-until-finished
 ```

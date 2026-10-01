@@ -17,8 +17,8 @@
 ```mermaid
 graph TD
   CLIENT[Client Business & Compliance Stakeholders] --> SEM[Semantic Layer]
-  SEM --> CORE[Core Layer - MPP 数仓]
-  CORE --> SRC[Source Systems - 示例源系统 et al.]
+  SEM --> CORE[Core Layer - MPP Data Warehouse]
+  CORE --> SRC[Source Systems - Example Source Systems et al.]
   subgraph DELIVERY[SOW Delivery]
     S1[SOW1 Modelling] --> CORE
     S2[SOW2 Migration] --> CORE

@@ -1,43 +1,56 @@
-## Description: <br>
-Data Analyzer helps agents query sales data, generate sales and profit charts, analyze trends, and create PDF business reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Data Analyzer supports sales data queries, chart generation, trend analysis, and PDF business reporting.
 
-## Publisher: <br>
-[shiziluk](https://clawhub.ai/user/shiziluk) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[shiziluk](https://clawhub.ai/user/shiziluk)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and business analysts use this skill to query bundled sales data, generate sales and profit charts, analyze profit trends, and create PDF business reports.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: The package includes an unrelated installer-named HTML page that loads remote scripts.
+
+Mitigation: Remove the file or document why it is required before installing the skill.
+
+Risk: Dependencies are listed without pinned versions.
+
+Mitigation: Pin and review dependency versions before deployment.
+
+Risk: Generated chart and PDF outputs use predictable fixed /tmp filenames.
+
+Mitigation: Use safe private temporary paths or unique filenames for generated outputs.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and developers can use this skill to query packaged sales data, visualize sales or profit metrics, inspect profit trends, and assemble simple PDF business reports. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, files]
 
-## Known Risks and Mitigations: <br>
-Risk: The PDF report function accepts a user-controlled chart path. <br>
-Mitigation: Pass only chart images created for the intended report and review the PDF before sharing. <br>
-Risk: Dependencies are not pinned in the artifact requirements. <br>
-Mitigation: Pin pandas, matplotlib, and fpdf2 versions before controlled deployment. <br>
-Risk: A stray HTML document is packaged with a .sh installer filename. <br>
-Mitigation: Remove or rename that file before using installer workflows; do not execute it as a shell script. <br>
+**Output Format:** [Plain text responses plus generated PNG chart files and PDF report files]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/shiziluk/skills/data-analyzer) <br>
-- [Publisher profile](https://clawhub.ai/user/shiziluk) <br>
+**Other Properties Related to Output:** [Generated charts and reports are written to fixed /tmp paths.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, image files, PDF files] <br>
-**Output Format:** [Plain text responses with generated PNG charts and PDF reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes generated chart and report files to temporary local paths.] <br>
+1.0.0 (source: frontmatter and server release metadata)
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,57 @@
-## Description: <br>
-Structured code reviews with severity-ranked findings and deep multi-agent mode for reviewing code, auditing code quality, and critiquing PRs, MRs, or diffs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides structured reviews of code changes, pull requests, and diffs with severity-ranked findings and an optional deep multi-agent review mode.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to perform structured code reviews that check intended behavior first, then assess correctness, maintainability, security, reliability, performance, and test coverage. It supports standard reviews and deeper multi-agent review for large or sensitive diffs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Deep or external review modes may expose repository diffs and PR discussion to local tools, gh, and configured agent or model providers. <br>
-Mitigation: Use those modes only when the repository and PR discussion are appropriate for the configured tools and providers. <br>
-Risk: Auto-applied safe fixes can still affect the working tree. <br>
-Mitigation: Review any auto-applied changes before committing. <br>
+## Use Case:
 
+Developers and engineers use this skill to review code, pull requests, and diffs for correctness, security, and reliability issues and report evidence-backed findings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-code-review) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [Skill specification](artifact/SPEC.md) <br>
-- [Action Routing](artifact/references/action-routing.md) <br>
-- [Deep Review Process](artifact/references/deep-review.md) <br>
-- [Scope & comparison-range resolution](artifact/references/scope-resolution.md) <br>
-- [Security Detection Patterns](artifact/references/security-patterns.md) <br>
-- [Severity Levels and Confidence Rubric](artifact/references/severity-and-confidence.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review reports with severity-ranked findings, residual risks, verdicts, and inline shell commands when verification is needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask scope or review-mode questions; may propose or apply safe local fixes according to the skill's action-routing rules.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: ClawHub release evidence) <br>
+Risk: Broad review scope can expose private or regulated source material to external reviewer tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep review scope explicit and require user approval before external dispatch; do not send sensitive diffs to another vendor.
+
+Risk: Delegated or incomplete reviews can miss changed files or overstate readiness.
+
+Mitigation: Track coverage of every selected file and disclose any unreviewed paths or checks before giving a merge verdict.
+
+## Reference(s):
+
+- [Skill release on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-code-review)
+- [Review scope and mode selection](artifact/references/scope-and-mode-selection.md)
+- [Standard review process](artifact/references/standard-review-process.md)
+- [Deep review](artifact/references/deep-review.md)
+- [Reviewer trust boundary](artifact/references/reviewer-trust-boundary.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown review with severity-ranked findings and a merge-readiness verdict]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes review scope, evidence, checks performed, and residual risks when applicable.]
+
+## Skill Version(s):
+
+5.0.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,27 +1,28 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-PM Master · SOW 级启动会（Kick-off）批量生成器
--------------------------------------------------
-修复「SOW 级 individual kick-off 没跑、没产出工件」：每个 SOW（工作说明书）级 summary 包
-在规划期都应由本脚本产出一份 per-SOW 启动会工件（templates/common/sow_kickoff.md），
-对齐范围/交付物/责任人/首批行动。
+PM Master · SOW-level Kick-off batch generator
+---------------------------------------------
+Fixes the gap where "SOW-level individual kick-offs were not run and produced no
+artifacts": each SOW (Statement of Work) level summary package should, during the
+planning phase, produce a per-SOW kick-off artifact (templates/common/sow_kickoff.md)
+via this script, aligning scope / deliverables / owners / first actions.
 
-识别 SOW 级包：
-  - 优先：wbs 中 `summary: true` 且 tier != 'program' 的行（即 SOW 级汇总包）；
-  - 兜底：若没有显式 summary 标记，则取「顶层包」（id 不含 '.'，且存在以其为前缀的子包，
-    如 'SOW1' 下有 'SOW1.1'）。
+Identifying SOW-level packages:
+  - Preferred: wbs rows with `summary: true` and tier != 'program' (i.e. SOW-level summary packages);
+  - Fallback: if no explicit summary flag, take "top-level packages" (id has no '.' and has
+    child packages prefixed with it, e.g. 'SOW1' has 'SOW1.1').
 
-每个 SOW 包派生：
-  - deliverables：其下叶子包（id 以 '<sow_id>.' 开头）的名称；
-  - experts：叶子包去重后的 role；
-  - participants：SOW owner + 领域专家 + PM + sponsor；
-  - kickoff_date：project.start_date 或 '待定'。
+Each SOW package derives:
+  - deliverables: names of its leaf packages (ids starting with '<sow_id>.');
+  - experts: de-duplicated roles of leaf packages;
+  - participants: SOW owner + domain experts + PM + sponsor;
+  - kickoff_date: project.start_date or 'TBD'.
 
-输出：<项目根>/plans/kickoff/<sow_id>_kickoff.md，并把路径写回
-      project.yaml 的 artifacts.sow_kickoffs（列表）。
+Output: <project root>/plans/kickoff/<sow_id>_kickoff.md, and write the path back to
+        project.yaml's artifacts.sow_kickoffs (list).
 
-用法：
+Usage:
   python3 build_sow_kickoff.py --project /workspace/<slug>/project.yaml
   python3 build_sow_kickoff.py --project <yaml> --out-dir /custom/kickoff
 """
@@ -50,7 +51,7 @@ def _save(path, data):
 
 
 def _as_list(v):
-    """将字符串/列表统一为列表，便于模板 {{#each}} 渲染。"""
+    """Normalize a string/list into a list, for template {{#each}} rendering."""
     if v is None:
         return None
     if isinstance(v, list):
@@ -59,16 +60,17 @@ def _as_list(v):
 
 
 def _identify_sow_packages(wbs):
-    """返回 SOW 级包的 id 列表。
+    """Return the list of SOW-level package ids.
 
-    仅项目群层(tier=program)的汇总包算作独立 SOW，避免把组件层 phase 汇总包
-    （如 SOW1.1 阶段组）误判为独立 SOW 而重复开启动会。
+    Only program-tier (tier=program) summary packages count as independent SOWs,
+    to avoid misclassifying component-tier phase summary packages (e.g. SOW1.1 phase
+    groups) as independent SOWs and opening redundant kick-offs.
     """
     explicit = [w.get('id') for w in wbs
                 if w.get('summary') and w.get('tier') == 'program' and w.get('id')]
     if explicit:
         return explicit
-    # 兜底：顶层包且有子包（且为 program 层）
+    # Fallback: top-level packages that have children (and are program-tier)
     ids = [w.get('id') for w in wbs if w.get('id')]
     sows = []
     for w in wbs:
@@ -82,34 +84,34 @@ def _identify_sow_packages(wbs):
 
 
 def main():
-    ap = argparse.ArgumentParser(description="PM Master · SOW 启动会批量生成器")
-    ap.add_argument('--project', required=True, help="单一事实源 project.yaml")
-    ap.add_argument('--out-dir', default=None, help="输出目录（缺省 <项目根>/plans/kickoff）")
-    ap.add_argument('--template', default=None, help="启动会模板（缺省取技能内 templates/common/sow_kickoff.md）")
+    ap = argparse.ArgumentParser(description="PM Master · SOW Kick-off batch generator")
+    ap.add_argument('--project', required=True, help="Single source of truth: project.yaml")
+    ap.add_argument('--out-dir', default=None, help="Output directory (default <project root>/plans/kickoff)")
+    ap.add_argument('--template', default=None, help="Kick-off template (default skill templates/common/sow_kickoff.md)")
     a = ap.parse_args()
 
     if yaml is None:
-        raise SystemExit("需要 PyYAML：请先 `pip install pyyaml`")
+        raise SystemExit("PyYAML required: run `pip install pyyaml`")
 
     data = _load(a.project)
     wbs = data.get('wbs') or []
     if not wbs:
-        raise SystemExit("⚠ project.yaml 中未找到 wbs，无法生成 SOW 启动会（请先完成 WBS 拆解）。")
+        raise SystemExit("⚠ No wbs found in project.yaml; cannot generate SOW kick-offs (complete the WBS decomposition first).")
 
     sow_ids = _identify_sow_packages(wbs)
     if not sow_ids:
-        print("[sow_kickoff] 未识别到 SOW 级包（summary: true 或带子包的顶层包），跳过。")
+        print("[sow_kickoff] No SOW-level packages identified (summary: true or top-level packages with children); skipping.")
         return
 
     proj = data.get('project') or {}
-    kickoff_date = proj.get('start_date') or '待定'
-    pm = proj.get('pm') or '（待定）'
-    sponsor = proj.get('sponsor') or '（待定）'
+    kickoff_date = proj.get('start_date') or 'TBD'
+    pm = proj.get('pm') or '(TBD)'
+    sponsor = proj.get('sponsor') or '(TBD)'
 
     tpl_path = a.template or os.path.join(SCRIPT_DIR, '..', 'templates', 'common', 'sow_kickoff.md')
     tpl_path = os.path.abspath(tpl_path)
     if not os.path.exists(tpl_path):
-        raise SystemExit(f"启动会模板不存在：{tpl_path}")
+        raise SystemExit(f"Kick-off template not found: {tpl_path}")
     with open(tpl_path, 'r', encoding='utf-8') as f:
         tpl = f.read()
     from render import render
@@ -130,40 +132,41 @@ def main():
             r = w.get('role')
             if r and r not in experts:
                 experts.append(r)
-        participants = [{'name': sow.get('owner') or '（待定）', 'role': 'SOW 责任人'}]
+        participants = [{'name': sow.get('owner') or '(TBD)', 'role': 'SOW Owner'}]
         for r in experts:
-            participants.append({'name': f'（{r} 专家）', 'role': f'领域专家({r})'})
-        participants.append({'name': pm, 'role': '项目经理(PM)'})
-        participants.append({'name': sponsor, 'role': '发起人(Sponsor)'})
+            participants.append({'name': f'({r} expert)', 'role': f'Domain expert ({r})'})
+        participants.append({'name': pm, 'role': 'Project Manager (PM)'})
+        participants.append({'name': sponsor, 'role': 'Sponsor'})
 
         ctx = {
             'project': proj,
             'sow': {
                 'id': sow_id,
                 'name': sow.get('name', sow_id),
-                'domain': sow.get('domain') or '（待定）',
-                'owner': sow.get('owner') or '（待定）',
+                'domain': sow.get('domain') or '(TBD)',
+                'owner': sow.get('owner') or '(TBD)',
                 'objective': sow.get('objective') or sow.get('deliverable') or sow.get('name', sow_id),
-                'scope': sow.get('scope') or sow.get('deliverable') or '（待定）',
+                'scope': sow.get('scope') or sow.get('deliverable') or '(TBD)',
             },
             'deliverables': deliverables,
             'experts': experts,
             'participants': participants,
             'kickoff_date': kickoff_date,
             'decisions': sow.get('kickoff_decisions')
-                or [{'id': 1, 'item': '确认范围与交付物', 'conclusion': '（待定）'}],
-            'assumptions': _as_list(sow.get('assumptions')) or ['（待定）'],
+                or [{'id': 1, 'item': 'Confirm scope and deliverables', 'conclusion': '(TBD)'}],
+            'assumptions': _as_list(sow.get('assumptions')) or ['(TBD)'],
             'next_actions': sow.get('next_actions')
-                or [{'action': '拆解并派发叶子工作包', 'owner': sow.get('owner') or '（待定）', 'due': '（待定）'}],
-            'artifacts': sow.get('artifacts') or ['（待定）'],
-            'status': sow.get('status') or '规划中',
+                or [{'action': 'Decompose and dispatch leaf work packages', 'owner': sow.get('owner') or '(TBD)', 'due': '(TBD)'}],
+            'artifacts': sow.get('artifacts') or ['(TBD)'],
+            'status': sow.get('status') or 'planning',
         }
         rendered = render(tpl, ctx)
         slug = str(sow_id).replace('.', '_')
         if a.out_dir:
             out_path = os.path.join(a.out_dir, f'{slug}_kickoff.md')
         else:
-            # 每个 SOW 一个子计划文件夹（kickoff + 排期同处），可独立执行、与父项目关联
+            # Each SOW gets its own sub-plan folder (kickoff + schedule together),
+            # executable independently and linked to the parent project
             out_dir = os.path.join(root, 'plans', slug)
             os.makedirs(out_dir, exist_ok=True)
             out_path = os.path.join(out_dir, 'kickoff.md')
@@ -173,11 +176,11 @@ def main():
         produced.append(rel)
         data['artifacts'][f'sow_kickoff_{slug}'] = rel
         data['artifacts'][f'sow_plan_{slug}'] = os.path.relpath(os.path.dirname(out_path), root)
-        print(f"[sow_kickoff] 已生成 {sow_id} 启动会：{out_path}")
+        print(f"[sow_kickoff] Generated {sow_id} kick-off: {out_path}")
 
     data['artifacts']['sow_kickoffs'] = produced
     _save(a.project, data)
-    print(f"[sow_kickoff] 共 {len(produced)} 份 SOW 启动会，已写入 artifacts.sow_kickoffs")
+    print(f"[sow_kickoff] {len(produced)} SOW kick-offs generated; written to artifacts.sow_kickoffs")
 
 
 if __name__ == '__main__':

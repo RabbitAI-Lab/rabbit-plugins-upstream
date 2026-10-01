@@ -1,42 +1,55 @@
-## Description: <br>
-Troubleshooting guide for vx issues. Use when encountering installation failures, version conflicts, PATH issues, or other vx problems. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Troubleshooting guide for vx issues. Use when encountering installation failures, version conflicts, PATH issues, or other vx problems.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and agents use this skill to diagnose and recover from vx installation failures, version conflicts, PATH issues, runtime errors, configuration problems, CI failures, and corrupted local state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Remote installer commands can execute unreviewed code when copied directly from troubleshooting output. <br>
-Mitigation: Require explicit user approval before running installer commands, and prefer reviewed, pinned installation steps. <br>
-Risk: Reset and lock-file recovery steps can delete local vx state or project lock data. <br>
-Mitigation: Confirm backups, scope, and consequences before deleting ~/.vx or vx.lock. <br>
+## Use Case:
 
+Developers and engineers use this skill to diagnose and resolve vx installation, version, PATH, configuration, and runtime problems.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/vx-troubleshooting) <br>
-- [vx Documentation](https://github.com/loonghao/vx#readme) <br>
-- [vx GitHub Issues](https://github.com/loonghao/vx/issues) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and troubleshooting decision steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local repair commands, remote installer commands, and destructive reset steps that require user review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: A complete reset can delete local vx state and configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Try vx doctor --fix and cache repair first; back up and inspect ~/.vx before deleting it.
+
+Risk: Installer commands can run unverified remote scripts.
+
+Mitigation: Download and verify installer scripts before running them; do not pipe remote content directly to a shell.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/loonghao/skills/vx-troubleshooting)
+- [vx documentation](https://github.com/loonghao/vx#readme)
+- [vx issue tracker](https://github.com/loonghao/vx/issues)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Symptom-based troubleshooting and diagnostic steps]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
