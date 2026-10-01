@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/simple-english",
+  "identifier": "official/creative/simple-english",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/simple-english",
+  "branch": "main",
+  "pushedAt": "2026-10-01T14:05:39Z",
+  "contentHash": "1c8cff49189b4fdf791313088968134886f8c2bc09147c4afb99f51241e9efc4",
+  "fetchedAt": "2026-10-01T14:45:04.520Z"
+}

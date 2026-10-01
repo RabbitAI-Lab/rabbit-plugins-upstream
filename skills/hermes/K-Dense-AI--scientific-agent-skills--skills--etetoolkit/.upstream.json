@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/etetoolkit",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/etetoolkit",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/etetoolkit",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "f6d6a41a6e6361a11fbb9ec122a85dff1c7d8ebf44eff2c4b4b14053c9c9a84b",
+  "fetchedAt": "2026-10-01T14:45:08.147Z"
+}

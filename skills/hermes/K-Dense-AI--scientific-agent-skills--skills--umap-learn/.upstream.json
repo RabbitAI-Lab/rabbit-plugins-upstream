@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/umap-learn",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/umap-learn",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/umap-learn",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "0799187314117f06c956c2a0686a40ca61a77451d6fd9330df56d9d91ee5654a",
+  "fetchedAt": "2026-10-01T14:45:08.300Z"
+}

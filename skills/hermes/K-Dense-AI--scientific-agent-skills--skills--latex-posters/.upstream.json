@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/latex-posters",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/latex-posters",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/latex-posters",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "178baef29766c641299a09b7adcda7e3ebb9e2f7e72bfd9840f2c130655db344",
+  "fetchedAt": "2026-10-01T14:45:08.181Z"
+}

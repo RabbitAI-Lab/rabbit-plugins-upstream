@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/venue-templates",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/venue-templates",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/venue-templates",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "aaaee5a3221f8e674c0d6d849a1a39b30874c6e0cde90ab1e6a82ec7faa8e18c",
+  "fetchedAt": "2026-10-01T14:45:08.306Z"
+}

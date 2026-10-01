@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/generate-image",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/generate-image",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/generate-image",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "1d90d4b0cc58b21123f99e87433ec68d23510bf72b209120cd54644ade285e07",
+  "fetchedAt": "2026-10-01T14:45:08.155Z"
+}

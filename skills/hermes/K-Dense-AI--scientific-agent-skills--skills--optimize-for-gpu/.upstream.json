@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/optimize-for-gpu",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/optimize-for-gpu",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/optimize-for-gpu",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "cfd388f2e474204f620dfd583026bf6800137964db1ce976c9672952007c3a2f",
+  "fetchedAt": "2026-10-01T14:45:08.212Z"
+}

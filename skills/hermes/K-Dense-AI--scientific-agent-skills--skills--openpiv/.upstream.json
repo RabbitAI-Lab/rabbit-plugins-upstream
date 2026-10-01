@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/openpiv",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/openpiv",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/openpiv",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "3bb50bab1ccd634d04930111aea6567154f2d615eb586f679e4c5cb2c9e3b08b",
+  "fetchedAt": "2026-10-01T14:45:08.209Z"
+}

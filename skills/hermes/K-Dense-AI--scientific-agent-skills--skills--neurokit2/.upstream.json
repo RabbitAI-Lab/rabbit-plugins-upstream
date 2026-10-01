@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/neurokit2",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/neurokit2",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/neurokit2",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "50ca1743cdaa37f0fb959d9d6a03799d0e694c75cd19f01d5804f66998f3d882",
+  "fetchedAt": "2026-10-01T14:45:08.199Z"
+}

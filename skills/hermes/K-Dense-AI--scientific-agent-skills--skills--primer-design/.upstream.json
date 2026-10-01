@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/primer-design",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/primer-design",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/primer-design",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "d10000975e6c6059968b9c46d42de054edc6da039d4150ad98cbe4435c447462",
+  "fetchedAt": "2026-10-01T14:45:08.239Z"
+}

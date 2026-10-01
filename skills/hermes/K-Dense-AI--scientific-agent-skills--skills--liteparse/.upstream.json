@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/liteparse",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/liteparse",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/liteparse",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "822f308c156066c72547a87d09966bf49994e2abe994b19972fd370b600614a0",
+  "fetchedAt": "2026-10-01T14:45:08.182Z"
+}

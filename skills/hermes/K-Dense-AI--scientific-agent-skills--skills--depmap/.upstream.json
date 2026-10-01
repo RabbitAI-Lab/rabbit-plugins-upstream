@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/depmap",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/depmap",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/depmap",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "a5bcc2a0ad0921e61f2dd6ed40ed039b57c1188c48bf5d9fb6d64d967d24b56d",
+  "fetchedAt": "2026-10-01T14:45:08.136Z"
+}

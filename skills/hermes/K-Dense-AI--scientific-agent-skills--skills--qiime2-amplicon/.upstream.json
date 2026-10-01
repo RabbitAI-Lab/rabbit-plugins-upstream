@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/qiime2-amplicon",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/qiime2-amplicon",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/qiime2-amplicon",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "62c0465c3f2f4e9fd9cd53537008c5b2743a0d78eb799ade7763112ba843f485",
+  "fetchedAt": "2026-10-01T14:45:08.257Z"
+}

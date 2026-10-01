@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-writing",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scientific-writing",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scientific-writing",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "67be5dd47b6ff168b8de5ee391660e1d99960bfcdc16fedfb48182fa479b2934",
+  "fetchedAt": "2026-10-01T14:45:08.277Z"
+}

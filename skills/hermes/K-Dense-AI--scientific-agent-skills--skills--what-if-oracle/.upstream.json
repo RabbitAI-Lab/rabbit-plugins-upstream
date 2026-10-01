@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/what-if-oracle",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/what-if-oracle",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/what-if-oracle",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "db33775a23e0ffad060f6a777e2c7fb211912f138439043571c7c6323cbbeb9e",
+  "fetchedAt": "2026-10-01T14:45:08.307Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/vaex",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/vaex",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/vaex",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "a5047c5562eb44fa55b66b518c39bc31ed440f19338d211996fbe2ed5bea3782",
+  "fetchedAt": "2026-10-01T14:45:08.303Z"
+}

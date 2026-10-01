@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pydicom",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pydicom",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pydicom",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "e5531703ca6e6c502520c740e0e5d15ba7c013cf11a52219291734e6082f2d43",
+  "fetchedAt": "2026-10-01T14:45:08.245Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/cirq",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/cirq",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/cirq",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "cc2efc6192f6859251aab3a42cf3a3676415ebd6c947252fae83777ec0b2c9e8",
+  "fetchedAt": "2026-10-01T14:45:08.119Z"
+}

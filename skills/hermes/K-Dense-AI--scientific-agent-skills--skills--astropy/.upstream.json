@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/astropy",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/astropy",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/astropy",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "16658bda658e5c4b27b49ee97922f0df9049e8cff258a7231ccdfbdc276648df",
+  "fetchedAt": "2026-10-01T14:45:08.109Z"
+}

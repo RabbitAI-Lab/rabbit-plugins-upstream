@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-schematics",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scientific-schematics",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scientific-schematics",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "2099d83b7e8928f7b68868884ae6d90b1c12aa8a1e32e73bb8ce22a445219a63",
+  "fetchedAt": "2026-10-01T14:45:08.271Z"
+}

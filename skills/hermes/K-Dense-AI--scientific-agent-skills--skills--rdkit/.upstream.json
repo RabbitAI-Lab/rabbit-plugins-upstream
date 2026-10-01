@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/rdkit",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/rdkit",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/rdkit",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "be4986586a5ab980943bed8b261684d096c22d560a8167138c3b114bac92726a",
+  "fetchedAt": "2026-10-01T14:45:08.261Z"
+}

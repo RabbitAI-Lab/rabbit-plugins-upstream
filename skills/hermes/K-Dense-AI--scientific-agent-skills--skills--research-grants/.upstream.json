@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/research-grants",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/research-grants",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/research-grants",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "e1fb5358b7989654d101b57f805ea0eaef020ccbf35e025c9e45685ca3161f3b",
+  "fetchedAt": "2026-10-01T14:45:08.264Z"
+}

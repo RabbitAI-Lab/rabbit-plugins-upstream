@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/neuropixels-analysis",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/neuropixels-analysis",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/neuropixels-analysis",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "21d7b835077232cd5352cb29de0d92289e1e37bfc1d69152547d526bbdec9cef",
+  "fetchedAt": "2026-10-01T14:45:08.201Z"
+}

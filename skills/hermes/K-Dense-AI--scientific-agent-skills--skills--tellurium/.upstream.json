@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/tellurium",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/tellurium",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/tellurium",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "c55d2b526543b13085790742607b929cbbe432fe7700132bb36e7f98488ef929",
+  "fetchedAt": "2026-10-01T14:45:08.290Z"
+}

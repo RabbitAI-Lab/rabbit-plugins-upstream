@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/ncats-arax",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/ncats-arax",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/ncats-arax",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "ef54695b72bb160020cb897c51bac6d808367ecac37261539f15db92e4de0e7f",
+  "fetchedAt": "2026-10-01T14:45:08.197Z"
+}

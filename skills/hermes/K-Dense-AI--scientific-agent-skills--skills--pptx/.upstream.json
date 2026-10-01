@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pptx",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pptx",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pptx",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "34411a1ebe55079e0afe2d2404dd1b3b0782ff2026701cacd10cfbb1fe3caca3",
+  "fetchedAt": "2026-10-01T14:45:08.235Z"
+}

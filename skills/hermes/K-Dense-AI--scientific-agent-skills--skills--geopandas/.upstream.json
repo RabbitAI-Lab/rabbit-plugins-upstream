@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/geopandas",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/geopandas",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/geopandas",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "0710df96f33c55803a3327dbad0789038bc27ed616c6eda6e0f0c0062aee4c2d",
+  "fetchedAt": "2026-10-01T14:45:08.160Z"
+}

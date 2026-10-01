@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/waypoint-bio",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/waypoint-bio",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/waypoint-bio",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "33cec1adf87ab5ff11557211657980124ddf492381d6e9b7539645dbdf009962",
+  "fetchedAt": "2026-10-01T14:45:08.307Z"
+}

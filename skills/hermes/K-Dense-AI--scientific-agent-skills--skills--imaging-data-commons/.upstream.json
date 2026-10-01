@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/imaging-data-commons",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/imaging-data-commons",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/imaging-data-commons",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "5f222ff5b77c98a489a09eb2044c8527dcfe9fa5c58b523a37c450646f9bde63",
+  "fetchedAt": "2026-10-01T14:45:08.172Z"
+}

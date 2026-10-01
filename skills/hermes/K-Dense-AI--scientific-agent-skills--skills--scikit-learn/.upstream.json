@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scikit-learn",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scikit-learn",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scikit-learn",
+  "branch": "main",
+  "pushedAt": "2026-10-01T00:14:57Z",
+  "contentHash": "234fa3c9eaac0c638d9fd9d4d2feef34bec733d30c180e1cb9b64c191f1de45e",
+  "fetchedAt": "2026-10-01T14:45:08.278Z"
+}
