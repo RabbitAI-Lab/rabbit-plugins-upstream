@@ -1,42 +1,60 @@
-## Description: <br>
-Scores and diagnoses Ruankao senior qualification essay drafts across five exam tracks, producing dimension-level scores, pass-line assessment, and targeted revision guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scores and diagnoses Chinese Ruankao advanced-qualification essays across five qualification tracks, with tailored improvement suggestions.
 
-## Publisher: <br>
-[nieen](https://clawhub.ai/user/nieen) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nieen](https://clawhub.ai/user/nieen)
 
-## Use Case: <br>
-External Ruankao candidates and reviewers use this skill to evaluate senior qualification essay drafts against the selected exam-track rubric. It helps identify score-limiting gaps such as missing prompt coverage, weak practical evidence, structure issues, and unclear writing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nieen/skills/ruankao-essay-scoring) <br>
-- [Default scoring rubric for system architect essays](references/scoring-rubric.md) <br>
-- [Project manager scoring rubric](references/scoring-rubric-pm.md) <br>
-- [System analyst scoring rubric](references/scoring-rubric-sa.md) <br>
-- [Network planning designer scoring rubric](references/scoring-rubric-ne.md) <br>
-- [System planning and management scoring rubric](references/scoring-rubric-sp.md) <br>
+Ruankao advanced-qualification candidates use this skill to score a submitted essay against the relevant qualification rubric, identify weaknesses, and prioritize revisions. It can also review a single scoring dimension or compare a revised draft with an earlier version.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown scoring report with tables, per-dimension diagnosis, and prioritized revision advice] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only output; users should avoid including sensitive personal information in essay drafts unless needed for review, and should confirm the request is a Ruankao essay-scoring task before using the skill.] <br>
+Global
 
-## Skill Version(s): <br>
-1.1.0 (source: evidence release and SKILL.md frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The skill may activate for general Chinese essay-scoring requests outside Ruankao exams.
+
+Mitigation: Confirm the essay is for a Ruankao advanced qualification before applying its rubric.
+
+Risk: An agent might modify a local draft while providing scoring feedback.
+
+Mitigation: Allow file edits only when the user explicitly requests changes to the draft.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/nieen/skills/ruankao-essay-scoring)
+- [General and system architect scoring rubric](artifact/references/scoring-rubric.md)
+- [Project manager scoring rubric](artifact/references/scoring-rubric-pm.md)
+- [Systems analyst scoring rubric](artifact/references/scoring-rubric-sa.md)
+- [Network planner scoring rubric](artifact/references/scoring-rubric-ne.md)
+- [Systems planning and management scoring rubric](artifact/references/scoring-rubric-sp.md)
+- [Scoring report template](artifact/references/report-template.md)
+- [Common scoring errors and troubleshooting](artifact/references/common-errors.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Chinese-language Markdown scoring report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes dimension scores, an essay checklist, an overall diagnosis, and prioritized revision advice.]
+
+## Skill Version(s):
+
+1.5.2 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

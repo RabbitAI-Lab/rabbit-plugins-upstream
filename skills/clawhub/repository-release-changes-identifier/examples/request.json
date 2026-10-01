@@ -1,0 +1,3 @@
+{
+  "commit_patch": "Change-ID: REPO-FOXTROT-6186\ndiff --git a/services/api.py b/services/api.py\n--- a/services/api.py\n+++ b/services/api.py\n@@ -1 +1,2 @@\n-old = 1\n+old = 2\n+ready = True\n"
+}

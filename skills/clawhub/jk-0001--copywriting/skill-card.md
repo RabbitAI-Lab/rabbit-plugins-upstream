@@ -1,36 +1,52 @@
-## Description: <br>
-Helps an agent produce and refine concise copywriting content for marketing, product, or communication tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Write persuasive copy for landing pages, emails, ads, sales pages, and marketing materials.
 
-## Publisher: <br>
-[jk-0001](https://clawhub.ai/user/jk-0001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jk-0001](https://clawhub.ai/user/jk-0001)
 
-## Use Case: <br>
-Developers, marketers, and content teams use this skill to help an agent draft, revise, and polish human-facing copy. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Generated copy may contain inaccurate, unsupported, or misleading claims. <br>
-Mitigation: Review generated content against source materials, brand guidance, and applicable legal requirements before publication. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
+## Use Case:
 
+External users, marketers, founders, and solopreneurs use this skill to draft and refine marketing copy for landing pages, headlines, calls to action, product descriptions, ads, sales pages, and email sequences.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should be reviewed by a human before publication.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-0.1.0 (source: target metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Generated marketing copy could include inaccurate product claims, misleading urgency, or unsupported proof.
+
+Mitigation: Review generated copy for factual accuracy, truthful claims, appropriate urgency, and support for any proof points before publication.
+
+Risk: Broad activation triggers may apply copywriting guidance in a non-marketing writing context.
+
+Mitigation: Confirm the user wants persuasive marketing copy before applying conversion-focused frameworks or urgency tactics.
+
+## Reference(s):
+
+- [Copywriting skill on ClawHub](https://clawhub.ai/jk-0001/skills/copywriting)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text copywriting guidance and draft copy]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code, shell commands, credential access, or persistence are part of the artifact.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

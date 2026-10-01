@@ -1,47 +1,61 @@
-## Description: <br>
-Helps English teachers design CSE-first, CEFR-referenced assessments across listening, speaking, reading, and writing, with learner profiles and intervention guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助英语教师设计听说读写四维测评，依据 CSE 描述语整理能力画像和教学建议，并以 CEFR 作为参照。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers and tutoring teams use this skill to plan four-skill assessments, map learner ability against CSE with CEFR as an international reference, draft learner profiles, and prepare teaching interventions for review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive student assessment profiles or CEFR/CSE levels could be written into downstream systems without clear confirmation or rollback. <br>
-Mitigation: Use read-only or draft-review mode for student records, anonymize learner identifiers, and require teacher approval of the exact level, profile, and intervention fields before any write-back. <br>
-Risk: Draft assessment guidance could be mistaken for final teacher scoring or ranking. <br>
-Mitigation: Keep outputs as teacher-reviewed assessment frameworks and ability profiles; do not use the skill to rank students or replace teacher scoring decisions. <br>
+## Use Case:
 
+英语教师用它规划中国中小学听说读写综合测评，整理学生能力画像、教学干预建议和成长记录；等级由教师对照 CSE 描述语判定，而非按分数自动换算。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-assessment) <br>
-- [CEFR can-do statements](references/cefr-can-do-statements.md) <br>
-- [CEFR four-skill descriptors](references/cefr-four-skill-descriptors.md) <br>
-- [Four-skill rubric](references/four-skill-rubric.md) <br>
-- [Assessment template](references/assessment-template.md) <br>
-- [Student ability profile template](references/student-ability-profile-template.md) <br>
-- [Intervention suggestion sample](references/intervention-suggestion-sample.md) <br>
-- [English growth archive sample](references/english-growth-archive-sample.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize content and crisis contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style assessment plans, learner profiles, rubrics, and intervention recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces draft CSE/CEFR mappings, four-skill profiles, and intervention fields for teacher review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Class assessment records and student profiles may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use pseudonymous data and obtain teacher consent before workspace writes or student-profile writeback.
+
+Risk: China-specific teaching content and crisis contacts may not fit other regions.
+
+Mitigation: Adapt the content, consent requirements, and crisis contacts before deployment outside mainland China.
+
+Risk: Broad assessment triggers may activate the skill unintentionally.
+
+Mitigation: Narrow the activation triggers when accidental activation is a concern.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-assessment)
+- [CSE and CEFR can-do statements](artifact/references/cefr-can-do-statements.md)
+- [Four-skill assessment rubric](artifact/references/four-skill-rubric.md)
+- [Assessment design template](artifact/references/assessment-template.md)
+- [Senior-high assessment blueprint](artifact/references/hs-assessment-blueprint.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Markdown assessment plans, ability profiles, and teaching recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher reviews student-facing material and confirms any student-profile writeback.]
+
+## Skill Version(s):
+
+2.9.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

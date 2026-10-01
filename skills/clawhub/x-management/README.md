@@ -2,6 +2,17 @@
 
 Draft-first X/Twitter account management skill for OpenClaw.
 
+ClawHub: [X Management skill](https://clawhub.ai/princebansal/skills/x-management)
+
+Companion plugin: [OpenClaw X Plugin](https://clawhub.ai/princebansal/plugins/openclaw-plugin-x)
+
+Source: [GitHub repository](https://github.com/princebansal/openclaw-skill-x-management)
+
+## Release notes
+
+### 0.1.5
+- Clarify that media uploads are immediate external actions and require a specific user-authorized file and account.
+
 This skill is the agent-side workflow layer that pairs with the `openclaw-plugin-x` plugin.
 
 ## What this skill does
@@ -48,7 +59,7 @@ Example ClawHub publish flow:
 clawhub skill publish ./openclaw-skill-x-management \
   --slug x-management \
   --name "X Management" \
-  --version 0.1.3 \
+  --version 0.1.5 \
   --tags latest
 ```
 

@@ -1,46 +1,63 @@
-## Description: <br>
-BrickLink Store API helper/CLI (OAuth 1.0 request signing). Covers orders, store inventory (read + write), catalog, categories, colors, feedback, and push notifications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+BrickLink Store API helper/CLI (OAuth 1.0 request signing). Covers orders, store inventory (read + write), catalog, categories, colors, feedback, and push notifications.
 
-## Publisher: <br>
-[odrobnik](https://clawhub.ai/user/odrobnik) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[odrobnik](https://clawhub.ai/user/odrobnik)
 
-## Use Case: <br>
-External developers and BrickLink store operators use this skill to let an agent run OAuth-signed BrickLink Store API CLI commands for orders, inventory, catalog lookup, pricing, feedback, notifications, and local order or invoice HTML views. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform mutating BrickLink store actions, including order, payment, feedback, and inventory changes. <br>
-Mitigation: Install only when the agent is intended to use BrickLink OAuth credentials with store read/write authority, and review every mutating command before execution. <br>
-Risk: Order detail and invoice HTML can contain customer order data and may be persisted locally. <br>
-Mitigation: Use private workspace or /tmp output paths on trusted machines and delete generated files when no longer needed. <br>
+## Use Case:
 
+Developers, store operators, and agents use this skill to query BrickLink store orders, inventory, catalog data, feedback, and notifications, and to prepare or run authenticated BrickLink API CLI commands. It also supports store mutations such as order updates, feedback replies, and inventory create/update/delete operations when the user provides suitable credentials and approves the action.
 
-## Reference(s): <br>
-- [BrickLink ClawHub skill page](https://clawhub.ai/odrobnik/skills/bricklink) <br>
-- [Setup instructions](SETUP.md) <br>
-- [BrickLink Catalog Item API](references/catalog-api.md) <br>
-- [BrickLink Store Inventory API](references/inventory-api.md) <br>
-- [BrickLink Orders API](references/orders-api.md) <br>
-- [BrickLink catalog resource representations](https://www.bricklink.com/v3/api.page?page=resource-representations-catalog) <br>
-- [BrickLink inventory resource representations](https://www.bricklink.com/v3/api.page?page=resource-representations-inventory) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, HTML files] <br>
-**Output Format:** [Markdown guidance with shell command invocations, JSON API responses, and optional HTML order or invoice files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Python 3 and BrickLink OAuth credentials; mutating commands act on a live store account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.3 (source: frontmatter and server release metadata) <br>
+Risk: Commands can immediately change live BrickLink store data, including orders, feedback, and inventory.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege or read-only credentials when possible and manually review every mutating command before execution.
+
+Risk: Order detail and invoice HTML exports may contain customer personal information and default to predictable /tmp file paths.
+
+Mitigation: Choose an appropriate workspace output path for sensitive exports, protect generated files, and remove temporary copies when no longer needed.
+
+Risk: BrickLink OAuth credentials grant access according to the account and token permissions used.
+
+Mitigation: Store credentials securely, avoid sharing them with untrusted agents, and rotate tokens if exposure is suspected.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/odrobnik/skills/bricklink)
+- [Setup Instructions](SETUP.md)
+- [BrickLink Catalog Item API](references/catalog-api.md)
+- [BrickLink Store Inventory API](references/inventory-api.md)
+- [BrickLink Orders API](references/orders-api.md)
+- [BrickLink Catalog Resource Representations](https://www.bricklink.com/v3/api.page?page=resource-representations-catalog)
+- [BrickLink Inventory Resource Representations](https://www.bricklink.com/v3/api.page?page=resource-representations-inventory)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files]
+
+**Output Format:** [Markdown guidance with inline shell commands; CLI commands can return JSON or text and can write local HTML files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python 3 and BrickLink OAuth 1.0 credentials via config file or environment variables.]
+
+## Skill Version(s):
+
+1.4.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

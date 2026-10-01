@@ -1,41 +1,53 @@
-## Description: <br>
-AI-powered workflow design and automation guidance for mapping business processes, assessing automation fit, designing agentic pipelines, generating workflow specifications, and estimating ROI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI-powered agentic workflow design and automation assistant for mapping multi-step processes, identifying automation opportunities, designing autonomous agent pipelines, generating workflow specs, and estimating ROI.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Operations managers, developers, product managers, consultants, and founders use this skill to assess business processes for automation and design practical agentic workflows. It helps produce pipeline blueprints, platform recommendations, HITL checkpoints, workflow specs, and ROI estimates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad workflow-automation triggers may route general automation planning requests to this skill. <br>
-Mitigation: Enable it only when workflow-automation planning support is desired and review its recommendations before use. <br>
-Risk: Generated workflow designs may affect sensitive business data, customer records, payments, public posting, or external systems. <br>
-Mitigation: Require human review, HITL checkpoints, access controls, and rollback plans before implementing or connecting generated workflows to third-party tools. <br>
+## Use Case:
 
+Operations managers, developers, product managers, consultants, and entrepreneurs use this skill to assess business processes, design agentic workflow blueprints, choose automation platforms, generate n8n/Make/Zapier-oriented specs, and estimate automation ROI.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/agentic-workflow-designer) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON/YAML workflow specifications, scoring tables, and configuration-oriented recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include automation suitability scores, HITL checkpoints, platform comparisons, rollback guidance, and ROI estimates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.3.3 (source: frontmatter and server evidence) <br>
+Risk: Generated workflow specs may be incomplete, incorrect, or unsuitable for direct import into production automation systems.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat generated specs as drafts and review them before import or deployment.
+
+Risk: Automation designs may include customer-facing, financial, regulated, data-deleting, or external side-effect actions.
+
+Mitigation: Add human approval checkpoints for these actions and validate compliance, retention, access control, and audit requirements.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/agentic-workflow-designer)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown with JSON and YAML workflow specifications]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces workflow blueprints, platform recommendations, ROI estimates, and review guidance for human validation before deployment.]
+
+## Skill Version(s):
+
+3.3.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

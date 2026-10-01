@@ -1,42 +1,53 @@
-## Description: <br>
-AI-powered digital human operations assistant for financial institutions covering script design, content planning, live streaming management, interaction optimization, and performance analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps financial marketing teams plan virtual-avatar scripts, content schedules, audience interactions, and performance reviews.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank and insurance digital marketing teams use this skill to plan and generate digital-human scripts, content calendars, live-stream interaction designs, and performance-analysis guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated scripts or campaign plans could conflict with advertising or financial-marketing compliance requirements. <br>
-Mitigation: Review generated content against applicable advertising and financial-marketing rules before publication. <br>
-Risk: Regulatory-update content is advisory and may become stale or incomplete. <br>
-Mitigation: Confirm regulatory claims against current official sources before using them in customer-facing materials. <br>
-Risk: Performance analytics workflows could expose customer communications, account data, or confidential business records if raw data is used. <br>
-Mitigation: Use aggregated or anonymized metrics and avoid entering sensitive customer or business data. <br>
+## Use Case:
 
+Financial institution marketing and operations teams use this skill to draft digital-human video and livestream scripts, plan content calendars, design avatar interactions, and review campaign performance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/security-digital-human-ops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with structured templates and illustrative code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory content for financial digital-human marketing workflows; generated scripts and metrics guidance should be reviewed before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server evidence and frontmatter) <br>
+Risk: Financial marketing or regulatory guidance may be inaccurate or outdated.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have qualified compliance staff verify claims and applicable requirements before publication.
+
+Risk: Customer or confidential financial information could be disclosed in prompts.
+
+Mitigation: Provide only necessary, de-identified inputs; exclude customer identifiers, account details, internal client lists, and non-public financial data.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/security-digital-human-ops)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Text and Markdown scripts, tables, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Planning guidance only; no code execution, data access, or publishing.]
+
+## Skill Version(s):
+
+3.0.4 (source: server-resolved release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

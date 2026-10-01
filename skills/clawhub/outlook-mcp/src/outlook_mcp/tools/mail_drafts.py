@@ -7,7 +7,7 @@ from typing import Any
 from outlook_mcp.config import Config
 from outlook_mcp.pagination import apply_pagination, build_request_config, wrap_nextlink
 from outlook_mcp.permissions import CATEGORY_MAIL_DRAFTS, CATEGORY_MAIL_SEND, check_permission
-from outlook_mcp.tools.mail_read import _format_message_summary
+from outlook_mcp.tools.mail_read import SUMMARY_SELECT, _format_message_summary
 from outlook_mcp.validation import validate_datetime, validate_email, validate_graph_id
 
 # MAPI tag PR_DEFERRED_SEND_TIME (0x3FEF, PtypTime) — the legacy extended
@@ -19,7 +19,7 @@ from outlook_mcp.validation import validate_datetime, validate_email, validate_g
 _PR_DEFERRED_SEND_TIME_ID = "SystemTime 0x3FEF"
 
 
-def _build_deferred_send_property(deferred_send_datetime: str):
+def _build_deferred_send_property(deferred_send_datetime: str, tz: str = "UTC"):
     """Return a SingleValueLegacyExtendedProperty for PR_DEFERRED_SEND_TIME.
 
     `deferred_send_datetime` must be ISO 8601. validate_datetime normalizes
@@ -30,7 +30,7 @@ def _build_deferred_send_property(deferred_send_datetime: str):
         SingleValueLegacyExtendedProperty,
     )
 
-    normalized = validate_datetime(deferred_send_datetime)
+    normalized = validate_datetime(deferred_send_datetime, tz)
     prop = SingleValueLegacyExtendedProperty()
     prop.id = _PR_DEFERRED_SEND_TIME_ID
     prop.value = normalized
@@ -49,10 +49,7 @@ async def list_drafts(
     """
     query_params: dict[str, Any] = {
         "$orderby": "lastModifiedDateTime desc",
-        "$select": (
-            "id,subject,from,receivedDateTime,isRead,importance,"
-            "bodyPreview,hasAttachments,categories,flag,conversationId"
-        ),
+        "$select": SUMMARY_SELECT,
     }
     query_params = apply_pagination(query_params, count, cursor)
 
@@ -146,7 +143,9 @@ async def create_draft(
 
     deferred_normalized = None
     if deferred_send_datetime is not None:
-        prop, deferred_normalized = _build_deferred_send_property(deferred_send_datetime)
+        prop, deferred_normalized = _build_deferred_send_property(
+            deferred_send_datetime, config.timezone
+        )
         msg.single_value_extended_properties = [prop]
 
     # POST /me/messages creates a draft
@@ -264,7 +263,9 @@ async def update_draft(
             msg.single_value_extended_properties = [prop]
             deferred_normalized = ""
         else:
-            prop, deferred_normalized = _build_deferred_send_property(deferred_send_datetime)
+            prop, deferred_normalized = _build_deferred_send_property(
+            deferred_send_datetime, config.timezone
+        )
             msg.single_value_extended_properties = [prop]
 
     await graph_client.me.messages.by_message_id(draft_id).patch(msg)

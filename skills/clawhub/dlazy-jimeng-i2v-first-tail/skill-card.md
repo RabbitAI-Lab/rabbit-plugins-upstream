@@ -1,44 +1,59 @@
-## Description: <br>
-Generate coherent transition videos using Jimeng's first and tail frame models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to generate transition videos from first and last frame images using Jimeng through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to call dLazy's hosted Jimeng first-and-last-frame video workflow from an agent, providing a prompt plus first and last frame images to generate transition video output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local first or last frame images are sent to dLazy's hosted service for generation. <br>
-Mitigation: Use the skill only when cloud processing by dLazy is intended, and avoid sending sensitive prompts or media unless that use is acceptable for the user's environment. <br>
-Risk: Broad trigger wording could make the skill run for generic transition-video requests. <br>
-Mitigation: Confirm that the user intends to use dLazy's Jimeng video service before invoking the command. <br>
-Risk: Authentication can persist a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY or npx when a less persistent setup is preferred, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Creators and developers use this skill to direct an agent to generate a transition video from supplied first- and last-frame images.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-i2v-first-tail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, json, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an asynchronous task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release metadata) <br>
+Risk: Installing the external CLI runs third-party package code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package before installation; use the on-demand npx invocation if a persistent global installation is unnecessary.
+
+Risk: Local media supplied for generation is uploaded to dLazy's hosted service.
+
+Mitigation: Only submit media that you are comfortable sharing with dLazy.
+
+Risk: The CLI can store a dLazy API key locally.
+
+Mitigation: Use a revocable key and rotate or revoke it if its storage or exposure is a concern.
+
+## Reference(s):
+
+- [dLazy CLI repository (linked in release metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell commands and result links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI may return an asynchronous task ID; completed media can be saved locally.]
+
+## Skill Version(s):
+
+1.3.23 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

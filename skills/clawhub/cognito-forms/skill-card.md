@@ -1,47 +1,60 @@
-## Description: <br>
-Cognito Forms API integration with managed OAuth for accessing forms, entries, documents, and files through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents access Cognito Forms to list forms, manage entries, and retrieve submitted documents through an authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent access Cognito Forms through Maton, including listing forms, managing entries, and retrieving documents and files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Maton API key and access to a connected Cognito Forms account. <br>
-Mitigation: Keep MATON_API_KEY private and install the skill only when agent access to Cognito Forms through Maton is intended. <br>
-Risk: Create, update, and delete requests can change or remove form entries. <br>
-Mitigation: Approve write operations only after checking the form ID, entry ID, target connection, and expected effect. <br>
-Risk: Multiple Cognito Forms connections can cause requests to target the wrong account. <br>
-Mitigation: Verify the selected connection and use the Maton-Connection header when more than one active connection exists. <br>
-Risk: Document and file retrieval can expose form submission data. <br>
-Mitigation: Confirm the form ID, entry ID, document template number, or file ID before retrieving documents or files. <br>
+## Use Case:
 
+People managing Cognito Forms submissions use this skill to inspect forms and entries, update or delete entries with approval, and retrieve documents. Developers can use its connection and automation guidance for approved workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/cognito-forms) <br>
-- [Cognito Forms API Overview](https://www.cognitoforms.com/support/475/data-integration/cognito-forms-api) <br>
-- [Cognito Forms REST API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/rest-api-reference) <br>
-- [Cognito Forms API Reference](https://www.cognitoforms.com/support/476/data-integration/cognito-forms-api/api-reference) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, API Calls, Configuration] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, bash, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Cognito Forms OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The connected account can expose or change Cognito Forms business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only access where possible and confirm the target and effect before each write or deletion.
+
+Risk: Raw API keys can expose a long-lived credential.
+
+Mitigation: Prefer the Maton CLI's managed login; use raw API keys only when the CLI cannot be used.
+
+Risk: Trigger destinations can continuously forward event data.
+
+Mitigation: Obtain separate approval for each destination and verify its endpoint and expected data before enabling it.
+
+## Reference(s):
+
+- [Cognito Forms API overview](https://www.cognitoforms.com/support/475/data-integration/cognito-forms-api)
+- [Maton homepage](https://maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with command and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include form entries or document links containing sensitive business or personal data.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Audit-ready decision artifacts for LLM outputs: assumptions, risks, recommendation, and review gating as schema-valid JSON. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This superseded reference skill produces structured JSON decision records with assumptions, risks, recommendations, and consistency checks for human review.
 
-## Publisher: <br>
-[sapenov](https://clawhub.ai/user/sapenov) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[dgr-ai-labs](https://clawhub.ai/user/dgr-ai-labs)
 
-## Use Case: <br>
-Developers, teams, and decision makers use this skill to turn review-required prompts into auditable JSON decision records with assumptions, risks, recommendations, and consistency checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated decision records may contain secrets, personal data, or confidential incident details if those details are included in the prompt. <br>
-Mitigation: Remove sensitive data before storing or sharing generated artifacts. <br>
-Risk: Example outputs may not require review for every high-impact scenario. <br>
-Mitigation: Require qualified human review for production rollbacks, access-control, financial, legal, medical, safety, or other high-impact decisions. <br>
+## Use Case:
 
+Developers and decision reviewers use this reference skill to document decision context, assumptions, risks, and recommendations in a consistent format for human review. It does not enforce actions or establish that a recommendation is correct.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/sapenov/skills/dgr) <br>
-- [Publisher Profile](https://clawhub.ai/user/sapenov) <br>
-- [DGR JSON Schema](artifact/schema.json) <br>
-- [DGR Field Guide](artifact/field_guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [JSON object conforming to schema.json] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes decision metadata, assumptions, risks, recommendation, review gating, and consistency checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata and SKILL.md changelog) <br>
+Risk: A structured rationale can be mistaken for verified evidence or a correct decision.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate important assumptions and sources independently, and require qualified human review before acting on high-stakes recommendations.
+
+Risk: The skill documents decisions but cannot prevent an agent from taking an unsafe action.
+
+Mitigation: Do not treat the record as an enforcement mechanism; apply separate controls before consequential actions.
+
+## Reference(s):
+
+- [DGR skill release](https://clawhub.ai/dgr-ai-labs/skills/dgr)
+- [DGR Gate successor](https://clawhub.ai/dgr-ai-labs/plugins/openclaw-dgr-gate)
+- [Decision record schema](artifact/schema.json)
+- [Decision record field guide](artifact/field_guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Structured decision records]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes assumptions, risks, a recommendation, and a consistency check; intended for human review, not enforcement.]
+
+## Skill Version(s):
+
+1.1.1 (source: ClawHub release evidence; bundled SKILL.md states 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

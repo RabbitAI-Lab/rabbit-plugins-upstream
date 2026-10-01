@@ -1,47 +1,61 @@
-## Description: <br>
-Basecamp API integration with managed OAuth for managing projects, to-dos, messages, schedules, documents, and team collaboration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in managing Basecamp projects, to-dos, messages, schedules, and documents through a connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Basecamp 4 through Maton's managed OAuth gateway for project, to-do, message, schedule, document, and team collaboration workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill relies on Maton to mediate access to a connected Basecamp account. <br>
-Mitigation: Install only when Maton is trusted for the account, review the connected Basecamp permissions, and keep MATON_API_KEY private. <br>
-Risk: Write operations can create, update, archive, trash, or post Basecamp content. <br>
-Mitigation: Require explicit user confirmation before each write operation, including the target resource and intended effect. <br>
-Risk: Multiple Basecamp connections can cause requests to affect the wrong account. <br>
-Mitigation: Use the Maton-Connection header when more than one Basecamp connection exists. <br>
+## Use Case:
 
+Teams and their agents use this skill to find and manage Basecamp projects, tasks, discussions, schedules, and documents, with user approval for changes and account connections.
 
-## Reference(s): <br>
-- [ClawHub Basecamp Skill](https://clawhub.ai/byungkyu/skills/basecamp) <br>
-- [Basecamp 4 API Documentation](https://github.com/basecamp/bc3-api) <br>
-- [Basecamp Authentication Guide](https://github.com/basecamp/bc3-api/blob/master/sections/authentication.md) <br>
-- [Basecamp API Endpoint Reference](https://github.com/basecamp/bc3-api#endpoints) <br>
-- [Related Maton API Gateway Skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Maton API Key Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline bash, Python, JavaScript, HTTP endpoint, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, and a Basecamp OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Connected-account access can expose or change Basecamp business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth, limit access to the task, and confirm each write or deletion with the user.
+
+Risk: Trigger destinations can forward event data to third-party hosts.
+
+Mitigation: Use only destinations the user explicitly trusts and remove unused triggers and destinations.
+
+Risk: Long-lived API keys or unattended automations can retain access beyond the task.
+
+Mitigation: Prefer OAuth through the Maton CLI and remove unused connections and functions.
+
+## Reference(s):
+
+- [Basecamp 4 API documentation](https://github.com/basecamp/bc3-api)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton homepage](https://maton.ai)
+- [Basecamp skill release](https://clawhub.ai/byungkyu/skills/basecamp)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration, Code]
+
+**Output Format:** [Markdown with command and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions require a connected account and network access.]
+
+## Skill Version(s):
+
+1.2.4 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

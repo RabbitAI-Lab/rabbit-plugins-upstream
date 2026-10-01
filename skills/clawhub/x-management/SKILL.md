@@ -5,6 +5,8 @@ description: Draft-first X/Twitter account management workflow for OpenClaw. Use
 
 # X Management
 
+Companion package: [OpenClaw X Plugin on ClawHub](https://clawhub.ai/princebansal/plugins/openclaw-plugin-x). This skill supplies the judgment and approval workflow; the plugin supplies X account access and the draft/publish tools.
+
 Use the X plugin as a **draft-first system**, not an autonomous posting engine.
 
 ## Core operating rule
@@ -50,6 +52,7 @@ Still partial:
 - engagement actions
 - deeper thread expansion beyond immediate referenced context
 - packaged-runtime validation should still be treated as an active release-quality concern when new plugin versions ship
+- media uploads are live external actions, not drafts; only invoke `x_media_upload` for a specific user-authorized file and account
 
 ## Use the plugin surface this way
 

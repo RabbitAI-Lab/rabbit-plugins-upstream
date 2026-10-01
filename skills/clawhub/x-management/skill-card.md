@@ -1,41 +1,54 @@
-## Description: <br>
-Draft-first X/Twitter account management workflow for OpenClaw that helps agents read account context, draft posts, replies, quote tweets, and threads, and keep write actions behind explicit approval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps OpenClaw users research X/Twitter account context and prepare posts, replies, quotes, and threads with explicit approval before publishing.
 
-## Publisher: <br>
-[princebansal](https://clawhub.ai/user/princebansal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[princebansal](https://clawhub.ai/user/princebansal)
 
-## Use Case: <br>
-OpenClaw users and agents use this skill to manage a personal X/Twitter account by gathering context, drafting social posts, and publishing only after explicit user approval through the paired X plugin. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Approved drafts can be published publicly from the connected X/Twitter account. <br>
-Mitigation: Review the exact draft text and require explicit approval before publishing. <br>
-Risk: Multi-account sessions can publish from the wrong account if the accountId is ambiguous or omitted. <br>
-Mitigation: Use the exact accountId for draft, approval, and publish steps, and verify non-default accounts with x_account_me before approval. <br>
-Risk: The workflow requires OAuth account access through the paired plugin. <br>
-Mitigation: Install only when intending to connect an X/Twitter account and reconnect if required read scopes are missing. <br>
+## Use Case:
 
+People managing an X/Twitter account use this skill with the OpenClaw X plugin to review account context, draft posts and replies, and approve publication explicitly.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text] <br>
-**Output Format:** [Markdown and plain text workflow guidance with social post drafts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Draft-first workflow; public posting depends on explicit approval through the paired X plugin.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: server-resolved release metadata and README publish example) <br>
+Risk: An unintended or inaccurate post could be published.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact draft and require explicit user approval before publishing.
+
+Risk: A post or media upload could affect the wrong account or upload an unauthorized file.
+
+Mitigation: Use explicit account IDs when multiple accounts are configured; verify the account and authorize the specific file before a live media upload.
+
+## Reference(s):
+
+- [X Management on ClawHub](https://clawhub.ai/princebansal/skills/x-management)
+- [Companion OpenClaw X Plugin](https://clawhub.ai/princebansal/plugins/openclaw-plugin-x)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft-first recommendations; publishing requires explicit approval. Media uploads are immediate external actions.]
+
+## Skill Version(s):
+
+0.1.5 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

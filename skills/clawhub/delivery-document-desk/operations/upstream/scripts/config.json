@@ -1,0 +1,37 @@
+{
+  "variant_id": "relay_13_signature_requirement",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "delivery_request",
+  "output_name": "requires_signature",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "package_class",
+      "service_level"
+    ],
+    "properties": {
+      "package_class": {
+        "type": "string",
+        "enum": [
+          "documents",
+          "electronics",
+          "regulated_material"
+        ]
+      },
+      "service_level": {
+        "type": "string",
+        "enum": [
+          "standard",
+          "priority",
+          "insured"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "boolean"
+  },
+  "effect": null
+}

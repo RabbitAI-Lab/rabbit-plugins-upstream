@@ -2,7 +2,7 @@
 
 Read this file only when you need to author, debug, or review a RAGFlow Agent/Canvas DSL. For CLI syntax, read [COMMANDS.md](COMMANDS.md). For SDK request and response shapes, read [API.md](API.md). For failures and recovery steps, read [TROUBLESHOOTING.md](TROUBLESHOOTING.md).
 
-This guide distills the current RAGFlow v0.26.4 agent behavior into practical schema rules, minimal examples, and failure patterns you can use directly.
+This guide distills the current RAGFlow v0.27.2 agent behavior into practical schema rules, minimal examples, and failure patterns you can use directly.
 
 ## Contents
 
@@ -204,7 +204,7 @@ Most variable failures come from ids, output names, or top-level fields not lini
 - `top_k`
 
 If you want an explicit retrieval stage on the canvas, start from `02-retrieval-message.json`. If you want retrieval as an LLM tool, start from `03-tool-agent.json`.
-As of v0.26.4, metadata filters are correctly reused across canvas executions even when node state is modified, fixing an issue where filters could be lost during iterative debugging.
+As of v0.27.0, metadata filters are correctly reused across canvas executions even when node state is modified, fixing an issue where filters could be lost during iterative debugging.
 
 ### Agent
 
@@ -328,3 +328,6 @@ These examples are structurally minimal, not production-minimal. Replace `llm_id
 | Webhook agent creates successfully but endpoint behavior is broken | `Begin.mode`, `schema`, `security`, or `response` does not match the current implementation |
 | Iteration agent creates successfully but crashes at execution time | `items_ref` resolved to `None` or a non-list, often because the upstream `Agent` did not produce a real `structured.items` array |
 | Old DSL imports but behaves strangely | The server migrated it, but the final structure was not rewritten to the current schema |
+### v0.27.2 validation notes
+
+Integer DSL parameters must be JSON integers: fractional values such as `1.5` and booleans are rejected for positive/nonnegative-integer fields. Template references accept `{node@output}` or `{{node@output}}`; keep braces balanced.

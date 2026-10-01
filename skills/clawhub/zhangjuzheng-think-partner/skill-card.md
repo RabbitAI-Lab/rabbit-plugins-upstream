@@ -1,38 +1,53 @@
-## Description: <br>
-Provides Zhang Juzheng-inspired pragmatic reform frameworks for organizational change, execution problems, stakeholder resistance, and incentive analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies Zhang Juzheng-inspired reform frameworks to organizational change, execution challenges, and stakeholder resistance.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Managers, operators, founders, and change agents use this skill to analyze organizational reform, execution gaps, stakeholder resistance, and incentive tradeoffs through Zhang Juzheng-inspired frameworks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Management and reform recommendations could be treated as authoritative advice for sensitive people, incentive, or accountability decisions. <br>
-Mitigation: Use the skill as a perspective generator, then review recommendations with appropriate organizational, legal, HR, or stakeholder judgment before applying hard-edged tactics. <br>
+## Use Case:
 
+Managers and teams use this skill to frame organizational reform problems, identify affected stakeholders, and plan incremental, measurable changes. Its examples focus on Chinese organizations and should be adapted to local requirements elsewhere.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/zhangjuzheng-think-partner) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Chinese Markdown advice with scenario analysis, diagnostic questions, and actionable recommendations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first responses with English key terms preserved; no code execution, credential access, file access, network access, or persistence requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+Risk: Stakeholder tactics or performance targets may be misapplied in sensitive workplace or personnel situations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use as a discussion framework; involve affected people and qualified HR or compliance reviewers before consequential decisions.
+
+Risk: Regulatory examples and historical analogies may not fit current or local requirements.
+
+Mitigation: Check current official rules and obtain qualified legal, financial, or compliance advice where needed.
+
+## Reference(s):
+
+- [Zhangjuzheng Think Partner on ClawHub](https://clawhub.ai/gechengling/skills/zhangjuzheng-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown, primarily in Simplified Chinese unless another language is requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structured diagnosis, stakeholder analysis, phased actions, and measurable checkpoints; no code or tool execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server release metadata and SKILL.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

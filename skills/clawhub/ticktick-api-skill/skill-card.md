@@ -1,43 +1,64 @@
-## Description: <br>
-TickTick API integration with managed OAuth for managing tasks, projects, and task lists. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage TickTick tasks and projects through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agent users use this skill to connect through Maton OAuth and work with TickTick tasks, projects, and task lists. It supports reading task data and preparing create, update, complete, delete, and organization operations with explicit confirmation before writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The Maton API key grants access to the connected TickTick account's task and project data. <br>
-Mitigation: Keep MATON_API_KEY private, avoid exposing it in logs or command output, and revoke the key or delete the Maton connection when no longer needed. <br>
-Risk: Create, update, complete, and delete operations can modify TickTick tasks or projects. <br>
-Mitigation: Confirm the exact target resource and intended effect with the user before approving any write action. <br>
+## Use Case:
 
+People and teams using an agent to find, create, update, complete, or organize TickTick tasks and projects through their authorized account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/ticktick-api-skill) <br>
-- [TickTick Developer Portal](https://developer.ticktick.com/) <br>
-- [TickTick Help Center](https://help.ticktick.com/) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown instructions with HTTP paths, JSON examples, and Python, JavaScript, and shell snippets.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a TickTick OAuth connection through Maton; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Maton brokers access to the user's TickTick account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if the user trusts Maton, prefer OAuth login, and grant only the access needed.
+
+Risk: Writes can change or delete tasks, projects, or connections.
+
+Mitigation: Review the target and effect with the user and get explicit approval before each write.
+
+Risk: Optional functions, triggers, and destinations can continue acting or forwarding event data.
+
+Mitigation: Create them only with separate informed approval, review their scope and destination, and remove them when no longer needed.
+
+Risk: Using a long-lived API key instead of OAuth increases credential exposure.
+
+Mitigation: Prefer the OAuth CLI flow; use an API key only when the CLI is unavailable and never print or persist it.
+
+## Reference(s):
+
+- [TickTick skill on ClawHub](https://clawhub.ai/byungkyu/skills/ticktick-api-skill)
+- [Maton](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [TickTick developer portal](https://developer.ticktick.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code]
+
+**Output Format:** [Markdown guidance, commands, and structured API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an authorized connection and network access; confirm writes with the user.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

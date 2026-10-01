@@ -1,43 +1,56 @@
-## Description: <br>
-Performs AI analysis on input video clips and images, then generates a smooth natural scene description. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Performs AI analysis on input video clips/image content and generates a smooth, natural scene description. | 视觉摘要智述技能，对传入的视频片段/图片内容进行AI分析，生成一段通顺自然的场景描述内容
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Agents use this skill when a user provides an image, local video file, or media URL and needs a readable visual summary, scene description, or report history lookup. It is suited to content understanding, accessibility support, and media asset review workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded media is processed by the publisher's cloud service. <br>
-Mitigation: Avoid sending sensitive personal, business, or regulated media unless the publisher's retention, access, and account controls are acceptable. <br>
-Risk: The skill can create or reuse a local identity, store authentication tokens locally, and retrieve cloud-stored report history associated with that identity. <br>
-Mitigation: Use it only in workspaces where local identity state and token storage are acceptable, and review account-linked history before relying on it. <br>
+## Use Case:
 
+Developers and external users use this skill to submit images, videos, local files, or media URLs for visual understanding and natural-language scene summaries. It can also query cloud-hosted historical analysis reports associated with the skill's internal identity flow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-visual-summary-analysis) <br>
-- [Visual summary API documentation](references/api_doc.md) <br>
-- [Analysis API error documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text containing scene descriptions, structured analysis results, report links, or history tables.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local file input, media URL input, optional saved output files, and cloud-backed report history lookup.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence; artifact SKILL.md frontmatter lists 1.0.8) <br>
+Risk: Selected images, videos, or media URLs are sent to lifeemergence.com/open.lifeemergence.com cloud services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only with media that may be shared with those services, and avoid confidential media or private/internal URLs unless the backend and retention policy are trusted.
+
+Risk: Reports may be associated with an internally generated or supplied identity, and service tokens may be stored in the workspace data directory.
+
+Mitigation: Review identity handling and token storage before installation, and restrict workspace access where report history or tokens may be sensitive.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-visual-summary-analysis)
+- [API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [Open API service](https://open.lifeemergence.com/smyx-open-api)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown or JSON-like text produced by the skill's scripts, with optional saved result files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include structured analysis content, report links, historical report tables, and progress or error messages.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata; artifact frontmatter reports 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,62 @@
-## Description: <br>
-QuickBooks API integration with managed OAuth for QuickBooks Online accounting administration, including customers, vendors, invoices, payments, and financial reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents access and manage QuickBooks Online accounting data through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and authorized accounting administrators use this skill to let an agent access QuickBooks Online through Maton-managed OAuth. It supports querying accounting data and carefully approved changes to customers, invoices, payments, and reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, modify, or delete QuickBooks accounting records. <br>
-Mitigation: Default to read-only requests and require explicit user approval after showing the exact endpoint, target record, amount, account context, and consequence for each write or delete action. <br>
-Risk: Requests could be sent to the wrong QuickBooks company when multiple Maton connections exist. <br>
-Mitigation: Verify the intended connection ID and company before each request and include the Maton-Connection header, especially before write operations. <br>
-Risk: The MATON_API_KEY grants access to Maton-managed QuickBooks connections. <br>
-Mitigation: Protect the API key as a secret, use a least-privileged QuickBooks account, and revoke unused connections promptly. <br>
+## Use Case:
 
+Finance teams and business users can ask an agent to retrieve QuickBooks records and reports or perform specifically approved accounting updates. Optional hosted functions and triggers support user-approved automation.
 
-## Reference(s): <br>
-- [ClawHub QuickBooks Skill](https://clawhub.ai/byungkyu/skills/quickbooks) <br>
-- [QuickBooks API Overview](https://developer.intuit.com/app/developer/qbo/docs/get-started) <br>
-- [QuickBooks Customer API](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/customer) <br>
-- [QuickBooks Invoice API](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/invoice) <br>
-- [QuickBooks Payment API](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/payment) <br>
-- [QuickBooks Profit and Loss Report API](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/report-entities/profitandloss) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Python, JavaScript, shell command, JSON, and SQL-like query examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and an active QuickBooks OAuth connection; write and delete actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: An authorized agent could change sensitive accounting records or amounts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privileged connection, verify the selected account, default to reads, and approve each write only after checking the exact records, amounts, endpoint, and effect.
+
+Risk: Hosted functions, triggers, or destinations can run actions or deliver data persistently.
+
+Mitigation: Review and explicitly approve the handler, schedule or event, destination, data fields, and persistence before enabling automation.
+
+Risk: Exposed credentials or full responses could disclose financial and personal data.
+
+Mitigation: Keep credentials in the platform's credential store, avoid printing or logging secrets and raw responses, and retrieve only needed fields.
+
+## Reference(s):
+
+- [QuickBooks skill on ClawHub](https://clawhub.ai/byungkyu/skills/quickbooks)
+- [QuickBooks API overview](https://developer.intuit.com/app/developer/qbo/docs/get-started)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton homepage](https://maton.ai)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, API request examples, Code, Configuration instructions]
+
+**Output Format:** [Markdown with shell, JSON, and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accounting operations require an authorized connection; writes and automations require explicit user approval.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

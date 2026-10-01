@@ -1,50 +1,60 @@
-## Description: <br>
-Helps math teachers turn exam writing into a structured assessment design workflow using goals, assessment blueprints, difficulty gradients, implementation rules, and result analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助初高中数学教师制定测评蓝图与双向细目表、选编并标注题目来源，以及分析逐题统计结果。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Math teachers and tutoring staff use this skill to design diagnostic, formative, summative, and selective math assessments. It produces blueprints, difficulty planning, implementation guidance, and post-assessment analysis frameworks without replacing teacher judgment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student assessment records or rankings could expose sensitive education data if used directly in reports or downstream systems. <br>
-Mitigation: Use pseudonyms where possible, confirm before reading student profiles or writing results, and avoid rankings or public score disclosures unless a teacher explicitly authorizes the use. <br>
-Risk: Assessment items could include unauthorized copyrighted textbook or question-bank material. <br>
-Mitigation: Require source and copyright status labels for items, prefer original or authorized material, and do not copy unauthorized question banks. <br>
-Risk: Users may treat generated assessment guidance as a complete exam, grading decision, or final student evaluation. <br>
-Mitigation: Keep outputs as teacher-reviewed design frameworks, analysis templates, and teaching suggestions rather than final exams or automated scores. <br>
+## Use Case:
 
+面向中国初高中数学教师，辅助设计诊断性、形成性和终结性测评，规划知识点与难度分布，并依据逐题得分分析题目表现；最终出卷、验题和记录更新均由教师确认。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-exam-designer) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
-- [双向细目表模板](references/blueprint-template.md) <br>
-- [数学测评设计流程](references/exam-design-process.md) <br>
-- [数学测评结果分析模板](references/result-analysis-rubric.md) <br>
-- [双向细目表样板](references/blueprint-sample.md) <br>
-- [难度梯度样板](references/difficulty-gradient-sample.md) <br>
-- [测评分析报告模板（班级）](references/class-report-sample.md) <br>
-- [测评分析报告模板（学员）](references/student-report-sample.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize curriculum, privacy practices and crisis-referral contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces assessment blueprints, rubrics, report templates, and implementation guidance; it does not generate complete exams or score student work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and frontmatter) <br>
+Risk: 班级画像、薄弱知识点和测评结果可能涉及学生隐私。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 仅共享任务必需的匿名化班级信息，并在使用工作空间前确认数据共享范围；在中国大陆以外先适配当地隐私要求。
+
+Risk: 未经核对的候选题或统计结果可能误导测评决策。
+
+Mitigation: 教师逐题验算 AI 生成的候选题、审阅统计结论，并逐条批准记录更新。
+
+Risk: 试题泄露或未经授权复用题目可能造成保密和版权问题。
+
+Mitigation: 不输入启用前的统考试题；核查题目来源与使用权限，对受限题目仅保留索引。
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-exam-designer)
+- [测评设计流程](artifact/references/exam-design-process.md)
+- [双向细目表模板](artifact/references/blueprint-template.md)
+- [测评结果分析标准](artifact/references/result-analysis-rubric.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Markdown 蓝图、细目表和逐题统计；经教师确认的结构化记录]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [候选题须标明 AI 生成并经教师验算；不自动生成完整试卷或阅卷。]
+
+## Skill Version(s):
+
+2.9.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -72,7 +72,7 @@ All commands: `POST $STEALTHY_AUTO_BROWSE_URL/` with JSON body `{"action": "name
 Authorization: Bearer <key>
 ```
 
-A query-param form (`?auth_token=<key>`) exists for MCP clients that can't set headers — avoid it for normal API calls because query strings end up in logs.
+Query-string authentication is not supported because URLs leak into logs.
 
 In single-instance mode, requests are serialized automatically — only one runs at a time, the rest queue up.
 
@@ -178,6 +178,11 @@ Response: `{"url": "...", "title": "..."}`
 {"action": "get_interactive_elements", "visible_only": true}
 {"action": "get_text"}
 {"action": "get_html"}
+{"action": "get_page_info"}
+{"action": "detect_challenge"}
+{"action": "get_element", "selector": "main article"}
+{"action": "get_elements", "selector": "main article a", "limit": 25}
+{"action": "get_computed_style", "selector": "main article", "properties": ["display", "font-size"]}
 {"action": "eval", "expression": "document.title"}
 {"action": "eval", "expression": "document.querySelectorAll('a').length"}
 ```
@@ -185,6 +190,20 @@ Response: `{"url": "...", "title": "..."}`
 `get_interactive_elements` returns all buttons, links, inputs with `x`, `y`, `w`, `h`, `text`, `selector`, `visible`. Pass `x`, `y` directly to `system_click`.
 
 `get_text` returns visible page text (truncated to 10,000 chars). Call this first after navigating.
+
+For structured extraction, use `get_element` for one matching node or `get_elements` for a bounded list. `get_page_info` returns document/viewport state, and `get_computed_style` exposes selected CSS values without a custom JavaScript expression.
+
+### Challenge Detection
+
+`detect_challenge` is read-only, best-effort detection for authorised QA flows that need to request human review. It returns `absent`, `present`, or `unknown`, plus bounded known-vendor or generic low-confidence evidence. It never clicks, solves, submits, or enters a challenge frame, and excludes query strings, fragments, site keys, response values, page text, and HTML from the result. Set `scroll_into_view: true` to bring the first visible detected frame or widget into the viewport for VNC handoff; it still never clicks or focuses it. It recognises documented Turnstile, reCAPTCHA, hCaptcha, Friendly Captcha, ALTCHA, Arkose, AWS WAF, and GeeTest signals when exposed in the top-level page.
+
+Use an `output_id` plus a script `if` output condition to decide whether your orchestration should notify a person. In cluster mode, place `detect_challenge` inside `run_script`.
+
+### Virtual Camera and Microphone
+
+For authorized camera/microphone compatibility tests, mount test media at `/media` and configure `VIRTUAL_CAMERA_FILE` and/or `VIRTUAL_MICROPHONE_FILE` before the browser starts. A page's `navigator.mediaDevices.getUserMedia()` call then receives tracks captured from those files. A request for an unconfigured kind fails with `NotFoundError` rather than falling back to hardware. This virtualizes streams only; it does not add native devices to `enumerateDevices()`. Source files must remain within `VIRTUAL_MEDIA_DIR` (default `/media`) and the browser must restart after static-source changes.
+
+Set `VIRTUAL_MEDIA_DYNAMIC=true` to switch file-backed sources at runtime. `set_virtual_media_source` takes `kind` (`"camera"` or `"microphone"`) plus an existing relative `source` name; `upload_virtual_media` takes `kind`, a safe `filename` whose declared media type matches that kind, strict base64 `content_base64`, and optional `activate`. The filename supplies only the extension: the service generates and returns a collision-safe stored basename and never overwrites a named source. It checks decoded uploads with `ffprobe` for the requested video or audio stream before storage or activation. Uploads are limited to `VIRTUAL_MEDIA_UPLOAD_MAX_BYTES` (50 MiB by default) and need a writable `VIRTUAL_MEDIA_DIR`. Already acquired page streams retain their track identities after a source switch. Only files inside the configured media directory are accepted—never arbitrary paths, remote URLs, WebSocket streams, or other live ingress. These actions require the same Bearer authorization as every other action when `AUTH_TOKEN` is set. See [references/setup.md](references/setup.md).
 
 ### Screenshots
 
@@ -382,9 +401,9 @@ The browser exposes all actions as MCP tools via Streamable HTTP at `/mcp/` on t
 http://127.0.0.1:8080/mcp/
 ```
 
-Connect any MCP-compatible client to that URL. All actions from the HTTP API are available as tools — dedicated tools include `goto`, `screenshot`, `system_click`, `system_type`, `eval_js`, `get_text`, `click`, `fill`, `run_script` (multi-step), and `browser_action` (generic fallback for everything else — cookies, tabs, storage, dialogs, downloads, logging, recording, and more).
+Connect any MCP-compatible client to that URL. All actions from the HTTP API are available as tools — dedicated tools include `goto`, `screenshot`, `system_click`, `system_type`, `eval_js`, `get_text`, `detect_challenge`, `click`, `fill`, `run_script` (multi-step), and `browser_action` (generic fallback for everything else — cookies, tabs, storage, dialogs, downloads, logging, recording, and more).
 
-If `AUTH_TOKEN` is set, connect to `http://127.0.0.1:8080/mcp/?auth_token=<key>`. Avoid sending tokens via query string when the endpoint is reachable beyond localhost — query strings end up in proxy logs.
+If `AUTH_TOKEN` is set, configure the MCP client to send `Authorization: Bearer <key>` when connecting to `http://127.0.0.1:8080/mcp/`.
 
 Works in both standalone and cluster mode. In cluster mode, only `run_script` is available (same restriction as HTTP API).
 
@@ -454,6 +473,7 @@ steps:
 - **`output_id`** on any step collects its result into `outputs`. Screenshots become base64 data URIs.
 - **`${env.VAR_NAME}`** substitutes environment variables.
 - **`on_error: continue`** keeps going past failures. `stop` (default) halts.
+- **Control flow:** `if` conditions can inspect elements, text, URL globs, JavaScript booleans, and prior outputs. `repeat` and `while` require explicit bounds (1–100 iterations); a `while` that remains true at its bound fails visibly. See the [control-flow reference](https://github.com/psyb0t/docker-stealthy-auto-browse/blob/main/docs/script-mode.md#control-flow) for the complete schema and limits.
 - **All HTTP API actions** work as script steps.
 - **Logs go to stderr**, stdout is clean JSON.
 - **Exit code** 0 on success, 1 on failure.

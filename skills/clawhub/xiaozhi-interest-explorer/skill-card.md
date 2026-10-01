@@ -1,41 +1,56 @@
-## Description: <br>
-This skill helps students use a 52-week, weekly exploration framework to distinguish shallow preferences from durable interests by recording challenge responses, time perception, external feedback, and staged interest-DNA reflections. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过每周的探索与回顾，帮助学生辨别浅层喜好和愿意克服困难持续投入的兴趣。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill for structured interest exploration, self-understanding, and growth planning. It guides weekly exploration, records interest-DNA signals, and can summarize progress for parents when appropriate. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The trigger scope may activate during broad self-discovery or growth-planning conversations. <br>
-Mitigation: Narrow activation to explicit interest-exploration, 52-week tracking, or interest-DNA recording requests. <br>
-Risk: Student reflections and parent-facing summaries may contain personal information. <br>
-Mitigation: Share, persist, or transfer these records only with clear consent and appropriate privacy handling. <br>
+## Use Case:
 
+面向中文环境下的小学中高段、初中及高中学生，在明确同意后通过每周探索、记录和回顾，辨别持续兴趣；未同意留存时仅提供单次探索对话。
 
-## Reference(s): <br>
-- [兴趣探索档案与记录模板](references/interest-exploration-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer) <br>
+### Deployment Geography for Use:
 
+中国大陆；在其他地区使用前须本地化同意规则与危机求助渠道。
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Conversational guidance and structured Markdown-style summaries or records] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce weekly exploration prompts, interest-DNA records, progress reports, and parent-facing summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: 未成年人跨周兴趣记录可能留存或共享个人信息。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 先说明记录范围、保留、访问及删除方式并取得学生与适用监护人的同意；分享与家长简报另行授权，支持查看、更正和删除。
+
+Risk: 境外使用时，同意规则及危机求助渠道可能不适用。
+
+Mitigation: 仅在能履行当地同意、删除、监护人参与和危机转介要求的环境启用留存；境外使用前先本地化规则与渠道。
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-interest-explorer)
+- [兴趣探索记录模板](references/interest-exploration-template.md)
+- [学段参数表](shared/grade-bands.md)
+- [危机识别与转介协议](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [中文对话及 Markdown 探索记录、阶段回顾与报告]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [获同意后可记录兴趣探索；未获同意时仅提供单次对话。]
+
+## Skill Version(s):
+
+2.9.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

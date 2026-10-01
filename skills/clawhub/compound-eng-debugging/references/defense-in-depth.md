@@ -53,16 +53,22 @@ function initializeWorkspace(string $projectDir, string $sessionId): void
 Prevent dangerous operations in specific contexts (test, staging, CI).
 
 ```python
+import os
+import tempfile
+
+
 async def git_init(directory: str) -> None:
     if os.environ.get("NODE_ENV") == "test":
         normalized = os.path.realpath(directory)
         tmp_dir = os.path.realpath(tempfile.gettempdir())
-        if not normalized.startswith(tmp_dir):
+        if normalized == tmp_dir or os.path.commonpath([normalized, tmp_dir]) != tmp_dir:
             raise RuntimeError(
                 f"Refusing git init outside temp dir during tests: {directory}"
             )
     # ... proceed
 ```
+
+Resolve symlinks before comparing path components; a string prefix also accepts sibling paths such as `/tmp-other`. Restrict the operation to a child of the temporary root, not the root itself. This check assumes the test owns the directory and no concurrent actor can replace its path components; use an isolated workspace or descriptor-relative operations when that assumption does not hold.
 
 ### Layer 4: Debug Instrumentation
 
@@ -82,10 +88,10 @@ Use `console.error()` in tests (not logger, which may be suppressed). Log BEFORE
 
 When you fix a bug:
 
-1. **Trace the data flow** -- where does the bad value originate? Where is it consumed?
-2. **Map all checkpoints** -- list every function/boundary data passes through
-3. **Add validation at each layer** -- entry, business logic, environment, instrumentation
-4. **Test each layer independently** -- bypass layer 1, verify layer 2 catches it
+1. **Trace the data flow**: where does the bad value originate? Where is it consumed?
+2. **Map all checkpoints**: list every function/boundary data passes through
+3. **Add validation at each layer**: entry, business logic, environment, instrumentation
+4. **Test each layer independently**: bypass layer 1, verify layer 2 catches it
 
 ## Key Insight
 

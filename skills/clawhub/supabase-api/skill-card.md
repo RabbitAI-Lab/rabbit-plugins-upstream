@@ -1,46 +1,57 @@
-## Description: <br>
-Supabase API integration with managed authentication for database tables, auth users, and storage buckets through Maton. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents access connected Supabase projects to query tables, manage authentication users, and work with storage through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to inspect and operate connected Supabase projects, including PostgREST table access, auth user management, and storage bucket operations. It is intended for Supabase workflows that need managed Maton authentication through MATON_API_KEY. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change data in a connected Supabase project through Maton. <br>
-Mitigation: Install only if Maton is trusted with the project and prefer staging or least-privileged projects for exploration. <br>
-Risk: POST, PUT, PATCH, and DELETE operations can modify production data, auth users, or storage resources. <br>
-Mitigation: Review the target resource, filters, and intended effect before approving any write operation. <br>
-Risk: When multiple Supabase connections exist, requests may target the wrong project if the connection is ambiguous. <br>
-Mitigation: Specify the intended connection explicitly before executing project-specific requests. <br>
+## Use Case:
 
+Developers and other authorized users can ask an agent to inspect or manage data, authentication users, and storage in a connected Supabase project. With separate approval, they can also set up hosted functions and scheduled or event-driven actions.
 
-## Reference(s): <br>
-- [Maton](https://maton.ai) <br>
-- [Supabase REST API Guide](https://supabase.com/docs/guides/api) <br>
-- [PostgREST Documentation](https://postgrest.org/en/stable/) <br>
-- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api) <br>
-- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoint descriptions and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API operations act through Maton against the selected connected Supabase project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Connected Supabase access can change project data, users, or storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only or staging access where possible and confirm each write, authentication, storage, or administrative action.
+
+Risk: Hosted functions, schedules, and trigger destinations may keep acting after setup.
+
+Mitigation: Require explicit approval before creating them and review the function's behavior, permissions, and destination first.
+
+## Reference(s):
+
+- [Supabase skill release](https://clawhub.ai/byungkyu/skills/supabase-api)
+- [Maton](https://maton.ai)
+- [Supabase REST API guide](https://supabase.com/docs/guides/api)
+- [Supabase Auth API](https://supabase.com/docs/reference/javascript/auth-api)
+- [Supabase Storage API](https://supabase.com/docs/reference/javascript/storage-api)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with commands and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions are limited by the connected user's authorization; writes and new connections require user confirmation.]
+
+## Skill Version(s):
+
+1.2.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

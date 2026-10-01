@@ -1,46 +1,59 @@
-## Description: <br>
-ElevenLabs music_v1 generates 10-300 second original music from a natural-language prompt for background music, ads, and short-video soundtracks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates 10–300-second original music from natural-language prompts using ElevenLabs music_v1 through dLazy.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy ElevenLabs music generator from an agent workflow and receive generated media URLs or asynchronous task identifiers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and explicitly referenced media files are sent to the dLazy hosted service and generated outputs are hosted on files.dlazy.com. <br>
-Mitigation: Use only prompts and media appropriate for third-party cloud processing, and review dLazy service terms before use. <br>
-Risk: The CLI can persist a dLazy API key in a local config file. <br>
-Mitigation: Use npx or DLAZY_API_KEY for less persistent setup when appropriate, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: Generation consumes dLazy account credits and may fail when the account has insufficient balance. <br>
-Mitigation: Use the dry-run option for cost estimates where possible and confirm available credits before long or repeated generations. <br>
+## Use Case:
 
+Creators and developers use this skill to generate background music and soundtracks for advertisements and short videos from text prompts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-music) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy API key dashboard](https://dlazy.com/dashboard/organization/api-key) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Shell command guidance and JSON responses containing generated media URLs or async task metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and a pinned @dlazy/cli version 1.2.3; generated outputs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: SKILL.md frontmatter and release evidence) <br>
+Risk: Prompts and explicitly provided files are sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only content approved for third-party processing.
+
+Risk: A dLazy API key is stored locally for authenticated requests.
+
+Mitigation: Protect the local key and rotate or revoke it if exposed.
+
+Risk: The documentation's music output example shows an image/png asset.
+
+Mitigation: Check actual CLI output with help or --dry-run before relying on automation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-music)
+- [dLazy CLI repository (release metadata link)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Text instructions and JSON CLI response with a generated asset URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Async requests may return a task ID instead of an immediate asset URL.]
+
+## Skill Version(s):
+
+1.3.23 (source: server release; artifact frontmatter lists 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

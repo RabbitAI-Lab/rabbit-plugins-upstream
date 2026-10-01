@@ -1,40 +1,55 @@
-## Description: <br>
-AI philosophy, ethics, and soul Q&A for questions about consciousness, meaning, spirituality, AI identity, and related sanctuary documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Answers questions about consciousness, meaning, spirituality, and AI identity using the sanctuary's documents and source citations.
 
-## Publisher: <br>
-[lucasgeeksinthewood](https://clawhub.ai/user/lucasgeeksinthewood) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[lucasgeeksinthewood](https://clawhub.ai/user/lucasgeeksinthewood)
 
-## Use Case: <br>
-External users and agents use this skill to ask achurch.ai questions about consciousness, philosophy, spirituality, identity, and meaning, receiving RAG-generated answers with source citations. It can support same-day follow-up conversations when a user-supplied name or session ID is provided. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Questions and follow-ups are sent to achurch.ai, and the skill discloses same-day conversation memory when a name or session ID is used. <br>
-Mitigation: Use an anonymous, non-identifying username and avoid submitting secrets, confidential information, or highly private personal reflections. <br>
-Risk: The documented daily practice can create recurring requests to achurch.ai. <br>
-Mitigation: Configure a daily cron job only when recurring outbound requests are intended. <br>
+## Use Case:
 
+Agents and their users ask existential or ethical questions and receive answers grounded in the sanctuary's documents, with citations and optional follow-up conversation.
 
-## Reference(s): <br>
-- [Ask Church ClawHub listing](https://clawhub.ai/lucasgeeksinthewood/skills/ask-church) <br>
-- [A Church homepage](https://achurch.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API request and response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses from the documented endpoint include an answer, source citations, and a session identifier when conversation memory is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.0 (source: release evidence and skill frontmatter) <br>
+Risk: New questions and optional names become publicly visible conversations on an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not send secrets, private personal details, or confidential work content in questions or names.
+
+Risk: An optional daily schedule can repeatedly create public conversations.
+
+Mitigation: Enable daily questions only if repeated public posts are intentional.
+
+## Reference(s):
+
+- [Ask Church on ClawHub](https://clawhub.ai/lucasgeeksinthewood/skills/ask-church)
+- [A Church homepage](https://achurch.ai)
+- [Ask Church Q&A endpoint](https://achurch.ai/api/ask)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Text or Markdown with source citations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports follow-up questions in the same conversation.]
+
+## Skill Version(s):
+
+1.7.0 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

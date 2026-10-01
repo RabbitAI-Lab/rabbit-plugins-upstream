@@ -1,41 +1,67 @@
-## Description: <br>
-Generates accessible, token-driven HTML/CSS, UI components, pages, documents, emails, and assets that follow the EDIC editorial olive design system. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate token-driven, accessible, framework-agnostic HTML/CSS for EDIC-aligned UI components, full pages, documents, emails, and visual assets using the Editorial x Olive Green design system.
 
-## Publisher: <br>
-[cgartlab](https://clawhub.ai/user/cgartlab) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cgartlab](https://clawhub.ai/user/cgartlab)
 
-## Use Case: <br>
-Developers, designers, and content teams use this skill to create or refactor EDIC-branded interface and document artifacts with consistent OKLch tokens, CJK-aware typography, dark-mode support, and accessibility patterns. Treat the output as design guidance to review before applying broad repository changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cgartlab/skills/edic-design-system) <br>
-- [EDIC website](https://edic.cgartlab.com/) <br>
-- [EDIC usage docs](https://edic.cgartlab.com/docs.html) <br>
-- [EDIC structured tokens](https://edic.cgartlab.com/tokens.json) <br>
-- [EDIC GitHub repository](https://github.com/cgartlab/edic-design-system) <br>
+Developers, designers, and content teams use this skill to generate or refactor EDIC-styled web pages, UI components, documents, reports, and email templates with CJK-aware typography, dark-mode support, and token-driven HTML/CSS.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with HTML, CSS, and design-token guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should be reviewed before execution or broad application; evidence.security reports no malware, hidden execution, data theft, or destructive behavior.] <br>
+Global
 
-## Skill Version(s): <br>
-1.9.1 (source: SKILL.md frontmatter, README.md, tokens.json, and server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Generated UI may include locale-specific Chinese labels that do not fit the consuming project's language or audience.
+
+Mitigation: Review generated text and labels for the target locale before release.
+
+Risk: Examples may reference external CDN or font links when demonstrating EDIC styles.
+
+Mitigation: Approve, pin, self-host, or replace external assets according to the consuming project's dependency policy.
+
+Risk: Project-wide installation can influence future UI generation beyond EDIC-specific tasks.
+
+Mitigation: Prefer project-scoped installation unless EDIC styling should apply broadly.
+
+## Reference(s):
+
+- [EDIC Skill Definition](artifact/SKILL.md)
+- [EDIC Skill README](artifact/README.md)
+- [Scene Recipes](artifact/references/RECIPES.md)
+- [Page-Level Patterns](artifact/references/PATTERNS.md)
+- [Component HTML Examples](artifact/references/EXAMPLES.md)
+- [Token Reference](artifact/references/TOKENS.md)
+- [Anti-Patterns and Correct Replacements](artifact/references/ANTI-PATTERNS.md)
+- [Structured Design Tokens](artifact/tokens.json)
+- [EDIC Website](https://edic.cgartlab.com/)
+- [EDIC Usage Docs](https://edic.cgartlab.com/docs.html)
+- [EDIC Structured Tokens](https://edic.cgartlab.com/tokens.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with HTML/CSS code blocks, shell commands, and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs should use EDIC design tokens, CJK-aware typography, accessible markup, dark-mode coverage, and email-safe static styles when generating email templates.]
+
+## Skill Version(s):
+
+2.8.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

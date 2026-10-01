@@ -1,45 +1,55 @@
-## Description: <br>
-Generates videos by selecting an appropriate dLazy CLI video model for text, image, first/last-frame, digital human, and lip-sync requests. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents choose a dLazy video model and generate videos from text prompts, images, or other media.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to choose and run dLazy video-generation CLI commands for text-to-video, image-to-video, first/last-frame video, digital human, segmentation, and lip-sync workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys may be stored in the local dLazy CLI config, and the security evidence notes that local storage protections may be weaker than the skill text claims. <br>
-Mitigation: Prefer per-invocation DLAZY_API_KEY use when persistent storage is not desired, or manually restrict permissions on ~/.dlazy/config.json. <br>
-Risk: Prompts, parameters, and local media files passed to image, video, or audio fields are sent to dLazy cloud endpoints. <br>
-Mitigation: Only pass files and prompts intended for upload to dLazy's cloud service. <br>
-Risk: The security verdict is suspicious despite no listed risk findings. <br>
-Mitigation: Review the skill and dLazy CLI before installation; use the pinned npx command when avoiding persistent global installs. <br>
+## Use Case:
 
+Creators and developers use this skill to generate video from prompts, animate images, create frame-guided clips, and produce talking-head or lip-synced video through dLazy.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-video-generate) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The selected dLazy CLI commands may return JSON envelopes and hosted media URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.6 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and supplied media are sent to dLazy for cloud generation, and generated files are hosted on its storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit content you are comfortable sharing with dLazy; review its service terms before use.
+
+Risk: The skill uses a pinned npm CLI and requires a dLazy API key that may be stored in local user configuration.
+
+Mitigation: Review the CLI before installing; use DLAZY_API_KEY per invocation if you do not want the key saved in local configuration.
+
+## Reference(s):
+
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-video-generate)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline commands and generated video links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated video files are hosted by dLazy.]
+
+## Skill Version(s):
+
+1.4.24 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

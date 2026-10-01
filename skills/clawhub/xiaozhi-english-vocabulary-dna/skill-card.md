@@ -1,41 +1,61 @@
-## Description: <br>
-Helps English learners save vocabulary, schedule consent-based spaced repetition reminders, preview upcoming lesson words, and track vocabulary retention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language English vocabulary tutor for K–12 learners that schedules spaced review, assembles daily vocabulary cards, and prepares students for upcoming lessons.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to capture English vocabulary from photos, conversations, or manual entries, then run consent-based spaced review through flashcards, sentence practice, contextual dialogue, and progress reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores vocabulary history, example sentences, and learning performance in local memory, which may resurface personal details during later reviews or reports. <br>
-Mitigation: Use the skill only with user consent, avoid sensitive personal details in practice sentences, and review local memory behavior before installation. <br>
-Risk: IM reminders may interrupt users or run outside expectations if enabled without clear consent. <br>
-Mitigation: Enable reminders only after explicit consent and use the documented fallback of session-time review or user-initiated practice when timed reminders are unavailable. <br>
+## Use Case:
 
+Chinese-reading K–12 students use this skill to collect English vocabulary, review due words with adaptive cards, preview upcoming lessons, and inspect their learning progress. Younger students should use it with a parent or teacher present.
 
-## Reference(s): <br>
-- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna) <br>
+### Deployment Geography for Use:
 
+Mainland China (localize language, curriculum, and crisis-help contacts before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown and conversational text with review prompts, vocabulary cards, reports, and setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local memory for vocabulary history and learning performance when available; OCR and timed reminders can fall back to manual input or session-time review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Storing a minor's vocabulary history or sharing progress without appropriate permission.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm profile, cross-skill, and parent-sharing consent before saving or sharing; honor access, correction, deletion, export, and pause requests.
+
+Risk: Unwanted or excessive study reminders.
+
+Mitigation: Require reminder consent, combine due words into one daily card, and pause reminders after repeated non-response.
+
+Risk: Mainland China crisis contacts or curriculum assumptions may not fit users elsewhere.
+
+Mitigation: Localize curriculum, language, and crisis-help contacts before deployment outside Mainland China; ask the user's region when uncertain.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-english-vocabulary-dna)
+- [Vocabulary radar topic templates](references/vocabulary-radar-topics.md)
+- [High-school vocabulary guidance](references/english-hs-vocabulary.md)
+- [Vocabulary review and consent rules](shared/vocab.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language vocabulary cards, study prompts, and progress summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [At most one due-vocabulary card per day; proactive reminders require consent and a reminder-capable integration.]
+
+## Skill Version(s):
+
+2.9.0 (source: skill frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

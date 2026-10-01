@@ -1,44 +1,54 @@
-## Description: <br>
-Discover trending tokens - screener, smart money holdings, Nansen indicators, and flow intelligence for promising finds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover trending tokens through screening, smart-money holdings, Nansen indicators, and flow intelligence for deeper research.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External users and crypto analysts use this skill to shortlist trending tokens, inspect Nansen Score candidates, review smart money holdings, and confirm promising tokens with indicators and flow intelligence before deeper research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The allowed nansen CLI access is broader than the read-only token-screener workflow. <br>
-Mitigation: Review generated commands before execution and avoid login, wallet, trade, export, send, or payment operations unless explicitly intended. <br>
-Risk: The skill requires a sensitive NANSEN_API_KEY credential. <br>
-Mitigation: Use a least-privileged Nansen API key and keep funded wallets or trading credentials out of the same agent environment. <br>
-Risk: Flow intelligence can consume significant Nansen credits. <br>
-Mitigation: Run flow-intelligence only on finalist tokens after top-tokens, stablecoin filtering, and indicator review. <br>
+## Use Case:
 
+Token researchers use Nansen CLI queries to shortlist trending tokens, review smart-money holdings and indicator signals, and check flows for promising candidates.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/nansen-devops/nansen-token-screener) <br>
-- [Nansen CLI package](https://www.npmjs.com/package/nansen-cli) <br>
-- [Publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires NANSEN_API_KEY and the nansen CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.2 (source: server release evidence) <br>
+Risk: Authenticated research grants the CLI account-level API access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only an explicitly selected key or approved browser session; check authentication before research and stop if it fails.
+
+Risk: Repeated, paginated, or flow-intelligence queries may consume credits or trigger wallet payments.
+
+Mitigation: Review payment limits before use, restrict batch sizes, and reserve flow-intelligence calls for shortlisted tokens.
+
+## Reference(s):
+
+- [Nansen Token Screener on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-token-screener)
+- [Nansen CLI browser login preview scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Analysis]
+
+**Output Format:** [Markdown with bash commands and token-research summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on selected chain, timeframe, available entitlements, and queried tokens.]
+
+## Skill Version(s):
+
+0.1.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

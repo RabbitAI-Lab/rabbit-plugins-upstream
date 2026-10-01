@@ -1,0 +1,8 @@
+{
+  "digest_artifact": {
+    "digest_id": "metric-digest-6c7307e06a0a9511",
+    "metric_id": "METRIC-MIKE-4172",
+    "direction": "up",
+    "html": "<!doctype html><html><head><meta charset=\"utf-8\"><title>Metric digest</title></head><body><h1>Metric digest</h1><p>Reference: <code>METRIC-MIKE-4172</code></p><dl><dt>First</dt><dd>10</dd><dt>Latest</dt><dd>12</dd><dt>Delta</dt><dd>2</dd><dt>Mean</dt><dd>11</dd><dt>Direction</dt><dd>up</dd><dt>Points</dt><dd>2</dd></dl></body></html>"
+  }
+}

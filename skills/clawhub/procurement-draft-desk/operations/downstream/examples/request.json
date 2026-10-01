@@ -1,0 +1,9 @@
+{
+  "purchase_terms": {
+    "supplier_id": "VENDOR-HOTEL-8462",
+    "currency": "USD",
+    "lead_days": 14,
+    "incoterm": "FCA",
+    "renewal_month": "2026-11"
+  }
+}

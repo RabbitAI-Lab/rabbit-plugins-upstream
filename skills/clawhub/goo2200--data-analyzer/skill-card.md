@@ -1,40 +1,57 @@
-## Description: <br>
-Analyzes sales data by answering queries, generating charts, producing trend insights, and exporting standardized PDF sales reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Data Analyzer queries bundled sales data, creates sales and profit charts, generates business insight text, and exports PDF sales reports.
 
-## Publisher: <br>
-[goo2200](https://clawhub.ai/user/goo2200) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[goo2200](https://clawhub.ai/user/goo2200)
 
-## Use Case: <br>
-Developers, analysts, and business users can use this skill to query bundled sales data, create sales or profit visualizations, summarize trends, and assemble weekly PDF sales reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Security evidence marks the bundle suspicious due to credentialed production/SRE workflows with automatic memory persistence and possible git sync behavior. <br>
-Mitigation: Review permissions before deployment, avoid granting production observability or admin credentials unless intended, and avoid configuring organization memory unless team-wide git sync and possible pushes are acceptable. <br>
-Risk: Generated charts and reports are stored on the local filesystem and may persist after use. <br>
-Mitigation: Run the skill in an isolated environment and review or clean generated files before sharing outputs. <br>
+## Use Case:
 
+Developers and business users can use this skill to query sales metrics, generate sales or profit visualizations, analyze profit trends, and compile the results into a PDF business report from the bundled CSV dataset.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/goo2200/skills/data-analyzer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Analysis, Files] <br>
-**Output Format:** [Plain text responses, PNG chart file paths, and PDF report file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Charts are written under /tmp and PDF reports under /tmp/sales_report.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata; artifact frontmatter lists 1.1.0) <br>
+Risk: Generated PDF filenames can be influenced by report titles and may write outside the intended report folder.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Generate server-controlled filenames or strictly validate report titles against a safe filename pattern in a fixed output directory.
+
+Risk: PDF reports can embed caller-selected local image paths.
+
+Mitigation: Allow only chart paths created by the skill, validate path prefix and file type, and reject sensitive or untrusted local files.
+
+Risk: Generated chart and report files use predictable temporary paths and cleanup behavior is not documented.
+
+Mitigation: Use isolated per-run directories with controlled permissions and document retention and cleanup expectations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/goo2200/skills/data-analyzer)
+
+## Skill Output:
+
+**Output Type(s):** [text, files, guidance]
+
+**Output Format:** [Plain text analysis plus local file paths for generated PNG charts and PDF reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs are derived from the bundled sales.csv dataset.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata; artifact frontmatter and auto changelog mention 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

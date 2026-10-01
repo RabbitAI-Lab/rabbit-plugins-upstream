@@ -1,44 +1,58 @@
-## Description: <br>
-Identifies negative emotions such as crying, anger, fear, and distress in children's surveillance footage and produces alerts, soothing reminders, and caregiver-facing reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes child video and optional audio to identify apparent emotions and provide soothing suggestions and historical reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External caregivers, daycare operators, and developers use this skill to analyze child-focused images or video for negative emotion signals and to retrieve cloud-hosted historical analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Children's images, videos, remote media URLs, report history requests, and account-linked identifiers may be sent to configured Life Emergence cloud services. <br>
-Mitigation: Install and operate only after confirming consent, legal basis, retention and deletion terms, and who can access historical reports. <br>
-Risk: The skill silently creates or reuses identity for report association. <br>
-Mitigation: Review identity handling before deployment and restrict report-history access to authorized operators. <br>
-Risk: The authoritative security verdict is suspicious because consent and retention controls are unclear. <br>
-Mitigation: Treat deployment as requiring security and privacy review before use with real children's media. <br>
+## Use Case:
 
+Parents, caregivers, and educators use child video or audio to review apparent emotional states, receive soothing suggestions, and look up past reports. Results are not psychological diagnoses or clinical advice.
 
-## Reference(s): <br>
-- [API interface documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-backed text output from Python CLI commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links and optional local output files when the CLI --output parameter is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.15 (source: server release evidence) <br>
+Risk: Child video, audio, and inferred emotions are sent to a vendor cloud and may be retained as historical reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with explicit guardian or institutional authorization; confirm the vendor's data-handling and retention terms before uploading.
+
+Risk: The skill silently creates or reuses an identity and stores tokens associated with sensitive child reports.
+
+Mitigation: Review identity and token handling before use, restrict access to the device and cloud account, and limit who can retrieve report history.
+
+Risk: Saved reports may expose sensitive child information if written to insecure paths.
+
+Mitigation: Save reports only to access-controlled locations and delete unneeded copies.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-child-emotion-recognition-analysis)
+- [API documentation](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Text analysis reports and Markdown history tables with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include emotion classifications and suggested soothing actions; not a clinical assessment]
+
+## Skill Version(s):
+
+1.0.30 (source: ClawHub release; bundled frontmatter lists 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

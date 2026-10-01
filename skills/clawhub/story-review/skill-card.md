@@ -1,51 +1,61 @@
-## Description: <br>
-Coordinates multi-perspective adversarial review of fiction text, using full, lean, or solo review modes with fallback behavior when reviewer agents or reference files are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews Chinese-language fiction from multiple perspectives, identifying plot, character, prose, and continuity issues with actionable revision suggestions.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and agent users use this skill to review fiction drafts for structure, character, prose, continuity, platform fit, and actionable revision findings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist review discoveries into project tracking files without a separate confirmation step. <br>
-Mitigation: Review proposed tracking-file changes before relying on them, and require an explicit confirmation or diff when using this skill in a shared project. <br>
-Risk: The skill may read local story project materials and use reviewer subagents when available. <br>
-Mitigation: Install and run it only in projects where that local access and subagent use are acceptable, and prefer explicit /story-review commands over broad natural-language triggers. <br>
+## Use Case:
 
+Fiction authors and editors use this skill to review story chapters for narrative structure, character consistency, prose quality, and platform-specific expectations, then prioritize revisions.
 
-## Reference(s): <br>
-- [Story Review skill page](https://clawhub.ai/worldwonderer/skills/story-review) <br>
-- [OpenClaw metadata source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Quality Checklist](references/quality-checklist.md) <br>
-- [Quality Rubric](references/quality-rubric.md) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
-- [Plot Core Methods](references/plot-core-methods.md) <br>
-- [Character Relations](references/character-relations.md) <br>
-- [Dialogue Mastery](references/dialogue-mastery.md) <br>
-- [Fanqie Quality Rubric](references/rubrics/fanqie.md) <br>
-- [Qidian Quality Rubric](references/rubrics/qidian.md) <br>
-- [Zhihu Quality Rubric](references/rubrics/zhihu.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown review report with structured findings and actionable revision guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports requested mode, effective mode, fallback status, rubric, rubric source, severity, category, location, evidence, issue, and fix fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.13 (source: server release evidence; artifact frontmatter reports 1.1.0) <br>
+Risk: The review reads story-project files that may contain unpublished material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run only in projects whose story files you intend to expose to the reviewing agent and any deployed reviewer agents.
+
+Risk: Review workflows can write tracking, batch-review, or author-preference state under the project.
+
+Mitigation: Review the memory and tracking behavior before use, and inspect scoped state changes after a review.
+
+Risk: Automated findings and revision suggestions may misjudge authorial intent or continuity.
+
+Mitigation: Check findings against the manuscript and story canon before making revisions.
+
+## Reference(s):
+
+- [Story Review on ClawHub](https://clawhub.ai/worldwonderer/skills/story-review)
+- [Project link in skill metadata (not verified import provenance)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Review quality rubric](references/quality-rubric.md)
+- [Style resolution](references/style-resolution.md)
+- [Review tracking](references/review-tracking.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Files]
+
+**Output Format:** [Markdown review report with ranked findings and revision suggestions; optional project-scoped state files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports full, lean, and solo review; falls back to solo when reviewer agents are unavailable. Does not modify story manuscripts.]
+
+## Skill Version(s):
+
+1.1.26 (source: ClawHub release metadata; bundled frontmatter says 1.1.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

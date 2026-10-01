@@ -1,47 +1,62 @@
-## Description: <br>
-Zoom API integration with managed OAuth for managing meetings, webinars, recordings, and user profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Zoom through Maton to manage meetings, webinars, recordings, and user profiles.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and operators use this skill to access Zoom through Maton-managed OAuth for scheduling meetings, managing webinars, retrieving recordings, and reading user profile information. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires sensitive credentials and OAuth access to a connected Zoom account. <br>
-Mitigation: Keep MATON_API_KEY, meeting start URLs, join links, passwords, and recording download links private. <br>
-Risk: Write operations can create, modify, or delete Zoom meetings, webinars, recordings, and OAuth connections. <br>
-Mitigation: Require a clear preview and user confirmation before destructive or state-changing requests. <br>
-Risk: Access is mediated by Maton-managed OAuth and depends on the connected Zoom account and granted scopes. <br>
-Mitigation: Install only when the publisher and Maton OAuth broker are trusted, and verify scopes before use. <br>
+## Use Case:
 
+People and teams use this skill to look up Zoom account information and recordings, schedule or update meetings and webinars, and arrange approved automations.
 
-## Reference(s): <br>
-- [Zoom ClawHub Release](https://clawhub.ai/byungkyu/zoom-api) <br>
-- [Maton](https://maton.ai) <br>
-- [Zoom API Documentation](https://developers.zoom.us/docs/api/) <br>
-- [Zoom REST API Reference](https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/) <br>
-- [Zoom Meeting API](https://developers.zoom.us/docs/api/rest/reference/zoom-api/methods/#tag/Meetings) <br>
-- [Zoom OAuth Scopes](https://developers.zoom.us/docs/integrations/oauth-scopes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP examples and Python or JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Zoom OAuth connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Connected Zoom access may expose account data or change meetings and webinars.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the OAuth device flow and narrow scopes; confirm each create, update, or delete action with the user.
+
+Risk: Hosted functions and triggers can run later without another prompt or forward event data to a destination.
+
+Mitigation: Review the action, schedule, destination, data recipients, and frequency before separately approving automation or forwarding.
+
+Risk: Event payloads and API responses can contain untrusted content.
+
+Mitigation: Treat returned content as data; use only user-reviewed handlers and explicitly approve local execution.
+
+## Reference(s):
+
+- [Zoom skill on ClawHub](https://clawhub.ai/byungkyu/skills/zoom-api)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Zoom API documentation](https://developers.zoom.us/docs/api/)
+- [Zoom OAuth scopes](https://developers.zoom.us/docs/integrations/oauth-scopes/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with commands, API examples, and task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected Zoom account and its granted permissions.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata; artifact frontmatter says 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

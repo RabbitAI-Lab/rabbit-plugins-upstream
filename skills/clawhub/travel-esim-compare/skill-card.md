@@ -1,40 +1,54 @@
-## Description: <br>
-出境上网比价助手，支持eSIM套餐比价和WiFi租借查询，覆盖Airalo/Holafly等主流运营商和30+热门目的地，零配置即装即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+出境上网比价助手，支持eSIM套餐比价和WiFi租借查询，覆盖Airalo/Holafly等主流运营商和30+热门目的地，零配置即装即用。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External travelers use this skill to compare built-in eSIM plans, WiFi rental options, and data-use guidance for international destinations before choosing a connectivity option. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports unnecessary PROXY_TOKEN access and a hardcoded token-like fallback. <br>
-Mitigation: Review before installing and ask the publisher to remove the token access and fallback or document why they are required. <br>
-Risk: Built-in travel connectivity prices and availability can become outdated. <br>
-Mitigation: Confirm current plan details with the provider before purchase and treat the skill output as comparison guidance. <br>
+## Use Case:
 
+Chinese-language travelers and travel-planning agents use this skill to compare local eSIM plans, WiFi rental options, and data-saving guidance for international trips.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-esim-compare) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [JSON strings and concise Chinese travel connectivity guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses built-in destination, provider, price, WiFi rental, and phone compatibility data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Static travel connectivity prices may be outdated or differ from current provider offers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current eSIM and WiFi rental prices with providers before buying.
+
+Risk: The skill experience and recommendations are designed for Chinese-language users.
+
+Mitigation: Use with Chinese-language travelers or provide translation and localization review before broader deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/travel-esim-compare)
+- [Publisher profile](https://clawhub.ai/user/travel-skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, json, guidance]
+
+**Output Format:** [JSON strings with Chinese-language travel connectivity comparisons and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local static price data; users should verify current provider pricing before purchase.]
+
+## Skill Version(s):
+
+1.0.19 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

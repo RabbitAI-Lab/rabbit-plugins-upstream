@@ -1,45 +1,59 @@
-## Description: <br>
-Google Forms API integration with managed OAuth for creating forms, adding questions, and retrieving responses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect to Google Forms through Maton to create forms, add questions, and retrieve responses with managed OAuth.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and external users use this skill to connect agents to Google Forms through Maton-managed OAuth, then retrieve form data or create and update forms with user-approved API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive Google Forms content and responses through a connected Google account. <br>
-Mitigation: Install only when Maton is trusted to broker the account connection, keep MATON_API_KEY private, and verify the selected connection when multiple accounts are available. <br>
-Risk: Create, update, or delete operations can change Google Forms resources. <br>
-Mitigation: Approve write operations only after checking the exact form ID, target resource, and intended change. <br>
+## Use Case:
 
+People and teams managing Google Forms can use this skill to create forms, add questions, and retrieve responses through their authorized connection. Optional hosted functions and scheduled or external-event triggers can automate actions with user approval; Google Forms itself is not a trigger source.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-forms) <br>
-- [Google Forms API Overview](https://developers.google.com/workspace/forms/api/reference/rest) <br>
-- [Get Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/get) <br>
-- [Create Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/create) <br>
-- [Batch Update Form](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms/batchUpdate) <br>
-- [List Responses](https://developers.google.com/workspace/forms/api/reference/rest/v1/forms.responses/list) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with Python, JavaScript, shell command, HTTP, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid Maton-managed Google Forms OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: A connection could authorize broader Google Forms access than the task needs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OAuth scopes and request only the access needed; confirm new connections and writes with the user.
+
+Risk: Persistent triggers and destinations can keep forwarding sensitive event data to a URL.
+
+Mitigation: Confirm the automation and destination with the user, verify who controls the URL, and review or remove unneeded forwarding.
+
+Risk: The API-key fallback uses a long-lived credential.
+
+Mitigation: Prefer managed OAuth; use an API key only when the CLI cannot be installed and avoid exposing it to child processes or logs.
+
+## Reference(s):
+
+- [Maton](https://maton.ai)
+- [Google Forms API reference](https://developers.google.com/workspace/forms/api/reference/rest)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown guidance and command examples; JSON API results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions depend on the user's authorized Google Forms connection; writes and automation require confirmation.]
+
+## Skill Version(s):
+
+1.2.4 (source: ClawHub release metadata; skill frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

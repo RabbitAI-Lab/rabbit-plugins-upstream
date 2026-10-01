@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/nansen-alerts-webhook-listener",
   "slug": "nansen-alerts-webhook-listener",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778492514832,
-  "contentHash": "e05c71d223a5ceabf2ce801daa41ecaaa7b164ef3c1d043c94e058fa61d8dbe1",
-  "fetchedAt": "2026-07-26T19:30:45.574Z"
+  "version": "1.0.2",
+  "updatedAt": 1790651593618,
+  "contentHash": "b7b3d1a2670ae8ef140b5a2571e0c605b0bd1613ee07445c612ec79094aeac1e",
+  "fetchedAt": "2026-10-01T14:47:17.632Z"
 }

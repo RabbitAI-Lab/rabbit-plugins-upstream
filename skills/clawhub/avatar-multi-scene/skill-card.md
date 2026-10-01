@@ -1,48 +1,57 @@
-## Description: <br>
-Use when someone wants the same person hosting several clips - multi-segment UGC, comparison reels, or mixed speaking and animated scenes with continuity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides creators through planning and producing multi-scene videos with a consistent on-camera host, including speaking clips and animated comparisons.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External creators, marketers, and agent operators use this skill to plan and produce coherent multi-scene avatar or motion-transfer reels with a recurring host or character. It guides intake, continuity planning, staged approvals, Pruna image/video generation, and ffmpeg assembly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can install related Pruna skills and use a Pruna API key. <br>
-Mitigation: Review the required skills and confirm the API key scope before allowing generation. <br>
-Risk: The workflow can upload user-provided media and spend generation credits. <br>
-Mitigation: Confirm media rights and require the documented approval gates before any paid generation. <br>
-Risk: Poorly matched motion templates and reference images can produce visible artifacts in animate rows. <br>
-Mitigation: Use the documented alignment checks, repose with p-image-edit when needed, and review stills before video generation. <br>
-Risk: The workflow can run local ffmpeg commands for sliders and assembly. <br>
-Mitigation: Review generated shell commands and file paths before execution. <br>
+## Use Case:
 
+Creators and production teams use this skill to plan and assemble reels with a recurring host across talking-head and motion-transfer scenes, reviewing scripts, stills, and clips before proceeding.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/avatar-multi-scene) <br>
-- [Prompt templates](prompt-templates.md) <br>
-- [Animate beats](animate-beats.md) <br>
-- [Examples](examples.md) <br>
-- [Batch template](templates/batch.template.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration, shell commands] <br>
-**Output Format:** [Markdown guidance with JSON manifest patterns and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses staged approval gates before paid generation, PRUNA_API_KEY for Pruna calls, and local ffmpeg commands for comparison clips and final assembly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Reference media and generated content are uploaded to Pruna using an API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm rights to source media and chosen voices or locales before upload, and protect the API key.
+
+Risk: Paid generation can run before the requested media is approved or costs are understood.
+
+Mitigation: Confirm costs and follow the plan, stills, and clips approval gates before advancing.
+
+Risk: Example install commands may introduce an unreviewed skill dependency.
+
+Mitigation: Use a trusted skills installer path and review dependencies before installation.
+
+## Reference(s):
+
+- [Avatar Multi-Scene on ClawHub](https://clawhub.ai/pruna-ai/skills/avatar-multi-scene)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, JSON configuration, Shell commands]
+
+**Output Format:** [Markdown scene plans and scripts, JSON scene manifests, and ffmpeg commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Approval-gated still, clip, and final assembly workflow.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
