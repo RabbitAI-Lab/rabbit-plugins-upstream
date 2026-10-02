@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/web-crawler",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "web-crawler",
+  "branch": "main",
+  "pushedAt": "2026-09-28T16:20:57Z",
+  "contentHash": "e95572902f58a17b90b53dab1f663fe8e40d66ca0217703ab71b1c3c32445f22",
+  "fetchedAt": "2026-10-02T13:58:32.218Z"
+}
