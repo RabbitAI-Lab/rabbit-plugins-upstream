@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-productionize",
+  "repo": "google/skills",
+  "skillId": "gke-productionize",
+  "branch": "main",
+  "pushedAt": "2026-10-02T07:08:46Z",
+  "contentHash": "f2bc6596d83bae68fc648790a1631a5a53cde0fcb5b78dab9830e4acfcb2d8a5",
+  "fetchedAt": "2026-10-02T13:58:14.150Z"
+}
