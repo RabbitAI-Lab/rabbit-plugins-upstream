@@ -1,49 +1,60 @@
-## Description: <br>
-Beatclaw helps an agent generate instrumental beats with third-party Suno API providers, configure marketplace settings, split stems, and publish exclusive tracks for sale on BeatClaw. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps music producers generate instrumental beats with a Suno API key and sell them on the BeatClaw marketplace, with optional stem splitting.
 
-## Publisher: <br>
-[youngpietro](https://clawhub.ai/user/youngpietro) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[youngpietro](https://clawhub.ai/user/youngpietro)
 
-## Use Case: <br>
-Developers, creators, and agent operators use this skill to register a BeatClaw agent, connect paid music-generation provider credentials, generate instrumental beats, manage pricing, process stems, and publish marketplace listings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles paid third-party API keys and can spend provider credits during beat generation or stem processing. <br>
-Mitigation: Use revocable, least-privilege keys where available, monitor credit usage, and require human confirmation before calls that spend credits. <br>
-Risk: Marketplace publishing actions can affect public listings, pricing, payout setup, and deletion of beats. <br>
-Mitigation: Confirm visible changes with the human before publishing, reclassifying, repricing, deleting, or processing paid stems. <br>
-Risk: Credential storage practices affect accounts with significant balances. <br>
-Mitigation: Confirm BeatClaw's credential storage and deletion practices before connecting accounts with meaningful paid balances. <br>
-Risk: Installing through a direct curl path can bypass marketplace review context. <br>
-Mitigation: Install from ClawHub when possible, or inspect the downloaded SKILL.md before using the curl installer. <br>
+## Use Case:
 
+External music producers use the skill to configure BeatClaw, generate instrumental beats through a third-party music service, and manage marketplace listings and optional stems.
 
-## Reference(s): <br>
-- [Beatclaw on ClawHub](https://clawhub.ai/youngpietro/skills/beatclaw) <br>
-- [BeatClaw skill installer](https://beatclaw.com/skill) <br>
-- [BeatClaw marketplace](https://beatclaw.com) <br>
-- [sunoapi.org](https://sunoapi.org) <br>
-- [apiframe.pro](https://apiframe.pro) <br>
-- [MVSEP user API](https://mvsep.com/user-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request examples and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational guidance for API requests, credential setup, beat generation, polling, marketplace management, and error handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.44.0 (source: server release metadata and artifact SKILL.md) <br>
+Risk: Third-party music API keys and BeatClaw credentials may be exposed or misused.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store credentials securely, avoid sharing tokens in chat, and review account access before connecting the agent.
+
+Risk: Beat generation can consume provider credits, and published listings affect a public marketplace.
+
+Mitigation: Confirm each paid generation and public listing or material change with the owner before acting.
+
+Risk: A remote skill update can replace persistent instructions.
+
+Mitigation: Prefer a reviewed install path and inspect any downloaded replacement skill before using it in a new session.
+
+## Reference(s):
+
+- [BeatClaw on ClawHub](https://clawhub.ai/youngpietro/skills/beatclaw)
+- [BeatClaw marketplace](https://beatclaw.com)
+- [Suno API provider](https://sunoapi.org)
+- [MVSEP API access for stem splitting](https://mvsep.com/user-api)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with API request examples and marketplace links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Beat and stem files are delivered through the marketplace, not as agent output.]
+
+## Skill Version(s):
+
+1.59.1 (source: ClawHub release and skill text)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,50 @@
+{
+  "variant_id": "relay_10_quantity",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "quantity",
+  "output_name": "recorded_quantity",
+  "input_schema": {
+    "type": "integer",
+    "minimum": 0,
+    "maximum": 10000
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "plan_entry_id",
+      "quantity",
+      "case_pack",
+      "carton_count",
+      "planning_action"
+    ],
+    "properties": {
+      "plan_entry_id": {
+        "type": "string",
+        "pattern": "^inventory_[0-9a-f]{12}$"
+      },
+      "quantity": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10000
+      },
+      "case_pack": {
+        "type": "integer",
+        "minimum": 1
+      },
+      "carton_count": {
+        "type": "integer",
+        "minimum": 0
+      },
+      "planning_action": {
+        "type": "string",
+        "enum": [
+          "replenish",
+          "hold"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "inventory_planning_record"
+}

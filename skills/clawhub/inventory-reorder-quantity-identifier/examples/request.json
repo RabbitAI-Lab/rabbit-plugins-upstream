@@ -1,0 +1,7 @@
+{
+  "inventory_note": {
+    "on_hand": 100,
+    "reorder_point": 300,
+    "safety_stock": 40
+  }
+}

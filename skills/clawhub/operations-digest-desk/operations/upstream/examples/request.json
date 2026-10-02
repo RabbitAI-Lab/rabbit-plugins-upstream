@@ -1,0 +1,9 @@
+{
+  "cadence_request": {
+    "cadence": "daily",
+    "hour": 17,
+    "timezone": "UTC",
+    "deduplicate_by": "case_id",
+    "group_by": "team"
+  }
+}

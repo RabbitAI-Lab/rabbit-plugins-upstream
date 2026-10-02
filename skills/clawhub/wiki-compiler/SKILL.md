@@ -1,389 +1,193 @@
 ---
 name: wiki-compiler
-version: 4.0.0
+version: 5.0.0
 description: 腾讯 IMA 知识库 Wiki 编译——将原始资料系统化组织为结构清晰的Wiki知识体系，并支持标签体系管理与按文件夹层级结构归类。当用户说"建知识库""整理资料库""编译知识库""搭建wiki""知识体系化""把资料整理成wiki""给知识库打标签""按标签分类""标签整理""按文件夹归类""整理散落文件"时触发。不适用于单篇摘要、简单问答、或仅搜索已有知识库内容的场景。
 license: MIT-0
 author: cookfish
-last_updated: 2026-07-08
-requires:
-  skills:
-    - name: ima-skill
-      reason: 本技能依赖 ima-skill 提供的笔记管理和知识库操作能力
-env:
-  IMA_OPENAPI_CLIENTID: ima OpenAPI 客户端ID
-  IMA_OPENAPI_APIKEY: ima OpenAPI API密钥
+last_updated: 2026-09-28
+homepage: https://github.com/cookfish/wiki-compiler
+
+metadata:
+  openclaw:
+    emoji: 🔧
+    requires:
+      primaryEnv: IMA_OPENAPI_APIKEY
+      env:
+        - IMA_OPENAPI_CLIENTID
+        - IMA_OPENAPI_APIKEY
 ---
 
-# 知识库 Wiki 编译器 v4.0.0
+# 知识库 Wiki 编译器 v5.0.0
 
-> **技能版本**：v4.0.0 | 最后更新：2026-07-08 | 上一版：v3.0.2
-> **核心理念**：用 LLM 作为"知识编译器"，将原始资料一次性编译为结构清晰、内部互联的 Wiki 知识库。编译后的 Wiki 是"真理之源"——LLM 直接基于对 Wiki 整体结构的理解进行自检索和回答，知识在系统中持续累积和演化。
+> **技能版本**：v5.0.0 | 最后更新：2026-09-28 | 上一版：v4.1.0
+> **核心理念**：基于 Karpathy 的 LLM Wiki 模式 —— **"Human curates, LLM maintains"**
+> **三大操作**：Ingest（摄取）/ Lint（健康检查）/ Schema（契约）
+> **IMA 平台依赖**：需配置 `IMA_OPENAPI_CLIENTID` 和 `IMA_OPENAPI_APIKEY` 环境变量。获取方式：访问 https://ima.qq.com/agent-interface
 
 ---
 
 ## 快速开始
 
 ### 场景 1：建新知识库
+用户："建一个关于 XXX 的知识库" → **Ingest**（完整流水线）
 
-用户："建一个关于 XXX 的知识库" → 自动启动 [阶段 0 → 阶段 4 完整流程](#阶段-0诊断与归类)
+### 场景 2：导入新资料
+用户："导入这个网页" / "上传这个 PDF" → **Ingest**（自动级联）
 
-### 场景 2：整理已有散落文件
+### 场景 3：整理散落文件
+用户："按文件夹归类" / "整理散落文件" → **Ingest 前置**（Folder Pre-Ingest）
 
-用户："按文件夹归类" / "整理散落文件" → 仅执行 [阶段 0](#阶段-0诊断与归类)
+### 场景 4：维护知识库
+用户："检查知识库" / "健康检查" → **Lint**（4 类标准检查）
 
-### 场景 3：维护已有知识库
+### 场景 5：增量更新导览
+用户："更新导览" / "导览新增了 N 篇文章" → **Ingest**（增量模式）
 
-- 用户："检查知识库" → 启动 [阶段 6 健康检查](#61-健康检查)
-- 用户："补充知识库" → 启动 [阶段 6 知识补充](#62-知识补充)
-- 用户："审查标签" / "整理标签" → 启动 [阶段 6 标签审查](#64-标签审查)
-
-### 场景 4：增量更新导览
-
-用户："更新导览" / "导览新增了 N 篇文章" → 启动 [阶段 2 → 阶段 4 增量模式](#阶段-2检查旧版本)
-
-### 场景 5：标签管理
-
-- 用户："给知识库打标签" → 启动 [标签体系 → 设计与应用](#标签体系)
-- 用户："按标签分类" → 启动 [标签应用](#标签体系)
+### 场景 6：标签管理
+用户："给知识库打标签" / "审查标签" → **Ingest** 子任务（Schema 辅助）
 
 ---
 
-## 整体流程（7 阶段法）
+## 核心理念
+
+### Karpathy 三大操作
+
+| 操作 | 职责 | 触发词 | 详见 |
+|------|------|--------|------|
+| **Ingest**（摄取） | 资料入库，编译/更新导览，级联多个相关导览 | "建知识库""导入网页""上传文件""更新导览" | [ingest.md](references/ingest.md) |
+| **Lint**（健康检查） | 4 类标准检查：结构/矛盾/孤立/过期 | "检查知识库""健康检查" | [lint.md](references/lint.md) |
+| **Schema**（契约） | 强制 frontmatter 规范（自动应用） | （无需用户触发）| [schema.md](references/schema.md) |
+
+**Query（查询）由 IMA search/fetch 完成，不归本 skill 管。**
+
+### 为什么这样设计
+
+- **Ingest**：知识库是"会复利的资产"，不是"可检索的语料库"
+- **Lint**：通过定期检查防止 wiki 衰败（类比代码世界的 `eslint`）
+- **Schema**：没有 schema，LLM 会天马行空；有了 schema，LLM 才守纪律
+
+> "Human curates, LLM maintains" — 人类决定收录什么，LLM 维护导览
+
+---
+
+## Ingest（摄取）
+
+### 子任务流水线
 
 ```
-阶段 0：诊断与归类   ← 是否需要先整理结构？
-   ↓
-阶段 1：资料收集     ← 知识库有什么？
-   ↓
-阶段 2：检查旧版本   ← 是否已编译过？
-   ↓
-阶段 3：链接特性预获取  ← 文件能链接吗？
-   ↓
-阶段 4：编译生成     ← 写导览笔记
-   ↓
-阶段 5：写入与验证   ← 创建/更新笔记
-   ↓
-阶段 6：维护与迭代   ← 持续演化
+Collect（收集） → Check（检查） → Link（链接特性） → Compile（编译） → Write（写入） → Cascade（级联）
+   ↓                ↓                ↓                ↓                ↓              ↓
+  阶段 1.1          阶段 1.2          阶段 1.3          阶段 1.4          阶段 1.5       阶段 1.6
 ```
 
-**核心原则**：
-- **每个阶段都有"确认门"**——用户确认后再进入下一阶段
-- **预获取链接是阶段 3 的必做步骤**——避免写完后发现无法链接导致返工
-- **增量优先**——每次编译前必须检查旧版本（阶段 2），优先增量更新而非重新创建
-- **破坏性操作前必读** [references/security.md](references/security.md)
+### 关键子任务
 
----
+| 子任务 | 核心动作 | API |
+|--------|---------|-----|
+| **Collect** | 上传文件 / 导入网页 / 拉取已有 | `upload_file`, `import_urls`, `get_knowledge_list` |
+| **Check** | 搜索旧导览 | `search_note`（标题="主题导览"）|
+| **Link** | 获取链接特性表 | `export_media_for_ima_sandbox` |
+| **Compile** | 新建/增量更新 | LLM 5 步法或 6 步法 |
+| **Write** | 创建/追加/编辑笔记 | `import_doc`, `append_doc`, `update_note` |
+| **Cascade** | **创建新版本导览 + 旧版保留历史**（知识复利）| `search_note` + Jaccard 算法 |
 
-## 阶段 0：诊断与归类
+详见 [references/ingest.md](references/ingest.md)
 
-> 适用于：知识库刚建好、文件散落在根目录、结构混乱、多层结构不一致
+### ⚠️ Karpathy 核心机制：知识复利（Cascade）
 
-### 何时需要
+> 一次 Ingest 可能触动多个导览（不仅是新文件所在的那个）
 
-- 根目录有散落文件（`parent_folder_id` 是根 ID）
-- 父文件夹下有应该归入子文件夹的文件
-- 多层结构不一致
+**IMA 实际可实现方式**：每个 Cascade 创建新 note_id（frontmatter 完整可控），旧版笔记保留作为历史。
 
-### 核心判断
-
-**`add_knowledge` ≠ `move_knowledge`**
-
-| 操作 | 效果 | 何时用 |
-|------|------|--------|
-| `add_knowledge` | 虚拟展示，`parent_folder_id` 不变 | 临时展示 |
-| `move_knowledge` | 物理归类，`parent_folder_id` 改变 | 真正整理 |
-
-**仅用 `add_knowledge` 不调用 `move`，文件会永远挂在根目录**——即使它"看起来在文件夹里"。
-
-### 流程
-
-1. 拉根目录（不带 `folder_id`）
-2. 检查每个文件的 `parent_folder_id`：
-   - 指向根目录 → 真正散落
-   - 指向文件夹 ID → 已归类
-3. 列出散落文件，按关键词推荐目标文件夹
-4. 批量调用 `move_knowledge`（每次最多 10 个）
-5. **移动前备份标签**（`move` 会清空标签数组）
-6. 验证根目录为空
-
-详见 [references/folder-organization.md](references/folder-organization.md)
-
-### 输出模板
-
-```markdown
-## 知识库结构诊断报告
-
-### 顶层文件夹
-| 文件夹 | 文件数 | 含子文件夹 |
-|--------|:------:|:----------:|
-| ... | ... | ... |
-
-### 散落文件
-- 共 X 个文件 `parent_folder_id` 是根目录
-- 列出每个文件的标题和推荐目标文件夹
-
-### 多层结构
-- AI 量化与深度学习/
-  - 机器学习理论方法/（Y 个文件）
-  - 大模型与智能体/（Y 个文件）
-
-### 处理建议
-- 散落文件：调用 `move_knowledge` 归类
-- 多层结构：导览放父级，子文件夹不需要各自导览
+```
+新文件被上传
+   ↓
+计算与每个现有导览的相关性（标签 Jaccard + 文件夹归属 + 标题关键词）
+   ↓
+相关度 > 0.5 的导览 → 加入"待更新列表"
+   ↓
+用户确认（必选）
+   ↓
+对每个候选导览：
+  1. export_note 读旧版
+  2. LLM 生成新版本正文
+  3. import_doc 创建新笔记（新 frontmatter：version/updated/changelog）
+  4. append_doc 在旧笔记末尾追加"已被替代"标记
 ```
 
----
+**示例**：上传"遗传算法在量化交易中的应用" → 1 个新导览笔记创建（v1.6）+ 1 个旧版标记追加。
 
-## 阶段 1：资料收集
-
-### 资料来源
-
-- 用户上传的文件
-- 已有知识库（`kb_id`）的内容
-- 联网搜索（用 `search(source="web")`）
-
-### 收集方式
-
-- `get_knowledge_list` 逐级浏览
-- 不带 `folder_id` 拉根目录（含散落文件视图）
-- 资料完整性优先，结构不急
-
-### 确认门
-
-向用户展示收集到的资料清单和知识库边界，确认后再进入阶段 2。
+详见 [references/ingest.md 第 7 节](references/ingest.md)
 
 ---
 
-## 阶段 2：检查旧版本
+## Lint（健康检查）
 
-> **重要**：每次编译前必须检查是否已有该主题的知识导览，避免重复创建或丢失历史版本信息。
+### 4 类标准检查（Karpathy 完整版）
 
-### 检查方式
+| 检查 | 触发频率 | 检查内容 |
+|------|---------|---------|
+| **结构** | 每周 | 散落文件、空文件夹、文件错放 |
+| **矛盾** | 每月 | 不同导览对同一概念说法冲突 |
+| **孤立** | 每月 | 导览未被任何文件引用 |
+| **过期** | 每月 | 低 confidence + 长期未更新 |
 
-1. 在目标文件夹中搜索标题包含"主题导览"的笔记
-2. 如果找到"主题导览：xxx"，记录其 `note_id` 和版本信息
-3. 如果没找到，则进入新建流程
+详见 [references/lint.md](references/lint.md)
 
-### 判断逻辑
+### 触发词
 
-| 情况 | 处理方式 |
-|------|---------|
-| 已有该主题的旧版本导览 | **增量更新**：读取旧版本 → 对比增量 → 更新导览 |
-| 已有其他主题的导览 | **新建**：按正常流程创建 |
-| 没有任何知识导览 | **新建**：按正常流程创建 |
+- "检查知识库" / "知识库体检" / "健康检查"
+- "审查标签" / "整理标签"（仅标签部分）
 
-详见 [references/versioning.md](references/versioning.md) 和 [references/incremental-update.md](references/incremental-update.md)
+### 输出
 
----
-
-## 阶段 3：链接特性预获取（编译前必做）
-
-> **目的**：避免写完后发现无法链接导致返工
-
-### 流程
-
-1. **收集文件列表**：`get_knowledge_list` 提取 `media_id`、`media_type`、`title`
-2. **批量获取链接特性**：`export_media_for_ima_sandbox` 获取永久 URL
-3. **生成链接特性表**：
-
-| media_id | title | media_type | 链接策略 | URL/备注 |
-|---------|-------|-----------|---------|---------|
-| xxx | 文章A | 2 (网页) | ✅ 可内嵌 | https://... |
-| xxx | 文章C | 7 (Markdown) | ⚠️ 不内嵌 | 请在知识库中查看 |
-
-4. **按类型分类编译**：
-
-| 文件类型 | 编译写法 |
-|---------|---------|
-| type 2/6 | `[标题](永久URL)` |
-| type 7/11 | `标题`（纯文本，不加链接）|
-| type 1/3/4/5 | `标题 — 请在知识库中查看` |
-
-详见 [references/link-handling.md](references/link-handling.md)
+`outputs/lint-YYYY-MM-DD.md` —— 包含总体评分、4 类检查详情、修复建议。
 
 ---
 
-## 阶段 4：编译生成
+## Schema（契约）
 
-### 4.1 新建模式（5 步法）
+### 强制 frontmatter（每篇主题导览）
 
-1. **明确主题** — 确定核心概念（主题定位、核心概念、边界范围）
-2. **梳理关键词** — 提取关键要素（每概念 3-5 个子主题）
-3. **发现关系** — 找出逻辑关联（层级、并列、因果、对立）
-4. **呈现结构** — 可视化知识网络（表格 + 学习路径）
-5. **美化优化** — 提升可读性（标题规范、排版、信息密度）
-
-### 4.2 增量更新模式
-
-1. 读取旧版本（`export_note`）
-2. 提取版本信息
-3. 对比知识库增量（新增/删除/概念变化）
-4. 更新导览内容（保留结构、更新要素、更新实践建议）
-5. 更新版本号（patch +0.0.1 / minor +0.1 / major +1.0）
-
-### 4.3 笔记撰写规范
-
-4 章节结构（详见 [references/guide-template.md](references/guide-template.md)）：
-
-| 章节 | 内容详略 | 重点 |
-|------|---------|------|
-| 一、主题定位 | 略写（~100 字）| 定义 + 解决问题 + 依赖链条 |
-| 二、核心概念与关键要素 | 详写（每概念 200-300 字）| 核心思想 + 引用文章 + 实践建议 |
-| 三、学习路径 | 中等（表格 + 一段话）| 两条路径 + 知识网络连接 |
-| 四、相关主题 | 略写（表格）| 主题 + 关系 + 连接点 |
-
-**关键要素写作**：冒号前是要素名称，冒号后是详细说明，末尾用 `[《标题》](链接)` 引用。
-
-**链接格式要求**（必须严格遵守）：
-- 所有引用必须提供可点击的有效链接
-- 链接来源参考阶段 3 生成的链接特性表
-- 禁止使用裸链接或纯 URL 文本
-
+```yaml
 ---
-
-## 阶段 5：写入与验证
-
-> **重要**：笔记创建接口返回成功不代表内容完整，必须立即验证。
-
-### 写入
-
-```bash
-# 1. 构建请求 JSON
-python3 -c "
-import json
-with open('guide_content.md', 'r') as f: content = f.read()
-with open('note_request.json', 'w') as f:
-    json.dump({
-        'content_format': 1,
-        'content': content,
-        'title': '📖 主题导览：[主题名称]'
-    }, f, ensure_ascii=False, indent=2)
-"
-
-# 2. 创建笔记
-curl -s -X POST "https://ima.qq.com/openapi/note/v1/import_doc" \
-  -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
-  -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
-  -H "Content-Type: application/json" \
-  -d @note_request.json | python3 -m json.tool
-# 返回: {"code": 0, "data": {"note_id": "xxx"}}
+title: 📖 主题导览：[主题名称]
+type: guide
+confidence: high | medium | low
+created: YYYY-MM-DD
+updated: YYYY-MM-DD
+version: 1.0
+changelog:
+  - v1.0: 初始版本
+sources:
+  - [《文章1》](URL)
+related_guides:
+  - [《另一导览》](URL)
+---
 ```
 
-**短内容优化**：< 3KB 的内容直接用 `import_doc` + `curl -d @filepath`，跳过 COS 中间环节。
+详见 [references/schema.md](references/schema.md)
 
-### 验证
+### 核心字段说明
 
-- `export_note` 导出内容
-- 与原始内容比对
-- 失败则删除重建（参考 [references/security.md](references/security.md) 安全删除流程）
-
-详见 [references/write-and-verify.md](references/write-and-verify.md)
-
----
-
-## 阶段 6：维护与迭代
-
-知识库需要"活"起来，而非一次性建好就搁置。
-
-### 6.1 健康检查
-
-**触发词**："检查知识库"、"知识库体检"
-
-- 空文件夹、错放文件、矛盾信息、缺覆盖
-- 生成健康检查报告，列出问题 + 修复建议
-- 用户确认后执行修复
-
-### 6.2 知识补充
-
-**触发词**："补充知识库"、"更新知识库"
-
-- 识别薄弱环节（空文件夹、内容过时）
-- 联网搜索补充新资料
-- 编译后归入对应位置
-- **更新知识导览**：触发增量更新流程
-
-### 6.3 输出与回流
-
-用户可基于 Wiki 生成各类产出（研究报告、总结、幻灯片大纲等），保存回笔记本后实现知识的"增量训练"——系统持续演化。
-
-### 6.4 标签审查
-
-**触发词**："审查标签"、"整理标签"
-
-详见 [references/tagging.md](references/tagging.md) 第 7 节。
-
-**检查项**：
-- 命名规范（无近似标签）
-- 孤儿标签（关联文件数 = 0）
-- 弱标签（关联文件数 < 3）
-- 热门标签（关联文件数 > 100）
-
-**破坏性操作保护**：详见 [references/security.md](references/security.md)
-
-### 6.5 维护节奏
-
-| 维护类型 | 频率 | 触发条件 |
-|---------|------|---------|
-| 健康检查 | 每月 1 次 | 时间周期 |
-| 知识补充 | 按需 | 用户上传新资料 |
-| 标签审查 | 每季度 1 次 | 标签数 > 100 |
-| 增量更新导览 | 每周 1 次 | 文件数增加 > 10% |
-| 深度重构 | 每半年 1 次 | 主题边界变化 |
-
-详见 [references/maintenance.md](references/maintenance.md)
+| 字段 | Karpathy 对应 | 作用 |
+|------|-------------|------|
+| `confidence` | LLM 把握度 | 让用户知道哪些导览可信 |
+| `sources[]` | 资料溯源 | 每个论断追到 raw（防止幻觉）|
+| `related_guides[]` | `[[wikilinks]]` | 网状结构而非树状 |
+| `changelog[]` | `git log` | 审计追踪 |
+| `version` | 语义化版本 | 变更管理 |
 
 ---
 
-## 标签体系
-
-### 设计原则
-
-- 每篇文章 3-5 个关键词作为主题标签
-- 文章级标签（涉及主题） + 文件夹（归属主题）= 协同
-- 标签创建前不需要完整词表，可渐进添加
-
-### 分类
-
-| 类型 | 用途 | 示例 |
-|------|------|------|
-| 主题标签 | 文章涉及的主题 | 风险因子 / 量化策略 |
-| 属性标签 | 文章固有属性 | 科普 / 进阶 / 待补充 |
-| 状态标签 | 维护状态 | 已编译 / 待审核 / 草稿 |
-
-### ⚠️ 关键 API 规范
-
-- `item_name` 必须严格匹配 `get_knowledge_list` 返回的**完整标题**
-- `limit` 范围 `(0, 50]`，超出返回错误
-- 调用前必须确认用户对该知识库有写权限
-
-详见 [references/tagging.md](references/tagging.md)
-
----
-
-## 安全准则
-
-### 破坏性操作清单
+## 安全准则（破坏性操作）
 
 | 操作 | 风险 | 保护 |
 |------|------|------|
-| `delete_note` | 不可逆 | 备份→三重确认→操作日志 |
+| ~~`delete_note`~~ | ❌ API 不支持 | 客户端手动 |
 | `tag_delete` | 关联自动解除 | 列影响文件→用户确认 |
 | `tag_rename` | 重名自动合并 | 检查新名→用户确认 |
 | `move_knowledge` | 标签可能清空 | 备份标签→移动后恢复 |
-
-### 通用保护原则
-
-1. **备份优先**：所有破坏性操作前必须先备份
-2. **三重确认门**：备份完成 + 内容验证 + 用户显式确认
-3. **操作日志**：每次破坏性操作后记录到 `/sandbox/workspace/logs/note_operations.log`
-4. **优先用可逆方案**：`tag_remove` 优于 `tag_delete`，创建新笔记优于删除旧笔记
-
-### 💡 推荐：保留旧笔记 + 创建新笔记
-
-> 对绝大多数场景，**不要删除旧笔记**，而是：
-> 1. 创建内容完全的新笔记
-> 2. 在新笔记中标注"替代旧版 v1.X（`note_id=XXX`）"
-> 3. 旧笔记保留作为历史版本，用户在 IMA 客户端手动决定是否删除
 
 详见 [references/security.md](references/security.md)
 
@@ -391,26 +195,24 @@ curl -s -X POST "https://ima.qq.com/openapi/note/v1/import_doc" \
 
 ## API 速查
 
-### 关键端点
+### 核心端点
 
 | 功能 | 端点 |
 |------|------|
-| 获取知识库列表 | `openapi/wiki/v1/get_knowledge_list` |
+| 上传文件 | `openapi/wiki/v1/upload_file` |
+| 导入网页 | `openapi/wiki/v1/import_urls` |
+| 创建文件夹 | `openapi/wiki/v1/create_folder` |
 | 移动文件 | `openapi/wiki/v1/move_knowledge` |
+| 重命名 | `openapi/wiki/v1/rename_knowledge` |
 | 添加标签 | `openapi/wiki/v1/tag_add` |
-| 列出标签 | `openapi/wiki/v1/tag_list` |
+| 列出知识库 | `openapi/wiki/v1/get_knowledge_list` |
+| 获取媒体信息 | `openapi/wiki/v1/get_media_info` |
 | 创建笔记 | `openapi/note/v1/import_doc` |
+| 追加笔记 | `openapi/note/v1/append_doc` |
 | 导出笔记 | `openapi/note/v1/export_note` |
-
-### 错误码速查
-
-| code | 含义 |
-|------|------|
-| 0 | 成功 |
-| 51 | 参数错误（如 `limit` 超出范围）|
-| 220001 | 文件名称不匹配（`item_name` 未用完整标题）|
-| 220004 | 无效的 `knowledge_base_id` |
-| 220030 | 无写权限 |
+| 搜索笔记 | `openapi/note/v1/search_note` |
+| 按 block 编辑 | `openapi/note/v1/update_note` |
+| ~~删除笔记~~ | ❌ API 不支持 |
 
 详见 [references/api-reference.md](references/api-reference.md) 和 [references/troubleshooting.md](references/troubleshooting.md)
 
@@ -421,51 +223,82 @@ curl -s -X POST "https://ima.qq.com/openapi/note/v1/import_doc" \
 1. **原子化**：每个知识节点围绕单一主题
 2. **关联性**：知识卡片之间通过超链接形成网状结构
 3. **大纲化**：每个卡片内部有完整的章节结构
-4. **可溯源**：标注每篇文章的来源出处
-5. **可读性**：结构清晰、信息密度适中、美观易读
+4. **可溯源**：每篇文章有来源出处（sources[]）
+5. **可读性**：结构清晰、信息密度适中
+6. **confidence 标注**：每个论断有可信度（Karpathy 特色）
 
 ---
 
 ## 重要提醒
 
-- **预获取链接是编译前的必做步骤**——先建立链接特性表，再基于表编译
-- **增量优先**——每次编译前必须检查旧版本，优先增量更新而非重新创建
-- 编译是增量过程——第一次编译不必完美，后续维护中持续优化
-- 核心价值在于"结构化 + 互联"而非单纯的文件分类
-- 知识库规模适中时（数十到数百篇），LLM 内生理解优于向量检索
-- 每次编译后保留变更记录，方便追溯和回退
-- **产出是笔记本中的笔记**——使用 `import_doc` 创建笔记，写入笔记本
+- **预获取链接是编译前的必做步骤**（Link 子任务）—— 先建立链接特性表，再基于表编译
+- **增量优先**——每次 Ingest 前必须 Check 旧版本，优先增量更新而非重新创建
+- **schema 强制**——所有导览必须遵守 [references/schema.md](references/schema.md)
+- **级联需确认**——Cascade 是 Karpathy 核心机制，但首次使用应告知用户
+- **导出笔记是 COS URL**——`export_note` 返回 `content_url`（3 小时时效），需二次下载
+- **删除笔记不支持**——IMA 平台当前 API 不支持，请用户在客户端操作
 
 ---
 
 ## 变更日志
 
+### v5.0.2 (2026-09-28) - Cascade 算法修正
+
+- **Cascade 算法改为 IMA 实际可实现版**：每次级联 = 创建新 note_id + 旧笔记追加"已被替代"标记
+- 移除 LLM 评分依赖（改为纯 API Jaccard 算法）
+- 强调"frontmatter 不可修改"的 IMA 限制
+- Cascade 用户确认变成必选（不再自动执行）
+
+详见 [references/ingest.md 第 7 节](references/ingest.md)
+
+### v5.0.1 (2026-09-28) - API 端点对齐 patch
+
+- 修正 5 处错误端点（get_media_info 删除、list_knowledge_bases → search_knowledge_base、list_notebooks → list_notebook、list_notes → list_note、create_notebook → add_notebook）
+- 补充 14 个缺失端点
+- 更新错误码（220001 → 210001 等）
+
+### v5.0.0 (2026-09-28) - Karpathy 重构（major 升级）
+
+**架构重组**：
+- 7 阶段 → Karpathy **三大操作**（Ingest / Lint / Schema）
+- SKILL.md 精简到 ~450 行（v4.1.0 是 499 行）
+- 新增 3 个核心 references：ingest.md / lint.md / schema.md
+- 引入 Karpathy 核心机制：**知识复利（Cascade 级联更新）**
+
+**Schema 强制化**：
+- 主题导览 frontmatter 强化：必填 confidence / sources[] / related_guides[] / changelog
+- confidence 字段：每篇导览标注可信度（high/medium/low）
+- sources[] 强制：每个论断追到 raw 资料
+
+**Ingest 增强**：
+- Cascade 算法改为 IMA 实际可实现版：每次级联创建新 note_id + 旧笔记追加"已被替代"标记
+- 移除 LLM 评分依赖（改为纯 API Jaccard 算法）
+- 新增 update_note（按 block 编辑）
+
+**Lint 强化**：
+- 从"基础健康检查"升级到 Karpathy 标准的 4 类检查（结构/矛盾/孤立/过期）
+- Lint 报告输出到 `outputs/lint-YYYY-MM-DD.md`
+
+**触发词保持 11 个不变**
+
+**复杂度反思**：
+- 之前 v4.2.0 加 14 项功能会让 SKILL.md 增长到 700+ 行
+- v5.0.0 重组为三大操作，结构更清晰
+- 11 个触发词保持不变，description 不变（向后兼容）
+
+### v4.1.0 (2026-09-28) - IMA 原生格式升级
+
+- 顶层 requires: { skills: [ima-skill] } → metadata.openclaw.requires.env 数组
+- 删除笔记 API 修正：v4.0.0 附录 B 的 `delete_note` 安全删除流程已失效
+
 ### v4.0.0 (2026-07-08) - 完全重构
 
-- 重新组织为 7 阶段法（诊断→收集→检查→链接→编译→写入→维护）
-- SKILL.md 精简至操作手册，详细内容拆分到 `references/` 子目录
-- 元信息完善（`version` / `license` / `author` / `last_updated`）
-- 新增快速开始、故障排查、统一安全准则、变更日志
-- 解决原版 4 处内容重复、章节编号混乱、量化个案污染通用技能等问题
+- 7 阶段法操作流程
 
 ### v3.0.2 (2026-07-08) - 描述优化
-
-- description 补充"按文件夹层级结构归类"
-- 新增 2 个触发词："按文件夹归类"、"整理散落文件"
-
 ### v3.0.1 (2026-07-08) - 安全修复
-
-- `delete_note` 流程重写为安全删除（备份→三重确认→操作日志）
-
 ### v3.0.0 (2026-05-13) - 多层结构
-
-- 新增 3.0 知识库结构诊断
-- 新增 6.5 多层文件夹归类
-- 集成 8 条实战经验
-
 ### v1.0 (2026-05-07) - 初版
-
-- 基于 LLM 编译方法论创建
 
 ---
 
@@ -476,17 +309,21 @@ wiki-compiler/
 ├── SKILL.md                            ← 本文件（操作手册）
 └── references/
     ├── reference.md                    ← references/ 索引
-    ├── folder-organization.md          ← 阶段 0 详细
-    ├── tagging.md                      ← 标签体系
-    ├── security.md                     ← 安全准则
+    ├── ingest.md                       ← 🆕 Ingest 完整操作 + 级联算法
+    ├── lint.md                         ← 🆕 Lint 4 类标准检查
+    ├── schema.md                       ← 🆕 强制 frontmatter 契约
+    ├── folder-organization.md          ← Ingest 前置：文件夹整理
+    ├── tagging.md                      ← Ingest 子任务：标签管理
+    ├── security.md                     ← 破坏性操作保护
     ├── api-reference.md                ← API 速查
-    ├── guide-template.md               ← 阶段 4 笔记撰写规范
-    ├── versioning.md                   ← 阶段 2 版本控制
-    ├── incremental-update.md           ← 阶段 4 增量更新
-    ├── link-handling.md                ← 阶段 3 链接处理
-    ├── write-and-verify.md             ← 阶段 5 写入与验证
-    ├── maintenance.md                  ← 阶段 6 维护
+    ├── guide-template.md               ← 笔记撰写规范（含新 frontmatter）
+    ├── versioning.md                   ← 版本控制
+    ├── write-and-verify.md             ← 写入与验证
+    ├── link-handling.md                ← 链接处理
     ├── troubleshooting.md              ← 故障排查
     └── cases/
         └── quantitative-investing.md   ← 实战案例
 ```
+
+> ⚠️ **IMA 平台注意**：IMA 平台会周期性向 `/sandbox/workspace/skills/<skill>/` 添加软链接 `<skill> -> /root/.skills/<skill>/`，可能导致打包时混入旧版本。打包前务必用 `find ... -type l` 检查并清理。
+> 详见 [references/troubleshooting.md](references/troubleshooting.md) 第 10 节。

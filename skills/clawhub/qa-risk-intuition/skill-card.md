@@ -1,40 +1,51 @@
-## Description: <br>
-Identifies testing areas that may look simple but carry high risk, then helps prioritize limited QA resources with risk levels and mitigation suggestions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams identify deceptively high-risk features and prioritize testing using change, business, technical, data, and integration signals.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to triage test focus when time is limited, requirements are changing, or a feature may hide business, data, integration, or technical risk. It produces prioritized risk areas, a probability-impact matrix, and mitigation suggestions for test planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may frame broad testing requests through a risk-assessment lens even when the user needs a general test plan. <br>
-Mitigation: Use it when risk prioritization is desired, and choose a general test-planning skill when the goal is comprehensive test design. <br>
-Risk: A risk assessment can miss high-risk areas if the requirements or scenario tree are incomplete. <br>
-Mitigation: Supplement the requirement decomposition and scenario context, then rerun the risk assessment before relying on the priority list. <br>
+## Use Case:
 
+QA practitioners and test leads use this skill to score feature risks, choose testing depth, and allocate limited test resources.
 
-## Reference(s): <br>
-- [Risk Signals Radar and Checklist](references/risk-signals.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown risk assessment report with risk matrix tables and mitigation suggestions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Each risk point is expected to include a unique risk ID and a linked requirement ID.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The optional installation command fetches an unpinned companion package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid running it unless the source is trusted and the companion package has been reviewed or pinned to a known version.
+
+## Reference(s):
+
+- [Risk signals and checklist](artifact/references/risk-signals.md)
+- [Risk assessment matrix and report template](artifact/assets/risk-matrix.md)
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-risk-intuition)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown risk assessment table and grouped risk report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Risk IDs, three-factor scores, testing depth, and resource allocation recommendations; does not generate test cases.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

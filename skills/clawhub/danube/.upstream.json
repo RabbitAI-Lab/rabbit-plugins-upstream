@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/danube",
   "slug": "danube",
   "ownerHandle": null,
-  "version": "8.0.12",
-  "updatedAt": 1779076534340,
-  "contentHash": "08ec805806fdb6ba0d9fd52dc47cc2f09f25abacb8d99cabaa1260716e3f440f",
-  "fetchedAt": "2026-07-26T18:56:25.095Z"
+  "version": "8.1.22",
+  "updatedAt": 1790944419280,
+  "contentHash": "415af65b8d14a0ce68928d0b7bde0f5047004625bcd119065fcd490a4c56436e",
+  "fetchedAt": "2026-10-02T13:59:41.849Z"
 }

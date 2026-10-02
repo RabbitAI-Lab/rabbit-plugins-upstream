@@ -1,42 +1,57 @@
-## Description: <br>
-Use Axiom Wallet via MCP to manage payment methods, review account activity, and complete user-requested purchases through Axiom's server-managed browser checkout. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users place specific physical-product orders through Axiom and check saved payment methods, order status, and receipts.
 
-## Publisher: <br>
-[axiom-wallet](https://clawhub.ai/user/axiom-wallet) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[axiom-wallet](https://clawhub.ai/user/axiom-wallet)
 
-## Use Case: <br>
-External users and agents use this skill to connect to Axiom Wallet, check saved payment-method metadata, review recent transactions, and start user-requested purchases that require Axiom approval flows before completion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A connected agent can read wallet transaction and payment-method metadata. <br>
-Mitigation: Install only when the user intends to let an agent use Axiom Wallet, use OAuth approval, and avoid exposing tokens, cookies, browser state, or OAuth authorize URLs. <br>
-Risk: The skill can start purchases through Axiom Wallet. <br>
-Mitigation: Require clear user intent, verify the payment method before purchase, wait for Axiom approval links, and never claim success until purchase status returns completed. <br>
+## Use Case:
 
+People use Axiom to order clearly specified physical products through their saved Axiom payment method, check their payment method, and review order progress and receipts. The agent asks for missing product details before starting an order.
 
-## Reference(s): <br>
-- [Axiom ClawHub listing](https://clawhub.ai/axiom-wallet/axiom) <br>
-- [Authentication guide](references/authentication.md) <br>
-- [Axiom MCP endpoint](https://mcp.useaxiom.ai/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown guidance with inline shell commands and MCP tool-call instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires mcporter >=0.8.0 and OAuth approval before account or purchase tools can be used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata and VERSION) <br>
+Risk: The agent can start real purchases using the user's saved payment method.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start only clearly requested orders with a known merchant, exact product, and required options; use low spending limits and Axiom approval rules.
+
+Risk: The OAuth troubleshooting fallback intercepts browser-opening commands and can capture authorization URLs.
+
+Mitigation: Avoid the PATH-interception fallback unless its capture behavior is understood; prefer the standard authentication flow.
+
+## Reference(s):
+
+- [Axiom on ClawHub](https://clawhub.ai/axiom-wallet/axiom)
+- [Authentication](references/authentication.md)
+- [Worked examples](references/examples.md)
+- [Axiom tool reference](references/tool-reference.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown text with purchase updates, approval links, and receipt details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Only report an order as complete after Axiom confirms completion.]
+
+## Skill Version(s):
+
+0.2.2 (source: release metadata, VERSION)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

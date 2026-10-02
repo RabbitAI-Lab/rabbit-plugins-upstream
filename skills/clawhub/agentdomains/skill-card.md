@@ -1,45 +1,60 @@
-## Description: <br>
-AgentDomains helps agents claim and manage free public hostnames under makes.fyi or agentdomains.co using the AgentDomains CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents claim and manage public hostnames for websites, APIs, and webhooks using AgentDomains.
 
-## Publisher: <br>
-[tashfeenahmed](https://clawhub.ai/user/tashfeenahmed) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tashfeenahmed](https://clawhub.ai/user/tashfeenahmed)
 
-## Use Case: <br>
-Developers and agents use this skill when they need a public hostname for a site, API, webhook callback, redirect, reverse proxy, DNS record, or nameserver delegation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, modify, forward, proxy, or delete public DNS names. <br>
-Mitigation: Review each AgentDomains command and target before execution, and delete names no longer needed. <br>
-Risk: The AgentDomains API key is a secret. <br>
-Mitigation: Store AGENTDOMAINS_API_KEY and saved AgentDomains configuration securely, and avoid exposing credentials in shared shells or logs. <br>
-Risk: Forwarding or proxying can expose a service publicly or send visitors to an unintended destination. <br>
-Mitigation: Confirm the hostname, destination URL, backend, and HTTPS behavior before sharing the public address. <br>
+## Use Case:
 
+Developers and agents use this skill to create public hostnames and manage DNS records, HTTPS setup, redirects, reverse proxies, and nameserver delegation for sites, APIs, and callbacks.
 
-## Reference(s): <br>
-- [AgentDomains Documentation](https://docs.agentdomains.co) <br>
-- [AgentDomains API Documentation](https://docs.agentdomains.co#api) <br>
-- [AgentDomains Service](https://agentdomains.co) <br>
-- [AgentDomains CLI Releases](https://github.com/tashfeenahmed/AgentDomains/releases) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples and JSON-oriented CLI instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require the AgentDomains CLI, Go for installation, and an AgentDomains API key or saved configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: ClawHub release metadata) <br>
+Risk: Public DNS names and proxies can expose private or unauthenticated services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the intended public exposure; do not point or proxy private, administrative, or local-only services without authorization.
+
+Risk: An exposed API key could allow unauthorized domain management.
+
+Mitigation: Protect the AgentDomains API key and avoid logging or committing it.
+
+Risk: Unpinned CLI or MCP installations can change unexpectedly.
+
+Mitigation: Pin CLI or MCP package versions in controlled environments.
+
+## Reference(s):
+
+- [AgentDomains documentation](https://docs.agentdomains.co)
+- [AgentDomains API documentation](https://docs.agentdomains.co#api)
+- [AgentDomains MCP documentation](https://docs.agentdomains.co/#mcp)
+- [AgentDomains ClawHub release](https://clawhub.ai/tashfeenahmed/skills/agentdomains)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown and shell commands; CLI responses can be JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can provide claimed hostnames, DNS changes, and setup or account-management steps.]
+
+## Skill Version(s):
+
+0.6.0 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

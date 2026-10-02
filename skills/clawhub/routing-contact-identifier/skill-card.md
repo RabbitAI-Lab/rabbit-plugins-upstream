@@ -1,38 +1,49 @@
-## Description: <br>
-Select a contact for a client brief. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Select a contact for a client brief.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Operational users can use this skill to route routine client brief or payment-review messages to a concise recipient in controlled validation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be mistaken for a broad contact-routing assistant even though the evidence describes a narrow synthetic validation skill. <br>
-Mitigation: Use it only for expected controlled validation routing tasks and review the returned recipient before acting on it. <br>
+## Use Case:
 
+Employees handling client briefs use this skill to select a configured recipient from a request's message kind and account tier.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/routing-contact-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recipient value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: A configured contact may be mistaken for an approved, deliverable business address.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the recipient against the current approved routing directory before using it; bundled examples use a .invalid domain.
+
+## Reference(s):
+
+- [Client Brief Routing Desk on ClawHub](https://clawhub.ai/wxt-ai/skills/routing-contact-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON object containing a recipient email string]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses configured local contact data; does not send messages or contact a network service.]
+
+## Skill Version(s):
+
+1.1.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

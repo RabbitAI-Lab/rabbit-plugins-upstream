@@ -1,44 +1,62 @@
-## Description: <br>
-Qa Test Skills turns requirement documents into traceable, structured test cases through a 12-step QA workflow covering functional, boundary, combination, regression, review, and reporting activities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates QA analysis of requirement documents into traceable test cases, coverage reports, and risk assessments.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, testers, product teams, and developers use this skill to transform PRDs, uploaded files, URLs, or direct requirement descriptions into structured test cases, coverage reports, risk areas, and test reports. It is intended for workflows that need traceable requirements coverage and AI-assisted review of testing gaps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may read referenced requirement files, linked subdocuments, directories, and user-provided URLs during QA analysis. <br>
-Mitigation: Use explicit paths and avoid broad or sensitive directories unless those documents are intended for QA analysis. <br>
-Risk: Generated test guidance can miss context or introduce misleading coverage conclusions if the supplied requirements are incomplete. <br>
-Mitigation: Review the generated coverage report, risk areas, and validation report before using the test cases for release decisions. <br>
+## Use Case:
 
+QA engineers and developers use this skill to turn written requirements, attachments, or URLs into test scenarios, traceable test cases, coverage analysis, and reports. The full workflow depends on separately available companion skills.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-skills) <br>
-- [Enforcement rules](references/enforcement.md) <br>
-- [Output format and checklist](references/format.md) <br>
-- [Input routing rules](references/routing.md) <br>
-- [Workflow detail](references/workflow-detail.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, CSV, Guidance] <br>
-**Output Format:** [Markdown reports, CSV test cases, and structured JSON-style analysis blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are expected to include traceability identifiers for test cases, requirements, and scenarios.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: Referenced documents or URLs may expose sensitive information or lead the agent to read unintended files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted documents, scope permitted paths and directories, and confirm URL fetches before analysis.
+
+Risk: Installing companion skills via an unreviewed package command may run untrusted code.
+
+Mitigation: Inspect and pin the installation source before running the suggested npx command.
+
+Risk: The workflow may execute a local validation command without adequate confirmation.
+
+Mitigation: Review the validation script and its input path, and approve local command execution before running it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-test-skills)
+- [Workflow details](artifact/references/workflow-detail.md)
+- [Input routing](artifact/references/routing.md)
+- [Output format](artifact/references/format.md)
+- [Workflow enforcement](artifact/references/enforcement.md)
+- [Depth benchmarks](artifact/references/depth-benchmarks.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Guidance]
+
+**Output Format:** [Markdown analysis and reports plus UTF-8 CSV test cases]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Nine-column CSV; unique test-case IDs and requirement/scenario traceability; coverage is limited to supplied requirements.]
+
+## Skill Version(s):
+
+1.8.0 (source: server release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

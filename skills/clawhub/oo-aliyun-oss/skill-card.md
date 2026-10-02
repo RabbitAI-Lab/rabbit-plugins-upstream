@@ -1,44 +1,61 @@
-## Description: <br>
-Operates Alibaba Cloud OSS through an OOMOL-connected account using the oo CLI to list buckets and objects, fetch metadata, generate pre-signed URLs, upload objects, and delete objects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents operate Alibaba Cloud OSS through OOMOL and the oo CLI for reading, creating, updating, and deleting bucket and object data.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect Alibaba Cloud OSS resources and perform controlled object operations through a connected OOMOL account. It supports object listing, metadata checks, pre-signed URL generation, uploads, and deletions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploads and deletes can change or remove Alibaba Cloud OSS objects. <br>
-Mitigation: Confirm the exact bucket, object key, payload, and expected effect before approving upload or delete actions. <br>
-Risk: Pre-signed URLs can grant read, upload, or delete access to a specific object. <br>
-Mitigation: Generate pre-signed URLs only for the intended object and operation, and review the requested access before sharing or using them. <br>
-Risk: The skill depends on the oo CLI and an OOMOL-connected Alibaba Cloud OSS credential. <br>
-Mitigation: Install and authenticate the oo CLI only when needed, and use the connected account intended for the target bucket. <br>
+## Use Case:
 
+Developers and external users use this skill to let an agent inspect Alibaba Cloud OSS action schemas, list buckets and objects, view object metadata, download objects, upload content, generate pre-signed URLs, and delete objects through an OOMOL-connected account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/oo-aliyun-oss) <br>
-- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [Alibaba Cloud OSS](https://www.alibabacloud.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return structured JSON from oo connector executions when the agent runs Alibaba Cloud OSS actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Setup guidance can execute remote oo CLI installer scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Manually verify or install the oo CLI through trusted documentation before running installer commands.
+
+Risk: The connected Alibaba Cloud OSS account can perform uploads, deletes, overwrites, and generate pre-signed URLs that grant write or delete access.
+
+Mitigation: Require explicit user confirmation for the exact payload, target bucket or object, and URL permission scope before running state-changing or destructive actions.
+
+Risk: The skill operates through the user's OOMOL-connected Alibaba Cloud OSS account.
+
+Mitigation: Use only with OOMOL and Alibaba Cloud OSS accounts that the user intends the agent to operate.
+
+## Reference(s):
+
+- [Alibaba Cloud OSS homepage](https://www.alibabacloud.com)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI install guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-aliyun-oss)
+- [OOMOL publisher profile](https://clawhub.ai/user/oomol)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, API Calls, JSON, Configuration guidance]
+
+**Output Format:** [Markdown with inline shell commands and JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses live connector schemas before constructing requests; write, overwrite, delete, and write-capable pre-signed URL actions require explicit confirmation.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

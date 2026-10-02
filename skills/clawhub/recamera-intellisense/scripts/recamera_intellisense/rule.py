@@ -1,4 +1,8 @@
-"""Record rule system: config, schedule, and trigger tagged-union (``/record/rule/...``)."""
+"""Record rule system: config, schedule, trigger tagged-union, and the
+recording-source discovery surface.
+
+The legacy ``sed`` (sound-event) trigger kind is retired: sound recording is
+an ``inference_set`` rule with ``source_filter=["acousticslab"]``."""
 
 from __future__ import annotations
 
@@ -14,6 +18,8 @@ if __name__ == "__main__" and __package__ is None:
 from typing import Any, Dict, List, Optional
 
 from . import _config, _http
+from ._coerce import to_bool
+from ._errors import RecameraError
 
 __all__ = [
     "get_rule_system_info",
@@ -24,6 +30,7 @@ __all__ = [
     "get_record_trigger",
     "set_record_trigger",
     "activate_http_trigger",
+    "get_record_sources",
 ]
 
 PATH_CONFIG = "/cgi-bin/entry.cgi/record/rule/config"
@@ -31,9 +38,10 @@ PATH_INFO = "/cgi-bin/entry.cgi/record/rule/info"
 PATH_SCHEDULE = "/cgi-bin/entry.cgi/record/rule/schedule-rule-config"
 PATH_RECORD_RULE = "/cgi-bin/entry.cgi/record/rule/record-rule-config"
 PATH_HTTP_ACTIVATE = "/cgi-bin/entry.cgi/record/rule/http-rule-activate"
+PATH_SOURCES = "/api/app-center/v1/recording/sources"
 
 
-def get_rule_system_info(device_name: str) -> Dict[str, Any]:
+def get_rule_system_info(device_name: Optional[str] = None) -> Dict[str, Any]:
     """Health / availability snapshot of the rule subsystem."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_INFO) or {}
@@ -88,7 +96,7 @@ def _parse_avail_tty(v: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def get_record_config(device_name: str) -> Dict[str, Any]:
+def get_record_config(device_name: Optional[str] = None) -> Dict[str, Any]:
     """Return `{rule_enabled, writer: {format, interval_ms}}`."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_CONFIG) or {}
@@ -103,7 +111,7 @@ def get_record_config(device_name: str) -> Dict[str, Any]:
 
 
 def set_record_config(
-    device_name: str,
+    device_name: Optional[str] = None,
     *,
     rule_enabled: bool,
     writer_format: str,
@@ -112,7 +120,7 @@ def set_record_config(
     """Enable/disable the rule pipeline and set the writer format (`JPG`/`MP4`/`RAW`)."""
     dev = _config.resolve(device_name)
     payload = {
-        "bRuleEnabled": bool(rule_enabled),
+        "bRuleEnabled": to_bool(rule_enabled, "rule_enabled"),
         "dWriterConfig": {
             "sFormat": str(writer_format).upper(),
             "iIntervalMs": int(writer_interval_ms),
@@ -122,7 +130,7 @@ def set_record_config(
     _http.expect_ok(resp, "set rule config")
 
 
-def get_schedule_rule(device_name: str) -> Optional[List[Dict[str, str]]]:
+def get_schedule_rule(device_name: Optional[str] = None) -> Optional[List[Dict[str, str]]]:
     """Active-weekdays list, or `None` when the schedule is disabled."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_SCHEDULE) or {}
@@ -138,7 +146,7 @@ def get_schedule_rule(device_name: str) -> Optional[List[Dict[str, str]]]:
 
 
 def set_schedule_rule(
-    device_name: str,
+    device_name: Optional[str] = None,
     schedule: Optional[List[Dict[str, str]]] = None,
 ) -> None:
     """Pass `None` or `[]` (or omit) to disable (rule active 24/7)."""
@@ -158,11 +166,66 @@ def set_schedule_rule(
 _FULL_FRAME_REGION = [[0.0, 0.0], [1.0, 0.0], [1.0, 1.0], [0.0, 1.0]]
 
 
-def get_record_trigger(device_name: str) -> Dict[str, Any]:
-    """Return the current trigger as a tagged-union dict; see :func:`trigger_to_json` for each shape."""
+def get_record_sources(device_name: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Recording-rule sources, normalized: ``{id, kind, name, running,
+    frame_capable, event_capable, supports_roi, classes}``.
+
+    ``classes`` is empty when unknowable (the ``builtin`` source follows the
+    selected vision model — see ``get_detection_models_info``). Validate
+    ``source_filter``/``label_filter`` against this BEFORE compiling a rule."""
     dev = _config.resolve(device_name)
-    d = _http.get_json(dev, PATH_RECORD_RULE) or {}
-    return parse_trigger(d)
+    data = _http.get_json(dev, PATH_SOURCES)
+    if not isinstance(data, dict):
+        raise RecameraError(
+            f"get record sources failed: unexpected payload type {type(data).__name__}"
+        )
+    out: List[Dict[str, Any]] = []
+    for s in data.get("sources") or []:
+        if not isinstance(s, dict) or not s.get("id"):
+            continue
+        classes: List[str] = []
+        for sig in s.get("signals") or []:
+            if not isinstance(sig, dict):
+                continue
+            if sig.get("type") not in ("detection", "classification"):
+                continue
+            for c in sig.get("classes") or []:
+                if isinstance(c, str) and c not in classes:
+                    classes.append(c)
+        out.append({
+            "id": s["id"],
+            "kind": s.get("kind", "app"),
+            "name": s.get("name") or s["id"],
+            "running": bool(s.get("running", False)),
+            "frame_capable": bool(s.get("frame_capable", False)),
+            "event_capable": bool(s.get("event_capable", False)),
+            "supports_roi": bool(s.get("supports_roi", False)),
+            "classes": classes,
+        })
+    return out
+
+
+def _fetch_record_rule(dev: Dict[str, Any]) -> Dict[str, Any]:
+    """Raw `record-rule-config` payload (no tagged-union decoding)."""
+    d = _http.get_json(dev, PATH_RECORD_RULE)
+    return d if isinstance(d, dict) else {}
+
+
+def get_record_trigger(device_name: Optional[str] = None) -> Dict[str, Any]:
+    """Return the current trigger as a tagged-union dict; see :func:`trigger_to_json`."""
+    dev = _config.resolve(device_name)
+    return parse_trigger(_fetch_record_rule(dev))
+
+
+def _get_inference_rules(device_name: Optional[str] = None) -> List[Dict[str, Any]]:
+    """Decoded INFERENCE_SET rules; `[]` for other kinds. Gates on the raw
+    ``sCurrentSelected`` so an unmigrated ``SED`` selection yields `[]`
+    instead of tripping :func:`parse_trigger`'s refusal."""
+    dev = _config.resolve(device_name)
+    raw = _fetch_record_rule(dev)
+    if str(raw.get("sCurrentSelected", "")).upper() != "INFERENCE_SET":
+        return []
+    return [_parse_detection_rule(r) for r in (raw.get("lInferenceSet") or [])]
 
 
 def parse_trigger(d: Dict[str, Any]) -> Dict[str, Any]:
@@ -199,22 +262,18 @@ def parse_trigger(d: Dict[str, Any]) -> Dict[str, Any]:
     if kind == "ALWAYS_ON":
         return {"kind": "always_on"}
     if kind == "SED":
-        s = d.get("dSED") or {}
-        confidence = s.get("lConfidenceFilter") or [0.0, 1.0]
-        labels = [x for x in (s.get("lClassFilter") or []) if isinstance(x, str)]
-        return {
-            "kind": "sed",
-            "model_id": s.get("sID", ""),
-            "consecutive_window_ms": int(s.get("iConsecutiveWindowMs", 0)),
-            "confidence_range_filter": [float(c) for c in confidence],
-            "label_filter": labels,
-        }
+        raise ValueError(
+            "The 'sed' trigger kind is retired: firmware migrates dSED sections "
+            "to inference_set rules on boot. Use kind='inference_set' with "
+            "source_filter=['acousticslab'] for sound-triggered recording."
+        )
     raise ValueError(f"Unknown trigger kind {kind!r}")
 
 
 def _parse_detection_rule(v: Dict[str, Any]) -> Dict[str, Any]:
     confidence = v.get("lConfidenceFilter") or [0.0, 1.0]
     labels = [x for x in (v.get("lClassFilter") or []) if isinstance(x, str)]
+    sources = [x for x in (v.get("lSourceFilter") or []) if isinstance(x, str)]
     regions_raw = v.get("lRegionFilter")
     regions: Optional[List[List[List[float]]]] = None
     if isinstance(regions_raw, list):
@@ -230,6 +289,7 @@ def _parse_detection_rule(v: Dict[str, Any]) -> Dict[str, Any]:
         "debounce_times": int(v.get("iDebounceTimes", 0)),
         "confidence_range_filter": [float(c) for c in confidence],
         "label_filter": labels,
+        "source_filter": sources,
         "region_filter": regions,
     }
 
@@ -246,6 +306,8 @@ def _detection_rule_to_json(rule: Dict[str, Any]) -> Dict[str, Any]:
         "iDebounceTimes": int(rule.get("debounce_times", 0)),
         "lConfidenceFilter": confidence,
         "lClassFilter": list(rule.get("label_filter", [])),
+        # Empty = match every source; name sources to scope the rule.
+        "lSourceFilter": list(rule.get("source_filter", [])),
         "lRegionFilter": [{"lPolygon": poly} for poly in regions],
     }
 
@@ -254,9 +316,9 @@ def _validate_confidence_range(rule_name: Any, confidence: List[Any]) -> None:
     """Enforce `confidence_range_filter = [min, max]` with both ∈ [0, 1] and min ≤ max."""
     label = f"rule {rule_name!r}" if rule_name else "rule"
     if not isinstance(confidence, list) or len(confidence) != 2:
+        detail = len(confidence) if isinstance(confidence, list) else type(confidence).__name__
         raise ValueError(
-            f"{label}: confidence_range_filter must be exactly [min, max]; "
-            f"got {len(confidence) if isinstance(confidence, list) else type(confidence).__name__} value(s)"
+            f"{label}: confidence_range_filter must be exactly [min, max]; got {detail} value(s)"
         )
     try:
         lo, hi = float(confidence[0]), float(confidence[1])
@@ -264,7 +326,7 @@ def _validate_confidence_range(rule_name: Any, confidence: List[Any]) -> None:
         raise ValueError(
             f"{label}: confidence_range_filter entries must be numeric; got {confidence!r}"
         ) from exc
-    if not (0.0 <= lo <= 1.0) or not (0.0 <= hi <= 1.0):
+    if lo < 0.0 or lo > 1.0 or hi < 0.0 or hi > 1.0:
         raise ValueError(
             f"{label}: confidence_range_filter values must be within [0.0, 1.0]; got [{lo}, {hi}]"
         )
@@ -274,7 +336,13 @@ def _validate_confidence_range(rule_name: Any, confidence: List[Any]) -> None:
         )
 
 
-_TRIGGER_SIBLING_KEYS = ("lInferenceSet", "dTimer", "dGPIO", "dTTY", "dSED")
+_TRIGGER_SIBLING_KEYS = ("lInferenceSet", "dTimer", "dGPIO", "dTTY")
+
+_SED_RETIRED = (
+    "trigger kind 'sed' is retired: sound-event recording is now an "
+    "inference_set rule with source_filter=['acousticslab'] (debounce_times "
+    "replaces consecutive_window_ms; ~960 ms per hop)"
+)
 
 
 def _trigger_patch(trigger: Dict[str, Any]) -> tuple[str, Dict[str, Any]]:
@@ -318,21 +386,7 @@ def _trigger_patch(trigger: Dict[str, Any]) -> tuple[str, Dict[str, Any]]:
     if kind == "always_on":
         return "ALWAYS_ON", {}
     if kind == "sed":
-        confidence = list(trigger.get("confidence_range_filter", [0.0, 1.0]))
-        _validate_confidence_range("sed", confidence)
-        consecutive_window_ms = int(trigger.get("consecutive_window_ms", 0))
-        if not (0 <= consecutive_window_ms <= 60000):
-            raise ValueError(
-                f"sed: consecutive_window_ms must be within [0, 60000]; got {consecutive_window_ms}"
-            )
-        return "SED", {
-            "dSED": {
-                "sID": str(trigger.get("model_id", "")),
-                "iConsecutiveWindowMs": consecutive_window_ms,
-                "lConfidenceFilter": confidence,
-                "lClassFilter": list(trigger.get("label_filter", [])),
-            }
-        }
+        raise ValueError(_SED_RETIRED)
     raise ValueError(f"Unknown trigger kind {kind!r}")
 
 
@@ -363,11 +417,12 @@ def trigger_to_json(trigger: Dict[str, Any]) -> Dict[str, Any]:
     Accepted shapes::
 
         {"kind": "timer", "interval_seconds": 60}
-        {"kind": "gpio", "name": "GPIO_01", "state": "FLOATING", "signal": "RISING", "debounce_ms": 0}
-        {"kind": "inference_set", "rules": [...]}
+        {"kind": "gpio", "name": "GPIO_01", "state": "FLOATING",
+         "signal": "RISING", "debounce_ms": 0}
+        {"kind": "inference_set", "rules": [...]}  # rule.source_filter:
+        #   ["builtin"] vision, ["acousticslab"] sound, [] matches every source
         {"kind": "http"} | {"kind": "always_on"}
         {"kind": "tty", "name": "...", "command": "..."}
-        {"kind": "sed", "model_id": "", "consecutive_window_ms": 0, "confidence_range_filter": [0.5, 1.0], "label_filter": ["Cat"]}
 
     Prefer :func:`set_record_trigger`, which performs a read-modify-write so
     other trigger kinds' remembered settings survive a kind switch.
@@ -375,7 +430,9 @@ def trigger_to_json(trigger: Dict[str, Any]) -> Dict[str, Any]:
     return _merge_trigger_payload(None, trigger)
 
 
-def set_record_trigger(device_name: str, trigger: Dict[str, Any]) -> None:
+def set_record_trigger(
+    device_name: Optional[str] = None, *, trigger: Dict[str, Any]
+) -> None:
     """Install *trigger* while preserving other kinds' remembered settings.
 
     Fetches the current `record-rule-config`, copies the sibling sub-objects
@@ -389,7 +446,7 @@ def set_record_trigger(device_name: str, trigger: Dict[str, Any]) -> None:
     dev = _config.resolve(device_name)
     try:
         current = _http.get_json(dev, PATH_RECORD_RULE)
-    except Exception:
+    except RecameraError:  # fresh/unreachable device: degrade to full-replace
         current = None
     payload = _merge_trigger_payload(
         current if isinstance(current, dict) else None, trigger
@@ -398,7 +455,7 @@ def set_record_trigger(device_name: str, trigger: Dict[str, Any]) -> None:
     _http.expect_ok(resp, "set record trigger")
 
 
-def activate_http_trigger(device_name: str) -> None:
+def activate_http_trigger(device_name: Optional[str] = None) -> None:
     """Fire a one-shot record event on an HTTP-kind trigger."""
     dev = _config.resolve(device_name)
     resp = _http.post_json(dev, PATH_HTTP_ACTIVATE)
@@ -414,17 +471,5 @@ COMMANDS = {
     "get_record_trigger": get_record_trigger,
     "set_record_trigger": set_record_trigger,
     "activate_http_trigger": activate_http_trigger,
-}
-COMMAND_SCHEMAS = {
-    "get_rule_system_info": {"required": {"device_name"}, "optional": set()},
-    "get_record_config": {"required": {"device_name"}, "optional": set()},
-    "set_record_config": {
-        "required": {"device_name", "rule_enabled", "writer_format"},
-        "optional": {"writer_interval_ms"},
-    },
-    "get_schedule_rule": {"required": {"device_name"}, "optional": set()},
-    "set_schedule_rule": {"required": {"device_name"}, "optional": {"schedule"}},
-    "get_record_trigger": {"required": {"device_name"}, "optional": set()},
-    "set_record_trigger": {"required": {"device_name", "trigger"}, "optional": set()},
-    "activate_http_trigger": {"required": {"device_name"}, "optional": set()},
+    "get_record_sources": get_record_sources,
 }

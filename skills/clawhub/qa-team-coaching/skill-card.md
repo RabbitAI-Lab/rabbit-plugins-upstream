@@ -1,39 +1,54 @@
-## Description: <br>
-Helps QA teams coach new testers and raise team testing capability through pair testing, knowledge sharing, checklists, reusable templates, training materials, and progress evaluation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams coach new members and build testing capability through paired testing, reviews, checklists, templates, and tailored training plans.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA leads, mentors, and testing teams use this skill to assess team capability gaps, design coaching plans, create training materials, and establish review and progress metrics for new or growing testers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generic terms such as training, newcomer, mentoring, or team growth may invoke the skill even when QA coaching was not intended. <br>
-Mitigation: Confirm the requested coaching context before relying on generated plans, checklists, or templates. <br>
-Risk: Generated checklists, review standards, or training materials could influence team workflow if adopted without review. <br>
-Mitigation: Review and approve proposed materials and process changes before applying them in a real team workflow. <br>
+## Use Case:
 
+QA leads, mentors, and testing teams use this skill to assess skill gaps, onboard new testers, and create coaching plans with measurable follow-up.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured coaching plans, skill matrices, training-material lists, mentorship guides, and progress metrics] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Each coaching plan is expected to include a COACH-XXXX traceability identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Training examples could be mistaken for approved changes to QA or release processes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed checklists and process changes with the team before adopting them.
+
+Risk: The optional command to install an external skill set introduces a separate supply-chain trust decision.
+
+Mitigation: Verify the package and source, and prefer a pinned commit or version before running the command.
+
+## Reference(s):
+
+- [Coaching methods](references/coaching-methods.md)
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-team-coaching)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coaching plans may include a skill matrix, training materials, mentorship guidance, progress metrics, and a COACH-XXXX identifier.]
+
+## Skill Version(s):
+
+1.8.0 (source: ClawHub release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

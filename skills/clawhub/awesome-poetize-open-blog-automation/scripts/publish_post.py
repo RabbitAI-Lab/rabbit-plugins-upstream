@@ -342,6 +342,7 @@ def request_json(
     api_key: str,
     payload: dict[str, Any] | None = None,
     extra_headers: dict[str, str] | None = None,
+    return_error_dict: bool = False,
 ) -> dict[str, Any]:
     headers = {
         "X-API-KEY": api_key,
@@ -364,6 +365,9 @@ def request_json(
             return json.loads(content)
     except urllib.error.HTTPError as exc:
         body = exc.read().decode("utf-8", errors="replace")
+        if return_error_dict:
+            # 供调用方自行翻译 HTTP 层错误（如旧后端的 404/500），不再直接终止
+            return {"code": exc.code, "message": f"HTTP {exc.code} calling {url}", "detail": body[:500]}
         die(f"HTTP {exc.code} calling {url}\n{body}")
     except urllib.error.URLError as exc:
         die(f"Network error calling {url}: {exc}")
@@ -1168,6 +1172,14 @@ def build_payload(markdown_text: str, args: argparse.Namespace) -> tuple[dict[st
         payload["labelName"] = label_name
     elif not is_update:
         die("Missing label. Provide front matter 'label' or 'labelId'.")
+
+    # 分类/标签描述（auto-create 时传入，避免后端用硬编码默认值）
+    sort_description = meta_value(meta, "sortDescription") or meta_value(meta, "sortDesc")
+    label_description = meta_value(meta, "labelDescription") or meta_value(meta, "labelDesc")
+    if sort_description is not MISSING:
+        payload["sortDescription"] = sort_description
+    if label_description is not MISSING:
+        payload["labelDescription"] = label_description
 
     if cover is not None:
         payload["cover"] = cover

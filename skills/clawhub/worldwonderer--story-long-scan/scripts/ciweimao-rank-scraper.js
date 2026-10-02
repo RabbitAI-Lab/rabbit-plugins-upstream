@@ -4,7 +4,7 @@
  *
  * 配合 browser-cdp skill 使用。先启动 Chrome CDP 环境，再运行本脚本。
  * 采集策略：刺猬猫 rank-index 页面单页展示所有榜单，文本解析提取结构化数据。
- * 输出 Markdown 格式匹配 scan-output-format.md 规范。
+ * 输出 Markdown 格式见 references/platform-ciweimao.md；aggregate-rank.js 按此格式聚合。
  *
  * 用法：
  *   node ciweimao-rank-scraper.js --type click       # 点击榜
@@ -17,7 +17,7 @@
 
 const fs = require("fs");
 const path = require("path");
-const { ab, sleep, evalJSONBase64, scrollLoad, getArg, runCli } = require("./cdp-utils");
+const { ab, sleep, evalJSONBase64, scrollLoad, getArg, localDateStamp, runCli } = require("./cdp-utils");
 
 const RANK_URL = "https://www.ciweimao.com/rank-index";
 
@@ -222,8 +222,7 @@ function main() {
         }
       }
 
-      const date = new Date().toISOString().slice(0, 10).replace(/-/g, "");
-      const filename = `刺猬猫${rt.label}_${date}.md`;
+      const filename = `刺猬猫${rt.label}_${localDateStamp()}.md`;
       fs.mkdirSync(OUTDIR, { recursive: true });
       const filepath = path.join(OUTDIR, filename);
       fs.writeFileSync(filepath, lines.join("\n"), "utf-8");
@@ -239,5 +238,3 @@ function main() {
 if (require.main === module) {
   runCli(main, "刺猬猫采集");
 }
-
-module.exports = { extractAllRanks, extractBookUrls };

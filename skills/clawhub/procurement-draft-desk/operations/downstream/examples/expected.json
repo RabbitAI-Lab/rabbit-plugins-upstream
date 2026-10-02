@@ -1,0 +1,12 @@
+{
+  "purchase_draft_id": {
+    "draft_id": "purchase-b0b086c7990878af",
+    "status": "draft",
+    "supplier_id": "VENDOR-HOTEL-8462",
+    "currency": "USD",
+    "lead_days": 14,
+    "incoterm": "FCA",
+    "renewal_month": "2026-11",
+    "summary": "USD terms, 14-day lead time, FCA, renewal 2026-11."
+  }
+}

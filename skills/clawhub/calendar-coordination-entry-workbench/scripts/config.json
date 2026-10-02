@@ -1,0 +1,63 @@
+{
+  "variant_id": "cap_07_event_to_coordination",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "event_digest",
+  "output_name": "calendar_artifact",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "event_id",
+      "starts_at",
+      "ends_at",
+      "timezone",
+      "duration_minutes"
+    ],
+    "properties": {
+      "event_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "starts_at": {
+        "type": "string",
+        "minLength": 1
+      },
+      "ends_at": {
+        "type": "string",
+        "minLength": 1
+      },
+      "timezone": {
+        "type": "string",
+        "minLength": 1
+      },
+      "duration_minutes": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "artifact_id",
+      "event_id",
+      "ics_content"
+    ],
+    "properties": {
+      "artifact_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "event_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "ics_content": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_calendar_artifact_create"
+}

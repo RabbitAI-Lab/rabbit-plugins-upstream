@@ -1,44 +1,60 @@
-## Description: <br>
-YouTube Data API integration with managed OAuth for searching videos, managing playlists, accessing channel data, and interacting with comments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search YouTube, inspect channels and videos, and manage playlists, subscriptions, and comments through a user's connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to work with YouTube through Maton-managed OAuth, including searches, channel and video lookups, playlists, comments, subscriptions, and account-scoped write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Maton-managed OAuth can perform account-changing YouTube actions such as playlist, comment, subscription, rating, and deletion operations. <br>
-Mitigation: Install only if you trust Maton to broker OAuth access, confirm the intended YouTube connection before use, and approve write actions only after checking the exact target and effect. <br>
+## Use Case:
 
+People and developers use this skill to research YouTube content and manage their connected account's playlists, subscriptions, and comments, with approval before account changes or automations.
 
-## Reference(s): <br>
-- [ClawHub YouTube Skill](https://clawhub.ai/byungkyu/skills/youtube-api-skill) <br>
-- [YouTube Data API Overview](https://developers.google.com/youtube/v3) <br>
-- [YouTube Data API Search](https://developers.google.com/youtube/v3/docs/search/list) <br>
-- [YouTube Data API Playlists](https://developers.google.com/youtube/v3/docs/playlists) <br>
-- [YouTube Data API Comments](https://developers.google.com/youtube/v3/docs/comments) <br>
-- [YouTube Data API Quota Calculator](https://developers.google.com/youtube/v3/determine_quota_cost) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, API Calls, Configuration instructions] <br>
-**Output Format:** [Markdown with CLI commands, API endpoint examples, code snippets, and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected YouTube OAuth account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata) <br>
+Risk: Connected-account actions can change playlists, subscriptions, comments, or authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read/list requests and confirm the account and exact resource before approving writes or a new connection.
+
+Risk: Approved hosted functions and triggers can create persistent automations using the connected account.
+
+Mitigation: Require explicit approval of each automation, its permissions, and the actions it will perform.
+
+Risk: Raw API-key mode exposes a long-lived credential to the calling environment.
+
+Mitigation: Prefer OAuth through the CLI; use raw API-key mode only when the CLI cannot be used, and never log or persist the key.
+
+## Reference(s):
+
+- [ClawHub YouTube skill](https://clawhub.ai/byungkyu/skills/youtube-api-skill)
+- [Maton homepage](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [YouTube Data API overview](https://developers.google.com/youtube/v3)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Guidance]
+
+**Output Format:** [Text or Markdown with CLI commands and structured API results where requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses can include account and channel data; write actions require user confirmation.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

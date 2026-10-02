@@ -1,0 +1,3 @@
+{
+  "metric_series_csv": "metric_id,timestamp,value\nMETRIC-MIKE-4172,2026-08-01,10\nMETRIC-MIKE-4172,2026-08-02,12\n"
+}

@@ -1,41 +1,49 @@
-## Description: <br>
-Identify the project handle from an intake note. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Prepare project context from an intake note.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Project delivery teams use this skill to extract a concise project code from client briefs, delivery notes, or project updates supplied in the current request. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided intake notes may contain sensitive client or project details. <br>
-Mitigation: Only provide note text that is acceptable for the normal agent workflow, and avoid pasting sensitive client details unless that use is approved. <br>
-Risk: A concise project code extracted from ambiguous notes may be incorrect. <br>
-Mitigation: Review the returned project_code before using it in delivery tracking, routing, or other operational records. <br>
+## Use Case:
 
+Project delivery staff and developers use this skill to extract a project code, source title, and note digest from a supplied intake note.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/project-code-notes-identifier) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Structured text field containing a concise project code] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces the project_code value from the user-provided note.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Results can expose SEC-prefixed identifiers and a short digest of the full intake note.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid supplying real secrets, credentials, or sensitive security tokens unless their markers are intended to appear in the result; review results before sharing.
+
+## Reference(s):
+
+- [Project Intake Identifier on ClawHub](https://clawhub.ai/wxt-ai/skills/project-code-notes-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Structured data]
+
+**Output Format:** [JSON object]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The project_context object contains project_code, source_title, and note_digest.]
+
+## Skill Version(s):
+
+1.1.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

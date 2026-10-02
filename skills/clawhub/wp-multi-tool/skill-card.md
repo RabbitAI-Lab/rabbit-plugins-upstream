@@ -1,42 +1,54 @@
-## Description: <br>
-WordPress site health audit, performance optimization, database cleanup, autoload tuning, slow query detection, wp-config management, image size control, frontend speed fixes, and server diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides WordPress site health checks and performance diagnostics, with optional WP-CLI cleanup and configuration changes requiring user confirmation.
 
-## Publisher: <br>
-[marcindudekdev](https://clawhub.ai/user/marcindudekdev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[marcindudekdev](https://clawhub.ai/user/marcindudekdev)
 
-## Use Case: <br>
-Developers, site owners, and WordPress operators use this skill to inspect site health, diagnose performance bottlenecks, and apply WP-CLI based optimization or cleanup actions with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WP-CLI commands can inspect or change a live WordPress site. <br>
-Mitigation: Use the skill only on sites where the operator is authorized to run WP-CLI, and review proposed commands before execution. <br>
-Risk: Cleanup, configuration edits, frontend toggles, or plugin activation can modify data or site behavior. <br>
-Mitigation: Require explicit user confirmation for write operations and take a database backup before destructive cleanup commands. <br>
+## Use Case:
 
+WordPress site administrators and developers use this skill to audit site health, investigate performance problems, and plan or perform confirmed maintenance with WP-CLI. Plugin-specific monitoring commands require the paid WP Multitool plugin; basic diagnostics do not.
 
-## Reference(s): <br>
-- [WP Multitool Homepage](https://wpmultitool.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool) <br>
-- [Publisher Profile](https://clawhub.ai/user/marcindudekdev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with WP-CLI command blocks and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostics can be proposed directly; write operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release metadata) <br>
+Risk: Cleanup commands can permanently delete site data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm each write action with the user and export the database before cleanup.
+
+Risk: Optimization and configuration changes can affect site availability or behavior.
+
+Mitigation: Review the intended change and confirm it before running table optimization, wp-config edits, or plugin option changes.
+
+## Reference(s):
+
+- [WP Multitool skill listing](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool)
+- [WP Multitool website and documentation](https://wpmultitool.com)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Text or Markdown with WP-CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only diagnostics work without the paid plugin; plugin-specific monitoring requires it.]
+
+## Skill Version(s):
+
+1.9.10 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

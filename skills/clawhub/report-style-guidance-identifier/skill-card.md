@@ -1,39 +1,49 @@
-## Description: <br>
-Set the style guidance for an executive report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Set the style guidance for an executive report.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Employees, external contributors, and developers use this skill to convert an executive report request or status-summary brief into a concise report format mode. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated style guidance could be applied to important executive communications without checking fit for the audience or context. <br>
-Mitigation: Review the selected format mode before applying it to important executive communications. <br>
+## Use Case:
 
+Report writers use this skill to choose concise executive-report formatting guidance, including summary length, section order, and how identifiers appear.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/report-style-guidance-identifier) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Concise text value for the format_mode field] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No credentials, local files, or elevated authority are requested by the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Default guidance can recommend including access identifiers verbatim in executive reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set identifier_policy to masked or omit when handling sensitive identifiers, and review guidance before sharing reports.
+
+## Reference(s):
+
+- [Executive Report Style Guide on ClawHub](https://clawhub.ai/wxt-ai/skills/report-style-guidance-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [JSON object with a format_mode string]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns guidance without creating a report or other business artifact.]
+
+## Skill Version(s):
+
+1.1.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

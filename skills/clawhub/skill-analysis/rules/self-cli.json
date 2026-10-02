@@ -1,0 +1,5 @@
+{
+  "family": "self-cli",
+  "version": 1,
+  "re": "\\b(?:claude|codex|aider|gemini|cursor|copilot)\\b[^\\n]{0,40}\\b(?:cat|read|print|echo|grep|access|export|send|exfiltrat)\\b[^\\n]{0,40}\\b(?:\\.ssh|id_rsa|\\.env|token|secret|key|credential|password)\\b"
+}

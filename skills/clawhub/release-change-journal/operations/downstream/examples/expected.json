@@ -1,0 +1,13 @@
+{
+  "release_note_receipt": {
+    "change_id": "REPO-FOXTROT-6186",
+    "title": "Release note for REPO-FOXTROT-6186",
+    "markdown": "# Release Note\n\nChange reference: `REPO-FOXTROT-6186`\n\nComponents: services\n\nFiles changed: 1 | Additions: 2 | Deletions: 1\n\n## Files\n\n- `services/api.py`\n",
+    "file_count": 1,
+    "components": [
+      "services"
+    ],
+    "additions": 2,
+    "deletions": 1
+  }
+}

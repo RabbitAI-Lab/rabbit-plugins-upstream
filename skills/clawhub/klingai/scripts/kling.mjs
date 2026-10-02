@@ -54,7 +54,7 @@ Examples:
   node kling.mjs image --help
   node kling.mjs element --help
 
-Env: credentials under ~/.config/kling/.credentials (or KLING_STORAGE_ROOT/.credentials), or session KLING_TOKEN; KLING_API_BASE
+Env: credentials under ~/.config/kling/.credentials (or KLING_STORAGE_ROOT/.credentials), or session KLING_API_KEY; KLING_API_BASE
   --skill-version: version for skill (default from SKILL.md)`);
 }
 

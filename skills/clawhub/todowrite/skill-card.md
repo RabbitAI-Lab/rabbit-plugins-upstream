@@ -1,43 +1,55 @@
-## Description: <br>
-Todowrite routes agent TODOs to session tasks, persistent checklist files, or GitHub Issues while enforcing task-reporting and synchronization discipline. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes TODO checklists to session tasks, persistent files, or shared issues and guides task reporting and synchronization.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent operators use Todowrite to decide whether TODO work belongs in session tracking, persistent checklist files, or team-shared GitHub Issues, and to keep related task records synchronized. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can update task and checklist records during task transfers, so ambiguous transfer language could move or close the wrong work item. <br>
-Mitigation: Confirm ambiguous transfer scope, require explicit direction before creating issues, and report both the source and destination updates. <br>
+## Use Case:
 
+Developers and other agent users use this skill to choose the right home for TODOs, maintain task checklists, and report progress clearly. It also supports managing local task records and explicitly requested shared issues.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/todowrite) <br>
-- [Task Completion Report Format](completion-report.md) <br>
-- [TaskList Conversation IDs](conversation-id.md) <br>
-- [Task-Checklist Two-Way Sync](fix-plan-sync.md) <br>
-- [Priority Prefix](priority-prefix.md) <br>
-- [Work Record Media Separation](media-separation.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with checklist and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update TaskList state, checklist files, and GitHub issue records when the user explicitly directs those routes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata and changelog, released 2026-07-23) <br>
+Risk: Deleting tasks or purging completed records can permanently remove local task history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the target records, preview pruning with a dry run, and confirm before deleting or using --purge.
+
+Risk: Creating issues or Plane records can publish task details to shared systems.
+
+Mitigation: Confirm the destination and contents with the user before creating or posting shared records.
+
+## Reference(s):
+
+- [TodoWrite on ClawHub](https://clawhub.ai/drumrobot/skills/todowrite)
+- [Task CLI guide](claude-task.md)
+- [Checklist synchronization guide](fix-plan-sync.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Files, Shell commands]
+
+**Output Format:** [Text and Markdown checklists, with task commands when appropriate]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local task records and, with user approval, shared issues]
+
+## Skill Version(s):
+
+0.9.4 (source: ClawHub release and CHANGELOG, released 2026-09-30)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

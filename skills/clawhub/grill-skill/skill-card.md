@@ -1,39 +1,54 @@
-## Description: <br>
-Grill Skill helps developers design, run, measure, and iterate skill evals with Caliper. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Interviews skill authors to design eval tasks, then uses Caliper results to test and improve their skills.
 
-## Publisher: <br>
-[edonadei](https://clawhub.ai/user/edonadei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[edonadei](https://clawhub.ai/user/edonadei)
 
-## Use Case: <br>
-Developers and skill authors use this skill to create or improve Caliper evals for agent skills, then run quick and reliability checks before release. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated eval setup, cleanup, MCP, backend, or secret configuration could cause unintended file changes or external service use when run. <br>
-Mitigation: Review generated eval YAML and Caliper commands before execution, especially sections that write files, configure MCP servers, select backends, or reference secrets. <br>
+## Use Case:
 
+Skill authors and developers use this skill to design evaluation tasks, run Caliper tests, and identify changes that improve skill reliability.
 
-## Reference(s): <br>
-- [Grill Skill Reference](artifact/REFERENCE.md) <br>
-- [ClawHub skill page](https://clawhub.ai/edonadei/skills/grill-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with YAML snippets and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or edit Caliper eval YAML files and recommend Caliper validation, run, report, compare, and baseline commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: The skill can read and edit selected skill files and write evaluation specifications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it in a trusted project and review generated evaluation YAML before confirming writes.
+
+Risk: Caliper tests may execute task setup or cleanup commands and load local agent customizations.
+
+Mitigation: Review test commands and use isolated Caliper mode for portable or shared results.
+
+## Reference(s):
+
+- [Grill Skill on ClawHub](https://clawhub.ai/edonadei/skills/grill-skill)
+- [Grill Skill Reference](artifact/REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands]
+
+**Output Format:** [Markdown guidance and YAML evaluation specifications]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes test results and comparisons when Caliper is run.]
+
+## Skill Version(s):
+
+1.0.11 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

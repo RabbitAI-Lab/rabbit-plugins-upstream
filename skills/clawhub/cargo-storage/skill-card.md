@@ -1,47 +1,58 @@
-## Description: <br>
-Manage models, datasets, columns, and relationships and query workspace storage with SQL using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in inspecting and managing Cargo workspace models, datasets, columns, relationships, records, and SQL queries.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and workspace operators use this skill to inspect and manage Cargo workspace storage, including models, datasets, columns, relationships, records, and SQL queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to remove models or columns and export large workspace datasets. <br>
-Mitigation: Require explicit user confirmation before removal or full-export commands, preview SQL with LIMIT, and use least-privilege Cargo credentials. <br>
-Risk: The install metadata references @cargo-ai/cli@latest, which can change over time. <br>
-Mitigation: Review or pin the Cargo CLI package version in managed environments before granting access to production workspaces. <br>
+## Use Case:
 
+Developers and workspace administrators use this skill to discover Cargo storage schemas, manage models and relationships, query business records, and configure external data ingestion.
 
-## Reference(s): <br>
-- [Cargo Storage on ClawHub](https://clawhub.ai/cargo-ai/cargo-storage) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Model examples](references/examples/models.md) <br>
-- [Dataset examples](references/examples/datasets.md) <br>
-- [Column examples](references/examples/columns.md) <br>
-- [Storage query examples](references/examples/queries.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands require @cargo-ai/cli and Cargo authentication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and release evidence) <br>
+Risk: Storage changes can alter or delete workspace data, including through relationship replacement.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the workspace and obtain approval before deletes or relationship replacements.
+
+Risk: Exports can disclose workspace records.
+
+Mitigation: Require confirmation before exporting data and limit exports to the intended records.
+
+Risk: Webhook URLs containing API tokens can expose credentials through chat, logs, files, or shell history.
+
+Mitigation: Confirm token creation and webhook setup; prefer header-based or secret-manager delivery, avoid recording token-bearing URLs, and rotate exposed tokens.
+
+## Reference(s):
+
+- [Cargo Storage skill on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-storage)
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, SQL queries, Configuration instructions]
+
+**Output Format:** [Markdown with CLI and SQL examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance may include JSON response examples and instructions for CSV or Parquet exports.]
+
+## Skill Version(s):
+
+1.2.3 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
