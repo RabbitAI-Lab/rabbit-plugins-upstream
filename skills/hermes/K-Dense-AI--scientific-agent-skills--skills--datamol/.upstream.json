@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/datamol",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/datamol",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/datamol",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:42:43Z",
+  "contentHash": "494f1a0ce6b1a3b61c279ccf2ebe043e5223943848875c1d6f856efd9becc80d",
+  "fetchedAt": "2026-10-02T13:56:31.014Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/uspto-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/uspto-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/uspto-database",
+  "branch": "main",
+  "pushedAt": "2026-10-02T13:55:32Z",
+  "contentHash": "f5653d8887d54eac07169f2184535f9f94d23ac92d5b955587617d43670a79ae",
+  "fetchedAt": "2026-10-02T13:56:15.785Z"
+}

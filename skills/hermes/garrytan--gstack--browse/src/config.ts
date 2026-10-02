@@ -11,10 +11,10 @@
  */
 
 import * as fs from 'fs';
-import * as os from 'os';
 import * as path from 'path';
 import { mkdirSecure } from './file-permissions';
 import { safeUnlinkQuiet } from './error-handling';
+import { readConfigKey, resolveStateRoot } from '../../lib/state-root';
 
 export interface BrowseConfig {
   projectDir: string;
@@ -32,9 +32,15 @@ export interface BrowseConfig {
 export function getGitRoot(): string | null {
   try {
     const proc = Bun.spawnSync(['git', 'rev-parse', '--show-toplevel'], {
+    windowsHide: true,
       stdout: 'pipe',
       stderr: 'pipe',
-      timeout: 2_000, // Don't hang if .git is broken
+      // Raised from 2s: under heavy machine load `git rev-parse` routinely
+      // takes >2s (measured 6.3s spikes). Timing out here returns null →
+      // resolveConfig falls back to process.cwd() → state files scatter across
+      // cwds (split-brain daemons; `goto` and `url` hit different servers). 8s
+      // still bounds a genuinely broken .git from hanging the CLI forever.
+      timeout: 8_000,
     });
     if (proc.exitCode !== 0) return null;
     return proc.stdout.toString().trim() || null;
@@ -78,6 +84,21 @@ export function resolveConfig(
   };
 }
 
+function isIgnoredByGit(projectDir: string, relPath: string): boolean {
+  try {
+    const proc = Bun.spawnSync(['git', 'check-ignore', '-q', '--', relPath], {
+    windowsHide: true,
+      cwd: projectDir, stdout: 'pipe', stderr: 'pipe',
+      timeout: 2_000,
+    });
+    return proc.exitCode === 0;
+  } catch {
+    // git not found, timed out, or not a repo (exit 128). Fall through to
+    // the text-check path — appending is the safe default when unsure.
+    return false;
+  }
+}
+
 /**
  * Create the .gstack/ state directory if it doesn't exist.
  * Throws with a clear message on permission errors.
@@ -95,7 +116,24 @@ export function ensureStateDir(config: BrowseConfig): void {
     throw err;
   }
 
+  // Load-bearing guard: a self-contained ignore INSIDE the state dir so its
+  // contents can NEVER be `git add`-ed, regardless of the project's own
+  // .gitignore (which may be absent, or the append below may silently fail).
+  // The state dir holds session-state.json (live cookies + localStorage/
+  // sessionStorage tokens) and browse-network.log / browse-audit.jsonl
+  // (captured request headers can carry bearer tokens). Written unconditionally,
+  // synchronously, before return — the project-.gitignore dance below is now
+  // redundant safety, kept so `.gstack/` still reads as ignored in git status.
+  try {
+    fs.writeFileSync(path.join(config.stateDir, '.gitignore'), '*\n');
+  } catch {
+    // Best-effort; the project-.gitignore path below is the fallback.
+  }
+
   // Ensure .gstack/ is in the project's .gitignore
+  // First, check if git already ignores .gstack/ (via global excludes, .git/info/exclude, or parent .gitignore)
+  if (isIgnoredByGit(config.projectDir, '.gstack/')) return;
+
   const gitignorePath = path.join(config.projectDir, '.gitignore');
   try {
     const content = fs.readFileSync(gitignorePath, 'utf-8');
@@ -124,6 +162,7 @@ export function ensureStateDir(config: BrowseConfig): void {
 export function getRemoteSlug(): string {
   try {
     const proc = Bun.spawnSync(['git', 'remote', 'get-url', 'origin'], {
+    windowsHide: true,
       stdout: 'pipe',
       stderr: 'pipe',
       timeout: 2_000,
@@ -154,22 +193,68 @@ export function readVersionHash(execPath: string = process.execPath): string | n
   }
 }
 
-/**
- * Resolve the gstack home directory.
- *
- * Honors the existing convention used by telemetry.ts and domain-skills.ts:
- *   1. GSTACK_HOME env (explicit override)
- *   2. $HOME/.gstack (default)
- */
+/** The gstack state root: delegates to the shared chain in lib/state-root.ts. */
 export function resolveGstackHome(): string {
-  return process.env.GSTACK_HOME || path.join(os.homedir(), '.gstack');
+  return resolveStateRoot();
+}
+
+/**
+ * Read one key from the flat-YAML config store via readConfigKey (the same
+ * reader bin/gstack-config uses, including the most-restrictive merge for
+ * privacy keys such as telemetry). Tolerates optional single/double quotes
+ * around the value and a trailing `# comment`. Returns the unquoted value
+ * string, or null when the file is missing or unreadable or the key is absent.
+ *
+ * Single source of truth for flat-YAML key reads — isPairAgentEnabled
+ * (pair_agent) and telemetry.ts (telemetry tier) both route through it so
+ * the two consent gates can never drift on parsing semantics.
+ */
+export function readGstackConfigYamlKey(key: string): string | null {
+  const raw = readConfigKey(key);
+  if (raw === null) return null;
+  return raw.replace(/\s*#.*$/, '').trim().replace(/^(['"])(.*)\1$/, '$2');
+}
+
+/**
+ * Is the remote pair-agent (ngrok tunnel) surface opt-in enabled?
+ *
+ * Fail-closed: the tunnel exposes the local browser to the internet, so it
+ * stays OFF unless the user explicitly ran `gstack-config set pair_agent on`
+ * (the /pair-agent skill asks once on first use and sets it). Any read/parse
+ * failure (missing config, malformed JSON) also resolves OFF. The tunnel
+ * egress receipts cite this gate as their consent — it must exist and gate
+ * every activation point (#B6, fork port wave 2).
+ *
+ * Env override `GSTACK_PAIR_AGENT=on|off` wins (used by tests and as an
+ * emergency knob), mirroring the telemetry env-hint convention.
+ */
+export function isPairAgentEnabled(): boolean {
+  const env = process.env.GSTACK_PAIR_AGENT;
+  if (env === 'on') return true;
+  if (env === 'off') return false;
+  // Canonical store: ~/.gstack/config.yaml (flat `key: value` lines, written
+  // by bin/gstack-config — which is what the /pair-agent consent step runs).
+  // The fork read config.json; porting that verbatim would have made the gate
+  // silently un-enableable on main. JSON kept as a fallback shape only.
+  // Anything other than exactly on/off (missing key, malformed value) falls
+  // through to the JSON fallback and ultimately fails closed.
+  const yamlValue = readGstackConfigYamlKey('pair_agent');
+  if (yamlValue === 'on') return true;
+  if (yamlValue === 'off') return false;
+  try {
+    const raw = fs.readFileSync(path.join(resolveGstackHome(), 'config.json'), 'utf-8');
+    return JSON.parse(raw)?.pair_agent === 'on';
+  } catch {
+    return false;
+  }
 }
 
 /**
  * Resolve the Chromium profile directory.
  *
  * Resolution order:
- *   1. `explicit` arg (passed via ServerConfig.chromiumProfile by embedders)
+ *   1. `explicit` arg (no production caller passes one today; kept for
+ *      direct programmatic use)
  *   2. CHROMIUM_PROFILE env (used by gbrowser's gbd per-workspace)
  *   3. <resolveGstackHome()>/chromium-profile (default)
  */

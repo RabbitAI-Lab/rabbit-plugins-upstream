@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/megatron-core",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/megatron-core",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/megatron-core",
+  "branch": "main",
+  "pushedAt": "2026-10-02T13:55:32Z",
+  "contentHash": "285ad05941d7e22007f6a8e52793cc2e624903be50f98fb272baeea6a069cdf8",
+  "fetchedAt": "2026-10-02T13:56:15.634Z"
+}

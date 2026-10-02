@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-video-pipeline",
+  "identifier": "NVIDIA/skills/skills/jetson-video-pipeline",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-video-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:12:08Z",
+  "contentHash": "c7ce878781fa3bbc5a8e07e91d821756e1d8fc4840fba155d1cd369c6b328ff1",
+  "fetchedAt": "2026-10-02T13:56:16.805Z"
+}

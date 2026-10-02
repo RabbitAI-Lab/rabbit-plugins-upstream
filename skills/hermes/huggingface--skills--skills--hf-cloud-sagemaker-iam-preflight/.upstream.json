@@ -5,7 +5,7 @@
   "repo": "huggingface/skills",
   "path": "skills/hf-cloud-sagemaker-iam-preflight",
   "branch": "main",
-  "pushedAt": "2026-07-25T04:31:32Z",
-  "contentHash": "2b4aea0fbfc5e1be375dcaa736c0b73bfed5235dde2239c527d7667f53aedc08",
-  "fetchedAt": "2026-07-26T17:03:50.908Z"
+  "pushedAt": "2026-10-01T12:33:22Z",
+  "contentHash": "b5fa1471e90c20dfbdfee35793be14b864bfc6317cbf9978fdb7723b87d6d789",
+  "fetchedAt": "2026-10-02T13:56:13.827Z"
 }

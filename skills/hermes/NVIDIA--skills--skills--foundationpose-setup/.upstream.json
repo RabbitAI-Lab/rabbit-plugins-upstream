@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/foundationpose-setup",
+  "identifier": "NVIDIA/skills/skills/foundationpose-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/foundationpose-setup",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:12:08Z",
+  "contentHash": "0ef833aab42c5ac5d263629cdfe0c33b0bbcdfafa27aff68c666cbe0a7937bf8",
+  "fetchedAt": "2026-10-02T13:56:16.773Z"
+}
