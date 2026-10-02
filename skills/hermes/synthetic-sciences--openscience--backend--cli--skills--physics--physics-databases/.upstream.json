@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/physics-databases",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/physics-databases",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/physics-databases",
+  "branch": "main",
+  "pushedAt": "2026-10-02T13:55:32Z",
+  "contentHash": "eb0391201899e08a6cda56064a52e50b4f2d33eb1692b1a5366bd1979bc8e1a3",
+  "fetchedAt": "2026-10-02T13:56:15.553Z"
+}

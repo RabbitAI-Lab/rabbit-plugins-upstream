@@ -5,7 +5,7 @@
   "repo": "huggingface/skills",
   "path": "skills/hf-cloud-sagemaker-production-defaults",
   "branch": "main",
-  "pushedAt": "2026-07-25T04:31:32Z",
-  "contentHash": "8360e265f19804dffb853ea959db33cd9772dd43ee350d85df9721d32c794cac",
-  "fetchedAt": "2026-07-26T17:03:50.909Z"
+  "pushedAt": "2026-10-01T12:33:22Z",
+  "contentHash": "0df05c27c5cf346cabacc895838b92a66038096ec4956edf4045da97015ecf8f",
+  "fetchedAt": "2026-10-02T13:56:13.829Z"
 }

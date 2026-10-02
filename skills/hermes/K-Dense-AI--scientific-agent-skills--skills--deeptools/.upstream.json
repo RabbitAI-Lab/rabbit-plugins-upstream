@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/deeptools",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/deeptools",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/deeptools",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:42:43Z",
+  "contentHash": "8d271aa40d6c685ac6cef9132ab04e30c95278f35411771694730cf8908814a2",
+  "fetchedAt": "2026-10-02T13:56:31.016Z"
+}

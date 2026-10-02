@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/polars",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/polars",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/polars",
+  "branch": "main",
+  "pushedAt": "2026-10-02T13:55:32Z",
+  "contentHash": "823d0e83077a083e28ae305c88e4f15890c4c6fe4d05d869d4f4b70c0d47813b",
+  "fetchedAt": "2026-10-02T13:56:15.560Z"
+}

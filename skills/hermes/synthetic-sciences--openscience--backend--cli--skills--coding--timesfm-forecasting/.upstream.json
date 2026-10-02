@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/timesfm-forecasting",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/timesfm-forecasting",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/timesfm-forecasting",
+  "branch": "main",
+  "pushedAt": "2026-10-02T13:55:32Z",
+  "contentHash": "550d725d391ef69b021c5d0b1f0cc4274fe69a668c73933891dea1f3b763fb9d",
+  "fetchedAt": "2026-10-02T13:56:15.627Z"
+}

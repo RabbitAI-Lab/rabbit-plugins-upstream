@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/admet-prediction",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/admet-prediction",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/admet-prediction",
+  "branch": "main",
+  "pushedAt": "2026-10-02T13:55:32Z",
+  "contentHash": "2638a9923c75789156b6940221aa06d61b24d58b68c92c07dd457d5a25a3bcd9",
+  "fetchedAt": "2026-10-02T13:56:15.376Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/chroma",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/chroma",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/chroma",
+  "branch": "main",
+  "pushedAt": "2026-10-02T13:55:32Z",
+  "contentHash": "c7a8ac5d0fe282e70309ce096622eda5c828ef77a75c5f092a1f0a2c4d49e655",
+  "fetchedAt": "2026-10-02T13:56:15.403Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/gtars",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/gtars",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/gtars",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:42:43Z",
+  "contentHash": "45ea3ae088ab32594c241e44fce12a1078a7ab9899c7383aaa7211baa8b55d62",
+  "fetchedAt": "2026-10-02T13:56:31.039Z"
+}
