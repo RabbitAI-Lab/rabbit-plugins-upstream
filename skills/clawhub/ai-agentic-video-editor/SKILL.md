@@ -2,23 +2,24 @@
 name: ai_agentic_video_editor
 description: AI agentic video editor: send a prompt, the autonomous editor plans, uses internal tools, exports, and returns the result.
 version: 1.0.0
+license: MIT
 metadata:
   openclaw:
     requires:
       env:
-        - ADSCENE_API_URL
-        - ADSCENE_API_KEY
+        - LEVEA_API_URL
+        - LEVEA_API_KEY
       bins:
         - curl
         - jq
-    primaryEnv: ADSCENE_API_KEY
+    primaryEnv: LEVEA_API_KEY
     envVars:
-      - name: ADSCENE_API_URL
+      - name: LEVEA_API_URL
         required: true
         description: Base URL for the Levea API, for example https://api.livecore.ai. Do not use the studio URL or the /api/v1/misc/editor route.
-      - name: ADSCENE_API_KEY
+      - name: LEVEA_API_KEY
         required: true
-        description: OpenClaw API key generated from the Studio app at https://studio.livecore.ai/.
+        description: OpenClaw API key generated from the Studio app at https://livecore.ai/.
     skillKey: openclaw_ai_video_editor
     homepage: https://github.com/brajendrak00068/openclaw-ai-video-editor#readme
 ---
@@ -33,12 +34,14 @@ Use this skill when the user asks for OpenClaw video editing, AI video editing, 
 
 ## Endpoint
 
-`POST {ADSCENE_API_URL}/api/v1/misc/openclaw/v1/execute`
+`POST {LEVEA_API_URL}/api/v1/misc/openclaw/v1/execute`
 
-Auth: `Authorization: Bearer {ADSCENE_API_KEY}`
+Auth: `Authorization: Bearer {LEVEA_API_KEY}`
 
-Create an account and generate the OpenClaw API key in Studio: `https://studio.livecore.ai/`.
-Use `https://api.livecore.ai` for `ADSCENE_API_URL`; Studio is only for signup, login, and key management.
+Create an account and generate the OpenClaw API key in Studio: `https://livecore.ai/`.
+Use `https://api.livecore.ai` for `LEVEA_API_URL`; Studio is only for signup, login, and key management.
+
+> `LEVEA_API_URL` / `LEVEA_API_KEY` are canonical. The legacy `ADSCENE_API_URL` / `ADSCENE_API_KEY` names are still accepted as a silent fallback for backward compatibility.
 
 Accepts either single-shot JSON (default) or SSE (`Accept: text/event-stream` or `?stream=true`).
 
@@ -58,8 +61,8 @@ Request body:
 Every edit goes through one tool: **`autonomous_edit`**. Pass a natural-language description in `params.prompt`. The agent classifies the intent, decomposes into atomic steps, plans, executes through safety gates, and verifies the result. There are no other tools the caller needs to learn.
 
 ```bash
-curl -sS -X POST "$ADSCENE_API_URL/api/v1/misc/openclaw/v1/execute" \
-  -H "Authorization: Bearer $ADSCENE_API_KEY" \
+curl -sS -X POST "$LEVEA_API_URL/api/v1/misc/openclaw/v1/execute" \
+  -H "Authorization: Bearer $LEVEA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "tool": "autonomous_edit",
@@ -98,7 +101,7 @@ Behind a single `autonomous_edit` call the agent can compose any of:
 - Glow, shadow, inner shadow, gradient fills, text gradients
 - Vertical reframe (9:16) and vertical-reframe montage
 - Split screen (top/bottom, left/right, picture-in-picture)
-- Branding overlays and brand kits (logo / watermark / colors / fonts / voice) from gallery, project brand settings, or AI-generated
+- Branding overlays and brand kits (logo / watermark / colors / fonts / voice) from gallery, project brand settings, or AI-generated; brand-kit limits match Studio billing: Free none, Starter 1, Creator+ unlimited
 - Motion / face tracking with dynamic zoom-follow
 - Object hide / object blur, selective face blur, privacy redaction, safe-zone repair
 
@@ -144,7 +147,7 @@ Behind a single `autonomous_edit` call the agent can compose any of:
 
 ## Auto-export follow-up
 
-After any **mutating** `autonomous_edit` call, if the scene was actually changed and the agent did not already queue an export, the route fires one automatically as a second run. The final response carries `videoUrl` (when ready) or `jobId` (for polling). Read-only and conversational `autonomous_edit` calls do NOT trigger auto-export.
+After an authoritatively **verified mutating** `autonomous_edit` call, if the changed scene was durably committed and the agent did not already queue an export, the route fires one automatically as a second run. The final response carries `videoUrl` (when ready) or `jobId` (for polling). Partial, unverified, conflicted, read-only, and conversational calls do NOT trigger auto-export.
 
 ## Optional input parameters (parity with the in-product editor)
 
@@ -212,8 +215,8 @@ The same event stream the in-product editor uses. Notable event types:
 Generation actions (`generate_*`, `EXPORT_VIDEO`) return immediately with a `jobId` in `activeTasks` / `pendingAsyncJobs`. Poll status with:
 
 ```
-GET {ADSCENE_API_URL}/api/v1/misc/openclaw/v1/jobs/{jobId}
-Authorization: Bearer {ADSCENE_API_KEY}
+GET {LEVEA_API_URL}/api/v1/misc/openclaw/v1/jobs/{jobId}
+Authorization: Bearer {LEVEA_API_KEY}
 ```
 
 Response:
@@ -262,14 +265,15 @@ Rate-limited per API key. Processing times vary: read-only ~1–3s, structural e
 - **Audio in**: MP3, WAV, M4A, AAC (or extracted from video)
 - **Output**: MP4 (export), ZIP (viral clips / multi-platform bundles)
 - **Max video length**: up to ~3 hours per asset (plan-dependent); sync edits and async generation both supported
-- **Recommended resolution**: 1080p or 4K; canvas is configurable per project
+- **Export caps**: same as Studio billing — Free 720p with Levea watermark, Starter 1080p with no watermark, Creator / Studio / Enterprise 4K with no watermark
+- **Canvas resolution**: 1080p or 4K recommended while editing; final export is capped by the active plan
 
 ## Example: end-to-end viral-clip generation
 
 ```bash
 # 1) Kick off the viral-clip pipeline (auto-export follow-up queues rendering)
-curl -sS -X POST "$ADSCENE_API_URL/api/v1/misc/openclaw/v1/execute" \
-  -H "Authorization: Bearer $ADSCENE_API_KEY" \
+curl -sS -X POST "$LEVEA_API_URL/api/v1/misc/openclaw/v1/execute" \
+  -H "Authorization: Bearer $LEVEA_API_KEY" \
   -H "Content-Type: application/json" \
   -d '{
     "tool": "autonomous_edit",
@@ -282,14 +286,14 @@ curl -sS -X POST "$ADSCENE_API_URL/api/v1/misc/openclaw/v1/execute" \
 # 2) Poll job status until done
 JOB_ID=$(jq -r '.jobId // .activeTasks[0].intent.job_id' /tmp/result.json)
 while true; do
-  STATUS=$(curl -sS "$ADSCENE_API_URL/api/v1/misc/openclaw/v1/jobs/$JOB_ID" \
-    -H "Authorization: Bearer $ADSCENE_API_KEY" | jq -r '.status')
+  STATUS=$(curl -sS "$LEVEA_API_URL/api/v1/misc/openclaw/v1/jobs/$JOB_ID" \
+    -H "Authorization: Bearer $LEVEA_API_KEY" | jq -r '.status')
   echo "Status: $STATUS"
   [ "$STATUS" = "completed" ] || [ "$STATUS" = "failed" ] && break
   sleep 5
 done
 
 # 3) Fetch the final artifact URL(s)
-curl -sS "$ADSCENE_API_URL/api/v1/misc/openclaw/v1/jobs/$JOB_ID" \
-  -H "Authorization: Bearer $ADSCENE_API_KEY" | jq '.result'
+curl -sS "$LEVEA_API_URL/api/v1/misc/openclaw/v1/jobs/$JOB_ID" \
+  -H "Authorization: Bearer $LEVEA_API_KEY" | jq '.result'
 ```

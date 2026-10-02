@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-cli",
   "slug": "runapi-cli",
   "ownerHandle": null,
-  "version": "0.2.11",
-  "updatedAt": 1784536720011,
-  "contentHash": "ce963bf89117a6f21a435c731a14260a65f126e7cce2cc67ce256dc244e7785b",
-  "fetchedAt": "2026-07-26T18:10:13.913Z"
+  "version": "0.3.1",
+  "updatedAt": 1790574595431,
+  "contentHash": "77e719abd211aeb30f912225144a085126b2f3628b10c102141dbf66f464f5f7",
+  "fetchedAt": "2026-10-02T14:15:20.341Z"
 }

@@ -1,0 +1,32 @@
+{
+  "variant_id": "relay_08_branch",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "branch_request",
+  "output_name": "source_branch",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "quarter",
+      "release_name"
+    ],
+    "properties": {
+      "quarter": {
+        "type": "string",
+        "pattern": "^q[1-4]$"
+      },
+      "release_name": {
+        "type": "string",
+        "pattern": "^[A-Za-z0-9 -]{3,80}$"
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "string",
+    "pattern": "^release/q[1-4]-[a-z0-9]+(?:-[a-z0-9]+)*$",
+    "minLength": 9,
+    "maxLength": 128
+  },
+  "effect": null
+}

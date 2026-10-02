@@ -1,41 +1,62 @@
-## Description: <br>
-从“套公式”到“建模型”：通过识别现象、选择模型、数学表达三步法，训练学生先判断物理模型再列式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+引导初高中学生识别物理现象、选择适用模型并用数学表达，培养模型迁移能力。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to practice physics modeling instead of formula matching. It guides learners to identify physical phenomena, select an appropriate model, write the mathematical relationship, and transfer the same model across problem variants. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Coordination with learning or reminder skills could persist study summaries or create reminders beyond the immediate tutoring exchange. <br>
-Mitigation: Use those related skills only after explicit user consent, matching the inspected skill instructions. <br>
-Risk: Some physics models include high-school extension content that may be inappropriate for an introductory middle-school lesson. <br>
-Mitigation: Respect the skill's grade-level markings and present high-school quantitative formulas only when the learner's level supports them. <br>
+## Use Case:
 
+Chinese-speaking middle and high school students use this coach to identify physical processes, check when a model applies, and express its relationships mathematically rather than memorizing formulas for individual problems.
 
-## Reference(s): <br>
-- [物理建模模式详解](references/physics-modeling-patterns.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize curriculum, language, emergency contacts, and minor-consent rules before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance and Socratic prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May coordinate with related learning or reminder skills when available and only with user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student modeling profiles and handoffs can contain educational records about minors.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm consent before enabling profile memory, cross-skill sharing, parent sharing, or reminders; honor pause, export, correction, and deletion requests.
+
+Risk: Mainland-China-specific curriculum and crisis contacts may be unsuitable in other regions.
+
+Mitigation: Localize curriculum, language, emergency contacts, and minor-consent rules before use outside mainland China.
+
+Risk: An inapplicable physical model can mislead a student.
+
+Mitigation: Check the observed process and the model's applicability conditions before presenting a mathematical relationship.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-modeling-coach)
+- [Physics modeling patterns](artifact/references/physics-modeling-patterns.md)
+- [High school physics models: compulsory volume 1](artifact/references/physics-hs1-models.md)
+- [High school physics models: compulsory volumes 2 and 3](artifact/references/physics-hs2-models.md)
+- [High school physics models: selective compulsory volumes](artifact/references/physics-hs3-models.md)
+- [Platform capabilities and privacy controls](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Conversational text with physics relationships and step-by-step modeling prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can provide a text export of the student's modeling profile on request.]
+
+## Skill Version(s):
+
+2.10.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

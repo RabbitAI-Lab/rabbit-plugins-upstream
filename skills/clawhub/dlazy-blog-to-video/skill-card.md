@@ -1,45 +1,56 @@
-## Description: <br>
-Dlazy Blog To Video helps agents invoke the dLazy file-to-video SaaS workflow to turn blog posts or other documents into narrated videos with storyboard, voiceover, and build steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps turn blog posts and other documents into narrated videos using dLazy's file-to-video service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and agents can use this skill to start or continue dLazy file-to-video projects for converting blog posts, articles, and documents into narrated videos for social, YouTube, training, courseware, or report-broadcast use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill advertises blog-to-video but routes agents through a broader file/document-to-video SaaS workflow. <br>
-Mitigation: Treat it as a general file-to-video wrapper and confirm the intended document or file scope before use. <br>
-Risk: Prompts and explicitly attached files may be sent to dLazy API and file storage endpoints. <br>
-Mitigation: Avoid submitting confidential documents unless the dLazy account, data handling terms, and storage behavior are acceptable. <br>
-Risk: The workflow requires a dLazy API key that may be stored in local CLI configuration. <br>
-Mitigation: Use account-scoped keys, keep the local config protected, and rotate or revoke the key when access changes. <br>
+## Use Case:
 
+Creators and teams use this skill to request narrated videos from blog posts or other documents, with storyboards and voiceovers generated through dLazy.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-blog-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to run pinned dLazy CLI commands, attach files, or continue an existing dLazy project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: Despite its blog-to-video name, the workflow handles general files and documents, which may be uploaded to dLazy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when broader document-to-video processing is intended; review attachments and avoid sensitive files unless you trust the service.
+
+Risk: Prompts and attached files are sent to dLazy, and login can save an API key locally.
+
+Mitigation: Use non-sensitive prompts and files; consider per-invocation API keys and on-demand CLI use if you prefer not to keep a saved key or global installation.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-blog-to-video)
+- [dLazy CLI repository (listed in skill metadata; not verified release provenance)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Streaming conversational text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video generation runs through the dLazy service.]
+
+## Skill Version(s):
+
+1.0.23 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

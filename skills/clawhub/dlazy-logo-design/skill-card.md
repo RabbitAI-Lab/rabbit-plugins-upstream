@@ -1,45 +1,55 @@
-## Description: <br>
-Dlazy Logo Design helps agents create, refine, or evaluate logo and brand identity work through the dLazy hosted logo-design template. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps create, refine, and evaluate logos and brand marks, with transparent-background results and multi-context previews.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, designers, and developers use this skill to create, upgrade, or evaluate logos and brand identity concepts through the dLazy hosted logo-design template. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and any files attached with --files are sent to dLazy services. <br>
-Mitigation: Avoid confidential brand assets unless dLazy's terms and data handling are acceptable; attach only the files needed for the task. <br>
-Risk: The dLazy CLI can save an API key in the local user configuration. <br>
-Mitigation: Use OS-user protected configuration or the DLAZY_API_KEY environment variable, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: A global npm installation persists the pinned dLazy CLI on the host. <br>
-Mitigation: Use the pinned npx invocation when a persistent global CLI is not desired. <br>
+## Use Case:
 
+Designers and brand teams use this skill to develop or assess a logo and review it across brand contexts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-logo-design) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Files, Guidance] <br>
-**Output Format:** [Markdown or terminal text from the dLazy CLI, with generated logo assets or preview links when the service returns them] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; optional local attachments are uploaded via the dLazy CLI when --files is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter, server release metadata) <br>
+Risk: Prompts and attached logo references are sent to the dLazy hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review sensitive business material before sending prompts or uploading files.
+
+Risk: Signing in saves an API key locally, and using the CLI installs or runs a third-party package.
+
+Mitigation: Protect the local key, rotate it if exposed, and review the linked CLI source or package before use; use the npx option to avoid a global installation.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-logo-design)
+- [dLazy CLI source (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Image assets]
+
+**Output Format:** [Text with links to a transparent-background logo and live preview]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Multi-context logo preview]
+
+## Skill Version(s):
+
+1.3.22 (source: ClawHub release metadata; artifact frontmatter lists 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

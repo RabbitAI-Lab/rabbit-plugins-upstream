@@ -1,47 +1,61 @@
-## Description: <br>
-Helps agents operate an awesome-poetize-open blog by drafting, publishing, updating or hiding posts, managing taxonomy, comments, media, translations, themes, analytics, SEO, and paid-article settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators write, publish, and manage articles, media, comments, themes, SEO, analytics, and paid-article settings on their awesome-poetize-open blog.
 
-## Publisher: <br>
-[leapya](https://clawhub.ai/user/leapya) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leapya](https://clawhub.ai/user/leapya)
 
-## Use Case: <br>
-Blog owners, developers, and agent operators use this skill to manage an awesome-poetize-open blog through guided article workflows, administrative operations, and configuration commands. It is scoped to POETIZE blog management, not general-purpose writing or SEO consulting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The POETIZE API key can grant broad blog administration access. <br>
-Mitigation: Use a revocable least-privilege key, prefer secure environment injection, and protect any generated credential or config files. <br>
-Risk: Publishing, hiding content, comment operations, SEO/theme changes, image uploads, and payment configuration can mutate a live blog. <br>
-Mitigation: Require explicit confirmation for public posts and other state-changing actions, and use draft or preview flows before publishing. <br>
-Risk: Local images and payment configuration files may contain sensitive or unintended content. <br>
-Mitigation: Review file paths before upload or payment setup and only use payment configuration on a blog the operator owns. <br>
-Risk: The optional eval dry-run can send skill text and test intent to a user-supplied LLM endpoint. <br>
-Mitigation: Run eval only with explicit opt-in and confirm the destination host before any external transmission. <br>
+## Use Case:
 
+Blog owners and administrators use this skill to plan and operate an awesome-poetize-open site, including publishing and recovering content and managing site settings. It does not support the closed-source POETIZE edition or other blogging platforms.
 
-## Reference(s): <br>
-- [Poetize Blog Automation on ClawHub](https://clawhub.ai/leapya/skills/awesome-poetize-open-blog-automation) <br>
-- [Strategy Playbook](references/strategy-playbook.md) <br>
-- [Decision Matrix](references/decision-matrix.md) <br>
-- [Creativity Workflow](references/creativity-workflow.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown, JSON briefs, shell commands, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local article/configuration files and guided command invocations for explicit POETIZE blog operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.8 (source: server release evidence and artifact frontmatter) <br>
+Risk: A high-privilege API key or generated configuration may expose blog administration access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a revocable least-privilege key, inject secrets securely or store them in a protected user config path, and do not commit credential files.
+
+Risk: Publishing, deletion, uploads, theme or SEO changes, comments, and payment configuration can alter a live site or expose local files.
+
+Mitigation: Require HTTPS and explicit confirmation of each target and action; inspect local image paths and payment settings, and preview drafts or edits before applying them.
+
+Risk: The optional evaluation sends skill text to a user-selected external language-model endpoint.
+
+Mitigation: Run evaluation only when intentionally opted in and after checking the destination and material to be sent.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/leapya/skills/awesome-poetize-open-blog-automation)
+- [awesome-poetize-open project documentation](https://github.com/LeapYa/awesome-poetize-open)
+- [Blog strategy playbook](references/strategy-playbook.md)
+- [Content decision matrix](references/decision-matrix.md)
+- [Creativity workflow](references/creativity-workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown articles and guidance, shell commands, and JSON configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May publish or change live blog content and settings after user confirmation.]
+
+## Skill Version(s):
+
+2.5.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

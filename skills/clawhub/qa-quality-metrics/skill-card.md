@@ -1,39 +1,50 @@
-## Description: <br>
-Helps QA and engineering teams build quality metric reports and dashboards across process quality, product quality, testing efficiency, and quality health trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams define and report process, product, efficiency, and health metrics to track quality trends and inform decisions.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and engineering managers use this skill to quantify software quality, prepare quality dashboards, analyze defect and test trends, and turn testing data into management-facing reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad requests such as trend analysis may produce QA-oriented metric guidance when the user intended a different domain. <br>
-Mitigation: Invoke the skill for testing metrics, defect quality, quality dashboards, or QA reporting work, and route unrelated trend-analysis requests elsewhere. <br>
-Risk: Quality metrics can become misleading if used only as scorecards instead of trend signals. <br>
-Mitigation: Review metric definitions, compare them against baselines, and include improvement recommendations with the report. <br>
+## Use Case:
 
+QA engineers and managers use this skill to build quality dashboards and reports from test execution and defect data, compare trends and targets, and identify areas for improvement.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown quality metric reports with structured dashboard sections and metric formulas] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include a METRIC-XXXX traceability ID and cover process quality, product quality, testing efficiency, and quality health dimensions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The optional companion-install command fetches an unpinned external package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only after trusting the publisher and verifying or pinning the exact version.
+
+## Reference(s):
+
+- [Quality metrics dimensions](references/metrics-dimensions.md)
+- [ClawHub skill listing](https://clawhub.ai/kokxi/skills/qa-quality-metrics)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown quality metrics report with dashboard summaries and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports use METRIC-XXXX IDs, state coverage denominators and missing areas, and avoid unsupported claims of complete coverage.]
+
+## Skill Version(s):
+
+1.8.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

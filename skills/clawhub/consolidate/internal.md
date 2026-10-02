@@ -6,7 +6,7 @@ Entry: `Skill("consolidate", "internal ...")` or `pr.md` Workflow Step 3.5 / Ste
 
 ## Step 3.5.0: Internal-review engine selection (superpowers default; CLI = bot-review substitute only)
 
-**The Internal Review engine is `superpowers:requesting-code-review` (code-reviewer agent) by DEFAULT.** CodeRabbit CLI local is NOT an internal-review engine — it is a **bot-review-layer substitute**, used only when the bot layer produced nothing: **no CodeRabbit cloud review evidence on the PR AND Copilot unavailable/failed**. (User policy — see failed-attempts.md "0-findings".)
+**The Internal Review engine is provided by the `superpowers` plugin (`superpowers:code-reviewer` agent) by DEFAULT.** CodeRabbit CLI local is NOT an internal-review engine — it is a **bot-review-layer substitute**, used only when the bot layer produced nothing: **no CodeRabbit cloud review evidence on the PR AND Copilot unavailable/failed**. (User policy — see failed-attempts.md "0-findings".)
 
 **Two engine layers (do not mix)**:
 
@@ -18,6 +18,16 @@ Entry: `Skill("consolidate", "internal ...")` or `pr.md` Workflow Step 3.5 / Ste
 **Why superpowers is the internal default**: CodeRabbit cloud + CodeRabbit CLI share the same AI engine. When any CodeRabbit review evidence already exists on the PR (walkthrough, prior CLI run), running CLI again duplicates the same engine and adds zero independent perspective — the internal review's purpose. The CLI's tier/visibility bypass matters only when the bot layer is empty.
 
 **Engine-duplication gate (HARD STOP — before running ANY review engine)**: enumerate engines that already produced review evidence on this PR (cloud walkthrough/summary comment, Copilot review, a prior CLI run recorded in the existing Internal Review comment or session tracker). Running an engine that already reviewed this PR = duplicate → **forbidden without an explicit user ask**.
+
+**Re-review exception — two bot reviews already in (operator policy)**: when the bot layer already carries **two independent engine reviews** on this PR, a further review is scoped to the **delta that findings-application produced** — and that re-review is **sufficient, not mandatory**. In that situation CodeRabbit CLI *is* permitted even though it duplicates the cloud CodeRabbit engine, because a re-review of applied fixes is a different act from a first review of the same diff. The duplication the gate above forbids is re-running an engine against a diff it has already reviewed; re-running it against the fixes made in response to its own findings is the intended use.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Treat a re-review of applied fixes as a duplicate run and refuse the CLI | Two bot reviews already present → CLI permitted for the findings-applied delta |
+| 2 | Make the delta re-review mandatory before the Summary can be posted | It is sufficient, not required. No applied findings yet = nothing to re-review = proceed |
+| 3 | Re-review the whole diff when only a subset of findings was applied | Scope the re-review to the applied delta |
+
+**Self-check (before invoking any engine on a PR that already has bot reviews)**: how many independent engines reviewed this PR? If two or more — is there an *applied-findings delta* to re-review? No delta → no re-review needed. Delta present → the CLI is an allowed engine for it, duplication notwithstanding.
 
 **CodeRabbit invocation-mode matrix** (self-contained — do not rely on external rule files):
 
@@ -64,6 +74,20 @@ The PRIVATE+Free row explains why cloud output may be walkthrough-only — but t
 | 5 | Install CLI silently, or use CLI without `coderabbit auth status` check | Offer install/re-auth via AskUserQuestion — install + `coderabbit auth login` require user interaction |
 | 6 | Modify `.coderabbit.yaml` (cloud config) hoping to unlock CLI/agent capabilities | yaml is the cloud-config medium only. CLI/agent capabilities are mode-orthogonal — yaml has no effect on them |
 
+### Two rules pointing opposite ways is itself an ask trigger (HARD STOP)
+
+The gates in this skill are written as HARD STOPs, which makes wording strength a tempting tie-breaker when two of them disagree. It is not one. When two artifacts — two topics, a topic and a verifier script, a skill and a workspace-level gate — give **opposite instructions for the same situation**, that contradiction is the finding, and resolving it by obeying whichever is phrased more forcefully hides it.
+
+Stop and ask, presenting both instructions and what each would produce. Adopting the stronger-sounding one silently converts a documentation defect into a behavioural one, and the next run hits it again with no record that it happened.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Compare wording strength (HARD STOP vs a plain table row) and follow the louder one | Strength does not rank instructions. Surface the conflict and ask |
+| 2 | Pick one side, proceed, and leave the contradiction in place | The conflict is a finding — record it so the rule can be reconciled |
+| 3 | Read one gate's phrasing as license to manufacture a trigger another gate says is absent | A routing/verification requirement presupposes its trigger; it never creates one |
+
+**Self-check (whenever two gates seem to apply and disagree)**: can I satisfy both at once? If no, am I about to choose by phrasing strength? Then ask instead — and note which two artifacts conflicted.
+
 **Self-check (before dispatching any review engine in Step 3.5)**:
 
 1. Which engines already reviewed this PR? (cloud comments, Copilot reviews, prior CLI runs in the existing Internal Review comment / session tracker) — enumerate before choosing
@@ -83,9 +107,58 @@ The PRIVATE+Free row explains why cloud output may be walkthrough-only — but t
 
 **Worktree (from Step 2.7)**: the PR branch is already checked out into a worktree by `pr.md` Step 2.7. Dispatch the code-reviewer **against that worktree path** so it reads real files (not just `gh pr diff`) and can run tests/build locally. Pass the worktree path in the agent prompt (`Repository: <worktree-path>`). The reviewer should still use `gh pr diff <N>` for the canonical PR diff, but reads file bodies + runs verification in the worktree.
 
+### Pre-dispatch gate — the failure history selects the starting rung (HARD STOP)
+
+The ladder below is **reactive**: it says what to do after a dispatch fails. That wastes a dispatch when the failure is already known to be deterministic in this environment. **Before the first dispatch**, grep the recurrence store for this dispatch's failure class and read the result as a rung selector:
+
+```bash
+grep -rn --include="*.md" -oE "<!-- fa: class=[a-z0-9-]*(dispatch|subagent|agent-spawn)[a-z0-9-]* count=[0-9]+[^>]*-->" \
+  "${FA_DATA_DIR:-$HOME/.claude/skills/cleanup/data}"
+```
+
+| Standing history | Start at |
+|---|---|
+| No matching class, or `count` ≤ 2 | Rung 1 |
+| `count` ≥ 3 and the recorded failure mode matches what you are about to do | **Skip Rung 1 — start at Rung 2, or Rung 3 if Rung 2 is unavailable** |
+| Class has a recorded mitigation you have not applied | Apply it first; then Rung 1 counts as one attempt |
+
+**Established about `Prompt is too long` on this dispatch — do not re-litigate (measured 2026-09-28)**: it reproduces across **both** model tiers, across **both** tool-set sizes (a `Tools: *` agent and an 8-tool agent), with a ~500-byte prompt, and after the subagent merely read one 54KB file. The binding constraint is the **subagent's own context budget** — not caller prompt length, not model tier, not tool-schema size. Two corollaries: passing a long brief by file path instead of inline does **not** help (the bytes move from the prompt into a `Read`, which the subagent still holds), and **per-file payload chunking is a closed direction** (tried and failed twice).
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Dispatch first, consult the history only after it fails | Consult first — the history selects the rung |
+| 2 | Note a recorded class as a caveat and dispatch anyway | `count` ≥ 3 with a matching mode is an instruction to skip Rung 1 |
+| 3 | Treat the checklist gate's tracker read as covering this | That gate asks "is this issue tracked?"; this one asks "is the **method I am about to use** recorded as broken?" |
+| 4 | Re-test the tier or tool-set axis to confirm | Both axes are closed above — re-testing spends a dispatch on a known result |
+
+**Self-check (before the first `Agent` dispatch here)**: did I grep for this failure class *this session*; what `count`/`status` returned; does it select Rung 1 or lower; and am I actually starting at the rung it selected?
+
+**Enforcement**: `hook-kit/resources/block-agent-redispatch-after-overflow.js` (PreToolUse:Agent) denies a second dispatch once one has already overflowed in the session. To dispatch while genuinely moving down the ladder, put `[rung-escalated]` in the prompt (a trailing reason is fine in either spelling).
+
 **Fallback procedure:**
 
 1. **Call `Skill("superpowers:requesting-code-review")` (MANDATORY)** — this skill loads the review framework and includes code-reviewer agent dispatch. When the skill returns the review result, proceed to the "Check existing review comment" and "Post/update review comment" sub-steps below (still within Step 3.5).
+2. **In-session agent path unavailable → dispatch to a clawo session (do NOT abandon the review)**: if the `code-reviewer` agent path does not run in this session (Agent tool unregistered, the dispatch stalls, or repeated attempts fail), do not drop the Internal Review — dispatch the entire consolidate to a fresh **clawo session** (the `clawo` skill `launch` topic: `session-start` in the repo cwd + `session-send "consolidate <PR-URL>"`), which runs consolidate autonomously with the project's `.claude/` rules. Pre-bake the verdict/medium gates in the dispatch message (autonomous sessions cannot `AskUserQuestion` — see `clawo/launch.md` Step 5a). Abandoning the review because the in-session agent stalled — and pivoting to unrelated work — is the exact drift this fallback prevents.
+3. **Dispatch succeeded but the agent reported nothing → escalate on a bound (HARD STOP)**: the failure mode that stalls this step most quietly is not an unavailable agent — it is a *successful* dispatch whose agent ends idle with no result. There is no error to catch, so a caller waiting on the report simply stops and the consolidate never reaches Step 4, with no trace of why. Treat all of these as the same condition: the dispatch returns an agent id but no completion notification arrives; the agent reaches a terminal state with an empty final message; the agent's transcript exists but carries no review body.
+
+   Escalation ladder — take the next rung as soon as the current one yields no review body, and never let the sequence exit without a posted comment:
+
+   | Rung | Action | Leaves this rung when |
+   |------|--------|-----------------------|
+   | 1 | Re-dispatch **once**, restating the worktree path and the `gh pr diff <N>` command in the prompt | A review body is returned |
+   | 2 | Dispatch the whole consolidate to a fresh clawo session (item 2 above) | A review body is returned |
+   | 3 | Self-analyse inline and post under the same title template, per Don't `#4` below | Always — this rung cannot fail |
+
+   Whichever rung produces the body, **name the engine that produced it in the body's opening line** (e.g. "the superpowers code-reviewer dispatch went idle twice without reporting, so per Don't `#4` this is a self-analysed review"). A reader must be able to tell a subagent review from a self-analysed one; presenting rung 3 output as rung 1 output misrepresents the review's independence — the second perspective is the whole reason Step 3.5 exists.
+
+   | # | Don't | Do |
+   |---|-------|-----|
+   | 1 | Keep waiting on a dispatched agent that has already gone idle, or re-dispatch repeatedly hoping for a different outcome | One re-dispatch, then move down the ladder. Repeated identical dispatches are the stall, not a recovery from it |
+   | 2 | Read "the agent returned nothing" as "there was nothing to report" | An empty result is a failed dispatch, not a clean review. A clean review still has a body — "no actionable findings" plus what was verified and how |
+   | 3 | Pivot to other work while the review is "waiting on the agent" | Rung 3 always terminates. There is no state in which this step legitimately stays open |
+   | 4 | Post rung 3 output without disclosing the substitution | State the engine and the reason in the body's opening line, and record it in the Summary's reviewer matrix |
+
+**Prevention tooling never substitutes for the POST (HARD STOP)**: if a non-compliant / garbage review comment is discovered on the PR, correcting the *process* (building a guard hook, adding a lint, filing a prevention task) does NOT complete this consolidate. The compliant `## AI Review Summary — [receiving-code-review](...)` must still be posted for this PR. A prevention effort spawned from a consolidate gap is additive work, never a substitute for the object deliverable — do not treat the consolidate as done until the Summary is on the PR.
 
 | # | Don't | Do (correct alternative) |
 |---|-------|-------------------------|
@@ -155,8 +228,17 @@ If `--interactive` is off, proceed directly to the medium-decided POST (determin
 **Title template (MANDATORY — first line of the review body / comment body)**:
 ```markdown
 ## Internal Code Review — [requesting-code-review](https://skills.sh/obra/superpowers/requesting-code-review)
+<!-- consolidate:verified -->
 ```
-Do not write `code-reviewer` as plain text; use the link format above.
+Do not write `code-reviewer` as plain text; use the link format above. The `<!-- consolidate:verified -->` HTML comment on the second line is an invisible machine-readable provenance marker: it renders as nothing on GitHub but lets the `block-noncompliant-review-comment` guard (client hook + server Action) confirm the comment came through consolidate even if the `requesting-code-review` link text is ever reworded.
+
+**Bot-layer content in the body drops the suffix (HARD STOP — 3rd recurrence of mixing bot-layer content into this artifact)**: the `— [requesting-code-review](...)` suffix is a provenance claim — "this artifact is the superpowers requesting-code-review framework's own output." If the body includes ANY bot-layer finding (CodeRabbit CLI local substitute, or any other bot-layer engine), as its own section OR merged into the findings list with a `Source` label — the suffix is false and must be dropped. Use a plain title instead: `## Internal Code Review (CodeRabbit CLI + superpowers code-reviewer)` (name the actual engines that contributed). The `<!-- consolidate:verified -->` marker still applies regardless of title wording.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Keep the `[requesting-code-review]` suffix while merging a CodeRabbit CLI (bot-layer substitute) finding into the same findings list, distinguished only by a `Source` column | Drop the suffix; title names the actual contributing engines |
+| 2 | Assume this only applies to the "add a separate CodeRabbit CLI section" pattern (the 2nd recurrence's exact shape) | Applies whenever bot-layer content appears anywhere in the body — a merged/unified findings list is the same violation with different formatting |
+| 3 | Leave a previously-posted review's title unfixed after discovering bot-layer content was included | Update the review body via `gh api -X PUT repos/{owner}/{repo}/pulls/{N}/reviews/{review_id}` (reviews ARE PATCH/PUT-able for body text, unlike the state) |
 
 #### Caller-supplied custom title contract (HARD STOP)
 
@@ -315,6 +397,20 @@ If 0, capture is absent.
 Right after Step 4 Classify, before Step 5 Summary posting. If the classification result contains a "UI capture missing" actionable, include it in the Summary body so the author can follow up with attachment.
 
 Detailed rule: see `skills/github-flow/pr.md` Step 8 "UI Change PR — MANDATORY" section (in this repo; installed locally as `~/.claude/skills/github-flow/pr.md`).
+
+## Pre-Merge Code Review Existence Verification & Dual Fallback Gate (HARD STOP)
+
+1. **Prohibit Merge Proposals Without Substantive Review**: CI checks passing (green) or external bot (CodeRabbit, etc.) rate-limit/offline skips must NEVER be treated as completed code review.
+2. **Mandatory Pre-Merge Review Verification**: Before proposing PR merge via `AskUserQuestion` or executing `gh pr merge`, verify that real review evidence exists (`reviews` list, `reviewDecision: "APPROVED"`, or AI Review Summary comment).
+3. **Mandatory Dual Fallback (superpowers + coderabbit CLI) & Consolidate Execution**: When external bot review is 0 findings or offline, executing BOTH (1) **superpowers review** (`requesting-code-review` / `code-reviewer` subagent dispatch) and (2) **coderabbit CLI review** (`code-review` / `coderabbit review --plain`) is MANDATORY. Then, execute the official `consolidate` skill (`/consolidate pr`, `consolidate:internal`) to aggregate and classify findings.
+4. **Prohibit Verbal/Ad-hoc Review Fabrication**: Fabricating self-review tables or verbal claims in chat text without physically running `consolidate` is strictly prohibited.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Proposing `(Recommended) Merge ...` based solely on green CI or CodeRabbit rate-limit skip without review | Verify physical presence of `reviews` and `reviewDecision`, executing internal reviews first if absent |
+| 2 | Presenting merge confirmation ask when review findings or AI Review Summary comment are missing | Complete independent code reviews, post the summary comment, and propose merge based on findings |
+| 3 | Claiming "thorough post-review complete" verbally in chat after inspecting `git show` without running `consolidate` | Physically execute the `consolidate` skill (or `clawo consolidate`) to complete formal review triage |
+| 4 | Running only one of superpowers or coderabbit CLI when external bot review is absent | Execute BOTH superpowers subagents and coderabbit CLI reviews to thoroughly synthesize findings |
 
 ## Next
 

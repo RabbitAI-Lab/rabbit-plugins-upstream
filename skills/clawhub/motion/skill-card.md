@@ -1,44 +1,60 @@
-## Description: <br>
-Motion API integration with managed OAuth for managing tasks, projects, workspaces, comments, recurring tasks, schedules, and related Motion data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Motion tasks, projects, and workspaces through a user-authorized Maton connection, with optional automation guidance.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to query and manage connected Motion workspaces through Maton-managed OAuth, including tasks, projects, comments, custom fields, schedules, and recurring tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a sensitive MATON_API_KEY and delegates Motion OAuth access through Maton. <br>
-Mitigation: Install only if Maton is trusted, keep MATON_API_KEY private, and use the intended Motion connection when multiple accounts are linked. <br>
-Risk: Create, update, and delete calls can change Motion tasks, projects, comments, custom fields, connections, and recurring tasks. <br>
-Mitigation: Approve write or delete actions only after checking the exact target resource and intended effect. <br>
+## Use Case:
 
+Motion users and developers use this skill to look up scheduled work and, with confirmation, create or update tasks and projects. It also guides user-approved functions and event-triggered automations through Maton.
 
-## Reference(s): <br>
-- [Motion on ClawHub](https://clawhub.ai/byungkyu/motion) <br>
-- [Maton](https://maton.ai) <br>
-- [Motion API Documentation](https://docs.usemotion.com/) <br>
-- [Motion API Reference](https://docs.usemotion.com/api-reference) <br>
-- [Motion Cookbooks](https://docs.usemotion.com/cookbooks/getting-started) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with HTTP endpoints and Python or JavaScript examples; API responses are JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Motion OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Functions and triggers can repeatedly act on a connected account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact code, target account, event fields, and persistence before approval; remove unused automations and connections.
+
+Risk: Destinations can continuously forward matching event data to another host.
+
+Mitigation: Confirm the destination host, data fields, and ongoing delivery separately before creating or changing a destination; delete it when no longer needed.
+
+Risk: Event watching with --exec runs a local handler on untrusted event data.
+
+Mitigation: Use only a user-reviewed handler with explicit approval, and treat event fields as data rather than executable instructions.
+
+## Reference(s):
+
+- [Motion skill on ClawHub](https://clawhub.ai/byungkyu/skills/motion)
+- [Maton](https://maton.ai)
+- [Motion API reference](https://docs.usemotion.com/api-reference)
+- [Time trigger reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with command, code, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions are scoped to user-authorized connections; writes and new connections require confirmation.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

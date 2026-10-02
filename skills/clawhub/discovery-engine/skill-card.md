@@ -1,44 +1,60 @@
-## Description: <br>
-Automatically discovers novel, statistically validated patterns in tabular data and returns structured conditions, effect sizes, citations, and novelty scores. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents find and explain statistically validated patterns in tabular data, including subgroup effects, feature interactions, and literature-backed novelty assessments.
 
-## Publisher: <br>
-[jessicarumbelow](https://clawhub.ai/user/jessicarumbelow) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jessicarumbelow](https://clawhub.ai/user/jessicarumbelow)
 
-## Use Case: <br>
-Developers, analysts, and data scientists use this skill to send tabular datasets to Disco, choose target and exclusion settings, run public or private analyses, and interpret statistically validated pattern results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Datasets may be sent to Disco's remote service, and public analyses may publish data or results. <br>
-Mitigation: Use private mode for confidential data and confirm the requested visibility before starting an analysis. <br>
-Risk: Private analyses and account actions can consume credits or involve paid plans. <br>
-Mitigation: Estimate cost first, get explicit user confirmation, and do not attach payment methods, buy credits, or change plans unless the user requested that exact action. <br>
+## Use Case:
 
+Developers and data analysts use this skill to analyze tabular datasets with Disco and communicate validated patterns, effect sizes, and supporting citations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jessicarumbelow/skills/discovery-engine) <br>
-- [Disco homepage](https://disco.leap-labs.com) <br>
-- [Disco MCP endpoint](https://disco.leap-labs.com/mcp) <br>
-- [Python SDK documentation](docs/python-sdk.md) <br>
-- [OpenAPI specification](docs/openapi.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with API and tool-call guidance, configuration snippets, and code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured pattern summaries with conditions, p-values, effect sizes, citations, novelty labels, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.152 (source: ClawHub release evidence; artifact package metadata reports 0.2.151) <br>
+Risk: An analysis may publish results publicly by default, exposing sensitive dataset insights.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm visibility before every run and explicitly select private visibility for confidential data.
+
+Risk: Selected datasets are sent to Disco's hosted service for analysis.
+
+Mitigation: Only submit data approved for upload to that service and review its sensitivity first.
+
+Risk: A payment-enabled API key can permit autonomous purchases, subscriptions, or payment-method changes without a hard confirmation gate.
+
+Mitigation: Do not expose a payment-enabled key to autonomous workflows unless human approval is enforced for billing actions.
+
+## Reference(s):
+
+- [Discovery skill release](https://clawhub.ai/jessicarumbelow/skills/discovery-engine)
+- [Disco documentation](https://disco.leap-labs.com/llms-full.txt)
+- [Python SDK reference](docs/python-sdk.md)
+- [OpenAPI specification](docs/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries with structured pattern details and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include pattern conditions, effect sizes, adjusted p-values, literature citations, and novelty classifications.]
+
+## Skill Version(s):
+
+0.2.182 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

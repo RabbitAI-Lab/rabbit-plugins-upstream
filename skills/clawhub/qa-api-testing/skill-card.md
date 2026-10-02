@@ -1,40 +1,54 @@
-## Description: <br>
-Provides Chinese-language guidance for testing RESTful, GraphQL, gRPC, and WebSocket APIs, including functional validation, parameter combinations, authentication and authorization checks, timeout and retry behavior, idempotency, contract assertions, compatibility, test matrices, and tool selection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides API testing across REST, GraphQL, gRPC, WebSocket, SOAP, and webhook endpoints with test cases, contract checks, mock strategies, and tool recommendations.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and test automation engineers use this skill to design API test plans, contract assertion checklists, mock strategies, security checks, and automation-script outlines for RESTful, GraphQL, gRPC, WebSocket, and third-party callback APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API testing guidance could be applied to systems the user is not authorized to assess. <br>
-Mitigation: Use the skill only for APIs and environments where testing is explicitly authorized. <br>
-Risk: Captured request and response logs may include secrets, tokens, personal data, or production credentials. <br>
-Mitigation: Avoid production credentials where possible and redact secrets and sensitive data from logs and shared test artifacts. <br>
+## Use Case:
 
+Developers and QA engineers use this skill to plan API tests for functionality, security, failures, performance, contracts, and compatibility, and to prepare traceable test cases.
 
-## Reference(s): <br>
-- [Qa Api Testing on ClawHub](https://clawhub.ai/kokxi/skills/qa-api-testing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with structured checklists, tables, test matrices, and code or command snippets when useful] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are guidance artifacts for API testing, including test plans, test cases, mock strategies, automation script designs, security checks, contract assertions, and tool recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Security, load, webhook, or retry tests may affect live services, credentials, payments, or write operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run generated tests only on systems you own or are authorized to test; use approved test environments and credentials for sensitive or state-changing scenarios.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-api-testing)
+- [Core testing flows](artifact/references/core-flows.md)
+- [Test case examples](artifact/references/test-cases.md)
+- [Testing tools](artifact/references/tooling.md)
+- [Testing scenarios](artifact/references/scenarios.md)
+- [Test case template](artifact/assets/case-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Code]
+
+**Output Format:** [Markdown test-case tables, test plans, checklists, and automation script designs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Chinese-language guidance; test cases include unique IDs and contract links, with coverage scoped to the provided API documentation.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

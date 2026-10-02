@@ -1,41 +1,54 @@
-## Description: <br>
-Analyzes a specific Polymarket wallet with Nansen CLI commands to show trader bets, trade history, PnL breakdown, and market context. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides analysis of a Polymarket wallet's trades, profit and loss, and market context using Nansen.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External analysts, developers, and agents use this skill to inspect a Polymarket trader address, retrieve recent trades, compare resolved and unresolved PnL, and identify market context for the wallet's positions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs Nansen CLI research commands that require a Nansen API key and may consume API quota. <br>
-Mitigation: Confirm the NANSEN_API_KEY is appropriate for the environment, trust the installed nansen-cli package, and monitor API usage. <br>
-Risk: Wallet trade and PnL analysis depends on Nansen and Polymarket data returned for the supplied address. <br>
-Mitigation: Validate the wallet address, prefer addresses sourced from trades-by-market as documented, and review resolved versus unresolved market results before relying on conclusions. <br>
+## Use Case:
 
+External users and analysts use this skill to inspect a Polymarket trader's wallet activity, compare profit and loss across markets, and understand what the trader is betting on.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-polymarket-trader-profile) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the NANSEN_API_KEY environment variable and the nansen CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Repeated research calls can consume credits or trigger wallet payments under the configured payment policy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm credentials, wallet authorization, payment policy, and spending limits before issuing calls or running loops.
+
+Risk: Cached authentication status may not establish that a selected credential remains usable.
+
+Mitigation: Confirm a selected API key or browser session, check authentication status, and stop on authentication failure rather than switching to anonymous access.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/nansen-devops/skills/nansen-polymarket-trader-profile)
+- [Nansen CLI browser login platform scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Analysis]
+
+**Output Format:** [Markdown with bash commands and narrative analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a Polymarket wallet address; Nansen research calls may consume credits or trigger authorized payments.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

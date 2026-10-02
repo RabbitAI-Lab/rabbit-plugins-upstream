@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/grafana-api",
   "slug": "grafana-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739753410,
-  "contentHash": "b96e06838d50e7787a0b694c1d404d7ae638ba441640b986fde460968a4ec6b4",
-  "fetchedAt": "2026-07-26T18:27:35.347Z"
+  "version": "1.2.10",
+  "updatedAt": 1790938296514,
+  "contentHash": "253ccdba2149c6afdf8af02e20b0c379410e1ce3971f233ba61dd84d7b8057fe",
+  "fetchedAt": "2026-10-02T14:00:34.324Z"
 }

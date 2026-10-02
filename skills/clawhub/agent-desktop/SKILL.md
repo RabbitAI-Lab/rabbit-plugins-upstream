@@ -1,28 +1,28 @@
 ---
 name: agent-desktop
 version: 0.4.0
-tags: desktop-automation, accessibility, ai-agent, gui-automation, cli
+tags: computer-use, desktop-automation, accessibility, ai-agent, gui-automation, cli
 requirements:
   - agent-desktop
 description: >
-  Desktop automation via native OS accessibility trees using the agent-desktop CLI.
-  Use when an AI agent needs to observe, interact with, or automate desktop applications
+  Reliable computer use via native OS accessibility trees.
+  Use when an AI agent needs to see and operate desktop applications
   (click buttons, fill forms, navigate menus, read UI state, toggle checkboxes, scroll,
   drag, type text, take screenshots, manage windows, use clipboard, manage notifications).
-  Covers 58 command names (54 operational; four held-input names fail closed until
+  Covers 59 command names (55 operational; four held-input names fail closed until
   daemon ownership exists) across observation, interaction, keyboard/mouse, app
   lifecycle, notifications (macOS), clipboard, wait, session lifecycle, and a
   `skills` command that bundles docs straight from the binary.
-  Triggers on: "click button", "fill form", "open app", "read UI", "automate desktop",
-  "accessibility tree", "snapshot app", "type into field", "navigate menu", "toggle checkbox",
-  "take screenshot", "desktop automation", "agent-desktop", or any desktop GUI interaction task.
+  Triggers on: "click button", "fill form", "open app", "read UI", "computer use",
+  "operate desktop", "accessibility tree", "snapshot app", "type into field", "navigate menu",
+  "toggle checkbox", "take screenshot", "desktop automation", "agent-desktop", or any desktop GUI interaction task.
   Supports the macOS Phase 1 adapter, with Windows and Linux planned against
   the same core contracts.
 ---
 
 # agent-desktop
 
-CLI tool enabling AI agents to observe and control desktop applications via native OS accessibility trees.
+Computer-use tool that AI agents call to see and operate desktop applications via native OS accessibility trees.
 
 **Core principle:** agent-desktop is NOT an AI agent. It is a tool that AI agents invoke. It outputs structured JSON with ref-based element identifiers. The observation-action loop lives in the calling agent.
 
@@ -44,19 +44,19 @@ Detailed documentation is split into focused reference files. Read them as neede
 |-----------|----------|
 | `references/commands-observation.md` | snapshot, find, get, is, screenshot, list-surfaces — all flags, output examples |
 | `references/commands-interaction.md` | click, type, set-value, select, toggle, scroll, drag, keyboard, mouse — choosing the right command |
-| `references/commands-system.md` | launch, close, windows, clipboard, wait, batch, session, status, permissions, version |
-| `references/workflows.md` | 12 common patterns: forms, menus, dialogs, scroll-find, drag-drop, async wait, anti-patterns |
+| `references/commands-system.md` | launch (including `--cdp` for Chromium web contents), close, windows, clipboard, wait, batch, session, status, permissions, version |
+| `references/workflows.md` | 17 common patterns: forms, menus, dialogs, scroll-find, drag-drop, async wait, anti-patterns |
 | `references/macos.md` | macOS permissions/TCC, AX API internals, smart activation chain, surfaces, Notification Center, troubleshooting |
 
 ## The Observe-Act Loop (Progressive Skeleton Traversal)
 
-Use **progressive skeleton traversal** as the default approach. It reduces token consumption 78-96% for dense apps by exploring the UI in two phases: a shallow skeleton overview, then targeted drill-downs into regions of interest.
+When you know the target's role or exact name, use `find --role ... --name ... --exact` directly. Otherwise, use **progressive skeleton traversal** for dense or unfamiliar apps: a shallow overview followed by targeted drill-downs.
 
 ```
 1. SKELETON → agent-desktop snapshot --skeleton --app "App" -i --compact
    Parse the overview. Identify the region containing your target.
    Regions show children_count (e.g., "Sidebar" with children_count: 42).
-   Named containers at truncation boundary have refs for drill-down.
+   The nearest safely resolvable container has a ref for drill-down.
    Keep the returned snapshot_id.
 
 2. DRILL    → agent-desktop snapshot --root @e3 --snapshot <snapshot_id> -i --compact
@@ -77,7 +77,7 @@ Use **progressive skeleton traversal** as the default approach. It reduces token
 - Surface snapshots (menus, sheets, alerts) — these are already focused
 
 **When skeleton shines:**
-- Dense Electron apps (Slack, VS Code, Discord, Notion)
+- Dense Electron apps (Slack, VS Code, Discord, Notion) that are **already running** — for one you are launching fresh, `launch --cdp` plus a CDP client (agent-browser preferred) reads the web contents faster than any skeleton walk (see principle 15)
 - Any app where full snapshot exceeds ~50 refs
 - Multi-region workflows (sidebar + main content + toolbar)
 
@@ -86,7 +86,7 @@ Use **progressive skeleton traversal** as the default approach. It reduces token
 - Refs are assigned depth-first and emitted with their snapshot, for example `@s8f3k2p9:e1`, `@s8f3k2p9:e2`, `@s8f3k2p9:e3`. Legacy bare refs require an explicit `--snapshot`.
 - An element gets a ref when it is addressable for an action: an interactive role (button, textfield, checkbox, link, menuitem, tab, slider, combobox, treeitem, cell, radiobutton, switch, ...) **or** any element advertising an action — so `scrollarea` (Scroll) and `disclosure` (Expand/Collapse) are ref-able and `scroll`/`expand`/`collapse` can target them
 - A `SetFocus`-only affordance does not earn a ref on its own
-- In skeleton mode, named/described containers at truncation boundary also get refs (drill-down targets with empty `available_actions`)
+- In skeleton mode, each truncated branch exposes the deepest safely resolvable drill target using stable text, native ID, or bounds evidence; the nearest resolvable ancestor is used when the boundary itself is anonymous
 - Static text and non-actionable groups/containers remain in tree for context but have no ref
 - Refs are deterministic within a snapshot but NOT stable across snapshots if UI changed
 - Snapshot output uses qualified refs that embed `snapshot_id` and need no separate `--snapshot`; a session-owned ref still requires the same `--session` or `AGENT_DESKTOP_SESSION` scope because lookup never crosses namespaces
@@ -96,16 +96,25 @@ Use **progressive skeleton traversal** as the default approach. It reduces token
 - **Strict resolution:** stale refs return `STALE_REF`; duplicate plausible targets return `AMBIGUOUS_TARGET` instead of choosing arbitrarily.
 - **Actionability:** every ref-addressed action checks its applicable live visibility, stability, enabled, editability, policy, supported-action, and hit-test requirements under one bounded budget before a single dispatch. Pointer actions focus before their final geometry read, re-resolve moving endpoints, and return `TIMEOUT` with `details.kind: "actionability_timeout"` instead of sending input after the deadline.
 - **Headless vs headed:** ref actions are strictly headless by default: semantic accessibility APIs only, with no focus stealing, cursor movement, or synthesized keyboard input. In headed mode, core focuses the exact ref window before dispatch; pointer actions also require a verified target point, while the adapter owns OS delivery. On macOS, `click`, `right-click`, `type`, `clear`, and `scroll` are physical-first; double/triple-click, hover, and drag are physical-only; expand/collapse and other semantic actions remain semantic. Raw `--xy` input has no window identity and never steals focus. `press` is explicit physical keyboard input; held-input commands (`key-down`, `key-up`, `mouse-down`, `mouse-up`) are reserved and fail closed in the stateless CLI.
-- **Sessions and tracing:** run `session start` once per agent run to create a manifest with `trace: on` (default), then pass its returned ID with `--session` or `AGENT_DESKTOP_SESSION`. Use `session start --screenshots` when you need replay artifacts (`artifacts: full`): pre/post-action PNGs and refmap copies under the session trace directory (sensitive — treat exports like screenshots). Commands in that explicit scope record JSONL automatically to per-process segments under `~/.agent-desktop/sessions/<id>/trace/<pid>-<procTs>.jsonl` — no `--trace` on every call. Read traces back with `trace show` (bounded JSON for agents) or `trace export` (single-file HTML for humans). A session owns both its trace and its latest-snapshot namespace. Snapshot lookup never searches another namespace. **`--session <id>` alone** (no manifest from `session start`) selects only the snapshot namespace — existing callers see no surprise trace files. **`--trace <path>`** still overrides to one atomic file for CI or one-offs. Activation precedence is `--session` > `AGENT_DESKTOP_SESSION` > no session; `session start` does not activate later processes. Multi-agent shared sessions: each agent acts on qualified refs from its own snapshot — implicit latest is not a cross-agent guarantee. Run `status` to see `session_id` and `tracing`. Trace lines include `ts_ms`, monotonic per-process `seq`, and redacted sensitive fields (`text`, `value`, `expected`, `name`, `username`, `description`, `label`, `query`, `secret`, `token`, `password`, `title`, `url`, `help`, `placeholder` → `{ "redacted": true }`). `--trace-strict` fails on trace setup and pre-action writes; post-action success traces are best-effort.
+- **Sessions and tracing:** run `session start` once per task to create a manifest with `trace: on` (default), then pass its returned ID with `--session` or `AGENT_DESKTOP_SESSION`. Use `session start --screenshots` when you need replay artifacts (`artifacts: full`): pre/post-action PNGs and refmap copies under the session trace directory (sensitive — treat exports like screenshots). Commands in that explicit scope record JSONL automatically to per-process segments under `~/.agent-desktop/sessions/<id>/trace/<pid>-<procTs>.jsonl` — no `--trace` on every call. Read traces back with `trace show` (bounded JSON for agents) or `trace export` (single-file HTML for humans). A session owns both its trace and its latest-snapshot namespace. Snapshot lookup never searches another namespace. **`--session <id>` alone** (no manifest from `session start`) selects only the snapshot namespace — existing callers see no surprise trace files. **`--trace <path>`** still overrides to one atomic file for CI or one-offs. Activation precedence is `--session` > `AGENT_DESKTOP_SESSION` > no session; `session start` does not activate later processes. Multi-agent shared sessions: the harness passes the same session ID to every subagent. For independent macOS cursors use `session start --cursor --multi-agent` and assign each subagent a stable `AGENT_DESKTOP_AGENT_ID` or global `--agent-id` (flag wins). Desktop UI actions then require the ID; observations, clipboard operations, and administration do not. Three distinct IDs produce three cursors, in both headless and headed mode. Drags reuse the cursor’s curved motion and show a live accent-colored trail while held, fading after release; the ripple setting controls the trail. Physical pointer commands also show their agent’s overlay; the interaction lease serializes access to the shared OS pointer. Each agent acts on qualified refs from its own snapshot — implicit latest is not a cross-agent guarantee. Optional `--agent-id <id> cursor-overlay enable` styling is saved for that agent’s next presentation; no registration is needed. Disable/end stops every session cursor. Run `status` to see `session_id` and `tracing`. Trace lines include `ts_ms`, monotonic per-process `seq`, and redacted sensitive fields (`text`, `value`, `expected`, `name`, `username`, `description`, `label`, `query`, `secret`, `token`, `password`, `title`, `url`, `help`, `placeholder` → `{ "redacted": true }`). `--trace-strict` fails on trace setup and pre-action writes; post-action success traces are best-effort.
 
 ## JSON Output Contract
 
 Every command returns a JSON envelope on stdout:
 
-**Success:** `{ "version": "2.1", "ok": true, "command": "snapshot", "data": { ... } }`
-**Error:** `{ "version": "2.1", "ok": false, "command": "click", "error": { "code": "STALE_REF", "message": "...", "suggestion": "..." } }`
+**Success:** `{ "version": "2.4", "ok": true, "command": "snapshot", "data": { ... } }`
+**Error:** `{ "version": "2.4", "ok": false, "command": "click", "error": { "code": "STALE_REF", "message": "...", "suggestion": "..." } }`
 
 The `error` object may also carry an optional `details` object (e.g. the actionability report on an actionability failure, candidate summaries on `AMBIGUOUS_TARGET`, or the last observed state on a `wait` `TIMEOUT`). Parse errors leniently — `details` and future fields are additive, so do not reject responses with unknown keys.
+
+An error also carries `disposition`, and that object decides whether a retry is safe:
+
+| Field | Values |
+|-------|--------|
+| `disposition.delivery` | `not_delivered`, `delivery_uncertain`, `delivered_unverified`, `delivered_verified`, `unknown` |
+| `disposition.retry` | `safe`, `unsafe`, `unknown` |
+
+**Retry or substitute an action only when `disposition.retry` is `safe`, and follow `recovery.strategy` only in that same case.** Only `not_delivered` is `safe`. Every other delivery value is `unsafe`, because the action may already have landed — repeating it would click, type, or submit twice. On an `unsafe` result, read `details.post_state` and `details.postcondition_satisfied` to decide what actually happened, then act on the observed state instead of repeating the command. A failure after preparatory scrolling carries `details.preparatory_scroll` and never authorizes an automatic retry.
 
 An actionability failure on a hit-test action (`click`, `double-click`, `right-click`, `triple-click`, `hover`, `drag`) can carry a `receives_events` check with `reason: "occluded by <role>"` plus a structured `occluder: { "role", "name", "bounds" }` — another element is on top of the target. Bring the target window/element to the front (or dismiss the occluder) rather than blind-retrying; see `references/commands-interaction.md` for the full check list.
 
@@ -118,7 +127,7 @@ Exit codes: `0` success, `1` structured error, `2` argument error.
 | `PERM_DENIED` | Accessibility or Screen Recording permission not granted | Grant the named permission in System Settings |
 | `ELEMENT_NOT_FOUND` | Ref cannot be resolved against the live UI | Re-run snapshot, use fresh ref |
 | `APP_NOT_FOUND` | App not running | Launch it first |
-| `ACTION_FAILED` | AX action rejected | Try an explicit alternative command |
+| `ACTION_FAILED` | Action rejected or its observed result contradicted the request | Inspect `disposition.retry`, `details.post_state`, and `details.after_action`; do not repeat or substitute an action after uncertain or unverified delivery |
 | `ACTION_NOT_SUPPORTED` | Element can't do this | Use different command |
 | `STALE_REF` | Ref could not be re-identified in the live UI | Use the `snapshot_id` returned with this ref; if the UI changed or the target disappeared, re-run `snapshot` / `snapshot --skeleton` to get fresh refs |
 | `AMBIGUOUS_TARGET` | Multiple elements matched the old ref identity | Re-run snapshot and choose a more specific ref |
@@ -134,7 +143,9 @@ Exit codes: `0` success, `1` structured error, `2` argument error.
 
 `TIMEOUT` errors carry a `details` object whose `kind` field selects the schema. `kind: "wait_timeout"` includes `predicate`, `timeout_ms`, and `last_observed` or `last_error`, plus `ref`/`title`/`text_chars` depending on the wait mode. `kind: "chain_deadline"` includes `value_before`, `value_at_timeout`, `target`, and `mutated` (increment waits) or `wanted_expanded`/`observed_expanded` (disclosure waits). `mutated: true` — or an unknown `observed_expanded` state — means re-read the element before retrying; `mutated: false` means the state did not change and retrying directly is safe.
 
-## Command Quick Reference (58 names, 54 operational)
+`details.kind: "post_action_verification"` means execution was followed by a contradictory or failed state read. The original read error code is preserved, so even `STALE_REF` or `TIMEOUT` can follow delivery. Inspect `post_state`, `after_action`, and `disposition.retry` before any retry or alternative action. Missing evidence alone is reported as successful `delivered_unverified` with `details.verification_scope: "unavailable"`, not as proof that the change failed.
+
+## Command Quick Reference (59 names, 55 operational)
 
 ### Observation
 ```
@@ -144,10 +155,14 @@ agent-desktop snapshot --app "App" -i                       # Full tree (simple 
 agent-desktop snapshot --app "App" --surface menu -i        # Surface snapshot
 agent-desktop screenshot --app "App" out.png                # PNG screenshot
 agent-desktop find --app "App" --role button                # Search elements
+agent-desktop find --root @s8f3k2p9:e3 --role button        # Search one region only
+agent-desktop find --app "App" --surface menubar --name "Save" --first  # Search a menu
 agent-desktop get @e1 --snapshot <snapshot_id> --property text       # Read element property
 agent-desktop is @e1 --snapshot <snapshot_id> --property enabled     # Check element state
 agent-desktop list-surfaces --app "App"                     # Available surfaces
 ```
+
+For a visual demo on macOS, add `--debug --screenshot /tmp/visual.html` to `snapshot` or `click`. The local HTML viewer has ref highlights and collapsible role groups with checkbox filters. Choose a new file; see [Visual debug](references/commands-observation.md#visual-debug).
 
 ### Interaction
 ```
@@ -184,7 +199,9 @@ agent-desktop --headed mouse-move --xy 100,200  # Move cursor
 
 ### App & Window
 ```
-agent-desktop launch "System Settings"          # Launch and wait
+agent-desktop launch "System Settings"          # Launch; returns once running
+agent-desktop launch "TextEdit" --activate       # Also bring it forward and wait for a window
+agent-desktop launch "Obsidian" --cdp            # Fresh launch + verified Chrome DevTools Protocol port for web contents
 agent-desktop close-app "TextEdit"              # Quit gracefully
 agent-desktop close-app "TextEdit" --force      # Force quit; SIGKILL if SIGTERM does not exit
 agent-desktop list-windows --app "Finder"       # List windows
@@ -236,10 +253,14 @@ agent-desktop wait --notification --app "App"   # Wait for new notification
 
 ### System
 ```
-agent-desktop session start [--name LABEL] [--screenshots] [--no-trace]  # Creates a session; pass the returned ID explicitly
+agent-desktop session start [--name LABEL] [--screenshots] [--no-trace] [--cursor [--multi-agent]]  # Creates a session; pass the returned ID explicitly
 agent-desktop session end [id]                                      # Seal manifest
 agent-desktop session list                                          # List session manifests
 agent-desktop session gc [--older-than SECS] [--ended]              # Reclaim ended/stale sessions
+agent-desktop --session <id> cursor-overlay enable [--multi-agent] [--label TEXT] [--max-words N] [--fill HEX] [--rim HEX] [--accent HEX] [--size N] [--no-ripple] [--no-highlight]
+agent-desktop --session <id> --agent-id ID cursor-overlay enable [--label TEXT] [--max-words N] [--fill HEX] [--rim HEX] [--accent HEX] [--size N] [--no-ripple] [--no-highlight]
+export AGENT_DESKTOP_SESSION=<id>
+agent-desktop cursor-overlay disable                                # Stop all cursors in the selected session
 agent-desktop trace show [--limit N] [--event PREFIX]               # Merge trace segments (default tail 500; 0 = all)
 agent-desktop trace export [--out path.html] [--limit N]            # Self-contained HTML viewer (default tail 5000)
 agent-desktop status                            # Health, session_id, tracing, artifacts, permissions
@@ -253,16 +274,19 @@ agent-desktop skills get desktop --full         # Load this skill + all referenc
 
 ## Key Principles for Agents
 
-1. **Skeleton first, drill second.** Start with `--skeleton -i --compact` for dense apps. Drill into regions with `--root @ref`. Full snapshot only for simple apps.
+1. **Find known targets; skeleton unknown structure.** If role or exact name is known, use targeted `find` first. Use `--skeleton -i --compact` when the region is unknown, then drill with `--root @ref`. For fresh Chromium launches, prefer `launch --cdp` plus a CDP client.
 2. **Use `-i --compact` flags.** Filters to interactive elements and collapses empty wrappers, minimizing tokens.
 3. **Refs are snapshot-scoped.** Keep `snapshot_id` for deterministic multi-step use; re-drill the affected region after any UI-changing action. Scoped invalidation keeps other refs intact.
 4. **Prefer refs over coordinates.** `click @s8f3k2p9:e5` > `agent-desktop --headed mouse-click --xy 500,300`.
 5. **Use `wait` for async UI.** After launch/dialog triggers, wait for expected state.
 6. **Check permissions first.** Run `permissions` on first use; screenshots also need Screen Recording.
 7. **Handle errors.** Branch on `error.code` only — `error.message` and `error.suggestion` text is informational and may change between versions.
-8. **Use `find` for targeted searches.** Faster than any snapshot when you know role/name.
-9. **Use surfaces for overlays.** `snapshot --surface menu` for menus, `--surface sheet` for dialogs. Never `--skeleton` for surfaces — they're already focused.
-10. **Batch for performance.** Multiple commands in one invocation.
-11. **Headless by default.** Ref actions use semantic AX paths and block silent focus stealing, cursor movement, keyboard synthesis, and pasteboard insertion. Use `--headed` only when exact-window focus or physical delivery is intended; raw coordinates never imply focus.
-12. **Start a session once per run.** `session start` creates the manifest; pass its returned ID through `AGENT_DESKTOP_SESSION` for the run or `--session <id>` for one command. It does not activate later processes implicitly.
-13. **Trace hard failures.** With an active trace-enabled session, segments are written automatically. Add `--trace /tmp/agent-desktop.jsonl` only when you need a single override file (CI, one-offs). Check `status` when unsure whether tracing is active.
+8. **Scope targeted searches.** Pair known names with role and `--exact`; use `--limit 2` before a mutation when uniqueness is not guaranteed. Narrow with `--root @ref` for one region or `--surface menubar` for a menu.
+9. **Use surfaces for overlays.** `snapshot --surface menu` for menus, `--surface sheet` for dialogs. Never `--skeleton` for surfaces — they're already focused. Reach one item inside an overlay with `find --surface`, not a full surface snapshot.
+10. **Read `data.surfaces` after acting.** An action that opens a sheet, menu, or alert reports it there. Target that overlay next instead of searching windows for what changed.
+11. **Batch for performance.** Multiple commands in one invocation.
+12. **Headless by default.** Ref actions use semantic AX paths and block silent focus stealing, cursor movement, keyboard synthesis, and pasteboard insertion. Use `--headed` only when exact-window focus or physical delivery is intended; raw coordinates never imply focus.
+13. **Start a session once per run.** `session start` creates the manifest; pass its returned ID through `AGENT_DESKTOP_SESSION` for the run or `--session <id>` for one command. It does not activate later processes implicitly.
+14. **Trace hard failures.** With an active trace-enabled session, segments are written automatically. Add `--trace /tmp/agent-desktop.jsonl` only when you need a single override file (CI, one-offs). Check `status` when unsure whether tracing is active.
+15. **Relocate state with `AGENT_DESKTOP_HOME`.** When set, the env value is the state root itself — sessions, refmaps, traces, and locks all live under it, for every subcommand. Default stays `~/.agent-desktop`. The value must be an absolute path; a relative or empty value fails with `INVALID_ARGS` before any command runs. `status` reports the resolved root as `state_root`. Explicit output paths (`screenshot --out`, `--trace <path>`) are never re-rooted.
+16. **Chromium-app strategy.** The accessibility path is the default, and the only option for already-running apps and for native surfaces (menus, dialogs, windows). `launch --cdp` plus a CDP client (agent-browser preferred; any CDP client works) is the opt-in fast path for a Chromium app's web contents, when a fresh launch is acceptable.

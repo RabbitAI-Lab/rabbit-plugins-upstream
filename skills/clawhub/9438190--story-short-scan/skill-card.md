@@ -1,44 +1,62 @@
-## Description: <br>
-Analyzes short-form web fiction rankings across Zhihu Yanyan, Qimao, Heiyan, and Dianzhong to identify current emotional hooks, topic trends, risks, and validation actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes short-form Chinese web fiction rankings across platforms such as Zhihu Yanyan, Qimao, Heiyan, and Dianzhong to identify market themes, emotional hooks, trend candidates, and validation actions.
 
-## Publisher: <br>
-[9438190](https://clawhub.ai/user/9438190) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[9438190](https://clawhub.ai/user/9438190)
 
-## Use Case: <br>
-Writers, editors, and market analysts use this skill to scan short-form web fiction platforms, compare current ranking samples, and turn those signals into story direction candidates and follow-up validation steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can reuse a logged-in browser session and read an admin cookie to access private Heiyan management data. <br>
-Mitigation: Use it only with authorized access, prefer public-page collection or a dedicated least-privilege account, and treat generated Markdown files as potentially private business or catalog data. <br>
-Risk: Short-form fiction trend conclusions can become stale quickly or rely on historical reference data when live collection is unavailable. <br>
-Mitigation: Label sample dates and confidence, rescan before treating a topic as current, and keep unverified historical patterns as candidate hypotheses. <br>
+## Use Case:
 
+Writers, editors, and publishing analysts use this skill to scan short-fiction market samples, compare platform patterns, and turn ranking evidence into topic directions, risk thresholds, and follow-up validation steps.
 
-## Reference(s): <br>
-- [Short Web Fiction Market Reference](references/real-market-data.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/9438190/skills/story-short-scan) <br>
-- [OpenClaw Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Dianzhong Male Short Fiction Browse](https://www.ishugui.com/browse) <br>
-- [Dianzhong Female Short Fiction Browse](https://www.ishugui.com/browse/on3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports with tables and optional inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce dated Markdown data files when browser-based collection scripts are used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: The Heiyan scraper can reuse a logged-in admin browser session and call management APIs with an extracted Admin-Token cookie.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only with explicit authorization, prefer a dedicated low-privilege Chrome profile, and avoid personal or high-privilege admin sessions.
+
+Risk: Generated ranking reports may contain sensitive internal catalog data from authenticated sources.
+
+Mitigation: Treat generated reports as sensitive, store them in approved locations, and review contents before sharing outside the authorized team.
+
+Risk: Historical market reference data can become stale in fast-moving short-fiction markets.
+
+Mitigation: Require current scan dates, trend confidence, and rescan timing before using recommendations as active market guidance.
+
+## Reference(s):
+
+- [Story Short Scan ClawHub page](https://clawhub.ai/9438190/skills/story-short-scan)
+- [OpenClaw metadata source](https://github.com/worldwonderer/oh-story-claudecode)
+- [Short-form fiction market reference](references/real-market-data.md)
+- [Dianzhong male short-fiction browse page](https://www.ishugui.com/browse)
+- [Dianzhong female short-fiction browse page](https://www.ishugui.com/browse/on3)
+- [Heiyan management booklist page](https://manage.zhangwenpindu.cn/books/booklist)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, guidance]
+
+**Output Format:** [Markdown reports with optional shell commands and generated Markdown data files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports should include sample date, trend confidence, expiry or rescan timing, topic candidates, saturation risks, and validation actions.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

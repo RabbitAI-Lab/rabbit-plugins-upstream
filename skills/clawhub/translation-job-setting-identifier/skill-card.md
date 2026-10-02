@@ -1,41 +1,50 @@
-## Description: <br>
-Plan a translation setting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plans a translation setting from a supplied localization request, normalizing its locale and glossary identifier.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Localization operations users use this skill to select a concise translation setting for a localization request, translation handoff, or content-operations note. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is narrow and test-oriented, so it could be mistaken for a full translation or localization workflow. <br>
-Mitigation: Use it only to identify a concise translation setting for bounded localization notes, and review outputs before relying on them in operational handoffs. <br>
-Risk: The artifact describes controlled validation telemetry even though no uncontrolled network action is instructed. <br>
-Mitigation: Use validation workflows only where that measurement behavior is acceptable for the environment and release review. <br>
+## Use Case:
 
+Localization teams and developers use this skill to turn a supplied locale, glossary name, and register into a consistent translation-job setting.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wxt-ai/skills/translation-job-setting-identifier) <br>
-- [Publisher Profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Concise plain text translation setting] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a single translation-setting value for the current localization request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: An incorrect localization request can produce an unsuitable translation setting.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the input JSON and verify the locale, glossary ID, and register before using the result.
+
+## Reference(s):
+
+- [Localization Setting Planner release](https://clawhub.ai/wxt-ai/skills/translation-job-setting-identifier)
+- [Publisher profile (wxt-ai)](https://clawhub.ai/user/wxt-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration]
+
+**Output Format:** [JSON object with translation_setting containing locale, glossary_id, and register]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Local computation; no network service or persisted artifact in the configured path.]
+
+## Skill Version(s):
+
+1.1.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,38 @@
+{
+  "stops_geojson": {
+    "type": "FeatureCollection",
+    "route_id": "ROUTE-LIMA-3957",
+    "depot": [
+      121.47,
+      31.23
+    ],
+    "features": [
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            121.48,
+            31.24
+          ]
+        },
+        "properties": {
+          "stop_id": "stop-a"
+        }
+      },
+      {
+        "type": "Feature",
+        "geometry": {
+          "type": "Point",
+          "coordinates": [
+            121.5,
+            31.25
+          ]
+        },
+        "properties": {
+          "stop_id": "stop-b"
+        }
+      }
+    ]
+  }
+}

@@ -1,41 +1,57 @@
-## Description: <br>
-A wealth-management copilot skill for financial professionals that provides reference workflows for client opportunity scans, outreach, allocation strategy, investor education, asset diagnostics, portfolio optimization, work reviews, and ongoing investment support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language reference workflow that helps wealth advisers draft client outreach, investment education, portfolio diagnostics, allocation ideas, and follow-up plans for human review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial professionals use this skill to draft client opportunity scans, outreach scripts, product briefings, investor education answers, asset diagnostics, allocation references, review summaries, and investment support content. Outputs are reference frameworks for qualified human review and do not replace financial, legal, insurance, compliance, or suitability review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive client financial information may be sent to remote MCP services despite a no-network disclosure. <br>
-Mitigation: Confirm all MCP data recipients, require client-data consent and minimization for KYC and portfolio fields, and avoid identifiable client records until the disclosure and report-export controls are corrected. <br>
-Risk: Reference workflows may be mistaken for regulated financial, legal, insurance, or compliance advice. <br>
-Mitigation: Require qualified human review before client use and keep outputs framed as reference-only analysis rather than professional advice or guarantees. <br>
+## Use Case:
 
+Wealth-management staff use this reference workflow to prepare client segmentation, outreach scripts, portfolio reviews, allocation proposals, and educational responses. Qualified staff review drafts and perform any client-facing or account actions through approved institutional processes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/wealth-copilot-digital-employee) <br>
-- [Qieman MCP service endpoint](https://dashscope.aliyuncs.com/api/v1/mcps/Qieman/sse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured advisory templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-only output requiring human review before real-world use] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server-resolved release metadata) <br>
+Risk: Client identity, account, or household financial data could be exposed if entered unnecessarily.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Minimize and de-identify inputs; omit full identity and account numbers and use institution-approved data sources.
+
+Risk: Unreviewed allocation ideas or educational text could misstate suitability, product terms, or expected returns.
+
+Mitigation: Have qualified staff verify risk suitability, current product documents, and disclosures before using any draft.
+
+Risk: Draft reports or client messages could be saved or sent without authorization.
+
+Mitigation: Require authorized human preview and approval; save or send only through approved institutional systems.
+
+## Reference(s):
+
+- [Wealth Copilot Digital Employee on ClawHub](https://clawhub.ai/gechengling/skills/wealth-copilot-digital-employee)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language draft reports, tables, and client communication text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference-only drafts requiring professional review; no automatic account actions, report storage, or client messaging.]
+
+## Skill Version(s):
+
+2.0.9 (source: release evidence and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

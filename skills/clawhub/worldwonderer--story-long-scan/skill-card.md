@@ -1,46 +1,62 @@
-## Description: <br>
-Story Long Scan helps agents collect and analyze long-form Chinese web-novel rankings from platforms such as Qidian, Fanqie, JJWXC, Qimao, and Ciweimao to identify genre trends, topic candidates, and validation actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes rankings across Chinese web-fiction platforms to identify long-form genre trends and promising story concepts.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External writers, publishing analysts, and agents use this skill to gather ranking samples and turn them into market scans, reader profiles, and topic decisions for long-form Chinese web novels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs local Node.js scraper scripts and may use a browser-CDP session to visit ranking pages. <br>
-Mitigation: Review commands before execution and use a dedicated browser profile when existing login state should not be involved. <br>
-Risk: The skill writes generated reports to a local output directory. <br>
-Mitigation: Choose the output directory intentionally and review generated Markdown files before relying on them. <br>
+## Use Case:
 
+Web-fiction writers and editors use this skill to compare platform rankings, assess genre demand, and choose feasible long-form story topics backed by available samples.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-scan) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [genre-trends.md](artifact/references/genre-trends.md) <br>
-- [publishing-guide.md](artifact/references/publishing-guide.md) <br>
-- [reader-profiling.md](artifact/references/reader-profiling.md) <br>
-- [scan-output-format.md](artifact/references/scan-output-format.md) <br>
-- [topic-decision.md](artifact/references/topic-decision.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown reports, concise text guidance, and shell command suggestions for scraper execution.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local Markdown reports and topic-decision files to a user-selected output directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.9 (source: server release evidence; artifact frontmatter says 1.0.0) <br>
+Risk: Ranking collection may conflict with a platform's scraping terms.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the target site's terms before collecting rankings.
+
+Risk: Browser-based collection may use an existing site session.
+
+Mitigation: Use a separate browser profile when existing sessions should remain isolated.
+
+Risk: Scan results write local reports and may reflect incomplete or stale rankings.
+
+Mitigation: Run in a workspace where scan-output files are acceptable, and verify sparse or outdated samples before making decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/worldwonderer/skills/story-long-scan)
+- [Project link listed in skill metadata (provenance unverified)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Topic decision guide](artifact/references/topic-decision.md)
+- [Genre trends reference](artifact/references/genre-trends.md)
+- [Reader profiling reference](artifact/references/reader-profiling.md)
+- [Platform and publishing guide](artifact/references/publishing-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown ranking summaries, trend reports, and story-topic recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports and topic decisions may be saved as local Markdown files.]
+
+## Skill Version(s):
+
+1.1.16 (source: ClawHub release metadata; bundled frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

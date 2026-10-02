@@ -1,41 +1,60 @@
-## Description: <br>
-Guides Chinese-speaking learners through a week-long cross-disciplinary inquiry project that connects a real-world theme across subjects and summarizes the work as project DNA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese-speaking students through a weeklong investigation of a real-world topic across school subjects, culminating in a record of their discoveries and connections.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and learning assistants use this skill to plan and run a cross-subject project around a real topic, explore it from several academic perspectives, and turn the results into reusable study notes and a project DNA summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect with related learning-note skills and may read or update study records such as Cornell notes and a knowledge accumulation tree. <br>
-Mitigation: Use it only in learning-note workspaces where those records are expected to be available, and review generated note or knowledge-tree updates before keeping them. <br>
-Risk: Cross-subject project guidance can produce broad connections that may need validation for a student's curriculum or age level. <br>
-Mitigation: Review the proposed subject perspectives, prompts, and project DNA summary before treating them as study material. <br>
+## Use Case:
 
+Students in upper primary through high school use this skill to explore a chosen topic through multiple subjects, identify connections, and organize a weeklong project record. Upper-primary students use it with a parent or teacher present.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective) <br>
-- [跨学科侦探周项目模板](references/detective-project-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and structured project notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces subject-view prompts, connection maps, project DNA summaries, and learning-note updates when paired with the related note-taking skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Persistent learning records or cross-skill sharing may expose a minor's project information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Explain profile writeback and sharing controls to the student or guardian; honor requests to view, correct, delete, pause, or restrict sharing.
+
+Risk: Mainland China crisis contacts, curriculum assumptions, and minor-consent expectations may not fit other locations.
+
+Mitigation: Localize crisis resources and educational assumptions before use outside mainland China, and confirm applicable minor-consent requirements.
+
+Risk: Study support is not appropriate when a student signals an immediate safety crisis.
+
+Mitigation: Stop the learning workflow, encourage contact with a trusted adult, and direct the student to location-appropriate emergency or crisis support.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective)
+- [Cross-subject detective project template](references/detective-project-template.md)
+- [Cross-subject connection examples](shared/cross-subject-connections.md)
+- [Hint ladder](shared/hint-ladder.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Text]
+
+**Output Format:** [Conversational text and Markdown project records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes subject prompts, connection summaries, and a project record; profile updates depend on the student's sharing and memory choices.]
+
+## Skill Version(s):
+
+2.10.0 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

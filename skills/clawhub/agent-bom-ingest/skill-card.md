@@ -1,46 +1,59 @@
-## Description: <br>
-Validate and ingest operator-pushed agent-bom inventory JSON to produce local findings, graph, policy, provenance, and auditor-ready exports without direct cloud credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Validates operator-supplied agent-bom inventory and guides local scanning and auditor-ready exports without requiring direct cloud credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, security engineers, and operators use this skill when they already have canonical inventory JSON from cloud, CMDB, endpoint, or AI-agent collection workflows and need local validation, scanning, graphing, policy checks, provenance review, or exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Inventory-derived security data may leave the local machine when optional push or vulnerability enrichment is enabled. <br>
-Mitigation: Verify the operator-provided push URL and enrichment endpoints before enabling those optional actions. <br>
-Risk: Untrusted or unintended inventory files could produce misleading local findings. <br>
-Mitigation: Run schema validation first and analyze only inventory files the operator intended to provide. <br>
-Risk: Inventory and configuration may contain sensitive tokens, URL credentials, private keys, or environment values. <br>
-Mitigation: Rely on the skill's redaction guidance and do not display or export raw secrets. <br>
+## Use Case:
 
+Developers and inventory operators use this skill to validate existing agent inventories, review local security findings, and prepare reports for auditors or automation without granting cloud access to agent-bom.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-ingest) <br>
-- [agent-bom repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OSV vulnerability API](https://api.osv.dev/v1) <br>
-- [GitHub Advisory API](https://api.github.com/advisories) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent-bom CLI to create operator-selected JSON, SARIF, HTML, Markdown, CycloneDX, or SPDX export files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Optional vulnerability lookups may send package or advisory lookup data to OSV or GitHub.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review what may be shared before enabling external enrichment; keep scans local when external lookup is unnecessary.
+
+Risk: Optional control-plane push can send inventory to an unintended destination or expose an API token.
+
+Mitigation: Push only to an operator-approved URL with an operator-managed token; do not paste or print the token.
+
+Risk: Malformed inventory or missing discovery trust fields may produce misleading findings.
+
+Mitigation: Validate against the packaged schema and require the claimed discovery provenance and permissions before scanning.
+
+## Reference(s):
+
+- [agent-bom project](https://github.com/msaad00/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-ingest)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides local exports in JSON, SARIF, HTML, Markdown, CycloneDX, or SPDX formats.]
+
+## Skill Version(s):
+
+0.107.2 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

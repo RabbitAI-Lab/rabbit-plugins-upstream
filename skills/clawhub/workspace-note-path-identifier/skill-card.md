@@ -1,38 +1,49 @@
-## Description: <br>
-Plan a knowledge-base placement path. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Plans a knowledge-base archive path from a supported document type and account reference.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and researchers use this skill to return a concise knowledge-base path for a note, report, or article placement request in controlled validation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The generated path may be too narrow or unsuitable for a real knowledge-base workflow. <br>
-Mitigation: Verify the returned path before using it for production knowledge-base placement. <br>
+## Use Case:
 
+Knowledge-base publishers and agents use this skill to plan an archive path for a supported document type and account reference. It returns a path suggestion, not a created or published file.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/workspace-note-path-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Plain text path string] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a single concise path value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: A proposed archive path could be mistaken for a saved or published document.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm any file creation or publication separately; this skill only returns a path.
+
+## Reference(s):
+
+- [Knowledge Placement Planner on ClawHub](https://clawhub.ai/wxt-ai/skills/workspace-note-path-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON containing a path string]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Proposes an archives/*.csv path; does not create or publish a file.]
+
+## Skill Version(s):
+
+1.1.0 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

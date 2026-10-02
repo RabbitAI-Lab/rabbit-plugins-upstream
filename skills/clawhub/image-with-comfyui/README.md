@@ -1,11 +1,13 @@
 # Image with ComfyUI
 
-Call a local ComfyUI instance for **text-to-image**, **image-to-image/edit**, and **image-to-video** generation. Supports Z-Image, SD3.5 Medium, Qwen Image Edit, and Wan2.2 models.
+Call a user-defined ComfyUI server (local or remote) for **text-to-image**, **image-to-image/edit**, **image-to-video**, and **image-to-3D-mesh** generation. **Qwen-Image 2.1** is the default model for both T2I and image editing (including multi-image reference composition); Z-Image, SD3.5 Medium, Qwen Image Edit (2511), Wan2.2, and Hunyuan 3D v2.1 (3D mesh) are available as options.
+
+> **New here?** Qwen-Image 2.1 needs a one-time ComfyUI setup — see [Qwen-Image 2.1 ComfyUI Setup](#qwen-image-21-comfyui-setup).
 
 ## Quick Start
 
-1. **Ensure ComfyUI is running** on your local machine.
-2. **Set the URL** (via environment variable or `config.json`):
+1. **Ensure a ComfyUI server is running** (locally, or on a host you can reach).
+2. **Set the URL** (via environment variable or `config.json`). The endpoint is user-defined — the bundled default is `http://127.0.0.1:8188`; point `COMFYUI_URL` at any ComfyUI server you control — a data-flow warning is printed on every run for non-local hosts. If no server is reachable, the script exits with configuration instructions:
    ```bash
    export COMFYUI_URL=http://comfyui.host:api-port
    ```
@@ -19,35 +21,137 @@ Read `config.json` at the skill root. All values can be overridden by environmen
 |---|---|---|
 | `COMFYUI_URL` | `comfyui_url` | `http://localhost:8188` |
 | `COMFYUI_TIMEOUT` | `timeout_seconds` | `120` |
-| `COMFYUI_POLL_INTERVAL` | `poll_interval_seconds` | `3` |
+| `COMFYUI_POLL_INTERVAL` | `poll_interval_seconds` | `1` |
+| `COMFYUI_KEEP_MODELS_RESIDENT` | `keep_models_resident` | `false` |
 | `COMFYUI_OUTPUT_DIR` | `output_dir` | `media/comfyui` |
+| `COMFYUI_APIKEY` | `comfyui_api_key` | _(none → no auth header)_ |
 
-**Priority:** Environment variables > `config.json`
+**Priority:** Environment variables > `config.json`.
+
+> Note: The config.json key `comfyui_api_key` (string) is optional. When empty/absent, **no** `Authorization` header is added and behavior is unchanged. When set, every ComfyUI API request carries `Authorization: Bearer <key>` (env var wins over the config value).
+
+### 🔒 ComfyUI API Key (Bearer Auth)
+
+If your ComfyUI instance requires an API key, set it via either of these (env var takes precedence):
+
+```bash
+export COMFYUI_APIKEY=sk-your-key
+```
+
+or, in `config.json`:
+
+```json
+"comfyui_api_key": "sk-your-key"
+```
+
+When present, the skill adds `Authorization: Bearer <key>` to all ComfyUI API calls (`/prompt`, `/history`, `/object_info`, `/upload/image`, `/view`, `/upload/*`). Do not commit your key to version control — prefer the env var, and never paste it into the chat or logs.
+
+> **⚠️ This skill only *sends* the key — it doesn't authenticate your ComfyUI itself.** For the Bearer key to be honored, the ComfyUI server must run an authentication custom node that recognizes that key. The reference implementation is [`sunshinejnjn/comfyui-auth`](https://github.com/sunshinejnjn/comfyui-auth) (a fork of the original [`ivellioscolin/comfyui-auth`](https://github.com/ivellioscolin/comfyui-auth)). To set it up:
+> 1. Clone it into your ComfyUI: `git clone https://github.com/sunshinejnjn/comfyui-auth.git ComfyUI/custom_nodes/comfyui-auth`
+> 2. Edit its `apikeys.conf` — add a `label = <your-key>` line (the key is read **as written**, plain or as configured), then restart ComfyUI (the plugin reloads its config per request, but a re-clone/restart makes the new code load).
+> 3. Point this skill at that server via `COMFYUI_URL` and set `COMFYUI_APIKEY` to that same key.
+>
+> Without the plugin installed on the server, the key is silently ignored and the API responds as if no auth is required. The `test` command (`python3 image_with_comfyui.py test`) will tell you whether the endpoint answers before you try generating.
+
+### Data & Privacy
+
+- **Transmitted to the endpoint**: prompts and workflow JSON (all modes); **full source images** for I2I and I2V.
+- **Endpoint** is user-defined (`COMFYUI_URL` env var > `comfyui_url` in `config.json`; bundled default `http://127.0.0.1:8188`). A non-local endpoint prints a warning on every run, and an unreachable server exits with configuration instructions (this section + [Qwen-Image 2.1 ComfyUI Setup](#qwen-image-21-comfyui-setup)). Use HTTPS for remote servers and never put credentials in the URL or logs.
+- **Written to disk**: generated media is saved under `output_dir` (config) or `COMFYUI_OUTPUT_DIR` in your workspace; delivery staging copies live in `~/.openclaw/media/outbound/` and are removed after a successful send. If your content is sensitive, review the endpoint and output location before running.
 
 ## Models & Custom Nodes
 
 This skill uses the **existing** ComfyUI installation — it does not ship models or nodes. Before using, ensure your ComfyUI has:
 
 ### Required Models
-| Model | Expected Location |
-|---|---|
-| Z-Image (SVD XT) | `ComfyUI/models/checkpoints/` |
-| SD3.5 Medium | `ComfyUI/models/checkpoints/` |
-| Qwen Image Edit Plus | `ComfyUI/models/checkpoints/` |
-| Wan2.2 1.3B | `ComfyUI/models/checkpoints/` |
-| Wan2.2 VAEMODEL | `ComfyUI/models/vae/` |
-| Wan2.2 Audio Model | `ComfyUI/models/audio_encoders/` |
-| T5XXL & FluxFill | `ComfyUI/models/clip/` |
-| RIFE (for video interpolation) | `ComfyUI/models/frameworks/` |
+
+Every model below has a **verified download source** in [`MODEL_URL.txt`](MODEL_URL.txt) — open that file for the exact HuggingFace repo, folder, and filename. Our server currently runs a **UC/NSFW-merged set** (Qwen-Image 2.1 = uncensored, Wan2.2 = NSFW creator merges); `MODEL_URL.txt` lists **SFW/official equivalents** for a clean setup.
+
+| Model | Expected Location | Source |
+|---|---|---|
+| Z-Image (SVD XT) | `ComfyUI/models/checkpoints/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| SD3.5 Medium | `ComfyUI/models/checkpoints/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| Qwen Image Edit Plus | `ComfyUI/models/checkpoints/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| **Qwen-Image 2.1** (default T2I + edit) | see [Qwen-Image 2.1 ComfyUI Setup](#qwen-image-21-comfyui-setup) | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| Wan2.2 1.3B | `ComfyUI/models/checkpoints/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| Wan2.2 VAEMODEL | `ComfyUI/models/vae/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| Wan2.2 Audio Model | `ComfyUI/models/audio_encoders/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| T5XXL & FluxFill | `ComfyUI/models/clip/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
+| **Hunyuan 3D v2.1** (I2M) | `ComfyUI/models/checkpoints/` | [`MODEL_URL.txt`](MODEL_URL.txt) |
 
 ### Required Custom Nodes
-| Node | Package | Install Command |
-|---|---|---|
-| Impact Pack | `ComfyUI-Impact-Pack` | `cd ComfyUI/custom_nodes && git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git && pip install -r requirements.txt` |
-| WAS Nodes | `ComfyUI-WAS-Nodes` | `cd ComfyUI/custom_nodes && git clone https://github.com/WASasquatch/ComfyUI-WAS-Nodes.git` |
-| ComfyUI-Manager | `ComfyUI-Manager` | `cd ComfyUI/custom_nodes && git clone https://github.com/comfyanonymous/ComfyUI-Manager.git` |
 
-When a missing node or model is detected, the system will report the exact package and install command.
+Install **pinned at reviewed commits** (as of 2026-09-20). Check out the exact commit rather than a mutable default branch, and install dependencies in an isolated venv under a non-privileged user — never `pip install` as root:
+
+| Node | Package (repo) | Pinned commit |
+|---|---|---|
+| Impact Pack | [ltdrdata/ComfyUI-Impact-Pack](https://github.com/ltdrdata/ComfyUI-Impact-Pack) | `429d0159a` |
+| WAS Nodes | [WASasquatch/was-node-suite-comfyui](https://github.com/WASasquatch/was-node-suite-comfyui) *(repo renamed from `ComfyUI-WAS-Nodes`)* | `9934caa92` |
+| ComfyUI-Manager | [Comfy-Org/ComfyUI-Manager](https://github.com/Comfy-Org/ComfyUI-Manager) *(migrated from `comfyanonymous/`)* | `946ef8fe6` |
+| rgthree | [rgthree/rgthree-comfy](https://github.com/rgthree/rgthree-comfy) | — (required by the Qwen-Image 2.1 workflow's LoRA pass-through node) |
+
+```bash
+cd ComfyUI/custom_nodes
+git clone https://github.com/ltdrdata/ComfyUI-Impact-Pack.git
+cd ComfyUI-Impact-Pack && git checkout --detach 429d0159ad429e64d2b3916e6e7be9c22d025c3c
+python3 -m venv .venv && .venv/bin/pip install -r requirements.txt
+```
+
+Repeat the same pin-and-checkout pattern for the other two repositories (use their pinned commits above). Review dependency lists before installing, and re-check upstream commits before upgrading a pin.
+
+When a missing node or model is detected, the script reports the package name and a manual install hint — it never executes `git clone` itself (ComfyUI may run on another host).
+
+## Qwen-Image 2.1 ComfyUI Setup
+
+**Qwen-Image 2.1** (model id `qwen21`) is the **default** model for both `t2i` and `i2i`. One workflow covers text-to-image, single-image edit, and multi-image reference composition. It is a distilled model — **CFG must stay at 1.0** (the script enforces this; raising it burns the image).
+
+### Prerequisites
+- **ComfyUI ≥ 0.37.0** (frontend 1.53.6). The workflow uses core nodes that only exist in recent builds:
+  - `TextEncodeQwenImage21` (`comfy_extras.nodes_qwen`)
+  - `ResolutionSelector` (`comfy_extras.nodes_resolution`)
+  - `ComfySwitchNode` / `If/Else Switch` (`comfy_extras.nodes_logic`)
+  - `PrimitiveBoolean` (`comfy_extras.nodes_primitive`)
+  
+  If any show up as a red *missing node*, **update ComfyUI** — they are core, not a custom pack. (`If/Else Switch` is experimental and may be hidden from node search until you enable experimental nodes; loading the workflow works either way.)
+
+### Model files (3)
+Place each in the folder shown, under your ComfyUI install. These are the exact filenames the workflow expects:
+
+| File | Destination folder |
+|---|---|
+| `QWEN_Image/qwen-image-2.1-UC-int8_convrot.safetensors` | `ComfyUI/models/diffusion_models/` (keep the `QWEN_Image/` subfolder; older builds may use `models/unet/`) |
+| `qwen3vl_8b_int8_convrot.safetensors` | `ComfyUI/models/text_encoders/` (Qwen3-VL 8B int8; loaded with `type: qwen_image`) |
+| `qwen_image_2.1_vae_bf16.safetensors` | `ComfyUI/models/vae/` |
+
+> Unlike the original foprc workflow (which used a GGUF Q8 model + ComfyUI-GGUF), this workflow loads the diffusion model via **`UNETLoader`** with `weight_dtype: fp8_e4m3fn_fast`. That **removes the ComfyUI-GGUF dependency** — the only custom node needed is **rgthree**.
+
+If you use a different quantization/filename, update `unet_name` in `workflows/qwen_image_2.1_api.json` (node `17`) to match what's on disk.
+
+### Custom nodes
+- **rgthree-comfy** (for the `Power Lora Loader` node) — install via ComfyUI Manager or `git clone https://github.com/rgthree/rgthree-comfy` into `custom_nodes/`, then restart.
+- All other nodes are core ComfyUI.
+- *Optional:* the LoRA stack is off by default and passes the model/CLIP straight through. If you don't have rgthree, you can instead delete node `10` and rewire `17 → 6` (model) and `2 → 5` (clip).
+
+### Verifying your setup
+```bash
+python3 image_with_comfyui.py test          # server reachable?
+python3 image_with_comfyui.py t2i --prompt "A red fox in snow" --aspect 1:1
+python3 image_with_comfyui.py i2i --prompt "Change the sky to sunset" --image /path/in.jpg
+```
+If a loader dropdown is blank in the web UI, the file isn't where ComfyUI is looking — check the folder above. If a node reports *missing*, update ComfyUI (see Prerequisites).
+
+### How the dual-mode switch works
+Node `12` (`PrimitiveBoolean`) is the master switch:
+- **OFF** (`false`) → pure **T2I**: the sampler starts from an empty latent sized by `ResolutionSelector` (aspect ratio + megapixels).
+- **ON** (`true`) → **edit / multi-image**: reference image(s) feed `TextEncodeQwenImage21`, whose output latent is sampled instead. The script wires 1 image to `image_1`, and extra images to `image_2 … image_N` (up to 16).
+
+### Multi-image prompt format
+With 2+ reference images, the model sees them in **slot order** (`image_1`, `image_2`, …). Reference each by index in the prompt so it knows which is which:
+```
+Put the garment from <image2> onto the person in <image1>, keep <image1>'s pose and lighting.
+Combine both photos into one scene: subject of <image1> on the left, subject of <image2> on the right.
+```
+Keep the instruction concise and in the user's language; the skill passes it through verbatim. `--image` accepts multiple paths (order = slot order = `<image1>`, `<image2>` …).
 
 ## Testing
 
@@ -60,35 +164,59 @@ python3 image_with_comfyui.py test
 # Test each workflow individually
 python3 image_with_comfyui.py t2i --prompt "A cat on a windowsill"
 
-# Verify all 4 workflows
-python3 test_all_workflows.py
+# Run the health check before each batch of jobs
+python3 image_with_comfyui.py test
 ```
+
+### Output filename scheme
+
+Generated files use a short mode prefix + timestamp (`YYYYMMDD_HHMMSS`) + ComfyUI's counter:
+
+| Mode | Prefix | Example (JPG) |
+|---|---|---|
+| Qwen-Image 2.1 T2I | `qt2i` | `qt2i_20260928_050328_00001.jpg` |
+| Qwen-Image 2.1 I2I | `qi2i` | `qi2i_20260928_050328_00001.jpg` |
+| Qwen Image Edit (2511) | `qei2i` | `qei2i_20260928_050328_00001.jpg` |
+| Z-Image T2I | `zt2i` | `zt2i_20260928_050328_00001.jpg` |
+| SD3.5 Medium T2I | `st2i` | `st2i_20260928_050328_00001.jpg` |
+| Character cutout (i2m step 1) | `mcut` | `mcut_20260928_050328_00001.png` |
+| Hunyuan 3D v2.1 i2m | `i2m` | `i2m_20260928_050328_00001.glb` |
+| i2m delivery package | `i2m` | `i2m_20260928_050328_00001.zip` (the ×3000-scaled GLB inside) |
+
+The trailing underscore ComfyUI appends is stripped, so names never end in `_`. The i2m GLB is **scaled ×3000 in place, then packaged as `<same-stem>.zip`** — the `.glb` stays on disk, but what gets sent to the user is the **zip** (delivery rules: SKILL.md → Output Delivery; the character image is also sent, as an image, and the mesh is never rendered).
 
 ### Manual Workflow Testing
 
 You can also test workflows directly in the ComfyUI web UI. Copy any workflow file from `workflows/` into ComfyUI, load it, and run:
 
+- **Qwen-Image 2.1 (T2I + edit + multi-image, default)**: `workflows/qwen_image_2.1_api.json`
 - **Z-Image T2I**: `workflows/z-image_t2i_api.json`
 - **SD3.5 Medium T2I**: `workflows/sd3.5-med_t2i_api.json`
-- **Qwen Image Edit**: `workflows/qwen_image-edit_api.json`
+- **Qwen Image Edit (2511)**: `workflows/qwen_image-edit_api.json`
 - **Wan2.2 I2V**: `workflows/wan2.2_i2v_api.json`
+- **Hunyuan 3D v2.1 I2M (image → 3D mesh)**: `workflows/hunyuan3d-v2.1_i2m_api.json`
 
 ## Important Notes
 
-### Local Skill — No Separate Installation
+### Local Skill — No Automatic Installation
 
-This skill **does not install anything**. It connects to your existing ComfyUI instance via API calls. The workflows, models, and custom nodes are already configured in your ComfyUI setup. This skill simply provides an interface to use them.
+This skill **does not install anything automatically**. It connects to your existing ComfyUI instance via API calls; the workflows, models, and custom nodes must already be configured in your ComfyUI setup. If a node is missing, the skill only *reports* the package and a pinned manual install hint (it never runs `git clone` itself, since ComfyUI may be on another host). The manual commands in [Required Custom Nodes](#required-custom-nodes) are optional setup steps for your own ComfyUI — review and pin them before running.
 
-### VRAM Release After Generation
+### VRAM Release vs. Speed Tradeoff
 
-This skill uses the `UnloadAllModels` node (bypassed automatically if unavailable) to free VRAM after each generation. This prevents VRAM exhaustion during repeated tasks. The original node may not be present in your ComfyUI installation — the system will detect and skip it transparently.
+By default this skill uses the `UnloadAllModels` node (and `UnloadModel` in the Qwen edit branch) to free VRAM after each generation, preventing VRAM exhaustion during repeated tasks. The unload nodes are stripped only when `keep_models_resident` is explicitly set to `true` (config or `COMFYUI_KEEP_MODELS_RESIDENT`); otherwise they run and release VRAM on every run. The unload nodes are bypassed automatically if a given ComfyUI instance doesn't have them — the system detects and skips them transparently.
+
+> **The slow part of a “5-minute” run is almost never inference.** It's model reload *or* agent-side overhead before the run, not the sampling. See the skill's **Execution Discipline — Fast Path** section for how the run is expected to be invoked.
 
 ### Workflow Modifications
 
-All workflow files in the `workflows/` directory are **adapted versions** of original ComfyUI workflows. The original author information and credits are preserved within each JSON file. Modifications include:
-- API-ready output node placement
-- Parameter exposure for external control
-- Auto-enhance and preprocessing pipeline integration
+All workflow files in the `workflows/` directory are **adapted versions** of original ComfyUI workflows. They are repackaged into self-contained HTTP-API graphs — the original source is **not** kept inside the JSON. The original source for each workflow plus exactly what was changed is documented in [references/attribution.md](references/attribution.md). Known modifications include:
+- API-ready output node placement + timestamped output filenames
+- Parameter exposure (aspect, steps, CFG, seed, neg, etc.) for external control
+- Prompt auto-routing (e.g. Qwen Edit routes to the positive prompt node)
+- A standard **safetensors** model load replacing the original GGUF load (Qwen-Image 2.1), dropping the ComfyUI-GGUF dependency
+- VRAM-cleanup nodes (`UnloadAllModels`, `UnloadModel`) added, auto-bypassed when absent
+- The SD3.5 double-`.safetensors` suffix bug fixed; Wan2.2 pointed at 4-step Lightspeed weights
 
 ### Error Handling
 
@@ -101,17 +229,31 @@ The system handles three categories of errors automatically:
 ## CLI Reference
 
 ```bash
-# Generate image from text
-python3 image_with_comfyui.py t2i --prompt "Your description" --aspect 16:9
+# Generate image from text (default: Qwen-Image 2.1)
+python3 image_with_comfyui.py t2i --prompt "Your description" --aspect 1:1
 
-# Generate image with SD3.5
-python3 image_with_comfyui.py sd35 --prompt "Your description" --negative "blurry"
+# Generate with an explicit model
+python3 image_with_comfyui.py t2i --model z-image --prompt "Your description"
+python3 image_with_comfyui.py t2i --model sd35 --prompt "Your description" --negative "blurry"
 
-# Edit an image
+# Edit an image (default: Qwen-Image 2.1)
 python3 image_with_comfyui.py i2i --prompt "Replace background" --image /path/to/image.png
+
+# Multi-image reference (2+ images; order = <image1>, <image2>, ...)
+python3 image_with_comfyui.py i2i \
+  --prompt "Put the shirt from <image2> on the person in <image1>" \
+  --image /path/person.jpg /path/shirt.jpg
 
 # Generate video from image
 python3 image_with_comfyui.py wan2.2 --prompt "Camera pans left" --image /path/to/image.png
+
+# Turn the character in an image into a 3D mesh (GLB)
+# Default: extract the main character first (i2i transparent cutout), then generate
+python3 image_with_comfyui.py i2m --image /path/to/character.jpg
+# --extract rembg (u2net cutout, no redraw) | --extract none (image used as-is)
+# Delivery: character image (as an image) + i2m_*.zip (as an attachment);
+# the GLB is scaled x3000 in place before zipping (--scale 1 to skip);
+# the mesh is never rendered (no GLB -> image/video conversion; viewer links OK)
 
 # Test ComfyUI connection
 python3 image_with_comfyui.py test
@@ -121,7 +263,10 @@ python3 image_with_comfyui.py test
 
 | Mode | Timeout |
 |---|---|
+| T2I (Qwen-Image 2.1) | 300s |
 | T2I (Z-Image) | 100s |
 | T2I (SD3.5) | 100s |
-| I2I (Qwen) | 600s |
+| I2I (Qwen-Image 2.1, incl. multi-image) | 600s |
+| I2I (Qwen 2511) | 600s |
 | I2V (Wan2.2) | 1000s |
+| I2M (Hunyuan 3D v2.1) | 900s |

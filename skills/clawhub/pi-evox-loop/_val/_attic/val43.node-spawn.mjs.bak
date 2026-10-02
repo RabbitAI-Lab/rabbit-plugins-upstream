@@ -1,0 +1,185 @@
+#!/usr/bin/env node
+/**
+ * val43.mjs — #43 受控验证（确定性 / 无需 LLM）
+ *
+ * 目的：对本轮三处改动做「配对对照 + 无回归」断言，全部为离线确定性测试，
+ *       不依赖任何模型端点（本地无 API key 时的等价受控框架）。
+ *
+ * 覆盖：
+ *   A. P0③ 引导式 manual deposit（engine/light/distill.mjs + light-cli.mjs）
+ *      A1 占位符 strategy 被拒绝 / A2-A3 anti_patterns+source 透传
+ *      A4-A7 draft --commit 落库为 quarantined 引导草稿
+ *      A8 未补 FIX 的占位符草稿不落库
+ *   B. P1④ recall 负载均衡偏置（evolver-recall.mjs）—— scale-0 无回归 + 偏置生效
+ *   C. P1⑤ 注入冲突守卫 —— 真冲突剔除 / 单基因无副作用 / 复合 token 不误判
+ *   D. 注入与质量契约（与 pi_evolve.loadApprovedStrategy 同源过滤，经真实 recall 代码验证）
+ *
+ * 隔离：所有测试用 EVO_STORE_DIR / EVOX_HITS_DIR 指向 _val/run43 下的临时目录，
+ *       绝不触碰真实 ~/.evomap/assets。
+ */
+import fs from 'node:fs';
+import path from 'node:path';
+import { spawnSync } from 'node:child_process';
+import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const HERE = path.dirname(fileURLToPath(import.meta.url));
+const REPO = path.resolve(HERE, '..');
+const CODE = path.join(REPO, 'code');
+const RUN = path.join(REPO, '_val', 'run43');
+
+let PASS = 0, FAIL = 0;
+const FAILED = [];
+function check(id, desc, cond, detail = '') {
+	const ok = !!cond;
+	if (ok) PASS++; else { FAIL++; FAILED.push(`${id} ${desc}`); }
+	console.log(`${ok ? '✅' : '❌'} ${id} ${desc}${detail ? `  — ${detail}` : ''}`);
+}
+function resetDir(d) { fs.rmSync(d, { recursive: true, force: true }); fs.mkdirSync(d, { recursive: true }); }
+function writeJsonl(p, arr) {
+	fs.mkdirSync(path.dirname(p), { recursive: true });
+	fs.writeFileSync(p, arr.map((o) => JSON.stringify(o)).join('\n') + '\n');
+}
+function readGenesOf(dir) {
+	const p = path.join(dir, 'genes.jsonl');
+	if (!fs.existsSync(p)) return [];
+	return fs.readFileSync(p, 'utf8').split('\n').map((s) => s.trim()).filter(Boolean).map((s) => { try { return JSON.parse(s); } catch { return null; } }).filter(Boolean);
+}
+function mkGene({ id, signals, strategy, anti = [], category = 'repair' }) {
+	return {
+		type: 'Gene', schema_version: '1.13.0', id, category,
+		signals_match: signals,
+		strategy: Array.isArray(strategy) ? strategy : [strategy],
+		anti_patterns: anti,
+		constraints: { max_files: 12, forbidden_paths: ['.git', 'node_modules'] },
+		validation: [], summary: 'val43 test gene',
+		generation_meta: { source: 'val43' },
+		claims: [{ predicate: 'output_contract', kind: 'behavioral' }],
+		scope: { signals: signals.map((s) => `capability:${s}`) },
+		asset_id: `sha256:${id}`,
+	};
+}
+function seedStore(dir, genes, approveAll = true) {
+	resetDir(dir);
+	writeJsonl(path.join(dir, 'genes.jsonl'), genes);
+	writeJsonl(path.join(dir, 'review.jsonl'), genes.map((g) => ({
+		assetId: g.asset_id, state: approveAll ? 'approved' : 'quarantined', reason: 'val43', at: new Date().toISOString(),
+	})));
+}
+function runRecall({ store, query, top = 5, hitsDir }) {
+	const env = { ...process.env, EVO_STORE_DIR: store, EVOX_QUERY: query, EVOX_TOPN: String(top) };
+	if (hitsDir) env.EVOX_HITS_DIR = hitsDir;
+	const r = spawnSync(process.execPath, [path.join(CODE, 'evolver-recall.mjs')], { env, encoding: 'utf8', cwd: REPO });
+	return { out: `${r.stdout ?? ''}${r.stderr ?? ''}`, status: r.status };
+}
+/** 从召回输出解析被选中的 gene_id 序列（行格式：[#N|gene_x] [cat] text） */
+function pickIds(out) {
+	const ids = [];
+	for (const line of out.split('\n')) {
+		const m = line.match(/^\[#\d+\|([^\]]+)\]/);
+		if (m) ids.push(m[1]);
+	}
+	return ids;
+}
+function runLightCli(args, storeDir) {
+	return spawnSync(process.execPath, [path.join(CODE, 'light-cli.mjs'), ...args], {
+		env: { ...process.env, EVO_STORE_DIR: storeDir }, encoding: 'utf8', cwd: REPO,
+	});
+}
+
+console.log('═══════════════ val43 — #43 受控验证（LLM-free）═══════════════\n');
+resetDir(RUN);
+
+// ─────────────── A. P0③ 引导式 manual deposit ───────────────
+console.log('── A. P0③ 引导式沉淀（light/distill + light-cli）──');
+const distill = await import(pathToFileURL(path.join(CODE, 'engine/light/distill.mjs')).href);
+
+const a1 = distill.distillManual({ strategy: "AVOID: x. FIX: <在此填写可执行修法>", signals: ['encoding-error'] });
+check('A1', '占位符 strategy 被拒绝（守卫）', a1.gene === null && /拒绝/.test(a1.raw), String(a1.raw).slice(0, 48));
+
+const a2 = distill.distillManual({
+	strategy: "FIX: read with encoding='gbk'", signals: ['encoding-error'],
+	antiPatterns: ['assume-default-utf8'], source: 'light-manual-guided',
+});
+check('A2', 'anti_patterns 落库', !!a2.gene && (a2.gene.anti_patterns || [])[0] === 'assume-default-utf8');
+check('A3', 'generation_meta.source 透传', !!a2.gene && a2.gene.generation_meta.source === 'light-manual-guided');
+
+const storeA = path.join(RUN, 'storeA');
+const cliA = runLightCli([
+	'draft', '--error', "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd6 in position 0: invalid start byte (events.jsonl)",
+	'--tool', 'read', '--context', 'sum events.jsonl',
+	'--strategy', "FIX: read events.jsonl with encoding='gbk'", '--commit',
+], storeA);
+const gA = readGenesOf(storeA);
+check('A4', 'draft --commit 落库 1 条引导草稿', gA.length === 1, `genes=${gA.length} rc=${cliA.status}`);
+check('A5', '草稿带 anti_patterns=assume-default-utf8', !!gA[0] && (gA[0].anti_patterns || []).includes('assume-default-utf8'), JSON.stringify(gA[0]?.anti_patterns));
+check('A6', '草稿 source=light-manual-guided', !!gA[0] && gA[0].generation_meta.source === 'light-manual-guided');
+check('A7', '草稿台账态=quarantined（待审）', /quarantined/.test(fs.existsSync(path.join(storeA, 'review.jsonl')) ? fs.readFileSync(path.join(storeA, 'review.jsonl'), 'utf8') : ''));
+
+const storeA2 = path.join(RUN, 'storeA2');
+runLightCli(['draft', '--error', "UnicodeDecodeError: 'utf-8' codec can't decode byte 0xd6", '--commit'], storeA2);
+check('A8', '未补 FIX 的占位符草稿不落库', readGenesOf(storeA2).length === 0, `genes=${readGenesOf(storeA2).length}`);
+
+// ─────────────── B/C. recall 负载均衡 + 冲突守卫 ───────────────
+console.log('\n── B. P1④ 负载均衡偏置（scale-0 无回归 / 偏置生效）──');
+const geneGBK = mkGene({ id: 'gene_test_gbk', signals: ['read', 'encoding-error'], strategy: "FIX: read the file with encoding='gbk' to avoid UnicodeDecodeError" });
+const geneJSON = mkGene({ id: 'gene_test_json', signals: ['read', 'invalid-json'], strategy: 'FIX: parse each line with json.loads and skip malformed lines' });
+const geneFILE = mkGene({ id: 'gene_test_file', signals: ['file-not-found'], strategy: 'FIX: list the directory before assuming a path exists' });
+
+const storeB = path.join(RUN, 'storeB'); seedStore(storeB, [geneGBK, geneJSON, geneFILE]);
+const hitsB = path.join(RUN, 'hitsB'); resetDir(hitsB); // 空命中库 = scale-0
+const outB = runRecall({ store: storeB, query: 'gbk file read error unicode decode', top: 5, hitsDir: hitsB }).out;
+const idsB = pickIds(outB);
+check('B1', 'scale-0：GBK 对靶基因排首位', idsB[0] === 'gene_test_gbk', idsB.join(','));
+check('B2', 'scale-0：JSON 对靶基因在列（未误删）', idsB.includes('gene_test_json'));
+check('B3', 'scale-0：不对靶基因被排除', !idsB.includes('gene_test_file'));
+
+const geneHot = mkGene({ id: 'gene_test_hot', signals: ['alpha'], strategy: 'use alpha method' });
+const geneCold = mkGene({ id: 'gene_test_cold', signals: ['bravo'], strategy: 'use bravo method' });
+const storeC = path.join(RUN, 'storeC'); seedStore(storeC, [geneHot, geneCold]);
+const hitsC0 = path.join(RUN, 'hitsC0'); resetDir(hitsC0);
+const ids0 = pickIds(runRecall({ store: storeC, query: 'alpha bravo', top: 5, hitsDir: hitsC0 }).out);
+check('B4', 'scale-0：等分基因按库序（hot 在前，偏置为 0）', ids0[0] === 'gene_test_hot' && ids0[1] === 'gene_test_cold', ids0.join(','));
+
+const hitsC1 = path.join(RUN, 'hitsC1'); resetDir(hitsC1);
+writeJsonl(path.join(hitsC1, 'hits.jsonl'), Array.from({ length: 10 }, () => ({ ts: new Date().toISOString(), gene_id: 'gene_test_hot', asset_id: 'sha256:gene_test_hot' })));
+const ids1 = pickIds(runRecall({ store: storeC, query: 'alpha bravo', top: 5, hitsDir: hitsC1 }).out);
+check('B5', 'P1④ 偏置生效：热门下压 / 冷门上抬（顺序翻转）', ids1[0] === 'gene_test_cold' && ids1.includes('gene_test_hot'), ids1.join(','));
+
+console.log('\n── C. P1⑤ 注入冲突守卫 ──');
+const geneP = mkGene({ id: 'gene_test_conf_p', signals: ['read', 'encoding-error'], strategy: "FIX: read the file with encoding='gbk'", anti: ['use utf-8 default'] });
+const geneQ = mkGene({ id: 'gene_test_conf_q', signals: ['read', 'invalid-json'], strategy: 'FIX: just use the default utf-8 encoding, it works fine' });
+const storeD = path.join(RUN, 'storeD'); seedStore(storeD, [geneP, geneQ]);
+const hitsD = path.join(RUN, 'hitsD'); resetDir(hitsD);
+const idsD = pickIds(runRecall({ store: storeD, query: 'gbk utf-8 encoding read', top: 5, hitsDir: hitsD }).out);
+check('C1', '真冲突：剔除被 anti_patterns 命中的低分基因', idsD.includes('gene_test_conf_p') && !idsD.includes('gene_test_conf_q'), idsD.join(','));
+
+const storeE = path.join(RUN, 'storeE'); seedStore(storeE, [geneP]);
+const idsE = pickIds(runRecall({ store: storeE, query: 'gbk utf-8 encoding read', top: 5, hitsDir: hitsD }).out);
+check('C2', '单基因场景无副作用（不被误删）', idsE.includes('gene_test_conf_p'), idsE.join(','));
+
+const geneBlindP = mkGene({ id: 'gene_test_blind_p', signals: ['read', 'encoding-error'], strategy: "FIX: read with encoding='gbk'", anti: ['assume-default-utf8'] });
+const geneBlindQ = mkGene({ id: 'gene_test_blind_q', signals: ['read', 'invalid-json'], strategy: 'FIX: just use the default utf-8 encoding, it works fine' });
+const storeF = path.join(RUN, 'storeF'); seedStore(storeF, [geneBlindP, geneBlindQ]);
+const idsF = pickIds(runRecall({ store: storeF, query: 'gbk utf-8 encoding read', top: 5, hitsDir: hitsD }).out);
+check('C3', '复合 token anti_patterns 不误判（保守·宁缺毋滥）', idsF.includes('gene_test_blind_p') && idsF.includes('gene_test_blind_q'), idsF.join(','));
+
+// ─────────────── D. 注入 / 质量契约 ───────────────
+console.log('\n── D. 注入与质量契约（同 loadApprovedStrategy 过滤）──');
+const geneNarr = mkGene({ id: 'gene_test_narr', signals: ['read', 'encoding-error'], strategy: 'Now I understand the context, let me read the file with gbk encoding and report the total' });
+const storeG = path.join(RUN, 'storeG'); seedStore(storeG, [geneNarr]);
+const idsG = pickIds(runRecall({ store: storeG, query: 'gbk read encoding', top: 5, hitsDir: hitsD }).out);
+check('D1', '叙述型 strategy 被召回守卫拦截（§20 质量守卫）', !idsG.includes('gene_test_narr'), idsG.join(','));
+
+const storeH = path.join(RUN, 'storeH'); seedStore(storeH, [geneGBK], false); // quarantined
+const idsH = pickIds(runRecall({ store: storeH, query: 'gbk read encoding', top: 5, hitsDir: hitsD }).out);
+check('D2', '未审核基因不注入（审核门生效）', !idsH.includes('gene_test_gbk'), idsH.join(','));
+
+const piSrc = fs.readFileSync(path.join(CODE, 'pi_evolve.mjs'), 'utf8');
+check('D3', 'loadApprovedStrategy 过滤契约在源码确认（approved ∩ isRepairLike）',
+	/function loadApprovedStrategy/.test(piSrc) && /isRepairLike\(text\)/.test(piSrc) && /approved\.has\(aid\)/.test(piSrc));
+
+console.log('\n═══════════════════ 汇总 ═══════════════════');
+console.log(`PASS=${PASS}  FAIL=${FAIL}`);
+if (FAIL) { console.log('未通过项：'); FAILED.forEach((f) => console.log(`  - ${f}`)); }
+console.log(`临时库目录：${RUN}（可安全删除）`);
+process.exit(FAIL ? 1 : 0);

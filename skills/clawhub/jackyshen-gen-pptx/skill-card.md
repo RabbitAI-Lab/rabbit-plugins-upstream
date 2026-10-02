@@ -1,45 +1,62 @@
-## Description: <br>
-Creates, reads, edits, combines, and validates PowerPoint .pptx presentations with guidance for design, templates, palettes, and QA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create, edit, and inspect PowerPoint presentations, with optional image generation and quality checks.
 
-## Publisher: <br>
-[mebusw](https://clawhub.ai/user/mebusw) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mebusw](https://clawhub.ai/user/mebusw)
 
-## Use Case: <br>
-Developers and presentation authors use this skill to create new PPTX decks, adapt existing templates, extract presentation content, and run content and visual QA before delivery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read presentation content and create or modify files in the workspace. <br>
-Mitigation: Confirm target files and output paths before execution, and keep backups of important source presentations. <br>
-Risk: Optional image generation or remote image sources may expose presentation intent or introduce unsuitable visuals. <br>
-Mitigation: Use local approved assets or ask the agent to disable external image generation when a local-only workflow is required. <br>
-Risk: PPTX, Node, Python, and conversion tooling may require dependency installs or shell commands. <br>
-Mitigation: Review commands before execution and run the workflow in an isolated workspace with only the required dependencies. <br>
+## Use Case:
 
+People preparing presentations use this skill to generate editable slide decks, revise existing PPTX files, and review slide content and layout.
 
-## Reference(s): <br>
-- [Server-resolved GitHub source](https://github.com/mebusw/jackyshen-gen-pptx) <br>
-- [ClawHub skill page](https://clawhub.ai/mebusw/skills/jackyshen-gen-pptx) <br>
-- [PptxGenJS presentation creation guide](creating.md) <br>
-- [Presentation editing workflow](editing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with inline shell commands and code snippets; generated work may include .pptx files, extracted text, images, or intermediate XML files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May operate on workspace presentation files and use optional image generation, package installation, and QA conversion tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Optional image generation or QA may share sensitive deck content with other skills or services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review data handling before enabling these options; avoid using them for sensitive decks unless approved.
+
+Risk: The LibreOffice helper may load unsafe native code from a shared temporary location.
+
+Mitigation: Use an isolated workspace, avoid shared multi-user hosts, and review or control the helper before routine use.
+
+Risk: Installing dependencies without review may introduce untrusted code.
+
+Mitigation: Review the skill and pin or inspect its dependencies before installation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/mebusw/skills/jackyshen-gen-pptx)
+- [Server-resolved source repository](https://github.com/mebusw/jackyshen-gen-pptx)
+- [Presentation creation guide](artifact/creating.md)
+- [Presentation editing guide](artifact/editing.md)
+- [Slide layouts](artifact/references/slide-layouts.md)
+- [PptxGenJS documentation](https://gitbrent.github.io/PptxGenJS/)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Code, Guidance]
+
+**Output Format:** [PPTX presentations, JavaScript source, and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional images and quality checks when requested.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,38 +1,53 @@
-## Description: <br>
-宠物出行助手，覆盖国内10+航司宠物托运/客舱政策、铁路携带规定和证件办理指南，带毛孩子出行查政策、办证件一站搞定，零配置即装即用。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+宠物出行助手，覆盖国内10+航司宠物托运/客舱政策、铁路携带规定和证件办理指南，带毛孩子出行查政策、办证件一站搞定，零配置即装即用。
 
-## Publisher: <br>
-[travel-skills](https://clawhub.ai/user/travel-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[travel-skills](https://clawhub.ai/user/travel-skills)
 
-## Use Case: <br>
-External users use this skill to look up pet travel policies for major domestic Chinese airlines and rail travel, then generate domestic or international pet document checklists. It is intended for reference planning, not booking, medical advice, or carrier-side operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Airline, railway, and international pet entry requirements can change after release. <br>
-Mitigation: Treat the skill output as reference information and verify time-sensitive requirements with the carrier or official authority before booking or travel. <br>
+## Use Case:
 
+External pet owners and travel planners use this skill to check China-focused airline and railway pet travel policies and generate domestic or international pet document preparation guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page: pet-travel-guide](https://clawhub.ai/travel-skills/skills/pet-travel-guide) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, guidance] <br>
-**Output Format:** [Markdown-facing guidance and structured JSON tool responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local built-in reference data and does not require network access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence) <br>
+Risk: Bundled pet travel policy guidance may be outdated or incomplete for a specific carrier, rail operator, route, destination, or travel date.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm requirements with the airline, rail operator, destination authority, or other official source before booking or travel.
+
+Risk: Users may mistake policy and document guidance for official booking, reservation, or compliance completion.
+
+Mitigation: Use the skill as preparation guidance only; complete bookings, applications, and official confirmations through the relevant carrier or authority.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/travel-skills/skills/pet-travel-guide)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, guidance]
+
+**Output Format:** [JSON tool results for agent-generated Chinese travel guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses bundled China-focused pet travel policy data; no external requests or user data collection are indicated by the evidence.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

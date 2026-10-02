@@ -1,48 +1,57 @@
-## Description: <br>
-Provides FC3D lottery analysis and number-selection guidance using historical draw statistics and 12 filtering methods for straight, group3, and group6 play. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Chance Fc3d Predictor provides educational China Welfare Lottery 3D analysis guidance using historical-data statistics, gameplay rules, probability tables, and candidate-number selection examples.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill to generate FC3D lottery analysis reports, candidate number sets, filtering steps, and optional Python examples for personal reference. Outputs are advisory only and should not be treated as predictions or financial guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake lottery number recommendations for reliable predictions. <br>
-Mitigation: Present outputs as gambling-related entertainment and personal reference only, and require users to apply their own judgment. <br>
-Risk: Lottery guidance can encourage overspending. <br>
-Mitigation: Advise strict spending limits and rational betting before any real-world use. <br>
-Risk: Optional Python examples may install packages, contact an external lottery-data site, and create local report files. <br>
-Mitigation: Review optional code before running it and only execute it in an appropriate local environment. <br>
+## Use Case:
 
+External users use this skill as an educational FC3D lottery reference for reviewing gameplay rules, historical-statistical analysis methods, candidate-number filtering examples, and responsible budgeting reminders. It is advisory only and should not be treated as a way to predict winning numbers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/chance-fc3d-predictor) <br>
-- [README](README.md) <br>
-- [Skill definition](SKILL.md) <br>
-- [FC3D Python algorithm reference](references/fc3d_algorithm_python.md) <br>
-- [FC3D data templates and output norms](references/fc3d_data_templates.md) <br>
-- [FC3D strategy guide](references/fc3d_strategy_guide.md) <br>
-- [500.com FC3D data chart](https://datachart.500.com/fc3d/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown analysis reports with tables, candidate number lists, and optional Python or shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory-only lottery guidance; optional code may fetch external draw data and create local report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.3 (source: release evidence) <br>
+Risk: Users may mistake historical lottery analysis or candidate filtering for a reliable prediction method.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present outputs as educational reference only and keep probability, expected-value, and no-guarantee disclaimers visible.
+
+Risk: Gambling-related guidance can contribute to overspending or chasing losses.
+
+Mitigation: Encourage fixed budgets, spending limits, and stopping rules before any lottery purchase.
+
+Risk: The skill could be misused for minors, online lottery purchasing, or paid prediction claims.
+
+Mitigation: Do not use it to target minors, facilitate lottery purchasing, or market guaranteed or paid winning-number predictions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/gechengling/skills/chance-fc3d-predictor)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, guidance]
+
+**Output Format:** [Markdown with tables and illustrative Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Educational and advisory lottery-analysis content; no bundled execution, storage, network access, credentials, or persistence.]
+
+## Skill Version(s):
+
+4.0.6 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

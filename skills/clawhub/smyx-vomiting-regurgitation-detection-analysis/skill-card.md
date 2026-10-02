@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes indoor fixed-camera pet video to detect vomiting or regurgitation behavior, vomitus appearance, event timing, frequency, and report history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes indoor pet videos for vomiting or regurgitation behavior and produces event summaries, observations, and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and pet-care operators use this skill to review indoor pet camera footage for visual signs of vomiting or regurgitation and to retrieve prior cloud reports. Results are behavioral observations and should not be treated as veterinary diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive indoor pet camera footage and report data may be sent to a remote service for analysis and history lookup. <br>
-Mitigation: Install only after confirming user consent, service trust, data retention expectations, and whether the uploaded media is appropriate for cloud processing. <br>
-Risk: The skill can silently create or reuse cloud identity state and persist local tokens. <br>
-Mitigation: Review account creation, token storage, and cleanup behavior before deployment; restrict execution to environments where that identity behavior is acceptable. <br>
-Risk: Broad automatic triggers can initiate remote analysis or report retrieval when users provide pet footage or ask for historical reports. <br>
-Mitigation: Require clear operator confirmation for sensitive media workflows and document when remote calls occur. <br>
+## Use Case:
 
+Pet owners and veterinary care teams use this skill to review indoor camera footage for possible vomiting or regurgitation events, inspect event details, and retrieve prior reports. Results support observation rather than veterinary diagnosis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-vomiting-regurgitation-detection-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON structured analysis report with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the analysis result to a user-selected output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.7) <br>
+Risk: Indoor pet footage or video URLs are sent to a cloud service and may expose household activity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only footage you are authorized to share; confirm the service endpoint, retention period, and deletion process with the publisher before submitting real household video.
+
+Risk: Analysis history is linked to an automatically managed identity, and user records and tokens are stored locally.
+
+Mitigation: Review authentication and local storage practices with the publisher, restrict access to stored records, and use a trusted device.
+
+Risk: Similar-looking behaviors can be misclassified, and results are not a medical diagnosis.
+
+Mitigation: Confirm suspected events against the footage and consult a veterinarian for persistent symptoms or urgent concerns.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-vomiting-regurgitation-detection-analysis)
+- [Pet analysis API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Markdown]
+
+**Output Format:** [Structured analysis text or JSON with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include event observations, risk prompts, history listings, and an optional saved result file.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

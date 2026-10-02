@@ -1,0 +1,9 @@
+{
+  "recorded_amount": {
+    "scenario_id": "budget_2cd22e7908ff",
+    "currency": "USD",
+    "minor_units": 900100,
+    "display_amount": "USD 9001.00",
+    "budget_band": "standard"
+  }
+}

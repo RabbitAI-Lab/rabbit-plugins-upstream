@@ -1,41 +1,59 @@
-## Description: <br>
-Looks up, searches, and manages Google Contacts and broader Google People API profiles through the gogcli Contacts MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search and manage Google Contacts, inspect People profiles, and search the Google Workspace directory.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to configure an MCP-backed assistant for Google Contacts and Workspace directory lookups, including contact search, profile retrieval, and manager or reports relations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can involve sensitive Google Workspace and Contacts access. <br>
-Mitigation: Install only when the publisher is trusted with Google Workspace access and review enabled scopes with `google-workspace config show`. <br>
-Risk: Write-capable Workspace actions can modify data if enabled. <br>
-Mitigation: Keep Docs, Sheets, Drive, and other write modes off unless needed, and avoid Drive readwrite unless broad Drive-file token access is acceptable. <br>
+## Use Case:
 
+People using an agent can look up personal contacts or Workspace directory entries, inspect profiles and relations, and manage contacts through an authenticated Google account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-contacts) <br>
-- [gogcli dependency](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown with JSON configuration blocks and inline command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include MCP server configuration and Google Workspace tool-use guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release metadata) <br>
+Risk: The connector has ongoing access to Google Contacts and People data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when this access is acceptable; use GOG_READONLY=1 for lookup-only workflows.
+
+Risk: Some delete and merge actions may proceed without enforced user confirmation.
+
+Mitigation: Manually confirm delete and dedupe-apply requests before the agent calls a tool; preview duplicate merges first.
+
+Risk: Contact exports can write personal information to local files, and authentication changes affect account access.
+
+Mitigation: Restrict GOG_FILE_ROOTS and manually confirm exports and authentication changes.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/chrischall/skills/gogcli-mcp-contacts)
+- [gogcli documentation](https://github.com/openclaw/gogcli)
+- [Model Context Protocol documentation](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files]
+
+**Output Format:** [MCP tool responses with contact or directory data; optional vCard (.vcf) exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may contain personal contact and directory information.]
+
+## Skill Version(s):
+
+4.6.0 (source: ClawHub release, package.json, manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

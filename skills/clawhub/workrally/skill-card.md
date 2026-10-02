@@ -1,49 +1,62 @@
-## Description: <br>
-WorkRally CLI is an AIGC comic/video creation workflow skill for AI agents, covering image and video generation, project, series, shot, asset, media, canvas, upload, and download operations through the workrally command line. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create AI-generated images, video, audio, and 3D assets and manage WorkRally projects, shots, materials, and collaborative canvases.
 
-## Publisher: <br>
-[tencent-adm](https://clawhub.ai/user/tencent-adm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tencent-adm](https://clawhub.ai/user/tencent-adm)
 
-## Use Case: <br>
-Developers, creators, and AI agents use this skill to operate WorkRally CLI workflows for AI-generated images, AI-generated videos, storyboard and shot management, media uploads, asset organization, and collaborative canvas updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents through sensitive WorkRally project, asset, credential, media, and canvas actions. <br>
-Mitigation: Install only for trusted WorkRally workflows, use least-privilege API keys, and keep the WorkRally config file private. <br>
-Risk: Delete, recycle-bin, upload, download, canvas overwrite, and canvas clear operations can change or expose user work. <br>
-Mitigation: Require explicit user confirmation before destructive, permanent, sensitive media, or broad canvas update operations. <br>
-Risk: AI generation and media operations may fail or produce incorrect results if agents guess model IDs, URLs, or object identifiers. <br>
-Mitigation: Use the documented CLI discovery commands, official WorkRally media URLs, and JSON output before submitting generation or asset operations. <br>
+## Use Case:
 
+Creators and developers use this skill to guide an agent through media generation, production planning, file uploads, and asset and canvas management in WorkRally.
 
-## Reference(s): <br>
-- [WorkRally ClawHub page](https://clawhub.ai/tencent-adm/skills/workrally) <br>
-- [WorkRally homepage](https://workrally.qq.com) <br>
-- [WorkRally API key configuration](https://workrally.qq.com/open-api) <br>
-- [AI generation guide](references/ai-generation-guide.md) <br>
-- [Canvas guide](references/canvas-guide.md) <br>
-- [Common pitfalls](references/common-pitfalls.md) <br>
-- [Shot guide](references/shot-guide.md) <br>
-- [Upload and assets guide](references/upload-and-assets-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration instructions, JSON] <br>
-**Output Format:** [Markdown guidance with inline CLI commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to use the workrally CLI with JSON output for automation-friendly operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.4.1 (source: frontmatter and server release metadata) <br>
+Risk: Account credentials grant access to WorkRally content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install the WorkRally CLI only if trusted, use a scoped API key where possible, and protect the credentials directory.
+
+Risk: Uploading local files shares their contents with a remote service.
+
+Mitigation: Obtain explicit user confirmation before uploading files.
+
+Risk: Deleting materials or overwriting shared canvases can affect collaborators.
+
+Mitigation: Obtain explicit user confirmation before deleting, clearing, or overwriting remote content.
+
+## Reference(s):
+
+- [WorkRally on ClawHub](https://clawhub.ai/tencent-adm/skills/workrally)
+- [WorkRally](https://workrally.qq.com)
+- [AI generation guide](references/ai-generation-guide.md)
+- [Shotlist guide](references/shotlist-guide.md)
+- [Canvas guide](references/canvas-guide.md)
+- [Upload and assets guide](references/upload-and-assets-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Media asset links]
+
+**Output Format:** [Markdown guidance with CLI commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media and edited projects reside in the user's WorkRally account.]
+
+## Skill Version(s):
+
+2.10.1 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

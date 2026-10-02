@@ -1,0 +1,13 @@
+{
+  "obligation_schedule": {
+    "agreement_id": "agreement-7e10249b204a4417",
+    "obligations": [
+      {
+        "clause_id": "CLAUSE-KILO-2846",
+        "owner": "account-operations",
+        "notice_days": 30,
+        "notice_due_date": "2026-10-01"
+      }
+    ]
+  }
+}

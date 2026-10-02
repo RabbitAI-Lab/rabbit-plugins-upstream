@@ -1,48 +1,62 @@
-## Description: <br>
-Guides agents through configuring Feishu group chat so multiple AI agents can collaborate by mutual @ mentions using text messages. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in connecting multiple AI agents through Feishu group chat using direct bot mentions or Gateway routing.
 
-## Publisher: <br>
-[zhouxin121](https://clawhub.ai/user/zhouxin121) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhouxin121](https://clawhub.ai/user/zhouxin121)
 
-## Use Case: <br>
-Developers and agent operators use this skill to set up Feishu groups, bot apps, permissions, open_id discovery, text-format @ mentions, and troubleshooting for multi-agent collaboration in group chat. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Feishu App Secret and open_id values can expose bot access or user identity context if mishandled. <br>
-Mitigation: Protect secrets and open_id values, share them only with the intended agents, and rotate credentials if they are exposed. <br>
-Risk: Configured bots can post messages into the Feishu group. <br>
-Mitigation: Limit each bot to the intended group and keep broad group-message permissions disabled unless explicitly needed. <br>
-Risk: Incorrect message format or permission settings can cause agents to miss @ mentions or receive unintended group traffic. <br>
-Mitigation: Use text messages with raw <at user_id="ou_xxx"> tags, verify event subscriptions, and keep group_msg disabled for @-only behavior. <br>
+## Use Case:
 
+Developers and teams use this skill to set up Feishu bots, connect agents in a group chat, route messages, and troubleshoot handoffs between agents.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/zhouxin121/skills/feishu-agent-communication) <br>
-- [Server-resolved GitHub source](https://github.com/zhouxin121/feishu-agent-communication) <br>
-- [Feishu developer documentation](https://open.feishu.cn/document/home/index) <br>
-- [Feishu message content documentation](https://open.feishu.cn/document/server-docs/im-v1/message-content-description/create-content) <br>
-- [Feishu send message API](https://open.feishu.cn/document/uAjLw4CM/ukTMukTMukTM/reference/im-v1/message/send) <br>
-- [Feishu event subscription guide](https://open.feishu.cn/document/server-docs/event-subscription-guide/overview) <br>
-- [OpenClaw documentation](https://docs.openclaw.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with tables and inline API parameters] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Covers Feishu bot setup, permission choices, open_id handling, @ mention formatting, validation steps, and troubleshooting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release metadata) <br>
+Risk: Bot access to group messages could expose conversations beyond the intended collaboration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated Feishu app and group where possible, and grant only the message permissions needed.
+
+Risk: Exposing app credentials in shared chats or repositories could compromise the bot.
+
+Mitigation: Keep Feishu app credentials out of shared chats and repositories.
+
+Risk: The separate paid deployment guide is an external resource not covered by this skill's review.
+
+Mitigation: Review the linked guide independently before following its deployment instructions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zhouxin121/skills/feishu-agent-communication)
+- [Feishu Open Platform](https://open.feishu.cn)
+- [Feishu bot setup](artifact/references/feishu-bot-setup.md)
+- [Gateway configuration overview](artifact/references/gateway-config.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+- [Detailed deployment guide (paid)](https://www.jinengpu.chat/feishu-multi-agent-detail.html)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration instructions, Text]
+
+**Output Format:** [Markdown with setup steps, message-flow examples, and troubleshooting advice]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Detailed configuration templates are offered through a separate paid guide.]
+
+## Skill Version(s):
+
+0.1.3 (source: release evidence, _meta.json, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
