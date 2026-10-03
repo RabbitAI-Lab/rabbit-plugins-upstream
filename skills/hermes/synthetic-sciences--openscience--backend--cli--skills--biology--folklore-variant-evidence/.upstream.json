@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/folklore-variant-evidence",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/folklore-variant-evidence",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/folklore-variant-evidence",
+  "branch": "main",
+  "pushedAt": "2026-10-03T03:28:07Z",
+  "contentHash": "b8c39976d7a3ed76d0bdf13abe4092e4dfdefac4203347567c5e5f455807e60c",
+  "fetchedAt": "2026-10-03T12:38:59.541Z"
+}

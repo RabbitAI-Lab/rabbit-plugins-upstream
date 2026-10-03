@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-nv-tesseract-forecasting",
+  "identifier": "NVIDIA/skills/skills/tao-finetune-nv-tesseract-forecasting",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-finetune-nv-tesseract-forecasting",
+  "branch": "main",
+  "pushedAt": "2026-10-02T22:28:42Z",
+  "contentHash": "fa642e2732b89fa9b13ad957d188e6cd5ff795c9f9b0cc1d8faf1d04e1e97f07",
+  "fetchedAt": "2026-10-03T12:38:58.419Z"
+}

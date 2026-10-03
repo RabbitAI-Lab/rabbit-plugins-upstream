@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/pinn-training",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/pinn-training",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/pinn-training",
+  "branch": "main",
+  "pushedAt": "2026-10-03T03:28:07Z",
+  "contentHash": "fa34cc65986219a4e9afc40fc6fc97d3cc6cf8451f5ca826dd301670843f6b24",
+  "fetchedAt": "2026-10-03T12:38:59.584Z"
+}

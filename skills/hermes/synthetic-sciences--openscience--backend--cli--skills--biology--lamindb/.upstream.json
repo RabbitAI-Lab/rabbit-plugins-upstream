@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/lamindb",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/lamindb",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/lamindb",
+  "branch": "main",
+  "pushedAt": "2026-10-03T03:28:07Z",
+  "contentHash": "904ab1f685f97b5da94142be9576c7dcb43796a1978fcb67e94c00bc7efbd3e4",
+  "fetchedAt": "2026-10-03T12:38:59.557Z"
+}

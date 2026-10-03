@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/zotero-local",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/zotero-local",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/zotero-local",
+  "branch": "main",
+  "pushedAt": "2026-10-03T03:28:07Z",
+  "contentHash": "45bc5a2e480f61349ea1bcf567ed7a03f5f8cd02775b011fd6d78832f7312765",
+  "fetchedAt": "2026-10-03T12:38:59.630Z"
+}

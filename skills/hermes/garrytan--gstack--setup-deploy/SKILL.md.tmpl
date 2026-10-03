@@ -25,6 +25,8 @@ allowed-tools:
 
 {{PREAMBLE}}
 
+{{THIRD_PARTY_ACTIONS}}
+
 # /setup-deploy — Configure Deployment for gstack
 
 You are helping the user configure their deployment so `/land-and-deploy` works
@@ -32,9 +34,6 @@ automatically. Your job is to detect the deploy platform, production URL, health
 checks, and deploy status commands — then persist everything to CLAUDE.md.
 
 After this runs once, `/land-and-deploy` reads CLAUDE.md and skips detection entirely.
-
-## User-invocable
-When the user types `/setup-deploy`, run this skill.
 
 ## Instructions
 
@@ -80,6 +79,7 @@ find . -maxdepth 1 -name '*.gemspec' 2>/dev/null | grep -q . && echo "PROJECT_TY
 ### Step 3: Platform-specific setup
 
 Based on what was detected, guide the user through platform-specific configuration.
+If several platforms are detected, ask which one serves this project's production target before proceeding. Detection is a hint, not a selection. Confirm whether the project is a web app, API, CLI, or library; use detected CLI/library markers as defaults.
 
 #### Fly.io
 
@@ -105,7 +105,7 @@ If `render.yaml` detected:
 5. Set health check: the inferred URL
 
 Ask the user to confirm. Render uses auto-deploy from the connected git branch — after
-merge to main, Render picks it up automatically. The "deploy wait" in /land-and-deploy
+merge to the default branch, Render picks it up automatically. The "deploy wait" in /land-and-deploy
 should poll the Render URL until it responds with the new version.
 
 #### Vercel
@@ -114,8 +114,9 @@ If vercel.json or .vercel detected:
 
 1. Check for `vercel` CLI: `which vercel 2>/dev/null`
 2. If installed: `vercel ls --prod 2>/dev/null | head -3`
-3. Vercel deploys automatically on push — preview on PR, production on merge to main
+3. Vercel deploys automatically on push — preview on PR, production on merge to the default branch
 4. Set health check: the production URL from vercel project settings
+Ask for the production URL if not available from the CLI, then confirm it before writing.
 
 #### Netlify
 
@@ -124,6 +125,11 @@ If netlify.toml detected:
 1. Extract site info from netlify.toml
 2. Netlify deploys automatically on push
 3. Set health check: the production URL
+Ask for and confirm the production URL; do not infer it from a repository name.
+
+#### Heroku / Railway
+
+These markers do not identify the production app or service reliably. Keep the detected platform as a suggestion and use the Custom / Manual questions below to collect the production URL, trigger, and status check.
 
 #### GitHub Actions only
 
@@ -140,7 +146,7 @@ If nothing detected:
 Use AskUserQuestion to gather the information:
 
 1. **How are deploys triggered?**
-   - A) Automatically on push to main (Fly, Render, Vercel, Netlify, etc.)
+   - A) Automatically on push to the default branch (Fly, Render, Vercel, Netlify, etc.)
    - B) Via GitHub Actions workflow
    - C) Via a deploy script or CLI command (describe it)
    - D) Manually (SSH, dashboard, etc.)
@@ -160,6 +166,8 @@ Use AskUserQuestion to gather the information:
 
 ### Step 4: Write configuration
 
+Before writing, collect fields not already confirmed: merge method (squash/merge/rebase, constrained to methods allowed by repo settings), pre-merge command or none, deploy trigger, and status/health checks. Ask only for missing values, across every platform path. If the project does not deploy, set platform/URL/workflow/status/health/trigger to `none`, retain its CLI/library project type, and skip deploy verification. Show the complete proposed configuration and obtain confirmation.
+
 Read CLAUDE.md (or create it). Find and replace the `## Deploy Configuration` section
 if it exists, or append it at the end.
 
@@ -175,7 +183,7 @@ if it exists, or append it at the end.
 
 ### Custom deploy hooks
 - Pre-merge: {command or "none"}
-- Deploy trigger: {command or "automatic on push to main"}
+- Deploy trigger: {command or "automatic on push to <default branch>"}
 - Deploy status: {command or "poll production URL"}
 - Health check: {URL or command}
 ```

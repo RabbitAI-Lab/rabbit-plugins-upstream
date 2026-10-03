@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/devops/inference-sh-cli",
+  "identifier": "official/devops/inference-sh-cli",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/devops/inference-sh-cli",
+  "branch": "main",
+  "pushedAt": "2026-10-03T12:30:28Z",
+  "contentHash": "676d081a4ae62386d0e92be08b1ebe46d16a541caacb6e85e96968fdc90fe9d4",
+  "fetchedAt": "2026-10-03T12:39:15.070Z"
+}
