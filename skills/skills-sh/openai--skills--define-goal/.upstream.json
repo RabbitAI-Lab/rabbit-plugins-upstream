@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/define-goal",
+  "repo": "openai/skills",
+  "skillId": "define-goal",
+  "branch": "main",
+  "pushedAt": "2026-09-08T20:35:26Z",
+  "contentHash": "e988680dcf9a18be5e5b0891b959a76d3e3889f0c1b56620f50e4c00306dc169",
+  "fetchedAt": "2026-10-03T12:40:58.799Z"
+}

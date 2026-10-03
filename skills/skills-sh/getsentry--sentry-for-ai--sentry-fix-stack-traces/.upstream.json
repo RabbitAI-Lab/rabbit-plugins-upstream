@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-fix-stack-traces",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-fix-stack-traces",
+  "branch": "main",
+  "pushedAt": "2026-10-02T19:35:21Z",
+  "contentHash": "07f0da922e1e99fe5342d7982eba9427ebc09d68bfbd17773f822dc998d45f06",
+  "fetchedAt": "2026-10-03T12:41:25.800Z"
+}
