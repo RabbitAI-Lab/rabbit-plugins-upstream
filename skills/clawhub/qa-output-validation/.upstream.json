@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/qa-output-validation",
   "slug": "qa-output-validation",
   "ownerHandle": null,
-  "version": "1.6.0",
-  "updatedAt": 1783358159664,
-  "contentHash": "ec60743ab8974e1bbc482c552a652516562cc89521dced65de40346619e53515",
-  "fetchedAt": "2026-07-26T18:19:34.170Z"
+  "version": "1.8.0",
+  "updatedAt": 1790656125325,
+  "contentHash": "7487aeb023b20d64f030b70ae819641a1a37025630ce2fa5bab84120b780cc27",
+  "fetchedAt": "2026-10-03T13:01:19.220Z"
 }

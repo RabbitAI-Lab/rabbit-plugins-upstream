@@ -43,7 +43,7 @@ def _parse_event(d: Dict[str, Any]) -> Dict[str, Any]:
     }
 
 
-def get_capture_status(device_name: str) -> Dict[str, Any]:
+def get_capture_status(device_name: Optional[str] = None) -> Dict[str, Any]:
     """Current capture state (includes the last event, if any)."""
     dev = _config.resolve(device_name)
     d = _http.get_json(dev, PATH_STATUS) or {}
@@ -79,7 +79,7 @@ def _validate_output_dir(output: Optional[str]) -> Optional[str]:
 
 
 def start_capture(
-    device_name: str,
+    device_name: Optional[str] = None,
     *,
     output: Optional[str] = None,
     format: str = FORMAT_IMAGE,
@@ -122,7 +122,7 @@ def start_capture(
     return _parse_event(capture)
 
 
-def stop_capture(device_name: str) -> None:
+def stop_capture(device_name: Optional[str] = None) -> None:
     """Stop the running capture (no-op for JPG)."""
     dev = _config.resolve(device_name)
     resp = _http.post_json(dev, PATH_STOP)
@@ -130,12 +130,12 @@ def stop_capture(device_name: str) -> None:
 
 
 def capture_image(
-    device_name: str,
+    device_name: Optional[str] = None,
     *,
     output: Optional[str] = None,
     timeout: float = _DEFAULT_TIMEOUT_S,
 ) -> Dict[str, Any]:
-    """Start a JPG capture, poll to completion (terminal states `COMPLETED/FAILED/INTERRUPTED/CANCELED`),
+    """Start a JPG capture, poll until terminal (`COMPLETED`/`FAILED`/`INTERRUPTED`/`CANCELED`),
     fetch the file via the daemon, and return `{event, path, size, content_base64}`.
     """
     # Resolve output dir via current storage status if not supplied.
@@ -149,7 +149,7 @@ def capture_image(
                 base = slot["mount_path"].rstrip("/")
                 data_dir = slot.get("data_dir", "").strip("/")
                 output = f"{base}/{data_dir}" if data_dir else base
-        except Exception:
+        except RecameraError:
             output = None
     output = output or OUTPUT_FALLBACK
 
@@ -169,6 +169,7 @@ def capture_image(
     from .files import fetch_file
 
     blob = fetch_file(device_name, path=remote, raw=True)
+    assert isinstance(blob, bytes)  # raw=True contract
     return {
         "event": final,
         "path": remote,
@@ -182,13 +183,4 @@ COMMANDS = {
     "start_capture": start_capture,
     "stop_capture": stop_capture,
     "capture_image": capture_image,
-}
-COMMAND_SCHEMAS = {
-    "get_capture_status": {"required": {"device_name"}, "optional": set()},
-    "start_capture": {
-        "required": {"device_name"},
-        "optional": {"output", "format", "video_length_seconds"},
-    },
-    "stop_capture": {"required": {"device_name"}, "optional": set()},
-    "capture_image": {"required": {"device_name"}, "optional": {"output", "timeout"}},
 }

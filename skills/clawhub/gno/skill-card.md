@@ -1,47 +1,61 @@
-## Description: <br>
-Search local documents, files, notes, and knowledge bases; index directories; search with BM25, vector, or hybrid retrieval; and get AI answers with citations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents index and search local documents and notes, retrieve cited answers, and manage a local knowledge base through GNO.
 
-## Publisher: <br>
-[gmickel](https://clawhub.ai/user/gmickel) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gmickel](https://clawhub.ai/user/gmickel)
 
-## Use Case: <br>
-Developers and knowledge workers use this skill to let an agent operate the local GNO CLI for indexing local folders, searching documents and notes, retrieving cited content, managing local search collections, and setting up optional MCP or web UI access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can grant an agent broad access to run local GNO commands that index private files. <br>
-Mitigation: Use narrow collections and avoid adding folders that contain secrets or sensitive material. <br>
-Risk: GNO commands can change assistant configurations, start persistent services, export content, or delete local GNO data. <br>
-Mitigation: Review proposed commands before execution, prefer dry-run or preview modes for configuration and publishing actions, and reserve destructive commands for explicit user-approved maintenance. <br>
-Risk: MCP write tools and the web UI can expand the skill's local access surface. <br>
-Mitigation: Enable MCP write tools only when needed and avoid exposing the web UI beyond the local machine unless the network impact is understood. <br>
+## Use Case:
 
+Developers and other users of local agent tools use this skill to search files and notes, retrieve cited evidence, and organize a personal knowledge base. It also supports optional agent-session lookup, memory, and publishing workflows.
 
-## Reference(s): <br>
-- [GNO Skill README](artifact/README.md) <br>
-- [GNO Skill Instructions](artifact/SKILL.md) <br>
-- [GNO CLI Reference](artifact/cli-reference.md) <br>
-- [GNO MCP Reference](artifact/mcp-reference.md) <br>
-- [GNO Usage Examples](artifact/examples.md) <br>
-- [GNO MCP Documentation](https://www.gno.sh/docs/MCP) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include citations, document URIs, file paths, CLI status output, MCP setup steps, and web UI process guidance depending on the requested workflow.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: ClawHub release evidence) <br>
+Risk: Indexing sensitive files may expose their contents to local search or enabled integrations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit indexed collections and avoid indexing secrets unless explicitly accepted.
+
+Risk: Optional remote model backends, network exports, and publishing may send document content outside the machine.
+
+Mitigation: Review egress and publishing settings before enabling remote calls, exports, or uploads.
+
+Risk: Enabling MCP write tools can allow changes to notes and knowledge records.
+
+Mitigation: Leave MCP write tools disabled unless needed and review requested writes.
+
+## Reference(s):
+
+- [GNO ClawHub release](https://clawhub.ai/gmickel/skills/gno)
+- [GNO skill documentation](artifact/README.md)
+- [GNO CLI reference](artifact/cli-reference.md)
+- [GNO MCP reference](artifact/mcp-reference.md)
+- [GNO agent installation guide](https://gno.sh/docs/agents-install)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with cited answers and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a separately installed GNO CLI; results depend on indexed local documents.]
+
+## Skill Version(s):
+
+1.2.8 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

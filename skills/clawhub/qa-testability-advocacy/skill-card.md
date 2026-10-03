@@ -1,39 +1,53 @@
-## Description: <br>
-Chinese-language QA guidance skill for evaluating software testability across controllability, observability, isolation, automation, and diagnosability, then producing assessment reports, improvement suggestions, refactoring guidance, and best practices. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses software testability and proposes practical architecture improvements across interfaces, data, logging, configuration, and dependencies.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill when features are difficult to test or architecture reviews need testability advocacy. It helps assess testability gaps and turn them into traceable improvement suggestions and implementation guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may suggest cleanup of test data as part of improving data-layer testability. <br>
-Mitigation: Review cleanup suggestions before applying them and limit any cleanup to non-critical test data. <br>
-Risk: Guidance may omit some testability issues for complex systems. <br>
-Mitigation: Supplement the assessment with code review when gaps are suspected, then rerun the improvement planning step. <br>
+## Use Case:
 
+QA practitioners, developers, and architects use this skill to review testability gaps and plan prioritized improvements to system design and testing workflows.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured assessment sections and traceable suggestion IDs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a testability assessment, improvement suggestions, refactoring guidance, and best-practice recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The optional install command fetches a broader, unpinned skill set.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the publisher and source before running the command.
+
+Risk: Acting on cleanup recommendations could affect important data.
+
+Mitigation: Treat cleanup suggestions as planning advice and confirm they affect only non-critical test data before acting.
+
+## Reference(s):
+
+- [Testability dimensions checklist](references/testability-dimensions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Testability assessment, prioritized improvements, refactoring guidance, and uniquely identified recommendations.]
+
+## Skill Version(s):
+
+1.8.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,57 @@
-## Description: <br>
-Gladia Documentation Auto gives agents a comprehensive Gladia speech-to-text reference for transcription, audio intelligence, endpoint selection, and SDK-first workflow guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Gladia speech-to-text integration guidance for pre-recorded and live transcription, including SDK examples, API workflows, and feature selection.
 
-## Publisher: <br>
-[gladiaio](https://clawhub.ai/user/gladiaio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gladiaio](https://clawhub.ai/user/gladiaio)
 
-## Use Case: <br>
-Developers and agents use this skill to build Gladia transcription and audio-analysis workflows, choose pre-recorded versus live APIs, configure SDK/API requests, and avoid common implementation errors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may guide agents toward Gladia transcription or audio-analysis behavior outside an explicit user request because the security summary notes a routing-scope concern. <br>
-Mitigation: Use the skill only for explicit Gladia, transcription, speech-to-text, or audio-analysis tasks until the broad fallback wording is narrowed. <br>
-Risk: Transcription workflows may require Gladia credentials or may send audio to Gladia. <br>
-Mitigation: Review whether a task requires a Gladia API key or audio upload, keep credentials out of generated code and logs, and get user confirmation before sending audio to the service. <br>
+## Use Case:
 
+Developers use this reference to choose Gladia transcription modes and features, integrate the SDK or API, and handle audio transcription results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gladiaio/skills/gladia-documentation-auto) <br>
-- [Gladia publisher profile](https://clawhub.ai/user/gladiaio) <br>
-- [Server-resolved provenance unavailable](evidence.json#provenance) <br>
-- [Source skill metadata](https://docs.gladia.io/.well-known/agent-skills/gladia/skill.md) <br>
-- [Gladia documentation](https://docs.gladia.io) <br>
-- [Gladia documentation index](https://docs.gladia.io/llms.txt) <br>
-- [Pre-recorded quickstart](https://docs.gladia.io/chapters/pre-recorded-stt/quickstart) <br>
-- [Live quickstart](https://docs.gladia.io/chapters/live-stt/quickstart) <br>
-- [Audio intelligence features](https://docs.gladia.io/chapters/audio-intelligence/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with code snippets, API examples, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [SDK-first recommendations with raw REST/WebSocket fallback guidance when the SDK cannot satisfy the requirement.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Transcription can send sensitive audio or video to Gladia and retain audio and transcripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain consent before uploading; configure zero data retention when privacy or compliance requires it.
+
+Risk: Exposing the Gladia API key in client code can allow unauthorized use.
+
+Mitigation: Keep the API key on the backend or in a protected environment variable; never hardcode it in client code.
+
+## Reference(s):
+
+- [Gladia skill documentation](https://docs.gladia.io/.well-known/agent-skills/gladia/skill.md)
+- [Gladia documentation](https://docs.gladia.io/llms.txt)
+- [Pre-recorded transcription quickstart](https://docs.gladia.io/chapters/pre-recorded-stt/quickstart)
+- [Live transcription quickstart](https://docs.gladia.io/chapters/live-stt/quickstart)
+- [Gladia API reference](https://docs.gladia.io/api-reference/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [SDK-first guidance for pre-recorded and live transcription.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

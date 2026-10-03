@@ -1,0 +1,72 @@
+{
+  "variant_id": "cap_10_candidate_to_interview",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "candidate_profile_yaml",
+  "output_name": "interview_plan",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string",
+        "format": "candidate-role-yaml",
+        "minLength": 1
+      },
+      {
+        "type": "object",
+        "required": [
+          "candidate_id",
+          "profile",
+          "role"
+        ],
+        "properties": {
+          "candidate_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "profile": {
+            "type": "object"
+          },
+          "role": {
+            "type": "object"
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "candidate_id",
+      "matched_required",
+      "missing_required",
+      "topics"
+    ],
+    "properties": {
+      "candidate_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "matched_required": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "missing_required": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "topics": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

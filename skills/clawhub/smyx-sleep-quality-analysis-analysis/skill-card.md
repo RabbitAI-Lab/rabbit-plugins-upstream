@@ -1,45 +1,54 @@
-## Description: <br>
-Analyzes fixed-camera pet sleep videos through cloud APIs to report sleep and awake states, total sleep duration, roll-over or position-change counts, startle-awakening events, a 0-100 sleep-quality score, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet rest-area videos to report sleep duration, position changes, awakenings, and a sleep-quality score.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External pet owners, animal hospital staff, boarding centers, and developers operating the skill use it to analyze pet bed or rest-area videos for sleep quality indicators and retrieve cloud-hosted historical analysis reports. The output is a sleep-health reference, not a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet monitoring videos or video URLs are sent to lifeemergence.com cloud APIs for processing. <br>
-Mitigation: Use only footage appropriate for third-party cloud processing, avoid sensitive home, hospital, boarding, or third-party footage unless retention and access controls are understood, and prefer non-sensitive test media during evaluation. <br>
-Risk: The skill performs silent identity setup and stores an internal user identity plus service tokens in a local workspace database. <br>
-Mitigation: Run the skill in a controlled workspace, review local data storage before production use, and remove or rotate stored credentials when the workspace is shared or decommissioned. <br>
-Risk: The server security verdict is suspicious because cloud processing, local token storage, and history retrieval may not be obvious to users. <br>
-Mitigation: Disclose these behaviors to operators, restrict use to trusted environments, and review the configured endpoints before allowing access to real monitoring footage. <br>
+## Use Case:
 
+Pet owners and caregivers use this skill to assess nighttime sleep patterns from pet-bed video and review prior analysis reports. Results may help flag changes worth discussing with a veterinarian, but are not a diagnosis.
 
-## Reference(s): <br>
-- [Pet Sleep Quality Analysis API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-sleep-quality-analysis-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, files, guidance] <br>
-**Output Format:** [Markdown text with structured JSON-style analysis results, recommendations, historical report lists, and report export links; optionally saved to an output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local mp4, avi, or mov video files up to 10 MB, or public video URLs processed by the API service; pet type can be cat, dog, or other.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.6) <br>
+Risk: Pet rest-area footage or video URLs are sent to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share footage only if comfortable with the provider's retention and deletion practices; avoid private household or clinical footage until these are understood.
+
+Risk: The skill automatically creates or reuses an identity, stores tokens locally, and retrieves cloud report history with limited user-facing control.
+
+Mitigation: Review the local data directory for generated SQLite and token files, and consider the account-linked cloud history before use.
+
+## Reference(s):
+
+- [Pet sleep analysis API documentation](references/api_doc.md)
+- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis report or Markdown history table; optional JSON file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a report link, sleep metrics, a 0–100 score, and recommendations.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

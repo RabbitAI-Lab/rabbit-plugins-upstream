@@ -1,41 +1,55 @@
-## Description: <br>
-Model Pyramid gives agents advisory rules for right-sizing delegated subagent model tiers and reasoning effort during fan-out. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recommends a model, effort level, and optional advisor for a session or each delegated task based on capability and thoroughness needs.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Developers and agent operators use Model Pyramid when spawning or delegating subagents to choose capability tiers and reasoning effort for peer work, exploration, large homogeneous lookup fan-outs, and default tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Incorrect sizing advice could affect agent cost, latency, or output quality. <br>
-Mitigation: Review the per-subagent recommendation before applying it in a runtime, especially for production fan-outs. <br>
-Risk: Runtime-specific model or effort knobs may not match the conceptual pyramid vocabulary. <br>
-Mitigation: Use the runtime mapping reference and state any nearest-notch substitution or unsupported-knob degradation. <br>
+## Use Case:
 
+Developers and other agent users use this skill to choose model and effort settings for a session or individual subagents and decide when an advisor may help. Its recommendations are advisory and do not change settings or spawn agents.
 
-## Reference(s): <br>
-- [Runtime Mapping](references/runtime-mapping.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/vincentjiang06/skills/model-pyramid) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with optional shell command examples and per-subagent report lines] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory only; recommendations should be reviewed before applying to a runtime.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: Dated model defaults or advisor pairing guidance may become inaccurate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Re-check current provider documentation before using exact defaults or pairing rules.
+
+Risk: Model, effort, advisor, or token-budget choices may affect cost and task thoroughness.
+
+Mitigation: Review the recommendations against the task and available budget before applying them.
+
+## Reference(s):
+
+- [Model and effort reference](references/model-and-effort.md)
+- [Orchestration reference](references/orchestration.md)
+- [Runtime knobs reference](references/runtime-knobs.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration instructions, Text]
+
+**Output Format:** [Markdown with per-agent model and effort recommendations and optional validation findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory only; model facts are dated and should be rechecked before use.]
+
+## Skill Version(s):
+
+1.1.0 (source: ClawHub release and skill metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

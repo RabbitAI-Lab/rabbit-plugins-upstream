@@ -1,46 +1,67 @@
-## Description: <br>
-Google Slides lets agents create, edit, and manage Google Slides presentations through AgentPMT-hosted remote tool calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Google Slides lets an agent create, edit, search, style, and manage Google Slides presentations through AgentPMT-hosted remote tool calls.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-Developers and workflow operators use this skill to automate Google Slides deck creation, template filling, slide editing, thumbnails, and presentation maintenance through AgentPMT MCP or REST calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes broad write and delete capabilities for Google Slides presentations. <br>
-Mitigation: Install only when that level of access is acceptable, keep inputs scoped, and review target presentation IDs before execution. <br>
-Risk: Raw batch_update and delete_object actions can make broad or destructive changes. <br>
-Mitigation: Prefer high-level edit actions and use raw batch_update or delete_object only when the intended change is explicit. <br>
-Risk: Image insertion requires publicly accessible image URLs. <br>
-Mitigation: Use approved public assets and avoid URLs that expose confidential or access-controlled material. <br>
+## Use Case:
 
+External users and developers use this skill to automate Google Slides workflows, including creating decks, adding slides and page elements, filling templates, styling content, searching presentations, and generating thumbnails.
 
-## Reference(s): <br>
-- [ClawHub Google Slides skill](https://clawhub.ai/agentpmt/skills/google-slides) <br>
-- [AgentPMT Google Slides marketplace page](https://www.agentpmt.com/marketplace/google-slides) <br>
-- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup) <br>
-- [What AgentPMT is](https://clawhub.ai/agentpmt/what-is-agentpmt) <br>
-- [Generated action schema](artifact/schema.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API calls, JSON] <br>
-**Output Format:** [Markdown instructions with JSON MCP and REST call bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Remote AgentPMT calls return JSON responses and may create, update, duplicate, reorder, or delete Google Slides presentation content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release and SKILL.md frontmatter) <br>
+Risk: The skill can search, read, create, edit, delete, and run raw update operations on accessible Google Slides presentations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege Google access, verify presentation and object IDs before destructive actions, and keep backups for important decks.
+
+Risk: Raw batch update requests can heavily alter presentations without built-in confirmation safeguards.
+
+Mitigation: Review generated request payloads before execution and prefer scoped, named actions when they satisfy the task.
+
+Risk: Credential or payment secrets could be exposed if included in prompts or logs.
+
+Mitigation: Follow the setup skill for credential handling and avoid placing account secrets, wallet private keys, mnemonics, signatures, or payment headers in prompts or logs.
+
+Risk: Floating setup installs can change over time.
+
+Mitigation: Prefer pinned or reviewed setup-skill versions before deployment.
+
+## Reference(s):
+
+- [Generated action schema](artifact/schema.md)
+- [Google Slides marketplace page](https://www.agentpmt.com/marketplace/google-slides)
+- [ClawHub skill page](https://clawhub.ai/agentpmt/skills/google-slides)
+- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup)
+- [AgentPMT overview](https://clawhub.ai/agentpmt/what-is-agentpmt)
+- [AgentPMT main MCP server](https://api.agentpmt.com/mcp/)
+- [AgentPMT REST invoke endpoint](https://api.agentpmt.com/products/purchase)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, JSON, Shell commands, Configuration]
+
+**Output Format:** [Markdown with JSON and bash examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tool responses are JSON; thumbnail URLs expire after approximately 30 minutes.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

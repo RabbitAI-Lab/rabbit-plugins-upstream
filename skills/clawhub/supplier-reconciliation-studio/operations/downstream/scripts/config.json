@@ -1,0 +1,96 @@
+{
+  "variant_id": "shadow_06_entity_resolution",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "matching_guidance",
+  "output_name": "match_result",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "normalization_steps": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "minimum_score": {
+            "type": "number"
+          }
+        },
+        "required": [
+          "normalization_steps",
+          "minimum_score"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "normalization_steps": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "minimum_score": {
+                    "type": "number"
+                  }
+                },
+                "required": [
+                  "normalization_steps",
+                  "minimum_score"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "matched": {
+        "type": "boolean"
+      },
+      "left_canonical": {
+        "type": "string"
+      },
+      "right_canonical": {
+        "type": "string"
+      },
+      "score": {
+        "type": "number"
+      }
+    },
+    "required": [
+      "matched",
+      "left_canonical",
+      "right_canonical",
+      "score"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_entity_match_report"
+}

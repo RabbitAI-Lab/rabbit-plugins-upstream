@@ -1,47 +1,68 @@
-## Description: <br>
-Kling AI helps agents run Kling video generation, image generation, subject management, and account quota workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Calls Kling AI for video generation, image generation, subject management, and account quota inquiry.
 
-## Publisher: <br>
-[klingai-dev](https://clawhub.ai/user/klingai-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[klingai-dev](https://clawhub.ai/user/klingai-dev)
 
-## Use Case: <br>
-Developers and external users use this skill to route agent requests to Kling AI for video generation, image generation, reusable subject management, and read-only account quota checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use account credentials to access a Kling account. <br>
-Mitigation: Install only when account connection is intended, use a trusted machine, and protect or revoke stored credentials when needed. <br>
-Risk: The skill can upload selected media to Kling AI. <br>
-Mitigation: Review media inputs before submission and avoid providing sensitive files unless the upload is intended. <br>
-Risk: Generation requests can spend Kling quota. <br>
-Mitigation: Confirm generation intent before running costly jobs and avoid speculative retries. <br>
-Risk: Subject management can delete Kling subjects. <br>
-Mitigation: List and confirm subject IDs before deletion. <br>
+## Use Case:
 
+External users and developers use this skill to turn Kling AI generation, subject-management, and quota requests into validated CLI actions. It helps agents choose the correct video, image, element, or account workflow before submitting billable Kling API tasks.
 
-## Reference(s): <br>
-- [Kling AI Skill on ClawHub](https://clawhub.ai/klingai-dev/klingai) <br>
-- [Kling AI Developer Docs (CN)](https://app.klingai.com/cn/dev/document-api) <br>
-- [Kling AI Developer Docs (Global)](https://kling.ai/document-api/quickStart/productIntroduction/overview) <br>
-- [API Reference](reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown and CLI output with local file paths, task IDs, and links when available] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May submit API calls that return generated media files after polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected media are sent to Kling AI for generation and subject workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only prompts and media that are appropriate to share with Kling AI, and confirm ambiguous generation intent before starting billable tasks.
+
+Risk: Kling API keys may be persisted under the Kling storage root when bind, import, or configure flows are used.
+
+Mitigation: Prefer session-only KLING_API_KEY for non-persistent use, or protect and periodically review the local Kling credentials storage.
+
+Risk: Subject deletion is explicit but not separately confirmed by the skill.
+
+Mitigation: Review delete commands and subject identifiers carefully before execution.
+
+Risk: Generated assets may be removed by the platform after a retention period.
+
+Mitigation: Download and retain needed outputs locally after successful generation.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/klingai-dev/skills/klingai)
+- [Kling AI API Documentation](https://klingai.com/document-api/)
+- [Kling AI Docs Index](https://klingai.com/document-api/llms.txt)
+- [Kling API Authentication](https://klingai.com/document-api/api/get-started/authentication.md)
+- [Video Capability Map](https://klingai.com/document-api/guides/capability-map/video.md)
+- [Image Capability Map](https://klingai.com/document-api/guides/capability-map/image.md)
+- [Kling Elements API](https://klingai.com/document-api/api/video/3-0-omni/elements.md)
+- [Account Usage API](https://klingai.com/document-api/api/assets/account-usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance]
+
+**Output Format:** [Markdown guidance with shell commands; CLI runs print task status and local output paths.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media can be downloaded to the selected output directory; account and subject commands may print status, quota, or task identifiers.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

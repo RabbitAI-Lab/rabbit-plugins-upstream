@@ -1,50 +1,61 @@
-## Description: <br>
-Zoho Inventory API integration with managed OAuth for managing items, sales orders, invoices, purchase orders, bills, contacts, and shipments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Zoho Inventory records through an authorized account, including items, orders, invoices, bills, contacts, and shipments.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, operators, and agents supporting inventory workflows use this skill to read, create, update, and delete Zoho Inventory records through Maton-managed OAuth. Write operations should be reviewed with the user before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access and modify records in a connected Zoho Inventory account through Maton-mediated OAuth. <br>
-Mitigation: Install only if you trust Maton for this account, use the least-privileged Zoho connection available, and confirm the target resource and intended effect before approving create, update, or delete operations. <br>
-Risk: The MATON_API_KEY grants access to Maton-managed connections. <br>
-Mitigation: Keep the key private, provide it only in trusted runtime environments, and rotate it if exposure is suspected. <br>
-Risk: Multiple active Zoho Inventory connections can cause requests to target the wrong account. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header whenever more than one active connection exists. <br>
+## Use Case:
 
+Inventory and operations teams use this skill to look up and, with approval, update Zoho Inventory items, contacts, sales and purchase orders, invoices, bills, and shipments. Users can also approve scheduled or event-driven actions on their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/zoho-inventory) <br>
-- [Zoho Inventory API v1 Introduction](https://www.zoho.com/inventory/api/v1/introduction/) <br>
-- [Zoho Inventory Items API](https://www.zoho.com/inventory/api/v1/items/) <br>
-- [Zoho Inventory Contacts API](https://www.zoho.com/inventory/api/v1/contacts/) <br>
-- [Zoho Inventory Sales Orders API](https://www.zoho.com/inventory/api/v1/salesorders/) <br>
-- [Zoho Inventory Invoices API](https://www.zoho.com/inventory/api/v1/invoices/) <br>
-- [Zoho Inventory Purchase Orders API](https://www.zoho.com/inventory/api/v1/purchaseorders/) <br>
-- [Zoho Inventory Bills API](https://www.zoho.com/inventory/api/v1/bills/) <br>
-- [Maton API Key Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with inline Python, curl, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a connected Zoho Inventory account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Changes to inventory, orders, invoices, or other business records may have financial or operational consequences.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer read-only access; verify the account and target record, and obtain explicit approval for every write or deletion.
+
+Risk: Approved automations can run repeatedly and send event data to external destinations.
+
+Mitigation: Confirm each automation and destination, limit the data forwarded, and avoid third-party destinations unless the user understands the ongoing data flow.
+
+Risk: Exposed credentials or broad permissions could disclose business data.
+
+Mitigation: Use only the necessary account and scopes, keep credentials out of outputs and destinations, and revoke unused connections.
+
+## Reference(s):
+
+- [Zoho Inventory API documentation](https://www.zoho.com/inventory/api/v1/introduction/)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton website](https://maton.ai)
+- [ClawHub skill release](https://clawhub.ai/byungkyu/skills/zoho-inventory)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with command, code, and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return Zoho Inventory business records through the authorized connection.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

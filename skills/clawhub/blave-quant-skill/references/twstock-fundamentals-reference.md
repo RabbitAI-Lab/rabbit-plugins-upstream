@@ -27,10 +27,14 @@ Query params: `start` / `end`（YYYY-MM-DD，可省略）
 | `GET /studio/market/twstock/batch/balance_sheet?stock_ids=...` | 資產負債表 |
 | `GET /studio/market/twstock/batch/monthly_revenue?stock_ids=...` | 月營收 |
 | `GET /studio/market/twstock/batch/price_adj?stock_ids=...&start=...&end=...` | 向後調整日K |
+| `GET /studio/market/twstock/batch/price?stock_ids=...&start=...&end=...` | 原始日K OHLCV（含 High/Low） |
+| `GET /studio/market/twstock/batch/per?stock_ids=...&start=...&end=...` | PER／PBR／殖利率 |
 | `GET /studio/market/twstock/batch/institutional?stock_ids=...&start=...&end=...` | 三大法人 |
 | `GET /studio/market/twstock/batch/shareholding?stock_ids=...&start=...&end=...` | 股東人數 |
 
-Batch 回傳格式：`{"data_type": "financials", "data": {"2330": [...], "2317": [...]}}`
+Batch 回傳格式：`{"data_type": "financials", "data": {"2330": [...], "2317": [...]}, "failed": []}`——
+`failed` 為 server 端抓取失敗（rate limit 或上游錯誤）的股票，應重試；不在 `data` 也不在 `failed`
+才是真的沒資料。每型 `data` 內欄位與對應單檔 endpoint 完全一致。
 
 ---
 
@@ -76,6 +80,21 @@ Batch 回傳格式：`{"data_type": "financials", "data": {"2330": [...], "2317"
 
 `_per` 結尾的 type 代表佔總資產百分比（例如 `Equity_per`）。
 
+**現金流量表 (cashflow)**——主要科目如下，完整清單依公司與年度不同，以實際回傳為準（不熟的 type 看 `origin_name`）。篩選請用 `type`，同一科目的 `origin_name` 括號全形／半形隨年度不同：
+
+| type | origin_name | 說明 |
+|---|---|---|
+| `CashFlowsFromOperatingActivities` | 營業活動之淨現金流入（流出） | 營業現金流 |
+| `CashProvidedByInvestingActivities` | 投資活動之淨現金流入（流出） | |
+| `CashFlowsProvidedFromFinancingActivities` | 籌資活動之淨現金流入（流出） | |
+| `PropertyAndPlantAndEquipment` | 取得不動產、廠房及設備 | 資本支出，負值 |
+| `Depreciation` | 折舊費用 | |
+| `CashBalancesEndOfPeriod` | 期末現金及約當現金餘額 | 時點餘額，非累計 |
+
+現金流量表的流量科目是**年度累計（YTD）**：`03-31` 為 Q1 單季，`06-30`／`09-30`／`12-31`
+為當年累計至該季。要單季值需減去同年前一季（Q1 不用減），`start` 請從 1 月起抓。此 endpoint
+沒有 `period` 參數，一律回傳累計值。
+
 ### 月營收
 
 ```json
@@ -89,7 +108,7 @@ Batch 回傳格式：`{"data_type": "financials", "data": {"2330": [...], "2317"
 
 ---
 
-## BlaveClaw lib 用法
+## Blave Agent lib 用法
 
 所有台股資料一律用 batch 函式（即使只有 1 支）：
 

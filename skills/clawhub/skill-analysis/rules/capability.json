@@ -1,0 +1,84 @@
+{
+  "family": "capability",
+  "version": 1,
+  "rules": [
+    {
+      "id": "cap-00",
+      "label": "命令执行",
+      "re": "os\\.system|subprocess|exec\\s*\\(|eval\\s*\\(|shell|Bash\\b|\\bsudo\\b|powershell",
+      "flags": "I"
+    },
+    {
+      "id": "cap-01",
+      "label": "网络访问",
+      "re": "https?://|urllib|requests|httpx|aiohttp|curl|wget|socket|fetch\\s*\\(",
+      "flags": "I"
+    },
+    {
+      "id": "cap-02",
+      "label": "文件写入",
+      "re": "open\\s*\\([^)]*[\\\"']w|write_text|writeBytes|fs\\.writeFile|echo\\s+[^|]*>\\s*\\S",
+      "flags": "I"
+    },
+    {
+      "id": "cap-03",
+      "label": "凭据/环境访问",
+      "re": "\\.env|os\\.environ|getenv|process\\.env|\\.ssh|API_?KEY|SECRET|PASSWORD|TOKEN",
+      "flags": "I"
+    },
+    {
+      "id": "cap-04",
+      "label": "远程代码拉取",
+      "re": "curl[^\\n]{0,500}\\|(?:sh|bash)|wget[^\\n]{0,500}\\|(?:sh|bash)|npx\\s+(?:-y|--yes)",
+      "flags": "I"
+    },
+    {
+      "id": "cap-05",
+      "label": "消息/邮件外发",
+      "re": "smtp|smtplib|send_message|sendMail|mailgun|twilio",
+      "flags": "I"
+    },
+    {
+      "id": "cap-06",
+      "label": "权限配置劫持",
+      "re": "settings\\.local\\.json|permission-mode|bypassPermissions|bash:\\*",
+      "flags": "I"
+    },
+    {
+      "id": "cap-07",
+      "label": "持久化",
+      "re": "@reboot|crontab|launchctl|schtasks|systemctl\\s+enable|Startup",
+      "flags": "I"
+    },
+    {
+      "id": "cap-08",
+      "label": "MCP 服务器接入",
+      "re": "mcpServers?|modelcontextprotocol|\\.mcp\\.json|mcp server",
+      "flags": "I"
+    },
+    {
+      "id": "cap-09",
+      "label": "供应链安装钩子",
+      "re": "postinstall|preinstall|prepare\\\"?\\s*:",
+      "flags": "I"
+    },
+    {
+      "id": "cap-10",
+      "label": "文件系统越权/符号链接",
+      "re": "os\\.symlink|ln\\s+-s|mklink|\\.\\./\\.\\.",
+      "flags": "I"
+    },
+    {
+      "id": "cap-11",
+      "label": "Agent 记忆篡改",
+      "re": "agent[\\s_-]?memory|MEMORY\\.md|\\.memory/|persistent[\\s_-]?memory",
+      "flags": "I"
+    },
+    {
+      "id": "cap-12",
+      "label": "本地无鉴权服务",
+      "re": "--no-auth|no_authentication|0\\.0\\.0\\.0",
+      "flags": "I"
+    }
+  ]
+}

@@ -1,10 +1,11 @@
 import { fromHttpError, fromTransportError, isRetriableHttpError, isStructuredError } from '../errors.js';
 import { getJson, postJson } from './http.js';
+import { thetaUrl, pathSegment } from '../security.js';
 const DEFAULT_BASE = 'https://ondemand.thetaedgecloud.com';
 const RETRIABLE_STATUS = new Set([408, 425, 429, 500, 502, 503, 504]);
 function baseUrl(cfg) {
     const raw = cfg.onDemandApiBaseUrl?.trim() || DEFAULT_BASE;
-    return raw.replace(/\/+$/, '');
+    return thetaUrl(raw, 'ondemand');
 }
 function h(cfg) {
     if (!cfg.onDemandApiToken)
@@ -38,10 +39,7 @@ function optionalNet(cfg) {
     };
 }
 function encodePathSegment(value, label) {
-    if (typeof value !== 'string' || !value.trim()) {
-        throw new Error(`${label} must be a non-empty string`);
-    }
-    return encodeURIComponent(value.trim());
+    return pathSegment(value, label);
 }
 function inferPath(service, opts = {}) {
     const params = new URLSearchParams();
@@ -119,12 +117,19 @@ function parseSseResponse(text) {
     let usage;
     let message = '';
     let reasoning = '';
+    const toolCalls = new Map();
     const chunks = [];
+    let done = false;
+    let malformed = false;
     for (const line of text.split(/\r?\n/)) {
         if (!line.startsWith('data:'))
             continue;
         const data = line.slice('data:'.length).trim();
-        if (!data || data === '[DONE]')
+        if (data === '[DONE]') {
+            done = true;
+            continue;
+        }
+        if (!data)
             continue;
         try {
             const chunk = JSON.parse(data);
@@ -141,16 +146,33 @@ function parseSseResponse(text) {
                 ? choice.message
                 : {};
             const content = delta.content ?? messageObj.content ?? choice?.text;
-            const reasoningChunk = delta.reasoning ?? messageObj.reasoning;
+            const reasoningChunk = delta.reasoning_content ?? delta.reasoning ?? messageObj.reasoning_content ?? messageObj.reasoning;
             if (typeof content === 'string')
                 message += content;
             if (typeof reasoningChunk === 'string')
                 reasoning += reasoningChunk;
+            const incoming = delta.tool_calls ?? messageObj.tool_calls;
+            if (Array.isArray(incoming))
+                for (const [position, part] of incoming.entries()) {
+                    const index = part.index ?? position;
+                    const current = toolCalls.get(index) ?? { type: 'function', function: { name: '', arguments: '' } };
+                    if (part.id)
+                        current.id = part.id;
+                    if (part.type)
+                        current.type = part.type;
+                    if (part.function?.name)
+                        current.function.name += part.function.name;
+                    if (part.function?.arguments)
+                        current.function.arguments += part.function.arguments;
+                    toolCalls.set(index, current);
+                }
         }
         catch {
-            // Ignore malformed SSE data lines; retain successfully parsed chunks.
+            malformed = true;
         }
     }
+    if (malformed || !chunks.length || (!done && !finishReason))
+        throw new Error('Malformed or incomplete Theta event stream');
     return {
         status: 'success',
         body: {
@@ -159,7 +181,7 @@ function parseSseResponse(text) {
                 {
                     id: id ?? 'streaming-response',
                     state: 'success',
-                    output: { message },
+                    output: { message, ...(toolCalls.size ? { tool_calls: [...toolCalls.entries()].sort(([a], [b]) => a - b).map(([, call]) => call) } : {}) },
                     model,
                     finish_reason: finishReason,
                     usage,
@@ -188,9 +210,10 @@ function normalizeChatCompletionsJson(payload) {
     const message = typeof messageObj.content === 'string' ? messageObj.content :
         typeof firstChoice.text === 'string' ? firstChoice.text :
             null;
-    const reasoning = typeof messageObj.reasoning === 'string' ? messageObj.reasoning :
-        typeof firstChoice.reasoning === 'string' ? firstChoice.reasoning :
-            '';
+    const reasoning = typeof messageObj.reasoning_content === 'string' ? messageObj.reasoning_content :
+        typeof messageObj.reasoning === 'string' ? messageObj.reasoning :
+            typeof firstChoice.reasoning === 'string' ? firstChoice.reasoning :
+                '';
     const usage = body.usage && typeof body.usage === 'object'
         ? { ...body.usage }
         : body.usage;
@@ -202,7 +225,7 @@ function normalizeChatCompletionsJson(payload) {
                 {
                     id: body.id ?? 'chat-completions-response',
                     state: 'success',
-                    output: { message },
+                    output: { message, ...(Array.isArray(messageObj.tool_calls) ? { tool_calls: messageObj.tool_calls } : {}) },
                     model: body.model,
                     finish_reason: firstChoice.finish_reason,
                     usage,
@@ -217,10 +240,11 @@ function normalizeChatCompletionsJson(payload) {
     };
 }
 async function postJsonOrSse(cfg, url, body, timeoutMs) {
-    for (let attempt = 0; attempt <= cfg.httpMaxRetries; attempt += 1) {
-        const canRetry = attempt < cfg.httpMaxRetries;
+    for (let attempt = 0; attempt < 1; attempt += 1) {
+        const canRetry = false;
         try {
             const res = await fetch(url, {
+                redirect: 'error',
                 method: 'POST',
                 headers: h(cfg),
                 body: JSON.stringify(body),
@@ -266,7 +290,12 @@ const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
 export const onDemandApiClient = {
     listServices: (cfg) => getJson(`${baseUrl(cfg)}/service/list?expand=template_id`, optionalNet(cfg)),
     createInferRequest: (cfg, service, payload, opts) => {
-        const body = normalizeInferPayload(payload);
+        const normalized = normalizeInferPayload(payload);
+        // Live 2026-10-03: multi-prediction services (image_to_image) ignore ?prediction= and run
+        // their default prediction; the body field is honoured. Send both.
+        const body = opts?.prediction && normalized.prediction === undefined
+            ? { ...normalized, prediction: opts.prediction }
+            : normalized;
         const timeoutMs = resolveCreateInferTimeoutMs(cfg, service, body);
         return postJsonOrSse(cfg, `${baseUrl(cfg)}${inferPath(service, opts)}`, body, timeoutMs);
     },
@@ -280,5 +309,31 @@ export const onDemandApiClient = {
         return normalizeChatCompletionsJson(result);
     },
     getInferRequest: (cfg, requestId) => getJson(`${baseUrl(cfg)}/infer_request/${encodePathSegment(requestId, 'requestId')}`, net(cfg)),
-    createInputPresignedUrls: (cfg, service, inputFields) => postJson(`${baseUrl(cfg)}/infer_request/${encodePathSegment(service, 'service')}/input_presigned_urls`, inputFields?.length ? { input_fields: inputFields } : {}, net(cfg))
+    createInputPresignedUrls: async (cfg, service, inputFields) => normalizePresignedUrls(await postJson(`${baseUrl(cfg)}/infer_request/${encodePathSegment(service, 'service')}/input_presigned_urls`, inputFields?.length ? { input_fields: inputFields } : {}, net(cfg)))
 };
+// Live response (2026-10-03): body[field] = {presigned_url, filename}. The legacy npm MCP 0.1.7
+// expected body.urls[field].upload_url. Normalise to one shape and state the upload contract.
+export const PRESIGNED_UPLOAD_CONTENT_TYPE = 'application/octet-stream';
+function normalizePresignedUrls(response) {
+    if (!response || typeof response !== 'object')
+        return response;
+    const body = response.body;
+    if (!body || typeof body !== 'object')
+        return response;
+    const source = (body.urls && typeof body.urls === 'object' ? body.urls : body);
+    const uploads = {};
+    for (const [field, raw] of Object.entries(source)) {
+        if (!raw || typeof raw !== 'object')
+            continue;
+        const info = raw;
+        const uploadUrl = info.presigned_url ?? info.upload_url;
+        if (typeof uploadUrl === 'string' && typeof info.filename === 'string') {
+            uploads[field] = { upload_url: uploadUrl, filename: info.filename };
+        }
+    }
+    return {
+        ...response,
+        uploads,
+        uploadInstructions: `PUT the file bytes to upload_url with header Content-Type: ${PRESIGNED_UPLOAD_CONTENT_TYPE} (any other type fails signature check with 403), then pass filename as the input field value.`
+    };
+}

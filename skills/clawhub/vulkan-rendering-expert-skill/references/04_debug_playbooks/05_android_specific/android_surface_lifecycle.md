@@ -42,15 +42,16 @@
 
 ---
 
-## 3. 快速验证路径
+## 3. 快速验证路径（证据驱动决策表）
 
-1. 打印 Java/Kotlin Surface 生命周期。
-2. 打印 native ANativeWindow acquire/release。
-3. 打印 render thread start/stop。
-4. 打印 acquire / present 返回值。
-5. 打印 swapchain recreate 触发原因。
-6. rotation / pause / resume 循环测试。
-7. 使用 AGI / logcat 关联分析。
+| # | 检查（成本升序） | 结果 A → 下一步 | 结果 B → 下一步 | 剪枝（排除的假设） |
+|---|---|---|---|---|
+| 1 | logcat：surfaceCreated / surfaceChanged / surfaceDestroyed 时间戳 vs crash / 黑屏首次出现时间 | surfaceDestroyed 早于 crash → §5-1（§2 的 P0 Surface destroyed 后仍 present 假设）；surfaceChanged（rotation）后异常且无 swapchain recreate 记录 → §5-3（§2 的 P0 swapchain 未随 surface changed 重建假设） | lifecycle 事件与异常无时序关联 → 检查 2 | — |
+| 2 | logcat：ANativeWindow acquire / release 配对、acquire / present 返回值 | ANativeWindow release 后仍被使用 → §5-2（§2 的 P0 ANativeWindow 生命周期假设）；present 返回 out-of-date 未处理 → §5-3 | 配对与返回值正常 → 检查 3 | 正常时排除 §2 的 P0 ANativeWindow 生命周期假设 |
+| 3 | pause / resume 后 render thread 状态：GPU 提交是否暂停、Vulkan 对象是否重复创建 | pause 后未暂停 GPU 提交 → §5-4；resume 后重复创建 Vulkan 对象 → §5-5（均为 §2 的 P1 pause/resume 状态机假设） | 状态机正常 → 检查 4 | 正常时排除 §2 的 P1 pause/resume 状态机假设 |
+| 4 | AGI：surface 事件后 GPU frame 是否继续提交、resize 后是否恢复 | surface destroyed 后仍持续提交 → 印证 §5-1；resize 后 frame 未恢复 → 检查 5 | frame 提交与恢复均正常 → 检查 6 | 正常时排除 §2 的 P0 Surface destroyed 后仍 present 假设 |
+| 5 | swapchain 重建是否覆盖全部依赖资源组：framebuffer / image view / command buffer 是否随新 swapchain 重录 | 只重建 swapchain、command buffer 仍引用旧 framebuffer / image view → §5-7（§2 的 P2 旧资源被 command buffer 引用假设） | 覆盖完整 → 检查 6 | 完整时排除 §2 的 P2 旧资源被 command buffer 引用假设 |
+| 6 | extent 值（surface 尺寸 / capabilities） | extent 为 0（minimized / layout 未完成）仍创建 swapchain → §5-6（§2 的 P1 extent 为 0 假设） | extent 正常 → §11 不确定处理 | 正常时排除 §2 的 P1 extent 为 0 假设 |
 
 ---
 
@@ -92,13 +93,17 @@ SurfaceView / SurfaceHolder
 
 ## 6. 修复方案
 
-### 最小修复
+### Workaround（临时绕过，现象消失 ≠ 根因修复）
 
-- Surface destroyed 时停止 render loop。
-- ANativeWindow 失效时不再 acquire / present。
-- surface changed 时触发 swapchain recreate。
+- 临时锁定屏幕方向，并在 pause 时走完整销毁 / resume 时完整重建的保守路径（恢复慢但状态简单；仅应急）。`[ANDROID]`
 
-### 稳定修复
+### Minimal Fix（针对根因的最小修复）
+
+- Surface destroyed 时停止 render loop。`[ANDROID]`
+- ANativeWindow 失效时不再 acquire / present。`[ANDROID]`
+- surface changed 时触发 swapchain recreate。`[ANDROID]`
+
+### Structural Fix（结构性 / 防复发修复）
 
 - 建立 Android lifecycle 状态机：
   - NoSurface
@@ -107,14 +112,11 @@ SurfaceView / SurfaceHolder
   - Rendering
   - Paused
   - Destroyed
-- render thread 根据状态机运行。
-- 所有 surface-dependent resource 统一重建。
-
-### 工程化修复
-
-- Java/Kotlin 与 native 层建立明确事件队列。
-- native render thread 不直接依赖 UI thread 临时状态。
-- 建立 surface generation id，防止旧 surface 被使用。
+- render thread 根据状态机运行。`[ANDROID]`
+- 所有 surface-dependent resource 统一重建。`[ANDROID]`
+- Java/Kotlin 与 native 层建立明确事件队列。`[ANDROID]`
+- native render thread 不直接依赖 UI thread 临时状态。`[ANDROID]`
+- 建立 surface generation id，防止旧 surface 被使用。`[ANDROID]`
 
 ---
 
@@ -165,8 +167,8 @@ SurfaceView / SurfaceHolder
 
 ## 10. Android 分支
 
-本 Playbook 本身就是 Android 分支。  
-如果使用 SurfaceView，需要重点检查 SurfaceHolder 生命周期。  
+本 Playbook 本身就是 Android 分支。
+如果使用 SurfaceView，需要重点检查 SurfaceHolder 生命周期。
 如果使用 NativeActivity，需要重点检查 native window 回调。
 
 ---

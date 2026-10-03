@@ -1,42 +1,49 @@
-## Description: <br>
-Provides per-channel session isolation, a Write-Ahead Log protocol, and working-buffer management so agents can preserve decisions, facts, and recovery context across long or complex sessions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps OpenClaw agents keep per-channel decision notes and recover context across long sessions using a write-ahead logging workflow.
 
-## Publisher: <br>
-[richgoodson](https://clawhub.ai/user/richgoodson) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[richgoodson](https://clawhub.ai/user/richgoodson)
 
-## Use Case: <br>
-Developers and operators of multi-channel OpenClaw agents use this skill to maintain human-readable per-channel session notes, Write-Ahead Log decision entries, and a working buffer for context recovery across long sessions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Conversation-derived state can be written to shared workspace memory files, including raw working-buffer exchanges during long sessions. <br>
-Mitigation: Redact secrets and unnecessary personal data before writing, require user opt-in before buffering raw exchanges, and avoid storing credentials or sensitive identifiers. <br>
-Risk: Shared session state can expose one channel's notes to another user if workspace scoping or file permissions are weak. <br>
-Mitigation: Use per-channel session scoping, restrict memory/sessions/ permissions to the owning agent or user, and keep session filenames channel-specific. <br>
-Risk: Session files and working buffers may persist longer than appropriate for sensitive environments. <br>
-Mitigation: Define a deletion schedule, prune distilled entries during maintenance, and clear expired working-buffer content after compaction recovery. <br>
+## Use Case:
 
+Developers operating OpenClaw agents use this skill to maintain channel-specific working notes, record decisions before replying, and recover project context after compaction or session restarts.
 
-## Reference(s): <br>
-- [Agent Session State on ClawHub](https://clawhub.ai/richgoodson/agent-session-state) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown session files and concise operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes per-channel session files under memory/sessions/ and a working buffer at memory/working-buffer.md when active.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: evidence.release.version and skill metadata) <br>
+Risk: Different channels whose names normalize to the same file slug may share persistent session notes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before multi-channel or multi-tenant use, require immutable unique channel IDs, namespace files by workspace or account, and verify stored channel identity before reading or writing.
+
+## Reference(s):
+
+- [Agent Session State on ClawHub](https://clawhub.ai/richgoodson/skills/agent-session-state)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown session notes and text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes per-channel notes to memory/sessions/ and supports distillation into longer-term memory.]
+
+## Skill Version(s):
+
+2.2.0 (source: skill metadata and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

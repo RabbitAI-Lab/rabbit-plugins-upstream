@@ -1,0 +1,7 @@
+{
+  "release_profile": {
+    "current_major": 2,
+    "require_approved": true,
+    "allow_prerelease": false
+  }
+}

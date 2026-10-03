@@ -1,40 +1,53 @@
-## Description: <br>
-AI-powered test strategy and automation assistant that designs testing strategies, generates unit, integration, and end-to-end test cases, implements web, mobile, and API test automation, and supports CI/CD testing pipelines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams design risk-based test strategies, generate test cases and automation examples, and plan CI/CD quality gates.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-QA engineers, software developers, test leads, and DevOps teams use this skill to design practical test strategies, generate test cases, scaffold automation, and plan CI/CD quality gates for software projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated API and browser test examples may include placeholder URLs, login values, tokens, or payment details that are unsafe to use directly in production. <br>
-Mitigation: Use sandbox or staging environments, provider-approved test payment data, and secret managers or environment variables for real test credentials. <br>
-Risk: Generated tests and quality gates may not fully match the target application behavior or risk profile. <br>
-Mitigation: Review generated test cases, automation code, and CI/CD thresholds before adopting them in a release workflow. <br>
+## Use Case:
 
+QA engineers, developers, test leads, and DevOps teams use this skill to plan unit, integration, and end-to-end testing, draft automation, and define CI/CD quality gates.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/ai-test-strategy-architect) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks, checklists, tables, and structured testing guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include sample test code, CI/CD configuration guidance, test strategy documents, and framework comparisons.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Generated tests or CI snippets may not fit the target project and could produce misleading results or quality gates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and adapt examples to the project before running them or adding them to CI.
+
+Risk: Example credentials or placeholders could be replaced with real production secrets.
+
+Mitigation: Use safe test credentials and never put production credentials in examples.
+
+## Reference(s):
+
+- [AI Test Strategy Architect on ClawHub](https://clawhub.ai/gechengling/skills/ai-test-strategy-architect)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown with code and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Proposed examples are for review and adaptation before execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

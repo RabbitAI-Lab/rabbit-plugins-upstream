@@ -1,0 +1,65 @@
+{
+  "variant_id": "cap_13_metric_to_digest",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "metric_digest",
+  "output_name": "digest_artifact",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "metric_id",
+      "first",
+      "latest",
+      "delta",
+      "mean",
+      "direction"
+    ],
+    "properties": {
+      "metric_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "first": {
+        "type": "number"
+      },
+      "latest": {
+        "type": "number"
+      },
+      "delta": {
+        "type": "number"
+      },
+      "mean": {
+        "type": "number"
+      },
+      "direction": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "digest_id",
+      "metric_id",
+      "html"
+    ],
+    "properties": {
+      "digest_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "metric_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "html": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_metric_digest_render"
+}

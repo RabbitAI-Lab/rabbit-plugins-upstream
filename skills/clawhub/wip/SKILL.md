@@ -84,7 +84,7 @@ Read args + call `TaskList` (Claude Code) or read `task.md` (Antigravity). Then 
 
 1. **Cleanup**: immediately delete stale completed/in_progress entries (no user confirmation required)
 2. **Checklist state recovery** (Step 1.5): for tasks whose state cannot be verified from the in-context conversation (post-compact / inherited items), Grep/Read `fix_plan.md` / `checklist.md` to recover their state before asking
-3. **Per-item direction ask**: for each remaining item, decide proceed / split / merge / hold / defer-to-checklist / delete
+3. **Per-item direction ask**: for each remaining item, decide proceed / split / merge / hold / defer-to-checklist / delete. `defer-to-checklist` follows `todowrite`'s `file` medium convention (`fix_plan.md`/`checklist.md`) — write the deferred item there rather than leaving it as an orphaned session task
 4. **Start priority + execute**: among items decided as "proceed", choose start priority, mark in_progress, and execute
 
 ### Step 1 (alt) — Registration path (Registration mode)
@@ -105,6 +105,7 @@ Read args + call `TaskList` (Claude Code) or read `task.md` (Antigravity). Then 
 | 4 | Skip `TaskList` before deciding mode | `TaskList` is the primary source for existing-task count. Guessing from context memory is unreliable |
 | 5 | Mixed mode: register new tasks + immediately mark in_progress without resume Step 2 direction ask on existing | Mixed mode: (a) register new, (b) then run resume on the combined list — old tasks may still need per-item direction |
 | 6 | Treat an explicit `/wip <small edit>` as a Skip-Condition case and go straight to `Read`/`Edit` of the deliverable | Explicit `/wip` = registration requested. Run Step 0 → Registration/Resume path → `TaskCreate` **first**, then execute. Skip Conditions gate self-invocation, not explicit calls |
+| 7 | Interrupt-stacked instructions arrive right after a registration-mode `/wip` (a newer directive: reword, investigate, etc.) → pivot to the newest instruction and never register the original `/wip` args | The original `/wip` args still require `TaskCreate` **first**. Register them before pivoting to any interrupt-stacked instruction — including Bash investigation for the newer directive. The register-before-execute guard hook only covers the case where `/wip` is the *last* user turn; the interrupt-stacked case (a newer non-`/wip` turn follows) is caught only by this discipline |
 
 Environment implementations:
 - Claude Code → [claude.md](./claude.md) (TaskList/TaskCreate/AskUserQuestion)

@@ -1,48 +1,66 @@
-## Description: <br>
-Microsoft Excel API integration with managed OAuth for reading and writing Excel workbooks, worksheets, ranges, tables, and charts stored in OneDrive or SharePoint. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read and update Microsoft Excel workbooks, worksheets, ranges, tables, and charts through a connected Microsoft account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to access Microsoft Excel data through Maton-managed OAuth, including workbook discovery, worksheet and range reads, table changes, chart creation, and other Excel operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill routes Microsoft Excel access through Maton and requires a MATON_API_KEY. <br>
-Mitigation: Use the API key only in controlled environments and install the skill only after confirming the user trusts Maton to proxy Microsoft Excel access. <br>
-Risk: Write and delete operations can alter workbook, worksheet, range, table, or chart data. <br>
-Mitigation: Require explicit user approval before create, update, or delete calls, including confirmation of the target workbook, worksheet, and intended effect. <br>
+## Use Case:
 
+People and developers use this skill to inspect and edit Excel data in their connected Microsoft account. With separate approval, they can also set up functions and scheduled or cross-app triggers that act on Excel data.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/microsoft-excel) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Microsoft Graph Excel API Overview](https://learn.microsoft.com/en-us/graph/api/resources/excel) <br>
-- [Working with Excel in Microsoft Graph](https://learn.microsoft.com/en-us/graph/excel-concept-overview) <br>
-- [Excel Workbook Resource](https://learn.microsoft.com/en-us/graph/api/resources/workbook) <br>
-- [Excel Worksheet Resource](https://learn.microsoft.com/en-us/graph/api/resources/worksheet) <br>
-- [Excel Range Resource](https://learn.microsoft.com/en-us/graph/api/resources/range) <br>
-- [Excel Table Resource](https://learn.microsoft.com/en-us/graph/api/resources/table) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with REST endpoints and Python, JavaScript, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and network access; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Connecting the wrong Microsoft account or granting overly broad access could expose workbook data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account and requested scopes before authorizing the connection; use only the access the task needs.
+
+Risk: Workbook writes could unintentionally alter or delete data.
+
+Mitigation: Start with read-only operations and obtain explicit approval for each write.
+
+Risk: Scheduled or cross-app automation could repeatedly act on data or use an unintended source or destination.
+
+Mitigation: Approve each automation separately, name its source and destination, and keep trigger scope narrow.
+
+Risk: Using a long-lived API key outside the CLI could leak credentials.
+
+Mitigation: Prefer OAuth through the CLI; when a key is necessary, keep it out of logs, command lines, and persistent files.
+
+## Reference(s):
+
+- [ClawHub Microsoft Excel skill](https://clawhub.ai/byungkyu/skills/microsoft-excel)
+- [Maton](https://maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Microsoft Graph Excel API overview](https://learn.microsoft.com/en-us/graph/api/resources/excel)
+- [Working with Excel in Microsoft Graph](https://learn.microsoft.com/en-us/graph/excel-concept-overview)
+- [Scheduled trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with inline shell and Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May summarize or modify data from authorized Excel workbooks; automation is optional and requires separate approval.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,14 @@
+{
+  "route_plan": {
+    "route_id": "ROUTE-LIMA-3957",
+    "ordered_stops": [
+      "stop-a",
+      "stop-b"
+    ],
+    "leg_km": [
+      1.463,
+      2.203
+    ],
+    "total_km": 3.666
+  }
+}

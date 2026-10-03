@@ -28,7 +28,7 @@ These consume your Reverse Contact plan's quota, not cargo credits — treat the
 
 - ✅ **LinkedIn company URL → firmographics, as a fallback** — when you sourced company LinkedIn URLs (e.g. from `salesNavigator`) and `waterfall.enrichCompany` / `linkedin.enrichCompany` missed.
 - ✅ **Reverse-email person lookup on an existing subscription** — own-key `enrichProfileFromEmail` for inbound/signup emails.
-- ❌ **Default company enrich** — the chain is `cargo.enrichBusinessFirmographics` (0.5) → `waterfall.enrichCompany` (1) → `peopleDataLabs.enrichCompany` (3) (see [`../references/alternatives.md`](../references/alternatives.md)).
+- ❌ **Default company enrich** — the chain is `aiArk.enrichCompany` (0.01) → `companyEnrich.enrichByDomain` (0.25) → `waterfall.enrichCompany` (1) → `peopleDataLabs.enrichCompany` (3) (see [`../references/alternatives.md`](../references/alternatives.md)).
 - ❌ **LinkedIn-anchored enrich on a budget** — `linkedin.enrichCompany` (0.25) / `linkedin.enrichCompanyFromDomain` (0.5) first.
 - ❌ **Credits-based person enrichment** — its profile actions aren't credits-compatible; use `waterfall.enrichContact` / `FullEnrich` instead.
 
@@ -39,7 +39,7 @@ These consume your Reverse Contact plan's quota, not cargo credits — treat the
 ```bash
 # Only on rows the priority enrich chain missed, where a LinkedIn company URL exists
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"reverseContact","actionSlug":"enrichCompanyFromLinkedin","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"reverseContact","actionSlug":"enrichCompanyFromLinkedin"}' \
   --records '[{"linkedinUrl":"https://www.linkedin.com/company/acme"}]' \
   --wait-until-finished
 ```
@@ -48,7 +48,7 @@ The catalog dump documents no output schema for these actions — inspect the fi
 
 ## Cost traps
 
-- **1 credit for a niche lookup.** If the row also has a domain, the cheaper domain-first chain (`companyEnrich.enrichByDomain` 0.25, `linkedin.enrichCompanyFromDomain` 0.5, `cargo.enrichBusinessFirmographics` 0.5) should already have run — this action is for URL-only rows.
+- **1 credit for a niche lookup.** If the row also has a domain, the cheaper domain-first chain (`aiArk.enrichCompany` 0.01, `companyEnrich.enrichByDomain` 0.25, `linkedin.enrichCompanyFromDomain` 0.5) should already have run — this action is for URL-only rows.
 - **Own-key actions on the wrong assumption.** `enrichProfileFromEmail` and friends fail without a Reverse Contact API key connector; there is no credits fallback for them.
 
 ## Anti-patterns
@@ -58,11 +58,18 @@ The catalog dump documents no output schema for these actions — inspect the fi
 
 ## Position in the waterfall
 
-**ENRICH stage, niche fallback rung.** Default company chain: `cargo.enrichBusinessFirmographics` (0.5, after `matchBusiness`) → `waterfall.enrichCompany` (1) → `peopleDataLabs.enrichCompany` (3). `reverseContact.enrichCompanyFromLinkedin` (1) slots in only when the input is a LinkedIn company URL the stack couldn't resolve.
+**ENRICH stage, niche fallback rung.** Default company chain: `aiArk.enrichCompany` (0.01) → `companyEnrich.enrichByDomain` (0.25) → `waterfall.enrichCompany` (1) → `peopleDataLabs.enrichCompany` (3). `reverseContact.enrichCompanyFromLinkedin` (1) slots in only when the input is a LinkedIn company URL the stack couldn't resolve.
+
+## Recurring use
+
+No scheduled fit — a niche per-record fallback rung, never a re-pull.
+
+- **In-play gate:** `enrichCompanyFromLinkedin` runs only where the target firmographic fields are still empty, a LinkedIn company URL exists, and the cheaper chain already missed — firmographics are stable, so re-running unchanged rows re-bills 1 credit for identical data. Stamp an attempted-at column so misses don't retry each cycle.
+- **Own-key actions in plays:** `enrichProfileFromEmail` and friends draw down the workspace's Reverse Contact plan quota on every cycle — apply the same empty-field gating even though no cargo credits move. Play wrapper + cadence defaults: [`../recipes/save-as-play.md`](../recipes/save-as-play.md).
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"reverseContact","actionSlug":"enrichCompanyFromLinkedin","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"reverseContact","actionSlug":"enrichCompanyFromLinkedin"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 

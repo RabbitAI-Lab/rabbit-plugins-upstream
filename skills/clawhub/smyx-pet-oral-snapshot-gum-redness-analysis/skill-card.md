@@ -1,44 +1,58 @@
-## Description: <br>
-This skill analyzes pet oral snapshot images or videos through the publisher's cloud API to estimate gum color, gum redness level, and tartar coverage, then returns oral-health observations and report links without providing a disease diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet oral images or videos to describe visible gum color and tartar coverage and provide non-diagnostic oral health observations.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill in pet cameras, smart pet products, and pet health management workflows to analyze oral snapshots for visible gum redness and tartar indicators. It supports single-image, video, URL-based, and history-query workflows for structured pet oral-health observations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images, videos, or media URLs may be sent to the publisher's cloud service for analysis. <br>
-Mitigation: Use only media approved for cloud processing, avoid sensitive content, and confirm the publisher's retention and deletion practices before deployment. <br>
-Risk: Cloud report history is tied to an automatically selected or created identity. <br>
-Mitigation: Review the identity behavior before installation and provide clear user consent, disclosure, and opt-out paths in production workflows. <br>
-Risk: Local token or account records may be stored in the workspace data directory. <br>
-Mitigation: Restrict workspace access, rotate or delete stored credentials when no longer needed, and prefer a release that documents local storage controls explicitly. <br>
+## Use Case:
 
+Pet owners and developers of pet cameras or health platforms can submit oral images or videos for visible gum and tartar observations, review suggested follow-up, and retrieve prior reports. Results are not veterinary diagnoses.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-oral-snapshot-gum-redness-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown text with optional JSON details and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write a requested output file; cloud history queries are presented as a Markdown table.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter lists 1.0.5) <br>
+Risk: Pet oral images, videos, or URL references are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit media only when cloud processing is acceptable and avoid including unnecessary sensitive content.
+
+Risk: The skill may create or reuse an internal identity and store service tokens in its local workspace.
+
+Mitigation: Use an isolated workspace and account, and protect local data as credential-bearing.
+
+Risk: History lookup can retrieve cloud-stored reports under that identity.
+
+Mitigation: Request history only when you intend to access prior reports.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-pet-oral-snapshot-gum-redness-analysis)
+- [API interface documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Text or Markdown with structured analysis results and report links; optional JSON output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save results to a local file or list cloud-stored report history.]
+
+## Skill Version(s):
+
+1.0.15 (source: ClawHub release metadata; bundled frontmatter says 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

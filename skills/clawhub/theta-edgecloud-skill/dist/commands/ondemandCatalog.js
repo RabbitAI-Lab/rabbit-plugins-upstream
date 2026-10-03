@@ -1,16 +1,53 @@
 export const ONDEMAND_CHAT_SERVICE_SLUGS = [
+    'glm_5_2',
     'qwen3',
     'minimax_m2_5',
     'gpt_oss_120b',
     'llama_3_1_70b',
-    'llama_3_8b'
+    'llama_3_8b',
+    'glm_5_3',
+    'glm_5_3_flash',
+    'qwen3_8_max',
+    'qwen3_8_flash',
+    'ling_3_0_flash_fin'
 ];
+// Chat services served by POST /infer_request/chat/completions with model=<slug>.
+// Live-verified 2026-10-03 for the GLM-5.3, Qwen3.8 and Ling families.
+export const OPENAI_CHAT_COMPLETION_SERVICES = [
+    'gpt_oss_120b', 'glm_5_3', 'glm_5_3_flash', 'qwen3_8_max', 'qwen3_8_flash', 'ling_3_0_flash_fin'
+];
+// Services that return structured tool_calls. Live 2026-10-03: Qwen3.8-Max/Flash and
+// Ling-3.0-flash-Fin accept a tools array but silently ignore it (plain-text answers).
+export const TOOL_CALLING_CHAT_SERVICES = ['glm_5_3', 'glm_5_3_flash', 'gpt_oss_120b'];
 export function isOnDemandChatService(slug) {
     return ONDEMAND_CHAT_SERVICE_SLUGS.includes(slug);
 }
 // Refreshed against live public on-demand service discovery on 2026-05-26.
 // Source: https://ondemand.thetaedgecloud.com/service/list
 export const ONDEMAND_SERVICE_CATALOG = {
+    qwen3_8_max: { slug: 'qwen3_8_max', name: 'Qwen3.8-Max', category: 'LLM', requiredInputFields: ['messages'], supportsInputPresignedUrls: false, defaultPrediction: 'completions', inputSchemaKind: 'chat_messages', pricingHint: 'live list 2026-10-03: input=220/output=660 credits per 1M tokens (1 credit = USD 0.01)', notes: 'OpenAI-compatible chat/completions. Optional enable_thinking. Tools are ignored; use GLM-5.3 for tool calls.' },
+    qwen3_8_flash: { slug: 'qwen3_8_flash', name: 'Qwen3.8-Flash', category: 'LLM', requiredInputFields: ['messages'], supportsInputPresignedUrls: false, defaultPrediction: 'completions', inputSchemaKind: 'chat_messages', pricingHint: 'live list 2026-10-03: input=17/output=52 credits per 1M tokens (1 credit = USD 0.01)', notes: 'Cheapest live chat model. Optional enable_thinking. Tools are ignored.' },
+    ling_3_0_flash_fin: { slug: 'ling_3_0_flash_fin', name: 'Ling-3.0-flash-Fin', category: 'LLM', requiredInputFields: ['messages'], supportsInputPresignedUrls: false, defaultPrediction: 'completions', inputSchemaKind: 'chat_messages', maxTokensDefault: 2048, contextWindow: 256000, pricingHint: 'live list 2026-10-03 shows 0/0; treat cost as UNKNOWN, not free', notes: 'Finance model via ZAN Router. Writes reasoning into content; allow >=1024 max_tokens. Tools are ignored.' },
+    seedance_2_5: { slug: 'seedance_2_5', name: 'Seedance 2.5', category: 'VideoGen', requiredInputFields: ['prompt'], supportsInputPresignedUrls: true, defaultPrediction: 'default', inputSchemaKind: 'service_specific', pricingHint: 'live list: 1177 credits per 1M video tokens; resolution/reference multipliers apply', notes: 'BytePlus external route. duration 4-30 (MCP example of 1 is invalid), ratio 16:9|9:16|1:1, resolution 480p|720p|1080p, generate_audio, watermark, one reference_image_url/reference_video_url/reference_audio_url. 2026-10-03: API returned 503 "temporarily unavailable".' },
+    glm_5_3: { slug: 'glm_5_3', name: 'GLM 5.3', category: 'LLM', requiredInputFields: ['messages'], supportsInputPresignedUrls: false, defaultPrediction: 'completions', inputSchemaKind: 'chat_messages', notes: 'Use OpenAI-compatible chat/completions for structured tools; discover live capacity before use.' },
+    glm_5_3_flash: { slug: 'glm_5_3_flash', name: 'GLM 5.3 Flash', category: 'LLM', requiredInputFields: ['messages'], supportsInputPresignedUrls: false, defaultPrediction: 'completions', inputSchemaKind: 'chat_messages', notes: 'Public catalog does not guarantee available workers.' },
+    image_to_image: { slug: 'image_to_image', name: 'Image to image', category: 'ImageRestore', requiredInputFields: [], supportsInputPresignedUrls: true, inputSchemaKind: 'service_specific', notes: 'Discover prediction-specific required fields and variants live; do not assume one input contract.' },
+    glm_5_2: {
+        slug: 'glm_5_2',
+        name: 'GLM 5.2',
+        category: 'LLM',
+        requiredInputFields: ['messages'],
+        supportsInputPresignedUrls: false,
+        defaultPrediction: 'completions',
+        inputSchemaKind: 'chat_messages',
+        variants: ['default'],
+        maxTokensDefault: 5000,
+        contextWindow: 1000000,
+        license: 'MIT',
+        pricingHint: 'live list: input=154/output=484, divisor=1000000; raw split-price units, currency unverified',
+        liveStatus: 'live-public-2026-08-05',
+        notes: 'Canonical slug is glm_5_2. Live schema includes enable_thinking. Keep opt-in for bounded, verifiable worker tasks.'
+    },
     qwen3: {
         slug: 'qwen3',
         name: 'Qwen3',
@@ -192,6 +229,17 @@ export const ONDEMAND_SERVICE_CATALOG = {
         liveStatus: 'catalog-only-not-in-live-list-2026-05-26'
     }
 };
+// Live public on-demand list verified 2026-10-03 (13 services). Anything else in this
+// catalog is historical metadata only and must not be presented as available.
+export const LIVE_SERVICES_2026_10_03 = [
+    'ling_3_0_flash_fin', 'qwen3_8_max', 'qwen3_8_flash', 'glm_5_3', 'glm_5_3_flash', 'qwen3', 'seedance_2_5',
+    'blip', 'esrgan', 'image_to_image', 'stable_diffusion_xl_turbo', 'llava', 'whisper'
+];
+for (const spec of Object.values(ONDEMAND_SERVICE_CATALOG)) {
+    spec.liveStatus = LIVE_SERVICES_2026_10_03.includes(spec.slug)
+        ? 'live-public-2026-10-03'
+        : 'retired-not-in-live-list-2026-10-03';
+}
 export function listOnDemandServices() {
     return Object.values(ONDEMAND_SERVICE_CATALOG);
 }

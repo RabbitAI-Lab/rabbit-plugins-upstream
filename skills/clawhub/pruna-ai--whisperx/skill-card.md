@@ -1,41 +1,56 @@
-## Description: <br>
-Use when an agent needs word-level timestamps from audio for lyric alignment, caption timing, or video-edit cut boundaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through obtaining word-level timestamps from audio for lyric alignment, cut-safe edits, and caption timing.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and media creators use this skill to align audio with word-level timestamps for lyric edits, cut boundaries, and captions.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Audio is provided to Replicate for transcription.
+
+Mitigation: Confirm permission to upload recordings and avoid sending sensitive audio without approval.
+
+Risk: A Replicate API token is required for transcription.
+
+Mitigation: Keep the token in secure environment storage and out of shared commands and outputs.
+
+Risk: Related-skill installation commands fetch external packages.
+
+Mitigation: Review installation commands and use pinned or trusted versions before running them.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers, media creators, and agents use this skill to transcribe audio with word-level timing for lyric-synced edits, captions, and cut alignment. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
 
-## Known Risks and Mitigations: <br>
-Risk: Audio is sent to Replicate for transcription and may involve paid API usage. <br>
-Mitigation: Confirm external processing is acceptable, verify REPLICATE_API_TOKEN is configured, and avoid sensitive audio unless that processing is approved. <br>
-Risk: Optional prerequisite skills and full-suite installation can expand the agent workflow beyond transcription. <br>
-Mitigation: Review prerequisite skills before installation and load only the skills needed for the task. <br>
+**Output Format:** [Markdown with bash examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/whisperx) <br>
-- [Replicate model page: victor-upmeet/whisperx](https://replicate.com/victor-upmeet/whisperx) <br>
+**Other Properties Related to Output:** [Guides audio input and alignment settings; downstream transcription can produce JSON and SRT files.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and references to JSON and SRT transcript outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REPLICATE_API_TOKEN and an HTTPS audio_file; align_output enables word-level timing.] <br>
+1.0.14 (source: ClawHub release metadata and skill frontmatter)
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and artifact metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

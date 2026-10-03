@@ -1,12 +1,13 @@
 ---
 name: newrelic-cli-skills
-version: 1.0.5
+version: 1.0.7
 description: >
   Monitor, query, and manage New Relic observability data via the newrelic CLI.
   Covers NRQL queries, APM performance triage, deployment markers, alert policy and
-  condition management, notification channel setup, infrastructure monitoring, and
-  agent diagnostics. Use when user asks about application performance, error rates,
-  slow transactions, deployment tracking, alert configuration, or New Relic setup.
+  condition management, notification channel setup, infrastructure monitoring, agent
+  diagnostics, and identity/access administration. Use when user asks about application
+  performance, error rates, slow transactions, deployment tracking, alert configuration,
+  New Relic setup, users, groups, roles, permissions, or access grants.
 metadata:
   openclaw:
     purpose: >
@@ -15,8 +16,10 @@ metadata:
       and infrastructure host data from the New Relic API. Write operations in this
       repo include deployment marker creation plus alert policy, condition, and
       notification channel creation; the alerts sub-skill also documents alert
-      condition deletion. Helper scripts execute newrelic CLI commands only and
-      should validate untrusted inputs before embedding them in NRQL.
+      condition deletion. IAM workflows add user/group CRUD, membership changes, and
+      access-grant creation/revocation; require explicit confirmation before IAM writes
+      and verify each write by reading the target back. Helper scripts execute newrelic
+      CLI commands only and should validate untrusted inputs before embedding them in NRQL.
     requires:
       env:
         - NEW_RELIC_API_KEY
@@ -28,6 +31,10 @@ metadata:
         NEW_RELIC_ACCOUNT_ID is the numeric account ID from the NR UI.
         See README.md for CLI installation instructions.
         Use an API key scoped to the minimum required accounts.
+        IAM writes also require organization-level authorization for the user associated
+        with the key: Authentication domain manager or Organization manager for
+        usermanagement, and Organization manager for accessmanagement grant writes.
+        Administrative user-management access requires a core or full platform user.
 tags:
   - newrelic
   - observability
@@ -35,6 +42,7 @@ tags:
   - monitoring
   - performance
   - nrql
+  - iam
 ---
 
 # New Relic CLI Skills
@@ -47,6 +55,7 @@ tags:
 **Alert management?** → [`alerts/SKILL.md`](alerts/SKILL.md)
 **Infrastructure/host issues?** → [`infrastructure/SKILL.md`](infrastructure/SKILL.md)
 **Agent not reporting?** → [`diagnostics/SKILL.md`](diagnostics/SKILL.md)
+**Users, groups, roles, permissions, or access grants?** → [`iam/SKILL.md`](iam/SKILL.md)
 
 ---
 
@@ -68,16 +77,23 @@ newrelic --version
 
 # Configure profile
 newrelic profile add \
-  --profile default \
+  --profile "default" \
   --apiKey $NEW_RELIC_API_KEY \
   --accountId $NEW_RELIC_ACCOUNT_ID \
   --region US   # US, EU, JP, GOV, or FEDRAMP (alias for GOV)
 
-newrelic profile default --profile default
+newrelic profile default --profile "default"
 
 # Verify
-newrelic profile list
+newrelic profile list --format JSON
 ```
+
+For structured profile discovery, pass `--format JSON` explicitly. The `isDefault`
+field identifies the persisted default profile, and profile names are emitted without
+terminal decoration. It does not necessarily identify the effective credentials: the
+global `--profile` flag can select another profile, while `NEW_RELIC_API_KEY`,
+`NEW_RELIC_ACCOUNT_ID`, `NEW_RELIC_REGION`, and `NEW_RELIC_LICENSE_KEY` override the
+corresponding stored profile fields.
 
 ---
 
@@ -140,6 +156,7 @@ newrelic entity search --name "" --type HOST
 | [`alerts/`](alerts/SKILL.md) | Alert policies, conditions, notification channels |
 | [`infrastructure/`](infrastructure/SKILL.md) | Host metrics, CPU/memory, process monitoring |
 | [`diagnostics/`](diagnostics/SKILL.md) | Agent health, config validation, connectivity |
+| [`iam/`](iam/SKILL.md) | Users, groups, memberships, roles, permissions, and access grants |
 
 ## Scripts
 

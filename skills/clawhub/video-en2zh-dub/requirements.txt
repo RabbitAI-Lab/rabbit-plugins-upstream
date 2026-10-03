@@ -1,0 +1,13 @@
+# Python 依赖，安装命令：
+#   pip install -r requirements.txt
+
+openai-whisper>=20230124
+edge-tts>=7.0.0
+pysrt>=1.1.2
+pydub>=0.25.1
+
+# 系统级依赖（不在此文件安装）：
+#   ffmpeg  —— pydub 与 whisper 都会调用它，必须可在 PATH 中找到
+#     Windows: winget install ffmpeg  或  choco install ffmpeg
+#     macOS:   brew install ffmpeg
+#     Linux:   apt install ffmpeg

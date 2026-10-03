@@ -1,0 +1,11 @@
+{
+  "review_plan": {
+    "handling_tier": "restricted",
+    "review_lane": "specialist-review",
+    "masked_preview": {
+      "account_name": "[redacted]",
+      "email": "[redacted]",
+      "region": "west"
+    }
+  }
+}

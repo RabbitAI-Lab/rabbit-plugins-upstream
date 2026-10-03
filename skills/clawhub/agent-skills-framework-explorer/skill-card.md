@@ -1,42 +1,55 @@
-## Description: <br>
-Helps developers explore, compare, and build with AI agent skill frameworks including Anthropic agent-skills, OpenAI Agents SDK, LangGraph, CrewAI, and MCP. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers compare agent frameworks, choose tool integrations, and plan agent workflows and migrations.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers and agent builders use this skill to compare agent frameworks, choose tool-integration approaches, design multi-agent workflows, and find starter patterns for MCP, CrewAI, LangGraph, OpenAI Agents SDK, Claude Agent SDK, and agent-skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Copied setup examples may install packages or run integration commands. <br>
-Mitigation: Review package sources, command effects, repository names, and environment-specific values before execution. <br>
-Risk: Examples reference credentials and write-capable operations such as creating GitHub issues or sending Slack messages. <br>
-Mitigation: Use scoped environment variables, avoid hardcoded tokens, and test write-capable integrations in non-production targets first. <br>
+## Use Case:
 
+Developers and agent builders use this skill to compare agent frameworks, select MCP-style tools, and design or migrate multi-agent workflows.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/gechengling/agent-skills-framework-explorer) <br>
-- [agent-skills repository](https://github.com/addyosmani/agent-skills) <br>
-- [Model Context Protocol documentation](https://modelcontextprotocol.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with code blocks and comparison tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include framework recommendations, example commands, setup configuration, and security notes for credentials or write-capable integrations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Example installation commands or framework choices may be outdated or unsuitable for a particular environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands against official releases, pin dependency versions, and commit lockfiles before use.
+
+Risk: Example tool integrations may expose broad credentials or allow unintended write actions.
+
+Mitigation: Use narrowly scoped, short-lived tokens and require human confirmation before remote changes.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/agent-skills-framework-explorer)
+- [Agent skills framework example](https://github.com/addyosmani/agent-skills)
+- [Model Context Protocol documentation](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with code and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory only; examples require review before use.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

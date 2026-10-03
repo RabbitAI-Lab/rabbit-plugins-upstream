@@ -1,5 +1,6 @@
 import { deleteEmpty, getJson, postJson, putEmpty, putJson } from './http.js';
-import { isStructuredError } from '../errors.js';
+import { isStructuredError, fromHttpError } from '../errors.js';
+import { pathSegment } from '../security.js';
 const BASE_CTRL = 'https://controller.thetaedgecloud.com';
 const BASE_API = 'https://api.thetaedgecloud.com';
 const CONTROLLER_DEFAULT_HEADERS = {
@@ -21,9 +22,7 @@ function net(cfg, service, headers) {
     };
 }
 function segment(value, field) {
-    if (typeof value !== 'string' || !value.trim())
-        throw new Error(`${field} must be a non-empty string`);
-    return encodeURIComponent(value.trim());
+    return pathSegment(value, field);
 }
 function url(base, path, params = {}) {
     const query = new URLSearchParams();
@@ -72,29 +71,32 @@ function documentForm(projectId, file, metadata) {
 }
 async function postForm(targetUrl, form, cfg) {
     const res = await fetch(targetUrl, {
+        redirect: 'error',
         method: 'POST',
         headers: k(cfg),
         body: form,
         signal: AbortSignal.timeout(cfg.httpTimeoutMs)
     });
     if (!res.ok)
-        throw new Error(await res.text());
+        throw fromHttpError('edgecloud-controller', targetUrl, res.status, await res.text());
     return res.json();
 }
 async function putForm(targetUrl, form, cfg) {
     const res = await fetch(targetUrl, {
+        redirect: 'error',
         method: 'PUT',
         headers: k(cfg),
         body: form,
         signal: AbortSignal.timeout(cfg.httpTimeoutMs)
     });
     if (!res.ok)
-        throw new Error(await res.text());
+        throw fromHttpError('edgecloud-controller', targetUrl, res.status, await res.text());
     return res.json();
 }
 export const edgecloudControllerClient = {
-    listStandardTemplates: (cfg, category) => getJson(`${BASE_CTRL}/deployment_template/list_standard_templates?category=${category}`, net(cfg, 'edgecloud-controller', k(cfg))),
-    listCustomTemplates: (cfg, projectId) => getJson(`${BASE_CTRL}/deployment_template/list_custom_templates?project_id=${projectId}`, net(cfg, 'edgecloud-controller', k(cfg))),
+    startDeploymentByBaseId: (cfg, projectId, baseId) => putEmpty(url(BASE_CTRL, `/deployments/base/${segment(baseId, 'baseId')}/start`, { project_id: projectId }), net(cfg, 'edgecloud-controller', k(cfg))),
+    listStandardTemplates: (cfg, category) => getJson(url(BASE_CTRL, '/deployment_template/list_standard_templates', { category }), net(cfg, 'edgecloud-controller', k(cfg))),
+    listCustomTemplates: (cfg, projectId) => getJson(url(BASE_CTRL, '/deployment_template/list_custom_templates', { project_id: projectId }), net(cfg, 'edgecloud-controller', k(cfg))),
     listVmTypes: (cfg) => getJson(`${BASE_API}/resource/vm/list`, net(cfg, 'edgecloud-controller', CONTROLLER_DEFAULT_HEADERS)),
     createDeployment: (cfg, payload) => postJson(`${BASE_CTRL}/deployment`, payload, net(cfg, 'edgecloud-controller', k(cfg))),
     listDeployments: (cfg, projectId) => firstRoute([

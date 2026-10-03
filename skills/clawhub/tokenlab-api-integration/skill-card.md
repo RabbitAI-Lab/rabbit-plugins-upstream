@@ -1,45 +1,65 @@
-## Description: <br>
-Integrates TokenLab chat, image, audio, video, and other API families into apps or scripts with runnable examples, model discovery, public contract checks, and agent-first recovery paths. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through TokenLab API integration using current model contracts, runnable code, and reversible client configuration.
 
-## Publisher: <br>
-[hedging8563](https://clawhub.ai/user/hedging8563) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hedging8563](https://clawhub.ai/user/hedging8563)
 
-## Use Case: <br>
-Developers and coding agents use this skill to add TokenLab API calls to applications or scripts with runnable examples, setup commands, model discovery, and route-selection guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated examples may use a TokenLab API key and make paid network API calls. <br>
-Mitigation: Review the selected endpoint, model, required environment variables, and expected costs before running generated commands. <br>
-Risk: Incorrect model, route, or request-shape assumptions can produce failed requests or unsupported parameters. <br>
-Mitigation: Use TokenLab model discovery, recommended-for shortlists, and model contract checks before hardcoding non-chat request details. <br>
-Risk: The skill depends on a third-party TokenLab service. <br>
-Mitigation: Confirm that the user trusts the TokenLab service before installing the skill or running generated integration examples. <br>
+## Use Case:
 
+Developers use this skill to select TokenLab endpoints from published model contracts, generate API integration code, and preview or apply supported agent-client configurations.
 
-## Reference(s): <br>
-- [Usage Notes](references/usage-notes.md) <br>
-- [TokenLab API overview](https://api.tokenlab.sh/llms.txt) <br>
-- [TokenLab model discovery](https://api.tokenlab.sh/v1/models) <br>
-- [TokenLab model contract endpoint](https://api.tokenlab.sh/v1/models/:model) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with runnable code and shell command blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes model discovery notes, routing guidance, assumptions, caveats, or next actions when needed.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Applying a client setup can change local configuration files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the preview first; apply only when authorized and retain a path to restore the prior configuration.
+
+Risk: Exposed API keys can permit unauthorized access.
+
+Mitigation: Keep TOKENLAB_API_KEY in a local secret manager or process environment; never paste it into chat.
+
+Risk: Live inference, media, or task calls may incur charges.
+
+Mitigation: Confirm intent and expected cost before making live calls.
+
+Risk: An unpinned installation source can change after review.
+
+Mitigation: Install from a pinned, reviewed source rather than a mutable command.
+
+## Reference(s):
+
+- [TokenLab documentation](https://tokenlab.sh/docs)
+- [TokenLab model catalog](https://api.tokenlab.sh/v1/models)
+- [TokenLab OpenAPI specification](https://tokenlab.sh/docs/openapi.json)
+- [Integration examples](references/integration_examples.md)
+- [Codex setup guide](references/codex_setup.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with runnable code and commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes endpoint rationale, credential setup, error handling, and a verification command.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

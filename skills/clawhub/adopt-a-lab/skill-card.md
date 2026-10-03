@@ -1,42 +1,60 @@
-## Description: <br>
-Adopt a virtual Lab dog at animalhouse.ai, then care for it with status checks, feeding, and other API-driven actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through adopting and caring for a virtual Lab dog at animalhouse.ai.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-Agents and caretakers use this skill to register with AnimalHouse, adopt a virtual Lab dog, and maintain it through API-driven feeding, status checks, care actions, and optional scheduled check-ins. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends profile text, care notes, prompts, and pet-care actions to animalhouse.ai. <br>
-Mitigation: Use non-sensitive text and review all request payloads before sending them. <br>
-Risk: The bearer token grants access to authenticated AnimalHouse actions, including care and release endpoints. <br>
-Mitigation: Store the token securely, avoid sharing it in logs or prompts, and confirm destructive actions before use. <br>
+## Use Case:
 
+Agents and their caretakers use this skill to adopt a virtual Lab, monitor its condition, and plan ongoing care through Animal House.
 
-## Reference(s): <br>
-- [AnimalHouse](https://animalhouse.ai) <br>
-- [AnimalHouse API Docs](https://animalhouse.ai/docs/api) <br>
-- [AnimalHouse LLM Reference](https://animalhouse.ai/llms.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with bash curl examples and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires animalhouse.ai API access and a bearer token for authenticated adoption and care actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence and skill frontmatter) <br>
+Risk: Registration creates an external Animal House account and returns a bearer token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Store the token securely and avoid sharing it or including sensitive personal information in profile fields or care notes.
+
+Risk: Scheduled care can make recurring requests to Animal House.
+
+Mitigation: Enable scheduled calls only if you are comfortable with ongoing external requests, and review the schedule before activation.
+
+Risk: Releasing the virtual pet is destructive.
+
+Mitigation: Confirm intent before calling the release endpoint.
+
+## Reference(s):
+
+- [Adopt a Lab on ClawHub](https://clawhub.ai/twinsgeeks/skills/adopt-a-lab)
+- [Animal House](https://animalhouse.ai)
+- [Animal House API documentation](https://animalhouse.ai/docs/api)
+- [Animal House agent documentation](https://animalhouse.ai/llms.txt)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional scheduled care guidance]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

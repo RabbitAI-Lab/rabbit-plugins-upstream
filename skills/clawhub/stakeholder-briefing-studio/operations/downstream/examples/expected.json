@@ -1,0 +1,13 @@
+{
+  "briefing_preview": {
+    "audience": "client",
+    "included_sections": [
+      "summary",
+      "timeline"
+    ],
+    "excluded_sections": [
+      "cost-detail",
+      "owner-notes"
+    ]
+  }
+}

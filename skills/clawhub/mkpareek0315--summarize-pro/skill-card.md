@@ -1,36 +1,52 @@
-## Description: <br>
-Summarize Pro condenses long-form content into TL;DRs, bullet summaries, ELI5 explanations, executive summaries, meeting notes, action items, translations, comparisons, and custom-length Markdown outputs while keeping its settings and summary records local. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Summarize Pro helps an agent turn long content into concise summaries, TL;DRs, bullet points, action items, meeting notes, email digests, comparisons, and multi-language or custom-length summaries.
 
-## Publisher: <br>
-[mkpareek0315](https://clawhub.ai/user/mkpareek0315) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[mkpareek0315](https://clawhub.ai/user/mkpareek0315)
 
-## Use Case: <br>
-External users and knowledge workers use this skill to summarize articles, documents, emails, meeting transcripts, conversations, and other long content into concise formats tailored to the request. It also supports local summary history, saved summaries, statistics, and custom summary templates. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Summary history, saved summaries, templates, and usage statistics may retain sensitive source-content details on the local machine. <br>
-Mitigation: Use the skill only when local retention under ~/.openclaw/summarize-pro is acceptable, and delete that directory when retained summary data should be removed. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
+## Use Case:
 
+External users and employees use this skill to summarize articles, documents, meetings, emails, threads, books, PDFs, reports, and conversations into concise reader-facing outputs. It also supports saved summaries, summary history, usage stats, and custom summary templates stored locally.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown summaries and concise text responses, with local JSON files for settings, history, saved summaries, and templates.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local read/write access under ~/.openclaw/summarize-pro for preferences, history, saved summaries, templates, and usage statistics.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Local history, stats, saved summaries, and templates may retain sensitive source content or derived summaries under ~/.openclaw/summarize-pro/.
+
+Mitigation: Avoid using the skill for highly sensitive documents unless local retention is acceptable, and periodically manage or delete the stored files.
+
+Risk: Summaries, action items, and comparisons may omit nuance or misstate source details if used without review.
+
+Mitigation: Review generated outputs against the original material before using them for decisions, commitments, or external communication.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mkpareek0315/skills/summarize-pro)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown and plain text with optional JSON-backed local state]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can create and update local settings, history, saved summaries, and templates under ~/.openclaw/summarize-pro/.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,61 @@
-## Description: <br>
-Brave Search API integration with managed authentication for web, image, news, and video search using a privacy-focused search engine. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search the web, images, news, and videos through Brave Search using a managed Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to make Brave Search requests through Maton-managed authentication, including web, image, news, video, local, autosuggest, spellcheck, and summarizer endpoints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries, optional location headers, and connection management requests are routed through Maton using the user's API key. <br>
-Mitigation: Install only if that routing is acceptable, avoid precise latitude and longitude unless needed, and treat MATON_API_KEY as a sensitive credential. <br>
-Risk: Connection creation or deletion can change access to Brave Search accounts. <br>
-Mitigation: Review and explicitly approve connection creation or deletion before execution, including the target connection and intended effect. <br>
+## Use Case:
 
+Developers and other users can ask an agent to retrieve Brave Search results for web pages, images, news, or videos, and configure explicitly approved search automations.
 
-## Reference(s): <br>
-- [Brave Search API Documentation](https://api-dashboard.search.brave.com/documentation) <br>
-- [Brave Search API Dashboard](https://api-dashboard.search.brave.com/) <br>
-- [Maton Homepage](https://maton.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/brave-search-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, shell command, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an active Brave Search connection through Maton.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Hosted functions, triggers, and destinations can create persistent automation or forward sensitive data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get separate, explicit approval for each automation and destination; narrow the event scope and forward only necessary data.
+
+Risk: Raw HTTP requests using MATON_API_KEY may expose a long-lived credential.
+
+Mitigation: Prefer managed login; protect the key and avoid including it in output, logs, or destination settings.
+
+Risk: Location headers can transmit sensitive location data.
+
+Mitigation: Only include location information when the user needs and approves location-aware search.
+
+## Reference(s):
+
+- [Brave Search API Documentation](https://api-dashboard.search.brave.com/documentation)
+- [Maton Docs](https://docs.maton.ai)
+- [Maton CLI Manual](https://cli.maton.ai/manual)
+- [Maton](https://maton.ai)
+- [Brave Search on ClawHub](https://clawhub.ai/byungkyu/skills/brave-search-api)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Text or Markdown with search results and optional command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the user's authorized connection and selected search options.]
+
+## Skill Version(s):
+
+1.2.8 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

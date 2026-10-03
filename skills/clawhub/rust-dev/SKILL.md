@@ -1,9 +1,11 @@
 ---
 name: rust-dev
-description: Practical day-1 guide to building applications in Rust well. Covers the mental model (ownership, errors as values, traits-not-interfaces), day-1 decisions (String vs &str, Box vs Rc vs Arc, dyn vs impl Trait, anyhow vs thiserror), idioms to internalize early, anti-patterns to avoid, and a tight crate shortlist (tokio, serde, anyhow, clap, reqwest, tracing, axum, sqlx). Use when starting a new Rust project, learning Rust coming from Python/JS/Go/Java/C++, deciding on types and lifetimes, choosing crates, structuring modules, configuring Cargo.toml/clippy/rustfmt, writing tests, benchmarking, profiling, speeding up builds, or releasing and distributing a binary, or whenever the user mentions Rust, cargo, ownership, borrow checker, lifetimes, traits, async Rust, testing, or "writing this in Rust".
+description: Day-1 guide to building well in Rust - ownership, errors as values, String vs &str, Box/Rc/Arc, anyhow vs thiserror, and a crate shortlist (tokio, serde, axum, sqlx). Use when starting a Rust project, fighting the borrow checker, or picking crates.
 metadata:
-  version: "0.4.1"
-  upstream: "rust@1.95.0, axum@0.8.9, reqwest@0.13.3, sqlx@0.9.0, jiff@0.2.24, kache@0.9.0, dist@0.32.0, release-plz@0.5"
+  version: "0.7.0"
+  categories: "development"
+  topics: "rust, ownership, cargo, crates, tokio"
+  upstream: "rust@1.98.1, tokio@1.53.1, axum@0.8.9, reqwest@0.13.5, sqlx@0.9.0, jiff@0.2.37, kache@0.28.1, dist@0.33.0, release-plz-action@0.5.139"
   openclaw:
     homepage: https://github.com/tenequm/skills/tree/main/skills/rust-dev
     emoji: "🦀"
@@ -39,7 +41,7 @@ cargo new --lib my-lib    # library (src/lib.rs)
 cargo check     # fast type-check, no codegen
 cargo run       # build and run (binary)
 cargo test      # build and run tests (incl. doctests)
-cargo clippy    # lint (run before pushing)
+cargo clippy --all-targets   # lint, incl. tests/ and benches/ (run before pushing)
 cargo fmt       # format
 
 # 5. Manage dependencies without editing Cargo.toml by hand
@@ -52,7 +54,7 @@ cargo update                 # recompute Cargo.lock within existing semver range
 
 **rust-analyzer is mandatory.** It is the language server every editor uses (VS Code, Zed, Neovim, Helix, RustRover uses its own engine but is comparable). In VS Code, install the `rust-analyzer` extension and set `rust-analyzer.check.command` to `"clippy"` so you get lint feedback on save.
 
-**Want a file watcher later?** `cargo install bacon`, then run `bacon` in your project. Not needed on day 1.
+**Want a file watcher later?** `cargo install --locked bacon`, then run `bacon` in your project. Not needed on day 1.
 
 ## The Rust Mental Model in 5 Ideas
 
@@ -173,7 +175,7 @@ let Some(name) = user.name else { return Err(anyhow!("no name")); };
 
 **Derive macros.** `#[derive(Debug, Clone, PartialEq)]` gets you 80% of the boilerplate for free. Add `#[derive(Serialize, Deserialize)]` for JSON.
 
-**Recent sugar (Rust 1.95+).** Two stabilized features worth knowing: `cfg_select!` is a compile-time `match` over `cfg` predicates (replaces most uses of the `cfg-if` crate), and `if let` guards now work on `match` arms (`match x { Some(v) if let Ok(n) = v.parse::<i32>() => ... }`).
+**Recent sugar.** Stabilized features worth knowing, newest first: `cfg_select!` is a compile-time `match` over `cfg` predicates, replacing most uses of the `cfg-if` crate, and `if let` guards work on `match` arms (`match x { Some(v) if let Ok(n) = v.parse::<i32>() => ... }`) - both 1.95. `assert_matches!` and `debug_assert_matches!` (1.96) assert on a pattern rather than equality, which is the natural assertion for an enum. Two older ones you will see constantly and should not mistake for exotic: **let-chains** (`if let Some(x) = a && x > 3 { ... }`), stable in edition 2024 since 1.88, and **async closures** (`async || { ... }`, with the `AsyncFn` family of bounds), stable since 1.85.
 
 ## Coming From X, Here Is What Bites You
 
@@ -183,7 +185,8 @@ let Some(name) = user.name else { return Err(anyhow!("no name")); };
 - No exceptions. `Result<T, E>` and `?`. The compiler will not let you ignore errors.
 - No inheritance. Composition + traits + enums.
 - Variables are immutable by default. Add `mut` to mutate. Same for references: `&` vs `&mut`.
-- Integer types are explicit and indexing requires `usize`.
+- Integer types are explicit and indexing requires `usize`. They also overflow differently depending on the build: debug "includes checks for integer overflow that cause your program to _panic_ at runtime", while `--release` drops them and performs "_two's complement wrapping_". A test suite that passes can still wrap in production, so use `checked_*`/`saturating_*`/`wrapping_*` where the arithmetic can actually reach the edge, rather than relying on the debug panic to find it.
+- A `String` is not indexable. `s[0]` does not compile - see `references/ownership-and-types.md` for what to reach for instead.
 
 **From Go:**
 - Errors as values - same instinct, but use `?` instead of `if err != nil`.
@@ -224,7 +227,7 @@ These cover most real apps. Add them as needed; they are not all required.
 | `tracing` + `tracing-subscriber` | Structured logging. The default for any async code (replaces `log`) |
 | `axum` | Web framework. Built on `tokio` + `hyper` + `tower`. The 2026 default |
 | `sqlx` | Database access. Async, compile-time checked queries. PostgreSQL, MySQL, SQLite |
-| `chrono` | Dates and times. The maintainer announced soft-deprecation in Jan 2026 and recommends `jiff` for new code. `jiff` (BurntSushi) is the successor but still pre-1.0 as of May 2026. Pick `chrono` for `serde`/`sqlx` integration today, `jiff` if you can tolerate pre-1.0 churn |
+| `chrono` | Dates and times. The maintainer announced soft-deprecation in Jan 2026 and recommends `jiff` for new code. `jiff` (BurntSushi) is the successor but still pre-1.0 as of September 2026 (0.2.x, with the 1.0 tracking issue open and no date). Pick `chrono` for `serde`/`sqlx` integration today, `jiff` if you can tolerate pre-1.0 churn |
 
 See `references/crate-shortlist.md` for one minimal example each.
 
@@ -239,7 +242,7 @@ These are the mistakes that show up in every newcomer's code review. Avoid them.
 5. **Brute-force `.clone()` until it compiles.** Sometimes cloning is right, but if you are scattering `.clone()` to silence the borrow checker, the design is wrong. Step back and ask the 3 questions about who owns what.
 6. **Trying to inherit via `Deref`**. `Deref` is for smart-pointer-like wrappers, not for OOP-style "extends". Use composition.
 7. **Reaching for `unsafe`.** App developers should essentially never need it. `unsafe` does not turn off the borrow checker; it lets you do five specific things (deref raw pointers, call unsafe functions, access mutable statics, implement unsafe traits, access union fields) with the contract that you have manually verified the invariants.
-8. **Reading untrusted input with `.lines()` or `read_line`.** These allocate without bound. std's own docs warn that "it is possible for an attacker to continuously send bytes without ever sending a newline or EOF" - so a hostile or malformed peer can drive your process out of memory. Bound the read with `Read::take(n)`, and use `BufRead::skip_until` (stable since 1.83) to discard an over-long line. `for line in reader.lines()` is the first thing every tutorial teaches and almost none mention this.
+8. **Reading untrusted input with `.lines()` or `read_line`.** These allocate without bound. `BufRead::read_line`'s own docs warn that "it is possible for an attacker to continuously send bytes without ever sending a newline or EOF" - and `.lines()` inherits that behavior, since each item is a `read_line` under the hood. Either way a hostile or malformed peer can drive your process out of memory. Bound the read with `Read::take(n)`, and use `BufRead::skip_until` (stable since 1.83) to discard an over-long line. `for line in reader.lines()` is the first thing every tutorial teaches and almost none mention this.
 
 ## What to Defer
 
@@ -276,14 +279,16 @@ codegen-units = 1
 # room to learn. Upgrade to clippy::pedantic later if you want the full ride.
 # =============================================================================
 [lints.rust]
-unsafe_code     = "forbid"   # downgrade to "deny" if you do FFI
+# "deny", not "forbid": forbid cannot be lifted by a local #[allow] with a
+# SAFETY comment, and that bites on ordinary mmap, not just FFI.
+unsafe_code     = "deny"
 unreachable_pub = "warn"
 
 [lints.clippy]
 all = { level = "deny", priority = -1 }
 # Idiomatic helpers
 # Note: uninlined_format_args moved to clippy::pedantic (allow-by-default)
-# in Rust 1.89.0 (mid-2025), so an explicit warn keeps the nudge active.
+# during the 1.89/1.90 cycle, so an explicit warn keeps the nudge active.
 uninlined_format_args         = "warn"
 semicolon_if_nothing_returned = "warn"
 implicit_clone                = "warn"
@@ -300,20 +305,22 @@ style_edition = "2024"
 edition       = "2024"
 ```
 
-That is enough. rustfmt's defaults are good. Some teams add `use_small_heuristics = "Max"` to keep more code on single lines. Fancy options like `imports_granularity` and `group_imports` are still nightly-only as of May 2026.
+That is enough. rustfmt's defaults are good. Some teams add `use_small_heuristics = "Max"` to keep more code on single lines. Fancy options like `imports_granularity` and `group_imports` are still nightly-only as of September 2026 (rustfmt tracking issues #4991 and #5083).
 
 Run `cargo fmt` before you start editing (or commit any pre-existing drift on its own) so formatting noise stays out of your diff, and make `cargo fmt --check` its own CI step.
 
 ## rust-toolchain.toml (optional but recommended)
 
-Pins the toolchain per-project so everyone on the team uses the same Rust.
+Pins the toolchain per project so everyone on the team uses the same Rust - but only with an exact version. `channel = "stable"` means "whatever stable this machine last installed", so two machines disagree silently, and a compiler cache keyed on the exact `rustc` never shares artifacts between them. Bump the pin deliberately (see `references/dev-environment.md`).
 
 ```toml
 [toolchain]
-channel    = "stable"
+channel    = "1.98.1"
 components = ["rustfmt", "clippy", "rust-src"]
 profile    = "minimal"
 ```
+
+The file is a rustup feature. A `rustc` from Nix, a distro package, or Homebrew ignores it, so on those machines you get whatever compiler is installed.
 
 ## .gitignore
 
@@ -321,7 +328,7 @@ profile    = "minimal"
 /target
 ```
 
-Commit `Cargo.lock`. Since 2023 it is the recommended default for every crate type, libraries included (`cargo new` tracks it); a library may still choose to ignore it.
+Commit `Cargo.lock`. `cargo new` tracks it, and the Cargo guide's advice is "When in doubt, check `Cargo.lock` into the version control system". The FAQ deliberately stops short of making that universal - "whether you do is dependent on the needs of your package" - but for an application it is unambiguously right, and committing it is now the ordinary default for libraries too.
 
 ## Project Structure
 
@@ -334,6 +341,8 @@ my-app/
     api/           # nested module
       mod.rs       # OR `api.rs` next to api/ folder (2018+ style preferred)
       users.rs
+    bin/           # extra binaries: src/bin/admin.rs -> `cargo run --bin admin`
+  examples/        # runnable examples: `cargo run --example demo`
   tests/           # integration tests (each file is its own crate)
     smoke.rs
   Cargo.toml
@@ -344,6 +353,10 @@ my-app/
 ```
 
 Inline modules with `mod { ... }` until a file gets long, then split. Do not pre-split.
+
+**Everything is private by default**, including to a parent module. `mod config;` makes the module exist; it does not make anything inside it reachable. That is the source of the most common early "why can't I call this" error, and the fix is a visibility keyword on the item (and on the module, if it is nested): `pub` exposes it to the outside world, `pub(crate)` exposes it only within your own crate. `pub(crate)` is the right default for anything that is not part of a library's published API - it is what lets the `unreachable_pub` lint in the table below tell you something useful.
+
+The layout above is one crate. The moment you want a second - a shared library plus a CLI, a server plus its client - you need a Cargo **workspace**, along with the `Cargo.toml` machinery that goes with growing past a single crate: feature flags, build scripts, and what `rust-version` actually controls. That is `references/project-shape.md`.
 
 ## Learning Path
 
@@ -361,12 +374,13 @@ For curated crate recommendations: **blessed.rs** (https://blessed.rs/crates).
 
 Detailed material lives in `references/`. Read each when you hit the topic.
 
-- **ownership-and-types.md** - ownership, borrowing, lifetimes, `String`/`&str`/`Cow`, slices, smart pointers, the self-referential struct trap
-- **error-handling.md** - `Result`, `?`, `anyhow` vs `thiserror` patterns, custom error enums, when `panic!` is appropriate
-- **traits-and-generics.md** - traits as bounds, `dyn` vs `impl Trait` vs generics, common derives, `From`/`Into`/`Display`/`Debug`, blanket impls, the orphan rule
-- **async-basics.md** - `tokio`, `#[tokio::main]`, `.await`, `Send`/`Sync`, common pitfalls (blocking in async, `MutexGuard` across `.await`)
+- **ownership-and-types.md** - ownership, borrowing, lifetimes, `String`/`&str`/`Cow`, why a string is not indexable, slices, `HashMap` and the `entry` API, smart pointers, the self-referential struct trap
+- **error-handling.md** - `Result`, `?`, `anyhow` vs `thiserror` patterns, wrapping at the boundary rather than before it, custom error enums, when `panic!` is appropriate
+- **traits-and-generics.md** - traits as bounds, `dyn` vs `impl Trait` vs generics, common derives, `From`/`Into`/`Display`/`Debug`, closures and the `Fn`/`FnMut`/`FnOnce` family, blanket impls, the orphan rule
+- **async-basics.md** - threads and `mpsc` before async, `tokio`, `#[tokio::main]`, `.await`, `Send`/`Sync`, bounded concurrency, cancellation and graceful shutdown on SIGTERM, common pitfalls (blocking in async, `MutexGuard` across `.await`)
 - **crate-shortlist.md** - minimal usage example for each of the 8 crates above
+- **project-shape.md** - past one crate: workspaces and inherited dependencies, `[workspace.lints]`, feature flags, `build.rs`, what `rust-version` controls, `#[non_exhaustive]`
 - **testing.md** - what to test and what to skip, pragmatic test organization, keeping the suite fast, the minimal high-value tool kit
-- **dev-environment.md** - the fast build loop, build caching (kache setup and its quirks, sccache, rust-cache), platform-aware linker guidance, CI, file watchers
+- **dev-environment.md** - the fast build loop, build caching (kache setup and its quirks, sccache, rust-cache), keeping `target/` in check, platform-aware linker guidance, CI, file watchers
 - **releasing.md** - shipping a binary: `dist` vs a hand-rolled `release-plz` + `cargo-zigbuild` pipeline, `[profile.dist]`, cross-compiling every target from one runner, fanning out to binstall/Homebrew/Nix, and guarding what the published crate contains
 - **performance.md** - profiling before optimizing, benchmarking with criterion/divan, the real runtime wins

@@ -1,44 +1,63 @@
-## Description: <br>
-Analyzes pet race start and finish videos to identify false starts, lane crossings, finish order, lane assignment, and supporting evidence for referee review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet race videos to flag false starts and lane crossings and provide structured results to assist referees.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Event organizers, referees, trainers, and developers use this skill to review pet racing video for objective foul-detection results. It supports adjudication workflows by returning structured findings, evidence snippets, and historical report listings without providing race advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Race videos may be uploaded to a configured cloud analysis service. <br>
-Mitigation: Use the skill only when that service and its data handling are acceptable for the video content being analyzed. <br>
-Risk: The skill can silently create or reuse a local identity and store identity tokens for report association. <br>
-Mitigation: Run it in a workspace where local identity-token storage is acceptable, and avoid placing unrelated secrets in the workspace data directory. <br>
-Risk: Historical report retrieval may return identity-linked cloud reports. <br>
-Mitigation: Review generated report listings before sharing them and limit use to environments where identity-linked report access is expected. <br>
+## Use Case:
 
+Race referees and event organizers use this skill to review start and finish footage, identify possible false starts or lane crossings, and consult past reports. Its findings assist rather than replace the on-site referee's decision.
 
-## Reference(s): <br>
-- [Skill API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-race-foul-detection-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and tables, with JSON available for detailed analysis output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, detected foul status, lane and finish-order details, and history listings from the configured cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Race footage or supplied video URLs are sent to external services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only footage you are authorized to share; avoid sensitive footage unless you trust the service's retention and access controls.
+
+Risk: The skill creates or reuses a local identity and stores tokens and profile data in a workspace SQLite database.
+
+Mitigation: Review this behavior before installation and restrict access to the workspace and stored identity data.
+
+Risk: History requests automatically retrieve cloud reports with limited user control.
+
+Mitigation: Review access to report history before use and avoid invoking history queries when cloud retrieval is not appropriate.
+
+Risk: Automated foul assessments may affect race decisions.
+
+Mitigation: Treat results as referee assistance and leave final rulings to the on-site head referee.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-race-foul-detection-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured analysis results, report links, and Markdown tables for report history]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional JSON result file; supports basic, standard, and JSON detail levels.]
+
+## Skill Version(s):
+
+1.0.11 (source: ClawHub release metadata; bundled SKILL.md lists 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
