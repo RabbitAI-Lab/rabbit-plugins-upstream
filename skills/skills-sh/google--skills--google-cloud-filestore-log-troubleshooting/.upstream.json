@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-filestore-log-troubleshooting",
+  "repo": "google/skills",
+  "skillId": "google-cloud-filestore-log-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-10-02T16:53:41Z",
+  "contentHash": "5cde0d43929521ac168d5c555ec8347f56a3cafc7ced52d76095bc3b79599a5a",
+  "fetchedAt": "2026-10-03T12:40:53.843Z"
+}

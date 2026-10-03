@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-slo-alert-configuration",
+  "repo": "google/skills",
+  "skillId": "google-cloud-slo-alert-configuration",
+  "branch": "main",
+  "pushedAt": "2026-10-02T16:53:41Z",
+  "contentHash": "34a825a67efb969a33485ac79dd83c048a87cf0c43390c3c94b94f67df947361",
+  "fetchedAt": "2026-10-03T12:40:53.650Z"
+}
