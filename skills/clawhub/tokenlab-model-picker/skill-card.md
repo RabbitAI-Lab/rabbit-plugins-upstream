@@ -1,43 +1,58 @@
-## Description: <br>
-Pick TokenLab models for chat, coding, image, video, audio, embeddings, reranking, and translation by reading public model catalog signals before recommending concrete model IDs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Recommends TokenLab model IDs for specific workloads using public catalog, model contract, and pricing information.
 
-## Publisher: <br>
-[hedging8563](https://clawhub.ai/user/hedging8563) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[hedging8563](https://clawhub.ai/user/hedging8563)
 
-## Use Case: <br>
-Developers and agents use this skill to choose TokenLab model IDs for coding, chat, multimodal, embedding, reranking, translation, audio, image, and video workloads based on public catalog, contract, and pricing signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses the public TokenLab model catalog, so catalog lookups may contact api.tokenlab.sh and expose query details. <br>
-Mitigation: Review whether external catalog access is acceptable and avoid including private prompts, secrets, or account data in catalog query parameters. <br>
-Risk: Model availability, pricing, and benchmark relevance can change over time. <br>
-Mitigation: Rerun the catalog and pricing lookups before relying on a recommendation for production routing or cost-sensitive work. <br>
+## Use Case:
 
+Developers and other TokenLab users use this skill to shortlist models for chat, coding, media, retrieval, translation, and decision workloads, with exact IDs and fallback choices.
 
-## Reference(s): <br>
-- [TokenLab model catalog](https://api.tokenlab.sh/v1/models) <br>
-- [TokenLab task shortlist endpoint](https://api.tokenlab.sh/v1/models?recommended_for=<scene>) <br>
-- [TokenLab model contract endpoint](https://api.tokenlab.sh/v1/models/:model) <br>
-- [TokenLab pricing endpoint](https://api.tokenlab.sh/v1/models/:model/pricing) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with a compact recommendation table and one runnable catalog command when useful.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workload assumptions, fallback models, and caveats about volatile availability, pricing, or benchmark data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: An unpinned, non-interactive installation command may install a changed source or CLI version.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify or pin the skills CLI and repository source before installing.
+
+Risk: Catalog lookups contact TokenLab's public API, and private data in query parameters could be disclosed.
+
+Mitigation: Avoid placing sensitive prompts or private data in catalog query parameters.
+
+Risk: Model availability, pricing, and benchmark signals may change after a recommendation.
+
+Mitigation: Recheck the current public catalog, contract, and pricing before selecting a model.
+
+## Reference(s):
+
+- [TokenLab Model Picker on ClawHub](https://clawhub.ai/hedging8563/skills/tokenlab-model-picker)
+- [TokenLab public model catalog](https://api.tokenlab.sh/v1/models)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown shortlist table with a catalog command and caveats]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes workload assumptions, exact model IDs, and fallback options.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

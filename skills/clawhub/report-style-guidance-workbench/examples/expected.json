@@ -1,0 +1,10 @@
+{
+  "applied_format": {
+    "rendered_report": "Account migration update\nThe migration is complete and the ownership review is scheduled for Friday.\nACC-1842, TEAM-73",
+    "included_identifiers": [
+      "ACC-1842",
+      "TEAM-73"
+    ],
+    "format_decision": "full"
+  }
+}

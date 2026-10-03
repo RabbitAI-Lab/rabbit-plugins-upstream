@@ -1,40 +1,58 @@
-## Description: <br>
-Configures an agent to manage Google Calendar events and Google Meet spaces through the gogcli Calendar MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Google Calendar and Meet to manage events, invitations, meeting spaces, and call history.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agent users use this skill to connect a Google account to a Calendar MCP server so an agent can schedule, list, create, update, delete, and respond to calendar events, and create or manage Google Meet spaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The configured MCP server can modify calendar and meeting data, including deleting events, responding to invitations, updating Meet settings, and ending conferences. <br>
-Mitigation: Install it only for a Google account the agent is intended to manage and require clear user confirmation before destructive or externally visible calendar and Meet actions. <br>
+## Use Case:
 
+Developers and users connect an agent to their Google account to schedule and manage calendar events and work with Google Meet spaces and calls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-calendar) <br>
-- [gogcli](https://github.com/openclaw/gogcli) <br>
-- [gogcli-mcp](https://github.com/chrischall/gogcli-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration snippets and command-line setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an authenticated gogcli installation, Node.js 18 or later, and a selected Google account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: Calendar changes and meeting actions can disrupt schedules; ending a Meet conference can proceed without an enforced confirmation gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before mutating events or ending meetings; set GOG_READONLY=1 when write access is unnecessary.
+
+Risk: Authentication tools and optional Zoom integration may expose account or conferencing credentials to an agent.
+
+Mitigation: Use only a trusted Google account, protect OAuth and Zoom credentials, and limit GOG_FILE_ROOTS to necessary directories.
+
+Risk: The full set of exposed tools includes high-impact actions not fully described in the short skill instructions.
+
+Mitigation: Review manifest.json and restrict tool access before deploying to shared or unattended agents.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/gogcli-mcp-calendar)
+- [gogcli dependency documentation](https://github.com/openclaw/gogcli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Configuration guidance, Shell commands]
+
+**Output Format:** [Plain text tool results and Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Calendar and meeting results depend on the selected Google account and its permissions.]
+
+## Skill Version(s):
+
+4.6.1 (source: ClawHub release, package.json, manifest.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

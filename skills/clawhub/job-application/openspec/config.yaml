@@ -1,0 +1,30 @@
+schema: spec-driven
+
+context: |
+  This repository contains the publishable OpenClaw skill `job-application`.
+  Python performs deterministic transformations from JSON to LaTeX and text;
+  pdflatex optionally renders PDFs. Linux and Windows are supported.
+  The bundled profile is fictional. Real profiles, photographs, generated
+  applications, and application history must remain outside the installed
+  skill directory so that ClawHub updates cannot overwrite private data.
+  Keep SKILL.md concise and put development contracts in openspec/specs/.
+
+rules:
+  proposal:
+    - State whether the change affects the published skill package, persistent user data, or both.
+    - Include privacy and update-safety consequences when data paths or profile handling change.
+  specs:
+    - Specify observable behavior and avoid implementation details.
+    - Include failure and non-overwrite scenarios where relevant.
+  tasks:
+    - Include validation of the skill metadata and all affected generators.
+    - Include a PDF render test when LaTeX output or templates change.
+
+operations:
+  apply:
+    guidance:
+      - Never use a real profile as a test fixture or commit personal data.
+      - Do not overwrite existing application directories during tests.
+  archive:
+    guidance:
+      - Confirm the main specs describe the shipped behavior before archiving.

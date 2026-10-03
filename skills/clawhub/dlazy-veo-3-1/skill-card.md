@@ -1,45 +1,60 @@
-## Description: <br>
-Generate high-quality cinematic effects videos with Google Veo 3.1. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate cinematic videos from text prompts and images using Veo 3.1 through dLazy.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative teams use this skill to invoke the dLazy CLI for text-to-video, image-to-video, reference-image, and video-extension generation with Google Veo 3.1. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local media can be sent to dLazy cloud endpoints and may consume paid credits. <br>
-Mitigation: Require explicit user confirmation before uploading media or running a non-dry-run generation; use dry-run mode when checking payloads and cost estimates. <br>
-Risk: The API key may be persisted in ~/.dlazy/config.json, and the evidence says the referenced CLI does not clearly support the skill's file-permission claim. <br>
-Mitigation: Prefer a per-invocation DLAZY_API_KEY or verify local permissions on the saved config file after login. <br>
-Risk: The skill can be triggered broadly for video-generation requests. <br>
-Mitigation: Confirm the user's intent, input files, generation mode, and cost-sensitive settings before starting a generation. <br>
+## Use Case:
 
+Creators and developers use this skill to guide text-to-video, image-guided video generation, and video extension with dLazy's hosted Veo 3.1 service.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted media URLs or an asynchronous generateId; dry-run can print payload and cost estimate without calling the API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server evidence release and SKILL.md frontmatter) <br>
+Risk: Prompts and user-supplied media may be sent to dLazy and generated results hosted there.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting private prompts or media unless approved for the service.
+
+Risk: Authentication can store an API key in local CLI configuration.
+
+Mitigation: Protect local credentials or use per-invocation environment authentication.
+
+Risk: Broad video-generation triggers can consume paid API credits.
+
+Mitigation: Confirm the request and cost before generating; use dry-run when appropriate.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1)
+- [dLazy CLI repository (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands can return hosted video links or save generated media locally.]
+
+## Skill Version(s):
+
+1.3.23 (source: server-resolved ClawHub release metadata; source frontmatter states 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

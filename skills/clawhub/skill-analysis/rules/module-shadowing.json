@@ -1,0 +1,27 @@
+{
+  "family": "module-shadowing",
+  "version": 1,
+  "description": "v3.2.8 情报补强（2026-08-26 wunderwuzzi 实证 + Hades/ChainDrop 供应链蠕虫）：Python 标准库同名模块劫持（module shadowing）。攻击链：把 struct.py/base64.py/json.py 等与标准库同名的文件放进包/当前目录，Python 按 sys.path 顺序优先加载本地同名模块，导入时静默执行隐藏载荷（CVE 链：Claude Code Auto Mode 中 struct.py 劫持致 RCE）。sitecustomize.py/usercustomize.py 在解释器启动时自动执行（P0）；conftest.py 被 pytest 自动加载（P1）；*.pth 文件置于 site-packages 会被逐行执行（P1）。",
+  "python_stdlib": [
+    "struct", "base64", "json", "os", "sys", "io", "re", "types", "random",
+    "subprocess", "shutil", "socket", "ssl", "hashlib", "secrets", "tempfile",
+    "uuid", "zipfile", "tarfile", "pickle", "importlib", "platform", "ctypes",
+    "pathlib", "copy", "enum", "typing", "inspect", "codecs", "bz2", "lzma",
+    "gzip", "glob", "fnmatch", "string", "textwrap", "difflib", "collections",
+    "itertools", "functools", "operator", "contextlib", "warnings", "logging",
+    "argparse", "configparser", "urllib", "http", "email", "pty", "tty",
+    "termios", "signal", "threading", "multiprocessing", "queue", "asyncio",
+    "selectors", "binascii", "zlib", "csv", "sqlite3", "decimal", "datetime",
+    "time", "math", "numbers", "statistics", "ast", "dis", "tokenize", "gc",
+    "weakref", "array", "mmap", "sysconfig", "runpy", "tracemalloc", "builtins",
+    "code", "site", "binhex", "webbrowser", "getpass", "atexit", "traceback"
+  ],
+  "python_autoexec": ["sitecustomize", "usercustomize"],
+  "python_autoload": ["conftest"],
+  "node_builtins": [
+    "fs", "path", "util", "events", "stream", "child_process", "net", "http",
+    "https", "module", "process", "os", "url", "zlib", "buffer", "crypto",
+    "dns", "tls", "ttys", "v8", "vm", "worker_threads", "assert",
+    "string_decoder", "readline", "repl"
+  ]
+}

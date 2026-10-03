@@ -2,40 +2,70 @@
 
 # Git Worktree Manager
 # Handles creating, listing, switching, and cleaning up Git worktrees
-# KISS principle: Simple, interactive, opinionated
 
 set -e
 
-# Colors for output
 RED='\033[0;31m'
 GREEN='\033[0;32m'
 YELLOW='\033[1;33m'
 BLUE='\033[0;34m'
 NC='\033[0m' # No Color
 
-# Get repo root
-GIT_ROOT=$(git rev-parse --show-toplevel)
+CURRENT_ROOT=$(git rev-parse --show-toplevel)
+COMMON_DIR=$(realpath -- "$(git rev-parse --git-common-dir)")
+CURRENT_GIT_DIR=$(realpath -- "$(git rev-parse --git-dir)")
+if [[ "$CURRENT_GIT_DIR" == "$COMMON_DIR" ]]; then
+  GIT_ROOT="$CURRENT_ROOT"
+elif [[ -f "$COMMON_DIR/whetstone-main-root" ]]; then
+  IFS= read -r GIT_ROOT < "$COMMON_DIR/whetstone-main-root"
+else
+  IFS= read -r main_record < <(git worktree list --porcelain)
+  GIT_ROOT=${main_record#worktree }
+fi
+[[ "$(git -C "$GIT_ROOT" rev-parse --show-toplevel)" == "$GIT_ROOT" ]] || {
+  echo "Error: main checkout unavailable; run create from the main checkout first" >&2
+  exit 1
+}
+ROOT_COMMON_DIR=$(git -C "$GIT_ROOT" rev-parse --git-common-dir)
+if [[ "$ROOT_COMMON_DIR" != /* ]]; then
+  ROOT_COMMON_DIR="$GIT_ROOT/$ROOT_COMMON_DIR"
+fi
+[[ "$(realpath -- "$ROOT_COMMON_DIR")" == "$COMMON_DIR" ]] || {
+  echo "Error: cannot resolve the main worktree safely" >&2
+  exit 1
+}
 WORKTREE_DIR="$GIT_ROOT/.worktrees"
 
-# Ensure .worktrees is in .gitignore
+resolve_worktree() {
+  local name="$1" candidate registered
+  git check-ref-format --branch "$name" >/dev/null 2>&1 || return 1
+  candidate=$(realpath -e -- "$WORKTREE_DIR/$name") || return 1
+  [[ "$candidate" == "$WORKTREE_DIR/"* ]] || return 1
+  while IFS= read -r registered; do
+    if [[ "$registered" == "worktree $candidate" ]]; then
+      printf '%s\n' "$candidate"
+      return 0
+    fi
+  done < <(git worktree list --porcelain)
+  return 1
+}
+
 ensure_gitignore() {
   if ! grep -q "^\.worktrees$" "$GIT_ROOT/.gitignore" 2>/dev/null; then
     echo ".worktrees" >> "$GIT_ROOT/.gitignore"
   fi
 }
 
-# Copy .env files from main repo to worktree
 copy_env_files() {
   local worktree_path="$1"
 
   echo -e "${BLUE}Copying environment files...${NC}"
 
-  # Find all .env* files in root (excluding .env.example which should be in git)
   local env_files=()
   for f in "$GIT_ROOT"/.env*; do
     if [[ -f "$f" ]]; then
-      local basename=$(basename "$f")
-      # Skip .env.example (that's typically committed to git)
+      local basename
+      basename=$(basename "$f")
       if [[ "$basename" != ".env.example" ]]; then
         env_files+=("$basename")
       fi
@@ -65,7 +95,6 @@ copy_env_files() {
   echo -e "  ${GREEN}✓ Copied $copied environment file(s)${NC}"
 }
 
-# Create a new worktree
 create_worktree() {
   local branch_name="$1"
   local from_branch="${2:-main}"
@@ -75,13 +104,23 @@ create_worktree() {
     exit 1
   fi
 
-  local worktree_path="$WORKTREE_DIR/$branch_name"
+  git check-ref-format --branch "$branch_name" >/dev/null || return 1
+  if [[ -L "$WORKTREE_DIR" ]]; then
+    echo "Error: refusing a symlinked worktree directory" >&2
+    return 1
+  fi
 
-  # Check if worktree already exists
+  local worktree_path="$WORKTREE_DIR/$branch_name"
+  if [[ "$(realpath -m -- "$worktree_path")" != "$worktree_path" ]]; then
+    echo "Error: refusing redirected worktree path: $worktree_path" >&2
+    return 1
+  fi
+
   if [[ -d "$worktree_path" ]]; then
     echo -e "${YELLOW}Worktree already exists at: $worktree_path${NC}"
     echo -e "Switch to it instead? (y/n)"
-    read -r response
+    # No stdin (agent/CI): read fails, set -e would abort. Empty answer = decline.
+    read -r response || response=""
     if [[ "$response" == "y" ]]; then
       switch_worktree "$branch_name"
     fi
@@ -92,99 +131,64 @@ create_worktree() {
   echo "  From: $from_branch"
   echo "  Path: $worktree_path"
 
-  # Update main branch
-  echo -e "${BLUE}Updating $from_branch...${NC}"
-  git checkout "$from_branch"
-  git pull origin "$from_branch" || true
+  # Fetch a fresh remote base without touching the caller's checkout.
+  echo -e "${BLUE}Fetching $from_branch from origin...${NC}"
+  local base_ref="origin/$from_branch"
+  # GIT_TERMINAL_PROMPT=0: fail fast instead of hanging on a credential
+  # prompt blocking on an inherited tty. A non-zero exit (offline, no
+  # remote) falls back to the local branch ref below.
+  if ! GIT_TERMINAL_PROMPT=0 git fetch --no-tags origin "$from_branch"; then
+    echo -e "${YELLOW}Fetch failed; branching from local $from_branch instead${NC}"
+    base_ref="$from_branch"
+  fi
 
-  # Create worktree
   mkdir -p "$WORKTREE_DIR"
   ensure_gitignore
+  printf '%s\n' "$GIT_ROOT" > "$COMMON_DIR/whetstone-main-root"
 
   echo -e "${BLUE}Creating worktree...${NC}"
-  git worktree add -b "$branch_name" "$worktree_path" "$from_branch"
+  git worktree add -b "$branch_name" "$worktree_path" "$base_ref"
 
-  # Copy environment files
+  if [[ -n "${WORKTREE_SESSION_ID:-}" ]]; then
+    printf '%s\n' "$WORKTREE_SESSION_ID" > "$(git -C "$worktree_path" rev-parse --git-path whetstone-owner)"
+  else
+    echo "Set WORKTREE_SESSION_ID before create to enable session-owned cleanup." >&2
+  fi
+
   copy_env_files "$worktree_path"
 
   echo -e "${GREEN}✓ Worktree created successfully!${NC}"
   echo ""
-  echo "To switch to this worktree:"
-  echo -e "${BLUE}cd $worktree_path${NC}"
+  echo "Run commands with this worktree as their workdir:"
+  printf 'env -C %q <command>\n' "$worktree_path"
   echo ""
 }
 
-# List all worktrees
 list_worktrees() {
-  echo -e "${BLUE}Available worktrees:${NC}"
-  echo ""
-
-  if [[ ! -d "$WORKTREE_DIR" ]]; then
-    echo -e "${YELLOW}No worktrees found${NC}"
-    return
-  fi
-
-  local count=0
-  for worktree_path in "$WORKTREE_DIR"/*; do
-    if [[ -d "$worktree_path" && -e "$worktree_path/.git" ]]; then
-      count=$((count + 1))
-      local worktree_name=$(basename "$worktree_path")
-      local branch=$(git -C "$worktree_path" rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
-
-      if [[ "$PWD" == "$worktree_path" ]]; then
-        echo -e "${GREEN}✓ $worktree_name${NC} (current) → branch: $branch"
-      else
-        echo -e "  $worktree_name → branch: $branch"
-      fi
-    fi
-  done
-
-  if [[ $count -eq 0 ]]; then
-    echo -e "${YELLOW}No worktrees found${NC}"
-  else
-    echo ""
-    echo -e "${BLUE}Total: $count worktree(s)${NC}"
-  fi
-
-  echo ""
-  echo -e "${BLUE}Main repository:${NC}"
-  local main_branch=$(git rev-parse --abbrev-ref HEAD 2>/dev/null || echo "unknown")
-  echo "  Branch: $main_branch"
-  echo "  Path: $GIT_ROOT"
+  git worktree list
 }
 
-# Switch to a worktree
 switch_worktree() {
   local worktree_name="$1"
 
   if [[ -z "$worktree_name" ]]; then
-    list_worktrees
-    echo -e "${BLUE}Switch to which worktree? (enter name)${NC}"
-    read -r worktree_name
+    list_worktrees >&2
+    echo "Return the path of which worktree? (enter name)" >&2
+    read -r worktree_name || worktree_name=""
   fi
 
-  local worktree_path="$WORKTREE_DIR/$worktree_name"
-
-  if [[ ! -d "$worktree_path" ]]; then
-    echo -e "${RED}Error: Worktree not found: $worktree_name${NC}"
-    echo ""
-    list_worktrees
-    exit 1
-  fi
-
-  echo -e "${GREEN}Switching to worktree: $worktree_name${NC}"
-  cd "$worktree_path"
-  echo -e "${BLUE}Now in: $(pwd)${NC}"
+  resolve_worktree "$worktree_name" || {
+    echo "Error: registered worktree not found: $worktree_name" >&2
+    return 1
+  }
 }
 
-# Copy env files to an existing worktree (or current directory if in a worktree)
 copy_env_to_worktree() {
   local worktree_name="$1"
   local worktree_path
 
   if [[ -z "$worktree_name" ]]; then
-    # Check if we're currently in a worktree
-    local current_dir=$(pwd)
+    local current_dir="$CURRENT_ROOT"
     if [[ "$current_dir" == "$WORKTREE_DIR"/* ]]; then
       worktree_path="$current_dir"
       worktree_name=$(basename "$worktree_path")
@@ -196,9 +200,7 @@ copy_env_to_worktree() {
       return 1
     fi
   else
-    worktree_path="$WORKTREE_DIR/$worktree_name"
-
-    if [[ ! -d "$worktree_path" ]]; then
+    if ! worktree_path=$(resolve_worktree "$worktree_name"); then
       echo -e "${RED}Error: Worktree not found: $worktree_name${NC}"
       list_worktrees
       return 1
@@ -209,83 +211,57 @@ copy_env_to_worktree() {
   echo ""
 }
 
-# Clean up completed worktrees
 cleanup_worktrees() {
-  if [[ ! -d "$WORKTREE_DIR" ]]; then
-    echo -e "${YELLOW}No worktrees to clean up${NC}"
-    return
+  if [[ $# -eq 0 || -z "${WORKTREE_SESSION_ID:-}" ]]; then
+    echo "Usage: set WORKTREE_SESSION_ID before create; cleanup <owned-name> [owned-name...]" >&2
+    return 1
   fi
-
-  echo -e "${BLUE}Checking for completed worktrees...${NC}"
-  echo ""
-
-  local found=0
+  local name worktree_path owner_file status response
   local to_remove=()
-
-  for worktree_path in "$WORKTREE_DIR"/*; do
-    if [[ -d "$worktree_path" && -e "$worktree_path/.git" ]]; then
-      local worktree_name=$(basename "$worktree_path")
-
-      # Skip if current worktree
-      if [[ "$PWD" == "$worktree_path" ]]; then
-        echo -e "${YELLOW}(skip) $worktree_name - currently active${NC}"
-        continue
-      fi
-
-      found=$((found + 1))
-      to_remove+=("$worktree_path")
-      echo -e "${YELLOW}• $worktree_name${NC}"
+  for name in "$@"; do
+    worktree_path=$(resolve_worktree "$name") || return 1
+    owner_file=$(git -C "$worktree_path" rev-parse --git-path whetstone-owner)
+    if [[ "$CURRENT_ROOT" == "$worktree_path" || ! -f "$owner_file" || "$(cat "$owner_file")" != "$WORKTREE_SESSION_ID" ]]; then
+      echo "Refusing current or unowned worktree: $worktree_path" >&2
+      return 1
     fi
+    status=$(git -C "$worktree_path" status --porcelain --untracked-files=all --ignored=matching) || return 1
+    if [[ -n "$status" ]]; then
+      echo "Refusing worktree with tracked, untracked, or ignored changes: $worktree_path" >&2
+      return 1
+    fi
+    to_remove+=("$worktree_path")
   done
-
-  if [[ $found -eq 0 ]]; then
-    echo -e "${GREEN}No inactive worktrees to clean up${NC}"
-    return
-  fi
-
-  echo ""
-  echo -e "Remove $found worktree(s)? (y/n)"
-  read -r response
-
-  if [[ "$response" != "y" ]]; then
-    echo -e "${YELLOW}Cleanup cancelled${NC}"
-    return
-  fi
-
-  echo -e "${BLUE}Cleaning up worktrees...${NC}"
+  printf 'Remove these session-owned clean worktrees?\n'
+  printf '  %s\n' "${to_remove[@]}"
+  echo "Confirm no process is using them. Remove? (y/n)"
+  read -r response || response=""
+  [[ "$response" == y ]] || return 0
   for worktree_path in "${to_remove[@]}"; do
-    local worktree_name=$(basename "$worktree_path")
-    git worktree remove "$worktree_path" --force 2>/dev/null || true
-    echo -e "${GREEN}✓ Removed: $worktree_name${NC}"
+    git worktree remove "$worktree_path" || return 1
+    printf 'Removed: %s\n' "$worktree_path"
   done
-
-  # Clean up empty directory if nothing left
-  if [[ -z "$(ls -A "$WORKTREE_DIR" 2>/dev/null)" ]]; then
-    rmdir "$WORKTREE_DIR" 2>/dev/null || true
-  fi
-
-  echo -e "${GREEN}Cleanup complete!${NC}"
 }
 
-# Main command handler
 main() {
   local command="${1:-list}"
 
   case "$command" in
     create)
-      create_worktree "$2" "$3"
+      create_worktree "${2:-}" "${3:-main}"
       ;;
     list|ls)
       list_worktrees
       ;;
     switch|go)
-      switch_worktree "$2"
+      switch_worktree "${2:-}"
       ;;
     copy-env|env)
-      copy_env_to_worktree "$2"
+      copy_env_to_worktree "${2:-}"
       ;;
     cleanup|clean)
-      cleanup_worktrees
+      shift
+      cleanup_worktrees "$@"
       ;;
     help)
       show_help
@@ -309,10 +285,10 @@ Commands:
   create <branch-name> [from-branch]  Create new worktree (copies .env files automatically)
                                       (from-branch defaults to main)
   list | ls                           List all worktrees
-  switch | go [name]                  Switch to worktree
+  switch | go [name]                  Print registered worktree path for caller workdir
   copy-env | env [name]               Copy .env files from main repo to worktree
                                       (if name omitted, uses current worktree)
-  cleanup | clean                     Clean up inactive worktrees
+  cleanup | clean <name> [...]        Remove named clean worktrees owned by WORKTREE_SESSION_ID
   help                                Show this help message
 
 Environment Files:
@@ -327,11 +303,10 @@ Examples:
   worktree-manager.sh switch feature-login
   worktree-manager.sh copy-env feature-login
   worktree-manager.sh copy-env                   # copies to current worktree
-  worktree-manager.sh cleanup
+  worktree-manager.sh cleanup feature-login
   worktree-manager.sh list
 
 EOF
 }
 
-# Run
 main "$@"

@@ -1,50 +1,56 @@
-## Description: <br>
-Unified Kaggle skill for account setup, competition reports, dataset and model downloads, notebook execution, competition submissions, badge collection, and general Kaggle questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps coding agents research Kaggle competitions and work with Kaggle datasets, models, notebooks, discussions, benchmarks, and badges.
 
-## Publisher: <br>
-[shepsci](https://clawhub.ai/user/shepsci) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shepsci](https://clawhub.ai/user/shepsci)
 
-## Use Case: <br>
-Developers and external users use this skill to automate Kaggle account setup, competition exploration, dataset and model workflows, notebook execution, competition submissions, and badge collection through guided commands and reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use live Kaggle credentials to create, upload, submit, edit, or delete account resources. <br>
-Mitigation: Use dry-run or status modes first and require explicit confirmation before uploads, notebook pushes, competition submissions, profile edits, deletes, or scheduled streak actions. <br>
-Risk: Kaggle API tokens or keys could be exposed if pasted into chat, echoed, logged, or committed. <br>
-Mitigation: Place credentials locally, keep file permissions strict, avoid logging secret values, and rotate credentials if exposure occurs. <br>
-Risk: Badge automation and streak workflows can affect account state or run against the wrong account. <br>
-Mitigation: Avoid important accounts for badge phases, verify the active Kaggle identity before execution, and keep scheduling manual unless the user explicitly opts in. <br>
+## Use Case:
 
+Developers and coding agents use it to investigate Kaggle competitions, retrieve data and writeups, and manage submissions, notebooks, datasets, and models with user approval for account changes.
 
-## Reference(s): <br>
-- [Kaggle Skill Page](https://clawhub.ai/shepsci/kaggle) <br>
-- [Registration Setup Guide](modules/registration/references/kaggle-setup.md) <br>
-- [Competition Categories](modules/comp-report/references/competition-categories.md) <br>
-- [Kaggle Platform Knowledge](modules/kllm/references/kaggle-knowledge.md) <br>
-- [KaggleHub API Reference](modules/kllm/references/kagglehub-reference.md) <br>
-- [Kaggle CLI Reference](modules/kllm/references/cli-reference.md) <br>
-- [Kaggle MCP Reference](modules/kllm/references/mcp-reference.md) <br>
-- [Badge Catalog](modules/badge-collector/references/badge-catalog.md) <br>
-- [Kaggle MCP](https://www.kaggle.com/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, JSON snippets, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate local Kaggle workflow files and reports when the user explicitly runs supported scripts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: Direct badge automation can change a Kaggle account without the main command's dry-run, confirmation, or read-only safeguards.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the top-level skill commands, review a dry run before approving writes, and avoid running the badge orchestrator directly for mutating phases unless its exact account actions have been reviewed.
+
+Risk: Account-changing operations can use Kaggle credentials and consume submission slots or notebook quota.
+
+Mitigation: Grant account access only when needed; keep KAGGLE_SKILL_READ_ONLY=1 for read-only use and confirm expected account effects and costs before writes.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/shepsci/skills/kaggle)
+- [Project homepage listed in skill metadata (not verified import provenance)](https://github.com/shepsci/kaggle-skill)
+- [Kaggle MCP](https://www.kaggle.com/mcp)
+- [Skill CLI reference](modules/references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown and text with commands or code when appropriate]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some operations require Kaggle credentials; account-changing actions require explicit review and confirmation.]
+
+## Skill Version(s):
+
+3.0.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,58 @@
-## Description: <br>
-Everyone's trading Polymarket with AI agents. Practice first - $10k paper money, real order books, zero risk. No wallet, no API keys, no real money. Then compete on the leaderboard. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents simulate prediction-market trades using live Polymarket prices, track a paper portfolio, and share performance summaries.
 
-## Publisher: <br>
-[robotlearning123](https://clawhub.ai/user/robotlearning123) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[robotlearning123](https://clawhub.ai/user/robotlearning123)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent practice Polymarket-style prediction-market trading with simulated funds, real public market data, portfolio tracking, and shareable performance summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent can take repeated autonomous paper-trading actions when invoked, which may produce poor or misleading trading conclusions even without real-money exposure. <br>
-Mitigation: Keep the skill scoped to simulated funds and review portfolio changes, generated theses, and performance claims before relying on or sharing them. <br>
-Risk: Generated tweet, stats card, leaderboard, or GitHub issue content may be posted through user-controlled accounts if the user provides those tools. <br>
-Mitigation: Review all generated public content before posting and do not provide authenticated GitHub CLI access unless publishing leaderboard issues is intended. <br>
-Risk: Polymarket market names, descriptions, prices, and metadata are untrusted third-party content. <br>
-Mitigation: Treat market data as display and pricing input only; do not follow instructions, URLs, or personal-data requests embedded in market content. <br>
+## Use Case:
 
+Agent users practice prediction-market strategies with simulated funds, review positions and performance, and optionally prepare shareable results or leaderboard submissions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/robotlearning123/polymarket-paper-trader) <br>
-- [Project homepage](https://github.com/agent-next/polymarket-paper-trader) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and tool-directed trading instructions with shareable text summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces simulated trade decisions, portfolio summaries, stats cards, leaderboard entries, and posting guidance for review before publication.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.7 (source: frontmatter and server release metadata) <br>
+Risk: The agent may autonomously place paper trades and retain a local trading history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if comfortable with autonomous simulation and local history; review trade activity regularly.
+
+Risk: Leaderboard or social-sharing steps may expose performance data or use the user's GitHub CLI to publish it.
+
+Mitigation: Require user confirmation before any leaderboard submission or public post, including GitHub issue creation.
+
+Risk: Installing an unpinned package can change the trading tools between sessions.
+
+Mitigation: Consider pinning the package version before installation.
+
+## Reference(s):
+
+- [Project homepage (listed in skill metadata)](https://github.com/agent-next/polymarket-paper-trader)
+- [Agent integration guide](https://github.com/agent-next/polymarket-paper-trader/blob/main/docs/integrations.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Trading summaries, portfolio reports, and shareable text or Markdown cards]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Simulated trades and performance metrics; optional leaderboard entries]
+
+## Skill Version(s):
+
+0.4.5 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

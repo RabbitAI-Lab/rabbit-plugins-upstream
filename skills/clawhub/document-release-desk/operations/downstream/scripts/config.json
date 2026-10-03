@@ -1,0 +1,100 @@
+{
+  "variant_id": "shadow_14_version",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "selection_guidance",
+  "output_name": "selection_result",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "current_major": {
+            "type": "integer"
+          },
+          "require_approved": {
+            "type": "boolean"
+          },
+          "allow_prerelease": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "current_major",
+          "require_approved",
+          "allow_prerelease"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "current_major": {
+                    "type": "integer"
+                  },
+                  "require_approved": {
+                    "type": "boolean"
+                  },
+                  "allow_prerelease": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "current_major",
+                  "require_approved",
+                  "allow_prerelease"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "selected_version": {
+        "type": [
+          "string",
+          "null"
+        ]
+      },
+      "eligible_versions": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "reason": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "selected_version",
+      "eligible_versions",
+      "reason"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_document_selection"
+}

@@ -1,37 +1,57 @@
-## Description: <br>
-AI-powered stock screening assistant for China A-share market analysis, combining quantitative factors, fundamental ranking, technical signals, sector rotation, and portfolio construction guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an educational framework for screening China A-share stocks using quantitative factors, fundamentals, technical signals, sector analysis, and portfolio construction.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Retail investors, fund managers, and quantitative analysts use this skill to screen China A-share candidates, compare factor scores, evaluate financial and technical risk signals, and draft portfolio construction guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial screening results or portfolio allocations may be inaccurate, stale, or unsuitable for a user's risk tolerance and time horizon. <br>
-Mitigation: Verify outputs against current market data and qualified financial advice before making investment decisions. <br>
+## Use Case:
 
+Investors and analysts use this skill to develop and review educational A-share screening criteria, factor comparisons, risk checks, and illustrative portfolio allocations; it does not provide investment advice or place trades.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global (focused on China's A-share market)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with explanatory text and illustrative Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable install behavior or trading authority is documented.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: release evidence and frontmatter) <br>
+Risk: Outdated or inaccurate market data, regulatory claims, or model outputs could mislead financial decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently verify data, claims, and screening results before acting; treat outputs as educational, not investment advice.
+
+Risk: Portfolio details could expose sensitive financial information.
+
+Mitigation: Share only anonymized holdings weights or factor data; omit account identifiers and transaction records.
+
+Risk: Illustrative code or portfolio suggestions could be mistaken for executable trading instructions.
+
+Mitigation: Review parameters and outputs before using any examples in an external environment; do not automate trades from this skill.
+
+## Reference(s):
+
+- [Security Stock Picker on ClawHub](https://clawhub.ai/gechengling/skills/security-stock-picker)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Code]
+
+**Output Format:** [Markdown with tables and illustrative code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Educational screening and portfolio examples; no live data access or trade execution.]
+
+## Skill Version(s):
+
+3.0.3 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

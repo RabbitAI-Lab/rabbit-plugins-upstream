@@ -1,39 +1,50 @@
-## Description: <br>
-Helps QA and engineering teams model complex business logic and system boundaries with state machines, data-flow views, and service-dependency views. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA practitioners model business states, data flows, and service dependencies to identify implicit rules, system boundaries, and test scope.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-Developers, QA engineers, and requirements analysts use this skill to turn complex requirements or scenario-tree inputs into domain models that expose object states, data movement, service dependencies, and missing business rules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording may cause the agent to apply the skill to general modeling requests where a narrower skill would be enough. <br>
-Mitigation: Use the skill when the request involves complex requirements, subsystem interaction, state transitions, data flow, or service dependencies. <br>
-Risk: A domain model may omit subsystems, states, data paths, or failure impacts that are not explicit in the source requirements. <br>
-Mitigation: Cross-check outputs against the scenario tree or requirements, use the included completion checklist, and retry modeling after filling any gaps. <br>
+## Use Case:
 
+QA engineers and developers use this skill to turn complex requirements and scenario trees into traceable state-transition, data-flow, and service-dependency models for test planning.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown with text diagrams and structured tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces state-machine, data-flow, and service-dependency views with traceability IDs when source scenarios are available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release metadata) <br>
+Risk: The optional installation command fetches a broader skill set from its current remote package state.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the command and the package contents before running it.
+
+## Reference(s):
+
+- [Modeling views guide](references/modeling-views.md)
+- [qa-domain-modeling on ClawHub](https://clawhub.ai/kokxi/skills/qa-domain-modeling)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown tables and diagrams for state transitions, data flows, and service dependencies]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Models have unique IDs and link to scenario IDs; coverage is qualified against the available requirements.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

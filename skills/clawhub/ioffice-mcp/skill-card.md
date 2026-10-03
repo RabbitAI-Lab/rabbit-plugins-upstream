@@ -1,42 +1,54 @@
-## Description: <br>
-Access iOffice workspace and facility data through an MCP server for buildings, floors, spaces, reservations, visitors, maintenance requests, moves, and mail. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps authorized employees access and manage iOffice workplace and facility records through an MCP server.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Employees and workplace operations teams use this skill to query and manage iOffice or Eptura Workplace tenant data through MCP, including room reservations, visitors, maintenance requests, moves, users, buildings, floors, spaces, and mail. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes broad tenant administration and destructive actions, including record deletion, user management, approvals, check-ins, deliveries, and other persistent operational changes. <br>
-Mitigation: Use a least-privilege iOffice or Eptura Workplace account and require explicit confirmation before delete, user-management, approval, check-in/out, delivery, or status-changing actions. <br>
-Risk: The configured account can expose workplace data such as visitor, mail, reservation, user, and facility records. <br>
-Mitigation: Install only when authorized by the employer, scope credentials to the intended tenant, and avoid bulk extraction or use outside approved workplace workflows. <br>
+## Use Case:
 
+Authorized employees use this skill to look up workspace information and manage reservations, visitors, maintenance requests, moves, and mail in their employer's iOffice tenant.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/ioffice-mcp) <br>
-- [ioffice-mcp npm package](https://www.npmjs.com/package/ioffice-mcp) <br>
-- [Project source link from artifact](https://github.com/chrischall/ioffice-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration examples, shell commands, and MCP tool-call instructions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses configured iOffice or Eptura Workplace credentials and may produce state-changing MCP tool calls when authorized.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.9 (source: server release evidence) <br>
+Risk: An external package handles credentials for workplace data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if you trust the package and use a least-privilege token where possible.
+
+Risk: Administrative or state-changing actions can alter workplace records.
+
+Mitigation: Confirm workplace authorization and review create, update, delete, approval, delivery, check-in, and checkout actions before execution.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/ioffice-mcp)
+- [ioffice-mcp npm package](https://www.npmjs.com/package/ioffice-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown and MCP tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the configured tenant and account permissions.]
+
+## Skill Version(s):
+
+3.2.2 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,86 @@
+{
+  "variant_id": "shadow_12_timezone",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "timezone_mode",
+  "output_name": "recorded_timezone",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "default_timezone": {
+            "type": "string"
+          },
+          "preserve_labeled": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "default_timezone",
+          "preserve_labeled"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "default_timezone": {
+                    "type": "string"
+                  },
+                  "preserve_labeled": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "default_timezone",
+                  "preserve_labeled"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "input_deadline": {
+        "type": "string"
+      },
+      "utc_deadline": {
+        "type": "string"
+      },
+      "source_timezone": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "input_deadline",
+      "utc_deadline",
+      "source_timezone"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_deadline_interpretation"
+}

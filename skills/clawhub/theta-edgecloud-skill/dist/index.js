@@ -4,17 +4,36 @@ import { inference } from './commands/inference.js';
 import { video } from './commands/video.js';
 import { ondemand } from './commands/ondemand.js';
 import { healthCheck } from './commands/health.js';
-import { executeThetaRuntimeCommand, listThetaRuntimeCommands, thetaRuntimeCommandSchemas } from './runtime/handlers.js';
+import { executeThetaRuntimeCommand, listThetaRuntimeCommands, thetaRuntimeCommandSchemas, thetaCommandRequiresConfirm } from './runtime/handlers.js';
 import { resolveThetaOnDemandToken } from './runtime/secretResolver.js';
+// Read-only convenience facade. Resource mutations (deployments, RAG agents, video,
+// characters, GPU nodes) are reachable only through executeThetaRuntimeCommand, which
+// enforces confirm:true outside dry-run.
 export function theta() {
     const cfg = loadConfig();
     return {
         cfg,
-        deploy: deployments,
+        deploy: {
+            listStandard: deployments.listStandard,
+            listCustom: deployments.listCustom,
+            listVm: deployments.listVm,
+            list: deployments.list,
+            routeProbe: deployments.routeProbe,
+            balance: deployments.balance,
+            chatbotGet: deployments.chatbotGet,
+            chatbotList: deployments.chatbotList,
+            chatbotDocumentGet: deployments.chatbotDocumentGet,
+            chatbotDocumentList: deployments.chatbotDocumentList
+        },
         inference,
-        video,
+        video: {
+            videoGet: video.videoGet,
+            videoList: video.videoList,
+            streamGet: video.streamGet,
+            ingestorList: video.ingestorList
+        },
         ondemand,
         healthCheck: () => healthCheck(cfg)
     };
 }
-export { executeThetaRuntimeCommand, listThetaRuntimeCommands, thetaRuntimeCommandSchemas, resolveThetaOnDemandToken };
+export { executeThetaRuntimeCommand, listThetaRuntimeCommands, thetaRuntimeCommandSchemas, thetaCommandRequiresConfirm, resolveThetaOnDemandToken };

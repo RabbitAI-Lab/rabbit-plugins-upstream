@@ -1,44 +1,63 @@
-## Description: <br>
-Inspect Google Ads accounts and campaigns, run GAQL reports, and coordinate campaign or audience changes with confirmation via the Google Ads API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Inspect Google Ads accounts and campaigns, run GAQL reports, and coordinate campaign or audience changes with confirmation via the Google Ads API.
 
-## Publisher: <br>
-[hith3sh](https://clawhub.ai/user/hith3sh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[hith3sh](https://clawhub.ai/user/hith3sh)
 
-## Use Case: <br>
-External users, marketers, and developers use this skill to inspect Google Ads customers and campaigns, run GAQL performance reports, and coordinate campaign, ad group, audience, or customer-list changes after confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connected Google account can expose Google Ads accounts available to that account. <br>
-Mitigation: Connect only the intended Google account and verify the active Google Ads integration before use. <br>
-Risk: Campaign, ad group, audience, or customer-list writes can change advertising configuration or spend. <br>
-Mitigation: Preview each write operation and require explicit user confirmation before execution. <br>
+## Use Case:
 
+External users and developers use this skill to inspect Google Ads customers and campaigns, run GAQL performance reports, and prepare campaign, ad group, or audience changes through ClawLink with explicit confirmation for writes.
 
-## Reference(s): <br>
-- [Google Ads API Documentation](https://developers.google.com/google-ads/api/docs/start) <br>
-- [Google Ads API Reference](https://developers.google.com/google-ads/api/reference/rpc) <br>
-- [GAQL Query Builder](https://developers.google.com/google-ads/api/docs/query/overview) <br>
-- [ClawLink OpenClaw Docs](https://docs.claw-link.dev/openclaw) <br>
-- [ClawHub Skill Page](https://clawhub.ai/hith3sh/google-ads-campaigns) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and tool-call parameters] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ClawLink-mediated Google Ads tool calls; write operations require preview and explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: The skill asks users to install and allowlist an unpinned third-party ClawLink plugin that mediates Google Ads access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when the user trusts ClawLink and the ClawHub package source, and verify the provider through the linked ClawLink materials before connecting accounts.
+
+Risk: Connected Google Ads accounts may have production spend or customer-list access.
+
+Mitigation: Connect only the Google Ads accounts needed for the task and review permissions before using the skill in production environments.
+
+Risk: Write actions can create or update campaigns, ad groups, audiences, or customer lists.
+
+Mitigation: Require a clear preview and explicit user confirmation before every write or destructive action.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/hith3sh/skills/google-ads-campaigns)
+- [Google Ads API documentation](https://developers.google.com/google-ads/api/docs/start)
+- [Google Ads API reference](https://developers.google.com/google-ads/api/reference/rpc)
+- [GAQL query documentation](https://developers.google.com/google-ads/api/docs/query/overview)
+- [ClawLink](https://claw-link.dev/?utm_source=clawhub&utm_medium=referral&utm_content=google-ads-campaigns)
+- [ClawLink Docs](https://docs.claw-link.dev/openclaw)
+- [ClawLink Verification](https://claw-link.dev/verify)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and JSON tool-call parameters]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a connected Google Ads account through ClawLink; write actions require preview and explicit user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

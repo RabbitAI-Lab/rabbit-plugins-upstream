@@ -41,14 +41,18 @@
 
 ---
 
-## 3. 快速验证路径
+## 3. 快速验证路径（证据驱动决策表）
 
-1. **用 GPU Profiler 抓取一帧**，确认瓶颈所在 pipeline stage。`[TOOL]`
-2. **降低渲染分辨率 50%**：若帧时间近似减半，瓶颈在 fragment / ROP。`[TOOL]`
-3. **减少 draw call 数或顶点数**：若帧时间显著下降，瓶颈在 vertex / geometry。`[TOOL]`
-4. **注释掉 suspicious pass**：二分定位耗时大户。`[TOOL]`
-5. **检查 barrier 数量与位置**：看 GPU 时间轴是否有大量空泡。`[TOOL]`
-6. **检查 texture / buffer 尺寸与格式**：降低采样质量或分辨率测试。`[TOOL]`
+| # | 检查（成本升序） | 结果 A → 下一步 | 结果 B → 下一步 | 剪枝（排除的假设） |
+|---|---|---|---|---|
+| 1 | AGI：GPU vs CPU 帧时间（瓶颈分类） | GPU 帧时间 ≥ CPU 且 `GPU % Busy` 接近 100% → 检查 2 | CPU 帧时间 > GPU → 转 `cpu_overhead_symptoms.md`（CPU 侧瓶颈） | GPU 满载时排除 §2 的 P0 过度同步 / barrier / wait 假设（满载与空等互斥） |
+| 2 | 分 pass GPU timer query（AGI 按 pass 分解 `GPU Duration` / timestamp query） | 少数 pass 耗时占比异常 → 检查 3 | 各 pass 分布均匀、无单点热点 → 检查 5 | 均匀时排除 §2 的 P0 Fragment/ROP 与 P0 Vertex/Geometry 单点热点假设 |
+| 3 | 热点 pass 的 stage 计数器：`Fragment Duration` / `Vertex Duration` / `Texture Fetch` | Fragment 高 → 检查 4；Vertex / Geometry 高 → §6 Minimal Fix 的 Vertex 分支（LOD / occlusion culling / instancing，§2 的 P0 Vertex/Geometry 假设）；`Texture Fetch` / `Texture Cache Miss` 高 → §5-1 / §5-3（§2 的 P1 Texture/bandwidth 假设） | 各 stage 均不突出 → 检查 5 | — |
+| 4 | overdraw / early-z 计数：`Fragment Shader Invocations` vs 屏幕像素数 | 远超像素数 → §5-2（透明未按深度排序 / 未启用 early-z）；接近像素数但 `Fragment Duration` 仍高 → §5-1 / §5-3（shader 复杂度 / RT+MSAA+MRT 压力） | 计数正常 → 检查 5 | 正常时排除 §2 的 P0 Fragment/ROP 假设 |
+| 5 | 每帧 draw call 计数与 CP / Command Buffer 负载 | draw call > 数千且 CP 负载高 → §5-4（§2 的 P1 大量小 draw call 假设） | 数量与负载正常 → 检查 6 | 正常时排除 §2 的 P1 大量小 draw call 假设 |
+| 6 | GPU 时间轴空泡（trace：`IDLE` / `WAIT` 占比、compute 是否长时间独占） | 空泡占比高 → §5-5（§2 的 P0 过度同步 / barrier / wait 假设）；compute 独占导致 graphics 空等 → §5-6（§2 的 P1 Compute 任务过重或调度不当假设） | 满载无空泡 → 检查 7 | 满载时排除 §2 的 P0 过度同步 / barrier / wait 假设 |
+| 7 | 帧时间尖峰时序 vs 首帧 / shader 变体切换 | 尖峰集中在首帧或变体首次出现 → §5-7（§2 的 P2 驱动编译 / pipeline cache 未命中假设） | 稳态持续偏高、与变体无关 → 检查 8 | 稳态时排除 §2 的 P2 驱动编译 / pipeline cache 未命中假设 |
+| 8 | 对照实验：降低渲染分辨率 50% 或注释可疑 pass 二分 | 降分辨率后帧时间近似减半 → 印证 §5-2 / §5-3 的 fragment / ROP 路径（§2 的 P0 Fragment/ROP 假设）；注释某 pass 后明显下降 → 该 pass 为热点，回到检查 3 | 均无明显变化 → §11 不确定处理 | 无变化时排除 §2 的 P0 Fragment/ROP 假设（分辨率无关） |
 
 ---
 
@@ -92,23 +96,24 @@ Command Buffer Submit
 
 ## 6. 修复方案
 
-### 最小修复
+### Workaround（临时绕过，现象消失 ≠ 根因修复）
 
-- 对 fragment 瓶颈：降低渲染分辨率、降低 overdraw、简化 shader。`[HEUR]`
-- 对 vertex 瓶颈：减少 draw call（batch / instancing）、LOD、减少 vertex attribute。`[HEUR]`
-- 对 barrier 瓶颈：合并 barrier、移除不必要的 `vkDeviceWaitIdle`。`[ENGINE]`
-- 对 compute 瓶颈：将 compute 拆小并与 graphics 交错 submit，或调整 dispatch 尺寸。`[HEUR]`
+- 降低渲染分辨率或整体画质档位：帧时间回落，但 overdraw / shader 复杂度 / 带宽架构等根因仍在；仅用于先恢复可玩性或验证瓶颈归属。`[HEUR]`
+- 临时跳过高耗时 pass（如 SSAO / SSR / 高级后处理）或锁定帧率（present mode 用 `FIFO`）：掩盖现象，交付前必须继续定位根因。`[HEUR]`
 
-### 稳定修复
+### Minimal Fix（针对根因的最小修复）
 
-- 实施延迟渲染、forward+ 等降低 overdraw 的架构。`[ENGINE]`
-- 建立 LOD、occlusion culling、depth prepass 降低 vertex / fragment 工作量。`[ENGINE]`
+- Fragment / ROP 瓶颈：精简热点 shader 的采样次数与 ALU；对透明 pass 按深度排序，用 depth prepass / early-z 降低 overdraw。`[ENGINE]`
+- Vertex 瓶颈：启用 LOD、occlusion culling、减少 vertex attribute，对重复 mesh 使用 instancing。`[ENGINE]`
+- Barrier / wait 瓶颈：合并相邻 barrier、把全局 barrier 收窄为实际 stage / access，移除每帧 `vkDeviceWaitIdle` 与多余的 `vkQueueWaitIdle`。`[SPEC]`
+- Compute 瓶颈：把长耗时 dispatch 拆小并与 graphics 交错 submit，避免长时间独占 GPU。`[ENGINE]`
+- 运行期编译尖峰：启用并持久化 `VkPipelineCache`，避免重复编译。`[SPEC]`
+
+### Structural Fix（结构性 / 防复发修复）
+
+- 实施延迟渲染、forward+ 等降低 overdraw 的渲染架构。`[ENGINE]`
 - 使用 bindless / multi-draw indirect 减少 draw call 和 descriptor 切换。`[ENGINE]`
 - 建立 render graph 自动合并 barrier 并减少 global barrier。`[ENGINE]`
-- 预编译 pipeline 并使用 `VkPipelineCache` 持久化。`[SPEC]`
-
-### 工程化修复
-
 - CI 集成性能测试，自动回归 GPU frame time。`[TOOL]`
 - 建立 per-pass GPU time budget 和自动告警。`[ENGINE]`
 - 对低端设备启用动态分辨率、动态 LOD、画质分级。`[ENGINE]`

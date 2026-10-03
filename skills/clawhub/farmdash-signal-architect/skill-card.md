@@ -1,47 +1,62 @@
-## Description: <br>
-Supervised, policy-gated DeFi intelligence and execution manual for FarmDash MCP tools (60 tools). Covers swaps, simulations, perps, and autonomous operator features with MEV protection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides DeFi agents through market research, trade quotes, simulations, and user-signed swap preparation with FarmDash tools.
 
-## Publisher: <br>
-[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[parmasanandgarlic](https://clawhub.ai/user/parmasanandgarlic)
 
-## Use Case: <br>
-External developers and agent operators use this skill to research DeFi opportunities, compare routes, prepare signed swaps or perps, and run bounded automation through FarmDash tools while preserving user review gates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can prepare wallet-affecting DeFi workflows, including swaps, perpetual contracts, and delegated automation. <br>
-Mitigation: Use read-only mode unless the user is ready to verify every token address, chain, amount, fee, slippage, route, budget, allowlist, cooldown, and revocation setting before signing. <br>
-Risk: Private keys, seed phrases, mnemonics, wallet exports, or OAuth tokens would create severe account and fund exposure if supplied to an agent. <br>
-Mitigation: Do not provide private keys or seed phrases; rely on local wallet signing or explicitly configured bounded delegation. <br>
-Risk: Onboarding, attribution analytics, referral routes, and bounded autopilot can introduce commercial or automated behavior. <br>
-Mitigation: Treat these behaviors as opt-in and require explicit user approval before enabling them. <br>
+## Use Case:
 
+External users and developers use this skill to assess DeFi opportunities, compare routes, simulate swaps, and prepare transactions for user review and signing. It also supports wallet monitoring and explicitly bounded delegated workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/parmasanandgarlic/skills/farmdash-signal-architect) <br>
-- [FarmDash Agent Hub](https://www.farmdash.one/agents) <br>
-- [FarmDash Skill Manual](https://www.farmdash.one/openclaw-skills/farmdash-signal-architect/SKILL.md) <br>
-- [FarmDash API Schema](https://www.farmdash.one/agents/openapi.yaml) <br>
-- [FarmDash MCP Server](https://www.farmdash.one/.well-known/mcp.json) <br>
-- [FarmDash Fee Structure](https://www.farmdash.one/fees) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Shell commands, Configuration, Markdown, JSON] <br>
-**Output Format:** [Markdown guidance with JSON examples, API procedure references, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May prepare DeFi transaction workflows for local user signing or explicitly bounded delegation; read-only Scout access is available without an API key.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.19 (source: server release metadata) <br>
+Risk: Swaps and other DeFi actions can cause financial loss if quotes, routes, fees, or signatures are wrong or stale.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review fresh quotes and simulations; independently verify token addresses, chains, amounts, fees, and every wallet signature before signing or submitting.
+
+Risk: Delegated or autopilot actions may exceed the user's intended trading authority.
+
+Mitigation: Require explicit setup approval, bounded budgets, allowlists, cooldowns, and a clear revocation path; halt when a bound is missing or violated.
+
+Risk: Wallet-linked activity and optional onboarding can disclose public addresses and usage metadata to FarmDash.
+
+Mitigation: Disclose the data sharing and make optional registration a user choice; never share seed phrases or private keys.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/parmasanandgarlic/skills/farmdash-signal-architect)
+- [FarmDash Agent Hub](https://www.farmdash.one/agents)
+- [FarmDash MCP discovery manifest](https://www.farmdash.one/.well-known/mcp.json)
+- [FarmDash API contract](https://www.farmdash.one/agents/openapi.yaml)
+- [FarmDash fees](https://www.farmdash.one/fees)
+- [FarmDash security boundaries](https://www.farmdash.one/security)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration, Shell commands]
+
+**Output Format:** [Markdown guidance and structured tool responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes trade analysis, quotes, simulation results, and transaction payloads for independent review and local signing.]
+
+## Skill Version(s):
+
+1.2.24 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

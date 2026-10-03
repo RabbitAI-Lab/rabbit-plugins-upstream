@@ -1,43 +1,58 @@
-## Description: <br>
-Measure a skill's reliability by running Caliper evaluations, interpreting results, and helping design .eval.yaml specs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Measures a skill's reliability through repeated evaluations, eval design and interpretation, and comparisons against the base agent.
 
-## Publisher: <br>
-[edonadei](https://clawhub.ai/user/edonadei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[edonadei](https://clawhub.ai/user/edonadei)
 
-## Use Case: <br>
-Developers and skill authors use this skill to validate, run, extend, and interpret Caliper evaluation specs for agent skills. It helps compare a skill against a baseline, measure pass@k reliability, and turn expected behavior into observable eval tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Evaluation specs can execute setup, cleanup, assertion blocks, and MCP declarations through Caliper. <br>
-Mitigation: Review each .eval.yaml file before running it, including command blocks, assertions, environment-variable references, and MCP server declarations. <br>
-Risk: Saved Caliper results may include private prompts, files, or tool outputs when transcripts are recorded. <br>
-Mitigation: Treat .caliper result files as sensitive, avoid committing private run artifacts, and review result JSON before sharing it. <br>
+## Use Case:
 
+Developers use this skill to design and run Caliper evaluations, measure repeatability, and compare a skill with an agent running without it.
 
-## Reference(s): <br>
-- [Evaluate Skill on ClawHub](https://clawhub.ai/edonadei/skills/evaluate-skill) <br>
-- [Caliper Reference](REFERENCE.md) <br>
-- [Evaluate Skill Eval Spec](evaluate-skill.eval.yaml) <br>
-- [Simple Eval Example](references/examples/simple.eval.yaml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline YAML, Python, and bash snippets; may create or edit .eval.yaml specs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are intended for Caliper workflows and may reference saved .caliper result JSONs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release evidence) <br>
+Risk: Third-party evaluation specs can execute setup, cleanup, assertions, connectors, or git-sourced content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review setup, cleanup, assert, mcp, and git-source entries before running a spec.
+
+Risk: User customizations can change results or make shared comparisons misleading.
+
+Mitigation: Use isolated runs when comparing backends, sharing measurements, or measuring the bare agent.
+
+Risk: Saved evaluation transcripts and snapshots may contain sensitive project or prompt data.
+
+Mitigation: Keep .caliper/results out of commits and review saved results before sharing.
+
+## Reference(s):
+
+- [Evaluate Skill on ClawHub](https://clawhub.ai/edonadei/skills/evaluate-skill)
+- [Caliper Reference](artifact/REFERENCE.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, YAML configuration, Shell commands, Evaluation reports]
+
+**Output Format:** [Markdown guidance, .eval.yaml specs, and Caliper results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can create evaluation specs and save run results for later comparison.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

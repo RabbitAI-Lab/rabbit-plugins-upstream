@@ -1,40 +1,49 @@
-## Description: <br>
-Complete vx CLI command reference for looking up command syntax, flags, output formats, token-efficient forwarding, and vx-native structured output options. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a vx CLI command reference for syntax, flags, structured output, and token-efficient forwarding.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and coding agents use this skill to look up vx CLI commands, structured output modes, forwarding behavior, global flags, and practical command examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some documented commands can print environment details or use authenticated tools, which may expose secrets or local development state. <br>
-Mitigation: Review command output before sharing it, avoid forwarding full environment output, and pay special attention to authenticated CLI usage. <br>
-Risk: Some documented commands install or remove tools, clean caches, export shell variables, or modify vx.toml and vx.lock. <br>
-Mitigation: Approve state-changing commands only for the intended project and inspect proposed changes before applying them. <br>
+## Use Case:
 
+Developers and coding agents use this reference to select vx commands, flags, and output formats for project analysis, tool management, and CLI workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/loonghao/vx-commands) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Command-reference guidance only; no executable payload is bundled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Unrelated task-tracker instructions may prompt an agent to post external status comments without authorization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ignore the tracker-delivery instructions unless requested; review the destination, account, and exact comment before any external post.
+
+## Reference(s):
+
+- [vx-commands ClawHub release](https://clawhub.ai/loonghao/skills/vx-commands)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with bash examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Covers JSON, TOON, and compact output options; forwarded tools retain native output by default.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

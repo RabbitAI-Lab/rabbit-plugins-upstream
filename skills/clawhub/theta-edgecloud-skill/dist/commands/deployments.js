@@ -123,6 +123,7 @@ async function waitForDedicatedProbe(cfg, endpoint, auth, probe, timeoutMs, inte
     return { ready: false, probe, endpoint, elapsedMs: Date.now() - startedAt, attempts };
 }
 export const deployments = {
+    startByBaseId: (cfg, projectId, baseId) => cfg.dryRun ? { dryRun: true, action: 'startByBaseId', projectId, baseId } : edgecloudControllerClient.startDeploymentByBaseId(cfg, projectId, baseId),
     listStandard: (cfg, category) => edgecloudControllerClient.listStandardTemplates(cfg, category),
     listCustom: (cfg, projectId) => edgecloudControllerClient.listCustomTemplates(cfg, projectId),
     listVm: (cfg) => edgecloudControllerClient.listVmTypes(cfg),
@@ -172,6 +173,7 @@ export const deployments = {
         let smoke;
         let deleteResult;
         let cleanupVerification;
+        let operationFailure;
         const before = await balanceSnapshot(cfg, opts.orgId);
         try {
             created = await edgecloudControllerClient.createDeployment(cfg, payload);
@@ -188,11 +190,14 @@ export const deployments = {
                 }, endpoint, auth);
             }
         }
+        catch (error) {
+            operationFailure = error?.message ?? String(error);
+        }
         finally {
             const baseId = created ? findKey(created, new Set(['baseid', 'base_id', 'deployment_id', 'id'])) : undefined;
             const shard = created ? findKey(created, new Set(['shard'])) : undefined;
             const suffix = created ? findKey(created, new Set(['suffix'])) : undefined;
-            if (created && shard && suffix) {
+            if (created && shard !== undefined && shard !== null && String(shard) !== '' && suffix !== undefined && suffix !== null && String(suffix) !== '') {
                 try {
                     await edgecloudControllerClient.deleteDeployment(cfg, projectId, String(shard), String(suffix));
                     deleteResult = { ok: true, shard, suffix };
@@ -206,12 +211,23 @@ export const deployments = {
             }
             try {
                 const listed = await edgecloudControllerClient.listDeployments(cfg, projectId);
-                const needleValues = [baseId, shard, suffix].filter((value) => value !== undefined && value !== null && value !== '').map(String);
-                const listedText = JSON.stringify(listed);
+                const needleValues = [baseId, suffix].filter((value) => value !== undefined && value !== null && value !== '').map(String);
+                const response = listed;
+                const body = response?.body ?? listed;
+                const rows = Array.isArray(body) ? body : body?.deployments;
+                const identifiable = (entry) => !!entry && typeof entry === 'object' && Object.entries(entry).some(([key, value]) => (['baseid', 'base_id', 'deployment_id', 'id', 'suffix'].includes(key.toLowerCase()) && ['string', 'number'].includes(typeof value) && String(value).length > 0) ||
+                    (typeof value === 'object' && identifiable(value)));
+                const knownList = Array.isArray(rows) && rows.every(identifiable);
+                const containsHandle = (entry) => {
+                    if (!entry || typeof entry !== 'object')
+                        return false;
+                    return Object.entries(entry).some(([key, value]) => (['baseid', 'base_id', 'deployment_id', 'id', 'suffix'].includes(key.toLowerCase()) && needleValues.includes(String(value))) ||
+                        (typeof value === 'object' && containsHandle(value)));
+                };
                 cleanupVerification = {
-                    checked: true,
+                    checked: knownList && needleValues.length > 0,
                     projectId,
-                    deletedHandlesAbsent: !needleValues.some((value) => listedText.includes(value)),
+                    deletedHandlesAbsent: knownList && needleValues.length > 0 && !rows.some(containsHandle),
                     handlesChecked: needleValues
                 };
             }
@@ -221,6 +237,8 @@ export const deployments = {
         }
         const after = await balanceSnapshot(cfg, opts.orgId);
         return redactObject({
+            ok: !operationFailure && readiness?.ready === true && deleteResult?.ok === true && cleanupVerification?.deletedHandlesAbsent === true,
+            operationFailure,
             createResponse: created,
             readiness,
             smokeResponse: smoke,

@@ -1,0 +1,8 @@
+{
+  "calculation_request": {
+    "currency": "USD",
+    "scale": 2,
+    "rounding_mode": "half-even",
+    "round_stage": "line"
+  }
+}

@@ -44,15 +44,15 @@
 
 ---
 
-## 3. 快速验证路径
+## 3. 快速验证路径（证据驱动决策表）
 
-1. 打印 acquire / present 返回值。
-2. 打印 surface changed / destroyed / created。
-3. 打印 swapchain recreate 开始和结束。
-4. 打印新旧 swapchain extent。
-5. 检查 recreate 前是否等待相关 in-flight fence。
-6. 检查所有尺寸相关资源是否重建。
-7. 用 RenderDoc / AGI 抓 resize 后第一帧。
+| # | 检查（成本升序） | 结果 A → 下一步 | 结果 B → 下一步 | 剪枝（排除的假设） |
+|---|---|---|---|---|
+| 1 | acquire / present 返回值 + surface created / changed / destroyed 日志 | OUT_OF_DATE / SUBOPTIMAL 未触发 recreate → §2 的 P1；surfaceDestroyed 后仍 present → §5-7；新 extent 为 0 仍创建 → §5-8 | recreate 被正常触发 → 检查 2 | 正常触发时排除 §2 的 P1 Surface 失效与 P1 未处理返回码假设 |
+| 2 | crash 时机：recreate 过程中，还是 recreate 后首帧 | recreate 中（销毁旧资源时）→ §5-6 未等 in-flight fence（§2 的 P0 in-flight 假设） | recreate 后首帧 → 检查 3 | recreate 中 crash 时排除 §2 的 P0 旧 image view / depth 未重建假设（尚未使用新资源） |
+| 3 | Validation lifetime 报错 + 旧 image view / framebuffer / depth 引用检查 | 仍引用旧 view / framebuffer 未重建 / depth 旧尺寸 → §5-1 / §5-2 / §5-3；descriptor 引用旧 offscreen → §5-5（§2 的 P2） | 引用均已更新 → 检查 4 | 均已更新时排除 §2 的 P0 旧 image view、P0 depth / framebuffer、P2 descriptor 假设 |
+| 4 | in-flight command buffer：是否引用旧 swapchain 资源、recreate 前是否等待 frame fence | 未等待 / 旧 CB 未重新录制 → §5-4 / §5-6（§2 的 P0 in-flight 假设） | 已 retire 并重录 → 检查 5 | 已 retire 时排除 §2 的 P0 in-flight command buffer 假设 |
+| 5 | RenderDoc / AGI 抓 recreate 后第一帧 | 首帧仍引用旧资源 → 回到检查 3 对应根因 | 全部使用新资源仍 crash → §11 不确定处理 | — |
 
 ---
 
@@ -98,25 +98,26 @@ Surface / ANativeWindow
 
 ## 6. 修复方案
 
-### 最小修复
+### Workaround（临时绕过，现象消失 ≠ 根因修复）
 
-- acquire / present 返回 OUT_OF_DATE 时触发 recreate。
-- recreate 前等待相关 frame fence。
-- 重建 swapchain image view、depth、framebuffer、command buffer。
+- 临时锁定屏幕方向，规避 rotation 触发 recreate（resize 仍会触发，仅应急）。`[ANDROID]`
 
-### 稳定修复
+### Minimal Fix（针对根因的最小修复）
 
-- 把所有尺寸相关资源归为 swapchain-dependent resources。
-- 建立统一 recreate 函数。
-- Surface destroyed 时暂停 render loop。
-- Surface recreated 后重新创建 surface/swapchain。
-- 为每个 frame resource 建立明确生命周期。
+- acquire / present 返回 OUT_OF_DATE 时触发 recreate。`[SPEC]`
+- recreate 前等待相关 frame fence。`[SPEC]`
+- 重建 swapchain image view、depth、framebuffer、command buffer。`[ENGINE]`
 
-### 工程化修复
+### Structural Fix（结构性 / 防复发修复）
 
-- 使用 render graph 统一管理尺寸相关资源。
-- 建立 resource generation id，防止 command buffer 引用旧资源。
-- 建立 Android lifecycle 状态机。
+- 把所有尺寸相关资源归为 swapchain-dependent resources。`[ENGINE]`
+- 建立统一 recreate 函数。`[ENGINE]`
+- Surface destroyed 时暂停 render loop。`[ANDROID]`
+- Surface recreated 后重新创建 surface/swapchain。`[ANDROID]`
+- 为每个 frame resource 建立明确生命周期。`[ENGINE]`
+- 使用 render graph 统一管理尺寸相关资源。`[ENGINE]`
+- 建立 resource generation id，防止 command buffer 引用旧资源。`[ENGINE]`
+- 建立 Android lifecycle 状态机。`[ANDROID]`
 
 ---
 

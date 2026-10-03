@@ -1,0 +1,36 @@
+{
+  "index_update": {
+    "index_id": "knowledge-index-5c76e3519dd21e88",
+    "reference": "KB-BRAVO-2091",
+    "heading": "Supplier Onboarding Guide",
+    "content_digest": "b72f99af01e7fa8a",
+    "indexed_sections": [
+      {
+        "section_id": "kb-bravo-2091-434fb89cbaed",
+        "ordinal": 1,
+        "heading": "Intake Requirements",
+        "content": "Collect the approved supplier profile and ownership details.",
+        "content_digest": "434fb89cbaed7a7c"
+      },
+      {
+        "section_id": "kb-bravo-2091-9474a3ead06b",
+        "ordinal": 2,
+        "heading": "Workspace Access",
+        "content": "Follow [[KB-POLICY-7720]] before granting editor access.",
+        "content_digest": "9474a3ead06b4f02"
+      }
+    ],
+    "backlinks": [
+      {
+        "source_reference": "KB-BRAVO-2091",
+        "target_reference": "KB-GUIDE-4401"
+      },
+      {
+        "source_reference": "KB-BRAVO-2091",
+        "target_reference": "KB-POLICY-7720"
+      }
+    ],
+    "dedup_status": "duplicates_removed",
+    "duplicates_removed": 1
+  }
+}

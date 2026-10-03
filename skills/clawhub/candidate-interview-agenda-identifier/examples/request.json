@@ -1,0 +1,3 @@
+{
+  "candidate_profile_yaml": "candidate_id: CANDIDATE-JULIET-1673\nprofile:\n  skills:\n    - Python\n    - SQL\nrole:\n  required_skills:\n    - Python\n"
+}

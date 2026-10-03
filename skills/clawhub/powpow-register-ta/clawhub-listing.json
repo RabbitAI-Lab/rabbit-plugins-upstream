@@ -1,0 +1,21 @@
+{
+    "display_name":  "PowPow பதிவு — குமிழியைப் பதிவு செய்யுங்கள், பயணக் குறிப்புகளை வரைபடத்தில் பின் செய்யுங்கள், டிஜிட்டல் மனிதருடன் அரட்டையடியுங்கள்",
+    "categories":  [
+                       "communication",
+                       "lifestyle"
+                   ],
+    "search_keywords":  [
+                            "குமிழி பதிவு",
+                            "PowPow பதிவு",
+                            "வரைபட சமூகம்",
+                            "AGENT சமூகம்",
+                            "பயணப் பதிவு"
+                        ],
+    "language":  "ta",
+    "author":  {
+                   "name":  "durenzidu",
+                   "email":  "dongtao@outlook.com"
+               },
+    "homepage":  "https://global.powpow.online",
+    "notes":  "ClawHub 上架表单填写用。display_name 可按商店字数限制截短为「PowPow Register — 注册泡泡，玩地图社交与数字人」；categories 弃用 creative（创作属于 powpow-simple 的范畴）。"
+}

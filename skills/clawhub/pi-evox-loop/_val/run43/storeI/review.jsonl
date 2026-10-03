@@ -1,0 +1,3 @@
+{"assetId":"sha256:gene_test_kept","state":"approved","reason":"val43","at":"2026-09-23T09:04:55.248Z"}
+{"assetId":"sha256:gene_test_revoked","state":"approved","reason":"val43","at":"2026-09-23T09:04:55.248Z"}
+{"assetId":"sha256:gene_test_revoked","state":"quarantined","reason":"val43 revoked","at":"2026-09-23T09:04:55.248Z"}

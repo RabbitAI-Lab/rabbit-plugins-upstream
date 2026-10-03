@@ -1,45 +1,60 @@
-## Description: <br>
-Theta EdgeCloud runtime for OpenClaw cost optimization: route eligible AI, media, inference, and GPU workloads through Theta EdgeCloud with secure command-scoped auth, dry-run safety, and on-demand Qwen3/chat support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Theta EdgeCloud AI, GPU, video and game-character workflows: discover live services, run inference, manage approved resources, and verify costs.
 
-## Publisher: <br>
-[zeuslabsllc](https://clawhub.ai/user/zeuslabsllc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zeuslabsllc](https://clawhub.ai/user/zeuslabsllc)
 
-## Use Case: <br>
-Developers and operators use this skill to connect OpenClaw workflows to Theta EdgeCloud for AI inference, media, video, GPU deployment, chatbot/RAG, billing, and readiness operations while keeping authentication scoped to invoked commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Theta credentials are required for live API operations. <br>
-Mitigation: Use user-supplied credentials through the runtime secret provider or environment variables, and do not bundle or commit API keys. <br>
-Risk: Deployment, video, wallet, and on-demand operations can mutate Theta resources or spend credits. <br>
-Mitigation: Start with THETA_DRY_RUN=1, use budget caps for smoke tests, and require explicit approval before live paid or mutating operations. <br>
-Risk: Private prompts, documents, media, or paid workloads may be sent to Theta services. <br>
-Mitigation: Confirm the data and workload are appropriate for Theta EdgeCloud before routing them through this skill. <br>
+## Use Case:
 
+Developers and operators use this skill to discover Theta EdgeCloud services, run AI and media inference, manage approved GPU and application resources, and check usage and costs.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/zeuslabsllc/theta-edgecloud-skill) <br>
-- [Theta EdgeCloud on-demand endpoint](https://ondemand.thetaedgecloud.com) <br>
-- [Theta EdgeCloud controller endpoint](https://controller.thetaedgecloud.com) <br>
-- [Theta EdgeCloud API endpoint](https://api.thetaedgecloud.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown guidance, shell command examples, and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runtime commands may return dry-run previews, readiness status, inference responses, deployment state, balance snapshots, or redacted validation summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.26 (source: server release evidence and package.json) <br>
+Risk: A persistent character-session context update can run without the explicit approval gate used for comparable remote changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require a patch or local policy enforcing confirm:true for theta.characters.session.context before allowing automated updates.
+
+Risk: Credentials can authorize paid calls and remote resource changes; dry-run still permits reads.
+
+Mitigation: Use least-privilege Theta credentials, provider-side quotas, THETA_DRY_RUN=1 before changes, and explicit approval for paid actions.
+
+Risk: Prompts, uploaded file metadata, character messages and generated URLs may contain private data sent to Theta services.
+
+Mitigation: Treat these inputs and outputs as private, avoid logging full responses, and do not publish customer inputs.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zeuslabsllc/skills/theta-edgecloud-skill)
+- [Capability map and API contracts](references/capabilities.md)
+- [Security scope](references/security.md)
+- [Theta EdgeCloud hosted MCP server card](https://www.thetaedgecloud.com/.well-known/mcp/server-card.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance and structured JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Live availability and pricing vary; approved paid actions can create ongoing costs.]
+
+## Skill Version(s):
+
+0.1.30 (source: ClawHub release metadata, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

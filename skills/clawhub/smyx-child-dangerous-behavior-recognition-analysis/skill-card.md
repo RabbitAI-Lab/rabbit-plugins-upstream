@@ -1,45 +1,58 @@
-## Description: <br>
-Detects climbing, playing with fire, touching power sources, and dangerous actions near windows, providing real-time alerts for child safety supervision in homes, kindergartens, and nurseries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes videos for hazardous child behaviors such as climbing, playing with fire, touching electrical sources, and risky actions near windows, and provides alerts and structured reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze child monitoring videos or video URLs for hazardous behaviors, receive structured safety reports, and query historical analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive child media may be uploaded or provided by URL to external cloud services for analysis. <br>
-Mitigation: Use only footage approved for that service, confirm consent and retention requirements, and avoid sending media that violates local privacy rules. <br>
-Risk: The skill can create or reuse persistent identity and token data while associating analysis reports with that identity. <br>
-Mitigation: Run it only in governed workspaces where local token storage, identity creation, and report association are acceptable and periodically review stored credentials. <br>
-Risk: Historical report queries can retrieve prior child-safety analysis reports from the cloud service. <br>
-Mitigation: Limit access to trusted operators and verify that report visibility and retention align with the deployment's privacy requirements. <br>
+## Use Case:
 
+Caregivers and staff in homes, nurseries, and classrooms can analyze monitoring videos for potentially hazardous child behavior and review alerts or historical reports. Alerts should be checked by a person rather than treated as a substitute for supervision.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-child-dangerous-behavior-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](artifact/references/api_doc.md) <br>
-- [Shared Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, files] <br>
-**Output Format:** [Markdown report text with optional JSON detail, historical report listings, and report export links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write an output file when --output is supplied; supports mp4, avi, and mov files up to 10 MB or video URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter says 1.0.7) <br>
+Risk: Children's videos or video URLs may be sent to external analysis services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain appropriate consent and review the external data flow before submitting footage from homes, nurseries, or classrooms.
+
+Risk: The skill may silently associate analysis with an identity and store account tokens locally.
+
+Mitigation: Review identity and local token storage practices before installation; restrict access to the workspace and stored credentials.
+
+Risk: Historical cloud reports may be retrieved automatically.
+
+Mitigation: Limit use to authorized operators and review who can access historical reports.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-child-dangerous-behavior-recognition-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis report or Markdown report list with links; optional JSON output file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes risk alerts, suggested actions, and report links when available.]
+
+## Skill Version(s):
+
+1.0.16 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

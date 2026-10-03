@@ -1,46 +1,55 @@
-## Description: <br>
-Debugs a live WeChat Mini Program runtime through the system `vince-mp` JSON CLI, using a persistent session for page data, element actions, screenshots, scans, console output, health checks, and request-log correlation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides live WeChat Mini Program debugging through a persistent vince-mp CLI session, including runtime inspection, UI actions, diagnostics, and log correlation.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Developers and engineers use this skill to connect an agent to WeChat DevTools and inspect, diagnose, and act on a live Mini Program runtime. It is suited for session-based debugging, UI uid workflows, camera-less scan checks, Skyline/media investigation, project health checks, and backend log correlation by requestId. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can act on a live WeChat Mini Program by tapping, navigating, changing storage, applying mocks, or instrumenting media and network behavior. <br>
-Mitigation: Use non-invasive reads by default, require explicit user requests for state-changing actions, and verify each action with returned CLI JSON evidence. <br>
-Risk: Admin credentials and backend logs may expose sensitive operational or user data. <br>
-Mitigation: Use admin tokens only when log retrieval is explicitly requested, prefer non-production environments, and redact sensitive log details from summaries. <br>
-Risk: Runtime commands depend on a local WeChat DevTools session and the system `vince-mp` CLI being available and compatible. <br>
-Mitigation: Start with the session workflow and health checks, report concrete CLI error codes, and avoid switching to unrelated automation backends. <br>
+## Use Case:
 
+Developers and engineers use this skill to inspect and troubleshoot a running WeChat Mini Program, interact with its UI, diagnose connection issues, and correlate client behavior with backend error logs.
 
-## Reference(s): <br>
-- [CLI Contract](references/cli-contract.md) <br>
-- [Runtime Protocol](rules/runtime-protocol.md) <br>
-- [UI Element Workflow](rules/ui-element-workflow.md) <br>
-- [Skyline and Media Workflow](references/skyline-media.md) <br>
-- [Evidence and Known Failures](references/evidence-and-failures.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands are expected to use structured JSON evidence and keep file outputs under the active workspace root.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: server evidence, target metadata, frontmatter) <br>
+Risk: Live runtime and backend log access can expose sensitive application or user data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with a trusted local vince-mp CLI, restrict access to its local state if needed, and obtain action-specific approval before production access.
+
+Risk: Admin tokens may be exposed if pasted into chat or supplied on command lines.
+
+Mitigation: Set the token privately in the agent's launch environment; never paste it into chat or pass it as a CLI argument.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/vincentjiang06/skills/mp-cli-sup)
+- [CLI contract](references/cli-contract.md)
+- [Runtime protocol](rules/runtime-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Analysis]
+
+**Output Format:** [Text and Markdown with CLI commands and diagnostic findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CLI operations return JSON evidence; actions may require user authorization.]
+
+## Skill Version(s):
+
+0.3.0 (source: server release metadata, skill frontmatter, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
