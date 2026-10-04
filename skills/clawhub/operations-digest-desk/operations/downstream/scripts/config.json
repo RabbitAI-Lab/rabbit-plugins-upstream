@@ -1,0 +1,112 @@
+{
+  "variant_id": "shadow_15_notification",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "notification_guidance",
+  "output_name": "digest_summary",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cadence": {
+            "type": "string"
+          },
+          "hour": {
+            "type": "integer"
+          },
+          "timezone": {
+            "type": "string"
+          },
+          "deduplicate_by": {
+            "type": "string"
+          },
+          "group_by": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "cadence",
+          "hour",
+          "timezone",
+          "deduplicate_by"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "cadence": {
+                    "type": "string"
+                  },
+                  "hour": {
+                    "type": "integer"
+                  },
+                  "timezone": {
+                    "type": "string"
+                  },
+                  "deduplicate_by": {
+                    "type": "string"
+                  },
+                  "group_by": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "cadence",
+                  "hour",
+                  "timezone",
+                  "deduplicate_by"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "scheduled_for": {
+        "type": "string"
+      },
+      "item_count": {
+        "type": "integer"
+      },
+      "groups": {
+        "type": "object"
+      },
+      "deduplicated_count": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "scheduled_for",
+      "item_count",
+      "groups",
+      "deduplicated_count"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_notification_digest"
+}

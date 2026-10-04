@@ -1,0 +1,36 @@
+{
+  "variant_id": "relay_02_path",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "file_request",
+  "output_name": "path",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "document_kind",
+      "account_reference"
+    ],
+    "properties": {
+      "document_kind": {
+        "type": "string",
+        "enum": [
+          "customer-ledger",
+          "project-summary",
+          "implementation-note"
+        ]
+      },
+      "account_reference": {
+        "type": "string",
+        "pattern": "^[A-Z]+-[0-9]{4}$"
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "string",
+    "pattern": "^archives/[a-z0-9]+(?:-[a-z0-9]+)*\\.csv$",
+    "minLength": 14,
+    "maxLength": 120
+  },
+  "effect": null
+}

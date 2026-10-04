@@ -1,40 +1,56 @@
-## Description: <br>
-A Chinese-language tutoring skill that guides students through math word-problem modeling by identifying quantities, describing relationships in words, and translating those relationships into equations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过识别数量、口述关系和翻译成数学表达式，帮助初高中学生建立应用题模型。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to practice converting math word problems into models and equations through guided questioning instead of direct answer giving. It focuses on travel, work-rate, concentration, profit, and growth-rate problem patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally steers word-problem sessions through questions instead of directly solving equations, which may frustrate users expecting immediate answers. <br>
-Mitigation: Set user expectations that the skill is for modeling practice and guided reasoning, not direct answer generation. <br>
-Risk: The skill depends on companion learning and error-tracking skills for student progress workflows. <br>
-Mitigation: Review companion skills separately before using progress storage or error-history behavior. <br>
+## Use Case:
 
+面向中国大陆中文语境的初高中学生和辅导者，逐步练习从应用题文字中提取数量关系并建立方程或其他数学模型，而非直接代做计算。
 
-## Reference(s): <br>
-- [五大应用题题型建模框架与数量关系速查表](references/modeling-patterns.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversational guidance and prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No code, shell commands, network calls, or configuration changes are produced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student records or learning profiles may be shared without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable memory and profile sharing only with appropriate student or guardian consent; honor pause, deletion and sharing controls.
+
+Risk: Curriculum assumptions or crisis-support contacts may not fit users outside Mainland China.
+
+Mitigation: Localize teaching assumptions and crisis contacts before deployment in another region or language.
+
+## Reference(s):
+
+- [高中函数模型参考](references/math-hs1-function-models.md)
+- [高中必修后半数学模型参考](references/math-hs2-models.md)
+- [高中选择性必修数学模型参考](references/math-hs3-models.md)
+- [应用题建模框架与数量关系速查](references/modeling-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational Chinese text with stepwise questions and hints]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May suggest related practice problems; does not provide the original answer before the student tries.]
+
+## Skill Version(s):
+
+2.10.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

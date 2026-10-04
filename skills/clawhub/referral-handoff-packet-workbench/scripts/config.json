@@ -1,0 +1,58 @@
+{
+  "variant_id": "cap_09_care_to_referral",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "referral_digest",
+  "output_name": "referral_packet_id",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "referral_id",
+      "specialty",
+      "urgency_band",
+      "requested_window"
+    ],
+    "properties": {
+      "referral_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "specialty": {
+        "type": "string",
+        "minLength": 1
+      },
+      "urgency_band": {
+        "type": "string",
+        "minLength": 1
+      },
+      "requested_window": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "packet_id",
+      "routing_lane",
+      "fields"
+    ],
+    "properties": {
+      "packet_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "routing_lane": {
+        "type": "string",
+        "minLength": 1
+      },
+      "fields": {
+        "type": "object"
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_referral_packet_create"
+}

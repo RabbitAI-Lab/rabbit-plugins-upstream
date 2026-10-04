@@ -1,0 +1,23 @@
+{
+  "digest_summary": {
+    "scheduled_for": "2026-09-04T17:00:00+00:00",
+    "item_count": 2,
+    "groups": {
+      "accounts": [
+        {
+          "case_id": "CASE-1",
+          "team": "accounts",
+          "message": "Owner confirmed"
+        }
+      ],
+      "delivery": [
+        {
+          "case_id": "CASE-2",
+          "team": "delivery",
+          "message": "Handoff complete"
+        }
+      ]
+    },
+    "deduplicated_count": 1
+  }
+}

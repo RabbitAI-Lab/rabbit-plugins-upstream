@@ -4,8 +4,9 @@ description: >
   Publish, schedule, and manage social media posts across Twitter/X, Facebook,
   Instagram, LinkedIn, TikTok, and YouTube. Content calendar with gap analysis,
   A/B testing, engagement inbox, AI content repurposing, optimal timing
-  suggestions, auto-scheduling, and UTM tracking.
-version: 1.10.0
+  suggestions, auto-scheduling, UTM tracking, and platform-native AI-content
+  disclosure labels.
+version: 1.12.0
 metadata:
   openclaw:
     requires:
@@ -87,19 +88,23 @@ curl -X POST https://socialcannon.app/api/v1/posts \
 
 Instead of raw HTTP, you can expose SocialCannon's 23 tools to any MCP-compatible agent with the [`@socialcannon/mcp`](https://www.npmjs.com/package/@socialcannon/mcp) package. Use the same `SOCIALCANNON_CLIENT_ID` / `SOCIALCANNON_CLIENT_SECRET` from your dashboard.
 
-**Hermes Agent** — add to `~/.hermes/config.yaml`:
+Run the exact version shown below (`@socialcannon/mcp@1.0.2`). The package runs with your credentials, so pinning means a later npm release is never picked up until you have reviewed it and changed the version yourself.
+
+Keep the Client Secret out of config files. Store it in your OS keychain or secret manager and expose it as the `SOCIALCANNON_CLIENT_SECRET` environment variable of the process that starts your agent.
+
+**Hermes Agent** — add to `~/.hermes/config.yaml`. Hermes replaces `${VAR}` references with values from its environment, so the file holds no secret:
 
 ```yaml
 mcp_servers:
   socialcannon:
     command: "npx"
-    args: ["-y", "@socialcannon/mcp"]
+    args: ["-y", "@socialcannon/mcp@1.0.2"]
     env:
-      SOCIALCANNON_CLIENT_ID: "your-client-id"
-      SOCIALCANNON_CLIENT_SECRET: "your-client-secret"
+      SOCIALCANNON_CLIENT_ID: "${SOCIALCANNON_CLIENT_ID}"
+      SOCIALCANNON_CLIENT_SECRET: "${SOCIALCANNON_CLIENT_SECRET}"
 ```
 
-**Claude Desktop** — add an entry under `mcpServers` in `claude_desktop_config.json` with the same `command`/`args`/`env`.
+**Claude Desktop** — add an entry under `mcpServers` in `claude_desktop_config.json` with the same pinned `command`/`args`. If your MCP client can only take the secret as a literal value in its config file, make that file readable only by you (`chmod 600`), never commit or sync it, and click **Generate API Secret** under **Settings → API Keys** to replace the secret if the file is ever exposed.
 
 The REST API documented below remains fully available; MCP is an optional convenience layer over the same endpoints.
 
@@ -201,6 +206,7 @@ Fields:
 - `mediaUrls` (optional) — array of public image/video URLs
 - `scheduledAt` (optional) — ISO 8601 datetime, `"optimal"` (auto-pick best time based on engagement data, Pro), or omit for immediate publish
 - `platformOptions.autoUtm` (optional) — auto-tag URLs with UTM parameters
+- `platformOptions.aiGenerated` (optional) — set `true` when requesting the platform's native AI-content label. TikTok and YouTube support it directly. Instagram fails closed unless the SocialCannon deployment has explicitly enabled verified native-disclosure access; do not omit the flag and publish unlabeled content as a workaround. See [AI-content disclosure](#ai-content-disclosure).
 - `platformOptions.mediaType` (optional) — controls content type:
   - `"reel"` — Facebook/Instagram Reel (vertical 9:16 video)
   - `"story"` — Facebook/Instagram/TikTok Story (24h ephemeral)
@@ -277,11 +283,44 @@ curl -X POST https://socialcannon.app/api/v1/posts/thread \
   }'
 ```
 
-Fields: `accountId` (required), `items` (required, min 2, max 25), `scheduledAt` (optional), `platformOptions` (optional). Instagram requires media on each item.
+Fields: `accountId` (required), `items` (required, min 2, max 25), `scheduledAt` (optional), `platformOptions` (optional — e.g. `aiGenerated: true` to request the AI-content label). Instagram requires media on each item and rejects `aiGenerated: true` before publishing unless verified native-disclosure access is enabled for the deployment.
+
+## AI-Content Disclosure
+
+When a post's media is AI-generated, set `platformOptions.aiGenerated: true` to request the native label. SocialCannon maps it as follows:
+
+| Platform | API field | User-facing label |
+|----------|-----------|-------------------|
+| Instagram | Default unavailable; `is_ai_generated` only after deployment capability enablement | "AI info" label (on carousels, parent only) |
+| TikTok | `is_aigc` | "AI-generated" label |
+| YouTube | `containsSyntheticMedia` | "Altered content" disclosure |
+
+Instagram is intentionally fail-closed by default: `aiGenerated: true` is rejected before any Meta request unless the deployment has explicitly enabled its separately verified native-disclosure capability. Never silently remove the flag to force publication; report the block instead. Facebook, X, and LinkedIn have no API disclosure field — the flag is accepted but ignored there. The request is also supported on threads (`platformOptions`), per-post in auto-schedule (`posts[].platformOptions`), and as a test-level `aiGenerated` flag on A/B tests (applies to every variant, with the same Instagram gate).
 
 ## Media Upload
 
-Upload images/videos before creating posts. **Three-step direct-to-GCS flow** — bytes go straight to Google Cloud Storage via a signed URL, never through SocialCannon's server. This supports files up to **4GB**.
+Upload images/videos before creating posts. **Three-step direct-to-GCS flow** — bytes go straight to Google Cloud Storage via a signed URL, never through SocialCannon's server, so our API never buffers the file. Each destination still has a **per-file limit**: the smaller of what the network accepts and what our publishing pipeline can fetch. Pass the destination accountId on step 1 so an unpublishable file is rejected before any signed URL is issued; without accountId the pipeline-wide ceiling of **140 MiB** applies.
+
+| Platform | Post type | File kind | Max per file |
+|----------|-----------|-----------|--------------|
+| X (Twitter) | Feed, Threads | Images | 5 MB |
+| X (Twitter) | Feed, Threads | GIFs | 5 MB |
+| X (Twitter) | Feed, Threads | Video (MP4, MOV) | 140 MiB |
+| Instagram | Feed, Stories, Carousels | Images (JPEG only) | 8 MB |
+| Instagram | Feed, Reels, Carousels | Video (MP4, MOV) | 100 MiB |
+| Instagram | Stories | Video (MP4, MOV) | 100 MB |
+| Facebook | Feed, Stories | Images (JPEG, PNG, WebP, GIF) | 10 MB |
+| Facebook | Feed, Reels, Stories | Video | 100 MiB |
+| LinkedIn | Feed, Threads | Images (JPEG, PNG, GIF) | 20 MiB |
+| TikTok | Feed, Carousels | Photo images | 20 MB |
+| TikTok | Feed | Video | 100 MiB |
+| YouTube | Feed, Shorts | Video | 100 MiB |
+
+TikTok Story, YouTube Community posts, LinkedIn video, and all Reddit media cannot be uploaded through this flow. LinkedIn video and YouTube Community media cannot be published through SocialCannon at all. A Reddit link post can point at a file you host yourself: pass its URL in mediaUrls. Over-limit or unsupported requests fail with 400 and code "MEDIA_LIMIT_EXCEEDED" or "UNSUPPORTED_MEDIA", and cost no upload quota.
+
+X's video upload takes MP4 and MOV only: a WebM destined for an X account is refused at upload-init. WebM stays accepted for Facebook, TikTok and YouTube.
+
+X documents a 15 MB GIF allowance for its `tweet_gif` media category, which this pipeline does not use: every GIF goes up as `tweet_image`, so 5 MB is the real cap for a GIF here.
 
 Accepted types: `image/jpeg`, `image/png`, `image/gif`, `image/webp`, `video/mp4`, `video/quicktime`, `video/webm`.
 
@@ -294,9 +333,13 @@ curl -X POST https://socialcannon.app/api/v1/media/upload-init \
   -d '{
     "filename": "photo.jpg",
     "contentType": "image/jpeg",
-    "size": 1048576
+    "size": 1048576,
+    "accountId": "<connected account id>",
+    "postType": "feed"
   }'
 ```
+
+Send accountId — the account that will publish the media — plus optionally postType, one of feed, reel, story, short, carousel, thread (default feed), so the size and format are validated against that destination's real limit.
 
 Response:
 ```json
@@ -307,13 +350,15 @@ Response:
     "publicUrl": "https://storage.googleapis.com/<bucket>/media/<clientId>/<uuid>.jpg",
     "requiredHeaders": {
       "Content-Type": "image/jpeg",
-      "x-goog-acl": "public-read"
-    }
+      "x-goog-acl": "public-read",
+      "x-goog-content-length-range": "0,5000000"
+    },
+    "limit": { "maxBytes": 5000000, "maxBytesDisplay": "5 MB", "platform": "twitter", "postType": "feed" }
   }
 }
 ```
 
-`uploadUrl` is a V4 signed PUT URL valid for **15 minutes**. `size` must be the exact byte size of the file you're about to upload.
+`uploadUrl` is a V4 signed PUT URL valid for **15 minutes**. `size` must be the exact byte size of the file you're about to upload. `limit.maxBytes` echoes the cap that was applied, and `limit.platform` is `null` when no `accountId` was given.
 
 ### Step 2 — PUT the file to the signed URL
 
@@ -321,10 +366,11 @@ Response:
 curl -X PUT "$UPLOAD_URL" \
   -H "Content-Type: image/jpeg" \
   -H "x-goog-acl: public-read" \
+  -H "x-goog-content-length-range: 0,5000000" \
   --data-binary @photo.jpg
 ```
 
-You **must** send the exact headers returned in `requiredHeaders`. Do **not** send the `Authorization` header — the signed URL carries its own auth. A successful PUT returns HTTP 200 with an empty body.
+You **must** send the exact headers returned in `requiredHeaders`, including the `x-goog-content-length-range` value from step 1 — it pins the size cap into the signature, so GCS itself refuses a file that is too large. Do **not** send the `Authorization` header — the signed URL carries its own auth. A successful PUT returns HTTP 200 with an empty body.
 
 ### Step 3 — Finalize
 
@@ -339,11 +385,14 @@ Pass the `publicUrl` you got from step 1 verbatim. The server verifies the objec
 
 Response: `{ "success": true, "data": { "url": "https://...", "filename": "media/<clientId>/<uuid>.jpg", "contentType": "image/jpeg", "size": 1048576 } }`
 
-Use the returned `url` in the `mediaUrls` field when creating posts. Images up to 25 MB are normalized to JPEG (and may be resized) for platform compatibility, so the `contentType` and `size` in the finalize response can differ from what you uploaded — PNG/WebP transparency is not preserved. Videos and images larger than 25 MB are stored as-is.
+Use the returned `url` in the `mediaUrls` field when creating posts. SocialCannon does not convert or resize uploads: the finalize response reports the file exactly as uploaded, and that same file is what the network receives. Upload a format and size the destination accepts — for example a JPEG for Instagram.
 
 ### Quota & errors
 
 - `403` on step 1 with `code` set → your tier has hit its upload quota. Inspect `limit` in the response body.
+- `400` on step 1 with `code: "MEDIA_LIMIT_EXCEEDED"` → the file is larger than the destination's per-file limit; the message names the actual size, the limit and the platform. Nothing was uploaded and no quota was spent.
+- `400` on step 1 with `code: "UNSUPPORTED_MEDIA"` → that platform / post type / file format cannot be published through SocialCannon (for example LinkedIn video, a TikTok Story, or a PNG on Instagram). Convert the file to a format the destination accepts (Instagram images must be JPEG) or pick a supported destination.
+- `404` on step 1 → `accountId` is not one of your connected accounts. `409` → that account is disconnected; reconnect it before uploading.
 - `404` on step 3 → the PUT didn't actually land. Retry from step 2.
 - `403` on step 3 → `publicUrl` doesn't belong to your client. Use the exact URL returned by step 1, do not construct it yourself.
 
@@ -512,7 +561,8 @@ curl -X POST https://socialcannon.app/api/v1/ab-tests \
     ],
     "metric": "engagementRate",
     "minDurationHours": 24,
-    "scheduledAt": "2026-04-20T10:00:00Z"
+    "scheduledAt": "2026-04-20T10:00:00Z",
+    "aiGenerated": true
   }'
 ```
 
@@ -520,7 +570,7 @@ curl -X POST https://socialcannon.app/api/v1/ab-tests \
 - **Omit `scheduledAt`** → all variants publish **immediately** to the platform via the social adapter
 - **Provide `scheduledAt`** → all variants are **scheduled** for that time (must be within 30 days; cron publishes them hourly)
 
-Each variant is a separate post record. Auto-completes after `minDurationHours` and the winner is determined by the chosen metric. Per-variant `mediaUrls` is optional.
+Each variant is a separate post record. Auto-completes after `minDurationHours` and the winner is determined by the chosen metric. Per-variant `mediaUrls` is optional. The test-level `aiGenerated` flag (optional) requests the platform's native AI-content label for every variant; Instagram rejects the test before variant creation unless verified native-disclosure access is enabled.
 
 **Partial failure semantics:** if ANY variant fails to publish during immediate mode, the endpoint returns **HTTP 502** and the failed variants are marked with `status: 'failed'`. The A/B test record is still created, but the winner comparison at completion only considers successfully published variants. Inspect each variant's post status before relying on test results.
 
@@ -581,14 +631,14 @@ curl -X POST https://socialcannon.app/api/v1/posts/auto-schedule \
     "accountId": "<account_id>",
     "posts": [
       { "content": "Post 1 text" },
-      { "content": "Post 2 text", "mediaUrls": ["https://..."] },
+      { "content": "Post 2 text", "mediaUrls": ["https://..."], "platformOptions": { "aiGenerated": true } },
       { "content": "Post 3 text" }
     ],
     "timezone": "UTC-5"
   }'
 ```
 
-Max 20 posts per request. Each post gets a unique slot. Returns `{ scheduled: [...], unscheduled: [...], summary: {...} }`.
+Max 20 posts per request. Each post gets a unique slot. Per-post `platformOptions` are supported (e.g. `aiGenerated` to request the AI-content label, `title`/`visibility` where applicable). An Instagram item with `aiGenerated: true` fails closed unless verified native-disclosure access is enabled. Returns `{ scheduled: [...], unscheduled: [...], summary: {...} }`.
 
 ## UTM Link Tracking
 
@@ -655,12 +705,14 @@ curl -X POST https://socialcannon.app/api/v1/posts \
 - Requires media (no text-only). Max 10 carousel items. No API deletion.
 - **Stories**: Set `platformOptions.mediaType` to `"story"`. One image or video.
 - **Reels**: Set `platformOptions.mediaType` to `"reel"`. Vertical 9:16 video.
+- **AI-content label**: Native disclosure is default-off and fail-closed. `platformOptions.aiGenerated: true` is rejected before any Meta request unless the deployment has explicitly enabled verified capability access. When enabled, SocialCannon sends `is_ai_generated` (the "AI info" label); on carousels it is applied to the parent only. Do not publish by silently removing the requested disclosure.
 
 ### TikTok
 - Requires media — no text-only posts. Supports video, photo carousel (up to 35 images), and Stories.
 - **`platformOptions.privacyLevel` is REQUIRED** on every TikTok post — there is no default. Omitting it returns `400` with code `TIKTOK_PRIVACY_REQUIRED`. Use a value from the creator-info endpoint's `privacyLevelOptions` (e.g. `PUBLIC_TO_EVERYONE`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`, `SELF_ONLY`).
 - **Interaction toggles** (optional, default = allowed): `disableComment`, `disableDuet`, `disableStitch` (booleans). Duet/Stitch apply to video only. If the creator-info endpoint reports an interaction is disabled account-side (`commentDisabled` / `duetDisabled` / `stitchDisabled`), set the matching `disable*` to `true` (the server force-disables it regardless).
 - **Commercial content disclosure** (optional): set `commercialContent: true` if the post promotes a brand, product, or service, then set `brandOrganic: true` (your own brand) and/or `brandedContent: true` (paid/third-party partnership). If `brandedContent` is true, `privacyLevel` cannot be `SELF_ONLY`.
+- **AI-generated disclosure** (optional): set `aiGenerated: true` when the media is AI-generated (`is_aigc` — TikTok shows an "AI-generated" label).
 - **Stories**: Set `platformOptions.mediaType` to `"story"`. One video. Ephemeral (24h).
 - Video publish uses an async poll model. No API deletion support.
 
@@ -696,6 +748,7 @@ curl -X POST https://socialcannon.app/api/v1/posts \
 - **Shorts**: Set `platformOptions.mediaType` to `"short"`. Vertical video ≤60s.
 - **Community posts**: Set `platformOptions.mediaType` to `"community"`. Text/image post to channel's Community tab.
 - Scheduled videos are uploaded as private with a `publishAt` timestamp.
+- **Altered content disclosure**: Set `platformOptions.aiGenerated: true` for realistic AI-generated media (`containsSyntheticMedia` — YouTube's "Altered content" disclosure).
 
 ### LinkedIn
 - 3,000 char limit. Supports text-only and images (single or multi-image). Threads combine all items into one post.
@@ -775,3 +828,4 @@ If you run into issues with the API, account connections, or integration setup, 
 8. For batch scheduling, use the auto-schedule endpoint instead of creating posts one by one.
 9. For YouTube, set `mediaType` to `"short"` for Shorts or `"community"` for Community tab posts.
 10. For TikTok, call `GET /api/v1/accounts/{id}/tiktok/creator-info` first — it returns the allowed `privacyLevelOptions` (pass one as `platformOptions.privacyLevel`; it is required) and which of Comment/Duet/Stitch are disabled (never enable a disabled one).
+11. If the media is AI-generated, set `platformOptions.aiGenerated: true` to request the native label. TikTok and YouTube map it directly; Instagram fails closed unless verified native-disclosure access is enabled for the deployment. Report that block rather than silently removing the flag.

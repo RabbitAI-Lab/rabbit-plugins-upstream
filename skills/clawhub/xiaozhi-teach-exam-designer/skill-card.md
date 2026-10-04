@@ -1,44 +1,58 @@
-## Description: <br>
-帮助老师设计科学测评方案，包括确认测评目标、设计双向细目表、控制难度梯度、生成评分标准和提供考后分析建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助中国大陆中小学教师设计双向细目表、试卷题目与评分标准，并按测评目标调整难度。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers and education-support agents use this skill to plan classroom assessments, build exam blueprints, align items to knowledge points and cognitive levels, draft scoring rubrics, and prepare aggregate post-exam analysis guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Assessment outputs may use classroom context from related teaching skills and write back score-rate or item-quality data. <br>
-Mitigation: Use aggregate score-rate and item-quality data only; avoid publishing named student results, rankings, or individual score records. <br>
-Risk: Exam materials may include copied or insufficiently licensed questions. <br>
-Mitigation: Require each item to include copyrightStatus and use teacher-owned, adapted, publicly citable, or index-only sources rather than unauthorized copied exam questions. <br>
-Risk: Generated scoring or analysis guidance could be treated as final judgment without teacher review. <br>
-Mitigation: Have a teacher review the blueprint, rubric, difficulty targets, and post-exam recommendations before classroom use. <br>
+## Use Case:
 
+面向中国大陆中小学教师，按知识点和认知层级制定测评蓝图、编选或改编试题、设计难度配比和评分细则，并为考后讲评整理错题清单。生成的题目须经教师验算后才能用于正式考试。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Exam blueprint reference](references/exam-blueprint.md) <br>
+### Deployment Geography for Use:
 
+中国大陆；用于其他地区前需调整课程标准、隐私与同意要求及危机求助渠道。
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance, structured tables, templates, and scoring rubric text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assessment blueprints, two-way specification tables, item metadata templates, scoring standards, and aggregate post-exam analysis suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: AI 生成的试题或答案可能不准确、不符合教学目标。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 教师逐题验算并核对答案、分值和课程标准，确认后才用于正式考试。
+
+Risk: 试卷资料或学生信息可能涉及保密与隐私。
+
+Mitigation: 不输入启用前的统考试题或学生个人信息；仅使用化名或聚合统计。
+
+Risk: 中国大陆以外的课程与求助信息可能不适用。
+
+Mitigation: 跨地区使用前调整课程标准、隐私和同意要求及危机求助渠道。
+
+## Reference(s):
+
+- [ClawHub 技能页面：测评设计师](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer)
+- [试卷蓝图与双向细目表模板](references/exam-blueprint.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Guidance]
+
+**Output Format:** [Markdown 表格和文本]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [输出为教师审定的草稿；不自动判分，考后统计数据仅供查阅。]
+
+## Skill Version(s):
+
+2.10.0 (source: ClawHub release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

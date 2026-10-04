@@ -1,40 +1,57 @@
-## Description: <br>
-Helps QA teams estimate testing effort from requirement complexity, change scope, historical baselines, and risk factors, producing phased estimates with confidence intervals and risk buffers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps QA teams estimate testing effort and schedules using complexity, historical baselines, and risk adjustments.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and project managers use this skill during release planning to estimate testing person-hours or person-days for smoke, functional, regression, and specialized testing. It is intended to turn scoped requirements and test strategy inputs into traceable estimates rather than approved schedule changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Testing estimates could be mistaken for approved release schedules or staffing commitments. <br>
-Mitigation: Treat outputs as planning estimates and require project manager confirmation before changing schedules, release plans, or resource allocations. <br>
-Risk: The skill may activate on broad scheduling or resource-planning requests that are not specifically about QA test effort. <br>
-Mitigation: Confirm the request is about testing effort before relying on the estimate for project planning. <br>
+## Use Case:
 
+QA engineers and project managers use this skill to estimate testing person-hours, staffing, and schedules from requirements, test strategy, and available historical data. It breaks effort into activities and reports assumptions, confidence, and risk buffers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-estimation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured estimation report sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include an EST-XXXX traceability ID, estimation result, work breakdown, risk buffer, confidence level, and safety guidance for human review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: The suggested npx installation command runs a separate package outside this read-only skill.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the package and source before running the installation command.
+
+Risk: Release plans or staffing inputs may contain confidential information.
+
+Mitigation: Avoid sharing sensitive inputs unless the agent environment and its tool permissions are appropriate.
+
+Risk: Effort estimates may not account for missing requirements or changed project conditions.
+
+Mitigation: Check scope, historical baselines, assumptions, and risk buffers with the project manager before changing a schedule.
+
+## Reference(s):
+
+- [Test effort estimation methods](references/estimation-methods.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown estimation report with effort tables and risk notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes an EST-XXXX identifier, activity breakdown, confidence assessment, and risk buffer.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

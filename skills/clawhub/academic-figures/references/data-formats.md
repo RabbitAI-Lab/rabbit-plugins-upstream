@@ -143,7 +143,7 @@ Each series value is an array of raw data points.
 - `estimates`: Point estimates
 - `ci_low` / `ci_high`: Confidence interval bounds
 - `overall` (optional): Diamond summary estimate
-- `ref_line` (optional): Reference/null line (default: 0)
+- `ref_line` (optional): Reference/null line. Default: auto by `measure` (OR/RR/HR → 1.0, MD/SMD → 0.0; log-scale data pass `ref_line`: 0 explicitly)
 
 ### Enhanced (v1.3.0) — Recommended for meta-analysis
 
@@ -328,7 +328,28 @@ EGPA,5,45,30,10,10
 
 ---
 
-## Dual Y-Axis Line Chart (`--type dual_axis`)
+## Slope Chart (`--type slope`, v4.2)
+
+```json
+{
+  "left_label": "基线",
+  "right_label": "12 周",
+  "items": {
+    "药物A": [72, 85],
+    "药物B": [65, 61],
+    "对照": [70, 71]
+  }
+}
+```
+
+- `items`: **恰好 2 个数值** `[左值, 右值]` 每项；至少 2 项。
+- `left_label` / `right_label`（可选）：两端列标题（默认 Before/After）。
+- 形态：每项一条左→右连线，两端直标"名称+数值"（自动避让）；
+  最大上升项主题色强调、最大下降项暖橙。多时点请改用 line。
+
+---
+
+## Dual Y-Axis Chart (`--type dual_axis`) — left bars + right lines
 
 ```json
 {
@@ -351,8 +372,15 @@ EGPA,5,45,30,10,10
 ```
 
 - `labels`: X-axis labels (time points).
-- `left` / `y1`: Series for the **left Y-axis** (solid lines).
-- `right` / `y2`: Series for the **right Y-axis** (dashed lines).
+- `left` / `y1`: Series for the **left Y-axis** — drawn as grouped BARS by default (v3.10).
+- `right` / `y2`: Series for the **right Y-axis** — drawn as dashed LINES by default (v3.10).
+- `left_type` (optional, v3.10): `"bar"` (default) or `"line"` — form of the left-axis series.
+- `right_type` (optional, v3.10): `"line"` (default) or `"bar"` — form of the right-axis series.
+- `left_floor` / `right_floor` (optional, v3.10): numeric lower bound for that Y-axis —
+  e.g. `"right_floor": 35` starts a percentage axis at a clean 35 (journal convention);
+  default keeps matplotlib's 5% margin. Ignored (with a warning) if ≥ the data maximum.
+- Legend: merged from both axes, drawn frameless in a reserved top band (never occludes data);
+  CLI `--legend-loc` / `--legend-outside` override.
 - `left_errors` / `y1_errors` (optional): Error band values for left axis series.
 - `right_errors` / `y2_errors` (optional): Error band values for right axis series.
 - `left_ylabel` (optional): Left Y-axis label.
@@ -495,3 +523,45 @@ Draw colored blocks connected by arrows, with optional group boxes and annotatio
 - `annotations` (array): Free-text labels at arbitrary positions:
   - `text`, `x`, `y`: Content and position
   - `fontsize`, `color`, `weight`, `ha`, `va` (optional): Styling
+
+
+## PRISMA 流程图（`-t prisma`，v2.1.0 新增）
+
+PRISMA 2020 系统综述流程图。必需字段：`records_identified`、`studies_included`。
+
+```json
+{
+  "records_identified": 128,
+  "duplicates_removed": 23,
+  "records_screened": 105,
+  "records_excluded": 61,
+  "reports_sought": 44,
+  "reports_not_retrieved": 3,
+  "reports_assessed": 41,
+  "exclusion_reasons": {"Wrong population": 5, "Wrong intervention": 7, "No usable data": 4},
+  "studies_included": 25,
+  "lang": "en"
+}
+```
+
+规则：
+- 中间字段可省略，自动按流水线推导（screened = identified − duplicates，sought = screened −
+  excluded，assessed = sought − not_retrieved）。
+- **自洽性闸门**：显式给出的数字必须与推导一致，`exclusion_reasons` 合计 + `studies_included`
+  必须等于 `reports_assessed`，否则 ERROR（exit 1）拒绝出图。
+- `lang: "zh"` 输出中文标准措辞（识别/筛选/纳入）；`exclusion_reasons` 的键始终按你给的内容
+  原样渲染（中英文均可）。
+- 数值为 0 且未显式给出的侧盒自动省略。
+
+## JSON vs CSV 能力对照（v3.1 收拢）
+
+| 能力 | JSON | CSV/TSV |
+|---|---|---|
+| 基础绘图（柱/线/散点/箱/小提琴等） | ✅ | ✅ |
+| 误差棒 + 显著性标记 | ✅ `errors`/`significance` | ❌ 请改用 JSON |
+| KM 风险表/log-rank | ✅ 原始 [时间,事件] 格式 | ❌ |
+| 多因素 Cox 森林图 | ✅ 逐例试者数据 | ✅ 长表 CSV 亦可 |
+| 组合图 panels / 复杂布局 | ✅ | ❌ |
+| Excel 直读 | — | `--sheet` 需 `.xlsx` |
+
+> 原则：需要误差棒、统计标注或复杂结构时用 JSON；简单数值用 CSV 即可。

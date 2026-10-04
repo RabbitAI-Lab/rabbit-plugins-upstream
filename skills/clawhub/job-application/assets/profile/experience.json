@@ -1,0 +1,18 @@
+[
+  {
+    "id":"northstar-consultant",
+    "period":"2022–heute",
+    "title":"Senior Data & Automation Consultant",
+    "subtitle":"Northstar Digital GmbH, Berlin (fiktiv)",
+    "description":["Konzipierte automatisierte Datenprozesse, die manuelle Bearbeitungszeiten in einem Beispielprojekt um 35 % reduzierten.","Moderierte Workshops mit Fachbereichen und übersetzte Anforderungen in umsetzbare technische Roadmaps."],
+    "tags":["python","sql","automation","consulting","stakeholder","cloud"]
+  },
+  {
+    "id":"brightworks-analyst",
+    "period":"2019–2022",
+    "title":"Data Analyst",
+    "subtitle":"BrightWorks AG, Hamburg (fiktiv)",
+    "description":["Entwickelte Reporting-Datenmodelle und Qualitätsprüfungen für operative Kennzahlen.","Schulte Anwenderinnen und Anwender im selbstständigen Umgang mit Analyse-Dashboards."],
+    "tags":["sql","analytics","data","workshop"]
+  }
+]

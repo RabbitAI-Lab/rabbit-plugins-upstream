@@ -1,0 +1,38 @@
+[
+  {
+    "app_label": "catalog",
+    "model": "organization",
+    "submission_kind": "create",
+    "description": "Add Example AI and its browser-automation product. Evidence: https://example.ai (organization), https://example.ai/browser (product), https://example.ai/trust lists SOC 2, https://example.ai/docs/mcp documents the MCP server.",
+    "payload": {
+      "name": "Example AI",
+      "slug": "example-ai",
+      "url": "https://example.ai",
+      "description": "Cloud browser-automation platform for AI agents.",
+      "products": {
+        "create": [
+          {
+            "name": "Example Browser",
+            "slug": "example-browser",
+            "url": "https://example.ai/browser",
+            "description": "Managed headless-browser API with an MCP endpoint.",
+            "categories": { "add": ["browser-automation"] },
+            "compliance_certifications": { "add": ["soc-2"] },
+            "mcp_servers": {
+              "create": [
+                { "name": "Example Browser MCP", "url": "https://mcp.example.ai" }
+              ]
+            },
+            "offers": {
+              "create": [
+                { "name": "Free", "slug": "free", "price_description": "Free plan for individual developers." },
+                { "name": "Pro", "slug": "pro", "price": "49.00", "price_currency": "USD", "price_period": "monthly" },
+                { "name": "Enterprise", "slug": "enterprise", "price_description": "Custom pricing — contact sales." }
+              ]
+            }
+          }
+        ]
+      }
+    }
+  }
+]

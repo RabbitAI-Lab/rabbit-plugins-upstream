@@ -1,0 +1,63 @@
+{
+  "variant_id": "relay_05_option",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "localization_note",
+  "output_name": "translation_setting",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "locale",
+      "glossary_name",
+      "register"
+    ],
+    "properties": {
+      "locale": {
+        "type": "string",
+        "pattern": "^[A-Za-z]{2}(?:[-_][A-Za-z]{2})?$"
+      },
+      "glossary_name": {
+        "type": "string",
+        "minLength": 3,
+        "maxLength": 60
+      },
+      "register": {
+        "type": "string",
+        "enum": [
+          "formal",
+          "neutral",
+          "concise"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "locale",
+      "glossary_id",
+      "register"
+    ],
+    "properties": {
+      "locale": {
+        "type": "string",
+        "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$"
+      },
+      "glossary_id": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{2,40}$"
+      },
+      "register": {
+        "type": "string",
+        "enum": [
+          "formal",
+          "neutral",
+          "concise"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": null
+}

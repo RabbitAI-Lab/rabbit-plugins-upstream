@@ -1,52 +1,63 @@
-## Description: <br>
-Paired: Phone Agent bridges an OpenClaw agent to a user-owned phone over Bluetooth and ADB for SMS, calls, contacts, media control, file transfer, PAN tethering, and optional local voice cloning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an OpenClaw agent to a user's phone for messaging, calls, contacts, media and file control, with optional local voice cloning.
 
-## Publisher: <br>
-[nj070574-gif](https://clawhub.ai/user/nj070574-gif) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nj070574-gif](https://clawhub.ai/user/nj070574-gif)
 
-## Use Case: <br>
-External users and developers running OpenClaw use this skill to let an agent operate their own paired phone for messaging, calls, device status, media, contacts, file transfer, tethering, and local voice-note or speech generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic SMS and call behaviors can act on a real phone, and server evidence reports incomplete trust gating on some SMS paths. <br>
-Mitigation: Review automation paths before installation, keep trusted-numbers.conf empty until deliberate, require explicit confirmation for high-impact actions, and do not enable SMS or call watcher services until their behavior is understood. <br>
-Risk: The skill can use sensitive local material such as a phone PIN, API keys, HMAC inbox key, phone identifiers, and a user voice reference. <br>
-Mitigation: Avoid storing a phone PIN unless necessary, keep secret files mode 0600, use user-supplied credentials only, and delete unused voice or paired configuration material when no longer needed. <br>
-Risk: Persistent services and Telegram relay paths expand the control surface for phone actions. <br>
-Mitigation: Enable only the services needed, restrict dispatch to HMAC-signed inbox messages from trusted sources, and stop or disable persistent services when not actively used. <br>
-Risk: A voice service exposed beyond the local host could expose local voice-cloning functionality. <br>
-Mitigation: Bind voice services to localhost or protect them with firewall rules. <br>
+## Use Case:
 
+People and developers operating their own Linux host and phone use this skill to let an OpenClaw agent receive and send messages, manage calls and media, transfer files, and optionally synthesize speech in their voice.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/nj070574-gif/paired) <br>
-- [Voice cloning setup](artifact/docs/VOICE-SETUP.md) <br>
-- [Third-party software attribution](artifact/THIRD_PARTY.md) <br>
-- [OpenClaw](https://openclaw.ai) <br>
-- [BlueZ](http://www.bluez.org/) <br>
-- [Android Debug Bridge](https://developer.android.com/tools/adb) <br>
-- [OpenBMB VoxCPM](https://github.com/OpenBMB/VoxCPM) <br>
-- [openbmb/VoxCPM2 model](https://huggingface.co/openbmb/VoxCPM2) <br>
-- [coqui XTTS-v2 model](https://huggingface.co/coqui/XTTS-v2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, configuration paths, and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Agent-facing wrappers are intended to return JSON-clean status or action results; high-impact phone actions may require confirmation or trusted-number allowlist checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and CHANGELOG-v2.0.0.md, released 2026-05-17) <br>
+Risk: Automatic replies or call handling may send texts or reject calls without the manual review users expect.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or disable LLM auto-reply and trusted-call auto-handler paths before enabling services.
+
+Risk: Phone control and trusted-number permissions can expose private communications or enable unintended actions.
+
+Mitigation: Install only on a single-user machine with a phone you control, and keep the trusted-numbers list very small.
+
+Risk: A stored phone PIN could allow unintended device access.
+
+Mitigation: Avoid storing a phone PIN unless you accept the risk.
+
+Risk: Cloned speech can be mistaken for the phone owner's authentic voice.
+
+Mitigation: Obtain clear consent and disclose when output is voice-cloned.
+
+## Reference(s):
+
+- [Paired on ClawHub](https://clawhub.ai/nj070574-gif/skills/paired)
+- [Voice setup guide](docs/VOICE-SETUP.md)
+- [VoxCPM2 model card](https://huggingface.co/openbmb/VoxCPM2)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance, Audio files]
+
+**Output Format:** [Markdown guidance and structured command output; optional synthesized audio]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Configured actions can send texts, place calls, and synthesize cloned speech.]
+
+## Skill Version(s):
+
+2.1.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

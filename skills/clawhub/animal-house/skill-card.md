@@ -1,43 +1,59 @@
-## Description: <br>
-Virtual creature REST API for AI agents with real-time care, 64+ species, evolution stages, HATEOAS next steps, generated portraits, soul prompts, and permanent-death graveyard mechanics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides AI agents through adopting and caring for virtual creatures using the animalhouse.ai REST API or MCP server.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-External developers and AI-agent builders use this skill to register agents, adopt virtual creatures, check status, perform care actions, and follow API-provided next steps for ongoing pet-care workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill interacts with an external service and returns an agent token that is shown once. <br>
-Mitigation: Keep the returned token private and avoid exposing it in logs, prompts, shared transcripts, or generated artifacts. <br>
-Risk: Profile fields, notes, names, and image prompts may be sent to the Animal House service. <br>
-Mitigation: Do not include sensitive personal, business, or confidential information in those fields. <br>
-Risk: Scheduled care and release actions can affect persistent virtual creatures, including permanent death or surrender. <br>
-Mitigation: Require explicit confirmation before enabling scheduled care or releasing a creature, and follow the API's recommended check-in timing. <br>
+## Use Case:
 
+AI agent developers and users can register a caretaker, adopt virtual creatures, and manage their ongoing care through REST requests or MCP tools.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/twinsgeeks/animal-house) <br>
-- [Animal House homepage](https://animalhouse.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance includes bearer-token handling, scheduled care recommendations, and endpoint-specific request examples.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: server release evidence and frontmatter) <br>
+Risk: Registration and care connect the agent to an external service and use a bearer token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Approve the external connection before use and store the ah_ token like a password.
+
+Risk: Optional MCP setup runs a package through npx.
+
+Mitigation: Review the package and its permissions before enabling MCP integration.
+
+Risk: Scheduled care may repeatedly make API calls, and releasing a creature appears irreversible.
+
+Mitigation: Review heartbeat automation before enabling it and manually confirm creature release actions.
+
+## Reference(s):
+
+- [Animal House website](https://animalhouse.ai)
+- [Animal House MCP documentation](https://animalhouse.ai/docs/mcp)
+- [ClawHub skill listing](https://clawhub.ai/twinsgeeks/skills/animal-house)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with shell and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Care recommendations can use API-provided next steps and recommended check-in times.]
+
+## Skill Version(s):
+
+1.1.4 (source: server-resolved release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -6,6 +6,7 @@ Depends only on layer-1 modules, stdlib, and the checks/_shared leaf.
 from __future__ import annotations
 import ipaddress
 import os
+import re
 import socket
 import time
 from pathlib import Path
@@ -20,18 +21,25 @@ from ..catalog import (
     Finding,
 )
 from ..collector import (
+    LIMIT_DOMAIN_CONFIG,
     Context,
+    agent_roster,
     dig,
 )
-
+from .. import trajectorystore as _trajectorystore
 from . import _shared
 from ._shared import (
     LOOPBACK,
     OUTBOUND_TOOL_HINTS,
+    SECRET_PATTERNS,
     _channels,
     _config_unreadable,
     _custom,
+    _detail_path,
     _enabled_tools,
+    _openclaw_generation,
+    _pattern_hits_real_secret,
+    _retired_key_note,
     _finding,
     _has_approval_gate,
     _hint,
@@ -39,7 +47,9 @@ from ._shared import (
     _mcp_has_remote,
     _mcp_servers,
     _mcp_url_is_local,
+    _plugins,
     _read_jsonl_tail,
+    _surface_absent,
     correlation_indicators,
     parse_bind_host,
 )
@@ -66,9 +76,22 @@ _EXT_SKILL_HINTS = (
 
 # ---------- Shared: egress-allowlist quality (weak-mitigation detection) ----------
 # An allowlist entry can be technically "present" yet still a weak mitigation if it
-# admits (a) a wildcard pattern, or (b) a domain that hosts anonymous/user-generated
-# content an attacker could stage a payload on despite the host being "trusted".
+# admits (a) a wildcard pattern, (b) a domain that hosts anonymous/user-generated
+# content an attacker could stage a payload on, or (c) a URL-rewriting proxy that will
+# relay to an arbitrary attacker-chosen target - despite the host itself being "trusted".
 # Used by both B38 (browser.ssrfPolicy.hostnameAllowlist) and C014 (MCP allowedHosts).
+#
+# C-342 (ESET H1 2026 "AI-fix"): AI-vendor user-content publishing surfaces belong in
+# the same category - claude.ai serves arbitrary attacker-controlled pages at
+# /public/artifacts/..., and chatgpt.com serves them at /share/... (both confirmed against
+# the vendors' own docs, 2026-08-01) - exactly like gist.github.com. Deliberately the
+# SPECIFIC consumer-product host, not the vendor's root domain: adding "anthropic.com"
+# or "openai.com" here would suffix-match legitimate API/docs subdomains
+# (api.anthropic.com, docs.anthropic.com) via the matching below and false-positive on
+# every skill that merely calls the provider's API. copilot.microsoft.com included on
+# the same reasoning (Copilot Pages sharing is real and documented; the exact share-URL
+# path segment could not be independently confirmed, but the host-level match already
+# avoids the root-domain over-broadening this note warns about).
 _USER_CONTENT_HOSTS = frozenset(
     {
         "pastebin.com",
@@ -82,17 +105,61 @@ _USER_CONTENT_HOSTS = frozenset(
         "0x0.st",
         "discord.com",
         "webhook.site",
+        "claude.ai",
+        "chatgpt.com",
+        "copilot.microsoft.com",
     }
 )
+
+# F-158 (TA488/Void Blizzard OWAReaper, CVE-2026-42897, 2026-07-22 Proofpoint report):
+# a URL-rewriting image/CDN proxy in an allowlist is equivalent to an open allowlist -
+# the proxy host is trusted, but the target it relays is attacker-chosen. OWAReaper
+# exfiltrated over HTTPS by relaying through exactly these hosts. Each grounded
+# 2026-08-02:
+# - images.weserv.nl / wsrv.nl: open-source image proxy, forwards an arbitrary "?url="
+#   target to any origin (github.com/weserv/images - "nginx used as forward proxy").
+# - i0-i3.wp.com (Jetpack "Photon"): official docs scope it to WordPress/Jetpack-
+#   connected sites, but the Photon URL rewrite form independently proxies images from
+#   any external origin regardless of that restriction - exactly the mechanism OWAReaper
+#   abused. Not corrected upstream as of this grounding.
+# - slack-imgs.com: Slack's own image-proxy/unfurl CDN (api.slack.com/robots,
+#   Slack-ImgProxy) - refetches and re-serves the image at any URL posted into Slack.
+#   C-135 note (2026-08-02): the exact per-URL scoping of Slack's proxy tokens is not
+#   independently confirmed here (unlike Camo's public HMAC scheme below) - inclusion
+#   rests on real-world abuse (OWAReaper used it as a live exfil relay per the
+#   Proofpoint report), at WARN severity, not on a confirmed "any URL, unscoped" proof.
+#   Revisit if Slack's proxy-token scheme is ever independently confirmed either way.
+#
+# Deliberately does NOT include camo.githubusercontent.com (already in _content.py's
+# _B59_BADGE_HOSTS): Camo requires a 40-hex-char SHA1 HMAC over the target URL, keyed
+# with a GitHub-only secret, so an attacker cannot mint a valid camo.githubusercontent.com
+# URL for an arbitrary target - a materially different, non-abusable mechanism. Grounded
+# 2026-08-02; left in _B59_BADGE_HOSTS unchanged.
+_URL_PROXY_HOSTS = frozenset(
+    {
+        "images.weserv.nl",
+        "wsrv.nl",
+        "slack-imgs.com",
+        "i0.wp.com",
+        "i1.wp.com",
+        "i2.wp.com",
+        "i3.wp.com",
+    }
+)
+
+# Combined lookup for _weak_allowlist_entries - kept as a separate constant so the two
+# source categories above stay independently documented and greppable.
+_WEAK_ALLOWLIST_HOSTS = _USER_CONTENT_HOSTS | _URL_PROXY_HOSTS
 
 
 def _weak_allowlist_entries(allowlist) -> list[str]:
     """Return the subset of an allowlist that is a weak mitigation.
 
-    Flags wildcard patterns (bare "*" or "*.example.com") and known user-content /
-    anonymous-paste / webhook hosts (matched by exact host or domain suffix, after
-    stripping a leading "*." if present). Non-string / malformed entries are ignored
-    (best-effort, no FAIL on unparseable data).
+    Flags wildcard patterns (bare "*" or "*.example.com"), known user-content /
+    anonymous-paste / webhook hosts, and known URL-rewriting image/CDN proxies
+    (matched by exact host or domain suffix, after stripping a leading "*." if
+    present). Non-string / malformed entries are ignored (best-effort, no FAIL on
+    unparseable data).
     """
     weak: list[str] = []
     if not isinstance(allowlist, list):
@@ -105,28 +172,192 @@ def _weak_allowlist_entries(allowlist) -> list[str]:
             weak.append(entry)
             continue
         bare = host[2:] if host.startswith("*.") else host
-        if bare in _USER_CONTENT_HOSTS or any(
-            bare == h or bare.endswith("." + h) for h in _USER_CONTENT_HOSTS
+        if bare in _WEAK_ALLOWLIST_HOSTS or any(
+            bare == h or bare.endswith("." + h) for h in _WEAK_ALLOWLIST_HOSTS
         ):
             weak.append(entry)
     return weak
 
 
-def check_browser_ssrf(ctx: Context) -> Finding:
-    """B38 — Browser control / cookie & SSRF exposure.
+# B-515 follow-up: an allowlist entry can grant a REAL exception from OpenClaw's
+# private-network gate, or merely be a config-hygiene red flag the runtime still
+# blocks today - these are two different mechanisms and a single "bypasses the guard"
+# claim is false for one of them. Verified against the real installed OpenClaw engine
+# offline (a stub resolver - no live DNS), not assumed from source alone:
+#
+#   allowedHostnames  169.254.169.254  -> BLOCKED (link-local / cloud-metadata)
+#   allowedHostnames  100.100.100.200  -> BLOCKED (Alibaba cloud-metadata carve-out)
+#   hostnameAllowlist 169.254.169.254  -> BLOCKED (legacy key grants no exemption)
+#   allowedHostnames  10.0.0.5         -> REACHABLE
+#   allowedHostnames  127.0.0.1        -> REACHABLE
+#   allowedHostnames  fd00::1          -> REACHABLE
+#   allowedHostnames  100.64.0.7       -> REACHABLE
+#
+# Mechanism (dist/ssrf-BayeDjCv.js): being on `allowedHostnames` sets
+# `skipPrivateNetworkChecks` (:264-270), which routes into a SECOND, narrower gate --
+# `assertAllowedTrustedHostnameResolvedAddressesOrThrow` (:207-209) -- that
+# unconditionally throws on link-local and cloud-metadata addresses regardless of the
+# allowlist. So the exemption genuinely reaches loopback / RFC1918 / CGNAT / IPv6-ULA
+# (BYPASS below: reachable today, dangerouslyAllowPrivateNetwork still false) but NEVER
+# reaches link-local or the well-known cloud-metadata addresses/hostname (LATENT below:
+# still blocked today by the second gate, but a genuine red flag on INTENT grounds --
+# it is a config mistake or a deliberate attempt to reach the metadata service, and it
+# goes live the instant dangerouslyAllowPrivateNetwork is separately set to true, which
+# is already this check's own FAIL condition). Both stay WARN, not FAIL: matches this
+# module's calibration for an ambiguous, possibly-deliberate shape (an internal
+# deployment MAY legitimately want the browser to reach a fixed internal host, and this
+# static check cannot tell that apart from a mistake) -- the same ambiguity
+# check_provider_baseurl/B178 already resolves to WARN.
+#
+# `hostnameAllowlist` (the legacy sibling key) never feeds `skipPrivateNetworkChecks`
+# at all (ssrf-BayeDjCv.js:105-107) -- an entry placed there grants NO exemption from
+# either gate, ever, so it is always treated as LATENT (red-flag, not-currently-live)
+# regardless of shape, never BYPASS.
+#
+# 100.100.100.200 (Alibaba ECS metadata) sits inside the ordinary 100.64.0.0/10 CGNAT
+# range yet is BLOCKED where an otherwise-ordinary CGNAT address in the same /10 is not
+# (100.64.0.7, verified REACHABLE) -- an explicit carve-out rather than range math alone.
+#
+# JUDGED as BYPASS: loopback (127.0.0.0/8, ::1, "localhost" and the other LOOPBACK
+# literals, including IPv4-mapped-IPv6 loopback forms -- see _loopback_ip); RFC1918/
+# CGNAT/IPv6-ULA (10/8, 172.16/12, 192.168/16, 100.64.0.0/10 minus the Alibaba
+# carve-out, fc00::/7); and "0.0.0.0"/"::" -- the 2024 "0.0.0.0 day" browser-routes-to-
+# localhost primitive, verified REACHABLE and neither link-local nor a metadata literal
+# (already modelled as local by _B178_LOCAL_MODEL_HOSTNAMES elsewhere in this file).
+# JUDGED as LATENT: link-local (169.254.0.0/16 -- the AWS/Azure/GCP metadata range --
+# and fe80::/10, extrapolated from the same "link-local" wording, not independently
+# reachability-probed for the IPv6 form), the Alibaba metadata IP, the grounded
+# metadata.google.internal hostname, and ANY otherwise-BYPASS-shaped entry that came
+# from the legacy hostnameAllowlist key only. Bracketed IPv6 ("[fd00::1]") is unwrapped
+# via the same `parse_bind_host` helper the gateway-bind checks use, and IPv4-mapped-
+# IPv6 forms ("::ffff:10.0.0.5") are folded to their IPv4 form before classification,
+# mirroring _loopback_ip's own fold.
+#
+# NOT judged, deliberately: any other bare/dotted hostname (e.g. "metadata.goog" --
+# GCP's short alias, not independently grounded here; an internal DNS name like
+# "db.corp.internal"; a Docker-Compose sibling service name) -- this is a local,
+# network-free check that cannot resolve DNS, and a plain hostname gives no static
+# signal that it is internal at all. Also not judged: decimal/octal-encoded IPv4
+# literals (e.g. "2130706433", "0177.0.0.1") -- NOT because OpenClaw's own matcher
+# might treat them as a different host (it does not: `looksLikeUnsupportedIpv4Literal`,
+# ssrf-BayeDjCv.js:145-150, recognizes and BLOCKS this exact shape independently of
+# this check), but because Python's `ipaddress` module rejects them as non-canonical,
+# and this scanner leaves that shape to the real engine's own, already-verified block
+# rather than hand-rolling a second parser for it.
+_CLOUD_METADATA_HOSTNAMES = frozenset({"metadata.google.internal"})
+_CLOUD_METADATA_IP_CARVEOUTS = frozenset({"100.100.100.200"})
+_ZERO_ROUTE_HOSTS = frozenset({"0.0.0.0", "::"})
+_LATENT_NETS = (
+    ipaddress.ip_network("169.254.0.0/16"),
+    ipaddress.ip_network("fe80::/10"),
+)
+_BYPASS_NETS = (
+    ipaddress.ip_network("10.0.0.0/8"),
+    ipaddress.ip_network("172.16.0.0/12"),
+    ipaddress.ip_network("192.168.0.0/16"),
+    ipaddress.ip_network("100.64.0.0/10"),
+    ipaddress.ip_network("fc00::/7"),
+)
 
-    FAIL    — browser is configured AND (dangerouslyAllowPrivateNetwork == true
-              OR noSandbox == true). Either flag is a CRITICAL-class primitive:
+
+def _private_allowlist_entries(allowlist, *, allow_bypass: bool = True):
+    """Return (bypass, latent) subsets of an allowlist -- see the block comment above
+    for the mechanism split and exactly which shapes are judged.
+
+    ``allow_bypass=False`` (pass the legacy hostnameAllowlist key here) forces every
+    otherwise-BYPASS-shaped entry into ``latent`` instead: that key never feeds
+    `skipPrivateNetworkChecks`, so it never grants the real exemption.
+    """
+    bypass: list[str] = []
+    latent: list[str] = []
+    if not isinstance(allowlist, list):
+        return bypass, latent
+    for entry in allowlist:
+        if not isinstance(entry, str) or not entry.strip():
+            continue
+        raw = entry.strip().lower()
+        if raw == "*" or raw.startswith("*."):
+            # Already reported by _weak_allowlist_entries as a wildcard; never a
+            # parseable IP literal or bare metadata hostname.
+            continue
+        host = parse_bind_host(raw).rstrip(".")
+        if host in _CLOUD_METADATA_HOSTNAMES:
+            latent.append(entry)
+            continue
+        if host in _ZERO_ROUTE_HOSTS:
+            (bypass if allow_bypass else latent).append(entry)
+            continue
+        if host in LOOPBACK:
+            (bypass if allow_bypass else latent).append(entry)
+            continue
+        try:
+            addr = ipaddress.ip_address(host)
+        except ValueError:
+            continue
+        mapped = getattr(addr, "ipv4_mapped", None)
+        if mapped is not None:
+            addr = mapped
+        if str(addr) in _CLOUD_METADATA_IP_CARVEOUTS:
+            latent.append(entry)
+            continue
+        if any(addr.version == net.version and addr in net for net in _LATENT_NETS):
+            latent.append(entry)
+            continue
+        if any(addr.version == net.version and addr in net for net in _BYPASS_NETS):
+            (bypass if allow_bypass else latent).append(entry)
+    return bypass, latent
+
+
+# B-362: shared not_applicable gate for the "no browser config" UNKNOWN branch that
+# B38/B195/B196/B321/B322/B330 all share verbatim (one locus, `ctx.config["browser"]`,
+# checked the same way by every one of them). Grounded against the installed dist
+# (~/.npm-global/lib/node_modules/openclaw/dist, openclaw@2026.7.1-2, 2026-07-30):
+# tools-effective-inventory-D78fLEDu.js:63 `hasExplicitBrowserIntent` --
+# `cfg.browser?.enabled !== false && Boolean(cfg.browser || cfg.plugins?.entries?.browser)`
+# -- is OpenClaw's OWN definition of "browser is configured/intended", and it ORs two
+# loci: the top-level `browser` block these checks already read, AND the bundled
+# browser plugin's alternate `plugins.entries.browser` enablement path (browser ships
+# as `bundledPluginId: "browser"` per sdk-alias-BJSUcD8n.js:303). A raw config with NO
+# `browser` key can still have live browser-tool config through that second path, so
+# not_applicable must require both to be absent -- mirrors _plugins()'s own legacy/
+# entries-shape handling rather than re-deriving it.
+def _browser_surface_absent(ctx: Context) -> bool:
+    return not _plugins(ctx.config).get("browser") and _surface_absent(
+        ctx, LIMIT_DOMAIN_CONFIG
+    )
+
+
+def check_browser_ssrf(ctx: Context) -> Finding:
+    """B38 - Browser control / cookie & SSRF exposure.
+
+    FAIL    - browser is configured AND (dangerouslyAllowPrivateNetwork == true
+              OR the legacy browser.ssrfPolicy.allowPrivateNetwork alias == true
+              OR noSandbox == true). Either private-network flag is a CRITICAL-class primitive:
               private-network access enables cloud-metadata credential theft;
               no-sandbox means the headless browser can escape OS isolation.
-    WARN    — browser is configured but ssrfPolicy.hostnameAllowlist is absent
-              (open egress surface — the browser can reach any external host);
-              OR the hostnameAllowlist is present but contains a wildcard entry or a
-              known user-content/anonymous-paste/webhook host — a weak mitigation an
-              attacker could stage payloads on despite the host being "trusted".
-    PASS    — browser is configured AND sandboxed AND private network is blocked
-              AND a hostnameAllowlist is present with no weak entries.
-    UNKNOWN — no browser config (not applicable).
+    WARN    - browser is configured but ssrfPolicy.allowedHostnames /
+              ssrfPolicy.hostnameAllowlist (the runtime merges both into one combined
+              allowlist -- B-515) are both absent/empty (open egress surface - the
+              browser can reach any external host); OR the combined allowlist is
+              present but contains a wildcard entry, a known user-content/
+              anonymous-paste/webhook host, or a URL-rewriting proxy - a weak
+              mitigation an attacker could stage payloads on despite the host being
+              "trusted"; OR an allowedHostnames entry that is itself loopback/
+              RFC1918-private/CGNAT/IPv6-ULA/0.0.0.0/:: - OpenClaw's own allowlist
+              exemption genuinely lets the browser reach that host TODAY even with
+              dangerouslyAllowPrivateNetwork=false (verified against the installed
+              engine); OR an allowedHostnames/hostnameAllowlist entry that is
+              link-local (incl. 169.254.169.254) or the grounded
+              metadata.google.internal/100.100.100.200 cloud-metadata literals - these
+              stay blocked TODAY by a separate, unconditional gate regardless of the
+              allowlist, but naming them is a config-hygiene/intent red flag that goes
+              live the moment dangerouslyAllowPrivateNetwork is set to true (the
+              legacy hostnameAllowlist key never grants the real exemption at all, so
+              every otherwise-bypass-shaped entry placed there is judged this way too).
+    PASS    - browser is configured AND sandboxed AND private network is blocked
+              AND the combined allowlist (allowedHostnames + hostnameAllowlist) is
+              non-empty with no weak or private-network entries.
+    UNKNOWN - no browser config (not applicable).
     """
     cfg = ctx.config
     browser = cfg.get("browser")
@@ -134,95 +365,260 @@ def check_browser_ssrf(ctx: Context) -> Finding:
         return _finding(
             "B38",
             UNKNOWN,
-            "No browser config — browser SSRF / cookie exposure not applicable.",
-            "—",
+            "No browser config \u2014 browser SSRF / cookie exposure not applicable.",
+            "\u2014",
+            not_applicable=_browser_surface_absent(ctx),
         )
 
     ssrf_policy = browser.get("ssrfPolicy") if isinstance(browser.get("ssrfPolicy"), dict) else {}
-    allow_private = ssrf_policy.get("dangerouslyAllowPrivateNetwork")
+    # C-135 adversarial pass, 2026-09-16, grounded against the installed 2026.9.4 dist:
+    # the browser's own config resolver, resolveBrowserSsrFPolicy (config-Dc3xLSSD.mjs:
+    # 117-130), ORs a LEGACY flat `allowPrivateNetwork` alias into
+    # `dangerouslyAllowPrivateNetwork` before the browser ever uses the policy --
+    # `dangerouslyAllowPrivateNetwork = allowPrivateNetwork === true ||
+    # dangerouslyAllowPrivateNetwork === true`. The canonical schema is `.strict()` and
+    # rejects the legacy key outright, so a config carrying it fails validation at
+    # startup -- but that does NOT make it safe-by-rejection: `resolveStartupConfigSnapshot`
+    # (automatic-startup-config-repair-Dwz3nno7.mjs:56-59, wired into the real boot path at
+    # pre-bootstrap-Da_13P9b.mjs:255) auto-repairs an invalid snapshot IN MEMORY via the
+    # same migration doctor uses (applyLegacyDoctorMigrations, which folds
+    # normalizeLegacyBrowserConfig from doctor-config-flow-BoTzHMKN.mjs:216-229) and boots
+    # with the repaired config -- silently, on EVERY startup, with no explicit
+    # "openclaw doctor" invocation needed. The disk WRITE-back is a separate step,
+    # commitAutomaticConfigRepair, called only from runDoctorConfigPreflight
+    # (doctor-config-preflight-clU90J9x.mjs, 2026.9.5): pre-bootstrap never calls it, but
+    # the CLI config guard does, incl. for `gateway run`, and only for a single-file config
+    # the repair plan admits (re-checked 2026.9.5; an earlier note here said doctor-only).
+    # So the raw file can show the legacy key until that write lands while every boot
+    # honours it: ONLY the legacy key set = live bypass, previously invisible to this check.
+    # Read both, `is True` on each -- not a truthy check, matching the coercion-proof
+    # gate below and risk.py's own C-135-B722-followup note.
+    #
+    # Two OTHER candidate keys were checked and do NOT apply here, so they are
+    # deliberately NOT read: OpenClaw's isPrivateNetworkOptInEnabled
+    # (ssrf-policy-bu9unXwu.mjs) also reads a nested `network.allowPrivateNetwork` /
+    # `network.dangerouslyAllowPrivateNetwork` shape, but that shape belongs to CHANNEL
+    # configs only (channels.<provider>.network.*; its own migration in
+    # legacy-private-network-migration-t-YHta0_.mjs is scoped to `channels.<channelKey>`,
+    # never to `browser`). The canonical browser/tools.web.fetch schema,
+    # SsrFPolicyConfigSchema (zod-schema.core-CZ0zDyHR.mjs:268-274, a `.strict()` object),
+    # has exactly 5 fields and no `network` member, and resolveBrowserSsrFPolicy never
+    # reads `cfg?.ssrfPolicy?.network`. Reading it here would fabricate a field path that
+    # does not exist for this subsystem (Golden Rule #4).
+    dangerously_allow_private = ssrf_policy.get("dangerouslyAllowPrivateNetwork")
+    legacy_allow_private = ssrf_policy.get("allowPrivateNetwork")
+    allow_private = dangerously_allow_private is True or legacy_allow_private is True
     no_sandbox = browser.get("noSandbox")
-    allowlist = ssrf_policy.get("hostnameAllowlist")
+    # B-515: the installed dist honours TWO sibling allowlist keys and merges them at
+    # runtime -- allowedHostnames (current) and hostnameAllowlist (legacy/alternate).
+    # An operator who only sets the current field must not get an "empty allowlist"
+    # WARN, so both are read and combined before any presence/weak-entry check below.
+    allowed_hostnames = ssrf_policy.get("allowedHostnames")
+    legacy_allowlist = ssrf_policy.get("hostnameAllowlist")
+    allowlist = (allowed_hostnames if isinstance(allowed_hostnames, list) else []) + (
+        legacy_allowlist if isinstance(legacy_allowlist, list) else []
+    )
 
     fail_ev: list[str] = []
-    if allow_private is True:
+    if allow_private:
+        trigger_keys = []
+        if dangerously_allow_private is True:
+            trigger_keys.append("dangerouslyAllowPrivateNetwork")
+        if legacy_allow_private is True:
+            trigger_keys.append("allowPrivateNetwork (legacy alias)")
         fail_ev.append(
-            "browser.ssrfPolicy.dangerouslyAllowPrivateNetwork=true — "
+            f"browser.ssrfPolicy.{'/'.join(trigger_keys)}=true \u2014 "
             "agent browser can reach internal/metadata IPs (169.254.169.254 cloud-credential theft)"
         )
     if no_sandbox is True:
         fail_ev.append(
-            "browser.noSandbox=true — headless browser runs without OS sandbox "
+            "browser.noSandbox=true \u2014 headless browser runs without OS sandbox "
             "(process-escape risk)"
         )
 
     if fail_ev:
+        fix = (
+            "Set browser.ssrfPolicy.dangerouslyAllowPrivateNetwork to false to block "
+            "cloud-metadata IP access; set browser.noSandbox to false (or omit it) to "
+            "keep the OS sandbox active. Also add browser.ssrfPolicy.allowedHostnames "
+            "(or the legacy browser.ssrfPolicy.hostnameAllowlist) to restrict which "
+            "hosts the browser may reach."
+        )
+        if legacy_allow_private is True:
+            fix += (
+                " browser.ssrfPolicy.allowPrivateNetwork is the retired alias for the "
+                "same flag \u2014 OpenClaw ORs it into dangerouslyAllowPrivateNetwork before "
+                "the browser ever uses the policy, so dangerouslyAllowPrivateNetwork=false "
+                "alone will not close this while allowPrivateNetwork stays true. Set it to "
+                "false too, or remove it and run 'openclaw doctor --fix' to migrate it."
+            )
+        # B-722: only add the blockedHostnames lever when the private-network flag
+        # is the (or one of the) actual triggers -- B38 can also FAIL on noSandbox alone,
+        # with neither flag ever set, and advice about "if the flag cannot be turned off"
+        # would be confusing noise pointed at a flag this config never enabled. C-135
+        # (independent adversarial pass) found this unconditional in the first draft.
+        #
+        # B-853: blockedHostnames is matched by HOSTNAME/IP TEXT only
+        # (resolveHostnamePolicyChecks, ssrf-B1sxrDMt.mjs:189 in the installed 2026.9.5
+        # dist, "denied before DNS"). With the private-network flag on,
+        # shouldSkipPrivateNetworkChecks (same file, lines 114-115) makes
+        # resolveHostnamePolicyChecks skip assertAllowedHostOrIpOrThrow, and
+        # resolvePinnedHostnameWithPolicy (lines 280/330) skips
+        # assertAllowedResolvedAddressesOrThrow too -- so a request naming an
+        # attacker-controlled hostname that itself RESOLVES to 169.254.169.254 is never
+        # checked against the blocked IP at all. blockedHostnames therefore blocks only a
+        # request that names one of the listed hosts/IPs directly; it does not close the
+        # resolved-IP gap the private-network flag opened. The wording below must not
+        # claim it "blocks them" (the addresses) -- only that it blocks direct use of the
+        # literal names/IPs.
+        if allow_private:
+            fix += (
+                " If the private-network flag cannot be turned off, an "
+                "allowedHostnames/hostnameAllowlist entry alone does not close this: on "
+                "OpenClaw 2026.9.1 and later, also add browser.ssrfPolicy.blockedHostnames "
+                "naming at least the cloud-metadata addresses \u2014 169.254.169.254, "
+                "metadata.google.internal, 100.100.100.200 \u2014 OpenClaw checks that deny "
+                "list before DNS and allow rules, even with private-network access "
+                "enabled, so it still blocks a request that names one of those hosts or "
+                "IP literals directly. It matches by hostname/IP text only, not by the "
+                "address a name resolves to, so an attacker-chosen hostname that resolves "
+                "to one of those addresses is NOT caught by this deny list while the flag "
+                "stays on \u2014 turning dangerouslyAllowPrivateNetwork off is the only way to "
+                "block that."
+            )
         return _finding(
             "B38",
             FAIL,
             "; ".join(fail_ev),
-            "Set browser.ssrfPolicy.dangerouslyAllowPrivateNetwork to false to block "
-            "cloud-metadata IP access; set browser.noSandbox to false (or omit it) to "
-            "keep the OS sandbox active. Also add browser.ssrfPolicy.hostnameAllowlist "
-            "to restrict which hosts the browser may reach.",
+            fix,
             evidence=fail_ev,
         )
 
-    # WARN: browser is configured but no hostnameAllowlist — open egress surface
-    has_allowlist = isinstance(allowlist, list) and len(allowlist) > 0
+    # WARN: browser is configured but no allowedHostnames/hostnameAllowlist entries in
+    # either sibling key - open egress surface
+    has_allowlist = len(allowlist) > 0
     if not has_allowlist:
         return _finding(
             "B38",
             WARN,
-            "Browser is configured with no ssrfPolicy.hostnameAllowlist — the agent "
-            "browser can fetch any external URL (open egress / SSRF surface).",
-            "Add browser.ssrfPolicy.hostnameAllowlist listing only the domains the "
+            "Browser is configured with no ssrfPolicy.allowedHostnames / "
+            "ssrfPolicy.hostnameAllowlist \u2014 the agent browser can fetch any external "
+            "URL (open egress / SSRF surface).",
+            "Add browser.ssrfPolicy.allowedHostnames (or the legacy "
+            "browser.ssrfPolicy.hostnameAllowlist) listing only the domains the "
             "browser legitimately needs to reach; set "
             "browser.ssrfPolicy.dangerouslyAllowPrivateNetwork to false.",
         )
 
-    # QUALITY: allowlist present but contains a wildcard or known user-content host —
-    # downgrade PASS to WARN. Still additive/advisory: does not touch FAIL behaviour.
+    # QUALITY: allowlist present but contains a wildcard, known user-content host,
+    # known URL-rewriting proxy, or a loopback/private/link-local/CGNAT/IPv6-ULA/
+    # cloud-metadata entry - downgrade PASS to WARN. Still additive/advisory: does not
+    # touch FAIL behaviour. All legs are computed and reported together (one Finding)
+    # so an allowlist mixing several reasons names all of them, instead of only the
+    # first one a sequential check would have found. BYPASS/LATENT are computed
+    # per-key (see _private_allowlist_entries) because the legacy hostnameAllowlist
+    # key never grants the real private-network exemption the current allowedHostnames
+    # key does - see the block comment above _private_allowlist_entries.
     weak_entries = _weak_allowlist_entries(allowlist)
-    if weak_entries:
+    bypass_current, latent_current = _private_allowlist_entries(
+        allowed_hostnames if isinstance(allowed_hostnames, list) else []
+    )
+    _, latent_legacy = _private_allowlist_entries(
+        legacy_allowlist if isinstance(legacy_allowlist, list) else [], allow_bypass=False
+    )
+    bypass_entries = bypass_current
+    latent_entries = list(dict.fromkeys(latent_current + latent_legacy))
+    if weak_entries or bypass_entries or latent_entries:
+        sentences = [
+            "Browser allowedHostnames/hostnameAllowlist is present, but:"
+        ]
+        evidence: list[str] = []
+        if weak_entries:
+            sentences.append(
+                "it contains weak entries (wildcard, known user-content/paste/"
+                "webhook host, and/or URL-rewriting image/CDN proxy) an attacker "
+                f"could stage a payload on or relay through despite the allowlist: "
+                f"{', '.join(weak_entries)}."
+            )
+            evidence.extend(weak_entries)
+        if bypass_entries:
+            sentences.append(
+                "it also allowlists loopback/RFC1918/CGNAT/IPv6-ULA/0.0.0.0/:: "
+                "host(s) that OpenClaw's own allowlist exemption genuinely lets the "
+                "browser reach TODAY even though dangerouslyAllowPrivateNetwork is "
+                f"false: {', '.join(bypass_entries)}."
+            )
+            evidence.extend(e for e in bypass_entries if e not in evidence)
+        if latent_entries:
+            sentences.append(
+                "it also names link-local/cloud-metadata host(s) \u2014 e.g. "
+                "169.254.169.254, the AWS/Azure/GCP instance-metadata IP that hands "
+                "out cloud credentials \u2014 that OpenClaw's own engine still blocks "
+                "today via a separate, unconditional gate; this is a config-hygiene "
+                "red flag on intent grounds and becomes live the moment "
+                f"dangerouslyAllowPrivateNetwork is set to true: {', '.join(latent_entries)}."
+            )
+            evidence.extend(e for e in latent_entries if e not in evidence)
         return _finding(
             "B38",
             WARN,
-            "Browser hostnameAllowlist is present but contains weak entries "
-            f"(wildcard and/or known user-content/paste/webhook host): {', '.join(weak_entries)} — "
-            "an attacker could stage a payload on a wildcard match or an anonymous "
-            "content host despite the allowlist.",
+            " ".join(sentences),
             "Replace wildcard entries with explicit hostnames, and avoid allowlisting "
             "anonymous paste/gist/webhook hosts (e.g. pastebin.com, gist.github.com, "
-            "raw.githubusercontent.com, webhook.site) — an attacker-controlled payload "
-            "can be staged there even though the host itself is 'trusted'.",
-            evidence=weak_entries,
+            "raw.githubusercontent.com, webhook.site) or URL-rewriting image/CDN "
+            "proxies (e.g. images.weserv.nl, i0-i3.wp.com, slack-imgs.com) \u2014 an "
+            "attacker-controlled target can be reached through them even though the "
+            "proxy host itself is 'trusted'. Remove any loopback (127.0.0.1, "
+            "localhost, 0.0.0.0, ::), private (10/8, 172.16/12, 192.168/16), "
+            "link-local (169.254.0.0/16), CGNAT (100.64.0.0/10), IPv6-ULA (fc00::/7), "
+            "or cloud-metadata (metadata.google.internal, 100.100.100.200) entry from "
+            "allowedHostnames/hostnameAllowlist \u2014 the ones OpenClaw's engine still "
+            "blocks today are still a config mistake or a live risk the moment "
+            "dangerouslyAllowPrivateNetwork flips to true.",
+            evidence=evidence,
         )
 
     return _finding(
         "B38",
         PASS,
-        "Browser is configured: sandboxed, private-network access blocked, "
-        "and hostnameAllowlist is present.",
+        "Browser is configured: sandboxed, allowedHostnames/hostnameAllowlist is "
+        "present with no weak or private-network entries, so private-network access "
+        "is blocked for every host not explicitly allowlisted.",
         "Keep browser.noSandbox unset/false, "
-        "dangerouslyAllowPrivateNetwork=false, and maintain a tight hostnameAllowlist.",
+        "dangerouslyAllowPrivateNetwork=false, and maintain a tight "
+        "browser.ssrfPolicy.allowedHostnames allowlist with no loopback/private/"
+        "link-local/cloud-metadata entries.",
     )
 
 
 # B195 (E-060 item 2): flags matched by exact pre-'=' token, never substring -- e.g.
-# "--proxy-server-bypass-list" must not match "--proxy-server" (C-135 guidance). Matched
-# case-INsensitively: Chromium's base::CommandLine lowercases every switch name during
-# its own parsing (base::ToLowerASCII()), so "--DISABLE-WEB-SECURITY" is functionally
-# identical to "--disable-web-security" to real Chrome -- confirmed via a live C-135
-# adversarial pass (2026-07-25) that also found OpenClaw's own chromeArgName() helper
-# (chrome-DDq_K3xu.js:156-158) already lowercases before its internal proxy-arg checks,
-# corroborating the same behaviour from the OpenClaw side. Dict keys stay lowercase
-# canonical; the *reported* evidence still quotes the flag as the operator wrote it.
+# "--proxy-server-bypass-list" must not match "--proxy-server" (C-135 guidance).
+#
+# Matched case-INsensitively. C-309 (2026-07-26) corrected the reason recorded here: the
+# previous note claimed Chromium's base::CommandLine lowercases every switch name it
+# parses. That is NOT universally true -- the lowercasing in base::CommandLine lives
+# behind a Windows-only build guard (the `BUILDFLAG(IS_WIN)` path in AppendSwitchNative /
+# the switch-map insertion), so on POSIX, where OpenClaw's managed Chrome actually runs,
+# switch names are matched case-SENSITIVELY and "--DISABLE-WEB-SECURITY" is NOT
+# recognized by Chrome as "--disable-web-security". Case-insensitive matching is
+# nonetheless the right behaviour for a DETECTOR and is deliberately kept: this check
+# reports operator intent to disable a browser protection, and a scanner that only
+# recognizes the exact casing is trivially evaded by a shift key. The cost of being
+# generous here is bounded -- the worst case is reporting a flag that Chrome would have
+# ignored anyway, which is a strictly safer error than staying silent on one it honours.
+# Corroborated from the OpenClaw side independently of Chromium's own casing rule:
+# OpenClaw's chromeArgName() helper (chrome-DDq_K3xu.js:156-158) lowercases before its
+# internal proxy-arg checks, so mixed case genuinely does change OpenClaw's own
+# behaviour even where it would not change Chrome's.
+#
+# B-337: keys are the DASHLESS switch name, because the leading dashes are not part of
+# the name Chrome matches on -- see _chrome_switch_name() below.
 _EXTRA_ARGS_FAIL_FLAGS = {
-    "--disable-web-security": (
+    "disable-web-security": (
         "disables the browser's same-origin policy entirely -- any page can read "
         "any other origin's cookies/DOM/responses"
     ),
-    "--load-extension": (
+    "load-extension": (
         "loads an arbitrary Chrome extension at launch -- an extension has broader "
         "page/cookie/network access than the page content itself"
     ),
@@ -233,20 +629,81 @@ _EXTRA_ARGS_FAIL_FLAGS = {
 # "explicit-browser-proxy" and all three suppress OpenClaw's own defensive
 # --no-proxy-server injection. B195 originally covered only --proxy-server.
 _EXTRA_ARGS_WARN_FLAGS = {
-    "--proxy-server": (
+    "proxy-server": (
         "reroutes all browser traffic through the configured proxy -- confirm the "
         "target is trusted"
     ),
-    "--proxy-auto-detect": (
+    "proxy-auto-detect": (
         "enables Chrome's automatic proxy detection (WPAD) -- on an untrusted network "
         "WPAD can be spoofed to redirect browser traffic through an attacker proxy"
     ),
-    "--proxy-pac-url": (
+    "proxy-pac-url": (
         "points the browser at a proxy auto-config (PAC) script -- confirm the URL is "
         "trusted, since a malicious PAC script can redirect arbitrary traffic through "
         "an attacker-controlled proxy"
     ),
 }
+_REMOTE_DEBUG_ADDRESS_SWITCH = "remote-debugging-address"
+
+
+# B-337: a Chrome switch is spelled with ONE or TWO leading dashes, and Chrome honours
+# both identically. Chromium's base::CommandLine carries a kSwitchPrefixes table which on
+# POSIX is {"--", "-"}; GetSwitchPrefixLength() returns the length of the FIRST entry that
+# prefixes the argument, and the switch name is whatever follows it up to the '='. So
+# `-remote-allow-origins=*` reaches Chrome as exactly the same switch as
+# `--remote-allow-origins=*`, and B195's old `flag_lower == "--..."` comparison reported
+# the single-dash spelling of its own FAIL conditions as clean -- a false negative in a
+# HIGH check, and the spelling a careless copy-paste is most likely to produce.
+#
+# MEASURED, not inferred (2026-07-26, Google Chrome 150.0.7871.186, headless, local): a
+# cross-origin CDP WebSocket upgrade against the DevTools port returns 403 by default;
+# with `--remote-allow-origins=*` it returns 101, and with `-remote-allow-origins=*` --
+# one dash -- it ALSO returns 101. The single-dash spelling is honoured by real Chrome.
+#
+# The "first matching prefix" rule is why this must NOT be written as `lstrip("-")`:
+# `---remote-allow-origins=*` matches the "--" entry first, so its switch NAME is
+# `-remote-allow-origins`, which matches nothing Chrome knows. That was measured on the
+# same run: the triple-dash spelling returned 403, i.e. it changed nothing. Peeling every
+# dash would turn that inert string into a finding -- trading the false negative for a
+# false positive. Exactly one or two dashes, therefore, and nothing else.
+#
+# Grounded from the OpenClaw side too: OpenClaw's own chromeArgName()
+# (chrome-DDq_K3xu.js:156-158) is `arg.trim().split("=",1)[0]?.toLowerCase()` -- it takes
+# the pre-'=' token and lowercases it but does NOT normalize the dash prefix, so its
+# PROXY_ROUTING_CHROME_ARGS / PROXY_CONTROL_CHROME_ARGS sets (spelled with "--") do not
+# recognize a single-dash proxy arg either. That is an OpenClaw-side blind spot, not a
+# reason to copy it: OpenClaw then injects its own --no-proxy-server alongside the
+# operator's single-dash -proxy-server=..., and Chromium resolves --no-proxy-server ahead
+# of the other proxy switches, so the operator's proxy is silently not used. The config
+# does not do what they wrote -- precisely the "real but lower-certainty risk" the WARN
+# tier exists for.
+def _chrome_switch_name(arg: str, *, casefold: bool = True) -> str:
+    """Dashless switch name of a Chrome launch argument, or "" if not a switch.
+
+    "--Proxy-Server=http://x" and "-proxy-server=http://x" both yield "proxy-server";
+    "---disable-web-security", "chrome://flags" and a bare "--" yield "".
+
+    *casefold* (default True) lowercases the result, which is what a DETECTOR wants --
+    see the C-309 note above _EXTRA_ARGS_FAIL_FLAGS. Pass casefold=False when the caller
+    needs the name EXACTLY as Chrome will match it: on POSIX, Chromium's switch lookup is
+    case-SENSITIVE, so `--REMOTE-ALLOW-ORIGINS=*` is not the same switch as
+    `--remote-allow-origins=*` and does nothing. Measured on Google Chrome 150.0.7871.186
+    (cross-origin CDP WebSocket upgrade; 403 = inert, 101 = honoured), 2026-07-26:
+        --remote-allow-origins=*   -> 101      --REMOTE-ALLOW-ORIGINS=* -> 403
+        --remote-allow-origins= *  -> 101      --Remote-Allow-Origins=* -> 403
+    (the space row also shows Chrome trims the value, which is why callers strip it).
+    A rung that hard-caps a grade must key on the exact-case name; a rung that merely
+    reports intent may use the casefolded one.
+    """
+    stripped = arg.strip()
+    if stripped.startswith("--"):
+        body = stripped[2:]
+    elif stripped.startswith("-"):
+        body = stripped[1:]
+    else:
+        return ""
+    name = body.partition("=")[0]
+    return name.lower() if casefold else name
 
 
 # B-331: OpenClaw ALWAYS launches its managed Chrome with
@@ -261,18 +718,67 @@ _EXTRA_ARGS_WARN_FLAGS = {
 #     previous WARN also mis-attributed causation: it told the operator their flag "opens
 #     an unauthenticated ... debug port on loopback" when OpenClaw's own always-present
 #     --remote-debugging-port opened it, so removing the flag could not have closed it.
-#   * A NON-loopback operator flag is a real, well-grounded FAIL for exactly the same
-#     reason: the port is always there, so moving its bind off-host genuinely exposes an
-#     unauthenticated CDP endpoint. That half is kept.
-def _remote_debug_host_is_loopback(value: str) -> bool:
-    """True when *value* (a --remote-debugging-address argument value) is loopback or
-    "localhost" -- accounting for an IPv4 host:port suffix, a bracketed IPv6 [::1]:port
-    form, and a bare full-form IPv6 loopback (0:0:0:0:0:0:0:1) -- all of which Chrome's
-    own address parser accepts and a C-135 adversarial pass (2026-07-25) found the
-    original bare `{"127.0.0.1","localhost","::1"}` set false-FAILed on."""
+#   * A NON-loopback operator flag was, until B-337, treated as a FAIL on the reasoning
+#     that the port is always there so moving its bind off-host exposes it. That FAIL has
+#     been RETRACTED -- see the measurement note on _remote_debug_bind_class below.
+#
+# B-337 / C-135 (2026-07-26): --remote-debugging-address NO LONGER EXISTS IN CHROMIUM.
+# The FAIL above was a false positive -- it docked a grade for a switch modern Chrome
+# silently ignores. Chromium removed the switch in M113 as part of the same hardening
+# that made the DevTools endpoint origin-checked; the debug port now always binds
+# loopback and can only be moved by an external forwarder, never by a Chrome flag.
+# Measured directly rather than taken on faith (2026-07-26, Google Chrome
+# 150.0.7871.186, headless, local, `ss -lnt` on the listening socket):
+#     --remote-debugging-port=P                                -> 127.0.0.1:P
+#     --remote-debugging-port=P --remote-debugging-address=0.0.0.0        -> 127.0.0.1:P
+#     --remote-debugging-port=P --remote-debugging-address=192.168.31.233 -> 127.0.0.1:P
+# i.e. the bind does not move, for the "all interfaces" value OR for a real interface
+# address. Corroborated structurally: the string "remote-debugging-address" does not
+# appear anywhere in the Chrome 150 binary's switch table, while its neighbours
+# "remote-debugging-pipe", "remote-debugging-port" and "remote-allow-origins" all do.
+#
+# The flag is therefore reported at WARN, not FAIL, and the loopback spellings stay
+# silent as before. WARN rather than silence because the value still carries real
+# information -- it records an operator INTENT to expose the control port off-host, and
+# on a pre-M113 Chrome binary (which an operator can pin via browser.executablePath) it
+# would genuinely bind off-host. What it must not do is assert an off-host bind that
+# provably does not happen on any currently-supported Chrome.
+def _remote_debug_bind_class(value: str) -> str:
+    """Classify a --remote-debugging-address value: "loopback", "offhost" or "unresolved".
+
+    "loopback" -- the value names the bind Chrome uses anyway, so the flag is a no-op
+    twice over (once because it restates the default, once because M113 removed the
+    switch). Silent, costs nothing. Recognized in every spelling Chrome's own address
+    parser accepted and a C-135 pass (2026-07-25) found the original bare
+    `{"127.0.0.1","localhost","::1"}` set false-FAILed on: an IPv4 host:port suffix, a
+    bracketed IPv6 `[::1]:port`, a bare full-form IPv6 loopback (`0:0:0:0:0:0:0:1`) --
+    plus, added by B-337, the IPv4-MAPPED IPv6 form `::ffff:127.0.0.1`. Python's
+    `ipaddress` reports `is_loopback` False for the mapped form (its `_ip` is not 1), yet
+    it denotes 127.0.0.1, so it has to be unmapped before the test or a loopback-bound
+    config draws a spurious finding.
+
+    "offhost" -- the value denotes a real address that is not loopback (0.0.0.0, ::,
+    10.0.0.5, ...). Reported at WARN as an intent signal; NOT a FAIL, because the switch
+    is inert on modern Chrome (see the measurement above).
+
+    "unresolved" -- not an address literal in any form recognized here (a DNS hostname,
+    "*", a typo). Also WARN: the effective bind cannot be determined from the config, and
+    "cannot determine" inside an otherwise-applicable check is this project's WARN case.
+
+    The numeric fallback mirrors _cdp_url_classify() in this same module, for the same
+    reason and with the same one-way discipline: `socket.inet_aton` implements the legacy
+    BSD numeric-host parsing behind the shorthand/octal/hex/bare-decimal IPv4 forms
+    ("127.1", "0177.0.0.1", "127.000.000.001", "2130706433", "0x7f000001") which Python's
+    strict `ipaddress` rejects outright. Without it, `127.1` -- an ordinary way to write
+    loopback -- classified as non-loopback. It only ever ADDS a loopback verdict, never
+    removes one, so it cannot mask a genuinely off-host value.
+    """
     host = value.strip()
-    if host.lower() == "localhost":
-        return True
+    if not host:
+        return "unresolved"
+    # rstrip(".") mirrors OpenClaw's parseHostForAddressChecks (see _cdp_url_classify).
+    if host.lower().rstrip(".") == "localhost":
+        return "loopback"
     if host.startswith("["):
         end = host.find("]")
         if end != -1:
@@ -282,41 +788,60 @@ def _remote_debug_host_is_loopback(value: str) -> bool:
         if port.isdigit():
             host = candidate
     try:
-        return ipaddress.ip_address(host).is_loopback
+        ip = ipaddress.ip_address(host)
     except ValueError:
-        return False
+        pass
+    else:
+        mapped = getattr(ip, "ipv4_mapped", None)
+        return "loopback" if (mapped or ip).is_loopback else "offhost"
+    # Trailing dots are dropped on the retry, for the same reason and with the same
+    # one-way discipline as _cdp_url_classify() -- see its C-135 note. "127.0.0.1." is
+    # loopback to a browser; a hostname written FQDN-style is still rejected by
+    # inet_aton and still falls through unchanged.
+    for candidate in (host, host.rstrip(".")):
+        try:
+            canonical = socket.inet_ntoa(socket.inet_aton(candidate))
+        except (OSError, UnicodeError):
+            continue
+        return "loopback" if canonical in LOOPBACK else "offhost"
+    return "unresolved"
 
 
 def check_browser_extra_args(ctx: Context) -> Finding:
-    """B195 — browser.extraArgs dangerous Chrome launch flags (E-060 item 2).
+    """B195 - browser.extraArgs dangerous Chrome launch flags (E-060 item 2).
 
     browser.extraArgs is pushed verbatim into the Chrome launch command with no
     validation -- unlike B38's own ssrfPolicy/noSandbox keys, nothing here is
     interpreted by OpenClaw first.
 
-    FAIL    — a flag in _EXTRA_ARGS_FAIL_FLAGS is present, OR
-              --remote-debugging-address is bound to a non-loopback address (0.0.0.0,
-              ::, or any host _remote_debug_host_is_loopback() doesn't recognize) --
-              an unauthenticated CDP debug port reachable off-host.
-    WARN    — a flag in _EXTRA_ARGS_WARN_FLAGS is present.
-    PASS    — extraArgs is absent/empty, or contains no matched flag. A loopback-bound
+    FAIL    - a flag in _EXTRA_ARGS_FAIL_FLAGS is present.
+    WARN    - a flag in _EXTRA_ARGS_WARN_FLAGS is present, OR
+              --remote-debugging-address carries a value that is not loopback (B-337:
+              an intent signal, downgraded from FAIL because Chromium removed the switch
+              in M113 and modern Chrome ignores it -- see _remote_debug_bind_class).
+    PASS    - extraArgs is absent/empty, or contains no matched flag. A loopback-bound
               --remote-debugging-address lands here: it restates the bind OpenClaw's own
               launch already uses, so it is a no-op and costs no score (B-331 -- see the
-              grounding note above _remote_debug_host_is_loopback).
-    UNKNOWN — no browser config (not applicable).
+              grounding note above _remote_debug_bind_class).
+    UNKNOWN - no browser config (not applicable).
 
-    Flag matching is case-insensitive (Chromium's own base::CommandLine lowercases
-    every switch name it parses); --remote-debugging-address host classification
-    normalizes an IPv4 host:port suffix and bracketed/bare IPv6 loopback forms before
-    checking .is_loopback (grounded by a C-135 pass, 2026-07-25).
+    Flag matching is case-insensitive (a deliberate detector choice -- see the C-309 note
+    above _EXTRA_ARGS_FAIL_FLAGS for why, and why the old "Chromium lowercases every
+    switch" justification was wrong) and accepts BOTH the one-dash and two-dash spelling
+    Chrome itself honours (B-337, see _chrome_switch_name).
+
+    NOT COVERED HERE, on purpose: --remote-allow-origins. It is an extraArgs flag, but
+    what it changes is who may reach the CDP control port, so it is graded by B330
+    alongside the rest of that surface rather than split across two checks.
     """
     browser = ctx.config.get("browser")
     if not isinstance(browser, dict):
         return _finding(
             "B195",
             UNKNOWN,
-            "No browser config — extraArgs not applicable.",
-            "—",
+            "No browser config \u2014 extraArgs not applicable.",
+            "\u2014",
+            not_applicable=_browser_surface_absent(ctx),
         )
 
     extra_args = browser.get("extraArgs")
@@ -324,8 +849,8 @@ def check_browser_extra_args(ctx: Context) -> Finding:
         return _finding(
             "B195",
             PASS,
-            "browser.extraArgs is absent or empty — no extra Chrome launch flags configured.",
-            "—",
+            "browser.extraArgs is absent or empty \u2014 no extra Chrome launch flags configured.",
+            "\u2014",
         )
 
     fail_ev: list[str] = []
@@ -335,41 +860,62 @@ def check_browser_extra_args(ctx: Context) -> Finding:
             continue
         arg = raw.strip()
         flag, _, value = arg.partition("=")
-        flag_lower = flag.lower()
-
-        if flag_lower in _EXTRA_ARGS_FAIL_FLAGS:
-            fail_ev.append(f"browser.extraArgs has {flag!r} — {_EXTRA_ARGS_FAIL_FLAGS[flag_lower]}")
+        switch = _chrome_switch_name(arg)
+        if not switch:
             continue
-        if flag_lower == "--remote-debugging-address":
-            # No address after the '=' (or a bare switch): nothing was rebound, so this
-            # cannot be evidence that the debug port moved off loopback. Not a FAIL.
+
+        if switch in _EXTRA_ARGS_FAIL_FLAGS:
+            fail_ev.append(f"browser.extraArgs has {flag!r} \u2014 {_EXTRA_ARGS_FAIL_FLAGS[switch]}")
+            continue
+        if switch == _REMOTE_DEBUG_ADDRESS_SWITCH:
+            # No address after the '=' (or a bare switch): nothing was named, so there is
+            # nothing to report.
             if not value.strip():
                 continue
+            bind_class = _remote_debug_bind_class(value)
             # Loopback-bound: a no-op that restates OpenClaw's own default bind. Costs
             # nothing and produces no evidence line (B-331).
-            if _remote_debug_host_is_loopback(value):
+            if bind_class == "loopback":
                 continue
-            fail_ev.append(
-                f"browser.extraArgs has {arg!r} — moves the Chrome DevTools Protocol "
-                "debug port that OpenClaw itself opens on every managed browser launch "
-                "(--remote-debugging-port) off loopback to a non-loopback address, "
-                "making it reachable off-host with no authentication"
+            if bind_class == "unresolved":
+                # Not an address literal in any recognized form (a DNS hostname, "*", a
+                # typo) -- the effective bind cannot be determined from this value at
+                # all, which is distinct from "offhost" naming a real non-loopback
+                # address below. "cannot be determined" is this project's standing
+                # phrasing for an applicable check that cannot resolve a fact.
+                warn_ev.append(
+                    f"browser.extraArgs has {arg!r} \u2014 the effective bind for the "
+                    "Chrome DevTools Protocol debug port cannot be determined from "
+                    "this value (not a recognized address literal). Chromium REMOVED "
+                    "the --remote-debugging-address switch in M113, so current Chrome "
+                    "ignores it regardless; this is reported as an unresolvable "
+                    "statement of intent, not a confirmed bind."
+                )
+                continue
+            warn_ev.append(
+                f"browser.extraArgs has {arg!r} \u2014 this names a non-loopback bind for the "
+                "Chrome DevTools Protocol debug port that OpenClaw itself opens on every "
+                "managed browser launch (--remote-debugging-port). Chromium REMOVED the "
+                "--remote-debugging-address switch in M113, so current Chrome ignores it "
+                "and the port stays on loopback \u2014 this is reported as a statement of "
+                "intent, and as a real exposure only if this agent is pinned to a "
+                "pre-M113 Chrome via browser.executablePath, not as a confirmed off-host "
+                "bind"
             )
             continue
-        if flag_lower in _EXTRA_ARGS_WARN_FLAGS:
-            warn_ev.append(f"browser.extraArgs has {flag!r} — {_EXTRA_ARGS_WARN_FLAGS[flag_lower]}")
+        if switch in _EXTRA_ARGS_WARN_FLAGS:
+            warn_ev.append(f"browser.extraArgs has {flag!r} \u2014 {_EXTRA_ARGS_WARN_FLAGS[switch]}")
 
     if fail_ev:
         return _finding(
             "B195",
             FAIL,
             f"browser.extraArgs contains {len(fail_ev)} dangerous Chrome launch "
-            "flag(s) — see evidence.",
-            "Remove the dangerous flag(s) from browser.extraArgs. For "
-            "--remote-debugging-address, dropping the flag entirely is the safe "
-            "choice: OpenClaw already supplies --remote-debugging-port on every "
-            "managed browser launch and Chrome binds that port to loopback by "
-            "default, so no address flag is needed to keep it local.",
+            "flag(s) \u2014 see evidence.",
+            "Remove the dangerous flag(s) from browser.extraArgs \u2014 neither "
+            "--disable-web-security nor --load-extension has a safe setting; if a "
+            "workflow needs one, give it a dedicated throwaway browser profile rather "
+            "than the profile the agent drives.",
             evidence=(fail_ev + warn_ev)[:6],
         )
     if warn_ev:
@@ -377,9 +923,13 @@ def check_browser_extra_args(ctx: Context) -> Finding:
             "B195",
             WARN,
             f"browser.extraArgs contains {len(warn_ev)} flag(s) with a real but "
-            "lower-certainty risk — see evidence.",
-            "Review the flagged entries; confirm any proxy target or PAC URL is "
-            "trusted, and prefer removing the flag if the proxy is not required.",
+            "lower-certainty risk \u2014 see evidence.",
+            "Review the flagged entries: confirm any proxy target or PAC URL is "
+            "trusted, and prefer removing the flag if the proxy is not required. Drop "
+            "any --remote-debugging-address entirely \u2014 Chromium removed that switch in "
+            "M113, so it does nothing on current Chrome, and OpenClaw already supplies "
+            "--remote-debugging-port on every managed launch with Chrome binding it to "
+            "loopback by default.",
             evidence=warn_ev[:6],
         )
     return _finding(
@@ -388,8 +938,7 @@ def check_browser_extra_args(ctx: Context) -> Finding:
         f"browser.extraArgs is configured with {len(extra_args)} flag(s), none "
         "matching a known-dangerous pattern.",
         "Keep browser.extraArgs free of --disable-web-security, --load-extension, "
-        "a non-loopback --remote-debugging-address, and unreviewed --proxy-server "
-        "entries.",
+        "and unreviewed --proxy-server entries.",
     )
 
 
@@ -448,7 +997,7 @@ def _browser_unowned_session_evidence(browser: dict) -> list[str]:
         driver = spec.get("driver")
         if driver in _UNOWNED_SESSION_DRIVERS:
             ev.append(
-                f"browser.profiles.{name}.driver={driver!r} — this profile attaches to a "
+                f"browser.profiles.{name}.driver={driver!r} \u2014 this profile attaches to a "
                 "browser OpenClaw did not launch (the operator's own, already-signed-in "
                 "session), so the evaluate sink runs inside it"
             )
@@ -462,14 +1011,14 @@ def _browser_unowned_session_evidence(browser: dict) -> list[str]:
         if attach_only and _cdp_url_classify(cdp_url) == "remote":
             ev.append(
                 f"browser.profiles.{name} is attach-only against "
-                f"cdpUrl={_cdp_url_display(cdp_url)} (non-loopback) — OpenClaw attaches "
+                f"cdpUrl={_cdp_url_display(cdp_url)} (non-loopback) \u2014 OpenClaw attaches "
                 "to an externally managed browser on another host instead of launching "
                 "its own, so the evaluate sink runs inside that foreign browser"
             )
     if not profiles and top_attach_only and _cdp_url_classify(top_cdp_url) == "remote":
         ev.append(
             f"browser.attachOnly=true with browser.cdpUrl={_cdp_url_display(top_cdp_url)} "
-            "(non-loopback) — OpenClaw attaches to an externally managed browser on "
+            "(non-loopback) \u2014 OpenClaw attaches to an externally managed browser on "
             "another host instead of launching its own, so the evaluate sink runs inside "
             "that foreign browser"
         )
@@ -477,7 +1026,7 @@ def _browser_unowned_session_evidence(browser: dict) -> list[str]:
 
 
 def check_browser_evaluate_enabled(ctx: Context) -> Finding:
-    """B196 — browser.evaluateEnabled arbitrary-JS sink (E-060 item 3).
+    """B196 - browser.evaluateEnabled arbitrary-JS sink (E-060 item 3).
 
     OpenClaw defaults this to true when the key is absent (grounded:
     dist/config-DpWXcVmn.js:441 `cfg?.evaluateEnabled ?? true`, the defaults table
@@ -495,18 +1044,18 @@ def check_browser_evaluate_enabled(ctx: Context) -> Finding:
     the incentive to write your configuration down explicitly, and left the common case
     (nobody writes the key) on the lenient rung.
 
-    FAIL    — the sink is ON **and** the config points the browser tool at a session
+    FAIL    - the sink is ON **and** the config points the browser tool at a session
               OpenClaw does not launch or own: a hand-written
               browser.profiles.*.driver of "existing-session"/"extension", or an
               attach-only profile against a non-loopback cdpUrl (see
               _browser_unowned_session_evidence and its grounding note). Arbitrary JS
               then executes inside the operator's real, already-signed-in browser, so
               one injected page reaches every cookie and live session in it.
-    WARN    — the sink is ON with no such corroboration: evaluateEnabled is absent
+    WARN    - the sink is ON with no such corroboration: evaluateEnabled is absent
               (vendor default true), OR explicitly true, OR set to any other non-`false`
               value (which cannot be confirmed disabled).
-    PASS    — evaluateEnabled is explicitly false (the only state that closes the sink).
-    UNKNOWN — no browser config at all (the browser tool is not in use).
+    PASS    - evaluateEnabled is explicitly false (the only state that closes the sink).
+    UNKNOWN - no browser config at all (the browser tool is not in use).
 
     WHY THE FAIL IS CORROBORATED RATHER THAN UNCONDITIONAL. Sink-ON alone is the
     documented vendor default of a documented feature (act:evaluate / wait --fn), so an
@@ -532,8 +1081,9 @@ def check_browser_evaluate_enabled(ctx: Context) -> Finding:
         return _finding(
             "B196",
             UNKNOWN,
-            "No browser config — evaluateEnabled not applicable (browser tool not configured).",
-            "—",
+            "No browser config \u2014 evaluateEnabled not applicable (browser tool not configured).",
+            "\u2014",
+            not_applicable=_browser_surface_absent(ctx),
         )
 
     evaluate_enabled = browser.get("evaluateEnabled")
@@ -542,7 +1092,7 @@ def check_browser_evaluate_enabled(ctx: Context) -> Finding:
         return _finding(
             "B196",
             PASS,
-            "browser.evaluateEnabled=false — the browser's arbitrary-JS evaluate "
+            "browser.evaluateEnabled=false \u2014 the browser's arbitrary-JS evaluate "
             "sink is disabled.",
             "Keep browser.evaluateEnabled=false unless a specific workflow needs "
             "page-JS evaluation.",
@@ -564,17 +1114,17 @@ def check_browser_evaluate_enabled(ctx: Context) -> Finding:
         return _finding(
             "B196",
             FAIL,
-            f"{spelling} — the browser's arbitrary-JS evaluate sink is ON, and this "
+            f"{spelling} \u2014 the browser's arbitrary-JS evaluate sink is ON, and this "
             "config points the browser tool at a session OpenClaw does not launch or "
             "own (see evidence). Content on any page the agent visits can therefore "
             "execute arbitrary JavaScript inside the operator's real, already-signed-in "
             "browser, reaching every cookie and live session in it (browser-tool "
-            "prompt-injection → account takeover). OpenClaw applies no extra evaluate "
+            "prompt-injection \u2192 account takeover). OpenClaw applies no extra evaluate "
             "restriction to those drivers: evaluateEnabled is resolved once, globally, "
-            "and is the only gate — its vendor default is true, so an absent key and an "
+            "and is the only gate \u2014 its vendor default is true, so an absent key and an "
             "explicit true are the same runtime state and only an explicit false "
             "disables it.",
-            "Set browser.evaluateEnabled=false — OpenClaw's own field documentation "
+            "Set browser.evaluateEnabled=false \u2014 OpenClaw's own field documentation "
             "says to keep it disabled unless a workflow needs evaluate semantics beyond "
             "snapshots/navigation. If a workflow genuinely requires page-JS evaluation, "
             "do not point it at a signed-in session: give the agent a dedicated managed "
@@ -586,11 +1136,11 @@ def check_browser_evaluate_enabled(ctx: Context) -> Finding:
     return _finding(
         "B196",
         WARN,
-        f"{spelling} — the browser's arbitrary-JS evaluate sink is ON, so every page "
+        f"{spelling} \u2014 the browser's arbitrary-JS evaluate sink is ON, so every page "
         "the agent's browser tool visits is an arbitrary-JS execution sink reachable "
-        "from content injected into that page (browser-tool prompt-injection → "
+        "from content injected into that page (browser-tool prompt-injection \u2192 "
         "code-exec). OpenClaw's vendor default for this key is true, so leaving it out "
-        "does not turn the sink off — an absent key and an explicit true are the same "
+        "does not turn the sink off \u2014 an absent key and an explicit true are the same "
         "runtime state, and only an explicit false disables it.",
         "Set browser.evaluateEnabled=false explicitly unless a specific workflow "
         "genuinely requires page-JS evaluation (act:evaluate / wait --fn); if it does, "
@@ -599,23 +1149,119 @@ def check_browser_evaluate_enabled(ctx: Context) -> Finding:
     )
 
 
-def check_outbound_proxy(ctx: Context) -> Finding:
-    """B155 — Outbound proxy hardening (credential leak / TLS-verify / SSRF-guard bypass).
+# Every field the provider-request TLS object actually has, per the installed dist
+# (`ConfiguredProviderRequestTlsSchema`). `insecureSkipVerify` is the only one B155
+# JUDGES; the other five are recognized purely as proof that a real TLS transport was
+# DECLARED, so a custom-CA / SNI-override config is not mistaken for an empty stub.
+# Split by type because "declared" means something different for each: a bool is
+# substantive at either value (an explicit `false` is still a declaration), whereas a
+# string field is only substantive when non-blank.
+_B155_TLS_BOOL_FIELDS = ("insecureSkipVerify",)
+_B155_TLS_STR_FIELDS = ("ca", "cert", "key", "passphrase", "serverName")
 
-    Audits OpenClaw's OUTBOUND proxy surface — the top-level managed forward proxy
+
+def _b155_tls_is_substantive(tls: dict) -> bool:
+    """True when a ``request.tls`` / ``request.proxy.tls`` object declares a real TLS
+    setting, rather than being an empty or unrecognized-shape stub.
+
+    The recognized set is the COMPLETE field list of this schema object, not a guess --
+    keeping it complete is what stops a legitimate config from being under-claimed as a
+    stub. An earlier revision recognized only ``insecureSkipVerify``, which sent a real
+    ``{serverName, ca}`` pin into the stub bucket and reported "no outbound proxy
+    configured": fail-safe (never a false PASS) but still a false negative on a declared
+    transport.
+
+    ``insecureSkipVerify: false`` DOES count -- the operator explicitly declared
+    verification on, which is an assessable, clean setting. That is deliberately different
+    from the bare ``request.allowPrivateNetwork: false`` case, which is a loose
+    request-level boolean rather than a declared transport object; see the call site.
+
+    Presence only: no value is ever read into detail/evidence, so the secret-shaped
+    ``passphrase`` field is tested for declaration and never echoed (§8).
+    """
+    if any(isinstance(tls.get(f), bool) for f in _B155_TLS_BOOL_FIELDS):
+        return True
+    return any(
+        isinstance(tls.get(f), str) and tls.get(f).strip()
+        for f in _B155_TLS_STR_FIELDS
+    )
+
+
+def _b155_proxy_is_substantive(pxy: dict) -> bool:
+    """True when a ``request.proxy`` object declares a real transport, not a stub.
+
+    Recognizes the fields this check actually reads or that the provider-request schema
+    documents for the object: a non-blank ``url``, a non-blank ``mode`` (e.g.
+    ``"explicit-proxy"``), or a nested ``tls`` object that is itself substantive. An empty
+    dict, or one carrying only keys we do not recognize, is NOT a transport -- promoting
+    it to PASS would claim we assessed something we never parsed.
+    """
+    for key in ("url", "mode"):
+        val = pxy.get(key)
+        if isinstance(val, str) and val.strip():
+            return True
+    nested = pxy.get("tls")
+    return isinstance(nested, dict) and _b155_tls_is_substantive(nested)
+
+
+def check_outbound_proxy(ctx: Context) -> Finding:
+    """B155 - Outbound proxy hardening (credential leak / TLS-verify / SSRF-guard bypass).
+
+    Audits OpenClaw's OUTBOUND proxy surface - the top-level managed forward proxy
     (`proxy.*`) plus per-provider request proxy/TLS options and web_fetch's env-proxy
     trust. Distinct from the INBOUND reverse-proxy trust in C032 / gateway.trustedProxies
     (do not conflate). Absence of a proxy is the default and is NEVER a FAIL (§5).
 
-    FAIL    — proxy.proxyUrl (or a provider's request.proxy.url) embeds credentials
+    FAIL    - proxy.proxyUrl (or a provider's request.proxy.url) embeds credentials
               (http://user:pass@host): a secret sits in plaintext in openclaw.json
               (only runtime logs are redacted).
-    WARN    — a provider disables proxy/endpoint TLS verification
+    WARN    - a provider disables proxy/endpoint TLS verification
               (models.providers.*.request.proxy.tls.insecureSkipVerify or
-              request.tls.insecureSkipVerify) → MITM; request.allowPrivateNetwork → SSRF;
-              tools.web.fetch.useTrustedEnvProxy → bypasses the local SSRF/DNS-rebind guard.
-    PASS    — a managed proxy is configured with a clean (credential-free) URL.
-    UNKNOWN — no outbound proxy configured (the default): advisory nudge, never a FAIL.
+              request.tls.insecureSkipVerify) -> MITM; request.allowPrivateNetwork -> SSRF;
+              tools.web.fetch.useTrustedEnvProxy -> bypasses the local SSRF/DNS-rebind guard.
+    PASS    - a managed proxy is configured with a clean (credential-free) URL, OR a
+              per-provider request.proxy/request.tls transport is configured and clean
+              with no top-level proxy.* block.
+    UNKNOWN - no outbound proxy configured (the default): advisory nudge, never a FAIL.
+              F-140: sets ``not_applicable`` only when the config locus was read
+              COMPLETELY and NO proxy surface is declared - neither the top-level
+              ``proxy.*`` block nor any per-provider ``models.providers.*.request.proxy``
+              / ``.tls`` object.
+
+              Surface presence is evaluated DIRECTLY, never inferred from "the signal
+              scan found nothing". Inferring it was a real bug (caught by C-135 review):
+              a configured-and-clean per-provider proxy produced no FAIL/WARN, fell to
+              this branch, and was reported not-applicable - telling the owner the check
+              did not apply to them about a proxy they had actually configured.
+              ``allowPrivateNetwork`` and ``tools.web.fetch.useTrustedEnvProxy`` are
+              deliberately NOT treated as surface: they are booleans that only signal when
+              true, so an explicit ``false`` is the default posture, not a declared proxy.
+
+              There are THREE outcomes on this branch, not two, and the middle one is easy
+              to lose in a refactor (a second C-135 round caught it being collapsed into
+              PASS):
+
+              * nothing declared anywhere -> UNKNOWN, ``not_applicable=True``.
+              * a proxy/TLS object declared but EMPTY or carrying only unrecognized keys
+                (a stub) -> UNKNOWN, ``not_applicable=False``. Nothing was assessable, so
+                it cannot be PASS; but a proxy key WAS read, so absence was never proven
+                and claiming it would be a fabricated negative.
+              * a substantive object (see ``_b155_proxy_is_substantive`` /
+                ``_b155_tls_is_substantive``) -> PASS/WARN/FAIL as the signals dictate.
+
+              Why absence here is genuine inapplicability and not an unassessed risk:
+              every exposure B155 models is a property OF a configured proxy - a
+              credential embedded in a proxy URL, a proxy/endpoint TLS verification that
+              was switched off, an env proxy the fetch tool was told to trust. None of
+              them can exist without a proxy to carry them, so with no proxy declared
+              there is no object left to assess. The host of course still has outbound
+              traffic; judging THAT surface is a different check's job, and marking this
+              one not-applicable makes no claim about it.
+
+              Scope note: the flag rides the same branch as the existing advisory nudge
+              and does not silence it. The detail text is unchanged, so this is not a
+              claim that a managed proxy is unnecessary - only that this check's specific
+              weakening signals have no place to live on this host.
     """
     from ..logsafe import sanitize_url_host_only  # noqa: PLC0415
     cfg = ctx.config
@@ -639,16 +1285,41 @@ def check_outbound_proxy(ctx: Context) -> Finding:
     # FAIL: a credential embedded in the managed-proxy URL is a plaintext secret in config.
     if parsed is not None and (parsed.username or parsed.password):
         fails.append(
-            f"proxy.proxyUrl embeds credentials ({sanitize_url_host_only(proxy_url)}) — "
+            f"proxy.proxyUrl embeds credentials ({sanitize_url_host_only(proxy_url)}) \u2014 "
             "a secret sits in plaintext in openclaw.json (only runtime logs are redacted)"
         )
 
-    # NOTE: proxy.enabled with no proxyUrl is NOT flagged — OpenClaw's resolveProxyUrl
+    # NOTE: proxy.enabled with no proxyUrl is NOT flagged - OpenClaw's resolveProxyUrl
     # falls back to the OPENCLAW_PROXY_URL env var, which this static check cannot see, so
     # "enabled without a config URL" is a legitimate (env-supplied) running config (§5, §4).
 
     # WARN: per-provider TLS-verify-disable / private-network egress. FAIL: an explicit-proxy
-    # url can embed credentials — same secret-leak class as the top-level proxy.proxyUrl.
+    # url can embed credentials - same secret-leak class as the top-level proxy.proxyUrl.
+    # F-140 follow-up: the per-provider transport surface is recorded as PRESENT here,
+    # independently of whether it produced a signal below. Before this, presence was only
+    # ever inferred from `fails`/`warns` being non-empty, so a provider proxy that was
+    # configured AND CLEAN fell through to the "no outbound proxy configured" UNKNOWN --
+    # and, once F-140 landed, was reported not-applicable. That told the owner this check
+    # did not apply to them about a proxy they had actually configured, which is the exact
+    # lying-not-applicable shape the flag exists to prevent.
+    #
+    # Presence means a declared proxy/TLS OBJECT (`request.proxy` / `request.tls`), not any
+    # request-level boolean. `allowPrivateNetwork` and `tools.web.fetch.useTrustedEnvProxy`
+    # are deliberately excluded: they are only signals when true (and then they already
+    # produce a WARN above), so treating an explicit `false` -- the default posture -- as
+    # "a proxy exists here" would assert a surface nobody configured.
+    #
+    # A dict is not automatically a transport. `request.proxy: {}` (or one carrying only
+    # unrecognized keys) declares NOTHING assessable, so counting it as surface would
+    # promote a stub to "configured and clean" -- the mirror image of the bug above, and a
+    # false PASS on a HIGH scored check. It is tracked SEPARATELY as `provider_stub`:
+    # neither surface-present (nothing to assess -> no PASS) nor surface-absent (we DID
+    # read a proxy key -> no not_applicable). That third state resolves to a plain
+    # UNKNOWN, which is the honest answer for unassessable data (Golden Rule #4).
+    # Mirrors the top-level block's own guard, which likewise requires
+    # `proxy_enabled is True or has_proxy_url` before treating `proxy: {}` as real.
+    provider_surface: list[str] = []
+    provider_stub: list[str] = []
     providers = dig(cfg, "models.providers")
     if isinstance(providers, dict):
         for pid, pspec in providers.items():
@@ -659,6 +1330,21 @@ def check_outbound_proxy(ctx: Context) -> Finding:
                 continue
             pxy = req.get("proxy")
             if isinstance(pxy, dict):
+                if _b155_proxy_is_substantive(pxy):
+                    provider_surface.append(
+                        f"models.providers.{pid}.request.proxy is configured"
+                    )
+                else:
+                    provider_stub.append(f"models.providers.{pid}.request.proxy")
+            ptls_decl = req.get("tls")
+            if isinstance(ptls_decl, dict):
+                if _b155_tls_is_substantive(ptls_decl):
+                    provider_surface.append(
+                        f"models.providers.{pid}.request.tls is configured"
+                    )
+                else:
+                    provider_stub.append(f"models.providers.{pid}.request.tls")
+            if isinstance(pxy, dict):
                 purl = pxy.get("url")
                 if isinstance(purl, str) and purl.strip():
                     try:
@@ -668,43 +1354,43 @@ def check_outbound_proxy(ctx: Context) -> Finding:
                     if pp is not None and (pp.username or pp.password):
                         fails.append(
                             f"models.providers.{pid}.request.proxy.url embeds credentials "
-                            f"({sanitize_url_host_only(purl)}) — a secret sits in plaintext in "
+                            f"({sanitize_url_host_only(purl)}) \u2014 a secret sits in plaintext in "
                             "openclaw.json (only runtime logs are redacted)"
                         )
             ptls = pxy.get("tls") if isinstance(pxy, dict) else None
             if isinstance(ptls, dict) and ptls.get("insecureSkipVerify") is True:
                 warns.append(
-                    f"models.providers.{pid}.request.proxy.tls.insecureSkipVerify=true — "
+                    f"models.providers.{pid}.request.proxy.tls.insecureSkipVerify=true \u2014 "
                     "proxy TLS certificate not verified (MITM surface)"
                 )
             utls = req.get("tls")
             if isinstance(utls, dict) and utls.get("insecureSkipVerify") is True:
                 warns.append(
-                    f"models.providers.{pid}.request.tls.insecureSkipVerify=true — "
+                    f"models.providers.{pid}.request.tls.insecureSkipVerify=true \u2014 "
                     "model-endpoint TLS certificate not verified (MITM surface)"
                 )
             if req.get("allowPrivateNetwork") is True:
                 warns.append(
-                    f"models.providers.{pid}.request.allowPrivateNetwork=true — "
+                    f"models.providers.{pid}.request.allowPrivateNetwork=true \u2014 "
                     "provider requests may reach private/metadata IPs (SSRF surface)"
                 )
 
-    # WARN: web_fetch trusts the env proxy → bypasses the local SSRF / DNS-rebind guard.
+    # WARN: web_fetch trusts the env proxy -> bypasses the local SSRF / DNS-rebind guard.
     if dig(cfg, "tools.web.fetch.useTrustedEnvProxy") is True:
         warns.append(
-            "tools.web.fetch.useTrustedEnvProxy=true — web_fetch trusts the environment "
+            "tools.web.fetch.useTrustedEnvProxy=true \u2014 web_fetch trusts the environment "
             "HTTP(S)_PROXY and lets it resolve DNS, bypassing the local SSRF/DNS-rebind "
             "guard (safe only if that proxy is operator-controlled)"
         )
 
-    # note (NOT a WARN — §5: a plain http:// CONNECT proxy is documented-normal, TLS stays
+    # note (NOT a WARN - §5: a plain http:// CONNECT proxy is documented-normal, TLS stays
     # end-to-end after CONNECT): only flag cleartext-to-proxy for a real non-loopback host.
     if parsed is not None and (parsed.scheme or "").lower() == "http":
         host = (parsed.hostname or "").lower()
         if host and host not in LOOPBACK and not host.startswith("127."):
             notes.append(
                 "proxy.proxyUrl uses plain http:// to a non-loopback host "
-                f"({sanitize_url_host_only(proxy_url)}) — the CONNECT handshake and any proxy "
+                f"({sanitize_url_host_only(proxy_url)}) \u2014 the CONNECT handshake and any proxy "
                 "auth travel in cleartext to the proxy; prefer https:// to the proxy endpoint"
             )
 
@@ -722,7 +1408,7 @@ def check_outbound_proxy(ctx: Context) -> Finding:
             shown = shown + [f"(+{len(warns) - 4} more)"]
         return _finding(
             "B155", WARN,
-            f"Outbound-proxy weakening ({len(warns)} signal(s)) — see evidence.",
+            f"Outbound-proxy weakening ({len(warns)} signal(s)) \u2014 see evidence.",
             "Re-enable TLS verification (remove insecureSkipVerify), avoid "
             "request.allowPrivateNetwork, and only set tools.web.fetch.useTrustedEnvProxy "
             "when the env proxy is operator-controlled and enforces egress policy.",
@@ -738,38 +1424,61 @@ def check_outbound_proxy(ctx: Context) -> Finding:
             "and egress policy enforced at the proxy.",
             evidence=notes,
         )
+    # F-140 follow-up: a per-provider proxy/TLS transport with no top-level proxy.* block.
+    # Deliberately a DISTINCT detail string rather than reusing the sentence above: this
+    # host has no managed forward proxy, so claiming one "is configured" would be a
+    # different false statement. Only configs that previously landed on the UNKNOWN branch
+    # can reach here, so no existing PASS fingerprint moves.
+    if provider_surface:
+        return _finding(
+            "B155", PASS,
+            f"Per-provider outbound transport is configured ({len(provider_surface)} "
+            "setting(s)) with no credential-in-URL, TLS-verify-disable, or "
+            "SSRF-guard-bypass signals; no top-level managed proxy (proxy.*) is set.",
+            "Keep per-provider request.proxy URLs credential-free (env / secret store) and "
+            "request.tls verification on. Optional: add a top-level managed proxy "
+            "(proxy.enabled + a credential-free https:// proxy.proxyUrl) to centralize and "
+            "audit egress.",
+            evidence=provider_surface[:6] + notes,
+        )
     return _finding(
         "B155", UNKNOWN,
-        "No outbound proxy configured — the agent's egress goes direct (the default). "
+        "No outbound proxy configured \u2014 the agent's egress goes direct (the default). "
         "A managed proxy (proxy.*) would centralize and log egress; informational, not required.",
         "Optional: set proxy.enabled + a credential-free https:// proxy.proxyUrl to route and "
         "audit the agent's outbound traffic through a controlled egress point.",
+        # A stub proxy/TLS object means we DID read a declared proxy key and could not make
+        # anything of it. Absence was therefore not established, so the flag stays False and
+        # this reports as an ordinary unresolved UNKNOWN.
+        not_applicable=(
+            not provider_stub and _surface_absent(ctx, LIMIT_DOMAIN_CONFIG)
+        ),
     )
 
 
-# B178 — hosts OpenClaw's own runtime treats as "the local machine" for a model-
+# B178 - hosts OpenClaw's own runtime treats as "the local machine" for a model-
 # provider baseUrl, beyond literal loopback (LOOPBACK). Grounded against the
 # installed dist (~/.npm-global/lib/node_modules/openclaw/dist):
-#   selection-JInn13lc.js:10859 isExplicitLocalHostnameBaseUrl — docker.orb.internal /
+#   selection-JInn13lc.js:10859 isExplicitLocalHostnameBaseUrl - docker.orb.internal /
 #     host.docker.internal / host.orb.internal
-#   selection-JInn13lc.js:10844 isLocalOllamaBaseUrl's own host===... check — "0.0.0.0"
+#   selection-JInn13lc.js:10844 isLocalOllamaBaseUrl's own host===... check - "0.0.0.0"
 #   discovery-shared-XxlmIfaG.js:37-46 LOCAL_OLLAMA_HOSTNAMES includes the above plus "::"
 #   runtime-C40mDMdO.d.ts:7 LMSTUDIO_DOCKER_HOST_BASE_URL="http://host.docker.internal:1234"
-#     — a first-party OpenClaw constant, not a hypothetical attacker value.
+#     - a first-party OpenClaw constant, not a hypothetical attacker value.
 # Deliberately NOT merged into the shared LOOPBACK set: LOOPBACK is also read for a
 # *gateway bind* (B73, EXPOSED_BINDS) where "0.0.0.0" means "listening on every
-# interface" — the opposite of local. These two sets model different questions
+# interface" - the opposite of local. These two sets model different questions
 # ("is this URL's target host local?" vs "is this bind exposed?") over overlapping
 # literals and must stay separate.
 _B178_LOCAL_MODEL_HOSTNAMES = {
     "0.0.0.0", "::", "docker.orb.internal", "host.docker.internal", "host.orb.internal",
 }
 
-# B178 — IPv4/IPv6 ranges that never leave the private network (RFC1918 + link-local +
+# B178 - IPv4/IPv6 ranges that never leave the private network (RFC1918 + link-local +
 # CGNAT + IPv6 ULA). A cleartext http:// baseUrl pointed at one of these can only be
 # intercepted by an on-LAN adversary, not the public Internet, so it is WARN, not FAIL.
 # Grounded against the same dist: selection-JInn13lc.js:10850 isLoopbackOllamaBaseUrl
-# treats 10/8, 172.16/12, 192.168/16 AND 100.64.0.0/10 (CGNAT — the range Tailscale
+# treats 10/8, 172.16/12, 192.168/16 AND 100.64.0.0/10 (CGNAT - the range Tailscale
 # hands out) as local; discovery-shared-XxlmIfaG.js:61-66 isIpv4PrivateRange agrees on
 # 10/8, 172.16/12, 192.168/16. 169.254.0.0/16 (link-local) and fc00::/7 (IPv6 ULA) are
 # RFC1918-equivalent ranges no public router forwards.
@@ -786,8 +1495,8 @@ _B178_PRIVATE_NETS = (
 
 def _b178_classify_host(host: str) -> str:
     """Classify a non-loopback baseUrl host for B178: 'local' (never flagged),
-    'private' (WARN — on-LAN-only exposure, ambiguous with a benign homelab/compose
-    setup), or 'public' (FAIL — a public IP literal or a dotted hostname, which this
+    'private' (WARN - on-LAN-only exposure, ambiguous with a benign homelab/compose
+    setup), or 'public' (FAIL - a public IP literal or a dotted hostname, which this
     static, network-free check cannot distinguish from one that resolves publicly)."""
     if host in _B178_LOCAL_MODEL_HOSTNAMES:
         return "local"
@@ -800,7 +1509,7 @@ def _b178_classify_host(host: str) -> str:
             return "private"
         return "public"
     # A bare single-label hostname (no dot, no colon) is a Docker-Compose-style
-    # sibling-service DNS name (e.g. "ollama") — resolvable only inside the private
+    # sibling-service DNS name (e.g. "ollama") - resolvable only inside the private
     # compose/orchestrator network, never off it. Grounded: selection-JInn13lc.js
     # :10862 isBareProviderHostnameBaseUrl uses the identical no-dot/no-colon test.
     if "." not in host and ":" not in host:
@@ -809,30 +1518,43 @@ def _b178_classify_host(host: str) -> str:
 
 
 def check_provider_baseurl(ctx: Context) -> Finding:
-    """B178 — cleartext http:// baseUrl on a model provider (API-key + traffic leak).
+    """B178 - cleartext http:// baseUrl on a model provider (API-key + traffic leak).
 
-    Grounded: ModelProviderSchema.baseUrl (zod-schema.core-DviqqtPj.js) — a real,
+    Grounded: ModelProviderSchema.baseUrl (zod-schema.core-DviqqtPj.js) - a real,
     optional, per-provider field B155 never reads. Dual-use: a custom https:// baseUrl
     (self-hosted gateway) is indistinguishable from an attacker repoint and is NEVER
-    flagged — only cleartext http:// is a signal at all, and even then only to a host
+    flagged - only cleartext http:// is a signal at all, and even then only to a host
     this check can't place on the local machine or the private network.
 
-    FAIL — a provider's baseUrl is http:// to a host that is neither loopback, nor a
+    FAIL - a provider's baseUrl is http:// to a host that is neither loopback, nor a
            local-model hostname OpenClaw's own runtime treats as the local machine
            (0.0.0.0, ::, *.docker.internal / *.orb.internal), nor a private/CGNAT/
            link-local IP literal, nor a bare single-label hostname (e.g. a Docker-
-           Compose sibling service) — i.e. a public IP or a dotted hostname.
-    WARN  — a provider's baseUrl is http:// to a private-range IP or a bare hostname:
+           Compose sibling service) - i.e. a public IP or a dotted hostname.
+    WARN  - a provider's baseUrl is http:// to a private-range IP or a bare hostname:
            only an on-LAN adversary could intercept it, and the dominant real-world
            instance of this shape (a local Ollama/LM Studio runtime) carries no API
-           key to leak in the first place — this check cannot tell that apart from a
+           key to leak in the first place - this check cannot tell that apart from a
            credentialed corporate LiteLLM gateway on the same LAN, so it stays WARN.
-    PASS — every configured baseUrl (if any) is https://, loopback, or a recognized
+    PASS - every configured baseUrl (if any) is https://, loopback, or a recognized
            local-model hostname, or none is set (bundled provider default, https).
-    UNKNOWN — openclaw.json could not be parsed.
+    UNKNOWN - openclaw.json could not be parsed.
     """
     if (f := _config_unreadable("B178", ctx)) is not None:
         return f
+    # B-661: `_config_unreadable` only covers "present but unparseable" - on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so `dig(ctx.config, "models.providers")` would silently resolve to None
+    # and fall through to the PASS about a config nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B178",
+            UNKNOWN,
+            "No config was read, so whether any model provider baseUrl uses a "
+            "cleartext http:// endpoint could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
     from ..logsafe import sanitize_url_host_only  # noqa: PLC0415
 
     providers = dig(ctx.config, "models.providers")
@@ -861,21 +1583,21 @@ def check_provider_baseurl(ctx: Context) -> Finding:
             if classification == "private":
                 warns.append(
                     f"models.providers.{pid}.baseUrl uses plain http:// to a private-"
-                    f"network host ({shown}) — unencrypted, but only reachable from "
+                    f"network host ({shown}) \u2014 unencrypted, but only reachable from "
                     "the local network; if this provider requires an API key, that "
                     "key would still be visible to any on-LAN observer"
                 )
                 continue
             fails.append(
                 f"models.providers.{pid}.baseUrl uses plain http:// to a non-loopback, "
-                f"non-private host ({shown}) — the provider API key and "
+                f"non-private host ({shown}) \u2014 the provider API key and "
                 "the full outbound model stream travel in cleartext"
             )
 
     if fails:
         return _finding(
             "B178", FAIL, "; ".join(fails),
-            "Point models.providers.<id>.baseUrl at an https:// endpoint — a cleartext "
+            "Point models.providers.<id>.baseUrl at an https:// endpoint \u2014 a cleartext "
             "http:// baseUrl exposes the provider API key (Authorization header) and "
             "the entire model stream to network interception. A self-hosted/private "
             "proxy or gateway with valid TLS (https://) is fine.",
@@ -885,7 +1607,7 @@ def check_provider_baseurl(ctx: Context) -> Finding:
         return _finding(
             "B178", WARN, "; ".join(warns),
             "If this baseUrl is a local model runtime (Ollama/LM Studio/vLLM) or an "
-            "internal gateway on your LAN, http:// is standard practice for it — no "
+            "internal gateway on your LAN, http:// is standard practice for it \u2014 no "
             "action needed. If it carries a real credential, prefer https:// or keep "
             "it behind a network you trust.",
             evidence=warns,
@@ -899,6 +1621,503 @@ def check_provider_baseurl(ctx: Context) -> Finding:
     )
 
 
+def _otel_undeterminable(cid: str, path: str, value: object, expected: str) -> Finding:
+    """Shared UNKNOWN shape for B365's malformed-container branches - same reasoning as
+    B82's ``_b82_undeterminable`` (this module): ``diagnostics``/``diagnostics.otel`` are
+    declared inside ``.strict()`` zod objects (``DiagnosticsConfigSchema``,
+    zod-schema-DN2u5FdA.mjs:1281-1315) with no ``.nullable()`` anywhere, so a malformed
+    shape means the config does not load at all and the real state cannot be determined
+    from this file - UNKNOWN, never an affirmative claim in either direction.
+    """
+    return _finding(
+        cid,
+        UNKNOWN,
+        f"{path} is present but is not {expected}, so whether OpenTelemetry export is "
+        "active cannot be determined. OpenClaw declares it inside a strict schema and "
+        "rejects the whole config at load time when the shape is wrong, so the running "
+        "agent is not using what this file says.",
+        f"Set {path} to {expected}, or remove it entirely to take the built-in default, "
+        "then re-run the audit.",
+        evidence=[f"{path}={value!r} (expected {expected})"],
+    )
+
+
+def check_otel_content_capture_egress(ctx: Context) -> Finding:
+    """B365 (C-412) - diagnostics.otel content capture ships raw agent turns off-host.
+
+    Grounded against the INSTALLED dist (openclaw@2026.9.3), not the filed task's stub.
+
+    Schema (zod-schema-Q1KXOooO.mjs:1258-1279) - diagnostics.otel is a strictObject with
+    enabled/endpoint/tracesEndpoint/metricsEndpoint/logsEndpoint/protocol/headers/
+    serviceName/metricNamePrefix/traces/metrics/logs/logsExporter/sampleRate/
+    flushIntervalMs/captureContent. captureContent is ``boolean().optional()`` - NOT the
+    granular {enabled, inputMessages, outputMessages, toolInputs, toolOutputs,
+    systemPrompt, toolDefinitions} object the filed stub described. That granular shape
+    is retired: legacy-fR_P797G.mjs's migrateFinalLayoutKills collapses any old
+    object-shaped captureContent to a plain boolean on every config load ("Collapsed
+    diagnostics.otel.captureContent to a boolean."), so a check keyed on the sub-fields
+    would silently never fire on a current install.
+
+    The real runtime gate - resolveDiagnosticModelContentCapturePolicy
+    (dist/worker/worker.mjs), EXECUTED by tracing its body, not inferred from the schema
+    description - is a conjunction of FOUR keys, not just captureContent::
+
+        if (!diagnostics || diagnostics.enabled === false) -> no capture
+        if (!otel || otel.enabled !== true || otel.traces === false) -> no capture
+        else: captureContent === true -> capture ALL of {inputMessages, outputMessages,
+              toolInputs, toolOutputs, toolDefinitions, anyModelContent}; systemPrompt is
+              HARDCODED false regardless of captureContent - never captured.
+
+    So content capture requires diagnostics.enabled not-false AND otel.enabled===true
+    AND otel.traces not-false AND otel.captureContent===true. Reading only captureContent
+    (the stub's own proposed WARN condition) would false-positive on otel.enabled left
+    unset/false - a real, plausible shape (captureContent set while experimenting, otel
+    itself never turned on).
+
+    Reachability reuses B178's classify-host idiom verbatim (this module,
+    _b178_classify_host) rather than a second copy. Content capture piggybacks on the
+    TRACE signal specifically (the gate checks otel.traces, not .metrics/.logs), so the
+    destination is tracesEndpoint if set, else the shared endpoint - per-signal-overrides
+    -shared is grounded from the schema descriptions map (schema-CwAIqZVE.mjs:937,
+    2026.9.5: "diagnostics.otel.tracesEndpoint": "... overrides diagnostics.otel.endpoint
+    and OTEL_EXPORTER_OTLP_ENDPOINT for trace export only."). Neither set -> the exporter
+    falls back to the standard OTEL_EXPORTER_OTLP_ENDPOINT environment variable, which
+    this config-only audit cannot observe (no on-disk dotenv witness the way
+    B82/OPENCLAW_CACHE_TRACE has) - reported as WARN with the gap disclosed, never an
+    assumed-safe PASS (Golden Rule #4) or a fabricated FAIL.
+
+    otel.headers (record<string,string>) carries the collector's own auth (e.g.
+    Authorization: Bearer ...). This is NOT already covered by the generic secret-at-rest
+    walk (checks/_shared._secret_paths): that walk keys on the DICT KEY matching
+    SECRET_KEY_RE (password/secret/token/api-key/bottoken), but an operator-chosen header
+    name like "Authorization" never matches it - a real blind spot distinct from the
+    C-412 task's own "do NOT re-file" note (which is about top-level fields literally
+    NAMED ...Secret/...Token, not an arbitrary header map). So this check scans header
+    VALUES for a real inline secret independent of key name, reusing the same
+    _pattern_hits_real_secret / SECRET_PATTERNS / _is_secret_reference machinery B1/C015
+    already use - never echoing the value itself.
+
+    WARN  - otel.enabled is True and a header value looks like a real inline secret
+            (independent of capture), OR content capture is active (see gate above) and
+            the effective destination is loopback / a private-range or bare-hostname
+            http:// target / any https:// target / unresolvable (no endpoint configured
+            at all - env-var fallback, not observable).
+    FAIL  - content capture is active AND the effective destination is a definite
+            public/unrecognized plain http:// host - raw agent turns (tool
+            inputs/outputs, full messages) travel in cleartext to a host reachable from
+            anywhere.
+    PASS  - content capture is not active (any one of the four gate keys fails) and no
+            header carries an inline secret.
+    UNKNOWN - unread config, or diagnostics/diagnostics.otel present but not an object
+              (both live inside .strict() zod objects, so a malformed shape means the
+              config does not load and the real state cannot be determined), or
+              enabled/traces/captureContent present but not booleans.
+    """
+    unreadable = _config_unreadable("B365", ctx)
+    if unreadable is not None:
+        return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" - on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so the coercion below would silently treat an UNREAD config the same as
+    # one that explicitly leaves diagnostics.otel unset and fall through to a PASS
+    # about a config nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B365",
+            UNKNOWN,
+            "No config was read, so whether diagnostics.otel ships raw agent turn "
+            "content off-host could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+    from ..logsafe import sanitize_url_host_only  # noqa: PLC0415
+
+    cfg = ctx.config
+
+    # Hand-walked, not dig(): dig() collapses "key absent" and "key present but
+    # malformed" to the same None, and here those two states have OPPOSITE verdicts -
+    # same reasoning as B82's check_cachetrace_redaction (this module).
+    diagnostics = cfg.get("diagnostics")
+    if "diagnostics" in cfg and not isinstance(diagnostics, dict):
+        return _otel_undeterminable("B365", "diagnostics", diagnostics, "a JSON object")
+    otel = diagnostics.get("otel") if isinstance(diagnostics, dict) else None
+    if isinstance(diagnostics, dict) and "otel" in diagnostics and not isinstance(otel, dict):
+        return _otel_undeterminable("B365", "diagnostics.otel", otel, "a JSON object")
+
+    diag_enabled = diagnostics.get("enabled") if isinstance(diagnostics, dict) else None
+    if diag_enabled is not None and not isinstance(diag_enabled, bool):
+        return _otel_undeterminable("B365", "diagnostics.enabled", diag_enabled, "a boolean")
+    otel_enabled = otel.get("enabled") if isinstance(otel, dict) else None
+    if otel_enabled is not None and not isinstance(otel_enabled, bool):
+        return _otel_undeterminable(
+            "B365", "diagnostics.otel.enabled", otel_enabled, "a boolean"
+        )
+    otel_traces = otel.get("traces") if isinstance(otel, dict) else None
+    if otel_traces is not None and not isinstance(otel_traces, bool):
+        return _otel_undeterminable("B365", "diagnostics.otel.traces", otel_traces, "a boolean")
+    capture = otel.get("captureContent") if isinstance(otel, dict) else None
+    if capture is not None and not isinstance(capture, bool):
+        return _otel_undeterminable(
+            "B365", "diagnostics.otel.captureContent", capture, "a boolean"
+        )
+
+    capture_active = (
+        diag_enabled is not False
+        and otel_enabled is True
+        and otel_traces is not False
+        and capture is True
+    )
+
+    header_secrets: list[str] = []
+    if isinstance(otel, dict) and otel_enabled is True:
+        headers = otel.get("headers")
+        if isinstance(headers, dict):
+            for hname, hval in headers.items():
+                if isinstance(hval, str) and _pattern_hits_real_secret(SECRET_PATTERNS, hval):
+                    header_secrets.append(
+                        f"diagnostics.otel.headers.{hname} looks like an inline secret, "
+                        "not a ${ENV} reference"
+                    )
+
+    is_fail = False
+    capture_notes: list[str] = []
+    if capture_active:
+        endpoint = otel.get("tracesEndpoint") or otel.get("endpoint")
+        if isinstance(endpoint, str) and endpoint.strip():
+            try:
+                parsed = urlparse(endpoint.strip())
+            except (ValueError, AttributeError):
+                parsed = None
+            host = (parsed.hostname or "").lower() if parsed else ""
+            scheme = (parsed.scheme or "").lower() if parsed else ""
+            shown = sanitize_url_host_only(endpoint)
+            if scheme == "http" and host and host not in LOOPBACK and not host.startswith("127."):
+                classification = _b178_classify_host(host)
+                if classification == "public":
+                    is_fail = True
+                    capture_notes.append(
+                        f"the trace destination ({shown}) is plain http:// to a "
+                        "non-loopback, non-private host \u2014 full model turns (tool "
+                        "inputs/outputs, messages) travel in cleartext to a host "
+                        "reachable from anywhere"
+                    )
+                elif classification == "private":
+                    capture_notes.append(
+                        f"the trace destination ({shown}) is plain http:// to a "
+                        "private-network host \u2014 only an on-LAN observer could "
+                        "intercept the captured turns"
+                    )
+                else:
+                    capture_notes.append(
+                        f"full model turns are shipped to a local collector ({shown})"
+                    )
+            else:
+                capture_notes.append(
+                    "full model turns (tool inputs/outputs, messages) are shipped to "
+                    f"{shown}"
+                )
+        else:
+            capture_notes.append(
+                "captureContent is on but no diagnostics.otel.tracesEndpoint or "
+                ".endpoint is configured \u2014 OpenTelemetry falls back to the standard "
+                "OTEL_EXPORTER_OTLP_ENDPOINT environment variable, whose value this "
+                "audit cannot observe from the config file alone"
+            )
+
+    all_notes = capture_notes + header_secrets
+    if not all_notes:
+        return _finding(
+            "B365", PASS,
+            "OpenTelemetry content capture is not active (diagnostics.otel is not "
+            "fully enabled, traces are off, or captureContent is not set), and no "
+            "diagnostics.otel.headers value looks like an inline secret.",
+            "If you enable diagnostics.otel.captureContent, it also needs "
+            "diagnostics.enabled, diagnostics.otel.enabled and traces not disabled to "
+            "actually capture anything \u2014 an unset otel.enabled leaves captureContent "
+            "inert.",
+        )
+
+    if is_fail:
+        return _finding(
+            "B365", FAIL, "; ".join(all_notes),
+            "Point diagnostics.otel.tracesEndpoint (or .endpoint) at an https:// "
+            "collector, or turn off diagnostics.otel.captureContent \u2014 a cleartext "
+            "http:// trace sink exposes every captured model turn to network "
+            "interception.",
+            evidence=all_notes,
+        )
+
+    return _finding(
+        "B365", WARN, "; ".join(all_notes),
+        "Review whether OpenTelemetry content capture is intentional \u2014 it ships full "
+        "model turns (tool inputs/outputs, messages; never the system prompt) to the "
+        "configured collector. Prefer an https:// collector, and move any "
+        "diagnostics.otel.headers auth value to a ${ENV} reference instead of a "
+        "literal.",
+        evidence=all_notes,
+    )
+
+
+def check_memory_search_remote_egress(ctx: Context) -> Finding:
+    """B366 (C-412) - memory.search.remote sends every embedded memory chunk to a
+    configured third-party endpoint.
+
+    Grounded against the INSTALLED dist (openclaw@2026.9.3), not the filed task's stub:
+    the real config path is ``memory.search.remote.{baseUrl,apiKey,headers,
+    batch.enabled}`` (zod-schema.agent-runtime-BigQghiZ.mjs:514-558, MemorySearchSchema -
+    the sibling of MemorySchema.search at zod-schema-Q1KXOooO.mjs:517-524), NOT
+    ``agents.defaults.memorySearch.remote.*`` as filed: the leaf name is ``memorySearch``
+    nowhere in the current schema (it is ``memory.search``), and ``remote`` is not
+    reachable under ``agents.defaults`` at all - AgentDefaultsSchema
+    (zod-schema-Q1KXOooO.mjs:137ff) has no ``memory`` key (only an unrelated
+    ``memoryFlush``). ``memory.search`` exists at TWO scopes instead: the config ROOT
+    (global default, MemorySchema) and PER-AGENT (AgentEntrySchema.memory.search,
+    zod-schema.agent-runtime-BigQghiZ.mjs:628) - reached via
+    ``agents.entries.<id>.memory.search.remote.*`` in the current record-based roster
+    shape, or the legacy ``agents.list[].memory.search.remote.*`` array shape; both are
+    read through the shared ``agent_roster()`` (collector.py, B-699) rather than a
+    second per-agent-shape reader.
+
+    This check does not need the roster's merge precedence between the two scopes (the
+    "AND vs REPLACE" question that mattered for B363's crossContext, or toolgrant.py's
+    profile+alsoAllow coalesce) - it evaluates the global scope and each agent's own
+    scope INDEPENDENTLY. Whichever scope actually sets remote.baseUrl is the one that
+    fires an HTTP call from that scope at runtime, so checking both sources directly is
+    sufficient and does not depend on tracing the runtime's merge function for this
+    field.
+
+    Reachability mirrors B178's classify-host idiom exactly (this module,
+    _b178_classify_host) - reused, not re-implemented. Unlike B178, remote.apiKey is NOT
+    separately flagged here for being a literal secret: its key name matches
+    SECRET_KEY_RE (api[_-]?key) and it is already swept into B1's generic
+    _secret_paths() walk over the whole config, gated on file permissions the same way
+    every other config-embedded secret is. This check's job is narrower and additive -
+    the baseUrl's EGRESS shape (does a credentialed embedding request leave in
+    cleartext to a host off this machine) - so it discloses apiKey's mere PRESENCE as
+    context (a credential travels with the request) without re-judging the value.
+
+    FAIL  - a remote.baseUrl (global or any agent's) is plain http:// to a definite
+            public/unrecognized host - every embedded memory chunk, and any configured
+            apiKey, travels in cleartext to a host reachable from anywhere.
+    WARN  - a remote.baseUrl is plain http:// to a private-range IP or a bare hostname
+            (on-LAN-only exposure), matching B178's WARN bar for the identical shape.
+    PASS  - no remote.baseUrl is set anywhere, or every one set is https:// / loopback /
+            a recognized local-model hostname.
+    UNKNOWN - unread config.
+    """
+    unreadable = _config_unreadable("B366", ctx)
+    if unreadable is not None:
+        return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" - on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so the coercion below would silently treat an UNREAD config the same as
+    # one with no memory.search.remote set anywhere and fall through to the PASS
+    # about a config nobody read. The docstring already promised "UNKNOWN - unread
+    # config"; this makes the code do it.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B366",
+            UNKNOWN,
+            "No config was read, so whether memory.search.remote sends embedded "
+            "memory chunks off-host could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+    from ..logsafe import sanitize_url_host_only  # noqa: PLC0415
+
+    cfg = ctx.config
+
+    sources: list[tuple[str, dict]] = []
+    global_remote = dig(cfg, "memory.search.remote")
+    if isinstance(global_remote, dict):
+        sources.append(("memory.search.remote", global_remote))
+    for agent in agent_roster(cfg):
+        agent_remote = dig(agent.entry, "memory.search.remote")
+        if isinstance(agent_remote, dict):
+            name = agent.entry.get("name") or agent.id or agent.index
+            sources.append((f"{agent.labelled(name)}.memory.search.remote", agent_remote))
+
+    fails: list[str] = []
+    warns: list[str] = []
+    for label, remote in sources:
+        base_url = remote.get("baseUrl")
+        if not isinstance(base_url, str) or not base_url.strip():
+            continue
+        try:
+            parsed = urlparse(base_url.strip())
+        except (ValueError, AttributeError):
+            continue
+        host = (parsed.hostname or "").lower()
+        if (parsed.scheme or "").lower() != "http" or not host:
+            continue
+        if host in LOOPBACK or host.startswith("127."):
+            continue
+        classification = _b178_classify_host(host)
+        if classification == "local":
+            continue
+        shown = sanitize_url_host_only(base_url)
+        api_key = remote.get("apiKey")
+        has_key = isinstance(api_key, (str, dict)) and bool(api_key)
+        key_note = (
+            " (remote.apiKey is also configured \u2014 that credential travels with it)"
+            if has_key else ""
+        )
+        if classification == "private":
+            warns.append(
+                f"{label}.baseUrl uses plain http:// to a private-network host "
+                f"({shown}){key_note} \u2014 every embedded memory chunk is reachable to "
+                "an on-LAN observer"
+            )
+            continue
+        fails.append(
+            f"{label}.baseUrl uses plain http:// to a non-loopback, non-private host "
+            f"({shown}){key_note} \u2014 every embedded memory chunk (and any configured "
+            "credential) travels in cleartext"
+        )
+
+    if fails:
+        return _finding(
+            "B366", FAIL, "; ".join(fails),
+            "Point memory.search.remote.baseUrl (global or per-agent) at an https:// "
+            "endpoint \u2014 memory indexing embeds and sends every stored memory chunk to "
+            "this host, so a cleartext http:// target exposes user content and any "
+            "configured remote.apiKey to network interception.",
+            evidence=fails + warns,
+        )
+    if warns:
+        return _finding(
+            "B366", WARN, "; ".join(warns),
+            "If this is a local/self-hosted embedding gateway on your LAN, http:// is "
+            "standard practice \u2014 no action needed. If it carries a real credential or "
+            "leaves the LAN, prefer https:// or keep it behind a network you trust.",
+            evidence=warns,
+        )
+    return _finding(
+        "B366", PASS,
+        "No memory.search.remote.baseUrl (global or per-agent) uses a cleartext "
+        "http:// endpoint to a public/unrecognized host.",
+        "Keep any custom memory.search.remote.baseUrl on https:// (loopback and "
+        "local-model http:// targets are not flagged).",
+    )
+
+
+def check_secrets_egress_proxy(ctx: Context) -> Finding:
+    """B387 (F-196) - secrets.egressProxy traffic-allowlist gap.
+
+    ``secrets.egressProxy`` (new in OpenClaw 2026.8.1; re-grounded here against the
+    installed 2026.9.5 dist and unchanged) is a loopback HTTP(S) forward proxy OpenClaw
+    injects into Gateway-hosted agent exec environments (``HTTPS_PROXY``/``HTTP_PROXY``,
+    per-run Basic-auth credentials) that substitutes an ``oc-sent-v2...end`` sentinel for
+    a real secret value, but only toward the destination host(s) that secret is bound to
+    (``openclaw secrets store set NAME --allow-host HOST``). Schema:
+    ``SecretsConfigSchema`` (`dist/zod-schema.core-CZ0zDyHR.mjs:326-339`) -
+    ``{enabled?: boolean, allowedHosts?: string[], bypassHosts?: string[]}.strict()``,
+    all optional, default ``enabled: false``. Off by default is not a gap (Golden
+    Rule #5: absence of an opt-in feature is never a FAIL).
+
+    ``allowedHosts`` and ``bypassHosts`` both validate through the SAME
+    ``EgressProxyExactHostSchema`` (same file, lines 329-330), which calls
+    ``normalizeExactAllowedHost`` (`dist/exact-hostname-B5MIU7_E.mjs`) and REJECTS any
+    entry containing ``*`` at config-load time: "Allowed host ... cannot contain a
+    wildcard; use one exact hostname." The filed task asked whether an unscoped wildcard
+    in ``bypassHosts`` was itself the FAIL-worthy shape, the way other allowlist checks
+    in this module (e.g. ``check_browser_ssrf``) treat one - it is not: the schema makes
+    that value impossible to persist through ``openclaw config set``, and a hand-edited
+    config carrying it would fail the SAME validation on the next config load, so this
+    check does not look for one.
+
+    What the vendor docs (`docs/gateway/secrets/secret-store-and-egress.md`, re-read
+    against 2026.9.5) actually describe is the OPPOSITE of the "empty allowlist is wide
+    open" shape several sibling checks in this module use for THEIR allowlists: "An
+    empty array is lockdown mode: only per-secret bound hosts and bypassHosts remain
+    reachable. Omitting allowedHosts leaves traffic unrestricted." So
+    ``allowedHosts: []`` is the MOST restrictive setting here, not the least - the real
+    gap is ``allowedHosts`` being ABSENT while the proxy is enabled, which leaves
+    non-sentinel traffic through the proxy unrestricted: any host, once a Gateway-hosted
+    run holds proxy credentials. Per-secret destination binding still protects the bound
+    secret VALUES either way; this check is only about that separate traffic surface,
+    which the vendor's own docs call "defense in depth" (a subprocess that ignores the
+    proxy environment variables and opens a raw socket bypasses it entirely) - which is
+    why this stays WARN-only and never escalates to FAIL.
+
+    PASS    - ``enabled`` is not ``true`` (the default; nothing runs, nothing to
+              assess), OR ``enabled: true`` and ``allowedHosts`` is a list (empty =
+              lockdown, non-empty = scoped - either way the vendor's own semantics call
+              this restricted).
+    WARN    - ``enabled: true`` and ``allowedHosts`` is absent, ``null``, or any other
+              non-list shape (a shape the real ``array().optional()`` schema would also
+              refuse, so it never enacts a restriction either) - the proxy's traffic
+              allowlist is not in effect.
+    UNKNOWN - config unreadable.
+    """
+    unreadable = _config_unreadable("B387", ctx)
+    if unreadable is not None:
+        return unreadable
+    # B-661: without this guard an unread config reads as `enabled is not True` and
+    # returns the "not enabled (the default)" PASS -- a fail-open, since the real
+    # config on that host may well have the proxy on with no allowlist. Same shape as
+    # checks/_config.py's own config_found guards.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B387", UNKNOWN,
+            "No config was read, so whether secrets.egressProxy is enabled -- and "
+            "whether its traffic allowlist is set -- could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+
+    cfg = ctx.config
+    enabled = dig(cfg, "secrets.egressProxy.enabled")
+
+    if enabled is not True:
+        return _finding(
+            "B387", PASS,
+            "secrets.egressProxy is not enabled (the default) \u2014 no secret-egress "
+            "substitution proxy runs for Gateway-hosted agent exec, so there is no "
+            "proxy traffic allowlist to assess.",
+            "If you enable secrets.egressProxy, also set "
+            "secrets.egressProxy.allowedHosts so non-sentinel proxy traffic is "
+            "restricted to the hosts this workload actually needs, instead of left "
+            "open.",
+            config_field_paths=frozenset({"secrets.egressProxy.enabled"}),
+        )
+
+    allowed_hosts = dig(cfg, "secrets.egressProxy.allowedHosts")
+
+    if not isinstance(allowed_hosts, list):
+        return _finding(
+            "B387", WARN,
+            "secrets.egressProxy.enabled is true but secrets.egressProxy.allowedHosts "
+            "is not set. OpenClaw's own default then applies: non-sentinel traffic "
+            "through the secret-egress proxy can reach any host once a Gateway-hosted "
+            "agent run holds proxy credentials. Secrets bound to a specific host via "
+            "the store stay protected either way \u2014 this is about the separate traffic "
+            "surface.",
+            "Set secrets.egressProxy.allowedHosts to the exact hosts this workload "
+            "needs (an empty array locks down everything not already bound to a "
+            "secret). Treat this as defense in depth alongside per-secret "
+            "--allow-host binding, since a subprocess that ignores the proxy "
+            "environment variables bypasses the allowlist entirely.",
+            evidence=[f"secrets.egressProxy.allowedHosts={allowed_hosts!r}"],
+            config_field_paths=frozenset({
+                "secrets.egressProxy.enabled", "secrets.egressProxy.allowedHosts",
+            }),
+        )
+
+    return _finding(
+        "B387", PASS,
+        "secrets.egressProxy is enabled and secrets.egressProxy.allowedHosts is set, "
+        "so non-sentinel proxy traffic is restricted to the declared hosts (an empty "
+        "list locks it down to nothing but per-secret bound hosts).",
+        "Keep secrets.egressProxy.allowedHosts scoped to only the hosts this "
+        "workload needs.",
+        evidence=[f"secrets.egressProxy.allowedHosts={allowed_hosts!r}"],
+        config_field_paths=frozenset({
+            "secrets.egressProxy.enabled", "secrets.egressProxy.allowedHosts",
+        }),
+    )
+
+
 def _b82_undeterminable(path: str, value: object, expected: str) -> Finding:
     """B82's single UNKNOWN shape, shared by all three malformed levels.
 
@@ -907,7 +2126,7 @@ def _b82_undeterminable(path: str, value: object, expected: str) -> Finding:
     uses ``.optional()`` with **zero** ``.nullable()`` anywhere, so an explicit ``null``
     is rejected exactly like a string or a list. A config carrying any of these shapes
     does not load at all, which makes the agent's real cache-trace state undeterminable
-    from the file — UNKNOWN, never an affirmative claim in either direction.
+    from the file - UNKNOWN, never an affirmative claim in either direction.
     """
     return _finding(
         "B82",
@@ -933,24 +2152,32 @@ def _b82_env_override(ctx: Context) -> "Finding | None":
 
     so the environment genuinely WINS over the config. Before B-282, B82 read only the
     config and therefore stated affirmatively that transcripts "are not being appended to
-    disk" while OpenClaw was appending them on every turn — a lying PASS of exactly the
+    disk" while OpenClaw was appending them on every turn - a lying PASS of exactly the
     class B-262 was filed for. The override has an on-disk, hermetic witness, so this is
     observable rather than the unobservable state the old docstring assumed.
 
     Verdicts:
 
-    * override parses truthy → **WARN**. Not FAIL: the value in a dotenv file applies only
+    * override parses truthy -> **WARN**. Not FAIL: the value in a dotenv file applies only
       on the next agent start and only if nothing already exported the key
       (first-wins, dotenv-global-mWLbBl_z.js:44-46,66).
-    * override parses falsy → **None**; the config PASS is affirmed and strengthened.
-    * override is present but unparseable → **None**. ``parseBooleanValue`` returns
+    * override parses falsy -> **None**; the config PASS is affirmed and strengthened.
+    * override is present but unparseable -> **None**. ``parseBooleanValue`` returns
       undefined for an ambiguous token and the ``??`` chain falls through to the config,
       so the config verdict is the correct one. No heuristic guessing.
     * nothing observed, a global dotenv exists, and the audited home is not this user's own
-      → **UNKNOWN** rather than an affirmative all-clear (Golden Rule #4).
+      -> **UNKNOWN** rather than an affirmative all-clear (Golden Rule #4).
+    * nothing observed, a global dotenv exists, and it exceeded the collector's byte cap
+      (``ctx.dotenv_truncated``) -> **UNKNOWN**, ``engine_degraded=True`` (B-657):
+      OPENCLAW_CACHE_TRACE could sit past the cut, so ``None`` here would let a caller's
+      config-derived PASS stand over content that was never scanned. Gated on
+      ``ctx.dotenv_truncated``, NOT the shared ``limit_hits_for(ctx, LIMIT_DOMAIN_ENV)``
+      (C-135 round 2, A2): ``dotenv_override`` never reads ``ctx.unit_env_values``, so the
+      domain-wide signal - which also fires on a truncated systemd unit this function
+      never touches - would degrade this check over a file it never opened.
 
     A variable exported in the shell of an already-running agent leaves no on-disk trace
-    and is not detectable here — a process boundary, not something a wider read could fix.
+    and is not detectable here - a process boundary, not something a wider read could fix.
     The residual is a false negative, so it cannot trip Golden Rule #5.
     """
     from ..collector import (  # noqa: PLC0415
@@ -974,14 +2201,14 @@ def _b82_env_override(ctx: Context) -> "Finding | None":
                 "Cache-trace diagnostics are switched on by the environment, overriding "
                 "the config. OPENCLAW_CACHE_TRACE is set in a file OpenClaw loads at "
                 "startup, and the environment takes precedence over "
-                "diagnostics.cacheTrace.enabled — so every agent turn appends its prompt, "
+                "diagnostics.cacheTrace.enabled \u2014 so every agent turn appends its prompt, "
                 "system prompt and full message payloads to a JSONL file on disk, "
                 "whatever the config says.",
                 "Remove OPENCLAW_CACHE_TRACE from the dotenv file (or set it to 0) so the "
                 "config's setting is the one that applies. The config alone cannot turn "
                 "this off while the variable is set.",
                 evidence=[
-                    f"OPENCLAW_CACHE_TRACE={raw!r} in {source}",
+                    f"OPENCLAW_CACHE_TRACE={raw!r} in {_detail_path(source, ctx.home)}",
                     f"transcripts written to {where}",
                 ],
             )
@@ -998,13 +2225,46 @@ def _b82_env_override(ctx: Context) -> "Finding | None":
             "here do not settle the question either way.",
             "Run the audit on the machine and account the agent runs as, with no --home "
             "argument, so the environment that actually applies can be read.",
-            evidence=[f"global dotenv present: {', '.join(ctx.dotenv_files)}"],
+            evidence=[
+                "global dotenv present: "
+                + ", ".join(_detail_path(p, ctx.home) for p in ctx.dotenv_files)
+            ],
+        )
+    # B-657: on the common audited-home-is-own path (the branch above only
+    # guards the OTHER-home case), `raw is None` can mean OPENCLAW_CACHE_TRACE sits past
+    # the collector's global-dotenv byte cap, not that it is genuinely unset. Every
+    # caller of this function treats `None` as "no override" and lets a config-derived
+    # PASS stand - which would then claim a clean bill of health over content that was
+    # never scanned.
+    #
+    # C-135 round 2 (A2): gated on ctx.dotenv_truncated, NOT limit_hits_for(ctx,
+    # LIMIT_DOMAIN_ENV) - that domain is shared with systemd-unit truncation, which this
+    # function's only evidence source (dotenv_override, dotenv_values/os.environ only,
+    # never unit_env_values) never reads. Using the domain-wide signal would degrade this
+    # check over a systemd unit it never opened a byte of.
+    if ctx.dotenv_truncated:
+        return _finding(
+            "B82",
+            UNKNOWN,
+            "The config does not switch cache-trace diagnostics on, and no "
+            "OPENCLAW_CACHE_TRACE override was found in the global dotenv file(s) that "
+            "were read \u2014 but at least one of them exceeded the collector's byte cap, so "
+            "an override past the cut would not have been seen. A clean bill of health "
+            "cannot be given over content that was never scanned.",
+            "Keep OpenClaw's global dotenv files (~/.openclaw/.env, "
+            "~/.config/openclaw/gateway.env) under the collector's size cap, then "
+            "re-run the audit.",
+            evidence=[
+                "global dotenv present: "
+                + ", ".join(_detail_path(p, ctx.home) for p in ctx.dotenv_files)
+            ],
+            engine_degraded=True,
         )
     return None
 
 
 def check_cachetrace_redaction(ctx: Context) -> Finding:
-    """B82 — cache-trace diagnostics persist full turn transcripts to disk.
+    """B82 - cache-trace diagnostics persist full turn transcripts to disk.
 
     Grounded against the INSTALLED dist, not the recon:
 
@@ -1017,7 +2277,7 @@ def check_cachetrace_redaction(ctx: Context) -> Finding:
         rejected outright. Reading it made this check's "not configured" branch an
         affirmative FALSE claim for every user who actually HAD cache tracing on.
 
-    The enable gate is ``enabled``, NOT ``filePath`` — ``resolveCacheTraceConfig`` reads::
+    The enable gate is ``enabled``, NOT ``filePath`` - ``resolveCacheTraceConfig`` reads::
 
         enabled = parseBooleanValue(env.OPENCLAW_CACHE_TRACE) ?? config?.enabled ?? false
 
@@ -1025,25 +2285,25 @@ def check_cachetrace_redaction(ctx: Context) -> Finding:
     env.OPENCLAW_CACHE_TRACE_FILE?.trim()``, falling back to
     ``$OPENCLAW_STATE_DIR/logs/cache-trace.jsonl`` when neither is set
     (``selection-JInn13lc.js:1052``). So ``enabled:true`` with no ``filePath`` still
-    writes transcripts — the writer bails only on the flag
-    (``createCacheTrace``: ``if (!cfg.enabled) return null``, ``:1083``) — and
+    writes transcripts - the writer bails only on the flag
+    (``createCacheTrace``: ``if (!cfg.enabled) return null``, ``:1083``) - and
     ``filePath`` set with ``enabled:false`` writes nothing. Keying on ``filePath`` would
     be a false-positive WARN on the latter, which is why the port is deliberately not 1:1.
 
     Redaction here is NOT config-gated: every payload field the trace writes goes through
-    ``redactAgentDiagnosticPayload`` (``selection-JInn13lc.js:828`` —
+    ``redactAgentDiagnosticPayload`` (``selection-JInn13lc.js:828`` -
     ``redactSecrets(sanitizeDiagnosticPayload(...))``), and ``logging.redactSensitive`` is
     never consulted by that module. This check therefore does not claim the sink is
-    unredacted; it reports that a bulk per-turn transcript sink is switched on — which
+    unredacted; it reports that a bulk per-turn transcript sink is switched on - which
     OpenClaw's own schema descriptor flags as something to "enable ... temporarily for
     debugging and disable afterward to reduce sensitive log footprint"
     (``dist/schema-DRyO1XBt.js:104``).
 
-    WARN    — ``diagnostics.cacheTrace.enabled`` is ``true``.
-    PASS    — it is explicitly ``false``, OR unset (the built-in default is ``false``,
+    WARN    - ``diagnostics.cacheTrace.enabled`` is ``true``.
+    PASS    - it is explicitly ``false``, OR unset (the built-in default is ``false``,
               per ``config?.enabled ?? false``). "Unset" means the key, or either
               enclosing container, is genuinely ABSENT.
-    UNKNOWN — ``enabled`` is present but NOT a boolean, or either enclosing container
+    UNKNOWN - ``enabled`` is present but NOT a boolean, or either enclosing container
               (``diagnostics`` / ``diagnostics.cacheTrace``) is present but not an
               object. All three are declared inside ``.strict()`` objects, so such a
               config is rejected at load time and we cannot say what the agent is
@@ -1064,7 +2324,7 @@ def check_cachetrace_redaction(ctx: Context) -> Finding:
     the two global dotenv files OpenClaw loads into ``process.env`` at startup, and this
     tool runs on the same host. Both PASS branches now go through ``_b82_env_override``
     first, and both sentences were softened from the affirmative "transcripts are not
-    being appended to disk" to the claim actually supported by the evidence — that no
+    being appended to disk" to the claim actually supported by the evidence - that no
     override was found where OpenClaw would load one. What remains unobservable is only a
     shell export into an already-running process, which is a process boundary and a false
     NEGATIVE, never a false positive.
@@ -1078,12 +2338,32 @@ def check_cachetrace_redaction(ctx: Context) -> Finding:
     unreadable = _config_unreadable("B82", ctx)
     if unreadable is not None:
         return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" - on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so the coercion below would silently treat an UNREAD config the same as
+    # one that explicitly leaves diagnostics.cacheTrace unset and fall through to a
+    # PASS about a config nobody read (the dotenv-only env-override witness below is
+    # independent of openclaw.json and stays reachable regardless).
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        override = _b82_env_override(ctx)
+        if override is not None:
+            return override
+        return _finding(
+            "B82",
+            UNKNOWN,
+            "No config was read, so whether diagnostics.cacheTrace.enabled switches on "
+            "bulk per-turn transcript logging could not be determined. No "
+            "OPENCLAW_CACHE_TRACE override was found in the files OpenClaw loads at "
+            "startup.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
     cfg = ctx.config if isinstance(ctx.config, dict) else {}
     # Walk the two containers by hand rather than through dig(): dig() collapses "key
     # absent" and "key present but malformed" to the same None, and here those two states
-    # have OPPOSITE verdicts. Absent is the documented default (`?? false` → PASS), while a
+    # have OPPOSITE verdicts. Absent is the documented default (`?? false` -> PASS), while a
     # container of the wrong type is rejected by the .strict() zod object at load time, so
-    # the agent is NOT running this file and its cache-trace state is undeterminable —
+    # the agent is NOT running this file and its cache-trace state is undeterminable -
     # GR#4 requires UNKNOWN there, not an affirmative "unset and defaults to false".
     diagnostics = cfg.get("diagnostics")
     if "diagnostics" in cfg and not isinstance(diagnostics, dict):
@@ -1106,7 +2386,7 @@ def check_cachetrace_redaction(ctx: Context) -> Finding:
             "OPENCLAW_CACHE_TRACE override was found in the files OpenClaw loads at "
             "startup.",
             "Pin diagnostics.cacheTrace.enabled to false so the intent is explicit and "
-            "auditable, and keep the OPENCLAW_CACHE_TRACE environment variable unset — "
+            "auditable, and keep the OPENCLAW_CACHE_TRACE environment variable unset \u2014 "
             "it overrides the config at runtime.",
         )
     enabled = trace_cfg.get("enabled")
@@ -1128,20 +2408,24 @@ def check_cachetrace_redaction(ctx: Context) -> Finding:
         if isinstance(trace_path, str) and trace_path.strip():
             where = f"diagnostics.cacheTrace.filePath={trace_path!r}"
         else:
+            # B-700: on 2026.8.1 `filePath` was removed and the parent holds only
+            # `enabled`, so "unset" is no longer something the user could change.
             where = (
-                "diagnostics.cacheTrace.filePath unset — written to "
-                "$OPENCLAW_CACHE_TRACE_FILE if set, else "
+                ("the trace file location is not configurable on this OpenClaw build"
+                 if _openclaw_generation(ctx) == "modern"
+                 else "diagnostics.cacheTrace.filePath unset")
+                + " \u2014 written to $OPENCLAW_CACHE_TRACE_FILE if set, else "
                 "$OPENCLAW_STATE_DIR/logs/cache-trace.jsonl"
             )
         return _finding(
             "B82",
             WARN,
-            "Cache-trace diagnostics are enabled — every agent turn appends its prompt, "
+            "Cache-trace diagnostics are enabled \u2014 every agent turn appends its prompt, "
             "system prompt and full message payloads to a JSONL file on disk. OpenClaw "
             "redacts known secret patterns from those payloads, but the transcript is "
             "still a bulk record of conversation content at rest.",
             "Set diagnostics.cacheTrace.enabled to false once the debugging session that "
-            "needed it is over — OpenClaw's own schema recommends enabling it only "
+            "needed it is over \u2014 OpenClaw's own schema recommends enabling it only "
             "temporarily. To keep tracing on with a smaller footprint, set "
             "diagnostics.cacheTrace.includeMessages, .includePrompt and .includeSystem "
             "to false so only digests are recorded.",
@@ -1152,6 +2436,14 @@ def check_cachetrace_redaction(ctx: Context) -> Finding:
     )
 
 
+# B-727: appended to B77's WARN when the journal exceeded the scan budget. The evidence
+# found is real either way - truncation never downgrades a WARN - but the count beside it
+# describes a window, not the file.
+_B77_WINDOW_NOTE = (
+    " Only the most recent 1 MB of the log was read, so earlier writes were not scanned."
+)
+
+
 def check_config_audit_log(ctx: Context) -> Finding:
     import json as _json
 
@@ -1160,17 +2452,17 @@ def check_config_audit_log(ctx: Context) -> Finding:
         return _finding(
             "B77",
             UNKNOWN,
-            "config audit log not found — cannot verify config change history.",
+            "config audit log not found \u2014 cannot verify config change history.",
             "Keep the config-io audit log (logs/config-audit.jsonl) enabled so config "
             "writes stay attributable and reviewable.",
         )
     try:
-        raw, _ = _read_jsonl_tail(log_path)
+        raw, truncated = _read_jsonl_tail(log_path)
     except OSError:
         return _finding(
             "B77",
             UNKNOWN,
-            "config audit log present but unreadable — cannot verify config change history.",
+            "config audit log present but unreadable \u2014 cannot verify config change history.",
             "Ensure logs/config-audit.jsonl is readable by the owner.",
         )
 
@@ -1215,11 +2507,27 @@ def check_config_audit_log(ctx: Context) -> Finding:
             WARN,
             f"config-write audit log shows {n} entr{'y' if n == 1 else 'ies'} of concern "
             f"across {total} recorded write(s): suspicious markers and/or writes from an "
-            "unexpected process.",
-            "Review each flagged config write. A write you did not initiate — or one "
-            "carrying a suspicious marker — may indicate config tampering; restore from a "
+            "unexpected process." + (_B77_WINDOW_NOTE if truncated else ""),
+            "Review each flagged config write. A write you did not initiate \u2014 or one "
+            "carrying a suspicious marker \u2014 may indicate config tampering; restore from a "
             "known-good backup and rotate any exposed credentials.",
             evidence=evidence[:10],
+        )
+    if truncated:
+        # B-727: `_read_jsonl_tail` is bounded at `_JSONL_SCAN_CAP` because these journals
+        # reach GB (B-104). The bound is right; claiming completeness over it is not.
+        # "all N recorded config write(s) are clean" was false in both halves on an
+        # over-cap file - `total` counts the window, "all" covers only what was read - so
+        # a write from an unexpected process before the window was reported as absent.
+        # Golden Rule #4: the check cannot determine the file's state, so it says so.
+        return _finding(
+            "B77",
+            UNKNOWN,
+            f"the {total} most recent config write(s) are clean and openclaw-originated, "
+            "but the audit log is larger than this scan's budget and earlier writes were "
+            "not read \u2014 cannot verify the full config change history.",
+            "Review logs/config-audit.jsonl directly for writes older than the most "
+            "recent 1 MB, or rotate it so a full scan fits.",
         )
     return _finding(
         "B77",
@@ -1230,7 +2538,7 @@ def check_config_audit_log(ctx: Context) -> Finding:
 
 
 # ---------------------------------------------------------------------------
-# B78 — Config-health integrity tracker review
+# B78 - Config-health integrity tracker review
 # ---------------------------------------------------------------------------
 def check_config_health_integrity(ctx: Context) -> Finding:
     import json as _json
@@ -1240,7 +2548,7 @@ def check_config_health_integrity(ctx: Context) -> Finding:
         return _finding(
             "B78",
             UNKNOWN,
-            "config-health integrity file not found — cannot evaluate config integrity history.",
+            "config-health integrity file not found \u2014 cannot evaluate config integrity history.",
             "Keep config-health tracking (logs/config-health.json) enabled so OpenClaw can "
             "detect and flag suspicious config states.",
         )
@@ -1250,7 +2558,7 @@ def check_config_health_integrity(ctx: Context) -> Finding:
         return _finding(
             "B78",
             UNKNOWN,
-            "config-health integrity file present but unreadable or malformed — cannot "
+            "config-health integrity file present but unreadable or malformed \u2014 cannot "
             "evaluate config integrity history.",
             "Ensure logs/config-health.json is valid JSON and owner-readable.",
         )
@@ -1260,7 +2568,7 @@ def check_config_health_integrity(ctx: Context) -> Finding:
         return _finding(
             "B78",
             UNKNOWN,
-            "config-health file has no tracked config entries — nothing to evaluate.",
+            "config-health file has no tracked config entries \u2014 nothing to evaluate.",
             "Keep config-health tracking (logs/config-health.json) enabled so OpenClaw can "
             "detect and flag suspicious config states.",
         )
@@ -1279,7 +2587,7 @@ def check_config_health_integrity(ctx: Context) -> Finding:
             "B78",
             WARN,
             f"config integrity alert: {n} tracked config(s) recorded a suspicious signature "
-            "— OpenClaw observed a config state it could not verify as known-good.",
+            "\u2014 OpenClaw observed a config state it could not verify as known-good.",
             "Treat this as possible config tampering: compare the live config against the "
             "last-known-good, restore from a trusted backup if it diverged, and rotate any "
             "credentials that may have been exposed.",
@@ -1295,12 +2603,12 @@ def check_config_health_integrity(ctx: Context) -> Finding:
 
 
 def _other_can_reach_read(home: Path, target: Path) -> bool:
-    """True when a NON-owner — world, or a group with members beyond the owner (UPG-safe, cf.
-    B22/B-189 `_group_has_other_members`) — can BOTH traverse every directory from *home* down
+    """True when a NON-owner - world, or a group with members beyond the owner (UPG-safe, cf.
+    B22/B-189 `_group_has_other_members`) - can BOTH traverse every directory from *home* down
     to *target* AND read *target*.
 
     Path-aware on purpose: a loose (umask-default 0o644/0o664) transcript sealed inside a 0o700
-    home is UNREACHABLE, so it is never a false at-rest exposure — verified on the reference
+    home is UNREACHABLE, so it is never a false at-rest exposure - verified on the reference
     fleet, where ~/.openclaw and the whole agents/ chain are 0o700 even though the nested
     codex-home transcripts are 0o664. POSIX stat-only; never reads content; never raises."""
     try:
@@ -1322,7 +2630,7 @@ def _other_can_reach_read(home: Path, target: Path) -> bool:
         m = st.st_mode
         world_ok = world_ok and bool(m & 0o001)  # o+x to traverse
         # Group leg requires a group KNOWN to have members beyond the owner (`is True`, not
-        # `is not False`). B19 is scored, so a false WARN moves the grade — on a umask-002 UPG
+        # `is not False`). B19 is scored, so a false WARN moves the grade - on a umask-002 UPG
         # box the owning group is a private singleton and membership may be undeterminable
         # (None); treating None as "shared" (as the WRITE check B22 does) would false-WARN
         # every such install. Erring toward NOT flagging on None keeps Golden Rule #5. The
@@ -1353,7 +2661,7 @@ def _collect_atrest_transcripts(home: Path, cap: int = 200) -> list[Path]:
         if len(out) >= cap or not root.is_dir():
             return
         try:
-            for f in root.rglob(pattern):  # generator — early break bounds the walk
+            for f in root.rglob(pattern):  # generator - early break bounds the walk
                 if len(out) >= cap:
                     break
                 try:
@@ -1387,7 +2695,7 @@ def check_data_atrest(ctx: Context) -> Finding:
         return _finding(
             "B19",
             UNKNOWN,
-            "On Windows, file security uses NTFS ACLs, not POSIX mode bits — "
+            "On Windows, file security uses NTFS ACLs, not POSIX mode bits \u2014 "
             "ClawSecCheck can't read those read-only (no extra tools), so this is "
             "UNKNOWN, never a false PASS.",
             "Check the ACLs yourself: `icacls <path>` should not grant write to "
@@ -1432,7 +2740,7 @@ def check_data_atrest(ctx: Context) -> Finding:
     except OSError:
         pass
 
-    # F-120: session transcripts + install-backups (secret/PII at rest). Path-aware — only a
+    # F-120: session transcripts + install-backups (secret/PII at rest). Path-aware - only a
     # file a NON-owner can actually reach AND read counts, so umask-default 0o644/0o664 files
     # sealed inside a 0o700 home never produce a spurious WARN (Golden Rule #5).
     transcripts = _collect_atrest_transcripts(ctx.home)
@@ -1449,7 +2757,7 @@ def check_data_atrest(ctx: Context) -> Finding:
             loose.append(f"{rel} (mode {oct(mode)[-3:]})")
 
     if not loose and not candidates_dirs and not transcripts:
-        return _finding("B19", UNKNOWN, "No memory/log/transcript stores found to inspect.", "—")
+        return _finding("B19", UNKNOWN, "No memory/log/transcript stores found to inspect.", "\u2014")
     if loose:
         joined = "; ".join(loose[:8])
         extra = f" (+{len(loose) - 8} more)" if len(loose) > 8 else ""
@@ -1476,7 +2784,7 @@ def _other_can_reach_write(home: Path, target: Path) -> bool:
     AND write *target*. The write-bit twin of ``_other_can_reach_read`` above, sharing its
     path-awareness: a loose mode sealed inside a 0o700 home is unreachable and therefore not
     an exposure. Group-write counts only when the owning group is KNOWN to have members
-    beyond the owner (UPG-safe — same rule as ``_lifecycle._writable_by_others``, which is
+    beyond the owner (UPG-safe - same rule as ``_lifecycle._writable_by_others``, which is
     the precedent this mirrors; kept local to avoid a cross-topic import, per CLAUDE.md §3).
     POSIX stat-only; never reads content; never raises."""
     try:
@@ -1535,7 +2843,7 @@ def _ancestors_allow_other_access(home: Path, stop: "Path | None" = None) -> boo
     files.
 
     Conservative on ignorance: an ancestor that cannot be stat'ed returns False ("cannot
-    prove reachable"), which suppresses a FAIL rather than inventing one — Golden Rule #4.
+    prove reachable"), which suppresses a FAIL rather than inventing one - Golden Rule #4.
 
     *stop* bounds the walk. Production passes nothing, so the walk runs to the real
     filesystem root; it exists so a test can pin this function against a directory chain it
@@ -1575,8 +2883,106 @@ def _ancestors_allow_other_access(home: Path, stop: "Path | None" = None) -> boo
 _B188_DB_NAMES = ("openclaw.sqlite", "openclaw.sqlite-wal", "openclaw.sqlite-shm")
 
 
+def _b188_collect_state_copies(
+    state_dir: Path, primary_names: "tuple[str, ...]", cap: int = 200
+) -> "tuple[list[Path], bool]":
+    """Bounded, symlink-safe scan for sqlite-shaped files under ``state/`` beyond the
+    primary DB/-wal/-shm trio ``_B188_DB_NAMES`` already covers (C-555). Exists because
+    OpenClaw's own 9.5
+    ``recoverOrphanTaskDeliveryRows`` (dist openclaw-state-db-DS2iNFy4.mjs:3868-3946) drops a
+    FULL copy of the state database under ``state/openclaw-task-delivery-recovery-*/`` at the
+    same 0600/0700 vendor-default modes as the original - a copy is exactly as exposed as its
+    parent chain, and the checks above never looked past the three fixed top-level names.
+    ``cap`` mirrors the 200-file bound ``_collect_atrest_transcripts`` uses for the same
+    reason: a pathological tree must not turn a permission check into an unbounded walk.
+
+    Returns ``(files, listing_failed)``. ``listing_failed`` is True only when the recursive
+    walk itself raised (e.g. a permission-denied subdirectory partway through), which the
+    caller turns into UNKNOWN rather than a silent PASS - Golden Rule #4: a walk that could
+    not complete is not evidence that nothing is there."""
+    out: list[Path] = []
+    if not state_dir.is_dir():
+        return out, False
+    try:
+        for f in state_dir.rglob("*.sqlite*"):
+            if len(out) >= cap:
+                break
+            try:
+                if not f.is_file() or f.is_symlink():
+                    continue
+                if f.parent == state_dir and f.name in primary_names:
+                    continue  # already covered by the primary FAIL-capable check above
+                out.append(f)
+            except OSError:
+                continue
+    except OSError:
+        return out, True
+    return sorted(out), False
+
+
+def _b188_collect_backups(home: Path, cap: int = 200) -> "tuple[list[Path], bool]":
+    """Bounded, symlink-safe scan of ``<home>/backups/**`` - OpenClaw's own pre-repair and
+    migration backup tree (C-555). Distinct from F-120's ``.openclaw-install-backups/**``
+    (covered by B19 above): measured on the reference machine, ``backups/`` holds a full
+    pre-repair ``openclaw.sqlite(.bak)`` trio AND unrelated migration snapshots (e.g.
+    ``heartbeat-migration/*.md``) side by side, so this walks every file under it rather than
+    filtering by name - any of them can be a retained copy of something sensitive, and the
+    directory is a deliberate backup location, not an incidental one. Same cap and
+    listing-failure contract as ``_b188_collect_state_copies``."""
+    out: list[Path] = []
+    backups_dir = home / "backups"
+    if not backups_dir.is_dir():
+        return out, False
+    try:
+        for f in backups_dir.rglob("*"):
+            if len(out) >= cap:
+                break
+            try:
+                if not f.is_file() or f.is_symlink():
+                    continue
+                out.append(f)
+            except OSError:
+                continue
+    except OSError:
+        return out, True
+    return sorted(out), False
+
+
+def _b188_dir_traversable_by_other(home: Path, target_dir: Path) -> bool:
+    """True when a non-owner can traverse every directory from *home* down INTO *target_dir*
+    itself (needs *target_dir*'s own o+x-or-known-shared-g+x bit too, unlike the chain-only
+    leg in ``_other_can_reach_read`` above, which stops one level short because it already
+    has a specific file to test). Used only to decide whether an un-listable directory's
+    UNKNOWN contents could actually matter - if *target_dir* is not reachable at all, its
+    contents are moot regardless of whether they could be enumerated. POSIX stat-only; never
+    raises."""
+    try:
+        rel = target_dir.relative_to(home)
+    except ValueError:
+        return False
+    chain: list[Path] = [home]
+    cur = home
+    for part in rel.parts:
+        cur = cur / part
+        chain.append(cur)
+    world_ok = True
+    group_ok = True
+    for d in chain:
+        try:
+            st = d.stat()
+        except OSError:
+            return False
+        m = st.st_mode
+        world_ok = world_ok and bool(m & 0o001)
+        grp_other = _shared._group_has_other_members(st.st_gid, st.st_uid)
+        group_ok = group_ok and bool(m & 0o010) and (grp_other is True)
+        if not world_ok and not group_ok:
+            return False
+    return True
+
+
 def check_state_db_atrest(ctx: Context) -> Finding:
-    """B188 (B-293, DISK-2) — the shared state SQLite database's at-rest permissions.
+    """B188 (B-293, DISK-2) - the shared state SQLite database's at-rest permissions.
 
     ~/.openclaw/state/openclaw.sqlite stores raw secrets at rest. Verified as real
     ``CREATE TABLE`` statements in the dist's OPENCLAW_STATE_SCHEMA_SQL
@@ -1585,25 +2991,25 @@ def check_state_db_atrest(ctx: Context) -> Finding:
     plus ``device_bootstrap_tokens.token``, ``apns_registrations.token`` and
     ``auth_profile_stores.store_json``. A backup/rsync/umask slip that leaves the file
     group- or world-readable lets another local account read a paired device's private key
-    and forge control-plane auth — and before this check, EVERY ClawSecCheck permission
+    and forge control-plane auth - and before this check, EVERY ClawSecCheck permission
     check passed over it, because none of them stat'ed the state DB. B19 above covers
     workspace memory/logs, bare *.log files and F-120 transcripts/backups; ``state/`` was
     absent from every leg. B11 reads only ``ctx.config_mode``, i.e. openclaw.json's mode
     alone. B182 is the closest precedent but enumerates only ClawHub CLI token stores.
 
-    SCOPE HONESTY — this is a conventional at-rest FILE-PERMISSION check, closable by a
+    SCOPE HONESTY - this is a conventional at-rest FILE-PERMISSION check, closable by a
     static ``stat()``. It is NOT runtime modelling, and it does NOT mine the state DB: the
     database is never opened here, so no secret is ever read, echoed or redacted (§8).
     Mining the DB's behavioural tables is a separate, larger question and is not what this
     check does.
 
-    SEVERITY HONESTY — the dominant reachability gate (the parent directory's mode) IS
+    SEVERITY HONESTY - the dominant reachability gate (the parent directory's mode) IS
     partially watched by OpenClaw's own audit when the native fold-in runs
     (``fs.state_dir.perms_readable``, audit-UjVvFwCi.js:477-489), and OpenClaw creates the
     chain at 0700 itself. So the strongest justification for this check is defence-in-depth
     plus grade participation, not an unguarded hole. Two real gaps remain: native resolves
     ``params.stateDir`` to ``~/.openclaw`` (the ROOT), so it checks the parent gate and never
-    the ``state/`` subdir or the DB file itself; and it misses x-without-r chains — a 0711
+    the ``state/`` subdir or the DB file itself; and it misses x-without-r chains - a 0711
     ``~/.openclaw`` is traversable but not readable, so native stays silent while a 0644
     ``openclaw.sqlite`` at a known fixed filename is fully readable by any local user.
     Native findings are also excluded from the score, and native is ``status=skipped``
@@ -1611,26 +3017,36 @@ def check_state_db_atrest(ctx: Context) -> Finding:
 
     REACHABILITY IS PROVEN, NOT ASSUMED. Loose mode bits inside ~/.openclaw are only an
     exposure if a non-owner can traverse down to them, and that depends on the directory
-    chain ABOVE ~/.openclaw too — a 0700 $HOME (the Fedora/RHEL/Arch default) seals
+    chain ABOVE ~/.openclaw too - a 0700 $HOME (the Fedora/RHEL/Arch default) seals
     everything beneath it. ``_other_can_reach_read`` deliberately starts at ``home`` and
     cannot see that, so this check adds ``_ancestors_allow_other_access`` and requires BOTH
     before it will assert a FAIL or WARN. Reaching a genuine exposure therefore also implies
     OpenClaw's own hardening did not apply: ``ensureOpenClawStatePermissions``
     (openclaw-state-db-DzSsA9Ji.js:1827) best-effort chmods ``state/`` to 0700
     (OPENCLAW_STATE_DIR_MODE = 448, :1811) and every ``openclaw.sqlite*`` file to 0600
-    (OPENCLAW_STATE_FILE_MODE = 384, :1812) on each open — which narrows the real-world
+    (OPENCLAW_STATE_FILE_MODE = 384, :1812) on each open - which narrows the real-world
     shape to restore-before-first-start, or a filesystem where chmod does not apply
     (CIFS/exFAT/DrvFs), for which the dist has an explicit "skipped permission hardening"
     warn path (:1825). On such a mount the `chmod` remediation is itself a no-op, so the
     FAIL's fix text says so.
 
-    FAIL    — the DB (or a -wal/-shm sibling) is reachable AND readable by another user,
+    FAIL    - the DB (or a -wal/-shm sibling) is reachable AND readable by another user,
               with the whole directory chain (above and below ~/.openclaw) permitting it.
-    WARN    — ``state/`` is reachable and writable by another user: they cannot read the
+    WARN    - ``state/`` is reachable and writable by another user: they cannot read the
               secrets, but they can swap the database under the agent (mirrors B182's
-              ``swappable`` branch).
-    UNKNOWN — no state DB present, or non-POSIX (NTFS ACLs make st_mode meaningless).
-    PASS    — present and not reachable-and-readable by others. Loose in-tree modes sealed
+              ``swappable`` branch). ALSO WARN (C-555, never escalated to FAIL) - a
+              RETAINED COPY is reachable and readable: a recovery snapshot elsewhere under
+              ``state/**/*.sqlite*`` (e.g. OpenClaw 9.5's orphan-task-delivery-recovery
+              copy), or any file under ``~/.openclaw/backups/**`` (pre-repair/migration
+              backups). Capped at WARN rather than the device-keys FAIL wording above
+              because a copy's provenance and freshness are less certain than the live DB -
+              same ancestor-reach gate, so a 0600 copy sealed inside a 0700 chain does not
+              fire, only a group/world-readable one does.
+    UNKNOWN - no state DB present, non-POSIX (NTFS ACLs make st_mode meaningless), or a
+              subdirectory under ``state/`` or ``backups/`` could not be listed (permission
+              denied) while itself being reachable by other users - never a false PASS over
+              a walk that could not complete.
+    PASS    - present and not reachable-and-readable by others. Loose in-tree modes sealed
               by a restrictive parent directory PASS with a distinct message that names the
               seal, rather than silently reading like a clean 0600 install.
     """
@@ -1638,7 +3054,7 @@ def check_state_db_atrest(ctx: Context) -> Finding:
         return _finding(
             "B188",
             UNKNOWN,
-            "On Windows, file security uses NTFS ACLs, not POSIX mode bits — ClawSecCheck "
+            "On Windows, file security uses NTFS ACLs, not POSIX mode bits \u2014 ClawSecCheck "
             "can't read those read-only (no extra tools), so the state database's at-rest "
             "permissions are UNKNOWN, never a false PASS.",
             "Check the ACLs yourself: `icacls %USERPROFILE%\\.openclaw\\state\\"
@@ -1659,14 +3075,14 @@ def check_state_db_atrest(ctx: Context) -> Finding:
         return _finding(
             "B188",
             UNKNOWN,
-            "No state database found at ~/.openclaw/state/openclaw.sqlite — cannot assess "
+            "No state database found at ~/.openclaw/state/openclaw.sqlite \u2014 cannot assess "
             "its at-rest permissions.",
             "If this install does use the state database, ensure it is readable by the "
             "audit so a future run can check its permissions.",
         )
 
     # Path-aware on purpose. A 0644 database sealed inside a 0700 home is the routine
-    # umask-022 outcome and is NOT exploitable — flagging it would be exactly the false WARN
+    # umask-022 outcome and is NOT exploitable - flagging it would be exactly the false WARN
     # F-120 already solved for transcripts, so this reuses `_other_can_reach_read` rather
     # than testing mode bits in isolation. Empirically: db=0644 inside home=0700 -> a naive
     # mode check FIRES while _other_can_reach_read is False (correctly silent); db=0644
@@ -1687,6 +3103,28 @@ def check_state_db_atrest(ctx: Context) -> Finding:
     ancestors_open = _ancestors_allow_other_access(ctx.home)
     writable_dir = _other_can_reach_write(ctx.home, state_dir)
 
+    # C-555: retained copies of the state database - a recovery snapshot under state/, or a
+    # file under ~/.openclaw/backups/ - are exactly as exposed as their parent chain, so this
+    # reuses the same path-aware `_other_can_reach_read` + ancestor gate as the primary DB
+    # above. Capped at WARN below regardless of what is found (never the device-keys FAIL
+    # wording): a copy's provenance and freshness are less certain than the live DB.
+    extra_files, state_listing_failed = _b188_collect_state_copies(state_dir, _B188_DB_NAMES)
+    backup_files, backups_listing_failed = _b188_collect_backups(ctx.home)
+    listing_failed = state_listing_failed or backups_listing_failed
+
+    exposed_extra: list[str] = []
+    for p in extra_files + backup_files:
+        if _other_can_reach_read(ctx.home, p):
+            try:
+                mode = p.stat().st_mode & 0o777
+            except OSError:
+                continue
+            try:
+                rel = p.relative_to(ctx.home)
+            except ValueError:
+                rel = p
+            exposed_extra.append(f"{rel} (mode {oct(mode)[-3:]}) is readable by other users")
+
     if exposed and ancestors_open:
         return _finding(
             "B188",
@@ -1700,8 +3138,8 @@ def check_state_db_atrest(ctx: Context) -> Finding:
             "paired devices and re-issue bootstrap tokens, since a copy taken while the "
             "file was readable stays valid. If the state directory lives on a filesystem "
             "that does not implement POSIX modes (CIFS/exFAT/DrvFs), chmod silently does "
-            "nothing there — OpenClaw hits the same wall and logs 'skipped permission "
-            "hardening' — so move the state directory onto a POSIX filesystem instead.",
+            "nothing there \u2014 OpenClaw hits the same wall and logs 'skipped permission "
+            "hardening' \u2014 so move the state directory onto a POSIX filesystem instead.",
             evidence=exposed,
         )
 
@@ -1716,7 +3154,7 @@ def check_state_db_atrest(ctx: Context) -> Finding:
             "B188",
             WARN,
             f"The state database itself is not readable by other users, but its directory "
-            f"~/.openclaw/state (mode {dmode}) is writable by another local user — they "
+            f"~/.openclaw/state (mode {dmode}) is writable by another local user \u2014 they "
             "cannot read the stored device keys and auth tokens, but they can replace the "
             "database under the running agent.",
             "Run `chmod 700 ~/.openclaw/state` so only the owner can add, remove or replace "
@@ -1724,11 +3162,51 @@ def check_state_db_atrest(ctx: Context) -> Finding:
             evidence=[f"state/ (mode {dmode}) is writable by other users"],
         )
 
+    # C-555: a retained copy (recovery snapshot or backup) is reachable and readable.
+    # WARN-only by design - never escalated to the device-keys FAIL wording above, since a
+    # copy's provenance and freshness are less certain than the live database.
+    if exposed_extra and ancestors_open:
+        joined = "; ".join(exposed_extra[:8])
+        more = f" (+{len(exposed_extra) - 8} more)" if len(exposed_extra) > 8 else ""
+        return _finding(
+            "B188",
+            WARN,
+            "A retained copy of the state database is readable by another local user: "
+            + joined + more + ". OpenClaw's own recovery snapshots (state/**) and "
+            "pre-repair/migration backups (~/.openclaw/backups/**) default to the same "
+            "0600/0700 protection as the live database, so a readable copy means that "
+            "protection slipped somewhere \u2014 and a copy can carry the same device keys and "
+            "auth tokens as the original.",
+            "Run `chmod 600` on the listed file(s) and `chmod 700` on their containing "
+            "directory. If the copy is no longer needed, delete it instead of just "
+            "tightening it.",
+            evidence=exposed_extra,
+        )
+
+    # C-555: a directory under state/ or backups/ could not be listed (permission denied)
+    # while itself being reachable by other users - an incomplete walk must not read as a
+    # clean PASS (Golden Rule #4). If it is unreachable, its unlistable contents are moot,
+    # so PASS still stands below.
+    if listing_failed and ancestors_open and (
+        _b188_dir_traversable_by_other(ctx.home, state_dir)
+        or _b188_dir_traversable_by_other(ctx.home, ctx.home / "backups")
+    ):
+        return _finding(
+            "B188",
+            UNKNOWN,
+            "state/ or ~/.openclaw/backups/ contains a subdirectory this audit could not "
+            "list (permission denied), and that directory is itself reachable by other "
+            "local users, so whether it holds an exposed copy of the state database cannot "
+            "be determined.",
+            "Check permissions on the unreadable subdirectory yourself, or run this audit "
+            "as the account that owns ~/.openclaw.",
+        )
+
     names = ", ".join(f"state/{p.name}" for p in present)
-    if (exposed or writable_dir) and not ancestors_open:
+    if (exposed or writable_dir or exposed_extra) and not ancestors_open:
         # Loose modes inside ~/.openclaw, but a directory above it (typically $HOME at 0700)
         # denies traversal to every non-owner, so nothing here is actually reachable. Not a
-        # finding — but say so plainly, because the seal is one `chmod 755 ~` away from gone.
+        # finding - but say so plainly, because the seal is one `chmod 755 ~` away from gone.
         return _finding(
             "B188",
             PASS,
@@ -1763,7 +3241,7 @@ def check_state_db_atrest(ctx: Context) -> Finding:
 _B190_TRUTHY_VARS = (
     (
         "OPENCLAW_DEBUG_PROXY_ENABLED",
-        "turns on traffic capture — every request and response the agent makes is written "
+        "turns on traffic capture \u2014 every request and response the agent makes is written "
         "to the state database, including Authorization headers and request bodies",
     ),
     (
@@ -1774,7 +3252,7 @@ _B190_TRUTHY_VARS = (
 _B190_VALUE_VARS = (
     (
         "OPENCLAW_DEBUG_PROXY_URL",
-        "routes the agent's traffic through this proxy — whoever operates it sees every "
+        "routes the agent's traffic through this proxy \u2014 whoever operates it sees every "
         "request the agent makes, which is a man-in-the-middle position over all agent "
         "traffic",
     ),
@@ -1790,9 +3268,9 @@ _B190_VALUE_VARS = (
 
 
 def check_debug_proxy_capture(ctx: Context) -> Finding:
-    """B190 (B-295, DISK-4) — the OPENCLAW_DEBUG_PROXY_* cluster and on-disk traffic capture.
+    """B190 (B-295, DISK-4) - the OPENCLAW_DEBUG_PROXY_* cluster and on-disk traffic capture.
 
-    SCOPE, STATED EXACTLY — this check is deliberately NARROWED, because the original
+    SCOPE, STATED EXACTLY - this check is deliberately NARROWED, because the original
     DISK-4 claim double-counted work B164 already does.
 
     ALREADY COVERED BY B164, AND NOT REPEATED HERE: the ``cache-trace.jsonl`` FILE sink.
@@ -1801,30 +3279,30 @@ def check_debug_proxy_capture(ctx: Context) -> Finding:
     trace left by a since-disabled session is still found), and ``logscan.py`` content-scans
     it with the vetted ``_EXFIL_RE`` / ``_KNOWN_EXFIL_HOST_RE`` / ``SECRET_PATTERNS`` /
     ``_CRED_RE`` detectors. So "exfil destinations and leaked auth headers sitting locally
-    and unexamined" is FALSE for the cache-trace file — that is exactly what B164 mines.
+    and unexamined" is FALSE for the cache-trace file - that is exactly what B164 mines.
     This check never re-scans it.
 
     WHAT IS GENUINELY UNCOVERED, and what this check adds: OpenClaw's debug-proxy capture is
-    a DIFFERENT subsystem, and it is enabled SOLELY by environment variable — there is no
+    a DIFFERENT subsystem, and it is enabled SOLELY by environment variable - there is no
     config field for it anywhere in the dist. B155 covers ``proxy.*`` / ``OPENCLAW_PROXY_URL``,
     a different subsystem, and explicitly concedes the env var it cannot see. Its rows land
     in SQLite tables, and ``logdiscovery``'s sink model is file-paths-only, so the E-044
     log-hunt substrate structurally cannot reach them.
 
-    WHAT THIS CHECK STILL DOES NOT DO — say it plainly: it does NOT mine the captured
+    WHAT THIS CHECK STILL DOES NOT DO - say it plainly: it does NOT mine the captured
     traffic. ``capture_events.headers_json`` holds bearer tokens and ``.data_text`` holds
     request bodies; reading them is a §8 disclosure hazard, and flagging the hosts a
     developer legitimately captured (provider APIs, ClawHub) would be a false "exfil"
-    signal — the exact false positive this check must not create. The collector therefore
+    signal - the exact false positive this check must not create. The collector therefore
     takes ``COUNT(*)`` and nothing else. Content-mining ``capture_events``/``capture_blobs``
     remains unbuilt. This check answers "was your traffic recorded to disk, and how much",
     never "what was in it".
 
-    WARN    — capture is observably on or has already run: a truthy enablement variable, a
+    WARN    - capture is observably on or has already run: a truthy enablement variable, a
               proxy/redirect URL, or rows already in the capture tables. Advisory and
               ``scored=False``: a developer legitimately running the debug proxy is a real
               and benign case, so this must never FAIL or move the grade.
-    UNKNOWN — no evidence found. Never PASS: enablement is env-only, a shell export leaves
+    UNKNOWN - no evidence found. Never PASS: enablement is env-only, a shell export leaves
               no on-disk trace (the same process boundary B192 documents), and
               ``OPENCLAW_DEBUG_PROXY_DB_PATH`` can point the capture at a database this
               check never counts. Zero rows here is therefore NOT proof capture is off, and
@@ -1836,13 +3314,13 @@ def check_debug_proxy_capture(ctx: Context) -> Finding:
     for name, what in _B190_TRUTHY_VARS:
         raw, source = dotenv_override(ctx, name)
         if raw is not None and is_truthy_env_value(raw):
-            hits.append(f"{name} is on ({source}) — it {what}")
+            hits.append(f"{name} is on ({_detail_path(source, ctx.home)}) \u2014 it {what}")
     for name, what in _B190_VALUE_VARS:
         raw, source = dotenv_override(ctx, name)
         if isinstance(raw, str) and raw.strip():
             # The VALUE is deliberately not echoed: a proxy URL can embed credentials
             # (http://user:pass@host). Naming the variable and its source is enough.
-            hits.append(f"{name} is set ({source}) — it {what}")
+            hits.append(f"{name} is set ({_detail_path(source, ctx.home)}) \u2014 it {what}")
 
     rows = ctx.capture_event_rows if ctx.capture_tables_found else 0
     blobs = ctx.capture_blob_rows if ctx.capture_tables_found else 0
@@ -1850,7 +3328,7 @@ def check_debug_proxy_capture(ctx: Context) -> Finding:
         hits.append(
             f"the state database already holds {rows} captured request/response flow(s)"
             + (f" and {blobs} captured body/bodies" if blobs else "")
-            + " — this traffic is on disk in plaintext, including any Authorization headers "
+            + " \u2014 this traffic is on disk in plaintext, including any Authorization headers "
             "and request bodies it contained"
         )
 
@@ -1860,14 +3338,14 @@ def check_debug_proxy_capture(ctx: Context) -> Finding:
             WARN,
             "OpenClaw's debug traffic-capture proxy is enabled, redirected, or has already "
             "recorded traffic: " + "; ".join(hits) + ". This is a legitimate debugging "
-            "feature, but while it is on, every request the agent makes — including the "
-            "credentials it sends to model providers and MCP servers — is written to local "
+            "feature, but while it is on, every request the agent makes \u2014 including the "
+            "credentials it sends to model providers and MCP servers \u2014 is written to local "
             "storage in plaintext, and a proxy URL puts whoever runs that proxy in a "
             "man-in-the-middle position over all agent traffic.",
             "If you are not actively debugging, unset the OPENCLAW_DEBUG_PROXY_* variables "
             "(check ~/.openclaw/.env and ~/.config/openclaw/gateway.env) and delete the "
             "captured rows, then rotate any credential that was in flight while capture was "
-            "on. If you are debugging, confirm you set the proxy URL yourself — a value you "
+            "on. If you are debugging, confirm you set the proxy URL yourself \u2014 a value you "
             "did not set is an interception of all agent traffic.",
             evidence=hits,
         )
@@ -1877,7 +3355,7 @@ def check_debug_proxy_capture(ctx: Context) -> Finding:
             "B190",
             UNKNOWN,
             "No capture tables were found in the state database, and no OPENCLAW_DEBUG_"
-            "PROXY_* variable was found in the persistent dotenv files — but debug-proxy "
+            "PROXY_* variable was found in the persistent dotenv files \u2014 but debug-proxy "
             "capture has NO config field and is enabled by environment variable alone, so "
             "its state cannot be confirmed from disk.",
             "No action needed if you do not use the debug proxy. To rule it out on a "
@@ -1899,18 +3377,31 @@ def check_debug_proxy_capture(ctx: Context) -> Finding:
 
 
 def check_discovery_mdns_mode(ctx: Context) -> Finding:
-    """B73 — mDNS full advertisement on non-loopback gateway bind.
+    """B73 - mDNS full advertisement on non-loopback gateway bind.
 
     Grounded (docs.openclaw.ai/gateway/discovery): discovery.mdns.mode enum
     ('minimal' default / 'off' / 'full'). 'full' with a non-loopback gateway bind
     broadly advertises the agent on the local network.
 
-    PASS — mode is 'minimal', 'off', unset (default 'minimal'), or 'full' with loopback.
-    WARN — mode == 'full' AND gateway bind is non-loopback.
+    PASS - mode is 'minimal', 'off', unset (default 'minimal'), or 'full' with loopback.
+    WARN - mode == 'full' AND gateway bind is non-loopback.
     """
     unreadable = _config_unreadable("B73", ctx)
     if unreadable is not None:
         return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" - on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so `dig(cfg, "discovery.mdns.mode")` would silently resolve to None and
+    # fall through to the PASS about a config nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B73",
+            UNKNOWN,
+            "No config was read, so whether discovery.mdns.mode broadly advertises "
+            "the agent on the local network could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
     cfg = ctx.config
     mode = dig(cfg, "discovery.mdns.mode")
     if mode != "full":
@@ -1936,7 +3427,7 @@ def check_discovery_mdns_mode(ctx: Context) -> Finding:
         "B73",
         WARN,
         "discovery.mdns.mode is 'full' with the gateway bound to a non-loopback address "
-        "— this broadly advertises the agent on the local network.",
+        "\u2014 this broadly advertises the agent on the local network.",
         "Set discovery.mdns.mode to 'minimal' or 'off', or bind the gateway to loopback "
         "when using full mDNS advertisement.",
         evidence=[
@@ -1962,16 +3453,16 @@ def check_egress(ctx: Context) -> Finding:
             "B14",
             MEDIUM,
             WARN,
-            f"No egress allowlist — the agent can reach out via: {', '.join(surface)}.",
+            f"No egress allowlist \u2014 the agent can reach out via: {', '.join(surface)}.",
             "OpenClaw has no built-in egress allowlist; minimise send-capable channels and "
             "external-service skills. Every outbound-capable skill can exfiltrate data "
             "(this is the third leg of the Lethal Trifecta).",
         )
-    return _custom("B14", MEDIUM, UNKNOWN, "No outbound channels / skills / tools detected.", "—")
+    return _custom("B14", MEDIUM, UNKNOWN, "No outbound channels / skills / tools detected.", "\u2014")
 
 
 def check_egress_inventory(ctx: Context) -> Finding:
-    """C014 — read-only inventory of outbound-capable surfaces and restriction signals.
+    """C014 - read-only inventory of outbound-capable surfaces and restriction signals.
 
     Complements B14's short summary with per-surface evidence: channels, outbound-capable
     tools, MCP servers, and clearly external-service skills. Advisory only: it surfaces the
@@ -1980,13 +3471,13 @@ def check_egress_inventory(ctx: Context) -> Finding:
     OpenClaw exposes NO global egress-control config field, so every restriction signal
     below is necessarily PER-SURFACE (a channel policy, a sender allowlist, an approval
     gate, an MCP `allowedHosts` / local-stdio transport). This check used to consult four
-    would-be global allowlists — `gateway.egress`, `network.egress`, a top-level `egress`,
-    and `tools.http.allow` — and none of them exists. Each is rejected at config load with
+    would-be global allowlists - `gateway.egress`, `network.egress`, a top-level `egress`,
+    and `tools.http.allow` - and none of them exists. Each is rejected at config load with
     a zod `unrecognized_keys` issue: the root object (zod-schema-O9ml_nmo.js:984-1572, 47
     keys) has no `network` and no `egress`, the `gateway` object (:1338-1482, 21 keys) has
     no `egress`, and `ToolsSchema` is `.strict()` with no `http` key
     (zod-schema.agent-runtime-C02vY4RT.js:723-758, plus the `...CommonToolPolicyFields`
-    spread at :512-519 — profile/allow/alsoAllow/deny/byProvider/toolsBySender).
+    spread at :512-519 - profile/allow/alsoAllow/deny/byProvider/toolsBySender).
 
     Because clawseccheck reads raw JSON via dig() and never validates against zod, schema
     absence did NOT make those limbs dead code: adding any one of the four to a config
@@ -2058,7 +3549,7 @@ def check_egress_inventory(ctx: Context) -> Finding:
             elif allowed_hosts and weak_hosts:
                 parts.append(
                     "allowedHosts present but contains a wildcard/user-content "
-                    f"host (weak mitigation): {', '.join(weak_hosts)}"
+                    f"host or URL-rewriting proxy (weak mitigation): {', '.join(weak_hosts)}"
                 )
             else:
                 parts.append("no allowedHosts restriction")
@@ -2089,7 +3580,7 @@ def check_egress_inventory(ctx: Context) -> Finding:
             "C014",
             PASS,
             f"Egress inventory: {surface_count} outbound-capable surface(s) found; at least one "
-            "carries a per-surface restriction signal — see evidence. OpenClaw has no global "
+            "carries a per-surface restriction signal \u2014 see evidence. OpenClaw has no global "
             "egress-control setting, so this is not a guarantee that egress is restricted: "
             "read the per-surface lines and treat any unrestricted surface as open.",
             "Keep outbound-capable tools, MCP endpoints, and channels on tight allowlists and retain approval on high-impact actions.",
@@ -2099,68 +3590,162 @@ def check_egress_inventory(ctx: Context) -> Finding:
         "C014",
         WARN,
         f"Egress inventory: {surface_count} outbound-capable surface(s) found with no explicit "
-        "restriction signal on any of them — see evidence. OpenClaw has no global egress-control "
+        "restriction signal on any of them \u2014 see evidence. OpenClaw has no global egress-control "
         "setting, so egress can only be narrowed per surface.",
-        "Add per-surface restrictions where OpenClaw supports them — channel dmPolicy/groupPolicy "
+        "Add per-surface restrictions where OpenClaw supports them \u2014 channel dmPolicy/groupPolicy "
         "allowlists, tools.elevated.allowFrom, an exec approval gate, MCP allowedHosts or a local "
-        "stdio transport — and keep outbound channels narrow.",
+        "stdio transport \u2014 and keep outbound channels narrow.",
         evidence=evidence,
     )
 
 
 def check_leak(ctx: Context) -> Finding:
+    """B9 - is sensitive output redacted?
+
+    B-700: the SUBJECT of this check is gone on OpenClaw 2026.8.1. `logging.redactSensitive`
+    was removed and the `logging` block is now the strict set
+    `{level, file, maxFileBytes, consoleLevel, consoleStyle, redactPatterns, audit}`.
+
+    The PASS below rests on the RUNTIME, not on the field's description -- a check that
+    stops warning has to earn it. From `dist/redact-*.js`::
+
+        const DEFAULT_REDACT_MODE = "tools";
+        function resolveConfigRedaction() {
+            const cfg = readLoggingConfig();
+            return { mode: DEFAULT_REDACT_MODE, patterns: cfg?.redactPatterns };
+        }
+        function resolveToolPayloadRedaction(loggingConfig = readLoggingConfig()) {
+            const userPatterns = loggingConfig?.redactPatterns;
+            return { mode: "tools", patterns: userPatterns && userPatterns.length > 0
+                     ? [...userPatterns, ...DEFAULT_REDACT_PATTERNS] : void 0 };
+        }
+
+    `mode` is a CONSTANT -- config feeds only `patterns`, so no configuration reaches the
+    module's `mode === "off"` branch. But a non-empty custom list does not add to the
+    built-ins on every path -- only `resolveToolPayloadRedaction` above unions it in
+    (transcripts, tool payloads, structured file-log fields). `resolveConfigRedaction`
+    hands `cfg?.redactPatterns` straight through, and the shared `resolvePatterns()` it
+    feeds REPLACES `DEFAULT_REDACT_PATTERNS` outright for a non-empty list -- that is the
+    console-output, warnings, and `openclaw logs` path. Identical on OpenClaw 2026.9.4
+    (`dist/redact-Ck-hjLec.mjs:1432-1441`) and 2026.9.5 (`dist/redact-CrCCqliq.mjs:1977-
+    1987`, `:2327-2333`) -- B-836; an earlier version of this docstring
+    described the union as universal, which it is not. An empty list falls through to
+    the defaults on every path. No env var disables it either -- the only
+    `OPENCLAW_REDACT*` symbol in the dist is the `OPENCLAW_REDACTED__` output marker.
+
+    That made this check actively harmful on a current build: the field is always absent,
+    so it emitted WARN on EVERY 2026.8.1 config, telling the user to "pin
+    logging.redactSensitive" -- an instruction their schema rejects
+    (`REJECTED unrecognized_keys@logging`). A warning that cannot be cleared, to fix a
+    risk that no longer exists.
+
+    So only the ABSENT case changes: on a build we can see is 2026.8.1+, absent is PASS,
+    because there is no setting that turns redaction off. On an older build, and on one
+    whose generation cannot be determined, the original reasoning stands and only the
+    advice is qualified -- a hermetic run must not silently pick a story.
+
+    A value that is PRESENT keeps its original verdict on every build, and the retirement
+    is appended as a note. The first version of this fix collapsed "off" and "tools" into
+    one WARN on a modern build, on the reasoning that an unrecognized key is not in effect
+    anyway; `scripts/monitor_detection_gate.py` answered `redaction-off: expected an
+    alert, got silence`, because a watch cannot see a change between two states that
+    render the same. Someone still WROTE "off" there, and that is what the monitor exists
+    to catch.
+    """
     # Valid values: "off" | "tools" (default when set: "tools")
-    # Boolean False never occurs in real configs — the field is always a string or absent.
+    # Boolean False never occurs in real configs - the field is always a string or absent.
     redact = dig(ctx.config, "logging.redactSensitive")
+    modern = _openclaw_generation(ctx) == "modern"
+    if modern and redact is None:
+        return _finding(
+            "B9",
+            PASS,
+            "Sensitive redaction is unconditional on this OpenClaw build \u2014 the logging "
+            "block has no setting that turns it off.",
+            "Nothing to set. If you do set logging.redactPatterns, note it REPLACES the "
+            "built-in patterns on console output, warnings, and `openclaw logs` (it only "
+            "adds to them for transcripts/tool payloads) -- include the built-in shapes "
+            "in your list, or leave the field unset, unless you have verified your "
+            "list's own coverage.",
+        )
+    # A PRESENT value keeps its original verdict on every build. An earlier version of this
+    # fix collapsed "off" and "tools" into one WARN on a modern build, reasoning that an
+    # unrecognized key is not in effect anyway - `scripts/monitor_detection_gate.py` then
+    # reported `redaction-off: expected an alert, got silence`, because a watch cannot see
+    # a change between two states that render identically. Whatever the runtime does with
+    # the key, someone WROTE "off" there, and that transition is exactly what the monitor
+    # exists to catch. The retirement is reported as an ADDED note, never by flattening the
+    # verdict - see [[reference_never_suppress_a_finding_for_presentation]] in spirit: the
+    # fact stays, only the framing changes.
+    stale = (" On OpenClaw 2026.8.1 and later this key was removed, so the value is not "
+             "in effect \u2014 delete it (`openclaw doctor --fix` does)." if modern else "")
     if redact == "off":
         return _finding(
             "B9",
             FAIL,
-            'logging.redactSensitive is "off" — secrets/system prompt can surface in tool output/logs.',
-            'Set logging.redactSensitive to "tools" to redact secrets from tool output and logs.',
+            'logging.redactSensitive is "off" \u2014 secrets/system prompt can surface in '
+            "tool output/logs." + stale,
+            'Set logging.redactSensitive to "tools" to redact secrets from tool output '
+            "and logs." + stale,
         )
     if redact is None:
         # B-128: the OpenClaw default when the field is unset is already "tools"
-        # (redaction ON) — an absent field is secure-by-default, not an exposure.
+        # (redaction ON) - an absent field is secure-by-default, not an exposure.
         # The real (smaller) gap is that the default isn't pinned, so a future
         # OpenClaw default change could silently alter this without the operator
-        # noticing. Wording/severity only — the trigger condition is unchanged.
+        # noticing. Wording/severity only - the trigger condition is unchanged.
         return _finding(
             "B9",
             WARN,
-            'logging.redactSensitive not pinned — default "tools" already redacts '
-            "secrets; pin it explicitly for stability against a future default change.",
-            'Explicitly set logging.redactSensitive to "tools".',
+            'logging.redactSensitive not pinned \u2014 default "tools" already redacts '
+            "secrets; pin it explicitly for stability against a future default change." +
+            _retired_key_note(ctx, "logging.redactSensitive"),
+            'Explicitly set logging.redactSensitive to "tools".' +
+            _retired_key_note(ctx, "logging.redactSensitive"),
         )
     if redact == "tools":
         return _finding(
             "B9",
             PASS,
-            'Sensitive redaction is enabled (logging.redactSensitive="tools").',
-            "Keep redaction on.",
+            'Sensitive redaction is enabled (logging.redactSensitive="tools").' + stale,
+            "Keep redaction on." + stale,
         )
-    # Unexpected value — be conservative
+    # Unexpected value - be conservative
     return _finding(
         "B9",
         WARN,
-        f'logging.redactSensitive has unexpected value {redact!r} — expected "tools" or "off".',
-        'Set logging.redactSensitive to "tools".',
+        f'logging.redactSensitive has unexpected value {redact!r} \u2014 expected "tools" '
+        'or "off".' + stale,
+        'Set logging.redactSensitive to "tools".' + stale,
     )
 
 
 def check_webfetch_redirects(ctx: Context) -> Finding:
-    """B83 — web-fetch tool allows excessive redirect following.
+    """B83 - web-fetch tool allows excessive redirect following.
 
     Grounded (recon: tools.web.fetch.enabled, tools.web.fetch.maxRedirects). A high
     redirect ceiling on the built-in fetch tool lets a fetched URL bounce the request
     through redirect chains toward private/internal targets (SSRF-style).
 
-    PASS — fetch disabled, maxRedirects unset, or maxRedirects <= 5.
-    WARN — fetch enabled AND maxRedirects > 5.
+    PASS - fetch disabled, maxRedirects unset, or maxRedirects <= 5.
+    WARN - fetch enabled AND maxRedirects > 5.
     """
     unreadable = _config_unreadable("B83", ctx)
     if unreadable is not None:
         return unreadable
+    # B-661: `_config_unreadable` only covers "present but unparseable" - on a host
+    # with no openclaw.json at all, config_parse_error is False and ctx.config is
+    # `{}`, so `dig(cfg, "tools.web.fetch.enabled")` would silently resolve to a
+    # falsy value and fall through to the PASS about a config nobody read.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B83",
+            UNKNOWN,
+            "No config was read, so whether the web-fetch tool follows an excessive "
+            "redirect chain could not be determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
     cfg = ctx.config
     if not dig(cfg, "tools.web.fetch.enabled"):
         return _finding(
@@ -2181,7 +3766,7 @@ def check_webfetch_redirects(ctx: Context) -> Finding:
     return _finding(
         "B83",
         WARN,
-        "tools.web.fetch.maxRedirects is high — a fetched URL can bounce through many "
+        "tools.web.fetch.maxRedirects is high \u2014 a fetched URL can bounce through many "
         "redirects toward private/internal targets (SSRF-style).",
         "Lower tools.web.fetch.maxRedirects to <= 5, or disable the web-fetch tool.",
         evidence=[f"tools.web.fetch.maxRedirects={redirects}"],
@@ -2189,7 +3774,7 @@ def check_webfetch_redirects(ctx: Context) -> Finding:
 
 
 # ---------------------------------------------------------------------------
-# B164 (F-124/E-044 Phase 1): log threat-hunt — content-scan the agent's OWN log corpus.
+# B164 (F-124/E-044 Phase 1): log threat-hunt - content-scan the agent's OWN log corpus.
 # ---------------------------------------------------------------------------
 # Distinct from what's already here: B82 (check_cachetrace_redaction) is config-only (is
 # redaction ON?), never reads cacheTrace CONTENT; B19 (check_data_atrest) is stat-only
@@ -2197,11 +3782,11 @@ def check_webfetch_redirects(ctx: Context) -> Finding:
 # logs/config-audit.jsonl, not the wider log corpus. B164 is the only one of the four that
 # actually content-scans the log corpus for threat signals.
 #
-# Quiet-by-default (design doc §5.1 — base-rate discipline): a real log corpus is
+# Quiet-by-default (design doc §5.1 - base-rate discipline): a real log corpus is
 # dominated by benign lines, so an isolated single-class hit is noise, not a finding. WARN
 # fires only when >=2 distinct signal classes co-occur in the SAME sink, or a single class
 # that already carries its own strong internal corroboration fires (exfil_evidence is
-# already secret+exfil-host paired inside logscan.py — either on the SAME line, or, per
+# already secret+exfil-host paired inside logscan.py - either on the SAME line, or, per
 # B-249, a credential-path read earlier in the sink followed by a base64-encoded param to
 # a known drop host on a later line; secrets_at_rest additionally needs the sink to be
 # world-readable, checked here via the same B19 perm-check helper above).
@@ -2210,15 +3795,183 @@ _LOG_HUNT_PER_FILE_BUDGET_S = 3.0
 # B-314: a CUMULATIVE ceiling across ALL sinks combined, checked once per sink before
 # spending that sink's own _LOG_HUNT_PER_FILE_BUDGET_S. Before this, N sinks each capped
 # individually at 3.0s could still multiply past this check's fair share of the 15s
-# per-check hard timeout (DEFAULT_CHECK_BUDGET_S) with no shared ceiling between them —
+# per-check hard timeout (DEFAULT_CHECK_BUDGET_S) with no shared ceiling between them -
 # measured on a real config: ~4 large sinks each spending close to their full per-file
 # allowance summed to 11.6s/15s (89% of budget, effectively no headroom before the next
 # check in CHECKS risked degrading to UNKNOWN via the audit-wide cooperative deadline).
 # Kept comfortably under the DoD's <=5s/check target so this one check can never itself
 # threaten the shared per-check timeout. A sink skipped once this fires is disclosed via
-# `_skipped_for_time` below (never silently dropped — Golden Rule #4), same honesty
+# `_skipped_for_time` below (never silently dropped - Golden Rule #4), same honesty
 # discipline `summarize_truncation` already applies to an oversized file/line.
 _LOG_HUNT_CHECK_BUDGET_S = 4.5
+
+
+# B-484: which sinks B164 offers to the scan, decided from (kind, mtime, size) BEFORE
+# anything is opened. Rank puts the cheap high-signal singletons first, then the corpora
+# newest-first; `str(path)` is the total-order tiebreak so two sinks sharing an mtime can
+# never swap between runs.
+#
+# A kind absent from this table sorts last rather than raising - logdiscovery may learn a
+# new kind before this table does, and a scan-ordering helper must never be the thing that
+# breaks the audit.
+_LOG_SINK_KIND_RANK = {
+    "config_audit": 0,
+    "config_log": 0,
+    "cache_trace": 0,
+    "trajectory": 1,
+    "transcript": 2,
+    "memory": 3,
+    "backup": 4,
+}
+_LOG_SINK_KIND_RANK_LAST = 9
+
+# B-484 / C-135: the share of the byte budget spent on the OLDEST sinks rather than the
+# newest. Exists so no single mtime value is a safe hiding place - see the reasoning in
+# `_plan_log_hunt_sinks`. 25% is small enough that the recent corpus (where a live
+# compromise actually writes) still gets the large majority, and large enough that the
+# reserve admits several real sinks rather than rounding to one.
+_LOG_HUNT_OLDEST_RESERVE = 0.25
+
+
+class _ReverseStr:
+    """Sort key that inverts string order, so one `sorted()` can order a field ascending
+    and another descending without reversing the whole sequence (which would also invert
+    the primary key). Used by `_plan_log_hunt_sinks`' reserve pass - see the comment
+    there for why the two passes must break ties in opposite directions.
+    """
+
+    __slots__ = ("_s",)
+
+    def __init__(self, s: str) -> None:
+        self._s = s
+
+    def __lt__(self, other: "_ReverseStr") -> bool:
+        return self._s > other._s
+
+    def __eq__(self, other: object) -> bool:
+        return isinstance(other, _ReverseStr) and self._s == other._s
+
+    def __hash__(self) -> int:
+        return hash(self._s)
+
+
+def _plan_log_hunt_sinks(sinks: list, lim) -> tuple[list, int]:
+    """Pick the sinks B164 will scan, and say how many were left out.
+
+    Returns ``(admitted, planned_out)``.
+
+    Before this, the loop simply walked `discover_log_sinks`' lexicographic order until the
+    wall clock ran out. Session filenames are UUIDs, so the covered slice was effectively
+    random AND unstable - two consecutive runs over an unchanged real corpus scanned 38 and
+    then 41 of 132 sinks, which makes B164's verdict irreproducible and drifts the skipped
+    count embedded in its own detail.
+
+    Two deliberate choices:
+
+    * **Skip-and-continue, not a strict prefix.** A single oversized old sink must not shut
+      the door on many small recent ones; admission keeps going past one that does not fit.
+    * **``size == 0`` is admitted at zero cost.** That is the "unknown" value - a
+      hand-built ``LogSink`` (tests/test_b314_check_perf.py) or a failed stat(). Planning
+      such a sink OUT would silently drop it; admitting it hands the decision to the clock
+      backstop, which is exactly the pre-B-484 behaviour.
+
+    This does NOT raise coverage to 100%: the byte budget is absolute, so the covered
+    FRACTION still falls as a fleet grows. What it buys is that the uncovered tail is
+    provably the oldest rather than arbitrary, and that the set is the same on every run.
+    """
+    budget = getattr(lim, "log_max_total_bytes", None)
+    ordered = sorted(
+        sinks,
+        key=lambda s: (
+            _LOG_SINK_KIND_RANK.get(s.kind, _LOG_SINK_KIND_RANK_LAST),
+            -getattr(s, "mtime", 0.0),
+            str(s.path),
+        ),
+    )
+    if not budget or budget <= 0:
+        return (ordered, 0)
+
+    # C-135 finding, and the reason this is not a plain recency prefix. Ordering newest
+    # first hands an attacker a cheap exclusion lever that the old lexicographic order did
+    # not have: one os.utime() backdating a sink pushes it behind the whole corpus and out
+    # of the budget. Measured on a 21-sink probe - a backdated evidence sink was read by
+    # the old order and NOT by a pure-recency plan. (Renaming to sort last defeats both,
+    # so the filename lever survives as the tiebreak; recency alone was strictly worse.)
+    #
+    # So the budget is split: most of it goes to the newest, a reserve to the OLDEST.
+    #
+    # WHAT THIS DOES AND DOES NOT BUY - stated precisely, because the first version of
+    # this comment claimed "there is no safe mtime" and a C-135 pass disproved it three
+    # ways. It does NOT make evasion impossible, and the uncovered middle band is not a
+    # narrow seam: on the real corpus it measured as a single contiguous window covering
+    # most of the mtime range, reachable by `touch -d @<median mtime>` - one `ls -lt`, no
+    # size knowledge. What the reserve removes is specifically the ZERO-KNOWLEDGE lever:
+    # backdating to the epoch, the obvious move, now lands in the reserve and is read.
+    # An attacker who profiles the corpus first can still aim at the middle.
+    #
+    # Closing the middle band is not possible with a fixed budget - some band must go
+    # unread while only ~40% of the corpus is affordable. Treat that as the standing
+    # limitation of a budgeted scanner, and note that an attacker who can rewrite these
+    # files can also simply truncate them.
+    reserve = int(budget * _LOG_HUNT_OLDEST_RESERVE)
+    main_budget = budget - reserve
+
+    admitted: list = []
+    chosen: set = set()
+    used = 0
+
+    # A sink can never cost more to scan than `log_max_bytes_per_file`: scan_log_file
+    # stops there (logscan.py, the `bytes_scanned + line_bytes > lim.log_max_bytes_per_file`
+    # guard). Charging the file's FULL size was not conservative, it was wrong - a 64 MiB
+    # sink was billed 32x its real 2 MiB cost, which made every sink larger than the total
+    # budget unadmittable at EVERY mtime, at both passes. That handed an attacker a lever
+    # needing no corpus knowledge at all: append until the file exceeds a public shipped
+    # constant. Found by the C-135 pass on the reserve.
+    per_file_cap = getattr(lim, "log_max_bytes_per_file", 0) or 0
+
+    def _cost(sink) -> int:
+        size = max(0, getattr(sink, "size", 0) or 0)
+        return min(size, per_file_cap) if per_file_cap else size
+
+    def _fill(candidates, allowance: int) -> int:
+        # Skip-and-continue, never stop-at-first-miss: a single oversized sink must not
+        # shut the door on many small ones behind it.
+        spent = 0
+        for sink in candidates:
+            if id(sink) in chosen:
+                continue
+            cost = _cost(sink)
+            if spent + cost > allowance:
+                continue
+            chosen.add(id(sink))
+            admitted.append(sink)
+            spent += cost
+        return spent
+
+    used += _fill(ordered, main_budget)
+    # Reserve pass: genuinely oldest-first ACROSS kinds, not `reversed(ordered)`.
+    # `ordered` is sorted by kind rank first, so reversing it walks the whole of the LAST
+    # KIND before it ever reaches an old trajectory sidecar - on any home carrying an
+    # install-backup directory the reserve was spent entirely on backups and the
+    # backdating lever came straight back. Also found by the C-135 pass.
+    # The path tiebreak is REVERSED here on purpose. Both passes ordering ties the same
+    # way means a sink that loses the tie in the main pool loses it again in the reserve
+    # and is covered by neither - which re-opened the name lever the moment the reserve
+    # stopped keying on kind rank. Disagreeing on ties is what makes the two passes
+    # complementary rather than two views of the same ordering.
+    oldest_first = sorted(
+        ordered, key=lambda s: (getattr(s, "mtime", 0.0), _ReverseStr(str(s.path)))
+    )
+    used += _fill(oldest_first, budget - used)
+
+    # Restore plan order for the scan loop so the newest are still read FIRST: if the
+    # clock backstop does fire, it should cut into the reserve, not into the recent pool.
+    # Keyed by id() and not by list.index(): LogSink is a frozen dataclass, so two sinks
+    # with identical fields compare equal and index() would return the wrong position for
+    # one of them - and index() would make this O(n^2) besides.
+    position = {id(s): i for i, s in enumerate(ordered)}
+    admitted.sort(key=lambda s: position[id(s)])
+    return (admitted, len(ordered) - len(admitted))
 
 
 def _log_hunt_corroborated(nonzero_classes: set, world_readable: bool) -> bool:
@@ -2229,65 +3982,127 @@ def _log_hunt_corroborated(nonzero_classes: set, world_readable: bool) -> bool:
     return strong_single or len(nonzero_classes) >= 2
 
 
+def _log_hunt_budget_remedy(lim) -> str:
+    """The tail clause for a "N sink(s) not scanned" disclosure - which remedy is true
+    depends on whether the run being disclosed was already `--exhaustive`.
+
+    B-486: before this, both call sites unconditionally pointed at `--exhaustive`, which
+    was fine while `EXHAUSTIVE_LIMITS.log_max_total_bytes` was unbounded (a truncated
+    default run really was helped by it, and a truncated *exhaustive* run could only
+    happen via the clock, so a re-run under different load genuinely could land
+    differently). Once `--exhaustive` itself got a finite, deterministically-planned
+    budget (the fix this function exists for), a run already under `--exhaustive` that
+    still has sinks left out will skip the SAME ones on a re-run - telling it to
+    "re-run with --exhaustive" would be advice to do the thing it already did and get
+    the identical result. So this branches on `lim.exhaustive` instead of assuming it.
+    """
+    if lim.exhaustive:
+        return (
+            " \u2014 even --exhaustive's own (much larger) scan budget could not cover "
+            "this fleet; a re-run with the same flag will skip the same sinks."
+        )
+    return (
+        " \u2014 re-run with --exhaustive for a much larger budget; it states "
+        "its own coverage either way."
+    )
+
+
 def check_log_threat_hunt(ctx: Context) -> Finding:
-    """B164 — threats surfaced in the agent's own log corpus (content scan, advisory).
+    """B164 - threats surfaced in the agent's own log corpus (content scan, advisory).
 
     Discovers every log/transcript sink the agent produces (trajectory sidecars,
     logging.file, cacheTrace transcripts, session transcripts, the config-audit log,
-    memory files, install backups — see logdiscovery.py) and content-scans each one
+    memory files, install backups - see logdiscovery.py) and content-scans each one
     (logscan.py) for six signal classes: injection markers against the agent, exfil
     evidence, dangerous-capability use, environment-compromise IOCs, log
     tamper/anomaly, and secrets at rest.
 
-    WARN  — at least one sink corroborates (see ``_log_hunt_corroborated``): >=2 distinct
+    WARN  - at least one sink corroborates (see ``_log_hunt_corroborated``): >=2 distinct
             signal classes co-occur in that sink, or a single inherently-strong class
             fires (exfil_evidence, or secrets_at_rest on a world-readable sink).
-    PASS  — sinks were found and scanned but no sink corroborated. Isolated/low-
+    PASS  - sinks were found and scanned but no sink corroborated. Isolated/low-
             confidence hits are counted and reported, never WARNed on individually.
-    UNKNOWN — no log/transcript sinks found, or none were readable/non-empty.
-    Never FAIL — a content heuristic over an attacker-influenced corpus must never hard-
-    fail the audit (Golden Rule #5); this check stays advisory (scored=False) — it never
+    UNKNOWN - no log/transcript sinks found, or none were readable/non-empty.
+    Never FAIL - a content heuristic over an attacker-influenced corpus must never hard-
+    fail the audit (Golden Rule #5); this check stays advisory (scored=False) - it never
     earns or costs an ordinary scored point, exactly as before.
 
     I-025/B-309 (Dave's 2026-07-20 ruling) originally carved out an exception to "can
     never move the A-F grade" for a same-line exfil_evidence hit anchored to a known
     drop-host. Across four C-135 rounds the drop-host gate was narrowed repeatedly (a
     named host, then an independent transport verb, then an attacker-exclusive
-    OOB/canary set) trying to make that exception sound — and THREE independent
+    OOB/canary set) trying to make that exception sound - and THREE independent
     adversarial reviews of the final attempt converged that it cannot be: this tool's
     own audience (security-conscious operators) legitimately sends secrets to the exact
     OOB/canary infrastructure (interactsh/oast, Burp Collaborator, dnslog,
     Canarytokens) a real attacker would also use, so the benign and malicious cases are
     byte-identical on a single log line. Dave's 2026-07-22 ruling RETRACTED the
     exception entirely (see logscan.py's retraction note above ``_scan_line_content``):
-    B164 no longer carries any exfil_evidence-derived cap signal at all — every B164
+    B164 no longer carries any exfil_evidence-derived cap signal at all - every B164
     corroboration, including exfil_evidence (same-line or cross-line), is WARN-only,
     permanently. See ``scoring.RUNTIME_SIGNAL_CAP`` / ``scoring._runtime_cap_signal``:
     the trajaudit-indicator match is the only remaining I-025/B-309 cap source.
     """
     # Lazy import: logscan.py (a Layer-1 leaf) itself imports from the checks aggregator
-    # (`from .checks import ...`) to reuse the engine's vetted indicator regexes — the
+    # (`from .checks import ...`) to reuse the engine's vetted indicator regexes - the
     # SAME reason several checks/*.py functions already import `..logsafe` lazily inside
     # the function body instead of at module top (see checks/_vet.py's comment on it).
     # logdiscovery.py has no such dependency, but is imported the same way for symmetry.
     from ..logdiscovery import discover_log_sinks  # noqa: PLC0415
     from ..logsafe import redact  # noqa: PLC0415
     from ..logscan import scan_log_file, summarize_truncation  # noqa: PLC0415
-    from ..scanbudget import audit_deadline  # noqa: PLC0415
+    from ..scanbudget import audit_deadline, limits_for  # noqa: PLC0415
 
-    sinks = discover_log_sinks(ctx)
+    unreadable_sinks: list = []
+    sinks = discover_log_sinks(ctx, unreadable_sinks)
+
+    # B-817: this discovery has no notion of the SQLite-backed trajectory store
+    # (trajectorystore.py) - a `kind="trajectory"` sink here is a JSONL sidecar only.
+    # When no such sidecar was found among the sinks, corroborate against the SQLite
+    # container so a clean PASS/UNKNOWN never stays silent about evidence this content
+    # scan structurally cannot read (event_json is never opened - see
+    # trajectorystore.py's own §8 paragraph). Locator-stale is the only status worth
+    # disclosing here: STATUS_LIVE never reaches this branch (a live sidecar would
+    # already be a `kind="trajectory"` sink) and STATUS_NO_RESIDUE has nothing to
+    # disclose.
+    sqlite_trajectory_disclosure = ""
+    if not any(sink.kind == "trajectory" for sink in sinks):
+        home = getattr(ctx, "home", None)
+        corro = _trajectorystore.corroborate(home) if isinstance(home, Path) else None
+        if corro is not None and corro.status == _trajectorystore.STATUS_LOCATOR_STALE:
+            sqlite_trajectory_disclosure = (
+                " trajectory evidence exists in a SQLite-backed store this content "
+                "scan cannot read (agents/*/agent/openclaw-agent.sqlite; event_json "
+                f"is never opened, by design) \u2014 {corro.sqlite_rows} row(s) across "
+                f"{corro.sqlite_sessions} session(s) unexamined."
+            )
+
     if not sinks:
+        # B-913: an unreadable source dir (e.g. a `chmod 000` workspace's memory/) is a
+        # distinct fact from "nothing configured" - name it rather than letting the
+        # reader assume there is genuinely no log corpus.
+        unreadable_note = (
+            f" Could not read: {'; '.join(unreadable_sinks[:8])}"
+            f"{f' (+{len(unreadable_sinks) - 8} more)' if len(unreadable_sinks) > 8 else ''}."
+            if unreadable_sinks
+            else ""
+        )
         return _finding(
             "B164",
             UNKNOWN,
             "No agent log/transcript sinks found (no logging.file, cacheTrace, trajectory "
             "sidecar, session transcript, config-audit log, memory file, or install backup) "
-            "— nothing to content-scan.",
+            f"\u2014 nothing to content-scan.{sqlite_trajectory_disclosure}{unreadable_note}",
             "Enable OpenClaw's default trajectory sidecar (on by default) and/or "
-            "logging.file so a future run has a log corpus to threat-hunt.",
+            "logging.file so a future run has a log corpus to threat-hunt."
+            + (
+                " Fix permissions on the listed unreadable path(s) and re-run."
+                if unreadable_sinks
+                else ""
+            ),
         )
 
-    # C-221: cross-artifact correlation — a skill NAMING a high-specificity IOC (a known
+    # C-221: cross-artifact correlation - a skill NAMING a high-specificity IOC (a known
     # drop-host or a credential/secret path in its own text) AND that same IOC APPEARING
     # in the agent's own log corpus is strong "declared a target and it was actually used"
     # evidence, folded into B164 as an additional corroboration axis (never its own check;
@@ -2301,25 +4116,42 @@ def check_log_threat_hunt(ctx: Context) -> Finding:
     isolated_hits = 0
     skipped_for_time = 0
 
-    # B-314: the cumulative ceiling starts once, before the loop — not re-armed per sink
+    # B-314: the cumulative ceiling starts once, before the loop - not re-armed per sink
     # (that would defeat the point; see _LOG_HUNT_CHECK_BUDGET_S's docstring).
-    check_deadline = audit_deadline(_LOG_HUNT_CHECK_BUDGET_S)
+    # F-164: both budgets read limits_for(ctx) so --exhaustive widens them; DEFAULT_LIMITS
+    # reproduces _LOG_HUNT_CHECK_BUDGET_S / _LOG_HUNT_PER_FILE_BUDGET_S exactly.
+    lim = limits_for(ctx)
+    check_deadline = audit_deadline(lim.log_check_budget_s)
 
-    for sink in sinks:
+    # B-484: choose the sinks up front, newest-first within kind, inside a byte budget -
+    # so the covered set is a pure function of (kind, mtime, size, path) instead of of how
+    # fast this box happened to be. Sinks planned out are counted into the SAME disclosure
+    # the clock backstop uses: from the reader's side "not scanned" means the same thing
+    # either way, and Golden Rule #4 cares that the number is honest, not why.
+    # NOTE: bound to a NEW name. `sinks` must keep meaning "everything discovered" -
+    # three later sentences count off it (`len(sinks)` in the none-readable return, the
+    # --exhaustive completeness line, and the "N scanned" roll-up). Rebinding it here made
+    # all three report the ADMITTED count instead, which produced a literal
+    # "-2 log/transcript sink(s) scanned" once `skipped_for_time` carried the planned-out
+    # sinks as well. Found by the C-135 pass on this change.
+    planned, planned_out = _plan_log_hunt_sinks(sinks, lim)
+    skipped_for_time += planned_out
+
+    for sink in planned:
         remaining = None if check_deadline is None else check_deadline - time.monotonic()
         if remaining is not None and remaining <= 0:
             skipped_for_time += 1
             continue
-        # B-314: this sink's own deadline is capped at whichever is TIGHTER — its usual
-        # per-file allowance, or however much of the cumulative check budget is left — so
+        # B-314: this sink's own deadline is capped at whichever is TIGHTER - its usual
+        # per-file allowance, or however much of the cumulative check budget is left - so
         # the last sink before the cumulative deadline can't still spend a full fresh
         # 3.0s and blow past it (a naive "check-then-always-give-3.0s" loop still let the
         # total overshoot by up to one sink's worth).
-        per_sink_budget = _LOG_HUNT_PER_FILE_BUDGET_S
+        per_sink_budget = lim.log_per_file_budget_s
         if remaining is not None:
             per_sink_budget = min(per_sink_budget, remaining)
         deadline = audit_deadline(per_sink_budget)
-        result = scan_log_file(sink, deadline, skill_iocs)
+        result = scan_log_file(sink, deadline, skill_iocs, limits=lim)
         all_results.append(result)
         if result.bytes_scanned == 0:
             continue
@@ -2337,14 +4169,27 @@ def check_log_threat_hunt(ctx: Context) -> Finding:
             rel = sink.path.name
 
         # C-221 / C-135 refinement: a cross-artifact hit on a KNOWN DROP-HOST a skill
-        # named (webhook.site / ngrok / pastebin …) is genuinely low-base-rate and
-        # qualifies the sink on its own. A hit on a credential/secret PATH is NOT — helper
-        # skills legitimately name and read ~/.aws/credentials, ~/.npmrc, … and those paths
+        # named (webhook.site / ngrok / pastebin ...) is genuinely low-base-rate and
+        # qualifies the sink on its own. A hit on a credential/secret PATH is NOT - helper
+        # skills legitimately name and read ~/.aws/credentials, ~/.npmrc, ... and those paths
         # legitimately appear in the log, so a path cross-hit is only a CORROBORATOR: it
         # counts as one extra signal class (needs a co-occurring class to clear the WARN
         # bar) and can never sole-trigger a WARN on a benign dual-use path (the C-135 false
         # positive: an aws-cost-helper skill naming ~/.aws/credentials + a benign log line).
-        strong_cross = {t: n for t, n in cross.items() if _KNOWN_EXFIL_HOST_RE.search(t)}
+        # B-384: a named, dated IOC dataset host (../iocdb.py) is at least as
+        # high-confidence as the generic drop-host shape list, so it also qualifies on its
+        # own - never a sole FAIL trigger (B164 stays advisory/scored=False throughout
+        # regardless). It no longer needs its own OR leg here: `_KNOWN_EXFIL_HOST_RE`
+        # (checks/_shared.py) now has the IOC dataset's hosts spliced into its own
+        # alternation, so a direct `iocdb.is_known_bad_host(t)` call would only ever be
+        # True when the regex leg below is already True too - checking both was two
+        # definitions of "known-bad host" that could disagree (and always agreed in
+        # practice, since precise-match implies substring-match), not two independent
+        # signals. One canonical check now covers both.
+        strong_cross = {
+            t: n for t, n in cross.items()
+            if _KNOWN_EXFIL_HOST_RE.search(t)
+        }
         weak_cross = {t: n for t, n in cross.items() if t not in strong_cross}
         effective = set(nonzero)
         if weak_cross:
@@ -2358,7 +4203,7 @@ def check_log_threat_hunt(ctx: Context) -> Finding:
                     skill = skill_iocs.get(tok, "?")
                     all_samples.append(
                         f"cross-artifact-ioc: skill '{skill}' names {redact(tok)} "
-                        f"— seen {count}x in {sink.kind}"
+                        f"\u2014 seen {count}x in {sink.kind}"
                     )
             corroborated[rel] = display
             all_samples.extend(result.samples[:5])
@@ -2366,26 +4211,54 @@ def check_log_threat_hunt(ctx: Context) -> Finding:
             isolated_hits += len(nonzero) + len(weak_cross)
 
     if not any_scanned:
+        # This path returns BEFORE the `if skipped_for_time:` disclosure below, so it has
+        # to carry the count itself - otherwise a run where the budget planned everything
+        # out reports "none were readable", blaming permissions for what was actually a
+        # scan-budget decision, and discloses no truncation at all (Golden Rule #4).
+        unread = (
+            f" {skipped_for_time} of them were not offered to the scan (scan budget "
+            f"reached){_log_hunt_budget_remedy(lim)}"
+            if skipped_for_time
+            else ""
+        )
         return _finding(
             "B164",
             UNKNOWN,
             f"{len(sinks)} log/transcript sink(s) found but none were readable/non-empty "
-            "— nothing to content-scan.",
+            f"\u2014 nothing to content-scan.{unread}",
             "Ensure the agent's log/transcript files are readable by the auditing user.",
         )
 
-    # B-285/LOG-1: a single, quantified truncation disclosure shared with B180 — see
+    # B-285/LOG-1: a single, quantified truncation disclosure shared with B180 - see
     # logscan.summarize_truncation's docstring for why this replaced the old generic
     # "results may be incomplete" wording.
     note = summarize_truncation(all_results)
+    # B-817: same disclosure the "no sinks at all" branch carries above, folded in here
+    # so it reaches the WARN and PASS paths too (both build their detail off `note`) -
+    # a sink list that HAS entries but no JSONL trajectory sidecar among them must not
+    # go quiet about SQLite-only evidence either.
+    note += sqlite_trajectory_disclosure
     # B-314: same honesty discipline for a sink skipped by the cumulative check-level
-    # deadline (_LOG_HUNT_CHECK_BUDGET_S) — never silently omitted from the count.
+    # deadline (_LOG_HUNT_CHECK_BUDGET_S) - never silently omitted from the count.
     if skipped_for_time:
         plural = "sink" if skipped_for_time == 1 else "sinks"
+        # B-484: the old sentence ended "- re-run to include them", which was true only
+        # while the cutoff was the wall clock and a second run could land differently.
+        # Now that the set is planned deterministically (B-486 extended this to
+        # --exhaustive too - see EXHAUSTIVE_LIMITS.log_max_total_bytes in scanbudget.py),
+        # a plain re-run skips exactly the same sinks, so that remedy would be a lie. The
+        # oldest-first phrasing tells the reader WHICH sinks they are missing - the point
+        # of ordering them in the first place.
         note += (
-            f" {skipped_for_time} log/transcript {plural} not scanned (check time budget "
-            "reached) — re-run to include them."
+            f" {skipped_for_time} log/transcript {plural} not scanned (scan budget "
+            f"reached; the oldest are left out first){_log_hunt_budget_remedy(lim)}"
         )
+    elif lim.exhaustive:
+        # F-164 SC-5: under --exhaustive, completeness must be stated affirmatively -
+        # silence must never be the only signal (the "no silent caps" rule). Only under
+        # --exhaustive: a default run skipping zero sinks purely by luck is the normal
+        # case and does not need its own sentence every time.
+        note += f" All {len(sinks)} log/transcript sink(s) scanned."
 
     if corroborated:
         n_sinks = len(corroborated)
@@ -2418,7 +4291,7 @@ def check_log_threat_hunt(ctx: Context) -> Finding:
         PASS,
         detail,
         "No action needed. Isolated/low-confidence signals are intentionally not WARNed "
-        "on individually (base-rate discipline) — see the Log Threat Report section for "
+        "on individually (base-rate discipline) \u2014 see the Log Threat Report section for "
         "the suppressed count.",
     )
 
@@ -2449,60 +4322,111 @@ def check_log_threat_hunt(ctx: Context) -> Finding:
 #   reconfigured to a locally-launching driver later, and the check never claims the
 #   binary WILL launch -- only that it is configured and, if it does launch, is not
 #   tamper-proof.
+#
+#   B-653: mcpArgs is mcpCommand's sibling and was completely unread (grep found zero
+#   hits before this fix). Grounded against the INSTALLED dist (openclaw@2026.9.4, not
+#   the task's own now-dead 2026.7.1-2 bundle citations): `browser.profiles.*.mcpArgs`
+#   is `string[]` (zod-schema-*.js: `mcpArgs: array(string()).optional()`; schema
+#   description "Extra per-profile Chrome DevTools MCP arguments for existing-session
+#   attachment, such as --no-usage-statistics"), read only for `driver:
+#   "existing-session"` profiles -- same gate as mcpCommand. `normalizeChromeMcpOptions`
+#   (chrome-mcp-options-*.mjs) hands `options.mcpArgs` to a yargs parser with
+#   `alias: {browserUrl: "u", wsEndpoint: "w"}` and `boolean: ["autoConnect"]` -- so
+#   mcpArgs is not just inert extra flags: `--browserUrl`/`-u`, `--wsEndpoint`/`-w`, or
+#   bare `--autoConnect` OVERRIDE which endpoint the Chrome DevTools MCP session
+#   connects to, taking precedence over `cdpUrl` entirely (`overridesConnection` short-
+#   circuits the normal cdpUrl-derived connection args). That is the SAME underlying
+#   risk B322 already grades for the `cdpUrl` field (an off-host CDP endpoint handing a
+#   remote party the browser session) reachable through a field B322 never reads.
+#   Deliberately NOT implemented here: resolving/classifying the actual endpoint value
+#   the way B322's `_cdp_url_classify` does (loopback vs remote vs unresolvable) -- that
+#   needs the same care B322's own extensive normalization comments show it took, and
+#   folding a second URL classifier into B321 under this task's narrower scope ("read
+#   mcpArgs") risks exactly the under-grounded-detector failure mode this project's own
+#   C-135 process exists to catch. So this only DISCLOSES that a connection-overriding
+#   flag is present in mcpArgs, at the same WARN/scored=False tier as mcpCommand, and
+#   names the gap in the finding's own fix text (B322 follow-up filed separately). A
+#   textual flag match only -- never resolves, validates, or classifies the URL itself.
+_B321_MCP_ENDPOINT_FLAG_RE = re.compile(
+    r"^--(browserUrl|wsEndpoint|autoConnect)(=.*)?$|^-[uw](=.*)?$"
+)
+
+# DEFAULT_CHROME_MCP_FEATURE_ARGS, chrome-mcp-options-*.mjs - the vendor appends these
+# unconditionally unless the config already carries an equivalent, so an mcpArgs entry
+# that merely restates one is not an override (see the WARN-evidence comment below).
+_B321_DEFAULT_MCP_FEATURE_ARGS = frozenset(
+    {"--no-usage-statistics", "--experimentalStructuredContent"}
+)
+
+
 def check_browser_executable_path(ctx: Context) -> Finding:
-    """B321 — browser.executablePath / browser.profiles.*.{executablePath,mcpCommand}.
+    """B321 - browser.executablePath / browser.profiles.*.{executablePath,mcpCommand,mcpArgs}.
 
-    Two distinct sub-signals share this one check ID:
+    Three sub-signals share this one check ID:
 
-    (A) executablePath (top-level and per-profile) — see the module comment above for
+    (A) executablePath (top-level and per-profile) - see the module comment above for
         the grounding. FAIL-capable: a configured, existing path that is writable by
         another local account is a real, narrow, deterministic escalation, closely
         analogous to B186's writable-relocated-code-root precedent
         (checks/_host.py check_bundled_root_override).
     (B) profiles.<name>.mcpCommand (existing-session driver only) overrides the
-        subprocess binary OpenClaw hands the Chrome DevTools MCP session to —
+        subprocess binary OpenClaw hands the Chrome DevTools MCP session to -
         normalizeChromeMcpOptions (chrome-mcp-BZM3Tb7R.js:174-183) passes it through
         with zero validation of any kind (no trustedDirs-style scoping, no existence
         check). The vendor default is itself an unpinned `npx -y
         chrome-devtools-mcp@latest` (DEFAULT_CHROME_MCP_COMMAND/
-        DEFAULT_CHROME_MCP_PACKAGE_ARGS, chrome-mcp-BZM3Tb7R.js:35-36) — so an explicit,
+        DEFAULT_CHROME_MCP_PACKAGE_ARGS, chrome-mcp-BZM3Tb7R.js:35-36) - so an explicit,
         non-default mcpCommand is at least as plausibly a *hardening* move (pinning a
         known binary instead of trusting an unpinned npx auto-install) as a downgrade.
         WARN-only, and `scored=False` on that specific branch (this check's CheckMeta
-        otherwise stays scored — see the FAIL branch above), mirroring B192/B324's
+        otherwise stays scored - see the FAIL branch above), mirroring B192/B324's
         precedent for a legitimate, commonly-wanted customization a FAIL would punish.
+    (C) profiles.<name>.mcpArgs (existing-session driver only, B-653) - mcpCommand's
+        sibling, previously unread entirely. Same WARN/scored=False tier as (B) - see
+        the module comment above for the grounding, including why a
+        browserUrl/wsEndpoint/autoConnect endpoint-override flag inside it is only
+        DISCLOSED here, never classified/escalated (that is B322's domain, filed
+        separately).
 
-    FAIL    — a configured executablePath (top-level or any profile's) exists on disk
+    FAIL    - a configured executablePath (top-level or any profile's) exists on disk
               and either the file itself or its containing directory is group/world-
               writable (non-sticky) by another local account
               (checks/_shared._dir_replaceable_by_others on both the file and its
-              parent — the file-writable case lets another account overwrite the binary
+              parent - the file-writable case lets another account overwrite the binary
               in place; the parent-writable case lets another account replace the
               directory entry, e.g. via rename/symlink, even if the file's own mode is
               tight). Requires host-filesystem scanning; see UNKNOWN below when it is
               off.
-    WARN    — an existing-session profile's mcpCommand is set to a non-default value
-              (scored=False on this branch — see (B) above).
-    PASS    — at least one executablePath was configured, host-scanned, and none is
-              writable by another account; no mcpCommand override found.
-    UNKNOWN — no browser config at all; OR browser is configured but neither an
-              executablePath (top-level or per-profile) nor an existing-session
-              mcpCommand override is set anywhere — nothing to assess; OR an
-              executablePath is configured but host-filesystem scanning is disabled
-              (ctx.include_host is False / --no-host) — mirrors C5's own --no-host gate
-              (checks/_capability.py check_path_safety): writability cannot be assessed
-              without stat()-ing the real path, and this check does not fall back to
-              reporting the independent mcpCommand signal alone in that specific run to
-              keep the "assessment incomplete" verdict unambiguous — a subsequent run
-              without --no-host (the CLI default) evaluates both signals normally.
+    WARN    - an existing-session profile's mcpCommand is a non-default value and/or
+              its mcpArgs is a non-empty list (scored=False on this branch - see (B)/(C)
+              above).
+    PASS    - at least one executablePath was configured, host-scanned, and none is
+              writable by another account; no mcpCommand override and no mcpArgs found.
+    UNKNOWN - no browser config at all; OR browser is configured but none of
+              executablePath (top-level or per-profile), an existing-session mcpCommand
+              override, or an existing-session mcpArgs entry is set anywhere - nothing
+              to assess (B-362: sets ``not_applicable`` here - the config locus was read
+              COMPLETELY and no sub-signal exists anywhere in the browser block, so
+              there is genuinely nothing for this check to assess, not merely an
+              unassessed risk); OR an executablePath is configured but host-filesystem
+              scanning is disabled (ctx.include_host is False / --no-host) - mirrors
+              C5's own --no-host gate (checks/_capability.py check_path_safety):
+              writability cannot be assessed without stat()-ing the real path, and this
+              check does not fall back to reporting the independent mcpCommand/mcpArgs
+              signal alone in that specific run to keep the "assessment incomplete"
+              verdict unambiguous - a subsequent run without --no-host (the CLI
+              default) evaluates every signal normally. This THIRD branch stays a real
+              UNKNOWN (not not_applicable) - candidates were found, the scan is merely
+              incomplete right now.
     """
     browser = ctx.config.get("browser")
     if not isinstance(browser, dict):
         return _finding(
             "B321",
             UNKNOWN,
-            "No browser config — executablePath / mcpCommand not applicable.",
-            "—",
+            "No browser config \u2014 executablePath / mcpCommand / mcpArgs not applicable.",
+            "\u2014",
+            not_applicable=_browser_surface_absent(ctx),
         )
 
     candidates: list[tuple[str, str]] = []
@@ -2523,17 +4447,49 @@ def check_browser_executable_path(ctx: Context) -> Finding:
             if isinstance(mcp_cmd, str) and mcp_cmd.strip() and mcp_cmd.strip() != "npx":
                 mcp_warn_ev.append(
                     f"browser.profiles.{name}.mcpCommand={mcp_cmd.strip()!r} overrides "
-                    "the vendor default (npx -y chrome-devtools-mcp@latest) — OpenClaw "
+                    "the vendor default (npx -y chrome-devtools-mcp@latest) \u2014 OpenClaw "
                     "does not validate this command/path before spawning it"
                 )
+            # B-653: mcpArgs, mcpCommand's sibling - see the module comment above for
+            # the grounding (including the browserUrl/wsEndpoint/autoConnect
+            # connection-override flags, disclosed but not classified/resolved here).
+            # C-135: an entry that is exactly one of the vendor's OWN
+            # DEFAULT_CHROME_MCP_FEATURE_ARGS (chrome-mcp-options-*.mjs) is dropped
+            # before flagging - the vendor appends both of those unconditionally
+            # regardless of config (only suppressing --no-usage-statistics from its own
+            # defaults when the user's mcpArgs already carries a usage-statistics
+            # flag, never the reverse), so a config that merely RESTATES a default is
+            # not an override in any sense the mcpCommand=="npx" precedent above
+            # would flag either.
+            mcp_args = spec.get("mcpArgs")
+            if isinstance(mcp_args, list):
+                clean_args = [
+                    a.strip() for a in mcp_args
+                    if isinstance(a, str) and a.strip()
+                    and a.strip() not in _B321_DEFAULT_MCP_FEATURE_ARGS
+                ]
+                if clean_args:
+                    endpoint_note = (
+                        " \u2014 includes a browserUrl/wsEndpoint/autoConnect flag, which "
+                        "overrides which endpoint the MCP session connects to"
+                        if any(_B321_MCP_ENDPOINT_FLAG_RE.match(a) for a in clean_args)
+                        else ""
+                    )
+                    mcp_warn_ev.append(
+                        f"browser.profiles.{name}.mcpArgs={clean_args!r} passes extra "
+                        "arguments to the spawned Chrome DevTools MCP process \u2014 "
+                        f"OpenClaw does not validate them before use{endpoint_note}"
+                    )
 
     if not candidates and not mcp_warn_ev:
         return _finding(
             "B321",
             UNKNOWN,
             "browser is configured but no executablePath (top-level or per-profile) "
-            "and no existing-session mcpCommand override is set — nothing to assess.",
-            "—",
+            "and no existing-session mcpCommand/mcpArgs override is set \u2014 nothing to "
+            "assess.",
+            "\u2014",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
         )
 
     if candidates and not getattr(ctx, "include_host", False):
@@ -2542,7 +4498,7 @@ def check_browser_executable_path(ctx: Context) -> Finding:
             "B321",
             UNKNOWN,
             f"{len(candidates)} configured executablePath entr{plural} found but "
-            "host-filesystem scanning is disabled (--no-host) — cannot assess whether "
+            "host-filesystem scanning is disabled (--no-host) \u2014 cannot assess whether "
             "the target is writable by another local account.",
             "Re-run without --no-host to assess executablePath writability.",
         )
@@ -2556,14 +4512,14 @@ def check_browser_executable_path(ctx: Context) -> Finding:
             found = False
         if not found:
             # Matches B186's own precedent: a configured-but-nonexistent path is
-            # silently not a finding here — OpenClaw's own exists() check surfaces a
+            # silently not a finding here - OpenClaw's own exists() check surfaces a
             # clear runtime error at launch time; that is a functionality issue, not a
             # security one.
             continue
         why_file = _shared._dir_replaceable_by_others(p)
         if why_file:
             fail_ev.append(
-                f"{label}={p} is {why_file} — another local account can overwrite "
+                f"{label}={p} is {why_file} \u2014 another local account can overwrite "
                 "this binary in place"
             )
         # C-135 regression (found in adversarial review, 2026-07-25): p.parent is
@@ -2594,8 +4550,8 @@ def check_browser_executable_path(ctx: Context) -> Finding:
             if why_parent:
                 via = " (via a symlink target)" if parent != p.parent else ""
                 fail_ev.append(
-                    f"{label}={p} — containing directory {parent} is {why_parent}"
-                    f"{via} — another local account can replace this binary"
+                    f"{label}={p} \u2014 containing directory {parent} is {why_parent}"
+                    f"{via} \u2014 another local account can replace this binary"
                 )
 
     if fail_ev:
@@ -2603,7 +4559,7 @@ def check_browser_executable_path(ctx: Context) -> Finding:
             "B321",
             FAIL,
             f"{len(fail_ev)} configured browser executable path(s) are writable by "
-            "another local account — see evidence.",
+            "another local account \u2014 see evidence.",
             "Move the browser executable to a directory only its owner can write to "
             "(0755/0700 with an owner-only-writable parent), or point "
             "browser.executablePath at the OS-managed Chrome/Chromium install instead.",
@@ -2615,9 +4571,12 @@ def check_browser_executable_path(ctx: Context) -> Finding:
             "B321",
             WARN,
             f"{len(mcp_warn_ev)} existing-session browser profile(s) override the "
-            "Chrome DevTools MCP command from the vendor default — see evidence.",
-            "Confirm the configured mcpCommand points to a binary you trust; OpenClaw "
-            "does not validate it before spawning.",
+            "Chrome DevTools MCP command and/or pass it extra arguments \u2014 see "
+            "evidence.",
+            "Confirm the configured mcpCommand points to a binary you trust and that "
+            "mcpArgs contains only arguments you intend, especially any "
+            "browserUrl/wsEndpoint/autoConnect entry (it redirects the MCP session's "
+            "browser connection); OpenClaw does not validate either before use.",
             evidence=mcp_warn_ev[:6],
             scored=False,
         )
@@ -2625,7 +4584,7 @@ def check_browser_executable_path(ctx: Context) -> Finding:
     return _finding(
         "B321",
         PASS,
-        f"{len(candidates)} configured browser executable path(s) checked — none "
+        f"{len(candidates)} configured browser executable path(s) checked \u2014 none "
         "writable by another local account.",
         "Keep browser.executablePath (and any per-profile override) pointed at a "
         "directory only its owner can write to.",
@@ -2633,6 +4592,139 @@ def check_browser_executable_path(ctx: Context) -> Finding:
 
 
 # ---------- B322: browser.profiles.*.{cdpUrl,userDataDir,driver:"existing-session"} ----------
+# WHATWG "special schemes" (url.spec.whatwg.org/#special-scheme) that reach the
+# "special authority ignore slashes" state this helper models. "file" is deliberately
+# ABSENT even though the spec lists it as special: file URLs go through their own
+# parsing states (file / file slash / file host), so folding them in here would
+# mishandle a scheme the helper claims to support. OpenClaw restricts cdpUrl to
+# http/https/ws/wss anyway (normalizeExistingSessionCdpUrl, config-DpWXcVmn.js:332-337).
+_WHATWG_SPECIAL_SCHEMES = ("http", "https", "ws", "wss", "ftp")
+
+# The characters the REAL pipeline removes from each end of a cdpUrl, which is the union
+# of two steps OpenClaw actually performs: `value.trim()` (normalizeOptionalString,
+# string-coerce-DW4mBlAt.js:9) and then `new URL(value)`, whose first step strips leading
+# and trailing C0 controls or space.
+#   * C0 controls U+0000-U+001F and space -- stripped by the URL parser.
+#   * ECMAScript trim()'s WhiteSpace + LineTerminator -- NBSP, BOM, the Zs block,
+#     LS/PS -- stripped by trim().
+# Python's argument-less str.strip() is NEITHER set: it misses U+0000-U+0008,
+# U+000E-U+001F and U+FEFF (so a BOM- or NUL-prefixed cdpUrl parsed as unparseable here
+# while the product happily resolved it -- a lying PASS), and it over-strips U+0085 NEL,
+# which is in neither the C0 range nor trim()'s set. U+0085 is therefore deliberately
+# ABSENT below. Measured against the live pipeline (trim -> new URL -> isLoopbackHost).
+_URL_TRIM_CHARS = (
+    "".join(chr(c) for c in range(0x00, 0x20))          # C0 controls
+    + "  \u1680"                              # space, NBSP, OGHAM SPACE MARK
+    + "".join(chr(c) for c in range(0x2000, 0x200b))    # EN QUAD .. HAIR SPACE
+    + "\u2028\u2029\u202f\u205f\u3000\ufeff"            # LS, PS, NNBSP, MMSP, IDSP, BOM
+)
+
+
+def _whatwg_url(url) -> str:
+    """Rewrite a URL the way a browser's WHATWG parser reads it, before urlparse sees it.
+
+    C-135 false negative (found 2026-07-26, fixed here). WHATWG treats a backslash as
+    equivalent to a forward slash inside a special-scheme URL; Python's urllib does not.
+    The two therefore disagree about where the authority ENDS, and an attacker can aim
+    them at different hosts with one string:
+
+        http://10.0.0.9:9222\\@127.0.0.1
+
+    urlparse keeps the whole thing as the authority and splits userinfo on the LAST '@',
+    yielding host "127.0.0.1" -- loopback, apparently safe, and the value this module
+    would have both graded and DISPLAYED. A browser terminates the authority at the
+    backslash, yielding host "10.0.0.9" port 9222, with "@127.0.0.1" demoted to the path.
+    Verified against Node's `new URL()` (host=10.0.0.9, port=9222, path=/@127.0.0.1)
+    versus Python's urlparse (host=127.0.0.1, port=None) on 2026-07-26.
+
+    That divergence is exactly load-bearing here, because OpenClaw parses cdpUrl with
+    `new URL()` itself -- normalizeExistingSessionCdpUrl (config-DpWXcVmn.js:326-342)
+    stores `cdpHost = parsed.hostname` and `cdpIsLoopback = isLoopbackHost(cdpHost)`.
+    So the product dials 10.0.0.9 while this check called it loopback: a config that
+    should FAIL reported clean, with the report naming the decoy loopback host.
+
+    Normalizing here rather than at each call site keeps _cdp_url_classify() and
+    _cdp_url_display() on ONE parse of ONE string -- a verdict and the host it names can
+    never again come from different readings of the same value.
+
+    THE SLASH RUN IS THE WHOLE POINT, NOT JUST THE BACKSLASH (C-135, second pass). A
+    first version of this helper only rewrote backslashes to slashes, which produced the
+    right answer for the exactly-two-backslash decoy above and the wrong answer for every
+    other run length -- because WHATWG does not merely alias `\\` to `/`, it has a
+    "special authority ignore slashes" state that consumes ANY run of `/` and `\\`
+    (zero or more, in any mix) between the scheme and the authority. So `http:10.0.0.9`,
+    `http:/10.0.0.9`, `http:///10.0.0.9` and `http:/\\/\\10.0.0.9` ALL resolve to host
+    10.0.0.9 in a browser. Python's urlparse instead finds no authority at all in those,
+    reports hostname None, and this module classified them "unparseable" -- which
+    _offhost_cdp_endpoints() treats as "nothing to report", i.e. B330 returned a PASS
+    whose own text asserts "every CDP endpoint it names is loopback". A lying PASS on
+    attacker-controllable input, the same failure mode as the historical B2/B70
+    `0.0.0.0/0` bug. Reachable: the schema puts no `.url()` refinement on cdpUrl
+    (zod-schema-O9ml_nmo.js:1096) and both normalizeExistingSessionCdpUrl
+    (config-DpWXcVmn.js:323) and parseBrowserHttpUrl (browser-config-DCrASvM0.js:15)
+    call bare `new URL(value)`.
+
+    Hence: strip the whole leading slash/backslash run, then re-attach exactly `://`.
+    This stays one-directional in the same sense as the numeric fallbacks below -- it
+    cannot invent a host that is not in the string, it can only move a value from
+    "unparseable" onto the host a browser's own parser resolves it to.
+
+    TAB/CR/LF ARE REMOVED FIRST, AND THE ORDER MATTERS (C-135, third pass). WHATWG's
+    very first step is "remove all ASCII tab or newline from input", before any state
+    machine runs -- so `http:<TAB>//10.0.0.9:9222` is host 10.0.0.9 to a browser and to
+    OpenClaw's isLoopbackHost. Python's urlsplit strips those characters too (bpo-43882),
+    which is why the pre-B-337 code got this right by accident. But rebuilding the string
+    as `scheme + "://" + rest` re-emits the tab immediately after the `://`, where it
+    lands INSIDE the authority and collapses the netloc to empty -- reintroducing the
+    very lying-PASS this helper exists to close. Measured: `http:<TAB>//10.0.0.9:9222`
+    classified "remote" before B-337, "unparseable" with the rewrite and no tab removal,
+    and "remote" again once the removal is done first. So the removal is not decoration;
+    it is what makes the rebuild safe.
+
+    USERINFO IS REMOVED BEFORE urlsplit SEES THE STRING (C-135, fifth pass). Python's
+    urlsplit validates `[`/`]` against the WHOLE netloc and raises ValueError if they are
+    unbalanced there -- but WHATWG's authority state finds the LAST `@` first and only
+    ever validates brackets in what follows it. So `http://[x]@10.0.0.9:9222` is host
+    10.0.0.9 to a browser and an exception here, which _cdp_url_classify turns into
+    "unparseable" -- the same lying PASS, with the decoy simply moved left of the `@`
+    instead of right of it. Splitting userinfo off at the last `@` of the authority
+    before handing the string over closes that, and as a side effect stops
+    _cdp_url_display() from ever echoing embedded credentials (OpenClaw's own
+    redactCdpUrl strips them for the same reason).
+
+    Non-special schemes are left alone apart from the character removals (WHATWG only
+    gives backslash its authority meaning for special schemes), as is any value with no
+    scheme, which classify/display already handle as unparseable.
+    """
+    # WHATWG step 1: strip ASCII tab (0x09), LF (0x0A) and CR (0x0D) everywhere; then
+    # remove from each end exactly what trim() + the URL parser remove (_URL_TRIM_CHARS).
+    text = str(url).translate({9: None, 10: None, 13: None}).strip(_URL_TRIM_CHARS)
+    scheme, sep, rest = text.partition(":")
+    if not sep or scheme.lower() not in _WHATWG_SPECIAL_SCHEMES:
+        return text
+    rest = rest.lstrip("/\\").replace("\\", "/")
+    # The authority ends at the first "/", "?" or "#"; everything up to the LAST "@"
+    # inside it is userinfo and is discarded, exactly as WHATWG's authority state does.
+    cut = len(rest)
+    for delim in "/?#":
+        found = rest.find(delim)
+        if found != -1 and found < cut:
+            cut = found
+    authority, tail = rest[:cut], rest[cut:]
+    at = authority.rfind("@")
+    if at != -1:
+        authority = authority[at + 1:]
+    return scheme + "://" + authority + tail
+
+
+# C-357: length gate for the IDNA/fullwidth-digit homoglyph fold in
+# _cdp_url_classify() below -- see the C-135 note at its call site for why nameprep
+# walks a whole non-ASCII label before its own length check can fire. No legitimate
+# DNS hostname exceeds 253 ASCII characters (RFC 1035); 512 is a generous ceiling that
+# only ever excludes pathological input.
+_IDNA_HOST_MAX_CHARS = 512
+
+
 def _cdp_url_classify(url) -> str:
     """Classify a browser.profiles.<name>.cdpUrl value: "loopback", "remote", or
     "unparseable". A non-string/empty value classifies as "loopback" -- OpenClaw's own
@@ -2648,13 +4740,80 @@ def _cdp_url_classify(url) -> str:
     if not isinstance(url, str) or not url.strip():
         return "loopback"
     try:
-        parsed = urlparse(url.strip())
+        parsed = urlparse(_whatwg_url(url))
         host = (parsed.hostname or "").lower()
     except Exception:
         return "unparseable"
     if not host:
         return "unparseable"
+    # C-357: non-ASCII label-separator dots (U+3002 IDEOGRAPHIC FULL STOP, U+FF0E
+    # FULLWIDTH FULL STOP, U+FF61 HALFWIDTH IDEOGRAPHIC FULL STOP) and fullwidth-digit
+    # spellings of an IPv4 literal (U+FF10-FF19) are exactly what a browser's WHATWG
+    # "domain to ASCII" host parser folds to their ASCII equivalents before
+    # isLoopbackHost ever sees the string -- so `http://127<U+3002>0<U+3002>0<U+3002>1:9222` dials genuine
+    # loopback in the real product, an IME substituting the ideographic full-width dot
+    # for ASCII "." while a user types a URL being a realistic, non-adversarial way to
+    # produce it. Grounded against Python's stdlib `encodings.idna` codec (RFC 3490
+    # ToASCII/nameprep -- the only IDNA implementation Golden Rule #1 allows, no PyPI
+    # `idna` package): its `dots` splitter is `re.compile("[.<U+3002 U+FF0E U+FF61>]")`,
+    # the identical RFC 3490 S3.1 / WHATWG dot-equivalence class, and nameprep's NFKC
+    # step folds fullwidth digits the same way. Measured directly (2026-07-28):
+    #     '127<U+3002>0<U+3002>0<U+3002>1'.encode('idna')  == b'127.0.0.1'
+    #     '<U+FF11 U+FF12 U+FF17>.0.0.1'.encode('idna') == b'127.0.0.1'
+    #     '169.254.169.254<U+3002>'.encode('idna') == b'169.254.169.254.'  (a real remote
+    #         IP keeps its identity -- only the dot form changes, matching the
+    #         existing one-trailing-dot handling a few lines below)
+    #     'example.com'.encode('idna') == b'example.com'  (real hostnames untouched)
+    # ASCII-gated (idna is only invoked on a host that actually contains a non-ASCII
+    # code point) so the exhaustively-tested pure-ASCII path below -- LOOPBACK
+    # membership, "localhost", the numeric fallback -- is untouched byte-for-byte.
+    # One-way, like every other fallback in this function: a host idna cannot encode
+    # (UnicodeError -- an empty/oversized label, a bidi violation, ...) falls straight
+    # through unchanged to the existing logic below, so this can only ever ADD a
+    # loopback verdict, never remove one.
+    #
+    # C-135 adversarial pass (2026-07-28): length-gated at _IDNA_HOST_MAX_CHARS. The
+    # stdlib nameprep step walks the WHOLE label doing per-character stringprep table
+    # lookups BEFORE its own "label too long" check ever fires (that check only runs
+    # on nameprep's OUTPUT), so an attacker-controlled non-ASCII host with no dots
+    # bypasses idna's own early-exit and forces the full pass. Measured: a 5,000,000
+    # char single-label non-ASCII host (still inside the pre-existing whole-config
+    # 5 MB byte ceiling, collector._MAX_CONFIG_BYTES) took ~19s to classify -- over
+    # this project's own 15s per-check budget (scanbudget.DEFAULT_CHECK_BUDGET_S),
+    # degrading the check to UNKNOWN under that safety net rather than a lying
+    # verdict, but still a real, newly-introduced cost this fix must not impose on an
+    # ordinary scan. No legitimate DNS hostname exceeds 253 ASCII characters (RFC
+    # 1035); 512 is a generous, RFC-agnostic ceiling that only ever excludes
+    # pathological input, never a real cdpUrl host.
+    if not host.isascii() and len(host) <= _IDNA_HOST_MAX_CHARS:
+        try:
+            host = host.encode("idna").decode("ascii")
+        except UnicodeError:
+            pass
     if host in LOOPBACK:
+        return "loopback"
+    # C-135: "localhost." is genuinely loopback to the product, while a bare
+    # set-membership test calls it remote -- a scored false FAIL on B322. Measured
+    # against the dist directly (isLoopbackHost imported live from net-BOKtNTf8.js):
+    #     isLoopbackHost("localhost.")  -> true      isLoopbackHost("127.0.0.1.")  -> false
+    #     new URL("http://localhost.:9222").hostname  -> "localhost."
+    #     new URL("http://127.0.0.1.:9222").hostname -> "127.0.0.1"
+    # So the two dotted cases are normalized by DIFFERENT layers, and only the hostname
+    # one needs handling here: OpenClaw's parseHostForAddressChecks strips trailing dots
+    # for its literal "localhost" comparison, whereas for an IP it never sees the dotted
+    # form at all because WHATWG's IPv4 parser has already dropped the empty trailing
+    # label -- at most one of them, which is why the numeric retry below only strips
+    # one trailing dot too, not an unbounded run.
+    #
+    # C-135 (2026-07-26, round 7): the full-rstrip above was measured against a single
+    # trailing dot and over-generalized to the whole LOOPBACK set, which also contains
+    # numeric forms ("127.0.0.1", "::1") that do NOT take this path -- WHATWG's IPv4
+    # parser removes AT MOST ONE trailing empty label, so "127.0.0.1.." stays remote to
+    # the product even though a full rstrip lands it back in LOOPBACK. Restricted to the
+    # literal "localhost" comparison, matching OpenClaw's own parseHostForAddressChecks
+    # (net-BOKtNTf8.js:255-258), which strips every trailing dot but ONLY for that one
+    # string equality check -- never for an IP-shaped host.
+    if host.rstrip(".") == "localhost":
         return "loopback"
     # C-135 regression (found in adversarial review, 2026-07-25): OpenClaw's own
     # cdpUrl normalization (normalizeExistingSessionCdpUrl, config-DpWXcVmn.js:326-342)
@@ -2681,11 +4840,28 @@ def _cdp_url_classify(url) -> str:
     # (a plain hostname, or a canonical dotted-quad public IP) is never reclassified
     # away from "remote" by this fallback; it only ever *adds* a loopback verdict,
     # never removes one.
-    try:
-        canonical = socket.inet_ntoa(socket.inet_aton(host))
-    except (OSError, UnicodeError):
-        pass
-    else:
+    #
+    # C-135 (2026-07-26), PRE-EXISTING false positive found by an independent adversarial
+    # differential against Node's `new URL()`: trailing dots. WHATWG's IPv4 parser drops
+    # the empty trailing label, so a browser resolves `http://127.0.0.1.:9222` to hostname
+    # "127.0.0.1" -- genuinely loopback -- while both `ipaddress` and `inet_aton` reject
+    # the dotted string, so this classified it "remote" and B322 emitted a SCORED FAIL on
+    # a loopback-only config. Note the normalization happens in the URL parser, not in
+    # OpenClaw: isLoopbackHost("127.0.0.1.") is itself false (measured), it simply never
+    # receives that form. It stays one-directional: a real hostname written FQDN-style
+    # ("example.com.") is still rejected by inet_aton and still classifies "remote", so
+    # no genuinely remote host can be reclassified as loopback by this.
+    #
+    # C-135 (round 7): only ONE trailing dot is dropped, not `rstrip`'s unbounded run --
+    # WHATWG's IPv4 parser removes at most one empty trailing label, so
+    # "127.0.0.1.." stays "remote" to the product (measured against the dist's own
+    # isLoopbackHost) even though a full rstrip would land it back in LOOPBACK.
+    one_dot_stripped = host[:-1] if host.endswith(".") else host
+    for candidate in (host, one_dot_stripped):
+        try:
+            canonical = socket.inet_ntoa(socket.inet_aton(candidate))
+        except (OSError, UnicodeError):
+            continue
         if canonical in LOOPBACK:
             return "loopback"
     return "remote"
@@ -2695,9 +4871,13 @@ def _cdp_url_display(url) -> str:
     """scheme://host[:port] only -- never the full URL. OpenClaw's own redactCdpUrl
     (browser-config-DCrASvM0.js:56-68) strips embedded username/password before any
     diagnostic display, confirming OpenClaw itself treats cdpUrl as potentially
-    credential-bearing; this check goes further and drops the path/query too."""
+    credential-bearing; this check goes further and drops the path/query too.
+
+    Parses the same _whatwg_url()-normalized string _cdp_url_classify() grades, so the
+    host shown can never disagree with the host judged (see that helper's C-135 note --
+    the un-normalized form displayed an attacker's decoy loopback host)."""
     try:
-        parsed = urlparse(str(url).strip())
+        parsed = urlparse(_whatwg_url(url))
         host = parsed.hostname or "?"
         port = f":{parsed.port}" if parsed.port else ""
         scheme = parsed.scheme or "?"
@@ -2707,78 +4887,78 @@ def _cdp_url_display(url) -> str:
 
 
 def check_browser_existing_session_profile(ctx: Context) -> Finding:
-    """B322 — browser.profiles.*.{cdpUrl,userDataDir,driver:"existing-session"}.
+    """B322 - browser.profiles.*.{cdpUrl,userDataDir,driver:"existing-session"}.
 
     driver:"existing-session" switches OpenClaw from launching its own managed Chrome to
     spawning a third-party `chrome-devtools-mcp` subprocess (vendor default `npx -y
     chrome-devtools-mcp@latest`, chrome-mcp-BZM3Tb7R.js:35-36) and handing it cdpUrl /
     userDataDir as raw CLI args (chrome-mcp-BZM3Tb7R.js normalizeChromeMcpOptions /
-    buildChromeMcpConnectionArgs — confirmed against the installed dist). Two distinct
+    buildChromeMcpConnectionArgs - confirmed against the installed dist). Two distinct
     concerns live under this one check ID:
 
     * userDataDir pointed at a real (non-dedicated) browser profile directory would hand
-      the agent live cookies/sessions from that profile — but OpenClaw's own field docs
+      the agent live cookies/sessions from that profile - but OpenClaw's own field docs
       frame userDataDir as normal usage for "Brave, Edge, Chromium, or non-default
       Chrome profiles", and "is this the user's real daily-driver profile or a
       dedicated automation profile" is not answerable from a bare path string without
-      an unsound heuristic (the two look identical on disk) — so userDataDir is
+      an unsound heuristic (the two look identical on disk) - so userDataDir is
       disclosed as WARN-tier context only, never a FAIL discriminator, and never used to
       suppress or escalate the cdpUrl verdict below.
     * cdpUrl is the FAIL discriminator: getBrowserProfileCapabilities()
       (cdp-reachability-policy-BLdT5iz3.js:9-19) hardcodes isRemote:false for every
       driver:"existing-session" profile; resolveCdpReachabilityPolicy() (same file,
       :17-19) only requires an ssrfPolicy.hostnameAllowlist match when
-      capabilities.isRemote is true — so the allowlist requirement that would gate a
+      capabilities.isRemote is true - so the allowlist requirement that would gate a
       genuinely remote managed-Chrome ("openclaw" driver) connection never triggers for
       an existing-session profile's cdpUrl, confirmed by direct dist read. That cdpUrl
       is then handed to the third-party chrome-devtools-mcp subprocess as a raw CLI arg
       (--wsEndpoint / --browserUrl) with no further OpenClaw-side loopback check at that
       hand-off.
 
-    Scope, stated exactly (v1 — deliberately deferred, not an oversight): only
+    Scope, stated exactly (v1 - deliberately deferred, not an oversight): only
     browser.profiles.<name>.cdpUrl is evaluated. The legacy top-level browser.cdpUrl ->
     existing-session-default-profile migration path
-    (config-DpWXcVmn.js:426-437,479 applyLegacyCdpUrlToExistingSessionDefaultProfile —
+    (config-DpWXcVmn.js:426-437,479 applyLegacyCdpUrlToExistingSessionDefaultProfile -
     fires only when browser.cdpUrl is a ws(s):// URL AND the resolved default profile is
     driver:"existing-session" AND that profile has no cdpUrl of its own) is not
     evaluated here; a profile relying solely on that legacy migration path is invisible
     to this check.
 
     "In effect" driver resolution: a profile counts as driver:"existing-session" when
-    either (a) browser.profiles.<name>.driver is explicitly "existing-session" — a real,
+    either (a) browser.profiles.<name>.driver is explicitly "existing-session" - a real,
     operator-written signal, since OpenClaw lets a tool call select any named profile at
     runtime, not only the resolved default, so an explicitly-declared existing-session
     profile is a latent activation regardless of browser.defaultProfile
-    (resolveProfile, config-DpWXcVmn.js:512-557) — or (b) browser.defaultProfile is
+    (resolveProfile, config-DpWXcVmn.js:512-557) - or (b) browser.defaultProfile is
     explicitly "user" and browser.profiles does not itself redefine "user" with another
     driver. OpenClaw auto-creates a built-in driver:"existing-session", attachOnly:true
     profile named "user" whenever the operator's config does not override it
-    (ensureDefaultUserBrowserProfile, config-DpWXcVmn.js:391-400) — but that built-in
+    (ensureDefaultUserBrowserProfile, config-DpWXcVmn.js:391-400) - but that built-in
     profile stays dormant unless explicitly selected. The bare, never-selected existence
-    of the built-in profile is deliberately NOT flagged on its own — every browser
+    of the built-in profile is deliberately NOT flagged on its own - every browser
     config would otherwise WARN, which would not be a real signal (see the module
     docstring's own note on this default-dormant channel).
 
-    FAIL    — an in-effect existing-session profile's cdpUrl resolves to a non-loopback
-              host (`scored=True` override on this branch — this check's CheckMeta is
+    FAIL    - an in-effect existing-session profile's cdpUrl resolves to a non-loopback
+              host (`scored=True` override on this branch - this check's CheckMeta is
               otherwise unscored, mirroring B186's own narrow-FAIL-override precedent:
               the WARN/PASS states here are a legitimate, working-as-intended feature,
               but this one deterministic escalation should still carry real grade
               weight).
-    WARN    — an in-effect existing-session profile's cdpUrl is absent, loopback, or
+    WARN    - an in-effect existing-session profile's cdpUrl is absent, loopback, or
               unparseable (ambiguous classification defaults to WARN, never FAIL/
               UNKNOWN, per this project's own precedent); and/or userDataDir is set on
               an in-effect profile (disclosed context, not a downgrade on its own).
-    PASS    — browser is configured but no profile has an in-effect driver of
+    PASS    - browser is configured but no profile has an in-effect driver of
               "existing-session".
-    UNKNOWN — no openclaw.json found; openclaw.json present but unparseable/unreadable;
+    UNKNOWN - no openclaw.json found; openclaw.json present but unparseable/unreadable;
               or no browser config at all.
     """
     if not ctx.config_found:
         return _finding(
             "B322",
             UNKNOWN,
-            "No openclaw.json found — browser existing-session profile exposure "
+            "No openclaw.json found \u2014 browser existing-session profile exposure "
             "cannot be assessed.",
             "Run the audit against the OpenClaw profile directory (its openclaw.json).",
         )
@@ -2791,8 +4971,9 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
         return _finding(
             "B322",
             UNKNOWN,
-            "No browser config — existing-session profile exposure not applicable.",
-            "—",
+            "No browser config \u2014 existing-session profile exposure not applicable.",
+            "\u2014",
+            not_applicable=_browser_surface_absent(ctx),
         )
 
     profiles_cfg = browser.get("profiles") if isinstance(browser.get("profiles"), dict) else {}
@@ -2809,9 +4990,9 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
             "B322",
             PASS,
             "browser is configured but no profile has an in-effect driver of "
-            "\"existing-session\" — this agent launches its own managed Chrome rather "
+            "\"existing-session\" \u2014 this agent launches its own managed Chrome rather "
             "than attaching to an existing browser session.",
-            "—",
+            "\u2014",
         )
 
     fail_ev: list[str] = []
@@ -2822,7 +5003,7 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
         if classification == "remote":
             fail_ev.append(
                 f"browser.profiles.{name} (driver=existing-session) cdpUrl="
-                f"{_cdp_url_display(cdp_url)} is not loopback — OpenClaw's own SSRF "
+                f"{_cdp_url_display(cdp_url)} is not loopback \u2014 OpenClaw's own SSRF "
                 "hostname-allowlist requirement never applies to an existing-session "
                 "profile (getBrowserProfileCapabilities hardcodes isRemote=false for "
                 "this driver), so this URL reaches the chrome-devtools-mcp subprocess "
@@ -2831,7 +5012,7 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
         elif classification == "unparseable":
             warn_ev.append(
                 f"browser.profiles.{name} (driver=existing-session) cdpUrl is set but "
-                "not a parseable URL — could not classify as loopback or remote"
+                "not a parseable URL \u2014 could not classify as loopback or remote"
             )
         elif cdp_url:
             warn_ev.append(
@@ -2841,12 +5022,12 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
         else:
             warn_ev.append(
                 f"browser.profiles.{name} (driver=existing-session) has no cdpUrl set "
-                "— auto-detects a locally running Chrome with remote debugging enabled"
+                "\u2014 auto-detects a locally running Chrome with remote debugging enabled"
             )
         user_data_dir = spec.get("userDataDir")
         if isinstance(user_data_dir, str) and user_data_dir.strip():
             warn_ev.append(
-                f"browser.profiles.{name}.userDataDir={user_data_dir.strip()!r} — the "
+                f"browser.profiles.{name}.userDataDir={user_data_dir.strip()!r} \u2014 the "
                 "agent attaches to whatever browser profile lives at this path; "
                 "confirm it is a dedicated automation profile, not a real "
                 "daily-driver profile with live cookies/sessions"
@@ -2857,7 +5038,7 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
             "B322",
             FAIL,
             f"{len(fail_ev)} existing-session browser profile(s) attach to a "
-            "non-loopback Chrome DevTools Protocol endpoint — see evidence.",
+            "non-loopback Chrome DevTools Protocol endpoint \u2014 see evidence.",
             "Point cdpUrl at a loopback address (127.0.0.1 / localhost), or tunnel the "
             "remote endpoint over SSH/VPN and connect to the local tunnel end instead "
             "of the raw remote host.",
@@ -2868,7 +5049,7 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
     return _finding(
         "B322",
         WARN,
-        f"{len(in_effect)} browser profile(s) use driver=\"existing-session\" — see "
+        f"{len(in_effect)} browser profile(s) use driver=\"existing-session\" \u2014 see "
         "evidence.",
         "This is a legitimate feature (attaching to a real, already-signed-in Chrome "
         "session) but review each profile: confirm cdpUrl is loopback-only, and "
@@ -2881,4 +5062,589 @@ def check_browser_existing_session_profile(ctx: Context) -> Finding:
         # FAIL branch above overrides the other way (scored=True) for the one narrow,
         # deterministic escalation that should carry real weight.
         scored=False,
+    )
+
+
+# ---------- B330 (C-298): the unauthenticated CDP control port OpenClaw always opens ----------
+# Grounded in the installed dist, in one line: buildOpenClawChromeLaunchArgs
+# (chrome-DDq_K3xu.js:1662-1689) puts `--remote-debugging-port=${profile.cdpPort}` FIRST in
+# every managed Chrome launch, unconditionally -- the Chrome DevTools Protocol is how
+# OpenClaw drives a browser at all -- and CDP itself carries no authentication step: a
+# client that can open the endpoint can drive the browser. OpenClaw's own endpoint for that
+# port is cdpUrlForPort() = `http://127.0.0.1:${cdpPort}` (chrome-DDq_K3xu.js:1659), and NO
+# dist file anywhere passes --remote-debugging-address, so Chrome's default loopback bind
+# applies.
+#
+# THE DECISION THIS CHECK RECORDS (C-298). The unauthenticated port itself is NOT graded.
+# It is a property of the vendor's design that an operator using the browser tool cannot
+# switch off, and B-331 established that this audit grades the effective state a config
+# CHOOSES, never a condition OpenClaw created -- charging score for the port would punish
+# an operator for something they cannot fix and could not act on. So the fact is stated in
+# every branch's message, and the ordinary loopback-confined case is a real PASS.
+#
+# WHAT IS GRADED, THEN. Only what the operator chose, on two axes:
+#   * WHERE the control channel points (WARN) -- an off-host cdpUrl.
+#   * WHO may reach it from inside the browser (FAIL) -- --remote-allow-origins.
+#
+# WHY --remote-allow-origins IS THE ONE FAIL RUNG, MEASURED NOT ASSUMED. Chromium added an
+# Origin check to the DevTools WebSocket endpoint precisely so that a web page could not
+# reach a loopback CDP port through the browser the user is already running.
+# --remote-allow-origins turns that check off. Measured on Google Chrome 150.0.7871.186
+# (headless, local, raw WebSocket upgrade carrying `Origin: http://evil.example` against
+# the endpoint from /json/version), 2026-07-26:
+#     (no flag)                      -> HTTP/1.1 403 Forbidden
+#     --remote-allow-origins=*       -> HTTP/1.1 101 WebSocket Protocol Handshake
+#     -remote-allow-origins=*        -> HTTP/1.1 101 WebSocket Protocol Handshake
+#     ---remote-allow-origins=*      -> HTTP/1.1 403 Forbidden
+# The wildcard converts a refused cross-origin request into a live CDP session, so ANY
+# page the agent's browser has open can then drive that browser -- read every origin's
+# cookies and DOM, navigate it, execute JS in it. Loopback confinement does not help: the
+# request originates inside the browser, which is already on loopback. That is an
+# operator-written flag with a measured effect, so it is graded, and graded firmly.
+# (The 1-vs-3-dash rows above are also what pin _chrome_switch_name()'s prefix rule.)
+#
+# A NAMED origin list is WARN, not FAIL: it still relaxes a protection Chromium added on
+# purpose, but only to origins the operator wrote down, which is a bounded and possibly
+# deliberate trade -- not the "any page at all" hole the wildcard opens.
+#
+# WHICH RUNG THIS IS RELATIVE TO ITS NEIGHBOURS. The corroborated off-host cdpUrl rung is
+# already owned, twice over, by checks whose evidence is sharper:
+#   * B322 FAILs (scored) a driver:"existing-session" profile whose cdpUrl is non-loopback.
+#   * B196 FAILs an attach-only profile against a non-loopback cdpUrl while its evaluate
+#     sink is on.
+# A third hard cap on those same configs would be triple-counting one fact, so this check
+# stays at WARN there. What neither neighbour covers is the plain shape: the TOP-LEVEL
+# browser.cdpUrl, and a MANAGED (driver "openclaw"/absent) profile's cdpUrl. Both are
+# stated as out-of-scope in the neighbours' own docstrings, and both genuinely move the
+# unauthenticated control channel off this host -- resolveBrowserConfig stores cdpHost from
+# browser.cdpUrl's hostname (config-DpWXcVmn.js:488) and every managed profile without its
+# own cdpUrl inherits it (config-DpWXcVmn.js:516,576). That is the gap this check fills.
+# The --remote-allow-origins axis is not covered by ANY neighbour, in any spelling.
+#
+# NO DOUBLE-COUNT WITH B38 OR B195. B38 grades browser.ssrfPolicy / noSandbox -- which
+# pages the browser may REACH. B195 grades extraArgs flags that weaken the browser itself.
+# This grades who may reach the CONTROL channel. B195 deliberately does not carry
+# --remote-allow-origins (its docstring says so), so that flag is scored exactly once.
+#
+# Two CDP endpoints are deliberately excluded from the off-host evidence:
+#   * driver:"existing-session" -- B322 owns it, including the FAIL.
+#   * driver:"extension" -- resolveProfile (config-DpWXcVmn.js:523-536) hardcodes
+#     cdpHost "127.0.0.1"/cdpIsLoopback true for this driver and, when an extension relay
+#     token exists, embeds it in the cdpUrl as HTTP credentials
+#     (`http://${EXTENSION_RELAY_CDP_USER}:${encodeURIComponent(token)}@127.0.0.1:${port}`).
+#     It is the one CDP endpoint OpenClaw does authenticate, and the operator's own cdpUrl
+#     is rejected for it by the schema, so nothing they write can move it. Verified by
+#     direct dist read, not inherited from the draft that proposed the exclusion.
+_CLEARTEXT_CDP_SCHEMES = ("http", "ws")
+_CDP_ALLOW_ORIGINS_SWITCH = "remote-allow-origins"
+
+
+def _cdp_url_is_cleartext(url) -> bool:
+    """True when a CDP URL's scheme carries the control channel without TLS."""
+    try:
+        return (urlparse(_whatwg_url(url)).scheme or "").lower() in _CLEARTEXT_CDP_SCHEMES
+    except Exception:
+        return False
+
+
+def _cdp_allow_origins_findings(browser: dict) -> "tuple[list[str], list[str]]":
+    """(fail_ev, warn_ev) for --remote-allow-origins in browser.extraArgs.
+
+    Wildcard -> FAIL evidence; a named origin list -> WARN evidence; absent, or present
+    with no value at all (which allows nothing) -> neither. Accepts the one-dash spelling
+    Chrome honours, via _chrome_switch_name (B-337).
+
+    CASE IS LOAD-BEARING FOR THE FAIL RUNG ONLY (C-135, 2026-07-26). An independent
+    adversarial pass found that this check FAILed on `--REMOTE-ALLOW-ORIGINS=*`, and the
+    measurement says Chrome does not: on POSIX, Chromium's switch lookup is
+    case-sensitive, so the uppercase spelling returns 403 (origin check still enforced)
+    where the lowercase one returns 101. Hard-capping a grade for a switch that provably
+    does nothing is precisely the M113 mistake B-337 removed from B195, so the wildcard
+    FAIL now requires the exact-case name. A case-variant is still REPORTED at WARN: it
+    is operator intent, and it WOULD take effect on Windows, where Chromium lowercases
+    switch names (the same BUILDFLAG(IS_WIN) path C-309 corrected the comment about).
+    """
+    fail_ev: list[str] = []
+    warn_ev: list[str] = []
+    extra_args = browser.get("extraArgs")
+    if not isinstance(extra_args, list):
+        return fail_ev, warn_ev
+    for raw in extra_args:
+        if not isinstance(raw, str) or not raw.strip():
+            continue
+        arg = raw.strip()
+        exact = _chrome_switch_name(arg, casefold=False)
+        if exact.lower() != _CDP_ALLOW_ORIGINS_SWITCH:
+            continue
+        # Exact-case == the spelling Chrome actually honours on POSIX.
+        honoured = exact == _CDP_ALLOW_ORIGINS_SWITCH
+        _, _, value = arg.partition("=")
+        origins = [o.strip() for o in value.split(",") if o.strip()]
+        if not origins:
+            continue
+        if "*" in origins and not honoured:
+            warn_ev.append(
+                f"browser.extraArgs has {arg!r} \u2014 this asks for the wildcard that would "
+                "switch off the DevTools Origin check, but Chromium's switch lookup is "
+                "case-sensitive on Linux/macOS, so as spelled it does nothing there "
+                "(measured: the uppercase form leaves a cross-origin CDP handshake at "
+                "403). It is reported rather than graded because on Windows, where "
+                "Chromium lowercases switch names, this spelling WOULD take effect"
+            )
+        elif "*" in origins:
+            fail_ev.append(
+                f"browser.extraArgs has {arg!r} \u2014 the wildcard switches OFF the Origin "
+                "check Chromium added to the DevTools endpoint, so any page the agent's "
+                "browser has open can open a CDP WebSocket to it and drive the browser: "
+                "read every origin's cookies and DOM, navigate it, and execute "
+                "JavaScript in it. Binding to loopback does not contain this \u2014 the "
+                "request comes from inside the browser, which is already on loopback"
+            )
+        else:
+            warn_ev.append(
+                f"browser.extraArgs has {arg!r} \u2014 this relaxes the Origin check on the "
+                f"unauthenticated CDP endpoint for {len(origins)} named origin(s); any "
+                "page served from one of them can drive the agent's browser through the "
+                "DevTools Protocol"
+            )
+    return fail_ev, warn_ev
+
+
+def _offhost_cdp_endpoints(browser: dict) -> list[str]:
+    """Evidence for every operator-written CDP endpoint that is not loopback-confined.
+
+    Empty list == the ordinary config, where the unauthenticated port stays on this host.
+    Reads only keys the operator actually wrote, never OpenClaw's synthesized default
+    profiles (same discipline as _browser_unowned_session_evidence).
+    """
+    ev: list[str] = []
+    top_cdp_url = browser.get("cdpUrl")
+    if _cdp_url_classify(top_cdp_url) == "remote":
+        ev.append(
+            f"browser.cdpUrl={_cdp_url_display(top_cdp_url)} is not loopback \u2014 this is "
+            "the cdpHost every managed profile without its own cdpUrl inherits, so "
+            "OpenClaw drives the browser over the network"
+            + (
+                ", and over a cleartext scheme, so the whole control channel "
+                "(page content, injected JS, cookies read back) crosses it in the clear"
+                if _cdp_url_is_cleartext(top_cdp_url)
+                else ""
+            )
+        )
+    profiles = browser.get("profiles")
+    profiles = profiles if isinstance(profiles, dict) else {}
+    for name, spec in sorted(profiles.items(), key=lambda kv: str(kv[0])):
+        if not isinstance(spec, dict):
+            continue
+        if spec.get("driver") in _UNOWNED_SESSION_DRIVERS:
+            continue  # B322 owns existing-session; extension is loopback + token-authed
+        cdp_url = spec.get("cdpUrl")
+        if _cdp_url_classify(cdp_url) != "remote":
+            continue
+        ev.append(
+            f"browser.profiles.{name}.cdpUrl={_cdp_url_display(cdp_url)} is not "
+            "loopback \u2014 this managed profile's unauthenticated CDP control channel "
+            "leaves this host"
+            + (" over a cleartext scheme" if _cdp_url_is_cleartext(cdp_url) else "")
+        )
+    return ev
+
+
+def check_browser_cdp_control_port(ctx: Context) -> Finding:
+    """B330 - the Chrome DevTools Protocol control port is unauthenticated (C-298).
+
+    FAIL    - browser.extraArgs carries --remote-allow-origins with a `*` wildcard,
+              which measurably converts a refused cross-origin CDP handshake into a live
+              one (403 -> 101, measured on Chrome 150 - see the note above
+              _cdp_allow_origins_findings). Any page the browser has open can then drive
+              it. This is the one rung the operator both chose and can undo.
+    WARN    - the operator's own config points the CDP control channel at a non-loopback
+              endpoint (top-level browser.cdpUrl, or a managed profile's cdpUrl), and/or
+              --remote-allow-origins names specific origins. The always-unauthenticated
+              channel is then reachable beyond a local process.
+    PASS    - every CDP endpoint the config names is loopback-confined and the Origin
+              check is intact (the ordinary case), or browser.enabled is false so no
+              managed launch - and therefore no CDP port - happens at all.
+    UNKNOWN - no openclaw.json, an unparseable one, or no browser config (the browser
+              tool is not in use, so nothing launches a Chrome to debug).
+
+    The unauthenticated port itself is never graded - it is OpenClaw's design and the
+    operator has no lever on it (B-331). See the decision note above
+    _cdp_allow_origins_findings for why the off-host cdpUrl rung stops at WARN rather
+    than triple-counting B322 and B196.
+    """
+    if not ctx.config_found:
+        return _finding(
+            "B330",
+            UNKNOWN,
+            "No openclaw.json found \u2014 the browser's CDP control port cannot be assessed.",
+            "Run the audit against the OpenClaw profile directory (its openclaw.json).",
+        )
+    unreadable = _config_unreadable("B330", ctx)
+    if unreadable is not None:
+        return unreadable
+
+    browser = ctx.config.get("browser")
+    if not isinstance(browser, dict):
+        return _finding(
+            "B330",
+            UNKNOWN,
+            "No browser config \u2014 the browser tool is not in use, so no managed Chrome "
+            "and no CDP control port.",
+            "\u2014",
+            not_applicable=_browser_surface_absent(ctx),
+        )
+
+    if browser.get("enabled") is False:
+        return _finding(
+            "B330",
+            PASS,
+            "browser.enabled=false \u2014 OpenClaw refuses browser control entirely, so it "
+            "never launches a managed Chrome and never opens the unauthenticated Chrome "
+            "DevTools Protocol port that every managed launch would otherwise open.",
+            "Keep browser.enabled=false while no workflow needs the browser tool.",
+            pass_confidence="verified",
+        )
+
+    origin_fail, origin_warn = _cdp_allow_origins_findings(browser)
+    offhost = _offhost_cdp_endpoints(browser)
+
+    if origin_fail:
+        return _finding(
+            "B330",
+            FAIL,
+            "The browser tool is in use, so OpenClaw opens a Chrome DevTools Protocol "
+            "control port on every managed launch (--remote-debugging-port, supplied "
+            "unconditionally), and CDP has no authentication step \u2014 the only thing "
+            "standing between a web page and that port is the Origin check Chromium "
+            "added to the DevTools endpoint. This config turns that check off with a "
+            "wildcard --remote-allow-origins, so any page the agent's browser has open "
+            "can open a CDP session and drive the browser: read every origin's cookies "
+            "and DOM, navigate it, execute JavaScript in it. One injected page is then "
+            "enough to take over every session in that browser.",
+            "Remove --remote-allow-origins from browser.extraArgs. OpenClaw's own CDP "
+            "client does not need it \u2014 it connects from Node, which sends no Origin "
+            "header, so the check it disables was never in OpenClaw's way. If some "
+            "other tool genuinely needs cross-origin CDP access, name that tool's exact "
+            "origin instead of the wildcard, and prefer giving it its own browser "
+            "profile rather than the one the agent drives.",
+            evidence=(origin_fail + origin_warn + offhost)[:6],
+        )
+
+    if origin_warn or offhost:
+        return _finding(
+            "B330",
+            WARN,
+            "The browser tool is in use, so OpenClaw opens a Chrome DevTools Protocol "
+            "control port on every managed launch (--remote-debugging-port, supplied "
+            "unconditionally) \u2014 and CDP has no authentication step, so whoever reaches "
+            "that port drives the agent's browser: reads its DOM and cookies, navigates "
+            "it, and executes JavaScript in it. This config does not keep that channel "
+            "confined to a local process (see evidence). The port itself is OpenClaw's "
+            "design and is not held against you; how far it reaches is your "
+            "configuration.",
+            "Point the CDP endpoint back at loopback (127.0.0.1 / localhost), or reach a "
+            "genuinely remote browser through an SSH/VPN tunnel and give OpenClaw the "
+            "local tunnel end \u2014 that restores both the authentication boundary and the "
+            "encryption the raw endpoint has neither of. Drop any --remote-allow-origins "
+            "unless a named tool needs it. If the browser tool is not needed at all, "
+            "browser.enabled=false removes the port entirely.",
+            evidence=(origin_warn + offhost)[:6],
+        )
+
+    return _finding(
+        "B330",
+        PASS,
+        "The browser tool is in use, so OpenClaw opens a Chrome DevTools Protocol "
+        "control port on every managed launch (--remote-debugging-port, supplied "
+        "unconditionally) and CDP carries no authentication \u2014 but this config keeps that "
+        "channel on this host: every CDP endpoint it names is loopback, and the Origin "
+        "check that stops a web page reaching it through the browser is intact. Worth "
+        "knowing rather than fixing: the port cannot be closed while the browser tool is "
+        "in use, so it is stated here and costs no score. What it means in practice is "
+        "that any process running on this machine can drive the agent's browser through "
+        "it, so the port is only as trustworthy as the code you let run locally.",
+        "Nothing to change in openclaw.json. Treat it as a host-level boundary: do not "
+        "run untrusted code on this machine as this user, keep the agent on a dedicated "
+        "managed profile rather than one holding live logins (B322/B196), and set "
+        "browser.enabled=false whenever the browser tool is not needed.",
+        pass_confidence="no_signal",
+    )
+
+
+# F-195: browser.extensionRelay.allowLegacyAuth -- new in OpenClaw 2026.8.1, re-grounded
+# against the installed 2026.9.5 dist. Runtime resolution is IDENTICAL on both call sites
+# that read it -- config-Bv9CXmGW.mjs:230 `cfg?.extensionRelay?.allowLegacyAuth ?? true`
+# (resolveBrowserConfig, feeding the actual relay-server startup in
+# relay-lifecycle-BNLtuauY.mjs) and gateway-relay-route-2phSkPrI.mjs:116
+# `... !== false` (the Gateway HTTP route's own auth gate) -- so absent and explicit
+# `true` are the SAME runtime state, not two severities apart. zod-schema-DN2u5FdA.mjs:
+# 1601-1604 and schema-CwAIqZVE.mjs:766 confirm the field path and the vendor's own
+# "Default: true for one migration window" description still hold at 2026.9.5; the field
+# has not been retired or flipped since the tracker entry was scoped.
+#
+# Capped at WARN, never FAIL, by design -- this is not a FAIL-capable check and C-135's
+# adversarial FAIL-review does not gate it:
+#   1. It is a vendor-declared, time-bound COMPATIBILITY default, not a state the
+#      operator chose. A FAIL would fire on essentially every fresh 2026.8.1+ install.
+#   2. OpenClaw's own bundled audit rates the identical condition `warn`
+#      (docs/gateway/security/audit-checks.md: `browser.extension_relay_legacy_auth`).
+#   3. The legacy path still requires the correct relay token
+#      (safeEqualSecret(token, legacyToken), gateway-relay-route-2phSkPrI.mjs:118) -- it
+#      is a protocol-strength downgrade (no replay-bound HMAC proof), not an
+#      authentication bypass.
+# Inputs deliberately NOT escalated past WARN (false-FAIL surface excluded by design,
+# not left undiagnosed): explicit `true` (identical runtime effect to absent, see above);
+# any non-boolean/malformed value (dig() returns it as-is; only literal `False` reaches
+# the PASS branch, mirroring the runtime's own `!== false`); a config where `browser` is
+# configured only through the bundled-plugin path (`plugins.entries.browser`) with no
+# `browser` object at all -- this reports UNKNOWN (via `_browser_surface_absent`), not a
+# presumed WARN, matching B38/B195/B196/B321/B322/B330's shared idiom for "no browser
+# dict to read" rather than resolving a default this check cannot see corroborated.
+def check_browser_extension_relay_legacy_auth(ctx: Context) -> Finding:
+    """B383 - browser.extensionRelay.allowLegacyAuth accepts legacy relay auth by default.
+
+    WARN    - browser is configured/intended and not disabled, and
+              browser.extensionRelay.allowLegacyAuth is absent, explicitly `true`, or any
+              other non-`false` value. The Chrome extension/CDP relay then accepts legacy
+              Bearer, Basic, and token-subprotocol authentication alongside Browser Relay
+              Authentication v2 -- a weaker, non-replay-bound credential shape the vendor
+              ships on by default "for one migration window" with no stated expiry.
+    PASS    - browser.extensionRelay.allowLegacyAuth is explicitly `false` (legacy auth
+              refused, v2 only), or browser.enabled is `false` (no browser capability
+              wiring in the gateway at all, so the relay never starts).
+    UNKNOWN - no openclaw.json, an unparseable one, or no browser config to read (the
+              browser tool is not in use, or is reachable only through a path this check
+              cannot corroborate - see `_browser_surface_absent`).
+    """
+    if not ctx.config_found:
+        return _finding(
+            "B383",
+            UNKNOWN,
+            "No openclaw.json found \u2014 browser.extensionRelay.allowLegacyAuth cannot be "
+            "assessed.",
+            "Run the audit against the OpenClaw profile directory (its openclaw.json).",
+        )
+    unreadable = _config_unreadable("B383", ctx)
+    if unreadable is not None:
+        return unreadable
+
+    browser = ctx.config.get("browser")
+    if not isinstance(browser, dict):
+        return _finding(
+            "B383",
+            UNKNOWN,
+            "No browser config \u2014 the browser tool is not in use, so no Chrome extension "
+            "relay ever listens and there is nothing to assess.",
+            "\u2014",
+            not_applicable=_browser_surface_absent(ctx),
+        )
+
+    if browser.get("enabled") is False:
+        return _finding(
+            "B383",
+            PASS,
+            "browser.enabled=false \u2014 OpenClaw wires up no browser capability in the "
+            "gateway at all, so the Chrome extension relay never starts and "
+            "browser.extensionRelay.allowLegacyAuth has nothing to weaken.",
+            "Keep browser.enabled=false while no workflow needs the browser tool.",
+            pass_confidence="verified",
+        )
+
+    allow_legacy = dig(ctx.config, "browser.extensionRelay.allowLegacyAuth")
+    if allow_legacy is False:
+        return _finding(
+            "B383",
+            PASS,
+            "browser.extensionRelay.allowLegacyAuth=false \u2014 the Chrome extension/CDP "
+            "relay accepts only Browser Relay Authentication v2 (a replay-bound, "
+            "connection-scoped HMAC proof); legacy Bearer/Basic/token-subprotocol "
+            "credentials are refused.",
+            "Nothing to change. Keep every paired extension and external CDP client on "
+            "v2 before revisiting this.",
+            pass_confidence="verified",
+        )
+
+    state = "explicitly true" if allow_legacy is True else "unset (the vendor default)"
+    return _finding(
+        "B383",
+        WARN,
+        "The browser tool is configured, so OpenClaw's Chrome extension/CDP relay is in "
+        f"play, and browser.extensionRelay.allowLegacyAuth is {state}. The relay accepts "
+        "legacy Bearer, Basic, and token-subprotocol authentication alongside Browser "
+        "Relay Authentication v2 \u2014 a weaker, non-replay-bound credential shape the "
+        "vendor ships on for one undated migration window. Every fresh 2026.8.1+ "
+        "install starts here; nothing in openclaw.json currently says otherwise.",
+        "Once every paired Chrome extension and external CDP client speaks Browser "
+        "Relay Authentication v2, set browser.extensionRelay.allowLegacyAuth to false "
+        "so the relay stops accepting the legacy credential shape.",
+        evidence=[f"browser.extensionRelay.allowLegacyAuth={allow_legacy!r}"],
+    )
+
+
+def check_attachments_ttl(ctx: Context) -> Finding:
+    """B390 (F-201) -- attachments.ttlHours unset means no media-retention sweep.
+
+    ``attachments.ttlHours`` is a straight rename of the pre-2026.8.1
+    ``media.ttlHours`` -- same field, same semantics (compare
+    ``docs/research/openclaw-8.1-schema-removed-paths.txt:1145`` against
+    ``openclaw-8.1-schema-added-paths.txt:358``, both workspace-root recon; unchanged
+    through every schema-paths snapshot up to the installed 2026.9.5). Grounded
+    directly against the installed 2026.9.5 dist rather than the internal recon prose,
+    because that recon's descriptions map omits the ``attachments`` namespace entirely
+    (a known gap in that map -- CLAUDE.md Golden Rule #4(c)):
+
+      - Type: ``ttlHours: z.ZodOptional<z.ZodNumber>``
+        (``cli-backend.types-DEEWiHUs.d.ts:8652``, mirrored at
+        ``types-B16fzBZc.d.ts:8487``) -- a plain optional number, no enum/min/max.
+      - Vendor description (``schema-CwAIqZVE.mjs:904-905``): "Top-level retention
+        behavior shared across providers and tools that persist media... Optional
+        retention window in hours for persisted media handled by the general mtime
+        sweep. Leave unset to disable that sweep, or set values like 24 (1 day) or 168
+        (7 days) to periodically remove older staged media. Managed outgoing media
+        (chat-generated attachments) is excluded and follows its own SQLite- and
+        transcript-aware retention."
+      - Runtime sweep gate (``server-maintenance-Cl2cKcaI.mjs:359-366``, the
+        server's own periodic ``runMediaMaintenance``/``runMediaCleanup`` tick,
+        confirmed invoked at line 379):
+        ``const ttlHours = params.getRuntimeConfig().attachments?.ttlHours;
+        mediaCleanupInFlight = (ttlHours !== void 0 ? cleanOldMedia(ttlHours * 60 *
+        6e4, {recursive: true, pruneEmptyDirs: true}) : pruneOutboundMedia())...`` --
+        when ``ttlHours`` is unset, ``cleanOldMedia`` (which sweeps the shared
+        ``media/inbound`` directory -- ``pruneNonPlaybackMedia``,
+        ``store-SPnAoW3B.mjs:150-165``/``208-212``, walks every subdirectory of
+        ``media/`` except ``playback-transcode``/``outgoing``) never runs at all;
+        only the unrelated, fixed-TTL ``pruneOutboundMedia()`` staging sweep runs
+        instead. Any set number (0 included -- no documented floor) makes
+        ``cleanOldMedia`` run on that interval. Neither ``cleanOldMedia`` nor
+        ``pruneNonPlaybackMedia`` reads ``attachments.ttlHours`` itself --
+        ``grep ttlHours store-SPnAoW3B.mjs`` returns nothing; the whole gating
+        conjunction lives in ``runMediaCleanup`` above, which converts hours to a
+        max-age in ms and passes it in. (An EARLIER version of this grounding cited
+        ``telegram-ingress-drain-factory-DbVZxBjw.mjs:3823`` as the gate -- that was
+        wrong. That file's ``resolveRetainedTelegramMedia`` also reads
+        ``cfg.attachments?.ttlHours`` (fed via its own line 3937), but only to decide
+        whether to reuse a cached media reference while rebuilding a Telegram reply
+        chain; it is Telegram-only and unrelated to the accumulation-preventing sweep
+        above. Do not follow that citation expecting to find the sweep.)
+
+    So the gap is exactly the filed task's premise: staged INCOMING media
+    (screenshots, voice notes, forwarded files landed by any channel provider)
+    accumulates on local disk indefinitely when unset. Managed OUTGOING media is
+    explicitly out of scope -- the vendor's own description excludes it -- so this
+    check's claim never extends to that surface.
+
+    PASS    -- ``attachments.ttlHours`` is set to a real number (any int/float, per
+               the plain ``ZodNumber`` schema -- this check does not second-guess a
+               concrete operator-chosen value).
+    WARN    -- at least one live channel provider is configured (so something could
+               actually stage inbound media) AND ``attachments.ttlHours`` is absent,
+               ``null``, or any other non-number shape (a shape the real
+               ``ZodOptional<ZodNumber>`` schema would also refuse, so it never
+               enacts a sweep either -- same idiom as B387's ``allowedHosts`` check).
+               Never FAIL: an unswept disk is a data-hygiene gap the operator can act
+               on at any time, not a proven compromise.
+    UNKNOWN -- three distinct reasons, each preserved separately rather than
+               collapsed into one:
+                 (a) config unreadable (parse error), or
+                 (b) never read at all (B-661: a config that was never actually read
+                     must not silently read as "unset", which would misreport this as
+                     a real gap on a host that was simply never scanned), or
+                 (c) F-201 follow-up: the config WAS read completely and simply has no
+                     live channel provider configured (``channels`` absent, or only
+                     ``defaults``/non-dict entries) -- ``not_applicable`` set via
+                     ``_surface_absent``. With no channel able to receive an inbound
+                     message at all, nothing can ever be staged into OpenClaw's
+                     shared ``media/inbound`` directory in the first place, so the
+                     "staged media accumulates" risk this check warns about cannot
+                     exist yet. Grounded against the installed 2026.9.5 dist:
+                     inbound attachments from EVERY channel -- native Telegram
+                     (``resolveTelegramInboundMediaUri`` builds a
+                     ``media://inbound/<id>`` URI, ``bot-message-BoqoOw2A.mjs:521-523``)
+                     and every plugin-SDK channel alike (``saveMediaBuffer(...,
+                     "inbound")``, exposed generically to any channel plugin via
+                     ``createRuntimeChannel``, ``runtime-channel-BvaQLHei.mjs:220``) --
+                     land in that SAME shared ``media/inbound`` subdirectory, and the
+                     general sweep this check is about (``cleanOldMedia`` /
+                     ``pruneNonPlaybackMedia``, ``store-SPnAoW3B.mjs:150-165``,
+                     invoked from the server's own maintenance tick,
+                     ``server-maintenance-Cl2cKcaI.mjs:362-363``) walks every
+                     subdirectory of ``media/`` except ``playback-transcode`` and
+                     ``outgoing`` -- it is channel-agnostic, not Telegram-specific.
+                     (The one Telegram-only consumer of ``attachments.ttlHours``,
+                     ``resolveRetainedTelegramMedia`` in
+                     ``telegram-ingress-drain-factory-DbVZxBjw.mjs:3823-3937``, is a
+                     narrower reply-chain media-reuse decision, not the
+                     accumulation-preventing sweep itself.) So the deciding factor is
+                     not "which channel type", but whether ANY live channel exists to
+                     originate an inbound message at all -- the same "no channels
+                     configured" test B25/B26/B30 already use
+                     (``k != "defaults"`` filtering of ``channels.*``): individual
+                     plugins can still lag the platforms they wrap (e.g. Buzz's own
+                     docs currently disclaim media support), but that is a
+                     per-plugin feature gap, not a distinction this check can soundly
+                     enumerate and keep current -- so it is not drawn here.
+    """
+    unreadable = _config_unreadable("B390", ctx)
+    if unreadable is not None:
+        return unreadable
+    # B-661: an unread config (config={}, config_found=False) would otherwise dig()
+    # straight to None and read exactly like a real "unset" WARN -- the same fail-open
+    # shape B387's own B-661 guard exists to close. Report UNKNOWN instead of
+    # asserting a fact about a host that was never actually scanned.
+    if (not isinstance(ctx.config, dict) or not ctx.config) and not ctx.config_found:
+        return _finding(
+            "B390", UNKNOWN,
+            "No config was read, so whether attachments.ttlHours is set could not be "
+            "determined.",
+            "Run the audit on the host where ~/.openclaw lives.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+
+    cfg = ctx.config
+
+    # F-201 follow-up: a config that WAS read completely but configures no live
+    # channel provider at all (e.g. `{}`) has no ingress path that could ever stage
+    # an inbound attachment -- the "media accumulates" risk below cannot exist yet.
+    # Same "real provider" filter as B25/B26/B30 (channels.<id> dict entries other
+    # than the `defaults` policy block).
+    providers = {
+        k: v for k, v in _channels(cfg).items() if k != "defaults" and isinstance(v, dict)
+    }
+    if not providers:
+        return _finding(
+            "B390", UNKNOWN,
+            "No channels are configured, so nothing can stage inbound media in the "
+            "first place -- attachments.ttlHours' retention sweep is not applicable.",
+            "Once a channel that can receive incoming attachments is configured, "
+            "set attachments.ttlHours to a bounded retention window.",
+            not_applicable=_surface_absent(ctx, LIMIT_DOMAIN_CONFIG),
+        )
+
+    ttl = dig(cfg, "attachments.ttlHours")
+
+    if isinstance(ttl, (int, float)) and not isinstance(ttl, bool):
+        return _finding(
+            "B390", PASS,
+            f"attachments.ttlHours is set ({ttl!r}) \u2014 OpenClaw's general mtime sweep "
+            "periodically removes staged incoming media older than that window.",
+            "Keep attachments.ttlHours at a value that matches how long this "
+            "workload actually needs staged media (voice notes, screenshots, "
+            "forwarded files) on disk.",
+            evidence=[f"attachments.ttlHours={ttl!r}"],
+            config_field_paths=frozenset({"attachments.ttlHours"}),
+        )
+
+    return _finding(
+        "B390", WARN,
+        "attachments.ttlHours is unset, so OpenClaw's general mtime sweep for staged "
+        "media never runs \u2014 incoming attachments (screenshots, voice notes, "
+        "forwarded files) accumulate on local disk indefinitely. (Managed "
+        "outgoing/chat-generated media is unaffected \u2014 it follows its own separate "
+        "retention.)",
+        "Set attachments.ttlHours to a bounded retention window in hours (e.g. 24 "
+        "for one day, 168 for one week) so staged incoming media is periodically "
+        "swept.",
+        evidence=[f"attachments.ttlHours={ttl!r}"],
+        config_field_paths=frozenset({"attachments.ttlHours"}),
     )

@@ -1,44 +1,59 @@
-## Description: <br>
-Through breeding-tank fixed cameras or macro-lens inputs, this skill analyzes fish-egg images or videos to identify incubation stages, report visual development signals, and provide breeding-stage recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fish-egg images or videos to identify incubation stages and suggest breeding actions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External ornamental fish breeders, aquaculture hatchery staff, and laboratory users can use this skill to classify fish-egg incubation stages from macro images or videos, monitor eye-spot and color-change signals, and receive structured guidance about likely hatching progress. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fish-egg images, videos, or media URLs may be sent to the publisher's cloud service for analysis. <br>
-Mitigation: Use the skill only with media the user is comfortable uploading, and review the publisher's retention and account-linkage expectations before deployment. <br>
-Risk: The security scan reports silent local identity linking and local bearer-token storage. <br>
-Mitigation: Run the skill in an isolated environment, inspect local credential storage, and remove or rotate stored tokens when access is no longer needed. <br>
-Risk: History lookup may fetch prior reports through the local identity associated with the skill. <br>
-Mitigation: Avoid shared workstations for report lookup and confirm that historical report access matches the user's authorization and privacy expectations. <br>
+## Use Case:
 
+Fish breeders and hatchery operators use this skill to assess egg development from images or videos, review incubation history, and plan timely fry care.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fish-egg-incubation-stage-analysis) <br>
-- [Fish egg incubation API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown summaries with JSON-capable structured report fields and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include incubation-stage classifications, color distribution metrics, eye-spot detection ratios, recommended actions, disclaimers, report links, and history tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter lists 1.0.2) <br>
+Risk: Fish-egg media and report-history requests are sent to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with media you are authorized to share and review the service's data handling before uploading.
+
+Risk: The skill creates or reuses a local identity database that may retain authentication tokens and link reports across sessions.
+
+Mitigation: Run in an isolated workspace and review or delete local data files when persistent identity linkage is unwanted.
+
+Risk: A runtime import-path weakness warrants manual review before installation.
+
+Mitigation: Inspect the installed code and avoid shared temporary installation paths.
+
+## Reference(s):
+
+- [Skill API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-fish-egg-incubation-stage-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [JSON analysis reports or Markdown history tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Incubation stage, observations, suggested actions, and report links; results can be saved to a file.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved ClawHub release; artifact frontmatter lists 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

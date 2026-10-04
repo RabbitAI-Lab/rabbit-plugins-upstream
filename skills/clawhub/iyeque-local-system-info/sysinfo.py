@@ -7,7 +7,7 @@ def get_cpu():
     return {
         "cpu_percent": psutil.cpu_percent(interval=1),
         "cpu_count": psutil.cpu_count(),
-        "load_avg": [x / psutil.cpu_count() for x in psutil.getloadavg()] if hasattr(psutil, "getloadavg") else []
+        "load_avg": ([x / max(1, psutil.cpu_count() or 1) for x in psutil.getloadavg()] if hasattr(psutil, "getloadavg") else [])
     }
 
 def get_memory():
@@ -30,6 +30,8 @@ def get_disk():
     }
 
 def get_processes(limit=20):
+    if not isinstance(limit, int) or limit < 1 or limit > 100:
+        raise ValueError("limit must be an integer from 1 to 100")
     procs = []
     for p in psutil.process_iter(['pid', 'name', 'username', 'cpu_percent', 'memory_percent']):
         try:

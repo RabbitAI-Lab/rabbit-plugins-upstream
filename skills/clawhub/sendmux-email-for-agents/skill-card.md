@@ -1,45 +1,58 @@
-## Description: <br>
-Give OpenClaw agents a Sendmux inbox to receive, triage, route, reply to, and send email with owner approval and scoped credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Give OpenClaw agents a Sendmux inbox to receive, triage, route, reply to, and send email with owner approval and scoped credentials.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and agent operators use this skill to route agent-email tasks to the right Sendmux setup, mailbox, sending, attachment, CLI, MCP, or token-efficiency workflow while preserving approval and credential boundaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles sensitive email, mailbox access, API keys, agent tokens, and one-time registration credentials. <br>
-Mitigation: Use secure credential storage, scoped tokens, and the skill's instruction not to paste secrets into chat, logs, files, screenshots, or memory-only state. <br>
-Risk: Outbound email or destructive mailbox changes could occur without the intended owner's approval. <br>
-Mitigation: Require explicit user confirmation before sending email, changing labels or read state, deleting mail, revoking keys, suspending mailboxes, or resuming mailboxes. <br>
-Risk: Attachments can expose sensitive content or consume excessive context if copied into chat. <br>
-Mitigation: Use Sendmux attachment workflows with local paths, presigned URLs, CLI or SDK helpers, and documented size limits instead of placing attachment bytes or long base64 in chat. <br>
+## Use Case:
 
+Developers and OpenClaw users use this skill to plan an agent inbox, triage incoming mail, draft replies, and route approved sends through appropriately scoped Sendmux connections.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-email-for-agents) <br>
-- [Sendmux skills repository](https://github.com/Sendmux/skills) <br>
-- [Sendmux agent auth discovery](https://app.sendmux.ai/auth.md) <br>
-- [Sendmux API resource](https://smtp.sendmux.ai/api/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown guidance with route recommendations, scoped credential notes, API call names, and command references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user approval before outbound sends or destructive mailbox changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.3.0) <br>
+Risk: A mistaken or unreviewed provider or skill version could expose mailbox access to an unintended party.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the Sendmux publisher and referenced skill repository before installation; prefer reviewed or pinned versions.
+
+Risk: Mailbox credentials or OAuth tokens could be disclosed through chat or generated artifacts.
+
+Mitigation: Keep credentials in the CLI-managed local profile and never paste keys or tokens into chat, logs, or repository files.
+
+Risk: Untrusted incoming email could prompt unauthorized sends or mailbox changes.
+
+Mitigation: Treat email content as data, require an appropriately scoped credential, and obtain explicit approval for each send, attachment send, or mailbox mutation.
+
+## Reference(s):
+
+- [Sendmux skills homepage (declared in skill metadata)](https://github.com/Sendmux/skills)
+- [Sendmux Email for Agents on ClawHub](https://clawhub.ai/sendmux.ai/skills/sendmux-email-for-agents)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes requests to task-specific Sendmux skills and distinguishes draft-only work from approved mailbox changes and email sends.]
+
+## Skill Version(s):
+
+1.0.11 (source: ClawHub release metadata; skill documentation states 1.7.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

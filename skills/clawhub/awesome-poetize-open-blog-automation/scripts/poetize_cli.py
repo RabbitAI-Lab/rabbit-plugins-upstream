@@ -20,6 +20,7 @@ import argparse
 import json
 import os
 import sys
+import urllib.parse
 from pathlib import Path
 from typing import Any
 
@@ -33,6 +34,7 @@ from manage_blog import (
     post_async_update,
     read_json_file as manage_read_json_file,
     resolve_article_id,
+    validate_time_ranges,
 )
 from manage_blog import apply_ops_strategy
 from publish_post import (
@@ -263,6 +265,29 @@ def _positive_float(value: str) -> float:
     return f
 
 
+RECYCLE_BIN_UPGRADE_HINT = (
+    "此命令依赖回收站能力（需要 awesome-poetize-open v5.2.7+）。"
+    "旧版后端没有对应端点，HTTP 层可能返回 404 或 500；"
+    "若博客已升级到 v5.2.7+ 仍出现本提示，请查看后端日志排查。"
+)
+
+
+def call_recycle_bin_api(method: str, url: str, api_key: str,
+                         payload: dict[str, Any] | None = None) -> dict[str, Any]:
+    """回收站命令专用请求兜底。
+
+    旧后端（<v5.2.7）没有这些端点，HTTP 层可能返回 404 或 500；
+    统一翻译为带升级指引的结构化错误，模型无需主动探测能力。
+    """
+    response = request_json(method, url, api_key, payload, return_error_dict=True)
+    if response.get("code") != 200 and response.get("detail") is not None:
+        response["agent_guide"] = {
+            "message": RECYCLE_BIN_UPGRADE_HINT,
+            "next_steps": ["升级博客后端到 v5.2.7+ 后重试；若已升级，请检查后端日志。"],
+        }
+    return response
+
+
 def add_global_args(parser: argparse.ArgumentParser) -> None:
     parser.add_argument("--base-url", default=None, help="Poetize base URL. Falls back to POETIZE_BASE_URL env or ~/.config/poetize/credentials.json.")
     parser.add_argument("--api-key", default=None, help="Poetize API key. Falls back to POETIZE_API_KEY env or ~/.config/poetize/credentials.json.")
@@ -390,6 +415,24 @@ def add_manage_subparsers(parser: argparse.ArgumentParser) -> None:
     p.add_argument("--label-id", type=int, help="Filter by tag ID.")
     p.add_argument("--label-name", help="Filter by tag name (resolved to ID).")
     p.add_argument("--exact-title", help="Filter to a single exact title match.")
+    p.add_argument("--recommend-only", action="store_true",
+                   help="Only articles featured in recommendations.")
+    p.add_argument("--article-search",
+                   help="Full-text search over title + content; wrap in /.../ for case-insensitive regex (e.g. \"/^Vue 3/\").")
+    p.add_argument("--created-between", action="append", metavar="START~END",
+                   help="Filter by create time, format START~END (either side omittable; "
+                        "yyyy-MM-dd or yyyy-MM-dd HH:mm:ss). Repeat to OR-combine multiple ranges. Backend v5.2.0+.")
+    p.add_argument("--updated-between", action="append", metavar="START~END",
+                   help="Filter by last-update time; same format as --created-between. Backend v5.2.0+.")
+    p.add_argument("--published-between", action="append", metavar="START~END",
+                   help="Filter by first-public-publish time (RSS pubDate semantics; drafts never published are excluded); "
+                        "same format as --created-between. Backend v5.2.0+.")
+    p.add_argument("--order", choices=["create-time", "update-time", "publish-time"],
+                   help="Sort field (default: create-time). Backend v5.2.0+ for non-default values.")
+    p.add_argument("--asc", action="store_true",
+                   help="Sort ascending (default: descending). Backend v5.2.0+.")
+    p.add_argument("--orphan-only", action="store_true",
+                   help="Only list broken articles whose category/tag is missing or was deleted (data-repair aid).")
 
     # get-article
     p = sub.add_parser("get-article", help="Get article content by ID, slug, or exact title.")
@@ -415,13 +458,94 @@ def add_manage_subparsers(parser: argparse.ArgumentParser) -> None:
     p.add_argument("--password", help="Password for hidden article.")
     p.add_argument("--tips", help="Preview tip for hidden article.")
 
+    # delete-article（移入回收站，保留期内可恢复；彻底删除不受支持）
+    p = sub.add_parser("delete-article", help="Move an article to the recycle bin (recoverable during the retention window).")
+    add_global_args(p)
+    add_article_target_args(p)
+    p.add_argument("--brief-file", help="JSON brief file for strategy validation.")
+    p.add_argument("--stdin-brief", action="store_true", help="Read brief JSON from stdin.")
+
+    # restore-article
+    p = sub.add_parser("restore-article", help="Restore an article from the recycle bin.")
+    add_global_args(p)
+    p.add_argument("--article-id", type=int, required=True, help="Trashed article ID (see list-trash).")
+
+    # list-trash
+    p = sub.add_parser("list-trash", help="List articles in the recycle bin.")
+    add_global_args(p)
+    p.add_argument("--search-key", help="Filter by title fragment.")
+    p.add_argument("--current", type=int, default=1, help="Page number.")
+    p.add_argument("--size", type=int, default=10, help="Page size.")
+
+    # list-versions
+    p = sub.add_parser("list-versions", help="List historical version snapshots of an article (newest first).")
+    add_global_args(p)
+    p.add_argument("--article-id", type=int, required=True, help="Target article ID.")
+
+    # restore-version
+    p = sub.add_parser("restore-version",
+                       help="Restore an article to a historical version (auto-snapshots the current version first).")
+    add_global_args(p)
+    p.add_argument("--article-id", type=int, required=True, help="Target article ID.")
+    p.add_argument("--version-id", type=int, required=True, help="Version ID from list-versions.")
+
+    # trash-detail（回收站文章详情，含正文与翻译，用于判断恢复对象）
+    p = sub.add_parser("trash-detail", help="Fetch a trashed article's full content and translations (to decide what to restore).")
+    add_global_args(p)
+    p.add_argument("--article-id", type=int, required=True, help="Trashed article ID (see list-trash).")
+
+    # version-detail（历史版本详情，含正文与翻译快照，用于判断回滚目标）
+    p = sub.add_parser("version-detail", help="Fetch a version snapshot's full content and translations (to decide what to roll back to).")
+    add_global_args(p)
+    p.add_argument("--version-id", type=int, required=True, help="Version ID from list-versions.")
+
+    # 资源回收站（删除进回收站，30 天内可恢复；彻底删除不受支持）
+    p = sub.add_parser("list-resources", help="List resources (excludes trashed ones).")
+    add_global_args(p)
+    p.add_argument("--search-key", help="Filter by path or original name fragment.")
+    p.add_argument("--current", type=int, default=1, help="Page number.")
+    p.add_argument("--size", type=int, default=10, help="Page size.")
+
+    p = sub.add_parser("delete-resource", help="Move a resource to the recycle bin (recoverable during the retention window).")
+    add_global_args(p)
+    p.add_argument("--resource-id", type=int, help="Target resource ID.")
+    p.add_argument("--path", help="Target resource path (when id unknown).")
+
+    p = sub.add_parser("restore-resource", help="Restore a resource from the recycle bin.")
+    add_global_args(p)
+    p.add_argument("--resource-id", type=int, required=True, help="Trashed resource ID (see list-resource-trash).")
+
+    p = sub.add_parser("list-resource-trash", help="List resources in the recycle bin.")
+    add_global_args(p)
+    p.add_argument("--search-key", help="Filter by path or original name fragment.")
+    p.add_argument("--current", type=int, default=1, help="Page number.")
+    p.add_argument("--size", type=int, default=10, help="Page size.")
+
+    p = sub.add_parser("list-resource-backups", help="List replacement backups (old versions kept after replace).")
+    add_global_args(p)
+    p.add_argument("--resource-id", type=int, help="Filter backups by resource ID.")
+    p.add_argument("--current", type=int, default=1, help="Page number.")
+    p.add_argument("--size", type=int, default=10, help="Page size.")
+
+    p = sub.add_parser("restore-resource-backup", help="Restore a resource to a pre-replacement old version (the current file is backed up first).")
+    add_global_args(p)
+    p.add_argument("--backup-id", type=int, required=True, help="Backup ID from list-resource-backups.")
+
+    p = sub.add_parser("resource-trash-detail", help="Fetch a trashed resource's metadata and preview URL (to decide what to restore).")
+    add_global_args(p)
+    p.add_argument("--resource-id", type=int, required=True, help="Trashed resource ID (see list-resource-trash).")
+
+    p = sub.add_parser("resource-backup-detail", help="Fetch a replacement backup's metadata and preview URL (to decide which old version to restore).")
+    add_global_args(p)
+    p.add_argument("--backup-id", type=int, required=True, help="Backup ID from list-resource-backups.")
+
     # article-analytics
     p = sub.add_parser("article-analytics", help="Get article analytics.")
     add_global_args(p)
     add_article_target_args(p)
 
     # site-visits
-    p = sub.add_parser("site-visits", help="Get site visit trends.")
+    p = sub.add_parser("site-visits", help="Get site visit trends with bot/human breakdown (daily, summary, ua_type_breakdown, top_uas, referrer_breakdown, region_breakdown).")
     add_global_args(p)
     p.add_argument("--days", type=int, choices=[7, 30], default=7, help="Number of days for trend data (7 or 30, default: 7).")
 
@@ -524,6 +648,57 @@ def add_manage_subparsers(parser: argparse.ArgumentParser) -> None:
     p.add_argument("--dry-run", action="store_true", help="Preview the change without persisting; returns original/updated content for review.")
     p.add_argument("--brief-file", help="JSON brief file for strategy validation.")
     p.add_argument("--stdin-brief", action="store_true", help="Read brief JSON from stdin.")
+
+    # list-sorts
+    p = sub.add_parser("list-sorts", help="List all categories.")
+    add_global_args(p)
+
+    # list-labels
+    p = sub.add_parser("list-labels", help="List all tags, optionally filtered by category.")
+    add_global_args(p)
+    p.add_argument("--sort-id", type=int, help="Filter tags by category ID.")
+
+    # create-sort
+    p = sub.add_parser("create-sort", help="Create a new category.")
+    add_global_args(p)
+    p.add_argument("--name", required=True, help="Category name.")
+    p.add_argument("--description", required=True, help="Category description.")
+    p.add_argument("--sort-type", type=int, choices=[0, 1], default=1, help="0=navbar, 1=normal (default: 1).")
+    p.add_argument("--priority", type=int, default=99, help="Priority (lower=earlier, default: 99).")
+
+    # update-sort
+    p = sub.add_parser("update-sort", help="Update an existing category.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Category ID.")
+    p.add_argument("--name", help="New category name.")
+    p.add_argument("--description", help="New category description.")
+    p.add_argument("--sort-type", type=int, choices=[0, 1], help="0=navbar, 1=normal.")
+    p.add_argument("--priority", type=int, help="Priority.")
+
+    # delete-sort
+    p = sub.add_parser("delete-sort", help="Delete a category.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Category ID.")
+
+    # create-label
+    p = sub.add_parser("create-label", help="Create a new tag.")
+    add_global_args(p)
+    p.add_argument("--name", required=True, help="Tag name.")
+    p.add_argument("--description", required=True, help="Tag description.")
+    p.add_argument("--sort-id", type=int, required=True, help="Category ID this tag belongs to.")
+
+    # update-label
+    p = sub.add_parser("update-label", help="Update an existing tag.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Tag ID.")
+    p.add_argument("--name", help="New tag name.")
+    p.add_argument("--description", help="New tag description.")
+    p.add_argument("--sort-id", type=int, help="Move tag to a different category.")
+
+    # delete-label
+    p = sub.add_parser("delete-label", help="Delete a tag.")
+    add_global_args(p)
+    p.add_argument("--id", type=int, required=True, help="Tag ID.")
 
 
 def format_comment_tree(records: list[dict[str, Any]]) -> str:
@@ -648,7 +823,24 @@ def cmd_manage(args: argparse.Namespace) -> None:
 
     try:
         if mc == "list-articles":
-            response = list_articles(args)
+            response = list_articles(
+                args,
+                search_key=args.search_key,
+                current=args.current,
+                size=args.size,
+                sort_id=args.sort_id,
+                sort_name=args.sort_name,
+                label_id=args.label_id,
+                label_name=args.label_name,
+                orphan_only=args.orphan_only,
+                recommend_only=args.recommend_only,
+                article_search=args.article_search,
+                create_time_ranges=validate_time_ranges(args.created_between, "--created-between"),
+                update_time_ranges=validate_time_ranges(args.updated_between, "--updated-between"),
+                publish_time_ranges=validate_time_ranges(args.published_between, "--published-between"),
+                order=args.order.replace("-", "_") if args.order else None,
+                asc=args.asc,
+            )
             if args.exact_title:
                 records = [
                     item for item in extract_records(response)
@@ -664,8 +856,16 @@ def cmd_manage(args: argparse.Namespace) -> None:
                     if first_id:
                         next_steps.append(f"Fetch article details (content/metadata): python poetize_cli.py manage get-article --article-id {first_id}")
                 next_steps.append("Fetch details of any article: python poetize_cli.py manage get-article --article-id <id>")
+                if args.orphan_only:
+                    if records:
+                        next_steps.append("Repair a broken article: python poetize_cli.py manage update-article --article-id <id> --payload-file payload.json with valid sortId/labelId (see manage list-sorts / list-labels).")
+                        message = f"Found {len(records)} orphan article(s) with missing or deleted category/tag. These are invisible to visitors and normal category/tag navigation."
+                    else:
+                        message = "No orphan articles found. All articles reference a valid category and tag."
+                else:
+                    message = "Articles listed successfully."
                 response["agent_guide"] = {
-                    "message": "Articles listed successfully.",
+                    "message": message,
                     "next_steps": next_steps
                 }
             print(json.dumps(response, ensure_ascii=False, indent=2))
@@ -691,6 +891,13 @@ def cmd_manage(args: argparse.Namespace) -> None:
                     "message": "Article details fetched successfully.",
                     "next_steps": next_steps
                 }
+                # 隐藏文章返回密码供 Agent 查看
+                if isinstance(data, dict) and data.get("viewStatus") is False:
+                    pwd = data.get("password")
+                    if pwd:
+                        response["agent_guide"]["password"] = pwd
+                        response["agent_guide"]["tips"] = data.get("tips", "")
+                        response["agent_guide"]["message"] = f"Article details fetched. This is a HIDDEN article — password: {pwd}"
             print(json.dumps(response, ensure_ascii=False, indent=2))
             return
 
@@ -735,6 +942,236 @@ def cmd_manage(args: argparse.Namespace) -> None:
                     f"To make it public again: edit markdown and run: python poetize_cli.py publish --markdown-file <file> --article-id {id_str} --publish --wait"
                 ]
             }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "delete-article":
+            article_id = resolve_article_id(args)
+            brief = resolve_brief(args)
+            payload = apply_ops_strategy(brief, {"id": article_id}, expected_task_type="delete_article")
+            response = call_recycle_bin_api("POST", f"{args.base_url.rstrip('/')}/api/api/article/delete", args.api_key,
+                                    payload)
+            if response.get("code") == 200:
+                # 保留天数以后端返回为准，避免与后端策略变化脱节
+                retention_days = (response.get("data") or {}).get("retentionDays")
+                window = f"{retention_days} days" if retention_days else "the retention window"
+                response["agent_guide"] = {
+                    "message": f"Article moved to the recycle bin. It is recoverable during the retention window "
+                               f"({window}); permanent purge happens automatically only after that.",
+                    "next_steps": [
+                        "Verify it is in trash: python poetize_cli.py manage list-trash",
+                        f"Restore it: python poetize_cli.py manage restore-article --article-id {article_id}"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "restore-article":
+            response = call_recycle_bin_api("POST", f"{args.base_url.rstrip('/')}/api/api/article/restore", args.api_key,
+                                    {"id": args.article_id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Article restored from the recycle bin.",
+                    "next_steps": [
+                        f"Verify: python poetize_cli.py manage get-article --article-id {args.article_id}"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-trash":
+            params: dict[str, Any] = {"current": args.current, "size": args.size}
+            if args.search_key:
+                params["searchKey"] = args.search_key
+            query = urllib.parse.urlencode(params)
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/article/trashList?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Recycle bin listed. Items are auto-purged after retentionDays.",
+                    "next_steps": [
+                        "Restore one item: python poetize_cli.py manage restore-article --article-id <id>"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-versions":
+            query = urllib.parse.urlencode({"articleId": args.article_id})
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/article/versions?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Version snapshots listed (newest first). Each update creates one snapshot; "
+                               "version restores are themselves snapshotted and reversible.",
+                    "next_steps": [
+                        "Restore one version: python poetize_cli.py manage restore-version "
+                        f"--article-id {args.article_id} --version-id <id>"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "restore-version":
+            response = call_recycle_bin_api("POST", f"{args.base_url.rstrip('/')}/api/api/article/restoreVersion",
+                                    args.api_key,
+                                    {"articleId": args.article_id, "versionId": args.version_id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Article restored to the requested version. The pre-restore state was snapshotted, "
+                               "so this restore can be undone with another restore-version.",
+                    "next_steps": [
+                        f"Verify: python poetize_cli.py manage get-article --article-id {args.article_id}"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "trash-detail":
+            query = urllib.parse.urlencode({"id": args.article_id})
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/article/trashDetail?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Trashed article content fetched. Read content/translations to confirm this is the article to restore.",
+                    "next_steps": [
+                        f"Restore it: python poetize_cli.py manage restore-article --article-id {args.article_id}"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "version-detail":
+            query = urllib.parse.urlencode({"versionId": args.version_id})
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/article/versionDetail?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Version content fetched. Compare it with the current article before rolling back.",
+                    "next_steps": [
+                        "Roll back: python poetize_cli.py manage restore-version --article-id <id> "
+                        f"--version-id {args.version_id}"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-resources":
+            params = {"current": args.current, "size": args.size}
+            if args.search_key:
+                params["searchKey"] = args.search_key
+            query = urllib.parse.urlencode(params)
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/resource/list?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Resources listed. Use the id (or path) with delete-resource; trashed resources are excluded.",
+                    "next_steps": []
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "delete-resource":
+            body: dict[str, Any] = {}
+            if getattr(args, "resource_id", None):
+                body["id"] = args.resource_id
+            if getattr(args, "path", None):
+                body["path"] = args.path
+            if not body:
+                raise SystemExit("delete-resource requires --resource-id or --path")
+            response = call_recycle_bin_api("POST", f"{args.base_url.rstrip('/')}/api/api/resource/delete", args.api_key, body)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Resource moved to the recycle bin. It is recoverable during the retention window.",
+                    "next_steps": [
+                        "Verify: python poetize_cli.py manage list-resource-trash",
+                        "Restore: python poetize_cli.py manage restore-resource --resource-id <id>"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "restore-resource":
+            response = call_recycle_bin_api("POST", f"{args.base_url.rstrip('/')}/api/api/resource/restore", args.api_key,
+                                    {"id": args.resource_id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Resource restored from the recycle bin.",
+                    "next_steps": []
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-resource-trash":
+            params = {"current": args.current, "size": args.size}
+            if args.search_key:
+                params["searchKey"] = args.search_key
+            query = urllib.parse.urlencode(params)
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/resource/trashList?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Resource recycle bin listed. Items are auto-purged after retentionDays.",
+                    "next_steps": [
+                        "Restore: python poetize_cli.py manage restore-resource --resource-id <id>"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-resource-backups":
+            params: dict[str, Any] = {"current": args.current, "size": args.size}
+            if getattr(args, "resource_id", None):
+                params["resourceId"] = args.resource_id
+            query = urllib.parse.urlencode(params)
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/resource/backupList?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Replacement backups listed. These are pre-replacement old versions kept for rollback.",
+                    "next_steps": [
+                        "Restore one: python poetize_cli.py manage restore-resource-backup --backup-id <id>"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "restore-resource-backup":
+            response = call_recycle_bin_api("POST", f"{args.base_url.rstrip('/')}/api/api/resource/restoreBackup",
+                                    args.api_key, {"id": args.backup_id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Resource restored to the pre-replacement version. The overwritten current file was backed up first, so this restore can be undone.",
+                    "next_steps": []
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "resource-trash-detail":
+            query = urllib.parse.urlencode({"id": args.resource_id})
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/resource/trashDetail?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Trashed resource metadata fetched. Open previewUrl to visually confirm before restoring.",
+                    "next_steps": [
+                        f"Restore: python poetize_cli.py manage restore-resource --resource-id {args.resource_id}"
+                    ]
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "resource-backup-detail":
+            query = urllib.parse.urlencode({"id": args.backup_id})
+            response = call_recycle_bin_api("GET", f"{args.base_url.rstrip('/')}/api/api/resource/backupDetail?{query}",
+                                    args.api_key)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": "Backup metadata fetched. Open previewUrl to visually confirm before restoring the old version.",
+                    "next_steps": [
+                        f"Restore: python poetize_cli.py manage restore-resource-backup --backup-id {args.backup_id}"
+                    ]
+                }
             print(json.dumps(response, ensure_ascii=False, indent=2))
             return
 
@@ -1180,6 +1617,133 @@ def cmd_manage(args: argparse.Namespace) -> None:
                 }
                 if warning:
                     print(f"⚠ WARNING: {warning}", file=sys.stderr)
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-sorts":
+            response = request_json("GET", f"{args.base_url.rstrip('/')}/api/api/categories", args.api_key)
+            if response.get("code") == 200:
+                data = response.get("data", [])
+                next_steps = []
+                if isinstance(data, list) and data:
+                    first_id = data[0].get("id")
+                    if first_id:
+                        next_steps.append(f"View tags in this category: python poetize_cli.py manage list-labels --sort-id {first_id}")
+                next_steps.append("Create a new category: python poetize_cli.py manage create-sort --name \"<name>\" --description \"<desc>\"")
+                response["agent_guide"] = {"message": f"Found {len(data) if isinstance(data, list) else 0} categories.", "next_steps": next_steps}
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "list-labels":
+            response = request_json("GET", f"{args.base_url.rstrip('/')}/api/api/tags", args.api_key)
+            if response.get("code") == 200:
+                data = response.get("data", [])
+                if args.sort_id is not None and isinstance(data, list):
+                    data = [item for item in data if item.get("sortId") == args.sort_id]
+                    response["data"] = data
+                next_steps = []
+                if isinstance(data, list) and data:
+                    first_id = data[0].get("id")
+                    if first_id:
+                        next_steps.append(f"Update this tag: python poetize_cli.py manage update-label --id {first_id} --name \"<new name>\" --description \"<new desc>\"")
+                next_steps.append("Create a new tag: python poetize_cli.py manage create-label --name \"<name>\" --description \"<desc>\" --sort-id <id>")
+                response["agent_guide"] = {"message": f"Found {len(data) if isinstance(data, list) else 0} tags.", "next_steps": next_steps}
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "create-sort":
+            payload = {
+                "sortName": args.name,
+                "sortDescription": args.description,
+                "sortType": args.sort_type,
+                "priority": args.priority,
+            }
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/sort/create", args.api_key, payload)
+            if response.get("code") == 200:
+                data = response.get("data")
+                sort_id = data.get("id") if isinstance(data, dict) else None
+                next_steps = [
+                    f"Create a tag in this category: python poetize_cli.py manage create-label --name \"<name>\" --description \"<desc>\" --sort-id {sort_id}" if sort_id else "Create a tag: python poetize_cli.py manage create-label --name \"<name>\" --description \"<desc>\" --sort-id <id>",
+                    "Publish an article to this category: python poetize_cli.py publish --markdown-file <file> --sort \"<name>\" --label \"<tag>\" --allow-create-label --draft --wait",
+                ]
+                response["agent_guide"] = {"message": f"Category '{args.name}' created successfully.", "next_steps": next_steps}
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "update-sort":
+            payload: dict[str, Any] = {"id": args.id}
+            if args.name is not None:
+                payload["sortName"] = args.name
+            if args.description is not None:
+                payload["sortDescription"] = args.description
+            if args.sort_type is not None:
+                payload["sortType"] = args.sort_type
+            if args.priority is not None:
+                payload["priority"] = args.priority
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/sort/update", args.api_key, payload)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Category {args.id} updated successfully. All article caches and prerendered pages have been refreshed.",
+                    "next_steps": [f"Verify: python poetize_cli.py manage list-sorts"],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "delete-sort":
+            response = request_json("POST", build_url(args.base_url, "/api/api/sort/delete"), 
+                                   args.api_key, {"id": args.id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Category {args.id} deleted successfully. Affected article pages have been re-rendered.",
+                    "next_steps": ["List remaining categories: python poetize_cli.py manage list-sorts"],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "create-label":
+            payload = {
+                "labelName": args.name,
+                "labelDescription": args.description,
+                "sortId": args.sort_id,
+            }
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/label/create", args.api_key, payload)
+            if response.get("code") == 200:
+                data = response.get("data")
+                label_id = data.get("id") if isinstance(data, dict) else None
+                response["agent_guide"] = {
+                    "message": f"Tag '{args.name}' created successfully.",
+                    "next_steps": [
+                        f"Publish an article with this tag: python poetize_cli.py publish --markdown-file <file> --sort-id {args.sort_id} --label-id {label_id} --draft --wait" if label_id else "Publish an article: python poetize_cli.py publish --markdown-file <file> --draft --wait",
+                    ],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "update-label":
+            payload = {"id": args.id}
+            if args.name is not None:
+                payload["labelName"] = args.name
+            if args.description is not None:
+                payload["labelDescription"] = args.description
+            if args.sort_id is not None:
+                payload["sortId"] = args.sort_id
+            response = request_json("POST", f"{args.base_url.rstrip('/')}/api/api/label/update", args.api_key, payload)
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Tag {args.id} updated successfully. All article caches and prerendered pages have been refreshed.",
+                    "next_steps": ["Verify: python poetize_cli.py manage list-labels"],
+                }
+            print(json.dumps(response, ensure_ascii=False, indent=2))
+            return
+
+        if mc == "delete-label":
+            response = request_json("POST", build_url(args.base_url, "/api/api/label/delete"), 
+                                   args.api_key, {"id": args.id})
+            if response.get("code") == 200:
+                response["agent_guide"] = {
+                    "message": f"Tag {args.id} deleted successfully. Affected article pages have been re-rendered.",
+                    "next_steps": ["List remaining tags: python poetize_cli.py manage list-labels"],
+                }
             print(json.dumps(response, ensure_ascii=False, indent=2))
             return
 

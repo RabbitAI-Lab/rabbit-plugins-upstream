@@ -1,0 +1,148 @@
+{
+  "module": "business_logic_relay",
+  "source_sha256": "f62796d4d20a5a918020d5c9a8b73a31d6bdea31345fb2fe23c25b77680e1998",
+  "operation_symbols": {
+    "Any": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 23,
+      "end_line": 23
+    },
+    "CONTRACTS": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 449,
+      "end_line": 1104
+    },
+    "Callable": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 23,
+      "end_line": 23
+    },
+    "Decimal": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 21,
+      "end_line": 21
+    },
+    "Dict": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 23,
+      "end_line": 23
+    },
+    "JsonDict": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 27,
+      "end_line": 27
+    },
+    "Mapping": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 23,
+      "end_line": 23
+    },
+    "UPSTREAM_EXECUTORS": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 1681,
+      "end_line": 1697
+    },
+    "_json_key": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 1144,
+      "end_line": 1145
+    },
+    "_type_matches": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 1153,
+      "end_line": 1168
+    },
+    "_up_recipient": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 1276,
+      "end_line": 1285
+    },
+    "_validate_format": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 1171,
+      "end_line": 1193
+    },
+    "_validate_schema": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 1196,
+      "end_line": 1258
+    },
+    "date": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 20,
+      "end_line": 20
+    },
+    "datetime": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 20,
+      "end_line": 20
+    },
+    "deepcopy": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 19,
+      "end_line": 19
+    },
+    "execute": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 1718,
+      "end_line": 1733
+    },
+    "json": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 13,
+      "end_line": 13
+    },
+    "re": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 16,
+      "end_line": 16
+    },
+    "urlsplit": {
+      "source": "experiments/business_logic_relay.py",
+      "line": 24,
+      "end_line": 24
+    }
+  },
+  "validation_symbols": {
+    "Any": {
+      "source": "experiments/business_logic.py",
+      "line": 11,
+      "end_line": 11
+    },
+    "Dict": {
+      "source": "experiments/business_logic.py",
+      "line": 11,
+      "end_line": 11
+    },
+    "_type_ok": {
+      "source": "experiments/business_logic.py",
+      "line": 95,
+      "end_line": 112
+    },
+    "date": {
+      "source": "experiments/business_logic.py",
+      "line": 9,
+      "end_line": 9
+    },
+    "math": {
+      "source": "experiments/business_logic.py",
+      "line": 7,
+      "end_line": 7
+    },
+    "re": {
+      "source": "experiments/business_logic.py",
+      "line": 8,
+      "end_line": 8
+    },
+    "urlparse": {
+      "source": "experiments/business_logic.py",
+      "line": 12,
+      "end_line": 12
+    },
+    "validate_schema": {
+      "source": "experiments/business_logic.py",
+      "line": 115,
+      "end_line": 196
+    }
+  }
+}

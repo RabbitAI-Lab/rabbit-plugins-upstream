@@ -1,0 +1,3 @@
+A1 1 [light-distill] 拒绝：strategy 仍是占位符，请补全 FI
+A2 1
+A3 1
