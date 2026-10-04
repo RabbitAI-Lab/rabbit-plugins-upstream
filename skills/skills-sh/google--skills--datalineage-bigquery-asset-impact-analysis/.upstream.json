@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/datalineage-bigquery-asset-impact-analysis",
+  "repo": "google/skills",
+  "skillId": "datalineage-bigquery-asset-impact-analysis",
+  "branch": "main",
+  "pushedAt": "2026-10-02T16:53:41Z",
+  "contentHash": "1ac0dcdc98b51008040171fff7e156edbcd0842512aeb01d25f1c184c31731e7",
+  "fetchedAt": "2026-10-04T13:18:40.907Z"
+}

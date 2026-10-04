@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-neptune",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-neptune",
+  "branch": "main",
+  "pushedAt": "2026-10-03T06:07:42Z",
+  "contentHash": "381682643e86916e0bf3d227ee505e5e41599d1310bade49ba8dc956c3780a27",
+  "fetchedAt": "2026-10-04T13:19:23.938Z"
+}

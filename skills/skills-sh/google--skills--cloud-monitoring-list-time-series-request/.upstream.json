@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-monitoring-list-time-series-request",
+  "repo": "google/skills",
+  "skillId": "cloud-monitoring-list-time-series-request",
+  "branch": "main",
+  "pushedAt": "2026-10-02T16:53:41Z",
+  "contentHash": "5d0387774956ee636fd3a508525c3f07e691bd745fdeb543a489a27b378a0857",
+  "fetchedAt": "2026-10-04T13:18:41.179Z"
+}
