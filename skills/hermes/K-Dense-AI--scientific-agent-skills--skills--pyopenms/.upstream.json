@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pyopenms",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pyopenms",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pyopenms",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:42:43Z",
+  "contentHash": "e3322fe6e9a05bdde361c13a3118541e255d29b6e8d6cba005b3d8315fea9b8c",
+  "fetchedAt": "2026-10-04T13:16:42.738Z"
+}

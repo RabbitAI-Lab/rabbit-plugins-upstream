@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/chembl-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/chembl-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/chembl-database",
+  "branch": "main",
+  "pushedAt": "2026-10-04T09:16:04Z",
+  "contentHash": "e6e4d524ccc908c1fb63ace78598a582f4ea3f32d7e619c067695540b4418783",
+  "fetchedAt": "2026-10-04T13:16:31.006Z"
+}

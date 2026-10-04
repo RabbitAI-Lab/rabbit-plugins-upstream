@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/molfeat",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/molfeat",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/molfeat",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:42:43Z",
+  "contentHash": "313984faa360b103bfdb62a4ef051e288694896b6cc3f367f0c7a258ffdedb64",
+  "fetchedAt": "2026-10-04T13:16:42.715Z"
+}

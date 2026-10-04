@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/cobrapy",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/cobrapy",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/cobrapy",
+  "branch": "main",
+  "pushedAt": "2026-10-04T09:16:04Z",
+  "contentHash": "de86b067bb4771b310d80ead649ec8de87856a6d6a0ec9360312c9217f265cbe",
+  "fetchedAt": "2026-10-04T13:16:31.011Z"
+}

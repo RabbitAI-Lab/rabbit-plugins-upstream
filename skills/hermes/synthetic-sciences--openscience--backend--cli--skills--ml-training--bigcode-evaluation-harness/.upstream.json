@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/bigcode-evaluation-harness",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/bigcode-evaluation-harness",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/bigcode-evaluation-harness",
+  "branch": "main",
+  "pushedAt": "2026-10-04T09:16:04Z",
+  "contentHash": "ab9dada34f79093cf29ca9791e551c477b4746ab4a4108c4bd84c35fbb4be679",
+  "fetchedAt": "2026-10-04T13:16:31.027Z"
+}
