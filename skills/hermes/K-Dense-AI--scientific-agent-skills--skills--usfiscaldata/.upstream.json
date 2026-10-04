@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/usfiscaldata",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/usfiscaldata",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/usfiscaldata",
+  "branch": "main",
+  "pushedAt": "2026-10-01T22:42:43Z",
+  "contentHash": "c23092b8c23c3f2ecb7f493b555fc457a18e6d1bd3ac4bede77335c08daa2bba",
+  "fetchedAt": "2026-10-04T13:16:42.759Z"
+}

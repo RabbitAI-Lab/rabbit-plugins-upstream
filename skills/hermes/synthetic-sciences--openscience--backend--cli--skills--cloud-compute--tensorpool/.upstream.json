@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/tensorpool",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/tensorpool",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/tensorpool",
+  "branch": "main",
+  "pushedAt": "2026-10-04T09:16:04Z",
+  "contentHash": "8c8553a97170a6b2b6609b43ad24bdb13fd518d6552ac93fcdd03a45d2c978f1",
+  "fetchedAt": "2026-10-04T13:16:31.105Z"
+}

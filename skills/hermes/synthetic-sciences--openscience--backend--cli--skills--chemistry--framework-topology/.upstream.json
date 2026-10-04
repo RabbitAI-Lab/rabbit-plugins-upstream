@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/framework-topology",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/framework-topology",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/framework-topology",
+  "branch": "main",
+  "pushedAt": "2026-10-04T09:16:04Z",
+  "contentHash": "176cda98a7ff14e962be40a836e944f2424e403d897ddce09d1f0037a4b03a01",
+  "fetchedAt": "2026-10-04T13:16:31.030Z"
+}

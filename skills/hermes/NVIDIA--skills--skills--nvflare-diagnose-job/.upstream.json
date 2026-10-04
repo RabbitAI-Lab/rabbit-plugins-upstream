@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-diagnose-job",
+  "identifier": "NVIDIA/skills/skills/nvflare-diagnose-job",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-diagnose-job",
+  "branch": "main",
+  "pushedAt": "2026-10-02T22:28:42Z",
+  "contentHash": "85db29935bf72064b0249d4454bde40fec4f220c69ec72b2b1aa2d4e897ecf43",
+  "fetchedAt": "2026-10-04T13:16:29.521Z"
+}
