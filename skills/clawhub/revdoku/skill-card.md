@@ -1,44 +1,59 @@
-## Description: <br>
-Create, update, and publish websites with Revdoku buckets, including interactive app sites backed by a per-bucket server database, while storing files privately until the user asks for a public or protected link. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects agents to Revdoku inboxes and shared cloud storage to read messages and files and perform authorized file and account operations.
 
-## Publisher: <br>
-[emirn](https://clawhub.ai/user/emirn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[emirn](https://clawhub.ai/user/emirn)
 
-## Use Case: <br>
-Developers and agents use this skill to publish local folders or bucket files as Revdoku websites, including static sites, protected sites, and app sites with per-bucket database actions. It guides when to use the Revdoku CLI, MCP tools, or REST flows and when to require user confirmation for publishing or lifecycle actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish local folders live and may reuse saved Revdoku credentials. <br>
-Mitigation: Use draft publishing until ready, verify publication status before sharing a live URL, and require explicit user confirmation for publish, unpublish, archive, restore, grant exchange, and permanent delete actions. <br>
-Risk: The helper script can download and execute an unpinned Revdoku CLI. <br>
-Mitigation: Review the helper script before first use and prefer an already installed or pinned Revdoku CLI when available. <br>
-Risk: Published websites may include analytics or browser-side event tracking. <br>
-Mitigation: Disable analytics or tracking when the user does not want those signals collected. <br>
+## Use Case:
 
+People and developers use this skill to let an authorized agent receive and review inbox messages and attachments, manage shared files, and perform explicitly requested storage or account actions.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/emirn/revdoku) <br>
-- [Revdoku app](https://app.revdoku.com) <br>
-- [Revdoku app templates](https://github.com/revdoku/revdoku/tree/main/templates) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, and implementation notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to publish, draft, protect, unpublish, archive, restore, or delete Revdoku bucket content only with the user confirmations described by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: An overly broad folder selection may upload sensitive local files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Select only authorized paths and review a dry-run before recursive uploads.
+
+Risk: Account credentials and access to private inboxes or stored files expose sensitive information.
+
+Mitigation: Grant only the access needed for the task and keep credentials and recovery messages private.
+
+Risk: Permanent bucket deletion irreversibly removes stored files.
+
+Mitigation: Review the exact account, bucket, and deletion preview; require explicit approval before confirming.
+
+## Reference(s):
+
+- [Revdoku homepage](https://revdoku.com)
+- [Revdoku API documentation](https://revdoku.com/api.md)
+- [Incoming email documentation](https://revdoku.com/api.md#incoming-email-into-a-bucket)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Text or Markdown with optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include summaries of messages and stored files, selected file paths, and operation results.]
+
+## Skill Version(s):
+
+1.0.508 (source: server release and VERSION file)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

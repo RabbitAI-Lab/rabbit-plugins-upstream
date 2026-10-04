@@ -1,0 +1,24 @@
+{
+  "family": "ioc",
+  "version": 3,
+  "_meta": {
+    "note": "真实威胁情报入口：仅收录有可靠来源与记录日期的已知恶意 IP/域名。本清单 IOC 来自腾讯安全威胁情报中心 2026-06-08《腾讯披露智能体 Skill 商店恶意样本与检测要点》（s.threatbook.com，含 91.92.242.30 跨平台木马下载器 C2、银狐 C2 域名等）、银狐木马 IOC 汇总（FreeBuf/奇安信/CNCERT，2025-2026）与腾讯云安全中心 Xinference 供应链投毒通告（TVD-2026-17847，2026-04-23，C2 whereisitat.lucyatemysuperbox.space）。示例演示数据见 examples/ioc-examples.json（is_example=true，非真实活跃 C2）。",
+    "source": "腾讯安全威胁情报中心(2026-06-08, s.threatbook.com) + 银狐木马 IOC 汇总(FreeBuf/奇安信/CNCERT, 2025-2026) + 腾讯云安全 Xinference 供应链通告(TVD-2026-17847, 2026-04-23)",
+    "recorded_date": "2026-09-08",
+    "maintainer": "吉祥 (user_ee0c0d25)"
+  },
+  "ips": [
+    "91.92.242.30",
+    "92.223.30.155",
+    "92.223.30.136",
+    "45.137.198.211"
+  ],
+  "domains": [
+    "ding7tian1.com",
+    "pm-relay.aisofialuz.workers.dev",
+    "trust-audit-framework.vercel.app",
+    "download.setup-service.com",
+    "fanyi1-youdao.com",
+    "whereisitat.lucyatemysuperbox.space"
+  ]
+}

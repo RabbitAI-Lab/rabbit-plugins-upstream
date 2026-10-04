@@ -1,44 +1,58 @@
-## Description: <br>
-Transforms completed QA analysis inputs into structured, prioritized, traceable test case designs with coverage notes and review guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides QA teams in turning analyzed requirements, scenarios, and boundary conditions into prioritized, traceable test cases using a consistent nine-column format.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, developers, and test leads use this skill after requirements, scenario, boundary, or combination analysis to turn those inputs into P0-P3 test case sets with traceability, coverage summaries, and review-ready expected results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill before enough upstream QA analysis is available. <br>
-Mitigation: Provide clear requirements and, when possible, completed scenario, boundary, or combination analysis before using the generated case design. <br>
-Risk: Generated test cases can miss product-specific details or include assumptions that do not match the target system. <br>
-Mitigation: Have a QA owner review the cases, fill in system-specific test steps, and verify traceability and coverage before execution. <br>
+## Use Case:
 
+QA engineers and developers use this skill to design and review requirement-linked test cases after analyzing requirements, scenarios, and boundaries. It organizes cases by test type, priority, risk, preconditions, steps, and measurable expected results.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-test-case-design) <br>
-- [Coverage and Quality Standards](references/coverage-and-quality.md) <br>
-- [Design Methods Reference](references/design-methods.md) <br>
-- [Output Template](references/output-template-full.md) <br>
-- [Review Standards](references/review-standards.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reports and tables with structured test case fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Leaves test steps for the user to complete and emphasizes requirement-based design rather than code inspection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Optional installation of the related skill collection may fetch unverified code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the source before running the installation command and prefer a pinned trusted version where available.
+
+Risk: Incomplete requirements or missing scenario and boundary analysis may yield generic or misleading test cases.
+
+Mitigation: Complete upstream analysis first and flag uncovered modules and assumptions for review.
+
+## Reference(s):
+
+- [ClawHub release: qa-test-case-design](https://clawhub.ai/kokxi/skills/qa-test-case-design)
+- [Nine-column test case template](assets/case-table.md)
+- [Test case format and numbering](references/output-template-full.md)
+- [Test design methods](references/design-methods.md)
+- [Coverage and quality criteria](references/coverage-and-quality.md)
+- [Review standards](references/review-standards.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown nine-column test case table or expanded case entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Unique case IDs, P0–P3 priorities, risk levels, measurable expected outcomes, and coverage scope notes.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

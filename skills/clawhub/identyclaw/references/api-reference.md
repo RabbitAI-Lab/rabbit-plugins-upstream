@@ -38,7 +38,7 @@ No authentication required.
 
 Login request/response shapes, field constraints, and error semantics are maintained in OpenAPI:
 
-- Canonical contract: [`../api-docs/swagger.json`](../api-docs/swagger.json)
+- Canonical contract: [`../api-docs/swagger.json`](../../api-docs/swagger.json)
 - Runtime endpoints: `GET /openapi.json`, `GET /swagger.json`
 
 For step-by-step API login implementation guidance (challenge retrieval, signing flow, retries, and troubleshooting), use:
@@ -271,7 +271,7 @@ Require JWT authentication AND specific permissions in IdentyClaw Passport's `pe
 
 ## DID Resolution
 
-**Status:** Experimental (OpenAPI). **Method specification:** [did-rodit-method.md](did-rodit-method.md).
+**Status:** Experimental HTTP resolver (OpenAPI). **Method specification:** [did-rodit-method.md](did-rodit-method.md) (public: `GET /.well-known/did-method-rodit`). **W3C registry:** [did-method-registry-submission.md](did-method-registry-submission.md).
 
 Protected endpoints for DID resolution (require JWT authentication). Primary identifier: `did:rodit:<12-letter-passport-id>`. Alias: `did:web:<host>:token:<passport-id>`. Resolution uses the server’s `NEAR_CONTRACT_ID` on NEAR mainnet.
 
@@ -397,6 +397,7 @@ Public policy documents (no authentication required).
 | `/.well-known/privacy-policy` | GET | Privacy Policy |
 | `/.well-known/data-retention` | GET | Data Retention Policy |
 | `/.well-known/why-identyclaw` | GET | Use cases and benefits of IdentyClaw |
+| `/.well-known/did-method-rodit` | GET | Canonical `did:rodit` DID method specification (Markdown) |
 
 ---
 
@@ -475,7 +476,7 @@ Other chain or policy outcomes on login (`RODIT_NOT_FOUND`, `RODIT_NOT_LIVE`, �
 
 See **[versioning.md](versioning.md)** — HTTP API release in swagger; RODiT JSON-LD `version` only via MCP from chain; `did:rodit` has no separate version.
 
-**HTTP API release** — only [`api-docs/swagger.json`](../api-docs/swagger.json) `info.version`. Surfaces: `GET /`, `GET /openapi.json`, MCP health/service info. Logged at boot as `apiReleaseVersion` in the configuration snapshot. Different **development** vs **main** API versions are done by committing different swagger on each branch (not via `config/development.json`). CI: `npm run validate:version`.
+**HTTP API release** — only [`api-docs/swagger.json`](../../api-docs/swagger.json) `info.version`. Surfaces: `GET /`, `GET /openapi.json`, MCP health/service info. Logged at boot as `apiReleaseVersion` in the configuration snapshot. Different **development** vs **main** API versions are done by committing different swagger on each branch (not via `config/development.json`). CI: `npm run validate:version`.
 
 `X-API-Version` is **not** implemented.
 

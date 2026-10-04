@@ -1,43 +1,53 @@
-## Description: <br>
-Finance Audit Agent guides AI-assisted financial audit review for insurance, securities, and banking workflows by parsing document images, applying 50+ audit and compliance rules, and drafting advisory audit reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides insurance, securities, and banking audits through document review, rule checks, and draft audit reports.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Audit, compliance, and risk teams use this skill to guide AI-assisted review of finance, insurance, securities, banking, identity, medical, and transaction documents. It produces advisory findings and report drafts for qualified human review rather than final audit decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is intended for sensitive financial, identity, insurance, banking, and medical documents. <br>
-Mitigation: Use it only when authorized, minimize or mask sensitive data where possible, and confirm retention, deletion, and logging controls before processing documents. <br>
-Risk: Generated audit findings may be incomplete, inaccurate, or unsuitable as final decisions. <br>
-Mitigation: Treat outputs as advisory and require qualified audit, compliance, or legal review before operational action. <br>
-Risk: The submitted SKILL.md content for version 2.0.0 is largely mojibake, which may obscure intended instructions or limitations. <br>
-Mitigation: Review a correctly encoded source copy before production deployment or downstream policy approval. <br>
+## Use Case:
 
+Financial auditors and compliance teams use the skill to review redacted insurance, securities, and banking materials, identify potential control gaps, and draft audit findings and remediation checklists for human review.
 
-## Reference(s): <br>
-- [Finance Audit Agent on ClawHub](https://clawhub.ai/gechengling/finance-audit-agent) <br>
-- [Source skill artifact](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown audit guidance, structured extraction examples, rule-check narratives, and advisory report templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated audit conclusions are advisory and should be reviewed by qualified humans.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata; artifact version section also states 2.0.0) <br>
+Risk: Audit materials may contain regulated personal, medical, or financial information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the audit module before sharing materials, minimize and redact sensitive fields, and review any retained workpapers before saving.
+
+Risk: Draft findings or regulatory references may be inaccurate or outdated.
+
+Mitigation: Have qualified audit, compliance, or legal staff verify findings and current regulatory requirements before relying on or issuing a report.
+
+## Reference(s):
+
+- [Finance Audit Agent on ClawHub](https://clawhub.ai/gechengling/skills/finance-audit-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, JSON]
+
+**Output Format:** [Text and Markdown checklists or draft reports; structured JSON for document extraction examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft outputs require qualified human review; redact personal and account data before sharing.]
+
+## Skill Version(s):
+
+2.0.2 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

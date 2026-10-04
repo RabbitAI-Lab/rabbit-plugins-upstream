@@ -1,0 +1,45 @@
+{
+  "variant_id": "cap_12_route_to_dispatch",
+  "sources": [
+    {
+      "role": "upstream",
+      "slug": "field-route-manifest-identifier",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/field-route-manifest-identifier-1.1.0.zip",
+      "archive_sha256": "c4b0350ea2ef60867ad0a5d8ece59b4ae4f55919bfcab786896227beb836eade",
+      "files": {
+        "README.md": "f126dde6e65b7e6758b24730c1d55ce7e1eddd70696d05f9c4f901641e21d2c9",
+        "SKILL.md": "78edf7f6b027a01e1fecae0df0ebf07e7ad0b948d511d7cc4bf2b109c20acd6d",
+        "examples/expected.json": "2096198b22e23916ddd7bf304ae98e0301cc875108ab36c7f94eb85dcb6dadbb",
+        "examples/request.json": "6abc0ce796036abb80b15e2f2cb62526b002727ecc40236f7baca0620805aa87",
+        "file-manifest.json": "03b918ac501ab22fe60906486dfca12bcb83eab5a367e7b6d8505544223cc8d9",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "8860808cdbccfb0e8d7cc3a2f50e354e1fc25d5e2c50051030f91348524efa1a",
+        "scripts/operation.py": "18ee8537c00ab13c1321d66721e880f3887a4b1904909a91e362c5f7fd0ee43c",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "671b899c2d33d8c7a0754007aefe24e0a2e36a1e3a953a8bd7628cc3cc3be6cb"
+      }
+    },
+    {
+      "role": "downstream",
+      "slug": "field-route-manifest-workbench",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/field-route-manifest-workbench-1.1.0.zip",
+      "archive_sha256": "c0c46b183211f9bf8aab1e2e68cf915493b739a6293e5f78389ec8336266e620",
+      "files": {
+        "README.md": "b87dd4a2e33b6f14f2b0a831fc56e64ece0b2750fb1fd5302c300659be73b3f8",
+        "SKILL.md": "ea3404923df2290b6346797c9d3d466fe12a713ac11aa13c2c6ceb9378e16e87",
+        "examples/expected.json": "39aa2efdc8adf3f852c4c6ebd7c1867fca702be019c17838add481fe0d3a1e2a",
+        "examples/request.json": "2096198b22e23916ddd7bf304ae98e0301cc875108ab36c7f94eb85dcb6dadbb",
+        "file-manifest.json": "d54777a803cbdc728125d28198b126f75f756f24065ba5e1e3d2d8408f18aa4f",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "8b5682d84502989f8bd566d9b334917e4bcab9489b6a1cfc72842e7d4f07675c",
+        "scripts/operation.py": "5324dabda6bac9a15f178e99d89d75a816d35cb26af8e2757fee0d5dcc269dd1",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "20779ae77b7a351b125b10f0e3b3c755391781b5342e33ef7eba20c37ba285c5"
+      }
+    }
+  ]
+}

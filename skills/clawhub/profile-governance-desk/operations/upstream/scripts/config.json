@@ -1,0 +1,33 @@
+{
+  "variant_id": "relay_04_config_key",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "profile_request",
+  "output_name": "setting_key",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "request_kind"
+    ],
+    "properties": {
+      "request_kind": {
+        "type": "string",
+        "enum": [
+          "notification_digest",
+          "sharing_visibility",
+          "default_language"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "string",
+    "enum": [
+      "profile.notifications.digest_mode",
+      "profile.sharing.default_visibility",
+      "profile.locale.default_language"
+    ]
+  },
+  "effect": null
+}

@@ -1,0 +1,11 @@
+{
+  "referral_form_json": {
+    "referral_id": "CARE-INDIA-9548",
+    "specialty": "cardiology",
+    "urgency": "priority",
+    "requested_window": "2026-09",
+    "contact_fields": {
+      "name": "omitted"
+    }
+  }
+}

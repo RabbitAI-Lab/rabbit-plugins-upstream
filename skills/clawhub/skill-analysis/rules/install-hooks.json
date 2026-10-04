@@ -1,0 +1,48 @@
+{
+  "family": "install-hooks",
+  "version": 1,
+  "rules": [
+    {
+      "id": "hook-00",
+      "re": "\"(?:postinstall|preinstall|prepare|postinstall\\.script)\"\\s*:",
+      "label": "package.json 含安装生命周期脚本（postinstall/prepare，可能自动执行载荷）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "hook-01",
+      "re": "npm\\s+install\\s+(?:git\\+|github:|git://|https?://.+?\\.git)",
+      "label": "从 Git/VCS 直接安装依赖（无 registry 校验，slopsquat/投毒入口）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "hook-02",
+      "re": "npm\\s+install\\s+-g\\b|pip\\s+install\\s+--user\\b",
+      "label": "全局/用户级安装依赖（影响所有项目，扩大污染面）",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "hook-03",
+      "re": "pip\\s+install\\s+git\\+https?://",
+      "label": "从 Git 直接 pip 安装（无校验，供应链风险）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "hook-10",
+      "re": "\"(?:sessionStart|SessionStart|preToolUse|PreToolUse|postToolUse|PostToolUse|postFileEdit|PostFileEdit|beforeShellExecution|userPromptSubmit|UserPromptSubmit|onSessionStart|afterFileEdit)\"\\s*:",
+      "label": "生命周期钩子事件配置（信息：需人工核对绑定命令；含危险命令时按 hook-11 升级）",
+      "sev": "P3",
+      "flags": "I"
+    },
+    {
+      "id": "hook-11",
+      "re": "\"hooks?\"\\s*:\\s*[\\[\\{]?[^\\n]{0,160}?\"(?:command|cmd|run|exec|shellCommand)\"\\s*:\\s*\"(?!(?:\\s*(?:npx|pnpm|bunx|uvx|pipx|npm|yarn|bun)\\s+)*(?:--yes\\s+)?(?:prettier|eslint|stylelint|biome|lint-staged|black|ruff|flake8|isort|pylint|mypy|gofmt|rustfmt|rubocop|clang-format|shellcheck|tsc)\\b)[^\"\\n]{0,160}?(?:curl\\b|wget\\b|bash\\b|sh\\s+-c|powershell|pwsh|cmd\\.exe|node\\s+(?:-e|--input-type)|node\\s+\\S+\\.(?:mjs|cjs|js)\\b|bun\\s+(?:run|x)\\b|python\\s+-c|eval\\b|base64\\s+-d|https?://|\\|\\s*(?:sh|bash)|Invoke-|/bin/(?:z|ba)sh|nc\\s+-|ncat\\b)",
+      "label": "hooks 配置内绑定命令（HookPry 投毒模式：随插件更新静默注入）",
+      "sev": "P1",
+      "flags": "I"
+    }
+  ]
+}

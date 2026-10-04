@@ -1,41 +1,57 @@
-## Description: <br>
-Teaches AI agents how to use vx, the universal development tool manager, for tool execution, project setup, token-efficient workflows, MCP integration, and GitHub Actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using vx to manage development tools and run project workflows across local environments, MCP integrations, and CI.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and agent operators use this skill to guide AI agents working in vx-managed projects, including tool execution, project setup, Git/GitHub workflows, MCP configuration, and CI usage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can steer agents toward vx commands that install tools, update local caches, change project files, or alter CI/MCP configuration. <br>
-Mitigation: Confirm the project is vx-managed and approve environment-changing commands such as vx install, vx sync, vx setup, vx lock, and vx ai setup before execution. <br>
-Risk: The skill includes Git and GitHub workflows that may mutate repositories or use token-bearing integrations. <br>
-Mitigation: Review repository state, intended branch or pull request, and token scope before allowing vx git, vx gh, or GitHub Actions changes. <br>
+## Use Case:
 
+Developers and their agents use this skill to choose vx-managed commands, configure project tool versions, and prepare MCP, GitHub Actions, and container workflows.
 
-## Reference(s): <br>
-- [ClawHub package page](https://clawhub.ai/loonghao/vx-usage) <br>
-- [Publisher profile](https://clawhub.ai/user/loonghao) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell, TOML, JSON, YAML, Dockerfile, and Starlark examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no executable payload is included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: Global skill setup can change guidance for other agent sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review changes before running vx ai setup globally; prefer project-local setup when appropriate.
+
+Risk: MCP integrations and GitHub operations can access sensitive files or credentials and publish comments.
+
+Mitigation: Limit MCP paths and token permissions, and review GitHub comments before posting.
+
+Risk: CI and container examples using latest or main can pull changing dependencies.
+
+Mitigation: Pin action, image, and tool versions where practical.
+
+## Reference(s):
+
+- [vx-usage on ClawHub](https://clawhub.ai/loonghao/skills/vx-usage)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with command and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples cover vx.toml, MCP, CI, and containers.]
+
+## Skill Version(s):
+
+1.0.10 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

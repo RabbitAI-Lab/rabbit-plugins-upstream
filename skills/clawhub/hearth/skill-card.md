@@ -1,48 +1,60 @@
-## Description: <br>
-Hearth runs a configuration-driven, read-only health-check sweep across homelab devices, reporting reachability, uptime/load, memory/disk, services, and app health in a consistent format. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Hearth performs read-only health sweeps across configured homelab devices and reports connectivity, resource usage, service status, and application health.
 
-## Publisher: <br>
-[nj070574-gif](https://clawhub.ai/user/nj070574-gif) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nj070574-gif](https://clawhub.ai/user/nj070574-gif)
 
-## Use Case: <br>
-Homelab admins, sysadmins, network engineers, and OpenClaw users use Hearth to check configured devices and receive a consistent read-only health snapshot before investigating failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use SSH credentials and bearer tokens while probing networked devices. <br>
-Mitigation: Audit devices.yaml before use, prefer SSH keys and scoped tokens, and keep long-lived secrets out of shell profiles. <br>
-Risk: Configured command probes can run shell commands on devices even though the skill presents itself as read-only. <br>
-Mitigation: Use command probes only when the commands were written and reviewed by the operator, and run --dry-run before probing a new configuration. <br>
-Risk: The security guidance notes weakened SSH credential safety and recommends caution around host-key verification. <br>
-Mitigation: Review the SSH options before use and keep host-key verification enabled wherever possible. <br>
+## Use Case:
 
+Homelab administrators and developers use this skill to check configured devices for outages and degraded health, then review per-device results without changing remote hosts.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/nj070574-gif/hearth) <br>
-- [README](README.md) <br>
-- [Configuration reference](docs/CONFIG.md) <br>
-- [Installation guide](docs/INSTALL.md) <br>
-- [Probe reference](docs/PROBES.md) <br>
-- [Platform support](docs/PLATFORMS.md) <br>
-- [Troubleshooting guide](docs/TROUBLESHOOTING.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance and terminal-style health-check output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Shows raw sweep output for each configured device and can guide dry runs, single-device checks, group checks, and configuration updates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.5 (source: server release metadata and user changelog entry) <br>
+Risk: Disabled SSH host-key verification can expose credentials to an impostor host on a hostile network.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require SSH host-key verification before password-based probes and prefer SSH keys over passwords.
+
+Risk: Broad automatic triggers or writable command probes could cause unwanted activity.
+
+Mitigation: Keep command probes read-only and narrow automatic routing triggers where supported.
+
+Risk: Credentials stored directly in device configuration may be disclosed.
+
+Mitigation: Keep real passwords and tokens out of devices.yaml; use SSH keys or credential environment variables.
+
+## Reference(s):
+
+- [Hearth on ClawHub](https://clawhub.ai/nj070574-gif/skills/hearth)
+- [Installation guide](docs/INSTALL.md)
+- [Configuration reference](docs/CONFIG.md)
+- [Probe reference](docs/PROBES.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown health summary or structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Per-device OK, DEGRADED, or DOWN status; sweep exit codes 0, 1, or 2.]
+
+## Skill Version(s):
+
+0.2.0 (source: server-resolved release and SKILL.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

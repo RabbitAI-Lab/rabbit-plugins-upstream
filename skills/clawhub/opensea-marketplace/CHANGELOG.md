@@ -1,5 +1,83 @@
 # @opensea/skill
 
+## 2.26.1
+
+### Patch Changes
+
+- Document how to clear collection page content in `opensea-api`: an empty `preview_media`, `sections` or section `media` list, `{}` for a hero slot, `modules: {}` for the overview, and `""` for description, website, Telegram, banner and logo. Note that a cleared logo falls back to the contract image and that `GET /collections/{slug}` can trail a modify, while `get-metadata` reads fresh.
+
+## 2.26.0
+
+### Minor Changes
+
+- Document collection page management in `opensea-api`: `opensea collections get-metadata`, `upload-page-media`, `set-pricing-currency`, `creator-fee-enforcement`, `set-creator-fee-enforcement` and `refresh`, `opensea drops items`, and the `metadata`, `media/{placement}`, `pricing_currency`, `creator_fee_enforcement`, `refresh` and `drops/{slug}/items` endpoints.
+
+## 2.25.0
+
+### Minor Changes
+
+- Document the drop item upload batch flow in `opensea-api`: `opensea drops upload-items`, which uploads a folder under one upload batch id and saves it by filename, `save-item-media-batch`, and the `items/media`, `items/media/save-batch` and deprecated `items/media/save` endpoints.
+
+## 2.24.0
+
+### Minor Changes
+
+- Document the drop publish flow in `opensea-api`: `opensea drops publish` and `unpublish` (with `--send`), `upload-metadata-ipfs --wait`, `metadata-ipfs-status`, `create-manifest-upload` and `upload-file`, and the endpoints behind them.
+
+## 2.23.1
+
+### Patch Changes
+
+- Correct the `WalletStateAttestationPredicate` entry in `opensea-tool-sdk/references/known-predicates.md`: the reference implementation's `hasAccess` takes the issuer's compact JWT as `data`, and a check costs about 130,000 gas.
+
+## 2.23.0
+
+### Minor Changes
+
+- Document endpoint-bound predicate authentication and the optional shared replay guard for single-use identity authorizations.
+
+## 2.22.0
+
+### Minor Changes
+
+- Add a `.grok-plugin/plugin.json` manifest and `.mcp.json` so plugin marketplaces (xAI Grok Build) can index the five sub-skills and the hosted OpenSea MCP server.
+
+## 2.21.2
+
+### Patch Changes
+
+- Pin the public release actions, include the MIT license text, and clarify credential and token-address examples so security scanners distinguish runtime values from embedded secrets.
+
+## 2.21.1
+
+### Patch Changes
+
+- Clarify that offer-action creation requires a payment token mint or contract address, and document the native SOL address instead of suggesting the `SOL` ticker symbol.
+
+## 2.21.0
+
+### Minor Changes
+
+- b68b01e: Add executable Solana order-action workflows for creating offers, fulfilling listings and offers, and cancelling orders, including exact-byte partial-signature handling, sponsored fee payers, and Jito bundles.
+
+## 2.20.0
+
+### Minor Changes
+
+- Document agent accounts: declaring an account an agent, the two-sided ownership handshake, the new `opensea agent` CLI group, and the `accounts/opensea-agent-relationships.sh` public read. Records that the writes take `write:wallets` while listing your own relationships takes `read:wallets`, so a client running the whole handshake needs both.
+
+## 2.19.2
+
+### Patch Changes
+
+- Document ERC20-denominated listing fulfillment: read prices with the `decimals` field (stablecoins commonly use 6, not 18), and check payment-token balance and conduit allowance (via ConduitController `getConduit`) before submitting.
+
+## 2.19.1
+
+### Patch Changes
+
+- Replace hardcoded supported-chain lists with a pointer to `GET /api/v2/chains`, and relax marketplace script chain validation to a format check so newer chains (e.g. `robinhood`) work.
+
 ## 2.19.0
 
 ### Minor Changes

@@ -1,0 +1,7 @@
+{
+  "delivery_profile": {
+    "operation_state": "completed",
+    "acknowledge_after": "completed",
+    "allow_repeat": false
+  }
+}

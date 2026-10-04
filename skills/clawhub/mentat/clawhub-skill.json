@@ -1,0 +1,762 @@
+{
+  "name": "mentat",
+  "display_name": "MENTAT",
+  "description": "MENTAT: the agent-native OTC venue. Three settlement paths on one response contract: escrow on Base (atomic, no admin keys), CoW Protocol relay (agent-signed EIP-712 orders, MEV-protected, non-custodial), and an XMR route via Wagyu (XMR in/out routed through XMR1 on Hyperliquid; Wagyu is the settlement counterparty; MENTAT never holds XMR; not trustless). Every quote and order response carries settlement_path, route_legs, and proofs[]: one proof per leg, whatever its chain can prove.",
+  "tagline": "disciplined intelligence",
+  "version": "1.4.5",
+  "previous_slug": "floor-otc",
+  "author": "Agora0x",
+  "license": "MIT-0",
+  "contact": "trade@mentat.market",
+  "tags": [
+    "otc",
+    "trading",
+    "escrow",
+    "defi",
+    "swap",
+    "base",
+    "erc-8004",
+    "web3",
+    "tokens",
+    "agent-economy",
+    "cow-protocol",
+    "batch-auction",
+    "mev-protected",
+    "eip-712",
+    "relay",
+    "xmr",
+    "monero",
+    "wagyu",
+    "hyperliquid",
+    "proofs"
+  ],
+  "homepage": "https://mentat.market",
+  "receipts": "https://mentat.market/ledger",
+  "agent_id": 31596,
+  "registry": "ERC-8004 Base Mainnet",
+  "registry_address": "0x8004A169FB4a3325136EB29fA0ceB6D2e539a432",
+  "chain": "base",
+  "chain_id": 8453,
+  "escrow_contract": "0x9EC9d882C93F52621CBD0d146D3F2e0929E53AA7",
+  "escrow_contracts": {
+    "v2": {
+      "name": "FloorEscrow V2",
+      "address": "0x9EC9d882C93F52621CBD0d146D3F2e0929E53AA7",
+      "used_by": "execute_trade, check_trade and the Telegram bot"
+    },
+    "v3": {
+      "name": "FloorEscrow V3",
+      "address": "0x83818036539737a813D1D99f1c6Cd2867c7D6a6d",
+      "deploy_block": 52006064,
+      "used_by": "web deals: a maker posts at https://mentat.market/new and shares the deal link https://mentat.market/deal/{id}",
+      "flow": "The maker funds the deal when creating it; the taker's fill settles both legs in one transaction; only the maker can cancel. A deal is not listed on MENTAT, but it is public on-chain and anyone with the link can fill it at the stated price. No skill calls V3: maker and taker use their own wallets.",
+      "post": "https://mentat.market/new",
+      "deal_link": "https://mentat.market/deal/{id}"
+    }
+  },
+  "cow_settlement": "0x9008D19f58AAbD9eD0D60971565AA8510560ab41",
+  "cow_vault_relayer": "0xC92E8bdf79f0507f65a392b0ab4667716BFE0110",
+  "endpoints": {
+    "agent_card": "https://api.mentat.market/.well-known/agent.json",
+    "a2a": "https://api.mentat.market/a2a",
+    "rest_quote": "https://api.mentat.market/api/quote",
+    "rest_xmr_orders": "https://api.mentat.market/api/xmr/orders",
+    "rest_routes": "https://api.mentat.market/api/routes",
+    "rest_prices": "https://api.mentat.market/api/prices",
+    "health": "https://api.mentat.market/health",
+    "telegram": "https://t.me/FloorOTCbot",
+    "mcp": "https://api.mentat.market/mcp",
+    "mcp_sse": "https://api.mentat.market/sse",
+    "rest_tape": "https://api.mentat.market/api/tape",
+    "rest_tape_receipt": "https://api.mentat.market/api/tape/{id}",
+    "rest_stats": "https://api.mentat.market/api/stats",
+    "ledger": "https://mentat.market/ledger",
+    "llms_txt": "https://mentat.market/llms.txt",
+    "web_new_deal": "https://mentat.market/new",
+    "web_deal": "https://mentat.market/deal/{id}"
+  },
+  "supported_tokens": [
+    {
+      "symbol": "USDC",
+      "address": "0x833589fCD6eDb6E08f4c7C32D4f71b54bdA02913",
+      "decimals": 6
+    },
+    {
+      "symbol": "USDbC",
+      "address": "0xd9aAEc86B65D86f6A7B5B1b0c42FFA531710b6CA",
+      "decimals": 6
+    },
+    {
+      "symbol": "DAI",
+      "address": "0x50c5725949A6F0c72E6C4a641F24049A917DB0Cb",
+      "decimals": 18
+    },
+    {
+      "symbol": "WETH",
+      "address": "0x4200000000000000000000000000000000000006",
+      "decimals": 18
+    },
+    {
+      "symbol": "XMR",
+      "chain": "monero",
+      "decimals": 12,
+      "settlement_path": "wagyu_route",
+      "note": "Routed via Wagyu through XMR1 (0xbB2057659bD378D17E2E151BB04bdcaA00000000, Hyperliquid spot). Pairs: XMR/USDC on Base, both directions."
+    }
+  ],
+  "protocol_fee_bps": 25,
+  "protocol_fee_note": "0.25% on every fill, on every path. CoW relay: routed by solvers via partnerFee in the appData the trader signs. Escrow: immutable in the contract; V2 deducts it from each side on settlement, V3 charges it on top of the maker's side. XMR route: a 25 bps integrator fee applied inside Wagyu's quoted amount, already included in to_amount and reported by Wagyu as integrator_fee; effective_cost_bps is the all-in number.",
+  "response_contract": {
+    "settlement_path": "escrow | cow_relay | wagyu_route | quote_only",
+    "route_legs": "[{ leg, name, chain, chain_id, proof_kind, proofs }]",
+    "proofs": "[{ chain, kind, hash, explorer_url }] — one entry per hash the chain has exposed; empty on a quote; never inferred"
+  },
+  "venues": {
+    "cow_relay": {
+      "settlement_path": "cow_relay",
+      "type": "off-chain order book + on-chain batch auction",
+      "settlement": "~30s by CoW solvers",
+      "custody": "non-custodial — MENTAT never holds funds",
+      "trustless": true,
+      "mev_protection": true,
+      "proofs": [
+        "cow_order_uid",
+        "settlement_tx (one per filling batch)"
+      ],
+      "skills": [
+        "prepare_trade",
+        "submit_signed_trade",
+        "check_cow_order"
+      ]
+    },
+    "escrow": {
+      "settlement_path": "escrow",
+      "type": "1:1 on-chain escrow (FloorEscrow contracts on Base)",
+      "contracts": "see escrow_contracts: V2 behind execute_trade and check_trade, V3 behind web deals (mentat.market/new and deal links)",
+      "settlement": "V2: atomic once both parties have deposited. V3: the taker's fill deposits and settles in one transaction",
+      "custody": "smart contract escrow, no admin keys",
+      "trustless": true,
+      "proofs": [
+        "escrow_create_tx"
+      ],
+      "skills": [
+        "execute_trade",
+        "check_trade"
+      ]
+    },
+    "wagyu_route": {
+      "settlement_path": "wagyu_route",
+      "type": "XMR in/out routed through XMR1 on Hyperliquid spot",
+      "counterparty": "Wagyu (wagyu.xyz)",
+      "custody": "MENTAT never holds XMR",
+      "trustless": false,
+      "pairs": [
+        "XMR/USDC on Base (both directions)"
+      ],
+      "minimums_usd": {
+        "sell_xmr": 25,
+        "buy_xmr": 500
+      },
+      "maximum_usd": 5000,
+      "fee_bps": 25,
+      "fee_note": "MENTAT earns a 25 bps integrator fee on every order, applied inside Wagyu's quoted amount: included in to_amount, reported by Wagyu as integrator_fee, counted in effective_cost_bps.",
+      "legs": [
+        "source chain (deposit_tx; Monero hash on XMR legs)",
+        "hyperliquid_swap (fill_tx, zero/one/many)",
+        "destination chain (payout_tx)"
+      ],
+      "paused_state": "A Wagyu 503 unavailable pauses the route; quotes and creates answer code routing_paused (HTTP 503 on REST) with until and retry_after_seconds.",
+      "skills": [
+        "get_quote",
+        "create_xmr_order",
+        "check_xmr_order",
+        "get_route_status"
+      ],
+      "price_reference": "hyperliquid (see price_reference)",
+      "refusal_codes": [
+        "routing_paused",
+        "below_minimum",
+        "above_maximum",
+        "no_route",
+        "amount_below_minimum",
+        "invalid_request",
+        "rate_limited",
+        "create_uncertain",
+        "price_divergence",
+        "price_stale",
+        "price_unavailable"
+      ]
+    }
+  },
+  "skills": [
+    {
+      "id": "get_quote",
+      "name": "Get OTC Quote",
+      "description": "Live quote at real market rates. XMR pairs (XMR/USDC on Base, both directions) answer through the Wagyu route with settlement_path wagyu_route, three route_legs, and an empty proofs[]. MENTAT charges 25 bps on every path; on the XMR route it is an integrator fee applied inside Wagyu's quoted amount (mentat_fee_bps, already in to_amount; effective_cost_bps is all-in). Direction-aware minimums: sell XMR from $25, buy XMR from $500. Code routing_paused while XMR routing is paused. Every XMR response carries the Hyperliquid price reference (reference: perp_mark, spot_mid, depth_1pct_usd, depth_side, divergence_pct, observed_at); quotes add tier_max_notional_usd and depth_cap_usd. Codes price_divergence, price_stale, price_unavailable when the reference refuses.",
+      "tags": [
+        "quote",
+        "swap",
+        "pricing",
+        "xmr"
+      ],
+      "input": {
+        "method": "REST GET (x402, $0.01 USDC) or JSON-RPC (unpaid, get_quote answers HTTP 402 with the payment terms)",
+        "rest": "GET /api/quote?from={from_token}&to={to_token}&amount={amount}&to_address={optional}",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "get_quote",
+            "arguments": {
+              "from_token": "string — token symbol (USDC, WETH, DAI, XMR, ...)",
+              "to_token": "string — token symbol",
+              "amount": "number, or a decimal string for XMR (never a float)",
+              "to_address": "string (optional) — destination address; lets the XMR route price destination costs"
+            }
+          }
+        }
+      },
+      "output": {
+        "quote": {
+          "settlement_path": "escrow | quote_only | wagyu_route",
+          "from_token": "string",
+          "to_token": "string",
+          "from_amount": "number | decimal string",
+          "to_amount": "number | decimal string",
+          "route_legs": "array",
+          "proofs": "[] on a quote",
+          "escrow_and_cow_pairs": {
+            "rate": "number",
+            "usd_value": "number",
+            "protocol_fee_bps": 25,
+            "escrow_contract": "address",
+            "valid_for_seconds": 60
+          },
+          "xmr_route": {
+            "counterparty": "Wagyu (wagyu.xyz)",
+            "custody": "MENTAT never holds XMR ... Not trustless.",
+            "from_amount_atomic": "string",
+            "to_amount_atomic": "string",
+            "effective_cost_bps": "number (all-in: Wagyu's costs plus MENTAT's fee)",
+            "mentat_fee_bps": 25,
+            "mentat_fee_note": "string",
+            "integrator_fee": "{ feePercent, feeAmountUsd, feeAddress } as reported by Wagyu",
+            "tool_used": "string",
+            "estimated_time_seconds": "number",
+            "direction": "sell | buy",
+            "min_notional_usd": "25 | 500",
+            "max_notional_usd": 5000,
+            "valid_for_seconds": 30,
+            "reference": "{ source: hyperliquid, perp_mark, spot_mid, depth_1pct_usd, depth_side, divergence_pct, observed_at }",
+            "tier_max_notional_usd": 5000,
+            "depth_cap_usd": "number — half of the 1% depth on the side the order hits"
+          }
+        }
+      },
+      "examples": [
+        "Get a quote for swapping 1000 USDC to WETH",
+        "Quote 0.1 XMR to USDC on Base",
+        "How much XMR do I get for 600 USDC?"
+      ]
+    },
+    {
+      "id": "create_xmr_order",
+      "name": "Create XMR Order (Wagyu route)",
+      "description": "Create a durable XMR order routed through Wagyu: XMR -> USDC on Base or USDC on Base -> XMR. Returns the venue's exact deposit address, amount, and expiry (the funding instruction), settlement_path wagyu_route, route_legs, and proofs[] (empty until each leg confirms). MENTAT earns a 25 bps integrator fee applied inside Wagyu's quoted amount (mentat_fee_bps). Wagyu is the settlement counterparty; MENTAT never holds XMR; not trustless.",
+      "tags": [
+        "xmr",
+        "monero",
+        "wagyu",
+        "hyperliquid",
+        "order"
+      ],
+      "input": {
+        "method": "JSON-RPC or REST POST",
+        "rest": "POST /api/xmr/orders (JSON body with the same arguments)",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "create_xmr_order",
+            "arguments": {
+              "from_token": "XMR | USDC",
+              "to_token": "USDC | XMR",
+              "amount": "decimal string — amount of from_token (e.g. \"0.1\")",
+              "to_address": "string — destination address on the destination chain (required)",
+              "refund_address": "string (optional) — refund address on the source chain"
+            }
+          }
+        }
+      },
+      "output": {
+        "order": {
+          "order_id": "string",
+          "settlement_path": "wagyu_route",
+          "status": "awaiting_deposit",
+          "deposit": {
+            "address": "string",
+            "chain": "monero | base",
+            "token": "XMR | USDC",
+            "amount": "decimal string",
+            "amount_atomic": "string"
+          },
+          "to_address": "string",
+          "expected_output": "decimal string",
+          "mentat_fee_bps": 25,
+          "mentat_fee_usd": "decimal string | null",
+          "expires_at": "ISO 8601",
+          "route_legs": "array",
+          "proofs": "[]",
+          "next_steps": "array of instructions",
+          "status_check": "{ skill: check_xmr_order, arguments: { order_id, to_address } }",
+          "reference": "the quote-time Hyperliquid reference"
+        },
+        "quote": "the quote the order was created from"
+      },
+      "examples": [
+        "Create an order: 0.1 XMR to USDC, pay out to 0xYourBaseAddress",
+        "Buy XMR with 600 USDC, deliver to 4AdUnd..."
+      ]
+    },
+    {
+      "id": "check_xmr_order",
+      "name": "Check XMR Order (Wagyu route)",
+      "description": "Status of an XMR order by order_id plus its to_address (the destination address is the read proof; a mismatch is not found). Returns the three legs (source-chain confirmations, Hyperliquid swap, destination delivery) and proofs[]: the Monero deposit tx hash, one fill_tx per Hyperliquid fill hash, and the destination payout tx hash. Fill hashes are appended as Wagyu saves them, including after completion.",
+      "tags": [
+        "xmr",
+        "status",
+        "proofs",
+        "wagyu"
+      ],
+      "input": {
+        "method": "JSON-RPC or REST GET",
+        "rest": "GET /api/xmr/orders/{order_id}?to_address={to_address}",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "check_xmr_order",
+            "arguments": {
+              "order_id": "string — from create_xmr_order",
+              "to_address": "string — the order's destination address"
+            }
+          }
+        }
+      },
+      "output": {
+        "order": {
+          "order_id": "string",
+          "settlement_path": "wagyu_route",
+          "status": "awaiting_deposit | processing | completed | refunded | failed | expired",
+          "stage": "string | null",
+          "action_required": "string | null",
+          "legs": {
+            "source": {
+              "state": "pending | observed | confirming | done",
+              "confirmations": "number",
+              "required_confirmations": "number",
+              "tx_hash": "string | null"
+            },
+            "hyperliquid": {
+              "state": "pending | trading | done",
+              "fill_count": "number",
+              "receipts_status": "pending | complete | incomplete",
+              "tx_hashes": "string[]"
+            },
+            "destination": {
+              "state": "pending | sending | done",
+              "tx_hash": "string | null"
+            }
+          },
+          "proofs": "[{ chain: monero|base|hyperliquid, kind: deposit_tx|fill_tx|payout_tx, hash, explorer_url }]",
+          "reference": "the live Hyperliquid reference",
+          "reference_warning": "string | absent — present when the live reference would refuse a new quote; the order itself is never failed by it"
+        }
+      },
+      "examples": [
+        "Check XMR order ord_... for 0xYourBaseAddress"
+      ]
+    },
+    {
+      "id": "get_route_status",
+      "name": "Route Status",
+      "description": "Whether XMR routing is live or paused (a Wagyu 503 unavailable pauses it), with the pause deadline and reason, plus the list of settlement paths.",
+      "tags": [
+        "status",
+        "xmr",
+        "routing"
+      ],
+      "input": {
+        "method": "REST GET or JSON-RPC",
+        "rest": "GET /api/routes",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "get_route_status",
+            "arguments": {}
+          }
+        }
+      },
+      "output": {
+        "settlement_paths": [
+          "escrow",
+          "cow_relay",
+          "wagyu_route"
+        ],
+        "routes": {
+          "wagyu_route": {
+            "paused": "boolean",
+            "until": "ISO 8601 | null",
+            "reason": "string | null",
+            "display": "XMR routing live | XMR routing paused",
+            "minimums_usd": {
+              "sell_xmr": 25,
+              "buy_xmr": 500
+            }
+          }
+        }
+      },
+      "examples": [
+        "Is XMR routing paused?"
+      ]
+    },
+    {
+      "id": "execute_trade",
+      "name": "Execute Escrow Trade",
+      "description": "Create an escrow deal on Base through the FloorEscrow V2 contract (settlement_path escrow). Both parties deposit, settlement is atomic, no admin keys. Returns the create tx as the first proof. A deployment may keep A2A execution switched off: then the answer is code execution_disabled with the V2 escrow address, and the Telegram bot or the contract is the way to open a deal. Web deals (mentat.market/new and deal links) settle through FloorEscrow V3 and need no skill.",
+      "tags": [
+        "trade",
+        "escrow",
+        "swap",
+        "settlement"
+      ],
+      "input": {
+        "method": "JSON-RPC",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "execute_trade",
+            "arguments": {
+              "from_token": "string — token symbol",
+              "to_token": "string — token symbol",
+              "amount": "number — amount of from_token"
+            }
+          }
+        }
+      },
+      "output": {
+        "trade": {
+          "trade_id": "bytes32",
+          "status": "Created",
+          "escrow_contract": "address",
+          "create_tx": "tx hash",
+          "basescan_url": "string",
+          "settlement_path": "escrow",
+          "route_legs": "array",
+          "proofs": "[{ chain: base, kind: escrow_create_tx, hash, explorer_url }]",
+          "next_steps": "Buyer and seller must approve + deposit tokens"
+        },
+        "quote": "same as get_quote output",
+        "error_codes": [
+          "execution_disabled"
+        ]
+      },
+      "examples": [
+        "Swap 1000 USDC for DAI through escrow",
+        "Execute trade: 5000 USDC to WETH"
+      ]
+    },
+    {
+      "id": "check_trade",
+      "name": "Check Escrow Trade",
+      "description": "On-chain status of a FloorEscrow V2 deal by its trade ID, with settlement_path, route_legs, and proofs[]. A FloorEscrow V3 web deal is read at mentat.market/deal/{id}.",
+      "tags": [
+        "status",
+        "trade",
+        "escrow"
+      ],
+      "input": {
+        "method": "JSON-RPC",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "check_trade",
+            "arguments": {
+              "trade_id": "bytes32 — the escrow trade ID"
+            }
+          }
+        }
+      },
+      "output": {
+        "trade": {
+          "trade_id": "bytes32",
+          "status": "Created | BuyerDeposited | SellerDeposited | BothDeposited | Settled | Expired | Refunded",
+          "buyer": "address",
+          "seller": "address",
+          "buy_token": "address",
+          "sell_token": "address",
+          "settlement_path": "escrow",
+          "route_legs": "array",
+          "proofs": "array"
+        }
+      },
+      "examples": [
+        "Check trade status for 0x8cb14ec9..."
+      ]
+    },
+    {
+      "id": "get_prices",
+      "name": "Get Live Prices",
+      "description": "Current CoinGecko prices for the escrow and CoW pairs. XMR is priced live by the Wagyu route at quote time.",
+      "tags": [
+        "prices",
+        "market",
+        "rates"
+      ],
+      "input": {
+        "method": "REST GET or JSON-RPC",
+        "rest": "GET /api/prices",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "get_prices",
+            "arguments": {}
+          }
+        }
+      },
+      "output": {
+        "prices": {
+          "TOKEN": {
+            "usd": "number",
+            "change_24h": "number"
+          }
+        },
+        "source": "coingecko",
+        "updated_at": "ISO 8601"
+      },
+      "examples": [
+        "What are the current token prices?",
+        "Get live crypto prices"
+      ]
+    },
+    {
+      "id": "prepare_trade",
+      "name": "Prepare CoW Order",
+      "description": "Build a CoW Protocol order for the calling agent's wallet to sign (settlement_path cow_relay). MENTAT returns the EIP-712 typed data, the appData document with MENTAT's 25 bps partnerFee baked in, a CoW quote, and a preflight check on the trader's sell-token balance and GPv2VaultRelayer allowance. The trader signs locally — MENTAT never custodies funds. The 25 bps fee is enforced because the appData hash is part of what the trader signs.",
+      "tags": [
+        "cow",
+        "swap",
+        "relay",
+        "eip-712",
+        "prepare",
+        "sign"
+      ],
+      "input": {
+        "method": "JSON-RPC",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "prepare_trade",
+            "arguments": {
+              "sell_token": "string — token symbol (USDC, USDT, USDbC, DAI, WETH)",
+              "buy_token": "string — token symbol",
+              "sell_amount": "number — amount of sell_token (human units)",
+              "trader_address": "string — 0x address of the calling agent's wallet",
+              "valid_for_seconds": "number (optional) — order validity window, default 1800"
+            }
+          }
+        }
+      },
+      "output": {
+        "order": "GPv2Order struct (sellToken, buyToken, receiver, sellAmount, buyAmount, validTo, appData, feeAmount, kind, partiallyFillable, sellTokenBalance, buyTokenBalance)",
+        "typed_data": {
+          "domain": "EIP-712 domain for Gnosis Protocol v2 on Base",
+          "types": "EIP-712 Order struct types",
+          "primaryType": "Order",
+          "message": "the order struct to sign"
+        },
+        "app_data": {
+          "hash": "bytes32 — keccak256 of the canonical appData JSON, signed inside the order",
+          "document": "the appData JSON object with MENTAT's partnerFee",
+          "full_string": "canonical JSON string — submit this with the signed order"
+        },
+        "quote_summary": "human-readable amounts, rate, validTo",
+        "partner_fee": "{ bps: 25, recipient: MENTAT treasury, note }",
+        "preflight": "{ balance, allowance, sufficient_balance, sufficient_allowance }",
+        "relayer": "{ address, approve_calldata, approve_to } — for one-time GPv2VaultRelayer approval if needed",
+        "next_steps": "array of human instructions",
+        "venue": "cow-protocol",
+        "settlement_path": "cow_relay",
+        "route_legs": "array",
+        "proofs": "[]"
+      },
+      "examples": [
+        "Prepare a CoW order to swap 1000 USDC for WETH from 0xMyAgent",
+        "Build a sell order: 0.5 WETH to USDC, trader 0xabc..."
+      ]
+    },
+    {
+      "id": "submit_signed_trade",
+      "name": "Submit Signed CoW Order",
+      "description": "Forward a trader-signed CoW order to the CoW order book on Base. MENTAT re-checks the appData hash matches MENTAT's partnerFee doc, validates the EIP-712 signature locally (rejects if recovered != trader_address), then POSTs to api.cow.fi. Returns the orderUid (first proof) and CoW explorer URL. Solvers fill in the next batch (~30s).",
+      "tags": [
+        "cow",
+        "swap",
+        "relay",
+        "submit",
+        "settle"
+      ],
+      "input": {
+        "method": "JSON-RPC",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "submit_signed_trade",
+            "arguments": {
+              "order": "GPv2Order struct from prepare_trade",
+              "signature": "string — 0x-prefixed 65-byte EIP-712 signature (132 hex chars)",
+              "trader_address": "string — must match the EIP-712 signer"
+            }
+          }
+        }
+      },
+      "output": {
+        "order_uid": "0x... — 56-byte CoW order UID",
+        "explorer_url": "https://explorer.cow.fi/base/orders/{uid}",
+        "status": "open",
+        "venue": "cow-protocol",
+        "settlement_path": "cow_relay",
+        "route_legs": "array",
+        "proofs": "[{ chain: base, kind: cow_order_uid, hash: order_uid, explorer_url }]",
+        "trader": "address",
+        "sell_token": "address",
+        "buy_token": "address",
+        "sell_amount": "uint256 string",
+        "buy_amount": "uint256 string",
+        "valid_to": "unix timestamp",
+        "partner_fee": "{ bps: 25, recipient }"
+      },
+      "examples": [
+        "Submit signed order with signature 0x... and trader 0xabc..."
+      ]
+    },
+    {
+      "id": "check_cow_order",
+      "name": "Check CoW Order",
+      "description": "Look up the live status of a CoW order by its 56-byte orderUid. Returns the order's state (open, fulfilled, cancelled, expired), executed sell/buy amounts, and proofs[] with one settlement_tx per batch that filled it.",
+      "tags": [
+        "cow",
+        "status",
+        "order",
+        "track"
+      ],
+      "input": {
+        "method": "JSON-RPC",
+        "jsonrpc": {
+          "method": "tasks/send",
+          "params": {
+            "skill_id": "check_cow_order",
+            "arguments": {
+              "order_uid": "string — 0x-prefixed 56-byte CoW order UID"
+            }
+          }
+        }
+      },
+      "output": {
+        "order_uid": "string",
+        "status": "open | fulfilled | cancelled | expired",
+        "executed_sell_amount": "uint256 string",
+        "executed_buy_amount": "uint256 string",
+        "sell_token": "address",
+        "buy_token": "address",
+        "from": "trader address",
+        "valid_to": "unix timestamp",
+        "explorer_url": "https://explorer.cow.fi/base/orders/{uid}",
+        "venue": "cow-protocol",
+        "settlement_path": "cow_relay",
+        "route_legs": "array",
+        "proofs": "[{ kind: cow_order_uid }, { kind: settlement_tx, hash, explorer_url }...]"
+      },
+      "examples": [
+        "Check CoW order 0x..."
+      ]
+    }
+  ],
+  "operator_key": {
+    "address": "0xE6f26F05C956D1833A1DAaaAD57CD0a1E626bfd3",
+    "roles": [
+      "owner of ERC-8004 Agent #31596 (ownerOf(31596) on the Identity Registry)",
+      "immutable treasury of FloorEscrow V2 (treasury(); feeBps() = 25)"
+    ],
+    "signs": [
+      "FloorEscrow V2 createEscrow: gated on identityRegistry.ownerOf(agentId) == msg.sender; records deal terms, moves no tokens, duration <= 7 days, tradeId not reusable",
+      "FloorEscrow V2 settle: permissionless, only when BothDeposited; 25 bps of each side to the immutable treasury, the rest to the counterparty named in the deal",
+      "IdentityRegistry.setAgentURI: agent metadata, operator script only"
+    ],
+    "can_like_anyone": [
+      "FloorEscrow V2 refund (after expiry, full refund to the depositor, no fee)",
+      "FloorEscrow V2 getTrade (read)"
+    ],
+    "floor_escrow_v3": "No special role. V3 has no operator-gated function: the maker alone creates, funds and cancels a deal, any taker fills it, and its fee recipient is a separate immutable address (treasury()), not this key.",
+    "cannot": [
+      "withdraw or sweep escrowed tokens (no such function)",
+      "change the fee or the treasury (immutable)",
+      "pause, upgrade, or kill the contract (no owner, no proxy, no admin role)",
+      "amend or cancel a deal before expiry",
+      "deposit or move a counterparty's tokens (depositBuyer/depositSeller pull from msg.sender only)",
+      "settle early or redirect a settlement"
+    ],
+    "not_used_by": [
+      "get_quote",
+      "check_trade",
+      "get_prices",
+      "get_route_status",
+      "cow_relay (the trader signs; MENTAT forwards to api.cow.fi)",
+      "wagyu_route (HTTPS API credential, no chain signing, MENTAT never holds XMR)",
+      "mcp (the same handlers on the same host; signs nothing itself)"
+    ],
+    "without_key": "Without PRIVATE_KEY, or with A2A execution switched off, execute_trade answers code execution_disabled with the V2 escrow address; everything else is unaffected."
+  },
+  "authentication": {
+    "required": false,
+    "note": "No API key needed. Quotes cost $0.01 USDC via x402: the paid call is REST GET /api/quote with an x402 payment header, and an unpaid get_quote over JSON-RPC answers HTTP 402 with the payment terms. The other JSON-RPC skills, order status, route status, and prices are free. CoW relay requires the calling agent's own wallet to sign orders — MENTAT never holds keys for the trader. The XMR route needs a to_address on the destination chain; the same address is the read proof for check_xmr_order. Escrow execution (execute_trade) signs createEscrow with the operator key; operator_key states exactly what that key can and cannot do."
+  },
+  "capabilities": {
+    "streaming": false,
+    "push_notifications": false,
+    "protocols": [
+      "google-a2a",
+      "json-rpc-2.0",
+      "rest",
+      "x402",
+      "mcp",
+      "cow-protocol",
+      "eip-712",
+      "erc-8004"
+    ],
+    "settlement_paths": [
+      "escrow",
+      "cow_relay",
+      "wagyu_route"
+    ]
+  },
+  "price_reference": {
+    "source": "hyperliquid",
+    "applies_to": "every XMR quote and order response (reference block)",
+    "fields": {
+      "perp_mark": "XMR perpetual mark price",
+      "spot_mid": "XMR1/USDC spot mid (pair @260)",
+      "depth_1pct_usd": "resting size within 1% of mid on the side the order hits",
+      "depth_side": "bids when selling XMR, asks when buying",
+      "divergence_pct": "perp mark vs spot mid",
+      "observed_at": "ISO 8601"
+    },
+    "quote_only_fields": {
+      "tier_max_notional_usd": 5000,
+      "depth_cap_usd": "half of depth_1pct_usd; the per-order cap is the smaller of the two"
+    },
+    "refusal_codes": {
+      "price_divergence": "perp mark and spot mid differ by more than 1%",
+      "price_stale": "a reading older than 60 seconds",
+      "price_unavailable": "Hyperliquid could not be read"
+    },
+    "on_orders": "a created order carries the quote-time reference; check_xmr_order re-reads the live one and adds reference_warning if it would refuse now, never failing the order"
+  }
+}

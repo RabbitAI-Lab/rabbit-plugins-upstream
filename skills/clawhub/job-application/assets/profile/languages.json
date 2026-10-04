@@ -1,0 +1,5 @@
+[
+  {"id":"de","label":"Deutsch","level":"Muttersprache","score":5},
+  {"id":"en","label":"Englisch","level":"Verhandlungssicher (C1)","score":4},
+  {"id":"fr","label":"Französisch","level":"Grundkenntnisse (A2)","score":2}
+]

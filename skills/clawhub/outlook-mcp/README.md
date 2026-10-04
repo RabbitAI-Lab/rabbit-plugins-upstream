@@ -22,13 +22,13 @@ You'll like this if you're:
 - An **agent builder** wiring Outlook into your own infra (OpenClaw, Claude Code, Cursor, custom MCP host) and want a typed tool surface — not stdout you have to parse
 - Building on **personal Microsoft accounts** (Outlook.com / Hotmail / Live) and want full control: BYO Azure app, no enterprise consent flow, no shared client ID
 - Looking for **real coverage** — mail, calendar, contacts, to-do, drafts, folders, batch ops, threading — instead of a mail-only or calendar-only wrapper
-- Security-conscious: tokens in the OS keyring (Keychain on macOS), granular `allow_categories`, optional `read_only` mode, zero telemetry
+- Security-conscious: tokens in the OS keyring (Keychain on macOS, libsecret on Linux -- never cleartext unless you opt in), granular `allow_categories`, optional `read_only` mode, zero telemetry
 
-This **isn't for you** if you need work/school M365 accounts (use Microsoft's official tooling — Entra ID auth and admin-consent flows are out of scope here), or if a basic mail-only client would suffice (this has 62 tools — way more than you need for "read my inbox").
+This **isn't for you** if you need work/school M365 accounts (use Microsoft's official tooling — Entra ID auth and admin-consent flows are out of scope here), or if a basic mail-only client would suffice (this has 68 tools — way more than you need for "read my inbox").
 
 ### How it differs from other Outlook tools you'll find
 
-This is the only **first-class MCP server** in the personal-Outlook space — most alternatives are bash scripts or skill-shaped CLI wrappers the agent shells out to. That distinction matters: the agent gets typed tool schemas with structured args/returns, not stdout it has to parse. Other things you won't find elsewhere: `/$batch`-optimized triage (10-20× faster on bulk ops), recursive folder ops with name resolution, granular per-category permissions, multi-account support, and full attachment write paths including >3MB upload sessions for drafts.
+This is the only **first-class MCP server** in the personal-Outlook space — most alternatives are bash scripts or skill-shaped CLI wrappers the agent shells out to. That distinction matters: the agent gets typed tool schemas with structured args/returns, not stdout it has to parse. Other things you won't find elsewhere: `/$batch`-optimized triage (10-20× faster on bulk ops), recursive folder ops with name resolution, granular per-category permissions, multiple mailboxes (one server per account via `OUTLOOK_MCP_CONFIG_DIR`), and full attachment write paths including >3MB upload sessions for drafts.
 
 ---
 
@@ -44,7 +44,7 @@ Give your AI agent full Outlook access. Example prompts that just work:
 - *"Draft a reply to the last message from my sister saying I'll call her this weekend."*
 - *"Move all newsletter and promotional email from this week to a 'Read Later' folder — batch 20 at a time."*
 
-The server exposes 62 discrete tools so the agent can compose its own workflow — read, triage, write, schedule, track tasks — without hardcoded macros.
+The server exposes 68 discrete tools so the agent can compose its own workflow — read, triage, write, schedule, track tasks — without hardcoded macros.
 
 ## Works With
 
@@ -59,21 +59,21 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io/v
 
 ## Features
 
-**62 tools** across 13 categories:
+**68 tools** across 13 categories:
 
 - **Auth (1)** -- auth status check (login is via CLI)
-- **Mail Read (7)** -- list inbox (with Focused Inbox filter), read message, bulk read by ID via `$batch`, search (KQL), list folders, delta-sync inbox changes, composed "since last call" digest across mail/events/contacts
+- **Mail Read (7)** -- list inbox (with Focused Inbox and uncategorized filters), read message, bulk read by ID via `$batch`, search (KQL), list folders, delta-sync inbox changes, composed "since last call" digest across mail/events/contacts
 - **Mail Write (3)** -- send, reply/reply-all, forward
 - **Mail Triage (9)** -- move, delete (soft by default), flag, categorize, mark read/unread, reclassify (Focused Inbox), list/set/delete per-sender Focused Inbox overrides
 - **Calendar Read (3)** -- list events (with recurring expansion), get event details, delta-sync event changes
 - **Calendar Write (4)** -- create, update, delete, RSVP (accept/decline/tentative)
 - **Contacts (7)** -- list, search, get, create, update, delete, delta-sync changes
-- **To Do (6)** -- list task lists, list/create/update/complete/delete tasks
+- **To Do (14)** -- task lists, tasks (list/get/create/update/complete/delete), checklist items (add/update/delete), task attachments (list/download/upload/delete)
 - **Drafts (5)** -- list, create, update, send, delete
 - **Attachments (5)** -- list, download, send-with-attachments, attach-to-draft, remove-draft-attachment
 - **Folder Management (3)** -- create, rename, delete mail folders
 - **Threading and Batch (3)** -- list thread, copy message, batch triage
-- **User and Admin (6)** -- whoami, list calendars, list categories, mail tips, accounts
+- **User and Admin (4)** -- whoami, list calendars, list categories, mail tips
 
 **Design principles:**
 
@@ -81,17 +81,21 @@ Listed on the [official MCP Registry](https://registry.modelcontextprotocol.io/v
 - **Zero telemetry** -- no analytics, no local caching, no third-party calls.
 - **Token storage** -- OS keyring via `azure-identity` (macOS Keychain, Windows Credential Store, Linux Secret Service).
 - **Input validation** -- all inputs validated (email, Graph IDs, OData, KQL, datetimes) before any API call.
-- **Read-only mode** -- set `read_only: true` in config to block all write operations.
+- **Read-only mode** -- set `read_only: true` in config to block all write operations. Note this limits the *tools*, not the *token* -- see [What `read_only` does and does not do](#what-read_only-does-and-does-not-do).
 - **Soft delete** -- delete moves to Deleted Items by default. Hard delete requires explicit `permanent: true`.
 - **Timezone-aware** -- calendar operations respect your configured IANA timezone.
+- **Relative dates** -- every datetime parameter takes ISO 8601 or an offset: `7d` is seven days ago, `+7d` is seven days from now, `now` is this moment. Units: `m`, `h`, `d`, `w`.
+- **Bounded attachments** -- attachment reads and writes are confined to `attachments_dir`, so a message that asks an agent to mail a file elsewhere on disk cannot be obeyed.
+- **Bounded delta cursors** -- a `delta_token` is caller-held state, so it is untrusted input. Every URL that would carry a Graph bearer token is parsed and required to be https on `graph.microsoft.com`, which is what stops a poisoned cursor from redirecting your mailbox token to someone else.
+- **Workflow prompts** -- `morning_brief`, `triage_folder` and `catch_up` ship as MCP prompts, so the common sequences do not have to be reconstructed call by call.
 
 ### Agent-friendly shape (1.8.0)
 
 Two pure-code upgrades that make the same 57 tools cheaper and more recoverable for AI agents:
 
-- **Concise mode** — pass `concise=True` to the five high-volume read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop bulky fields: full message bodies, per-event attendee lists, quoted prior-message text in threads, body previews/categories on inbox listings. Typical payload reduction ~10×. Default `concise=False` preserves the existing response shape — strict backward compat.
+- **Concise mode** — pass `concise=True` to the five high-volume read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop bulky fields: full message bodies, quoted prior-message text in threads, body previews and categories on inbox listings — typical payload reduction ~10×. On `outlook_list_events` the trade is different and smaller: the attendee list becomes a count, and `organizer`, `response_status`, `type` and `show_as` come off, so a concise scan cannot tell a recurring occurrence from a one-off. Default `concise=False` preserves the existing response shape — strict backward compat.
 
-- **Structured Graph errors** — every tool wraps msgraph SDK exceptions into `{code, message, action}` responses with operator-friendly recovery hints: re-auth on 401, ROADMAP pointer on 403/`ErrorAccessDenied` (known unsupported-endpoint dead-ends), re-list on 404/`ErrorItemNotFound`, back-off on 429, retry on 503. `OutlookMCPError` subclasses and validation errors pass through unchanged.
+- **Structured Graph errors** — every tool wraps msgraph SDK exceptions into `{code, message, action}` responses with operator-friendly recovery hints: re-auth on 401, a link to the repo's [ROADMAP dead-ends list](https://github.com/mpalermiti/outlook-mcp/blob/main/ROADMAP.md#investigated-and-not-viable) on 403/`ErrorAccessDenied`, re-list on 404/`ErrorItemNotFound`, back-off on 429, retry on 503. `OutlookMCPError` subclasses and validation errors pass through unchanged.
 
 ---
 
@@ -157,7 +161,8 @@ Create `~/.outlook-mcp/config.json`:
   "client_id": "YOUR_APPLICATION_CLIENT_ID",
   "tenant_id": "consumers",
   "timezone": "America/Los_Angeles",
-  "read_only": true
+  "read_only": true,
+  "attachments_dir": "~/.outlook-mcp/attachments"
 }
 ```
 
@@ -228,6 +233,18 @@ uv run outlook-mcp serve    # Start MCP server (default, used by OpenClaw/Claude
 
 ## Troubleshooting
 
+### `me-token-to-replace is invalid` on every call
+
+You're on 1.22.0 installed after 2026-09-18. A fresh install of that version resolves `microsoft-kiota-*` 1.13 or later, which `msgraph-core` doesn't yet handle, so every `/me` request reaches Graph as `/users/me-token-to-replace`. Fixed in 1.22.1, which caps kiota below 1.13 ([#80](https://github.com/mpalermiti/outlook-mcp/issues/80)):
+
+```bash
+uv tool upgrade outlook-graph-mcp
+# or: pipx upgrade outlook-graph-mcp
+# or: pip install --upgrade outlook-graph-mcp
+```
+
+Your config and sign-in are untouched; no re-auth needed.
+
 ### `SSL: CERTIFICATE_VERIFY_FAILED` on Linux
 
 If auth fails with `[SSL: CERTIFICATE_VERIFY_FAILED] certificate verify failed: unable to get local issuer certificate`, your Python environment can't find the system CA bundle. This is common on minimal/container Linux images and with the isolated venv from `uv tool install`.
@@ -248,6 +265,13 @@ A one-time startup warning about the token cache falling back to plaintext means
 ---
 
 ## Tool Reference
+
+**Dates.** Every datetime parameter (`after`, `before`, `start`, `end`, `due`,
+`deferred_send_datetime`) accepts ISO 8601 — `2026-10-22` or `2026-10-22T14:30:00Z` — or a
+relative offset: `7d` is seven days **ago**, `+7d` is seven days **from now**, and `now` is
+this moment. Units are `m`, `h`, `d`, `w`. Bare means *ago*, matching the usual CLI
+convention, so a due date in the future needs the `+`. Zone-less input is interpreted in your
+configured `timezone`; responses are always UTC.
 
 ### Auth
 
@@ -295,16 +319,16 @@ A one-time startup warning about the token cache falling back to plaintext means
 
 | Tool | Description |
 |------|-------------|
-| `outlook_list_events` | List events in a date range. Expands recurring events. Configurable via `days`, `after`, `before`. |
-| `outlook_get_event` | Get full event details: attendees, body, online meeting URL, recurrence. |
-| `outlook_list_events_delta` | List only event changes inside a window since the last call. `start` and `end` (ISO 8601) required on the first call (Graph constraint — no whole-calendar sync). Deletes come back as `{id, is_deleted: True}`. Cursor is stateless. |
+| `outlook_list_events` | List events in a date range. Expands recurring events. Each event carries `type` — `occurrence` or `exception` for an instance of a series, `singleInstance` for a one-off — so a listing tells recurring work apart without a second call. A `seriesMaster` never appears here: `calendarView` returns expanded instances, so use `outlook_get_event` to see a master. Each event also carries `show_as`, the free/busy status Outlook labels "Show as". Configurable via `days`, `after`, `before`. `calendar` selects which calendar to read: omit (or `"primary"`) for the default, otherwise a display name (case-insensitive; not-found and ambiguous errors name what exists) or an ID from `outlook_list_calendars`. A `cursor` continues the listing it came from, so later pages need neither `calendar` nor a second lookup. `concise=True` omits `type` and `show_as`. |
+| `outlook_get_event` | Get full event details: attendees, body, online meeting URL, recurrence, `type` (`singleInstance` / `seriesMaster` / `occurrence` / `exception`), `show_as`. |
+| `outlook_list_events_delta` | List only event changes inside a window since the last call. `start` and `end` (ISO 8601) required on the first call (Graph constraint — no whole-calendar sync). Each changed event carries every field the **default** `outlook_list_events` listing returns, `type` and `show_as` included, plus `is_deleted` (`concise=True` has its own narrower shape, which the delta tool does not mirror). Unlike the listing, this endpoint *does* return `seriesMaster` items, so a caller seeding from `outlook_list_events` should expect ids here that the seed never held. Deletes come back as `{id, is_deleted: True}` and nothing else. Cursor is stateless. |
 
 ### Calendar Write
 
 | Tool | Description |
 |------|-------------|
-| `outlook_create_event` | Create event with location, attendees, recurrence, online meeting support. |
-| `outlook_update_event` | Update event fields (subject, time, location, body). Only patches changed fields. |
+| `outlook_create_event` | Create event with location and attendees. (`is_online` has no effect on personal accounts — Graph ignores `isOnlineMeeting` for consumer mailboxes.) Pass `recurrence` to create a **series**: a shorthand (`daily`, `weekdays`, `weekly`, `monthly`, `yearly`, anchored on `start`) or a full [Graph recurrence object](https://learn.microsoft.com/graph/api/resources/patternedrecurrence) for anything else. `range.startDate` defaults to the event's start date. `show_as` sets the free/busy status Outlook labels "Show as" — `free`, `tentative`, `busy`, `oof` (out of office), `workingElsewhere`, or `unknown`; omit it and Graph applies its own default of `busy`. |
+| `outlook_update_event` | Update event fields (subject, time, location, body, attendees, all-day, `show_as`). Only patches changed fields. Pass `recurrence` to turn a single event into a series, or `remove_recurrence=True` to turn a series back into a single event. `attendees` **replaces** the whole guest list and emails invitations/cancellations; `is_all_day` needs `start`+`end` in the same call, while `show_as` patches on its own. Patching a time keeps the zone the event is anchored in; `timezone` (with `start`+`end`) re-anchors it elsewhere, which is how a series created before zones existed gets repaired. A `start`, `end` or `recurrence` patch to a series with edited or deleted occurrences is refused, naming them — Graph would silently discard every one. |
 | `outlook_delete_event` | Delete a calendar event. |
 | `outlook_rsvp` | RSVP to an event: `accept`, `decline`, or `tentative`. Optionally include a message. |
 
@@ -312,11 +336,11 @@ A one-time startup warning about the token cache falling back to plaintext means
 
 | Tool | Description |
 |------|-------------|
-| `outlook_list_contacts` | List contacts with cursor pagination. |
+| `outlook_list_contacts` | List contacts with cursor pagination. Summaries carry `categories`; `outlook_search_contacts` omits the key because Graph's `$search` does not return it. |
 | `outlook_search_contacts` | Search contacts by name or email. |
-| `outlook_get_contact` | Get full contact details by ID. |
+| `outlook_get_contact` | Get full contact details by ID, including home/business/other addresses, categories and personal notes. |
 | `outlook_create_contact` | Create a new contact. |
-| `outlook_update_contact` | Update contact fields. |
+| `outlook_update_contact` | Update contact fields. `home_address`, `business_address` and `other_address` take the shape `outlook_get_contact` returns — any subset of `street`, `city`, `state`, `postal_code`, `country_or_region` — and **replace** that whole address, so pass back every part you want to keep. Omit one to leave it untouched. |
 | `outlook_delete_contact` | Delete a contact. |
 | `outlook_list_contacts_delta` | List only contact changes since the last call. Deletes come back as `{id, is_deleted: True}`. Cursor is stateless. |
 
@@ -326,10 +350,18 @@ A one-time startup warning about the token cache falling back to plaintext means
 |------|-------------|
 | `outlook_list_task_lists` | List To Do lists. |
 | `outlook_list_tasks` | List tasks with status filter and pagination. |
+| `outlook_get_task` | Get full task details: notes (`body`), checklist items (ordered unchecked-first), due, recurrence flag. |
 | `outlook_create_task` | Create task with due date, importance, recurrence. |
 | `outlook_update_task` | Update task fields. |
 | `outlook_complete_task` | Mark task as completed. |
 | `outlook_delete_task` | Delete a task. |
+| `outlook_add_checklist_item` | Add a checklist item (sub-step) to a task. |
+| `outlook_update_checklist_item` | Update a checklist item — mark done (`is_checked`) or rename (partial patch). |
+| `outlook_delete_checklist_item` | Delete a checklist item from a task. |
+| `outlook_list_task_attachments` | List attachments on a To Do task (id, name, size, content_type) with pagination. |
+| `outlook_download_task_attachment` | Download a task attachment's content to a local file (confined to `attachments_dir`). |
+| `outlook_upload_task_attachment` | Attach a local file (from `attachments_dir`) to a task via inline base64 POST (1 byte – 20 MiB). |
+| `outlook_delete_task_attachment` | Remove an attachment from a To Do task. |
 
 ### Drafts
 
@@ -343,12 +375,24 @@ A one-time startup warning about the token cache falling back to plaintext means
 
 ### Attachments
 
+> **Since 1.20.0, these tools only reach `attachments_dir`** (default `~/.outlook-mcp/attachments`).
+> A bare filename resolves inside it; a path outside it is refused, including via a symlink.
+> To email a file, move it there first — or widen `attachments_dir`, understanding that
+> anything reachable from it can be sent. Before 1.20.0 these tools could read any file the
+> server process could read, which meant an email asking an agent to attach one could be obeyed.
+>
+> The same fence covers the To Do attachment tools (`outlook_upload_task_attachment`,
+> `outlook_download_task_attachment`): uploads read from `attachments_dir` and downloads
+> write into it, so neither can sweep arbitrary files off disk. (Downloads are not
+> `todo_write`-gated — they are reads, like `outlook_download_attachment`; the fence, not
+> the category, is what confines them.)
+
 | Tool | Description |
 |------|-------------|
 | `outlook_list_attachments` | List attachments on a message. |
-| `outlook_download_attachment` | Download attachment and save decoded bytes to a file. |
-| `outlook_send_with_attachments` | Send message with file attachments (auto upload session for >3MB). |
-| `outlook_attach_to_draft` | Add attachments to an existing draft (auto upload session for >3MB). |
+| `outlook_download_attachment` | Download an attachment and save decoded bytes into `attachments_dir`. |
+| `outlook_send_with_attachments` | Send a message with attachments read from `attachments_dir` (auto upload session for >3MB). |
+| `outlook_attach_to_draft` | Add attachments from `attachments_dir` to an existing draft (auto upload session for >3MB). |
 | `outlook_remove_draft_attachment` | Remove a single attachment from a draft. |
 
 ### Folder Management
@@ -375,33 +419,103 @@ A one-time startup warning about the token cache falling back to plaintext means
 | `outlook_list_calendars` | List available calendars. |
 | `outlook_list_categories` | List category definitions with colors. |
 | `outlook_get_mail_tips` | Pre-send check (OOF, delivery restrictions). |
-| `outlook_list_accounts` | List configured accounts. |
-| `outlook_switch_account` | Switch active account. |
+
+---
+
+## Prompts
+
+Three workflows ship as MCP prompts, so the common sequences do not have to be
+reconstructed call by call. Any MCP client that supports prompts will list them; in most
+clients they appear as slash commands or a prompt picker.
+
+| Prompt | Arguments | What it does |
+|--------|-----------|--------------|
+| `morning_brief` | `folder` (default `inbox`) | Today's events, unread mail and tasks due, in the cheapest order — one scan each, `concise=True`, batched reads. |
+| `triage_folder` | `folder` (default `inbox`), `count` (default 50) | One cheap scan of a folder, sorted into reply / archive / junk, applied with a single `outlook_batch_triage` call rather than one call per message. |
+| `catch_up` | `since` (default `24h`) | What changed in mail, calendar and contacts, via the delta path — roughly ten times cheaper than re-scanning on a schedule. |
+
+They cost nothing until invoked: `prompts/list` carries only a name and one line each, and
+the body is fetched on use.
 
 ---
 
 ## Configuration
 
-Config lives at `~/.outlook-mcp/config.json` (created with `0600` permissions).
+Config lives at `~/.outlook-mcp/config.json` (created with `0600` permissions). Set the `OUTLOOK_MCP_CONFIG_DIR` environment variable to move that settings directory (config.json, auth record, and the attachments default move with it) — see [Two accounts, two instances](#two-accounts-two-instances-optional--outlook_mcp_config_dir) below.
 
 | Field | Type | Default | Description |
 |-------|------|---------|-------------|
 | `client_id` | `string` | `null` | Azure AD application (client) ID. Required for auth. |
 | `tenant_id` | `string` | `"consumers"` | Azure AD tenant. Use `"consumers"` for personal Microsoft accounts. |
-| `timezone` | `string` | `"UTC"` | IANA timezone (e.g. `"America/New_York"`). Used for relative date computations in calendar tools. |
-| `read_only` | `bool` | `false` | When `true`, all write tools (send, reply, move, delete, create, update, RSVP) return an error. |
+| `timezone` | `string` | `"UTC"` | IANA timezone (e.g. `"America/New_York"`). Interprets zone-less dates, **and anchors every event you create** — a recurring event is expanded in this zone, so on the default `"UTC"` a 09:00 weekly meeting shifts an hour when the clocks change. Set it to where you are. |
+| `read_only` | `bool` | `false` | When `true`, all write tools (send, reply, move, delete, create, update, RSVP) return an error. Gates the tools, not the Microsoft token -- see below. |
+| `attachments_dir` | `string` | `"~/.outlook-mcp/attachments"` | The only directory the attachment tools may read from or write to. Every path an agent supplies is resolved and must land inside it — a symlink out or a `..` is refused. Widen it only if you understand that anything reachable can be emailed. |
 | `allow_categories` | `list[string]` | `[]` | Optional. Restrict write tools to specific categories (see below). Empty list = all writes allowed when `read_only: false`. |
+| `allow_unencrypted_token_cache` | `bool` | `false` | Permit the OAuth token cache to be written in cleartext when the platform has no encrypted store (Linux without libsecret). Off by default: authentication stops with an explanation rather than silently persisting a reusable Graph token in plaintext. macOS and Windows always encrypt and are unaffected. |
 
 ### Toolset selection (optional) — `OUTLOOK_MCP_TOOLSETS`
 
-All 62 tool schemas load into the client's context every turn (~8.6k tokens). A client that only needs part of the surface can set the `OUTLOOK_MCP_TOOLSETS` environment variable to a comma-separated list of tool groups, and only those load. The `account` group (auth / identity) is always available.
+All 68 tool schemas load into the client's context every turn (the chars/4 proxy `test_tool_surface_budget.py` measures with; a different yardstick than the ~8.6k o200k figure in ROADMAP for the 62-tool surface). A client that only needs part of the surface can set the `OUTLOOK_MCP_TOOLSETS` environment variable to a comma-separated list of tool groups, and only those load. The `account` group (auth / identity) is always available.
 
 ```bash
-# e.g. a recurring mail + calendar agent: ~30 tools instead of 62 (~52% fewer tool tokens/turn)
+# e.g. a recurring mail + calendar agent: ~30 tools instead of 68 (~55% fewer tool tokens/turn)
 OUTLOOK_MCP_TOOLSETS="mail,calendar,digest,delta"
 ```
 
 Groups: `mail`, `drafts`, `attachments`, `calendar`, `contacts`, `todo`, `folders`, `digest`, `delta`, `admin`. Unset (the default) loads everything — fully backward compatible. This only affects which tools are advertised; enabled tools behave identically.
+
+### Two accounts, two instances (optional) — `OUTLOOK_MCP_CONFIG_DIR`
+
+One server process serves one mailbox. To work against two accounts, register **two client entries** and give each its own settings directory with `OUTLOOK_MCP_CONFIG_DIR` — pair it with `OUTLOOK_MCP_TOOLSETS` so each instance also only loads the tool groups it needs:
+
+```json
+{
+  "mcpServers": {
+    "outlook-net": {
+      "command": "outlook-mcp",
+      "env": {
+        "OUTLOOK_MCP_TOOLSETS": "mail,calendar,contacts",
+        "OUTLOOK_MCP_CONFIG_DIR": "~/.outlook-mcp-net"
+      }
+    },
+    "outlook-neko": {
+      "command": "outlook-mcp",
+      "env": {
+        "OUTLOOK_MCP_TOOLSETS": "todo",
+        "OUTLOOK_MCP_CONFIG_DIR": "~/.outlook-mcp-neko"
+      }
+    }
+  }
+}
+```
+
+Then run `outlook-mcp auth` once per instance, with the same env set, to write each auth record in its own directory. Each instance reads its own `config.json` (own `client_id`, `timezone`, permissions) from its own directory.
+
+**Only move the config directory — never `HOME`.** The token cache is not in it: it stays in the OS keyring, and on macOS every azure-identity cache on the host shares one Keychain item, coordinated through a signal file — on this server, `~/.IdentityService/outlook-mcp.nocae` (azure-identity appends `.nocae` to every non-CAE cache name; a CAE cache would be a different file over the same item). Both processes must keep consulting that same signal file so their cache writes lock and merge into the one shared entry — which is exactly what moving the config directory preserves and redirecting `HOME` (or the cache location) would break: two signal files that each believe they own the Keychain item overwrite each other's token. `OUTLOOK_MCP_CONFIG_DIR` deliberately moves only where config.json, the auth record, and attachments live; unset or empty keeps the default `~/.outlook-mcp`.
+
+### What `read_only` does and does not do
+
+`read_only: true` stops outlook-mcp's write tools from running. Ask it to send mail and it
+refuses.
+
+**It does not make your Microsoft credential read-only.** When outlook-mcp signs in it
+requests the `.default` scope -- "everything this Azure app has been approved for." If you
+consented the app to `Mail.ReadWrite` and `Mail.Send` (which the setup steps above tell you
+to), the stored token can send mail whether `read_only` is on or off.
+
+Two consequences worth understanding:
+
+- `read_only` is a line in a text file. Anything able to edit `~/.outlook-mcp/config.json`
+  turns it off and has write access immediately -- no re-authentication, no new consent
+  prompt.
+- The enforcement lives in this server's Python code. Any other process holding the cached
+  token is unaffected by it.
+
+So treat `read_only` as a guardrail against an agent doing something rash, **not as a
+security boundary**. If you want a credential that genuinely cannot write, register a
+second Azure app consented only to the read scopes (`Mail.Read`, `Calendars.Read`,
+`Contacts.Read`, `Tasks.Read`, `User.Read`) and point `client_id` at that one. Then
+Microsoft enforces it rather than us.
 
 ### Granular Write Permissions (optional)
 
@@ -417,7 +531,7 @@ By default, `read_only: false` unlocks **all** write tools. For finer control, s
 | `mail_send` | send, reply, forward, send_draft, send_with_attachments | **Dangerous** — sends email on your behalf |
 | `calendar_write` | create/update/delete event, RSVP | Moderate — creates calendar entries |
 | `contacts_write` | create/update/delete contact | Moderate |
-| `todo_write` | create/update/complete/delete task | Safe — your own task list |
+| `todo_write` | create/update/complete/delete task, checklist items; upload/delete task attachments | Moderate — your own task list, but `outlook_upload_task_attachment` reads local files from `attachments_dir` and pushes their bytes to Graph, and task/checklist/attachment deletes are irreversible. Listing and downloading attachments are plain reads, gated like every other read (not at all) and fenced to `attachments_dir` |
 
 **Example policies:**
 
@@ -426,6 +540,11 @@ By default, `read_only: false` unlocks **all** write tools. For finer control, s
 ```json
 { "read_only": false, "allow_categories": ["mail_drafts", "mail_triage", "todo_write"] }
 ```
+
+(Note that `todo_write` includes the *write-side* task-attachment tools — file reads
+from `attachments_dir`, uploads to Graph, and irreversible deletes. Listing and
+downloading task attachments are reads and are not write-gated, like the mail
+attachment reads — see the table above.)
 
 **Calendar-only** (agent can manage your schedule, nothing else):
 
@@ -452,7 +571,7 @@ When `allow_categories` is set, any tool in a non-allowed category returns a per
 ## Privacy and Security
 
 - **Zero telemetry.** No analytics, no tracking, no usage data collected.
-- **Zero local caching.** Every call goes directly to Microsoft Graph. No local email/calendar storage.
+- **Zero local caching.** Every call goes directly to Microsoft Graph. No local email/calendar storage. (One carve-out: the To Do default-list id is resolved once per process and kept for the session — an id, not content; see `outlook_list_tasks`.)
 - **Zero third-party calls.** The server only talks to `graph.microsoft.com` and `login.microsoftonline.com`.
 - **Token storage.** OAuth tokens are persisted via `azure-identity`'s `TokenCachePersistenceOptions`. On macOS the OS Keychain is used; on Windows, DPAPI; on Linux with PyGObject/libsecret available, gnome-keyring. On Linux *without* libsecret (e.g. the isolated venv created by `uv tool install`), tokens fall back to a `0600` plaintext file at `~/.IdentityService/` and the MCP logs a one-time warning at startup. For encrypted storage on Linux, install `python3-gi gnome-keyring libsecret-1-0` and re-create the venv with `--system-site-packages`.
 - **No logging of sensitive data.** Message bodies, recipient addresses, and tokens are never logged.
@@ -489,7 +608,6 @@ uv run outlook-mcp
 - **Inbox Rules** -- list, create, delete rules
 - **Advanced mail** -- raw MIME export, internet message headers
 - **Calendar** -- cancel event (with attendee notification)
-- **Checklists** -- checklist items on To Do tasks
 - **Enterprise (Entra ID)** -- work/school account support
 
 ---

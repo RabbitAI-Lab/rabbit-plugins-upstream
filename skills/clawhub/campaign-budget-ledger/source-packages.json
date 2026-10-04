@@ -1,0 +1,45 @@
+{
+  "variant_id": "relay_03_amount",
+  "sources": [
+    {
+      "role": "upstream",
+      "slug": "budget-planning-units-identifier",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/budget-planning-units-identifier-1.1.0.zip",
+      "archive_sha256": "96a1c9580b42f2ad6a7757db8845f15481bceda07062ba209e373458ebe9c145",
+      "files": {
+        "README.md": "fbe314d753594fc448d6e54efacac23e24dc3d9bcc98891c62e429cd3af073ce",
+        "SKILL.md": "efa65f6a9ece97e8143663a35e6717f8ed820a8a399bc095f9591e4b0a12b6d3",
+        "examples/expected.json": "85f1ff3b02ed399652c16f1005b50c0e7e5e56a9d4fbdb631b7dcfe83cfd6aa4",
+        "examples/request.json": "864148034c51180e608455f4abe79d910b2ef5ef0590db5843635e311a560015",
+        "file-manifest.json": "183e37c807fbedaeb2dd464b0ea4b5b4f7fbc510cd466d94da5bffd8d7485653",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "2ae05bd53c254ec7f5ee521b05cd6a98c6423daeb49a6398881a0e8c080adffe",
+        "scripts/operation.py": "7fb4e5c21b6266658ea936dbcb07b97110f76d42bea8e26ca404a9dd9ed49f26",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "c7e41b8948326c85ff755c890e79dce316fbc058d7c183cb3a655a7586e60627"
+      }
+    },
+    {
+      "role": "downstream",
+      "slug": "budget-planning-units-workbench",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/budget-planning-units-workbench-1.1.0.zip",
+      "archive_sha256": "1da752a55687d56bb44c28e3d5d5f6f2752dd9b290c29a49c93c981416492efb",
+      "files": {
+        "README.md": "0e3c79709bca1d4d4fc152f80e5c7c56421309f1449f3c43a6b5148226a934b5",
+        "SKILL.md": "902ccf5cee9bf2518d79f5524f3a7fa43ac14bfc9a06fb92c080e4afa0f689e5",
+        "examples/expected.json": "24d7ae937691a40f24490089c5e6a419e08326165d3c999c70991dfc15b0724a",
+        "examples/request.json": "85f1ff3b02ed399652c16f1005b50c0e7e5e56a9d4fbdb631b7dcfe83cfd6aa4",
+        "file-manifest.json": "2f43848376050b40da9b92a92d2761dd3aac2edaffcc505a5f15f65cbd8a9dca",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "beee58ac00bf63de8a563fc8f62030c6687f1c007bf669ecad08c8e9aaf83fbd",
+        "scripts/operation.py": "6bcd9826bd0aebd717fb7ce6a52274a593cf0c8a74e5bc7ab7e9bba11c4a8db6",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "8de8a21449a2533fe10076b03b913990a67817dae903a94fe676d3f7587b5b3c"
+      }
+    }
+  ]
+}

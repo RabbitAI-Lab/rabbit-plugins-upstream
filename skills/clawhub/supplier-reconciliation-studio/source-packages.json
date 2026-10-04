@@ -1,0 +1,45 @@
+{
+  "variant_id": "shadow_06_entity_resolution",
+  "sources": [
+    {
+      "role": "upstream",
+      "slug": "supplier-name-resolution-identifier",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/supplier-name-resolution-identifier-1.1.0.zip",
+      "archive_sha256": "3ceb0227b2b81bdc0984d844b9cb16d5d2b950c2b2b519c585322087f64469dc",
+      "files": {
+        "README.md": "4f3b0d1f559ccd212f206ef5e252ac016173da3b13bd7e9b4905c2c780540eb6",
+        "SKILL.md": "6b52494212b9ff9d035ce2fb7ac582176867b1ffe8ba8c150a821ccc82ffd344",
+        "examples/expected.json": "89441b9b46025c02b0e3b54d21cf2c574880e6b8833082b67e4f1de2fd198782",
+        "examples/request.json": "bba6339b9fdf22d52f7f62ad4aaa9701d9927e33cebcaf0bf45b2c6a2e50e56c",
+        "file-manifest.json": "4a0bdf6b186dcff6a1e6b325b40535973675aa72bcf0cf596c4905c879915988",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "a6a6f30552b4a80b8eb4575b10080ccb39df6cc7c8a9db4acc54233b8c2509d7",
+        "scripts/operation.py": "86056ab11d458170c84f4aab6129e3647fd08a68308eb65b3288108931c9bff8",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "103cce98dd600de3e135604dcd27c01257192373afae973caf043fb2d26db168"
+      }
+    },
+    {
+      "role": "downstream",
+      "slug": "supplier-name-resolution-workbench",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/supplier-name-resolution-workbench-1.1.0.zip",
+      "archive_sha256": "fe31abb84afe33335816d6b9f9a8be73f4f6b62add7835786aac5fb82b597647",
+      "files": {
+        "README.md": "08fac77dab743973621b2d16713a2243c6327924e76f0fe64d131c79bee7df91",
+        "SKILL.md": "017eec8719f1c5f626f92df57ff257481bd086fc60870a7cf4a5c45a0a992775",
+        "examples/expected.json": "aab318a0d64f715b2245cbd12888b6713b75d8b5991ff55982f5e2614f4c8490",
+        "examples/request.json": "89441b9b46025c02b0e3b54d21cf2c574880e6b8833082b67e4f1de2fd198782",
+        "file-manifest.json": "e4d665e558b1ea562d11c7437c62240f5ad0a40c5dc207b677cd805679c17a7a",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "fefc905f1c3dd5ce91feb968ffd09a5777596905a54f8bd1dbfb7c67219f7389",
+        "scripts/operation.py": "bdcf5783f6d962b99cfc5285b2bf7b89b392e31081f5f1c63189e25b359ef521",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "04debddc19bec9efa32b4f1599b4ce2d541c88991fb4a6804369a3943d7ec665"
+      }
+    }
+  ]
+}

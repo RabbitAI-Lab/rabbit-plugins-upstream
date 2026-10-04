@@ -1,0 +1,45 @@
+{
+  "variant_id": "shadow_08_rounding",
+  "sources": [
+    {
+      "role": "upstream",
+      "slug": "invoice-rounding-guidance-identifier",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/invoice-rounding-guidance-identifier-1.1.0.zip",
+      "archive_sha256": "9326695dfea9a90fc4384c8a1ef463e529176a28df36966fd1f6ffeca8d36579",
+      "files": {
+        "README.md": "e91b076ce50b5641a4bf723008b329b0f62962501e9b9800d9ad45112e94ad08",
+        "SKILL.md": "105726e78df229786df38173fc5fcb4cde256b2e9bca023ffccc20184d97a5bf",
+        "examples/expected.json": "1e38cd8ae55083e6714a449d6c6aaf955086e5220f7f7ef4366993eea15788df",
+        "examples/request.json": "df0f18adbeb4092a9d51cccabf45cf08953ebcb7c07e19f2f7cdfd88cd1bcd0c",
+        "file-manifest.json": "c9b3e7a95c258f989899bb733c82b64521edbfd47b4d4d0920a7eb9306463b83",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "4863f57edb2b25d1b407d28dc9e441853a24219c5da0db6d44cedd0e9df5af4f",
+        "scripts/operation.py": "347117ee49f44ffe560dd0aac79bd2a68e59e90ca7d7c567347ceb53f3498406",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "79bfcb06b400a0aaacae5ef82d440375cba75ee0b8a209d47d1325b3632c0051"
+      }
+    },
+    {
+      "role": "downstream",
+      "slug": "invoice-rounding-guidance-workbench",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/invoice-rounding-guidance-workbench-1.1.0.zip",
+      "archive_sha256": "e66ae01b5058cd352487fb85aeb1684caf0ba5ae49ad5fb63b0b26e7b537fa27",
+      "files": {
+        "README.md": "dffd68f23aa5a33c2890b12894f8e26de9ea4b5dcfef234051f755b54d6a6570",
+        "SKILL.md": "7f52e10dffb9f53a8cc5ebf610e319733f35d752153165f571a0cd0c8758a5cd",
+        "examples/expected.json": "2de381720a74c81df135ead84bfe8178143629675e1a8c9690278c70c0e7864a",
+        "examples/request.json": "1e38cd8ae55083e6714a449d6c6aaf955086e5220f7f7ef4366993eea15788df",
+        "file-manifest.json": "8b122c2783b01cff6787590dfca3af23307221aa27d0c0294d30e8e213c37c6f",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "8de2ed7accc5e5900df15f20ec6f2c83fcd309d374054404352b2d0d9e49f2ba",
+        "scripts/operation.py": "2d6662921e9d87a5c66b0ee350718eaa30b25f07a9cded25f26896b840141c9b",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "8912a3844e234c76aa5cf6ef5d3a694c3fcb85b014e2eed8eda3b47867ec5df6"
+      }
+    }
+  ]
+}
