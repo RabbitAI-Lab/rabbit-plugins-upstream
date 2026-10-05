@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-serverless",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-serverless",
+  "branch": "main",
+  "pushedAt": "2026-10-05T15:42:50Z",
+  "contentHash": "5770834839a9fd8d30abb7a83f0cd50393032099a3c1706e0e1b18ef68aad284",
+  "fetchedAt": "2026-10-05T16:13:43.700Z"
+}
