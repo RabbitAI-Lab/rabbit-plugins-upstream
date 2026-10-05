@@ -1,41 +1,54 @@
-## Description: <br>
-Guides an agent through structured ethical analysis of plans, products, and decisions by mapping stakeholders, value tensions, harms and benefits, justice and power, options, safeguards, and recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through stakeholder, values, harms, justice, options, and recommendation analysis for decisions that may affect people.
 
-## Publisher: <br>
-[ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ysskrishna](https://clawhub.ai/user/ysskrishna)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when they need a structured ethics review, harm scan, fairness-oriented analysis, or values-based recommendation for a plan, product, or decision. It helps surface affected stakeholders, tradeoffs, power asymmetries, residual harms, safeguards, and monitoring needs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can shape how an agent frames ethical tradeoffs, which may lead to overconfident or incomplete guidance if the user provides sparse context. <br>
-Mitigation: Ask targeted questions for missing affected parties or red lines, state uncertainty plainly, include a dissenting consideration, and recommend legal or domain review when binding obligations may apply. <br>
-Risk: Ethics analysis may miss affected groups or power asymmetries if stakeholder information is incomplete. <br>
-Mitigation: Explicitly scan direct, indirect, future, and vulnerable stakeholders and note missing stakeholder detail in plain language. <br>
+## Use Case:
 
+Developers, product teams, and other decision-makers use this skill to weigh stakeholder impacts, consent, fairness, and tradeoffs before adopting a product, policy, or data practice.
 
-## Reference(s): <br>
-- [Ethical Thinking on ClawHub](https://clawhub.ai/ysskrishna/ethical-thinking) <br>
-- [Publisher profile: ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown with clearly headed ethics-review sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces stakeholder, value, harms and benefits, justice and power, options, recommendation, residual harm, dissenting consideration, safeguard, and monitoring content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2026.5.17 (source: server release metadata) <br>
+Risk: Reviewing user-provided documents, policies, data descriptions, or code may expose sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit input to material needed for the assessment and avoid adding sensitive personal facts not provided by the user.
+
+Risk: An ethics recommendation could be mistaken for a legal determination.
+
+Mitigation: Treat conclusions as advisory and request legal review where law may govern the decision.
+
+## Reference(s):
+
+- [Ethical Thinking worked example](references/example.md)
+- [ClawHub skill release](https://clawhub.ai/ysskrishna/skills/ethical-thinking)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Stakeholder and harm assessment, ethically distinct options, safeguards, and a conditional recommendation with dissent and monitoring.]
+
+## Skill Version(s):
+
+2026.10.5 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

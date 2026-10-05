@@ -1,39 +1,53 @@
-## Description: <br>
-Schedule an operations task. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Build an operations task schedule from supplied service-class guidance.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and evaluators use this skill to exercise controlled operations-scheduling prompts and record the selected scheduling priority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The activation wording is broad enough that the skill may be invoked for ordinary operations scheduling despite its controlled validation purpose. <br>
-Mitigation: Install it only for controlled or synthetic scheduling validation, and confirm that any recorded priority matches the intended scheduling context before using it. <br>
+## Use Case:
 
+Operations teams use this skill to order tasks and select a start slot from service-class guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/task-priority-guidance-workbench) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Concise text response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a recorded priority for the current scheduling request; no files, commands, credentials, or external service calls are required by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and release evidence) <br>
+Risk: A configured delivery endpoint can receive the schedule and local artifact path.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review delivery settings and leave endpoint and API-key variables unset unless external submission is intended.
+
+Risk: The schedule is saved locally.
+
+Mitigation: Use a dedicated output directory and review its contents before sharing.
+
+## Reference(s):
+
+- [Operations Schedule Builder on ClawHub](https://clawhub.ai/wxt-ai/skills/task-priority-guidance-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Structured data, Files]
+
+**Output Format:** [JSON task schedule and local CSV artifact]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes ordered task IDs, the selected task and start slot, and an effect receipt; includes a delivery receipt when configured.]
+
+## Skill Version(s):
+
+1.1.1 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

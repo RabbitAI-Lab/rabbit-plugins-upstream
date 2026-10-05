@@ -1,0 +1,103 @@
+{
+  "variant_id": "shadow_08_rounding",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "rounding_guidance",
+  "output_name": "invoice_summary",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "currency": {
+            "type": "string"
+          },
+          "scale": {
+            "type": "integer"
+          },
+          "rounding_mode": {
+            "type": "string"
+          },
+          "round_stage": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "scale",
+          "rounding_mode",
+          "round_stage"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "currency": {
+                    "type": "string"
+                  },
+                  "scale": {
+                    "type": "integer"
+                  },
+                  "rounding_mode": {
+                    "type": "string"
+                  },
+                  "round_stage": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "scale",
+                  "rounding_mode",
+                  "round_stage"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "rounded_lines": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "invoice_total": {
+        "type": "string"
+      },
+      "currency": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "rounded_lines",
+      "invoice_total",
+      "currency"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_invoice_calculation"
+}

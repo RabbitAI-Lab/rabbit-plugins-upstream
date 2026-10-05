@@ -1,48 +1,60 @@
-## Description: <br>
-Operate a user's 37Soul account from an agent to list and update owned hosts, chat with them, read posts and photos, and direct host-authored posts through the documented 37Soul API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lets an agent speak as a user's 37Soul character, remember conversations, and manage that user's characters and posts.
 
-## Publisher: <br>
-[xnjiang](https://clawhub.ai/user/xnjiang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xnjiang](https://clawhub.ai/user/xnjiang)
 
-## Use Case: <br>
-External creators use this skill to operate their own 37Soul hosts from an agent: discover hosts, inspect limited profile data, chat with a host, review recent posts, and direct a host to publish a post. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a 37Soul account token that can read hosts, chat with them, update limited profile fields, and direct posts. <br>
-Mitigation: Store the token privately with owner-only file permissions, do not commit it, and revoke it from 37Soul when it is no longer needed. <br>
-Risk: Ambiguous prompts could cause unintended host chats, profile edits, or directed posts. <br>
-Mitigation: Use explicit 37Soul wording, resolve the target host before acting, and restrict profile edits to the documented low-risk fields. <br>
-Risk: Retrying write requests after a timeout can duplicate messages, posts, charges, or model work. <br>
-Mitigation: Use one idempotency key per deliberate user intent, reuse it only to recover an uncertain request, and poll the returned operation. <br>
-Risk: Posting and chat are subject to platform limits and account credits. <br>
-Mitigation: Report rate-limit or credit errors plainly, do not retry terminal failures automatically, and ask before starting a new attempt. <br>
+## Use Case:
 
+People who create 37Soul characters use this skill to converse through a chosen persona, preserve relationship memories, check their characters, and ask them to chat or post.
 
-## Reference(s): <br>
-- [37Soul ClawHub Skill Page](https://clawhub.ai/xnjiang/skills/37soul-skill) <br>
-- [37Soul Website](https://37soul.com) <br>
-- [37Soul Agent Token Management](https://37soul.com/agent_access) <br>
-- [37Soul Agent API Reference](artifact/references/api-reference.md) <br>
-- [Getting Good Posts and Chats Out of Your Hosts](artifact/references/personality-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, API Calls, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON/API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a 37Soul account token and bounded API calls; chat and post actions return asynchronous operation results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.2.2 (source: ClawHub release metadata) <br>
+Risk: Persona conversations and remembered facts may be stored by 37Soul in the background without the user's awareness.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Explain the logging and memory behavior before enabling persona mode; avoid sending exchanges unless the user explicitly wants persistent memory.
+
+Risk: The account-level agent token can access all of the user's 37Soul characters.
+
+Mitigation: Store the token privately, limit agent access to it, and revoke it if exposure is suspected.
+
+Risk: Some conversations, media requests, and posting actions may spend credits or publish content.
+
+Mitigation: Confirm credit-spending or public actions with the user before requesting them.
+
+## Reference(s):
+
+- [37Soul skill on ClawHub](https://clawhub.ai/xnjiang/skills/37soul-skill)
+- [37Soul Agent API Reference](references/api-reference.md)
+- [37Soul Personality Guide](references/personality-guide.md)
+- [37Soul website](https://37soul.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational text or Markdown, including persona replies, host updates, and action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Replies can reflect saved relationship memories and report character chats or posts.]
+
+## Skill Version(s):
+
+6.7.0 (source: frontmatter, CHANGELOG, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

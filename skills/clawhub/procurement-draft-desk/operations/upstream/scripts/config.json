@@ -1,0 +1,81 @@
+{
+  "variant_id": "cap_08_vendor_to_procurement",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "supplier_csv",
+  "output_name": "purchase_terms",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string",
+        "format": "supplier-csv-row",
+        "minLength": 1
+      },
+      {
+        "type": "object",
+        "required": [
+          "supplier_id",
+          "currency",
+          "lead_days",
+          "incoterm",
+          "renewal_month"
+        ],
+        "properties": {
+          "supplier_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "currency": {
+            "type": "string",
+            "minLength": 1
+          },
+          "lead_days": {
+            "type": "integer"
+          },
+          "incoterm": {
+            "type": "string",
+            "minLength": 1
+          },
+          "renewal_month": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "supplier_id",
+      "currency",
+      "lead_days",
+      "incoterm",
+      "renewal_month"
+    ],
+    "properties": {
+      "supplier_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "currency": {
+        "type": "string",
+        "minLength": 1
+      },
+      "lead_days": {
+        "type": "integer"
+      },
+      "incoterm": {
+        "type": "string",
+        "minLength": 1
+      },
+      "renewal_month": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

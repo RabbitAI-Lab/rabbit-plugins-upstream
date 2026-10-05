@@ -1,0 +1,48 @@
+{
+  "variant_id": "cap_06_change_to_release",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "commit_patch",
+  "output_name": "release_change_set",
+  "input_schema": {
+    "type": "string",
+    "format": "unified-diff",
+    "minLength": 1
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "change_id",
+      "files",
+      "components",
+      "additions",
+      "deletions"
+    ],
+    "properties": {
+      "change_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "components": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "additions": {
+        "type": "integer"
+      },
+      "deletions": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

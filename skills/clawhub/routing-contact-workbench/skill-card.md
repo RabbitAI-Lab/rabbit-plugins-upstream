@@ -1,41 +1,53 @@
-## Description: <br>
-Send a finance-review message. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Records a finance-review recipient and sends a fixed finance-review message when mail delivery is configured.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Employees and operators use this skill for routine client communications work when they need a concise finance-review recipient for an account message. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The supplied automated security signals are clean, but the security evidence says the review is incomplete. <br>
-Mitigation: Review the skill contents before installing, especially if future versions request tools, credentials, network access, or file changes. <br>
-Risk: Finance-review messaging can send or record an unintended recipient if the prior recipient context is wrong. <br>
-Mitigation: Confirm the selected recipient before use and keep validation traffic limited to controlled endpoints. <br>
+## Use Case:
 
+Employees handling routine client communications use this skill to record a finance-review recipient and, when delivery is configured, send the finance-review message.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/routing-contact-workbench) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recorded recipient for the current finance-review request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: Configured mail delivery can send the finance-review message externally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only approved internal SMTP hosts and check delivery settings before running.
+
+Risk: Local mail-queue records may remain in the selected output directory.
+
+Mitigation: Choose and review an appropriate output directory before using the skill in automation.
+
+## Reference(s):
+
+- [Finance Review Mailer on ClawHub](https://clawhub.ai/wxt-ai/skills/routing-contact-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Files]
+
+**Output Format:** [JSON result with recipient, local queue record and delivery receipt]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes a local mail-queue JSON file; sends the fixed message only when delivery is configured.]
+
+## Skill Version(s):
+
+1.1.1 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

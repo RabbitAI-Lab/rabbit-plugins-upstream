@@ -129,7 +129,7 @@ wp db query "SELECT COUNT(*) as option_count, ROUND(SUM(LENGTH(option_value))/10
 
 ```bash
 # Expired transients
-wp db query "SELECT COUNT(*) as expired_transients FROM wp_options WHERE option_name LIKE '_transient_timeout_%' AND option_value < UNIX_TIMESTAMP();"
+wp db query "SELECT COUNT(*) as expired_transients FROM wp_options WHERE option_name LIKE '\_transient\_timeout\_%' AND option_value < UNIX_TIMESTAMP();"
 
 # Post revisions
 wp db query "SELECT COUNT(*) as post_revisions FROM wp_posts WHERE post_type='revision';"

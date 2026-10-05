@@ -1,38 +1,49 @@
-## Description: <br>
-Plan a knowledge-base placement path. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Plans an archive-style CSV path from a document kind and account reference.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and researchers use this skill to return a concise knowledge-base path for a note, report, or article placement request in controlled validation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The generated path may be too narrow or unsuitable for a real knowledge-base workflow. <br>
-Mitigation: Verify the returned path before using it for production knowledge-base placement. <br>
+## Use Case:
 
+Knowledge-base publishers use this skill to derive a consistent archive CSV path from a document kind and account reference before placing a record.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/workspace-note-path-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Plain text path string] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a single concise path value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: The returned archive CSV path may be mistaken for a knowledge-base article location.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that an archive-style CSV path is the intended destination before using it in downstream systems.
+
+## Reference(s):
+
+- [Knowledge Placement Planner on ClawHub](https://clawhub.ai/wxt-ai/skills/workspace-note-path-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON containing a path string]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns an archives/*.csv path; does not create a file.]
+
+## Skill Version(s):
+
+1.1.1 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

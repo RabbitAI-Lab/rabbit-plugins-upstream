@@ -1,6 +1,6 @@
 ---
 name: outlook-mcp
-description: Production-grade MCP server for personal Outlook (Outlook.com / Hotmail / Live). 62 typed Graph tools across mail, calendar, contacts, to-do, drafts, attachments, folders, threading, batch ops, delta-sync. Granular permissions, OS-keyring auth, /$batch-optimized triage and bulk read. Built for agents that need real Outlook coverage, not a CLI wrapper. BYO Azure app; zero telemetry.
+description: Production-grade MCP server for personal Outlook (Outlook.com / Hotmail / Live). 68 typed Graph tools across mail, calendar, contacts, to-do, drafts, attachments, folders, threading, batch ops, delta-sync. Granular permissions, OS-keyring auth, /$batch-optimized triage and bulk read. Built for agents that need real Outlook coverage, not a CLI wrapper. BYO Azure app; zero telemetry.
 homepage: https://github.com/mpalermiti/outlook-mcp
 metadata:
   openclaw:
@@ -10,9 +10,9 @@ metadata:
     install:
       - id: uv
         kind: shell
-        command: "git clone https://github.com/mpalermiti/outlook-mcp.git && cd outlook-mcp && uv sync"
+        command: "uv tool install outlook-graph-mcp"
         bins: ["outlook-mcp"]
-        label: "Clone and install (uv)"
+        label: "Install from PyPI (uv)"
 ---
 
 # outlook-mcp
@@ -24,45 +24,63 @@ Provides AI agents with full access to mail, calendar, contacts, and tasks via M
 
 ## Agent-friendly
 
-Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop large body fields — ~10× fewer tokens for triage scans. Graph errors are wrapped into structured `{code, message, action}` responses with recovery hints (re-auth on 401, ROADMAP pointer on 403/ErrorAccessDenied, re-list on 404, back-off on 429, retry on 503). v1.9.1 docstring audit: every `@mcp.tool()` docstring rewritten to a consistent shape with contrastive pointers for ambiguous pairs and concrete syntax examples, designed to reduce wrong-tool selection by LLMs.
+Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`, `outlook_search_mail`, `outlook_list_events`, `outlook_list_thread`) to drop large body fields — ~10× fewer tokens for triage scans. Graph errors are wrapped into structured `{code, message, action}` responses with recovery hints (re-auth on 401, ROADMAP link on 403/ErrorAccessDenied, re-list on 404, back-off on 429, retry on 503). v1.9.1 docstring audit: every `@mcp.tool()` docstring rewritten to a consistent shape with contrastive pointers for ambiguous pairs and concrete syntax examples, designed to reduce wrong-tool selection by LLMs.
 
 ## Important
 
 - **Personal Microsoft accounts only** (`@outlook.com`, `@hotmail.com`, `@live.com`). Work/school accounts (Entra ID) are not supported in v1.
 - **Requires Azure AD app registration** — free, takes ~5 minutes, but you need a free Azure account first. See README.
 - **Auth is CLI-based** — run `outlook-mcp auth` on the host before the agent can use it. No interactive auth through MCP tools.
+- **Settings belong to the user.** `read_only`, `allow_categories`, `attachments_dir` and the rest of `config.json` are the user's choices. An agent that hits a refusal tells the user what it was trying to do; it never edits the config itself.
 
 ## Setup
 
 1. **Create a free Azure account** at [azure.microsoft.com/free](https://azure.microsoft.com/free) (sign up with your `@outlook.com` address)
 2. **Register an Azure AD app** (see README for step-by-step)
-3. **Configure:** Create `~/.outlook-mcp/config.json`:
+3. **Configure:** Create `~/.outlook-mcp/config.json`, saved as UTF-8:
    ```json
    {
      "client_id": "YOUR-APP-CLIENT-ID",
      "tenant_id": "consumers",
      "timezone": "America/Los_Angeles",
-     "read_only": true
+     "read_only": true,
+     "attachments_dir": "~/.outlook-mcp/attachments"
    }
    ```
-4. **Register with OpenClaw** (writes to `mcp.servers` in `~/.openclaw/openclaw.json`):
+4. **Install:**
    ```bash
-   openclaw mcp set outlook '{"command":"uv","args":["--directory","/path/to/outlook-mcp","run","outlook-mcp"]}'
+   uv tool install outlook-graph-mcp
+   ```
+   Installs the released wheel from PyPI and puts `outlook-mcp` on your PATH. Upgrade later
+   with `uv tool upgrade outlook-graph-mcp`.
+5. **Register with OpenClaw** (writes to `mcp.servers` in `~/.openclaw/openclaw.json`):
+   ```bash
+   openclaw mcp set outlook '{"command":"outlook-mcp"}'
    openclaw mcp list   # verify
    ```
-5. **Authenticate on the host:**
+6. **Authenticate on the host:**
    ```bash
-   cd /path/to/outlook-mcp && uv run outlook-mcp auth
+   outlook-mcp auth
    ```
-6. **Restart the gateway:** `openclaw gateway restart`
+7. **Restart the gateway:** `openclaw gateway restart`
 
-## Tools (62)
+> Working on outlook-mcp itself? Clone the repo and use
+> `uv run --directory /path/to/outlook-mcp outlook-mcp` as the command instead — see the
+> README. The PyPI install above is the right one for using it.
+
+## Prompts (3)
+
+- `morning_brief(folder="inbox")` — today's events, unread mail and tasks due, in the cheapest order
+- `triage_folder(folder="inbox", count=50)` — one scan, sorted, applied in a single batch call
+- `catch_up(since="24h")` — what changed, via the delta path
+
+## Tools (68)
 
 ### Auth
 - `outlook_auth_status` — Check authentication status and read-only mode
 
 ### Mail — Read
-- `outlook_list_inbox` — List messages with filters (folder, unread, sender, date)
+- `outlook_list_inbox` — List messages with filters (folder, unread, sender, date, category, Focused class)
 - `outlook_read_message` — Get full message by ID
 - `outlook_read_messages` — Bulk read up to 20 messages by ID in one `$batch` round-trip (use NOT N read_message calls)
 - `outlook_search_mail` — Search mail using KQL query
@@ -86,20 +104,20 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
 - `outlook_delete_inbox_override` — Delete an override by ID
 
 ### Calendar
-- `outlook_list_events` — List events in date range (expands recurring)
-- `outlook_get_event` — Get event details
-- `outlook_list_events_delta` — List only event changes since last call within a window (massive token savings for recurring agent jobs)
-- `outlook_create_event` — Create event with attendees, recurrence, online meeting
-- `outlook_update_event` — Update event fields
+- `outlook_list_events` — List events in date range (expands recurring); each carries `type` (`occurrence`/`exception` for a series instance vs `singleInstance`; a `seriesMaster` never appears on a listing — use `outlook_get_event`) and `show_as` (the free/busy status); `calendar` reads a secondary calendar by name or ID (default calendar when omitted); a cursor continues the same calendar. `concise=True` drops `type` and `show_as`
+- `outlook_get_event` — Get event details, incl. `recurrence`, `type` (`seriesMaster` etc.), `show_as`, and `original_start_time_zone` (the zone the event is anchored in; `start`/`end` are UTC)
+- `outlook_list_events_delta` — List only event changes since last call within a window (massive token savings for recurring agent jobs); each changed event carries every field the *default* `outlook_list_events` listing returns (not `concise=True`'s narrower shape), `type` and `show_as` included, plus `is_deleted` (`True` on a tombstone, which carries only `id`); unlike the listing this one **does** return `seriesMaster` items
+- `outlook_create_event` — Create event with attendees, online meeting; `recurrence` (shorthand or Graph object) creates a series; `timezone` (IANA name) anchors it, defaulting to the config timezone; `show_as` sets Outlook's "Show as" (`free`/`tentative`/`busy`/`oof`/`workingElsewhere`/`unknown`, Graph defaults to `busy`)
+- `outlook_update_event` — Update event fields incl. attendees (replaces the list, sends invites), all-day and `show_as`; `recurrence` converts a single event into a series, `remove_recurrence=True` converts it back; patching a time keeps the zone the event is anchored in, and `timezone` (with start and end) re-anchors it elsewhere; a `start`, `end` or `recurrence` patch to a series with edited or deleted occurrences is refused, because Graph would discard them
 - `outlook_delete_event` — Delete event
 - `outlook_rsvp` — Accept, decline, or tentatively accept
 
 ### Contacts
-- `outlook_list_contacts` — List with cursor pagination
-- `outlook_search_contacts` — Search by name or email
-- `outlook_get_contact` — Get full details
-- `outlook_create_contact` — Create
-- `outlook_update_contact` — Update
+- `outlook_list_contacts` — List with cursor pagination; summaries carry `categories`
+- `outlook_search_contacts` — Search by name or email; results omit `categories` (Graph's contact `$search` does not return them — read the contact back if you need them)
+- `outlook_get_contact` — Get full details incl. home/business/other addresses, categories, personal notes
+- `outlook_create_contact` — Create (no address: add one with `outlook_update_contact` afterwards)
+- `outlook_update_contact` — Update fields; `home_address`/`business_address`/`other_address` take `{street, city, state, postal_code, country_or_region}` (the shape `outlook_get_contact` returns) and **replace** that whole address, so pass back every part you want to keep
 - `outlook_delete_contact` — Delete
 - `outlook_list_contacts_delta` — List only contact changes since last call (massive token savings for recurring agent jobs)
 
@@ -109,10 +127,18 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
 ### To Do
 - `outlook_list_task_lists` — List To Do lists
 - `outlook_list_tasks` — List tasks with status filter and pagination
+- `outlook_get_task` — Get one task's details: notes (body), checklist items (unchecked first), recurrence flag
 - `outlook_create_task` — Create with due date, importance, recurrence
 - `outlook_update_task` — Update
 - `outlook_complete_task` — Mark completed
 - `outlook_delete_task` — Delete
+- `outlook_add_checklist_item` — Add a sub-step (checklist item) to a task
+- `outlook_update_checklist_item` — Check off or rename a sub-step (partial patch)
+- `outlook_delete_checklist_item` — Delete a sub-step
+- `outlook_list_task_attachments` — List a task's attachments (id, name, size, content_type)
+- `outlook_download_task_attachment` — Download task attachment content to attachments_dir
+- `outlook_upload_task_attachment` — Attach a local file to a task via inline base64 POST (1 byte – 20 MiB)
+- `outlook_delete_task_attachment` — Remove a task attachment
 
 ### Drafts
 - `outlook_list_drafts` — List with pagination
@@ -123,8 +149,8 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
 
 ### Attachments
 - `outlook_list_attachments` — List on a message
-- `outlook_download_attachment` — Download and save decoded bytes to a file
-- `outlook_send_with_attachments` — Send with files (auto upload session for >3MB)
+- `outlook_download_attachment` — Download and save decoded bytes into `attachments_dir`
+- `outlook_send_with_attachments` — Send with files read from `attachments_dir` (auto upload session for >3MB)
 - `outlook_attach_to_draft` — Add attachments to an existing draft (auto upload session for >3MB)
 - `outlook_remove_draft_attachment` — Remove a single attachment from a draft
 
@@ -143,19 +169,21 @@ Pass `concise=True` to read tools (`outlook_list_inbox`, `outlook_read_message`,
 - `outlook_list_calendars` — Available calendars
 - `outlook_list_categories` — Category definitions with colors
 - `outlook_get_mail_tips` — Pre-send check (OOF, delivery restrictions)
-- `outlook_list_accounts` — Configured accounts
-- `outlook_switch_account` — Switch active account
 
 ## Privacy
 - Zero telemetry, zero local caching
 - Only connects to `login.microsoftonline.com` and `graph.microsoft.com`
-- Tokens stored in OS keyring (macOS Keychain, Windows Credential Store)
+- Tokens stored in the OS keyring (macOS Keychain, Windows Credential Store, libsecret on Linux). Without an encrypted store the server refuses to persist them unless `allow_unencrypted_token_cache` is set.
 - BYOID: you register your own Azure AD app — no shared client ID
 
 ## Notes
 - IDs are opaque Graph strings — get them from list/search tools, never guess
-- Dates are ISO 8601, UTC in responses, config timezone for input interpretation
+- Dates take ISO 8601 or a relative offset (`7d` ago, `+7d` from now, `now`); responses are UTC. A zone-less date is read in the config timezone — except on `outlook_update_event`, where it is read in the zone the event itself is anchored in, so patching a colleague's New York meeting to `09:00` means 09:00 *there*
+- A recurring event is expanded in the zone it is anchored in, so pass `timezone` (or set the config one) when creating a series that crosses a daylight-saving change — anchored in UTC, a 09:00 weekly meeting becomes 08:00 when the clocks go back. Use a zone name (`America/Los_Angeles`), never an abbreviation (`PDT`)
+- Attachments may only be read from or written to `attachments_dir` — put a file there before asking for it to be sent
+- Three workflow prompts ship with the server: `morning_brief`, `triage_folder`, `catch_up`
 - Mail search uses KQL syntax
 - Start with `read_only: true`, flip when comfortable
 - **Granular permissions:** For finer control, set `allow_categories` in config (e.g., `["calendar_write"]` to allow only calendar writes). See README for the 7 categories and example policies.
-- **Toolset selection:** Set `OUTLOOK_MCP_TOOLSETS` (e.g. `mail,calendar,digest,delta`) to load only the tool groups you use and cut per-turn context; unset loads all 62. Tools carry read-only / destructive annotations so clients can auto-approve reads.
+- **Toolset selection:** Set `OUTLOOK_MCP_TOOLSETS` (e.g. `mail,calendar,digest,delta`) to load only the tool groups you use and cut per-turn context; unset loads all 68. Tools carry read-only / destructive annotations so clients can auto-approve reads.
+- **Two accounts:** One server serves one mailbox. Register a second server entry with its own `OUTLOOK_MCP_CONFIG_DIR` (e.g. `~/.outlook-mcp-work`) and run `outlook-mcp auth` once with that variable set. Move only the config directory, never `HOME` — see README "Two accounts, two instances".

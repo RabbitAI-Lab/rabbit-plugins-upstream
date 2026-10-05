@@ -1,0 +1,9 @@
+{
+  "selection_result": {
+    "selected_version": "2.1.0",
+    "eligible_versions": [
+      "2.1.0"
+    ],
+    "reason": "highest eligible version in current major"
+  }
+}

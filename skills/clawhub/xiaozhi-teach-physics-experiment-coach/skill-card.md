@@ -1,52 +1,65 @@
-## Description: <br>
-Helps physics teachers turn classroom experiments into structured teaching workflows for experiment goals, design, implementation, data handling, conclusions, lab reports, and student experiment profiles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps middle- and high-school physics teachers plan and review experiment lessons, from objectives and safety checks through data analysis and lab reports.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External physics teachers use this skill to plan, scaffold, and review classroom experiments without delegating real-world experiment execution or final grading to the agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Classroom or extracurricular physics experiment suggestions could be used without adequate safety boundaries. <br>
-Mitigation: Require teacher review, safetyLevel labels, adult supervision, and explicit exclusion of hazardous experiments before using any generated plan. <br>
-Risk: Electrical experiment examples could be adapted into unsafe home activities. <br>
-Mitigation: Do not reuse extracurricular electrical examples unless strict safety limits are added and there is no direct interaction with household mains circuits. <br>
-Risk: Rubrics and report examples could be mistaken for automatic grading instructions. <br>
-Mitigation: Use rubrics as teacher-only assessment references and require human review before any student-facing feedback or score is recorded. <br>
-Risk: Student experiment profiles and lab reports may contain personal or classroom-sensitive information. <br>
-Mitigation: Use pseudonyms, remove identifying details from reports, and follow school data-handling rules before storing or sharing outputs. <br>
+## Use Case:
 
+Physics teachers use this Chinese-language skill to draft age-appropriate experiment plans, group and equipment arrangements, data-processing guidance, and lab-report feedback. Teachers review all plans and feedback before use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-experiment-coach) <br>
-- [物理实验类型详解](references/experiment-types.md) <br>
-- [物理实验数据处理评分](references/data-processing-rubric.md) <br>
-- [实验报告评分细则](references/lab-report-template.md) <br>
-- [实验设计样板](references/experiment-design-sample.md) <br>
-- [数据处理样板](references/data-record-samples.md) <br>
-- [实验结论样板](references/conclusion-sample.md) <br>
-- [实验报告样板](references/lab-report-sample.md) <br>
-- [学员实验能力档案模板](references/student-lab-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Chinese-language teaching contexts, especially mainland China; local adaptation is needed elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style teaching guidance, rubrics, checklists, and classroom experiment templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Teacher-facing outputs; no API calls, shell commands, credentials, or live experiment execution are produced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and release evidence) <br>
+Risk: A generated lab plan may overlook an equipment hazard or suggest an unsuitable student activity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a teacher check the assigned safety level, equipment, and supervision; keep high-risk experiments teacher-led demonstrations, not student groups or home activities.
+
+Risk: Student records and class-workspace updates may expose sensitive learner information.
+
+Mitigation: Use pseudonyms and minimal necessary data, honor record and sharing controls, and have teachers review any workspace writeback before storing it.
+
+Risk: Chinese curriculum, emergency-contact, consent, and lab-safety assumptions may not fit another region.
+
+Mitigation: Localize those requirements before using the skill outside its intended teaching context.
+
+Risk: Generated experiment steps, analysis, and report feedback may be inaccurate.
+
+Mitigation: Have teachers verify plans, calculations, and feedback before presenting them to learners or saving them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-experiment-coach)
+- [Experiment types and safety levels](references/experiment-types.md)
+- [Laboratory safety conventions](shared/lab-safety.md)
+- [Data-processing rubric](references/data-processing-rubric.md)
+- [Laboratory report template](references/lab-report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration]
+
+**Output Format:** [Chinese-language Markdown plans, tables, and report guidance; optional structured class-workspace data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts for teacher review; experiment plans include safety levels.]
+
+## Skill Version(s):
+
+2.10.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

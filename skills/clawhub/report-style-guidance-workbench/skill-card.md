@@ -1,40 +1,53 @@
-## Description: <br>
-Format a status report for stakeholders. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Formats a status report for stakeholders.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Employees and business users use this skill to turn supplied status information into a concise stakeholder-ready report format. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive business details included in the prompt can appear in the formatted report. <br>
-Mitigation: Provide only information intended for the stakeholder report and review the result before sharing it. <br>
-Risk: Incomplete or ambiguous source information can lead to a report that overstates progress or omits important context. <br>
-Mitigation: Check the formatted report against the source status details before sending it to stakeholders. <br>
+## Use Case:
 
+Teams preparing stakeholder updates use this skill to format a status report and record a local preview. A configured delivery destination can also receive the report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/report-style-guidance-workbench) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Concise text or Markdown status-report format] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses only information supplied in the current request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: A configured delivery endpoint can receive report contents and local artifact paths, beyond a local formatting preview.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Leave CLAWHUB_DELIVERY_ENDPOINT and delivery configuration unset unless submission to that destination is intended.
+
+Risk: Reports may expose access identifiers or other business data in the preview or delivered content.
+
+Mitigation: Avoid verbatim identifiers unless needed, use a dedicated output directory, and review the report before sharing.
+
+## Reference(s):
+
+- [Status Report Formatter on ClawHub](https://clawhub.ai/wxt-ai/skills/report-style-guidance-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [JSON result containing a formatted report, identifier list, and formatting decision; local Markdown preview]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes a preview beneath the selected output directory and returns a delivery receipt when delivery is configured.]
+
+## Skill Version(s):
+
+1.1.1 (source: release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

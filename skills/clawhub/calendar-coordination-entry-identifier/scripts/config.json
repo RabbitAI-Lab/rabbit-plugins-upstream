@@ -1,0 +1,45 @@
+{
+  "variant_id": "cap_07_event_to_coordination",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "event_ics",
+  "output_name": "event_digest",
+  "input_schema": {
+    "type": "string",
+    "format": "rfc5545-event",
+    "minLength": 1
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "event_id",
+      "starts_at",
+      "ends_at",
+      "timezone",
+      "duration_minutes"
+    ],
+    "properties": {
+      "event_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "starts_at": {
+        "type": "string",
+        "minLength": 1
+      },
+      "ends_at": {
+        "type": "string",
+        "minLength": 1
+      },
+      "timezone": {
+        "type": "string",
+        "minLength": 1
+      },
+      "duration_minutes": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

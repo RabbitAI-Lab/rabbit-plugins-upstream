@@ -1,0 +1,33 @@
+{
+  "variant_id": "relay_07_region",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "rollout_request",
+  "output_name": "deployment_region",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "residency"
+    ],
+    "properties": {
+      "residency": {
+        "type": "string",
+        "enum": [
+          "APAC",
+          "EU",
+          "US"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "string",
+    "enum": [
+      "ap-southeast-1",
+      "eu-west-1",
+      "us-east-1"
+    ]
+  },
+  "effect": null
+}

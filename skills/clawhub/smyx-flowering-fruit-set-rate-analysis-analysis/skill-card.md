@@ -1,43 +1,58 @@
-## Description: <br>
-Analyzes tomato or chili flower and fruit images or videos to count open flowers and young fruits, compute fruit-set rate, and return grower-facing guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes tomato and chili flower or fruit images and videos to estimate fruit-set rates and provide growing guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External growers, horticulture operators, and agent developers use this skill to analyze tomato or chili flower/fruit media, estimate fruit-set rates, receive pollination or environment adjustment guidance, and view prior analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded media or URLs are sent to lifeemergence cloud services for analysis. <br>
-Mitigation: Use only media and URLs suitable for third-party cloud processing; avoid sensitive images or private/internal URLs unless publisher disclosures meet your consent, retention, deletion, and permission requirements. <br>
-Risk: The skill silently creates or reuses an identity, stores tokens locally, and queries cloud report history tied to that identity. <br>
-Mitigation: Review local identity and token storage before installation, run the skill in an isolated workspace, and avoid using it where silent cloud history linkage is unacceptable. <br>
+## Use Case:
 
+Home growers and greenhouse operators use plant images or videos to assess flowering and fruit set, review analysis reports, and inform pollination or growing-condition adjustments.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text, including structured analysis reports, report links, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video paths or public media URLs; documented media limit is 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Images, videos, or media URLs may be sent to external analysis services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media approved for remote processing and confirm the destination before use.
+
+Risk: The skill may silently create or reuse an account identity, store tokens locally, and retrieve cloud report history.
+
+Mitigation: Review account-linked storage and history behavior before installation; protect the local workspace and tokens.
+
+Risk: Packaged code and documentation do not consistently match the plant-analysis description or release version.
+
+Mitigation: Verify the installed version and test actual outputs before relying on analysis or growing guidance.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis)
+- [Packaged API reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis report or Markdown table of historical reports, with report links; JSON where available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results can be saved to a file.]
+
+## Skill Version(s):
+
+1.0.12 (source: ClawHub release; packaged skill lists 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

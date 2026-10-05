@@ -1,0 +1,29 @@
+{
+  "variant_id": "relay_15_match_threshold",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "reconciliation_rule",
+  "output_name": "match_threshold",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "allowed_variance"
+    ],
+    "properties": {
+      "allowed_variance": {
+        "type": "number",
+        "minimum": 0.0,
+        "maximum": 0.5,
+        "multipleOf": 0.01
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "number",
+    "minimum": 0.5,
+    "maximum": 1.0,
+    "multipleOf": 0.01
+  },
+  "effect": null
+}

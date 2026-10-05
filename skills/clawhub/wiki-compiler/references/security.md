@@ -1,16 +1,24 @@
 # 安全准则
 
 > 任何破坏性操作前必读。任何不可逆操作必须先备份 + 用户确认 + 操作日志。
+>
+> ⚠️ **2026-09 重要更新**：IMA 平台当前 API **不支持**笔记、文件夹、文件的删除操作（仅支持标签删除）。详见第 3 节。
 
 ## 1. 破坏性操作清单
 
 | 操作 | API | 风险 | 保护级别 |
 |------|-----|------|:--------:|
-| 删除笔记 | `delete_note` | 不可逆，内容永久丢失 | 🔴 极高 |
+| ~~删除笔记~~ | ~~`delete_note`~~ | ❌ **API 不支持** | — |
 | 删除标签 | `tag_delete` | 所有关联自动解除 | 🔴 高 |
 | 重命名标签 | `tag_rename` | 新名重复会**自动合并** | 🔴 高 |
 | 移动文件 | `move_knowledge` | 标签数组可能清空 | 🟡 中 |
-| 删除文件夹 | `create_folder` 反向 | 文件归属变根目录 | 🟡 中 |
+| ~~删除文件夹~~ | — | ❌ **API 不支持** | — |
+| ~~删除文件~~ | — | ❌ **API 不支持** | — |
+
+**IMA 平台删除能力边界（2026-09 现状）**：
+- ✅ 可删除：标签（`tag_delete`）
+- ❌ 不可删除：笔记、知识库、文件夹、文件、媒体
+- 不可删除对象的处理方式：用户需在 **IMA 客户端手动删除**
 
 ## 2. 通用保护原则
 
@@ -19,98 +27,89 @@
 3. **操作日志**：每次破坏性操作后必须记录到 `/sandbox/workspace/logs/note_operations.log`
 4. **优先用可逆方案**：`tag_remove` 优于 `tag_delete`，创建新笔记优于删除旧笔记
 5. **影响范围可见**：执行前必须告诉用户"将影响 X 个文件/标签"
+6. **IMA 限制认知**：删除笔记/文件夹/文件只能让用户在客户端操作，不要尝试构造或寻找删除 API
 
-## 3. 删除笔记（`delete_note`）安全流程
+## 3. 删除笔记 — **改用客户端手动操作 + 新笔记替代模式**
 
-> ⚠️ **不可逆操作**。一旦执行：
-> - 笔记内容永久丢失，无法恢复
-> - `note_id` 被永久废弃，新笔记会获得新的 ID
-> - 如果 `note_id` 错误（如拼错、复制错误），可能误删其他笔记
-> - 所有外部引用该 `note_id` 的链接都会失效
+> ⚠️ **重要变化**：IMA 平台当前 API **不支持删除笔记**（`delete_note` 已无效）。
+> 原 v4.0.0 的"安全删除流程"中的 `delete_note` curl 调用是**无效操作**，必须改为：
+> 1. **创建新笔记替代**（推荐）
+> 2. **告知用户在 IMA 客户端手动删除**
 
-### 🚫 严禁直接执行
+### 3.1 推荐方案：创建新笔记替代旧笔记（推荐）
 
-```bash
-# ❌ 千万不要直接运行！必须先完成以下所有确认门
-curl -s -X POST "https://ima.qq.com/openapi/note/v1/delete_note" \
-  -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
-  -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
-  -H "Content-Type: application/json" \
-  -d '{"note_id": "<旧note_id>"}'
-```
-
-### ✅ 安全删除流程
-
-**步骤 1：备份原笔记内容**
+**核心思路**：不删除旧笔记，创建内容完全的新笔记，标注替代关系。
 
 ```bash
-# 先把旧笔记完整导出到本地，作为永久备份
+# 1. 读取旧笔记内容（保留作为版本历史）
 curl -s -X POST "https://ima.qq.com/openapi/note/v1/export_note" \
   -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
   -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
   -H "Content-Type: application/json" \
   -d '{"note_id":"<旧note_id>","target_content_format":1}' | \
 python3 -c "
-import sys, json, urllib.request
+import sys, json
 d = json.load(sys.stdin)
 if d['code'] == 0:
     content = d['data']['content']
-    backup_path = '/sandbox/workspace/backups/notes/<旧note_id>_backup.md'
+    backup_path = f'/sandbox/workspace/backups/notes/{d[\"data\"][\"note_id\"]}_backup.md'
     with open(backup_path, 'w') as f: f.write(content)
-    print(f'已备份到: {backup_path}')
+    print(f'已备份旧笔记到: {backup_path}')
 "
-```
 
-**步骤 2：三重确认门**
+# 2. 基于旧版本生成新内容（人工或 LLM 辅助）
 
-执行前必须依次确认以下问题，**任何一个答案为"否"或"不确定"都禁止继续**：
-
-- [ ] 确认 1：备份文件已成功保存到本地？
-- [ ] 确认 2：新内容已经创建并验证完整（与原内容比对通过）？
-- [ ] 确认 3：用户已**显式**确认删除（不是隐式同意）？
-- [ ] 确认 4：`note_id` 已核对 3 次以上，无拼写错误？
-
-**步骤 3：删除前最后一次预览**
-
-```bash
-# 先打印要删除的笔记信息，让用户最终确认
-curl -s -X POST "https://ima.qq.com/openapi/note/v1/get_note_info" \
+# 3. 创建新笔记（获得新的 note_id）
+curl -s -X POST "https://ima.qq.com/openapi/note/v1/import_doc" \
   -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
   -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
   -H "Content-Type: application/json" \
-  -d '{"note_id":"<旧note_id>"}' | python3 -m json.tool
+  -d @new_note_request.json | python3 -m json.tool
+# 返回: {"code": 0, "data": {"note_id": "<新note_id>"}}
 
-# 用户必须明确回复"确认删除"才能继续
+# 4. 在新笔记中标注"替代旧版 v1.X（note_id=XXX）"
+# 5. 旧笔记保留作为历史版本
+# 6. 用户在 IMA 客户端手动决定是否删除旧笔记
 ```
 
-**步骤 4：执行删除（仅在所有确认门通过后）**
+**优势**：
+- ✅ 完全规避 API 不支持删除的限制
+- ✅ 保留版本历史，可回溯
+- ✅ 零误删风险
+- ✅ 用户拥有最终决定权
 
-```bash
-# 此时方可执行删除——但强烈建议先告知用户：
-# "即将删除 note_id=XXX 的笔记'XXX'，是否继续？"
-# 等待用户再次确认后再运行：
+### 3.2 客户端手动删除流程
 
-curl -s -X POST "https://ima.qq.com/openapi/note/v1/delete_note" \
-  -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
-  -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
-  -H "Content-Type: application/json" \
-  -d '{"note_id": "<旧note_id>"}' | python3 -m json.tool
+如需删除旧笔记，按以下流程告知用户：
 
-# 立即记录到操作日志
-echo "$(date -Iseconds) | 删除笔记: <旧note_id> | 备份路径: <备份路径>" >> /sandbox/workspace/logs/note_operations.log
-```
+**步骤 1：告知用户**
+- 笔记标题：XXX
+- 笔记 ID：XXX
+- 删除位置：XXX（哪个笔记本）
 
-### 💡 推荐替代方案：保留旧笔记 + 创建新笔记
+**步骤 2：用户确认**
+- 用户明确回复"确认删除"
 
-> **强烈推荐**：对绝大多数场景，**不要删除旧笔记**，而是：
-> 1. 创建内容完全的新笔记（获得新的 `note_id`）
-> 2. 在新笔记中标注"替代旧版 v1.X（`note_id=XXX`）"
-> 3. 旧笔记保留作为历史版本，用户可自行在 IMA 客户端手动决定是否删除
+**步骤 3：指引用户在 IMA 客户端操作**
+- 打开 IMA 客户端 → 进入对应笔记本
+- 找到目标笔记 → 右键 → 删除
+- 或者：笔记右上角 ⋯ → 删除
 
-这样：
-- 避免误删风险
-- 保留版本历史
-- 用户拥有最终决定权
+**步骤 4：验证删除结果**
+- 用 `list_note`（单数）API 确认笔记不在列表中
+
+### 3.3 严禁操作
+
+❌ **不要尝试**：
+- 调用已失效的 `delete_note` API（即使文档还有说明）
+- 构造或寻找其他"伪删除"接口
+- 通过 `push_note` + `content_cos_key` 覆盖试图"擦除"内容
+- 重试 `delete_note`（浪费时间）
+
+✅ **应当做**：
+- 明确告知用户 IMA 平台的 API 边界
+- 推荐"创建新笔记替代"方案
+- 指引客户端手动删除路径
 
 ## 4. 删除标签（`tag_delete`）保护
 
@@ -173,3 +172,23 @@ echo "$(date -Iseconds) | <操作类型>: <note_id 或 tag_name> | 标题: <标�
 ```
 
 **目的**：建立可审计的操作记录，万一误删可追溯。
+
+## 8. 删除能力演进追踪
+
+IMA 平台删除能力可能随版本变化，使用前建议：
+
+1. 用 `npx clawhub inspect ima-knowledge` 或类似官方 skill 看最新规则
+2. 检查 ima-knowledge SKILL.md 的"规则"部分是否有变更
+3. 测试 API 是否已恢复支持
+
+已知能力矩阵（2026-09-28 现状）：
+
+| 操作 | 2026-05 试跑 | 2026-09 现状 |
+|------|:------------:|:------------:|
+| 删除标签 | ✅ 可用 | ✅ 可用 |
+| 删除笔记 | ✅ 可用 | ❌ 不可用 |
+| 删除文件夹 | ❌ 不可用 | ❌ 不可用 |
+| 删除文件 | ❌ 不可用 | ❌ 不可用 |
+| 删除知识库 | ❌ 不可用 | ❌ 不可用 |
+
+> 💡 即使历史试跑中 `delete_note` 可用，**当前已不可用**。务必按 2026-09 现状执行。

@@ -1,40 +1,54 @@
-## Description: <br>
-Guides agents through a structured design-thinking workflow for human-centered discovery, problem framing, ideation, low-fidelity prototyping, and test planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides product and service teams through user-centered discovery, idea generation, prototyping, and concept testing before building.
 
-## Publisher: <br>
-[ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ysskrishna](https://clawhub.ai/user/ysskrishna)
 
-## Use Case: <br>
-Product teams, designers, developers, and other users use this skill when they want an agent to explore a user problem before implementation. It structures the response around empathizing, defining, ideating, prototyping, and planning tests with clear assumptions and falsifiable signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broad product discovery or UX framing requests when the user actually wants a tightly specified implementation task. <br>
-Mitigation: Invoke it explicitly when the design-thinking workflow is desired, and skip it for frozen specifications or code-only maintenance tasks. <br>
-Risk: If user evidence is thin, the workflow could overstate assumptions as user insight. <br>
-Mitigation: Ask up to three clarifying questions when key context is missing, mark remaining gaps plainly, and avoid inventing field research or fabricated quotes. <br>
+## Use Case:
 
+Product teams, designers, and developers use this skill to frame uncertain user needs, explore possible solutions, and plan low-fidelity prototypes and tests before implementation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ysskrishna/design-thinking) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with clearly headed design-thinking sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Structured sections: Setup, Empathize, Define, Ideate, Prototype, and Test plan.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2026.5.17 (source: server release metadata and artifact frontmatter) <br>
+Risk: User research, support threads, or analytics shared for discovery may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only data appropriate for the design task and omit unnecessary sensitive details.
+
+Risk: Unsupported user insights or untested ideas may be mistaken for research findings.
+
+Mitigation: Distinguish supplied evidence from inferences and treat proposed ideas as hypotheses to test.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/ysskrishna/skills/design-thinking)
+- [Design thinking worked example](artifact/references/example.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown text with a design challenge, user insights, ideas, prototype descriptions, and test plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Separates supplied user evidence from inferred needs and labels ideas as hypotheses.]
+
+## Skill Version(s):
+
+2026.10.5 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

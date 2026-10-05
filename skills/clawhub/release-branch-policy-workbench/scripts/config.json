@@ -1,0 +1,90 @@
+{
+  "variant_id": "relay_08_branch",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "source_branch",
+  "output_name": "branch_policy_assessment",
+  "input_schema": {
+    "type": "string",
+    "pattern": "^release/q[1-4]-[a-z0-9]+(?:-[a-z0-9]+)*$",
+    "minLength": 9,
+    "maxLength": 128
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "assessment_id",
+      "source_branch",
+      "branch_exists",
+      "catalog_state",
+      "version_line",
+      "expected_version_line",
+      "version_line_status",
+      "policy_status"
+    ],
+    "properties": {
+      "assessment_id": {
+        "type": "string",
+        "pattern": "^branch_policy_[0-9a-f]{12}$"
+      },
+      "source_branch": {
+        "type": "string",
+        "pattern": "^release/q[1-4]-[a-z0-9]+(?:-[a-z0-9]+)*$",
+        "minLength": 9,
+        "maxLength": 128
+      },
+      "branch_exists": {
+        "type": "boolean"
+      },
+      "catalog_state": {
+        "oneOf": [
+          {
+            "type": "string",
+            "enum": [
+              "active",
+              "maintenance",
+              "closed"
+            ]
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "version_line": {
+        "oneOf": [
+          {
+            "type": "string",
+            "pattern": "^[0-9]+\\.[0-9]+$"
+          },
+          {
+            "type": "null"
+          }
+        ]
+      },
+      "expected_version_line": {
+        "type": "string",
+        "pattern": "^[0-9]+\\.[0-9]+$"
+      },
+      "version_line_status": {
+        "type": "string",
+        "enum": [
+          "aligned",
+          "behind",
+          "ahead",
+          "unavailable"
+        ]
+      },
+      "policy_status": {
+        "type": "string",
+        "enum": [
+          "eligible",
+          "review-required",
+          "unregistered"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "release_branch_policy_record"
+}

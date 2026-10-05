@@ -1,0 +1,77 @@
+{
+  "_note": "已知恶意 Skill 指纹库。v3.3.1 扩展为两类指纹：① type=sha256 —— 对 Skill 目录下每个文件计算 SHA-256，命中即判 P0 / BLOCK（已知恶意载荷无法靠改名或小幅改动绕过，内容变化即产生不同指纹）；② type=name —— 精确匹配 Skill 名称（目录名），用于已确认的恶意/仿冒 Skill 命名指纹。\n\n重要：随包发布的条目均为「示例种子 / 战役元数据」，用于验证机制可用，并非真实威胁情报。真实指纹须由维护者从可信 feed（厂商恶意 Skill 库、社区黑名单、内部事件复盘）填充到 entries 中。请勿把示例条目的 hash/name 当作真实 IOC 使用。\n\n字段：type（sha256|name，缺省 sha256）；sha256=64 位十六进制；name=Skill 名称（精确匹配，忽略大小写）；label=可读说明；severity=严重度（命中恒为 P0）；source=来源；illustrative=true 表示示例占位（非真实威胁）。campaigns 为 2026 年公开恶意 Skill 战役元数据（信息性，供维护者据来源填充真实指纹）。",
+  "schema_version": 2,
+  "version": 1,
+  "entries": [
+    {
+      "type": "sha256",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000001",
+      "label": "【示例种子】已知恶意 Skill 载荷 A（占位，非真实 IOC）",
+      "severity": "P0",
+      "source": "seed/illustrative",
+      "illustrative": true
+    },
+    {
+      "type": "sha256",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000002",
+      "label": "【示例种子】已知恶意 Skill 载荷 B（占位，非真实 IOC）",
+      "severity": "P0",
+      "source": "seed/illustrative",
+      "illustrative": true
+    },
+    {
+      "type": "sha256",
+      "sha256": "0000000000000000000000000000000000000000000000000000000000000003",
+      "label": "【示例种子】已知恶意 Skill 载荷 C（占位，非真实 IOC）",
+      "severity": "P0",
+      "source": "seed/illustrative",
+      "illustrative": true
+    },
+    {
+      "type": "name",
+      "name": "evil-skill-example",
+      "label": "【示例种子】已知恶意 Skill 命名指纹（占位，非真实）",
+      "severity": "P0",
+      "source": "seed/illustrative",
+      "illustrative": true
+    }
+  ],
+  "campaigns": [
+    {
+      "id": "clawhavoc",
+      "name": "ClawHavoc（OpenClaw/ClawHub 大规模投毒）",
+      "source": "Snyk ToxicSkills 2026-02",
+      "date": "2026-02",
+      "scope": "1,184+ 恶意 Skill；峰值时 7 个最热下载 Skill 中 5 个为恶意（投递 Atomic Stealer/AMOS）",
+      "techniques": ["提示注入", "恶意代码载荷", "伪装 Prerequisites 诱导安装", "自传播"],
+      "note": "攻击者利用已信任 Skill 静默更新为恶意载荷；随包不内置其真实文件指纹，需维护者从可信 feed 填充。"
+    },
+    {
+      "id": "skills-sh-impersonation",
+      "name": "skills.sh 仿冒 Skill 木马（Zenity）",
+      "source": "Zenity 2026-07 起",
+      "date": "2026-07",
+      "scope": "累计安装 170 万+；仿冒 Paperclip / Browser Use",
+      "techniques": ["先干净版积累信任后无感更新", "外泄 SSH/云凭证/K8s/CI secret/.env", "改写 system prompt 实现被删后自动重装"],
+      "note": "自愈/自动重装为本次新增 Persona Persistence 检测（pp-02）的主要情报来源之一。"
+    },
+    {
+      "id": "fakegit-fakeagent",
+      "name": "FakeGit / FakeAgent 战役",
+      "source": "Huntress 2026-07 / Help Net Security",
+      "date": "2026-07",
+      "scope": "数千个恶意 GitHub 仓库仿冒 AI 工具/Skill/MCP server；FakeAgent 影响 ≥29 个组织（投递 SectopRAT）",
+      "techniques": ["利用合法平台作可信投递面", "仿冒官方安装包", "仓库级 typosquat"],
+      "note": "命名仿冒检测见 rules/typosquat-names.json；如需仓库/文件级指纹请由维护者补充。"
+    },
+    {
+      "id": "deadbugz-mcp",
+      "name": "MCP Deadbugz 供应链活动",
+      "source": "公开 MCP 安全分析 2026",
+      "date": "2026",
+      "scope": "恶意 MCP server 前 3 次工具调用返回良性定义，越过阈值后篡改行为；74 分钟提交 23 个 PR",
+      "techniques": ["调用次数/阈值门控（rug pull）", "工具定义投毒", "窃取 SSH/AWS/shell history/K8s 配置"],
+      "note": "「调用次数门控」类静态线索由 trigger-conditions 规则族覆盖；真实 server 指纹需维护者补充。"
+    }
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "variant_id": "cap_12_route_to_dispatch",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "route_plan",
+  "output_name": "dispatch_manifest",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "route_id",
+      "ordered_stops",
+      "leg_km",
+      "total_km"
+    ],
+    "properties": {
+      "route_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "ordered_stops": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "leg_km": {
+        "type": "array",
+        "items": {
+          "type": "number"
+        }
+      },
+      "total_km": {
+        "type": "number"
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "manifest_id",
+      "route_id",
+      "stops",
+      "total_km"
+    ],
+    "properties": {
+      "manifest_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "route_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "stops": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "total_km": {
+        "type": "number"
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_dispatch_manifest_write"
+}

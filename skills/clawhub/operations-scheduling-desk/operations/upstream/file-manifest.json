@@ -1,0 +1,12 @@
+{
+  "SKILL.md": "30495f4cae23010a65eb442ec61887abde110197677f7274ed357e07c4e6ac6b",
+  "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+  "scripts/operation.py": "216b098e4a890b11790e2a0ff2e36271cee1151c9c3ffa7385efee7212d3cecd",
+  "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+  "scripts/config.json": "b62f368920f19cb75540b651121c3b761ec169530ee843af0f3c5469ac45a2fc",
+  "examples/request.json": "1534218af59bfb5f6043c451b4b7d954c6b71176feb791a090cf01f21b94f114",
+  "examples/expected.json": "2c334775997372c0036bd5167e69c399d4096386ac611bcb5dfa702f0933bf7d",
+  "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+  "source-map.json": "0f42eba67a7a39c77997cfe13f4e3ed658c43a1886b6e9e07e06cc1d76ba6771",
+  "README.md": "37e505c2b602e628baf39dc7e70de2a9dc9d923f6817d2c4613ef6cfe1940f89"
+}

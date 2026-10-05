@@ -1,0 +1,64 @@
+{
+  "variant_id": "cap_09_care_to_referral",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "referral_form_json",
+  "output_name": "referral_digest",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "referral_id",
+      "specialty",
+      "urgency",
+      "requested_window"
+    ],
+    "properties": {
+      "referral_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "specialty": {
+        "type": "string",
+        "minLength": 1
+      },
+      "urgency": {
+        "type": "string",
+        "minLength": 1
+      },
+      "requested_window": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "referral_id",
+      "specialty",
+      "urgency_band",
+      "requested_window"
+    ],
+    "properties": {
+      "referral_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "specialty": {
+        "type": "string",
+        "minLength": 1
+      },
+      "urgency_band": {
+        "type": "string",
+        "minLength": 1
+      },
+      "requested_window": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

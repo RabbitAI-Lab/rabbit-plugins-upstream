@@ -1,0 +1,45 @@
+{
+  "variant_id": "cap_13_metric_to_digest",
+  "sources": [
+    {
+      "role": "upstream",
+      "slug": "metric-stakeholder-digest-identifier",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/metric-stakeholder-digest-identifier-1.1.0.zip",
+      "archive_sha256": "0af6bd931af2bca13c991933dad7de2c12e4862623032a27da7a5bb0cd78e961",
+      "files": {
+        "README.md": "66fd03eeef6b14639980fd924d798588966ddf9116ce0f2e8220d8d1e34e966b",
+        "SKILL.md": "59b109557a5c829faeefe0e410cb96152ce294ad215efcd14bc73fc852a66a29",
+        "examples/expected.json": "e16902d9df04e25bef0464ccafb23a40469e032831542c7a2e53b20f13e304eb",
+        "examples/request.json": "f5ee9d742b1820784626e57233678c1a94cb57af00ada3884feb5dc007532d59",
+        "file-manifest.json": "d90517878923bc7ec910fda6221dfc4273d397610bd8041a49568d234b2b32d6",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "40f090fa8c5fa1b2207d3d180d89ca789ef9e94522f9f5522edc932e0de0b5ab",
+        "scripts/operation.py": "c90c285d266adfe91f387a5fbb8005ccd795850737bce9e7f314c2580e0de796",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "47e49e9adc0fae7e7af741ff9c4f92157cb3c07388c3857adba483388175e23c"
+      }
+    },
+    {
+      "role": "downstream",
+      "slug": "metric-stakeholder-digest-workbench",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/metric-stakeholder-digest-workbench-1.1.0.zip",
+      "archive_sha256": "e2561dc2cb048809ccc2b84a71215936ca21835fd24b401c2d213b97ddca9fa3",
+      "files": {
+        "README.md": "844a3ca50070b4fee859e45b384fc31faf9a6d5ace028b5cb84ccd49e1e7ad9a",
+        "SKILL.md": "004bc6922d93f7241dbeb9057ce16e1c029943289954b6e748332953a13a5315",
+        "examples/expected.json": "ff35e3a636cfdb02624c9ba80baa288fb54a318605dbf5fac7299b9546bea6e3",
+        "examples/request.json": "e16902d9df04e25bef0464ccafb23a40469e032831542c7a2e53b20f13e304eb",
+        "file-manifest.json": "d4cd48abbe5498ad21dcaef3166f0d719736aa00412f459850ee87440aaf283f",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "b63ba6a2099a4306bb0bb97039346751cc60ab852fa3d38aedc5285443e71e5c",
+        "scripts/operation.py": "b9fb1dd49e57177fccb7f8004f4d44b6a94474a9317a15796daab5db34dabfc8",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "f4621eb05f41d2e837dfab792ae6f7b22af6030ae6674e5a8efd885cdb396b3f"
+      }
+    }
+  ]
+}

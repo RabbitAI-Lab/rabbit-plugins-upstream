@@ -1,50 +1,58 @@
-## Description: <br>
-Production-grade MCP server for personal Outlook (Outlook.com / Hotmail / Live). 62 typed Graph tools across mail, calendar, contacts, to-do, drafts, attachments, folders, threading, batch ops, delta-sync. Granular permissions, OS-keyring auth, /$batch-optimized triage and bulk read. Built for agents that need real Outlook coverage, not a CLI wrapper. BYO Azure app; zero telemetry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects AI agents to personal Outlook mail, calendars, contacts, and tasks through Microsoft Graph tools.
 
-## Publisher: <br>
-[mpalermiti](https://clawhub.ai/user/mpalermiti) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mpalermiti](https://clawhub.ai/user/mpalermiti)
 
-## Use Case: <br>
-Agent builders and MCP client users use this skill to let agents read, triage, write, and organize personal Outlook mail, calendar, contacts, and tasks through typed Microsoft Graph tools. It is intended for personal Microsoft accounts, with work or school Entra ID accounts out of scope. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Agents can access sensitive Outlook mailbox, calendar, contact, and task data. <br>
-Mitigation: Install only for trusted agents and begin with read_only enabled. <br>
-Risk: Write-capable tools can send, delete, move, or modify Outlook data. <br>
-Mitigation: Enable only the needed allow_categories and toolsets, and gate destructive operations in the MCP client. <br>
-Risk: Attachment tools can interact with local file paths. <br>
-Mitigation: Avoid exposing attachment tools unless the agent is trusted with local file access. <br>
-Risk: Authentication uses persistent token storage. <br>
-Mitigation: Use OS keyring-backed token storage and configure encrypted keyring support on Linux before authenticating. <br>
+## Use Case:
 
+Agent builders and users of personal Outlook accounts use this server to summarize and organize mail, manage calendars and contacts, and track tasks. Write actions require the user's chosen permissions and configuration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mpalermiti/skills/outlook-mcp) <br>
-- [Publisher profile](https://clawhub.ai/user/mpalermiti) <br>
-- [Project homepage](https://github.com/mpalermiti/outlook-mcp) <br>
-- [PyPI package](https://pypi.org/project/outlook-graph-mcp/) <br>
-- [MCP Registry listing](https://registry.modelcontextprotocol.io/v0/servers?search=mpalermiti) <br>
-- [Security policy](SECURITY.md) <br>
-- [Release changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, shell commands, guidance] <br>
-**Output Format:** [MCP tool responses with structured text and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can read or modify Outlook data through Microsoft Graph and can save downloaded attachments to local file paths when attachment tools are enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.12.0 (source: server evidence, pyproject.toml, CHANGELOG, server.json) <br>
+Risk: Granting an agent access to personal mail, calendar, contacts, and tasks exposes sensitive account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only when Outlook access is needed; start with read_only enabled and use read_only_consent with a separate read-only Azure app when Microsoft-enforced read-only access is required.
+
+Risk: Enabled write tools can change or send account content.
+
+Mitigation: Enable only the write categories the user intends the agent to use.
+
+Risk: Attachment tools can read or save local files within their configured directory.
+
+Mitigation: Keep attachments_dir narrowly scoped.
+
+## Reference(s):
+
+- [Outlook MCP on ClawHub](https://clawhub.ai/mpalermiti/skills/outlook-mcp)
+- [outlook-graph-mcp on PyPI](https://pypi.org/project/outlook-graph-mcp/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [MCP tool responses with text or structured data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses depend on the selected tools and account permissions.]
+
+## Skill Version(s):
+
+1.24.0 (source: ClawHub release, pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

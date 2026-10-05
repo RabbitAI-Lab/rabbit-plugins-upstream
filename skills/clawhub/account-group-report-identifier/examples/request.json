@@ -1,0 +1,13 @@
+{
+  "report_request": {
+    "segment": "renewal_due",
+    "group_by": "region",
+    "measure": "annual_value_minor",
+    "calculation": "sum",
+    "columns": [
+      "group_key",
+      "account_count",
+      "aggregate_value"
+    ]
+  }
+}

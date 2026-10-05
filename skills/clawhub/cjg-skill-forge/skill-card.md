@@ -1,55 +1,60 @@
-## Description: <br>
-Skill Forge is a meta-skill for creating, upgrading, reviewing, and consolidating WorkBuddy skills using feedback loops, coverage audits, external benchmarking, validation, and a weighted review rubric. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers create, improve, audit, consolidate, and clarify agent skills using a structured workflow and evaluation tools.
 
-## Publisher: <br>
-[j-levee](https://clawhub.ai/user/j-levee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[j-levee](https://clawhub.ai/user/j-levee)
 
-## Use Case: <br>
-Developers and skill authors use Skill Forge to create or upgrade skills, audit whether a skill meets quality targets, and plan consolidation of overlapping local skills. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Default local feedback logs and anonymous cloud feedback uploads may be unsuitable for users who do not want usage signals recorded or sent to bundled endpoints. <br>
-Mitigation: Review the install notice and use the documented opt-outs before relying on the skill when local logging or cloud upload is not acceptable. <br>
-Risk: Publishing and proposal commands can read local credentials and change or publish skill packages. <br>
-Mitigation: Treat those commands as privileged actions; review command arguments, credential locations, and package contents before execution. <br>
-Risk: Semantic recast scanning can send skill metadata to a configured embedding service when semantic mode is enabled. <br>
-Mitigation: Use the default non-semantic scan unless external metadata processing is acceptable. <br>
+## Use Case:
 
+Developers and skill creators use this skill to build or upgrade agent skills, assess their quality, consolidate overlapping skills, and improve how clearly agents can use them.
 
-## Reference(s): <br>
-- [ClawHub Skill Forge release page](https://clawhub.ai/j-levee/skills/cjg-skill-forge) <br>
-- [Anti-Patterns](references/anti-patterns.md) <br>
-- [Churn Reflector](references/churn-reflector.md) <br>
-- [Real-Machine Forge](references/contest-hard-forge.md) <br>
-- [Coverage Audit](references/coverage-audit.md) <br>
-- [Coverage Seeding Rules](references/coverage-seeding.md) <br>
-- [Feedback Loop](references/feedback-loop.md) <br>
-- [Persona Skill Design](references/persona-design.md) <br>
-- [Project Governance](references/project-governance.md) <br>
-- [Quality Iteration Playbook](references/quality-iteration-playbook.md) <br>
-- [Simulation Testing](references/simulation-testing.md) <br>
-- [Skill Consolidation](references/skill-consolidation.md) <br>
-- [Skill Review Rubric](references/skill-review-rubric.md) <br>
-- [Skill Types](references/skill-types.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown prose with checklists, scores, code snippets, shell commands, and JSON or configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce skill drafts, review scores, audit reports, recast plans, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.9.5 (source: frontmatter and server release evidence) <br>
+Risk: The session hook can contact cloud endpoints with a persistent anonymous ID even when cloud sync is documented as off.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review network behavior before installation; disable the session hook if unwanted, or require explicit cloud opt-in before any signal download.
+
+Risk: Local method-level telemetry files are created by default.
+
+Mitigation: Check local recording settings and disable collection if it does not meet your privacy requirements.
+
+Risk: Forge and publication tools can inspect local skill directories and interact with cloud services.
+
+Mitigation: Review the directories and cloud actions involved, and approve any release only after checking generated content and sensitive data.
+
+## Reference(s):
+
+- [Skill Forge release on ClawHub](https://clawhub.ai/j-levee/skills/cjg-skill-forge)
+- [Forge pipeline](artifact/references/pipeline.md)
+- [Skill review rubric](artifact/references/skill-review-rubric.md)
+- [Signal and cloud configuration](artifact/references/cloud-config-schema.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown guidance, Code, Configuration, Shell commands, Analysis]
+
+**Output Format:** [Markdown reports and guidance, skill files, and configuration]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can produce skill assessments and plans; review generated files before use or publication.]
+
+## Skill Version(s):
+
+3.2.0 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

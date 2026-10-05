@@ -1,46 +1,61 @@
-## Description: <br>
-Twenty CRM API integration with managed authentication for managing companies, people, opportunities, notes, and tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Twenty CRM to manage contacts, companies, opportunities, activities, and workflows through Maton-managed authentication.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and business operators use this skill to read and manage Twenty CRM records through Maton-authenticated API examples, including contacts, deals, activities, workspace members, and connection selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify live CRM records through a Maton-authenticated Twenty connection. <br>
-Mitigation: Use it only with trusted Maton access and verify the exact record ID and intended effect before any create, update, or delete operation. <br>
-Risk: Multiple Twenty connections can cause requests to affect the wrong workspace. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header when more than one Twenty connection exists. <br>
-Risk: The skill can list workspace members and manage Twenty connections in addition to CRM records. <br>
-Mitigation: Limit use to users who are authorized to view workspace membership and manage the relevant Twenty connections. <br>
+## Use Case:
 
+People using Twenty CRM can ask an agent to find and manage companies, contacts, deals, notes, tasks, and workspace information. With explicit approval, they can also connect an account and set up automations that act on CRM data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/twenty) <br>
-- [Maton](https://maton.ai) <br>
-- [Twenty API documentation](https://docs.twenty.com/developers/extend/api) <br>
-- [Twenty GitHub repository](https://github.com/twentyhq/twenty) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with REST endpoints, JSON examples, and Python or JavaScript code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; write and delete examples should be executed only after confirming the target CRM record or connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Account connections and CRM writes can access or change data beyond the intended task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account and connection before granting access, use the narrowest available permissions, and obtain user approval before writes.
+
+Risk: Broad triggers or external destinations can continuously forward sensitive event data.
+
+Mitigation: Scope triggers to the requested source and events, minimize forwarded fields, and get explicit approval for each destination.
+
+Risk: Exposed API keys or stored OAuth credentials can permit unauthorized access.
+
+Mitigation: Keep credentials out of logs, shared outputs, destination headers, and automation payloads.
+
+## Reference(s):
+
+- [Twenty CRM skill on ClawHub](https://clawhub.ai/byungkyu/skills/twenty)
+- [Maton homepage](https://maton.ai)
+- [Twenty API documentation](https://docs.twenty.com/developers/extend/api)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton trigger source references](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with commands, API examples, and setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may contain CRM data; share only what the task needs.]
+
+## Skill Version(s):
+
+1.2.8 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
