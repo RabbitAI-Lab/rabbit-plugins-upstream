@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/deepspeed",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/deepspeed",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/deepspeed",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "39ca88f26fe3da795b1e7eb0b6ad97d33bf351acd1af96989813d34526273c3c",
+  "fetchedAt": "2026-10-05T16:08:08.275Z"
+}

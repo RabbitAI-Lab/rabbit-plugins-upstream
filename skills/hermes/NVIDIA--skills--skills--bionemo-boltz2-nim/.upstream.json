@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-boltz2-nim",
+  "identifier": "NVIDIA/skills/skills/bionemo-boltz2-nim",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-boltz2-nim",
+  "branch": "main",
+  "pushedAt": "2026-10-02T22:28:42Z",
+  "contentHash": "8516583a23a561537ab7adc613699f432ac5fc05286b72a444ada1aae2bce018",
+  "fetchedAt": "2026-10-05T16:08:06.530Z"
+}

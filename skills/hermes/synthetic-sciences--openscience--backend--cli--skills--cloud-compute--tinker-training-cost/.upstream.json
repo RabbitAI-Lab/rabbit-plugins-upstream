@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/tinker-training-cost",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/tinker-training-cost",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/tinker-training-cost",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "d10cf804641b83c004e97eb929f31137af46bd89fb3a4f17e394c8fb44e9c482",
+  "fetchedAt": "2026-10-05T16:08:08.509Z"
+}
