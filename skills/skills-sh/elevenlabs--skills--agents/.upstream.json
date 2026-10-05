@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/elevenlabs/skills/agents",
+  "repo": "elevenlabs/skills",
+  "skillId": "agents",
+  "branch": "main",
+  "pushedAt": "2026-10-03T21:23:14Z",
+  "contentHash": "b30afc52ab0ee5200f945364e16d74dc90791b09cb3a2a6ac9cb11eb1f1a03c4",
+  "fetchedAt": "2026-10-05T16:13:12.750Z"
+}

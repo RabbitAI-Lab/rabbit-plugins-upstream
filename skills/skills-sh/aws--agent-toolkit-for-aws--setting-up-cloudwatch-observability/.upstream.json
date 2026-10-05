@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/setting-up-cloudwatch-observability",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "setting-up-cloudwatch-observability",
+  "branch": "main",
+  "pushedAt": "2026-10-05T15:42:50Z",
+  "contentHash": "9b44c4c563a935629be37a58a4d19132b372c60e8328fb0d67869affb7776de5",
+  "fetchedAt": "2026-10-05T16:13:45.562Z"
+}
