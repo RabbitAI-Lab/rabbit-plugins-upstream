@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/bgpt-paper-search",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/bgpt-paper-search",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/bgpt-paper-search",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "67c7b37e78adc2a5d5d72954f9c7852bf8a57a5cc760df5876d128fee72ffd96",
+  "fetchedAt": "2026-10-05T16:08:21.565Z"
+}

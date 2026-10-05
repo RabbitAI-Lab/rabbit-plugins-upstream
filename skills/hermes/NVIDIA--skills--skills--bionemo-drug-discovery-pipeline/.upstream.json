@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-drug-discovery-pipeline",
+  "identifier": "NVIDIA/skills/skills/bionemo-drug-discovery-pipeline",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-drug-discovery-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-10-02T22:28:42Z",
+  "contentHash": "f76bb2b999d018b3e55c4158360f8a6ada85bd7cfd09acd357f5aabb085246d0",
+  "fetchedAt": "2026-10-05T16:08:06.702Z"
+}

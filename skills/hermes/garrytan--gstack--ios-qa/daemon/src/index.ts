@@ -19,7 +19,7 @@ import { probeTailscale, whoIs } from './tailscale-localapi';
 import { SessionTokenStore } from './session-tokens';
 import { mintForCaller } from './auth-mint';
 import { classifyRoute, proxyToDevice, type DeviceTunnel } from './proxy';
-import { writeAudit, writeAttempt, sanitizeReplacer } from './audit';
+import { writeAudit, writeAttempt, sanitizeReplacer, saltedHash } from './audit';
 import { bootstrapTunnel } from './tunnel-bootstrap';
 import { startTunnelKeepalive } from './devicectl';
 import type { Capability } from './types';
@@ -37,6 +37,7 @@ interface DaemonOptions {
   attemptsPath?: string;
   allowlistPath?: string;
   // Test injection
+  proxyTimeoutMs?: number;
   tunnelProvider?: () => Promise<DeviceTunnel | null>;
   whoIsImpl?: (addr: string) => Promise<{ identity: string; raw: unknown }>;
   probeImpl?: () => Promise<{ ok: boolean; reason?: string; ownIdentity?: string }>;
@@ -106,7 +107,7 @@ export async function startDaemon(opts: DaemonOptions): Promise<RunningDaemon | 
 
   // 3. Loopback listener (full surface).
   const loopbackServer = createServer(async (req, res) => {
-    await handleLoopback({ req, res, tokenStore, getTunnel, invalidateTunnel });
+    await handleLoopback({ req, res, tokenStore, getTunnel, invalidateTunnel, proxyTimeoutMs: opts.proxyTimeoutMs });
   });
   // Use port 0 for OS-assigned port when test/random port collisions are a risk.
   const requestedPort = opts.loopbackPort;
@@ -117,7 +118,7 @@ export async function startDaemon(opts: DaemonOptions): Promise<RunningDaemon | 
   // mode this can collide; we try the actualPort first and skip ipv6 if it
   // fails (tests don't exercise ::1 explicitly).
   const loopbackServerV6 = createServer(async (req, res) => {
-    await handleLoopback({ req, res, tokenStore, getTunnel, invalidateTunnel });
+    await handleLoopback({ req, res, tokenStore, getTunnel, invalidateTunnel, proxyTimeoutMs: opts.proxyTimeoutMs });
   });
   let v6Bound = false;
   try {
@@ -139,6 +140,7 @@ export async function startDaemon(opts: DaemonOptions): Promise<RunningDaemon | 
         tokenStore,
         getTunnel,
         invalidateTunnel,
+        proxyTimeoutMs: opts.proxyTimeoutMs,
         auditPath: opts.auditPath,
         attemptsPath: opts.attemptsPath,
         allowlistPath: opts.allowlistPath,
@@ -203,6 +205,7 @@ interface HandlerCtx {
   tokenStore: SessionTokenStore;
   getTunnel: () => Promise<DeviceTunnel | null>;
   invalidateTunnel: (failedTunnel: DeviceTunnel) => void;
+  proxyTimeoutMs?: number;
   // Explicit security-log + allowlist paths (default to env-derived when undefined).
   auditPath?: string;
   attemptsPath?: string;
@@ -275,6 +278,7 @@ async function proxyWithTunnelRecovery(opts: {
   agentIdentity?: string;
   getTunnel: HandlerCtx['getTunnel'];
   invalidateTunnel: HandlerCtx['invalidateTunnel'];
+  timeoutMs?: number;
 }): Promise<{ tunnel: DeviceTunnel; upstream: DeviceProxyResponse } | null> {
   let tunnel = await opts.getTunnel();
   if (!tunnel) return null;
@@ -285,6 +289,7 @@ async function proxyWithTunnelRecovery(opts: {
     tunnel: candidate,
     sessionId: opts.sessionId,
     agentIdentity: opts.agentIdentity,
+    timeoutMs: opts.timeoutMs,
   });
 
   let upstream = await makeAttempt(tunnel);
@@ -362,20 +367,38 @@ async function handleLoopback(ctx: HandlerCtx): Promise<void> {
       return;
     }
 
-    // /auth/sessions — list active sessions (owner only).
+    // /auth/sessions — list active sessions (owner only). Raw token values
+    // never leave the store: any local process can hit this listener, so a
+    // list that echoed live bearer tokens was a harvest-and-replay primitive.
+    // Callers get a salted-hash id plus metadata; revoke by identity, by the
+    // token they already hold from mint, or by token_id from this list.
     if (method === 'GET' && path === '/auth/sessions') {
-      sendJson(res, 200, { sessions: tokenStore.list() });
+      const sessions = await Promise.all(tokenStore.list().map(async ({ token, ...meta }) => ({
+        token_id: await saltedHash(token),
+        ...meta,
+      })));
+      sendJson(res, 200, { sessions });
       return;
     }
 
-    // /auth/revoke — revoke a token.
+    // /auth/revoke — revoke by raw token (the caller's own, from mint), by
+    // token_id (from /auth/sessions — keeps the list→revoke workflow alive
+    // now that the list is hash-only), or by identity.
     if (method === 'POST' && path === '/auth/revoke') {
       const body = await readBody(req);
       if ('error' in body) { sendJson(res, 413, body); return; }
-      const parsed = JSON.parse(body.toString('utf-8') || '{}') as { token?: string; identity?: string };
+      const parsed = JSON.parse(body.toString('utf-8') || '{}') as {
+        token?: string; token_id?: string; identity?: string;
+      };
       let count = 0;
       if (parsed.token) {
         count = tokenStore.revoke(parsed.token) ? 1 : 0;
+      } else if (parsed.token_id) {
+        for (const s of tokenStore.list()) {
+          if ((await saltedHash(s.token)) === parsed.token_id) {
+            count += tokenStore.revoke(s.token) ? 1 : 0;
+          }
+        }
       } else if (parsed.identity) {
         count = tokenStore.revokeByIdentity(parsed.identity);
       }
@@ -395,6 +418,7 @@ async function handleLoopback(ctx: HandlerCtx): Promise<void> {
       agentIdentity,
       getTunnel,
       invalidateTunnel,
+      timeoutMs: ctx.proxyTimeoutMs,
     });
     if (!proxied) {
       sendJson(res, 503, { error: 'device_not_connected' });
@@ -512,6 +536,7 @@ async function handleTailnet(ctx: TailnetCtx): Promise<void> {
       agentIdentity: session.identity,
       getTunnel,
       invalidateTunnel,
+      timeoutMs: ctx.proxyTimeoutMs,
     });
     if (!proxied) {
       sendJson(res, 503, { error: 'device_not_connected' });

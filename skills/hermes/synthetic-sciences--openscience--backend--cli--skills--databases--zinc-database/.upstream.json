@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/zinc-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/zinc-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/zinc-database",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "21f712ff5954d32d96acf8f083352aaf787f78fae8a910608c6685f210736cec",
+  "fetchedAt": "2026-10-05T16:08:08.534Z"
+}

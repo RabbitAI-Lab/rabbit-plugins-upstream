@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/labarchive-integration",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/labarchive-integration",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/labarchive-integration",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "1bf339c06bfa6fe6c2ff427e16d1de3c6d06fea7bb163f3d376e1f36de2dee94",
+  "fetchedAt": "2026-10-05T16:08:08.336Z"
+}

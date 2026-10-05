@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/umap-learn",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/umap-learn",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/umap-learn",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "2bb184f407bbbe4f78932d53152b63a50ab2dbfe7786ec3ebd8cf40a7b9f20b7",
+  "fetchedAt": "2026-10-05T16:08:08.517Z"
+}

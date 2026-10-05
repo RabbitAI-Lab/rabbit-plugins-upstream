@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pkpd-modeling",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pkpd-modeling",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pkpd-modeling",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "48b1e0f2648aea98ddc4f01151270d451be98a47ad3a3fa80200964e42845f1d",
+  "fetchedAt": "2026-10-05T16:08:21.679Z"
+}
