@@ -4,15 +4,14 @@
 
 ### "Worktree already exists"
 
-If you see this, the script will ask if you want to switch to it instead.
+The script offers to print its path. This does not transfer ownership or change the caller's working directory.
 
 ### "Cannot remove worktree: it is the current worktree"
 
-Switch out of the worktree first (to main repo), then cleanup:
+Run cleanup with the main checkout as workdir. Obtain its path from `list`; `git rev-parse --show-toplevel` inside a linked checkout returns that linked checkout, not the main one.
 
 ```bash
-cd $(git rev-parse --show-toplevel)
-bash ${CLAUDE_PLUGIN_ROOT}/skills/ia-git-worktree/scripts/worktree-manager.sh cleanup
+env -C "$main_checkout" bash ${CLAUDE_PLUGIN_ROOT}/skills/ia-git-worktree/scripts/worktree-manager.sh cleanup feature-name
 ```
 
 ### Lost in a worktree?
@@ -31,38 +30,47 @@ If a worktree was created without .env files (e.g., via raw `git worktree add`),
 bash ${CLAUDE_PLUGIN_ROOT}/skills/ia-git-worktree/scripts/worktree-manager.sh copy-env feature-name
 ```
 
-Navigate back to main:
+Use the main path shown by `list` for commands aimed at the main checkout:
 
 ```bash
-cd $(git rev-parse --show-toplevel)
+env -C "$main_checkout" git status --short
 ```
+
+### Cleanup refuses a tree
+
+Supply explicit names and the `WORKTREE_SESSION_ID` set before creation. Do not reuse another session's token. Preserve any dirty, untracked, or ignored files, including copied environment files and dependencies; arrange their disposition under user authority before retrying. A locked tree remains protected by Git. A clean tree from this session can be removed after confirming no process uses it.
+
+### Tree-scanning tests fail with phantom offenders?
+
+A worktree under `.worktrees/` is a full second checkout inside the repository. `.gitignore` hides it from Git, not from a test that walks the tree with `rglob` or `find`, so a hygiene test reports offenders that repeat known-good files under the worktree prefix, and CI never reproduces the failure. Check `git worktree list` before debugging one. Remove only this session's clean trees through the manager, or run the suite from a checkout that contains no nested worktree; for parallel suites, create the worktrees outside the repository.
 
 ---
 
 ## Branch from a fresh remote base (manager-script behavior)
 
-Do not run these steps manually; the script runs them. Read only when debugging why `create` prompted about unpushed commits.
+Do not run these steps manually; the script runs them. Read only when debugging the resolved fetched commit or the local-ref fallback.
 
-When creating a worktree's branch from the default branch (`main`/`master`), the local base may be ahead of `origin/<base>` due to another session, worktree, or background task. Branching from local HEAD silently carries those unrelated commits into the new feature branch and the eventual PR — and an unconditional `git reset --hard origin/<base>` would silently drop the user's intentional unpushed work.
+When creating a worktree's branch from the default branch (`main`/`master`), the local base may be ahead of `origin/<base>` due to another session, worktree, or background task. Branching from local HEAD silently carries those unrelated commits into the new feature branch and the eventual PR. Checking out `<base>` in the caller's working tree to update it first is worse: it silently switches the user's active branch out from under them, which is why the script never does that.
 
-The script's safe sequence:
+The script's actual sequence (fetch-only, never checks out the caller's branch):
 
 ```bash
-git fetch --no-tags origin <base>
-unpushed=$(git log "origin/$base..$base" --oneline)
-if [ -n "$unpushed" ]; then
-  # Surface the commit list and prompt: carry forward (base_ref=$base) or leave on local <base> (base_ref=origin/$base)
-  ...
+fetch_marker=$(mktemp "${TMPDIR:-/tmp}/whetstone-fetch.XXXXXXXXXX")
+fetch_ref="refs/whetstone/fetch/${fetch_marker##*/}"
+GIT_TERMINAL_PROMPT=0 git fetch --no-tags --refmap= origin "<base>:$fetch_ref"
+if [ $? -eq 0 ]; then
+  base_sha=$(git rev-parse --verify "$fetch_ref^{commit}")
+else
+  base_sha=$(git rev-parse --verify '<base>^{commit}')
 fi
-git worktree add .worktrees/<name> -b <branch> "$base_ref"
+git update-ref -d "$fetch_ref"
+rm -- "$fetch_marker"
+git worktree add .worktrees/<name> -b <branch> "$base_sha"
 ```
 
-Two failure modes the prompt distinguishes:
+A narrow `remote.origin.fetch` refspec can leave remote-tracking refs frozen even after an explicit branch fetch succeeds. `FETCH_HEAD` is also shared between linked checkouts, so another fetch can overwrite it. The manager uses its own private destination, pins that SHA, removes its ref, and verifies the created checkout against the SHA. It does not assume `origin/<base>` was updated. For separate claims about remote-tracking history, check `git config --get-all remote.origin.fetch` and fetch an explicit destination refspec first.
 
-- **Stale-base contamination** — another session advanced local `<base>` past `origin/<base>` with unrelated commits. The user wants `origin/<base>` as the new branch's base; the unpushed commits stay on local `<base>` for separate handling.
-- **Forgot-to-branch** — the user authored real commits on local `<base>` intending them for a feature branch. The user wants HEAD as the new branch's base so the commits carry forward.
-
-Local git state alone cannot distinguish these (author email is unreliable in multi-session setups), so the script surfaces the choice rather than guessing. Default fallback when the user can't be reached: branch from `origin/<base>` and report the unpushed commits in the change summary so the user resolves them deliberately. If the script does not implement this yet, that is a known gap — open an issue rather than working around with raw `git worktree add`.
+Known gap: the script does not distinguish "stale-base contamination" (another session advanced local `<base>` past the remote base with unrelated commits) from "forgot-to-branch" (the user's own unpushed commits on local `<base>` that were meant for a feature branch); it always prefers the fetched remote commit when the fetch succeeds. To carry unpushed local commits on `<base>` forward into the new branch instead, branch manually: `git worktree add <path> -b <branch> <base>`.
 
 ---
 

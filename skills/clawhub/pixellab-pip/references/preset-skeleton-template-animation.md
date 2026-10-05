@@ -4,22 +4,42 @@ Read this for PixelLab character animation requests that use a preset/template/b
 
 SKILL.md holds the global rules this file does not restate: MCP-first routing with the not-configured / explicit-MCP fallback contract, the south-first direction default and ask-before-all-directions cost gate, frame-order preservation, and the ban on undocumented website / Aseprite-extension endpoints.
 
-Two families: managed preset/template animation on an existing character, and raw skeleton/keypoint animation. Custom skeleton authoring beyond estimated/exported keypoints is future-facing; route keypoint work to the documented REST endpoints below.
+Four workflows: managed preset/template animation, managed Skeleton v3 template animation, raw Skeleton v3 keypoint animation, and the legacy raw skeleton endpoint. Use Skeleton v3 for an explicit new skeleton workflow; keep the legacy route only when its exact REST payload is required.
 
-PixelLab recommends `animate-with-text-v3` ("Animate with text (new)") over the skeleton-based routes below — both preset/template ids and raw keypoints — because the skeleton model is older and text animation is simpler with better results. Default to `animate-with-text-v3` (see `animation.md`); use the skeleton routes when the user explicitly wants a named preset motion or to own/edit keypoints.
+PixelLab recommends `animate-with-text-v3` ("Animate with text (new)") over the older preset/template and raw-skeleton routes below for ordinary motion; the Skeleton v3 keypoint workflow is a separate Tier 1+ beta. Default to text animation unless the user explicitly selects PixMiniMax (see `animation.md`), asks for Skeleton v3, wants a named preset motion, or needs to own/edit keypoints.
+
+## Table of Contents
+
+- [Core Distinction](#core-distinction)
+- [MCP vs REST v2 Field Coverage](#mcp-vs-rest-v2-field-coverage)
+- [Managed Preset Animation (MCP)](#managed-preset-animation-mcp)
+- [Managed Preset Animation (REST v2)](#managed-preset-animation-rest-v2)
+- [Template Rendering And Tuning](#template-rendering-and-tuning)
+- [Skeleton v3 Keypoint Animation](#skeleton-v3-keypoint-animation)
+- [Skeleton Estimation And Legacy Raw Animation](#skeleton-estimation-and-legacy-raw-animation)
+- [Auto-Rig Skeleton Pipeline](#auto-rig-skeleton-pipeline)
+- [Aseprite Boundary](#aseprite-boundary)
+- [Preset Template Families](#preset-template-families)
+- [Preset Animation IDs](#preset-animation-ids)
+- [Frame Count](#frame-count)
+- [Verification](#verification)
 
 ## Core Distinction
 
 | User intent | Meaning | Route |
 |---|---|---|
 | Preset/template/built-in animation | Animate an existing managed character using a named motion template such as `walking-8-frames`, `breathing-idle`, or `jumping-1`. PixelLab generates frames for that character and direction. | Prefer MCP `animate_character`; fallback REST v2 `/characters/animations`. |
-| Raw/custom skeleton animation | Generate frames from explicit skeleton keypoints, a reference image, optional masks/init images, and camera settings. | REST v2 `/animate-with-skeleton` and `/estimate-skeleton`. |
+| Raw Skeleton v3 animation | Generate 3–15 frames from a reference image and a per-frame sequence of 18-joint keypoints. | MCP `animate_with_skeleton_v3` or REST `/animate-with-skeleton-v3`. |
+| Managed Skeleton v3 animation | Apply a named template to an existing managed character using the Skeleton v3 model; PixelLab supplies the template poses. | MCP `animate_character(mode="skeleton-v3", template_animation_id=...)` when the connected schema exposes the mode; otherwise REST `POST /animate-character` with `mode="skeleton-v3"` and `template_animation_id`. |
+| Legacy raw skeleton animation | Generate from the older three-frame skeleton payload with a reference image and optional masks/init images. | REST v2 `/animate-with-skeleton`. |
+
+REST `/estimate-skeleton` estimates keypoints for one pose and remains a shared helper in the auto-rig pipeline; it is not a legacy animation route.
 
 ## MCP vs REST v2 Field Coverage
 
-MCP `animate_character` handles normal managed-character template work when its visible schema exposes template mode, v3 custom mode, explicit `directions`, and `frame_count` (v3). When the visible schema exposes pro mode with cost confirmation, it can route pro animation. Inspect the visible schema before relying on `mode`, `frame_count`, `ai_freedom`, `custom_start_frame`, `end_frame`, `keep_first_frame`, `pro`, `confirm_cost`, cost reporting, or any raw-skeleton support.
+The current public MCP `animate_character` schema includes managed-template, v3 custom, Skeleton v3, and pro modes. It exposes `mode`, `template_animation_id`, `directions`, `frame_count` (v3 only), `ai_freedom` (template only), custom start/end frame base64/URL fields, `keep_first_frame`, `animation_group_id`, and `confirm_cost` (pro). Connected client schemas may lag; check the visible mode before calling managed Skeleton v3. Separate MCP `animate_with_skeleton_v3` accepts a raw reference image and keypoint sequence; it does not expose REST `/estimate-skeleton`.
 
-It is not field-for-field equivalent to REST `/characters/animations`. REST exposes extra exact-control fields: `description`, `text_guidance_scale`, `outline`, `shading`, `detail`, `isometric`, `color_image`, `force_colors`, `seed`, v3-only `custom_start_frame`/`end_frame`, and inline `enhance_prompt` (v3 mode). Use REST when those fields matter, for integration code, or to validate exact API behavior.
+It is not field-for-field equivalent to REST `/characters/animations`. REST exposes extra exact-control fields MCP lacks: `description`, `text_guidance_scale`, `outline`, `shading`, `detail`, `isometric`, `color_image`, `force_colors`, `seed`, and inline `enhance_prompt` (v3 mode). Use REST when those fields matter, for integration code, or to validate exact API behavior.
 
 ## Managed Preset Animation (MCP)
 
@@ -43,7 +63,7 @@ animate_character(
 )
 ```
 
-To turn a reference image or GIF frame into a managed character first, use REST `create-character-v3` with required `description`, `reference_image`, `template_id="mannequin"`, and the appropriate `view`/`no_background`, then animate the returned `character_id` with MCP once the character completes (verified for a horse-headed biped from a source GIF frame).
+To turn a reference image or GIF frame into a managed character first, use MCP `create_character(mode="v3", description=..., reference_image_url=...)` — v3 is the only mode that accepts a reference sprite, always outputs 8 directions, and prefers the URL form over inline base64 (MCP clients truncate large inline base64) — then animate the returned `character_id` with MCP once the character completes (verified for a horse-headed biped from a source GIF frame). Fall back to REST `create-character-v3` (`description`, `reference_image`, `template_id="mannequin"`, `view`/`no_background`) when MCP is unavailable or `template_id`/`no_background`/`enhance_prompt` matter.
 
 For a newly created quadruped:
 
@@ -83,6 +103,8 @@ GET  https://api.pixellab.ai/v2/background-jobs/{job_id}
 GET  https://api.pixellab.ai/v2/characters/{character_id}
 GET  https://api.pixellab.ai/v2/characters/{character_id}/zip
 ```
+
+MCP `get_character` returns a download link but not the full ZIP bundle — use the REST `/zip` route above when a packaged archive is required.
 
 Request shape:
 
@@ -157,21 +179,31 @@ Only add `action_description` for a variant the route supports:
 }
 ```
 
-## Raw Skeleton Keypoint Routes
+## Skeleton v3 Keypoint Animation
 
-Use these only for explicit custom skeleton/keypoint workflows, not ordinary built-in walk/idle requests.
+Use this route when the user explicitly wants the new skeleton workflow or supplies a pose sequence. It is a Tier 1+ beta and requires 3–15 output-frame keypoint sets; each frame supplies the 18 named joints with normalized `x`/`y` coordinates from 0 to 1. The reference image and its `first_frame_keypoints` anchor the first pose, while `keypoints` contains the full ordered output sequence.
+
+Use MCP `animate_with_skeleton_v3` when available, or REST `POST /v2/animate-with-skeleton-v3` for code and exact REST control. REST returns a background job; poll `GET /background-jobs/{job_id}`. MCP returns a job ID; retrieve the result with `get_image`. The result contains exactly `len(keypoints)` frames, in input order; it does not echo the reference frame.
+
+The first pose is redrawn from the prompt and keypoints, so provide a close reference pose: a mismatch can affect the learned palette, background, and transparency. The input image is limited to 256×256. Supply all 18 named joints in `first_frame_keypoints` and each `keypoints` frame. `description` is an appearance noun phrase (not pose, motion, style, or background); `action` is a short motion label because the keypoints carry the pose sequence. REST requires `direction`; `view` defaults to `low top-down` and `template_id` to `mannequin`, so set view/direction when the art needs a specific camera. Use the live schema for exact joint names and optional depth fields. Current cost examples are in `cost-routing.md`.
+
+For an existing managed character, use MCP `animate_character(mode="skeleton-v3", template_animation_id=...)` when the connected schema exposes that mode; otherwise use REST `POST /animate-character` with `mode="skeleton-v3"` and `template_animation_id`. Use `animate_with_skeleton_v3` or REST `/animate-with-skeleton-v3` when the user supplies an independent raw keypoint sequence.
+
+## Skeleton Estimation And Legacy Raw Animation
+
+REST `estimate-skeleton` remains useful for estimating one starting pose in an auto-rig pipeline; it does not create a full motion sequence. Use the legacy animation route only when the user needs its exact three-frame payload or optional legacy fields. New custom 3–15-frame pose sequences belong on Skeleton v3.
 
 ```text
 POST /v2/estimate-skeleton
 POST /v2/animate-with-skeleton
 ```
 
-`estimate-skeleton` takes a character image and returns keypoints. `animate-with-skeleton` accepts fields such as:
+`estimate-skeleton` takes a character image and returns one pose's keypoints. `animate-with-skeleton` accepts fields such as:
 
 ```text
 image_size
 reference_image
-skeleton_keypoints
+skeleton_keypoints  (exactly 3 frames)
 view
 direction
 guidance_scale
@@ -182,39 +214,39 @@ color_image
 seed
 ```
 
-MCP `create_character` / `animate_character` are managed-character tools: they use template animations and stored skeleton metadata internally but do not accept arbitrary keypoint arrays. Use REST for raw skeleton estimation/animation unless the visible MCP schema explicitly exposes `estimate_skeleton`, `animate_with_skeleton`, `skeleton_keypoints`, or equivalent keypoint fields.
+MCP `animate_with_skeleton_v3` accepts raw keypoints for Skeleton v3, but there is no MCP equivalent of REST `estimate-skeleton` or the legacy `/animate-with-skeleton` payload. Use REST for estimation or the legacy route; do not treat the new animation tool as field-for-field support for the legacy route.
 
 ## Auto-Rig Skeleton Pipeline
 
-Use this route for "auto rig", "estimate skeleton", "rig this sprite", "export skeleton for API", "animate with this skeleton", "my keypoints", "pose JSON", or a skeleton pipeline from a simple humanoid prompt. It is REST-first:
+Use this workflow for "auto rig", "estimate skeleton", "rig this sprite", "export skeleton for API", "animate with this skeleton", "my keypoints", "pose JSON", or a skeleton pipeline from a simple humanoid prompt. Estimation remains REST-first; use Skeleton v3 for per-frame animation when the full pose sequence is available:
 
 ```text
 source image or generated reference frame
   -> REST estimate-skeleton
   -> save/export keypoint JSON
-  -> optional local/Aseprite keypoint editing
-  -> REST animate-with-skeleton or create-image-bitforge
+  -> author or edit a 3–15-frame pose sequence
+  -> MCP animate_with_skeleton_v3 or REST animate-with-skeleton-v3
 ```
 
 Raw skeleton animation is the right route when the user wants to own, export, edit, or reuse the keypoints; managed template animation is still right for built-in managed motions.
 
 | User starts with | Best route |
 |---|---|
-| Existing sprite/image | Use it as the `estimate-skeleton` input and as `reference_image` for later `animate-with-skeleton` unless the user supplies a separate reference. |
-| Aseprite-authored skeleton | Export from Aseprite, convert `pose_keypoints` to REST `skeleton_keypoints`, then call REST. |
+| Existing sprite/image | Use it as the `estimate-skeleton` input and as the Skeleton v3 `first_frame`; author the remaining per-frame keypoints before animation. |
+| Aseprite-authored skeleton | Export from Aseprite, map joints to the live Skeleton v3 schema, and supply a full 3–15-frame sequence; use the conversion below only for the legacy REST endpoint. |
 | Prompt only ("humanoid knight") | Create or ask for a base reference frame first; prefer a PixelLab-generated humanoid/mannequin frame, then estimate keypoints from it. |
-| Existing managed character id | Preset motions: MCP/REST managed template animation. Raw skeleton ownership: fetch a direction frame, estimate/export keypoints, then REST raw skeleton routes. |
+| Existing managed character id | Preset motions: MCP/REST managed template animation. For managed Skeleton v3, use MCP `animate_character(mode="skeleton-v3", template_animation_id=...)` when the connected schema exposes the mode; otherwise use REST `POST /animate-character` with both fields. Fetch a frame and author raw per-frame keypoints when the user needs sequence ownership. |
 
 For simple humanoid prompts default the body plan to humanoid/mannequin (MCP `create_character(body_type="humanoid")` or REST `create-character-v3` with `template_id="mannequin"`).
 
-Programmatic steps:
+Legacy REST `/animate-with-skeleton` steps:
 
 1. Estimate or author keypoints. REST `POST /v2/estimate-skeleton` for a sprite/image; Aseprite "Export skeleton for API" writes normalized `pose_keypoints`. Local tooling may edit/validate JSON keypoints client-side (not a PixelLab API call).
 2. Convert exported keypoints to the target REST field: Aseprite `{ "pose_keypoints": [[...], ...] }` -> REST animation `skeleton_keypoints: [[...], ...]`; REST single-image BitForge `skeleton_keypoints: [...]`.
 3. Call `POST /v2/animate-with-skeleton` with `image_size`, `reference_image`, `skeleton_keypoints`, and explicit `view`/`direction`.
 4. Add `init_images`, `inpainting_images`, `mask_images`, or `color_image` when the user supplied those roles or the route requires them.
 
-`estimate-skeleton` returns a skeleton for one pose; it does not invent a walk/run sequence. `animate-with-skeleton` needs a keypoint sequence, so with only one estimated pose either ask for/create more poses, author a sequence in Aseprite, use managed template animation (built-in walk/idle/jump), or use REST custom text animation (motion without skeleton ownership).
+`estimate-skeleton` returns a skeleton for one pose; it does not invent a walk/run sequence. The legacy `animate-with-skeleton` requires exactly 3 keypoint frames (any other count returns 422). Skeleton v3 accepts 3–15 pose sets, but still requires the sequence; with only one estimated pose, author the remaining poses or use managed template animation or text animation if the user does not need keypoint control.
 
 ### View/Direction Trap And Defaults
 
@@ -228,7 +260,7 @@ Current schema requires `image_size` and `reference_image`; custom keypoint work
 
 ## Aseprite Boundary
 
-Estimate skeleton maps to REST `POST /v2/estimate-skeleton`; authoring/animating from keypoints maps to REST `POST /v2/animate-with-skeleton`; pose-guided image generation maps to REST `create-image-bitforge` (`skeleton_keypoints`/`skeleton_guidance_scale`). Aseprite exports normalized `pose_keypoints`; convert to REST `skeleton_keypoints`. Everything else in the Aseprite extension (edit skeleton, re-pose, insert template skeleton, its private template-animation flow and local skeleton JSON) is editor-internal and out of scope for public automation per SKILL.md. Aseprite's local template catalog is older/smaller than the managed preset IDs below; do not assume every managed id such as `breathing-idle` or `jumping-1` exists there.
+Estimate skeleton maps to REST `POST /v2/estimate-skeleton`; Skeleton v3 animation maps to MCP `animate_with_skeleton_v3` or REST `POST /v2/animate-with-skeleton-v3`; the legacy route remains REST `POST /v2/animate-with-skeleton`. Pose-guided image generation maps to REST `create-image-bitforge` (`skeleton_keypoints`/`skeleton_guidance_scale`). Aseprite exports normalized `pose_keypoints`; map the joints and frames to the selected live schema rather than assuming the legacy `skeleton_keypoints` shape is interchangeable. Other Aseprite extension operations (edit skeleton, re-pose, insert template skeleton, private template-animation flow, and local skeleton JSON) remain editor-internal for public automation. Aseprite's local template catalog is older/smaller than the managed preset IDs below; do not assume every managed id such as `breathing-idle` or `jumping-1` exists there.
 
 ## Preset Template Families
 
@@ -241,7 +273,7 @@ Use the right vocabulary for the surface:
 | MCP `create_character` | `body_type` | `humanoid`, `quadruped` | Use `humanoid` for bipedal/mannequin body plans. Use `quadruped` only for four-legged animals. |
 | MCP `create_character` | `template` | `bear`, `cat`, `dog`, `horse`, `lion` | Required only when `body_type="quadruped"`. Ignored for humanoid characters. |
 | MCP `create_character` | `proportions` | preset `default`, `chibi`, `cartoon`, `stylized`, `realistic_male`, `realistic_female`, `heroic`, or custom scale JSON | Humanoid only. This is how MCP expresses realistic/chibi humanoid proportions; it is not a separate `body_type`. |
-| REST managed character create | `template_id` | `mannequin`, `bear`, `cat`, `dog`, `horse`, `lion` | `mannequin` is the bipedal/humanoid skeleton reconstruction template and the default in current OpenAPI. |
+| REST managed character create | `template_id` | `mannequin`, `bear`, `cat`, `dog`, `horse`, `lion` | `mannequin` is the bipedal/humanoid skeleton reconstruction template and the default in current OpenAPI. `humanoid` is **not** a template id — it fails with "Template not found". |
 | REST managed animation | `template_animation_id` | Exact animation ids from the character's family | Does not take `body_type`; the managed character already carries the body plan/template family. |
 | Website Add Animation | `Template` | `mannequin`, `dog`, `cat`, `horse`, `bear`, `lion` | UI label for the managed character's animation family. |
 

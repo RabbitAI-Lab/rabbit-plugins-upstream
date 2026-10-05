@@ -1,0 +1,37 @@
+# skill-analysis CI 模板（GitHub Actions）
+# 适配本审计器的 --dir / --json / --sarif / --exit-on 接口与退出码（命中 ≥ 严重度时退出码 2）。
+# 用法：把本文件放到仓库 .github/workflows/skill-audit.yml，将 SKILLS_DIR 指向含 Skill 的目录。
+name: Skill Security Audit
+
+on:
+  push:
+    paths:
+      - '**/SKILL.md'
+      - 'skills/**'
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  audit:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Run skill-analysis
+        env:
+          SKILLS_DIR: ./skills   # 含多个 Skill 的目录（每个子目录含 SKILL.md）
+        run: |
+          python skills/skill-analysis/scripts/analyze_skill.py \
+            "$SKILLS_DIR" --dir --json --sarif skill-audit.sarif --exit-on P1
+
+      - name: Upload SARIF
+        if: always()
+        uses: github/codeql-action/upload-sarif@v3
+        with:
+          sarif_file: skill-audit.sarif
+        continue-on-error: true

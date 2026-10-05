@@ -1,0 +1,6 @@
+interface:
+  display_name: "Vibbit Skills"
+  short_description: "Product research, creative planning, and video production"
+  default_prompt: "Use $vibbit-skills to research products, plan content, generate media, adapt references, or create multilingual videos from my goals and existing assets."
+policy:
+  allow_implicit_invocation: true

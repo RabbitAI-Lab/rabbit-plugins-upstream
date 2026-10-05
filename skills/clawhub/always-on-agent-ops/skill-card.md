@@ -1,45 +1,58 @@
-## Description: <br>
-Keeps an OpenClaw agent running continuously by guiding loopback gateway setup, cron health checks, OAuth expiry checks, queue preflights, event dispatch, and retention cleanup. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps OpenClaw operators keep unattended agents observable with queue preflight checks, scheduled jobs, event dispatch, OAuth-expiry alerts, and log retention.
 
-## Publisher: <br>
-[alexbloch-ia](https://clawhub.ai/user/alexbloch-ia) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[alexbloch-ia](https://clawhub.ai/user/alexbloch-ia)
 
-## Use Case: <br>
-Developers and operators use this skill to keep an OpenClaw agent alive on a dedicated host, diagnose quiet failures, and configure outbound polling, cron jobs, notifications, and cleanup routines for unattended operation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unattended cron jobs and agent turns can run with more authority than intended if the host, queue tokens, or tool profiles are not scoped. <br>
-Mitigation: Install only on a dedicated, physically secured host; use scoped queue tokens; keep secrets.env chmod 600 and out of git; and verify every cron job ID and tool profile before enabling unattended runs. <br>
-Risk: Queue polling and notifications can send data to external systems chosen by the operator. <br>
-Mitigation: Confirm that queue and notification destinations are systems the operator is authorized to use, and keep secrets, PII, and payload dumps out of status messages. <br>
-Risk: Expired OAuth profiles, incorrect cron IDs, or phase-locked fallback schedules can make the agent appear healthy while work is missed or duplicated. <br>
-Mitigation: Prefer non-expiring API keys when appropriate, alert on OAuth warn or missing states, verify installed cron IDs with OpenClaw, and use explicit cron minutes for heavy fallback jobs. <br>
-Risk: Retention cleanup deletes local log files. <br>
-Mitigation: Limit deletion to regular .log files under a verified OpenClaw home, configure the retention window deliberately, and use the dry-run mode before applying a new cleanup policy. <br>
+## Use Case:
 
+Developers and operators use this skill to monitor and dispatch work on an OpenClaw host they control, detect expiring authentication, and manage scheduled log cleanup.
 
-## Reference(s): <br>
-- [OpenClaw](https://openclaw.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/alexbloch-ia/skills/always-on-agent-ops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with bash, JSON, JSON5, and status-line examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes operational checklists, cron conventions, and shell helper behavior for always-on OpenClaw hosts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata) <br>
+Risk: Queue credentials or private payloads could be exposed through stored files or notifications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a read-only queue token in a 600/400-permission file outside the workspace; keep secrets and private payloads out of notification channels.
+
+Risk: Unattended jobs could execute with broader permissions than intended.
+
+Mitigation: Review each cron before enabling it and keep runtime execution permissions as narrow as possible.
+
+Risk: Log cleanup can delete retained files when armed.
+
+Mitigation: Review purge dry-run output before setting PURGE_DRY_RUN=0.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/alexbloch-ia/skills/always-on-agent-ops)
+- [OpenClaw](https://openclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with shell and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes status-line conventions and JSON status examples.]
+
+## Skill Version(s):
+
+1.3.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

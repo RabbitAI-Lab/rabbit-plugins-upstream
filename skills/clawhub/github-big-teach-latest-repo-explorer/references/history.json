@@ -1,0 +1,620 @@
+{
+  "shown": [
+    {
+      "full_name": "MicrosoftLearning/AB-730-AI-business-professional",
+      "shown_at": "2026-09-03T11:57:35+08:00",
+      "stars": 0,
+      "html_url": "https://github.com/MicrosoftLearning/AB-730-AI-business-professional",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "TencentCloud/cloudq-for-dsh",
+      "shown_at": "2026-09-03T12:09:02+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/TencentCloud/cloudq-for-dsh",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "facebookresearch/midtraining-distillation",
+      "shown_at": "2026-09-03T12:18:00+08:00",
+      "stars": 6,
+      "html_url": "https://github.com/facebookresearch/midtraining-distillation",
+      "company": "Meta"
+    },
+    {
+      "full_name": "Azure-Samples/Commvault-CV-Backup-Permissions",
+      "shown_at": "2026-09-03T13:10:01+08:00",
+      "stars": 0,
+      "html_url": "https://github.com/Azure-Samples/Commvault-CV-Backup-Permissions",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "microsoft/fabric-data-agent-workshop",
+      "shown_at": "2026-09-03T13:13:12+08:00",
+      "stars": 0,
+      "html_url": "https://github.com/microsoft/fabric-data-agent-workshop",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "byteplus-sdk/c2patool",
+      "shown_at": "2026-09-03T13:52:30+08:00",
+      "stars": 0,
+      "html_url": "https://github.com/byteplus-sdk/c2patool",
+      "company": "ByteDance"
+    },
+    {
+      "full_name": "Azure-Samples/bring-your-own-agent-to-m365-accelerator",
+      "shown_at": "2026-09-03T13:58:53+08:00",
+      "stars": 1,
+      "html_url": "https://github.com/Azure-Samples/bring-your-own-agent-to-m365-accelerator",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "Tencent/TokenHub-Vendor-Verifier",
+      "shown_at": "2026-09-03T14:04:05+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/Tencent/TokenHub-Vendor-Verifier",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "Tencent/WeMM-Embedding",
+      "shown_at": "2026-09-03T14:12:48+08:00",
+      "stars": 1099,
+      "html_url": "https://github.com/Tencent/WeMM-Embedding",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "anthropics/commerce-agents",
+      "shown_at": "2026-09-03T17:25:53+08:00",
+      "stars": 954,
+      "html_url": "https://github.com/anthropics/commerce-agents",
+      "company": "Anthropic"
+    },
+    {
+      "full_name": "facebookresearch/project_superdex",
+      "shown_at": "2026-09-03T17:32:25+08:00",
+      "stars": 573,
+      "html_url": "https://github.com/facebookresearch/project_superdex",
+      "company": "Meta"
+    },
+    {
+      "full_name": "Tencent-Hunyuan/Hy4-preview",
+      "shown_at": "2026-09-03T20:31:56+08:00",
+      "stars": 338,
+      "html_url": "https://github.com/Tencent-Hunyuan/Hy4-preview",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "QwenLM/Qwen3.8-Flash-Next",
+      "shown_at": "2026-09-03T20:33:33+08:00",
+      "stars": 317,
+      "html_url": "https://github.com/QwenLM/Qwen3.8-Flash-Next",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "QwenLM/Qwen-Drive-1.0",
+      "shown_at": "2026-09-03T20:39:07+08:00",
+      "stars": 112,
+      "html_url": "https://github.com/QwenLM/Qwen-Drive-1.0",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "Tencent/ContextPilot",
+      "shown_at": "2026-09-03T20:57:59+08:00",
+      "stars": 99,
+      "html_url": "https://github.com/Tencent/ContextPilot",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "openai/PrimeGaps186",
+      "shown_at": "2026-09-04T20:22:48+08:00",
+      "stars": 117,
+      "html_url": "https://github.com/openai/PrimeGaps186",
+      "company": "OpenAI"
+    },
+    {
+      "full_name": "QwenLM/E-CommerceBench",
+      "shown_at": "2026-09-04T20:28:36+08:00",
+      "stars": 56,
+      "html_url": "https://github.com/QwenLM/E-CommerceBench",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "anthropics/fermats-last-theorem",
+      "shown_at": "2026-09-05T22:50:55+08:00",
+      "stars": 595,
+      "html_url": "https://github.com/anthropics/fermats-last-theorem",
+      "company": "Anthropic"
+    },
+    {
+      "full_name": "google-gemini/jot-gemini-transcribe-macOS",
+      "shown_at": "2026-09-06T10:01:40+08:00",
+      "stars": 422,
+      "html_url": "https://github.com/google-gemini/jot-gemini-transcribe-macOS",
+      "company": "Google"
+    },
+    {
+      "full_name": "GoogleCloudPlatform/open-knowledge-format",
+      "shown_at": "2026-09-07T10:01:38+08:00",
+      "stars": 318,
+      "html_url": "https://github.com/GoogleCloudPlatform/open-knowledge-format",
+      "company": "Google"
+    },
+    {
+      "full_name": "TencentARC/SCoPE",
+      "shown_at": "2026-09-07T14:01:15+08:00",
+      "stars": 193,
+      "html_url": "https://github.com/TencentARC/SCoPE",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "google-research/pointdit",
+      "shown_at": "2026-09-07T20:01:58+08:00",
+      "stars": 186,
+      "html_url": "https://github.com/google-research/pointdit",
+      "company": "Google"
+    },
+    {
+      "full_name": "google/artemis",
+      "shown_at": "2026-09-07T20:06:06+08:00",
+      "stars": 171,
+      "html_url": "https://github.com/google/artemis",
+      "company": "Google"
+    },
+    {
+      "full_name": "Tencent/UI-Mate",
+      "shown_at": "2026-09-08T10:01:14+08:00",
+      "stars": 89,
+      "html_url": "https://github.com/Tencent/UI-Mate",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "openai/LongGapsBetweenPrimes",
+      "shown_at": "2026-09-08T14:01:13+08:00",
+      "stars": 35,
+      "html_url": "https://github.com/openai/LongGapsBetweenPrimes",
+      "company": "OpenAI"
+    },
+    {
+      "full_name": "Tencent/EVIE",
+      "shown_at": "2026-09-08T20:01:14+08:00",
+      "stars": 35,
+      "html_url": "https://github.com/Tencent/EVIE",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "openai/NavierStokesAndEuler",
+      "shown_at": "2026-09-09T10:01:14+08:00",
+      "stars": 890,
+      "html_url": "https://github.com/openai/NavierStokesAndEuler",
+      "company": "OpenAI"
+    },
+    {
+      "full_name": "Tencent-Hunyuan/AuK",
+      "shown_at": "2026-09-09T14:01:17+08:00",
+      "stars": 27,
+      "html_url": "https://github.com/Tencent-Hunyuan/AuK",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "google-deepmind/orbit_sfm",
+      "shown_at": "2026-09-09T20:01:13+08:00",
+      "stars": 26,
+      "html_url": "https://github.com/google-deepmind/orbit_sfm",
+      "company": "Google"
+    },
+    {
+      "full_name": "Tencent/skillhub",
+      "shown_at": "2026-09-10T10:01:11+08:00",
+      "stars": 24,
+      "html_url": "https://github.com/Tencent/skillhub",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "anthropics/mythos-5-incident-transcript",
+      "shown_at": "2026-09-10T14:01:12+08:00",
+      "stars": 20,
+      "html_url": "https://github.com/anthropics/mythos-5-incident-transcript",
+      "company": "Anthropic"
+    },
+    {
+      "full_name": "AlibabaResearch/cut-craft-bench",
+      "shown_at": "2026-09-10T20:01:12+08:00",
+      "stars": 14,
+      "html_url": "https://github.com/AlibabaResearch/cut-craft-bench",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "google-research/mapl",
+      "shown_at": "2026-09-11T10:01:20+08:00",
+      "stars": 13,
+      "html_url": "https://github.com/google-research/mapl",
+      "company": "Google"
+    },
+    {
+      "full_name": "TencentCloud/tencentcloud-agentobs-sdk-dsh",
+      "shown_at": "2026-09-11T14:01:08+08:00",
+      "stars": 13,
+      "html_url": "https://github.com/TencentCloud/tencentcloud-agentobs-sdk-dsh",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "facebookresearch/WearableQA",
+      "shown_at": "2026-09-11T20:00:57+08:00",
+      "stars": 10,
+      "html_url": "https://github.com/facebookresearch/WearableQA",
+      "company": "Meta"
+    },
+    {
+      "full_name": "AlibabaResearch/ERPO",
+      "shown_at": "2026-09-12T10:01:08+08:00",
+      "stars": 11,
+      "html_url": "https://github.com/AlibabaResearch/ERPO",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "google-deepmind/agentic_ecology",
+      "shown_at": "2026-09-12T14:01:07+08:00",
+      "stars": 9,
+      "html_url": "https://github.com/google-deepmind/agentic_ecology",
+      "company": "Google"
+    },
+    {
+      "full_name": "bytedance/TTSonic",
+      "shown_at": "2026-09-13T20:01:15+08:00",
+      "stars": 7,
+      "html_url": "https://github.com/bytedance/TTSonic",
+      "company": "ByteDance"
+    },
+    {
+      "full_name": "alibaba/AIprofiling",
+      "shown_at": "2026-09-14T10:01:13+08:00",
+      "stars": 7,
+      "html_url": "https://github.com/alibaba/AIprofiling",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "Tencent-Hunyuan/Simple-Attention-Sparsification",
+      "shown_at": "2026-09-14T14:01:18+08:00",
+      "stars": 6,
+      "html_url": "https://github.com/Tencent-Hunyuan/Simple-Attention-Sparsification",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "Tencent/ElephantBench",
+      "shown_at": "2026-09-14T20:01:25+08:00",
+      "stars": 6,
+      "html_url": "https://github.com/Tencent/ElephantBench",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "alibaba/utp",
+      "shown_at": "2026-09-15T10:01:20+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/alibaba/utp",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "microsoft/amplifier-smart-tools",
+      "shown_at": "2026-09-15T14:01:28+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/microsoft/amplifier-smart-tools",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "Tencent/VideoHarness-RSI",
+      "shown_at": "2026-09-15T20:01:56+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/Tencent/VideoHarness-RSI",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "anthropics/claude-for-financial-advisors",
+      "shown_at": "2026-09-16T10:01:18+08:00",
+      "stars": 8,
+      "html_url": "https://github.com/anthropics/claude-for-financial-advisors",
+      "company": "Anthropic"
+    },
+    {
+      "full_name": "facebookresearch/digiworld",
+      "shown_at": "2026-09-16T14:01:44+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/facebookresearch/digiworld",
+      "company": "Meta"
+    },
+    {
+      "full_name": "MicrosoftLearning/AZ-802-Windows-Server-Administrator-Associate",
+      "shown_at": "2026-09-16T20:26:30+08:00",
+      "stars": 5,
+      "html_url": "https://github.com/MicrosoftLearning/AZ-802-Windows-Server-Administrator-Associate",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "Tencent-Hunyuan/evolve-scaler",
+      "shown_at": "2026-09-17T10:21:09+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/Tencent-Hunyuan/evolve-scaler",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "AlibabaResearch/SignalCoverageRL",
+      "shown_at": "2026-09-17T11:05:43+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/AlibabaResearch/SignalCoverageRL",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "microsoft/XBOX-Godot-NetRumble",
+      "shown_at": "2026-09-17T14:24:33+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/microsoft/XBOX-Godot-NetRumble",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "Azure-Samples/microsoft-foundry-hosted-agents",
+      "shown_at": "2026-09-17T20:01:13+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/Azure-Samples/microsoft-foundry-hosted-agents",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "anthropics/uplifting-biomolecular-modeling",
+      "shown_at": "2026-09-18T10:01:06+08:00",
+      "stars": 63,
+      "html_url": "https://github.com/anthropics/uplifting-biomolecular-modeling",
+      "company": "Anthropic"
+    },
+    {
+      "full_name": "Tencent/WeVisDoc",
+      "shown_at": "2026-09-18T19:08:29+08:00",
+      "stars": 21,
+      "html_url": "https://github.com/Tencent/WeVisDoc",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "google/viral-bench",
+      "shown_at": "2026-09-18T20:01:09+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/google/viral-bench",
+      "company": "Google"
+    },
+    {
+      "full_name": "microsoft/nvx",
+      "shown_at": "2026-09-19T10:01:06+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/microsoft/nvx",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "QwenLM/qwen-mm-plugins-hub",
+      "shown_at": "2026-09-19T14:01:02+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/QwenLM/qwen-mm-plugins-hub",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "TencentCloud/THCLI",
+      "shown_at": "2026-09-19T20:01:10+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/TencentCloud/THCLI",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "microsoft/ms_optee_os",
+      "shown_at": "2026-09-20T14:01:02+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/microsoft/ms_optee_os",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "facebookresearch/UnStep",
+      "shown_at": "2026-09-20T20:02:26+08:00",
+      "stars": 2,
+      "html_url": "https://github.com/facebookresearch/UnStep",
+      "company": "Meta"
+    },
+    {
+      "full_name": "QwenLM/Qwen-Image-2.1",
+      "shown_at": "2026-09-21T10:02:22+08:00",
+      "stars": 472,
+      "html_url": "https://github.com/QwenLM/Qwen-Image-2.1",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "QwenLM/RecreationWorld",
+      "shown_at": "2026-09-21T14:01:17+08:00",
+      "stars": 16,
+      "html_url": "https://github.com/QwenLM/RecreationWorld",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "QwenLM/Qwen-Live-Harness",
+      "shown_at": "2026-09-21T20:01:20+08:00",
+      "stars": 9,
+      "html_url": "https://github.com/QwenLM/Qwen-Live-Harness",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "google/skill-reach",
+      "shown_at": "2026-09-22T10:00:36+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/google/skill-reach",
+      "company": "Google"
+    },
+    {
+      "full_name": "TencentARC/GameHorizon",
+      "shown_at": "2026-09-22T14:02:10+08:00",
+      "stars": 32,
+      "html_url": "https://github.com/TencentARC/GameHorizon",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "TencentARC/WorldCrafter",
+      "shown_at": "2026-09-22T20:01:38+08:00",
+      "stars": 174,
+      "html_url": "https://github.com/TencentARC/WorldCrafter",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "aliyun/ai-agent-handbook",
+      "shown_at": "2026-09-23T10:02:01+08:00",
+      "stars": 130,
+      "html_url": "https://github.com/aliyun/ai-agent-handbook",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "TencentARC/GAE-GeometricAutoEncoder",
+      "shown_at": "2026-09-23T14:02:05+08:00",
+      "stars": 155,
+      "html_url": "https://github.com/TencentARC/GAE-GeometricAutoEncoder",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "google-research/rrsi",
+      "shown_at": "2026-09-24T10:04:34+08:00",
+      "stars": 249,
+      "html_url": "https://github.com/google-research/rrsi",
+      "company": "Google"
+    },
+    {
+      "full_name": "AlibabaResearch/SparkDiffusion",
+      "shown_at": "2026-09-25T10:22:25+08:00",
+      "stars": 116,
+      "html_url": "https://github.com/AlibabaResearch/SparkDiffusion",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "alibaba/AgenticBigBang",
+      "shown_at": "2026-09-25T11:19:49+08:00",
+      "stars": 40,
+      "html_url": "https://github.com/alibaba/AgenticBigBang",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "facebook/meta-ray-ban-display-ui-toolkit-web",
+      "shown_at": "2026-09-25T11:54:14+08:00",
+      "stars": 11,
+      "html_url": "https://github.com/facebook/meta-ray-ban-display-ui-toolkit-web",
+      "company": "Meta"
+    },
+    {
+      "full_name": "TencentCloud/octop-gateway",
+      "shown_at": "2026-09-25T20:14:19+08:00",
+      "stars": 16,
+      "html_url": "https://github.com/TencentCloud/octop-gateway",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "TencentCloud/octop-browser",
+      "shown_at": "2026-09-26T14:26:53+08:00",
+      "stars": 16,
+      "html_url": "https://github.com/TencentCloud/octop-browser",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "TencentCloud/octop-memory",
+      "shown_at": "2026-09-26T20:31:43+08:00",
+      "stars": 16,
+      "html_url": "https://github.com/TencentCloud/octop-memory",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "TencentCloud/octop-harness",
+      "shown_at": "2026-09-27T10:08:40+08:00",
+      "stars": 16,
+      "html_url": "https://github.com/TencentCloud/octop-harness",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "meituan-longcat/LongCat-DeepResearch",
+      "shown_at": "2026-09-27T20:13:22+08:00",
+      "stars": 8,
+      "html_url": "https://github.com/meituan-longcat/LongCat-DeepResearch",
+      "company": "Meituan"
+    },
+    {
+      "full_name": "Tencent/IterSynth",
+      "shown_at": "2026-09-28T10:05:49+08:00",
+      "stars": 7,
+      "html_url": "https://github.com/Tencent/IterSynth",
+      "company": "Tencent"
+    },
+    {
+      "full_name": "QwenLM/Omnilingua-Bench",
+      "shown_at": "2026-09-28T14:01:08+08:00",
+      "stars": 7,
+      "html_url": "https://github.com/QwenLM/Omnilingua-Bench",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "meta-pytorch/flex_shard",
+      "shown_at": "2026-09-28T15:52:14+08:00",
+      "stars": 6,
+      "html_url": "https://github.com/meta-pytorch/flex_shard",
+      "company": "Meta"
+    },
+    {
+      "full_name": "google/go-lru",
+      "shown_at": "2026-09-28T16:05:44+08:00",
+      "stars": 5,
+      "html_url": "https://github.com/google/go-lru",
+      "company": "Google"
+    },
+    {
+      "full_name": "aliyun/alibabacloud-data-agent-openapi-examples",
+      "shown_at": "2026-09-28T17:30:43+08:00",
+      "stars": 4,
+      "html_url": "https://github.com/aliyun/alibabacloud-data-agent-openapi-examples",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "alibaba/atrex-kernels",
+      "shown_at": "2026-09-28T18:01:02+08:00",
+      "stars": 3,
+      "html_url": "https://github.com/alibaba/atrex-kernels",
+      "company": "Alibaba"
+    },
+    {
+      "full_name": "GoogleCloudPlatform/gke-workload-identity-ca-rotation",
+      "shown_at": "2026-09-28T19:00:24+08:00",
+      "stars": 2,
+      "html_url": "https://github.com/GoogleCloudPlatform/gke-workload-identity-ca-rotation",
+      "company": "Google"
+    },
+    {
+      "full_name": "anthropics/claude-code-playground",
+      "shown_at": "2026-09-28T20:01:20+08:00",
+      "stars": 2,
+      "html_url": "https://github.com/anthropics/claude-code-playground",
+      "company": "Anthropic"
+    },
+    {
+      "full_name": "anthropics/raft-rs",
+      "shown_at": "2026-09-28T21:01:28+08:00",
+      "stars": 2,
+      "html_url": "https://github.com/anthropics/raft-rs",
+      "company": "Anthropic"
+    },
+    {
+      "full_name": "microsoft/amplifier-smart-tools-catalog",
+      "shown_at": "2026-09-29T09:01:10+08:00",
+      "stars": 2,
+      "html_url": "https://github.com/microsoft/amplifier-smart-tools-catalog",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "github/copilot-app-for-beginners",
+      "shown_at": "2026-09-29T10:00:51+08:00",
+      "stars": 2,
+      "html_url": "https://github.com/github/copilot-app-for-beginners",
+      "company": "Microsoft"
+    },
+    {
+      "full_name": "openai/codex-security",
+      "shown_at": "2026-09-29T10:19:05+08:00",
+      "stars": 10879,
+      "html_url": "https://github.com/openai/codex-security",
+      "company": "OpenAI"
+    }
+  ]
+}

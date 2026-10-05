@@ -1,39 +1,55 @@
-## Description: <br>
-This skill helps testers observe test execution across function behavior, interface responses, logs, UI rendering, data consistency, and performance, then record anomalies and follow-up questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides QA testers through observing six signals during test execution and recording factual results, outcomes, anomalies, and follow-up items.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and developers use this skill during test execution to capture structured observations, correlate each observation with a test case, and identify anomalies across functional, log, UI, data, dependency, and performance signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Broad troubleshooting or test-execution language may activate this workflow when the user intended a narrower task. <br>
-Mitigation: When the task is ambiguous, explicitly confirm whether to use this observation workflow before allowing shell or log-inspection steps. <br>
-Risk: The workflow may involve shell commands, log inspection, screenshots, or external monitoring in the target test environment. <br>
-Mitigation: Run it in a controlled environment and review requested commands, logs, and tool access before execution. <br>
+## Use Case:
 
+QA testers and developers use this Chinese-language workflow to observe functional behavior, performance, logs, data, UI, and dependencies while executing test cases, then document actual results and classify anomalies.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown execution observation report with traceable observation IDs, test-case links, anomaly lists, and environment issue notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Observations should use unique OBS-XXXX IDs and link to TC-XXXX test case IDs; command or tool use should be reviewed before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Log, database, monitoring, or screenshot checks may expose sensitive data or affect systems outside the intended test scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Perform these checks only in an authorized test environment and handle captured information appropriately.
+
+Risk: The optional companion installation may introduce code from a separately maintained source.
+
+Mitigation: Install the companion only after verifying that its source and version are trusted.
+
+## Reference(s):
+
+- [Observation guide](references/observation-guide.md)
+- [Execution record template](assets/execution-record.md)
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-execution-observation)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown execution-record tables and per-round observation notes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Preserves test-case IDs; records observed results, pass/fail/blocked conclusions, signal coverage, and follow-up items.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

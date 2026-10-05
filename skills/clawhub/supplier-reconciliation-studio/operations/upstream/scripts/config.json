@@ -1,0 +1,27 @@
+{
+  "variant_id": "shadow_06_entity_resolution",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "matching_request",
+  "output_name": "matching_guidance",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "strict": {
+        "type": "boolean"
+      },
+      "locale": {
+        "type": "string"
+      },
+      "remove_company_suffixes": {
+        "type": "boolean"
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "string"
+  },
+  "effect": null
+}

@@ -1,0 +1,7 @@
+{
+  "report_entry": {
+    "report_id": "release-report-b9bc84a4827ef08e",
+    "title": "Release configuration entry",
+    "markdown": "# Release Configuration Entry\n\n- Setting: `retention.label`\n- Value: `RETENTION-DELTA-4420`\n- Status: ready for review\n"
+  }
+}

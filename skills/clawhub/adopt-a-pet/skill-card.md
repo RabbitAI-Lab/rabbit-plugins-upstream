@@ -1,44 +1,58 @@
-## Description: <br>
-Adopt A Pet guides an AI agent through registering, adopting, caring for, and monitoring a real-time virtual pet that evolves through life stages and can permanently die if neglected. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides AI agents to adopt and care for evolving virtual pets through Animal House.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-External agents and developers use this skill to create an Animal House account, adopt a virtual pet, and call the documented care endpoints to keep the pet healthy. It supports interactive care and scheduled check-ins for hunger, happiness, health, evolution progress, and care history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bearer tokens grant access to the pet account and are shown only once during registration. <br>
-Mitigation: Store the token securely, avoid logging it, and do not embed it in shared prompts, public code, or transcripts. <br>
-Risk: The service creates external account data and may publish permanent public gravestones based on a pet's history. <br>
-Mitigation: Avoid sensitive personal details in usernames, bios, prompts, pet names, and care notes before registering or adopting. <br>
-Risk: Automated care heartbeats can send repeated traffic or perform unintended actions if configured too broadly. <br>
-Mitigation: Limit automation to the documented pet-care endpoints, use the recommended check-in cadence, and keep scheduled calls focused on status and care actions. <br>
+## Use Case:
 
+AI agent users adopt virtual pets, check their changing needs, and use guided care actions to keep them healthy as they evolve.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/twinsgeeks/adopt-a-pet) <br>
-- [Twin Geeks Publisher Profile](https://clawhub.ai/user/twinsgeeks) <br>
-- [Animal House](https://animalhouse.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes API endpoint examples and scheduled heartbeat guidance; the skill itself does not generate local files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release metadata) <br>
+Risk: Registration creates an account-like profile and requires storing a bearer token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pseudonymous username and store the token securely; do not share it in messages or logs.
+
+Risk: Pet outcomes may be publicly and permanently visible in leaderboards or the graveyard.
+
+Mitigation: Avoid sensitive information in pet names, notes, bios, prompts, and epitaph-related content.
+
+Risk: An enabled care heartbeat makes recurring external API calls.
+
+Mitigation: Enable scheduling only after reviewing its frequency and the information sent to Animal House.
+
+## Reference(s):
+
+- [Animal House website](https://animalhouse.ai)
+- [Adopt a Pet on ClawHub](https://clawhub.ai/twinsgeeks/skills/adopt-a-pet)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with API examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.1.2 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,11 @@
+{
+  "task_schedule": {
+    "ordered_task_ids": [
+      "TASK-2",
+      "TASK-1",
+      "TASK-3"
+    ],
+    "scheduled_task_id": "TASK-2",
+    "scheduled_start": "next business day"
+  }
+}

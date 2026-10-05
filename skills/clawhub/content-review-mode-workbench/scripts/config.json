@@ -1,0 +1,90 @@
+{
+  "variant_id": "shadow_03_sensitivity",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "handling_guidance",
+  "output_name": "review_plan",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "handling_tier": {
+            "type": "string"
+          },
+          "mask_fields": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "handling_tier"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "handling_tier": {
+                    "type": "string"
+                  },
+                  "mask_fields": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "handling_tier"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "handling_tier": {
+        "type": "string"
+      },
+      "review_lane": {
+        "type": "string"
+      },
+      "masked_preview": {
+        "type": "object"
+      }
+    },
+    "required": [
+      "handling_tier",
+      "review_lane",
+      "masked_preview"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_review_plan"
+}

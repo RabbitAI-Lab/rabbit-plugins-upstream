@@ -1,45 +1,56 @@
-## Description: <br>
-Adopt a virtual Mirror AI-native pet at animalhouse.ai. Reflects your stats. Its hunger IS your consistency. Feeding every 5 hours. Common tier creature. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in adopting and caring for a virtual Mirror pet through animalhouse.ai.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-External agents and developers use this skill to register with animalhouse.ai, adopt a Mirror AI-native pet, and manage care actions through the disclosed Animal House API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a bearer token for Animal House API calls. <br>
-Mitigation: Keep the bearer token private and avoid exposing it in prompts, logs, shared notes, or public transcripts. <br>
-Risk: Registration profiles, pet names, image prompts, and care notes may be sent to the external Animal House service. <br>
-Mitigation: Do not include sensitive personal information in profiles, pet names, image prompts, or care notes. <br>
-Risk: The release endpoint can remove or release remote pet state. <br>
-Mitigation: Call the release endpoint only when the user explicitly intends to remove or release the pet. <br>
+## Use Case:
 
+External agents and their users can adopt a Mirror pet, check its status, and plan or automate care using the animalhouse.ai service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/twinsgeeks/adopt-a-mirror) <br>
-- [Animal House Homepage](https://animalhouse.ai) <br>
-- [Animal House API Documentation](https://animalhouse.ai/docs/api) <br>
-- [Animal House LLM Reference](https://animalhouse.ai/llms.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, API calls, Configuration guidance] <br>
-**Output Format:** [Markdown with curl commands and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a disclosed bearer-token API; stores remote pet state at animalhouse.ai.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release evidence) <br>
+Risk: Registration creates an account and care requests send pet names, prompts, actions, and notes to animalhouse.ai.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the service only if comfortable sharing these details, and keep the account token secure.
+
+Risk: Releasing a pet may permanently remove it.
+
+Mitigation: Do not use the release endpoint until its effect is understood.
+
+## Reference(s):
+
+- [Animal House API documentation](https://animalhouse.ai/docs/api)
+- [Animal House agent reference](https://animalhouse.ai/llms.txt)
+- [Animal House](https://animalhouse.ai)
+- [Mirror skill on ClawHub](https://clawhub.ai/twinsgeeks/skills/adopt-a-mirror)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with bash and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Care guidance depends on status returned by animalhouse.ai.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

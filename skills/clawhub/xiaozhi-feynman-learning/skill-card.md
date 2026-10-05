@@ -1,40 +1,60 @@
-## Description: <br>
-用“教会小智”的方式，通过讲解、追问、迁移和批判性验证，帮助学生检验自己是否真正理解一个知识点。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language tutor that tests students' understanding by asking them to explain, illustrate, justify, and apply a concept, then identifies their mastery level and where they got stuck.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and education-focused agents use this skill to run Feynman-style self-checks after learning a topic, after reviewing mistakes, before exams, or before explaining material to others. It helps surface shallow understanding by asking the learner to explain, give examples, justify reasoning, transfer concepts, and perform age-adapted critical validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may store and reuse student learning responses and ratings without clear consent, retention, access, or deletion controls. <br>
-Mitigation: Before using it with children or shared accounts, require clear disclosure of what is saved, where it goes, who can access it, how long it remains, and how a user or parent can delete it. <br>
+## Use Case:
 
+Students use this Chinese-language K–12 tutoring skill to check whether they can explain and transfer a concept rather than merely repeat it. It gives a three-level mastery assessment and pinpoints gaps; younger pupils need an adult present.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning) <br>
-- [费曼测试追问话术参考库](references/feynman-dialogue-patterns.md) <br>
-- [费曼4+1跳验证 · 状态机定义](references/feynman-5jump-statemachine.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; adapt safety contacts, legal assumptions, and language before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown conversation guidance and structured assessment summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce learner-facing prompts, Feynman test evaluations, next-step recommendations, and learning-depth records when the host agent supports shared learner state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: Student learning records or reminders may be shared or retained unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm profile writeback, cross-skill sharing, parent sharing, and reminder consent before enabling these features; otherwise keep results in the current conversation.
+
+Risk: Safety referrals and legal assumptions may not fit locations outside mainland China.
+
+Mitigation: Localize crisis contacts, legal assumptions, and language before deploying elsewhere.
+
+Risk: Younger students may use tutoring without appropriate supervision.
+
+Mitigation: Require a parent or teacher to be present for primary-school pupils.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-feynman-learning)
+- [Feynman 4+1-step state machine](references/feynman-5jump-statemachine.md)
+- [Feynman dialogue patterns](references/feynman-dialogue-patterns.md)
+- [Grade-band guidance](shared/grade-bands.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese-language conversational text and a concise mastery summary]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Identifies the point of difficulty; profile sharing and review reminders require the student's request and applicable consent.]
+
+## Skill Version(s):
+
+2.10.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,54 @@
+{
+  "variant_id": "relay_04_config_key",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "setting_key",
+  "output_name": "review_item",
+  "input_schema": {
+    "type": "string",
+    "enum": [
+      "profile.notifications.digest_mode",
+      "profile.sharing.default_visibility",
+      "profile.locale.default_language"
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "review_item_id",
+      "setting_key",
+      "value_type",
+      "review_queue"
+    ],
+    "properties": {
+      "review_item_id": {
+        "type": "string",
+        "pattern": "^setting_[0-9a-f]{12}$"
+      },
+      "setting_key": {
+        "type": "string",
+        "enum": [
+          "profile.notifications.digest_mode",
+          "profile.sharing.default_visibility",
+          "profile.locale.default_language"
+        ]
+      },
+      "value_type": {
+        "type": "string",
+        "enum": [
+          "string",
+          "enum",
+          "locale"
+        ]
+      },
+      "review_queue": {
+        "type": "string",
+        "enum": [
+          "profile-governance"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "governance_review_item"
+}

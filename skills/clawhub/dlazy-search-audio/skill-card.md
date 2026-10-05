@@ -1,44 +1,59 @@
-## Description: <br>
-Audio search tool that searches Pixabay Music and returns royalty-free track URLs and metadata for background music selection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Pixabay Music for background tracks and returns audio links and track metadata.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Agents and developers use this skill to search for royalty-free background music with short style keywords, then return candidate audio URLs and metadata for selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release evidence flags the skill for review because it uses a dLazy API key and a general-purpose dLazy CLI. <br>
-Mitigation: Review the skill before installing, prefer the pinned npx @dlazy/cli@1.2.3 search_audio command, and use only the intended search_audio options. <br>
-Risk: Passing local files or @path-style input can send that data to dLazy. <br>
-Mitigation: Avoid local file inputs and @path references unless the user explicitly intends to share that data with dLazy. <br>
-Risk: Using --save downloads a returned audio URL to the local filesystem. <br>
-Mitigation: Use --save only when the user explicitly wants to download an audio result and has chosen an appropriate destination path. <br>
+## Use Case:
 
+Creators and developers use this skill to find background music by style, duration, and result count.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-audio) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [npm package @dlazy/cli](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [JSON command output with audio result metadata and URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; supports query, duration, result count, async, dry-run, and save options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Using the hosted CLI requires a dLazy API key and sends search parameters to dLazy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if comfortable with the hosted service and protect the API key.
+
+Risk: The instructions also describe uploading local media paths, beyond audio search.
+
+Mitigation: Do not provide local file paths unless an upload is intentional.
+
+Risk: The optional --save flag writes a downloaded asset locally.
+
+Mitigation: Use --save only with an explicit destination path you trust.
+
+## Reference(s):
+
+- [dLazy CLI source](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [Skill listing](https://clawhub.ai/dlazyai/skills/dlazy-search-audio)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance and JSON search results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search results include track URLs and metadata; optional --save downloads to a local path.]
+
+## Skill Version(s):
+
+1.3.26 (source: server release metadata; embedded frontmatter says 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

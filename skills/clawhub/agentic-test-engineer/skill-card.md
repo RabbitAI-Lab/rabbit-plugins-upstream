@@ -1,41 +1,53 @@
-## Description: <br>
-Agentic Test Engineer helps QA engineers and developers generate tests, diagnose flaky failures, repair broken UI selectors, and identify coverage gaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drafts test cases, test code, selector fixes, flaky-test diagnoses, and coverage guidance for human review without running tests or changing repositories.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-QA engineers and developers use this skill to generate unit, integration, E2E, and API tests from code or stories, diagnose flaky test failures, suggest selector repairs, and plan tests for uncovered code paths. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated tests or selector repairs may be incorrect, brittle, or misaligned with the intended application behavior. <br>
-Mitigation: Review generated tests and proposed self-healed selectors before committing or using them in production workflows. <br>
-Risk: The skill may need access to project code, tests, CI logs, and coverage files to provide useful guidance. <br>
-Mitigation: Install and run it only where sharing those project artifacts with the agent is acceptable. <br>
+## Use Case:
 
+QA engineers and developers use this advisory skill to design unit, integration, API, and browser tests, diagnose flaky failures, propose selector repairs, and prioritize coverage gaps. They review its suggestions before running tests or merging changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/agentic-test-engineer) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code blocks and structured recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces test code examples, selector repair options, flaky-test analysis, coverage recommendations, and reviewable workflow guidance; it does not execute tests directly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Screenshots, DOM snapshots, CI logs, and coverage files may expose sensitive information when shared with external testing services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use synthetic test data, redact sensitive content, limit snapshots to what is needed, and keep visual testing self-hosted unless vendor handling is approved.
+
+Risk: A suggested selector repair may hide a product regression or target the wrong element.
+
+Mitigation: Review every repair before merging; stop and escalate ambiguous selectors or behavior changes instead of automatically healing them.
+
+## Reference(s):
+
+- [Agentic Test Engineer on ClawHub](https://clawhub.ai/gechengling/skills/agentic-test-engineer)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Analysis, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with code blocks and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory output for human review; does not run tests, modify repositories, or access CI.]
+
+## Skill Version(s):
+
+1.0.2 (source: release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

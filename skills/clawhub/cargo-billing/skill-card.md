@@ -1,44 +1,57 @@
-## Description: <br>
-Pull usage metrics, check subscription status, view invoices, and manage credits using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users review Cargo credit balances, usage, subscriptions, invoices, and payment methods.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Cargo workspace administrators and operators use this skill to inspect billing usage, subscription state, invoices, credit balances, and billing portal access through the Cargo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Billing, invoice, card-on-file, and portal-session commands can reveal sensitive workspace billing details. <br>
-Mitigation: Use trusted Cargo CLI credentials, limit use to intended admin workflows, and review commands before running them. <br>
-Risk: Sample workflow-run commands used for cost estimates can consume credits. <br>
-Mitigation: Run only small samples, check available credits before larger batches, and monitor usage during execution. <br>
+## Use Case:
 
+Workspace administrators use this skill to check Cargo spending and remaining credits, investigate usage by resource, review subscription and invoice information, and manage a payment method.
 
-## Reference(s): <br>
-- [Cargo Billing skill page](https://clawhub.ai/cargo-ai/skills/cargo-billing) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Usage metrics examples](references/examples/usage-metrics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and admin-level Cargo billing access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence release metadata and skill frontmatter) <br>
+Risk: A mutable latest-version CLI has admin access to billing and payment settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted Cargo CLI package source and pin a reviewed version before using billing commands.
+
+Risk: Entering payment-card details as command-line flags may expose them in shell history or process listings.
+
+Mitigation: Prefer the hosted payment form or the CLI's standard-input option; do not place card details in command-line arguments.
+
+## Reference(s):
+
+- [Cargo Billing on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-billing)
+- [Cargo skill homepage (declared in metadata)](https://github.com/getcargohq/cargo-skills)
+- [Usage metrics examples](references/examples/usage-metrics.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Billing answers depend on the selected workspace and the data returned by the Cargo CLI.]
+
+## Skill Version(s):
+
+2.0.1 (source: SKILL.md frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

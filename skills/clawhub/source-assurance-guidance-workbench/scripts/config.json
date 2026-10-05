@@ -1,0 +1,88 @@
+{
+  "variant_id": "shadow_11_provenance",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "source_guidance",
+  "output_name": "source_resolution",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "required_agreement": {
+            "type": "integer"
+          },
+          "conflict_action": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "required_agreement",
+          "conflict_action"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "required_agreement": {
+                    "type": "integer"
+                  },
+                  "conflict_action": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "required_agreement",
+                  "conflict_action"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "field": {
+        "type": "string"
+      },
+      "disposition": {
+        "type": "string"
+      },
+      "selected_value": {},
+      "agreement_count": {
+        "type": "integer"
+      }
+    },
+    "required": [
+      "field",
+      "disposition",
+      "selected_value",
+      "agreement_count"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_source_resolution"
+}

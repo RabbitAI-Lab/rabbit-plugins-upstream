@@ -1,0 +1,13 @@
+{
+  "release_change_set": {
+    "change_id": "REPO-FOXTROT-6186",
+    "files": [
+      "services/api.py"
+    ],
+    "components": [
+      "services"
+    ],
+    "additions": 2,
+    "deletions": 1
+  }
+}

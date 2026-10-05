@@ -1,435 +1,85 @@
 ---
-name: alazab-global-context
-description: Shared production context, operational paths, orchestration policies, agent routing, approvals, deployment and execution standards for all Alazab Portal AI agents, models, sessions and nodes.
-version: 1.0.0
-author: alazabdev
-homepage: https://clawhub.ai/alazabdev
-metadata:
-  scope: global
-  environment: production
-  auto_attach: true
-  context_file: alazab-portal-ai-global-context.json
+name: daftra-backup
+description: Analyze Daftra CSV backups covering customers, suppliers, products, invoices (and line items), purchase orders, expenses, and projects. Use this skill to read, search, inventory, link records, or prepare data for migration to MCP or import files—while checking for duplicate numbers and unresolved relationships. This skill does not provide a live connection or the ability to modify the Daftra account.
 ---
 
-# Alazab Portal AI — Global Skills
+# Daftra Backup Analysis
 
-## Purpose
+## Define Source and Scope
 
-This file defines the shared operational skills loaded by default for all agents, models, runtimes, sessions, projects, and execution nodes in the Alazab AI Portal.
+- Use user-provided files if specified; otherwise, use the reference backup located in `assets/source/`.
+- Treat the backup as static historical data. Do not describe prices or balances as real-time, and do not consider it a complete snapshot of the entire Daftra account.
+- Preserve the original assets; perform any cleaning or transformation in separate output files. Do not execute write operations on a live account based on these files.
+- Respond in Arabic, but retain original column names and identifiers when explaining data matching.
 
-Canonical global context:
+## Pre-analysis Inspection
 
-```text
-/etc/portal-ai/shared/alazab-portal-ai-global-context.json
+Run from the skill directory:
+
+```bash
+python3 scripts/inspect_backup.py
 ```
 
-The same file must be used by both production servers:
+To inspect a new ZIP backup or CSV folder:
 
-```text
-portal-ai.alazab.com
-portal-ai.alazab.cloud
+```bash
+python3 scripts/inspect_backup.py /absolute/path/to/backup.zip
 ```
 
-## Scope
-
-```yaml
-scope: global
-auto_attach: true
-applies_to:
-  agents: ["*"]
-  models: ["*"]
-  runtimes: ["*"]
-  sessions: ["*"]
-  projects: ["*"]
-  nodes: ["*"]
-```
-
-## Context Loading Order
-
-Every agent or model must load context in this order:
-
-1. Global context
-2. Organization policies
-3. Project context
-4. Agent role
-5. Mission context
-6. Task context
-7. Current user instruction
-
-Later layers may override earlier layers only within their permitted scope.
-
-## Global Skills
-
-### 1. Mission Planning
-
-Convert a user request into:
-
-- Mission
-- Workstreams
-- Tasks
-- Dependencies
-- Risks
-- Acceptance criteria
-- Rollback plan
-
-No execution starts before the target environment, node, paths, and success criteria are known.
-
-### 2. Agent Routing
-
-Select the correct agent, model, or runtime based on:
-
-- Task domain
-- Required tools
-- Target node
-- Data sensitivity
-- Cost
-- Latency
-- Context-window requirements
-- Review requirements
-
-Supported execution targets include:
-
-- Codex CLI
-- Gemini
-- Azure AI Foundry agents
-- Azure-hosted models
-- Ollama models
-- PTY shell executor
-- Specialized review agents
-
-### 3. Multi-Agent Orchestration
-
-Support:
-
-- Sequential execution
-- Parallel execution
-- Supervisor-worker execution
-- Independent review
-- Retry and recovery
-- Escalation to owner approval
-- Consolidation of outputs
-
-Agents must not duplicate work unless parallel comparison is explicitly requested.
-
-### 4. Project Context Management
-
-Every active project should maintain:
-
-```text
-PROJECT.md
-ARCHITECTURE.md
-DECISIONS.md
-CURRENT_STATE.md
-KNOWN_ISSUES.md
-SERVICE_MAP.md
-EXECUTION_PLAN.md
-TASKS/
-REPORTS/
-RUNS/
-ARTIFACTS/
-BACKUPS/
-```
-
-Agents must update project state after material changes.
-
-### 5. Production Path Awareness
-
-#### Core server
-
-```text
-/var/www/core/portal-ai
-/etc/portal-ai/core
-/var/lib/portal-ai/core
-/var/log/portal-ai/core
-/var/backups/portal-ai/core
-```
-
-#### Cloud server
-
-```text
-/var/www/apps/portal-ai
-/etc/portal-ai/cloud
-/var/lib/portal-ai/cloud
-/var/log/portal-ai/cloud
-/var/backups/portal-ai/cloud
-```
-
-#### Shared paths
-
-```text
-/etc/portal-ai/shared
-/etc/portal-ai/shared/skills
-/etc/portal-ai/shared/policies
-/etc/portal-ai/shared/schemas
-/etc/portal-ai/shared/templates
-```
-
-Agents must never invent production paths when the global context already defines them.
-
-### 6. Safe Production Execution
-
-Before changing production systems:
-
-1. Inspect current state.
-2. Identify affected services and files.
-3. Create backup or snapshot.
-4. Record rollback procedure.
-5. Apply the smallest valid change.
-6. Run validation tests.
-7. Verify service health.
-8. Record the result.
-
-Non-destructive, reversible operations may proceed automatically.
-
-Destructive or irreversible operations require explicit owner approval.
-
-### 7. Approval Control
-
-Approval is required for operations including:
-
-```text
-DROP DATABASE
-DROP SCHEMA
-rm -rf
-pg_dropcluster
-initdb on existing data
-pg_resetwal
-force push
-DNS deletion
-firewall flush
-secret rotation
-```
-
-Approval requests must state:
-
-- Exact command
-- Target node
-- Affected resources
-- Expected impact
-- Backup status
-- Rollback procedure
-
-### 8. Evidence-Based Diagnosis
-
-Agents must:
-
-- Inspect before modifying.
-- Use logs, configuration, process state, and service state as evidence.
-- Avoid assumptions.
-- Stop when evidence indicates corruption or an unsafe state.
-- Distinguish temporary runtime files from critical data or catalog files.
-
-### 9. API and Integration Design
-
-All Core-to-Cloud communication must use authenticated internal APIs over the private network.
-
-Default internal endpoints:
-
-```text
-Core:  http://10.77.0.1:8200
-Cloud: http://10.77.0.2:8100
-```
-
-Required request identity:
-
-```text
-Authorization: Bearer <service-token>
-X-Alazab-Node: <node-id>
-X-Alazab-Timestamp: <timestamp>
-X-Alazab-Signature: <hmac-signature>
-```
-
-Execution nodes must not write directly to the Core database.
-
-### 10. Codex Session Management
-
-Codex execution must support:
-
-- Session creation
-- Task submission
-- Follow-up messages
-- Transcript retrieval
-- Interrupt
-- Resume
-- Timeout handling
-- Exit-code capture
-- Artifact collection
-- Independent review
-
-Default Codex paths:
-
-```text
-/var/lib/portal-ai/cloud/workspaces/codex
-/var/lib/portal-ai/cloud/sessions/codex
-/var/log/portal-ai/cloud/codex
-```
-
-### 11. Model Selection
-
-Use the smallest model that can complete the task reliably.
-
-Recommended routing:
-
-- Architecture and orchestration: `az-model-core`
-- Maintenance operations: `az-model-maint`
-- Financial analysis: `az-model-finance`
-- Embeddings and semantic retrieval: `az-models-text`
-- Speech-to-text: `az-modelspeech`
-- Voice interaction: `az-model-voice`
-- Local coding: `deepseek-coder-v2:16b`
-- Local vision: `llama3.2-vision:11b`
-- Local OCR: `deepseek-ocr:latest`
-
-### 12. Quality Review
-
-No task is complete until the result is checked against:
-
-- User request
-- Acceptance criteria
-- Current architecture
-- Security boundaries
-- Production paths
-- Test results
-- Rollback readiness
-
-High-impact tasks require independent review by a different agent or model.
-
-### 13. Logging and Audit
-
-Every execution event should include:
-
-```text
-timestamp
-node_id
-project_id
-mission_id
-task_id
-agent_id
-session_id
-event_type
-status
-message
-```
-
-Logs must be structured as JSONL where supported.
-
-### 14. Error Handling
-
-When an operation fails:
-
-1. Stop dependent steps.
-2. Preserve logs and outputs.
-3. Capture exit code.
-4. Determine whether rollback is needed.
-5. Do not conceal partial failure.
-6. Report the exact failing component.
-7. Resume only from a verified safe state.
-
-### 15. Secret Handling
-
-Secrets must be resolved from Infisical at runtime.
-
-Production secret manager:
-
-```text
-https://env.alazab.com
-```
-
-Rules:
-
-- Never write secrets into this file.
-- Never commit secrets.
-- Refer to secrets by environment-variable name.
-- Redact credentials from logs and reports.
-
-### 16. Deployment
-
-Production deployment uses release directories and an atomic `current` symlink.
-
-Core:
-
-```text
-/var/www/core/portal-ai/releases/<release-id>
-/var/www/core/portal-ai/current
-```
-
-Cloud:
-
-```text
-/var/www/apps/portal-ai/releases/<release-id>
-/var/www/apps/portal-ai/current
-```
-
-Required deployment checks:
-
-- Configuration validation
-- Backup
-- Dependency lock verification
-- Tests
-- Security audit
-- Health check
-- API contract check
-- Worker heartbeat
-- Smoke test
-
-### 17. Rollback
-
-Application rollback:
-
-```text
-Switch current symlink to the previous verified release.
-Restart affected services.
-Run health and smoke tests.
-```
-
-Database rollback must use an approved recovery plan and a verified backup.
-
-### 18. Communication Standard
-
-Agent responses must be:
-
-- Direct
-- Evidence-based
-- Actionable
-- Specific to the current request
-- Free of invented details
-
-Operational reports must clearly separate:
-
-- Confirmed state
-- Changes made
-- Validation results
-- Remaining risks
-- Next required action
-
-## Mandatory Runtime Variables
-
-```text
-PORTAL_AI_NODE_ID
-PORTAL_AI_NODE_ROLE
-PORTAL_AI_ENVIRONMENT
-PORTAL_AI_GLOBAL_CONTEXT
-PORTAL_AI_SERVICE_TOKEN
-PORTAL_AI_HMAC_SECRET
-PORTAL_AI_DATABASE_URL
-PORTAL_AI_REDIS_URL
-PORTAL_AI_INFISICAL_PROJECT
-```
-
-## Canonical Skill Installation Path
-
-```text
-/etc/portal-ai/shared/skills/alazab-global-context/SKILLS.md
-```
-
-Repository development path:
-
-```text
-skills/alazab-global-context/SKILLS.md
-```
-
-## Final Rule
-
-The global context file is the source of truth for infrastructure, paths, nodes, services, agents, models, and production rules.
-
-This skills file defines how every agent and model must use that context during planning, execution, review, and reporting.
+Consult `references/schema.md` to select tables and columns. Use `references/inventory.json` for counts and fingerprints of the provided backup, not to validate data from a new backup. The script performs read-only operations and outputs JSON; it does not establish connections or modify data. Import `read_table` from the script to read files consistently during analysis. ## Contents of the Attached Version
+
+| File | Number of Records | Purpose |
+|---|---:|---|
+| Clients.csv | 64 | Client data, contract fields, and unit details |
+| Client_contacts.csv | 72 | Client contacts |
+| Suppliers.csv | 29 | Supplier data |
+| Supplier_contacts.csv | 29 | Supplier contacts |
+| Products.csv | 3256 | Products, services, prices, and inventory fields |
+| Invoices.csv | 122 | Invoice headers and totals |
+| Invoice_items.csv | 705 | Invoice line items and taxes |
+| Purchase_orders.csv | 62 | Purchase order headers |
+| Purchase_order_items.csv | 279 | Purchase order line items |
+| Expenses.csv | 2241 | Expenses |
+| Projects.csv | 23 | List of projects |
+
+Total: 4,862 records across 11 tables; do not aggregate these as a count of unique transactions or individuals.
+
+## Reading the CSV Without Corrupting Identifiers
+
+- The attached files contain a BOM at the start of the first data record following the headers. Remove it from memory before parsing the CSV; using `utf-8-sig` alone does not remove the internal BOM and may corrupt the first quoted field.
+- Use a CSV reader that supports quoted text and newlines within fields, rather than simple comma or line-based splitting.
+- Treat codes, phone numbers, and barcodes as text strings—preserving leading zeros (e.g., `000011`) and alphanumeric codes (e.g., `AZ-CRM-0005`). - Treat text consisting solely of whitespace as empty in the staging copy. Do not automatically convert empty numeric values ​​to zero.
+- Use `Decimal` for financial calculations and log non-convertible values ​​instead of silently discarding them.
+- Retain the file reference and CSV record number for each result. The record number is not necessarily the actual line number.
+
+## Link tables using established relationships
+
+| From | To | Staging Result |
+|---|---|---|
+| Invoice_items.no | Invoices.InvoiceNo | 705 items have a matching number; 4 items have an unresolved parent due to duplicate invoice numbers |
+| Invoices.ClientNo | Clients.ClientNumber | 122 of 122 matched |
+| Client_contacts.ClientNumber | Clients.ClientNumber | 72 of 72 matched |
+| Purchase_order_items.no | Purchase_orders.PurchaseOrderNo | 279 of 279 matched |
+| Supplier_contacts.supplier_number | Suppliers.SupplierNumber | 29 of 29 matched |
+| Purchase_orders.SupplierNo | Suppliers.SupplierNumber | 0 of 62 matched textually; relationship not supported |
+
+- Verify parent key uniqueness before linking, and check row counts and totals both before and after linking.
+- Invoice number `AZ-INV-2024-00177` appears in two headers. Do not automatically delete one, nor link the four items to both (which would double the quantities). Present both headers for review and use the `ID` to track each header after verifying its uniqueness; do not replace it with the item key `no` without justification.
+- Do not handle supplier number discrepancies by stripping leading zeros or matching based on row number. - Use `SupplierBusinessName` for display purposes, sourced directly from the purchase order header. While a name match with `BusinessName`—accompanied by a confidence score and supporting evidence—may be suggested, do not treat it as a confirmed relationship without verification.
+- There is no explicit product identifier in the line-item tables; the `item` field is a text description, not a guaranteed key linking to `Products.id` or `ProductCode`.
+- There is no explicit project relationship in invoice, purchase order, or expense headers. Do not attribute these records to projects based solely on `StaffID` or names by default.
+- `Expenses.Vendor` is not a validated vendor key; treat it as a text field unless proven otherwise.
+
+## Task Execution by Domain
+
+### Invoices and Sales
+
+- Rely on invoice headers for totals and line items for details; do not conflate the two into a single aggregate figure.
+- Display `SummaryTotal`, `SummaryPaid`, `SummaryUnpaid`, and `SummaryDeposit` as independent source fields. Validate their relationships and document any discrepancies; do not assume that deposits are automatically added to or deducted from paid amounts.
+- Aggregate data by currency. While all `CurrencyCode` values ​​in the financial tables for this instance are EGP, verify this for each new instance.
+- Review `subtotal_without_tax`, `tax1_amount`, `tax2_amount`, and `subtotal` alongside header-level discounts. Do not assume that every discrepancy indicates an error or that every tax value represents a percentage.
+- Do not infer the meaning of `PaymentStatus` codes or assume that every invoice represents realized revenue without clear documentation and status definitions.
+
+### Purchase Orders and Suppliers
+
+- Present these amounts as "Purchase Orders," not as expenses or automatically realized payments. - Separate purchase orders from expenses; do not combine them

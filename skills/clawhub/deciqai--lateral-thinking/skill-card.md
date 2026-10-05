@@ -1,45 +1,57 @@
-## Description: <br>
-Helps an agent guide users through lateral thinking techniques for stuck problems by reframing the question, challenging assumptions, using random stimulation, extracting concepts, and forming PO springboards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through lateral-thinking techniques to reframe stuck problems, challenge assumptions, generate unconventional directions, and produce a structured Lateral Thinking Report.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when a problem feels exhausted despite a clear definition and they need structured prompts to generate new directions. It is best suited for breakthrough ideation and assumption discovery, not proofs, mathematical optimization, or urgent decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat generated directions or examples as proof, professional advice, or a final decision. <br>
-Mitigation: Use the report as decision-support only; verify sources and have qualified reviewers evaluate important business, legal, technical, or safety claims before acting. <br>
-Risk: The method deliberately challenges constraints and uses absurd PO statements, which can surface impractical or noncompliant ideas. <br>
-Mitigation: Treat provocations as springboards, not proposals, and apply the skill's feasibility screen plus domain, legal, and regulatory review before implementation. <br>
+## Use Case:
 
+Employees, external users, and developers use this skill when a team is stuck in repeated solution patterns and needs a guided creative problem-solving process. It helps an agent facilitate assumption challenge, random stimulation, concept extraction, and PO springboards before screening ideas for feasibility.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/lateral-thinking) <br>
-- [Lateral thinking primary sources](references/sources.md) <br>
-- [IDEO Shopping Cart Redesign example](examples/ideo-shopping-cart-redesign-1999.md) <br>
-- [Lateral Thinking: Creativity Step by Step](https://archive.org/details/lateralthinking00debo) <br>
-- [Creativity and the Default Network](https://doi.org/10.1016/j.neuroimage.2012.09.019) <br>
-- [deciqAI lateral thinking metadata](https://www.deciqai.com/s/lateral-thinking.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown report with structured sections, tables, coaching prompts, and feasibility-screened direction candidates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause for user input during novice coaching; produces decision-support guidance only and does not execute code.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Generated business ideas or problem-solving directions may be incomplete, misleading, or unsuitable where legal, regulatory, or operational constraints apply.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review generated directions before acting on them and validate constraints during the feasibility screen.
+
+Risk: The skill is not appropriate for problems with a mathematical or logical optimum, urgent decisions under five minutes, or tasks requiring rigorous proof.
+
+Mitigation: Redirect those cases to vertical analysis, first-principles reasoning, or a faster inversion exercise as appropriate.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/lateral-thinking)
+- [Sources - lateral-thinking](references/sources.md)
+- [IDEO Shopping Cart Redesign (1999)](examples/ideo-shopping-cart-redesign-1999.md)
+- [Lateral Thinking: Creativity Step by Step](https://archive.org/details/lateralthinking00debo)
+- [Creativity and the Default Network](https://doi.org/10.1016/j.neuroimage.2012.09.019)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, text]
+
+**Output Format:** [Markdown report with structured sections and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Interactive coaching mode may pause at WAIT steps; the skill contains no executable code, credential access, persistence, or hidden high-impact behavior.]
+
+## Skill Version(s):
+
+1.0.4 (source: release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

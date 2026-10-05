@@ -1,0 +1,19 @@
+{
+  "report_predicate": {
+    "where": {
+      "field": "account_status",
+      "operator": "eq",
+      "value": "renewal_due"
+    },
+    "group_by": "region",
+    "aggregate": {
+      "field": "annual_value_minor",
+      "operation": "sum"
+    },
+    "projected_columns": [
+      "group_key",
+      "account_count",
+      "aggregate_value"
+    ]
+  }
+}

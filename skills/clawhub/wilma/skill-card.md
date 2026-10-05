@@ -1,43 +1,59 @@
-## Description: <br>
-Access Finland's Wilma school system from AI agents to fetch schedules, homework, exams, grades, attendance and lesson notes, messages, and news through the wilma CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps AI agents retrieve and summarize schedules, homework, grades, lesson notes, messages, news, and documents from Finland's Wilma school system.
 
-## Publisher: <br>
-[aikarjal](https://clawhub.ai/user/aikarjal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[aikarjal](https://clawhub.ai/user/aikarjal)
 
-## Use Case: <br>
-Parents, guardians, and authorized school users can use this skill to retrieve Wilma student information through non-interactive JSON CLI commands and produce concise summaries of actionable school updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill accesses sensitive student records and Wilma account credentials. <br>
-Mitigation: Install and use it only for Wilma accounts the user is authorized to access, protect the local Wilma config file, and avoid passing TOTP secrets on the command line when possible. <br>
-Risk: AI-generated summaries may contain private student information or omit important context. <br>
-Mitigation: Review summaries before sharing and limit distribution to people who are authorized to see the underlying Wilma data. <br>
+## Use Case:
 
+Parents and guardians use an AI assistant to check their children's Wilma school updates and receive concise, actionable summaries of schedules, homework, exams, messages, and other school records.
 
-## Reference(s): <br>
-- [Wilma Skill on ClawHub](https://clawhub.ai/aikarjal/skills/wilma) <br>
-- [Wilma CLI npm package](https://www.npmjs.com/package/@wilm-ai/wilma-cli) <br>
-- [Wilmai GitHub repository](https://github.com/aikarjal/wilmai) <br>
-- [Wilmai website](https://wilm.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-oriented CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the wilma CLI and a local Wilma configuration file created through an authorized interactive login.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.3 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Access to sensitive children's school records and family messages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only with the account holder's consent and limit access to trusted agents and authorized users.
+
+Risk: School account passwords or two-step verification secrets could be exposed in chat or command history.
+
+Mitigation: Prefer browser login or agent secret settings; never paste passwords into chat or put verification secrets on command lines.
+
+Risk: Downloaded school documents and saved account sessions may persist locally.
+
+Mitigation: Save downloads in a task-specific folder and periodically review or remove saved Wilma accounts.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/aikarjal/skills/wilma)
+- [WilmAI website](https://wilm.ai)
+- [WilmAI project link (listed in skill)](https://github.com/aikarjal/wilmai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Concise written summaries and optional downloaded school documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [School updates are organized by child; dates and times retain their Finnish time-zone offsets.]
+
+## Skill Version(s):
+
+2.0.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

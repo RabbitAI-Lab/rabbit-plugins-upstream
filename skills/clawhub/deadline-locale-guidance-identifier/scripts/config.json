@@ -1,0 +1,27 @@
+{
+  "variant_id": "shadow_12_timezone",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "deadline_request",
+  "output_name": "timezone_mode",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "default_timezone": {
+        "type": "string"
+      },
+      "preserve_labeled": {
+        "type": "boolean"
+      },
+      "region": {
+        "type": "string"
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "string"
+  },
+  "effect": null
+}

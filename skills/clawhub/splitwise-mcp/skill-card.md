@@ -1,44 +1,55 @@
-## Description: <br>
-Access and manage Splitwise expenses, groups, friends, balances, notifications, categories, and currencies through a registered MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read and manage Splitwise expenses, groups, friends, and balances through MCP.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to connect an agent to Splitwise so it can answer questions about shared expenses and perform account-affecting expense or group actions through the Splitwise API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and modify Splitwise account data, including creating, editing, deleting expenses and changing group membership. <br>
-Mitigation: Use explicit confirmations before account-changing actions, review previews carefully, and verify group, user, and expense identifiers before execution. <br>
-Risk: The Splitwise API key authorizes account access and is attached to requests made by the MCP server. <br>
-Mitigation: Keep SPLITWISE_API_KEY private in the MCP environment or local .env file, avoid exposing it in logs or shared configs, and rotate it if exposed. <br>
-Risk: Custom split updates replace the full users array, and deleted expenses are soft-deleted with restoration handled in the Splitwise web app. <br>
-Mitigation: Review the complete split before updates and confirm delete actions only after checking the target expense. <br>
+## Use Case:
 
+People and teams using Splitwise can ask an agent to review balances and shared expenses, manage groups and friends, and make approved changes to expense records.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/chrischall/skills/splitwise-mcp) <br>
-- [splitwise-mcp npm package](https://www.npmjs.com/package/splitwise-mcp) <br>
-- [Splitwise API app registration](https://secure.splitwise.com/apps/register) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, API calls, Configuration, Guidance] <br>
-**Output Format:** [Natural-language guidance with MCP tool calls and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read and modify Splitwise account data when the configured server executes tool calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.3 (source: server release evidence) <br>
+Risk: Access to sensitive Splitwise financial data and account credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for intended account access, review the package, and safeguard the Splitwise API key.
+
+Risk: Expense, group, friend, comment, or user changes may alter shared records.
+
+Mitigation: Review the proposed changes with the user and obtain confirmation before approving writes.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/chrischall/skills/splitwise-mcp)
+- [splitwise-mcp npm package](https://www.npmjs.com/package/splitwise-mcp)
+- [Splitwise API key registration](https://secure.splitwise.com/apps/register)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Configuration instructions, Shell commands]
+
+**Output Format:** [Markdown with optional JSON configuration and Splitwise tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include expense details, balances, group information, and receipts on request.]
+
+## Skill Version(s):
+
+3.2.3 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

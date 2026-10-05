@@ -1,41 +1,54 @@
-## Description: <br>
-Guides developers converting a client-side Next.js App Router static export into an Electron desktop app, including offline Windows packaging, custom app protocol setup, locale and window persistence, system tray behavior, and GitHub Actions builds. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in packaging a client-side Next.js static export as an offline Windows Electron app without requiring WebView2.
 
-## Publisher: <br>
-[rockbenben](https://clawhub.ai/user/rockbenben) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rockbenben](https://clawhub.ai/user/rockbenben)
 
-## Use Case: <br>
-Developers and engineers use this skill to wrap static-export Next.js applications in Electron for Windows desktop distribution, especially for offline or intranet machines without WebView2. It provides implementation guidance, shell commands, configuration, and copy-paste templates for Electron, electron-builder, and CI release workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Electron and GitHub Actions templates may not match the target repository's project names, checkout branch, release permissions, or contents:write policy. <br>
-Mitigation: Review and adjust generated templates before use, especially app identifiers, workflow refs, release upload behavior, and repository permissions. <br>
-Risk: Desktop packaging guidance affects local application state and must be verified on the intended Windows runtime environment. <br>
-Mitigation: Confirm local persistence is limited to expected app state such as locale and window size, then test the built app on target Windows machines before distribution. <br>
+## Use Case:
 
+Developers use this skill to turn client-side Next.js static exports into self-contained Windows desktop apps for offline or intranet computers without WebView2. It provides Electron source templates, packaging steps, tests, and CI release guidance.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rockbenben/nextjs-to-electron) <br>
-- [electron-files.md](electron-files.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and code/configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces project-specific instructions and copy-paste Electron, electron-builder, and GitHub Actions templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: A copied CI release template may use unsuitable release permissions or action versions for the destination repository.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review release permissions, dependency versions, and action versions before enabling the workflow.
+
+Risk: The generated app writes local settings and may remain active in the Windows tray after its window closes.
+
+Mitigation: Inform users about the settings file and provide a clear tray Quit action.
+
+## Reference(s):
+
+- [Project homepage (listed in skill metadata)](https://github.com/rockbenben/aishort-skills/tree/main/skills/nextjs-to-electron)
+- [ClawHub skill listing](https://clawhub.ai/rockbenben/skills/nextjs-to-electron)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with code and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes Windows packaging and CI release templates; the resulting app may save local settings and remain in the tray until quit.]
+
+## Skill Version(s):
+
+1.1.6 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

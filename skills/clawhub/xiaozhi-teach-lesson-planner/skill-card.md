@@ -1,45 +1,59 @@
-## Description: <br>
-教案设计器 helps teachers turn lesson ideas into UbD-aligned, core-competency lesson plans with assessment evidence, Bloom question chains, time matrices, and optional A/B/C differentiation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese K–12 teachers draft UbD-based lesson plans with observable goals, assessment evidence, timed activities, question prompts, and differentiated tasks.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External teachers use this skill to draft and refine Chinese-language lesson plans, review-class plans, question chains, and differentiated task cards from curriculum goals and optional de-identified learning summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lesson planning may involve student-learning summaries or classroom observations. <br>
-Mitigation: Provide only de-identified or aggregate learning data, and avoid real student names, family identifiers, or individual rankings. <br>
-Risk: Generated lesson plans may be pedagogically incomplete or unsuitable for a specific class. <br>
-Mitigation: Teachers should review and adjust goals, tasks, timing, and questions before using the plan in class. <br>
-Risk: A/B/C differentiated plans depend on an existing learning summary. <br>
-Mitigation: Use the basic lesson-plan mode when no learning summary is available, and do not invent class or student data. <br>
+## Use Case:
 
+Teachers in Chinese K–12 settings use this skill to draft single-lesson or unit plans, including assessment criteria, questioning sequences, and A/B/C differentiated activities when class-level data is available. Teachers review the drafts before classroom or parent-facing use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner) <br>
-- [Core output templates](references/core-output-templates.md) <br>
-- [Layered lesson example](references/layered-lesson-example.md) <br>
-- [Lesson plan template](references/lesson-plan-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (adapt curriculum, privacy controls, and safety referrals before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown lesson plans, task cards, question chains, and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language output; differentiated plans depend on supplied de-identified learning summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Class teaching records may expose sensitive student or class-level information, particularly when shared with other skills or parents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check workspace consent and sharing settings, omit identifying student details, and have a teacher review any parent-facing output.
+
+Risk: Curriculum assumptions and safety referral information are tailored to mainland China.
+
+Mitigation: Before use elsewhere, verify local curriculum, minor-data requirements, and appropriate local help channels.
+
+Risk: AI-drafted activities or example questions may contain pedagogical or factual errors.
+
+Mitigation: Have a teacher verify the lesson plan and any generated questions before classroom use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-lesson-planner)
+- [Lesson plan template](artifact/references/lesson-plan-template.md)
+- [Differentiated lesson example](artifact/references/layered-lesson-example.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown lesson plans and question-chain drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Differentiated A/B/C tasks require available class-level tier data; otherwise the plan identifies the missing data and uses a basic version.]
+
+## Skill Version(s):
+
+2.10.0 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,54 @@
-## Description: <br>
-What is the state of the Hyperliquid perp market? Top contracts by volume/OI, trader leaderboard, and SM perp activity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Screens Hyperliquid perpetual futures for leading contracts, trader rankings, and smart-money activity using Nansen CLI.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers and analysts use this skill to query Nansen market-data views for Hyperliquid perpetual contracts, trader leaderboards, and smart-money perpetual trade activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires NANSEN_API_KEY to be available to the nansen-cli package. <br>
-Mitigation: Install and use it only in environments where sharing that credential with the third-party CLI is acceptable, and scope or rotate the key according to local policy. <br>
-Risk: The workflow depends on a third-party CLI package for market-data queries. <br>
-Mitigation: Review the nansen-cli package provenance before installation and keep execution limited to the documented read-only Nansen market-data commands. <br>
+## Use Case:
 
+Traders and market researchers use the skill to inspect Hyperliquid perpetual-futures volume, open interest, trader leaderboards, and smart-money trades with Nansen CLI filters.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/skills/nansen-perp-screener) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown text with Nansen CLI command examples and market-data field descriptions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen CLI and NANSEN_API_KEY for live market-data queries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server evidence release.version) <br>
+Risk: Research requests and loops may consume credits or trigger authorized x402 wallet payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check account entitlements, wallet authorization, payment policy, and spending limits before running calls, especially loops.
+
+Risk: API keys and saved browser sessions grant access to Nansen account research.
+
+Mitigation: Use an explicitly selected credential, check authentication status, and stop on authentication failure rather than switching to anonymous paid access.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/nansen-devops/skills/nansen-perp-screener)
+- [Nansen CLI browser login preview scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with Nansen CLI commands and market summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on live Nansen market data and selected filters.]
+
+## Skill Version(s):
+
+0.1.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

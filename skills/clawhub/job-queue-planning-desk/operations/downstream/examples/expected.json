@@ -1,0 +1,8 @@
+{
+  "recorded_profile": {
+    "queue_entry_id": "job_6253a9248bd7",
+    "processing_profile": "batch-balanced",
+    "queue_lane": "standard-batch",
+    "chunk_count": 25
+  }
+}

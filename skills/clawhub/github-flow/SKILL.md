@@ -4,10 +4,11 @@ metadata:
   author: es6kr
   version: "0.1.0"
 depends-on:
+  - cleanup
   - code-workflow
   - web-browser
 description: |
-  GitHub issue/PR workflow automation. Topics — auth-scope (gh CLI priority + account mapping + batch scope refresh + 404 checklist), commit-message-discipline (commit message authoring + amend refresh + PUBLIC English enforcement), dependencies (blocked-by/sub-issues via GraphQL), epic-bundle (deferred findings → Epic + sub-issues), expand (expand-vs-split mid-work), identity-auth (gh account map + scope refresh + GH_TOKEN fallback), merge (CI/review gates + no autonomous push), plan-to-issue (MD → issue body), pr (PR with test plan), push-guards (branch/push-reject/force-push/main-push), register (dup check + strategy), review (structured comments), review-apply (deferred feedback apply), sanitize (PUBLIC repo personal data scan), upstream-issue (external OSS feature/bug). Use when: "plan to issue", "issue register", "create PR", "PR body", "code review", "merge PR", "PR squash", "sanitize", "PII", "expand PR", "blocked by", "epic bundle", "upstream issue", "review apply", "sub-issue", "gh auth", "force push", "push reject", "branch change forbid", "auth scope", "account mapping", "scope refresh", "commit message", "PUBLIC repo English".
+  GitHub issue/PR workflow automation. Topics — auth-scope (gh CLI priority + account mapping + batch scope refresh + 404 checklist), commit-message-discipline (commit message authoring + amend refresh + PUBLIC English enforcement), dependencies (blocked-by/sub-issues via GraphQL), epic-bundle (deferred findings → Epic + sub-issues), expand (expand-vs-split mid-work), identity-auth (gh account map + scope refresh + GH_TOKEN fallback), merge (CI/review gates + no autonomous push), plan-to-issue (MD → issue body), pr (PR with test plan), publish (branch + draft PR + CI watch + ready + merge, one topic), push-guards (branch/push-reject/force-push/main-push), register (dup check + strategy), review (structured comments), review-apply (deferred feedback apply), sanitize (PUBLIC repo personal data scan), upstream-issue (external OSS feature/bug). Use when: "plan to issue", "issue register", "create PR", "PR body", "code review", "merge PR", "PR squash", "sanitize", "PII", "expand PR", "blocked by", "epic bundle", "upstream issue", "review apply", "sub-issue", "gh auth", "force push", "push reject", "branch change forbid", "auth scope", "account mapping", "scope refresh", "commit message", "PUBLIC repo English".
 ---
 
 # GitHub Flow
@@ -26,7 +27,8 @@ Convert plans, research, and implementation results into GitHub issues and PRs.
 | identity-auth | Owner-based gh account mapping for commit author identity + gh auth scope refresh + GH_TOKEN env fallback for org repo 404 | [identity-auth.md](./identity-auth.md) |
 | merge | CI success and AI review check then merge with commit cleanup, including pre-merge blockedBy verification | [merge.md](./merge.md) |
 | plan-to-issue | Convert plan/research MD to GitHub issue body or comments | [plan-to-issue.md](./plan-to-issue.md) |
-| pr | Create PR with structured body, test plan, and optional visual attachments | [pr.md](./pr.md) |
+| pr | Create PR with structured body, test plan, and optional visual attachments. Every distinct PR number in an AskUserQuestion payload needs its own clickable URL — this is an authoring rule you apply yourself. `resources/block-pr-url-gate.sh` exists but is **not currently registered in any hook config**, so nothing enforces it at runtime | [pr.md](./pr.md) |
+| publish | Package a working-tree change into its own branch + draft PR against a staging-base branch, watch CI, ready-transition, content-review ask, merge — the full repeated sequence in one topic | [publish.md](./publish.md) |
 | push-guards | Branch-change ask + push rejection ask + force-push CI status check + main/master push restriction + shared-branch direct-push restriction | [push-guards.md](./push-guards.md) |
 | register | Evaluate duplicates and decide registration strategy (new issue vs comment vs sub-issue) | [register.md](./register.md) |
 | review | Review PR code and post structured review comments | [review.md](./review.md) |
@@ -85,3 +87,15 @@ Every issue body and PR body must include a verification/test plan section. This
 | Discussion items / open questions | Issue comment | Threaded, time-stamped, doesn't clutter body |
 | Progress updates | Issue comment | Chronological record |
 | Review feedback summary | Issue comment | Preserves review history |
+
+### 4. Check for existing open PRs before starting repo-wide fix work (HARD STOP)
+
+Before starting work on a repo-wide or config-level problem (broken CI config, a stale/misconfigured file affecting many components, a systemic lint failure, etc.), run `gh pr list -R <owner>/<repo> --state open` and skim titles for the same problem. Someone (including a past session under your own account) may have already fixed it in an unmerged PR.
+
+**Why**: independently re-deriving a fix that already exists in an open PR wastes the work, and — worse — if both land, the later one can silently supersede or conflict with the earlier one without either author knowing. Case: a claude-plugins CI-fix session spent significant work rebuilding `release-please-config.json`'s `packages` list from scratch, unaware that PR #17 (same author, ~7 hours earlier) had already implemented the identical fix; PR #17 had to be closed as superseded once the duplication was discovered mid-review.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Jump straight into fixing a CI/config-level problem because it's clearly broken | `gh pr list --state open` first — skim titles for the same file/problem area |
+| 2 | Assume "I'd have noticed if this were already being worked on" | Open PRs from earlier in the same day (even your own past sessions) are easy to miss without an explicit check |
+| 3 | Only check open PRs when multiple sessions are known to be active | Run the check unconditionally before repo-wide fix work — it's a single `gh pr list` call |

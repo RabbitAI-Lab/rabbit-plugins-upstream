@@ -1,41 +1,54 @@
-## Description: <br>
-What are crypto funds and VCs holding right now? Cross-chain fund portfolios and net accumulation signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tracks crypto fund and venture capital holdings across Ethereum and Solana and compares their net accumulation signals.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External analysts, researchers, and agents use this skill to query Nansen smart-money holdings and netflow data for crypto funds and VCs across Ethereum and Solana. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the external nansen-cli package and a Nansen API key. <br>
-Mitigation: Confirm the package source before installation and provide an API key with only the access needed for research queries. <br>
-Risk: Unexpected Nansen CLI commands could expose more account data than intended if the API key has broad permissions. <br>
-Mitigation: Review proposed nansen commands before execution, especially when using API keys with privileges beyond read-only research. <br>
+## Use Case:
 
+Crypto researchers and investors use this skill to compare fund token holdings and net flows across Ethereum and Solana.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-fund-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/nansen-devops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen CLI and NANSEN_API_KEY.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: Research calls, including repeated calls, may consume credits or trigger authorized wallet payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review credits, wallet authorization, and spending limits before running research commands or loops.
+
+Risk: A missing or failed account session may prevent research calls.
+
+Mitigation: Select an API key or saved browser session, check authentication status, and stop if authentication fails rather than switching to anonymous paid access.
+
+## Reference(s):
+
+- [Nansen Fund Tracker on ClawHub](https://clawhub.ai/nansen-devops/skills/nansen-fund-tracker)
+- [Nansen CLI browser login preview scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with bash commands and fund holdings and net-flow analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses Nansen CLI research results for Ethereum and Solana; results depend on current account access and available data.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

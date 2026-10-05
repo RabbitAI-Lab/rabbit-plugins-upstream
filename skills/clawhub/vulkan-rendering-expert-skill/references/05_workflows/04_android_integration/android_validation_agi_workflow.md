@@ -153,7 +153,7 @@ Android Application
    - 也可使用 System Profiler 连续抓取多帧，分析 frame time 与 counter 趋势 [TOOL]。
 6. **分析 Validation Layer 输出**：
    - `adb logcat -s vulkan` 过滤 `VUID-` 前缀；按 VUID 在 Vulkan-Docs 或 `../../03_api_manual/09_debug_validation/vuid_decode.md` 查找含义 [TOOL]。
-   - 优先修复 `SYNC-HAZARD-*`、`VUID-vkCmdDraw-*-None-02721`（descriptor 未更新）、`VUID-vkCmdPipelineBarrier-oldLayout-01181` [TOOL]。
+   - 优先修复 `SYNC-HAZARD-*`、`VUID-vkCmdDraw-*-None-02721`（pipeline 未绑定到 graphics bind point）、`VUID-VkImageMemoryBarrier-oldLayout-01197` [TOOL]。
 7. **分析 AGI Barrier**：
    - 打开 Frame → Command Tree，定位到可疑 draw / dispatch。
    - 查看 Events / Dependencies 面板，确认 producer/consumer stage 与 access mask [TOOL]。
@@ -235,15 +235,15 @@ Android Application
 ## 13. 相关 Debug Playbook
 
 - `../../04_debug_playbooks/03_validation_errors/validation_error_decode.md`
-- `../../04_debug_playbooks/03_validation_errors/synchronization_hazard.md`
-- `../../04_debug_playbooks/03_validation_errors/image_layout_error.md`
-- `../../04_debug_playbooks/03_validation_errors/descriptor_binding_error.md`
+- `../../04_debug_playbooks/03_validation_errors/layout_sync_hazard_errors.md`
+- `../../04_debug_playbooks/03_validation_errors/layout_sync_hazard_errors.md`
+- `../../04_debug_playbooks/03_validation_errors/descriptor_pipeline_layout_errors.md`
 - `../../04_debug_playbooks/04_resource_sync/compute_graphics_sync_error.md`
 - `../../04_debug_playbooks/04_resource_sync/compute_no_output.md`
 - `../../04_debug_playbooks/02_crash_hang/device_lost.md`
 - `../../04_debug_playbooks/02_crash_hang/gpu_hang.md`
 - `../../04_debug_playbooks/05_android_specific/android_surface_lifecycle.md`
-- `../../04_debug_playbooks/06_performance_symptoms/barrier_overuse.md`
+- `../../04_debug_playbooks/06_performance_symptoms/barrier_draw_call_stall.md`
 - `../../04_debug_playbooks/06_performance_symptoms/gpu_frame_time_high.md`
 
 ---

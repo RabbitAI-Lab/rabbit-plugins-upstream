@@ -1,45 +1,54 @@
-## Description: <br>
-Analyzes fixed-camera kindergarten or early-education video to identify child social-interaction events, summarize pairwise frequency and duration, and generate social-interaction reports and heatmaps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes group video from kindergartens and early-education settings to summarize children's social interaction frequency, duration, and patterns in reports and heatmaps.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Teachers, school staff, parents, and education-support developers use this skill to analyze classroom, playground, or early-education video for pairwise child interaction counts, durations, initiators, heatmaps, and low-interaction candidates. Outputs are educational support signals and should not be treated as medical, psychological, or autism-screening results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes sensitive video or URL inputs involving children through a remote analysis service. <br>
-Mitigation: Use only with clear guardian and school consent, confirm that remote processing is permitted, and handle source media and report links according to the organization's child privacy requirements. <br>
-Risk: Social-interaction statistics or low-interaction flags could be mistaken for clinical, psychological, or autism-screening conclusions. <br>
-Mitigation: Present outputs as educational support signals only and direct users to qualified child-development or medical professionals for any developmental concerns. <br>
-Risk: The evidence flags automatic identity/account handling, history access, and persistent tokens with limited user control. <br>
-Mitigation: Review account binding, token storage, report retention, and history-access permissions before installing or operating the skill. <br>
+## Use Case:
 
+Teachers and early-education staff use the skill to review video-based counts and durations of interactions between children, identify children who may need additional attention, and retrieve historical reports. Results are educational aids, not developmental or medical diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-social-interaction-analysis-analysis) <br>
-- [Child social interaction API documentation](references/api_doc.md) <br>
-- [SMYX analysis API error documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown summaries with optional JSON detail and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include interaction statistics, initiator summaries, low-interaction candidate flags, heatmap URLs, exported report links, and historical report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Children's videos and social-interaction reports are sent to external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain guardian and institution consent before use, and verify the services' retention and deletion practices.
+
+Risk: Automatic identity reuse and locally stored tokens may expose sensitive reports.
+
+Mitigation: Restrict access to historical reports and exports, and protect the workspace data directory as sensitive.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-child-social-interaction-analysis-analysis)
+- [API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Markdown, JSON]
+
+**Output Format:** [Text or JSON analysis reports; Markdown tables and links for historical reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include per-child interaction counts, durations, alerts, and heatmap or report links.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,60 @@
-## Description: <br>
-Zoom Admin provides a managed OAuth integration for administering Zoom users, meetings, webinars, recordings, and account settings with admin-level access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps administer Zoom users, meetings, webinars, recordings, and account settings through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External developers and operations administrators use this skill to administer an explicitly authorized Zoom workspace through Maton's managed OAuth gateway. It supports listing and managing users, meetings, webinars, recordings, connections, and account settings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent could administer the wrong Zoom account if multiple OAuth connections are active. <br>
-Mitigation: Specify the intended Maton connection when multiple accounts exist and confirm the account before making requests. <br>
-Risk: Admin-level create, update, or delete actions can change users, meetings, webinars, recordings, or account settings. <br>
-Mitigation: Review each write action, including the target resource and intended effect, before approval. <br>
-Risk: An authorized connection may retain access longer than needed. <br>
-Mitigation: Revoke the Maton Zoom connection when the administrative task is complete or access is no longer needed. <br>
+## Use Case:
 
+Zoom workspace administrators use this skill to inspect account resources and, with explicit approval, manage users, meetings, webinars, recordings, and settings.
 
-## Reference(s): <br>
-- [Zoom Admin skill page](https://clawhub.ai/byungkyu/skills/zoom-admin-api) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline HTTP paths and Python, JavaScript, or shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY, network access, and an explicitly authorized Zoom Admin OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Admin access can expose or change other users' Zoom resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Authorize only the intended account with the minimum scopes, favor read-only requests, and confirm each write and new connection.
+
+Risk: Bulk retrieval of other users' recordings may expose sensitive content.
+
+Mitigation: Avoid bulk access and retrieve only the recordings needed for the approved task.
+
+Risk: Triggers or destinations can send data automatically beyond the immediate task.
+
+Mitigation: Confirm the data, recipient, and retention period before creating any trigger or destination.
+
+## Reference(s):
+
+- [Zoom API documentation](https://developers.zoom.us/docs/api/)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton](https://maton.ai)
+- [Zoom Admin skill release](https://clawhub.ai/byungkyu/skills/zoom-admin-api)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with command and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations and examples depend on the authorized Zoom account and its available scopes.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

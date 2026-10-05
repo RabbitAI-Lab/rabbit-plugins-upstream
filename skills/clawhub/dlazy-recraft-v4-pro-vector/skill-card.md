@@ -1,45 +1,56 @@
-## Description: <br>
-Generates high-fidelity text-to-vector assets with 4MP-tier quality for production-grade SVG-style assets and detailed illustrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create detailed vector artwork from text prompts using dLazy's Recraft V4 Pro Vector service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to call the dLazy hosted Recraft V4 Pro Vector CLI, submit prompts, and receive generated vector or image output URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and selected local files to dLazy-hosted services. <br>
-Mitigation: Review prompts and files for sensitive data before execution and use the service only when that data transfer is acceptable. <br>
-Risk: Authentication requires a dLazy API key that may be stored in local CLI configuration. <br>
-Mitigation: Use DLAZY_API_KEY per invocation when local persistence is undesirable, and rotate or revoke keys from dLazy when needed. <br>
-Risk: Installing the pinned npm CLI adds third-party executable code to the environment. <br>
-Mitigation: Review the pinned @dlazy/cli package or source before installing, and consider npx @dlazy/cli@1.2.3 to avoid a persistent global install. <br>
+## Use Case:
 
+Designers, developers, and other creators use this skill to request detailed vector artwork and illustrations from text prompts.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro-vector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON output containing generated asset URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; generated outputs are returned as files.dlazy.com URLs, with optional async task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Prompts and any files explicitly provided may be sent to dLazy's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and selected files for sensitive information before submitting them.
+
+Risk: Logging in can save a dLazy API key locally.
+
+Mitigation: Protect the local configuration and rotate or revoke the key through the dLazy dashboard if needed.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-pro-vector)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generation results can include a hosted image URL or be saved locally.]
+
+## Skill Version(s):
+
+1.3.24 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

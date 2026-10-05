@@ -1,43 +1,54 @@
-## Description: <br>
-Choose low-token Sendmux calls across MCP, CLI, SDKs, and HTTP by using snippets, counts, batches, deltas, cursors, ETags, and idempotency. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Choose low-token Sendmux calls across MCP, CLI, SDKs, and HTTP by using snippets, counts, batches, deltas, cursors, ETags, and idempotency.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and agents use this skill to choose efficient Sendmux operations for authorized email, mailbox, management, and API workflows while minimizing unnecessary reads, sends, retries, and attachment transfer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agents may access Sendmux keys or agent tokens while performing authorized workflows. <br>
-Mitigation: Keep key and token scopes narrow, use the appropriate Sendmux credential type for each surface, and do not ask users to paste secrets into chat. <br>
-Risk: Sends, deletes, provider changes, and other account-impacting actions can have side effects. <br>
-Mitigation: Require explicit approval for account-impacting actions and use idempotency keys for supported mutations and retries. <br>
-Risk: Full mailbox reads, broad log scans, or inline attachment transfer can expose unnecessary content and consume excess context. <br>
-Mitigation: Prefer counts, snippets, small limits, batch reads, deltas, cursors, ETags, and file paths or presigned URLs for attachments. <br>
+## Use Case:
 
+Developers and agents use this guide to choose efficient Sendmux email, mailbox, and management operations while limiting unnecessary data retrieval and repeated requests.
 
-## Reference(s): <br>
-- [Sendmux skills repository](https://github.com/Sendmux/skills) <br>
-- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-token-efficient-usage) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions] <br>
-**Output Format:** [Markdown with tables and inline bash/code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides route, batching, pagination, idempotency, and attachment-handling guidance for Sendmux workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata; artifact frontmatter says 1.3.0) <br>
+Risk: Send, delete, or management actions can change account data or send email.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each requested action before execution and grant management access only when needed.
+
+Risk: Broad credentials or unnecessary mailbox reads can expose sensitive content.
+
+Mitigation: Use scoped credentials where possible, keep secrets out of chat, and prefer snippets or targeted reads.
+
+## Reference(s):
+
+- [Sendmux skills homepage (listed in skill metadata)](https://github.com/Sendmux/skills)
+- [ClawHub skill release](https://clawhub.ai/sendmux.ai/skills/sendmux-token-efficient-usage)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown guidance with command and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommends scoped credentials, narrow reads, batching, and safe retries.]
+
+## Skill Version(s):
+
+1.0.11 (source: ClawHub release metadata; artifact frontmatter says 1.7.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

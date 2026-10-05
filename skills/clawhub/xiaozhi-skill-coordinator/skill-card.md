@@ -1,42 +1,59 @@
-## Description: <br>
-Coordinates mistake notebooks, Feynman tests, Cornell notes, study plans, and focus data only for explicit learning tasks with user consent and minimal necessary summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes Chinese K–12 learning requests to the appropriate study skill and, with user consent, summarizes authorized learning data in a monthly report.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and learning assistants use this skill to decide when to coordinate mistake review, explanation checks, note retrieval, study planning, focus coaching, reminders, and monthly learning-system summaries. It is intended for explicit user-requested coordination rather than automatic broad data collection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill coordinates summaries from multiple learning skills, which can expose more learner context than a single-skill workflow. <br>
-Mitigation: Use it only for explicit coordination, system-check, or monthly-report tasks, and keep inputs limited to the minimum necessary authorized summaries. <br>
-Risk: Study-profile writebacks or reminder synchronization could persist incorrect or unwanted updates if used without consent. <br>
-Mitigation: Require explicit user permission before writebacks or reminder sync, and block malformed handover data with the provided schema before persistence. <br>
+## Use Case:
 
+Chinese K–12 students, with adult supervision for primary grades, use this skill to find the right study support and request a consolidated monthly learning report. Parents and educators can review authorized summaries where sharing permissions allow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator) <br>
-- [One-week linkage record](references/one-week-linkage-record.md) <br>
-- [Handover protocol schema](schemas/handover-protocol.schema.json) <br>
+### Deployment Geography for Use:
 
+Mainland China; adapt curriculum, consent practices, and crisis-support contacts before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with optional structured JSON handover blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses consent-gated summaries and schema-validated handover payloads when coordinating with related learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Cross-skill summaries and sharing can expose a student's learning or emotional information beyond the intended audience.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review cross-skill, profile, teacher writeback, parent sharing, and reminder permissions before use; summarize only authorized, task-relevant data.
+
+Risk: Curriculum assumptions, consent practices, and crisis-support contacts may not fit deployments outside mainland China.
+
+Mitigation: Localize the curriculum, consent rules, and crisis-support contacts before deploying elsewhere.
+
+Risk: A monthly report may imply historical coverage when prior learning records are unavailable.
+
+Mitigation: Limit the report to information provided in the current session and clearly state its coverage; do not invent historical figures.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-coordinator)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [One-week learning coordination example](references/one-week-linkage-record.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, JSON]
+
+**Output Format:** [Chinese-language text or Markdown reports; structured handoff data when authorized]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Monthly reports require a user request or consent; the skill does not teach lessons or send reminders itself.]
+
+## Skill Version(s):
+
+2.10.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

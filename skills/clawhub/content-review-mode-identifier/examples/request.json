@@ -1,0 +1,10 @@
+{
+  "content_profile": {
+    "fields": [
+      "display_name",
+      "email"
+    ],
+    "contains_personal_fields": true,
+    "requested_tier": "restricted"
+  }
+}

@@ -1,42 +1,63 @@
-## Description: <br>
-Analyzes child study-area video from a smart desk lamp or tabletop camera to estimate focus scores, identify distraction periods, and return structured study-behavior reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes children's study-area videos for focus scores and distraction periods, and provides reports and access to historical results.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to submit a child study-area video or URL and receive visual focus metrics, distraction-event summaries, historical report listings, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child study videos, URLs, and identifiers may be processed by the vendor's cloud service. <br>
-Mitigation: Use only with appropriate guardian consent, and confirm the vendor's retention, deletion, and access-control practices before submitting sensitive child media. <br>
-Risk: The skill may silently create or reuse a local identity and cache service tokens in a workspace SQLite database. <br>
-Mitigation: Prefer a version that asks for explicit consent before uploads or identity creation, and inspect and remove stored identity or token data after use. <br>
+## Use Case:
 
+Parents and teachers use study-area video analysis to review a child's estimated focus scores, distraction periods, and historical reports as aids to understanding study habits, not as a substitute for direct observation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-focus-analysis-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, files] <br>
-**Output Format:** [Markdown or JSON analysis output, with optional saved result files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [History report lists are rendered as Markdown tables; analysis results may include focus scores, distraction events, alerts, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter reports 1.0.7) <br>
+Risk: Children's study-area media or URLs are sent to external cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain guardian consent before use and govern media access, transmission, and retention.
+
+Risk: Cloud history access and silently created or reused identities may expose reports to the wrong account.
+
+Mitigation: Confirm account ownership and restrict and audit access to historical reports.
+
+Risk: Authentication tokens are stored locally.
+
+Mitigation: Protect local credentials and limit access to the device and account.
+
+Risk: Estimated focus scores can be mistaken for definitive assessments of a child.
+
+Mitigation: Treat scores as supplementary and confirm findings through direct observation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-focus-analysis-analysis)
+- [Skill API documentation](references/api_doc.md)
+- [Skill usage introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON]
+
+**Output Format:** [Structured report or Markdown table; optional JSON output and saved result file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Estimated per-minute focus scores, distraction periods, and report links when available]
+
+## Skill Version(s):
+
+1.0.12 (source: ClawHub release metadata; bundled skill frontmatter says 1.0.18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

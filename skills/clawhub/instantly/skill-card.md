@@ -1,47 +1,55 @@
-## Description: <br>
-Instantly API integration with managed OAuth for managing cold email campaigns, leads, sending accounts, email workflows, and analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Instantly cold-email campaigns, leads, sending accounts, email, and analytics through a Maton-managed connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to operate Instantly through Maton's managed API gateway, including managing campaigns, leads, sending accounts, email workflows, and analytics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Approved write actions can create, modify, delete, send, reply to, or forward business email and lead data in the connected Instantly workspace. <br>
-Mitigation: Confirm the target connection, resource, recipient or campaign, and intended effect with the user before any write request. <br>
-Risk: Using the wrong Instantly connection can apply actions to the wrong account or workspace. <br>
-Mitigation: When multiple connections exist, require the intended connection and include the documented Maton-Connection header. <br>
-Risk: The Maton API key grants access to connected Instantly resources. <br>
-Mitigation: Keep MATON_API_KEY in the environment only, do not print it in outputs, and install the skill only when the user intends Maton-mediated Instantly access. <br>
+## Use Case:
 
+Sales and marketing teams and developers use this skill to review outreach results, manage campaigns, leads, and sending accounts, and perform approved email or automation actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/instantly) <br>
-- [Maton homepage](https://maton.ai) <br>
-- [API Gateway skill](https://clawhub.ai/byungkyu/api-gateway) <br>
-- [Instantly API V2 documentation](https://developer.instantly.ai/api-reference) <br>
-- [Instantly API introduction](https://developer.instantly.ai/) <br>
-- [Instantly Help Center](https://help.instantly.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Python, JavaScript, HTTP, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a MATON_API_KEY environment variable, and user approval before write operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Connected outreach and automation actions can change campaigns, leads, sender accounts, emails, or destinations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only operations and approve each connection, write, send, delete, function, trigger, or destination change explicitly.
+
+Risk: Sharing mailbox passwords or long-lived API keys can expose account access.
+
+Mitigation: Prefer managed OAuth and avoid giving the agent mailbox passwords or long-lived API keys unless absolutely necessary.
+
+## Reference(s):
+
+- [Instantly skill on ClawHub](https://clawhub.ai/byungkyu/skills/instantly)
+- [Maton](https://maton.ai)
+- [Instantly API reference](https://developer.instantly.ai/api-reference)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with shell and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.2.7 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

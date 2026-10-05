@@ -1,41 +1,53 @@
-## Description: <br>
-File provenance tracking, authority levels, commit conventions, and governance policies for accountable agent-maintained instruction, topic, contact, and memory files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tracks authorship and review history for agent instruction and memory files with provenance headers, git conventions, and scheduled or on-demand review guidance.
 
-## Publisher: <br>
-[richgoodson](https://clawhub.ai/user/richgoodson) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[richgoodson](https://clawhub.ai/user/richgoodson)
 
-## Use Case: <br>
-Developers and agent operators use this skill to keep agent-authored workspace memory and instruction changes reviewable through provenance headers, authority levels, review cadences, and git commit conventions. It is suited to OpenClaw workspaces where agents maintain files such as AGENTS.md, MEMORY.md, topic files, and contact notes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to maintain provenance headers, schedule OpenClaw cron checks, and commit changes to instruction and memory files. <br>
-Mitigation: Install only in workspaces where that behavior is acceptable, review git history and diff reports, and keep human review dates current. <br>
-Risk: Provenance headers, contact notes, and commit messages could accidentally include sensitive values if users or agents record too much detail. <br>
-Mitigation: Record the existence and storage location of credentials, not secret values, and keep secrets out of headers, notes, and commit messages. <br>
+## Use Case:
 
+OpenClaw users and agent operators use this skill to track who changed instruction and memory files, review stale material, and produce audit-friendly change reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/richgoodson/agent-provenance) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/richgoodson) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with provenance header templates, review prompts, commit-message conventions, and OpenClaw cron/check instructions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires OpenClaw and git in the workspace; no API keys or external channel credentials are required by default.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server release metadata and skill frontmatter) <br>
+Risk: Changes to agent instruction and memory files can affect future agent behavior or expose private context in reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed edits and reports, preserve user-owned rules, and avoid secrets in provenance headers and commit messages.
+
+Risk: An optional weekly check continues running until disabled or removed.
+
+Mitigation: Enable it only after explicit user consent and use the documented OpenClaw automation commands to disable or remove it.
+
+## Reference(s):
+
+- [Agent Provenance on ClawHub](https://clawhub.ai/richgoodson/skills/agent-provenance)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown reports and guidance with optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [On-demand change reports; optional weekly reports only with user approval.]
+
+## Skill Version(s):
+
+2.2.1 (source: skill metadata and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
