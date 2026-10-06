@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/saelens",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/saelens",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/saelens",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "9aaa5090e17661902e65961f17e1bb1779d63613b63367af9e144a13348b5154",
+  "fetchedAt": "2026-10-06T14:16:16.798Z"
+}

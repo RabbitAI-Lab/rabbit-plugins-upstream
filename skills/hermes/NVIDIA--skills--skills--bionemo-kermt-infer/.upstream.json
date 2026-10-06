@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-kermt-infer",
+  "identifier": "NVIDIA/skills/skills/bionemo-kermt-infer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-kermt-infer",
+  "branch": "main",
+  "pushedAt": "2026-10-06T07:06:10Z",
+  "contentHash": "d2aad5ec94624a57050112a49a92219160decc2146e139f38141890f8087330b",
+  "fetchedAt": "2026-10-06T14:16:15.175Z"
+}

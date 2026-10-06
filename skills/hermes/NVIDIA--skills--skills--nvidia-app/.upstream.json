@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvidia-app",
+  "identifier": "NVIDIA/skills/skills/nvidia-app",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvidia-app",
+  "branch": "main",
+  "pushedAt": "2026-10-06T07:06:10Z",
+  "contentHash": "e8dce61104c17cb76eeda6c1627cdbdae35192f2fb564133680978ffa86b7f1b",
+  "fetchedAt": "2026-10-06T14:16:15.242Z"
+}

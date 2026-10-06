@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/drug-design",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/drug-design",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/drug-design",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "ee3163e09cc9e136180b800948a0d70f20810cb6e965fcc86a80756f978b5c5c",
+  "fetchedAt": "2026-10-06T14:16:16.646Z"
+}

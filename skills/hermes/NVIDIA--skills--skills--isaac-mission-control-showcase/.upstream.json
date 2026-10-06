@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/isaac-mission-control-showcase",
+  "identifier": "NVIDIA/skills/skills/isaac-mission-control-showcase",
+  "repo": "NVIDIA/skills",
+  "path": "skills/isaac-mission-control-showcase",
+  "branch": "main",
+  "pushedAt": "2026-10-06T07:06:10Z",
+  "contentHash": "87900395dccc70eb52dfd2491a01c119d4126259d7663fc172a35bd2869c2891",
+  "fetchedAt": "2026-10-06T14:16:15.149Z"
+}

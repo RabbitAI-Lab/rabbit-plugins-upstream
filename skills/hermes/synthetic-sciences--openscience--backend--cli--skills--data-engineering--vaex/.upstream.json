@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/vaex",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/vaex",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/vaex",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "4e57d951f91603e5114442c551218a6b9620191c31906b84f65b4ce4afff4c6c",
+  "fetchedAt": "2026-10-06T14:16:16.830Z"
+}
