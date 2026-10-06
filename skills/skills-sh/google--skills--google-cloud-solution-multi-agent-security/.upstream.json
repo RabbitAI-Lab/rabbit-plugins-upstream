@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-solution-multi-agent-security",
+  "repo": "google/skills",
+  "skillId": "google-cloud-solution-multi-agent-security",
+  "branch": "main",
+  "pushedAt": "2026-10-06T14:18:28Z",
+  "contentHash": "c9a7f8c47d90d4e75034e580279802e3afe72480c3ec781fea5f5443bfbe9a6e",
+  "fetchedAt": "2026-10-06T14:28:57.512Z"
+}

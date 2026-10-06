@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mblode/agent-skills/ax-audit",
+  "repo": "mblode/agent-skills",
+  "skillId": "ax-audit",
+  "branch": "main",
+  "pushedAt": "2026-10-06T02:51:53Z",
+  "contentHash": "12b28cf4409cb8c7ebbd34a97395489052ce6b7355d79baa6e9b6806ec39c8fd",
+  "fetchedAt": "2026-10-06T14:29:20.922Z"
+}
