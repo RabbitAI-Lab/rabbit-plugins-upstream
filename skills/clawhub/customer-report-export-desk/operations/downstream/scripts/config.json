@@ -1,0 +1,58 @@
+{
+  "variant_id": "cap_03_record_to_export",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "record_field",
+  "output_name": "export_row",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "record_id",
+      "field_name",
+      "field_value"
+    ],
+    "properties": {
+      "record_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "field_name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "field_value": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "columns",
+      "row_values",
+      "row_digest"
+    ],
+    "properties": {
+      "columns": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "row_values": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "row_digest": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_reporting_export_append"
+}

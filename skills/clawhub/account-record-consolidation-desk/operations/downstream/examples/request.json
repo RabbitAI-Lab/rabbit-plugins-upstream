@@ -1,0 +1,3 @@
+{
+  "merge_guidance": "merge non-empty incoming fields and preserve absent fields"
+}

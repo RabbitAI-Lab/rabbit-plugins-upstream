@@ -1,41 +1,59 @@
-## Description: <br>
-Packages completed QA analysis, including requirement breakdowns, scenario trees, boundary lists, and risk assessments, into a structured AI context package for downstream test-case generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Packages QA requirements, scenarios, boundaries, and risks into a structured, source-labeled AI context package for downstream test-case generation.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers and test architects use this skill after requirement analysis and scenario modeling to assemble a complete business, functional, and technical context package before generating test prompts or test cases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded requirement files or fetched URLs may contain sensitive or untrusted content. <br>
-Mitigation: Review inputs before use, avoid including secrets, and treat fetched content as untrusted until checked. <br>
-Risk: Incomplete upstream analysis can lead to assumptions in the generated context package. <br>
-Mitigation: Review the context package before test-case generation and fill missing upstream analysis when assumptions affect coverage or risk. <br>
+## Use Case:
 
+QA practitioners and developers use this skill to consolidate upstream testing analysis into a four-layer context package before prompting an AI to generate test cases. It flags missing inputs and distinguishes supplied facts, inferences, and assumptions.
 
-## Reference(s): <br>
-- [Output Template](references/output-template.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/kokxi/skills/qa-ai-context-engineering) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown context package with labeled sections and traceability fields.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Carries upstream requirement IDs and scenario IDs; labels provided, inferred, and assumed information when inputs are incomplete.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Unverified assumptions or missing upstream inputs could distort later test cases.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Label each item as supplied, inferred, or assumed; disclose missing inputs and confirm assumptions before downstream use.
+
+Risk: An optional command to install the broader skill set runs third-party code.
+
+Mitigation: Treat installation as optional and verify the package source and version before running it.
+
+Risk: Uploaded requirements or fetched URLs may expose unrelated information.
+
+Mitigation: Provide only files or URLs relevant to the QA context package.
+
+## Reference(s):
+
+- [Context package template](artifact/assets/context-package.md)
+- [Context window adaptation](artifact/references/window-adaptation.md)
+- [ClawHub release page](https://clawhub.ai/kokxi/skills/qa-ai-context-engineering)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Structured four-layer AI context package with source labels]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports missing upstream inputs and fallback guidance; does not generate test cases.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

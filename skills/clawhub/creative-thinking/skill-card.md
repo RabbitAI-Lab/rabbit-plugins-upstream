@@ -1,36 +1,54 @@
-## Description: <br>
-Creative Thinking guides an agent through a structured ideation workflow that separates divergent idea generation from selection and planning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through structured brainstorming to generate varied ideas, combine promising options, and select next steps.
 
-## Publisher: <br>
-[ysskrishna](https://clawhub.ai/user/ysskrishna) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ysskrishna](https://clawhub.ai/user/ysskrishna)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when they want an agent to generate varied ideas, reframe a prompt, combine concepts, and choose next creative steps without prematurely critiquing the options. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
+People seeking creative options use this skill to brainstorm names, concepts, features, or campaigns, then narrow them to promising choices and a next step.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with structured ideation sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses Setup, Prime, Diverge, Connect, and Harvest sections; does not require files, credentials, network access, or shell commands.] <br>
+Global
 
-## Skill Version(s): <br>
-2026.5.17 (source: server release and skill metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Brainstorming may draw on sensitive project or brand documents when available.
+
+Mitigation: Limit access to relevant context and review proposed output before sharing it.
+
+Risk: Hypothetical benefits of ideas may be mistaken for validated user research.
+
+Mitigation: Label benefits as hypotheses and test selected ideas before adoption.
+
+## Reference(s):
+
+- [Creative Thinking worked example](references/example.md)
+- [Creative Thinking on ClawHub](https://clawhub.ai/ysskrishna/skills/creative-thinking)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creative brief, tagged ideas, mashups, top picks, next step, and parking lot.]
+
+## Skill Version(s):
+
+2026.10.5 (source: release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

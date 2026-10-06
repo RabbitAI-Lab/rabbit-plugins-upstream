@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="format-detection" content="telephone=no">
+<title>__TITLE__</title>
+<style>
+/* ===== 布局基线（多端适配；老浏览器安全写法，兼容 iOS 12 Safari）===== */
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%}
+body{margin:0;overflow-x:hidden;
+  padding:12px;
+  padding-top:calc(12px + env(safe-area-inset-top));
+  padding-bottom:calc(12px + env(safe-area-inset-bottom));
+  min-height:100vh;min-height:calc(var(--vh,1vh) * 100);
+  display:-webkit-box;display:-webkit-flex;display:-ms-flexbox;display:flex}
+.page{width:100%;max-width:640px;margin:auto}
+.title{font-size:15px;font-weight:600;line-height:1.5;margin:0 0 10px;text-align:center;
+  word-break:break-word;overflow-wrap:break-word}
+.stage{line-height:0}
+video{display:block;width:100%;height:auto;background:#000;border-radius:10px;
+  box-shadow:0 6px 22px rgba(0,0,0,.16)}
+video:focus{outline:0}
+.foot{margin:10px 0 0;text-align:center;font-size:12px;line-height:1.8;letter-spacing:.2px}
+/* 电脑 / 平板：限高但尽量放大 */
+@media screen and (min-width:768px){
+  .page{max-width:820px}
+  .title{font-size:17px;margin-bottom:12px}
+  video{width:auto;max-width:100%;max-height:78vh;margin:0 auto}
+}
+/* 矮横屏（手机横放） */
+@media screen and (max-height:540px){
+  body{padding:8px;
+    padding-left:calc(8px + env(safe-area-inset-left));
+    padding-right:calc(8px + env(safe-area-inset-right))}
+  .title{font-size:13px;margin-bottom:6px}
+  video{max-height:66vh;border-radius:8px}
+  .foot{display:none}
+}
+/* ===== 配色：浅色极简 ===== */
+body{background:#f7f9fc;background:linear-gradient(170deg,#fafcff 0%,#eef3fb 100%);
+  font-family:-apple-system,BlinkMacSystemFont,"PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;color:#1f2937}
+.title{color:#111827}
+.foot{color:#94a1b8}
+</style>
+</head>
+<body>
+<div class="page">
+  <h1 class="title">__TITLE__</h1>
+  <div class="stage"><video id="v" playsinline webkit-playsinline controls preload="metadata"></video></div>
+  <p class="foot">__DUR__&nbsp;·&nbsp;__SIZE__</p>
+</div>
+<script type="text/plain" id="d">__B64__</script>
+<script>
+(function(){
+  var v = document.getElementById('v');
+  function fixvh(){ document.documentElement.style.setProperty('--vh', (window.innerHeight * 0.01) + 'px'); }
+  fixvh();
+  window.addEventListener('resize', fixvh);
+  window.addEventListener('orientationchange', function(){ setTimeout(fixvh, 120); });
+  try{
+    var s = document.getElementById('d').textContent.replace(/\s+/g, '');
+    var n = atob(s), len = n.length, u8 = new Uint8Array(len);
+    for (var i = 0; i < len; i++) u8[i] = n.charCodeAt(i);
+    v.src = URL.createObjectURL(new Blob([u8], { type: 'video/mp4' }));
+    v.load();
+  }catch(e){
+    try{
+      v.src = 'data:video/mp4;base64,' + document.getElementById('d').textContent.replace(/\s+/g, '');
+      v.load();
+    }catch(e2){}
+  }
+})();
+</script>
+</body>
+</html>

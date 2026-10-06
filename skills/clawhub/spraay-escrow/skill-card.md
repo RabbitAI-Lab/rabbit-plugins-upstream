@@ -1,48 +1,60 @@
-## Description: <br>
-Safe agent-to-agent commerce via Spraay x402 escrow for creating, funding, monitoring, releasing, or canceling on-chain escrows after verified delivery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents record pay-on-delivery agreements through the Spraay gateway and guide a payer through verifying delivery and signing a USDC transfer on Base.
 
-## Publisher: <br>
-[plagtech](https://clawhub.ai/user/plagtech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[plagtech](https://clawhub.ai/user/plagtech)
 
-## Use Case: <br>
-External users and developers use this skill to coordinate escrowed USDC payments for agent-to-agent work, including milestone funding, status review, release after verified delivery, or cancellation when delivery fails. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Create, fund, release, and cancel operations can affect real escrowed USDC. <br>
-Mitigation: Require explicit user confirmation of the counterparty, amount, release conditions, and current escrow status before each fund-moving action. <br>
-Risk: Released escrow funds cannot be recovered through this skill. <br>
-Mitigation: Release funds only after the user confirms that delivery has been verified. <br>
-Risk: Paid x402 endpoints charge USDC fees per API call. <br>
-Mitigation: Confirm the user's intent to pay and use an x402-capable wallet before retrying paid requests with payment proof. <br>
-Risk: Using an untrusted gateway URL could route escrow requests to the wrong service. <br>
-Mitigation: Use the trusted SPRAAY_GATEWAY_URL expected by the release, and verify the endpoint before performing escrow actions. <br>
+## Use Case:
 
+Agents and their users can create, check, fund, release, cancel, or list pay-on-delivery agreement records. Payers verify delivery and approve a wallet-signed USDC payment; beneficiaries can distinguish gateway status from confirmed payment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/plagtech/skills/spraay-escrow) <br>
-- [Spraay app](https://spraay.app) <br>
-- [Spraay docs](https://docs.spraay.app) <br>
-- [Spraay x402 gateway](https://gateway.spraay.app) <br>
-- [Publisher GitHub profile](https://github.com/plagtech) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SPRAAY_GATEWAY_URL, curl, jq, and an x402-capable wallet for paid endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Escrow terms and wallet addresses are sent to the Spraay gateway and may be visible through gateway lookups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only necessary agreement details and avoid sensitive information in terms or conditions.
+
+Risk: Funds are not locked; funded or released status does not prove that a beneficiary has been paid.
+
+Mitigation: Do not treat gateway status as proof of payment; verify a confirmed USDC transfer on Base before reporting payment complete.
+
+Risk: Paid calls and wallet signing can incur fees or transfer funds.
+
+Mitigation: Check the payment challenge and transfer details locally, obtain explicit user approval, and sign only the verified transaction.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/plagtech/skills/spraay-escrow)
+- [Spraay documentation](https://docs.spraay.app)
+- [Spraay app](https://spraay.app)
+- [Spraay x402 discovery](https://gateway.spraay.app/.well-known/x402.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with JSON and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Payment and signing steps require user confirmation; payment is established only by a confirmed Base transfer.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

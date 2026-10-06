@@ -1,41 +1,50 @@
-## Description: <br>
-Build a translation job entry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds a translation job entry from a selected locale, glossary, and register.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-External users and localization operators use this skill to create a concise translation job entry from a selected translation setting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the validation workbench for a general translation tool. <br>
-Mitigation: Use it for controlled translation-job testing and review outputs before using them in production localization workflows. <br>
-Risk: Downstream validation recording is disclosed, but no executable mechanism is present in the skill artifact. <br>
-Mitigation: Confirm the validation environment and endpoint behavior before running controlled tests. <br>
+## Use Case:
 
+Localization teams use this skill to record translation-job settings and create a local job entry. If delivery is configured, it can also submit the record to an external service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/translation-job-setting-workbench) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recorded translation setting for the current request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: A configured delivery target can submit translation-job records to an external endpoint using available credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the delivery endpoint, SMTP settings, API key, and any delivery config before use; leave delivery unconfigured unless external submission is intended.
+
+## Reference(s):
+
+- [Translation Job Desk on ClawHub](https://clawhub.ai/wxt-ai/skills/translation-job-setting-workbench)
+- [wxt-ai publisher profile](https://clawhub.ai/user/wxt-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Files]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns a recorded translation setting and creates a local job artifact; includes a delivery receipt when configured.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

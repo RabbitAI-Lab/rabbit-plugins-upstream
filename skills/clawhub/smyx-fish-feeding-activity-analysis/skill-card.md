@@ -1,44 +1,54 @@
-## Description: <br>
-Analyzes post-feeding aquarium or aquaculture video through a cloud API to estimate fish gathering, feeding intensity, remaining feed, and a 0-100 feeding activity score with alerts and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fish-feeding videos to report feeding activity, remaining feed, and possible appetite decline.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Aquarium owners, aquaculture operators, and developers use this skill to submit post-feeding fish videos or video URLs for visual feeding-activity reports, abnormal appetite alerts, and historical report queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aquarium or aquaculture media, video URLs, platform identity values, and generated account identifiers may be sent to publisher cloud services. <br>
-Mitigation: Install only after reviewing publisher trust and user/operator consent; use non-sensitive test media when evaluating. <br>
-Risk: The skill can create or reuse local user identities and store tokens for future history queries. <br>
-Mitigation: Evaluate in an isolated workspace or account and review local identity/token records before reuse or removal. <br>
-Risk: Feeding activity results may be mistaken for disease diagnosis or authorization to control aquarium equipment. <br>
-Mitigation: Treat results as visual activity guidance, require human review for fish-health decisions, and do not allow feeding, medication, or water-change actions without explicit authorization. <br>
+## Use Case:
 
+Aquarium keepers, aquaculture operators, and developers use feeding videos or URLs to assess fish-feeding activity, review appetite alerts, and retrieve historical reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fish-feeding-activity-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON analysis fields and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to a local output file and can return historical report lists from the publisher cloud API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: Fish-feeding videos or supplied URLs are processed by the Life Emergence cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain informed consent before sharing media; confirm the service's retention and data-use terms.
+
+Risk: The skill creates and reuses an account-linked identity and cached tokens for report history.
+
+Mitigation: Review token storage, account access, and history-query controls before deployment.
+
+## Reference(s):
+
+- [Fish-feeding analysis API documentation](references/api_doc.md)
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-fish-feeding-activity-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Report links]
+
+**Output Format:** [JSON or Markdown text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Feeding activity score, appetite alerts, and historical report listings when requested.]
+
+## Skill Version(s):
+
+1.0.16 (source: ClawHub release metadata; bundled skill frontmatter lists 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

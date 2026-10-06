@@ -1,55 +1,69 @@
-## Description: <br>
-go-dev helps agents set up an opinionated Go development stack with linting, formatting, testing, CI, task runner, and database migration guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an opinionated Go development setup using golangci-lint, gofumpt, gotestsum, golang-migrate, just, and lefthook.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache 2.0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineering agents use go-dev when creating or upgrading Go projects that need consistent linting, formatting, testing, CI/CD, Justfile recipes, and database migration workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Tool installation commands can execute downloaded or newly installed binaries. <br>
-Mitigation: Review commands before running them and prefer package managers or verified release artifacts. <br>
-Risk: Database migration recipes can modify, revert, or delete database state when DATABASE_URL points at the wrong target. <br>
-Mitigation: Confirm DATABASE_URL and the intended environment before running migration, down, force, or drop commands. <br>
+## Use Case:
 
+Go developers use this skill to scaffold projects and set up linting, formatting, tests, CI, task recipes, Git hooks, and database migrations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tenequm/skills/go-dev) <br>
-- [Project homepage](https://github.com/tenequm/skills/tree/main/skills/go-dev) <br>
-- [golangci-lint Reference](references/golangci-lint-reference.md) <br>
-- [gofumpt Reference](references/gofumpt-reference.md) <br>
-- [gotestsum Reference](references/gotestsum-reference.md) <br>
-- [Go Testing Reference](references/go-testing-reference.md) <br>
-- [golang-migrate Reference](references/go-migrate-reference.md) <br>
-- [Justfile Reference](references/justfile-reference.md) <br>
-- [Go Official Docs](https://go.dev/doc/) <br>
-- [golangci-lint Docs](https://golangci-lint.run/) <br>
-- [gofumpt](https://github.com/mvdan/gofumpt) <br>
-- [gotestsum](https://github.com/gotestyourself/gotestsum) <br>
-- [golang-migrate](https://github.com/golang-migrate/migrate) <br>
-- [Lefthook](https://github.com/evilmartians/lefthook) <br>
-- [just](https://github.com/casey/just) <br>
-- [govulncheck](https://pkg.go.dev/golang.org/x/vuln/cmd/govulncheck) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown prose with fenced shell, YAML, Justfile, Go, and SQL code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes optional DATABASE_URL-dependent migration recipes and tool installation commands that users run manually.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.2 (source: server release evidence and skill metadata) <br>
+Risk: Installation commands can execute remote code that changes over time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands first; prefer verified release artifacts or a trusted package manager over piping a remote script into a shell.
+
+Risk: Unpinned container images can change between runs.
+
+Mitigation: Pin Docker images to reviewed versions or digests.
+
+Risk: Formatters and installed Git hooks can modify files or persist across project work.
+
+Mitigation: Run formatters and install hooks only when those project changes are intended; review the resulting diff.
+
+Risk: Database migration commands can change or roll back database state.
+
+Mitigation: Confirm the target DATABASE_URL and approve migration commands before running them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/tenequm/skills/go-dev)
+- [Project homepage (publisher-provided)](https://github.com/tenequm/skills/tree/main/skills/go-dev)
+- [golangci-lint reference](artifact/references/golangci-lint-reference.md)
+- [gofumpt reference](artifact/references/gofumpt-reference.md)
+- [gotestsum reference](artifact/references/gotestsum-reference.md)
+- [Go testing reference](artifact/references/go-testing-reference.md)
+- [golang-migrate reference](artifact/references/go-migrate-reference.md)
+- [Justfile reference](artifact/references/justfile-reference.md)
+- [Lefthook reference](artifact/references/lefthook-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Go, YAML, shell, and Justfile examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples and commands may change project files or database state when run.]
+
+## Skill Version(s):
+
+0.6.0 (source: server release, skill metadata, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

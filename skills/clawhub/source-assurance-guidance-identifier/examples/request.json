@@ -1,0 +1,7 @@
+{
+  "source_profile": {
+    "source_count": 3,
+    "critical_field": false,
+    "conflict_action": "hold"
+  }
+}

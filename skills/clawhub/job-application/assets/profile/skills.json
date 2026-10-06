@@ -1,0 +1,8 @@
+[
+  {"id":"python","label":"Python","score":5,"tags":["python","automation","data","etl"]},
+  {"id":"sql","label":"SQL & Data Modeling","score":5,"tags":["sql","database","analytics","data"]},
+  {"id":"cloud","label":"Cloud Architecture","score":4,"tags":["cloud","architecture","aws","azure"]},
+  {"id":"ai","label":"Applied AI","score":4,"tags":["ai","machine learning","llm","nlp"]},
+  {"id":"consulting","label":"Technical Consulting","score":5,"tags":["consulting","stakeholder","workshop","strategy"]},
+  {"id":"delivery","label":"Agile Delivery","score":4,"tags":["agile","scrum","delivery","leadership"]}
+]

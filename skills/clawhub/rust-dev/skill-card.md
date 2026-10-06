@@ -1,56 +1,64 @@
-## Description: <br>
-Practical day-1 guidance for building Rust applications, covering ownership, error handling, traits and generics, async Rust, testing, performance, crate selection, and release workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Rust developers through ownership, error handling, project setup, and choosing crates for new applications.
 
-## Publisher: <br>
-[tenequm](https://clawhub.ai/user/tenequm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tenequm](https://clawhub.ai/user/tenequm)
 
-## Use Case: <br>
-Developers and engineers use this skill when starting or maintaining Rust CLI tools, services, and libraries. It helps with Rust mental models, type and ownership choices, Cargo setup, testing, performance work, and release/distribution decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Suggested setup, cache, or release commands may install tools or change local and CI configuration. <br>
-Mitigation: Review commands before running them, pin versions where practical, and test changes in a disposable project or branch first. <br>
-Risk: Cache and release workflows may involve S3 credentials, personal access tokens, registry tokens, or other secrets. <br>
-Mitigation: Use least-privilege credentials, keep secrets in approved secret stores, and inspect generated CI workflows before enabling publication. <br>
-Risk: Broad Rust-development activation can surface guidance in many Rust-adjacent conversations. <br>
-Mitigation: Confirm the intended task before applying project changes, especially when the user only mentions Rust concepts or tooling. <br>
+## Use Case:
 
+Developers use this reference when starting Rust projects, addressing ownership and type errors, selecting crates, and configuring Cargo tooling.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/tenequm/skills/rust-dev) <br>
-- [Project Homepage](https://github.com/tenequm/skills/tree/main/skills/rust-dev) <br>
-- [Ownership and Types](references/ownership-and-types.md) <br>
-- [Error Handling](references/error-handling.md) <br>
-- [Traits and Generics](references/traits-and-generics.md) <br>
-- [Async Basics](references/async-basics.md) <br>
-- [Crate Shortlist](references/crate-shortlist.md) <br>
-- [Development Environment](references/dev-environment.md) <br>
-- [Testing](references/testing.md) <br>
-- [Performance](references/performance.md) <br>
-- [Releasing and Distribution](references/releasing.md) <br>
-- [The Rust Book](https://doc.rust-lang.org/book/) <br>
-- [Rust by Example](https://doc.rust-lang.org/rust-by-example/) <br>
-- [Rustlings](https://github.com/rust-lang/rustlings) <br>
-- [Blessed.rs Crate Catalog](https://blessed.rs/crates) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline Rust, TOML, YAML, and shell code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Cargo commands, configuration snippets, CI examples, and release workflow guidance for review before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata, SKILL.md frontmatter, and changelog released 2026-07-22) <br>
+Risk: Copied installation or Docker commands may change the developer's system.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands, particularly the rustup installer, before running them in the intended environment.
+
+Risk: Build-cache setup may persist data or rewrite and clean target directories.
+
+Mitigation: Check kache initialization and S3/OCI cache settings against local retention and access policies.
+
+Risk: Release workflows can expose credentials when copied without review.
+
+Mitigation: Review release-token configuration and use organization-approved secret handling.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/tenequm/skills/rust-dev)
+- [Project homepage (listed in skill metadata)](https://github.com/tenequm/skills/tree/main/skills/rust-dev)
+- [The Rust Programming Language](https://doc.rust-lang.org/book/)
+- [Ownership and Types](references/ownership-and-types.md)
+- [Error Handling](references/error-handling.md)
+- [Crate Shortlist](references/crate-shortlist.md)
+- [Development Environment](references/dev-environment.md)
+- [Testing](references/testing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with Rust, TOML, and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance and examples require review before use.]
+
+## Skill Version(s):
+
+0.8.0 (source: release metadata, SKILL.md metadata, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

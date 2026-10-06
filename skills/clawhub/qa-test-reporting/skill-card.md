@@ -1,41 +1,55 @@
-## Description: <br>
-Produces audience-specific QA test reports, including daily updates, weekly summaries, iteration reports, and quality decision summaries with metrics, risks, traceability IDs, and recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates audience-specific QA test reports with traceable results, clear quality conclusions, and explicit risks.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, project managers, and management stakeholders use this skill to turn test execution data, defect data, and optional quality metrics into reports tailored to the reader's decision needs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may trigger on generic requests such as daily report or progress report. <br>
-Mitigation: Specify that the requested report is for QA/testing, or choose a general project reporting workflow when the report is not test-related. <br>
-Risk: Report fields such as release recommendation or delay recommendation may be mistaken for an approved operational decision. <br>
-Mitigation: Treat release and delay recommendations as report content for stakeholder review, and require authorized human approval before acting on them. <br>
+## Use Case:
 
+QA teams and project leads use this skill to turn test execution and defect data into daily, weekly, iteration, or focused reports for developers, project managers, and leadership.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/kokxi/skills/qa-test-reporting) <br>
-- [Publisher profile](https://clawhub.ai/user/kokxi) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown reports and structured report guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include a unique report ID and aggregate related use case, defect, and requirement IDs when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server release evidence) <br>
+Risk: Release or delay recommendations could be mistaken for authorization to act.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat recommendations as report content and require authorized human review before business decisions.
+
+Risk: The optional installation command fetches an external skill package.
+
+Mitigation: Run it only after verifying and trusting the external package and its source.
+
+## Reference(s):
+
+- [Audience needs](artifact/references/audience-needs.md)
+- [Report templates](artifact/assets/report-templates.md)
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-test-reporting)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown reports with summaries, metrics, conclusions, and risk sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Report IDs and source-linked test, defect, requirement, and risk IDs; summarizes existing data rather than producing test cases.]
+
+## Skill Version(s):
+
+1.8.0 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

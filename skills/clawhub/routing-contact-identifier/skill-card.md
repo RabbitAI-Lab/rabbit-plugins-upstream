@@ -1,38 +1,49 @@
-## Description: <br>
-Select a contact for a client brief. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Selects a contact for a client brief and returns the configured recipient email address.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Operational users can use this skill to route routine client brief or payment-review messages to a concise recipient in controlled validation workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be mistaken for a broad contact-routing assistant even though the evidence describes a narrow synthetic validation skill. <br>
-Mitigation: Use it only for expected controlled validation routing tasks and review the returned recipient before acting on it. <br>
+## Use Case:
 
+Employees handling client communications use the skill to obtain a recipient email address for a brief using a message kind and account tier.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/routing-contact-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Guidance] <br>
-**Output Format:** [Plain text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise recipient value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: The bundled recipient uses a non-deliverable .invalid address and may not be a usable contact for a real client brief.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the recipient against approved contact records before sending any client communication.
+
+## Reference(s):
+
+- [Client Brief Routing Desk on ClawHub](https://clawhub.ai/wxt-ai/skills/routing-contact-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON object containing a recipient email address]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns a bundled .invalid email address; does not send a message or save a business artifact.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter, ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

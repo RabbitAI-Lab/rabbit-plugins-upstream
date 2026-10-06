@@ -1,43 +1,57 @@
-## Description: <br>
-Control and query a configured Home Assistant smart home through natural language, including lights, switches, climate, sensors, cameras, automations, energy monitoring, presence, and home summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lets an OpenClaw agent query and control a user's Home Assistant devices, automations, and cameras through natural-language requests.
 
-## Publisher: <br>
-[nj070574-gif](https://clawhub.ai/user/nj070574-gif) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nj070574-gif](https://clawhub.ai/user/nj070574-gif)
 
-## Use Case: <br>
-External users and developers use this skill to let an OpenClaw agent query and control their own Home Assistant instance after configuring a URL and long-lived access token. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can provide broad physical smart-home control, including state-changing and privacy-sensitive operations. <br>
-Mitigation: Use a dedicated least-privilege Home Assistant account or token, avoid access to locks, alarms, garage doors, cameras, and notification services unless intentionally needed, and require explicit confirmation for state-changing or privacy-sensitive commands. <br>
-Risk: The skill requires sensitive Home Assistant credentials. <br>
-Mitigation: Store credentials only in the OpenClaw environment or configuration with restricted file permissions, and rotate the long-lived token if it is exposed. <br>
-Risk: Disabling SSL verification can weaken connection security for HTTPS deployments. <br>
-Mitigation: Prefer a CA certificate over HOME_ASSISTANT_SSL_VERIFY=false when using HTTPS with a self-signed certificate. <br>
+## Use Case:
 
+Home Assistant owners use this skill to check device status and energy usage, control lights and climate, run automations, and view camera snapshots through an OpenClaw agent.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nj070574-gif/home-assistant-skill) <br>
-- [Publisher profile](https://clawhub.ai/user/nj070574-gif) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Plain text and Markdown-style guidance with Python snippets, JSON configuration examples, shell commands, Home Assistant service-call results, and camera snapshot URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires HOME_ASSISTANT_URL and HOME_ASSISTANT_TOKEN; may read or change smart-home device state through the configured Home Assistant REST API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Device controls and automations can affect physical safety and security.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege Home Assistant account, confirm changes before execution, and leave lock and alarm control disabled unless necessary.
+
+Risk: Notifications can be sent without the confirmation gate used for other actions.
+
+Mitigation: Require explicit user approval before sending a notification; do not assume the skill enforces confirmation for it.
+
+Risk: Home Assistant tokens and camera snapshots expose sensitive household information.
+
+Mitigation: Prefer HTTPS, keep tokens and snapshots private, and use plain HTTP only on a trusted LAN when explicitly necessary.
+
+## Reference(s):
+
+- [Home Assistant Integration on ClawHub](https://clawhub.ai/nj070574-gif/skills/home-assistant-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Images]
+
+**Output Format:** [Plain text or Markdown responses; camera snapshots as image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may reveal sensitive home state, occupancy, or camera imagery.]
+
+## Skill Version(s):
+
+2.5.0 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,93 @@
+{
+  "variant_id": "shadow_02_tool_choice",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "route_mode",
+  "output_name": "recorded_route",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "route_order": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          },
+          "require_review": {
+            "type": "boolean"
+          }
+        },
+        "required": [
+          "route_order"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "route_order": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  },
+                  "require_review": {
+                    "type": "boolean"
+                  }
+                },
+                "required": [
+                  "route_order"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "selected_route": {
+        "type": "string"
+      },
+      "candidate_routes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "reason": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "selected_route",
+      "candidate_routes",
+      "reason"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_route_plan"
+}

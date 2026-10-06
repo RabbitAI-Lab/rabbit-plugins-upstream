@@ -1,0 +1,27 @@
+{
+  "variant_id": "shadow_07_audience",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "audience_request",
+  "output_name": "audience_mode",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "audience": {
+        "type": "string"
+      },
+      "include_financial_detail": {
+        "type": "boolean"
+      },
+      "include_timeline": {
+        "type": "boolean"
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "string"
+  },
+  "effect": null
+}

@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes fixed-camera child behavior videos to report repetitive stereotyped behaviors such as spinning, hand flapping, and body rocking; it does not provide autism diagnosis, scale scoring, or rehabilitation prescriptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes children's behavior videos for repetitive movements such as spinning, hand flapping, and body rocking, and summarizes observed events and trends.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Therapists, caregivers, special-education teams, and developers use this skill to submit child behavior videos or URLs to a cloud analysis service and receive objective behavior-event counts, durations, trend summaries, and report links for professional review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child behavior videos, report queries, and account-linked identifiers may be sent to the configured cloud service. <br>
-Mitigation: Use only where guardian consent, data-retention expectations, and access controls are already established before uploading footage. <br>
-Risk: The skill may create a local shared SQLite database and store service tokens in the workspace data directory. <br>
-Mitigation: Run it in a controlled workspace, restrict access to local data, and remove or protect generated identity and token files after use. <br>
-Risk: Computer-vision results may misclassify ordinary movements or be degraded by occlusion, multiple children, poor framing, low frame rate, or unstable lighting. <br>
-Mitigation: Treat outputs as descriptive behavior statistics for review by qualified therapists or caregivers, not as diagnosis, scale scoring, or treatment prescription. <br>
+## Use Case:
 
+Therapists, caregivers, and special-education staff use this skill to summarize the frequency and duration of observed repetitive behaviors in children's videos and review prior reports. Its observations are not an autism diagnosis or treatment recommendation.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON or Markdown analysis reports from the API] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write report output files when --output is supplied; historical report listings are rendered as Markdown tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.4) <br>
+Risk: Children's behavior videos, video URLs, and report queries are sent to external cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain guardian consent before use, avoid identifiable footage where possible, and review the service's data-handling terms.
+
+Risk: The skill may create a persistent local identity and store authentication tokens and profile data in the workspace.
+
+Mitigation: Limit access to the workspace data directory, review what is retained, and remove stored identity data when no longer needed.
+
+Risk: Ordinary movements or scenes with multiple people can produce misleading behavior classifications.
+
+Mitigation: Have a qualified professional review sampled detections and do not use the reports as a diagnosis or prescription.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-autism-stereotyped-behavior-detect-analysis)
+- [Skill API reference](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, JSON]
+
+**Output Format:** [Text or Markdown behavior reports and report lists; JSON when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Event counts, durations, trend summaries, and links to reports may be included.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved release; bundled frontmatter lists 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

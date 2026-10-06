@@ -1,43 +1,58 @@
-## Description: <br>
-Guided first-run demo for the Cargo CLI that takes a fresh workspace to about 25 buyer-persona-matched leads with a cost receipt in under two minutes, then offers to save the search as a recurring play. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides a new Cargo user from a buyer persona to a short lead list and credit receipt, with an option to save the search as a recurring play.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers, sales operators, and GTM teams use this skill to demonstrate Cargo from a new workspace by sourcing buyer-persona-matched leads, showing a spend receipt, and optionally saving the search as a weekly play. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use connected lead providers and spend credits while retrieving prospect data. <br>
-Mitigation: Keep the quickstart on the capped low-cost path and require explicit user approval before any higher-cost fallback runs. <br>
-Risk: Demo lead output is temporarily written under /tmp. <br>
-Mitigation: Treat the temporary files as prospect data and remove or protect them when the demo is complete. <br>
-Risk: Saving the search as a weekly play can continue using provider data and credits. <br>
-Mitigation: Create the recurring play only after explicit user consent, and review or disable the schedule when it is no longer needed. <br>
+## Use Case:
 
+Sales and go-to-market users can try Cargo by searching for leads matching a chosen buyer persona, reviewing a credit receipt, and optionally saving the search as a weekly play.
 
-## Reference(s): <br>
-- [Cargo Quickstart on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-quickstart) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands, lead tables, receipts, and next-step guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and a Cargo account; may use connected lead providers and credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: A short demo request may trigger a paid lead search and spend Cargo credits without clear approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the active workspace, provider, lead limit, and expected credit cost before the first paid search.
+
+Risk: Fallback searches can use a different provider or cost more than the initial search.
+
+Mitigation: Confirm the replacement provider and its cost before running any fallback, especially the higher-cost prospect search.
+
+Risk: A weekly saved play can generate future searches and charges.
+
+Mitigation: Require separate explicit confirmation before enabling the recurring play.
+
+## Reference(s):
+
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+- [Cargo Quickstart on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-quickstart)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown lead table, credit receipt, and optional CLI instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Lead count and credit use depend on connected providers; a recurring play is offered separately.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

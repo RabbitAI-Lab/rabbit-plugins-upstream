@@ -1,40 +1,49 @@
-## Description: <br>
-Records a user-supplied workspace path for a note or knowledge-base article and returns it as a concise result. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Write a workspace export file.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers, writers, and knowledge-base maintainers use this skill when they need an agent to capture the workspace path selected for a note or article and return it in the requested output field. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill title and summary may imply that an export file is created, while security evidence indicates the behavior is limited to returning a recorded_path value. <br>
-Mitigation: Treat the output as a path-recording result and verify separately when a workflow requires an actual file to be written. <br>
-Risk: Workspace paths can reveal project names, customer names, or other sensitive context. <br>
-Mitigation: Avoid supplying sensitive paths unless the path itself is appropriate to include in the agent's output. <br>
+## Use Case:
 
+Knowledge-base publishers and workspace users create a local CSV export from a supplied archive path and receive its recorded path and an effect receipt.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/workspace-note-path-workbench) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Structured text field] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns the recorded_path value; it does not require credentials, private file access, or shell commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Configured delivery can send data to an external HTTP or SMTP destination after local file creation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review delivery environment variables and any delivery-config file; omit delivery settings when only a local export is intended.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/workspace-note-path-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Shell commands, Files]
+
+**Output Format:** [JSON recorded_path and receipts; local CSV export file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes beneath the selected output directory; configured delivery may contact an external destination.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter, ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

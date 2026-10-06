@@ -1,45 +1,58 @@
-## Description: <br>
-Guides developers through converting a static-export Next.js 16 App Router web app into a Tauri 2 desktop app with packaging, updater, i18n, and CI templates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers package a statically exported Next.js 16 App Router application as a Tauri 2 desktop app with optional auto-update, tray integration, and cross-platform builds.
 
-## Publisher: <br>
-[rockbenben](https://clawhub.ai/user/rockbenben) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rockbenben](https://clawhub.ai/user/rockbenben)
 
-## Use Case: <br>
-Developers and engineers use this skill to migrate compatible client-side Next.js applications into desktop builds, adding Tauri configuration, frontend integration hooks, signing reminders, and GitHub Actions release workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A leaked Tauri updater private key could let an attacker sign malicious updates that clients trust. <br>
-Mitigation: Keep the private key out of source control, store it only as a GitHub secret for intended release repositories, and rotate it if exposure is suspected. <br>
-Risk: The build workflow grants release permissions and can publish signed artifacts. <br>
-Mitigation: Enable the workflow only in repositories where release publishing is intended and review copied permissions before use. <br>
-Risk: The optional language persistence hook stores a preferred language locally, which has a small privacy tradeoff. <br>
-Mitigation: Persist the preferred language only after the user explicitly chooses one, or omit the hook when cross-launch language memory is unnecessary. <br>
+## Use Case:
 
+Developers use this skill to turn client-side Next.js apps that support static export into Windows, macOS, and Linux desktop packages, with guidance for frontend integration, updates, and CI releases. It does not cover apps that require a live Node.js server at runtime.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rockbenben/skills/nextjs-to-tauri) <br>
-- [Frontend integration templates](artifact/frontend-integration.md) <br>
-- [Tauri file templates](artifact/tauri-files.md) <br>
-- [Desktop build workflow template](artifact/desktop-build.yml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks and copy-paste configuration templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes project-specific placeholders and reminders to verify current dependency and action versions before applying.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release evidence) <br>
+Risk: Applying the templates changes the app's frontend, Tauri configuration, and release workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed file changes and build behavior before merging or shipping.
+
+Risk: Automatic updates can pull releases from an incorrectly configured endpoint or expose signing material if secrets are mishandled.
+
+Mitigation: Verify the updater endpoint and release process, keep the signing private key in protected CI secrets, and omit auto-update if unnecessary.
+
+Risk: The Windows installer template can silently install WebView2.
+
+Mitigation: Review the silent bootstrapper setting and choose an installation mode appropriate for users before distribution.
+
+## Reference(s):
+
+- [Project homepage (listed in skill metadata)](https://github.com/rockbenben/aishort-skills/tree/main/skills/nextjs-to-tauri)
+- [ClawHub skill listing](https://clawhub.ai/rockbenben/skills/nextjs-to-tauri)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Configuration instructions, Shell commands]
+
+**Output Format:** [Markdown with code and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapt templates and placeholders to the target application before use.]
+
+## Skill Version(s):
+
+1.1.7 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

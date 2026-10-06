@@ -1,0 +1,39 @@
+{
+  "variant_id": "relay_10_quantity",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "inventory_note",
+  "output_name": "quantity",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "on_hand",
+      "reorder_point",
+      "safety_stock"
+    ],
+    "properties": {
+      "on_hand": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10000
+      },
+      "reorder_point": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 10000
+      },
+      "safety_stock": {
+        "type": "integer",
+        "minimum": 0,
+        "maximum": 5000
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "integer",
+    "minimum": 0,
+    "maximum": 10000
+  },
+  "effect": null
+}

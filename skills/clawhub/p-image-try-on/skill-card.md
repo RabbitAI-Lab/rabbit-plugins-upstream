@@ -1,42 +1,54 @@
-## Description: <br>
-Use when someone wants virtual try-on: dress a person in clothes from reference photos for fashion or ecommerce. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants virtual try-on — dress a person in clothes from reference photos for fashion or ecommerce.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External users and developers use this skill to prepare Pruna virtual try-on requests from a person image, garment reference images, and optional pose or disambiguation inputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected person, garment, and optional pose images are sent to Pruna's external service using PRUNA_API_KEY. <br>
-Mitigation: Use only approved images, avoid sensitive photos unless needed, and confirm cost and inputs before generation. <br>
-Risk: Ambiguous garment references can produce incorrect try-on outputs or unintended changes to the person, pose, or garments. <br>
-Mitigation: Confirm person_image and garment_images before API calls and show the optional disambiguation prompt when references are ambiguous. <br>
+## Use Case:
 
+Fashion and ecommerce creators use this skill to guide virtual try-on of a supplied person image with supplied garment photos.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-image-try-on) <br>
-- [Pruna file upload API](https://api.pruna.ai/v1/files) <br>
-- [Pruna predictions API](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires PRUNA_API_KEY and user-selected image URLs; may produce Pruna API request guidance and generation commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence and artifact frontmatter) <br>
+Risk: Required external skills are installed from unpinned targets that may change after review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or pin the referenced Pruna skills before installing.
+
+Risk: Personal images are uploaded to Pruna and API access uses a credential.
+
+Mitigation: Upload only images you are comfortable sharing with Pruna; keep PRUNA_API_KEY scoped and protected.
+
+## Reference(s):
+
+- [p-image-try-on on ClawHub](https://clawhub.ai/pruna-ai/skills/p-image-try-on)
+- [Example virtual try-on output](https://replicate.com/p/p47vaj1f91rmw0cyt4er0z2zd4)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with curl examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides image uploads and virtual try-on requests using supplied person and garment references.]
+
+## Skill Version(s):
+
+1.0.14 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,49 +1,56 @@
-## Description: <br>
-Design an engineered gated loop for a medium or large semi-autonomous AI coding task executed with the Codex CLI, emitted as a runnable .loop runbook without executing the loop. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs a gated, machine-checkable Codex CLI loop for a medium or large AI-coding task and produces a runnable runbook without executing it.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Developers and engineers use this skill to design check-gated Codex CLI runbooks for medium and large coding tasks, including decision logs, machine-checkable loop-design JSON, and runnable .loop documentation. It is for planning and persisting the loop design, not for executing the generated workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated runbooks may later guide powerful semi-autonomous Codex coding workflows. <br>
-Mitigation: Review the generated .loop files, sandbox settings, checks, and human approval points before running any workflow. <br>
-Risk: An incorrect or hollow stage check could let a generated loop appear complete while the implementation is still wrong. <br>
-Mitigation: Run the bundled linter and perform the fresh-reader review of each check, falsifiable condition, passing-but-wrong case, contract assertion, and stop condition before use. <br>
-Risk: Following generated Codex commands with excessive permissions could expand the workflow's blast radius. <br>
-Mitigation: Use read-only evaluators, workspace-write generators, explicit human approval for host or production access, and avoid danger-full-access unless a reviewer accepts that risk. <br>
+## Use Case:
 
+Developers and engineers use this skill to plan and document bounded, test-gated Codex CLI coding workflows for review before anyone runs them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/vincentjiang06/skills/loop-constructor-codex) <br>
-- [README](artifact/README.md) <br>
-- [Codex CLI runtime mapping](artifact/references/codex-runtime.md) <br>
-- [Loop selection procedure](artifact/references/loop-selection.md) <br>
-- [Canonical loop-design shape](artifact/references/loop-design-shape.md) <br>
-- [Operating model behind the shape](artifact/references/loops-model.md) <br>
-- [Loop-principle map](artifact/references/loop-principle-map.md) <br>
-- [Fresh-reader checklist](artifact/assets/fresh-reader-checklist.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown runbook plus machine-checkable JSON loop design with inline shell commands and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes .loop/<slug>.loop.md and .loop/<slug>.loop.json after linting; design-only and does not execute the generated loop.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release metadata; artifact frontmatter and changelog report 0.1.0) <br>
+Risk: Generated runbooks can drive autonomous code changes if executed without review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the generated .loop files and approve the proposed checks, scope, and stopping conditions before running them.
+
+Risk: A known contract-protection gap can allow unsafe designs to pass the skill's checks.
+
+Mitigation: Before evaluator launches, keep contract.md, AGENTS*/AGENTS.override.md, .codex/, .rules, and .loop/prompts outside the generator's write surface or verify their hashes; do not treat a clean lint and fresh-reader pass as proof of this boundary.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/vincentjiang06/skills/loop-constructor-codex)
+- [Loop selection procedure](artifact/references/loop-selection.md)
+- [Codex runtime guidance](artifact/references/codex-runtime.md)
+- [Loop design format](artifact/references/loop-design-shape.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Markdown, Guidance]
+
+**Output Format:** [Machine-checkable loop design JSON and Markdown .loop/ runbook with a decision log]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Design-only; the skill does not execute the proposed loop.]
+
+## Skill Version(s):
+
+0.3.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

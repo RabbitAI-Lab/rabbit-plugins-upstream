@@ -31,7 +31,7 @@ Warm-intro path discovery — **two actions, both 2 credits**, scoring the relat
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theSwarm","actionSlug":"searchWarmIntrosToCompany","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theSwarm","actionSlug":"searchWarmIntrosToCompany"}' \
   --data '{
     "matchingCompanyDomain": "yourco.com",
     "targetCompanyDomain": "acme.com",
@@ -47,7 +47,7 @@ cargo-ai orchestration action execute \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"theSwarm","actionSlug":"searchWarmIntrosToPerson","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"theSwarm","actionSlug":"searchWarmIntrosToPerson"}' \
   --data '{
     "matchingCompanyDomain": "yourco.com",
     "targetLinkedinUrl": "https://linkedin.com/in/janedoe"
@@ -68,9 +68,15 @@ cargo-ai orchestration action execute \
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"theSwarm","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"theSwarm","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 
 - [`../recipes/account-expansion.md`](../recipes/account-expansion.md) — multi-threading a customer account through colleagues who already know the new buyers.
 - [`../recipes/outreach-activation.md`](../recipes/outreach-activation.md) — branch send-ready records: warm path → intro request, otherwise → sequencer.
+
+## Recurring use
+
+- **Re-checks can flip "no path" to "path"** — results improve as the team maps its network (see intro), so periodically re-running `searchWarmIntrosToCompany` on strategic accounts that previously returned no path is justified; keep it slow (monthly-ish) and only after the mapped network has actually grown.
+- **In-play gate:** 2 credits path-or-no-path — gate on account tier AND an empty warm-path result column; once a path is found, that row never re-bills, and re-checks target only the tier-1 no-path subset.
+- **Never a whole-TAM cron** — the whole-TAM-sweep warning above compounds on a schedule (10,000 credits per sweep, mostly "no path", every interval).

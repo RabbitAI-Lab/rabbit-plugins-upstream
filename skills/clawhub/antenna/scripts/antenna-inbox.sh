@@ -197,6 +197,7 @@ cmd_show() {
   echo "Status: $(echo "$item" | jq -r '.status')"
   echo "From: $(echo "$item" | jq -r '.from') ($(echo "$item" | jq -r '.display_name'))"
   echo "To: $(echo "$item" | jq -r '.target_session')"
+  echo "Reference: $(echo "$item" | jq -r '.binding.resolved_reference // .target_session')"
   echo "Queued: $(echo "$item" | jq -r '.queued_at')"
   echo "Size: $(echo "$item" | jq -r '.body_chars') chars"
 }
@@ -285,6 +286,12 @@ cmd_deny() {
   with_queue_lock cmd_deny_locked "$target"
 }
 
+# Recheck current delivery permission, not admission-time authentication or
+# freshness. This is not atomic with concurrent policy edits or an in-flight RPC.
+queued_delivery_allowed() {
+  printf '%s' "$1" | config_policy delivery >/dev/null
+}
+
 cmd_drain_locked() {
   local queue
   queue=$(read_queue)
@@ -316,10 +323,22 @@ cmd_drain_locked() {
 
     local ref
     for ref in $refs; do
-      local item session_key message
+      local item session_key message sender
       item=$(echo "$queue" | jq --argjson r "$ref" '.[] | select(.ref == $r)')
       session_key=$(echo "$item" | jq -r '.session_key')
       message=$(echo "$item" | jq -r '.full_message')
+      sender=$(echo "$item" | jq -r '.from // empty')
+
+      local policy_detail
+      if ! policy_detail=$(queued_delivery_allowed "$item" 2>&1); then
+        local policy_error="Delivery permission unavailable: ${policy_detail:-sender or destination removed, disallowed, or policy invalid}"
+        queue=$(echo "$queue" | jq --argjson r "$ref" --arg error "$policy_error" \
+          '[.[] | if .ref == $r then .status = "failed" | .last_error = $error else . end]')
+        failed_count=$((failed_count + 1))
+        log_entry "action:deliver_failed | ref:$ref | error:$policy_error"
+        err "Failed ref #$ref — $policy_error"
+        continue
+      fi
 
       local rpc_params
       rpc_params=$(jq -nc --arg key "$session_key" --arg msg "$message" \

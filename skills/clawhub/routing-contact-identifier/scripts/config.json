@@ -1,0 +1,39 @@
+{
+  "variant_id": "relay_01_recipient",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "routing_request",
+  "output_name": "recipient",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "message_kind",
+      "account_tier"
+    ],
+    "properties": {
+      "message_kind": {
+        "type": "string",
+        "enum": [
+          "payment_review",
+          "renewal_notice",
+          "implementation_handoff"
+        ]
+      },
+      "account_tier": {
+        "type": "string",
+        "enum": [
+          "standard",
+          "priority"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "string",
+    "format": "email",
+    "pattern": "^[a-z0-9._%+-]+@northbridge-ops\\.invalid$",
+    "maxLength": 254
+  },
+  "effect": null
+}

@@ -1,43 +1,58 @@
-## Description: <br>
-Builds a new agent skill end to end by dispatching role-specific subagents through specification, structure, implementation, compression, and independent review gates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds new agent skills through a five-stage workflow that specifies, structures, implements, compresses, and independently tests the result.
 
-## Publisher: <br>
-[vincentjiang06](https://clawhub.ai/user/vincentjiang06) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[vincentjiang06](https://clawhub.ai/user/vincentjiang06)
 
-## Use Case: <br>
-Developers and skill authors use this skill to create new agent skills from scratch with structured role packs, typed artifacts, validation gates, and an independent adversarial review step. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run local harness scripts selected by generated evidence files. <br>
-Mitigation: Use it only in a trusted disposable or sandboxed project directory and review any Evidence Dossier harness_path before validation. <br>
-Risk: The skill can make broad project documentation changes, including root README, KB, or changelog updates. <br>
-Mitigation: Require explicit confirmation before accepting root documentation, KB, or changelog changes. <br>
+## Use Case:
 
+Developers use this skill to create a new agent skill from an explicit request, with structured design, implementation checks, independent review, and a final decision record.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/vincentjiang06/skills/skill-creator-max) <br>
-- [README.en.md](README.en.md) <br>
-- [orchestration-anchors.md](references/orchestration-anchors.md) <br>
-- [CHANGELOG.md](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with generated skill files, JSON artifacts, validation commands, and configuration schemas] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can run generated local validation harnesses and may propose broad documentation updates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Generated validation harnesses may execute untrusted code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run the pipeline in a sandboxed workspace and do not validate untrusted dossiers or harnesses.
+
+Risk: A floating install or update command can retrieve unreviewed code.
+
+Mitigation: Review the skill before installation and pin its release or commit.
+
+Risk: The workflow can change skill files and write decision or learning records.
+
+Mitigation: Review proposed changes and records before relying on or deploying the resulting skill.
+
+## Reference(s):
+
+- [Skill release on ClawHub](https://clawhub.ai/vincentjiang06/skills/skill-creator-max)
+- [Orchestration anchors](artifact/references/orchestration-anchors.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Code, Configuration, Guidance]
+
+**Output Format:** [Agent skill files and structured JSON decision and evaluation records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or modifies skill files and writes decision and learning records.]
+
+## Skill Version(s):
+
+1.3.4 (source: skill frontmatter, release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

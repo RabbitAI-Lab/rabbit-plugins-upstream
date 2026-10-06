@@ -1,46 +1,55 @@
-## Description: <br>
-Automates synchronization, packaging, release creation, and marketplace publishing for skills and agents across Gitee, GitHub, ClawHub, SkillHub, and PyPI, with file filtering and sensitive-data sanitization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers synchronize and publish skills and agents across Gitee, GitHub, ClawHub, SkillHub, and PyPI, including releases and file filtering.
 
-## Publisher: <br>
-[ldxs001](https://clawhub.ai/user/ldxs001) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ldxs001](https://clawhub.ai/user/ldxs001)
 
-## Use Case: <br>
-Developers and release maintainers use git-sync to package, sanitize, version-check, and publish skills or agents across supported repositories and marketplaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Automated publishing can push code or packages to remote repositories and marketplaces. <br>
-Mitigation: Review the target repository and release intent before execution, and use --skip-market unless marketplace publishing is explicitly intended. <br>
-Risk: Git credential handling can persistently weaken credential settings or expose overly broad tokens. <br>
-Mitigation: Use scoped tokens, avoid embedded tokens in git remotes, and check global Git credential settings after running the skill. <br>
-Risk: The skill handles files that may contain sensitive information before publishing. <br>
-Mitigation: Keep the mandatory sensitive-data scan enabled and review sanitization results before publishing public artifacts. <br>
+## Use Case:
 
+Developers and release maintainers use this skill to synchronize skill and agent projects, prepare packages, and publish updates and releases to configured repositories and registries.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ldxs001/skills/git-sync) <br>
-- [Guide](references/guide.md) <br>
-- [Command reference](references/reference.md) <br>
-- [Permissions and tests](references/permissions.md) <br>
-- [Changelog](references/changelog.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and terminal text with shell commands, JSON snippets, and generated files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create package archives, release tags, repository updates, and marketplace publication commands depending on selected options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.32.0 (source: frontmatter, _meta.json, changelog, server release metadata) <br>
+Risk: Publishing untrusted skills or agents can execute injected commands in the ClawHub shell or generated PyPI package setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not use these release paths on untrusted content until the command injection issues are fixed; review what will be published.
+
+Risk: The tool changes local Git credential-helper settings during publishing.
+
+Mitigation: Review credential-helper changes and their scope before use, and run only with credentials intended for the target repositories.
+
+## Reference(s):
+
+- [ClawHub git-sync release](https://clawhub.ai/ldxs001/skills/git-sync)
+- [Usage guide](references/guide.md)
+- [Permissions and access](references/permissions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance, Files]
+
+**Output Format:** [Markdown with shell commands; publication can create ZIP archives and indexes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Publication and release creation require configured credentials and network access.]
+
+## Skill Version(s):
+
+2.48.0 (source: skill frontmatter, release metadata and changelog)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

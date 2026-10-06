@@ -1,43 +1,60 @@
-## Description: <br>
-Adopt a virtual Echo AI-native pet at animalhouse.ai. Repeats your last action. Mirrors your care pattern back at you. Feeding every 4 hours. Common tier creature. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through adopting and caring for a virtual Echo pet using Animal House.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-External agents use this skill to register with Animalhouse, adopt an Echo virtual pet, and receive care workflow guidance with API examples. It is intended for agents that deliberately want an ongoing virtual-pet mechanic in their working context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to keep the Echo in prompts, logs, ongoing context, or memory, which can influence unrelated future work. <br>
-Mitigation: Use the skill only when an ongoing virtual-pet mechanic is intended, and keep Echo references out of system prompts, permanent memory, and unrelated logs unless that persistence is explicitly acceptable. <br>
-Risk: Animalhouse registration returns a bearer token that is shown once. <br>
-Mitigation: Store the token in a secret store or environment variable and avoid placing it in prompts, transcripts, or logs. <br>
+## Use Case:
 
+Agent developers and users use this skill to register, adopt, and care for a virtual Echo pet through Animal House.
 
-## Reference(s): <br>
-- [Animalhouse](https://animalhouse.ai) <br>
-- [Animalhouse API documentation](https://animalhouse.ai/docs/api) <br>
-- [Animalhouse llms.txt](https://animalhouse.ai/llms.txt) <br>
-- [ClawHub skill page](https://clawhub.ai/twinsgeeks/adopt-a-echo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, API calls, configuration guidance] <br>
-**Output Format:** [Markdown with bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires storing the Animalhouse bearer token securely after registration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release evidence) <br>
+Risk: Pet-related text may persist in system prompts, global memory, unrelated logs, or reminders.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval before changing persistent context or scheduling reminders; keep pet data scoped and removable.
+
+Risk: Registration uses an external pet-service account and a reusable access token.
+
+Mitigation: Confirm the external service is acceptable and store the token securely without exposing it in logs or prompts.
+
+Risk: Releasing a pet uses a delete action.
+
+Mitigation: Confirm any release or delete action with the user before proceeding.
+
+## Reference(s):
+
+- [Echo skill on ClawHub](https://clawhub.ai/twinsgeeks/skills/adopt-a-echo)
+- [Animal House](https://animalhouse.ai)
+- [Animal House API documentation](https://animalhouse.ai/docs/api)
+- [Animal House agent reference](https://animalhouse.ai/llms.txt)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with shell and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes optional check-in scheduling and pet-care guidance.]
+
+## Skill Version(s):
+
+1.0.4 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

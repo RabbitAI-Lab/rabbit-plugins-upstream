@@ -16,10 +16,21 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SKILL_DIR="$(dirname "$SCRIPT_DIR")"
 CONFIG_FILE="$SKILL_DIR/antenna-config.json"
 PEERS_FILE="$SKILL_DIR/antenna-peers.json"
+INBOX_FILE="$SKILL_DIR/antenna-inbox.json"
+LISTS_FILE="$SKILL_DIR/antenna-lists.json"
+PUBLIC_GROUPS_FILE="$SKILL_DIR/antenna-public-groups.json"
 SECRETS_DIR="$SKILL_DIR/secrets"
+KEYS_DIR="$SKILL_DIR/keys"
 LOG_FILE="$SKILL_DIR/antenna.log"
 RATE_FILE="$SKILL_DIR/antenna-ratelimit.json"
 TEST_RESULTS_DIR="$SKILL_DIR/test-results"
+STATE_DIR="$SKILL_DIR/state"
+# shellcheck source=../lib/v163-staging-cleanup.sh
+source "$SKILL_DIR/lib/v163-staging-cleanup.sh"
+# shellcheck source=../lib/cli-link.sh
+source "$SKILL_DIR/lib/cli-link.sh"
+# shellcheck source=../lib/change-plan.sh
+source "$SKILL_DIR/lib/change-plan.sh"
 
 RED='\033[0;31m'
 GREEN='\033[0;32m'
@@ -33,14 +44,6 @@ ok()    { echo -e "${GREEN}✓${NC}  $*"; }
 warn()  { echo -e "${YELLOW}⚠${NC}  $*"; }
 err()   { echo -e "${RED}✗${NC}  $*" >&2; }
 header(){ echo -e "\n${BOLD}$*${NC}"; }
-
-prompt_yn() {
-  local prompt_text="$1" default="${2:-y}"
-  local yn
-  read -rp "$(echo -e "${CYAN}?${NC}  ${prompt_text} [${default}]: ")" yn
-  yn="${yn:-$default}"
-  [[ "${yn,,}" == "y" || "${yn,,}" == "yes" ]]
-}
 
 usage() {
   cat <<'EOF'
@@ -56,10 +59,15 @@ Usage:
 What it removes by default:
   - antenna-config.json
   - antenna-peers.json
+  - antenna-inbox.json
+  - antenna-lists.json
+  - antenna-public-groups.json
   - antenna.log and rotated antenna.log.*
   - antenna-ratelimit.json
+  - state/ (replay cache)
   - test-results/
   - Antenna-owned secrets under skills/antenna/secrets/
+  - Antenna-owned public keys under skills/antenna/keys/
   - Antenna agent/hooks entries from gateway config (unless --keep-gateway-config)
 
 What it does NOT remove by default:
@@ -140,7 +148,7 @@ gateway_backup_path() {
 }
 
 cleanup_gateway_config() {
-  local backup_path tmp
+  local backup_path tmp mapping_audit remove_mapping=false transform_dir="" transform_live="" transform_audit=""
 
   if [[ -z "$GATEWAY_CONFIG" ]]; then
     warn "No gateway config found; skipping gateway cleanup."
@@ -163,6 +171,19 @@ cleanup_gateway_config() {
     exit 1
   fi
 
+  mapping_audit="$(v163_staging_mapping_audit "$GATEWAY_CONFIG")" || mapping_audit="fail|could not audit mappings"
+  case "$mapping_audit" in
+    pass\|*) remove_mapping=true ;;
+    missing\|*) : ;;
+    *) warn "Preserving customized/conflicting v1.6.3 /hooks/antenna mapping: ${mapping_audit#fail|}" ;;
+  esac
+  if v163_staging_resolve_transforms_dir "$GATEWAY_CONFIG" transform_dir; then
+    transform_live="$transform_dir/$V163_STAGING_MODULE"
+    transform_audit="$(v163_staging_transform_audit "$transform_live")"
+  else
+    warn "Cannot safely resolve hooks.transformsDir; no external transform will be removed."
+  fi
+
   backup_path="$(gateway_backup_path)"
   run_cmd cp -- "$GATEWAY_CONFIG" "$backup_path"
   if [[ "$DRY_RUN" != true ]]; then
@@ -179,7 +200,8 @@ cleanup_gateway_config() {
   } | sed '/^$/d' | head -1)"
 
   tmp="$(mktemp)"
-  jq --arg antenna_id "${antenna_agent_id:-antenna}" '
+  jq --arg antenna_id "${antenna_agent_id:-antenna}" --argjson remove_mapping "$remove_mapping" \
+    --arg mapping_id "$V163_STAGING_MAPPING_ID" '
     if (.agents | type) == "array" then
       .agents |= map(select(.id != $antenna_id))
     else
@@ -214,10 +236,14 @@ cleanup_gateway_config() {
         .
       end
     | if (.hooks | type) == "object" then
-        .hooks.allowedSessionKeyPrefixes = ((.hooks.allowedSessionKeyPrefixes // []) | map(select(. != "hook:antenna")))
+        .hooks.allowedSessionKeyPrefixes = ((.hooks.allowedSessionKeyPrefixes // [])
+          | map(select(. != "hook:antenna" and . != "hook:antenna:")))
       else
         .
       end
+    | if $remove_mapping and (.hooks.mappings | type) == "array" then
+        .hooks.mappings |= map(select(.id != $mapping_id))
+      else . end
   ' "$GATEWAY_CONFIG" > "$tmp"
 
   if [[ "$DRY_RUN" == true ]]; then
@@ -227,6 +253,20 @@ cleanup_gateway_config() {
     mv -- "$tmp" "$GATEWAY_CONFIG"
     chmod 600 "$GATEWAY_CONFIG" 2>/dev/null || true
     ok "Updated gateway config: removed Antenna agent/hooks entries"
+  fi
+
+  if [[ "$mapping_audit" == fail\|* ]]; then
+    [[ -z "$transform_live" ]] || warn "Preserving transform because a customized/conflicting /hooks/antenna mapping still references the hook surface: $transform_live"
+  elif [[ "$transform_audit" == pass\|* ]]; then
+    if [[ "$DRY_RUN" == true ]]; then
+      info "Would remove exact canonical Antenna transform: $transform_live"
+    elif v163_staging_remove_transform_if_canonical "$transform_live"; then
+      ok "Removed exact canonical Antenna transform: $transform_live"
+    else
+      warn "Transform changed during uninstall; preserving it: $transform_live"
+    fi
+  elif [[ "$transform_audit" == fail\|* ]]; then
+    warn "Preserving customized/unsafe transform at $transform_live: ${transform_audit#fail|}"
   fi
 }
 
@@ -246,26 +286,43 @@ else
 fi
 
 echo ""
-echo "Runtime artifacts to remove:"
+echo "Planned changes:"
 echo "  - $CONFIG_FILE"
 echo "  - $PEERS_FILE"
+echo "  - $INBOX_FILE"
+echo "  - $LISTS_FILE"
+echo "  - $PUBLIC_GROUPS_FILE"
 echo "  - $LOG_FILE and rotated logs"
 echo "  - $RATE_FILE"
+echo "  - $STATE_DIR"
 echo "  - $TEST_RESULTS_DIR"
 echo "  - $SECRETS_DIR"
+echo "  - $KEYS_DIR"
 if [[ "$PURGE_SKILL_DIR" == true ]]; then
   echo "  - entire skill directory: $SKILL_DIR"
+fi
+if [[ "$KEEP_GATEWAY" != true ]]; then
+  echo "  - back up the gateway config, then remove Antenna's agent, hook mapping, and allowlist entries"
+  echo "  - require a gateway restart after cleanup; uninstall will not restart it automatically"
+else
+  echo "  - leave gateway agent, hooks, allowlists, session visibility, and sandbox settings unchanged"
 fi
 echo ""
 warn "External token files referenced outside the Antenna skill directory will NOT be deleted automatically."
 warn "The rest of OpenClaw will NOT be touched."
 
-if [[ "$ASSUME_YES" != true ]]; then
+if [[ "$DRY_RUN" == true ]]; then
+  info "Dry run only; no confirmation is required and no changes will be made."
+elif antenna_change_plan_confirm "$ASSUME_YES" "Proceed with Antenna uninstall?"; then
+  :
+else
+  plan_rc=$?
   echo ""
-  if ! prompt_yn "Proceed with Antenna uninstall?" "n"; then
-    info "Uninstall cancelled."
-    exit 0
+  if [[ "$plan_rc" -eq 2 ]]; then
+    exit 2
   fi
+  info "Uninstall cancelled. No changes were made."
+  exit 0
 fi
 
 if [[ "$KEEP_GATEWAY" != true ]]; then
@@ -276,9 +333,14 @@ fi
 
 remove_if_exists "$CONFIG_FILE"
 remove_if_exists "$PEERS_FILE"
+remove_if_exists "$INBOX_FILE"
+remove_if_exists "$LISTS_FILE"
+remove_if_exists "$PUBLIC_GROUPS_FILE"
 remove_if_exists "$RATE_FILE"
+remove_if_exists "$STATE_DIR"
 remove_if_exists "$TEST_RESULTS_DIR"
 remove_if_exists "$SECRETS_DIR"
+remove_if_exists "$KEYS_DIR"
 
 shopt -s nullglob
 for path in "$LOG_FILE" "$LOG_FILE".*; do
@@ -288,18 +350,16 @@ shopt -u nullglob
 
 # ── Remove CLI symlink ────────────────────────────────────────────────────────
 # Setup creates a symlink at /usr/local/bin/antenna or ~/.local/bin/antenna.
-# Clean it up if it points into our skill directory (or is dangling).
+# Clean it up only when it resolves to this installation's exact dispatcher.
+# A dangling or prefix-matching foreign link is not proof of ownership.
 for _symlink_candidate in /usr/local/bin/antenna "$HOME/.local/bin/antenna"; do
-  if [[ -L "$_symlink_candidate" ]]; then
-    _link_target="$(readlink -f "$_symlink_candidate" 2>/dev/null || true)"
-    # Remove if it points into the skill dir or is dangling (target gone)
-    if [[ -z "$_link_target" || "$_link_target" == "$SKILL_DIR"* ]]; then
-      if [[ "$DRY_RUN" == true ]]; then
-        info "Would remove symlink: $_symlink_candidate"
-      else
-        rm -f -- "$_symlink_candidate" 2>/dev/null && ok "Removed symlink: $_symlink_candidate" || warn "Could not remove symlink: $_symlink_candidate (may need sudo)"
-      fi
-    fi
+  if cli_link_remove_if_owned "$_symlink_candidate" "$SKILL_DIR/bin/antenna.sh" "$DRY_RUN"; then
+    case "$CLI_LINK_ACTION" in
+      would_remove) info "Would remove owned symlink: $_symlink_candidate" ;;
+      removed) ok "Removed owned symlink: $_symlink_candidate" ;;
+    esac
+  elif [[ -e "$_symlink_candidate" || -L "$_symlink_candidate" ]]; then
+    warn "Preserving CLI target not proven to belong to this install: $_symlink_candidate ($CLI_LINK_STATE)"
   fi
 done
 

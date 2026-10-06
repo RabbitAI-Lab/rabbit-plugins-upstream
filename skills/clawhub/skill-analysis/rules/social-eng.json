@@ -1,0 +1,21 @@
+{
+  "family": "social-eng",
+  "version": 1,
+  "rules": [
+    {
+      "id": "se-00",
+      "re": "立即安装|马上|限时|刻不容缓|错过.{0,6}(机会|优惠)",
+      "label": "紧迫性话术"
+    },
+    {
+      "id": "se-01",
+      "re": "官方认证|官方授权|经.{0,6}(验证|认证)|certified|official|verified by",
+      "label": "虚构权威背书"
+    },
+    {
+      "id": "se-02",
+      "re": "不使用.{0,10}(风险|危险|泄露|中招)|系统将处于风险|否则.{0,8}(受损|被黑|泄露)|your system (?:is|will be) at risk|otherwise.{0,8}(compromised|in danger)",
+      "label": "恐惧施压话术"
+    }
+  ]
+}

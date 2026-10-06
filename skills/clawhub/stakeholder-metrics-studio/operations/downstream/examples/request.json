@@ -1,0 +1,12 @@
+{
+  "metric_digest": {
+    "metric_id": "METRIC-MIKE-4172",
+    "first": 10.0,
+    "latest": 12.0,
+    "delta": 2.0,
+    "percentage_delta": 20.0,
+    "mean": 11.0,
+    "direction": "up",
+    "points": 2
+  }
+}

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/attacker",
   "slug": "attacker",
   "ownerHandle": null,
-  "version": "0.5.0",
-  "updatedAt": 1784015027072,
-  "contentHash": "eb59eb78b773a609d3933bfc9e7120ff5d198b1761446cb2201549f88a603cd1",
-  "fetchedAt": "2026-07-26T18:14:50.337Z"
+  "version": "0.8.2",
+  "updatedAt": 1790563951273,
+  "contentHash": "a8d082a3e71ba482a1df2b5999edf08e0d42e7699fabae6178856a7c49d5a909",
+  "fetchedAt": "2026-10-06T14:42:43.499Z"
 }

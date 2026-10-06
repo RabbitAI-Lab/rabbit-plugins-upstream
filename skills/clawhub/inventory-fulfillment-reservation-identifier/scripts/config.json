@@ -1,0 +1,56 @@
+{
+  "variant_id": "cap_15_lot_to_fulfillment",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "inventory_lots_json",
+  "output_name": "allocation_plan",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "request_id",
+      "requested_quantity",
+      "lots"
+    ],
+    "properties": {
+      "request_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "requested_quantity": {
+        "type": "number"
+      },
+      "lots": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "request_id",
+      "allocations",
+      "unfilled_quantity"
+    ],
+    "properties": {
+      "request_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "allocations": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "unfilled_quantity": {
+        "type": "number"
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

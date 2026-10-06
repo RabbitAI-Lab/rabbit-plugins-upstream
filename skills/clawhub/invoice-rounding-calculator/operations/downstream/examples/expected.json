@@ -1,0 +1,10 @@
+{
+  "invoice_summary": {
+    "rounded_lines": [
+      "10.00",
+      "4.32"
+    ],
+    "invoice_total": "14.32",
+    "currency": "USD"
+  }
+}

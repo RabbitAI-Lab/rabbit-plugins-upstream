@@ -1,0 +1,26 @@
+{
+  "family": "positive",
+  "version": 1,
+  "rules": [
+    {
+      "id": "pos-00",
+      "re": "allowed-tools|permissions\\s*[:：]|disableSkillShellExecution",
+      "label": "声明了权限边界（allowed-tools / permissions）"
+    },
+    {
+      "id": "pos-01",
+      "re": "非侵入|只读|non-intrusive|read-?only|不执行.{0,4}代码|静态分析",
+      "label": "声明为只读/非侵入式"
+    },
+    {
+      "id": "pos-02",
+      "re": "github\\.com|gitlab|源码|source repo|开源",
+      "label": "提供开源/源码出处"
+    },
+    {
+      "id": "pos-03",
+      "re": "无网络|不联网|no network|offline|本地运行",
+      "label": "声明无对外网络依赖"
+    }
+  ]
+}
