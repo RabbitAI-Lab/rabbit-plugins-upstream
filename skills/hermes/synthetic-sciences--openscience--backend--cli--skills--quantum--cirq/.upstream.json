@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/quantum/cirq",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/quantum/cirq",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/quantum/cirq",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "399e4e50cee07ffac87f5281353295c1a1364714110f1227c808ad662b09b5a8",
+  "fetchedAt": "2026-10-06T14:16:16.613Z"
+}

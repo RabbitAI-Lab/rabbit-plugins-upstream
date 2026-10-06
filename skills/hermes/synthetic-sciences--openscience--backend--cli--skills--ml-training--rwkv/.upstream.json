@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/rwkv",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/rwkv",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/rwkv",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "b5b861469c3e65de0cf5db9c0eee8c9253acc289024442f3429a7a2408f804ce",
+  "fetchedAt": "2026-10-06T14:16:16.785Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/pubmed-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/pubmed-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/pubmed-database",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "9150bc26621b60f6ddd4a1d05898bed70b4aba83a483840119235c07d498dadc",
+  "fetchedAt": "2026-10-06T14:16:16.765Z"
+}

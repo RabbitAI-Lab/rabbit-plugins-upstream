@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/optimize-for-gpu",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/optimize-for-gpu",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/optimize-for-gpu",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "c3a11365a15a0673586ed0b41f43e43e7c7c94c73401e6abe69e0b76e8723a90",
+  "fetchedAt": "2026-10-06T14:16:16.738Z"
+}

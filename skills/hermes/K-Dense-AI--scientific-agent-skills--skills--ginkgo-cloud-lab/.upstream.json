@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/ginkgo-cloud-lab",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/ginkgo-cloud-lab",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/ginkgo-cloud-lab",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "d2c209d98084cf5db6392ec8a59f731fb3e5b5380962e707944a9b8a6617f2a1",
+  "fetchedAt": "2026-10-06T14:16:31.800Z"
+}

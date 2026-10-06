@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/cheminformatics-definitions",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/cheminformatics-definitions",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/cheminformatics-definitions",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "23224e7b4714868a15804b9cab3c098435cc964e447695ad718f376d694315c5",
+  "fetchedAt": "2026-10-06T14:16:16.612Z"
+}

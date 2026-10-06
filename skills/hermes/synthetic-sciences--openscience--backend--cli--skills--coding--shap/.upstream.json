@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/shap",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/shap",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/shap",
+  "branch": "main",
+  "pushedAt": "2026-10-05T07:31:21Z",
+  "contentHash": "27fa778a1f29f1704a4f88a2deb4d6ebb55ff1c8fdced5a02b5a4aec89b730b9",
+  "fetchedAt": "2026-10-06T14:16:16.794Z"
+}
