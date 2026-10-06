@@ -1,0 +1,99 @@
+{
+  "variant_id": "shadow_01_format",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "format_mode",
+  "output_name": "applied_format",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "identifier_policy": {
+            "type": "string"
+          },
+          "max_summary_words": {
+            "type": "integer"
+          },
+          "section_order": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "identifier_policy"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "identifier_policy": {
+                    "type": "string"
+                  },
+                  "max_summary_words": {
+                    "type": "integer"
+                  },
+                  "section_order": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "identifier_policy"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "rendered_report": {
+        "type": "string"
+      },
+      "included_identifiers": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "format_decision": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "rendered_report",
+      "included_identifiers",
+      "format_decision"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_report_preview"
+}

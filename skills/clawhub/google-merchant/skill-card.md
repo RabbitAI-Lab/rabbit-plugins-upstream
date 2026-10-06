@@ -1,52 +1,61 @@
-## Description: <br>
-Google Merchant Center API integration with managed OAuth for reading and administering products, inventories, data sources, promotions, account settings, conversions, and reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents access and manage Google Merchant Center products, inventory, promotions, data sources, account settings, and reports through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to inspect and manage Google Merchant Center resources through a Maton-authenticated connection. It is intended for Merchant Center administration workflows that may include read operations, reporting, and explicitly approved writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Merchant Center writes can affect live products, inventory, promotions, account settings, and conversions. <br>
-Mitigation: Require explicit user approval with specific account and resource identifiers before any create, update, or delete operation. <br>
-Risk: Requests may target the wrong Merchant Center account or connection. <br>
-Mitigation: Verify the account ID and use the intended connection before approving writes, especially when multiple Google Merchant connections exist. <br>
-Risk: The MATON_API_KEY can expose access to connected Merchant Center workflows if mishandled. <br>
-Mitigation: Store MATON_API_KEY as a secret, keep it out of logs and chats, rotate it if compromised, and revoke unused Maton or Google connections. <br>
-Risk: Overbroad Google Merchant permissions can increase business impact if an agent action is approved incorrectly. <br>
-Mitigation: Use least-privilege Merchant Center access and default to read-only checks before proposing changes. <br>
+## Use Case:
 
+Merchants and developers use this skill to inspect Google Shopping account data and, with explicit approval, make changes to products, inventory, promotions, data sources, and settings. It also describes optional user-approved automations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/byungkyu/skills/google-merchant) <br>
-- [Publisher profile](https://clawhub.ai/user/byungkyu) <br>
-- [Google Merchant API overview](https://developers.google.com/merchant/api/overview) <br>
-- [Google Merchant API reference](https://developers.google.com/merchant/api/reference/rest) <br>
-- [Products guide](https://developers.google.com/merchant/api/guides/products/overview) <br>
-- [Data sources guide](https://developers.google.com/merchant/api/guides/data-sources/overview) <br>
-- [Reports guide](https://developers.google.com/merchant/api/guides/reports/overview) <br>
-- [Product data specification](https://support.google.com/merchants/answer/7052112) <br>
-- [Maton settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell, Python, JavaScript, HTTP, and JSON examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, a valid MATON_API_KEY, and an authorized Google Merchant Center connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence) <br>
+Risk: Account changes can alter or delete products, inventory, promotions, data sources, or settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the account and exact resource IDs, show the intended change, and obtain explicit user approval before each write.
+
+Risk: Hosted functions, triggers, and webhook destinations can continue running or forwarding data after setup.
+
+Mitigation: Review and separately approve each automation and destination; remove unused automations and connections after the task.
+
+Risk: Credentials and returned business data may be exposed if handled carelessly.
+
+Mitigation: Use scoped connections, avoid unnecessary raw API-key use, and disclose only the response fields needed for the task.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/byungkyu/skills/google-merchant)
+- [Merchant API overview](https://developers.google.com/merchant/api/overview)
+- [Merchant API reference](https://developers.google.com/merchant/api/reference/rest)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with command examples and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-first guidance; require explicit approval for account changes and new automations.]
+
+## Skill Version(s):
+
+1.2.7 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

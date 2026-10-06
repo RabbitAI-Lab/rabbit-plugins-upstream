@@ -10,6 +10,7 @@ export * from "./agent/session/inbox-id-to-mailbox-email.js";
 export * from "./agent/auth/agent-jwt.js";
 export * from "./agent/auth/agent-pow.js";
 export * from "./agent/auth/agent-auth-http.js";
+export * from "./agent/auth/agent-utm.js";
 export * from "./agent/jmap/agent-jmap.js";
 export * from "./agent/jmap/agent-jmap-verify.js";
 export * from "./agent/session/agent-session.js";

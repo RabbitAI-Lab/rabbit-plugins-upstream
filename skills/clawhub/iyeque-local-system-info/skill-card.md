@@ -1,39 +1,53 @@
-## Description: <br>
-Return system metrics (CPU, RAM, disk, processes) using psutil. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides local CPU, memory, disk, load, and bounded process diagnostics to help agents assess capacity and troubleshoot resource contention.
 
-## Publisher: <br>
-[iyeque](https://clawhub.ai/user/iyeque) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[iyeque](https://clawhub.ai/user/iyeque)
 
-## Use Case: <br>
-Developers and operators use this skill to inspect local CPU, memory, disk, and process metrics from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The processes action can reveal local usernames and running program names in the agent session. <br>
-Mitigation: Avoid using the processes action on shared or sensitive machines unless that information can be exposed to the session. <br>
-Risk: The skill depends on the psutil Python package. <br>
-Mitigation: In controlled environments, install psutil from an approved package source or pin an approved version. <br>
+## Use Case:
 
+Developers and operators use the skill to check local resource availability before demanding tasks and investigate process-level resource contention.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iyeque/iyeque-local-system-info) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Text] <br>
-**Output Format:** [JSON printed to standard output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Actions include summary, cpu, memory, disk, and processes; process output can include PID, process name, username, CPU percent, and memory percent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: evidence.release.version, metadata.openclaw.version) <br>
+Risk: Process names and optional usernames can disclose local activity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Inspect processes only for troubleshooting and use --include-owners only when username attribution is needed.
+
+Risk: A single resource reading may not reflect sustained availability.
+
+Mitigation: Treat results as point-in-time observations and recheck resources before consequential local work.
+
+## Reference(s):
+
+- [Local System Info release on ClawHub](https://clawhub.ai/iyeque/skills/iyeque-local-system-info)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Point-in-time local metrics; process results contain names and resource usage, with usernames included only on explicit request.]
+
+## Skill Version(s):
+
+1.2.1 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

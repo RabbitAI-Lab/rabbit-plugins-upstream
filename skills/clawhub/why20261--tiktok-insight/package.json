@@ -1,0 +1,27 @@
+{
+  "name": "tiktok-insight",
+  "version": "1.0.0",
+  "description": "TikTok竞品洞察分析工具，实时监测竞品流量效果、快速拆解对标竞对作品、精准拆解透视竞品流量及策略、高效搭建关键词库，适用于TikTok品牌方、创作者等进行竞品分析、流量优化和关键词研究。",
+  "keywords": [
+    "tiktok",
+    "search",
+    "keyword",
+    "content-analysis",
+    "competitor-analysis"
+  ],
+  "author": "um-why",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16.14.0"
+  },
+  "scripts": {
+    "search": "node scripts/tiktok/search-cli.js",
+    "post": "node scripts/tiktok/post-cli.js",
+    "comment": "node scripts/tiktok/comment-cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/um-why/tiktok-skill.git"
+  }
+}

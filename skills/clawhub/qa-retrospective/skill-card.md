@@ -1,41 +1,54 @@
-## Description: <br>
-Guides QA and project teams through data-backed retrospectives that turn iteration, project, or incident lessons into retrospective reports, action items, and follow-up plans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides QA teams through data-backed test and incident retrospectives, root-cause analysis, and actionable follow-up plans.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and project teams use this skill after an iteration, project, recurring issue, or production incident to collect quality data, analyze root causes, define action items, and create reusable team knowledge. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Retrospective recommendations may be mistaken for approved process changes. <br>
-Mitigation: Review proposed workflow, release, or collaboration changes with the team and reach consensus before implementation. <br>
-Risk: Retrospectives can include sensitive team feedback, defect details, or incident context. <br>
-Mitigation: Provide only information appropriate for the workspace context and avoid unnecessary sensitive details. <br>
-Risk: Broad review or recurring-problem phrasing may activate the skill when a different analysis is intended. <br>
-Mitigation: Clarify the requested output when the user needs a different summary, investigation, or analysis format. <br>
+## Use Case:
 
+QA engineers and teams use this skill after iterations, projects, or incidents to analyze defect and testing data, identify root causes, and track measurable improvements.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown retrospective reports, action-item tracking tables, checklists, and follow-up plans] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Each retrospective is expected to include a RETRO-XXXX traceability ID and data-backed root-cause analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: evidence release and artifact frontmatter) <br>
+Risk: The optional unpinned skill-set install command may add skills beyond this artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package source and use a pinned trusted version before running the command.
+
+Risk: Retrospective recommendations could change team or release processes without adequate review.
+
+Mitigation: Review proposals with the team and agree on changes before implementing them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-retrospective)
+- [Five-step retrospective method](references/five-steps.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown retrospective report and action-item tracking plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a RETRO-XXXX identifier, supporting metrics, root-cause analysis, owners, acceptance criteria, and follow-up checks.]
+
+## Skill Version(s):
+
+1.8.0 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

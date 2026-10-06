@@ -1,0 +1,15 @@
+{
+  "access_delta": {
+    "workspace_id": "SHARE-NOVEMBER-5268",
+    "added": [],
+    "removed": [],
+    "role_changed": [
+      {
+        "principal_id": "ops",
+        "from": "viewer",
+        "to": "editor"
+      }
+    ],
+    "external_entries": []
+  }
+}

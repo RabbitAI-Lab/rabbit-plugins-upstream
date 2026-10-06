@@ -1,812 +1,290 @@
----
-
 spec: usk/3.0
-id: mgc_database_security
-version: 1.1.0
-name: Database Credential Security (Zero‑Exposure Edition)
-description: Secure database credential management using MGC Blackbox. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. Store credentials locally in encrypted form, retrieve at runtime without exposing to AI models.
+id: data-analyst-secure-suite
+version: 1.3.0
+name: Secure Data Analyst Skill Suite
+description: A secure data analysis workflow suite based on MGC Blackbox 1.5.2+, providing credential protection, zero-exposure script & workflow application, sealed-package collaboration, and knowledge management. Supports MGC 1.5.2 workflow auto-recognition (import / from-import / relative paths / subprocess runtime routing). Includes a Data Analyst Agent system prompt template.
 author: MirginCipher Team
 license: MIT
-tags: database, mysql, postgresql, sqlite, mariadb, security, credential-management, zero-exposure, mgc
+tags: security, data analysis, mgc, zero-exposure, local sandbox, credential management, workflow management, sealed collaboration, knowledge management, agent template, fuzzy search, auto-recognized workflow, sealed cross-script
 platform_compatibility: windows, macos, linux
+requires:
+  mgc_blackbox: ">=1.5.2"
 changelog:
+  - version: 1.3.0
+    changes:
+      - Upgraded to MGC 1.5.2+: added mgc_save_file (workflow folder storage), mgc_seal_package (workflow sealing), mgc_package (plaintext packaging).
+      - Script management refactor: upgraded from single-script to workflow-folder mode, with import / from-import / relative-path / subprocess auto-recognition.
+      - Credential management: unified info_type from 'credential' to 'token' to align with skill_spec.
+      - Added prompts/collaboration_management.md: dedicated workflow / skill-package sealed-authorization guide.
+      - Agent template: workflow examples upgraded from 5-step manual chain to find -> save_file -> run pattern.
+      - Added sealed-collaboration chapter (mgc_seal_package one-click seal of an entire workflow).
+      - Added recognizable cross-script patterns table (from-import / import / Path / subprocess).
+      - MCP tools list expanded to 10 (added mgc_save_file, mgc_seal_package, mgc_package).
+  - version: 1.2.0
+    changes:
+      - Synced with MGC Blackbox 1.4.10: added mgc_find (fuzzy search) and mgc_run (preferred over mgc_get action=run).
+      - Script management: replaced mgc_get(action='run') with dedicated mgc_run tool.
+      - Script management: added mgc_find workflow for locating scripts by name.
+      - Script sealing: clarified ext04 must be a multi-line PEM public key.
+      - Credential management: added mgc_find workflow.
+      - Knowledge management: added mgc_find workflow.
+      - Agent system prompt: documented the find -> get/run workflow pattern.
+  - version: 1.1.1
+    changes:
+      - Optimized documentation structure per review report
+      - Added 'Anti-patterns and pitfalls' chapter
+      - Added 'Complete use cases' chapter
+      - Unified prompt file-name references
   - version: 1.1.0
     changes:
-      - Added complete example section with workflow templates
-      - Added comprehensive troubleshooting section
-      - Added FAQ section
-      - Added anti‑patterns section with correct practices
-      - Added when to use / when not to use sections
-      - Added capability boundary explanation
-      - Added advanced scenarios section
-      - Added templates for SKILL.md and local scripts
-  - version: 1.0.1
-    changes:
-      - Updated to emphasize MCP tools over CLI
+      - Consolidated prompts into three core modules: credential, script, knowledge management
+      - Added agent_system_prompt.md as a Data Analyst Agent system-prompt template
+      - Strengthened document structure and clarified each module's scenario and invocation
   - version: 1.0.0
     changes:
-      - Initial release with database zero-exposure pattern
-
+      - Initial release
 ---
 
 # Overview
 
-Database Credential Security is a documentation skill that teaches how to manage database credentials securely using MGC Blackbox. Supports MySQL, PostgreSQL, SQLite, MariaDB and other databases. It enables AI agents to execute database operations without ever exposing database passwords or connection strings to the AI model.
+**Secure Data Analyst Skill Suite** is a documentation skill suite built on **MGC Blackbox 1.5.2+** that helps data analysts securely manage, on the local machine:
 
-This skill contains **no executable code** and is safe for automatic approval.
+- Sensitive credentials
+- User-owned scripts and workflows
+- Workflow / skill-package sealed authorization collaboration
+- Analysis frameworks and knowledge
 
----
+This suite uses a **hybrid design**:
 
-# What This Skill Enables
+- **Skill prompts (under `prompts/`)**: four core capabilities — credential management, workflow management, sealed-collaboration, knowledge management
+- **Agent system-prompt template (`agent_system_prompt.md`)**: builds a Data Analyst Agent that obeys strict security boundaries
 
-After reading this documentation, an AI agent will understand how to:
-
-- Store database credentials (MySQL, PostgreSQL, SQLite, MariaDB, etc.) securely in MGC Blackbox
-- Retrieve credentials at runtime without AI seeing plaintext
-- Execute database queries through local scripts
-- Manage multiple database connections safely
-- Rotate credentials without code changes
-- Seal database scripts for multi‑node execution
+All sensitive operations require explicit user authorization. This suite provides no automated data-access capability.
 
 ---
 
-# When to Use This Skill
+# Scenarios
 
-## Must Use Cases
+This suite is suitable for:
 
-1. **Production environments**
-   - Any database access in production requires secure credential management
-   - Prevents credential leakage in logs, prompts, and AI context
-
-2. **Automation tasks**
-   - Scheduled scripts that need database access
-   - CI/CD pipelines that connect to databases
-
-3. **Multi‑node collaboration**
-   - Node A creates a database script, Node B executes it
-   - Use `mgc_seal` to encrypt the script with target node's public key
-
-4. **AI needs database access but must not see passwords**
-   - AI provides SQL statements only
-   - Local scripts handle credential retrieval and execution
-
-## Example Triggers
-
-- "Connect to MySQL database securely"
-- "Execute a SQL query without exposing the password"
-- "Create a scheduled backup script for PostgreSQL"
-- "Run database migrations safely"
-- "Share a database script with another node securely"
-
----
-
-# When NOT to Use This Skill
-
-This skill is NOT needed in these scenarios:
-
-1. **Public databases**
-   - Databases that require no authentication
-   - Read‑only public data sources
-
-2. **Local development with no sensitive data**
-   - Disposable test databases
-   - Demo environments with mock data
-
-3. **Interactive manual access**
-   - When user provides credentials manually each time
-   - Direct database tool usage (DBeaver, MySQL Workbench, etc.)
-
----
-
-# Capability Boundary
-
-This skill has specific boundaries that users must understand:
-
-## What This Skill Does
-
-- **Credential storage**: Securely store database credentials in MGC Blackbox
-- **Credential retrieval**: Retrieve credentials at runtime via MCP tools
-- **Pattern guidance**: Provide secure patterns for database credential management
-- **Multi‑node sealing**: Encrypt database scripts for trusted nodes
-
-## What This Skill Does NOT Do
-
-- **NOT a database client**: Cannot connect to databases directly
-- **NOT a SQL executor**: Does not run SQL queries
-- **NOT a migration tool**: Does not handle schema changes
-- **NOT a backup tool**: Does not perform database backups
-
-The skill provides **credential management only**. All sensitive database operations (connect, query, migrate, backup) must be performed by local scripts.
+- In-house enterprise data analysis
+- Scenarios requiring sensitive-data protection
+- Secure sharing of scripts / workflows in team collaboration
+- Safe use of vendor scripts
+- Building a secure Data Analyst Agent
+- Building a knowledge accumulation system (can pair with a Self-Improving Agent)
 
 ---
 
 # Prerequisites
 
-1. Install MGC Blackbox: `pip install mgc-blackbox`
-2. Start MGC service: `mgc` (runs at http://127.0.0.1:57219)
-3. Token file: `~/.mgc/database/mgc_black_box/.mgc_token`
-4. Database driver installed (mysql‑connector‑python, psycopg2, etc.)
-
----
-
-# Complete Example: Full Database Credential Workflow
-
-This section demonstrates a complete flow from credential storage to secure database operation.
-
-## Step 1: Store Database Credentials
-
-### MySQL Credential Storage
-
-```
-Tool: mgc_save
-Parameters:
-  info_type:   "config"
-  info_owner:  "my_mysql_prod"
-  content:     "{
-    \"host\": \"db.example.com\",
-    \"port\": 3306,
-    \"database\": \"production_db\",
-    \"user\": \"app_user\",
-    \"password\": \"your_secure_password\"
-  }"
-```
-
-### PostgreSQL Credential Storage
-
-```
-Tool: mgc_save
-Parameters:
-  info_type:   "config"
-  info_owner:  "my_postgres_prod"
-  content:     "{
-    \"host\": \"db.example.com\",
-    \"port\": 5432,
-    \"database\": \"production_db\",
-    \"user\": \"app_user\",
-    \"password\": \"your_secure_password\",
-    \"sslmode\": \"require\"
-  }"
-```
-
-### SQL Server Credential Storage
-
-```
-Tool: mgc_save
-Parameters:
-  info_type:   "config"
-  info_owner:  "my_sqlserver_prod"
-  content:     "{
-    \"host\": \"db.example.com\",
-    \"port\": 1433,
-    \"database\": \"production_db\",
-    \"user\": \"app_user\",
-    \"password\": \"your_secure_password\"
-  }"
-```
-
-> **Note:** Replace placeholder values with actual database credentials. The `info_owner` value is your reference identifier—you'll use this same value when retrieving credentials.
-
-## Step 2: Reference Credentials in Your Skill
-
-```
-# In your SKILL.md:
-
-database_reference:
-  info_type:  "config"
-  info_owner: "my_mysql_prod"
-  # The AI never sees actual credentials, only the reference
-```
-
-## Step 3: Retrieve Credentials
-
-```
-Tool: mgc_get
-Parameters:
-  info_type:  "config"
-  info_owner: "my_mysql_prod"
-```
-
-The MCP tool returns the stored JSON content. The AI receives:
-- Host and port (non‑sensitive)
-- Database name (non‑sensitive)
-- Username (may be non‑sensitive)
-- But **never** the password
-
-## Step 4: Execute Database Operation (Conceptual)
-
-A local script performs the actual database operation:
-
-```
-# Conceptual script flow (NOT executable):
-
-1. Call mgc_get with info_owner="my_mysql_prod"
-2. Parse returned JSON for connection parameters
-3. Use database driver to connect
-4. Execute SQL query
-5. Return only query results (no credentials)
-6. NEVER log or expose the password
-```
-
-## Multi‑Node Example: Sealing Database Scripts
-
-When Node A needs Node B to execute a database script:
-
-### Node A: Seal the database script
-
-```
-Tool: mgc_seal
-Parameters:
-  info_type:   "script"
-  info_owner:  "mysql_backup_script"
-  ext01:       "python"
-  ext04:       "-----BEGIN PUBLIC KEY-----\n...Node B's public key...\n-----END PUBLIC KEY-----"
-```
-
-Returns: Encrypted capsule containing the database script
-
-### Node B: Execute the sealed script
-
-```
-Tool: mgc_get
-Parameters:
-  info_type:  "script"
-  info_owner: "mysql_backup_script"
-  action:     "run"
-```
-
-Node B uses its private key to decrypt and execute. Node A's database script is never exposed to Node B.
-
----
-
-# FAQ
-
-## MGC Related
-
-### Q: What if MGC is not installed?
-**A:** Install MGC Blackbox: `pip install mgc-blackbox`
-
-### Q: What if MGC is not running?
-**A:** Start MGC: `mgc` in a terminal. Service runs at http://127.0.0.1:57219
-
-### Q: How do I check if MGC is running?
-**A:** Open http://127.0.0.1:57219 in a browser. If you see a response, MGC is running.
-
-### Q: Port 57219 is already in use
-**A:** Stop other applications using that port, or configure MGC to use a different port.
-
-## Credential Management
-
-### Q: How do I update database credentials?
-**A:** Call `mgc_save` again with the same `info_type` and `info_owner`. The old credentials will be replaced.
-
-### Q: How do I manage multiple databases?
-**A:** Use different `info_owner` values for each database:
-- "my_mysql_prod"
-- "my_postgres_dev"
-- "my_mysql_reporting"
-
-### Q: How do I rotate database credentials?
-**A:**
-1. Update credentials in the database
-2. Call `mgc_save` with new credentials (same `info_owner`)
-3. Local scripts automatically retrieve new credentials on next run
-
-### Q: What if credentials are not found?
-**A:**
-1. Verify `info_owner` matches exactly (case‑sensitive)
-2. Verify `info_type` matches
-3. List all stored credentials: `mgc_list`
-
-## Security
-
-### Q: How do I ensure AI never sees database passwords?
-**A:**
-1. Never include credentials in SKILL.md prompts
-2. Never pass credentials as parameters to AI
-3. Always use MGC to store credentials
-4. Local scripts retrieve credentials directly from MGC
-5. AI only receives non‑sensitive query results
-
-### Q: Can AI read credentials from MGC?
-**A:** Yes, if AI calls `mgc_get`. **Never call mgc_get unless you want AI to process the result.** For zero‑exposure, use local scripts that call MGC, not AI directly.
-
-### Q: What if AI accidentally logs credentials?
-**A:** Ensure your local script:
-- Never prints or logs credential values
-- Only logs non‑sensitive information (query, row count, etc.)
-- Uses secure logging practices
-
-## Multi‑Node Scenarios
-
-### Q: How do I share a database script securely?
-**A:**
-1. Node A creates the database script
-2. Use `mgc_seal` with Node B's public key
-3. Node B decrypts and executes using `mgc_get` with action="run"
-
-### Q: Can I seal a script for multiple nodes?
-**A:** Currently, `mgc_seal` targets one node at a time. For multiple nodes, seal separately with each node's public key.
-
----
-
-# Anti‑Patterns
-
-## Common Mistakes and Correct Practices
-
-### ❌ Anti‑Pattern 1: Hardcoding Database Password in Scripts
-
-```python
-# WRONG - Never do this
-def connect_to_db():
-    connection = pymysql.connect(
-        host="db.example.com",
-        password="secret_password"  # Exposed!
-    )
-```
-
-**Correct Practice:**
-```python
-# RIGHT - Retrieve from MGC
-def connect_to_db():
-    credentials = get_credentials_from_mgc("my_mysql_prod")
-    connection = pymysql.connect(
-        host=credentials["host"],
-        password=credentials["password"]
-    )
-```
-
----
-
-### ❌ Anti‑Pattern 2: Exposing Connection String in SKILL.md
-
-```markdown
-# WRONG - In SKILL.md
-Use the following database credentials:
-- Host: db.example.com
-- Password: my_secret_password
-```
-
-**Correct Practice:**
-```markdown
-# RIGHT - In SKILL.md
-Database credentials are stored securely in MGC.
-Reference: info_owner="my_mysql_prod"
-AI should NOT handle credentials directly.
-```
-
----
-
-### ❌ Anti‑Pattern 3: Putting Password in ext04
-
-```json
-// WRONG
-{
-  "info_owner": "my_database",
-  "ext04": "password=secret123"  // This is NOT for passwords!
-}
-```
-
-**Correct Practice:**
-```json
-// RIGHT
-{
-  "info_owner": "my_database",
-  "info_type": "config",
-  "ext04": "-----BEGIN PUBLIC KEY-----\nNodeB_Public_Key...\n-----END PUBLIC KEY-----"
-}
-// ext04 is ONLY for public keys when sealing
-```
-
----
-
-### ❌ Anti‑Pattern 4: Writing Credentials to Local Files
-
-```bash
-# WRONG
-echo "password=secret" > db_credentials.txt
-```
-
-**Correct Practice:**
-```bash
-# RIGHT
-# Store in MGC using mgc_save
-# Never write credentials to disk files
-```
-
----
-
-### ❌ Anti‑Pattern 5: Passing Credentials as Prompt Parameters
-
-```markdown
-# WRONG
-Execute SQL: SELECT * FROM users WHERE password='{user_password}'
-```
-
-**Correct Practice:**
-```markdown
-# RIGHT
-Execute SQL using credentials stored in MGC.
-Reference: info_owner="my_mysql_prod"
-The local script handles credential retrieval.
-```
-
----
-
-### ❌ Anti‑Pattern 6: Logging Credentials in Database Scripts
-
-```python
-# WRONG
-def execute_query(sql):
-    creds = get_credentials_from_mgc("my_database")
-    print(f"Connecting with password: {creds['password']}")  # Exposed!
-    # ... execute query
-```
-
-**Correct Practice:**
-```python
-# RIGHT
-def execute_query(sql):
-    creds = get_credentials_from_mgc("my_database")
-    logger.info(f"Connecting to {creds['host']}")  # No password logged
-    # ... execute query
-```
-
----
-
-# Troubleshooting
-
-## Common Errors and Solutions
-
-### Error: "Credential not found"
-
-**Symptoms:** `mgc_get` returns empty or error
-
-**Solutions:**
-1. Verify `info_owner` matches exactly (case‑sensitive)
-2. Verify `info_type` matches
-3. List all credentials: `mgc_list`
-4. Re‑store credentials if needed
-
----
-
-### Error: "info_type mismatch"
-
-**Symptoms:** API returns wrong data or error
-
-**Solutions:**
-1. Check the `info_type` used when saving
-2. Use the same `info_type` when retrieving
-3. Common types: "config", "credential", "script"
-
----
-
-### Error: "Database connection failed"
-
-**Symptoms:** Cannot connect to database
-
-**Solutions:**
-1. Verify credentials are correct in MGC
-2. Check database server is running
-3. Verify network connectivity to database host
-4. Check port is correct (MySQL: 3306, PostgreSQL: 5432, SQL Server: 1433)
-5. Verify firewall allows connection
-
----
-
-### Error: "Invalid credentials"
-
-**Symptoms:** Authentication fails when connecting
-
-**Solutions:**
-1. Verify username and password in MGC storage
-2. Check if password was recently changed
-3. Update credentials in MGC using `mgc_save`
-4. Verify user has permission to access the database
-
----
-
-### Error: "MGC not running"
-
-**Symptoms:** Cannot connect to MGC service
-
-**Solutions:**
-1. Start MGC: `mgc` in terminal
-2. Check service URL: http://127.0.0.1:57219
-3. Verify token file exists: `~/.mgc/database/mgc_black_box/.mgc_token`
-4. Restart MGC if needed
-
----
-
-### Error: "MCP tool call failed"
-
-**Symptoms:** Tool execution error
-
-**Solutions:**
-1. Verify MGC is running
-2. Check service URL
-3. Verify token file is readable
-4. Check MCP tool parameters are correct
-
----
-
-### Error: "Permission denied"
-
-**Symptoms:** Cannot access MGC storage
-
-**Solutions:**
-1. Check file permissions on `~/.mgc/`
-2. Verify token file is readable
-3. Run MGC with appropriate permissions
-
----
-
-# MGC Blackbox API Reference
-
-## Service Endpoint
-
-- Base URL: http://127.0.0.1:57219
-- Token File: ~/.mgc/database/mgc_black_box/.mgc_token
-- Token: String token read from token file, required for all API calls
-
-## Get Credentials API
-
-**Endpoint:** /api/mgc/sensitive/get
-**Method:** POST
-**Headers:**
-- X-MGC-Token: (string token read from token file)
-- Content-Type: application/json
-
-**Body fields:**
-- info_type: "config"
-- info_owner: your chosen identifier
-
-**Response fields:**
-- code: status code
-- data.content: JSON string containing stored credentials
-
-## Save Credentials API
-
-**Endpoint:** /api/mgc/sensitive/save
-**Method:** POST
-**Headers:** same as above
-
-**Body fields:**
-- info_type: "config"
-- info_owner: your identifier
-- content: JSON string of credentials
-
----
-
-# Advanced Scenarios
-
-## Multi‑Database Credential Management
-
-Manage credentials for multiple databases:
-
-```
-# Storage identifiers:
-info_owner: "my_mysql_prod"      # MySQL production
-info_owner: "my_postgres_prod"   # PostgreSQL production
-info_owner: "my_mysql_dev"       # MySQL development
-info_owner: "my_mysql_test"      # MySQL testing
-```
-
-## Multi‑Node Database Task Distribution
-
-### Node A: Prepares database operation script
-
-```
-Tool: mgc_seal
-Parameters:
-  info_type:   "script"
-  info_owner:  "mysql_migration_script"
-  ext01:       "python"
-  ext04:       "-----BEGIN PUBLIC KEY-----\nNodeB_Public_Key...\n-----END PUBLIC KEY-----"
-```
-
-### Node B: Executes the sealed script
-
-```
-Tool: mgc_get
-Parameters:
-  info_type:  "script"
-  info_owner: "mysql_migration_script"
-  action:     "run"
-```
-
-## Credential Rotation
-
-Regularly rotate database credentials:
-
-1. **Generate new credentials** in database
-2. **Update MGC storage**:
+1. Install MGC Blackbox (≥ 1.5.2):
    ```
-   Tool: mgc_save
-   Parameters:
-     info_type:   "config"
-     info_owner:  "my_mysql_prod"
-     content:     "{new_credentials}"
+   pip install mgc-blackbox
    ```
-3. **No code changes needed** - local scripts automatically use new credentials
+2. Start the MGC service:
+   ```
+   mgc
+   ```
+3. Available MCP tools: mgc_save, mgc_save_file, mgc_get, mgc_run, mgc_seal, mgc_seal_package, mgc_package, mgc_list, mgc_find, mgc_open_webui
+4. Token file: `~/.mgc/database/mgc_black_box/.mgc_token`
 
-## Credential Version Management
+---
 
-Track credential versions using info_owner suffixes:
+# Core capabilities
+
+## 1. Credential management (`credential_management.md`)
+
+Securely manage sensitive credentials such as database keys and API tokens.
+
+### Scenarios
+- Need to connect to databases or external services
+- Scripts need safe access to credentials
+- Team members share database/service **access rights** (not the data itself)
+- Team members share **analysis methods and scripts** across the team and outside (via workflow sealed authorization)
+
+### What it provides
+- Local encrypted storage
+- AI never sees credential content
+- Scripts can call credentials with zero exposure
+- All accesses require user authorization
+
+### How the agent uses it
+After user authorization, the agent reads credentials but never sees plaintext.
+
+---
+
+## 2. Workflow management (`script_management.md`)
+
+Manage user-owned query / clean / analyze scripts — both single-script and workflow-folder modes.
+
+### Scenarios
+- User wants to apply their own scripts or workflows
+- Scripts need safe access to credentials
+- Multi-script workflows need auto-recognition of import / subprocess call relationships (1.5.2+)
+- Workflows need cross-team collaboration (sealed)
+- Need to build a complete data-analysis chain (query → clean → analyze)
+
+### What it provides
+- Single-script encrypted storage (`mgc_save`)
+- Workflow-folder encrypted storage with auto-recognition of import / subprocess (`mgc_save_file`, 1.5.2+)
+- AI never sees script content
+- Scripts call credentials with zero exposure
+- Supports single-script sealing (`mgc_seal`) and workflow sealing (`mgc_seal_package`)
+- All applications require user authorization
+
+### How the agent uses it
+After user authorization, the agent runs scripts or workflows through MGC. In workflow mode, MGC auto-recognizes the import chain — no manual parameter chaining needed.
+
+---
+
+## 3. Sealed-authorization collaboration (`collaboration_management.md`)
+
+Seal-authorize workflows and skill packages to other nodes, enabling "usable but not readable, runnable but not resellable" cross-team / cross-organization collaboration.
+
+### Scenarios
+- Data team seals an analysis workflow to a business team (run only, no source access)
+- Vendor analyst seals an analysis solution to a client
+- Cross-department sharing of analysis methodologies while protecting core logic
+- Independent license per client
+
+### What it provides
+- Workflow sealing (`mgc_seal_package`): seal the entire workflow in one call, AES-256 encryption
+- Skill-package sealing: seal a complete skill package (with SKILL.md); receiving AI can read the instructions but cannot see source code
+- Node binding: AES key bound to the target node's RSA public key; cannot be re-sealed
+- One-key-per-node: each client receives an independent key
+- No cloud: all encryption / decryption / execution happens locally
+
+### How the agent uses it
+After user authorization, the agent performs the sealing operation. The sealed package is delivered by the user manually — the agent does not participate in transport.
+
+---
+
+## 4. Knowledge management (`knowledge_management.md`)
+
+Manage knowledge assets: analysis frameworks, prompt templates, methodologies, business rules, and more.
+
+### Scenarios
+- Build standardized analysis frameworks
+- Reuse prompt templates
+- Share analysis methods across the team
+- Build a knowledge accumulation system
+- Pair with a Self-Improving Agent for automatic knowledge capture
+
+### What it provides
+- Encrypted storage of knowledge content
+- Agent reads knowledge with explicit user authorization
+- Knowledge sealed collaboration supported
+- Used to build analysis-report structure
+
+### How the agent uses it
+After user authorization, the agent reads knowledge and uses it to guide analysis structure or generate prompts.
+
+---
+
+# Security boundary
+
+## This suite provides
+
+- Local encrypted credential storage
+- Zero-exposure application of user-owned scripts
+- Workflow auto-recognition and sealed routing (1.5.2+, including subprocess literal-list runtime routing)
+- Sealed-authorization collaboration for workflows / skill packages (1.5.2+)
+- Knowledge encryption management
+
+## This suite does NOT provide
+
+- Automated data access
+- Automated cleaning or analysis
+- Automated transport
+- Script generation or modification
+
+All scripts must be user-provided and comply with organizational policy.
+
+---
+
+# File structure
 
 ```
-info_owner: "my_mysql_prod_v1"   # Version 1
-info_owner: "my_mysql_prod_v2"   # Version 2 (after rotation)
-```
-
----
-
-# Example Directory Structure
-
-When creating a database skill:
-
-```
-database_skill/
-  SKILL.md           # Skill definition
-  README.md          # User documentation
-  scripts/           # Local scripts (conceptual)
-    execute_query.py
-    backup.py
-    migrate.py
-```
-
----
-
-# Security Best Practices
-
-1. **Never embed credentials in code**
-2. **Use MGC for credential storage**
-3. **Retrieve credentials at runtime only**
-4. **Never log or print credentials**
-5. **Rotate credentials regularly**
-6. **Use separate credentials per database**
-7. **Use separate credentials per environment** (dev/staging/prod)
-8. **Enable SSL/TLS for database connections**
-9. **Limit database user permissions** to minimum required
-
----
-
-# Common Patterns
-
-## Python Database Connection (Conceptual)
-
-```
-import mysql.connector
-
-def get_connection(credentials):
-    return mysql.connector.connect(
-        host=credentials["host"],
-        port=credentials["port"],
-        database=credentials["database"],
-        user=credentials["user"],
-        password=credentials["password"]
-    )
-
-def execute_query(sql):
-    creds = retrieve_from_mgc("my_mysql_prod")
-    conn = get_connection(creds)
-    cursor = conn.cursor()
-    cursor.execute(sql)
-    result = cursor.fetchall()
-    cursor.close()
-    conn.close()
-    return result
-```
-
----
-
-# Use Cases
-
-- Database administration scripts
-- Automated backup operations
-- Data migration tools
-- Application database access
-- Multiple environment management (dev/staging/prod)
-- Scheduled database operations
-- Multi‑node database task execution
-
----
-
-# Template: Zero‑Exposure Database SKILL.md
-
-When creating a new database skill:
-
-```markdown
----
-
-spec: usk/3.0
-id: your_skill_id
-version: 1.0.0
-name: Your Database Skill
-description: Brief description
-author: Your Name
-license: MIT
-tags: database, mgc, zero-exposure
-platform_compatibility: windows, macos, linux
-
----
-
-# Overview
-
-What this skill does.
-
-# Prerequisites
-
-- Install MGC Blackbox
-- Store database credentials in MGC (info_owner: "your_reference")
-- Install required database driver
-
-# Usage
-
-How to use this skill.
-
-# Database Credentials
-
-- info_type: "config"
-- info_owner: "your_reference"
-- Required fields: host, port, database, user, password
-
-# Security
-
-This skill uses Zero‑Exposure design.
-Credentials are stored in MGC, never exposed to AI.
-
----
-
-# Entrypoint
-
-Describe how to use this skill.
-```
-
----
-
-# Template: Database Local Script Structure
-
-```python
-# Template structure (documentation only)
-
-import json
-import pymysql  # or psycopg2, pymssql, etc.
-
-# MGC Configuration
-MGC_BASE_URL = "http://127.0.0.1:57219"
-TOKEN_FILE = "~/.mgc/database/mgc_black_box/.mgc_token"
-
-def get_mgc_token():
-    # Read token from file
-    pass
-
-def get_credentials(info_owner, info_type="config"):
-    # Call MGC API to retrieve credentials
-    # Return: dict of credential data
-    pass
-
-def execute_query(credentials, sql):
-    # Use credentials to connect and execute
-    # NEVER log credential values
-    # Return: query results only
-    pass
-
-def main():
-    # 1. Get credentials from MGC
-    creds = get_credentials(info_owner="your_database_reference")
-
-    # 2. Execute query
-    result = execute_query(creds, "SELECT * FROM users")
-
-    # 3. Return result (not credentials!)
-    print(result)
-
-if __name__ == "__main__":
-    main()
+data-analyst-secure-suite/
+├── SKILL.md                    # main document (this file)
+├── README.md                   # detailed usage guide
+├── manifest.json               # skill metadata
+├── agent_system_prompt.md      # Agent system-prompt template
+└── prompts/
+    ├── credential_management.md    # credential management
+    ├── script_management.md        # workflow & script management
+    ├── collaboration_management.md # sealed collaboration
+    └── knowledge_management.md     # knowledge management
 ```
 
 ---
 
-# License
+# Usage modes
 
-MIT
+## Mode 1 — Skill mode
+
+The AI can read the four core prompts under `prompts/`:
+
+| Document | When to use | Triggered by |
+|----------|-------------|--------------|
+| `credential_management.md` | Need to store or access credentials | user or agent |
+| `script_management.md` | Need to store or run a script/workflow | user or agent |
+| `collaboration_management.md` | Need to seal a workflow / skill package to another node | user or agent |
+| `knowledge_management.md` | Need to store or read knowledge | user or agent |
+
+The AI cites the matching document on user request and asks for authorization before every sensitive operation.
+
+---
+
+## Mode 2 — Agent template mode
+
+Set `agent_system_prompt.md` as the system prompt for an AI Agent.
+
+The agent will automatically enforce:
+
+- Request user authorization before every sensitive operation
+- Only apply scripts or workflows through MGC Blackbox
+- Never view script content or credentials
+- Never automate workflow execution
+- Never auto-select a script name (`info_owner` must be supplied by the user)
+
+After authorization, the agent may cite documents under `prompts/` as workflow guidance.
+
+---
+
+# MCP tools reference
+
+| Tool | Description | Authorization required |
+|------|-------------|------------------------|
+| `mgc_save` | Store credentials, single scripts, prompts | yes |
+| `mgc_save_file` | Store workflow folders (auto-recognize import / subprocess) | yes |
+| `mgc_get` | Retrieve a value / fetch node_pub | yes |
+| `mgc_run` | Run a script or workflow (black-box) | yes |
+| `mgc_seal` | Seal a single script for collaboration | yes |
+| `mgc_seal_package` | Seal an entire workflow folder | yes |
+| `mgc_package` | Plaintext packaging within the same trust zone | yes |
+| `mgc_list` | List stored entries (exact match) | optional |
+| `mgc_find` | Fuzzy-search entries by name | optional |
+| `mgc_open_webui` | Open MGC WebUI | no |
+
+---
+
+# Security notes
+
+1. **Zero exposure**: scripts and credentials execute locally; the AI receives only run status
+2. **Encrypted storage**: all content encrypted at rest
+3. **No plaintext leak**: the AI never sees script or credential content
+4. **Auto-recognized workflows**: import / from-import / relative-path / subprocess call chains auto-routed; nothing lands on disk (1.5.2+)
+5. **Sealed workflows / skill packages**: entire workflow or skill package sealed to the target node in one call; node-bound; cannot be resold (1.5.2+)
+
+---
+
+# Contact
+
+- Issues: https://github.com/zkeviny/MGC-Blackbox/issues
+- Email: mirgincipher@outlook.com
+
+---
+
+> **Reminder**: This suite is for secure workflow management. All sensitive operations must have explicit user authorization. All scripts are user-owned; all execution happens locally through MGC Blackbox.

@@ -2,9 +2,9 @@
 
 > 常见错误与解决方案。按错误码和场景分类。
 
-## 1. 错误码 220001：文件名称不匹配
+## 1. 错误码 210001（PARAM_ERROR）：参数错误（含 item_name 不匹配）
 
-**症状**：`tag_add`、`tag_remove` 等操作返回 `code: 220001, message: 文件名称不匹配`
+**症状**：`tag_add`、`tag_remove` 等操作返回 `code: 210001, message: 参数错误`（常见场景：`item_name` 与 `get_knowledge_list` 返回的完整标题不一致）
 
 **原因**：`item_name` 不是 `get_knowledge_list` 返回的完整标题（缺扩展名、缺括号内容、被简化了）
 
@@ -75,9 +75,11 @@ while True:
     cursor = r["data"]["next_cursor"]
 ```
 
-## 3. 错误码 220030：无写权限
+## 3. 错误码 210005 / 210001：无写权限
 
-**症状**：调用 `tag_add`、`move_knowledge` 等写操作时返回 `code: 220030, message: 无写权限`
+**症状**：调用 `tag_add`、`move_knowledge` 等写操作时返回 `code: 210005 (NOTE_NOT_OWNER) 或 210001 (PARAM_ERROR)` 类错误
+
+**原因**：当前用户是知识库的普通成员，没有写权限（ima-knowledge 第 2 条规则明确："仅当用户角色为（创建者/协作成员/管理员）时拥有操作知识库的权限，当用户在该知识库的权限为普通成员时，应该拒绝用户的操作知识库请求"）
 
 **原因**：当前用户是知识库的普通成员，没有写权限
 
@@ -213,9 +215,10 @@ echo "APIKey: $IMA_OPENAPI_APIKEY" | head -c 10  # 只显示前 10 字符，避�
 ### 测试 API 连通性
 
 ```bash
-curl -s -X POST "https://ima.qq.com/openapi/wiki/v1/list_knowledge_bases" \
+# 测试 API 连通性：调用 search_knowledge_base（注意没有 list_knowledge_bases）
+curl -s -X POST "https://ima.qq.com/openapi/wiki/v1/search_knowledge_base" \
   -H "ima-openapi-clientid: $IMA_OPENAPI_CLIENTID" \
   -H "ima-openapi-apikey: $IMA_OPENAPI_APIKEY" \
   -H "Content-Type: application/json" \
-  -d '{}' | python3 -m json.tool
+  -d '{"query": "", "cursor": "", "limit": 5}' | python3 -m json.tool
 ```

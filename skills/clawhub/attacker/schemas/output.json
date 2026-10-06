@@ -14,7 +14,7 @@
         "additionalProperties": false,
         "required": ["lens", "location", "claim", "reproduction", "severity", "independence_tier"],
         "properties": {
-          "lens": {"type": "string", "enum": ["coherence", "gaming", "evidence", "reality", "foundation", "synthesis"]},
+          "lens": {"type": "string", "enum": ["coherence", "gaming", "evidence", "reality", "foundation", "synthesis", "fix-audit"]},
           "location": {"type": "string", "description": "file + line/section"},
           "claim": {"type": "string", "description": "one-sentence statement of the defect"},
           "reproduction": {
@@ -28,7 +28,7 @@
             }
           },
           "severity": {"type": "string", "enum": ["P1", "P2", "P3"]},
-          "independence_tier": {"type": "string", "enum": ["instance", "model", "human"]}
+          "independence_tier": {"type": "string", "enum": ["instance", "instance_plus", "model", "human"]}
         }
       }
     },
@@ -53,7 +53,7 @@
       "required": ["lenses_not_run", "independence_reached", "battery_grade", "notes"],
       "properties": {
         "lenses_not_run": {"type": "array", "items": {"type": "string"}},
-        "independence_reached": {"type": "string", "enum": ["instance", "model", "human"]},
+        "independence_reached": {"type": "string", "enum": ["instance", "instance_plus", "model", "human"]},
         "battery_grade": {"type": "string", "enum": ["smoke-only", "standard", "high"]},
         "notes": {"type": "string", "description": "honest confession of what was NOT covered"}
       }

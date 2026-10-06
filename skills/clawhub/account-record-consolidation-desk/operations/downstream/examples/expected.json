@@ -1,0 +1,18 @@
+{
+  "merge_result": {
+    "merged_record": {
+      "account_id": "ACC-3177",
+      "owner": "Nora",
+      "region": "west",
+      "status": "renewal"
+    },
+    "changed_fields": [
+      "owner",
+      "status"
+    ],
+    "preserved_fields": [
+      "account_id",
+      "region"
+    ]
+  }
+}

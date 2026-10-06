@@ -1,45 +1,57 @@
-## Description: <br>
-Google Contacts API integration with managed OAuth for managing contacts, contact groups, and address book searches. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use a connected Google account to search, manage, and organize contacts and contact groups through Maton.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to read, create, update, and delete Google Contacts and contact groups through Maton's managed OAuth proxy. It is suited for address book lookup, contact maintenance, group management, and Google People API troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create, update, or delete contacts and contact groups in a connected Google account. <br>
-Mitigation: Confirm the active Google connection, target resource, and intended effect before any write operation. <br>
-Risk: Deleting a contact group with deleteContacts=true can also delete member contacts. <br>
-Mitigation: Use deleteContacts=false unless the user explicitly approves deleting both the group and its member contacts. <br>
-Risk: The integration depends on Maton as the OAuth proxy for Google Contacts. <br>
-Mitigation: Install and use the skill only when the user trusts Maton to broker the Google Contacts connection. <br>
+## Use Case:
 
+People and teams with an authorized Google account use this skill to find, create, update, or delete contacts and manage contact groups. With separate approval, they can set up Maton automations that act on the connected account.
 
-## Reference(s): <br>
-- [Google People API Overview](https://developers.google.com/people/api/rest) <br>
-- [People Resource](https://developers.google.com/people/api/rest/v1/people) <br>
-- [Contact Groups Resource](https://developers.google.com/people/api/rest/v1/contactGroups) <br>
-- [Person Fields Reference](https://developers.google.com/people/api/rest/v1/people#Person) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with API endpoints, JSON examples, and Python or JavaScript code snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; API responses are JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Contact changes or deletion can affect the wrong person or account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest account and scopes, verify the contact and account, and obtain explicit approval before each write or deletion.
+
+Risk: Approved automations can persist and forward event data to external destinations.
+
+Mitigation: Require separate approval for automations and destinations, and disclose what data will be forwarded before enabling them.
+
+## Reference(s):
+
+- [Google Contacts skill on ClawHub](https://clawhub.ai/byungkyu/skills/google-contacts)
+- [Maton homepage](https://maton.ai)
+- [Google People API documentation](https://developers.google.com/people/api/rest)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Scheduled trigger reference](artifact/references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with contact summaries and optional command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include personal contact data; disclose only fields needed for the request.]
+
+## Skill Version(s):
+
+1.2.6 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

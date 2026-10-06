@@ -1,0 +1,121 @@
+# office-token-booster v1.0.5 发布说明
+
+> **ClawHub 高危扫描整改版** —— 修复静态分析唯一一条 Critical 发现（`suspicious.exposed_secret_literal`），仅文档文本修正，代码零变更。
+>
+> 发布日期：2026-10-05 ｜ 版本号：`1.0.5` ｜ 作者：Elisabeth15501
+
+---
+
+## 本版改了什么
+
+**一句话**：仓库里没有任何真实密钥，但 `CHANGELOG.md` 在介绍「密钥检测规则」时把规则写成了「敏感名=值」的样子，被扫描器当成硬编码凭据——已改成散文描述，信息一条不少。
+
+| 项 | 说明 |
+|---|---|
+| 修复位置 | `CHANGELOG.md` v0.9.9 条目两处（模式枚举段、预检能力段） |
+| 命中原因 | 文本含「敏感名 + 赋值号 + 字面量」链式形态，符合 `suspicious.exposed_secret_literal` 规则 |
+| 实际风险 | **无真实凭据**（发布清单 23 文件凭据扫描命中 0），属形式命中 |
+| 改法 | 改为纯散文描述 + 模式清单指向 `scripts/security_preflight.py` 为准 |
+| 附加 | 新增文档回归守卫测试，防止同类 Critical 复发 |
+| 代码影响 | **零**。测试基线 186 passed / 3 skipped + 新增 7 例文档守卫 |
+
+### 为什么不用「排除文件」的方式绕过
+
+把 `CHANGELOG.md` 排除出发布包确实能让告警消失，但那是**让扫描器看不见**，不是修好——用户需要的能力变更记录会凭空消失，反而制造新的「声明与内容不符」。正确做法是让文本不再长得像凭据。
+
+---
+
+## v1.0.4 发布说明
+
+> **文档叙述清理 + 跨平台发布裁剪** —— 办公室 AI 提效助手，执行与度量一体，已上架天禧 AI 技能广场（v1.0.3），并同步发布至 ClawHub。
+>
+> 发布日期：2026-10-04 ｜ 版本号：`1.0.4` ｜ 作者：Elisabeth15501
+
+---
+
+## 本版改了什么
+
+纯文档与打包面变更，**代码行为零变更**（测试基线 186 passed / 3 skipped 不变）：
+
+1. **SKILL.md 去旧版本叙事**：清掉小节标题与正文里的 `v0.x` 演化叙述（`v0.3 长链路 Agent`、`v0.4 粘合层`、`v0.5 再往前一步`、`v0.6 接宿主对话事件`、`v0.7 去品牌化`）、`ADR-9` 与内部 `方向 B` 代号，改成直接讲能力；小节标题不再挂版本号。
+2. **修正一处陈旧断言**：`tests/test_v09_skillmd.py` 里硬编码的 `任务执行（方向 B）` 字面量改为通用的 `| 任务执行 |`，保留守卫本意。
+3. **新增 `.clawhubignore`**（只影响 ClawHub 包）：排除 `LICENSE`（平台强制 MIT-0）、联网上传客户端、开发期预检脚本、测试与开发期 requirements —— 这些都不是 SKILL.md 声明的用户能力。
+4. **编译跨平台声明**：frontmatter 去掉 `license: MIT`、补 `bins: [python3]`、`network` 去掉「天禧AI 上架版」单一平台措辞。
+
+> 一句话：本技能**既做**办公交付物（周报 / 纪要 / 数据分析 / 文档整理 / PPT 大纲），**又记**你省了多少 Token 和时间，全程纯本地、零联网、不读密钥。
+
+---
+
+## v1.0.3 发布说明
+
+> **代码质量整改版** —— 办公室 AI 提效助手，执行与度量一体，可安全上架天禧 AI 技能广场。
+>
+> 发布日期：2026-09-28 ｜ 版本号：`1.0.3` ｜ License：MIT ｜ 作者：Elisabeth15501
+
+---
+
+## 一句话定位
+
+`office-token-booster` 既帮你**做**办公交付物（周报 / 会议纪要 / 数据分析 / 文档整理 / PPT 大纲），又自动记下每次**省了多少 Token 和时间** —— 执行与度量一体，让「AI 提效」看得见、算得清、可验证。
+
+本版本为 **v1.0.3 代码质量整改**：基于 clean-code 审计，清除 1 项红项（不可达死规则 + 一处潜在崩溃）与 4 项黄项（长函数 / 魔法数 / 重复代码 / 工单式注释）。**纯重构，对外行为等价** —— CLI 参数、报告结构、问句应答、输出格式全部不变。
+
+> 版本号说明：天禧 AI 平台要求上传版本号严格大于已登记版本，同版本不允许覆盖，故本轮整改以 v1.0.3 发布。
+
+---
+
+## v1.0.3 变更摘要
+
+### 🔴 修复：潜在崩溃 + 不可达死规则
+
+| 项 | 问题 | 处置 |
+|----|------|------|
+| `report_engine` | 两处内联推荐渲染仍在读取已删除的 `rec.install_cmd`，命中即抛 `AttributeError` | 统一改走 `format_recommendations_md()`，并保留「九、」编号标题与 🔴/🟠/🟢 优先级标识（与 HTML 口径一致） |
+| `skill_recommender` | `_GLOBAL_RULES` 中按金额触发的规则声明了 `threshold_cost` / `condition`，但代码只判断 `threshold_tasks` —— 该 CRITICAL 规则永不触发，`condition` 从未被求值 | **删除而非实现**（账本无成本字段，按金额触发需先引入定价换算，属新功能）；一并删除 `install_cmd` / `requires_confirmation` 死字段 |
+
+### 🟡 重构：无行为变化
+
+- **长函数拆分**：`qa.answer_followup` 改表驱动（17 组关键词常量 + 路由表，162 → 19 行）；`diagnose.compute_summary` 抽聚合 helper（95 → 45 行）；`executor.main` 拆子命令（105 → 44 行）；`recommend_skills` 拆两个 matcher（64 → 26 行）。
+- **消除重复**：`diagnose` 两段近似聚合循环合并为 `_group_sum` + `_with_saved`；`executor` 4 处引擎页脚抽取为 `_engine_footer()`。
+- **魔法数常量化**：`qa` 内联关键词 → `_KW_*` 命名常量；`diagnose` 阈值 → 命名常量，提示文案改为插值常量（防改常量后文案漂移）。
+- **注释清理**：12 个模块共 **35+ 处** `S7/E3/S3/D1/E4/Issue #n/ADR-7/ADR-9/Phase N/v0.x` 工单式与版本号注释，改写为「为什么这样做」。
+- **杂项**：删除失效脚本 `test_clawhub.py` 与 `test_phase2.py`（调用已移除的联网参数，早已无法运行）。
+
+### ✅ 验证
+
+- 全量 **186 passed, 3 skipped**（与整改前基线一致）。
+- `qa` 模块 **54 组问句新旧输出逐句等价性比对，0 diff** —— 动了 15 个顺序敏感分支，单测不足以覆盖，故从 git HEAD 取出旧模块对拍。
+- `security_preflight scripts` EXIT=0；`executor` CLI 五条路径冒烟全通。
+
+---
+
+## 安全与合规
+
+- ✅ `network.outbound = false`：全程本地运行，不联网、不上传用户内容、不读密钥。
+- ✅ 上架包内 `.py` 扫描 `urllib / requests / http.client / socket.create / os.system / subprocess / os.popen / eval` 等联网 / 危险特征 **0 命中**。
+- ✅ 无硬编码本地绝对路径（如 `C:/Users/...`）。
+- ✅ 联网能力（技能推荐市场查询）已彻底移除，相关客户端不在上架包内。
+- ✅ 无硬编码密钥；报告本地生成。
+
+---
+
+## 上架包内容
+
+`office-token-booster.zip`（约 128 KB）包含：
+
+| 类别 | 文件 |
+|------|------|
+| 元信息 | `SKILL.md`、`config.yaml`、`LICENSE`、`RELEASE_NOTES.md` |
+| 文档 | `README.md`、`QUICKSTART.md`、`CHANGELOG.md`、`usage-examples.md` |
+| 业务代码 | `scripts/` 12 个模块（执行引擎、账本、报告、质量护栏、诊断、对话、宿主成本、推荐等）+ `type_registry.json` |
+| 示例 | `examples/ledger.json`（示例账本） |
+
+> 上架包已剔除一切联网客户端（`clawhub_client.py` / `skillhub_client.py`）与开发 / 测试噪音（`security_preflight.py` / `test_recommendation.py` / `tests/` / `.github/`），可直接上传天禧 AI 技能广场。
+
+---
+
+## 升级提示
+
+- 从 v1.0.x 升级无需数据迁移；账本 `ledger.json` 格式保持不变。
+- 版本号已统一为 `1.0.3`，与 git tag `v1.0.3` 对应。
+- 若此前手动改过 `network.outbound`，升级后请确认它为 `false` 以匹配上架合规要求。

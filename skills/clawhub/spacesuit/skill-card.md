@@ -1,44 +1,59 @@
-## Description: <br>
-Openclaw Spacesuit is a framework scaffold for OpenClaw workspaces that installs session protocols, memory structure, git workflow conventions, safety rules, handoff patterns, heartbeat checks, and local workspace automation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scaffolds OpenClaw workspaces with session, memory, safety, and collaboration conventions.
 
-## Publisher: <br>
-[jontsai](https://clawhub.ai/user/jontsai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jontsai](https://clawhub.ai/user/jontsai)
 
-## Use Case: <br>
-Developers and operators use this skill to bootstrap and maintain an OpenClaw workspace with durable memory, safety guidance, handoff conventions, and local scripts for workspace setup, upgrade previews, and operator indexing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill enables broad local memory and cross-session workspace behavior. <br>
-Mitigation: Review AGENTS.md, TOOLS.md, SECURITY.md, and the installed workspace files before enabling the framework; narrow or disable broad search, heartbeat, memory commit, and broadcast rules in shared or sensitive environments. <br>
-Risk: The operator sync utility reads local OpenClaw session transcripts and writes operator metadata to state/operators.json. <br>
-Mitigation: Run sync-operators.sh with --dry-run first, keep state/operators.json private, and use explicit workspace/profile settings when multiple OpenClaw profiles exist. <br>
-Risk: Install and upgrade scripts create or modify root workspace files. <br>
-Mitigation: Preview upgrades with the diff or dry-run commands and review marker-delimited changes before applying them to an active workspace. <br>
+## Use Case:
 
+OpenClaw users and workspace administrators use this skill to set up and maintain agent instructions, memory practices, safety rules, and optional workspace integrations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jontsai/skills/spacesuit) <br>
-- [OpenClaw](https://github.com/openclaw/openclaw) <br>
-- [OpenClaw Command Center](https://github.com/jontsai/openclaw-command-center) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and workspace file templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes local setup, upgrade, diff, and operator-sync scripts that create or modify workspace files when run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.0 (source: server release metadata and SKILL.md metadata) <br>
+Risk: Persistent memory instructions may expose private workspace context through remote pushes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove automatic memory-file git pushes and review what is stored or shared before enabling them.
+
+Risk: Generated instructions encourage broad searches of private files and services.
+
+Mitigation: Require explicit approval before accessing credentials, dotfiles, cloud storage, email, calendars, or prior sessions.
+
+Risk: Incident alerts could disclose sensitive details across unintended channels.
+
+Mitigation: Define approved incident recipients and channels in the generated security instructions before use.
+
+## Reference(s):
+
+- [OpenClaw Spacesuit on ClawHub](https://clawhub.ai/jontsai/skills/spacesuit)
+- [Release and rollback instructions](artifact/docs/releases/README.md)
+- [Work graph documentation](artifact/docs/work-graph.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration instructions, Shell commands]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides workspace instruction templates and optional local snapshot workflows.]
+
+## Skill Version(s):
+
+0.4.0 (source: ClawHub release, SKILL.md, CHANGELOG.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

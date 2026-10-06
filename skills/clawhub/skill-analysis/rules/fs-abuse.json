@@ -1,0 +1,104 @@
+{
+  "family": "fs-abuse",
+  "version": 2,
+  "rules": [
+    {
+      "id": "fs-00",
+      "re": "os\\.symlink\\b|ln\\s+-s\\b|mklink\\b|New-Item\\s+-ItemType\\s+SymbolicLink",
+      "label": "创建符号链接（可绕过路径限制/沙箱逃逸）",
+      "sev": "P1",
+      "why": "符号链接可越出声明的受限目录，是文件系统 MCP 沙箱逃逸（EscapeRoute CVE-2025-53109）的同类手法。"
+    },
+    {
+      "id": "fs-01",
+      "re": "(?:\\.\\./|\\.\\.\\\\){2,}",
+      "label": "路径穿越（../ 嵌套）",
+      "sev": "P2",
+      "why": "嵌套 ../ 可能越出声明目录读取/写入受限文件。"
+    },
+    {
+      "id": "fs-02",
+      "re": "--no-auth\\b|--no-auth-\\w+|no_authentication|auth\\s*[:=]\\s*false|disable[\\s_-]?auth|allow[\\s_-]?anonymous",
+      "label": "本地/服务进程禁用鉴权",
+      "sev": "P2",
+      "why": "无鉴权的本地服务可被同浏览器页通过 CSRF/DNS 重绑定利用（MCP Inspector CVE-2025-49596 同类）。"
+    },
+    {
+      "id": "fs-03",
+      "re": "bind\\s*[=(]?\\s*['\\\"]?0\\.0\\.0\\.0|host\\s*[:=]\\s*['\\\"]?0\\.0\\.0\\.0",
+      "label": "服务绑定 0.0.0.0（全网卡暴露）",
+      "sev": "P2",
+      "why": "开发期绑定全网卡便利，但同机其他进程/页可直达，扩大暴露面。"
+    },
+    {
+      "id": "fs-04",
+      "re": "^\\s*fsmonitor\\s*=\\s*(?!true\\b|false\\b|1\\b|0\\b|yes\\b|no\\b|hook\\b)\\S[^\\n]{0,500}",
+      "label": "Git 配置驱动执行：core.fsmonitor 指向外部命令（GitSpawn）",
+      "sev": "P0",
+      "why": "Git 刷新索引时会执行该命令，而 git status / git diff 等绝大多数触碰工作区的命令都会触发索引刷新。AI 编码 Agent 常在收集仓库上下文时自动运行 git，导致命令在用户批准之前、且在沙箱之外以开发者权限执行。依据 Manifold Security《GitSpawn》2026-09-01（影响 Claude Code / Goose CVE-2026-72718 / Hermes CVE-2026-71963 / Grok Build / Qwen Code）。投递方式为 zip、共享盘、同步文件夹等「以目录形式传递」的渠道，而非 clone。"
+    },
+    {
+      "id": "fs-05",
+      "re": "^\\s*(?:pager|editor|sshCommand|gitProxy|askpass|diff\\.[A-Za-z0-9_-]+\\.command|diff\\.external)\\s*=\\s*\\S[^\\n]{0,500}",
+      "label": "Git 配置驱动执行：pager/editor/sshProxy 等命令接收器",
+      "sev": "P0",
+      "why": "core.pager（git log 等输出时）、core.editor（编辑提交信息时）、core.sshCommand / core.gitProxy（远程操作时）均为 Git 的命令执行接收器，仓库自带配置即可指定要执行的命令。"
+    },
+    {
+      "id": "fs-06",
+      "re": "hooksPath\\s*=\\s*[^\\n]{0,500}\\.\\./",
+      "label": "Git hooksPath 路径遍历（指向仓库外的钩子目录）",
+      "sev": "P0",
+      "why": "core.hooksPath 值中含上级目录穿越，可逃逸出预期钩子目录、指向攻击者可写位置，进而在任意 git 操作时加载并执行外部钩子。"
+    },
+    {
+      "id": "fs-07",
+      "re": "hooksPath\\s*=\\s*(?!\\s*/dev/null)\\S[^\\n]{0,500}",
+      "label": "Git hooksPath 被重定向到非默认位置",
+      "sev": "P1",
+      "why": "把钩子目录指向仓库内其他路径即可让随包携带的脚本在 git 操作时自动执行。安全基线为指向空目录或 /dev/null。"
+    },
+    {
+      "id": "fs-08",
+      "re": "^\\s*worktree\\s*=\\s*[^\\n]{0,500}\\.\\./",
+      "label": "Git core.worktree 路径遍历（埋藏 bare 仓库逃逸）",
+      "sev": "P1",
+      "why": "在子目录埋一个 bare 仓库并设 bare=false 加 core.worktree 加执行指令，待上层服务进入该目录运行 git status / diff 时即加载恶意配置。"
+    },
+    {
+      "id": "fs-09",
+      "re": "^\\s*[\\w.-]+\\s*=\\s*(?!\\s*['\\\"])(?!\\s*!+\\s*[\\w$.]+\\s*[;,)\\]])\\s*(?:!|.*(?:sh\\s+-c|/\\s*dev\\s*/\\s*tcp|\\|\\s*(?:ba)?sh\\b|\\beval\\b|curl\\b[^\\n]{0,500}\\|\\s*(?:ba)?sh|wget\\b[^\\n]{0,500}\\|\\s*(?:ba)?sh|python[3]?\\b[^\\n]{0,500}-c\\b))",
+      "label": "Git 配置项中嵌入命令执行/下载执行原语",
+      "sev": "P0",
+      "why": "Git 配置值里出现下载执行、管道执行或解释器内联执行原语，属明确的「配置即代码执行」载荷。"
+    },
+    {
+      "id": "fs-10",
+      "re": "^\\s*symlinks\\s*=\\s*true\\b",
+      "label": "Git 启用符号链接还原（core.symlinks）",
+      "sev": "P2",
+      "why": "该配置会让后续 checkout / pull 还原仓库内的符号链接；配合仓库内指向上级目录的链接，可把仓库内读写升级为文件系统逃逸。"
+    },
+    {
+      "id": "fs-11",
+      "re": "(?:>\\s*|>>\\s*|tee\\s+)(?:/etc/|/root/|/usr/|/boot/|/proc/)",
+      "label": "写入类 Unix 系统级路径（提权/持久化写入）",
+      "sev": "P1",
+      "why": "向 /etc、/root、/usr 等系统级路径写入，可用于植入持久化、改写系统配置或覆盖关键文件。"
+    },
+    {
+      "id": "fs-12",
+      "re": "(?:>\\s*|>>\\s*|tee\\s+)[A-Za-z]:\\\\\\\\(?:Windows|ProgramData|System32)\\\\\\\\",
+      "label": "写入 Windows 系统级路径（提权/持久化写入）",
+      "sev": "P1",
+      "why": "向系统盘的系统目录写入，可用于植入持久化或改写系统配置。"
+    },
+    {
+      "id": "fs-13",
+      "re": "\\.\\./\\.\\./\\.\\./",
+      "label": "深度路径穿越（三层及以上上级目录）",
+      "sev": "P1",
+      "why": "连续三层以上的上级目录穿越，意图跳出 Skill 目录边界访问系统文件或其它项目目录（CVE-2026-66384 路径遍历同族）。"
+    }
+  ]
+}

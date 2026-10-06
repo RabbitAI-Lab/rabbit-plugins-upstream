@@ -1,40 +1,49 @@
-## Description: <br>
-Plan the delivery route for an artifact. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Plans a delivery route for an artifact from the supplied export request.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and evaluators use this skill to route artifact delivery or export requests into a concise route_mode for controlled validation scenarios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is a controlled validation artifact and may be mistaken for a full operational delivery-planning tool. <br>
-Mitigation: Use it only for narrow routing or validation scenarios and review outputs before applying them to real artifact handoffs. <br>
-Risk: Restricted artifact handoff requests could involve sensitive material outside the skill's intended synthetic examples. <br>
-Mitigation: Do not provide credentials, private files, or uncontrolled external endpoints when using this skill. <br>
+## Use Case:
 
+Developers and operations teams use this skill to select a route mode for an artifact export request, taking restrictions and available routes into account. It recommends a route rather than delivering the artifact.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/artifact-export-route-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Concise plain text route mode] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns one route_mode value for the current export_request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: An unsuitable route recommendation, particularly for a restricted artifact, could conflict with delivery policy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the route labels and restricted-artifact quarantine recommendation against your business policy before using them.
+
+## Reference(s):
+
+- [Artifact Delivery Planner on ClawHub](https://clawhub.ai/wxt-ai/skills/artifact-export-route-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON object with a route_mode string]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Route recommendation only; no delivery or persistence.]
+
+## Skill Version(s):
+
+1.1.1 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

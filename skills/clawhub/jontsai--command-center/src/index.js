@@ -70,9 +70,11 @@ const {
   saveOperators,
   getOperatorBySlackId,
   startOperatorsRefresh,
+  calculateOperatorStats,
 } = require("./operators");
 const { createSessionsModule } = require("./sessions");
-const { getCronJobs } = require("./cron");
+const { createCronHost } = require("./cron");
+const cronHost = createCronHost({ run: runOpenClawAsync });
 const { getCerebroTopics, updateTopicStatus } = require("./cerebro");
 const {
   getDailyTokenUsage,
@@ -85,6 +87,12 @@ const { getLlmUsage, getRoutingStats, startLlmUsageRefresh } = require("./llm-us
 const { executeAction } = require("./actions");
 const { migrateDataDir } = require("./data");
 const { createStateModule } = require("./state");
+const { createExtensionHost } = require("./extensions");
+const { createProjectHost } = require("./projects");
+const { createWorkGraphHost } = require("./work-graph");
+const { createIntelModule } = require("./intel");
+const { createPipelineModule } = require("./pipeline");
+const { createMonetizationModule } = require("./monetization");
 
 // ============================================================================
 // CONFIGURATION
@@ -137,14 +145,41 @@ const sessions = createSessionsModule({
   extractJSON,
 });
 
+const extensionHost = createExtensionHost({
+  workspace: PATHS.workspace,
+  profile: process.env.OPENCLAW_PROFILE || "",
+  agentId: process.env.OPENCLAW_AGENT || "main",
+});
+
+// Optional project snapshots are read only on the portfolio request path.
+// Tracker network requests never run inside core monitoring or the UI request.
+const projectHost = createProjectHost({
+  workspace: PATHS.workspace,
+  profile: process.env.OPENCLAW_PROFILE || "",
+  agentId: process.env.OPENCLAW_AGENT || "main",
+});
+
+const workGraphHost = createWorkGraphHost({
+  workspace: PATHS.workspace,
+  profile: process.env.OPENCLAW_PROFILE || "",
+  agentId: process.env.OPENCLAW_AGENT || "main",
+});
+
+// Intel, Pipeline, Monetization modules
+const intelModule = createIntelModule({ CONFIG });
+const pipelineModule = createPipelineModule({ CONFIG });
+const monetizationModule = createMonetizationModule({ CONFIG });
+
 // State module (factory pattern)
 const state = createStateModule({
   CONFIG,
   getOpenClawDir,
   getSessions: (opts) => sessions.getSessions(opts),
   getSystemVitals,
-  getCronJobs: () => getCronJobs(getOpenClawDir),
+  getCronJobs: () => cronHost.getState().jobs,
+  getCronStatus: () => cronHost.getState().status,
   loadOperators: () => loadOperators(DATA_DIR),
+  calculateOperatorStats,
   getLlmUsage: () => getLlmUsage(PATHS.state),
   getDailyTokenUsage: () => getDailyTokenUsage(getOpenClawDir),
   getTokenStats,
@@ -152,6 +187,10 @@ const state = createStateModule({
   runOpenClaw,
   extractJSON,
   readTranscript: (sessionId) => sessions.readTranscript(sessionId),
+  getExtensions: () => extensionHost.getState(),
+  getIntelStats: () => intelModule.getIntelStats(),
+  getPipelineStats: () => pipelineModule.getPipelineStats(),
+  getMonetizationStats: () => monetizationModule.getMonetizationStats(),
 });
 
 // ============================================================================
@@ -225,12 +264,13 @@ function serveStatic(req, res) {
 // ============================================================================
 function handleApi(req, res) {
   const sessionsList = sessions.getSessions();
-  const capacity = state.getCapacity();
+  const capacity = state.getCapacity(sessions.getSessions({ limit: null }));
   const tokenStats = getTokenStats(sessionsList, capacity, CONFIG);
 
   const data = {
     sessions: sessionsList,
-    cron: getCronJobs(getOpenClawDir),
+    cron: cronHost.getState().jobs,
+    cronStatus: cronHost.getState().status,
     system: state.getSystemStatus(),
     activity: state.getRecentActivity(),
     tokenStats,
@@ -245,7 +285,7 @@ function handleApi(req, res) {
 // ============================================================================
 // HTTP SERVER
 // ============================================================================
-const server = http.createServer((req, res) => {
+const server = http.createServer(async (req, res) => {
   // CORS headers
   res.setHeader("Access-Control-Allow-Origin", "*");
 
@@ -290,6 +330,27 @@ const server = http.createServer((req, res) => {
 
   if (pathname === "/api/status") {
     handleApi(req, res);
+  } else if (pathname === "/api/work-graph") {
+    if (req.method !== "GET") {
+      res.writeHead(405, { Allow: "GET" });
+      res.end();
+      return;
+    }
+    const graph = await workGraphHost.refresh();
+    res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
+    res.end(JSON.stringify(graph));
+  } else if (pathname === "/api/projects") {
+    if (req.method !== "GET") {
+      res.writeHead(405, { "Content-Type": "application/json", Allow: "GET" });
+      res.end(JSON.stringify({ error: "Read-only project view" }));
+      return;
+    }
+    await projectHost.refresh();
+    res.writeHead(200, {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store",
+    });
+    res.end(JSON.stringify(projectHost.getState()));
   } else if (pathname === "/api/session") {
     const sessionKey = query.get("key");
     if (!sessionKey) {
@@ -297,7 +358,7 @@ const server = http.createServer((req, res) => {
       res.end(JSON.stringify({ error: "Missing session key" }));
       return;
     }
-    const detail = sessions.getSessionDetail(sessionKey);
+    const detail = await sessions.getSessionDetailAsync(sessionKey);
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(detail, null, 2));
   } else if (pathname === "/api/cerebro") {
@@ -437,7 +498,7 @@ const server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ vitals, optionalDeps }, null, 2));
   } else if (pathname === "/api/capacity") {
-    const capacity = state.getCapacity();
+    const capacity = state.getCapacity(sessions.getSessions({ limit: null }));
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(capacity, null, 2));
   } else if (pathname === "/api/sessions") {
@@ -468,14 +529,15 @@ const server = http.createServer((req, res) => {
     const offset = (page - 1) * pageSize;
     const displaySessions = filteredSessions.slice(offset, offset + pageSize);
 
-    const tokenStats = getTokenStats(allSessions, state.getCapacity(), CONFIG);
-    const capacity = state.getCapacity();
+    const tokenStats = getTokenStats(allSessions, state.getCapacity(allSessions), CONFIG);
+    const capacity = state.getCapacity(sessions.getSessions({ limit: null }));
 
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify(
         {
           sessions: displaySessions,
+          catalog: sessions.getCatalogStatus(),
           pagination: {
             page,
             pageSize,
@@ -493,39 +555,22 @@ const server = http.createServer((req, res) => {
       ),
     );
   } else if (pathname === "/api/cron") {
-    const cron = getCronJobs(getOpenClawDir);
+    const snapshot = cronHost.getState();
+    const cron = snapshot.jobs;
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ cron }, null, 2));
+    res.end(JSON.stringify({ cron, cronStatus: snapshot.status }, null, 2));
   } else if (pathname === "/api/operators") {
     const method = req.method;
     const data = loadOperators(DATA_DIR);
 
     if (method === "GET") {
       const allSessions = sessions.getSessions({ limit: null });
-      const operatorsWithStats = data.operators.map((op) => {
-        const userSessions = allSessions.filter(
-          (s) => s.originator?.userId === op.id || s.originator?.userId === op.metadata?.slackId,
-        );
-        return {
-          ...op,
-          stats: {
-            activeSessions: userSessions.filter((s) => s.active).length,
-            totalSessions: userSessions.length,
-            lastSeen:
-              userSessions.length > 0
-                ? new Date(
-                    Date.now() - Math.min(...userSessions.map((s) => s.minutesAgo)) * 60000,
-                  ).toISOString()
-                : op.lastSeen,
-          },
-        };
-      });
+      const operatorsWithStats = calculateOperatorStats(data, allSessions);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify(
           {
-            operators: operatorsWithStats,
-            roles: data.roles,
+            ...operatorsWithStats,
             timestamp: Date.now(),
           },
           null,
@@ -650,7 +695,7 @@ server.listen(PORT, () => {
   }, 100);
 
   // Background cache refresh
-  const SESSIONS_CACHE_TTL = 10000;
+  const SESSIONS_CACHE_TTL = sessions.SESSIONS_CACHE_TTL || 60000;
   setInterval(() => sessions.refreshSessionsCache(), SESSIONS_CACHE_TTL);
 });
 
@@ -660,7 +705,7 @@ setInterval(() => {
   if (sseClients.size > 0 && !sseRefreshing) {
     sseRefreshing = true;
     try {
-      const fullState = state.refreshState();
+      const fullState = state.getFullState();
       broadcastSSE("update", fullState);
       broadcastSSE("heartbeat", { clients: sseClients.size, timestamp: Date.now() });
     } catch (e) {

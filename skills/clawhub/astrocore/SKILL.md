@@ -1,0 +1,109 @@
+---
+name: astrocore
+description: Connect this agent to AstroCore (astrocore.one) — a web workspace where the owner chats with the agent (text, voice, photos) and the agent saves memory, reports and gallery items. Use when the owner asks to connect to AstroCore, or to save/read AstroCore memory, reports or gallery.
+version: 1.0.1
+metadata:
+  openclaw:
+    requires:
+      env:
+        - ASTROCORE_API_KEY
+      bins:
+        - curl
+    primaryEnv: ASTROCORE_API_KEY
+    emoji: "🪐"
+    homepage: https://astrocore.one
+    envVars:
+      - name: ASTROCORE_API_KEY
+        required: true
+        description: The owner's AstroCore agent key (starts with ac_live_). Get it in AstroCore → Agents → Connect agent.
+      - name: ASTROCORE_URL
+        required: false
+        description: AstroCore address. Defaults to https://astrocore.one.
+---
+
+# AstroCore
+
+AstroCore is the owner's workspace for this agent: a chat in the browser and on
+the phone (text, voice messages, photos), plus **Memory**, **Reports** and
+**Gallery** that the agent can read and write.
+
+Base URL: `${ASTROCORE_URL:-https://astrocore.one}`.
+Every API call sends the owner's key in the `X-Api-Key` header. The key only
+gives access to that owner's own data. Never print the key in a reply.
+
+## 1. Connect the chat (one time, done by the owner)
+
+The AstroCore chat reaches this agent through a small service,
+`ascore-connector`, that runs next to OpenClaw and connects *out* to AstroCore
+(no open ports, no domain needed).
+
+**Do not install it yourself.** It is a system service, so the owner sets it up:
+
+1. Ask the owner to open AstroCore → **Agents → Connect agent**.
+2. AstroCore shows a one-line install command for their server. The owner
+   reviews it and runs it themselves in the server terminal.
+3. When it finishes, the agent appears online in AstroCore.
+
+If the owner asks whether it is connected, you may check (read-only):
+
+```bash
+systemctl is-active ascore-connector
+```
+
+`active` means the chat is connected. Anything else: ask the owner to run the
+command from AstroCore → Agents → Connect agent again.
+
+## 2. Voice replies in the AstroCore chat
+
+If the owner wants a spoken answer and TTS is set up in OpenClaw (for example
+ElevenLabs), generate the audio, save it to a file and put **one line** in the
+reply:
+
+```
+MEDIA: /absolute/path/to/reply.mp3
+```
+
+The connector uploads it and the chat shows a voice message. Formats: mp3, ogg,
+opus, m4a, wav, webm, up to 4 MB. Any other text in the reply is shown under it.
+
+## 3. Memory, Reports, Gallery (HTTP API)
+
+All endpoints: `GET` (list, `?id=&limit=&offset=`), `POST` (create),
+`PATCH` (update, JSON with `id`), `DELETE` (JSON `{"id": "..."}`).
+
+```bash
+URL="${ASTROCORE_URL:-https://astrocore.one}"
+H=(-H "X-Api-Key: $ASTROCORE_API_KEY" -H "Content-Type: application/json")
+```
+
+**Memory** — facts the owner wants the agent to remember (AstroCore adds them
+to the agent's context in chat):
+
+```bash
+curl -s "${H[@]}" "$URL/api/agent/memory?limit=20"
+curl -s "${H[@]}" -X POST "$URL/api/agent/memory" \
+  -d '{"title":"Client: Acme","content":"Prefers short weekly updates.","source":"agent","tags":["client"]}'
+```
+
+**Reports** — finished work the owner should see (summary + optional chart):
+
+```bash
+curl -s "${H[@]}" -X POST "$URL/api/agent/reports" \
+  -d '{"company_name":"Acme Q3 review","summary":"## Key points\n- Revenue +12%\n- Churn down","chart_data":{"labels":["Jul","Aug","Sep"],"values":[10,12,14]}}'
+```
+
+**Gallery** — images/videos made for the owner:
+
+```bash
+curl -s "${H[@]}" -X POST "$URL/api/agent/gallery" \
+  -d '{"title":"Logo idea","content":"Red planet mark","type":"image","media_type":"image","status":"done","media_url":"https://example.com/logo.png"}'
+```
+
+Responses are JSON. `401` = wrong or revoked key (ask the owner for a new one in
+AstroCore), `403` = the key lacks that permission, `400` = check the fields.
+
+## Rules
+
+- Never install, restart or remove system services; the owner does that from AstroCore.
+- Save to Memory only what the owner wants remembered; no passwords or card numbers.
+- Put long results in a Report and tell the owner it's in AstroCore → Reports.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/elevenlabs-api",
   "slug": "elevenlabs-api",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1781739754641,
-  "contentHash": "be81b217434413a923f6241af1684910fd095923ef19a4dd7299fa91c22d9eb5",
-  "fetchedAt": "2026-07-26T18:27:33.784Z"
+  "version": "1.2.7",
+  "updatedAt": 1790936971293,
+  "contentHash": "1e8313cfb31da350aeeaf02175c13943bb5aceed0c11be09227410b9d98aabdf",
+  "fetchedAt": "2026-10-06T14:30:01.209Z"
 }

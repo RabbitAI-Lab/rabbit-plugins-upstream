@@ -80,7 +80,7 @@ Style lock: [2-4 sentences: medium, line quality, palette, lighting, camera era]
 Same character as reference: [identity anchors: species, age, outfit, iconic props].
 ```
 
-## p-image: new still from text (when you lack a photo reference)
+## p-image: new photo generation (when you lack a photo reference)
 
 ```text
 [Style bible]
@@ -89,7 +89,7 @@ hands low in frame, face large and centered, mouth clearly visible for speech an
 neutral relaxed expression ready to speak.
 ```
 
-## p-image: photoreal hero (preferred for avatar pipelines)
+## p-image-ideogram: photoreal hero (preferred for avatar pipelines)
 
 ```text
 Photorealistic documentary portrait photograph of a real person, not CGI, not 3D render.

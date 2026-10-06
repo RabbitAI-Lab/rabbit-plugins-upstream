@@ -113,6 +113,33 @@ from pathlib import Path
 SD_DIR      = Path.home() / '.space-duck'
 SCRIPT_DIR  = Path(os.environ['SD_SCRIPT_DIR'])
 MODEL       = os.environ.get('SPACEDUCK_RESPONDER_MODEL', 'claude-sonnet-4-6')
+
+# 2026-09-02 — same two failure modes the peck responder hits under
+# supervision: (1) minimal PATH hides a user-local claude, (2) an inherited
+# cwd whose directory has since been deleted makes the claude CLI exit 1
+# ("current working directory was deleted") before it reads a byte of prompt.
+sys.path.insert(0, str(SCRIPT_DIR))
+try:
+    from _claudebin import resolve_claude, safe_cwd, ensure_cwd
+except Exception:
+    def resolve_claude():
+        return 'claude'
+
+    def safe_cwd():
+        return os.path.expanduser('~')
+
+    def ensure_cwd():
+        try:
+            return os.getcwd()
+        except Exception:
+            d = os.path.expanduser('~')
+            try:
+                os.chdir(d)
+            except Exception:
+                pass
+            return d
+ensure_cwd()
+SAFE_CWD = safe_cwd()
 def _envint(name, default):
     try:
         return int(str(os.environ.get(name, '')).strip() or default)
@@ -381,7 +408,8 @@ prompt = '\n\n---\n\n'.join(parts)
 #   'fail'         → value is a short reason; try the next brain
 def run_brain(cmd, label, allow_sentinel):
     try:
-        out = subprocess.run(cmd, input=prompt, capture_output=True, text=True, timeout=TIMEOUT)
+        out = subprocess.run(cmd, input=prompt, capture_output=True, text=True,
+                             timeout=TIMEOUT, cwd=SAFE_CWD)
     except subprocess.TimeoutExpired:
         return ('fail', f'timeout after {TIMEOUT}s')
     except FileNotFoundError:
@@ -459,7 +487,7 @@ if reply is None:
         # (exit 1 = silent reply death on root installs) and composing a
         # reply needs no tools anyway (same rationale as the 0.4.23
         # peck_responder fix).
-        attempts.append((['claude', '--print', '--model', MODEL], 'claude'))
+        attempts.append(([resolve_claude(), '--print', '--model', MODEL], 'claude'))
 
     for cmd, label in attempts:
         status, val = run_brain(cmd, label, allow_sentinel=False)

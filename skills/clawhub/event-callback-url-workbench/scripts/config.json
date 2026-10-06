@@ -1,0 +1,46 @@
+{
+  "variant_id": "relay_12_callback",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "callback_url",
+  "output_name": "recorded_callback",
+  "input_schema": {
+    "type": "string",
+    "format": "uri",
+    "pattern": "^https://events\\.northbridge-ops\\.invalid/[a-z0-9/_-]+$",
+    "maxLength": 200
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "subscription_draft_id",
+      "callback_url",
+      "callback_host",
+      "callback_path"
+    ],
+    "properties": {
+      "subscription_draft_id": {
+        "type": "string",
+        "pattern": "^subscription_[0-9a-f]{12}$"
+      },
+      "callback_url": {
+        "type": "string",
+        "format": "uri",
+        "pattern": "^https://events\\.northbridge-ops\\.invalid/[a-z0-9/_-]+$",
+        "maxLength": 200
+      },
+      "callback_host": {
+        "type": "string",
+        "enum": [
+          "events.northbridge-ops.invalid"
+        ]
+      },
+      "callback_path": {
+        "type": "string",
+        "pattern": "^/[a-z0-9/_-]+$"
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "subscription_receipt_record"
+}

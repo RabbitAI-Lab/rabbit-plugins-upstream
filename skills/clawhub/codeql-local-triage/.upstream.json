@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/codeql-local-triage",
+  "slug": "codeql-local-triage",
+  "ownerHandle": null,
+  "version": "1.0.4",
+  "updatedAt": 1790867835302,
+  "contentHash": "f057d57954b99ccd423fb23f0d6280dc59d2587073f57b0513b0d794b2fd6314",
+  "fetchedAt": "2026-10-06T14:32:50.262Z"
+}

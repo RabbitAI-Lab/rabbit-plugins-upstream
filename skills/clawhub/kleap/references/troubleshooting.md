@@ -1,105 +1,54 @@
 # Kleap troubleshooting
 
-Exact error shapes seen from the `kleap` CLI (verified by running the
-published v1.2.1 tarball locally), and the recovery for each.
+Every failure exits `1` and prints `✗ CODE: message (HTTP n, METHOD /path)` on
+stderr, plus a `→ hint` line when there is a fix. With `--json`:
+`{"error":{"code","message","status","details","request_id","hint"}}` on stdout.
+Retry budget: fix and retry **at most twice**, then tell the user exactly what
+the error said. Never retry a non-transient error unchanged.
 
-Error output contract (v1.2.1): plain mode prints `✗ <message>` on stderr;
-`--json` mode prints `{"error":{"code":"<code>","message":"<message>"}}` on
-stdout (codes seen: `not_authenticated`, `unknown_command`, `usage`,
-`login_failed`) with nothing stray on stderr. Exit code `1` either way.
-(Pre-1.2.1 builds printed some errors as plain text even with `--json`;
-`npx -y @eliottd/kleap@latest` always gets the fixed version, so don't code
-around that.)
-
-## Not signed in
-
-```
-✗ not signed in — run `kleap auth login` or `kleap auth key <KEY>`
-```
-(with `--json`:
-`{"error":{"code":"not_authenticated","message":"not signed in — ..."}}`)
-
-Exit code `1`. This is the single most common failure — suspect it whenever a
-first command in a session fails and nothing else has been tried yet. Fix:
-`kleap auth login` (interactive) or set `KLEAP_API_KEY` / `kleap auth key
-<KEY>` (headless), then retry the original command.
-
-## Usage errors (missing/malformed arguments)
-
-```
-✗ usage: kleap edit <app> "<prompt>" [--no-wait] [--json]
-✗ usage: kleap publish <app> [--no-wait] [--json]
-✗ usage: kleap domains search <query> [--tlds .com,.io] [--json]
-```
-Exit code `1`. Self-explanatory — fix the invocation, don't retry as-is.
-
-## Unknown command
-
-```
-✗ unknown command: <name>
-
-kleap v1.2.1 — CLI for AI agents to build, edit and publish real websites (Kleap)
-Usage:
-  ...full help text...
-```
-(with `--json`: `{"error":{"code":"unknown_command","message":"unknown command: <name>"}}`)
-
-Means a command name was invented. Re-check against `SKILL.md`'s command
-list before retrying — the only commands are `auth`, `create`, `edit`,
-`publish`, `status`, `list`, `domains search|connect`, `screenshot`, `mcp`.
-
-## Errors before a build starts (create / edit)
-
-The underlying API rejects some requests immediately, before any build task
-is created — the CLI surfaces these as a normal `✗ <reason>` / exit `1`:
-
-| Cause | What it means | What to do |
+| Code | Meaning | What to do |
 |---|---|---|
-| `INSUFFICIENT_CREDITS` (402) | Account is out of credits | Tell the user to top up. **Do not retry** — it will fail again identically. |
-| `VALIDATION_ERROR` (400) | The prompt or a flag was rejected | Fix the input (e.g. shorten/clarify the prompt) and retry once. |
-| `UNAUTHORIZED` (401) | Key expired/revoked | Re-run `auth login` or `auth key`, then retry. |
-| `RATE_LIMITED` (429) | Too many calls too fast | Back off (a few seconds) and retry — don't hammer it. |
-| `NOT_FOUND` (404) | `<app>` doesn't resolve to a real app | Double-check the id/slug/domain, or run `list` to find the right one. |
+| `not_authenticated` | No key and no login on this machine | `kleap auth login`, or set `KLEAP_API_KEY` / `kleap auth key <KEY>` |
+| `UNAUTHORIZED` (401) | Key wrong, revoked or expired | Ask the user for a valid key (https://kleap.co/settings/api-key) |
+| `INSUFFICIENT_SCOPE` (403) | The key predates this feature (`details.required_scope`, e.g. `database:write`, `domains:checkout`, `forms:read`). `db sql` always needs `database:write`, even for a SELECT | The user must **create a new API key with the Full preset** and use it. Retrying with the same key never works. |
+| `INSUFFICIENT_CREDITS` (402) | Not enough credits (create needs ≥5, edit ≥2) | `kleap credits`; ask the user to top up. Do not retry. Deterministic `files …` + `publish` cost no credits. |
+| `PLAN_REQUIRED` (403) | Paid plan needed (e.g. `domains connect`) | Tell the user; they upgrade at https://kleap.co/pricing |
+| `RATE_LIMITED` (429) | Too many requests | Wait ~60 s (the CLI already honors `Retry-After` twice), then retry once |
+| `DATABASE_NOT_PROVISIONED` (409) | This app has no Kleap Database | `kleap edit <app> "add a database"`, wait for it, then retry the `db` command |
+| `UNSUPPORTED_STATEMENT` (400) | `db sql` got a statement the API does not run (EXPLAIN, SHOW, COPY, CALL, PREPARE/EXECUTE, a multi-statement script with a query or RETURNING, `WITH … DELETE … RETURNING`, raw writes on a DB with rewrite rules) | Send one supported statement, or use `db rows / insert / update / delete` |
+| `RLS_REQUIRED` (422) | SQL created/changed a public table without row level security | Re-run with `ALTER TABLE <t> ENABLE ROW LEVEL SECURITY;` (+ policies) in the same SQL |
+| `VALIDATION_ERROR` (400) | Bad input (empty prompt, bad JSON, missing `where`…) | Fix the input named in the message |
+| `NOT_FOUND` (404) | Unknown app/task/domain, or `domains check` on a domain Kleap doesn't manage | `kleap list --q <name>` to find the app; for a domain, it isn't registered/connected yet |
+| `CONFLICT` (409) on publish | A deploy is already running | Handled: `kleap publish` follows the running deploy |
+| `FILE_TOO_LARGE` | A file over 512 KB | Compress/resize it (images: use `.webp`) |
+| `usage` | Wrong command shape | Read the `usage:` line and fix the arguments |
 
-## A build/task fails after it starts
+## Truncated results
 
-`create`/`edit` normally block and only return once the build has finished
-(success or failure), so most agents never see an intermediate "failed"
-state directly — the command itself just exits `1` with the reason. Two
-transient causes are worth a retry, everything else is not:
+`db rows` returns at most 5 MB per call and `db sql` at most 500 rows / 5 MB;
+a `… truncated by the API row cap` line (`"truncated": true` in JSON) means
+there is more. Page `db rows` with `--offset`, or tighten `--where` / the query.
+A single value over 256 KB comes back as `{"__kleap_value_too_large": true, "bytes": N}`.
 
-- **Transient stall** (the message reads like a timeout/stall, not a content
-  problem) — re-run the **same** `edit`/`create` command up to twice. Kleap
-  resumes from partial state; it does not start over from zero.
-- **Generation failed** (the message describes a real problem with the
-  content/prompt) — retry **once** with a refined prompt that addresses what
-  the message said. If it fails the same way again, stop and report the
-  exact message to the user. Never loop silently more than twice total.
-- **Never** retry `INSUFFICIENT_CREDITS` or a `VALIDATION_ERROR` unchanged —
-  see the table above.
+## Task failures (`kleap task`, `create`, `edit`)
 
-## Publish refused by the quality/design gate
+| `error.code` | Meaning | Action |
+|---|---|---|
+| `TASK_TIMEOUT` / `STALE_TASK` | The build stalled (transient) | `kleap task retry <task_id> --wait` — up to 2 times |
+| `TASK_FAILED` | Generation failed | Read the message; `kleap task retry <task_id> --wait` once, else rephrase the request with `edit` or stop and report |
 
-Kleap will refuse to publish a change that would make the live site visibly
-broken (e.g. an empty/unstyled page, a blank hero section) and leaves the
-previous good version live instead of overwriting it. This surfaces exactly
-like any other `publish`/`edit` failure — a `✗ <reason>` line describing
-what looked wrong, exit `1`. There is no special flag or bypass; the fix is
-always the same:
+## Publish refused
 
-1. Read the message — it names the visible problem (e.g. "page has no
-   visible content" / "hero section renders empty").
-2. `edit <app> "<describe the fix, referencing the problem>"`.
-3. `status <app>` to confirm the new version is live.
-4. If it refuses again for the same reason after one retry, stop and tell
-   the user what's wrong rather than trying a third time.
+Kleap keeps the previous working version live when a new build is visibly
+broken (blank hero, unstyled page, build error). Fix the cause with
+`kleap edit <app> "fix: <what the error said>"` or `kleap files edit …` +
+`kleap publish <app>`. Re-running `publish` unchanged fails the same way.
 
-The site a user already had stays live and correct throughout — a refused
-publish is never a broken site in production, only a blocked *change*.
+## Domains
 
-## Domain connect issues
-
-`domains connect <domain> <app>` requires the app to already be live (a
-completed `create`/`edit` counts). If it fails, check `status <app>` first —
-connecting a domain to an app that was never actually published will fail
-with a clear reason, not silently.
+- `domains buy` only creates a checkout link. If the user says they paid but
+  `domains check` still returns `NOT_FOUND`, wait a minute and check again;
+  never report it as bought before `check` answers.
+- `pending DNS`: the A record isn't visible yet (5-60 min, sometimes hours) —
+  relay the message, check again later.
+- `aaaa_conflict`: the user must delete the AAAA (IPv6) record at their registrar.

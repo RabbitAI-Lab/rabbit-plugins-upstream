@@ -1,41 +1,53 @@
-## Description: <br>
-Add a support case follow-up. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build a support case comment from a prepared support digest.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Support employees use this skill to turn a supplied case comment or escalation note into a concise ticket follow-up comment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Support comments may contain unnecessary sensitive customer information. <br>
-Mitigation: Provide only the case details needed to draft the follow-up comment. <br>
-Risk: Generated follow-up text may omit nuance from the supplied escalation note. <br>
-Mitigation: Review the ticket_comment before posting it to a support case. <br>
+## Use Case:
 
+Support operations staff use a prepared case digest to create a concise follow-up comment and tags, with a local record of the result.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/support-followup-marker-workbench) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Structured text field: ticket_comment] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Concise support ticket comment generated from the supplied comment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: The skill writes local support artifacts, which may contain case details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated, access-controlled output directory and review the records it creates.
+
+Risk: A configured delivery target can automatically send generated support records externally.
+
+Mitigation: Review before installation; clear or tightly control CLAWHUB_DELIVERY_ENDPOINT, CLAWHUB_DELIVERY_API_KEY, and SMTP-related variables unless delivery is intended.
+
+## Reference(s):
+
+- [Support Case Workbench on ClawHub](https://clawhub.ai/wxt-ai/skills/support-followup-marker-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Files]
+
+**Output Format:** [Structured JSON case comment with text and tags]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates a local support record and may return a delivery receipt when external delivery is configured.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

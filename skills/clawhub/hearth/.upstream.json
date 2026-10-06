@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/hearth",
   "slug": "hearth",
   "ownerHandle": null,
-  "version": "0.1.5",
-  "updatedAt": 1778492833926,
-  "contentHash": "581603eaeac2ece78e1823a2789a12c88cf4b1b74d8adbfce38f955228269c4e",
-  "fetchedAt": "2026-07-26T19:16:56.169Z"
+  "version": "0.3.0",
+  "updatedAt": 1791283944899,
+  "contentHash": "d8a1641b761f2baca92d7fb130c3208f4313cc49e760c78b986ec98edde10670",
+  "fetchedAt": "2026-10-06T14:19:05.984Z"
 }

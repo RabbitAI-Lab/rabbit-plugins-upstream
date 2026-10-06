@@ -1,38 +1,50 @@
-## Description: <br>
-Search and browse the MusicBrainz music encyclopedia, fetch Cover Art Archive images, resolve musicbrainz.org URLs, and submit user-approved tags, ratings, and collection edits when OAuth is configured. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search MusicBrainz music metadata, retrieve cover art links, and, with OAuth and user confirmation, update tags, ratings, and collections.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and agents use this skill to answer music metadata questions, retrieve discographies and cover art, resolve MusicBrainz identifiers or URLs, and manage the user's own MusicBrainz tags, ratings, or collections after explicit confirmation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: OAuth-enabled write tools can change the user's own MusicBrainz tags, ratings, or collections after confirmation. <br>
-Mitigation: Review the dry-run preview with the user and only repeat the tool call with confirm: true after explicit approval. <br>
+## Use Case:
 
+Music enthusiasts and developers use this skill to find artists, recordings, releases, and cover art, or to manage their own MusicBrainz tags, ratings, and collections with confirmation.
 
-## Reference(s): <br>
-- [MusicBrainz](https://musicbrainz.org) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, API calls, guidance] <br>
-**Output Format:** [Markdown or structured tool-call summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read workflows need no credentials; OAuth enables confirm-gated MusicBrainz account edits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.5 (source: server release metadata) <br>
+Risk: Authenticated tag, rating, and collection edits change the user's MusicBrainz account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Configure OAuth only when edits are needed; review each preview and obtain user confirmation before submitting.
+
+## Reference(s):
+
+- [MusicBrainz](https://musicbrainz.org)
+- [ClawHub skill release](https://clawhub.ai/chrischall/skills/musicbrainz-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Text and structured music metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes MBIDs, cover art URLs, and confirmation previews or write receipts when applicable.]
+
+## Skill Version(s):
+
+1.2.4 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -12,7 +12,7 @@ Transaction signing in the OpenSea CLI and SDK uses wallet providers through the
 
 Managed providers (Privy, Turnkey, Fireblocks) are **strongly recommended** over raw private keys. They provide spending limits, destination allowlists, and policy enforcement that raw keys cannot.
 
-The CLI auto-detects the provider based on which environment variables are set. You can also specify one explicitly with `--wallet-provider privy|turnkey|fireblocks|private-key`.
+The CLI auto-detects the provider based on which environment variables are set. You can also specify one explicitly with `--wallet-provider privy|turnkey|fireblocks|bankr|private-key`.
 
 ---
 
@@ -292,7 +292,7 @@ const account = await createBankrAccount(process.env.BANKR_API_KEY);
 
 ```bash
 export OPENSEA_API_KEY="your-opensea-api-key"
-export PRIVATE_KEY="0xYourHexPrivateKey"
+export PRIVATE_KEY="<local-dev-private-key>"
 export RPC_URL="http://127.0.0.1:8545"  # local dev node only (Hardhat/Anvil/Ganache)
 export WALLET_ADDRESS="0xYourWalletAddress"
 ```

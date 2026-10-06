@@ -1,7 +1,7 @@
 ---
 name: kleap
-description: "Ship a live website or web app end-to-end — hosting, database, auth, forms, custom domain — driven from this agent via the kleap CLI (npx, no install)."
-version: 1.0.1
+description: "Ship and run a live website or web app end-to-end — hosting, database, auth, forms/leads, analytics, custom domains — driven from this agent via the kleap CLI (npx, no install)."
+version: 1.1.0
 metadata:
   openclaw:
     requires:
@@ -11,136 +11,102 @@ metadata:
     envVars:
       - name: KLEAP_API_KEY
         required: false
-        description: "kleap_live_sk_... API key for headless/CI use. Not needed if `kleap auth login` already ran once (token cached in ~/.kleap/config.json)."
+        description: "kleap_live_sk_... API key (create it with the Full preset) for headless/CI use. Not needed if `kleap auth login` already ran once (token cached in ~/.kleap/config.json)."
     emoji: "🌐"
     homepage: "https://kleap.co/mcp"
 ---
 
-# Kleap — ship a live business from this agent
+# Kleap — ship and run a live business from this agent
 
-Kleap turns a prompt into a **live, hosted site** — not code the user still has
-to deploy. Hosting, database, auth, forms and TLS are all included; every
-publish is **verified-live** (Kleap only reports a URL once it has confirmed
-the new version is actually serving — never a dead link).
+Kleap turns a prompt into a **live, hosted site** — hosting, database, auth,
+forms and TLS included — and every publish is **verified-live** (a URL is only
+reported once the new version is provably serving).
 
-Everything runs through `npx -y @eliottd/kleap@latest <command>` — no global
-install required, nothing to compile.
+Every command is `npx -y kleap-cli@latest <command>` (below: `kleap <command>`).
+Output is 1-3 lines; add `--json` for the full structured result (errors too:
+`{"error":{"code","message","hint",...}}`). Exit `0` = success, `1` = failure.
+`<app>` accepts an app id, a `slug.kleap.io` URL, a bare slug or a connected
+custom domain.
 
-## Setup (one-time per machine/account)
+## Setup (once per machine)
 
-Pick one:
+- Interactive: `kleap auth login` (browser, no key to paste).
+- Headless / CI: `KLEAP_API_KEY=kleap_live_sk_...` in the env, or
+  `kleap auth key <KEY>`. Create the key at https://kleap.co/settings/api-key with
+  the **Full** preset (older keys lack the database/checkout scopes).
+- Check: `kleap auth status` (exit 0 = signed in). `kleap credits` shows the balance.
 
-- **Interactive** — `npx -y @eliottd/kleap@latest auth login` opens a browser,
-  no key to copy or paste. The token is cached in `~/.kleap/config.json`; every
-  later `npx` call on this machine reuses it automatically.
-- **Headless / CI** — set `KLEAP_API_KEY=kleap_live_sk_...` in the environment,
-  or run `npx -y @eliottd/kleap@latest auth key <KEY>` once. Get a key at
-  kleap.co → Settings → API key → MCP / API access.
+## Build and change a site
 
-Verify: `npx -y @eliottd/kleap@latest auth status` — exits `0` and prints one
-line naming the active auth method (env key, browser login, or stored key; it
-does not print the account), or exits `1` with
-`✗ not signed in — run 'kleap auth login' or 'kleap auth key <KEY>'`. Do this
-first if unsure — every other command fails fast with that same message
-otherwise.
+| Goal | Command |
+|---|---|
+| New site (blocks 1-15 min, prints the live URL) | `kleap create "<rich prompt: business, audience, tone, sections>"` |
+| Change it with Kleap's AI | `kleap edit <app> "<one concrete change>"` |
+| Don't block | add `--no-wait --json` → `{task_id, app_id}`; later `kleap task <task_id> --wait` |
+| Failed / stalled task | `kleap task retry <task_id> --wait` (new task id; TASK_TIMEOUT/STALE_TASK ≤2×, TASK_FAILED 1×, then stop and tell the user) |
+| State of a site | `kleap status <app>` · `kleap list [--q name]` · `kleap screenshot <app>` · `kleap messages <app>` |
+| Rename (URL never changes) | `kleap rename <app> <new name>` |
 
-## Core workflow — ship a site
+`create` and `edit` deploy by themselves — no `publish` needed after them.
 
-1. **Create**: `npx -y @eliottd/kleap@latest create "<detailed prompt>"`.
-   Describe the business in one rich sentence — who it's for, tone, the
-   sections it needs (e.g. "services + pricing + contact form"). This single
-   call builds **and deploys**: it blocks (typically 1-5 min, up to ~15 for
-   complex sites) and, on success, prints exactly:
-   `✓ created app 4821 — https://warm-bakery-fold.kleap.io`
-   That URL is already confirmed live — there is no separate publish step
-   after a successful `create`.
-2. Doing other work while it builds? Add `--no-wait --json` → returns
-   `{ app_id, task_id, ... }` immediately; check back later with `status`.
-3. Always capture the `app_id` (or slug/URL) from the output — every later
-   command on this site needs it.
+## Exact edits with your own code (deterministic, no Kleap credits)
 
-## Edit a site that already exists
+1. `kleap files ls <app>` → `kleap files cat <app> <path...>` (read before changing).
+2. Change: `kleap files edit <app> <path> --find "<old>" --replace "<new>" [--all]`,
+   or `kleap files write <app> <path> --file <local> | --stdin | --content "<text>"`
+   (images/fonts/PDF are sent base64 automatically; 512 KB max),
+   or `kleap files rm <app> <path...>` (never blank a file to delete it),
+   or `kleap image <app> public/hero.webp "<vivid prompt>" [--hd]`.
+3. **Then `kleap publish <app>`** — files do not go live until you publish.
 
-`npx -y @eliottd/kleap@latest edit <app> "<specific change>"`. `<app>` accepts
-a numeric id, a `slug.kleap.io` URL, a bare slug, or a connected custom
-domain — resolved server-side, no lookup needed first. Be concrete ("change
-the headline to 'Roasted slow' and make the CTA button orange"), not vague
-("make it better"). Blocks until redeployed and prints the same
-`✓ edited app ... — <url>` confirmation. Prefer editing over recreating — it
-keeps everything that already works and is far cheaper.
+## Leads, traffic, search
 
-## Connect a domain the user already owns
+- `kleap forms <app> [--since 2026-09-01T00:00:00Z] [--limit 50]` — form
+  submissions, newest first; `--json` gives flat objects (`name`, `email`, …,
+  `submission_id`, `submitted_at`, `app_id`). Empty on a new site is normal.
+- `kleap analytics <app> [--period 7d|30d|90d]` — visitors, pageviews, top pages
+  (only after the site has been published).
+- `kleap search-console <app> [--period 7d|28d|30d|90d]` — Google clicks/impressions/CTR/position. Not
+  connected → `kleap search-console connect <app>` prints a consent link the
+  **user** opens (needs a custom domain first).
 
-1. `npx -y @eliottd/kleap@latest domains search "<name>" [--tlds .com,.io]` —
-   list available names. Kleap does not buy domains on the user's behalf —
-   if they want a brand-new one, tell them to buy it elsewhere (or just keep
-   the free `slug.kleap.io` `create` already gave them).
-2. `npx -y @eliottd/kleap@latest domains connect <domain> <app>` — connects a
-   domain the user **already owns**. The app must already be live (a
-   completed `create`/`edit` already counts — no extra `publish` needed
-   first). Prints the exact A record to set at their registrar. TLS
-   auto-issues after DNS propagates — say "a few minutes to a few hours",
-   never "instant".
+## Database (the app's own Postgres)
 
-## Check status anytime
+- `kleap db schema <app>` — tables, columns and an ESTIMATED row count (`~N`; use `db sql` `count(*)` for an exact one).
+- `kleap db rows <app> <table> [--where '{"status":"new"}'] [--limit 100] [--order-by created_at --order desc]`
+- `kleap db insert <app> <table> '{"email":"a@b.co"}'` (object or array, or `--file rows.json`)
+- `kleap db update <app> <table> --where '{"id":12}' --set '{"status":"done"}'`
+- `kleap db delete <app> <table> --where '{"id":12}'` — `--where` is mandatory; read the rows first.
+- `kleap db sql <app> "select count(*) from leads where status = \$1" --params '["new"]'`
+  — owner-level: always needs `database:write`, even for a SELECT. One statement
+  (no EXPLAIN/SHOW/COPY/CALL → `UNSUPPORTED_STATEMENT`); results are capped at
+  500 rows / 5 MB (a `… truncated` line tells you). To just read, prefer `db rows`.
 
-`npx -y @eliottd/kleap@latest status <app>` → one line: name, id, and either
-the live URL or "not published". Use this to confirm before telling a user
-something is live, and to poll after a `--no-wait` create/edit.
+No database yet (`DATABASE_NOT_PROVISIONED`) → `kleap edit <app> "add a database"` first.
 
-`npx -y @eliottd/kleap@latest publish <app>` forces a redeploy without
-changing content — rarely needed since `create`/`edit` already deploy; use it
-if a user asks to "push it live again" with no new instruction.
+## Domains
 
-## When a publish is refused or a build fails
+- `kleap domains search <name> [--tlds .com,.fr]` — available names + price.
+- `kleap domains buy <domain> [--years 1] [--app <app>]` — prints a **checkout
+  link the user must open and pay**. The domain is **not bought** until they
+  pay; with `--app` it is connected to that site once paid. Give the user the
+  link, then confirm later with `kleap domains check <domain>`.
+- `kleap domains connect <domain> <app>` — a domain the user **already owns**
+  (paid plan): relay the printed A record; TLS follows DNS propagation
+  ("minutes to a few hours", never "instant").
+- `kleap domains check <domain>` — `active`, `pending DNS` (relay the message) or an AAAA conflict.
 
-`create` / `edit` / `publish` exit `1` with one line: `✗ <reason>` on stderr
-(or `{"error":{"code":...,"message":...}}` on stdout with `--json` — every
-error path honors `--json` as of CLI v1.2.1). Two families, same recovery:
+## Rules
 
-- **A build/generation error** — the message names what broke. Run
-  `edit <app> "fix: <describe the broken thing>"`, then check `status <app>`.
-- **A publish refusal (quality/design gate)** — Kleap blocks publishing
-  something visibly broken (blank hero, unstyled page) and keeps the
-  previous working version live instead of overwriting it. The message
-  describes what looked wrong. Fix it with
-  `edit <app> "<describe the fix, referencing what the error said>"` — this
-  redeploys through the same gate. Do not re-run `publish` unchanged; it will
-  refuse again for the same reason.
+1. **Golden rule — never claim a site is live** until a command confirmed it:
+   the `✓ … — <url>` line of `create`/`edit`/`publish`, a completed `task`, or
+   `status` showing a live URL. A build *starting* is not a site *online*.
+2. **Buying a domain = a checkout link the user pays.** Never say a domain is
+   bought, registered or live before `domains check` shows it.
+3. On any `✗ CODE: message`, read the `→` hint line (or `error.hint` in JSON)
+   and act on it; fix-and-retry at most twice, then tell the user exactly what
+   the error said. See `references/troubleshooting.md`.
+4. Prefer `edit` / `files edit` over recreating a site — it keeps what works.
 
-**Retry budget: fix-and-retry at most twice.** If it still fails, stop and
-tell the user exactly what the error said — never claim a site is live that
-isn't.
-
-## Conventions
-
-- Every command accepts `--json` for machine-parseable output; without it,
-  output is 1-3 human-readable lines by design (built for an agent reading
-  its own tool output, not a terminal).
-- Exit code `0` = success, `1` = failure — safe to gate on directly, no prose
-  parsing needed for the happy path.
-- `kleap list [--limit N] [--q text]` — the user's existing apps, one
-  tab-separated row each (`id  name  url`), if you need to find one by name.
-- `kleap screenshot <app>` — capture a preview screenshot URL, useful to show
-  the result without the user opening a browser.
-
-## The golden rule
-
-Never tell the user a site is live until a command has actually confirmed it
-— the `✓ ... — <url>` line from `create`/`edit`/`publish`, or `status <app>`
-showing a live URL. A build *starting* is not a site being *online*.
-
-## What good looks like
-
-> User: "Make me a landing page for my dog-walking business in Austin and put
-> it online."
-> You run: `npx -y @eliottd/kleap@latest create "landing page for a
-> dog-walking business in Austin, warm and friendly tone, services + pricing
-> + contact form"`
-> Output: `✓ created app 5310 — https://sunny-paws-walk.kleap.io`
-> You reply: "It's live: https://sunny-paws-walk.kleap.io" — said only after
-> that `✓` line confirmed it.
-
-See `references/recipes.md` for the full create → domain → edit walkthrough,
-non-blocking flows and JSON parsing; `references/troubleshooting.md` for
-exact error codes and recovery.
+See `references/recipes.md` for complete flows (lead capture → read leads,
+database CRUD, buy + connect a domain, non-blocking builds).

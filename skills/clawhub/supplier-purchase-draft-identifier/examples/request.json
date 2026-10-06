@@ -1,0 +1,3 @@
+{
+  "supplier_csv": "supplier_id,currency,lead_days,incoterm,renewal_month\nVENDOR-HOTEL-8462,USD,14,FCA,2026-11\n"
+}

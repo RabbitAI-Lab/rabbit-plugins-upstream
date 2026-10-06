@@ -1,0 +1,16 @@
+{
+  "allocation_plan": {
+    "request_id": "fulfillment-6384",
+    "allocations": [
+      {
+        "lot_id": "LOT-OSCAR-6384",
+        "quantity": 5
+      },
+      {
+        "lot_id": "LOT-PAPA-7410",
+        "quantity": 3
+      }
+    ],
+    "unfilled_quantity": 0
+  }
+}

@@ -1,47 +1,60 @@
-## Description: <br>
-Suggests next actions after task completion and can auto-invoke through a Stop hook when completion keywords are detected. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Suggests practical next actions after a task, including follow-up options for stalled work.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and agent users use Next to choose follow-up work after completed tasks, such as verifying changes, committing or pushing work, monitoring CI, creating draft pull requests, or wrapping up a session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The always-on Stop hook can prompt follow-up actions after ordinary task completion. <br>
-Mitigation: Install only where automatic completion follow-ups are desired, and review or constrain the Stop hook before enabling it. <br>
-Risk: Stall detection can route the agent into automatic remediation through the dependent fix workflow. <br>
-Mitigation: Review the stall-detect behavior and require the expected level of user approval before any fix workflow executes. <br>
-Risk: Next-action options can include repository operations such as tests, commits, pushes, pull requests, or CI monitoring. <br>
-Mitigation: Inspect generated options and allow repository-changing actions only after explicit user selection. <br>
+## Use Case:
 
+Developers and other assistant users use this skill to find actionable follow-ups after finishing a task, spot stalled steps, and choose what to do next.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/next) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [Ask Gates](artifact/ask-gates.md) <br>
-- [Stall Detection](artifact/stall-detect.md) <br>
-- [Suggestion Patterns](artifact/suggestion-patterns.md) <br>
-- [Stop Hook Trigger](artifact/resources/next-trigger.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Text or Markdown guidance with selectable next-action options and optional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May register and execute selected follow-up actions when the user chooses one or more options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: evidence.release.version and CHANGELOG, released 2026-07-23) <br>
+Risk: Persistent hooks can automatically prompt for next actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review hook paths and enable them only if automatic suggestions are wanted.
+
+Risk: Next-action discovery may inspect transcripts, task state, GitHub/CI context, and planning files across visited workspaces.
+
+Mitigation: Limit use to trusted workspaces and review the scope of accessible project information.
+
+Risk: A helper-script lookup may execute code from agent plugin directories.
+
+Mitigation: Verify the helper-script path and contents before enabling hooks.
+
+## Reference(s):
+
+- [Next skill listing](https://clawhub.ai/drumrobot/skills/next)
+- [Stall detection](artifact/stall-detect.md)
+- [Ask gates](artifact/ask-gates.md)
+- [Suggestion patterns](artifact/suggestion-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Markdown with next-action options and a user-selection prompt]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Suggestions depend on the current task and available skills.]
+
+## Skill Version(s):
+
+0.11.0 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

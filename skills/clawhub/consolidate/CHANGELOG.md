@@ -1,5 +1,133 @@
 # Changelog
 
+## [0.7.1](https://github.com/es6kr/skills/compare/consolidate-v0.7.0...consolidate-v0.7.1) (2026-10-04)
+
+
+### Bug Fixes
+
+* **consolidate:** unify Source, Type, and Severity into a single 3-line column ([#603](https://github.com/es6kr/skills/issues/603)) ([c4ef164](https://github.com/es6kr/skills/commit/c4ef16457eaedcdac22dc7ab74fcb0d3cbf6a276))
+* **hooks:** verify executable hook registrations ([1bd613a](https://github.com/es6kr/skills/commit/1bd613aba2aa5cb2509f3dacd53acc5eab3cbf3f))
+
+## [0.7.0](https://github.com/es6kr/skills/compare/consolidate-v0.6.5...consolidate-v0.7.0) (2026-09-30)
+
+
+### Features
+
+* **fix-plan, consolidate:** consolidate task coordination, review collection, and docs ([d6162d8](https://github.com/es6kr/skills/commit/d6162d8d25bb80c85aa2c5cd475afdf0ee638535))
+
+
+### Bug Fixes
+
+* **consolidate:** accept an engine-named Code Review in the provenance gate ([dbb93fb](https://github.com/es6kr/skills/commit/dbb93fb0c329e6efaa9ea1257058ef4455c4085c))
+* **consolidate:** enhance review collection, PATCH verification, and harness check ([858adef](https://github.com/es6kr/skills/commit/858adef07f212f09e550be77c7fc89cfd229e9fe))
+* **consolidate:** make the dispatch-failure history select the starting rung ([17637c3](https://github.com/es6kr/skills/commit/17637c303d26aed4af95514af44d527e7076e422))
+* **consolidate:** reconcile the two-comment invariant across pr/internal/post ([1e17091](https://github.com/es6kr/skills/commit/1e170913e104711bc124008a632360cc59c0f05d))
+* **consolidate:** reconcile the two-comment invariant and the provenance gate ([28d2f9a](https://github.com/es6kr/skills/commit/28d2f9a399e28342ef16cc9244279c85ec75bf39))
+* **consolidate:** Step 8 finding-handling ask must reuse posted Status column ([#561](https://github.com/es6kr/skills/issues/561)) ([2d310e3](https://github.com/es6kr/skills/commit/2d310e3cc51d4b28d711973c27bc94e4abae9d2e))
+
+## [0.6.5](https://github.com/es6kr/skills/compare/consolidate-v0.6.4...consolidate-v0.6.5) (2026-09-20)
+
+
+### Bug Fixes
+
+* address code review feedback ([0c08bfb](https://github.com/es6kr/skills/commit/0c08bfbf2b5b737fdce685c8f15ead56c64290f4))
+* **consolidate:** drop requesting-code-review suffix when bot-layer content is mixed in ([#498](https://github.com/es6kr/skills/issues/498)) ([66fb1be](https://github.com/es6kr/skills/commit/66fb1bedc768544415a808b2d33d96feeee0a3ea))
+* **consolidate:** guard verify_consolidate.py format contract at POST time ([#500](https://github.com/es6kr/skills/issues/500)) ([941023a](https://github.com/es6kr/skills/commit/941023a5fb36becfdc484017b8cde128078f07a9))
+
+## [0.6.4](https://github.com/es6kr/skills/compare/consolidate-v0.6.3...consolidate-v0.6.4) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+* **consolidate:** count every finding source in verify_consolidate ([f12825a](https://github.com/es6kr/skills/commit/f12825aa4dc186fc6d4529d6f62fbfde524573f1))
+* **consolidate:** count every finding source in verify_consolidate ([2860dd0](https://github.com/es6kr/skills/commit/2860dd0c9dc8837d26c660da9b5ec6687fc4f80e))
+* **consolidate:** make the Workflow Index a traversal gate, not a reading suggestion ([#482](https://github.com/es6kr/skills/issues/482)) ([2d7bbad](https://github.com/es6kr/skills/commit/2d7bbada5775ed090e61ae9af171fa3e37d2de45))
+* **consolidate:** resolve git cat-file against -R repo instead of process cwd ([049614d](https://github.com/es6kr/skills/commit/049614d4c9213356250ccdc096c8ff38140d0e29))
+* **skills:** document canonical Do/Don't tables for Plane URLs, plan sync, and pre-merge reviews ([7069da8](https://github.com/es6kr/skills/commit/7069da85bb11bdcf0da8d9dc93619eeafc972dd2))
+
+## [0.6.3](https://github.com/es6kr/skills/compare/consolidate-v0.6.2...consolidate-v0.6.3) (2026-09-05)
+
+
+### Bug Fixes
+
+* **consolidate:** enforce the Summary Status vocabulary at post time and in verify ([18c07c3](https://github.com/es6kr/skills/commit/18c07c3b7c6df058d497c6c2d17771c6a1a781eb))
+* **fix-plan:** add simple-vs-session self-check before Orca recommendation ask ([46e5d77](https://github.com/es6kr/skills/commit/46e5d77e3faefb0524fb4e4e6e80aa056d2d66ca))
+
+## [0.6.2](https://github.com/es6kr/skills/compare/consolidate-v0.6.1...consolidate-v0.6.2) (2026-09-01)
+
+
+### Bug Fixes
+
+* **consolidate:** identify review artifacts by title line, not whole-body substring ([#397](https://github.com/es6kr/skills/issues/397)) ([8143da7](https://github.com/es6kr/skills/commit/8143da79baff109325d4e187d5ef4d67b6fe213d))
+* staging branch next-fix sync into main ([bbbd460](https://github.com/es6kr/skills/commit/bbbd460bf3b6b1cba4c6d07b3641afa734c89860))
+
+## [0.6.1](https://github.com/es6kr/skills/compare/consolidate-v0.6.0...consolidate-v0.6.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* apply PR [#363](https://github.com/es6kr/skills/issues/363) Copilot Minor review findings ([731745c](https://github.com/es6kr/skills/commit/731745c6d67c329c8c6dde666107672282a3894a))
+* **consolidate:** add block-summary-fabricated-claims guard for Summary POST ([e2d054e](https://github.com/es6kr/skills/commit/e2d054edad4cca08307a99ceef927c156903f3e5))
+* promote next-fix batch (consolidate fabrication guard, session rewind, config-driven PR base) ([7ca0ccb](https://github.com/es6kr/skills/commit/7ca0ccbf13cefafedc33a16a7361756c95f8b8f6))
+* resolve PR [#363](https://github.com/es6kr/skills/issues/363) audit Pending findings (plane_bulk_update profile, hook checker schema, regex, dedup) ([19ffc83](https://github.com/es6kr/skills/commit/19ffc83f296ad5568b82a85b104fcf419580c102))
+
+## [0.6.0](https://github.com/es6kr/skills/compare/consolidate-v0.5.4...consolidate-v0.6.0) (2026-08-20)
+
+
+### Features
+
+* promote next-feat batch (hook registry schema, self-reference path anchoring) ([0c33ffa](https://github.com/es6kr/skills/commit/0c33ffac99a9237f4530566470dabeaea128c209))
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+
+### Bug Fixes
+
+* **consolidate:** refresh the AI Review Summary before the merge ask when findings were fixed ([#348](https://github.com/es6kr/skills/issues/348)) ([9512c9c](https://github.com/es6kr/skills/commit/9512c9cdff7d1a0d2e36a8c70a468e2abca6e977))
+* **hook-kit,fix-plan,consolidate:** resolve review findings on registry fail-fast, add-item safety, and mechanical verification ([72fb280](https://github.com/es6kr/skills/commit/72fb28054ccd858aa56617e8a6a5d1fb5b9d2384))
+* promote next-fix batch (hook path repair, topic-dispatch scoping, conflict diagnosis) ([eb7ecb6](https://github.com/es6kr/skills/commit/eb7ecb61dda9701d78f12dc810781dc7cb687caa))
+
+## [0.5.4](https://github.com/es6kr/skills/compare/consolidate-v0.5.3...consolidate-v0.5.4) (2026-08-17)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.5.3](https://github.com/es6kr/skills/compare/consolidate-v0.5.2...consolidate-v0.5.3) (2026-08-12)
+
+
+### Bug Fixes
+
+* **consolidate:** clarify tracking medium is the session workspace, not the reviewed PR's repo ([435b997](https://github.com/es6kr/skills/commit/435b997fa83072538393576b771efe3846e2da69))
+* **consolidate:** clarify tracking medium is the session workspace, not the reviewed PR's repo ([544bbca](https://github.com/es6kr/skills/commit/544bbca50b15ed22a18441b7848e8b96fa8e4bb1))
+* promote accumulated next-fix fixes to main ([803bbd3](https://github.com/es6kr/skills/commit/803bbd3b9e4f8367ee1b955cfa2b6a536f85cee0))
+
+## [0.5.2](https://github.com/es6kr/skills/compare/consolidate-v0.5.1...consolidate-v0.5.2) (2026-08-09)
+
+
+### Bug Fixes
+
+* **consolidate:** address CodeRabbit/Copilot review findings on PR [#270](https://github.com/es6kr/skills/issues/270) ([3b11a73](https://github.com/es6kr/skills/commit/3b11a730b5ad68803d35a8264eda540e48265d75))
+* **consolidate:** require merge-method precheck before squash-merge option label ([#269](https://github.com/es6kr/skills/issues/269)) ([1830341](https://github.com/es6kr/skills/commit/183034138eab3d72a8ecb1005db91b86797db0ba))
+* declare undeclared skill-to-skill dependencies (7 skills) ([#271](https://github.com/es6kr/skills/issues/271)) ([36a9f9d](https://github.com/es6kr/skills/commit/36a9f9d7c1fac9bb1c4c96b325a067ab92ad0da7))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.5.1](https://github.com/es6kr/skills/compare/consolidate-v0.5.0...consolidate-v0.5.1) (2026-08-05)
+
+
+### Bug Fixes
+
+* promote next-fix staging (38 fixes across 16 skills) ([94f8c33](https://github.com/es6kr/skills/commit/94f8c33800ce411ae63e22c5259cdae8435508a4))
+
+## [0.5.0](https://github.com/es6kr/skills/compare/consolidate-v0.4.0...consolidate-v0.5.0) (2026-08-03)
+
+
+### Features
+
+* **consolidate:** cross-platform noncompliant-review-comment guard ([#166](https://github.com/es6kr/skills/issues/166)) ([168fb9c](https://github.com/es6kr/skills/commit/168fb9cfecc3249c181572910a9925257fbe52a2))
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+
 ## [0.4.0](https://github.com/es6kr/skills/compare/consolidate-v0.3.6...consolidate-v0.4.0) (2026-07-23)
 
 
