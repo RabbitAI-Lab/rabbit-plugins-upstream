@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/sentry-for-ai/sentry-create-alert",
+  "repo": "getsentry/sentry-for-ai",
+  "skillId": "sentry-create-alert",
+  "branch": "main",
+  "pushedAt": "2026-10-05T16:05:01Z",
+  "contentHash": "bbac480fa5294f46af3ce7d27be086c1946e294164a94546b96767d480604ed7",
+  "fetchedAt": "2026-10-06T14:29:30.314Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-cluster-autoscaler",
+  "repo": "google/skills",
+  "skillId": "gke-cluster-autoscaler",
+  "branch": "main",
+  "pushedAt": "2026-10-06T14:18:28Z",
+  "contentHash": "b4ae1a7914da4d5844c8dfce256d64aa87d429bac205f76d8a105250123ef972",
+  "fetchedAt": "2026-10-06T14:28:57.251Z"
+}
