@@ -1,44 +1,58 @@
-## Description: <br>
-Analyzes pet training videos or video URLs through server-side APIs to recognize whether a pet executes Sit, Down, or Stay commands and returns structured posture-matching, timing, and execution results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet-training videos to assess whether a pet performs sit, down, and stay commands and reports posture matching and response timing.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and operators of smart pet-training or remote training workflows use this skill to submit training videos and receive structured command-execution recognition results, response-latency data, and report links. The skill is for training-effect reference and does not provide medical diagnosis or behavior-therapy advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet images or videos are sent to Life Emergence server APIs for analysis. <br>
-Mitigation: Use only with media appropriate for remote processing and review privacy or compliance requirements before deployment. <br>
-Risk: The skill can silently create or reuse a local internal identity and register or log in to a remote service. <br>
-Mitigation: Run it in account-isolated workspaces and confirm identity behavior before enabling it for shared or multi-user environments. <br>
-Risk: Reusable tokens and local user data may persist in the workspace data area. <br>
-Mitigation: Review or clear the local data database and smyx-api-key file when separating users, sessions, or environments. <br>
+## Use Case:
 
+Pet trainers and developers use this skill to assess command execution in training videos and review analysis results or past reports. It does not provide medical diagnosis or behavioral therapy advice.
 
-## Reference(s): <br>
-- [API Documentation](artifact/references/api_doc.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-training-command-execution-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON] <br>
-**Output Format:** [Markdown text containing structured JSON-style analysis results, historical report lists, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to a user-specified output file; analysis and history queries are backed by remote API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release and frontmatter) <br>
+Risk: Videos or video URLs are sent to Life Emergence services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm permission to share the footage and review the service's data handling before use.
+
+Risk: The skill can silently create or reuse an identity, log in remotely, and store tokens in a workspace SQLite database.
+
+Mitigation: Review the account flow before installation and restrict access to the workspace and stored tokens.
+
+Risk: Matching prompts can automatically retrieve cloud report history without clear user confirmation.
+
+Mitigation: Require explicit user consent before querying history and confirm the account and report scope.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-pet-training-command-execution-analysis)
+- [Pet training analysis API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis report or Markdown history table, with optional saved output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include command matching, response timing, and report links.]
+
+## Skill Version(s):
+
+1.0.13 (source: ClawHub server release; bundled frontmatter lists 1.0.14)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

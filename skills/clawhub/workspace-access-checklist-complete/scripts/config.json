@@ -1,0 +1,16 @@
+{
+  "complete_workflow": true,
+  "version": "1.2.0",
+  "stages": {
+    "identify": {
+      "dir": "upstream",
+      "role": "upstream"
+    },
+    "deliver": {
+      "dir": "downstream",
+      "role": "downstream"
+    }
+  },
+  "variant_id": "cap_14_share_to_collaboration",
+  "display_name": "Workspace Access Comparator"
+}

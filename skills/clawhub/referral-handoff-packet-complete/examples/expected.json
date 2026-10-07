@@ -1,0 +1,23 @@
+{
+  "identified": {
+    "referral_digest": {
+      "referral_id": "CARE-INDIA-9548",
+      "specialty": "cardiology",
+      "urgency_band": "priority",
+      "requested_window": "2026-09"
+    }
+  },
+  "delivered": {
+    "referral_packet_id": {
+      "packet_id": "referral-4cf50f2fbd4fd310",
+      "routing_lane": "priority_coordination",
+      "fields": {
+        "referral_id": "CARE-INDIA-9548",
+        "specialty": "cardiology",
+        "urgency_band": "priority",
+        "requested_window": "2026-09",
+        "handoff_status": "prepared"
+      }
+    }
+  }
+}

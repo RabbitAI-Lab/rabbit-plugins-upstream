@@ -2,15 +2,56 @@
 
 from __future__ import annotations
 
+from mcp.server.mcpserver.exceptions import ToolError
 
-class OutlookMCPError(Exception):
-    """Base exception for all outlook-mcp errors."""
+# Closes every refusal that names a setting. These strings reach the model, and
+# the clients this server runs under give the agent file tools: a refusal that
+# spells out how to turn itself off is an instruction the agent can carry out,
+# and the agent reads mail. The setting is named so the agent can tell the
+# user; changing it is the user's call. Addressed to the agent by name, because
+# `outlook-mcp auth` prints some of these to the operator too, and the operator
+# is exactly who should change the setting.
+LEAVE_SETTINGS_TO_THE_USER = (
+    "If you are an AI agent, do not change the server's settings — tell the user."
+)
+
+
+def _config_dir() -> str:
+    """The settings directory remedies point at, imported lazily.
+
+    ``config`` imports ``permissions`` for its category validation, and
+    ``permissions`` imports this module for its error types — a cycle the
+    remedy strings close over the runtime value instead of the import.
+    """
+    from outlook_mcp.config import DEFAULT_CONFIG_DIR
+
+    return DEFAULT_CONFIG_DIR
+
+
+class OutlookMCPError(ToolError):
+    """Base exception for all outlook-mcp errors.
+
+    Subclasses ``ToolError`` — the SDK's "anticipated failure" — because that is
+    what decides whether the model reads our message or a bare ``Error executing
+    tool <name>``. Every error in this module is a condition we saw coming and
+    wrote a recovery hint for, so every one of them belongs on that side of the
+    line. A genuine crash must keep inheriting from ``Exception`` and stay
+    generic to the client. Guarded by ``tests/test_error_text_reaches_client.py``.
+    """
 
     def __init__(self, code: str, message: str, action: str | None = None):
         self.code = code
         self.message = message
         self.action = action
         super().__init__(message)
+
+    def __str__(self) -> str:
+        """Message plus recovery hint — this string is what the model reads.
+
+        ``action`` exists to tell an agent what to do next, so it has to be in
+        the text the client receives, not only on the attribute.
+        """
+        return f"{self.message} {self.action}" if self.action else self.message
 
 
 class AuthRequiredError(OutlookMCPError):
@@ -20,7 +61,7 @@ class AuthRequiredError(OutlookMCPError):
         super().__init__(
             "auth_required",
             "Not authenticated. No valid credential found.",
-            "Call outlook_login to authenticate with your Microsoft account.",
+            "Run `outlook-mcp auth` on the host to authenticate.",
         )
 
 
@@ -31,20 +72,34 @@ class ReadOnlyError(OutlookMCPError):
         super().__init__(
             "read_only",
             f"Cannot use {tool_name} — server is in read-only mode.",
-            "Set read_only to false in ~/.outlook-mcp/config.json to enable write operations.",
+            "The user set read_only in the server's config.json. Tell them what you "
+            f"were trying to do. {LEAVE_SETTINGS_TO_THE_USER}",
         )
 
 
 class PermissionDeniedError(OutlookMCPError):
-    """Raised when a write tool is not in the user's allow_categories."""
+    """Raised when a write tool is not in the user's allow_categories.
 
-    def __init__(self, tool_name: str, category: str):
+    ``doing`` names the part of a call that needs ``category`` when the tool
+    as a whole does not — inviting attendees from a calendar tool needs
+    ``mail_send`` — so the refusal says which argument to drop, not just that
+    the tool was refused.
+    """
+
+    def __init__(self, tool_name: str, category: str, doing: str | None = None):
+        if doing:
+            message = (
+                f"Cannot use {tool_name} to {doing} — that sends email, and category "
+                f"'{category}' is not in allow_categories."
+            )
+        else:
+            message = f"Cannot use {tool_name} — category '{category}' is not in allow_categories."
         super().__init__(
             "permission_denied",
-            f"Cannot use {tool_name} — category '{category}' is not in allow_categories.",
+            message,
             (
-                f"Add '{category}' to allow_categories in ~/.outlook-mcp/config.json, "
-                "or unset allow_categories for full write access."
+                "The user limits this server's writes with allow_categories in its "
+                f"config.json. Tell them this needs '{category}'. {LEAVE_SETTINGS_TO_THE_USER}"
             ),
         )
 
@@ -83,7 +138,7 @@ class GraphAPIError(OutlookMCPError):
             # Legacy behavior: derive action from status_code only.
             action = None
             if status_code == 401:
-                action = "Token may have expired. Try outlook_login to re-authenticate."
+                action = "Token may have expired — run `outlook-mcp auth` on the host."
             elif status_code == 429:
                 action = "Rate limited by Microsoft Graph. Wait a moment and retry."
         super().__init__(
@@ -95,6 +150,171 @@ class GraphAPIError(OutlookMCPError):
         self.error_code = error_code
 
 
+class UnencryptedTokenCacheError(OutlookMCPError):
+    """Raised when the token cache would be written in cleartext un-asked.
+
+    On Linux without libsecret, msal_extensions falls back to a plaintext cache
+    file. That fallback used to be enabled unconditionally, so a reusable Graph
+    refresh token could land on disk in the clear with only a log line to mark
+    it. Persisting a credential that way is a decision the operator gets to
+    make, so the default is now to stop and say so.
+    """
+
+    def __init__(self):
+        super().__init__(
+            "unencrypted_token_cache",
+            "Refusing to persist the token cache: this environment has no "
+            "encrypted store (Linux without libsecret/gnome-keyring), so the "
+            "cache would be written to disk in cleartext.",
+            "This is for the user to decide, on the host: install the system "
+            "packages (apt: `gnome-keyring libsecret-1-0 python3-gi`) and re-create "
+            "the venv with `--system-site-packages`, or opt in to plaintext storage "
+            "with allow_unencrypted_token_cache in the server's config.json. See "
+            "https://github.com/mpalermiti/outlook-mcp/issues/7. "
+            f"{LEAVE_SETTINGS_TO_THE_USER}",
+        )
+
+
+class StaleConsentError(OutlookMCPError):
+    """Raised when the cached sign-in session cannot grant what we request.
+
+    AADSTS70000 is Entra's generic invalid-grant, so it names a family of
+    dead ends rather than one. The one that motivated this error: a
+    first-time consent that went through ``.default`` alone lands as a
+    signed-in session carrying no delegated permissions, and redeeming any
+    scope from it is refused — wording that suggests signing in and trying
+    again, which is in fact the only exit, because the missing consent
+    cannot be redeemed from the session that skipped it. A revoked refresh
+    token reports the same code, and the remedy is the same. It says "log
+    in again" in those words because the error's own text never does, and
+    every less specific remedy reads as an optional top-up.
+    """
+
+    def __init__(self):
+        super().__init__(
+            "stale_consent",
+            "The cached sign-in session cannot serve a token for the scopes "
+            "this server requests (AADSTS70000: The requested user must first "
+            "sign-in and grant the client application access).",
+            "Log in again — run `outlook-mcp auth` on the host and complete "
+            "the sign-in. This is most often not an expired token: the "
+            "consent was skipped when the session was issued and cannot be "
+            "redeemed from it, so no retry or refresh will fix it. (A "
+            "revoked refresh token reports the same code; logging in again "
+            "is the remedy there too.)",
+        )
+
+
+class ClientIdMismatchError(OutlookMCPError):
+    """Raised when the saved sign-in was made with a different app registration.
+
+    azure-identity serves the *record's* client id and ignores the one it is
+    constructed with, so a `client_id` changed in config.json went unnoticed:
+    the old app's session kept being used, and status printed the new id beside
+    "authenticated". That matters most for the one reason to change it — moving
+    to an app that holds fewer permissions — because the wider session stayed.
+    """
+
+    def __init__(self, configured: str, saved: str):
+        super().__init__(
+            "client_id_mismatch",
+            f"The saved sign-in was made with a different app registration "
+            f"(client_id {saved[:8]}…) than the one now in config.json "
+            f"({configured[:8]}…), so it was not used.",
+            "Run `outlook-mcp auth` on the host to sign in with the configured app.",
+        )
+
+
+class ConfigLoadError(OutlookMCPError):
+    """The settings file could not be loaded; the server booted fail-safe.
+
+    ``main`` validates the config before the transport starts and exits with
+    the repair on stderr. This error is the lifespan's backstop for the same
+    condition when the server is reached without going through ``main``:
+    raising there surfaces as an exception group nobody can read, so the
+    server boots read-only instead and every tool call carries the repair.
+    """
+
+    def __init__(self, reason: Exception, config_dir: str):
+        super().__init__(
+            "config_load_failed",
+            f"The settings file could not be loaded ({reason}); the server booted read-only.",
+            f"Fix {config_dir}/config.json and restart the server. {LEAVE_SETTINGS_TO_THE_USER}",
+        )
+
+
+class UntrustedURLError(OutlookMCPError):
+    """Raised when a URL that would receive a Graph token isn't a Graph URL.
+
+    The delta tools hand their cursor straight back to Graph as a request URL,
+    with the mailbox bearer token attached. That cursor is caller-held state and
+    the caller is an agent that reads mail, so the cursor is untrusted input:
+    left unchecked it redirects a live full-mailbox token to any host that can
+    get a string in front of the model. Refusing is the only safe answer — there
+    is no partial-trust version of "send the token somewhere else".
+    """
+
+    def __init__(self, source: str, url: str):
+        shown = url[:120] if url else "(empty)"
+        super().__init__(
+            "untrusted_url",
+            f"Refusing to send a Microsoft Graph token to a non-Graph URL "
+            f"(from {source}): {shown!r}.",
+            "Delta cursors must be https URLs on graph.microsoft.com. Discard "
+            "this cursor and start a fresh sync by calling again with no "
+            "delta_token.",
+        )
+        self.source = source
+
+
+class ForeignCursorError(OutlookMCPError):
+    """Raised when a delta cursor points somewhere other than its tool's endpoint.
+
+    The host check (``UntrustedURLError``) keeps the token on Graph. It does not
+    keep a tool on its own data: a cursor is a whole URL, so with only the host
+    pinned, any Graph path handed back as a cursor was fetched and returned —
+    mail through the calendar tool, tasks through the contacts tool. A cursor is
+    only good for the endpoint that issued it.
+    """
+
+    def __init__(self, source: str, url: str, resource: str):
+        shown = url[:120] if url else "(empty)"
+        if source == "initial_url":
+            # The first URL is built here, from the tool's own arguments — there
+            # is no cursor to blame, and telling the caller to discard one would
+            # send it looking for something it never passed.
+            message = (
+                f"Could not build a {resource} delta link from this call's arguments: {shown!r}."
+            )
+            action = (
+                "Check the folder or id passed to this tool; for mail, pass the folder's "
+                "display name or a well-known name such as inbox."
+            )
+        else:
+            message = (
+                f"Refusing a cursor that is not a {resource} delta link (from {source}): {shown!r}."
+            )
+            action = (
+                "A delta cursor only works with the tool that returned it. Discard this "
+                "cursor and start a fresh sync by calling again with no delta_token."
+            )
+        super().__init__("foreign_cursor", message, action)
+        self.source = source
+
+
+class ToolInputError(OutlookMCPError, ValueError):
+    """A tool argument the caller can fix, raised as an anticipated failure.
+
+    Tool modules raise plain ``ValueError`` for bad input and the server's
+    ``_wrap_tool_errors`` converts it here, so the message reaches the model
+    (SEP-1303: input validation errors are tool execution errors, not protocol
+    errors). Still a ``ValueError``, so callers catching that are unaffected.
+    """
+
+    def __init__(self, message: str):
+        super().__init__("invalid_input", message, None)
+
+
 # ── Graph error wrapper ────────────────────────────────────
 
 
@@ -103,19 +323,29 @@ class GraphAPIError(OutlookMCPError):
 _HINT_TABLE: dict[tuple[int, str | None], str] = {
     (401, None): "Token may have expired — run `outlook-mcp auth` on the host.",
     (403, "ErrorAccessDenied"): (
-        "Endpoint may not be supported for this account type. "
-        "See ROADMAP 'Investigated and not viable' for known dead-ends."
+        "Endpoint may not be supported for this account type. See "
+        "https://github.com/mpalermiti/outlook-mcp/blob/main/ROADMAP.md"
+        "#investigated-and-not-viable for known dead-ends."
+    ),
+    (400, "ErrorPropertyValidationFailure"): (
+        "Graph rejected a property but did not say which. On calendar writes this "
+        "has two observed causes, both about time zones: a "
+        "recurrence.range.recurrenceTimeZone naming a different zone than the "
+        "event's own (omit it — Graph derives it from the event), or changing a "
+        "series master's zone without re-sending its recurrence in the same call."
     ),
     (404, "ErrorItemNotFound"): (
         "Resource not found. The ID may be stale — re-list to get current IDs."
     ),
+    (412, "ErrorIrresolvableConflict"): (
+        "Something else changed the item while this update was in flight, so Graph "
+        "refused it rather than overwrite that change. Nothing was modified — "
+        "re-read the item and send the update again."
+    ),
     (429, None): (
-        "Rate limited by Microsoft Graph. "
-        "Back off and retry; respect any Retry-After header."
+        "Rate limited by Microsoft Graph. Back off and retry; respect any Retry-After header."
     ),
-    (503, None): (
-        "Microsoft Graph is temporarily unavailable. Retry after a short delay."
-    ),
+    (503, None): ("Microsoft Graph is temporarily unavailable. Retry after a short delay."),
 }
 
 
@@ -152,14 +382,13 @@ def wrap_graph_error(exc: Exception) -> GraphAPIError:
         from msgraph.generated.models.o_data_errors.o_data_error import (
             ODataError as _ODataError,
         )
+
         graph_types: tuple[type, ...] = (APIError, _ODataError)
     except ImportError:  # pragma: no cover — defensive
         graph_types = (APIError,)
 
     if not isinstance(exc, graph_types):
-        raise TypeError(
-            f"wrap_graph_error: not a Graph SDK error: {type(exc).__name__}"
-        )
+        raise TypeError(f"wrap_graph_error: not a Graph SDK error: {type(exc).__name__}")
 
     status_code: int | None = getattr(exc, "response_status_code", None)
 

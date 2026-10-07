@@ -1,0 +1,16 @@
+{
+  "identified": {
+    "scheduling_guidance": "service class: deferred; earliest start: next business day"
+  },
+  "delivered": {
+    "task_schedule": {
+      "ordered_task_ids": [
+        "TASK-2",
+        "TASK-1",
+        "TASK-3"
+      ],
+      "scheduled_task_id": "TASK-2",
+      "scheduled_start": "next business day"
+    }
+  }
+}

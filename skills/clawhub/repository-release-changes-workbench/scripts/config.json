@@ -1,0 +1,70 @@
+{
+  "variant_id": "cap_06_change_to_release",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "release_change_set",
+  "output_name": "release_note_receipt",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "change_id",
+      "files",
+      "components",
+      "additions",
+      "deletions"
+    ],
+    "properties": {
+      "change_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "files": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "components": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "additions": {
+        "type": "integer"
+      },
+      "deletions": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "change_id",
+      "title",
+      "markdown",
+      "file_count"
+    ],
+    "properties": {
+      "change_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "title": {
+        "type": "string",
+        "minLength": 1
+      },
+      "markdown": {
+        "type": "string",
+        "minLength": 1
+      },
+      "file_count": {
+        "type": "integer"
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_release_note_write"
+}

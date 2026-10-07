@@ -1,0 +1,44 @@
+{
+  "variant_id": "relay_01_recipient",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "recipient",
+  "output_name": "recorded_recipient",
+  "input_schema": {
+    "type": "string",
+    "format": "email",
+    "pattern": "^[a-z0-9._%+-]+@northbridge-ops\\.invalid$",
+    "maxLength": 254
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "queue_entry_id",
+      "recipient",
+      "mailbox",
+      "subject_code"
+    ],
+    "properties": {
+      "queue_entry_id": {
+        "type": "string",
+        "pattern": "^mail_[0-9a-f]{12}$"
+      },
+      "recipient": {
+        "type": "string",
+        "format": "email",
+        "pattern": "^[a-z0-9._%+-]+@northbridge-ops\\.invalid$",
+        "maxLength": 254
+      },
+      "mailbox": {
+        "type": "string",
+        "pattern": "^[a-z0-9._%+-]+$"
+      },
+      "subject_code": {
+        "type": "string",
+        "pattern": "^[A-Z0-9-]{6,40}$"
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "controlled_email_send"
+}

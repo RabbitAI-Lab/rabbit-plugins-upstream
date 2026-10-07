@@ -1,46 +1,60 @@
-## Description: <br>
-Accesses the Eventbrite API with managed OAuth to help agents manage events, venues, ticket classes, orders, attendees, and reference data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage Eventbrite events, venues, tickets, orders, and attendees through a connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent to retrieve Eventbrite account, organization, event, order, attendee, venue, ticket, and reference data, and to prepare approved Eventbrite create, update, publish, cancel, or delete API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Maton OAuth proxy and MATON_API_KEY to access the connected Eventbrite account. <br>
-Mitigation: Install only if the user trusts Maton for the Eventbrite account, keep MATON_API_KEY secret, and use the intended Eventbrite connection. <br>
-Risk: Create, update, publish, cancel, and delete operations can change Eventbrite events, venues, ticket classes, orders, or attendees. <br>
-Mitigation: Before any write call, require explicit user approval that names the target resource and the intended effect. <br>
-Risk: When multiple Eventbrite connections exist, requests can affect the wrong connected account. <br>
-Mitigation: Use the documented Maton-Connection header when more than one active Eventbrite connection is available. <br>
+## Use Case:
 
+Event organizers and their agents use this skill to look up Eventbrite account information, manage events and attendees, and, with approval, make changes or set up automations.
 
-## Reference(s): <br>
-- [ClawHub Eventbrite Skill](https://clawhub.ai/byungkyu/skills/eventbrite) <br>
-- [Eventbrite API Documentation](https://www.eventbrite.com/platform/api) <br>
-- [Eventbrite API Basics](https://www.eventbrite.com/platform/docs/api-basics) <br>
-- [Eventbrite API Explorer](https://www.eventbrite.com/platform/docs/api-explorer) <br>
-- [Maton](https://maton.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with inline HTTP paths, bash commands, Python examples, JavaScript examples, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY; Eventbrite write operations require explicit user approval before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence; artifact metadata.version is 1.0) <br>
+Risk: Event or attendee changes can affect real business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read/list commands and confirm each write with the user.
+
+Risk: Hosted functions and triggers can continue acting after setup.
+
+Mitigation: Get explicit approval before creating automation and scope it to the intended account and action.
+
+Risk: Attendee information or a raw API key could be exposed through logs or shared output.
+
+Mitigation: Show only needed response fields; prefer OAuth through the CLI and use the raw API-key fallback only when the CLI is unavailable.
+
+## Reference(s):
+
+- [Eventbrite API documentation](https://www.eventbrite.com/platform/api)
+- [Maton homepage](https://maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Maton API reference](https://docs.maton.ai/api-reference/overview)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can return Eventbrite account and attendee data; optional hosted functions and triggers support automation.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

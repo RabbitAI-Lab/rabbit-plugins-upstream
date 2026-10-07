@@ -23,7 +23,7 @@ Use `linkedin.findProfileUrl` (0.25 cred) — cheapest credible source.
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl"}' \
   --records '[
     {"fullName":"John Smith","companyName":"Acme"},
     ...
@@ -37,7 +37,7 @@ Run `linkedin.enrichProfile` (0.25 cred) on the candidate URL. Compare the retur
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"enrichProfile","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"linkedin","actionSlug":"enrichProfile"}' \
   --records "$(jq -c '[.results[] | {linkedinUrl: .url}]' /tmp/candidates.json)" \
   --wait-until-finished > /tmp/enriched.json
 ```
@@ -58,7 +58,7 @@ For rejected candidates, escalate via reverse-email lookup (only useful if you h
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"reverseEmailLookup","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"FullEnrich","actionSlug":"reverseEmailLookup"}' \
   --records '[{"email":"john.smith@acme.com"}, ...]' \
   --wait-until-finished > /tmp/reverse.json
 ```
@@ -77,8 +77,8 @@ Only the rows that passed the validation gate get written back. Mark unresolved 
 |---|---|
 | `linkedin.findProfileUrl` | 0.25 |
 | `linkedin.enrichProfile` (validation) | 0.25 |
-| `FullEnrich.reverseEmailLookup` (fallback, ~30% of cases) | 2 × 0.3 = 0.6 |
-| **Effective: ~1.1 cred per resolved contact** (with ~80% resolution rate) |
+| `FullEnrich.reverseEmailLookup` (fallback, ~30% of cases) | 1 × 0.3 = 0.3 |
+| **Effective: ~0.8 cred per resolved contact** (with ~80% resolution rate) |
 
 ## Common pitfalls
 
@@ -88,4 +88,4 @@ Only the rows that passed the validation gate get written back. Mark unresolved 
 
 ## Action shape rules
 
-`{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl","config":{}}`. **No `connectorUuid` in config.** Per-record data: `fullName` (required), `companyName` (optional — improves matching). If the source data has separate first/last columns, concatenate them into `fullName` first (see [`../provider-playbooks/linkedin.md`](../provider-playbooks/linkedin.md)).
+`{"kind":"connector","integrationSlug":"linkedin","actionSlug":"findProfileUrl"}`. **No `connectorUuid` in config.** Per-record data: `fullName` (required), `companyName` (optional — improves matching). If the source data has separate first/last columns, concatenate them into `fullName` first (see [`../provider-playbooks/linkedin.md`](../provider-playbooks/linkedin.md)).

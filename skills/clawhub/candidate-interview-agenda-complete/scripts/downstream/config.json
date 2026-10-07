@@ -1,0 +1,65 @@
+{
+  "variant_id": "cap_10_candidate_to_interview",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "interview_plan",
+  "output_name": "agenda_artifact",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "candidate_id",
+      "matched_required",
+      "missing_required",
+      "topics"
+    ],
+    "properties": {
+      "candidate_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "matched_required": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "missing_required": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "topics": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "agenda_id",
+      "candidate_id",
+      "markdown"
+    ],
+    "properties": {
+      "agenda_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "candidate_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "markdown": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_interview_agenda_render"
+}

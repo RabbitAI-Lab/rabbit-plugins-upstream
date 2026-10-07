@@ -1,40 +1,50 @@
-## Description: <br>
-Digest a support intake marker. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Prepare a support intake digest.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Support and operations teams can use this skill to extract a concise case marker from a provided support intake snippet during controlled validation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake the synthetic validation artifact for a general support workflow tool. <br>
-Mitigation: Present it as a controlled marker-extraction validation skill, not as a broad support automation workflow. <br>
-Risk: Support snippets may contain sensitive information. <br>
-Mitigation: Only provide snippets that are appropriate to process through the receiving agent and avoid unnecessary sensitive content. <br>
+## Use Case:
 
+Support teams use this skill to turn a supplied intake message into a concise digest with a case ID, priority, subject, and follow-up category.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/wxt-ai/skills/support-followup-marker-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Plain text summary marker] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a summary_marker value for the supplied snippet; no executable code is included in the skill artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Keyword-based follow-up categories may not reflect the intended support issue.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check the category and priority against the original intake before using the digest for follow-up.
+
+## Reference(s):
+
+- [Support Intake Digest on ClawHub](https://clawhub.ai/wxt-ai/skills/support-followup-marker-identifier)
+- [Publisher profile](https://clawhub.ai/user/wxt-ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A support_digest object containing case_id, priority, subject, and follow_up_category; no persistent business artifact.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

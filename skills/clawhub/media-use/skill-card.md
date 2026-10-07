@@ -1,52 +1,61 @@
-## Description: <br>
-Agent Media OS for HyperFrames projects that helps agents resolve, generate, operate on, and reuse media assets including background music, sound effects, images, icons, logos, voices, grades, LUTs, captions, transcription, and background removal. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents resolve, generate, edit, and reuse media for HyperFrames projects, including audio, images, video treatments, and captions.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative agents use this skill to select, generate, transform, freeze, and reuse media assets for HyperFrames projects. It is suited to workflows that need local media ledgers, provider-aware media resolution, audio processing, captions, transcription, color treatments, and reusable project or cross-project assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can contact cloud media providers, CDNs, model registries, package registries, and service APIs. <br>
-Mitigation: Review provider choices before sending private media to cloud services, and use --local-only for sensitive work when local providers and cached assets are sufficient. <br>
-Risk: Usage telemetry may be linked to a HeyGen email or account identity. <br>
-Mitigation: Set HYPERFRAMES_NO_TELEMETRY=1 or DO_NOT_TRACK=1 when telemetry should be disabled. <br>
-Risk: The skill uses local credential or profile files and stores reusable media state under ~/.media. <br>
-Mitigation: Inspect local credential, profile, and media-cache locations before shared or regulated use, and clear or isolate reusable state when switching projects or clients. <br>
-Risk: Some workflows can auto-install dependencies or use model and package registries. <br>
-Mitigation: Run in a controlled environment, review dependency sources, and pin or preinstall approved tools for production workflows. <br>
-Risk: Media adoption and recipe workflows can alter project media assumptions. <br>
-Mitigation: Back up frame.md and review generated ledgers, recipes, and asset selections before adopting them into an existing project. <br>
+## Use Case:
 
+Creators and developers use this skill to find or generate project media, produce voiceover and captions, edit footage, and reuse assets across HyperFrames projects.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/media-use) <br>
-- [Setup and providers](artifact/references/setup-providers.md) <br>
-- [Resolve](artifact/references/resolve.md) <br>
-- [Audio](artifact/references/audio.md) <br>
-- [Operations](artifact/references/operations.md) <br>
-- [Media treatments](artifact/references/media-treatments.md) <br>
-- [HeyGen CLI documentation](https://developers.heygen.com/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON snippets, file paths, and reusable media ledger entries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce or reference local media files, frozen assets, captions, transcripts, color-treatment JSON, LUT files, and reusable project or global media state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.34 (source: server release metadata) <br>
+Risk: Untrusted audio requests may cause generated audio to be written outside the project.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Process only trusted projects and avoid untrusted audio_request.json files until line IDs are sanitized.
+
+Risk: Unpinned runtime tools may execute code that has not been reviewed.
+
+Mitigation: Review the skill before installation and prefer pinned or locked HyperFrames commands.
+
+Risk: Media may be sent to configured third-party providers.
+
+Mitigation: Review provider settings and credentials before sending sensitive media to HeyGen, Gemini, ElevenLabs, or other configured tools.
+
+## Reference(s):
+
+- [ClawHub media-use release](https://clawhub.ai/heygen-com/skills/media-use)
+- [Media resolution and reuse](artifact/references/resolve.md)
+- [Audio workflows](artifact/references/audio.md)
+- [Media operations](artifact/references/operations.md)
+- [Provider setup](artifact/references/setup-providers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Files, Configuration instructions]
+
+**Output Format:** [Text and Markdown guidance with commands and paths to generated media files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Resolved assets can be recorded in a project ledger for reuse.]
+
+## Skill Version(s):
+
+1.0.72 (source: ClawHub release record)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

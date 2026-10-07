@@ -1,0 +1,39 @@
+{
+  "version": "1.2.0",
+  "stages": {
+    "upstream": {
+      "source_package": "budget-planning-units-identifier",
+      "module": 7113,
+      "package_files": {
+        "README.md": "e41253ece8e4d7238518dbe5fe4186e26bdafe73d5376fd77f50a5e2ed82232e",
+        "SKILL.md": "98b169fce9debe838f4a13158ab98011e892b95e641c6d26552868d5a610b23c",
+        "examples/expected.json": "85f1ff3b02ed399652c16f1005b50c0e7e5e56a9d4fbdb631b7dcfe83cfd6aa4",
+        "examples/request.json": "864148034c51180e608455f4abe79d910b2ef5ef0590db5843635e311a560015",
+        "file-manifest.json": "d558b1a38bb945e452fca81814d6d6a5851a698f84b572f14a5dc8d9a2fac1f5",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "e951bab19b78f5e33e9978c1a3397879b31e552253ac673f2fd7a44541116976",
+        "scripts/operation.py": "7fb4e5c21b6266658ea936dbcb07b97110f76d42bea8e26ca404a9dd9ed49f26",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "c7e41b8948326c85ff755c890e79dce316fbc058d7c183cb3a655a7586e60627"
+      }
+    },
+    "downstream": {
+      "source_package": "budget-planning-units-workbench",
+      "module": 17461,
+      "package_files": {
+        "README.md": "6d1860ecd818b9847a8dff1b677b05133dc3161a989611bf7ea902f696cfc014",
+        "SKILL.md": "a6c5342bc8793659d1dea9bb03e2f6fa4523a27320b7eb02343c6f9d1af9d1d1",
+        "examples/expected.json": "24d7ae937691a40f24490089c5e6a419e08326165d3c999c70991dfc15b0724a",
+        "examples/request.json": "85f1ff3b02ed399652c16f1005b50c0e7e5e56a9d4fbdb631b7dcfe83cfd6aa4",
+        "file-manifest.json": "45a1f48eca8d7b3bc802181e00bc860f66c7154a10319044c5cf1dcd9c6c2bd4",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "71fcd6d45a5e2b2280d0b1ce07e3c8a413259398955bd04b376d293a74fcd1ce",
+        "scripts/operation.py": "72ad7e42ae06008be63d9a8b01d87c065fafbc3155688e9b2248a402b125dd24",
+        "scripts/run.py": "cf42b0fe43f247f278952ff5dcc14150457bdd29ad28cc6086a98aa0ca4fe982",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "8de8a21449a2533fe10076b03b913990a67817dae903a94fe676d3f7587b5b3c"
+      }
+    }
+  }
+}

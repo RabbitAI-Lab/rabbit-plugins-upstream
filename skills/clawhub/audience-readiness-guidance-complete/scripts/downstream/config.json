@@ -1,0 +1,98 @@
+{
+  "variant_id": "shadow_07_audience",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "audience_guidance",
+  "output_name": "briefing_preview",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "audience": {
+            "type": "string"
+          },
+          "allowed_section_tags": {
+            "type": "array",
+            "items": {
+              "type": "string"
+            }
+          }
+        },
+        "required": [
+          "audience",
+          "allowed_section_tags"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "audience": {
+                    "type": "string"
+                  },
+                  "allowed_section_tags": {
+                    "type": "array",
+                    "items": {
+                      "type": "string"
+                    }
+                  }
+                },
+                "required": [
+                  "audience",
+                  "allowed_section_tags"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "audience": {
+        "type": "string"
+      },
+      "included_sections": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "excluded_sections": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [
+      "audience",
+      "included_sections",
+      "excluded_sections"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_briefing_preview"
+}

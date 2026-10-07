@@ -1,0 +1,6 @@
+{
+  "routing_request": {
+    "message_kind": "payment_review",
+    "account_tier": "priority"
+  }
+}

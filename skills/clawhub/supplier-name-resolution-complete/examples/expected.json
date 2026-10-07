@@ -1,0 +1,13 @@
+{
+  "identified": {
+    "matching_guidance": "normalize case, punctuation, and common company suffixes"
+  },
+  "delivered": {
+    "match_result": {
+      "matched": true,
+      "left_canonical": "northbridge labs",
+      "right_canonical": "northbridge labs",
+      "score": 1.0
+    }
+  }
+}

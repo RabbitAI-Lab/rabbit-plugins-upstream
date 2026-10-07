@@ -1,0 +1,15 @@
+{
+  "identified": {
+    "retry_mode": "retry failed delivery automatically"
+  },
+  "delivered": {
+    "recorded_retry_mode": {
+      "attempts_remaining": 2,
+      "retry_times": [
+        "2026-09-03T08:05:00+00:00",
+        "2026-09-03T08:10:00+00:00"
+      ],
+      "next_action": "retry"
+    }
+  }
+}

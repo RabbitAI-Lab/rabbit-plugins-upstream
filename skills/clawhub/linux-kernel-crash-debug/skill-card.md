@@ -1,41 +1,56 @@
-## Description: <br>
-Guides developers and engineers through Linux kernel panic and vmcore analysis with crash, kdump, and related memory debugging tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides evidence-first analysis of Linux kernel crashes and vmcores using the crash utility and memory and concurrency debugging tools.
 
-## Publisher: <br>
-[crazyss](https://clawhub.ai/user/crazyss) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[crazyss](https://clawhub.ai/user/crazyss)
 
-## Use Case: <br>
-Developers, kernel engineers, and operators use this skill to triage Linux kernel crashes, inspect vmcore files, configure kdump, and reason about memory corruption, deadlocks, OOM events, and architecture-specific crash parameters. Because the workflow can involve live-system tooling and sensitive memory dumps, it is best used by experienced operators in controlled environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/crazyss/linux-kernel-crash-debug) <br>
-- [Project homepage](https://github.com/crazyss/linux-kernel-crash-debug) <br>
-- [Kernel.org kdump documentation](https://docs.kernel.org/admin-guide/kdump/kdump.html) <br>
-- [Crash utility documentation](https://crash-utility.github.io/) <br>
-- [Crash utility whitepaper](https://crash-utility.github.io/crash_whitepaper.html) <br>
+Developers and Linux engineers use this skill to triage kernel panics and diagnose likely causes of crashes, deadlocks, and memory faults from vmcores and related evidence.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and crash command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include diagnostic command sequences, kdump setup guidance, vmcore handling guidance, and bounded wrapper commands for crash analysis.] <br>
+Global
 
-## Skill Version(s): <br>
-1.3.2 (source: server release evidence and SKILL.md frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Vmcores and diagnostic output can contain sensitive process memory and credentials.
+
+Mitigation: Keep dumps and outputs access-controlled; use offline files under an unprivileged account and obtain approval before sharing or uploading them.
+
+Risk: Live tracing, system configuration changes, or crash tests can disrupt a host.
+
+Mitigation: Require explicit authorization for the specific host and action before privileged installs, live tracing, debugfs or procfs writes, service or boot changes, or kdump tests.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/crazyss/skills/linux-kernel-crash-debug)
+- [Project homepage (release metadata)](https://github.com/crazyss/linux-kernel-crash-debug)
+- [Crash Utility documentation](https://crash-utility.github.io/)
+- [Evidence-first workflow](artifact/references/evidence-first-workflow.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Evidence-backed conclusions with confidence levels and disproof checks.]
+
+## Skill Version(s):
+
+1.4.4 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,23 @@
+{
+  "identified": {
+    "event_digest": {
+      "event_id": "EVENT-GOLF-7315",
+      "starts_at": "2026-09-04T01:30:00Z",
+      "ends_at": "2026-09-04T02:00:00Z",
+      "timezone": "UTC",
+      "duration_minutes": 30,
+      "location": "Room 8",
+      "raw_start": "20260904T013000Z",
+      "raw_end": "20260904T020000Z"
+    }
+  },
+  "delivered": {
+    "calendar_artifact": {
+      "artifact_id": "coordination-c0076a2638e6ad4a",
+      "event_id": "EVENT-GOLF-7315",
+      "starts_at": "2026-09-04T01:30:00Z",
+      "ends_at": "2026-09-04T02:00:00Z",
+      "ics_content": "BEGIN:VCALENDAR\r\nVERSION:2.0\r\nPRODID:-//Workspace Operations//Coordination//EN\r\nBEGIN:VEVENT\r\nUID:coordination-c0076a2638e6ad4a\r\nDTSTART:20260904T013000Z\r\nDTEND:20260904T020000Z\r\nSUMMARY:Coordination follow-up for EVENT-GOLF-7315\r\nLOCATION:Room 8\r\nDESCRIPTION:Meeting handoff recorded for EVENT-GOLF-7315 (30 minutes).\r\nEND:VEVENT\r\nEND:VCALENDAR\r\n"
+    }
+  }
+}

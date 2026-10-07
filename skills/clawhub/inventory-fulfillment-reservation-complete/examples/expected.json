@@ -1,0 +1,36 @@
+{
+  "identified": {
+    "allocation_plan": {
+      "request_id": "fulfillment-6384",
+      "allocations": [
+        {
+          "lot_id": "LOT-OSCAR-6384",
+          "quantity": 5
+        },
+        {
+          "lot_id": "LOT-PAPA-7410",
+          "quantity": 3
+        }
+      ],
+      "unfilled_quantity": 0
+    }
+  },
+  "delivered": {
+    "reservation_receipt": {
+      "reservation_id": "reservation-5ffefb2bd97bbe1e",
+      "request_id": "fulfillment-6384",
+      "status": "planned",
+      "allocations": [
+        {
+          "lot_id": "LOT-OSCAR-6384",
+          "quantity": 5
+        },
+        {
+          "lot_id": "LOT-PAPA-7410",
+          "quantity": 3
+        }
+      ],
+      "unfilled_quantity": 0
+    }
+  }
+}

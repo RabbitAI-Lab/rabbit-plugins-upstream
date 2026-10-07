@@ -1,43 +1,54 @@
-## Description: <br>
-Profiles wallet balances, PnL, labels, transactions, counterparties, related wallets, batch jobs, traces, and wallet comparisons through the Nansen CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Profiles and compares blockchain wallets using Nansen CLI research commands for balances, PnL, labels, transactions, counterparties, and related wallets.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-External developers and analysts use this skill to ask an agent to run Nansen wallet profiler commands for a specific wallet address, multiple wallets, transaction history, PnL, labels, counterparties, related wallets, traces, and comparisons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill grants the agent access to the whole nansen CLI while using a Nansen API key. <br>
-Mitigation: Use a scoped or low-risk API key where possible and supervise commands before execution, especially in environments where the CLI has trading, wallet-management, or other sensitive functions configured. <br>
-Risk: Profiler commands can consume API quota or credits, and trace commands may make many API calls. <br>
-Mitigation: Keep trace width and depth conservative, review batch sizes before execution, and monitor Nansen API quota or credit usage. <br>
+## Use Case:
 
+Analysts and developers use this skill to investigate a wallet's activity, holdings, and relationships, or compare multiple wallets across supported chains.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nansen-devops/nansen-wallet-profiler) <br>
-- [Publisher profile](https://clawhub.ai/user/nansen-devops) <br>
-- [Required environment variable: NANSEN_API_KEY](artifact/SKILL.md) <br>
-- [Required CLI package: nansen-cli](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline Nansen CLI commands and command-output interpretation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen CLI and NANSEN_API_KEY; command results depend on Nansen API access, limits, and available wallet data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: Authenticated research calls may consume credits or trigger x402 wallet payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the CLI package is trusted and review wallet payment policy and spending limits before making calls.
+
+Risk: Batch and multi-hop trace requests can multiply paid research calls.
+
+Mitigation: Keep trace width and batch size conservative and confirm expected costs before running loops.
+
+## Reference(s):
+
+- [Nansen Wallet Profiler skill release](https://clawhub.ai/nansen-devops/skills/nansen-wallet-profiler)
+- [Nansen CLI browser-login preview documentation](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with bash command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Research results depend on the selected wallet, chain, and query options; some results support pagination or CSV export.]
+
+## Skill Version(s):
+
+0.1.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,15 @@
+{
+  "identified": {
+    "route_mode": "quarantine export route"
+  },
+  "delivered": {
+    "recorded_route": {
+      "selected_route": "review-first",
+      "candidate_routes": [
+        "review-first",
+        "standard"
+      ],
+      "reason": "first available route from active order"
+    }
+  }
+}

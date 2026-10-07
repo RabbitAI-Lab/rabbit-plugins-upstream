@@ -1,0 +1,39 @@
+{
+  "version": "1.2.0",
+  "stages": {
+    "upstream": {
+      "source_package": "invoice-rounding-guidance-identifier",
+      "module": 3306,
+      "package_files": {
+        "README.md": "3defe1e8b30684fd6daa90cf9fed41364e949dacfcce465354e780ab04509fae",
+        "SKILL.md": "08312c96057b8d6df973634741d6ed441945c49ce122614185d31d6175e0d1d9",
+        "examples/expected.json": "1e38cd8ae55083e6714a449d6c6aaf955086e5220f7f7ef4366993eea15788df",
+        "examples/request.json": "df0f18adbeb4092a9d51cccabf45cf08953ebcb7c07e19f2f7cdfd88cd1bcd0c",
+        "file-manifest.json": "ce412653d17c96f30ac64c31811d3f68652e3dc9438e167e1cea1a6328d5ee52",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "41da210ea331168789775de2b7123d21ffdeb27a7a7fcd1ab9e8e05370d653bb",
+        "scripts/operation.py": "347117ee49f44ffe560dd0aac79bd2a68e59e90ca7d7c567347ceb53f3498406",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "79bfcb06b400a0aaacae5ef82d440375cba75ee0b8a209d47d1325b3632c0051"
+      }
+    },
+    "downstream": {
+      "source_package": "invoice-rounding-guidance-workbench",
+      "module": 18112,
+      "package_files": {
+        "README.md": "16b1694519aa6c4dc14ba3eb5c54c519d830e41a3e246a0d6ce3efb982adb838",
+        "SKILL.md": "c40b04f5eedae4eb5dac5865e9a795965e7c9ec0f84bbd592aba85ff7abf5cf0",
+        "examples/expected.json": "2de381720a74c81df135ead84bfe8178143629675e1a8c9690278c70c0e7864a",
+        "examples/request.json": "1e38cd8ae55083e6714a449d6c6aaf955086e5220f7f7ef4366993eea15788df",
+        "file-manifest.json": "38040253d676d1b1cd7dafbf9962cc6defb467e9bb2a5ba948cac09904243a45",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "6f682406f565414aa9a9de7dbb64dd462b7624788938c587e688765c8ac9eb0c",
+        "scripts/operation.py": "99d70e6937c7bb9f3f49c2c2aa15995b317e3e97737e3d34968f47125a3d983f",
+        "scripts/run.py": "cf42b0fe43f247f278952ff5dcc14150457bdd29ad28cc6086a98aa0ca4fe982",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "8912a3844e234c76aa5cf6ef5d3a694c3fcb85b014e2eed8eda3b47867ec5df6"
+      }
+    }
+  }
+}

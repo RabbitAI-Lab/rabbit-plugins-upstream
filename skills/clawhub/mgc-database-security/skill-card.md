@@ -1,42 +1,58 @@
-## Description: <br>
-Secure database credential management using MGC Blackbox for MySQL, PostgreSQL, SQLite, MariaDB, and related database workflows while avoiding direct credential exposure to AI models. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides data analysts in using MGC Blackbox to manage local credentials, scripts, workflows, knowledge, and sealed collaboration with explicit approval.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers and automation engineers use this skill to design database workflows that store credentials in MGC Blackbox, reference them by identifier, and retrieve them through trusted local execution paths instead of placing passwords in prompts, logs, or skill files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Calling mgc_get for real credential records can place secret material into the agent context. <br>
-Mitigation: Use trusted local scripts to retrieve credentials and return only non-sensitive results; call mgc_get for real credential records only with explicit user approval. <br>
-Risk: Sealed-script examples using action="run" represent code execution. <br>
-Mitigation: Require explicit user approval and trusted script provenance before running sealed scripts; inspect or scan scripts where possible before execution. <br>
-Risk: The release under-discloses sensitive credential retrieval and script execution paths. <br>
-Mitigation: Review the security guidance before enabling the skill and define deployment-specific boundaries for MGC access and database operations. <br>
+## Use Case:
 
+Data analysts and developers use this skill to manage local credentials, user-owned analysis workflows, knowledge, and authorized sharing through MGC Blackbox.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/mgc-database-security) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, shell commands, configuration] <br>
-**Output Format:** [Markdown documentation with tool-call examples, configuration snippets, and conceptual code patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; examples reference MGC MCP tools and local script patterns rather than providing executable code in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Agent-triggered credential access or workflow execution can perform sensitive operations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval for each sensitive operation.
+
+Risk: The MGC token or retrieved credentials can be exposed.
+
+Mitigation: Treat the token and any retrieved credential content as secrets.
+
+Risk: Broad zero-exposure claims may overstate protection for knowledge or script internals.
+
+Mitigation: Do not assume those contents are invisible to the agent; review what each operation reveals.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zkeviny/skills/mgc-database-security)
+- [MGC Blackbox project](https://github.com/zkeviny/MGC-Blackbox)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands]
+
+**Output Format:** [Markdown with code examples and tool-call guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires MGC Blackbox 1.5.2+ for the documented workflows.]
+
+## Skill Version(s):
+
+1.3.0 (source: ClawHub release and bundled skill)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

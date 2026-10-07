@@ -1,40 +1,53 @@
-## Description: <br>
-Assemble a reporting export row. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assembles a reporting export row from a supplied customer record field.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-External users and reporting teams use this skill to turn an approved cell_value supplied in the current request into a concise exported_cell for a reporting export row. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Unapproved or unintended input could be formatted into a reporting export cell. <br>
-Mitigation: Use only approved cell_value input that the user intentionally provides in the current request. <br>
-Risk: The exported cell could be copied into reports without review. <br>
-Mitigation: Review exported_cell before adding it to downstream reporting exports. <br>
+## Use Case:
 
+Customer reporting staff and their agents use the skill to turn a supplied record field into a reporting export row, append it to a local CSV, and optionally deliver it to a configured endpoint.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/record-export-field-workbench) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text] <br>
-**Output Format:** [Concise text field value] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces the exported_cell field from the user-supplied cell_value.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: The export row may be sent to a configured external delivery endpoint.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the endpoint and API key handling before running; leave delivery settings unset when only local assembly is intended.
+
+Risk: Running the skill appends customer reporting data to a local CSV.
+
+Mitigation: Check the output directory and confirm that local export storage is appropriate for the data.
+
+## Reference(s):
+
+- [Reporting Export Assembler on ClawHub](https://clawhub.ai/wxt-ai/skills/record-export-field-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Files]
+
+**Output Format:** [JSON export row and local CSV]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes columns, row values, and a row digest; runs may also return a local effect receipt and, when configured, a delivery receipt.]
+
+## Skill Version(s):
+
+1.1.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

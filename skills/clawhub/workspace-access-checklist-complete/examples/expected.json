@@ -1,0 +1,32 @@
+{
+  "identified": {
+    "access_delta": {
+      "workspace_id": "SHARE-NOVEMBER-5268",
+      "added": [],
+      "removed": [],
+      "role_changed": [
+        {
+          "principal_id": "ops",
+          "from": "viewer",
+          "to": "editor"
+        }
+      ],
+      "external_entries": []
+    }
+  },
+  "delivered": {
+    "checklist_artifact": {
+      "checklist_id": "access-1f8fc02d8c18f688",
+      "workspace_id": "SHARE-NOVEMBER-5268",
+      "items": [
+        {
+          "status": "open",
+          "action": "review role change",
+          "principal_id": "ops",
+          "from": "viewer",
+          "to": "editor"
+        }
+      ]
+    }
+  }
+}

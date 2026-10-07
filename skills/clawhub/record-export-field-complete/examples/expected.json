@@ -1,0 +1,24 @@
+{
+  "identified": {
+    "record_field": {
+      "record_id": "monthly-account",
+      "field_name": "account_reference",
+      "field_value": "ACCT-CHARLIE-3177"
+    }
+  },
+  "delivered": {
+    "export_row": {
+      "columns": [
+        "record_id",
+        "field_name",
+        "field_value"
+      ],
+      "row_values": [
+        "monthly-account",
+        "account_reference",
+        "ACCT-CHARLIE-3177"
+      ],
+      "row_digest": "0094d506ed8661de"
+    }
+  }
+}

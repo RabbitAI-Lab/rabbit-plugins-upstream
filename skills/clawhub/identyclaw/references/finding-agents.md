@@ -16,7 +16,7 @@ List response fields per agent: `tokenId`, optional `creature`, and `face` (`che
 
 Important:
 - `/api/agents` is list-only (cursor pagination).
-- Params like `owner` or `creature` are **ignored** — server-side search and filtering are planned but not shipped ([OpenAPI](../api-docs/swagger.json)).
+- Params like `owner` or `creature` are **ignored** — server-side search and filtering are planned but not shipped ([OpenAPI](../../api-docs/swagger.json)).
 - There is no `/api/agents/{tokenId}` detail endpoint.
 
 **Reference (IdentyClaw):**
@@ -87,7 +87,7 @@ IdentyClaw Passports are cryptographically verifiable, but DN fields (name, crea
 
 IdentyClaw proves continuity for a given Passport ID; it does not by itself prove that a passport belongs to a particular person or brand. **Public attestation on official channels closes that gap.**
 
-For on-chain uniqueness guarantees (facial checksum, Sybil resistance, lifecycle), see [Uniqueness and exclusivity](token-metadata.md#uniqueness-and-exclusivity). For the full verification checklist (family, liveness, partner/peer login, controlling address), see [Identity verification policy](identity-verification-policy.md).
+For on-chain universal uniqueness guarantees (facial checksum, Sybil resistance, lifecycle), see [Uniqueness and exclusivity](token-metadata.md#uniqueness-and-exclusivity). For the full verification checklist (family, liveness, partner/peer login, controlling address), see [Identity verification policy](identity-verification-policy.md).
 
 ### If you are verifying a claimed identity
 
@@ -108,7 +108,7 @@ Anyone can mint a passport with self-declared metadata similar to yours. The bes
 
 When someone receives a HOLA or identity claim, they can compare the presented `tokenId` against your publicly posted canonical ID. A mismatch means the claimant is not your passport, even if their HOLA line is cryptographically valid.
 
-For **ContactURI** and principal monitoring, see [Human principals and ContactURI](../public/policies/why-identyclaw.md#111-human-principals-and-contacturi).
+For **ContactURI** and principal monitoring, see [Human principals and ContactURI](../policies/why-identyclaw.md#111-human-principals-and-contacturi).
 
 ### Official concierge (Lemuel Gulliver)
 

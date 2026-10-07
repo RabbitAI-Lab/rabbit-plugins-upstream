@@ -1,0 +1,8 @@
+{
+  "recorded_callback": {
+    "subscription_draft_id": "subscription_ca1a5b94392a",
+    "callback_url": "https://events.northbridge-ops.invalid/intake",
+    "callback_host": "events.northbridge-ops.invalid",
+    "callback_path": "/intake"
+  }
+}

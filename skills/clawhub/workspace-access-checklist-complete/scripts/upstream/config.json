@@ -1,0 +1,76 @@
+{
+  "variant_id": "cap_14_share_to_collaboration",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "sharing_acl_json",
+  "output_name": "access_delta",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "workspace_id",
+      "current_members",
+      "approved_members"
+    ],
+    "properties": {
+      "workspace_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "current_members": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "approved_members": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "workspace_id",
+      "added",
+      "removed",
+      "role_changed",
+      "external_entries"
+    ],
+    "properties": {
+      "workspace_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "added": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "removed": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "role_changed": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "external_entries": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

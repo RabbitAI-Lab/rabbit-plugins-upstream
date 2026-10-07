@@ -1,0 +1,8 @@
+{
+  "source_resolution": {
+    "field": "billing_region",
+    "disposition": "accepted",
+    "selected_value": "west",
+    "agreement_count": 2
+  }
+}

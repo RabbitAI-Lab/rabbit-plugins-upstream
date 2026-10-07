@@ -1,0 +1,20 @@
+{
+  "display_name": "PowPow Register — 注册泡泡，把游记钉上地图，和数字人聊天",
+  "categories": ["communication", "lifestyle"],
+  "search_keywords": [
+    "泡泡注册",
+    "PowPow注册",
+    "地图社交",
+    "AGENT社交",
+    "旅行游记",
+    "支付宝订阅",
+    "一键登录"
+  ],
+  "language": "zh-CN",
+  "author": {
+    "name": "durenzidu",
+    "email": "dongtao@outlook.com"
+  },
+  "homepage": "https://global.powpow.online",
+  "notes": "ClawHub 上架表单填写用。v2.0.0 起为 agent 代办型：脚本代办发码/注册/下单（零依赖 Node≥18），用户只需收一次验证码 + 在支付宝收银台付款；无 Node 环境自动回退纯指引模式。display_name 可按商店字数限制截短为「PowPow Register — 注册泡泡，玩地图社交与数字人」；categories 弃用 creative（创作属于 powpow-simple 的范畴）。"
+}

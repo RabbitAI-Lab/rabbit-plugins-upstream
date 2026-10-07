@@ -1,41 +1,60 @@
-## Description: <br>
-Diagnose and fix excessive Postgres egress from application query patterns that fetch more database data than they use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through diagnosing and reducing excessive PostgreSQL data transfer caused by inefficient application queries.
 
-## Publisher: <br>
-[andrelandgraf](https://clawhub.ai/user/andrelandgraf) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[andrelandgraf](https://clawhub.ai/user/andrelandgraf)
 
-## Use Case: <br>
-Developers and engineers use this skill to investigate high Neon or Postgres network transfer costs, identify high-egress queries, and apply query, pagination, caching, and aggregation fixes that reduce database-to-application data transfer. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Running database setup or diagnostic operations against the wrong production target can affect monitoring history or operational assumptions. <br>
-Mitigation: Confirm the database target and get approval before creating extensions, resetting pg_stat_statements, or collecting production diagnostic data. <br>
-Risk: Changing selected columns, pagination, joins, caching, or aggregation can alter application response behavior. <br>
-Mitigation: Run existing tests, verify API response shapes, and measure pg_stat_statements before and after applying changes. <br>
+## Use Case:
 
+Developers and engineers use this skill to identify costly PostgreSQL query patterns, reduce database egress through targeted code changes, and verify the results. It also describes optional Neon configuration for controlling non-production compute costs.
 
-## Reference(s): <br>
-- [Neon Network Transfer Documentation](https://neon.com/docs/introduction/network-transfer.md) <br>
-- [Neon Cost Optimization Documentation](https://neon.com/docs/introduction/cost-optimization.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration] <br>
-**Output Format:** [Markdown with SQL examples and implementation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only output; users review and apply suggested database diagnostics and code changes manually.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata) <br>
+Risk: Resetting query statistics or creating an extension on the wrong database can affect production diagnostics or settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target database or Neon branch and review the proposed SQL before execution.
+
+Risk: Applying optional Neon configuration can change compute behavior or expire future ephemeral branches through the TTL setting.
+
+Mitigation: Review configuration and branch scope before installing @neon/config or running neon config apply; confirm TTL is appropriate.
+
+Risk: Column selection and pagination changes can alter API responses expected by clients.
+
+Mitigation: Run existing tests, check response shapes, and compare database transfer metrics after changes.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/andrelandgraf/skills/neon-postgres-egress-optimizer)
+- [Neon parent skill](https://neon.com/docs/ai/skills/neon/SKILL.md)
+- [Neon network transfer documentation](https://neon.com/docs/introduction/network-transfer.md)
+- [Neon cost optimization documentation](https://neon.com/docs/introduction/cost-optimization.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with SQL, code, and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations and proposed changes should be verified against application behavior and database metrics.]
+
+## Skill Version(s):
+
+1.0.3 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,54 @@
-## Description: <br>
-Harvest every ponytail: shortcut comment into one debt ledger, so deferrals get tracked instead of forgotten. One-shot report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds `ponytail:` shortcut comments in a repository and reports a one-shot technical-debt ledger.
 
-## Publisher: <br>
-[dietrichgebert](https://clawhub.ai/user/dietrichgebert) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dietrichgebert](https://clawhub.ai/user/dietrichgebert)
 
-## Use Case: <br>
-Developers and engineers use this skill to scan a repository for deliberate `ponytail:` shortcut comments and turn them into a grouped debt ledger. It helps teams track ceilings, upgrade triggers, and missing trigger information without changing source files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The ledger may omit debt markers if a repository uses comment prefixes beyond the documented grep pattern. <br>
-Mitigation: Extend the search pattern for the repository's languages before treating the ledger as complete. <br>
-Risk: Rows without an upgrade trigger can silently become stale process debt. <br>
-Mitigation: Review entries tagged no-trigger and add a concrete revisit trigger before relying on the ledger for planning. <br>
-Risk: Persisting the ledger writes a new repository file when explicitly requested. <br>
-Mitigation: Review the requested output path and generated markdown before committing it. <br>
+## Use Case:
 
+Developers use this skill to collect marked shortcuts into a technical-debt ledger and identify entries missing a trigger for revisiting them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dietrichgebert/skills/ponytail-debt) <br>
-- [Homepage](https://github.com/DietrichGebert/ponytail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, files] <br>
-**Output Format:** [Markdown ledger with repository file and line references; optionally a persisted markdown file when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports marker totals and tags entries with missing upgrade triggers as no-trigger.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.4 (source: server release metadata) <br>
+Risk: A ledger entry without an upgrade trigger may leave a shortcut unaddressed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review entries tagged no-trigger and add a concrete condition for revisiting each shortcut.
+
+Risk: Persisting the ledger creates or updates a project file.
+
+Mitigation: Keep reporting read-only unless the user explicitly requests a saved ledger.
+
+## Reference(s):
+
+- [Project homepage listed in skill metadata](https://github.com/DietrichGebert/ponytail)
+- [ClawHub skill release](https://clawhub.ai/dietrichgebert/skills/ponytail-debt)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Files]
+
+**Output Format:** [File-grouped ledger with source locations, shortcut details, and summary counts; optional Markdown file on request]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tags markers lacking an upgrade trigger as no-trigger; otherwise reports read-only.]
+
+## Skill Version(s):
+
+4.13.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

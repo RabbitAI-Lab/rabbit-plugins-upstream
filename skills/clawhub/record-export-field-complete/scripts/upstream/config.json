@@ -1,0 +1,63 @@
+{
+  "variant_id": "cap_03_record_to_export",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "record_note",
+  "output_name": "record_field",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string",
+        "format": "record-field",
+        "minLength": 1
+      },
+      {
+        "type": "object",
+        "required": [
+          "record_id",
+          "field_name",
+          "field_value"
+        ],
+        "properties": {
+          "record_id": {
+            "type": "string",
+            "minLength": 1
+          },
+          "field_name": {
+            "type": "string",
+            "minLength": 1
+          },
+          "field_value": {
+            "type": "string",
+            "minLength": 1
+          }
+        },
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "record_id",
+      "field_name",
+      "field_value"
+    ],
+    "properties": {
+      "record_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "field_name": {
+        "type": "string",
+        "minLength": 1
+      },
+      "field_value": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": null
+}

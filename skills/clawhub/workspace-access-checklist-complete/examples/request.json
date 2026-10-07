@@ -1,0 +1,20 @@
+{
+  "sharing_acl_json": {
+    "workspace_id": "SHARE-NOVEMBER-5268",
+    "organization_domain": "northbridge.example",
+    "current_members": [
+      {
+        "principal_id": "ops",
+        "role": "editor",
+        "domain": "northbridge.example"
+      }
+    ],
+    "approved_members": [
+      {
+        "principal_id": "ops",
+        "role": "viewer",
+        "domain": "northbridge.example"
+      }
+    ]
+  }
+}

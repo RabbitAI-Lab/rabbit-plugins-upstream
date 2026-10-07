@@ -1,0 +1,12 @@
+{
+  "identified": {
+    "path": "archives/customer-ledger-bravo-2091.csv"
+  },
+  "delivered": {
+    "recorded_path": {
+      "relative_path": "archives/customer-ledger-bravo-2091.csv",
+      "stem": "customer-ledger-bravo-2091",
+      "extension": ".csv"
+    }
+  }
+}
