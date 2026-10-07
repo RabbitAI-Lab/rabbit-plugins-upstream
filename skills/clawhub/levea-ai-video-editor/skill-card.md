@@ -1,45 +1,54 @@
-## Description: <br>
-Agentic AI video editor: send a prompt, the autonomous editor plans, uses internal tools, exports, and returns the result. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent plan, execute, verify, and export video edits from natural-language requests through Levea's video-editing service.
 
-## Publisher: <br>
-[brajendrak00068](https://clawhub.ai/user/brajendrak00068) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[brajendrak00068](https://clawhub.ai/user/brajendrak00068)
 
-## Use Case: <br>
-External creators, marketers, editors, and developers use this skill to ask an agent for natural-language video edits, captioning, privacy redaction, brand/project/asset workflows, and MP4 or ZIP exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send API keys and user media or project data to Levea's cloud service. <br>
-Mitigation: Install only when that cloud processing is acceptable, keep API keys secret, and avoid sending sensitive media without authorization. <br>
-Risk: Mutating edits may automatically render outputs and create artifact URLs. <br>
-Mitigation: Use requirePlanApproval for important, sensitive, or destructive workflows and review generated outputs before publishing or sharing. <br>
-Risk: Beta editing outputs can be incorrect or incomplete. <br>
-Mitigation: Preview final media, check captions and redactions, and rerun or repair edits before relying on the result. <br>
+## Use Case:
 
+Content creators and editors use this skill to request video edits such as captions, short clips, reframing, audio cleanup, and exports through an agent.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/brajendrak00068/levea-ai-video-editor) <br>
-- [Levea MCP server package](https://www.npmjs.com/package/levea-mcp-server) <br>
-- [ClawHub plugin listing](https://clawhub.ai/plugins/openclaw-ai-video-editor) <br>
-- [Levea Studio for API keys](https://studio.livecore.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, shell commands, and API response fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return video URLs, ZIP URLs, job IDs, scene state, and status messages from the Levea cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.23 (source: ClawHub release evidence) <br>
+Risk: Prompts, project identifiers, scene data, images, asset descriptors, and approval-state memory are sent to the configured Levea API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the provider's data-handling terms before using sensitive media or project data.
+
+Risk: Edits to user content can be destructive or irreversible, and beta outputs can be wrong.
+
+Mitigation: Describe the planned edit and obtain explicit confirmation; require plan approval for destructive or irreversible work.
+
+## Reference(s):
+
+- [Levea AI Video Editor on ClawHub](https://clawhub.ai/brajendrak00068/skills/levea-ai-video-editor)
+- [Skill metadata homepage](https://github.com/brajendrak00068/openclaw-ai-video-editor#readme)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Text]
+
+**Output Format:** [Markdown instructions and shell examples for JSON API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Describes edit plans, approval, verification, and export results.]
+
+## Skill Version(s):
+
+1.0.24 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

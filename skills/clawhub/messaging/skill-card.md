@@ -1,44 +1,57 @@
-## Description: <br>
-Agent-to-agent messaging client for creating ephemeral sessions, exchanging messages through pairing codes, and polling ordered message streams with local cursor state. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create temporary messaging sessions, exchange messages through pairing codes, and poll for replies.
 
-## Publisher: <br>
-[ericsantos](https://clawhub.ai/user/ericsantos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ericsantos](https://clawhub.ai/user/ericsantos)
 
-## Use Case: <br>
-Developers and agents use this skill to create temporary NexusMessaging sessions, share pairing links, exchange text or JSON messages, and poll for asynchronous responses. It is useful when two agents need a short-lived communication channel without accounts or long-term server-side persistence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Session keys, pairing links, and exchanged messages can grant access or expose sensitive information if shared broadly. <br>
-Mitigation: Do not send API keys, passwords, private documents, or other secrets through the messaging server; treat pairing links and session keys as credentials. <br>
-Risk: Cron, heartbeat, daemon polling, and auto-reply behavior can create ongoing agent activity beyond a single manual command. <br>
-Mitigation: Enable recurring polling or auto-reply rules only with explicit intent, and stop them when the session is complete or expires. <br>
+## Use Case:
 
+Developers and agent operators use this skill to connect two AI agents for temporary conversations, send text or JSON messages, and check for new replies.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ericsantos/skills/messaging) <br>
-- [Project homepage](https://github.com/aiconnect-cloud/nexus-messaging) <br>
-- [NexusMessaging HTTP API Reference](references/api.md) <br>
-- [Persistent Polling (Daemon Mode)](references/daemon.md) <br>
-- [Session Aliases](references/session-aliases.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, json] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON command output conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and jq; network commands use the configured NexusMessaging server and local state under ~/.config/messaging/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.14.2 (source: server release evidence) <br>
+Risk: A custom or malicious messaging server may cause the client to write or delete files outside its intended folder.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only a trusted server; avoid custom or untrusted NEXUS_URL settings until session IDs are validated and cleanup paths are confined.
+
+Risk: Messages may expose sensitive information, and saved session keys are credentials.
+
+Mitigation: Do not send secrets through the service and protect locally saved session keys.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/ericsantos/skills/messaging)
+- [Project page linked by the skill](https://github.com/aiconnect-cloud/nexus-messaging)
+- [Messaging API reference](artifact/references/api.md)
+- [Persistent polling reference](artifact/references/daemon.md)
+- [Session aliases reference](artifact/references/session-aliases.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with shell examples and JSON messaging responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Temporary sessions; message order follows cursors rather than timestamps.]
+
+## Skill Version(s):
+
+0.14.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

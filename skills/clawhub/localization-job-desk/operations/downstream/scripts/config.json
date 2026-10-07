@@ -1,0 +1,73 @@
+{
+  "variant_id": "relay_05_option",
+  "role": "downstream",
+  "version": "1.1.0",
+  "input_name": "translation_setting",
+  "output_name": "recorded_translation_setting",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "locale",
+      "glossary_id",
+      "register"
+    ],
+    "properties": {
+      "locale": {
+        "type": "string",
+        "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$"
+      },
+      "glossary_id": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{2,40}$"
+      },
+      "register": {
+        "type": "string",
+        "enum": [
+          "formal",
+          "neutral",
+          "concise"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "job_code",
+      "locale",
+      "glossary_id",
+      "register",
+      "segment_limit"
+    ],
+    "properties": {
+      "job_code": {
+        "type": "string",
+        "pattern": "^translation_[0-9a-f]{12}$"
+      },
+      "locale": {
+        "type": "string",
+        "pattern": "^[a-z]{2}(?:-[A-Z]{2})?$"
+      },
+      "glossary_id": {
+        "type": "string",
+        "pattern": "^[a-z][a-z0-9-]{2,40}$"
+      },
+      "register": {
+        "type": "string",
+        "enum": [
+          "formal",
+          "neutral",
+          "concise"
+        ]
+      },
+      "segment_limit": {
+        "type": "integer",
+        "minimum": 100,
+        "maximum": 1000
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "translation_job_entry"
+}

@@ -1,43 +1,57 @@
-## Description: <br>
-Enables agents to call Gemini models through RunAPI using OpenAI-compatible chat completions or Gemini contents clients for chat, streaming, multimodal input, Google Search grounding, structured output, and reasoning-effort workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in calling Gemini models through RunAPI using Gemini contents clients, with compatibility guidance for existing Chat Completions clients.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agents use this skill to connect existing OpenAI or Gemini client code to Gemini models through RunAPI, including streaming, multimodal, grounding, structured-output, and model-list workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, images, files, and other request content may be sent to an external RunAPI-backed Gemini service. <br>
-Mitigation: Avoid sending secrets, regulated data, or confidential business material unless that data sharing is approved for the use case. <br>
-Risk: Long Gemini generations can keep an agent waiting on a blocking response. <br>
-Mitigation: Use streaming for longer responses as directed by the skill guidance. <br>
+## Use Case:
 
+Developers and agents use this skill to configure RunAPI credentials, send Gemini requests, and check streaming responses. Existing Chat Completions clients can follow its separate compatibility guidance.
 
-## Reference(s): <br>
-- [RunAPI Gemini model documentation](https://runapi.ai/models/gemini.md) <br>
-- [RunAPI Gemini model page](https://runapi.ai/models/gemini) <br>
-- [RunAPI Google provider documentation](https://runapi.ai/providers/google.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline code blocks, API request examples, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces integration guidance for RunAPI-backed Gemini requests; the skill itself does not execute hidden commands or perform destructive actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.11 (source: server release metadata) <br>
+Risk: Prompts and related request content are sent to RunAPI.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only when this disclosure is acceptable, and review request content before sending it.
+
+Risk: The RunAPI API key is sensitive.
+
+Mitigation: Keep the key in the configured environment variable and avoid exposing it in shared requests or logs.
+
+## Reference(s):
+
+- [Gemini on RunAPI documentation](https://runapi.ai/models/gemini.md)
+- [RunAPI Gemini homepage](https://runapi.ai/models/gemini)
+- [RunAPI Google provider](https://runapi.ai/providers/google.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [Compatibility protocols](references/compatibility-protocols.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with shell and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Covers response-completion checks and bounded retry guidance.]
+
+## Skill Version(s):
+
+0.2.16 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,59 @@
-## Description: <br>
-Checks Solana wallets and x402 sellers before payment by returning readiness, trust, merchant, and receipt-verification guidance from TWZRD's observed payment corpus. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents discover x402 services and assess a seller's payment risk before signing or paying.
 
-## Publisher: <br>
-[twzrd-sol](https://clawhub.ai/user/twzrd-sol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twzrd-sol](https://clawhub.ai/user/twzrd-sol)
 
-## Use Case: <br>
-Developers and agent operators use this skill to preflight Solana wallet and x402 seller payments, check merchant and wallet trust signals, decide whether to proceed, and verify TWZRD receipts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can influence whether an agent signs or sends Solana/x402 payments. <br>
-Mitigation: Require explicit workflow approval before acting on payment decisions or changing payment routing. <br>
-Risk: Paid x402 trust and merchant calls can spend USDC on Solana. <br>
-Mitigation: Run the free preflight and merchant-card checks first, then require operator approval before paid endpoints are called. <br>
-Risk: The skill may involve network calls, optional package installs, MCP setup, facilitator routing changes, and canonical skill refreshes. <br>
-Mitigation: Approve endpoint changes, package installs, MCP additions, routing changes, and refreshes before execution. <br>
+## Use Case:
 
+Agents and developers use the skill to discover x402 callables, check seller wallets and listings, and gate payments based on preflight and merchant risk assessments. Optional paid checks provide additional trust and merchant history.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/twzrd-sol/skills/twzrd-trust) <br>
-- [Canonical Skill Source](https://intel.twzrd.xyz/skill.md) <br>
-- [TWZRD Service Homepage](https://intel.twzrd.xyz) <br>
-- [TWZRD MCP Endpoint](https://intel.twzrd.xyz/mcp) <br>
-- [TWZRD OpenAPI 3.1 Descriptor](https://intel.twzrd.xyz/openapi.json) <br>
-- [TWZRD x402 Descriptor](https://intel.twzrd.xyz/.well-known/x402) <br>
-- [TWZRD Facilitator Support](https://intel.twzrd.xyz/supported) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with curl and npx shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses TWZRD HTTP and optional MCP endpoints; no API key is required; paid x402 calls may spend USDC on Solana.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release evidence; artifact metadata version 1.8) <br>
+Risk: Service responses may suggest commands or tooling that affect a wallet payment flow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run only fixed, reviewed commands and never execute command strings returned by TWZRD responses.
+
+Risk: Changing payment-tool versions or skill updates may alter pre-signing behavior.
+
+Mitigation: Use reviewed, pinned package versions and update the skill only through a trusted installation channel.
+
+Risk: A mistaken payment network, recipient, or amount can lead to unintended spending.
+
+Mitigation: Confirm the network, recipient, and amount before any signing step.
+
+## Reference(s):
+
+- [TWZRD Trust skill documentation](https://intel.twzrd.xyz/skill.md)
+- [TWZRD MCP endpoint](https://intel.twzrd.xyz/mcp)
+- [TWZRD OpenAPI reference](https://intel.twzrd.xyz/openapi.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with command and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Free risk assessments and optional paid x402 trust checks.]
+
+## Skill Version(s):
+
+1.13.34 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

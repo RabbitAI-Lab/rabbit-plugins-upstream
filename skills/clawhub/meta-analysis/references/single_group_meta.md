@@ -26,6 +26,10 @@ m <- metaprop(
 | `PASF` (Freeman-Tukey) | Very small or very large proportions, stabilizes variance |
 | `PFT` (generalizable Freeman-Tukey) | Combines benefits |
 
+> 2026-09-01 口径统一：单组率 measure 以 `PLOGIT`/`PRAW`（meta 包名，coze 主路径口径）为准。
+> 本地 `ma_analyze()`（metafor 后端）同时接受等价别名 `PLO`（≡PLOGIT）与 `PR`（≡PRAW）；
+> `PASF`/`PFT` 两包实现不同，不做跨包别名，请按所用函数的原生参数名传。
+
 ## metamean — Single Mean Meta / 单组均值合并
 
 ```r
@@ -83,14 +87,19 @@ m <- metacor(
 
 ### NNT from single study
 ```r
-library(dmetar)
-# Furukawa's NNT (accounts for baseline risk)
-NNT(res, sm = "RR", baseline = 0.3)
-# where res is rma output
+# 需治疗数 NNT（不依赖 dmetar；原 dmetar::NNT 已移除）
+# 基于 RR 与对照基线风险 p_c 的传统近似：NNT = 1 / (p_c * (1 - RR))
+# 若 res 为 meta 包对象（如 metabin 结果），也可直接用 meta::nnt(res, ...)
+p_c <- 0.3     # 对照基线风险 baseline risk
+rr  <- 0.75    # 相对风险（示例值）
+nnt_value <- 1 / (p_c * (1 - rr))
+nnt_value
+# where res is an rma (metafor) or meta object
 ```
 
-### NNT from network meta (multinma / gemtc)
+### NNT from network meta (gemtc / multinma 可选)
 ```r
+# multinma 为可选后端（需手动装 Stan 工具链）；否则用 gemtc::mtc.relative.effect 等
 library(multinma)
 # NNT from NMA relative effects
 nma_nnt(nma_fit, baseline_risk = 0.3, comparison = "treatment")

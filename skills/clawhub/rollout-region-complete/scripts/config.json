@@ -1,0 +1,16 @@
+{
+  "complete_workflow": true,
+  "version": "1.2.0",
+  "stages": {
+    "identify": {
+      "dir": "upstream",
+      "role": "upstream"
+    },
+    "deliver": {
+      "dir": "downstream",
+      "role": "downstream"
+    }
+  },
+  "variant_id": "relay_07_region",
+  "display_name": "Regional Rollout Planner"
+}

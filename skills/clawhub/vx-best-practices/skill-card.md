@@ -1,38 +1,49 @@
-## Description: <br>
-Best practices for using vx effectively. Use when following recommended patterns for tool management, project setup, and team workflows with vx. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides best practices for managing tools, configuring projects, and coordinating team workflows with vx.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and engineers use this skill to apply vx conventions for project setup, reproducible tool versions, team workflows, provider development, and agent-friendly command output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The guide includes migration cleanup examples that remove local tool-manager directories. <br>
-Mitigation: Verify vx is working first, then rename or back up ~/.nvm or ~/.pyenv before deleting them; do not run those removal commands without explicit review. <br>
+## Use Case:
 
+Developers and coding agents use this skill to set up vx-managed projects, choose tool versions, maintain lockfiles, and follow team and CI workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/loonghao/vx-best-practices) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash, TOML, YAML, and Starlark examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; users should review commands before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Migration examples recursively delete nvm and pyenv directories, potentially destroying tools or user data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not execute removal commands automatically; inspect directory contents, confirm they are no longer needed, and back up important data first.
+
+## Reference(s):
+
+- [vx-best-practices on ClawHub](https://clawhub.ai/loonghao/skills/vx-best-practices)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, Code]
+
+**Output Format:** [Markdown with Bash, TOML, YAML, and Starlark examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples cover project setup, tool versions, team workflows, and provider development.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

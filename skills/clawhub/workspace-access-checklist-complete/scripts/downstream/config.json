@@ -1,0 +1,74 @@
+{
+  "variant_id": "cap_14_share_to_collaboration",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "access_delta",
+  "output_name": "checklist_artifact",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "workspace_id",
+      "added",
+      "removed",
+      "role_changed",
+      "external_entries"
+    ],
+    "properties": {
+      "workspace_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "added": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "removed": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "role_changed": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      },
+      "external_entries": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "checklist_id",
+      "workspace_id",
+      "items"
+    ],
+    "properties": {
+      "checklist_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "workspace_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "items": {
+        "type": "array",
+        "items": {
+          "type": "object"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_access_checklist_write"
+}

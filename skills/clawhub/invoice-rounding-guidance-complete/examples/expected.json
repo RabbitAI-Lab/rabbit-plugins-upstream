@@ -1,0 +1,15 @@
+{
+  "identified": {
+    "rounding_guidance": "round each line to two decimals using half-even"
+  },
+  "delivered": {
+    "invoice_summary": {
+      "rounded_lines": [
+        "10.00",
+        "4.32"
+      ],
+      "invoice_total": "14.32",
+      "currency": "USD"
+    }
+  }
+}

@@ -1,14 +1,13 @@
 ---
 name: dlazy-elevenlabs-search
 version: 1.3.4
-description: Search the ElevenLabs voice library by keyword, source, and category. Returns a playable preview for each matched voice so you can pick the right one before running TTS. 搜索 ElevenLabs 人声库：按关键词、来源、分类筛选可用音色，返回每个音色的试听样本，便于挑选后用于 TTS 配音。
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy elevenlabs-search -h for help."}}
+description: "Search the ElevenLabs voice library by keyword, source, and category. Returns a playable preview for each matched voice so you can pick the right one before running TTS. 搜索 ElevenLabs 人声库：按关键词、来源、分类筛选可用音色，返回每个音色的试听样本，便于挑选后用于 TTS 配音。"
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When invoking this skill, use dlazy elevenlabs-search -h for help."}}
 ---
 
-# dlazy-elevenlabs-search
+# 音色库搜索 ElevenLabs Voice Search
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
-
 
 
 Search the ElevenLabs voice library by keyword, source, and category. Returns a playable preview for each matched voice so you can pick the right one before running TTS.
@@ -47,7 +46,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)
@@ -79,13 +78,14 @@ Execute `dlazy elevenlabs-search` to get the result.
 dlazy elevenlabs-search -h
 
 Options:
-  --prompt [prompt]                    Prompt [default: ]
+  --prompt [prompt]                    Sent verbatim to ElevenLabs as a substring search over each voice's name/labels — it is NOT split into OR'd keywords, so every extra word NARROWS the result and a full sentence usually matches nothing. Give ONE English descriptor (two at most). Good: deep, young, old, raspy, narrative, male, child. Bad: 'stern angry mature male boss scolding in mandarin'. Pick source/style with voice_type / category, not with more words here. [default: ]
   --voice_type [voice_type]            Voice source（any=Any; personal=My Voices; community=Community Library; default=Default; workspace=Workspace; non-default=Non-default; non-community=Personal + Workspace; saved=Saved） [default: any] (choices: "any", "personal", "community", "default", "workspace", "non-default", "non-community", "saved")
-  --category [category]                Category（any=Any; premade=Premade; cloned=Cloned (IVC); generated=AI Generated; professional=Professional (PVC)） [default: any] (choices: "any", "premade", "cloned", "generated", "professional")
+  --category [category]                Category（any=Any; premade=Premade; cloned=Instant (IVC); generated=AI Generated; professional=Professional (PVC)） [default: any] (choices: "any", "premade", "cloned", "generated", "professional")
   --page_size [page_size]              Result count [default: 10]
   --dry-run                            Print payload + cost estimate without calling API
   --no-wait                            Return generateId immediately for async tasks
   --timeout <seconds>                  Max seconds to wait for async completion (default: "1800")
+  --save <path>                        Download the result asset to this local path (mkdir + retry handled for you)
   -h, --help                           display help for command
 ```
 

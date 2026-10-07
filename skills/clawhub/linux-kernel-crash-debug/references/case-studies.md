@@ -1,5 +1,8 @@
 # Debugging Case Studies
 
+> Language note: Chinese explanations and original source titles are optional companion material. Follow the user’s preferred language and translate relevant passages when needed; no locale is required.
+
+
 Detailed kernel crash debugging case analysis.
 
 ## Case 1: Kernel BUG Location
@@ -878,7 +881,7 @@ Panic shows `cpu_slab.freelist` is corrupted with an abnormal value, pointing to
 **Fix**:
 ```bash
 # Enable KASAN to catch UAF at step 3
-echo 1 > /proc/sys/kernel/kasan_multi_shot
+kasan_multi_shot             # kernel boot parameter for repeated reports
 # Or recompile with CONFIG_KASAN=y
 ```
 

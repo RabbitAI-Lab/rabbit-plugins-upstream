@@ -1,38 +1,49 @@
-## Description: <br>
-Set confirmation style for a delivery workflow. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Set acknowledgement guidance for a delivery.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Developers and evaluators use this skill for controlled delivery workflow validation where an agent returns a concise confirmation style for delivery confirmation, export handoff, or workspace notification requests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The returned label could be mistaken for authorization to execute an export or bypass normal confirmation controls. <br>
-Mitigation: Treat the confirmation style as a label or style cue only, and require normal export authorization and confirmation checks before any workflow action. <br>
+## Use Case:
 
+People coordinating deliveries use this skill to turn a supplied delivery profile into brief guidance on when and how often to acknowledge the delivery.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/export-confirmation-style-identifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, guidance] <br>
-**Output Format:** [Plain text field value] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns a concise confirmation_style label; no commands, private file access, credentials, or uncontrolled external service calls are required by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: Generic role and effect wording may imply actions beyond generating acknowledgement guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only for local guidance from the supplied delivery profile; maintainers should clarify the documentation.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/wxt-ai/skills/export-confirmation-style-identifier)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [JSON with a string acknowledgement_guidance field]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Computes guidance locally; does not send acknowledgements or persist a business artifact.]
+
+## Skill Version(s):
+
+1.1.1 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

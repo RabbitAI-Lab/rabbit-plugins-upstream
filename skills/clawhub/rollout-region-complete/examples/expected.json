@@ -1,0 +1,13 @@
+{
+  "identified": {
+    "deployment_region": "ap-southeast-1"
+  },
+  "delivered": {
+    "recorded_region": {
+      "brief_id": "deploy_92cdfb895658",
+      "deployment_region": "ap-southeast-1",
+      "owner": "apac-release-operations",
+      "change_window": "regional-evening"
+    }
+  }
+}

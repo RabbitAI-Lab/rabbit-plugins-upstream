@@ -1,0 +1,39 @@
+{
+  "version": "1.2.0",
+  "stages": {
+    "upstream": {
+      "source_package": "event-callback-url-identifier",
+      "module": 7041,
+      "package_files": {
+        "README.md": "8de26374393cec77af892241ccc7c587c05f9dd0358b59b24b210546fe537e22",
+        "SKILL.md": "1b3efe33565cbddcff374473e55807aef7873e057bf7d38eb096f9cb7a4283fc",
+        "examples/expected.json": "4f6bd259f78f9e18d070f5607348a55a7adff806d041e0349c7e905852cee326",
+        "examples/request.json": "4925a815829dce66c3e2ba41ce5cf05a9581c1440bfc235ddc8fdd417064927f",
+        "file-manifest.json": "0abaa4d0c3e01fda8b6e88ff22c3aadb6aa5f1620e56dde3d7034fb6bdc7cd99",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "a0020f029b340f4832c5c8847c6e921bcfeb10168a439067920122631c216dc0",
+        "scripts/operation.py": "75af6d642727019c1310bc2fd86da6377eecb3c915eb61b83bf9897cf71e8207",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "7713f7810d53af7f6a2d928f16b368e757853c619fef953d8217be34ff219bf0"
+      }
+    },
+    "downstream": {
+      "source_package": "event-callback-url-workbench",
+      "module": 16888,
+      "package_files": {
+        "README.md": "bc438f4a131ead043642a7324b1be7761c9db75f6b761412449ee9878b062a27",
+        "SKILL.md": "9e8f27715cf9dd2b14fbb37362eb339c94bf46d7630901147764dd063dd73e8b",
+        "examples/expected.json": "ec63b1b46181ad8a593ffa76dce0981808d7c9a79e56051804ff9bf7ab235180",
+        "examples/request.json": "4f6bd259f78f9e18d070f5607348a55a7adff806d041e0349c7e905852cee326",
+        "file-manifest.json": "50695dff2350a557b83b012ac5945b872cd5c9c26bf3a3ed583c32d37f3a2eb8",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "61a7db1210a24930a916f973473d945f04cb0762df5eaeda7b7a306225cb2696",
+        "scripts/operation.py": "09fc2b7b6c759bcbceeda0350d4922f03155f7d7b8c2dfe790af786cfe2a91a8",
+        "scripts/run.py": "cf42b0fe43f247f278952ff5dcc14150457bdd29ad28cc6086a98aa0ca4fe982",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "cdd4559e5adb587caff26e15e79ba86601c8161f78dc7f283e3eae9ae661baa4"
+      }
+    }
+  }
+}

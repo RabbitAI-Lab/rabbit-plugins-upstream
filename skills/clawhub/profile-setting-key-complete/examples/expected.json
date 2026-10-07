@@ -1,0 +1,13 @@
+{
+  "identified": {
+    "setting_key": "profile.notifications.digest_mode"
+  },
+  "delivered": {
+    "review_item": {
+      "review_item_id": "setting_86be7f79e578",
+      "setting_key": "profile.notifications.digest_mode",
+      "value_type": "enum",
+      "review_queue": "profile-governance"
+    }
+  }
+}

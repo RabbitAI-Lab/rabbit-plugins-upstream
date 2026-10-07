@@ -1,0 +1,30 @@
+{
+  "variant_id": "shadow_02_tool_choice",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "export_request",
+  "output_name": "route_mode",
+  "input_schema": {
+    "type": "object",
+    "properties": {
+      "artifact_class": {
+        "type": "string"
+      },
+      "restricted": {
+        "type": "boolean"
+      },
+      "available_routes": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "required": [],
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "string"
+  },
+  "effect": null
+}

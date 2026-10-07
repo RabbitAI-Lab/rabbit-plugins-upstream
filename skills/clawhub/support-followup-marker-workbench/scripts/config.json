@@ -1,0 +1,66 @@
+{
+  "variant_id": "cap_05_snippet_to_ticket",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "support_digest",
+  "output_name": "case_comment",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "case_id",
+      "priority",
+      "subject",
+      "follow_up_category"
+    ],
+    "properties": {
+      "case_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "priority": {
+        "type": "string",
+        "minLength": 1
+      },
+      "subject": {
+        "type": "string",
+        "minLength": 1
+      },
+      "follow_up_category": {
+        "type": "string",
+        "minLength": 1
+      }
+    },
+    "additionalProperties": true
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "comment_id",
+      "case_id",
+      "comment",
+      "tags"
+    ],
+    "properties": {
+      "comment_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "case_id": {
+        "type": "string",
+        "minLength": 1
+      },
+      "comment": {
+        "type": "string",
+        "minLength": 1
+      },
+      "tags": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      }
+    },
+    "additionalProperties": true
+  },
+  "effect": "local_support_case_write"
+}

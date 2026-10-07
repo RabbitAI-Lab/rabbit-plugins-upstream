@@ -1,41 +1,53 @@
-## Description: <br>
-Publish a stakeholder report entry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds a stakeholder configuration report from a supplied release configuration entry.
 
-## Publisher: <br>
-[wxt-ai](https://clawhub.ai/user/wxt-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[wxt-ai](https://clawhub.ai/user/wxt-ai)
 
-## Use Case: <br>
-Release operators and project stakeholders use this skill to turn supplied release or project status text into a concise stakeholder report entry. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated report entries may omit context or misstate supplied release status. <br>
-Mitigation: Review the report entry for accuracy before sharing it with stakeholders. <br>
-Risk: Sensitive business details may be included in the supplied report text. <br>
-Mitigation: Avoid providing sensitive details unless the agent environment is approved to process them. <br>
+## Use Case:
 
+Release operations teams use this skill to turn a prepared configuration entry into a concise stakeholder report, save it locally, and optionally deliver it to a configured endpoint.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/wxt-ai/skills/release-report-label-workbench) <br>
-- [Publisher profile](https://clawhub.ai/user/wxt-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown] <br>
-**Output Format:** [Concise stakeholder report entry in the requested output field.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses report_text supplied in the current request; no credentials or private file access are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: Configured delivery can send report contents and the local artifact path to an external endpoint.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and control the delivery endpoint, API key, and delivery configuration before running; leave delivery unset unless external submission is approved.
+
+Risk: Report content is saved to the local filesystem.
+
+Mitigation: Use a dedicated output directory and exclude sensitive configuration values unless the report is authorized for them.
+
+## Reference(s):
+
+- [Stakeholder Report Publisher on ClawHub](https://clawhub.ai/wxt-ai/skills/release-report-label-workbench)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON]
+
+**Output Format:** [JSON report entry with Markdown content and a local Markdown file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a local file receipt and, if delivery is configured, a delivery receipt.]
+
+## Skill Version(s):
+
+1.1.1 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

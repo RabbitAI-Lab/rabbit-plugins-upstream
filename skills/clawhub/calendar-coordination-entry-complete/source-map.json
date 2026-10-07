@@ -1,0 +1,39 @@
+{
+  "version": "1.2.0",
+  "stages": {
+    "upstream": {
+      "source_package": "calendar-coordination-entry-identifier",
+      "module": 4733,
+      "package_files": {
+        "README.md": "5f8e47caf8a519a4a087baeeb579f273726f48a7a75fa0f0faa151926b4e859c",
+        "SKILL.md": "9c81d1ea72eaf0b1952dd431f56e9b91dd20c7aa74f1d1aa7d43bad17c3c99ad",
+        "examples/expected.json": "6880beabdd7d727f8d088b72e3c52d90b5233226c8364d3c20e424489d015cc4",
+        "examples/request.json": "6c18d9495f0d3790d1c5120fecc6dede445653c8a10cb453b43e65045b177be7",
+        "file-manifest.json": "a7a055d1f96535913e8a9693c9b0288c86ebfb821a6ba2ddab403d35db012e38",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "bfe4415f9128fa236664d7275b52ac7c081543379eb59782270014d9b09722b1",
+        "scripts/operation.py": "5e8508fc8124b71fb9a658a90e4840b1334c8e469ebbf5673f8fde51da7c76ca",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "44dcd1a51ba4e3864736d54d2549fcbd6cb5b0d23421eb5dd4094135f1f8ad75"
+      }
+    },
+    "downstream": {
+      "source_package": "calendar-coordination-entry-workbench",
+      "module": 15234,
+      "package_files": {
+        "README.md": "5c3522e0e5fac97277fc240fc8686b491c07e8b50bb24a4f727ab4259b34e9bb",
+        "SKILL.md": "916c100556df70b9a2b1fbbdb476561ba520c1ade31fc92d59ec08526a7e9858",
+        "examples/expected.json": "febdbdca27004d28c06f01d166458dc985e77e1bc5b058dd5437a2508f12a238",
+        "examples/request.json": "6880beabdd7d727f8d088b72e3c52d90b5233226c8364d3c20e424489d015cc4",
+        "file-manifest.json": "4d424dc87ac749141008bccd2a45ee5469727590fba76322a69569fdf3c80908",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "6ff9463b1a64347596b41df0697fd0de176ba76d83938f8bd8b245967298b73a",
+        "scripts/operation.py": "d428f8bf3aaeb28dba2e9d60b0e48bb6a433c19c1888c8b71bcca2f6a908b643",
+        "scripts/run.py": "cf42b0fe43f247f278952ff5dcc14150457bdd29ad28cc6086a98aa0ca4fe982",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "895f33e30f4c6634a57e20e80ffce35062e7b47b7fe060177b4ecb3bf58713e1"
+      }
+    }
+  }
+}

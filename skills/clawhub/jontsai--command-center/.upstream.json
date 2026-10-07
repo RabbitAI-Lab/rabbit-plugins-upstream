@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/command-center",
   "slug": "command-center",
   "ownerHandle": "jontsai",
-  "version": "1.4.1",
-  "updatedAt": 1778486013286,
-  "contentHash": "3a34e07eb3da27e283aa10bea70af6b8c75188858af929f03669bcfe653fd30a",
-  "fetchedAt": "2026-07-26T18:24:35.242Z"
+  "version": "1.5.0",
+  "updatedAt": 1791284015784,
+  "contentHash": "acc95825b277b36ca854ced270c097fedddcdccad394d9f8b2c854498cf597c9",
+  "fetchedAt": "2026-10-07T14:41:23.027Z"
 }

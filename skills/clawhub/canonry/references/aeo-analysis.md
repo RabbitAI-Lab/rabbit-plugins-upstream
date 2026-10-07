@@ -11,7 +11,7 @@ A "mentioned" query means the client's brand was NAMED in the AI provider's answ
 
 A "not-mentioned" query means the answer text never named the client. `answerMentioned = null` is distinct: the mention was not checked for that snapshot — treat it as missing, not negative.
 
-**Mention share** is the competitive read: of all brand names appearing across the answer set (the project plus tracked competitors), the fraction that were the project = AI share-of-voice. A competitor taking mention share on a query you used to own is the highest-signal regression.
+**Mention share** is the competitive read: of all brand names appearing across the answer set (the project plus tracked competitors), the fraction that were the project = AI share-of-voice. A competitor taking mention share on a query you used to own is the highest-signal regression. A competitor is named by its domain label (4+ letters or digits) plus its curated aliases; when answers call a competitor something its domain does not say ("TuneSpoke" for `spoketuneworks.example`, a 3-letter brand), set `cnry competitor aliases <project> <domain> --set <name>` first, or the share overstates the project.
 
 ### First diagnostic read (mention-first)
 
@@ -118,7 +118,7 @@ For competitive queries, if others are mentioned/cited and the client isn't (che
 - Do they have stronger schema/structured data?
 - Are they more established in the index?
 
-Run `cnry evidence <project> --format json` and check `competitorOverlap` in snapshots.
+Run `cnry evidence <project> --format json`. Use `citedDomains` and grounding-source hosts for citation evidence; use answer text with Canonry's shared matcher for mention evidence. `competitorOverlap` is a legacy mixed field and must not be treated as either metric by itself.
 
 ### Step 4: Check across providers
 Gemini, OpenAI, Claude, and Perplexity may behave differently. One citing a domain while another doesn't is normal — each has its own knowledge base and update schedule.
@@ -133,8 +133,9 @@ Look for patterns: are gaps growing or shrinking? Are new competitors appearing?
 A lost mention (or lost citation) isn't always a lost user. Before declaring a regression real, confirm whether AI-referral traffic actually fell on the same window:
 ```bash
 cnry ga status <project>                          # confirm lastSyncedAt is recent; re-sync if stale
-cnry ga ai-referral-history <project> --format json
-                                                      # daily {date, source, medium, attribution, sessions, users}
+cnry ga ai-referral-daily <project> --format json
+                                                      # AI sessions per day and per source, deduplicated across
+                                                      # attribution dimensions; totals match `cnry ga traffic`
 cnry ga attribution <project> --trend             # 7d/30d direction per channel + biggest mover
 ```
 Read the result against the citation loss window:
@@ -161,6 +162,16 @@ Read transitions on the mention signal first (primary), then the citation signal
 
 **Fluctuation** (mentioned/cited in some runs, not others) — normal for competitive queries. Track the trend over 5+ runs before drawing conclusions. AI answers are non-deterministic.
 
+## Change since the previous sweep
+
+To answer "did it move since the last sweep?", read `populations[].comparison` from `cnry measurement-plan visibility <project> --format json` (MCP: `canonry_visibility_report`). Simple and Advanced projects return it the same way.
+
+- Every query class population carries its own comparison. Never pool branded and non-brand changes.
+- `comparison` is absent when the previous sweep cannot be read. Absent is not zero change: say the change is unavailable.
+- `state: available`: quote each metric's `delta` (current rate minus the previous rate) with both rates' numerators and denominators and the `previousRun` date. The previous sweep can predate the report's date window.
+- `state: unavailable`: report its `reason` (`no-previous-run`, `partial-run`, `scoped-run`, `definition-changed`, `model-changed`, `legacy-unknown`, `no-selected-run`). An unavailable reason is not zero change; never subtract rates by hand to fill it.
+- A metric inside an available comparison can still be unavailable (`current-unavailable`, `previous-unavailable`, `not-applicable`). Treat it the same way.
+
 ## What to Recommend
 
 ### Low overall mention rate (< 50%)
@@ -178,7 +189,7 @@ Red flag — the engine won't even say your name. Check (the lost citation for y
 - Is the homepage indexed?
 - Does `llms.txt` exist and list the business clearly?
 - Does schema include the exact brand name in `name` field?
-- Is a brand alias missing? (`spec.brandAliases` widens the `answerMentioned` detector for variants like "Acme Cloud" vs "AcmeCloud".)
+- Is a brand alias missing? (`spec.aliases` widens the `answerMentioned` detector for another name the brand goes by, such as a product or former name. Case, spacing and punctuation variants like "Acme Cloud" vs "AcmeCloud" already match.)
 
 ### Informational terms not mentioned
 Content strategy play:
@@ -198,3 +209,17 @@ Expected — each provider has independent knowledge. Focus on the ones that mat
 
 **Never say:** "Deploy this and re-run canonry to see if it worked."
 **Always say:** "This positions the site correctly. Canonry will tell us if/when that pays off."
+
+## Experimental sentiment
+
+Sentiment is a branded figure: read `canonry sentiment <project> --query-class branded
+--format json` for the favorable share. Non-brand answers name the brand almost only to
+recommend it, so read them as exceptions with `canonry sentiment evidence <project>
+--query-class non-brand --outcome mixed,unfavorable`. Favorable is favorable /
+(favorable + mixed + unfavorable); never pool the classes. Missing mentions, factual statements, and
+unknown judgments stay outside this denominator, so sentiment cannot replace
+mention coverage. Zero judged answers are unavailable. Inspect the returned
+coverage, frozen scope, and per-query source evidence before interpreting a score.
+The feature is default-off, has no theme setup, and has not passed independent
+human evaluation for either query class. Native Aero routing and client reports
+do not consume these experimental scores.

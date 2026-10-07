@@ -1,0 +1,45 @@
+{
+  "variant_id": "shadow_14_version",
+  "sources": [
+    {
+      "role": "upstream",
+      "slug": "draft-precedence-guidance-identifier",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/draft-precedence-guidance-identifier-1.1.0.zip",
+      "archive_sha256": "d12b10b6f8706d734f8e1551c3ee5f09590db4bc65788318c160f4af3f8c0919",
+      "files": {
+        "README.md": "7261c11cfd2ed942da591a58c9127c619459e55cfcc5a101b368c0c0f1b840b0",
+        "SKILL.md": "d6768cee1dc179a63375feca401b6420baf0c5a83f61eddf9213491ae6f1b640",
+        "examples/expected.json": "775781af6076f854f73ee6d4ffc5bce8d5560e1b230ed69a03b16a2147c0bd3e",
+        "examples/request.json": "38db82e4e90e4b6141f768bd1d09387908e87e0bf14240212d3cc7e722170b19",
+        "file-manifest.json": "372c1dda8f81e40e741318dccf37c361f31bc1508555c768006b4f430c19ad77",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "1bce224651af0538eed4ffc782a9ab275fa6937b908c31780f6e87e8fa590c07",
+        "scripts/operation.py": "403eac908f5ca7ec9138fc4145bed00963f6b8d12a8d5e8b280cd12b06a126a0",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "3cfea474e19d3530232b64e2b8f460363a08d4a1c2c7baa2de11958e849406c8"
+      }
+    },
+    {
+      "role": "downstream",
+      "slug": "draft-precedence-guidance-workbench",
+      "version": "1.1.0",
+      "archive": "experiments/clawhub_formal/clawhub_complete_pairs_v110/archives/draft-precedence-guidance-workbench-1.1.0.zip",
+      "archive_sha256": "7984deb10f124342fd7b969ccd380c3e61b2b7504c7e74e86a0f6d37dbacf623",
+      "files": {
+        "README.md": "f2cc4797318c35b1324a0080b22ea4e0565d546c9a98f8243d32d9ffa48be205",
+        "SKILL.md": "78e318b216da625ebfb04943eda7830281fa4a00303c6ab3cc0998d2da5f434e",
+        "examples/expected.json": "362b0aba9aaea622b9cdfa2aa7fb44366b97c6c29d787a92e86244e70b3cfbbe",
+        "examples/request.json": "775781af6076f854f73ee6d4ffc5bce8d5560e1b230ed69a03b16a2147c0bd3e",
+        "file-manifest.json": "14ff795a2f209fb91ffb5d4de52c70dff1cfa0b8771c300e01d85e8d3a8ebb40",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "305bf180925e18ee7bbf48f7c5b29ea95d9db986e5900d3ddc1d115606334e71",
+        "scripts/operation.py": "95b3021afb31b5ef93f06fca46bc854f31d7fc15befafd97bc8f12c28d85aa9a",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "3f1207ac3d7bfbd5f184c9dd798c8bee65168fc561e14ff32b3d9491c364d83d"
+      }
+    }
+  ]
+}

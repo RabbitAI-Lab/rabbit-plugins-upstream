@@ -1,0 +1,12 @@
+{
+  "identified": {
+    "acknowledgement_guidance": "acknowledge after completion; one receipt per operation"
+  },
+  "delivered": {
+    "confirmation_result": {
+      "operation_id": "DELIVERY-5804",
+      "confirmation_status": "created",
+      "receipt_created": true
+    }
+  }
+}

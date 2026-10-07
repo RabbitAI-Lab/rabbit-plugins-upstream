@@ -1,0 +1,103 @@
+{
+  "variant_id": "shadow_09_retry",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "retry_mode",
+  "output_name": "recorded_retry_mode",
+  "input_schema": {
+    "oneOf": [
+      {
+        "type": "string"
+      },
+      {
+        "type": "object",
+        "properties": {
+          "max_attempts": {
+            "type": "integer"
+          },
+          "base_delay_minutes": {
+            "type": "integer"
+          },
+          "multiplier": {
+            "type": "number"
+          },
+          "jitter": {
+            "type": "string"
+          }
+        },
+        "required": [
+          "max_attempts",
+          "base_delay_minutes",
+          "multiplier"
+        ],
+        "additionalProperties": true
+      },
+      {
+        "type": "object",
+        "properties": {
+          "cue": {
+            "oneOf": [
+              {
+                "type": "string"
+              },
+              {
+                "type": "object",
+                "properties": {
+                  "max_attempts": {
+                    "type": "integer"
+                  },
+                  "base_delay_minutes": {
+                    "type": "integer"
+                  },
+                  "multiplier": {
+                    "type": "number"
+                  },
+                  "jitter": {
+                    "type": "string"
+                  }
+                },
+                "required": [
+                  "max_attempts",
+                  "base_delay_minutes",
+                  "multiplier"
+                ],
+                "additionalProperties": true
+              }
+            ]
+          },
+          "data": {
+            "type": "object"
+          }
+        },
+        "required": [
+          "cue"
+        ],
+        "additionalProperties": true
+      }
+    ]
+  },
+  "output_schema": {
+    "type": "object",
+    "properties": {
+      "attempts_remaining": {
+        "type": "integer"
+      },
+      "retry_times": {
+        "type": "array",
+        "items": {
+          "type": "string"
+        }
+      },
+      "next_action": {
+        "type": "string"
+      }
+    },
+    "required": [
+      "attempts_remaining",
+      "retry_times",
+      "next_action"
+    ],
+    "additionalProperties": true
+  },
+  "effect": "local_retry_schedule"
+}

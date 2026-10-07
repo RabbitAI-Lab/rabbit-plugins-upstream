@@ -1,0 +1,30 @@
+{
+  "segmented_note": {
+    "reference": "KB-BRAVO-2091",
+    "heading": "Supplier Onboarding Guide",
+    "tags": [
+      "onboarding",
+      "supplier-ops"
+    ],
+    "links": [
+      "KB-GUIDE-4401",
+      "KB-POLICY-7720",
+      "KB-POLICY-7720"
+    ],
+    "content_digest": "b72f99af01e7fa8a",
+    "sections": [
+      {
+        "ordinal": 1,
+        "heading": "Intake Requirements",
+        "content": "Collect the approved supplier profile and ownership details.",
+        "content_digest": "434fb89cbaed7a7c"
+      },
+      {
+        "ordinal": 2,
+        "heading": "Workspace Access",
+        "content": "Follow [[KB-POLICY-7720]] before granting editor access.",
+        "content_digest": "9474a3ead06b4f02"
+      }
+    ]
+  }
+}

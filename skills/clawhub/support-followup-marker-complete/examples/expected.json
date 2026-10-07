@@ -1,0 +1,22 @@
+{
+  "identified": {
+    "support_digest": {
+      "case_id": "CASE-ECHO-5804",
+      "priority": "normal",
+      "subject": "Follow-up ownership",
+      "follow_up_category": "general"
+    }
+  },
+  "delivered": {
+    "case_comment": {
+      "comment_id": "comment-3807cfb106bfc9ef",
+      "case_id": "CASE-ECHO-5804",
+      "comment": "General follow-up recorded for CASE-ECHO-5804 with normal priority.",
+      "tags": [
+        "follow-up",
+        "general",
+        "normal"
+      ]
+    }
+  }
+}

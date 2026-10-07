@@ -1,0 +1,39 @@
+{
+  "version": "1.2.0",
+  "stages": {
+    "upstream": {
+      "source_package": "inventory-reorder-quantity-identifier",
+      "module": 6866,
+      "package_files": {
+        "README.md": "a38d76e0aa14c28baf4a9725c1eb61515a3c890b44b5d5d6ee026d63b354d2ec",
+        "SKILL.md": "fd10a1ebd67b97ff59216daaaae72e90c0f34027a216f6e7ade91ae629f2fed8",
+        "examples/expected.json": "5f441a90a7e36a05dfc00522128134b385676f32980f11b1bac56e55964a2c20",
+        "examples/request.json": "52303a3dfda64efa246291e45d8a8cda3295f6ce01639252d28cb44f6e322f47",
+        "file-manifest.json": "3bb6c18554a962bb83265c1d0ed7a3e09f9ddb9400c4b543808c4bf1ecd69681",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "d366bc0b15d5c41504c4090859746d3c2a2fb72f1ab4637bbc4e92ffb49b5415",
+        "scripts/operation.py": "4b15f2542ce1e9dcf85e0be342897385c694a99bc68fbc086dab58e017835d04",
+        "scripts/run.py": "51bb30b32374e7358ce951851b75c26367cad84b289b27924bb797168acbe518",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "936bc3f1d709f751493351ef5d57273a16e4a2e6bef1b52596b0b0290d574c26"
+      }
+    },
+    "downstream": {
+      "source_package": "inventory-reorder-quantity-workbench",
+      "module": 16591,
+      "package_files": {
+        "README.md": "5b6731916672e21fb3ecbe4cac5e7595637250dfe70a769cd3541de4bc99a721",
+        "SKILL.md": "a1e70004e973e7ec2ac1020da992e22092ea780b1251651e50f4ad227a34331e",
+        "examples/expected.json": "cccebc8c03e5697e1816dc6175c143a584a5dd832fbe79e1957bab766c7ede53",
+        "examples/request.json": "5f441a90a7e36a05dfc00522128134b385676f32980f11b1bac56e55964a2c20",
+        "file-manifest.json": "114607a2fcc5af1eb2e6041b38d2d4b356f5898b45967c0b36b80dd6f5eb5903",
+        "requirements.txt": "7aa0db98a9e68681855b8a6a6e747d6156187ef07f8475689f4246ae0e97f984",
+        "scripts/config.json": "9f299052f6ede53cfc62e63e9e93eeccf75a52eb635107fbd21c9f50f546b376",
+        "scripts/operation.py": "d8c1a8c94f02141fa4522af6f3c2f9f96ec688133a3276614f37665ecdd54107",
+        "scripts/run.py": "cf42b0fe43f247f278952ff5dcc14150457bdd29ad28cc6086a98aa0ca4fe982",
+        "scripts/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+        "source-map.json": "ea6619035b0eacd4c40333e1188caed1ba8c74d7ded858377b08e8440528cec0"
+      }
+    }
+  }
+}

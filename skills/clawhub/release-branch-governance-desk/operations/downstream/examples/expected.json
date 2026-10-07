@@ -1,0 +1,12 @@
+{
+  "branch_policy_assessment": {
+    "assessment_id": "branch_policy_eeba01454b1f",
+    "source_branch": "release/q3-account-refresh",
+    "branch_exists": true,
+    "catalog_state": "active",
+    "version_line": "3.4",
+    "expected_version_line": "3.4",
+    "version_line_status": "aligned",
+    "policy_status": "eligible"
+  }
+}

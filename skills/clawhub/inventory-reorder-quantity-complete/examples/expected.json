@@ -1,0 +1,14 @@
+{
+  "identified": {
+    "quantity": 240
+  },
+  "delivered": {
+    "recorded_quantity": {
+      "plan_entry_id": "inventory_67a891340437",
+      "quantity": 240,
+      "case_pack": 24,
+      "carton_count": 10,
+      "planning_action": "replenish"
+    }
+  }
+}

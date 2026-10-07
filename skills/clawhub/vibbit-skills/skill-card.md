@@ -1,45 +1,60 @@
-## Description: <br>
-Call Vibbit OpenAPI to generate B-roll images, parse Douyin/Xiaohongshu/Bilibili links, break down viral videos, list available avatars, and initialize avatar voiceover workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create and improve Vibbit content by researching products, planning scripts, generating images, audio and video, producing and translating videos, and reviewing results.
 
-## Publisher: <br>
-[zgissing](https://clawhub.ai/user/zgissing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zgissing](https://clawhub.ai/user/zgissing)
 
-## Use Case: <br>
-External users and developers use this skill to route eligible media-generation, video-analysis, avatar-listing, and avatar voiceover tasks through Vibbit's OpenAPI-backed CLI instead of hand-writing API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation rules may cause matching media-generation or video-analysis requests to use Vibbit by default. <br>
-Mitigation: Install only when Vibbit should handle these tasks, and confirm ambiguous user intent before invoking the skill. <br>
-Risk: Prompts, media URLs, signed URLs, private media, localhost links, or intranet URLs may be sent to or fetched by Vibbit services. <br>
-Mitigation: Avoid confidential inputs and private network URLs unless the user is comfortable sharing or exposing them to Vibbit. <br>
-Risk: A custom VIBBIT_BASE_URL can redirect requests and credentials to a nonstandard endpoint. <br>
-Mitigation: Keep VIBBIT_BASE_URL pointed at a trusted endpoint and use a scoped Vibbit API key when available. <br>
+## Use Case:
 
+Creators, marketers, and production teams use this skill to research products, develop creative concepts, generate or edit media with Vibbit, and review or localize finished videos.
 
-## Reference(s): <br>
-- [Vibbit SKILL on ClawHub](https://clawhub.ai/zgissing/vibbit-skills) <br>
-- [Vibbit API Key Management](https://app.vibbit.ai/api-keys) <br>
-- [Vibbit OpenAPI Base URL](https://openapi.vibbit.cn) <br>
-- [Vibbit File Info API](https://tools.vibbit.ai/api/file-info) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON CLI responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires VIBBIT_API_KEY and Node.js 18+; returns media URLs, parsed metadata, avatar lists, or avatar voiceover workflow links through Vibbit APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: frontmatter and server release evidence) <br>
+Risk: API keys may be stored in an unencrypted local private file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the host secret manager; if using the local helper, protect the private credentials file.
+
+Risk: Cloud media generation can consume paid credits and transmit local media to Vibbit.
+
+Mitigation: Review uploads and credit-consuming submissions before authorizing them.
+
+Risk: Optional local rendering may install new dependencies through npx.
+
+Mitigation: Review the renderer and dependency installation before approving it.
+
+## Reference(s):
+
+- [Vibbit Skills release](https://clawhub.ai/zgissing/skills/vibbit-skills)
+- [Vibbit module catalog](artifact/references/catalog.md)
+- [Vibbit authentication reference](https://vibbit.apifox.cn/514565013e0)
+- [Vibbit API client guide](artifact/references/runtime/api-client.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Media files]
+
+**Output Format:** [Markdown responses with media links or local deliverables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Cloud generation requires an authorized Vibbit account and may consume credits.]
+
+## Skill Version(s):
+
+2.14.5 (source: release evidence, skill metadata, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,168 @@
+{
+  "variant_id": "relay_09_filter",
+  "role": "upstream",
+  "version": "1.1.0",
+  "input_name": "report_request",
+  "output_name": "report_predicate",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "segment",
+      "group_by",
+      "measure",
+      "calculation",
+      "columns"
+    ],
+    "properties": {
+      "segment": {
+        "type": "string",
+        "enum": [
+          "renewal_due",
+          "active",
+          "paused"
+        ]
+      },
+      "group_by": {
+        "type": "string",
+        "enum": [
+          "region",
+          "tier"
+        ]
+      },
+      "measure": {
+        "type": "string",
+        "enum": [
+          "annual_value_minor",
+          "open_item_count"
+        ]
+      },
+      "calculation": {
+        "type": "string",
+        "enum": [
+          "sum",
+          "average"
+        ]
+      },
+      "columns": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "group_key",
+            "account_count",
+            "aggregate_value"
+          ]
+        },
+        "minItems": 2,
+        "maxItems": 3,
+        "uniqueItems": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "where",
+      "group_by",
+      "aggregate",
+      "projected_columns"
+    ],
+    "properties": {
+      "where": {
+        "type": "object",
+        "required": [
+          "field",
+          "operator",
+          "value"
+        ],
+        "properties": {
+          "field": {
+            "type": "string",
+            "enum": [
+              "account_status",
+              "region",
+              "tier"
+            ]
+          },
+          "operator": {
+            "type": "string",
+            "enum": [
+              "eq",
+              "neq",
+              "in"
+            ]
+          },
+          "value": {
+            "oneOf": [
+              {
+                "type": "string",
+                "minLength": 1,
+                "maxLength": 64
+              },
+              {
+                "type": "array",
+                "items": {
+                  "type": "string",
+                  "minLength": 1,
+                  "maxLength": 64
+                },
+                "minItems": 1,
+                "maxItems": 5,
+                "uniqueItems": true
+              }
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "group_by": {
+        "type": "string",
+        "enum": [
+          "region",
+          "tier"
+        ]
+      },
+      "aggregate": {
+        "type": "object",
+        "required": [
+          "field",
+          "operation"
+        ],
+        "properties": {
+          "field": {
+            "type": "string",
+            "enum": [
+              "annual_value_minor",
+              "open_item_count"
+            ]
+          },
+          "operation": {
+            "type": "string",
+            "enum": [
+              "sum",
+              "average"
+            ]
+          }
+        },
+        "additionalProperties": false
+      },
+      "projected_columns": {
+        "type": "array",
+        "items": {
+          "type": "string",
+          "enum": [
+            "group_key",
+            "account_count",
+            "aggregate_value"
+          ]
+        },
+        "minItems": 2,
+        "maxItems": 3,
+        "uniqueItems": true
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": null
+}

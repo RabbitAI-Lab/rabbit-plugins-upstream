@@ -1,45 +1,58 @@
-## Description: <br>
-Analyzes reptile enclosure images or video frames to identify urate size, color, and texture plus feces morphology, then returns a structured visual assessment with alert guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes reptile enclosure images for urate size and feces appearance, then provides an assessment and alerts based on the observed waste.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, and enclosure app developers use this skill to analyze reptile excrement images or video frames, retrieve cloud report history, and generate structured visual-health observations with recommended next actions. The skill is framed as visual assessment support, not disease diagnosis or prescription guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile media and report history are processed by LifeEmergence cloud services. <br>
-Mitigation: Use only media appropriate for cloud processing, avoid sensitive backgrounds or identifying information, and confirm data retention expectations before deployment. <br>
-Risk: The skill can create or reuse a local identity and store service tokens in the workspace. <br>
-Mitigation: Run it in a private, controlled workspace and remove the skill data directory or credentials when access is no longer needed. <br>
-Risk: History queries can return identity-linked report records. <br>
-Mitigation: Restrict use in shared environments and verify that the active workspace identity is the intended one before querying report history. <br>
+## Use Case:
 
+Reptile keepers and developers of enclosure-monitoring tools use this skill to review images of reptile waste, track urate and feces changes, and retrieve assessment reports. Its health prompts are observational, not veterinary diagnoses.
 
-## Reference(s): <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill source documentation](artifact/SKILL.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-excrement-analysis-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance, Files] <br>
-**Output Format:** [Structured text or JSON with report fields, Markdown tables for history lists, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report links, alert levels, recommended actions, and disclaimers; depends on LifeEmergence cloud API responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter states 1.0.6) <br>
+Risk: Enclosure images or URLs are sent to an external analysis service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with appropriate consent and after checking the service's data-handling terms; avoid submitting sensitive or unnecessary imagery.
+
+Risk: The skill silently creates or reuses an account-linked identity and persists identifiers or tokens locally.
+
+Mitigation: Review or clear the workspace data directory and smyx-api-key.txt when persistent identity or credential reuse is unwanted.
+
+Risk: Image-based health prompts may be mistaken for a veterinary diagnosis.
+
+Mitigation: Treat assessments as screening guidance, and consult a reptile veterinarian for concerning or persistent findings.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-reptile-excrement-analysis-analysis)
+- [Reptile excrement analysis API reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured assessment or Markdown report list; optional JSON and saved report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes urate and feces observations, alerts, suggested follow-up, and report links when available.]
+
+## Skill Version(s):
+
+1.0.11 (source: server-resolved ClawHub release metadata; bundled skill frontmatter says 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

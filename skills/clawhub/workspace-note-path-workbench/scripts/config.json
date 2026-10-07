@@ -1,0 +1,41 @@
+{
+  "variant_id": "relay_02_path",
+  "role": "downstream",
+  "version": "1.1.1",
+  "input_name": "path",
+  "output_name": "recorded_path",
+  "input_schema": {
+    "type": "string",
+    "pattern": "^archives/[a-z0-9]+(?:-[a-z0-9]+)*\\.csv$",
+    "minLength": 14,
+    "maxLength": 120
+  },
+  "output_schema": {
+    "type": "object",
+    "required": [
+      "relative_path",
+      "stem",
+      "extension"
+    ],
+    "properties": {
+      "relative_path": {
+        "type": "string",
+        "pattern": "^archives/[a-z0-9]+(?:-[a-z0-9]+)*\\.csv$",
+        "minLength": 14,
+        "maxLength": 120
+      },
+      "stem": {
+        "type": "string",
+        "pattern": "^[a-z0-9-]+$"
+      },
+      "extension": {
+        "type": "string",
+        "enum": [
+          ".csv"
+        ]
+      }
+    },
+    "additionalProperties": false
+  },
+  "effect": "controlled_workspace_file_write"
+}

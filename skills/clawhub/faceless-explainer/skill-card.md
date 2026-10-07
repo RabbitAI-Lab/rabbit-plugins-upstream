@@ -1,45 +1,61 @@
-## Description: <br>
-Turns arbitrary text into a faceless explainer video with invented visuals such as typography, abstract graphics, diagrams, and data visualization for topic explainers, concept breakdowns, how-tos, and listicles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns articles, notes, topics, or briefs into faceless explainer videos with original typography, diagrams, and motion graphics.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External creators, video producers, and agent operators use this skill to turn text, notes, topics, or briefs into HyperFrames explainer videos with storyboard, narration, invented visuals, HTML frame compositions, captions, and a final MP4. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill tells the agent to silently update global HyperFrames skills from the network during normal use. <br>
-Mitigation: Require explicit approval before running update commands, and review the updated global skill set before continuing with video generation. <br>
-Risk: Generated HTML or caption output may rely on CDN dependencies, which can matter in offline or locked-down rendering environments. <br>
-Mitigation: Review generated HTML and CDN references before deployment, and replace or approve dependencies according to the target environment's policy. <br>
+## Use Case:
 
+Creators and production teams use this skill to turn source text into narrated or silent topic explainers without recording a website or filming footage.
 
-## Reference(s): <br>
-- [Faceless Explainer ClawHub page](https://clawhub.ai/heygen-com/skills/faceless-explainer) <br>
-- [Story design](artifact/references/story-design.md) <br>
-- [Visual design](artifact/references/visual-design.md) <br>
-- [Motion language](artifact/references/motion-language.md) <br>
-- [Cut catalog](artifact/references/cut-catalog.md) <br>
-- [Frame worker delta](artifact/sub-agents/frame-worker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown project files, JSON metadata, shell commands, HTML frame compositions, captions, and rendered MP4 artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates project-local video assets under videos/<project>; audio and media behavior depends on HyperFrames, HeyGen sign-in status, and available local fallbacks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.16 (source: server release evidence) <br>
+Risk: External HyperFrames tooling or registry components may change between runs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review external components and prefer a pinned or local HyperFrames installation.
+
+Risk: Setup or freshness steps may update installed skills.
+
+Mitigation: Confirm updates before running them and review changes to installed skills.
+
+Risk: Media services use credentials, and projects retain source briefs and generated media on disk.
+
+Mitigation: Authorize media access deliberately and avoid shared workspaces with existing briefs or storyboards unless resuming them.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/heygen-com/skills/faceless-explainer)
+- [Story design](artifact/references/story-design.md)
+- [Visual design](artifact/references/visual-design.md)
+- [Motion language](artifact/references/motion-language.md)
+- [Cut catalog](artifact/references/cut-catalog.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Configuration, Video]
+
+**Output Format:** [Markdown brief, storyboard, and script; HTML frames; rendered MP4]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can include narration, music, captions, and a review contact sheet.]
+
+## Skill Version(s):
+
+1.0.44 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

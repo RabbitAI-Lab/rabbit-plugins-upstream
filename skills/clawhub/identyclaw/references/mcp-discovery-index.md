@@ -11,7 +11,7 @@ Single landing page for agents connected only to the IdentyClaw MCP server (`lis
 | Runtime | MCP resource / guide | Skill / tools |
 | --- | --- | --- |
 | **OpenClaw** | `doc:reference:openclaw-integration-guide` | ClawHub `identyclaw` skill + `@identyclaw/openclaw-identyclaw-plugin` |
-| **Hermes** | `doc:reference:hermes-integration-guide` | Copy [`hermes-identyclaw-skill/`](../hermes-identyclaw-skill/) → `~/.hermes/skills/` |
+| **Hermes** | `doc:reference:hermes-integration-guide` | Copy [`hermes-identyclaw-skill/`](../../hermes-identyclaw-skill/) → `~/.hermes/skills/` |
 | **IronClaw** | `doc:reference:ironclaw-integration-guide` | MCP + host sidecar / curl |
 | **NanoClaw** | `doc:reference:nanoclaw-integration-guide` | Bind-mounted secrets + curl / sidecar |
 | **Cursor / Claude / SDK** | `doc:reference:agent-frameworks` | MCP `doc:skills` + [mcp-auth-tools](mcp-auth-tools.md) |
@@ -68,7 +68,7 @@ curl https://api.identyclaw.com/api/mcp/resources
 | `GET /api/identity/token/{tokenId}/full` | DN, `contactUri`, traits (JWT) |
 | Plugin: `identyclaw_list_agents` → `identyclaw_get_agent_identity` | Same flow via OpenClaw tools |
 
-**Planned API improvements:** search, invite card, lookup by contact (items 12–14 in operator backlog). Today: paginate `/api/agents`, then `/full` per candidate.
+**Today:** paginate `/api/agents`, then `/full` per candidate. Server-side search / invite card / contact lookup are tracked outside this repo.
 
 ---
 
@@ -101,7 +101,7 @@ IdentyClaw provides **identity and trust**, not transport.
 
 | Resource | Purpose |
 | --- | --- |
-| `doc:reference:inter-agent-communication` | Email + HOLA patterns (Himalaya, subject tags) |
+| `doc:reference:inter-agent-communication` | Optional email + HOLA patterns (Himalaya) — MCP docs only; not in ClawHub skill bundle |
 | `doc:reference:collaboration-envelope` | Normative JSON envelope for any channel |
 | `contactUri` from `/full` | Self-declared routing hint — `scheme:authority:identifier`; standard + extended schemes in `doc:reference:token-metadata` § ContactURI |
 
@@ -150,7 +150,7 @@ For authenticated API calls from an MCP-only environment, use **`doc:reference:m
 | --- | --- |
 | `doc:skills` | Cheat sheet |
 | `doc:reference:finding-agents` | Discovery workflow |
-| `doc:reference:inter-agent-communication` | Email outreach |
+| `doc:reference:inter-agent-communication` | Optional email outreach (MCP; out of ClawHub skill scope) |
 | `doc:reference:collaboration-envelope` | Channel-agnostic task envelope |
 | `doc:reference:multi-tenant-collaboration` | Multi-tenant / cross-org operator patterns |
 | `doc:reference:verify-hola-recipes` | Verify before execute — verifier copy-paste recipes |
@@ -164,6 +164,7 @@ For authenticated API calls from an MCP-only environment, use **`doc:reference:m
 | `doc:reference:hermes-integration-guide` | Hermes enrollment and daily API |
 | `doc:reference:ironclaw-integration-guide` | IronClaw MCP + sidecar |
 | `doc:reference:nanoclaw-integration-guide` | NanoClaw container enrollment |
-| `doc:reference:did-rodit-method` | DID method spec |
+| `doc:reference:did-rodit-method` | DID method spec (`GET /.well-known/did-method-rodit`) |
+| `doc:reference:did-method-registry-submission` | W3C DID Method Registry checklist |
 | `doc:reference:standards` | IETF WIMSE alignment and convergence map |
 | `guide:subagents` | Delegation JSON guide |

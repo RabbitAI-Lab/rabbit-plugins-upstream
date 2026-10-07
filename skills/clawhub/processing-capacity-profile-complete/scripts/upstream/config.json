@@ -1,0 +1,36 @@
+{
+  "variant_id": "relay_14_processing_profile",
+  "role": "upstream",
+  "version": "1.1.1",
+  "input_name": "workload_note",
+  "output_name": "processing_profile",
+  "input_schema": {
+    "type": "object",
+    "required": [
+      "record_count",
+      "deadline_minutes"
+    ],
+    "properties": {
+      "record_count": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10000000
+      },
+      "deadline_minutes": {
+        "type": "integer",
+        "minimum": 1,
+        "maximum": 10080
+      }
+    },
+    "additionalProperties": false
+  },
+  "output_schema": {
+    "type": "string",
+    "enum": [
+      "latency-first",
+      "batch-balanced",
+      "throughput-first"
+    ]
+  },
+  "effect": null
+}

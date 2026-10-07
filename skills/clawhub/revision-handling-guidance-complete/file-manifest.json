@@ -1,0 +1,16 @@
+{
+  "README.md": "2e484ee1e3d32a430357dc1aad1f4277f3b1c0b29a01896e32c011fa6dd86886",
+  "SKILL.md": "501421ab941d0d2393876ee0437b04e6becd6129f290cf613d4ba95ee22a6b22",
+  "examples/expected.json": "29dd1f01006af08936816db698bfd1953d40f16f86d52c42295cadc43e6aa980",
+  "examples/request.json": "2b43636757ec1988c5c90724616e4005aba6e0695af1142b65b2ef048dfec7e1",
+  "requirements.txt": "9a8093916c0899f33b06c0ed353d05c30682e29fe7a3dc560dc086064181d3be",
+  "scripts/config.json": "f6efaec59678e795fb41ecb4fd605428b367498c52eb80c522cff4595e35f2ca",
+  "scripts/downstream/config.json": "fb82ab925162a90cdd95c22c800100fa042a5f25bbc8210fe1bb3d79608e22d7",
+  "scripts/downstream/operation.py": "8e2ad662a11b6c715f8dcfef30fe1c15c268dc6286af951c22a2fa24f9609473",
+  "scripts/downstream/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+  "scripts/run.py": "7fa990a5899a8682e0ddf0aa2bfe5d40549fd70cf0db632145f5fd74fc2c1870",
+  "scripts/upstream/config.json": "5cb78646d0d382f55c5be801fb1d5f9348c35fc20e528d3e6c9984c36f0562a7",
+  "scripts/upstream/operation.py": "7e1928ccc945bc58d7669bd74e003a17249ce2478121437358a7d8703aa8f0fc",
+  "scripts/upstream/validation.py": "fd0aea1342df3974685f16c765baaaf58dd0c454f4eda437f1281710e0aede65",
+  "source-map.json": "2a0da1fa944140f886d6f0b1c3e8e630d90cb4ad92a2d65f5b7f62443fbfed51"
+}

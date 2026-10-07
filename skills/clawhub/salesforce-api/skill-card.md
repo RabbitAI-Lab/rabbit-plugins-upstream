@@ -1,46 +1,61 @@
-## Description: <br>
-Salesforce CRM API integration with managed OAuth for querying, managing, and mutating Salesforce records through Maton CLI or API workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent query and manage Salesforce CRM records through a user-authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and CRM administrators use this skill to query Salesforce data, inspect sObject schemas, manage OAuth connections, and perform approved CRUD, composite, and batch operations through Maton. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can mutate Salesforce CRM records through create, update, delete, composite, and batch operations. <br>
-Mitigation: Default to SOQL or GET requests first, verify the exact connection, sObject type, record IDs, and intended effect, then require explicit approval before any write operation. <br>
-Risk: MATON_API_KEY and Salesforce OAuth connections can grant access to CRM data and administrative actions. <br>
-Mitigation: Use the narrowest Salesforce permissions available, keep the API key out of logs and shared files, rotate exposed keys, and revoke unused connections promptly. <br>
-Risk: Batch and composite requests can affect multiple Salesforce records in a single call. <br>
-Mitigation: Prefer sandbox orgs for destructive or bulk work, enumerate every affected record before execution, and use transaction controls such as allOrNone when appropriate. <br>
+## Use Case:
 
+Salesforce administrators and developers use this skill to inspect CRM records, make approved changes, and configure related automations through their authorized connection.
 
-## Reference(s): <br>
-- [ClawHub Salesforce Skill](https://clawhub.ai/byungkyu/skills/salesforce-api) <br>
-- [Salesforce REST API Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm) <br>
-- [SOQL Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_soql.htm) <br>
-- [SOSL Reference](https://developer.salesforce.com/docs/atlas.en-us.soql_sosl.meta/soql_sosl/sforce_api_calls_sosl.htm) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with CLI, Python, JavaScript, HTTP endpoint, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a valid Salesforce OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence) <br>
+Risk: CRM writes or batch actions may change or delete unintended records.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the connection, affected record IDs, and intended effects before writes; test destructive or batch work in a sandbox org.
+
+Risk: Broad Salesforce permissions or unused connections may leave access beyond the task.
+
+Mitigation: Use the narrowest available Salesforce scopes and remove unused connections promptly.
+
+Risk: Leftover functions, triggers, or destinations may continue to run after the task.
+
+Mitigation: Remove functions, triggers, and destinations when they are no longer needed.
+
+## Reference(s):
+
+- [Salesforce skill on ClawHub](https://clawhub.ai/byungkyu/skills/salesforce-api)
+- [Maton](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+- [Salesforce REST API Developer Guide](https://developer.salesforce.com/docs/atlas.en-us.api_rest.meta/api_rest/intro_rest.htm)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with shell commands and API examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires network access, a Maton account, and an authorized Salesforce connection.]
+
+## Skill Version(s):
+
+1.2.8 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

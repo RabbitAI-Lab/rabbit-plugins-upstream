@@ -1,0 +1,18 @@
+{
+  "identified": {
+    "audience_mode": "treat the brief as client-ready"
+  },
+  "delivered": {
+    "briefing_preview": {
+      "audience": "client",
+      "included_sections": [
+        "summary",
+        "timeline"
+      ],
+      "excluded_sections": [
+        "cost-detail",
+        "owner-notes"
+      ]
+    }
+  }
+}

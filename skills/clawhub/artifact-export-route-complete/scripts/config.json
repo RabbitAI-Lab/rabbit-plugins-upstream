@@ -1,0 +1,16 @@
+{
+  "complete_workflow": true,
+  "version": "1.2.0",
+  "stages": {
+    "identify": {
+      "dir": "upstream",
+      "role": "upstream"
+    },
+    "deliver": {
+      "dir": "downstream",
+      "role": "downstream"
+    }
+  },
+  "variant_id": "shadow_02_tool_choice",
+  "display_name": "Artifact Delivery Planner"
+}

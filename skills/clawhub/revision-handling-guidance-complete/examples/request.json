@@ -1,0 +1,7 @@
+{
+  "revision_profile": {
+    "strategy": "merge-nonempty",
+    "preserve_absent": true,
+    "accept_blank": false
+  }
+}

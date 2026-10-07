@@ -1,56 +1,63 @@
-## Description: <br>
-Guides agents through HyperFrames CLI workflows for scaffolding, checking, previewing, rendering, publishing, cloud rendering, diagnostics, upgrades, telemetry, and related video asset operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through developing, checking, previewing, and rendering HyperFrames video projects locally or through hosted and self-managed cloud services.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and agents use this skill to operate the HyperFrames CLI during video project creation, validation, preview, rendering, publishing, and troubleshooting across local, HeyGen cloud, AWS Lambda, and Google Cloud Run workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Publish and cloud rendering commands can upload project source and assets. <br>
-Mitigation: Confirm the user wants a publish or cloud workflow, use dry-run and ignore-file checks where available, and review included assets before upload. <br>
-Risk: HeyGen cloud, AWS Lambda, and Google Cloud Run workflows can use credentials and incur usage or infrastructure costs. <br>
-Mitigation: Confirm the target provider, credential source, project or stack, region, and cost-sensitive settings before executing cloud or infrastructure commands. <br>
-Risk: Feedback and telemetry can send diagnostics outside the local workspace. <br>
-Mitigation: Respect telemetry opt-out or disabled states, obtain consent for public issue filing, and strip absolute paths or identifying machine details from feedback. <br>
-Risk: Rendering or publishing can produce final deliverables before the user has approved the preview. <br>
-Mitigation: Run the HyperFrames check and final preview workflow, then wait for explicit user approval before final render or publish commands. <br>
+## Use Case:
 
+Developers and video creators use this skill to scaffold, inspect, test, preview, render, and publish HyperFrames compositions, including cloud rendering workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-cli) <br>
-- [HeyGen CLI repository](https://github.com/heygen-com/heygen-cli) <br>
-- [HyperFrames CLI skill](SKILL.md) <br>
-- [Cloud rendering](references/cloud.md) <br>
-- [AWS Lambda rendering](references/lambda.md) <br>
-- [Google Cloud Run rendering](references/cloudrun.md) <br>
-- [Preview, render, publish, and feedback](references/preview-render.md) <br>
-- [Lint, check, and snapshot](references/lint-validate-inspect.md) <br>
-- [Init and scaffold](references/init-and-scaffold.md) <br>
-- [Compare and batch rendering](references/compare-and-batch.md) <br>
-- [Doctor and browser management](references/doctor-browser.md) <br>
-- [Beats utility](references/beats.md) <br>
-- [Info, upgrade, docs, benchmark, telemetry, and asset preprocessing](references/upgrade-info-misc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands and command-specific guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend JSON output modes, dry runs, preview gates, and provider-specific cloud or infrastructure settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.20 (source: server release evidence) <br>
+Risk: Feedback reports may be posted to a public channel, and render telemetry is opt-out.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Disable telemetry or require approval before each report; review and redact feedback payloads before submission.
+
+Risk: Cloud upload, publishing, and infrastructure deletion can expose project content or remove cloud resources.
+
+Mitigation: Require explicit confirmation before upload, publish, cloud delete, lambda destroy, or cloudrun destroy; inspect project archives and visibility first.
+
+Risk: Unpinned CLI invocations and skill-pack installations can introduce unexpected changes.
+
+Mitigation: Pin or wrap the CLI version when possible, and confirm skill-pack installations before running them.
+
+## Reference(s):
+
+- [HyperFrames CLI skill](https://clawhub.ai/heygen-com/skills/hyperframes-cli)
+- [Project setup and scaffolding](references/init-and-scaffold.md)
+- [Linting and validation](references/lint-validate-inspect.md)
+- [Preview, rendering, publishing, and feedback](references/preview-render.md)
+- [HeyGen-hosted rendering](references/cloud.md)
+- [AWS Lambda rendering](references/lambda.md)
+- [Google Cloud Run rendering](references/cloudrun.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions]
+
+**Output Format:** [Markdown with command examples and project code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide creation of video projects and rendered media.]
+
+## Skill Version(s):
+
+1.0.59 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

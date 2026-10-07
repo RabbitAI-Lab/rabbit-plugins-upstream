@@ -1,47 +1,54 @@
-## Description: <br>
-Atomic Mail lets an AI agent read and write email over JMAP, including inbox registration, mailbox listing, message fetching, and sending mail. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an AI agent to register an Atomic Mail inbox and read or send email through JMAP.
 
-## Publisher: <br>
-[atomicmail](https://clawhub.ai/user/atomicmail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[atomicmail](https://clawhub.ai/user/atomicmail)
 
-## Use Case: <br>
-Developers and external users use this skill to connect an AI agent to Atomic Mail so it can register an inbox, fetch and triage mailbox data, send replies, and upload attachments through JMAP. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill stores Atomic Mail credentials and JWT bearer tokens locally. <br>
-Mitigation: Keep the credentials directory private, exclude it from logs and backups where possible, and never commit credential or JWT files. <br>
-Risk: The skill can send email and upload attachments when invoked. <br>
-Mitigation: Require explicit user approval before sending mail, replying, forwarding, or uploading attachments through presets or custom JMAP requests. <br>
-Risk: Scheduled inbox polling can expose mailbox contents during recurring agent turns. <br>
-Mitigation: Use the documented agent-scheduled workflow only in trusted runtimes and avoid raw CLI cron jobs that fetch mail without an agent review step. <br>
+## Use Case:
 
+Users and developers can connect an agent to an Atomic Mail inbox to register an account, check messages, and send or reply to email when authorized.
 
-## Reference(s): <br>
-- [Atomic Mail homepage](https://atomicmail.ai) <br>
-- [ClawHub Atomic Mail skill page](https://clawhub.ai/atomicmail/skills/atomicmail) <br>
-- [Atomic Mail overview help topic](lib/shared/help/topics/overview.md) <br>
-- [Atomic Mail JMAP cheatsheet help topic](lib/shared/help/topics/jmap_cheatsheet.md) <br>
-- [OpenClaw cron documentation](https://docs.openclaw.ai/automation/cron-jobs) <br>
-- [Hermes cron documentation](https://hermes-agent.nousresearch.com/docs/user-guide/features/cron) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May execute CLI calls that return JSON JMAP results and write local credential and JWT files during registration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.3.24 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: Local mail credentials and JWT files could expose inbox access if disclosed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the credential directory private; never commit credentials.json or JWT files.
+
+Risk: An agent with inbox access could send mail or change mailbox state during an unattended check.
+
+Mitigation: Review scheduled jobs and keep inbox checks read-only unless explicitly authorized to send or modify mail.
+
+## Reference(s):
+
+- [Atomic Mail skill on ClawHub](https://clawhub.ai/atomicmail/skills/atomicmail)
+- [Atomic Mail](https://atomicmail.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Natural-language email summaries and instructions with shell commands; mail requests can return JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scheduled inbox reports can be read-only; sending or changing mail requires authorization.]
+
+## Skill Version(s):
+
+0.3.31 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
