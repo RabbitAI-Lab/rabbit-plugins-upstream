@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/protocolsio-integration",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/protocolsio-integration",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/protocolsio-integration",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "1fee57b539f936396eee34d2f12754335956fcde0dd055219806fc7f8695c6d3",
+  "fetchedAt": "2026-10-07T14:35:55.768Z"
+}

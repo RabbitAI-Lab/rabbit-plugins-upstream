@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/rtvi-cv-scaffold-vss-service",
+  "identifier": "NVIDIA/skills/skills/rtvi-cv-scaffold-vss-service",
+  "repo": "NVIDIA/skills",
+  "path": "skills/rtvi-cv-scaffold-vss-service",
+  "branch": "main",
+  "pushedAt": "2026-10-07T02:26:12Z",
+  "contentHash": "9532f3014c54bc07f5e740d7deccd438cd31add5adac6289978344a2f8b240f7",
+  "fetchedAt": "2026-10-07T14:35:41.112Z"
+}

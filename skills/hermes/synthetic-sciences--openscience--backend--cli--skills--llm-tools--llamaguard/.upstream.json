@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/llamaguard",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/llamaguard",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/llamaguard",
+  "branch": "main",
+  "pushedAt": "2026-10-06T17:56:12Z",
+  "contentHash": "db31645ae888d6123349e53383e92f30c9e220b34eb3efe8eead73be50cbad2d",
+  "fetchedAt": "2026-10-07T14:35:42.364Z"
+}

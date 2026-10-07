@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/genomic-coordinates",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/genomic-coordinates",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/genomic-coordinates",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "b5a56386d3389f2ef499f3383de91a4aa8d8b3c08efd5e15528d0809638be63e",
+  "fetchedAt": "2026-10-07T14:35:55.710Z"
+}
