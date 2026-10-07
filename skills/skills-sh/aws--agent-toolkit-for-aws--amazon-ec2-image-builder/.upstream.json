@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-ec2-image-builder",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-ec2-image-builder",
+  "branch": "main",
+  "pushedAt": "2026-10-07T05:42:53Z",
+  "contentHash": "5bc99b22addf211d22b6d786d774d8369d9a36cec789756477130dc923b80f12",
+  "fetchedAt": "2026-10-07T14:38:04.100Z"
+}

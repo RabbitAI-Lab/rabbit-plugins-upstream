@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/claude-settings-audit",
+  "repo": "getsentry/skills",
+  "skillId": "claude-settings-audit",
+  "branch": "main",
+  "pushedAt": "2026-10-02T19:29:06Z",
+  "contentHash": "1a7d7ba55b2ecf5f4ffa339fb7ef55d3b255575ade73e86b8c8e7b76db5f7293",
+  "fetchedAt": "2026-10-07T14:35:47.842Z"
+}
