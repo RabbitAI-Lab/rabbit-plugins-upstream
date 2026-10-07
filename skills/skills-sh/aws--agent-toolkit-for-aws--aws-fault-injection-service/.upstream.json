@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-fault-injection-service",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-fault-injection-service",
+  "branch": "main",
+  "pushedAt": "2026-10-07T05:42:53Z",
+  "contentHash": "fc74c18d7eeebf798b8c8377657315a76c20a20d4874420230f53603e591bab6",
+  "fetchedAt": "2026-10-07T14:38:04.397Z"
+}

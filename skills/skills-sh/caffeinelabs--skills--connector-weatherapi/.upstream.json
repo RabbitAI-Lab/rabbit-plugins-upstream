@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/caffeinelabs/skills/connector-weatherapi",
+  "repo": "caffeinelabs/skills",
+  "skillId": "connector-weatherapi",
+  "branch": "main",
+  "pushedAt": "2026-10-07T12:18:30Z",
+  "contentHash": "6c72441ac09a56dc18df357ae6a89b19b623f162614d9362156d587b8048c2a2",
+  "fetchedAt": "2026-10-07T14:35:41.472Z"
+}
