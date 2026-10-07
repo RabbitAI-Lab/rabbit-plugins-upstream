@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/molecular-cloning",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/molecular-cloning",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/molecular-cloning",
+  "branch": "main",
+  "pushedAt": "2026-10-06T17:56:12Z",
+  "contentHash": "165a90f14b740d373f240c3ee03b3f972980844b6cb59bf616c64277921501df",
+  "fetchedAt": "2026-10-07T14:35:42.375Z"
+}

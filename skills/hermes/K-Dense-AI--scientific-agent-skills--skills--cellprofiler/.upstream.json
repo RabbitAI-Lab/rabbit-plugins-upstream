@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/cellprofiler",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/cellprofiler",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/cellprofiler",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "c44f3b11a7b34195dd77c19ee4250dadcad82678148c057b6420d10bfbdaded1",
+  "fetchedAt": "2026-10-07T14:35:55.684Z"
+}

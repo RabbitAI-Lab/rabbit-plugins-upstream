@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pi-agent",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pi-agent",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pi-agent",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "f4bf42c3120e672ccdde2eda50aafe3edb1b1b0340eaecd3472de873d2eb22c6",
+  "fetchedAt": "2026-10-07T14:35:55.761Z"
+}

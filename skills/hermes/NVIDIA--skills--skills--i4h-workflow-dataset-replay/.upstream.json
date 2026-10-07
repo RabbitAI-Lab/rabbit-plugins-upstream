@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-dataset-replay",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-dataset-replay",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-dataset-replay",
+  "branch": "main",
+  "pushedAt": "2026-10-07T02:26:12Z",
+  "contentHash": "76b692665dbeefe2c9466e514b0b34b496c2940ca7b8369e81744df210641673",
+  "fetchedAt": "2026-10-07T14:35:40.434Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/nemo-guardrails",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/nemo-guardrails",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/nemo-guardrails",
+  "branch": "main",
+  "pushedAt": "2026-10-06T17:56:12Z",
+  "contentHash": "bf20e12ac72b932ca3de5b06a163d3d9331e2b8e9c47d848efab25b643ac267f",
+  "fetchedAt": "2026-10-07T14:35:42.380Z"
+}
