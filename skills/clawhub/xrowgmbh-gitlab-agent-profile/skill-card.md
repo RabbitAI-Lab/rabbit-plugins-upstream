@@ -1,42 +1,57 @@
-## Description: <br>
-Maintain the GitLab agent profile page and static contribution performance chart. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Maintain the GitLab agent profile page and static contribution performance chart.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to keep a GitLab profile repository updated with monthly contribution charts and proof records for owner and agent activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses GitLab credentials that may read configured projects. <br>
-Mitigation: Use a least-privilege GitLab token and limit configured projects to repositories needed for the profile update. <br>
-Risk: The skill can run unattended and commit or push generated profile assets. <br>
-Mitigation: Run it in a dedicated profile repository and review the cron configuration before enabling scheduled execution. <br>
-Risk: Output paths and image conversion tooling can affect local files or invoke optional external converters. <br>
-Mitigation: Keep output paths relative to the intended workspace and avoid the npm or ImageMagick conversion fallback unless the tooling is pinned or sandboxed. <br>
+## Use Case:
 
+Developers and GitLab profile maintainers use this skill to track monthly owner and agent contributions across selected projects and update the agent's public profile charts and proof records.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Files] <br>
-**Output Format:** [Markdown guidance plus generated SVG, WebP, and JSON asset files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses GitLab CLI authentication and configurable environment variables for project selection, output paths, owner, agent, and month count.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.75.3 (source: release evidence) <br>
+Risk: Broad GitLab access could expose more project activity than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a minimally scoped token and restrict the root group or project list.
+
+Risk: Published charts and proof records include aggregate private or internal activity.
+
+Mitigation: Review generated assets and totals for disclosure before pushing profile changes.
+
+Risk: Scheduled runs may repeatedly update and push profile assets without supervision.
+
+Mitigation: Keep the cron disabled unless recurring unattended updates are explicitly wanted.
+
+## Reference(s):
+
+- [GitLab Agent Profile on ClawHub](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-gitlab-agent-profile)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, Files]
+
+**Output Format:** [Markdown instructions; SVG and WebP charts; JSON proof records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Charts cover completed calendar months; private and internal contributions appear as aggregate totals without identifying project details.]
+
+## Skill Version(s):
+
+1.106.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

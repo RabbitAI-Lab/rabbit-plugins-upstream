@@ -1,0 +1,15 @@
+{
+  "full_name": "Mira Hoffmann",
+  "email": "mira.hoffmann@example.com",
+  "phone": "+49 30 00000000",
+  "location": "Berlin, Deutschland",
+  "website": "https://example.com/mira-hoffmann",
+  "profile_picture": "assets/profile/mira-hoffmann.png",
+  "default_language": "de",
+  "default_target_title": "Data & Automation Consultant",
+  "about_me_base": [
+    "Beraterin für datengetriebene Prozesse und verantwortungsvolle Automatisierung.",
+    "Verbindet technische Umsetzung mit klarer Kommunikation und messbarem Geschäftsnutzen."
+  ],
+  "fictional": true
+}

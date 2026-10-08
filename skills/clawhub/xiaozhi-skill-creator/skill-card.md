@@ -1,42 +1,58 @@
-## Description: <br>
-Guides ClawHub users through creating, testing, and iterating custom SKILLs using a four-layer structure, privacy boundaries, template examples, and health checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in writing and reviewing Chinese-language learning skills using a four-layer structure, a five-step workflow, and clear safety and privacy boundaries.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External ClawHub users and students use this skill to design personalized learning SKILLs, write and refine prompts, structure memory and output behavior, and test whether a new SKILL is working as intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Templates may encourage long-term memory, uploaded learning materials, reminders, or cross-SKILL sharing beyond a user's intent. <br>
-Mitigation: Keep memory, uploads, reminders, and cross-SKILL sharing explicitly opt-in, and scope stored or shared information to the minimum needed for the learning task. <br>
-Risk: Broad activation wording can cause the skill to be invoked for general prompt-writing help outside custom SKILL creation. <br>
-Mitigation: Narrow activation language when installing if the desired use is only SKILL creation, debugging, and iteration. <br>
+## Use Case:
 
+Skill developers and high-school students with programming or prompt-writing experience use this tool to draft and troubleshoot learning-skill instructions, including behavior rules, memory fields, and safety boundaries. It does not provide subject tutoring or generate exercises.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [references/skill-templates-library.md](references/skill-templates-library.md) <br>
+### Deployment Geography for Use:
 
+China mainland
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Text] <br>
-**Output Format:** [Markdown and structured prompt templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes reusable SKILL prompt templates, privacy-boundary guidance, testing steps, iteration advice, and diagnostic checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: China-mainland crisis contacts, curriculum mappings, consent rules, and legal references may be unsuitable elsewhere.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Localize and review these details before using generated skills with students in another region.
+
+Risk: An unreviewed draft could give students inappropriate guidance or mishandle personal information.
+
+Mitigation: Review the proposed skill against the supplied safety and privacy rules and test it before deployment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Skill templates library](references/skill-templates-library.md)
+- [Shared vocabulary and thresholds](shared/vocab.md)
+- [Platform conventions](shared/platform-conventions.md)
+- [Crisis-response boundaries](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown skill drafts and written review guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces proposed SKILL.md content; does not access student records or provide tutoring.]
+
+## Skill Version(s):
+
+2.11.0 (source: server-resolved release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

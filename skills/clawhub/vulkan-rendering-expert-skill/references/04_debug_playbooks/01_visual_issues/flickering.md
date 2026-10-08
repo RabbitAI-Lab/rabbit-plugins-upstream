@@ -41,14 +41,15 @@
 
 ---
 
-## 3. 快速验证路径
+## 3. 快速验证路径（证据驱动决策表）
 
-1. 降为 1 frame-in-flight，看闪烁是否消失。
-2. 打印 frame index / image index。
-3. 检查每帧 uniform / descriptor 是否独立。
-4. 检查 fence wait/reset 顺序。
-5. 用 RenderDoc 抓异常帧。
-6. 开启 sync validation。
+| # | 检查（成本升序） | 结果 A → 下一步 | 结果 B → 下一步 | 剪枝（排除的假设） |
+|---|---|---|---|---|
+| 1 | 打印 frame index / image index 日志 | 混用或错位 → §5-2（frame index 与 image index 混用） | 一致 → 检查 2 | 一致时排除 §2 的 P1 image index 混用假设 |
+| 2 | Validation / sync validation | 有 hazard VUID → §5-5（barrier stage / access 不匹配） | clean → 检查 3 | clean 时排除 §2 的 P2 barrier 缺失假设 |
+| 3 | 帧间差异是否周期性（周期 ≈ frames-in-flight 数） | 周期性 → frame 资源复用方向：检查 4 | 非周期 → 检查 5 | 非周期时排除 §2 的 P0 fence / uniform 提前覆盖 / descriptor 串帧假设 |
+| 4 | 降为 1 frame-in-flight + 检查 fence wait / reset 顺序 | 闪烁消失 → §5-1 / §5-3 / §5-4（fence signal 前覆盖、descriptor 无 per-frame 隔离、CB reset 时机） | 仍闪烁 → 检查 5 | 仍闪烁时排除 §2 的 P0 帧资源复用与 P1 command buffer 复用假设 |
+| 5 | RenderDoc 抓异常帧：acquire / present semaphore 复用与 barrier 覆盖 | semaphore 等待 / 信号配对错误 → §4 链路排查；barrier 未覆盖读写 → §5-5 | 均正常 → §11 不确定处理 | — |
 
 ---
 
@@ -79,18 +80,21 @@ Frame Index
 
 ## 6. 修复方案
 
-### 最小修复
+### Workaround（临时绕过，现象消失 ≠ 根因修复）
 
-- 降到单帧验证。
-- 每帧资源独立。
-- fence signal 后再复用资源。
+- 降到单帧（frames-in-flight = 1）验证：若闪烁消失，说明问题出在多帧资源复用；性能损失大，仅用于定位。`[ENGINE]`
 
-### 稳定修复
+### Minimal Fix（针对根因的最小修复）
 
-- 建立 per-frame resource 结构。
-- 明确区分 frame index 和 swapchain image index。
-- 对 uniform 使用 ring buffer 或 dynamic offset。
-- 对 descriptor 建立 per-frame set。
+- 每帧资源独立：per-frame 的 uniform / descriptor / command buffer 不跨帧复用。`[ENGINE]`
+- 资源在 fence signal（GPU 使用完成）后再复用或销毁。`[SPEC]`
+
+### Structural Fix（结构性 / 防复发修复）
+
+- 建立 per-frame resource 结构。`[ENGINE]`
+- 明确区分 frame index 和 swapchain image index。`[ENGINE]`
+- 对 uniform 使用 ring buffer 或 dynamic offset。`[ENGINE]`
+- 对 descriptor 建立 per-frame set。`[ENGINE]`
 
 ---
 

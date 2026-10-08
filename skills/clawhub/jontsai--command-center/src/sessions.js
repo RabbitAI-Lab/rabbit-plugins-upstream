@@ -1,42 +1,25 @@
+const { SESSION_LIST_COMMAND } = require("./openclaw");
 const fs = require("fs");
 const path = require("path");
 const { detectTopics } = require("./topics");
 
-// Channel ID to name mapping (auto-populated from Slack)
-const CHANNEL_MAP = {
-  c0aax7y80np: "#cc-meta",
-  c0ab9f8sdfe: "#cc-research",
-  c0aan4rq7v5: "#cc-finance",
-  c0abxulk1qq: "#cc-properties",
-  c0ab5nz8mkl: "#cc-ai",
-  c0aan38tzv5: "#cc-dev",
-  c0ab7wwhqvc: "#cc-home",
-  c0ab1pjhxef: "#cc-health",
-  c0ab7txvcqd: "#cc-legal",
-  c0aay2g3n3r: "#cc-social",
-  c0aaxrw2wqp: "#cc-business",
-  c0ab19f3lae: "#cc-random",
-  c0ab0r74y33: "#cc-food",
-  c0ab0qrq3r9: "#cc-travel",
-  c0ab0sbqqlg: "#cc-family",
-  c0ab0slqdba: "#cc-games",
-  c0ab1ps7ef2: "#cc-music",
-  c0absbnrsbe: "#cc-dashboard",
-};
+const { createChannelDirectory } = require("./channel-directory");
+// Deprecated export retained for compatibility; names come from runtime metadata.
+const CHANNEL_MAP = {};
 
 // Parse session key into readable label
-function parseSessionLabel(key) {
+function parseSessionLabel(key, resolvedName = null) {
   // Pattern: agent:main:slack:channel:CHANNEL_ID:thread:TIMESTAMP
   // or: agent:main:slack:channel:CHANNEL_ID
   // or: agent:main:main (telegram main)
 
   const parts = key.split(":");
 
-  if (parts.includes("slack")) {
+  if (parts.includes("slack") || parts.includes("discord")) {
     const channelIdx = parts.indexOf("channel");
     if (channelIdx >= 0 && parts[channelIdx + 1]) {
-      const channelId = parts[channelIdx + 1].toLowerCase();
-      const channelName = CHANNEL_MAP[channelId] || `#${channelId}`;
+      const channelName =
+        resolvedName || (parts.includes("slack") ? "Slack channel" : "Discord channel");
 
       // Check if it's a thread
       if (parts.includes("thread")) {
@@ -75,75 +58,266 @@ function parseSessionLabel(key) {
  */
 function createSessionsModule(deps) {
   const { getOpenClawDir, getOperatorBySlackId, runOpenClaw, runOpenClawAsync, extractJSON } = deps;
+  const directory = deps.channelDirectory || createChannelDirectory({ run: runOpenClawAsync });
+  function channelIdentity(session) {
+    const parts = (session.key || "").split(":");
+    const provider = parts.includes("slack")
+      ? "slack"
+      : parts.includes("discord")
+        ? "discord"
+        : null;
+    const index = parts.indexOf("channel");
+    if (!provider || index < 0 || !parts[index + 1]) return null;
+    const id = parts[index + 1];
+    const account =
+      session.accountId || session.origin?.accountId || session.deliveryContext?.accountId || "";
+    const result = directory.lookup(provider, id, account);
+    const metadataName = session.groupChannel;
+    const readableMetadata =
+      typeof metadataName === "string" && !metadataName.toLowerCase().includes(id.toLowerCase())
+        ? metadataName
+        : null;
+    const name = result.name ? `#${result.name.replace(/^#/, "")}` : readableMetadata;
+    return {
+      channelId: id,
+      channelName: name,
+      channelNameStatus: result.name ? result.status : readableMetadata ? "metadata" : "unresolved",
+      channelAccount: account,
+      channelNameObservedAt: result.observedAt || null,
+    };
+  }
 
   // SESSION CACHE - Async refresh to avoid blocking
-  let sessionsCache = { sessions: [], timestamp: 0, refreshing: false };
-  const SESSIONS_CACHE_TTL = 10000; // 10 seconds
+  let sessionsCache = { sessions: [], raw: [], timestamp: 0, refreshing: false };
+  let sessionsRefreshPromise = null;
+  const detailCache = new Map();
+  const SESSIONS_CACHE_TTL = 60000; // 1 minute
+  const transcriptMetadataCache = new Map();
+  let transcriptPathIndex = null;
+  let transcriptPathIndexTimestamp = 0;
+  const TRANSCRIPT_PATH_INDEX_TTL = 300000; // 5 minutes
+
+  function getSessionsDir() {
+    const openclawDir = getOpenClawDir();
+    return path.join(openclawDir, "agents", "main", "sessions");
+  }
+
+  function getBaseSessionIdFromTranscriptFile(file) {
+    if (!file.endsWith(".jsonl") || file.includes(".deleted.")) return null;
+
+    const name = file.slice(0, -".jsonl".length);
+
+    // Plain transcript: <sessionId>.jsonl
+    const exactUuidMatch = name.match(
+      /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i,
+    );
+    if (exactUuidMatch) return { sessionId: name, exact: true };
+
+    // Suffix transcript: <sessionId>-topic-...jsonl, <sessionId>-...jsonl, etc.
+    // This preserves the previous fallback semantics without scanning the whole directory
+    // once for every missing exact match.
+    const suffixedUuidMatch = name.match(
+      /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})-/i,
+    );
+    if (suffixedUuidMatch) return { sessionId: suffixedUuidMatch[1], exact: false };
+
+    return { sessionId: name, exact: true };
+  }
+
+  function getTranscriptPathIndex() {
+    const now = Date.now();
+    if (transcriptPathIndex && now - transcriptPathIndexTimestamp < TRANSCRIPT_PATH_INDEX_TTL) {
+      return transcriptPathIndex;
+    }
+
+    const sessionsDir = getSessionsDir();
+    const index = new Map();
+
+    try {
+      const files = fs.readdirSync(sessionsDir);
+      for (const file of files) {
+        const transcript = getBaseSessionIdFromTranscriptFile(file);
+        if (!transcript) continue;
+
+        // Prefer exact transcript names over suffixed fallbacks.
+        if (!index.has(transcript.sessionId) || transcript.exact) {
+          index.set(transcript.sessionId, path.join(sessionsDir, file));
+        }
+      }
+    } catch (e) {
+      // Directory read failed; keep an empty index for this TTL window.
+    }
+
+    transcriptPathIndex = index;
+    transcriptPathIndexTimestamp = now;
+    return transcriptPathIndex;
+  }
+
+  /**
+   * Find transcript file for a session ID.
+   * Handles both plain (sessionId.jsonl) and topic-suffixed (sessionId-topic-XXX.jsonl) files.
+   * @param {string} sessionId - Session UUID
+   * @returns {string|null} - Full path to transcript file or null if not found
+   */
+  function findTranscriptPath(sessionId) {
+    if (!sessionId) return null;
+
+    // Exact transcript names are cheap to check and should become visible immediately.
+    // Keep the expensive directory-wide fallback index for topic-suffixed legacy files.
+    const exactPath = path.join(getSessionsDir(), `${sessionId}.jsonl`);
+    if (fs.existsSync(exactPath)) return exactPath;
+
+    return getTranscriptPathIndex().get(sessionId) || null;
+  }
+
+  function readTranscriptPrefix(transcriptPath, maxBytes = 50000) {
+    const fd = fs.openSync(transcriptPath, "r");
+    try {
+      const buffer = Buffer.alloc(maxBytes);
+      const bytesRead = fs.readSync(fd, buffer, 0, maxBytes, 0);
+      return buffer.toString("utf8", 0, bytesRead);
+    } finally {
+      fs.closeSync(fd);
+    }
+  }
+
+  function extractOriginatorFromLines(lines) {
+    // Find the first user message to extract originator
+    for (let i = 0; i < Math.min(lines.length, 10); i++) {
+      try {
+        const entry = JSON.parse(lines[i]);
+        if (entry.type !== "message" || !entry.message) continue;
+
+        const msg = entry.message;
+        if (msg.role !== "user") continue;
+
+        let text = "";
+        if (typeof msg.content === "string") {
+          text = msg.content;
+        } else if (Array.isArray(msg.content)) {
+          const textPart = msg.content.find((c) => c.type === "text");
+          if (textPart) text = textPart.text || "";
+        }
+
+        if (!text) continue;
+
+        // Extract Slack user from message patterns:
+        // Format 1 (old): "[Slack #channel +6m 2026-01-27 15:31 PST] username (USERID): message"
+        // Format 2 (new): Conversation info JSON with "sender_id": "USERID" and "sender": "username"
+        const slackUserMatch = text.match(/\]\s*([\w.-]+)\s*\(([A-Z0-9]+)\):/);
+
+        if (slackUserMatch) {
+          const username = slackUserMatch[1];
+          const userId = slackUserMatch[2];
+
+          const operator = getOperatorBySlackId(userId);
+
+          return {
+            userId,
+            username,
+            displayName: operator?.name || username,
+            role: operator?.role || "user",
+            avatar: operator?.avatar || null,
+          };
+        }
+
+        // Try new format: Conversation info JSON block
+        // Look for "sender_id": "USERID" and "sender": "username"
+        const senderIdMatch = text.match(/"sender_id":\s*"([A-Z0-9]+)"/);
+        const senderMatch = text.match(/"sender":\s*"([^"]+)"/);
+
+        if (senderIdMatch) {
+          const userId = senderIdMatch[1];
+          const username = senderMatch ? senderMatch[1] : userId;
+
+          const operator = getOperatorBySlackId(userId);
+
+          return {
+            userId,
+            username,
+            displayName: operator?.name || username,
+            role: operator?.role || "user",
+            avatar: operator?.avatar || null,
+          };
+        }
+      } catch (e) {}
+    }
+
+    return null;
+  }
+
+  function extractTopicFromLines(lines) {
+    // Extract text from messages
+    // Transcript format: {type: "message", message: {role: "user"|"assistant", content: [...]}}
+    let textSamples = [];
+    for (const line of lines.slice(0, 30)) {
+      // First 30 entries
+      try {
+        const entry = JSON.parse(line);
+        if (entry.type === "message" && entry.message?.content) {
+          const msgContent = entry.message.content;
+          if (Array.isArray(msgContent)) {
+            msgContent.forEach((c) => {
+              if (c.type === "text" && c.text) {
+                textSamples.push(c.text.slice(0, 500));
+              }
+            });
+          } else if (typeof msgContent === "string") {
+            textSamples.push(msgContent.slice(0, 500));
+          }
+        }
+      } catch (e) {
+        /* skip malformed lines */
+      }
+    }
+
+    if (textSamples.length === 0) return null;
+
+    const topics = detectTopics(textSamples.join(" "));
+    return topics.length > 0 ? topics.slice(0, 2).join(", ") : null;
+  }
+
+  function getSessionMetadata(sessionId) {
+    if (!sessionId) return { originator: null, topic: null };
+
+    try {
+      const transcriptPath = findTranscriptPath(sessionId);
+      if (!transcriptPath) return { originator: null, topic: null };
+
+      const stat = fs.statSync(transcriptPath);
+      const cached = transcriptMetadataCache.get(sessionId);
+      if (
+        cached &&
+        cached.transcriptPath === transcriptPath &&
+        cached.mtimeMs === stat.mtimeMs &&
+        cached.size === stat.size
+      ) {
+        return cached.metadata;
+      }
+
+      // Read first 50KB of transcript once per file version; enough for originator/topic.
+      const content = readTranscriptPrefix(transcriptPath, 50000);
+      const lines = content.split("\n").filter((l) => l.trim());
+      const metadata = {
+        originator: extractOriginatorFromLines(lines),
+        topic: extractTopicFromLines(lines),
+      };
+
+      transcriptMetadataCache.set(sessionId, {
+        transcriptPath,
+        mtimeMs: stat.mtimeMs,
+        size: stat.size,
+        metadata,
+      });
+      return metadata;
+    } catch (e) {
+      return { originator: null, topic: null };
+    }
+  }
 
   // Extract session originator from transcript
   function getSessionOriginator(sessionId) {
-    try {
-      if (!sessionId) return null;
-
-      const openclawDir = getOpenClawDir();
-      const transcriptPath = path.join(
-        openclawDir,
-        "agents",
-        "main",
-        "sessions",
-        `${sessionId}.jsonl`,
-      );
-
-      if (!fs.existsSync(transcriptPath)) return null;
-
-      const content = fs.readFileSync(transcriptPath, "utf8");
-      const lines = content.trim().split("\n");
-
-      // Find the first user message to extract originator
-      for (let i = 0; i < Math.min(lines.length, 10); i++) {
-        try {
-          const entry = JSON.parse(lines[i]);
-          if (entry.type !== "message" || !entry.message) continue;
-
-          const msg = entry.message;
-          if (msg.role !== "user") continue;
-
-          let text = "";
-          if (typeof msg.content === "string") {
-            text = msg.content;
-          } else if (Array.isArray(msg.content)) {
-            const textPart = msg.content.find((c) => c.type === "text");
-            if (textPart) text = textPart.text || "";
-          }
-
-          if (!text) continue;
-
-          // Extract Slack user from message patterns:
-          // Example: "[Slack #channel +6m 2026-01-27 15:31 PST] username (USERID): message"
-          // Pattern: "username (USERID):" where USERID is the sender's Slack ID
-          const slackUserMatch = text.match(/\]\s*([\w.-]+)\s*\(([A-Z0-9]+)\):/);
-
-          if (slackUserMatch) {
-            const username = slackUserMatch[1];
-            const userId = slackUserMatch[2];
-
-            const operator = getOperatorBySlackId(userId);
-
-            return {
-              userId,
-              username,
-              displayName: operator?.name || username,
-              role: operator?.role || "user",
-              avatar: operator?.avatar || null,
-            };
-          }
-        } catch (e) {}
-      }
-
-      return null;
-    } catch (e) {
-      return null;
-    }
+    return getSessionMetadata(sessionId).originator;
   }
 
   /**
@@ -152,65 +326,12 @@ function createSessionsModule(deps) {
    * @returns {string|null} - Primary topic or null
    */
   function getSessionTopic(sessionId) {
-    if (!sessionId) return null;
-    try {
-      const openclawDir = getOpenClawDir();
-      const transcriptPath = path.join(
-        openclawDir,
-        "agents",
-        "main",
-        "sessions",
-        `${sessionId}.jsonl`,
-      );
-      if (!fs.existsSync(transcriptPath)) return null;
-
-      // Read first 50KB of transcript (enough for topic detection, fast)
-      const fd = fs.openSync(transcriptPath, "r");
-      const buffer = Buffer.alloc(50000);
-      const bytesRead = fs.readSync(fd, buffer, 0, 50000, 0);
-      fs.closeSync(fd);
-
-      if (bytesRead === 0) return null;
-
-      const content = buffer.toString("utf8", 0, bytesRead);
-      const lines = content.split("\n").filter((l) => l.trim());
-
-      // Extract text from messages
-      // Transcript format: {type: "message", message: {role: "user"|"assistant", content: [...]}}
-      let textSamples = [];
-      for (const line of lines.slice(0, 30)) {
-        // First 30 entries
-        try {
-          const entry = JSON.parse(line);
-          if (entry.type === "message" && entry.message?.content) {
-            const msgContent = entry.message.content;
-            if (Array.isArray(msgContent)) {
-              msgContent.forEach((c) => {
-                if (c.type === "text" && c.text) {
-                  textSamples.push(c.text.slice(0, 500));
-                }
-              });
-            } else if (typeof msgContent === "string") {
-              textSamples.push(msgContent.slice(0, 500));
-            }
-          }
-        } catch (e) {
-          /* skip malformed lines */
-        }
-      }
-
-      if (textSamples.length === 0) return null;
-
-      const topics = detectTopics(textSamples.join(" "));
-      return topics.length > 0 ? topics.slice(0, 2).join(", ") : null;
-    } catch (e) {
-      return null;
-    }
+    return getSessionMetadata(sessionId).topic;
   }
 
   // Helper to map a single session (extracted from getSessions)
   function mapSession(s) {
-    const minutesAgo = s.ageMs ? s.ageMs / 60000 : Infinity;
+    const minutesAgo = typeof s.ageMs === "number" && s.ageMs >= 0 ? s.ageMs / 60000 : Infinity;
 
     // Determine channel type from key (messaging platform)
     let channel = "other";
@@ -226,9 +347,13 @@ function createSessionsModule(deps) {
     else if (s.key.includes(":cron:")) sessionType = "cron";
     else if (s.key === "agent:main:main") sessionType = "main";
 
-    const originator = getSessionOriginator(s.sessionId);
-    const label = s.groupChannel || s.displayName || parseSessionLabel(s.key);
-    const topic = getSessionTopic(s.sessionId);
+    const metadata = getSessionMetadata(s.sessionId);
+    const originator = metadata.originator;
+    const identity = channelIdentity(s);
+    const label = identity
+      ? parseSessionLabel(s.key, identity.channelName)
+      : s.groupChannel || s.displayName || parseSessionLabel(s.key);
+    const topic = metadata.topic;
 
     const totalTokens = s.totalTokens || 0;
     const sessionAgeMinutes = Math.max(1, Math.min(minutesAgo, 24 * 60));
@@ -238,7 +363,8 @@ function createSessionsModule(deps) {
       sessionKey: s.key,
       sessionId: s.sessionId,
       label: label,
-      groupChannel: s.groupChannel || null,
+      ...identity,
+      groupChannel: identity?.channelName || s.groupChannel || null,
       displayName: s.displayName || null,
       kind: s.kind,
       channel: channel,
@@ -247,6 +373,9 @@ function createSessionsModule(deps) {
       recentlyActive: minutesAgo < 60,
       minutesAgo: Math.round(minutesAgo),
       tokens: s.totalTokens || 0,
+      lifetimeTokens: typeof s.totalTokens === "number" ? s.totalTokens : null,
+      inputTokens: typeof s.inputTokens === "number" ? s.inputTokens : null,
+      outputTokens: typeof s.outputTokens === "number" ? s.outputTokens : null,
       model: s.model,
       originator: originator,
       topic: topic,
@@ -258,12 +387,19 @@ function createSessionsModule(deps) {
     };
   }
 
-  async function refreshSessionsCache() {
-    if (sessionsCache.refreshing) return; // Don't double-refresh
+  function refreshSessionsCache() {
+    if (sessionsRefreshPromise) return sessionsRefreshPromise;
+    sessionsRefreshPromise = performSessionsRefresh().finally(() => {
+      sessionsRefreshPromise = null;
+    });
+    return sessionsRefreshPromise;
+  }
+
+  async function performSessionsRefresh() {
     sessionsCache.refreshing = true;
 
     try {
-      const output = await runOpenClawAsync("sessions --json 2>/dev/null");
+      const output = await runOpenClawAsync(`${SESSION_LIST_COMMAND} --json`);
       const jsonStr = extractJSON(output);
       if (jsonStr) {
         const data = JSON.parse(jsonStr);
@@ -271,13 +407,17 @@ function createSessionsModule(deps) {
 
         // Map sessions (same logic as getSessions)
         const mapped = sessions.map((s) => mapSession(s));
+        const withOriginator = mapped.filter((s) => s.originator != null);
 
         sessionsCache = {
           sessions: mapped,
+          raw: sessions,
           timestamp: Date.now(),
           refreshing: false,
         };
-        console.log(`[Sessions Cache] Refreshed: ${mapped.length} sessions`);
+        console.log(
+          `[Sessions Cache] Refreshed: ${mapped.length} sessions (${withOriginator.length} with originator)`,
+        );
       }
     } catch (e) {
       console.error("[Sessions Cache] Refresh error:", e.message);
@@ -295,7 +435,19 @@ function createSessionsModule(deps) {
       refreshSessionsCache();
     }
 
-    return sessionsCache.sessions;
+    // Refresh cheap display metadata without rescanning transcripts or waiting for
+    // the slower session catalog refresh after the directory becomes available.
+    return sessionsCache.sessions.map((session, index) => {
+      const identity = channelIdentity(sessionsCache.raw[index] || { key: session.sessionKey });
+      return identity
+        ? {
+            ...session,
+            ...identity,
+            label: parseSessionLabel(session.sessionKey, identity.channelName),
+            groupChannel: identity.channelName,
+          }
+        : session;
+    });
   }
 
   function getSessions(options = {}) {
@@ -312,7 +464,7 @@ function createSessionsModule(deps) {
 
     // For limited requests, can still use sync (fast enough)
     try {
-      const output = runOpenClaw("sessions --json 2>/dev/null");
+      const output = runOpenClaw(`${SESSION_LIST_COMMAND} --json`);
       const jsonStr = extractJSON(output);
       if (jsonStr) {
         const data = JSON.parse(jsonStr);
@@ -331,20 +483,14 @@ function createSessionsModule(deps) {
   }
 
   // Read session transcript from JSONL file
-  function readTranscript(sessionId) {
-    const openclawDir = getOpenClawDir();
-    const transcriptPath = path.join(
-      openclawDir,
-      "agents",
-      "main",
-      "sessions",
-      `${sessionId}.jsonl`,
-    );
+  function readTranscript(sessionId, { withStatus = false } = {}) {
+    const result = (entries, available) => (withStatus ? { entries, available } : entries);
+    const transcriptPath = findTranscriptPath(sessionId);
 
     try {
-      if (!fs.existsSync(transcriptPath)) return [];
+      if (!transcriptPath) return result([], false);
       const content = fs.readFileSync(transcriptPath, "utf8");
-      return content
+      const entries = content
         .trim()
         .split("\n")
         .map((line) => {
@@ -355,18 +501,21 @@ function createSessionsModule(deps) {
           }
         })
         .filter(Boolean);
+      return result(entries, !content.trim() || entries.length > 0);
     } catch (e) {
       console.error("Failed to read transcript:", e.message);
-      return [];
+      return result([], false);
     }
   }
 
   // Get detailed session info
-  function getSessionDetail(sessionKey) {
+  function getSessionDetail(sessionKey, supplied = {}) {
     try {
       // Get basic session info
-      const listOutput = runOpenClaw("sessions --json 2>/dev/null");
-      let sessionInfo = null;
+      const listOutput = supplied.sessionInfo
+        ? null
+        : runOpenClaw(`${SESSION_LIST_COMMAND} --json`);
+      let sessionInfo = supplied.sessionInfo || null;
       const jsonStr = extractJSON(listOutput);
       if (jsonStr) {
         const data = JSON.parse(jsonStr);
@@ -378,7 +527,8 @@ function createSessionsModule(deps) {
       }
 
       // Read transcript directly from JSONL file
-      const transcript = readTranscript(sessionInfo.sessionId);
+      const { entries: transcript, available: transcriptAvailable } =
+        supplied.transcript || readTranscript(sessionInfo.sessionId, { withStatus: true });
       let messages = [];
       let tools = {};
       let facts = [];
@@ -477,13 +627,15 @@ function createSessionsModule(deps) {
       });
 
       // Generate summary from recent messages
-      let summary = "No activity yet.";
+      let summary = transcriptAvailable
+        ? "No activity yet."
+        : "Transcript unavailable — session metadata only.";
       const userMessages = messages.filter((m) => m.role === "user");
       const assistantMessages = messages.filter((m) => m.role === "assistant");
       let topics = [];
 
       if (messages.length > 0) {
-        summary = `${messages.length} messages (${userMessages.length} user, ${assistantMessages.length} assistant). `;
+        summary = `${messages.length}${supplied.recent ? " recent" : ""} messages (${userMessages.length} user, ${assistantMessages.length} assistant). `;
 
         // Identify main topics from all text using pattern matching
         const allText = messages.map((m) => m.text).join(" ");
@@ -510,31 +662,23 @@ function createSessionsModule(deps) {
               ? `${Math.round(ageMs / 3600000)} hours ago`
               : `${Math.round(ageMs / 86400000)} days ago`;
 
-      // Determine readable channel name
-      // Priority: groupChannel > displayName > parsed from key > fallback
-      let channelDisplay = "Other";
-      if (sessionInfo.groupChannel) {
-        channelDisplay = sessionInfo.groupChannel;
-      } else if (sessionInfo.displayName) {
-        channelDisplay = sessionInfo.displayName;
-      } else if (sessionKey.includes("slack")) {
-        // Try to parse channel name from key
-        const parts = sessionKey.split(":");
-        const channelIdx = parts.indexOf("channel");
-        if (channelIdx >= 0 && parts[channelIdx + 1]) {
-          const channelId = parts[channelIdx + 1].toLowerCase();
-          channelDisplay = CHANNEL_MAP[channelId] || `#${channelId}`;
-        } else {
-          channelDisplay = "Slack";
-        }
-      } else if (sessionKey.includes("telegram")) {
-        channelDisplay = "Telegram";
-      }
+      const identity = channelIdentity({ ...sessionInfo, key: sessionKey });
+      const channelDisplay =
+        identity?.channelName ||
+        (identity
+          ? parseSessionLabel(sessionKey)
+          : sessionInfo.groupChannel || sessionInfo.displayName || parseSessionLabel(sessionKey));
 
       // Use parsed totals or fallback to session info
-      const finalTotalTokens = totalInputTokens + totalOutputTokens || sessionInfo.totalTokens || 0;
-      const finalInputTokens = totalInputTokens || sessionInfo.inputTokens || 0;
-      const finalOutputTokens = totalOutputTokens || sessionInfo.outputTokens || 0;
+      const finalTotalTokens = supplied.recent
+        ? sessionInfo.totalTokens || 0
+        : totalInputTokens + totalOutputTokens || sessionInfo.totalTokens || 0;
+      const finalInputTokens = supplied.recent
+        ? sessionInfo.inputTokens || 0
+        : totalInputTokens || sessionInfo.inputTokens || 0;
+      const finalOutputTokens = supplied.recent
+        ? sessionInfo.outputTokens || 0
+        : totalOutputTokens || sessionInfo.outputTokens || 0;
 
       // Format model name (strip prefix)
       const modelDisplay = (detectedModel || sessionInfo.model || "-")
@@ -543,16 +687,21 @@ function createSessionsModule(deps) {
 
       return {
         key: sessionKey,
+        transcriptAvailable,
         kind: sessionInfo.kind,
         channel: channelDisplay,
-        groupChannel: sessionInfo.groupChannel || channelDisplay,
+        ...identity,
+        groupChannel: channelDisplay,
         model: modelDisplay,
         tokens: finalTotalTokens,
         inputTokens: finalInputTokens,
         outputTokens: finalOutputTokens,
-        cacheRead: totalCacheRead,
-        cacheWrite: totalCacheWrite,
-        estCost: totalCost > 0 ? `$${totalCost.toFixed(4)}` : null,
+        cacheRead: supplied.recent ? null : totalCacheRead,
+        cacheWrite: supplied.recent ? null : totalCacheWrite,
+        historyScope: supplied.recent
+          ? "Recent messages only; metadata totals cover the session."
+          : null,
+        estCost: !supplied.recent && totalCost > 0 ? `$${totalCost.toFixed(4)}` : null,
         lastActive,
         summary,
         topics, // Array of detected topics
@@ -573,15 +722,90 @@ function createSessionsModule(deps) {
     }
   }
 
+  async function getSessionDetailAsync(sessionKey) {
+    if (!sessionsCache.timestamp) {
+      void refreshSessionsCache();
+      return { error: "Session catalog is loading; retry shortly." };
+    } else getSessionsCached();
+    const sessionInfo = sessionsCache.raw.find((s) => s.key === sessionKey);
+    if (!sessionInfo)
+      return {
+        error: sessionsCache.timestamp
+          ? "Session not found"
+          : "Session catalog unavailable; retry shortly.",
+      };
+    const cached = detailCache.get(sessionKey);
+    if (
+      cached &&
+      cached.sessionId === sessionInfo.sessionId &&
+      Date.now() - cached.timestamp < 30000
+    )
+      return cached.promise;
+    const entry = { timestamp: Date.now(), sessionId: sessionInfo.sessionId, promise: null };
+    entry.promise = (async () => {
+      try {
+        const output = await runOpenClawAsync(
+          [
+            "gateway",
+            "call",
+            "chat.history",
+            "--params",
+            JSON.stringify({ sessionKey, limit: 50 }),
+            "--timeout",
+            "5000",
+            "--json",
+          ],
+          { timeout: 7000 },
+        );
+        const data = JSON.parse(extractJSON(output));
+        if (
+          data?.sessionKey === sessionKey &&
+          (!data.sessionId || data.sessionId === sessionInfo.sessionId) &&
+          Array.isArray(data.messages)
+        ) {
+          return getSessionDetail(sessionKey, {
+            sessionInfo,
+            recent: true,
+            transcript: {
+              available: true,
+              entries: data.messages.map((message) => ({
+                type: "message",
+                message,
+                timestamp: message.timestamp,
+              })),
+            },
+          });
+        }
+      } catch {
+        /* Legacy stores can still provide a local transcript. */
+      }
+      return getSessionDetail(sessionKey, { sessionInfo });
+    })();
+    detailCache.set(sessionKey, entry);
+    while (detailCache.size > 100) detailCache.delete(detailCache.keys().next().value);
+    return entry.promise;
+  }
+
   return {
+    findTranscriptPath,
     getSessionOriginator,
     getSessionTopic,
     mapSession,
     refreshSessionsCache,
     getSessionsCached,
+    getCatalogStatus: () => ({
+      observedAt: sessionsCache.timestamp ? new Date(sessionsCache.timestamp).toISOString() : null,
+      status: !sessionsCache.timestamp
+        ? "loading"
+        : Date.now() - sessionsCache.timestamp > SESSIONS_CACHE_TTL
+          ? "stale"
+          : "ready",
+      refreshing: sessionsCache.refreshing,
+    }),
     getSessions,
     readTranscript,
     getSessionDetail,
+    getSessionDetailAsync,
     parseSessionLabel,
   };
 }

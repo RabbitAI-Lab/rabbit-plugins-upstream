@@ -9,123 +9,73 @@ metadata: {"openclaw":{"emoji":"🌐","primaryEnv":"DOMAINKITS_API_KEY"}}
 ## Why DomainKits?
 
 With DomainKits MCP your AI can:
-- **Data-driven actions** -- See what's registering now, what's expiring tomorrow, what just dropped
-- **Make informed decisions** -- Analyze keyword value, brand risk, and safety in seconds
-- **Execute instantly** -- From idea to available domain with pricing in seconds
+- **Data-driven actions**: see what's registering now, what's expiring, and what just dropped
+- **Informed decisions**: analyze keyword value and brand risk in seconds
+- **Fast execution**: go from an idea to an available domain with pricing in seconds
 
 ## Setup
 
-### Claude Code
-```bash
-claude mcp add domainkits https://api.domainkits.com/v1/mcp
-```
+- Endpoint: `https://api.domainkits.com/v1/mcp` (optional header `X-API-Key` for account limits)
+- Claude Code: `claude mcp add --transport http domainkits https://api.domainkits.com/v1/mcp`
+- Setup for Claude.ai, Claude Desktop, Gemini CLI, Cursor: [domainkits.com/mcp](https://domainkits.com/mcp)
 
-With API key (for higher limits):
-```bash
-claude mcp add domainkits https://api.domainkits.com/v1/mcp --header "X-API-Key: YOUR_KEY"
-```
+## How to use the tools
 
-### Claude.ai
-Connect DomainKits via **Settings > Connectors**. No manual configuration needed.
+DomainKits tools return domain data; the analysis is yours. Their data is fresher than your training knowledge, so for anything recent, go by the tool result.
 
-### Cursor / Other MCP Clients
-Add to your MCP config:
-```json
-{
-  "mcpServers": {
-    "domainkits": {
-      "url": "https://api.domainkits.com/v1/mcp"
-    }
-  }
-}
-```
+Each tool's description and input schema define its data, parameters, and accepted values. Follow them as written, and do not carry one tool's parameter values over to another.
 
-With API key:
-```json
-{
-  "mcpServers": {
-    "domainkits": {
-      "url": "https://api.domainkits.com/v1/mcp",
-      "headers": {
-        "X-API-Key": "YOUR_KEY"
-      }
-    }
-  }
-}
-```
+Before a multi-tool sequence the user did not ask for, confirm the goal with the user. Tool calls count against their quota.
 
-## Tools
+### Pick the tool by lifecycle stage
 
-### Search
-- `nrds` -- Newly registered domains, by keyword or browse a gTLD
-- `aged` -- Domains with 5-20+ years history
-- `expired` -- Domains entering deletion cycle, by keyword or browse a gTLD
-- `deleted` -- Just-dropped domains, available now
-- `active` -- Live registered domains (~240M gTLD database)
-- `market` -- Domains with marketplace listing data, by keyword or browse a gTLD
-- `ns_reverse` -- Domains on a specific nameserver
-- `unregistered_ai` -- Unregistered short .ai domains (3-letter, pattern-based)
-- `domain_changes` -- Domain change detection across 4M+ monitored domains
-- `typosquat` -- Generate typosquat permutations and check which variants are registered
+| Stage | Tools | What they find |
+|---|---|---|
+| Newly registered | `nrds_live`, `nrds` | Recent registrations by keyword or TLD. `nrds_live` for the newest names, `nrds` for a longer history with more filters |
+| Registered | `active`, `aged`, `market` | Live registered domains. `aged` for long registration histories, `market` for names with marketplace listing data |
+| Expired | `expired` | Domains in the deletion cycle, not yet open for registration |
+| Deleted | `deleted` | Domains that completed the deletion cycle and are open for registration |
+| Changes | `domain_changes` | Recent registration and status changes to premium names |
+| Unregistered | `unregistered_ai` | Short .ai names open for registration |
 
-### Lookup
-- `available` -- Single-domain availability with pricing
-- `dns` -- DNS records (A, AAAA, MX, NS, TXT, SOA)
-- `whois` -- WHOIS/RDAP registration data
-- `safety` -- Google Safe Browsing status (requires account)
-- `tld_check` -- Keyword availability across TLDs
-- `keyword_data` -- Google Ads keyword data (requires account)
-- `price` -- Registration and renewal prices by TLD
-- `market_price` -- Secondary market listing prices
-- `backlink_summary` -- SEO backlink profile (requires account)
+### Look up one domain
 
-### Trends
-- `keywords_trends` -- Hot, emerging, and prefix keywords in domain registrations
-- `tld_trends` -- Historical registration trends by TLD
-- `tld_rank` -- TLD rankings by registration volume
+- `whois`: registration data. `epp_status` explains the status codes it returns.
+- `dns`: DNS records.
+- `ip_lookup`: network operator and approximate location of an IP or domain.
+- `registrar`: a registrar's accreditation and parent company.
+- `available`: whether one domain can be registered, and its price. `bulk_available`: the same question for a list of domains.
+- `tld_check`, `bulk_tld`: one name across TLDs.
+- `price`: registration and renewal prices by TLD. `market_price`: aftermarket listing price.
+- `backlink_summary`: backlink profile. `keyword_data`: keyword search data.
+- `keywords_trends`: what people are registering recently, as keyword lists. `tld_trends`, `tld_rank`: registration trends by TLD.
 
-### Bulk
-- `bulk_tld` -- Keyword popularity across TLDs
-- `bulk_available` -- Batch availability check (up to 10 domains)
+### Connect results when the user asks
 
-### Stateful (require memory)
-- `preferences` -- Manage memory and saved preferences (action: get/set/delete)
-- `monitor` -- Domain monitoring with WHOIS/DNS/page change checks (action: get/set/update/delete)
-- `strategy` -- Save and execute domain strategies (action: get/set/update/delete)
-- `usage` -- Current tier, per-group usage, and remaining quota
+- Infrastructure behind a domain: nameservers from `whois` or `dns`, then `ns_reverse` for other domains on those nameservers. `ip_lookup` adds the network operator.
+- Lookalikes of a brand: `typosquat` for registered variants of a domain; `nrds_live` or `nrds` for new registrations containing the brand keyword.
+- Current state of an `expired` result: `whois`.
+- Registrability of a `deleted` result: `available`.
+- Whether a domain is flagged as unsafe: DomainKits has no threat check. Use a URL threat-check tool the user has connected, or tell the user this check is unavailable.
+
+### Report results
+
+- For paged results, report the total separately from the number of results reviewed, and say how many pages were checked. Fetch more pages only when the user wants them.
+- A tool's own message about a result, such as no records found, is part of the answer. Pass it on rather than treating it as a failure.
+- On a limit or plan message, do not retry the same call. Tell the user what was limited.
+
+### Account tools
+
+- `usage`: the user's current tier and remaining quota.
+- `preferences`, `monitor`, `strategy`: stored on the user's DomainKits account. Create, change, or delete them only with the user's explicit consent.
 
 ## Skills
 
-DomainKits MCP serves raw data. For domain industry workflows (naming consultation, competitive analysis, keyword intelligence, expired domain due diligence, and more), see [DomainKits Skills](https://github.com/ABTdomain/domainkits-skills), an open-source collection of workflow prompts that any AI assistant can use on top of this data.
+DomainKits MCP serves raw data. For domain workflows (brand protection, domain analysis, comparative valuation, name generation, naming advice, keyword intelligence, keyword trends, and market briefings), see [DomainKits Skills](https://github.com/ABTdomain/domainkits-skills), an open-source collection of workflow skills that any AI assistant can use on top of this data.
 
-## Instructions
+## Access
 
-When user wants domain suggestions:
-1. Brainstorm names based on keywords
-2. Call `bulk_available` to validate
-3. Show available options with prices
-
-When user wants to analyze a domain:
-1. Call `whois`, `dns`, `safety`
-2. Give a clear verdict
-
-Output rules:
-- Default to `no_hyphen=true` and `no_number=true`
-- Use `usage` to check remaining quota before heavy operations
-
-## Access Tiers
-
-| | Guest | Member (free) | Premium | Platinum |
-|---|---|---|---|---|
-| **Search tools** | 5/min, 10/day | 20/min, 2000/day | 60/min, 2000/day | Unlimited |
-| **Lookup tools** | 5/min, 10/day | Varies | 20-50/min | Unlimited or high cap |
-| **Trend tools** | 5/min, 10/day | 10/min, 100/day | Unlimited | Unlimited |
-| **Bulk tools** | 5/min, 10/day | 5/min, 50/day | 8/min, 1000/day | Unlimited |
-| **Safety, Backlinks, Keywords** | Blocked | Limited | Limited | High cap or unlimited |
-| **Monitors** | -- | 5 | 50 | Unlimited |
-| **Strategies** | -- | 1 | 6 | Unlimited |
-
-Register free at [domainkits.com](https://domainkits.com/register). [View pricing](https://domainkits.com/pricing).
+Works without an API key on a guest quota. A free account raises it; paid tiers raise it further. Current per-tier limits are listed at [domainkits.com/pricing](https://domainkits.com/pricing); the `usage` tool reports the live quota for the current account. Register free at [domainkits.com](https://domainkits.com/register).
 
 ## Privacy
 

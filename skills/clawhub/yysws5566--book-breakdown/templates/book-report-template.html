@@ -1,0 +1,535 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>拆书报告 - 《书名》</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=JetBrains+Mono:wght@500;700&display=swap" rel="stylesheet">
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  :root {
+    --bk-orange: #F59E0B;
+    --bk-orange-soft: #FEF3C7;
+    --bk-blue: #3B82F6;
+    --bk-blue-soft: #DBEAFE;
+    --bg: #FAFAFC;
+    --bg-soft: #F4F4F8;
+    --surface: #FFFFFF;
+    --border: #E5E7EB;
+    --border-soft: #F1F2F6;
+    --text: #0F172A;
+    --text-2: #475569;
+    --text-3: #94A3B8;
+    --success: #10B981;
+    --success-soft: #D1FAE5;
+    --warning: #F59E0B;
+    --warning-soft: #FEF3C7;
+    --danger: #FE2C55;
+    --danger-soft: #FFE5EC;
+    --shadow-sm: 0 1px 2px rgba(15, 23, 42, 0.04);
+    --shadow-md: 0 4px 12px rgba(15, 23, 42, 0.06), 0 2px 4px rgba(15, 23, 42, 0.04);
+    --shadow-lg: 0 20px 40px rgba(245, 158, 11, 0.12), 0 8px 16px rgba(15, 23, 42, 0.04);
+  }
+  body {
+    font-family: 'Inter', -apple-system, "PingFang SC", "Microsoft YaHei", sans-serif;
+    background: var(--bg);
+    background-image:
+      radial-gradient(ellipse 80% 60% at 10% 0%, rgba(245, 158, 11, 0.07), transparent 60%),
+      radial-gradient(ellipse 60% 50% at 95% 30%, rgba(59, 130, 246, 0.07), transparent 60%);
+    background-attachment: fixed;
+    color: var(--text);
+    line-height: 1.65;
+    padding: 32px 24px 80px;
+    letter-spacing: -0.005em;
+    -webkit-font-smoothing: antialiased;
+  }
+  .container { max-width: 1180px; margin: 0 auto; }
+
+  /* 1. Hero */
+  .hero {
+    position: relative;
+    background: linear-gradient(135deg, #F59E0B 0%, #F97316 45%, #3B82F6 120%);
+    border-radius: 28px;
+    padding: 40px 44px;
+    margin-bottom: 24px;
+    overflow: hidden;
+    box-shadow: var(--shadow-lg);
+    color: #fff;
+  }
+  .hero::before {
+    content: ''; position: absolute;
+    top: -120px; right: -100px;
+    width: 400px; height: 400px;
+    background: radial-gradient(circle, rgba(255,255,255,0.3), transparent 70%);
+    border-radius: 50%; filter: blur(40px);
+  }
+  .hero::after {
+    content: '📚'; position: absolute;
+    bottom: -50px; right: -10px;
+    font-size: 200px; line-height: 1;
+    opacity: 0.14;
+  }
+  .hero-content { position: relative; z-index: 2; }
+  .hero-eyebrow {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 5px 12px;
+    background: rgba(255,255,255,0.2);
+    backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600;
+    margin-bottom: 14px;
+  }
+  .hero h1 { font-size: 34px; font-weight: 800; letter-spacing: -0.02em; margin-bottom: 12px; line-height: 1.15; }
+  .hero-meta { display: flex; gap: 18px; flex-wrap: wrap; font-size: 13px; opacity: 0.92; margin-bottom: 22px; }
+  .hero-meta span { display: inline-flex; align-items: center; gap: 6px; }
+  .hero-meta span::before { content: '·'; opacity: 0.4; }
+  .hero-meta span:first-child::before { display: none; }
+  .hero-conclusion {
+    background: rgba(255,255,255,0.18);
+    backdrop-filter: blur(20px); -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.3);
+    border-radius: 16px;
+    padding: 18px 22px;
+    box-shadow: 0 8px 30px rgba(0,0,0,0.1), inset 0 1px 0 rgba(255,255,255,0.4);
+    font-size: 15px; line-height: 1.7;
+  }
+  .hero-conclusion strong { font-weight: 700; }
+  .hero-conclusion .icon {
+    display: inline-flex;
+    width: 28px; height: 28px;
+    background: #fff; color: var(--bk-orange);
+    border-radius: 50%; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+    margin-right: 8px; vertical-align: middle;
+  }
+
+  /* 2. Bento KPI */
+  .bento { display: grid; grid-template-columns: repeat(12, 1fr); gap: 16px; margin-bottom: 24px; }
+  .b-card {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 20px;
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    transition: 220ms cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+  .b-card:hover { transform: translateY(-2px); box-shadow: var(--shadow-md); }
+  .b-card.span-3 { grid-column: span 3; }
+  .b-card.span-6 { grid-column: span 6; }
+  .b-card.gradient::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: linear-gradient(90deg, var(--bk-orange), var(--bk-blue));
+  }
+  .b-label {
+    font-size: 12px; font-weight: 500;
+    color: var(--text-3); text-transform: uppercase;
+    letter-spacing: 0.06em; margin-bottom: 10px;
+  }
+  .b-value {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 36px; font-weight: 800;
+    letter-spacing: -0.02em; line-height: 1.1;
+    background: linear-gradient(135deg, var(--bk-orange), var(--bk-blue));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+  }
+  .b-value.success { background: linear-gradient(135deg, #10B981, #059669); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .b-sub { font-size: 12px; color: var(--text-3); margin-top: 6px; }
+
+  /* 3. Section 通用 */
+  section {
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    border-radius: 24px;
+    padding: 32px;
+    margin-bottom: 20px;
+    box-shadow: var(--shadow-sm);
+  }
+  .sec-head { display: flex; align-items: center; gap: 14px; margin-bottom: 24px; }
+  .sec-icon {
+    width: 40px; height: 40px;
+    background: linear-gradient(135deg, var(--bk-orange-soft), var(--bk-blue-soft));
+    border-radius: 12px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 20px;
+  }
+  .sec-head h2 { font-size: 20px; font-weight: 700; letter-spacing: -0.01em; }
+  .sec-head .sub { color: var(--text-3); font-size: 13px; margin-top: 2px; font-weight: 400; }
+
+  /* 4. 总概括 */
+  .summary-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .sum-item {
+    background: linear-gradient(135deg, #fff, var(--bg-soft));
+    border: 1px solid var(--border-soft);
+    border-radius: 14px;
+    padding: 18px 20px;
+  }
+  .sum-item .k { font-size: 12px; color: var(--text-3); font-weight: 600; letter-spacing: 0.05em; margin-bottom: 8px; }
+  .sum-item .v { font-size: 14px; color: var(--text); line-height: 1.7; }
+  .sum-item.full { grid-column: span 2; }
+
+  /* 5. 核心概念 */
+  .concept {
+    background: linear-gradient(135deg, #fff, var(--bg-soft));
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 20px 22px;
+    margin-bottom: 12px;
+    transition: 200ms;
+    border-left: 4px solid var(--bk-orange);
+  }
+  .concept:hover { box-shadow: var(--shadow-sm); transform: translateX(2px); }
+  .concept-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .concept-title { font-size: 15px; font-weight: 700; display: flex; align-items: center; gap: 8px; }
+  .concept-level { font-size: 11px; color: var(--text-3); background: var(--bg-soft); padding: 2px 8px; border-radius: 100px; }
+  .concept .plain {
+    margin: 10px 0;
+    padding: 12px 16px;
+    background: var(--bk-orange-soft);
+    border-radius: 10px;
+    font-size: 14px; font-weight: 600;
+    border-left: 3px solid var(--bk-orange);
+  }
+  .concept .desc { font-size: 13px; color: var(--text-2); line-height: 1.7; margin-bottom: 6px; }
+  .concept .note { font-size: 12.5px; color: var(--danger); background: var(--danger-soft); padding: 8px 12px; border-radius: 8px; }
+
+  /* 6. 金句墙 */
+  .quote-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 14px; }
+  .quote-card {
+    background: linear-gradient(135deg, var(--bk-blue-soft), #fff);
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    padding: 20px;
+    position: relative;
+  }
+  .quote-card::before {
+    content: '"'; position: absolute; top: 6px; left: 14px;
+    font-size: 48px; font-weight: 900; color: var(--bk-blue); opacity: 0.25;
+  }
+  .quote-card .q { font-size: 15px; font-weight: 600; line-height: 1.6; margin-bottom: 10px; }
+  .quote-card .why { font-size: 12.5px; color: var(--text-2); line-height: 1.6; }
+  .quote-card .src { font-size: 11px; color: var(--text-3); margin-top: 8px; }
+
+  /* 7. 逐章拆解 */
+  .chapter {
+    padding: 20px 22px;
+    border: 1px solid var(--border-soft);
+    border-radius: 16px;
+    margin-bottom: 12px;
+    transition: 200ms;
+  }
+  .chapter:hover { box-shadow: var(--shadow-sm); }
+  .chapter.core { border-left: 4px solid var(--success); background: linear-gradient(to right, var(--success-soft), transparent 40%); }
+  .chapter.aux { border-left: 4px solid var(--bk-orange); }
+  .chapter.trans { border-left: 4px solid var(--text-3); opacity: 0.75; }
+  .chapter-head { display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
+  .chapter-title { font-size: 15px; font-weight: 700; }
+  .chapter .one-line { font-size: 14px; color: var(--text-2); margin-bottom: 8px; }
+  .chapter ul { list-style: none; font-size: 13px; line-height: 1.8; }
+  .chapter li { padding-left: 16px; position: relative; color: var(--text-2); }
+  .chapter li::before { content: '▸'; position: absolute; left: 0; color: var(--bk-blue); }
+
+  /* 8. 逻辑链 */
+  .logic-chain { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin: 10px 0; }
+  .logic-node {
+    padding: 8px 16px;
+    background: linear-gradient(135deg, var(--bk-orange-soft), var(--bk-blue-soft));
+    border: 1px solid var(--border-soft);
+    border-radius: 100px;
+    font-size: 13px; font-weight: 600;
+  }
+  .logic-arrow { color: var(--bk-blue); font-weight: 800; font-size: 16px; }
+  .logic-explain { font-size: 13px; color: var(--text-2); background: var(--bg-soft); padding: 12px 16px; border-radius: 10px; margin-top: 12px; }
+
+  /* 9. 行动清单 */
+  .action {
+    display: flex; gap: 16px;
+    padding: 18px 20px;
+    margin-bottom: 12px;
+    border-radius: 16px;
+    background: var(--surface);
+    border: 1px solid var(--border-soft);
+    transition: 200ms;
+  }
+  .action:hover { transform: translateX(4px); }
+  .action.p0 { border-left: 4px solid var(--danger); background: linear-gradient(to right, var(--danger-soft), transparent 40%); }
+  .action.p1 { border-left: 4px solid var(--warning); background: linear-gradient(to right, var(--warning-soft), transparent 40%); }
+  .action.p2 { border-left: 4px solid var(--bk-blue); background: linear-gradient(to right, var(--bk-blue-soft), transparent 40%); }
+  .action-icon {
+    flex-shrink: 0; width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px; font-weight: 700;
+  }
+  .p0 .action-icon { background: var(--danger); color: #fff; }
+  .p1 .action-icon { background: var(--warning); color: #fff; }
+  .p2 .action-icon { background: var(--bk-blue); color: #fff; }
+  .action-body { flex: 1; }
+  .action-title { font-size: 15px; font-weight: 700; margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+  .action-badge { padding: 2px 8px; border-radius: 6px; font-size: 11px; font-weight: 700; letter-spacing: 0.05em; }
+  .p0 .action-badge { background: var(--danger); color: #fff; }
+  .p1 .action-badge { background: var(--warning); color: #fff; }
+  .p2 .action-badge { background: var(--bk-blue); color: #fff; }
+  .action-detail { font-size: 13px; color: var(--text-2); margin-top: 6px; line-height: 1.7; }
+
+  /* 10. 标签 */
+  .tag {
+    display: inline-flex; align-items: center;
+    padding: 4px 10px;
+    background: var(--bk-orange-soft);
+    color: var(--bk-orange);
+    border-radius: 100px;
+    font-size: 12px; font-weight: 600;
+    margin: 2px;
+  }
+  .tag.blue { background: var(--bk-blue-soft); color: #2563EB; }
+  .tag.green { background: var(--success-soft); color: var(--success); }
+
+  /* 11. 页脚 */
+  footer { text-align: center; margin-top: 32px; padding: 24px; color: var(--text-3); font-size: 13px; line-height: 2; }
+  footer strong {
+    background: linear-gradient(135deg, var(--bk-orange), var(--bk-blue));
+    -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text;
+    font-weight: 700;
+  }
+
+  /* 12. 响应式 */
+  @media (max-width: 900px) {
+    .b-card.span-3 { grid-column: span 6; }
+    .summary-grid, .quote-grid { grid-template-columns: 1fr; }
+    .hero h1 { font-size: 26px; }
+  }
+  @media (max-width: 600px) {
+    body { padding: 16px 12px 60px; }
+    .hero { padding: 28px 24px; }
+    section { padding: 24px 20px; }
+    .b-card.span-3 { grid-column: span 12; }
+  }
+</style>
+</head>
+<body>
+<div class="container">
+
+  <!-- 1. Hero 头部 -->
+  <header class="hero">
+    <div class="hero-content">
+      <span class="hero-eyebrow">📚 拆书报告</span>
+      <h1>《书名》 · 核心提炼与行动指南</h1>
+      <div class="hero-meta">
+        <span>作者 [作者名]</span>
+        <span>拆书深度 [核心]</span>
+        <span>📅 2026-08-23</span>
+      </div>
+      <div class="hero-conclusion">
+        <span class="icon">💡</span><strong>一句话总结</strong>：[1句话，主语+核心动作+核心对象+目的]
+      </div>
+    </div>
+  </header>
+
+  <!-- 2. Bento KPI -->
+  <div class="bento">
+    <div class="b-card span-3 gradient">
+      <div class="b-label">📖 推荐指数</div>
+      <div class="b-value success">🟢</div>
+      <div class="b-sub">推荐 / 可看可不看 / 不推荐</div>
+    </div>
+    <div class="b-card span-3 gradient">
+      <div class="b-label">📄 全书页数</div>
+      <div class="b-value">320</div>
+      <div class="b-sub">核心提炼 [N] 个概念</div>
+    </div>
+    <div class="b-card span-3 gradient">
+      <div class="b-label">🔑 核心概念</div>
+      <div class="b-value">[N]</div>
+      <div class="b-sub">已提炼可落地概念</div>
+    </div>
+    <div class="b-card span-3 gradient">
+      <div class="b-label">✅ 行动项</div>
+      <div class="b-value">[N]</div>
+      <div class="b-sub">立即执行清单</div>
+    </div>
+  </div>
+
+  <!-- 3. 总概括 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-icon">📖</div>
+      <div>
+        <h2>总概括</h2>
+        <div class="sub">这本书在回答什么问题？作者怎么回答的？</div>
+      </div>
+    </div>
+    <div class="summary-grid">
+      <div class="sum-item full">
+        <div class="k">❓ 这本书在回答什么问题</div>
+        <div class="v">[核心命题，1句话]</div>
+      </div>
+      <div class="sum-item full">
+        <div class="k">✍️ 作者的答案</div>
+        <div class="v">[核心主张，1-2句话]</div>
+      </div>
+      <div class="sum-item">
+        <div class="k">📂 书的类型</div>
+        <div class="v">[理论型 / 工具型 / 叙事型 / 综述型]</div>
+      </div>
+      <div class="sum-item">
+        <div class="k">🎯 适合谁读</div>
+        <div class="v">[人群] — [为什么]</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 4. 核心概念 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-icon">🔑</div>
+      <div>
+        <h2>核心概念提炼</h2>
+        <div class="sub">3-7 个关键概念，每个配人话翻译</div>
+      </div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-head">
+        <div class="concept-title">🟢 核心概念 1：[概念名]<span class="concept-level">重要度：核心</span></div>
+      </div>
+      <div class="desc"><strong>作者的定义：</strong>[1-2句话，忠实原文]</div>
+      <div class="plain">💬 说人话就是：[大白话解释，≤3句]</div>
+      <div class="desc"><strong>什么时候用：</strong>[具体场景]</div>
+      <div class="note">⚠️ 注意：[概念局限/边界条件]</div>
+    </div>
+
+    <div class="concept">
+      <div class="concept-head">
+        <div class="concept-title">🟢 核心概念 2：[概念名]<span class="concept-level">重要度：核心</span></div>
+      </div>
+      <div class="desc"><strong>作者的定义：</strong>[1-2句话，忠实原文]</div>
+      <div class="plain">💬 说人话就是：[大白话解释，≤3句]</div>
+      <div class="desc"><strong>什么时候用：</strong>[具体场景]</div>
+    </div>
+  </section>
+
+  <!-- 5. 金句墙 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-icon">💬</div>
+      <div>
+        <h2>金句摘录</h2>
+        <div class="sub">信息密度最高的原句，配使用场景说明</div>
+      </div>
+    </div>
+    <div class="quote-grid">
+      <div class="quote-card">
+        <div class="q">"[金句原文]"</div>
+        <div class="why">为什么重要：[一句话]</div>
+        <div class="src">📄 第 X 章</div>
+      </div>
+      <div class="quote-card">
+        <div class="q">"[金句原文]"</div>
+        <div class="why">为什么重要：[一句话]</div>
+        <div class="src">📄 第 X 章</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 6. 逐章拆解 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-icon">📑</div>
+      <div>
+        <h2>逐章拆解</h2>
+        <div class="sub">核心章深度拆，过渡章一句话</div>
+      </div>
+    </div>
+
+    <div class="chapter core">
+      <div class="chapter-head"><div class="chapter-title">第 X 章：[章节标题]</div><span class="tag green">核心章节</span></div>
+      <div class="one-line">一句话总结：[本章核心观点]</div>
+      <ul>
+        <li>要点 1：[2-3句话阐述]</li>
+        <li>要点 2：[2-3句话阐述]</li>
+        <li>案例：[讲了什么] → [证明了什么]</li>
+      </ul>
+    </div>
+
+    <div class="chapter aux">
+      <div class="chapter-head"><div class="chapter-title">第 X 章：[章节标题]</div><span class="tag">辅助章节</span></div>
+      <div class="one-line">一句话总结：[本章核心观点]</div>
+      <ul>
+        <li>要点 1：[2-3句话阐述]</li>
+      </ul>
+    </div>
+
+    <div class="chapter trans">
+      <div class="chapter-head"><div class="chapter-title">第 X 章：[章节标题]</div><span class="tag blue">过渡章节</span></div>
+      <div class="one-line">一句话总结：[本章核心观点]</div>
+    </div>
+  </section>
+
+  <!-- 7. 全书逻辑链 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-icon">🧭</div>
+      <div>
+        <h2>全书逻辑链</h2>
+        <div class="sub">章节如何推进全书论证</div>
+      </div>
+    </div>
+    <div class="logic-chain">
+      <span class="logic-node">第1章 [提出问题]</span>
+      <span class="logic-arrow">→</span>
+      <span class="logic-node">第2章 [分析原因]</span>
+      <span class="logic-arrow">→</span>
+      <span class="logic-node">第3章 [方案A]</span>
+      <span class="logic-arrow">→</span>
+      <span class="logic-node">第4章 [整合行动]</span>
+    </div>
+    <div class="logic-explain">💡 [1-2句话解释逻辑推进线]</div>
+  </section>
+
+  <!-- 8. 行动清单 -->
+  <section>
+    <div class="sec-head">
+      <div class="sec-icon">✅</div>
+      <div>
+        <h2>行动清单</h2>
+        <div class="sub">按优先级排序，P0 必做</div>
+      </div>
+    </div>
+
+    <div class="action p0">
+      <div class="action-icon">!</div>
+      <div class="action-body">
+        <div class="action-title">[行动标题] <span class="action-badge">P0</span></div>
+        <div class="action-detail">[具体可执行的动作 + 为什么重要]</div>
+      </div>
+    </div>
+
+    <div class="action p1">
+      <div class="action-icon">⚠</div>
+      <div class="action-body">
+        <div class="action-title">[行动标题] <span class="action-badge">P1</span></div>
+        <div class="action-detail">[具体可执行的动作]</div>
+      </div>
+    </div>
+
+    <div class="action p2">
+      <div class="action-icon">★</div>
+      <div class="action-body">
+        <div class="action-title">[行动标题] <span class="action-badge">P2</span></div>
+        <div class="action-detail">[具体可执行的动作]</div>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    📅 拆书日期：2026-08-23 · <strong>📚 拆书家 book-breakdown v1.0</strong><br>
+    💡 拆书是提炼，不是替代。值得细读的书，请回到原文。
+  </footer>
+
+</div>
+</body>
+</html>

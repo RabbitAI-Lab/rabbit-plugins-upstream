@@ -1,6 +1,6 @@
 ---
 name: invest
-version: 0.20.1 # x-release-please-version
+version: 0.21.0 # x-release-please-version
 description: openInvest multi-asset AI investment committee — **daily use**. Read portfolio / live prices / strategy / decision history / adjust positions / run a 4-role LLM committee for an investment verdict. Supports any yfinance symbol (A-share / HK / US / ETF / crypto / commodities) and any currency. **Two paths** — (1) Coordinator, Claude Code spawns 4 subagents, saves DeepSeek tokens; (2) Direct, any agent (Codex / Hermes / OpenClaw / Cursor / Cline / plain script) runs `run.sh run_committee <SYM>` for a one-shot verdict. **Trigger scenarios** — "show portfolio / 看看我的持仓", "how is my P&L / 我现在涨了多少", "should I buy/sell X / 该不该买卖X", "analyze X / 分析一下X", "run committee on X / 跑委员会", "track AAPL / 跟踪苹果", "add/trim a position, log a trade / 加仓减仓记一笔". **First-time install uses a separate skill `invest-setup`** (switch to it when `doctor` returns `needs_setup`). Backend — longsizhuo/openInvest.
 platforms: [linux, macos]
 metadata:
@@ -244,6 +244,10 @@ holdings while browsing/searching, proactively call `ingest_event` to feed it in
 event ledger** (MCP tool, or CLI `ingest_event
 --title --url [--snippet --source]`) — the backend handles normalization / severity
 grading / dedup / RAG recall, and resending the same item never double-books.
+A new item that grades severity ≥ mid, non-neutral, and hits a holding/target automatically
+re-runs the committee for that symbol (rate-limited and shared with the crawler: 12h per-symbol
+cooldown that a strictly higher-severity item can bypass, ≤4 per rolling 24h; the result's
+`committee_task_id` says whether one fired) — so feed material news only. In advisory mode ingestion never triggers anything.
 A-share / regional-market news especially: that is the crawler's blind spot and you are
 the only source. If the host has a quotes/news skill installed (e.g. Longbridge), its
 news is worth feeding too — the ledger cares about the information, not where it came from.
@@ -268,7 +272,10 @@ core duty (issue #133 Decision 2).
 
 **User asks "how often did I follow the advice / is the committee reliable"**:
 `decisions --days 90` → adoption rate + the full verdict↔intervention↔execution↔outcome chain per decision;
-pair with `discipline` for the counterfactual P&L of rule-blocked actions. When the user
+pair with `discipline` for the counterfactual P&L of rule-blocked actions (its inaction rate counts
+**live** verdicts only). For hit rates use `GET /api/verdict_review/summary`: it returns separate
+`live` / `backtest` / `contaminated` buckets — quote only `live` as performance, never add the
+buckets together, and say "sample too small" when a rate is `null` (n<30). When the user
 rejects the same class of recommendation several times in a row, proactively point out
 "the divergence pattern between you and the committee" — that is not a bad thing; it is
 a signal worth recording.

@@ -6,10 +6,12 @@ Three specific failure modes a naive tracking/case change introduces: wrong all-
 
 ## What it does
 
-- **All-caps tracking formula**: `TS = max(5%, min(12%, 160/FS))`, compressed to `+3–5%` above 32px — a precise, continuously-scaled alternative to banded tracking values.
+- **All-caps tracking formula**: `TS = max(3%, min(12%, 160/FS))` — one continuous formula, shared with `text-typesetting`, so both skills give the same value for the same size.
 - **Small caps guard**: refuses to fake small caps by shrinking the base font; checks for the native OpenType feature first.
-- **Ligature collision check**: flags when tracking below `-2%` risks colliding built-in ligatures (`fi`, `fl`, `ffi`), and disables ligatures on just that range instead of loosening the tracking.
+- **Ligature collision check**: flags when tracking below `-2%` risks colliding built-in ligatures (`fi`, `fl`, `ffi`), and switches ligatures off on just that range instead of loosening the tracking (in Figma: reported as a step for the user, since the Plugin API can't set OpenType features).
 - **Inline acronym isolation**: detects 3+ consecutive capital letters inside sentence-case prose and isolates them into a subrange (`+5%` tracking, `-1px` size) so they don't read as a dark "spot" breaking paragraph color.
+- **Missing-glyph check**: checks language-specific letters, quotes, dashes, multiplication and currency signs; reports `hasMissingFont` first and labels glyph-level fallback as a visual check because the Plugin API cannot expose it.
+- Reads first and asks only when a missing value changes the result; every write requires permission.
 
 ## When to use
 
@@ -41,4 +43,4 @@ MIT — see `LICENSE`. Author: **[Monika Zapisek](https://monikazapisek.com)**. 
 
 ---
 
-*Part of the [Design Engineering Playbook](https://github.com/monikazapisekstudio/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*
+*Part of the [Design Engineering Playbook](https://github.com/monikazapisek/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*

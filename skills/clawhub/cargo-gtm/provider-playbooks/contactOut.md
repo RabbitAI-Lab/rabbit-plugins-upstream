@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # contactOut (ContactOut)
 
-LinkedIn-URL-anchored contact info — emails and phones from a profile URL, plus a filter-based people/company search. **Mid-tier fallback**: reach for it when the priority stack (cargo native → FullEnrich → waterfall) misses, or for its free company-domain lookup.
+LinkedIn-URL-anchored contact info — emails and phones from a profile URL, plus a filter-based people/company search. **Mid-tier fallback**: reach for it when the priority stack (aiArk → FullEnrich → waterfall) misses, or for its free company-domain lookup.
 
 ## Credits-based actions
 
@@ -23,7 +23,7 @@ Cost is driven by the **config you request**, not the data returned: asking for 
 - ✅ **Emails/phone when you already hold the LinkedIn URL** — `enrich` is keyed on `linkedinUrl` only; no name/domain fallback inputs.
 - ✅ **Free company lookup** — `enrich` with `objectType: "company"` costs 0 credits and returns firmographics (`size`, `industry`, `revenue`, `employees`, `funding`, …).
 - ✅ **Phone at the prospeo price point** — contact enrich with `includePhone` is 3, the same as `prospeo.findPhone`, and returns emails in the same call.
-- ❌ **Primary people sourcing** — `search` at 1/item (3/item revealed) vs `salesNavigator.searchLeads` at 0.02. Mid-tier when other sources miss (see [`../references/stage-action-map.md`](../references/stage-action-map.md)).
+- ❌ **Primary people sourcing** — `search` at 1/item (3/item revealed) vs `salesNavigator.searchLeads` at 0.2. Mid-tier when other sources miss (see [`../references/stage-action-map.md`](../references/stage-action-map.md)).
 - ❌ **Enrichment without a LinkedIn URL** — resolve the URL first ([`../recipes/linkedin-url-lookup.md`](../recipes/linkedin-url-lookup.md)) or use `waterfall.enrichContact` (2), which accepts name/domain/email.
 
 ## Patterns
@@ -32,7 +32,7 @@ Cost is driven by the **config you request**, not the data returned: asking for 
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"contactOut","actionSlug":"enrich","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"contactOut","actionSlug":"enrich"}' \
   --data '{
     "objectType": "contact",
     "linkedinUrl": "https://linkedin.com/in/alicesmith",
@@ -48,7 +48,7 @@ cargo-ai orchestration action execute \
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"contactOut","actionSlug":"enrich","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"contactOut","actionSlug":"enrich"}' \
   --data '{"objectType":"company","companyDomain":"acme.com"}' \
   --wait-until-finished
 ```
@@ -60,7 +60,7 @@ Zero credits. Worth a probe before paying `waterfall.enrichCompany` (1) on unmat
 ```bash
 # Step 1 — search WITHOUT revealing (1/item): filter and shortlist first
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"contactOut","actionSlug":"search","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"contactOut","actionSlug":"search"}' \
   --data '{
     "objectType": "people",
     "filters": [
@@ -84,14 +84,22 @@ The `filters` array is discriminated by `name`: list-type filters (`skills`, `ed
 
 ## Anti-patterns
 
-- **contactOut for bulk sourcing.** At 1–3/item, a 1,000-row search costs 1,000–3,000 credits; `salesNavigator.searchLeads` covers the same B2B ground at 0.02. Use contactOut search only when LinkedIn-anchored and priority sources miss.
+- **contactOut for bulk sourcing.** At 1–3/item, a 1,000-row search costs 1,000–3,000 credits; `salesNavigator.searchLeads` covers the same B2B ground at 0.2 (200 credits). Use contactOut search only when LinkedIn-anchored and priority sources miss.
 - **Skipping verification.** Returned emails still go through `waterfall.verifyEmail` (0.1) — or `zeroBounce.verifyEmail` (0.1) as a second opinion — before any send.
 
 ## Position in the waterfall
 
-- Contact enrich — **mid rung** of the email/phone chain: after cargo native + FullEnrich, alongside `waterfall.enrichContact` (2); its `includePhone` tier (3) sits at the `prospeo.findPhone` price, below FullEnrich (6) and waterfall (7).
+- Contact enrich — **mid rung** of the email/phone chain: after aiArk + FullEnrich, alongside `waterfall.enrichContact` (2); its `includePhone` tier (3) sits at the `prospeo.findPhone` price, below FullEnrich (6) and waterfall (7).
 - `search` — coverage fallback when salesNavigator/icypeas miss the segment.
+
+## Recurring use
+
+No scheduled fit — per-record enrichment only; a re-run `search` re-bills every item returned (1–3/item) for a mostly unchanged result set.
+
+- **In-play gate:** run contact `enrich` only where the target field is still empty — gate on empty `email` (1–2-tier) or empty phone (3-tier), and keep `includePhone: false` in the play config: it triples the price on every row the play re-touches.
+- **The free rung is safe to repeat:** company `enrich` (0 credits) can sit ungated in a play — it never bills. Every paid action needs the empty-field gate.
+- **Stability:** emails/phones behind a LinkedIn URL don't decay fast — re-enriching filled rows on a timer just re-bills unchanged data.
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"contactOut","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"contactOut","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**

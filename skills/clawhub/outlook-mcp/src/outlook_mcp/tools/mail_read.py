@@ -44,6 +44,19 @@ def _concise_summary(summary: dict) -> dict:
     return {k: v for k, v in summary.items() if k not in _CONCISE_SUMMARY_DROP}
 
 
+# Every field ``_format_message_summary`` reads, in one place. It used to be
+# copy-pasted into each of the four call sites, and they drifted: only
+# ``list_inbox`` selected ``inferenceClassification``, so ``search_mail``,
+# ``list_drafts`` and ``get_thread`` returned ``"classification": ""`` for
+# every message no matter what Focused Inbox had decided. A $select narrower
+# than its formatter is a silent lie — the caller cannot tell "not classified"
+# from "we forgot to ask".
+SUMMARY_SELECT = (
+    "id,subject,from,receivedDateTime,isRead,importance,"
+    "bodyPreview,hasAttachments,categories,flag,conversationId,inferenceClassification"
+)
+
+
 def _format_message_summary(msg: Any) -> dict:
     """Convert Graph SDK message to summary dict.
 
@@ -93,6 +106,16 @@ def _format_message_summary(msg: Any) -> dict:
 
 VALID_CLASSIFICATIONS = {"focused", "other"}
 
+# Graph rejects `$orderby=receivedDateTime` combined with a `$filter` on any other
+# property (400 InefficientFilter) unless a receivedDateTime clause comes FIRST in
+# the filter. Presence alone is not enough — clause order is load-bearing, verified
+# live: the same clauses with receivedDateTime second still 400. When the caller
+# supplies no after/before we prepend this permissive floor to satisfy the index.
+# 1900-01-01 is a readable floor that predates any real mail item; mailbox $count is
+# identical with and without it. See https://devblogs.microsoft.com/microsoft365dev/
+# update-to-filtering-and-sorting-rest-api/
+RECEIVED_FLOOR = "1900-01-01T00:00:00Z"
+
 
 async def list_inbox(
     graph_client: Any,
@@ -106,11 +129,19 @@ async def list_inbox(
     cursor: str | None = None,
     classification: str | None = None,
     concise: bool = False,
+    uncategorized_only: bool = False,
+    timezone: str = "UTC",
 ) -> dict:
     """List messages in a folder.
 
     classification: filter by Focused Inbox classification — "focused" or "other".
     None means no filter (both).
+
+    uncategorized_only: when True, filter to only messages with no categories assigned
+    (uses OData ``not categories/any()``). Default False.
+
+    timezone: IANA zone that zone-less ``after``/``before`` values are interpreted in.
+    Defaults to UTC; the server passes ``config.timezone``.
 
     concise: when True, drop ``preview`` and ``categories`` from each message
     (smaller payload for triage scans). Default False preserves the existing shape.
@@ -120,37 +151,46 @@ async def list_inbox(
 
     query_params = apply_pagination({}, count, cursor)
     query_params["$orderby"] = "receivedDateTime desc"
-    query_params["$select"] = (
-        "id,subject,from,receivedDateTime,isRead,importance,"
-        "bodyPreview,hasAttachments,categories,flag,conversationId,inferenceClassification"
-    )
+    query_params["$select"] = SUMMARY_SELECT
 
     # If cursor provided, it already set $skip — ignore the manual skip param
     if not cursor and skip:
         query_params["$skip"] = skip
 
-    # Build filter with validated inputs
-    filters = []
+    # Build filter with validated inputs. Clauses are validated in signature order
+    # (so validation errors keep their existing precedence) but emitted with the
+    # receivedDateTime clauses first — see RECEIVED_FLOOR.
+    date_filters: list[str] = []
+    other_filters: list[str] = []
     if unread_only:
-        filters.append("isRead eq false")
+        other_filters.append("isRead eq false")
     if from_address:
         validate_email(from_address)
         safe_from = from_address.replace("'", "''")
-        filters.append(f"from/emailAddress/address eq '{safe_from}'")
+        other_filters.append(f"from/emailAddress/address eq '{safe_from}'")
     if after:
-        safe_after = validate_datetime(after)
-        filters.append(f"receivedDateTime ge {safe_after}")
+        safe_after = validate_datetime(after, timezone)
+        date_filters.append(f"receivedDateTime ge {safe_after}")
     if before:
-        safe_before = validate_datetime(before)
-        filters.append(f"receivedDateTime le {safe_before}")
+        safe_before = validate_datetime(before, timezone)
+        date_filters.append(f"receivedDateTime le {safe_before}")
     if classification is not None:
         if classification not in VALID_CLASSIFICATIONS:
             raise ValueError(
                 f"Invalid classification '{classification}'. "
                 f"Must be one of: {sorted(VALID_CLASSIFICATIONS)}"
             )
-        filters.append(f"inferenceClassification eq '{classification}'")
+        other_filters.append(f"inferenceClassification eq '{classification}'")
+    if uncategorized_only:
+        other_filters.append("not categories/any()")
 
+    # $orderby is unconditionally `receivedDateTime desc`, so any non-date clause
+    # needs a leading receivedDateTime clause. A caller-supplied after/before
+    # already satisfies that — don't double-add.
+    if other_filters and not date_filters:
+        date_filters.append(f"receivedDateTime ge {RECEIVED_FLOOR}")
+
+    filters = date_filters + other_filters
     if filters:
         query_params["$filter"] = " and ".join(filters)
 
@@ -195,18 +235,22 @@ def _format_read_message_from_sdk(
     to_list = []
     for r in msg.to_recipients or []:
         if r.email_address:
-            to_list.append({
-                "name": sanitize_output(r.email_address.name or ""),
-                "email": r.email_address.address or "",
-            })
+            to_list.append(
+                {
+                    "name": sanitize_output(r.email_address.name or ""),
+                    "email": r.email_address.address or "",
+                }
+            )
 
     cc_list = []
     for r in msg.cc_recipients or []:
         if r.email_address:
-            cc_list.append({
-                "name": sanitize_output(r.email_address.name or ""),
-                "email": r.email_address.address or "",
-            })
+            cc_list.append(
+                {
+                    "name": sanitize_output(r.email_address.name or ""),
+                    "email": r.email_address.address or "",
+                }
+            )
 
     body_text = ""
     body_html = None
@@ -219,11 +263,13 @@ def _format_read_message_from_sdk(
 
     attachments = []
     for att in msg.attachments or []:
-        attachments.append({
-            "id": att.id,
-            "name": sanitize_output(att.name or ""),
-            "size": att.size or 0,
-        })
+        attachments.append(
+            {
+                "id": att.id,
+                "name": sanitize_output(att.name or ""),
+                "size": att.size or 0,
+            }
+        )
 
     importance = "normal"
     if msg.importance and hasattr(msg.importance, "value"):
@@ -286,18 +332,22 @@ def _format_read_message_from_raw(
     to_list = []
     for r in raw.get("toRecipients") or []:
         ea = (r or {}).get("emailAddress") or {}
-        to_list.append({
-            "name": sanitize_output(ea.get("name") or ""),
-            "email": ea.get("address") or "",
-        })
+        to_list.append(
+            {
+                "name": sanitize_output(ea.get("name") or ""),
+                "email": ea.get("address") or "",
+            }
+        )
 
     cc_list = []
     for r in raw.get("ccRecipients") or []:
         ea = (r or {}).get("emailAddress") or {}
-        cc_list.append({
-            "name": sanitize_output(ea.get("name") or ""),
-            "email": ea.get("address") or "",
-        })
+        cc_list.append(
+            {
+                "name": sanitize_output(ea.get("name") or ""),
+                "email": ea.get("address") or "",
+            }
+        )
 
     body = raw.get("body") or {}
     content = body.get("content") or ""
@@ -310,11 +360,13 @@ def _format_read_message_from_raw(
 
     attachments = []
     for att in raw.get("attachments") or []:
-        attachments.append({
-            "id": att.get("id"),
-            "name": sanitize_output(att.get("name") or ""),
-            "size": att.get("size") or 0,
-        })
+        attachments.append(
+            {
+                "id": att.get("id"),
+                "name": sanitize_output(att.get("name") or ""),
+                "size": att.get("size") or 0,
+            }
+        )
 
     flag_status = "notFlagged"
     flag_node = raw.get("flag")
@@ -412,9 +464,7 @@ async def read_message(
 
         from outlook_mcp.tools.mail_drafts import _PR_DEFERRED_SEND_TIME_ID
 
-        adapter = graph_client.me.messages.by_message_id(
-            message_id
-        ).request_adapter
+        adapter = graph_client.me.messages.by_message_id(message_id).request_adapter
         filter_expr = f"id eq '{_PR_DEFERRED_SEND_TIME_ID}'"
         # Keep `=`, space, and single quotes literal — Graph requires
         # them in the $filter clause and they're safe inside a query
@@ -476,10 +526,7 @@ def _build_read_subrequest_url(message_id: str, include_deferred_send: bool) -> 
     filter_expr = f"id eq '{_PR_DEFERRED_SEND_TIME_ID}'"
     # Match ``read_message``: keep ``= '`` literal, percent-encode the rest.
     encoded_filter = quote(filter_expr, safe="= '")
-    return (
-        f"/me/messages/{safe_id}"
-        f"?$expand=singleValueExtendedProperties($filter={encoded_filter})"
-    )
+    return f"/me/messages/{safe_id}?$expand=singleValueExtendedProperties($filter={encoded_filter})"
 
 
 async def read_messages(
@@ -523,9 +570,7 @@ async def read_messages(
     if not message_ids:
         raise ValueError("message_ids must not be empty")
     if len(message_ids) > MAX_BATCH_SIZE:
-        raise ValueError(
-            f"Maximum {MAX_BATCH_SIZE} messages per batch (Graph API limit)"
-        )
+        raise ValueError(f"Maximum {MAX_BATCH_SIZE} messages per batch (Graph API limit)")
 
     # Fail fast on malformed IDs *before* any HTTP work.
     for mid in message_ids:
@@ -535,17 +580,21 @@ async def read_messages(
 
     subrequests = []
     for i, mid in enumerate(message_ids):
-        subrequests.append({
-            "id": str(i),
-            "method": "GET",
-            "url": _build_read_subrequest_url(mid, include_deferred_send),
-        })
+        subrequests.append(
+            {
+                "id": str(i),
+                "method": "GET",
+                "url": _build_read_subrequest_url(mid, include_deferred_send),
+            }
+        )
 
     tok = credential.get_token(GRAPH_TOKEN_SCOPE)
     headers = {
         "Authorization": f"Bearer {tok.token}",
         "Content-Type": "application/json",
         "Accept": "application/json",
+        # A $batch response carries up to 20 messages; httpx decompresses it.
+        "Accept-Encoding": "gzip",
     }
 
     async with httpx.AsyncClient(timeout=30.0) as client:
@@ -576,12 +625,14 @@ async def read_messages(
     for i, mid in enumerate(message_ids):
         sub = responses_by_id.get(str(i))
         if sub is None:
-            failures.append({
-                "id": mid,
-                "status": 0,
-                "code": "NoResponse",
-                "message": "no sub-response returned by Graph for this id",
-            })
+            failures.append(
+                {
+                    "id": mid,
+                    "status": 0,
+                    "code": "NoResponse",
+                    "message": "no sub-response returned by Graph for this id",
+                }
+            )
             continue
 
         status = sub.get("status", 0)
@@ -589,18 +640,18 @@ async def read_messages(
 
         if 200 <= status < 300:
             messages.append(
-                _format_read_message_from_raw(
-                    body, format, concise, include_deferred_send
-                )
+                _format_read_message_from_raw(body, format, concise, include_deferred_send)
             )
         else:
             err = body.get("error") or {}
-            failures.append({
-                "id": mid,
-                "status": status,
-                "code": err.get("code") or "",
-                "message": err.get("message") or "",
-            })
+            failures.append(
+                {
+                    "id": mid,
+                    "status": status,
+                    "code": err.get("code") or "",
+                    "message": err.get("message") or "",
+                }
+            )
 
     return {
         "messages": messages,
@@ -629,10 +680,7 @@ async def search_mail(
 
     query_params = apply_pagination({}, count, cursor)
     query_params["$search"] = safe_query
-    query_params["$select"] = (
-        "id,subject,from,receivedDateTime,isRead,importance,"
-        "bodyPreview,hasAttachments,categories,flag,conversationId"
-    )
+    query_params["$select"] = SUMMARY_SELECT
 
     if folder:
         folder = await resolve_folder_id(graph_client, folder)

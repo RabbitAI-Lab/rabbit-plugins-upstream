@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-ingest",
   "slug": "agent-bom-ingest",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946315175,
-  "contentHash": "148b405544eefd8ce940c9f565a9e90d7d0dc53a08e88ca734d1a177b4a762f8",
-  "fetchedAt": "2026-07-26T18:04:21.560Z"
+  "version": "0.108.2",
+  "updatedAt": 1791435849663,
+  "contentHash": "838e46e6aec9074df0c9f5501b16f7bf571121f81b1b2c025ddefc0ea1c0499c",
+  "fetchedAt": "2026-10-08T14:46:50.007Z"
 }

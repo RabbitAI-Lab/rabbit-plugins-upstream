@@ -1,47 +1,65 @@
-## Description: <br>
-Helps physics teachers design lesson frameworks that build physics concepts through classroom contexts, demonstrations, data, modeling, applications, and student reflection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助中国初高中物理教师设计以概念与物理观念为主线、包含分层活动和提问链的教案草稿。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Physics teachers use this skill to plan lessons that move from physics concepts to concept construction, law teaching, modeling, applications, classroom summaries, and student-profile updates. It is intended to support teacher review and adaptation, not replace teacher preparation or classroom judgment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student profiles and lab reports may contain identifiable or sensitive student information. <br>
-Mitigation: Use aliases, desensitize student reports, and sync profile data only with appropriate school or administrator authorization. <br>
-Risk: Lab activity suggestions may need classroom-specific safety controls before use. <br>
-Mitigation: Have a qualified teacher review lab examples, add concrete safety controls, set safety levels, and exclude dangerous experiments. <br>
-Risk: Generated lesson frameworks could be mistaken for complete teacher preparation or final student answers. <br>
-Mitigation: Use outputs as teacher-reviewed planning frameworks and guidance, not as a substitute for teacher preparation, direct answer delivery, or classroom judgment. <br>
+## Use Case:
 
+面向中国初高中物理教师，生成新授课、复习课和讲评课的教学环节、概念建构路径、提问链及实验教学预留环节，供教师复核。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-lesson-planner) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
-- [Physics Concepts Map](references/physics-concepts-map.md) <br>
-- [Lab Design Template](references/lab-design-template.md) <br>
-- [Physics Model Examples](references/model-examples.md) <br>
-- [Student Physics Profile Template](references/student-physics-profile-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (localize curriculum, crisis contacts and legal assumptions before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown-style lesson-planning guidance with structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces teacher-facing frameworks, prompts, checklists, and templates; it does not execute code.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Lesson plans or example questions may contain errors or unsuitable content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a physics teacher check lesson drafts and verify AI-generated questions before classroom use.
+
+Risk: Experiment suggestions may be mistaken for ready-to-run procedures.
+
+Mitigation: Treat experiments as planning placeholders; have the teacher and school lab staff confirm equipment, hazards and safety procedures before use.
+
+Risk: Student records or exam material could be shared or stored inappropriately.
+
+Mitigation: Use de-identified classroom data, exclude unreleased exam questions and confirm each proposed workspace write with the teacher.
+
+Risk: Chinese curriculum, legal assumptions and crisis contacts may not apply outside Mainland China.
+
+Mitigation: Localize those materials and contacts before using the skill in other regions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-physics-lesson-planner)
+- [Physics concepts map](references/physics-concepts-map.md)
+- [High-school physics curriculum maps](references/physics-hs1-curriculum-map.md)
+- [Physics lesson examples](references/model-examples.md)
+- [Lab design template](references/lab-design-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language lesson-plan drafts and teaching guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes proposed lesson segments and question chains; class-record entries require teacher confirmation.]
+
+## Skill Version(s):
+
+2.11.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

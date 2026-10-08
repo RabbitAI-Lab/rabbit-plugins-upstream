@@ -1,38 +1,62 @@
-## Description: <br>
-思维梯度训练师 helps agents guide middle-school math learners through level-based diagnostics, tailored gradient exercises, growth journaling, and weekly progress checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese-speaking middle- and high-school students through five levels of math practice, identifying their current level and helping them progress one step at a time.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and tutoring agents use this skill to identify a learner's current math ceiling, generate staged practice for weak areas, and summarize progress over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create ongoing learning profiles, record student mistakes and progress, update other learning-history skills, and trigger reminder workflows. <br>
-Mitigation: Use it with explicit student or parent consent and provide clear controls to disable, delete, or limit stored progress data. <br>
+## Use Case:
 
+Chinese-speaking middle- and high-school students use this skill to assess their level on familiar math topics, practice progressively harder problems, and review their growth over time. Educators and caregivers can support practice and consent decisions.
 
-## Reference(s): <br>
-- [Initial Math Module Gradient Level Reference](references/gradient-levels.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize language, curriculum, consent rules, and crisis resources before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown-style tutoring prompts, problem sequences, progress records, and summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include learner progress records, weak-area summaries, and reminder guidance for recurring math growth checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Students' learning profiles could be stored or shared without appropriate consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm consent for profile storage and sharing, and honor pause, correction, deletion, and sharing controls.
+
+Risk: Weekly reminders could be unwanted or unavailable on the host platform.
+
+Mitigation: Only hand off reminders after student consent; do not promise proactive reminders without supported scheduling.
+
+Risk: Curriculum, minor-consent rules, or crisis contacts may not apply outside Mainland China.
+
+Mitigation: Localize language, curriculum, consent rules, and crisis resources before deployment elsewhere.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-math-gradient-trainer)
+- [Math gradient levels](references/gradient-levels.md)
+- [High-school year 1 gradient levels](references/math-hs1-gradient-levels.md)
+- [High-school year 2 gradient levels](references/math-hs2-gradient-levels.md)
+- [High-school year 3 gradient levels](references/math-hs3-gradient-levels.md)
+- [AI-generated question checks](shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational text and Markdown practice questions, feedback, and progress summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional learning-profile records and consent-based reminder handoffs]
+
+## Skill Version(s):
+
+2.11.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

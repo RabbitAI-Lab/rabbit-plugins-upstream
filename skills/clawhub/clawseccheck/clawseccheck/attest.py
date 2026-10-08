@@ -1,4 +1,4 @@
-"""Attestation layer — a structured agent self-report that enriches the static audit.
+"""Attestation layer - a structured agent self-report that enriches the static audit.
 
 The static audit reads only what the config files contain. Many security-relevant
 facts are *not* in any config field: the agent's real tool/verb inventory, whether
@@ -6,7 +6,7 @@ untrusted input can reach a side-effect without approval, host monitors a file s
 cannot see. The attestation layer lets the user's *agent* self-report those facts in
 a small JSON, which the engine consumes via ``--attest``.
 
-Trust model (the whole point — read this before extending):
+Trust model (the whole point - read this before extending):
 
 * A self-report is **weaker** evidence than a config fact. The agent being audited
   may be compromised or prompt-injected, so it could be wrong or could lie. Every
@@ -40,7 +40,7 @@ _VERB_CLASSES = (
     # EXEC is the broadest blast radius of all: arbitrary code/command execution
     # SUBSUMES egress (curl), destruction (rm) and config mutation. It is the single
     # most dangerous primitive an agent can hold, so it ranks first. Hints are kept
-    # high-precision on purpose — bare "system"/"eval"/"spawn" are omitted because they
+    # high-precision on purpose - bare "system"/"eval"/"spawn" are omitted because they
     # match benign reads (get_system_info, evaluate_expression) and would FP under §5.
     ("EXEC", (
         "bash", "shell", "exec", "subprocess", "powershell", "run_command",
@@ -63,6 +63,17 @@ _VERB_CLASSES = (
         "purge", "destroy", "expunge", "hard_delete", "drop_table", "drop_database",
         "wipe", "shred", "truncate",
     )),
+    # COMMERCE (C-339, ESET H1 2026 "Credit Claw" shape): a verb that spends the
+    # user's money - direct access, and the loss is irreversible the way a leaked
+    # file is not. Kept high-precision on purpose, same discipline as EXEC above: a
+    # bare "pay"/"buy"/"order" would FP on unrelated reads (get_order_status,
+    # list_orders, sort_order, reorder) - only compound verb forms that spell out an
+    # actual money-moving action land here.
+    ("COMMERCE", (
+        "create_order", "place_order", "submit_order", "complete_purchase",
+        "checkout", "charge_card", "process_payment", "capture_payment",
+        "make_payment", "pay_invoice", "purchase_item",
+    )),
     ("EGRESS", (
         "send", "forward", "reply", "post", "publish", "webhook", "http_post",
         "upload", "email_send", "share", "tweet", "broadcast", "dispatch",
@@ -74,7 +85,7 @@ _VERB_CLASSES = (
     )),
 )
 
-# Reversible / low-blast verbs — explicitly "safe" so a toolset holding only these
+# Reversible / low-blast verbs - explicitly "safe" so a toolset holding only these
 # PASSes B43 ("forward-exfil and delete-evidence are physically impossible").
 _REVERSIBLE_HINTS = (
     "search", "list", "get", "read", "fetch", "view", "lookup", "find",
@@ -98,7 +109,7 @@ _BYPASS_ALIAS_MAP = {
     "sleeper": "sleeper",
 }
 
-# How a CALLER handles a delegated callee's output, strongest→weakest. A typed/
+# How a CALLER handles a delegated callee's output, strongest->weakest. A typed/
 # structured return ("schema") is a wall that blocks the instruction/data channel; a
 # sanitized-text return ("filtered") is a best-effort sieve; "raw" passes the callee's
 # output through verbatim. Used by the delegation-reassembly analysis (B47/RISK-11).
@@ -111,7 +122,7 @@ def normalize_verb(name) -> str:
 
     Real tool names arrive wrapped: ``mcp__claude_ai_Slack__slack_send_message`` or
     dotted ``gmail.send``. Substring-matching the whole string lets a *provider* name
-    pollute the verdict — e.g. ``mcp__SendGrid__list_templates`` would read as EGRESS
+    pollute the verdict - e.g. ``mcp__SendGrid__list_templates`` would read as EGRESS
     on the "send" in "SendGrid" though the verb is a reversible ``list_templates``.
     Stripping to the last namespace segment fixes that:
     ``mcp__SendGrid__list_templates`` -> ``list_templates``; ``gmail.send`` -> ``send``.
@@ -126,9 +137,9 @@ def normalize_verb(name) -> str:
 def classify_verb(name: str) -> str:
     """Map one tool/verb name to a blast-radius class.
 
-    Returns one of MAILBOX_CONFIG, DESTRUCTIVE, EGRESS, REVERSIBLE, or UNKNOWN.
-    Classification runs on the normalized verb (namespace stripped) so a provider
-    name can never decide the class.
+    Returns one of EXEC, MAILBOX_CONFIG, DESTRUCTIVE, COMMERCE, EGRESS, REVERSIBLE,
+    or UNKNOWN. Classification runs on the normalized verb (namespace stripped) so a
+    provider name can never decide the class.
     """
     n = normalize_verb(name)
     for cls, hints in _VERB_CLASSES:
@@ -139,7 +150,7 @@ def classify_verb(name: str) -> str:
     return "UNKNOWN"
 
 
-HIGH_BLAST_CLASSES = ("EXEC", "MAILBOX_CONFIG", "DESTRUCTIVE", "EGRESS")
+HIGH_BLAST_CLASSES = ("EXEC", "MAILBOX_CONFIG", "DESTRUCTIVE", "COMMERCE", "EGRESS")
 
 
 def classify_tools(tools) -> dict:
@@ -162,7 +173,7 @@ def parse_attestation(data) -> dict:
     """Validate an attestation given as a JSON string or an already-parsed object.
 
     Returns the dict, or ``{}`` on any problem (bad JSON, non-object root, unknown
-    schema version). Never raises — a malformed attestation means "no attestation",
+    schema version). Never raises - a malformed attestation means "no attestation",
     so checks fall back to UNKNOWN. Shared by the file loader and the stdin path so
     both validate identically.
     """
@@ -175,7 +186,7 @@ def parse_attestation(data) -> dict:
         return {}
     schema = data.get("schema")
     if schema is not None and schema != SCHEMA_ID:
-        # Unknown schema version — refuse to guess its shape.
+        # Unknown schema version - refuse to guess its shape.
         return {}
     return data
 
@@ -197,7 +208,7 @@ def template() -> dict:
     """The skeleton the agent fills in (emitted by ``--ask``).
 
     ``_questions`` is human-facing guidance for whoever fills the file; the engine
-    ignores it. Keep it short and concrete — the agent reads this to self-report.
+    ignores it. Keep it short and concrete - the agent reads this to self-report.
     """
     return {
         "schema": SCHEMA_ID,
@@ -211,7 +222,7 @@ def template() -> dict:
             ),
             "proven_tools": (
                 "Tool verbs you have LOG or TRACE evidence you ACTUALLY invoked (not "
-                "just hold) — leave empty if you have no execution log to cite."
+                "just hold) \u2014 leave empty if you have no execution log to cite."
             ),
             "approval_gates": (
                 "For each action class, do you require human approval BEFORE acting? "
@@ -238,7 +249,7 @@ def template() -> dict:
                 "paths to your identity/memory files (SOUL.md, AGENTS.md, TOOLS.md, "
                 "MEMORY.md, ...) wherever they actually live. 'openclaw_install': the "
                 "directory OpenClaw is installed in. The engine still stat()s these "
-                "ITSELF — you only point it at WHERE to look, so the permission check "
+                "ITSELF \u2014 you only point it at WHERE to look, so the permission check "
                 "stays an authoritative file stat, not a trusted self-report."
             ),
             "agents": (
@@ -248,7 +259,7 @@ def template() -> dict:
                 "['web_fetch', 'read_file']}, ...]. The engine classifies each "
                 "agent's lethal-trifecta legs itself and checks whether any single "
                 "agent holds all three (untrusted input + sensitive data + outbound/"
-                "exec) — privilege separation means no single agent does. Config "
+                "exec) \u2014 privilege separation means no single agent does. Config "
                 "cannot express per-agent tool grants, so only you can supply this. "
                 "Omit (leave []) if you run a single agent."
             ),
@@ -256,7 +267,7 @@ def template() -> dict:
                 "If your agents call/spawn each other, list the edges: [{'from': "
                 "'researcher', 'to': 'main', 'returns': 'schema'}, ...]. 'from' is the "
                 "caller, 'to' the callee, and 'returns' is how the CALLER handles the "
-                "callee's output — 'schema' (a typed/structured value = a wall that "
+                "callee's output \u2014 'schema' (a typed/structured value = a wall that "
                 "blocks injected instructions), 'filtered' (sanitized text = a sieve), "
                 "'raw' (the callee's output flows in verbatim), or 'unknown'. The engine "
                 "checks whether an untrusted-input agent can reassemble the full trifecta "
@@ -282,7 +293,7 @@ def attested_paths(att: dict) -> dict:
     DISCOVERY, not attestation-of-fact: the agent supplies *where* to look; the engine
     still runs the stat() itself, so a finding built from these keeps real-stat strength
     (HIGH confidence), unlike the weak ATTESTED self-report fields above. Tolerant of
-    junk — returns ``{"bootstrap": [str, ...], "openclaw_install": str | None}``.
+    junk - returns ``{"bootstrap": [str, ...], "openclaw_install": str | None}``.
     """
     out: dict = {"bootstrap": [], "openclaw_install": None}
     if not isinstance(att, dict):
@@ -304,11 +315,11 @@ def attested_proven(att: dict) -> set:
     """Verb names the agent has LOG/TRACE evidence it ACTUALLY invoked (B84).
 
     Distinct from ``tools`` (what the agent self-reports it HOLDS): this is a
-    stronger claim — runtime evidence of actual invocation, not just capability.
+    stronger claim - runtime evidence of actual invocation, not just capability.
     Still ATTESTED confidence (a self-report, not the engine's own observation), but
     within the self-report layer it is the tightest signal available: declared
     (config grant) > effective (self-reported inventory) > proven (self-reported
-    execution evidence). Tolerant of junk — returns a set of normalized verb names
+    execution evidence). Tolerant of junk - returns a set of normalized verb names
     (namespace-stripped, lowercased) so it compares directly against the other two
     sets; non-string entries are skipped.
     """
@@ -326,9 +337,9 @@ def attested_agents(att: dict) -> list[dict]:
     The agent self-reports each agent it runs and the tool/verb names that agent
     holds; the engine classifies the lethal-trifecta legs ITSELF (it never trusts a
     self-graded "this agent is safe"). Like the other attestation fields this is a
-    DECLARATION the static config cannot express — OpenClaw config has no per-agent
-    tool allowlist, only per-agent *deny* lists — so findings built from it carry
-    ATTESTED confidence, not HIGH. Tolerant of junk — returns a list of
+    DECLARATION the static config cannot express - OpenClaw config has no per-agent
+    tool allowlist, only per-agent *deny* lists - so findings built from it carry
+    ATTESTED confidence, not HIGH. Tolerant of junk - returns a list of
     ``{"name": str, "tools": [str, ...]}``; non-dict entries are dropped, a missing
     name falls back to a positional label, non-string tools are skipped.
     """
@@ -360,9 +371,9 @@ def attested_delegation(att: dict) -> list[dict]:
 
     Each edge is ``{"from": <caller>, "to": <callee>, "returns": <tier>}``: the caller
     can invoke the callee, and ``returns`` is how the caller handles the callee's output
-    — one of RETURN_TIERS. The OpenClaw config does not express a delegation graph, so
+    - one of RETURN_TIERS. The OpenClaw config does not express a delegation graph, so
     this is a DECLARATION (findings carry ATTESTED confidence), not a config fact.
-    Tolerant of junk — non-dict edges are dropped, a blank/missing ``from`` or ``to``
+    Tolerant of junk - non-dict edges are dropped, a blank/missing ``from`` or ``to``
     drops the edge, and an unrecognized ``returns`` normalizes to ``"unknown"``.
     """
     out: list[dict] = []

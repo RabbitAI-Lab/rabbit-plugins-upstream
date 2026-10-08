@@ -40,4 +40,4 @@ MIT — see `LICENSE`. Author: **[Monika Zapisek](https://monikazapisek.com)**. 
 
 ---
 
-*Part of the [Design Engineering Playbook](https://github.com/monikazapisekstudio/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*
+*Part of the [Design Engineering Playbook](https://github.com/monikazapisek/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*

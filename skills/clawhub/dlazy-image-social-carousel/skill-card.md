@@ -1,43 +1,55 @@
-## Description: <br>
-A structured workflow skill dedicated to social-media carousel design using a decide-intent-first, single-confirmation, cover-first flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through planning and generating social-media carousel slides using a confirmed design direction and an approved cover image.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, marketers, and content teams use this skill to plan and generate social-media carousel image sets with a confirmed direction, cover-first review, and consistent remaining slides. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and provided media can be sent to dLazy API and file services. <br>
-Mitigation: Avoid submitting sensitive material unless approved for the service and review organizational data-handling requirements before use. <br>
-Risk: The dLazy API key may be stored in a local CLI configuration file. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for non-persistent use, and rotate or revoke keys when access changes. <br>
-Risk: The workflow depends on a third-party CLI and hosted API. <br>
-Mitigation: Review the dLazy CLI source or package before installation and use the pinned CLI version identified by the release evidence. <br>
+## Use Case:
 
+Content creators and marketing teams use this skill to plan platform-specific social carousels, approve a cover design, and generate visually consistent remaining slides.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with confirmation tables, phase status, CLI commands, and generated image URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy CLI authentication; prompts and supplied media may be sent to dLazy API and file services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release metadata) <br>
+Risk: Using an external CLI package requires installing or running third-party software.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the @dlazy/cli package before use; choose the npx alternative if a global installation is undesirable.
+
+Risk: Prompts and referenced media are sent to dLazy's hosted service, and use requires an API key.
+
+Mitigation: Avoid submitting sensitive content without approval and rotate or revoke the API key through the service dashboard when needed.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-image-social-carousel)
+- [dLazy CLI repository (skill metadata link)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands]
+
+**Output Format:** [Markdown planning tables, status updates, generation commands, and generated-image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Slide plans and image generation proceed after user confirmation; the cover is approved before remaining slides.]
+
+## Skill Version(s):
+
+1.3.27 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

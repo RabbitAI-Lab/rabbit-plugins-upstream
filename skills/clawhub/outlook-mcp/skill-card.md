@@ -1,50 +1,54 @@
-## Description: <br>
-Production-grade MCP server for personal Outlook (Outlook.com / Hotmail / Live). 62 typed Graph tools across mail, calendar, contacts, to-do, drafts, attachments, folders, threading, batch ops, delta-sync. Granular permissions, OS-keyring auth, /$batch-optimized triage and bulk read. Built for agents that need real Outlook coverage, not a CLI wrapper. BYO Azure app; zero telemetry. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects agents to personal Outlook mail, calendars, contacts, and tasks through an MCP server.
 
-## Publisher: <br>
-[mpalermiti](https://clawhub.ai/user/mpalermiti) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mpalermiti](https://clawhub.ai/user/mpalermiti)
 
-## Use Case: <br>
-Agent builders and MCP client users use this skill to let agents read, triage, write, and organize personal Outlook mail, calendar, contacts, and tasks through typed Microsoft Graph tools. It is intended for personal Microsoft accounts, with work or school Entra ID accounts out of scope. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Agents can access sensitive Outlook mailbox, calendar, contact, and task data. <br>
-Mitigation: Install only for trusted agents and begin with read_only enabled. <br>
-Risk: Write-capable tools can send, delete, move, or modify Outlook data. <br>
-Mitigation: Enable only the needed allow_categories and toolsets, and gate destructive operations in the MCP client. <br>
-Risk: Attachment tools can interact with local file paths. <br>
-Mitigation: Avoid exposing attachment tools unless the agent is trusted with local file access. <br>
-Risk: Authentication uses persistent token storage. <br>
-Mitigation: Use OS keyring-backed token storage and configure encrypted keyring support on Linux before authenticating. <br>
+## Use Case:
 
+Developers and agent users connect a personal Outlook account to read and organize mail, calendars, contacts, and tasks, with optional user-approved write actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/mpalermiti/skills/outlook-mcp) <br>
-- [Publisher profile](https://clawhub.ai/user/mpalermiti) <br>
-- [Project homepage](https://github.com/mpalermiti/outlook-mcp) <br>
-- [PyPI package](https://pypi.org/project/outlook-graph-mcp/) <br>
-- [MCP Registry listing](https://registry.modelcontextprotocol.io/v0/servers?search=mpalermiti) <br>
-- [Security policy](SECURITY.md) <br>
-- [Release changelog](CHANGELOG.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, shell commands, guidance] <br>
-**Output Format:** [MCP tool responses with structured text and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can read or modify Outlook data through Microsoft Graph and can save downloaded attachments to local file paths when attachment tools are enabled.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.12.0 (source: server evidence, pyproject.toml, CHANGELOG, server.json) <br>
+Risk: Agent access to personal Outlook data and optional write actions may expose or alter sensitive content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start in read-only mode, use separate read-only consent when needed, and enable only necessary write categories.
+
+Risk: Downloaded attachments may contain sensitive data.
+
+Mitigation: Keep the permitted attachment directory narrow and grant access only when needed.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/mpalermiti/skills/outlook-mcp)
+- [outlook-graph-mcp package](https://pypi.org/project/outlook-graph-mcp/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Structured MCP tool results and text prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected mailbox and enabled permissions.]
+
+## Skill Version(s):
+
+1.25.1 (source: ClawHub release, CHANGELOG.md, pyproject.toml)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

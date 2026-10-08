@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/messaging",
   "slug": "messaging",
   "ownerHandle": null,
-  "version": "0.14.2",
-  "updatedAt": 1783628377257,
-  "contentHash": "99bbcbf41cec99b926b90a43e562cc1646fd17d003b4b32116519d682beb5ff7",
-  "fetchedAt": "2026-07-26T18:17:21.278Z"
+  "version": "0.14.5",
+  "updatedAt": 1790460161628,
+  "contentHash": "be9f7cf7d9d918d5c772c0236bd11d4feaa2ae2d2ff291bdcd888a89873f417d",
+  "fetchedAt": "2026-10-08T15:10:24.864Z"
 }

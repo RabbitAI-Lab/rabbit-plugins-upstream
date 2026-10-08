@@ -1,47 +1,60 @@
-## Description: <br>
-帮助英语老师把听力课从放录音和刷题转为围绕目标、材料、听前预测、听中分层、听后任务、微技能训练和学员档案的系统化教学设计。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese K–12 English teachers design listening lessons with suitable materials, pre-listening prediction, layered listening tasks, follow-up activities, and micro-skill practice.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-English teachers use this skill to design listening lessons, choose appropriately licensed materials, create pre-listening and while-listening tasks, plan micro-skill practice, and maintain pseudonymous listening profiles for students. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student listening profiles may contain identifiable or sensitive learning information. <br>
-Mitigation: Use pseudonyms, avoid sensitive student identifiers, and require teacher confirmation before saving profile data to shared records. <br>
-Risk: Listening materials may have copyright or licensing restrictions. <br>
-Mitigation: Confirm copyright status before use and rely on textbook, original, Creative Commons, or authorized materials rather than copying unauthorized audio. <br>
-Risk: Assessment suggestions could be mistaken for automated grading. <br>
-Mitigation: Use the skill's rubrics and frameworks as teacher-reviewed guidance; keep dictation scoring and final listening grades under teacher control. <br>
+## Use Case:
 
+Teachers use this skill to select appropriately licensed English listening materials and draft age-appropriate lesson activities, practice questions, and listening-skill support for upper primary through high school students. Teachers review generated content and approve any classroom-record updates.
 
-## Reference(s): <br>
-- [Listening Material Sources](references/listening-material-sources.md) <br>
-- [Listening Rubric](references/listening-rubric.md) <br>
-- [Micro-Skill Training](references/micro-skill-training.md) <br>
-- [Pre-Listening Prediction Sample](references/pre-listening-prediction-sample.md) <br>
-- [Student Listening Profile Template](references/student-listening-profile-template.md) <br>
-- [While-Listening Task Sample](references/while-listening-task-sample.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize examination, legal, safety, and emergency guidance before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown-style teaching plans, task templates, rubrics, and profile guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces teaching design guidance and structured templates; it does not execute code, grade dictation, or assign final listening scores.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Classroom records could expose student information or preserve unreviewed assessments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require teacher confirmation before storing lessons, assessments, or weakness records; use pseudonyms and obtain consent before student-profile updates.
+
+Risk: Listening materials may be used or shared without the rights to do so.
+
+Mitigation: Check source terms and record copyright status; keep links or indexes rather than copying audio without authorization.
+
+Risk: China-specific examination or emergency guidance may not fit other locations.
+
+Mitigation: Adapt examination, legal, safety, and emergency guidance to the local jurisdiction before use outside Mainland China.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-english-listening-designer)
+- [Listening material sources](artifact/references/listening-material-sources.md)
+- [Listening assessment rubric](artifact/references/listening-rubric.md)
+- [Micro-skill training](artifact/references/micro-skill-training.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured lesson plans, listening tasks, material recommendations, and teaching guidance in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Audio is optional when speech synthesis is available; classroom and student-record updates require teacher approval and consent.]
+
+## Skill Version(s):
+
+2.11.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

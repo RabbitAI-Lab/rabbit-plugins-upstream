@@ -1,6 +1,6 @@
 ---
 name: vx-usage
-description: "Teaches AI agents how to use vx, the universal dev tool manager. Use when the project has vx.toml or .vx/, or when the user mentions vx, tool version management, Git/GitHub operations, or cross-platform setup. vx auto-manages Node.js, Python, Go, Rust, and 142 providers via Starlark DSL provider.star files. Also covers MCP integration patterns and GitHub Actions."
+description: "Teaches AI agents how to use vx, the universal dev tool manager. Use when the project has vx.toml or .vx/, or when the user mentions vx, tool version management, Git/GitHub operations, or cross-platform setup. vx supplies 164 Starlark DSL Providers for runtimes such as Node.js, Python, Go, and Rust. Also covers MCP integration patterns and GitHub Actions."
 ---
 
 # VX - Universal Development Tool Manager
@@ -180,6 +180,23 @@ vx cache info                 # Show cache usage
 vx search <query>             # Search available tools
 vx info                       # System info and capabilities
 ```
+
+## Managed Plain Commands
+
+Use `vx <runtime>` for ordinary execution. When a user needs a plain command
+outside `vx dev` (for example an editor invoking a CLI), use a managed command
+shim instead of maintaining a handwritten wrapper.
+
+First check `vx --version` and the command list in `vx --help`. Only if `shim`
+is listed, check `vx shim --help` and `vx shim add --help`: the required interface
+is `add/list/remove/sync/path`. Release v0.9.34 predates this interface; a merged
+PR alone does not mean the installed binary supports it.
+
+Read the [managed command shim guide](https://github.com/loonghao/vx/blob/main/docs/guide/managed-command-shims.md)
+before creating or repairing entries. It covers Codex package targets, safe
+`--as`/`--dir` selection, Windows shells, PATH precedence, upgrade `sync`, and
+ownership checks. Do not default to `--force` or change global PATH.
+`vx shim codex`, bare `vx shim`, and `vx shim rebuild` are not this interface.
 
 ## Project Configuration (vx.toml)
 
@@ -402,7 +419,7 @@ vx msvc@14.40 cl main.cpp
 | lib | `vx msvc lib` | Library manager |
 | nmake | `vx msvc nmake` | Make utility |
 
-## Supported Tools (142 Providers)
+## Supported Tools (164 Providers)
 
 | Category | Tools |
 |----------|-------|
@@ -431,7 +448,7 @@ vx msvc@14.40 cl main.cpp
 
 ## Provider System (Starlark DSL)
 
-All 142 providers are defined using **provider.star** (Starlark DSL) — a declarative, zero-compilation approach. Each provider lives in `crates/vx-providers/<name>/provider.star`.
+All 164 Providers are defined using **provider.star** (Starlark DSL) — a declarative, zero-compilation approach. Each provider lives in `crates/vx-providers/<name>/provider.star`.
 
 vx uses a **two-phase execution model** (inspired by Buck2):
 1. **Analysis Phase (Starlark)**: `provider.star` runs as pure computation, returning descriptor dicts. No I/O.
@@ -718,3 +735,25 @@ jobs:
       - run: vx node --version
       - run: vx npm test
 ```
+
+
+---
+
+## Delivery Surface — External Systems Are Evidence
+
+GitHub PRs, CI runs, and dashboards are **supporting evidence**, not the delivery
+surface. The conclusion has to land where the work is tracked.
+
+- **Record the outcome once, completely** — one issue comment carrying status,
+  branch/commit/PR, what you validated, the blocker, and the next owner.
+- **Verify terminal state, not intermediate state.** A green CI run or an open,
+  review-ready PR is not "shipped". Confirm merged / released / deployed, then
+  record *that*.
+- **Keep public surfaces public-safe.** PR titles, bodies, and commit messages
+  carry technical content only — no internal issue IDs, routing history,
+  reviewer handoffs, local absolute paths, or internal hostnames.
+- **Collect results in the foreground.** A queued or pending state is a handoff,
+  not a completion; never end a turn "standing by" for background work.
+
+Concretely: the delivery surface is the team's issue or task tracker — the
+issue comment plus its metadata. A PR comment alone delivers nothing.

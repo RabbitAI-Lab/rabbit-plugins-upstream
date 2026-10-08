@@ -5,21 +5,28 @@
 [![agentskills.io](https://img.shields.io/badge/agentskills.io-compatible-purple.svg)](https://agentskills.io)
 [![ClawHub](https://img.shields.io/badge/ClawHub-travel--search--ru-blue.svg)](https://clawhub.ai/skills/travel-search-ru)
 
-Интеграция AI-агентов с популярными туристическими сервисами: **Aviasales**, **Travelata**, **Level.Travel** и **Sputnik8**.
+Поисковый слой для планирования путешествий с популярными туристическими сервисами: **Aviasales**, **Travelata**, **Level.Travel**, **Tutu.ru**, **Tripster** и **Sputnik8**.
 
-Ищите авиабилеты, пакетные туры, отели и экскурсии прямо из Claude Code, Cursor, Gemini CLI, GitHub Copilot и других AI-агентов. Агент получает цены, ключевые параметры и короткие ссылки на выдачу.
+Агент может составить маршрут своими обычными инструментами, а навык найдёт для него авиабилеты, поезда, пакетные туры, отели и экскурсии. В ответе будут цены, ключевые параметры и короткие ссылки на выдачу. Навык работает в Claude Code, Cursor, Gemini CLI, GitHub Copilot и других AI-агентах.
 
 | Сервис | Что доступно |
 |--------|--------------|
 | **Aviasales** | Авиабилеты и календарь цен |
 | **Travelata** | Пакетные туры |
 | **Level.Travel** | Пакетные туры и отели без перелёта |
+| **Tutu.ru** | Кэшированное расписание поездов и ориентировочные цены |
 | **Tripster** | Экскурсии и активности |
 | **Sputnik8** | Экскурсии, билеты и активности |
 
 **Два способа подключения:** [Agent Skill](#установка) или [удалённый MCP-сервер](#mcp-сервер).
 
 ## Демо
+
+### Codex: семейный отпуск в Кемере
+
+![Codex ищет тур и экскурсии в Кемере](https://github.com/MissiaL/travel-search-ru/releases/download/v2.1.0/codex-kemer-agent-log.gif)
+
+Анимация собрана из результатов живого MCP-запроса от 22 июля 2026 года; это не запись экрана. Перед бронированием уточняйте цену и доступность.
 
 ![Travel search demo](https://github.com/MissiaL/travel-search-ru/releases/download/v1.0/book_small.gif)
 
@@ -41,7 +48,7 @@
 ## Как это устроено
 
 ```
-Пользователь спрашивает про туры / отели / авиа / экскурсии
+Пользователь спрашивает про туры / отели / авиа / поезда / экскурсии
   │
   ▼
 Агент читает SKILL.md → запускает scripts/travel_search.py → оформляет ответ
@@ -53,10 +60,12 @@ MCP https://mcp.botclaw.ru/travel (Streamable HTTP)
 | Команда CLI | Назначение |
 |-------------|------------|
 | `search-tours` | Пакетные туры (перелёт + отель) |
+| `cheapest-tours` | Быстрая подборка самых дешёвых туров Travelata |
 | `search-hotels` | Отели без перелёта |
 | `get-tour-details` | Актуальные детали тура перед бронированием |
 | `search-flights` | Варианты перелётов |
 | `flight-calendar` | Календарь цен на авиабилеты |
+| `search-trains` | Поезда Tutu.ru и ориентировочные цены |
 | `search-activities` | Экскурсии и активности |
 | `list-destinations` | Справочник направлений |
 
@@ -75,10 +84,19 @@ git clone https://github.com/MissiaL/travel-search-ru.git travel-search-ru
 ```bash
 python scripts/travel_search.py list-tools
 python scripts/travel_search.py describe search-tours
-python scripts/travel_search.py search-tours --input '{"departure_city":"Москва","country":"Турция","date_from":"2026-09-10","date_to":"2026-09-20","adults":2}'
+python scripts/travel_search.py search-tours --input '{"departure_city":"Москва","country":"Турция","date_from":"YYYY-MM-DD","date_to":"YYYY-MM-DD","nights_min":7,"nights_max":10,"adults":2}'
 ```
 
+Вместо `YYYY-MM-DD` подставьте реальные даты не раньше сегодняшней.
+
 Актуальные схемы полей — через `describe`, см. [references/usage.md](references/usage.md).
+
+Особенности поиска:
+
+- `search-trains` возвращает кэшированное расписание Tutu.ru и ориентировочные цены. Дата используется в ссылке на выдачу; наличие поезда, мест и итоговую цену нужно проверить перед бронированием.
+- У `search-activities` поля `date_from` и `date_to` необязательны, а `persons` принимает значения от 1 до 100.
+- Для туров и отелей окно дат вылета (заезда) — не больше 30 дней, диапазон ночей лучше задавать явно и не шире 5 значений, питание — кодами `RO`, `BB`, `HB`, `FB`, `AI`, `UAI`.
+- Если сервер вернул ошибку, CLI передаёт её текст в поле `message` (категория `tool_error`); при перегрузке сервиса — категория `rate_limited`.
 
 ## MCP-сервер
 
@@ -110,19 +128,7 @@ claude mcp add --transport http travel-search-ru https://mcp.botclaw.ru/travel
 
 Единственный удалённый эндпоинт: `https://mcp.botclaw.ru/travel` (HTTPS, только чтение).
 
-На сервис уходят **только переданные критерии поиска** (города, даты, состав путешественников и т.п.). Учётные данные не передаются; доступ к почте/календарю не используется; бронирование и долговременное хранение не выполняются.
-
-## Миграция на 2.0.0
-
-- **v1.3.1** остаётся доступной через неизменяемый тег/релиз `v1.3.1`.
-- **v2.0.0** убирает `api_call.py` и сырые ссылки на провайдеров; вместо них вызывайте команды `scripts/travel_search.py`.
-- Поля `--input` берите из live-схемы (`describe`), а не из старых provider-документов.
-
-## Изменения в 2.1.0
-
-`search-activities` объединяет Tripster и Sputnik8. Для экскурсий доступны необязательные фильтры дат `date_from` и `date_to`, `persons` от 1 до 100, `children_allowed` и сортировка `recommended`, `price`, `rating` или `reviews`.
-
-Каждая запись указывает `provider`, `price_unit` и `price_text`. Сравнивайте цены только с одинаковым `price_unit`: цена за человека, группу и билет — разные единицы.
+На сервис уходят **только переданные критерии поиска** (города, даты, состав путешественников и т.п.). Для поездов дата используется в ссылке Tutu.ru, но само расписание API по дате не фильтрует. Учётные данные не передаются; доступ к почте/календарю не используется; бронирование и долговременное хранение не выполняются.
 
 ## Требования
 
@@ -131,11 +137,13 @@ claude mcp add --transport http travel-search-ru https://mcp.botclaw.ru/travel
 
 ## Примеры запросов
 
+- «Спланируй поездку в Турцию на неделю с актуальными ценами»
 - «Найди туры в Турцию на двоих, 7 ночей в мае»
 - «Отель в Стамбуле без перелёта на 5 ночей»
 - «Дешёвые билеты из Москвы в Анталью в июне»
+- «Найди поезд из Москвы в Сочи на 15 сентября»
 - «Экскурсии в Кемере»
 
 ## Лицензия
 
-MIT
+MIT — см. [LICENSE](LICENSE).
