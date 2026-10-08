@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/skill-installer",
+  "repo": "openai/skills",
+  "skillId": "skill-installer",
+  "branch": "main",
+  "pushedAt": "2026-09-08T20:35:26Z",
+  "contentHash": "58c5df61d0adf8280277bbedacae969da201698ae3cfbfd3faa0f319c1d2a0f5",
+  "fetchedAt": "2026-10-08T14:41:05.832Z"
+}

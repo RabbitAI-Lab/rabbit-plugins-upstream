@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/upbit",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "upbit",
+  "branch": "main",
+  "pushedAt": "2026-09-28T16:20:57Z",
+  "contentHash": "efbc4955d96e972da9ab70d106163572cfe352ae81edb672bc5f6110fba7aadf",
+  "fetchedAt": "2026-10-08T14:41:19.316Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/diff-scanning-with-aws-security-agent",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "diff-scanning-with-aws-security-agent",
+  "branch": "main",
+  "pushedAt": "2026-10-08T14:35:07Z",
+  "contentHash": "42bd3e137d13be7b7c70e534e1dbb3af2ca46dcc067fdd20eeb09819f36ea19e",
+  "fetchedAt": "2026-10-08T14:41:36.084Z"
+}
