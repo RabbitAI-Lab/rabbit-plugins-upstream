@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/compound-eng-postgresql",
   "slug": "compound-eng-postgresql",
   "ownerHandle": null,
-  "version": "4.1.1",
-  "updatedAt": 1780627513136,
-  "contentHash": "5adc02e2e90f1b596d858f1304aeeda1581a494dced9a8c19864ca29e563033d",
-  "fetchedAt": "2026-07-26T18:35:22.061Z"
+  "version": "5.0.1",
+  "updatedAt": 1791047527883,
+  "contentHash": "bbd82593488f7a6eb76a284cf0013e916fdd81d5bf43022e67dfd21519bb5d82",
+  "fetchedAt": "2026-10-08T14:54:13.614Z"
 }

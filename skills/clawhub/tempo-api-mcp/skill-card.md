@@ -1,44 +1,54 @@
-## Description: <br>
-Access Tempo time-tracking, planning, team, account, and timesheet approval data through an MCP server backed by the Tempo API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use Tempo through MCP to review time tracking, resource plans, teams, accounts, and timesheet approvals and to make authorized changes.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and Tempo/Jira users use this skill to query worklogs, plans, teams, accounts, and timesheet approvals, and to create or update Tempo records through MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose broad Tempo/Jira time, team, account, and organizational data. <br>
-Mitigation: Use a least-privilege Tempo token and require explicit confirmation before cross-user, team, or account queries. <br>
-Risk: Create, update, delete, and approval tools can change Tempo records. <br>
-Mitigation: Require the agent to summarize the target record, action, and parameters and obtain user confirmation before any mutating operation. <br>
-Risk: Tempo API tokens can be exposed if stored in shared project configuration or chat transcripts. <br>
-Mitigation: Keep TEMPO_API_TOKEN out of committed files and shared chats, use local secret storage where available, and rotate the token if exposed. <br>
+## Use Case:
 
+Tempo/Jira users and their agents use this skill to review worklogs, allocations, and timesheet approvals, and to make authorized changes to time-tracking records.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/chrischall/skills/tempo-api-mcp) <br>
-- [tempo-api-mcp npm Package](https://www.npmjs.com/package/tempo-api-mcp) <br>
-- [Tempo Terms of Use](https://www.tempo.io/terms-of-use) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance, API calls] <br>
-**Output Format:** [Markdown guidance with JSON configuration snippets, shell commands, and MCP tool calls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a registered tempo-api-mcp server and a TEMPO_API_TOKEN supplied through MCP configuration or environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.9 (source: server release metadata) <br>
+Risk: The skill's personal-use description understates access to coworkers' worklogs, team data, and other-user timesheets when the token has broader permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review Tempo/Jira permissions before installation and use a least-privilege token; limit team, reviewer, account, plan, and approval access to what is needed.
+
+Risk: Authorized write actions can change or delete time records and act on timesheet approvals.
+
+Mitigation: Keep confirmation prompts enabled for writes and review each proposed action before approving it.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/tempo-api-mcp)
+- [Tempo API MCP npm package](https://www.npmjs.com/package/tempo-api-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown and structured Tempo tool responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Write operations request confirmation before execution.]
+
+## Skill Version(s):
+
+3.2.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

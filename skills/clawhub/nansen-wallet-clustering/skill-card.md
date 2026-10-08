@@ -1,41 +1,55 @@
-## Description: <br>
-Cluster and attribute related wallets across funding chains, shared signers, CEX deposit patterns, governance voters, and related address groups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Clusters and attributes related wallets using funding chains, shared signers, and CEX deposit patterns.
 
-## Publisher: <br>
-[nansen-devops](https://clawhub.ai/user/nansen-devops) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[nansen-devops](https://clawhub.ai/user/nansen-devops)
 
-## Use Case: <br>
-Developers, analysts, and investigators use this skill to guide Nansen CLI wallet-attribution workflows, compare related addresses, expand candidate clusters with human confirmation, and report confidence-scored ownership signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Wallet addresses, chain selections, and investigation patterns are sent to Nansen through the CLI. <br>
-Mitigation: Install only if the nansen-cli package and Nansen API usage are trusted, and avoid submitting sensitive addresses unless that disclosure is acceptable. <br>
-Risk: Trace, batch, and L2 expansion commands can consume API credits or broaden the investigation beyond the seed wallet. <br>
-Mitigation: Keep trace width at or below the documented limit, reserve counterparty expansion for the seed unless approved, and ask for human confirmation before querying newly found addresses. <br>
+## Use Case:
 
+Analysts and developers use this skill to investigate wallet ownership and relationships across supported chains, compare candidate clusters, and document attribution signals with confidence levels.
 
-## Reference(s): <br>
-- [Wallet Attribution Reference](artifact/REFERENCE.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nansen-devops/nansen-wallet-clustering) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and confidence-scored attribution output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the nansen CLI and NANSEN_API_KEY; outputs address, owner, confidence, signals, and role when following the reference format.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: release evidence) <br>
+Risk: Authenticated research calls, particularly loops and traces, may consume credits or trigger wallet-funded x402 payments.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review credentials, wallet authorization, payment policy, and spending limits before running calls; constrain traces and confirm each newly discovered address before expanding.
+
+Risk: Weak relationship signals may lead to incorrect wallet-owner attribution.
+
+Mitigation: Report the underlying signals and confidence, exclude single-signal matches, and stop expanding low-confidence clusters.
+
+## Reference(s):
+
+- [Wallet Attribution Reference](REFERENCE.md)
+- [Nansen CLI Browser Login Platform Scope](https://github.com/nansen-ai/nansen-cli/blob/main/docs/browser-login.md#preview-platform-scope)
+- [ClawHub Skill Release](https://clawhub.ai/nansen-devops/skills/nansen-wallet-clustering)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands]
+
+**Output Format:** [Markdown with wallet attribution entries and bash commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Attribution entries identify address, owner, confidence, signals, and role.]
+
+## Skill Version(s):
+
+0.1.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

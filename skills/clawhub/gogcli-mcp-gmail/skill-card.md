@@ -1,41 +1,58 @@
-## Description: <br>
-This skill helps an agent use Gmail through gogcli for mailbox reading, organization, drafts, forwarding, autoreplies, attachments, and bulk message operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read, organize, draft, and send Gmail messages through tools for threads, labels, attachments, bulk actions, and account settings.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill when they want an agent to work with a selected Gmail account in depth, including threads, labels, drafts, attachments, forwarding, autoreplies, and bulk archive, trash, or mark-read operations. It is appropriate only when the user intends to grant broad Gmail mailbox and account-setting authority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can give an agent broad access to Gmail messages and account settings. <br>
-Mitigation: Review before installing for sensitive personal or business mail, and authorize only the Gmail account the user intends to expose. <br>
-Risk: The skill can support permanent deletion, forwarding, delegates, forwarding settings, filters, send-as settings, vacation responders, watch notifications, tracking, sending mail, and downloading message content. <br>
-Mitigation: Require explicit confirmation before any destructive action, message sending, forwarding, settings change, tracking action, or message-content download. <br>
+## Use Case:
 
+People and teams using an agent to manage Gmail can search mail, work with threads and attachments, prepare replies or forwards, organize messages, and manage mailbox settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/gogcli-mcp-gmail) <br>
-- [gogcli project](https://github.com/openclaw/gogcli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, configuration, API calls, guidance] <br>
-**Output Format:** [Markdown guidance with JSON MCP server configuration and Gmail tool-use instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can lead an agent to invoke Gmail MCP tools that read, send, modify, delete, forward, download, or change Gmail account settings after authorization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.8.0 (source: server release evidence) <br>
+Risk: Broad Gmail read/write and settings access can expose or change sensitive mail and account settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant access only to an appropriate account; use a dedicated account or enable GOG_READONLY when only reads are needed.
+
+Risk: Some destructive Gmail and settings deletions can be forced without a separate user-confirmation flow.
+
+Mitigation: Review and explicitly approve destructive actions, especially deletion of labels, filters, drafts, and send-as aliases.
+
+Risk: Stored Gmail credentials could be exposed on an insufficiently isolated host.
+
+Mitigation: Use a secure keyring backend and strong host isolation.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/gogcli-mcp-gmail)
+- [gogcli dependency documentation](https://github.com/openclaw/gogcli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Configuration guidance]
+
+**Output Format:** [Structured Gmail data and text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include message contents, attachment links, and local file paths.]
+
+## Skill Version(s):
+
+4.7.0 (source: server release and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

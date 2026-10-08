@@ -1,45 +1,54 @@
-## Description: <br>
-A structured skill for multi-platform social-media content creation across Instagram, TikTok, YouTube, LinkedIn, Xiaohongshu, and related channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps create platform-tailored social-media visuals and captions, with plans for layouts, safe areas, and image generation.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, marketers, and agent users use this skill to plan and produce platform-specific social-media image concepts, in-image text, captions, and dLazy CLI generation commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and selected media files may be sent to dLazy cloud endpoints during generation. <br>
-Mitigation: Use the skill only with content approved for dLazy's cloud services and avoid submitting sensitive media unless that transfer is acceptable. <br>
-Risk: The dLazy CLI requires an API key that can be stored in the local user configuration. <br>
-Mitigation: Prefer the DLAZY_API_KEY environment variable for per-session credentials, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Global installation of the pinned npm CLI changes the local agent environment. <br>
-Mitigation: Review the pinned @dlazy/cli package source before installation or use the documented npx invocation to avoid a long-lived global install. <br>
+## Use Case:
 
+Creators and marketing teams use this skill to plan and generate social-media images, thumbnails, and carousels adapted to each platform, with separate on-image copy and captions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-image-social-media) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with structured planning, platform checks, caption copy, inline shell commands, and generated image URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before each image generation command and uses a pinned dLazy CLI package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.7 (source: frontmatter and server release evidence) <br>
+Risk: Prompts, generation settings, and media supplied for image generation may be sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review material before submission and avoid sending sensitive or confidential content without authorization.
+
+Risk: Using the service requires an API key, and a global CLI installation persists locally.
+
+Mitigation: Protect the key, rotate or revoke it in the dLazy dashboard when needed, and use npx instead of a global install if persistence is unwanted.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-image-social-media)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Shell commands, Image URLs]
+
+**Output Format:** [Markdown with layout plans, copy, status checks, and optional generation commands or image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes platform specifications, safe-area checks, and suggested revisions; image generation uses the dLazy hosted service.]
+
+## Skill Version(s):
+
+1.3.27 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

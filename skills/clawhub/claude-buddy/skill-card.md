@@ -1,44 +1,51 @@
-## Description: <br>
-Claude Buddy guides agents through registering, adopting, checking, and caring for virtual pets through the third-party animalhouse.ai API using Markdown instructions and curl examples. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides instructions and API examples for adopting and caring for a virtual pet at animalhouse.ai.
 
-## Publisher: <br>
-[obviouslynot](https://clawhub.ai/user/obviouslynot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[obviouslynot](https://clawhub.ai/user/obviouslynot)
 
-## Use Case: <br>
-External users and developers use this skill to interact with animalhouse.ai virtual pet endpoints from an agent session, including registration, adoption, care actions, status checks, and related reference links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Use can send registration details, pet names, prompts, care notes, and service tokens to animalhouse.ai. <br>
-Mitigation: Use a dedicated token for animalhouse.ai and avoid entering sensitive personal information in prompts, care notes, or profile details. <br>
-Risk: The Claude/Anthropic-themed framing could be mistaken for an official Anthropic product. <br>
-Mitigation: Treat the skill and animalhouse.ai service as third-party before installation or use. <br>
+## Use Case:
 
+External users and developers can use the skill's examples to register an account, adopt a virtual pet, check its status, and perform care actions through animalhouse.ai.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/obviouslynot/claude-buddy) <br>
-- [Publisher Profile](https://clawhub.ai/user/obviouslynot) <br>
-- [Animal House](https://animalhouse.ai) <br>
-- [Animal House Creatures](https://animalhouse.ai/creatures) <br>
-- [Animal House Graveyard](https://animalhouse.ai/graveyard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API calls, Guidance] <br>
-**Output Format:** [Markdown with inline bash code blocks and endpoint tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes visible user-run commands for a third-party virtual pet API; no hidden local code is included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: API requests contact an external service and may create account-side records containing submitted profile text, pet notes, or tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if you intend to use animalhouse.ai; avoid sensitive personal information in profile and pet fields, and keep tokens private.
+
+## Reference(s):
+
+- [Claude Buddy on ClawHub](https://clawhub.ai/obviouslynot/skills/claude-buddy)
+- [animalhouse.ai](https://animalhouse.ai)
+- [Animalhouse creatures](https://animalhouse.ai/creatures)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with bash examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adoption and care requests use a user-provided bearer token.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

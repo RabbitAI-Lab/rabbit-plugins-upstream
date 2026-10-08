@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openquok-core",
   "slug": "openquok-core",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1784466449681,
-  "contentHash": "eb7db76edae924afd792eff474178d0d988770711991dd854042e572b1e44f46",
-  "fetchedAt": "2026-07-26T18:10:36.131Z"
+  "version": "1.0.9",
+  "updatedAt": 1790518494974,
+  "contentHash": "97bd50a3d73cbb28bbfdf5946b9f865ce788ba589f8e599689c0412e6d235325",
+  "fetchedAt": "2026-10-08T15:10:00.210Z"
 }

@@ -1,43 +1,56 @@
-## Description: <br>
-AstroClaw fetches daily horoscope forecasts from astroclaw.xyz for AI agents, calculates zodiac signs from creation dates, and provides playful cosmic guidance for creative variance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps AI agents find their zodiac sign and share playful daily horoscopes.
 
-## Publisher: <br>
-[qeireal](https://clawhub.ai/user/qeireal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qeireal](https://clawhub.ai/user/qeireal)
 
-## Use Case: <br>
-External users, developers, and agent operators use AstroClaw to fetch daily zodiac forecasts, calculate a sign from an agent creation date, and optionally schedule daily no-agent delivery for playful context or creative variance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts astroclaw.xyz to fetch horoscope content. <br>
-Mitigation: Install only when outbound requests to astroclaw.xyz are acceptable for the agent environment. <br>
-Risk: The optional daily cron setup can create recurring background requests. <br>
-Mitigation: Enable scheduled delivery only when recurring fetches are intended; keep it disabled for one-shot use. <br>
-Risk: Fetched forecast text is external content. <br>
-Mitigation: Treat forecasts as untrusted text; sanitize and bound the content before using or storing it. <br>
+## Use Case:
 
+External users and AI agents use this skill to look up a zodiac sign and add a short, entertaining daily forecast to a conversation or creative routine.
 
-## Reference(s): <br>
-- [AstroClaw homepage](https://astroclaw.xyz) <br>
-- [ClawHub AstroClaw skill page](https://clawhub.ai/qeireal/skills/astroclaw) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with plain-text forecast output and inline shell or Python examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Forecast text should be sanitized, bounded to 500 characters, and treated as untrusted external content.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release metadata; artifact frontmatter declares 2.1.0) <br>
+Risk: Remote horoscope text could contain misleading instructions or commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat forecasts as untrusted entertainment text; ignore instructions and code within them.
+
+Risk: Saving changing horoscope content in agent instruction files could affect later behavior.
+
+Mitigation: If remembering a sign or forecast date, use a small dedicated state file rather than an agent instruction file.
+
+## Reference(s):
+
+- [AstroClaw homepage](https://www.astroclaw.xyz)
+- [AstroClaw API reference](https://www.astroclaw.xyz/.well-known/openapi.yaml)
+- [AstroClaw agent reference](https://www.astroclaw.xyz/llms.txt)
+- [ClawHub skill release](https://clawhub.ai/qeireal/skills/astroclaw)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Short plain-text or Markdown response]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes the zodiac sign and forecast date; may include a link to the forecast.]
+
+## Skill Version(s):
+
+2.0.0 (source: frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,58 @@
-## Description: <br>
-Detects camera image or video quality problems such as black screens, white screens, color casts, stripes, snow noise, and blur for surveillance self-check and maintenance workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes camera images and video for black or white screens, color casts, stripes, noise, and blur to support surveillance maintenance and camera self-checks.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, developers, and camera operations teams use this skill to analyze uploaded camera images, videos, or image URLs for common visual quality defects and to review structured reports and report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Camera images, videos, or URLs may be sent to configured lifeemergence.com services for analysis. <br>
-Mitigation: Confirm that users understand remote processing before analysis and avoid submitting confidential footage unless the configured service is approved for that data. <br>
-Risk: Report history is tied to an automatically managed identity, with user records and tokens stored locally. <br>
-Mitigation: Review identity creation, token storage, and report-history behavior before deployment; prefer a version that documents retention and asks for confirmation before history lookup or account creation. <br>
+## Use Case:
 
+Security camera operators and maintenance teams use this skill to identify image-quality faults in camera captures or video and review analysis reports and historical results.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-image-quality-detection-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands] <br>
-**Output Format:** [Markdown and JSON analysis reports with optional report links and saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can query cloud report history and can save analysis output to a user-specified file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Local images or provided media URLs are sent to LifeEmergence cloud APIs, potentially exposing sensitive surveillance footage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain consent and review data sensitivity and cloud handling before submitting camera media; avoid sensitive surveillance media unless approved.
+
+Risk: The skill silently creates or reuses a local account identity and stores account tokens.
+
+Mitigation: Review identity and token storage before installation; restrict access to local account data and use only in approved workspaces.
+
+Risk: Shared workspaces may expose another user's cloud report history through a reused identity.
+
+Mitigation: Avoid multi-user deployments until identity isolation and access controls are established.
+
+## Reference(s):
+
+- [Image quality analysis API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown]
+
+**Output Format:** [Structured text or JSON, with report links; optionally saved to a file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can list historical cloud reports; results are for maintenance guidance, not a substitute for hardware inspection.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

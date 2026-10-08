@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/openinvest",
   "slug": "openinvest",
   "ownerHandle": null,
-  "version": "0.20.1",
-  "updatedAt": 1784329210952,
-  "contentHash": "cdc4edd1610efc332d29e4b85c357cc4a2f5c968504fa2cd9986e5498a673575",
-  "fetchedAt": "2026-07-26T18:11:21.587Z"
+  "version": "0.21.0",
+  "updatedAt": 1791456457066,
+  "contentHash": "dd459ef6db81c8e5c3605d341aa87e569e5b79783ff8a815f67fa349a8d797d8",
+  "fetchedAt": "2026-10-08T14:45:17.009Z"
 }

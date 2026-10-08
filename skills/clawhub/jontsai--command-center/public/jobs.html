@@ -858,9 +858,10 @@
         }
       }
     </style>
-    <script src="/js/i18n.js"></script>
+    <script src="js/i18n.js"></script>
     <!-- Shared Sidebar Loader -->
-    <script src="/js/sidebar.js"></script>
+    <script src="js/state-stream.js"></script>
+    <script src="js/sidebar.js"></script>
   </head>
   <body>
     <!-- Sidebar container (populated by sidebar.js) -->
@@ -934,6 +935,9 @@
           </button>
         </div>
 
+        <p id="jobs-unavailable" role="status" data-i18n="jobs.providerUnavailable" hidden>
+          AI Jobs is not connected. Scheduled OpenClaw automations are shown under Cron Jobs.
+        </p>
         <!-- Jobs Grid -->
         <div class="section">
           <div id="jobs-loading" class="loading">
@@ -1184,6 +1188,7 @@
 
       // Set filter
       function setFilter(filter) {
+        if (!jobsAvailable) return;
         currentFilter = filter;
         document.querySelectorAll(".filter-btn").forEach((btn) => {
           btn.classList.toggle("active", btn.dataset.filter === filter);
@@ -1191,12 +1196,38 @@
         renderJobs();
       }
 
+      let jobsAvailable = false;
+      function showJobsUnavailable() {
+        jobsAvailable = false;
+        jobs = [];
+        document.getElementById("jobs-unavailable").hidden = false;
+        for (const id of ["jobs-loading", "jobs-empty", "jobs-grid"])
+          document.getElementById(id).style.display = "none";
+        for (const id of [
+          "stat-total",
+          "stat-active",
+          "stat-paused",
+          "stat-running",
+          "stat-success-rate",
+          "stat-failures",
+          "nav-jobs-count",
+        ]) {
+          const element = document.getElementById(id);
+          if (element) element.textContent = "—";
+        }
+      }
       // Fetch jobs from API
       async function fetchJobs() {
         try {
-          const res = await fetch("/api/jobs");
+          const res = await fetch("api/jobs");
           const data = await res.json();
-          jobs = data.jobs || [];
+          if (!res.ok || data.status === "unavailable" || !Array.isArray(data.jobs)) {
+            showJobsUnavailable();
+            return;
+          }
+          jobsAvailable = true;
+          document.getElementById("jobs-unavailable").hidden = true;
+          jobs = data.jobs;
           renderJobs();
           updateStats();
           document.getElementById("sidebar-updated").textContent = t(
@@ -1205,6 +1236,7 @@
             "Updated: " + new Date().toLocaleTimeString(),
           );
         } catch (e) {
+          showJobsUnavailable();
           console.error("Failed to fetch jobs:", e);
           showToast(t("jobs.toastLoadFailed", {}, "Failed to load jobs"), "error");
         }
@@ -1218,7 +1250,7 @@
       // Run job
       async function runJob(jobId) {
         try {
-          const res = await fetch(`/api/jobs/${encodeURIComponent(jobId)}/run`, { method: "POST" });
+          const res = await fetch(`api/jobs/${encodeURIComponent(jobId)}/run`, { method: "POST" });
           const data = await res.json();
           if (data.success) {
             showToast(
@@ -1237,7 +1269,7 @@
       // Pause job
       async function pauseJob(jobId) {
         try {
-          const res = await fetch(`/api/jobs/${encodeURIComponent(jobId)}/pause`, {
+          const res = await fetch(`api/jobs/${encodeURIComponent(jobId)}/pause`, {
             method: "POST",
           });
           const data = await res.json();
@@ -1255,7 +1287,7 @@
       // Resume job
       async function resumeJob(jobId) {
         try {
-          const res = await fetch(`/api/jobs/${encodeURIComponent(jobId)}/resume`, {
+          const res = await fetch(`api/jobs/${encodeURIComponent(jobId)}/resume`, {
             method: "POST",
           });
           const data = await res.json();
@@ -1289,7 +1321,7 @@
         empty.style.display = "none";
 
         try {
-          const res = await fetch(`/api/jobs/${encodeURIComponent(jobId)}/history?limit=50`);
+          const res = await fetch(`api/jobs/${encodeURIComponent(jobId)}/history?limit=50`);
           const data = await res.json();
           const runs = data.runs || [];
 

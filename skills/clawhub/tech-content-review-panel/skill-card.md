@@ -1,41 +1,54 @@
-## Description: <br>
-Reviews finished tech, AI, or industry deep-analysis drafts with an eight-role expert panel that verifies facts and originality, checks style and depth, and produces publish-ready revision guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews finished tech, AI, and industry deep-analysis articles through an eight-role panel covering facts, originality, style, depth, reader value, and distribution readiness.
 
-## Publisher: <br>
-[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[haiyangchenbj](https://clawhub.ai/user/haiyangchenbj)
 
-## Use Case: <br>
-Writers, editors, analysts, and content strategists use this skill to review completed tech, AI, data, or industry deep-analysis drafts before publication. It provides a structured panel critique, fact and originality checks, style red-line review, depth assessment, distribution feedback, and prioritized revision guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fact and originality checks may use web searches with facts or distinctive phrasing from a draft. <br>
-Mitigation: Avoid using the skill on confidential unpublished material unless external search exposure is acceptable, or remove sensitive details before review. <br>
-Risk: Editorial recommendations or fact-check results can be incomplete or mistaken if source evidence is weak. <br>
-Mitigation: Treat to-verify items and must-fix recommendations as review inputs, and confirm important claims against reliable sources before publication. <br>
+## Use Case:
 
+Writers and editors use this skill to assess a finished long-form tech or AI analysis for publication, identify must-fix issues, and check whether revisions preserve the intended audience and scope. It is not intended for news, marketing, documentation, tutorials, or unfinished drafts.
 
-## Reference(s): <br>
-- [Tech Content Review Panel on ClawHub](https://clawhub.ai/haiyangchenbj/skills/tech-content-review-panel) <br>
-- [Six Depth Moves](references/depth-playbook.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured Markdown review with role-labeled sections, pass or reject status, issue categories, and prioritized revision guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include fact and originality verification notes, style red-line findings, depth-move coverage, distribution feedback, and author-decision tradeoffs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release metadata) <br>
+Risk: Web checks of draft content may disclose unpublished ideas or sensitive material to external search services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain permission before searching unpublished text, and avoid sending confidential passages or distinctive phrasing to external services.
+
+Risk: Strict editorial preferences or incomplete fact and originality searches may lead to misleading publication-readiness judgments.
+
+Mitigation: Have the author review cited evidence, unresolved claims, and proposed style changes before publishing.
+
+## Reference(s):
+
+- [Tech Content Review Panel on ClawHub](https://clawhub.ai/haiyangchenbj/skills/tech-content-review-panel)
+- [Depth playbook](references/depth-playbook.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown review with per-role findings and prioritized editorial recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes fact and originality checks, style and depth assessments, distribution feedback, and a separate reader-fit test.]
+
+## Skill Version(s):
+
+1.2.1 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

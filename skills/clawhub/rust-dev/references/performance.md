@@ -19,6 +19,8 @@ Whatever you build to answer a performance question - a benchmark, an A/B timing
 
 A profiler needs optimized code *and* debug symbols, but a plain `--release` build strips the symbols - so the profile comes back as unreadable `[unknown]` frames. Add a `profiling` profile once:
 
+One toolchain change to know before you blame your tools: **Rust 1.97 made the v0 symbol mangling scheme the default.** The release notes are explicit that this "may cause some tools (such as debuggers or profilers, especially with old versions) to fail to demangle symbols emitted by Rust" and "may also cause the formatting of text in backtraces to change". So garbled or undemangled frames after a toolchain bump usually mean an out-of-date profiler, not a broken build.
+
 ```toml
 [profile.profiling]
 inherits = "release"
@@ -26,8 +28,8 @@ debug = true
 ```
 
 - **`samply`** is the go-to sampling profiler: `cargo install --locked samply`, build with `cargo build --profile profiling`, then `samply record ./target/profiling/my-app`. It opens an interactive Firefox Profiler view in the browser; works on macOS, Linux, and Windows (on Linux, grant perf access once with `sysctl kernel.perf_event_paranoid=1`).
-- **`cargo-flamegraph`** produces a static flamegraph SVG; `samply` has largely displaced it for interactive work.
-- For **heap profiling** - what allocates and how much - the `dhat` crate gives in-process, native-speed heap profiling: add it, set its global allocator, and view the profile in the DHAT online viewer (cross-platform, unlike Valgrind).
+- **`cargo-flamegraph`** produces a static flamegraph SVG; `samply` has largely displaced it for interactive work. On Linux it now needs `--no-rosegment`, because rust-lld became the default linker in 1.90 and perf cannot generate accurate stack traces without it - the same applies under mold.
+- For **heap profiling** - what allocates and how much - the `dhat` crate gives in-process, cross-platform heap profiling (unlike Valgrind): add it, set its global allocator, and view the profile in the DHAT online viewer. Budget for the slowdown; its docs warn that "the program will run more slowly than normal... it can be large", and the author notes maintenance is not a high priority. It is a tool you reach for deliberately, not one you leave wired in.
 - The **Rust Performance Book** (https://nnethercote.github.io/perf-book/) is the canonical guide - read it before reaching for tricks.
 
 For a release profile that is representative and ships fast:
@@ -97,3 +99,5 @@ When resident memory looks too high, the folk-wisdom fix is to swap the global a
 Most "excess" RSS is memory the process already freed but the allocator has **retained** rather than returned to the OS. It is available for reuse and it is not a leak; it just looks alarming in a process monitor. Confirm which you have before acting - a heap profiler (`dhat`) shows *live* bytes, and the gap between live bytes and RSS is retention and fragmentation, not leakage.
 
 If that gap is where your memory went, the lever is **the transient peak, not the allocator**: an allocator only holds regions that some earlier spike forced it to acquire. Cutting the spike (stream instead of buffering, `into_iter()` instead of `.iter()`, process in batches) means the regions are never claimed in the first place. Reach for an allocator swap only with a measurement in hand showing it helps *your* workload on *your* platform - and re-measure after, because the intuitive result is not guaranteed.
+
+The same goes for trimming. `malloc_trim(0)` at a quiet point (and `MALLOC_ARENA_MAX` to cap glibc's arenas) can visibly drop RSS on Linux, but it is a glibc function with no portable equivalent - a trim hook patches one platform, while cutting the spike fixes all of them.

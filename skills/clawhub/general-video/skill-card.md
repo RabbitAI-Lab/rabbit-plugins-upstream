@@ -1,43 +1,53 @@
-## Description: <br>
-Author or edit custom HyperFrames video compositions for longer or multi-scene pieces, brand and sizzle reels, montages, static loops, static title cards, footage remixes, and freeform builds when no specialized workflow fits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Authors and edits custom HyperFrames video compositions when specialized workflows do not fit, including multi-scene pieces, title cards, and footage remixes.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and creative operators use this skill to plan, build, verify, and optionally render HyperFrames video projects from a brief or existing project state. It is suited to custom video compositions that need staged assets, design adherence, motion planning, review gates, and project-scoped file generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can run disclosed HyperFrames CLI commands and create or modify project files. <br>
-Mitigation: Review the planned commands and generated files before execution, and keep work scoped to the intended HyperFrames project directory. <br>
-Risk: Provider sign-in, billing, or render approval may be required for some media and rendering steps. <br>
-Mitigation: Confirm authentication status, billing impact, and render approval before provider actions or final rendering. <br>
-Risk: Larger videos may delegate scene work to scoped workers that generate composition HTML and motion sidecars. <br>
-Mitigation: Use the generated frame packets as bounded inputs and verify all scene files, motion JSON, and final HyperFrames checks before rendering. <br>
+## Use Case:
 
+Video creators and developers use this skill to plan, build, revise, and check custom HyperFrames compositions for projects that do not fit a specialized workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/general-video) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/heygen-com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and project files such as BRIEF.md, STORYBOARD.md, HTML compositions, and motion JSON sidecars] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create project-scoped HyperFrames files and bounded frame-packet files for delegated scene work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata) <br>
+Risk: Unpinned external commands and built-in skill updates may change the reviewed workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installation; use a trusted, pinned HyperFrames CLI/package source and review updates before running them.
+
+Risk: External commands can modify project files in environments with sensitive files or credentials.
+
+Mitigation: Review the skill and limit access to sensitive project files and credentials before execution.
+
+## Reference(s):
+
+- [General Video on ClawHub](https://clawhub.ai/heygen-com/skills/general-video)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown, Shell commands, Files]
+
+**Output Format:** [HTML compositions, project files, preview or rendered video, and Markdown handoff]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Rendering requires final preview approval; reports duration for time-based deliverables.]
+
+## Skill Version(s):
+
+1.0.25 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

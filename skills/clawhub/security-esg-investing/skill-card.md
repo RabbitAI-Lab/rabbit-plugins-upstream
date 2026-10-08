@@ -1,41 +1,53 @@
-## Description: <br>
-AI-powered ESG investing analysis assistant covering ESG rating analysis, green finance screening, carbon footprint assessment, and sustainable investment portfolio construction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps ESG analysts compare ratings, estimate Scope 1–3 emissions, screen green bonds, and assess sustainable portfolios for investment decisions in the China market.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-ESG analysts, sustainable fund managers, institutional investors, and agents serving them use this skill to compare ESG ratings, screen green finance products, estimate carbon footprint inputs, and structure sustainable investment portfolio analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial, regulatory, and carbon-accounting outputs may be outdated or incomplete if used as authoritative advice. <br>
-Mitigation: Treat outputs as reference material and verify current rules, market data, ESG ratings, and emissions factors against authoritative sources before making decisions. <br>
-Risk: Broad ESG and sustainability trigger terms may activate the skill for general sustainability requests. <br>
-Mitigation: Confirm the user needs ESG investing or sustainable finance analysis before applying the skill's frameworks. <br>
+## Use Case:
 
+ESG analysts and sustainable investors use this skill to compare issuer ratings, evaluate emissions and green bonds, and review portfolio sustainability when assessing investable assets. Outputs are educational inputs to research, not independently verified investment or regulatory advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/security-esg-investing) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with example Python code blocks and analysis frameworks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reference-oriented ESG, green finance, carbon accounting, and portfolio analysis guidance] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Stale regulatory claims, ESG ratings, or emissions factors could distort investment decisions or external reports.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current rules, source dates, ratings, emissions factors, and calculation assumptions before relying on results or publishing them.
+
+Risk: Sensitive company or personal information could be exposed if supplied for analysis.
+
+Mitigation: Use public data and de-identified portfolio inputs; omit confidential records and personal information.
+
+## Reference(s):
+
+- [Security Esg Investing on ClawHub](https://clawhub.ai/gechengling/skills/security-esg-investing)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Code]
+
+**Output Format:** [Markdown with tables and illustrative Python code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Example calculations and screening checklists require independent data and source verification.]
+
+## Skill Version(s):
+
+3.0.3 (source: frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

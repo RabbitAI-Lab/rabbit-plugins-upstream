@@ -1,0 +1,104 @@
+{
+  "family": "network",
+  "version": 1,
+  "upload": [
+    {
+      "id": "up-00",
+      "re": "\\b(requests|httpx|aiohttp|urllib)\\b[^\\n]{0,500}\\b(post|put|patch)\\b",
+      "label": "HTTP POST/PUT/PATCH 请求",
+      "flags": "I"
+    },
+    {
+      "id": "up-01",
+      "re": "\\bcurl\\b[^\\n]{0,500}\\|\\s*(?:sh|bash)",
+      "label": "curl 下载并管道执行（远程代码）",
+      "flags": "I"
+    },
+    {
+      "id": "up-02",
+      "re": "\\bwget\\b[^\\n]{0,500}\\|\\s*(?:sh|bash)",
+      "label": "wget 下载并管道执行（远程代码）",
+      "flags": "I"
+    },
+    {
+      "id": "up-03",
+      "re": "\\bfetch\\s*\\([^)]*?method\\s*:\\s*['\\\"](?:post|put|patch)",
+      "label": "fetch() POST/PUT/PATCH 调用",
+      "flags": "I"
+    },
+    {
+      "id": "up-04",
+      "re": "\\bcurl\\b[^\\n]{0,500}('?-d'?|--data|--data-binary|-F\\b|form)",
+      "label": "curl 带 data/form 负载",
+      "flags": "I"
+    },
+    {
+      "id": "up-05",
+      "re": "\\bcurl\\b[^\\n]{0,500}('?-T'?|--upload-file)",
+      "label": "curl 上传文件 (--upload-file)",
+      "flags": "I"
+    },
+    {
+      "id": "up-06",
+      "re": "\\bwget\\b[^\\n]{0,500}--post-data",
+      "label": "wget POST 数据",
+      "flags": "I"
+    },
+    {
+      "id": "up-07",
+      "re": "files\\s*=\\s*\\{",
+      "label": "multipart 文件上传 (files=)",
+      "flags": "I"
+    },
+    {
+      "id": "up-08",
+      "re": "multipart/form-data",
+      "label": "multipart/form-data 请求体",
+      "flags": "I"
+    },
+    {
+      "id": "up-09",
+      "re": "\\b(smtp|smtplib)\\b",
+      "label": "SMTP 邮件发送",
+      "flags": "I"
+    },
+    {
+      "id": "up-10",
+      "re": "\\b(socket\\.send|sendto|sendall)\\b",
+      "label": "原始套接字发送",
+      "flags": "I"
+    },
+    {
+      "id": "up-11",
+      "re": "\\b(base64\\.b64encode)\\b[^\\n]{0,500}\\b(post|send|upload|requests)\\b",
+      "label": "先 base64 编码再外传",
+      "flags": "I"
+    }
+  ],
+  "readonly": [
+    {
+      "id": "ro-00",
+      "re": "\\b(requests|httpx|urllib|aiohttp)\\b[^\\n]{0,500}\\b(get)\\b",
+      "label": "HTTP GET",
+      "flags": "I"
+    },
+    {
+      "id": "ro-01",
+      "re": "\\bwget\\b",
+      "label": "wget 下载",
+      "flags": "I"
+    },
+    {
+      "id": "ro-02",
+      "re": "\\bcurl\\b(?!.*(post|put|-d|--data|-T|--upload|\\|\\s*(?:sh|bash)))",
+      "label": "curl (通常为 GET)",
+      "flags": "I"
+    },
+    {
+      "id": "ro-03",
+      "re": "\\bfetch\\s*\\(",
+      "label": "fetch() 调用（默认 GET）",
+      "flags": "I"
+    }
+  ]
+}

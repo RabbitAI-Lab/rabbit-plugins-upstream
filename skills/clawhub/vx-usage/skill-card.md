@@ -1,41 +1,58 @@
-## Description: <br>
-Teaches AI agents how to use vx, the universal development tool manager, for tool execution, project setup, token-efficient workflows, MCP integration, and GitHub Actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using vx to manage development tools, project setup, Git and GitHub workflows, MCP integrations, and CI.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and agent operators use this skill to guide AI agents working in vx-managed projects, including tool execution, project setup, Git/GitHub workflows, MCP configuration, and CI usage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can steer agents toward vx commands that install tools, update local caches, change project files, or alter CI/MCP configuration. <br>
-Mitigation: Confirm the project is vx-managed and approve environment-changing commands such as vx install, vx sync, vx setup, vx lock, and vx ai setup before execution. <br>
-Risk: The skill includes Git and GitHub workflows that may mutate repositories or use token-bearing integrations. <br>
-Mitigation: Review repository state, intended branch or pull request, and token scope before allowing vx git, vx gh, or GitHub Actions changes. <br>
+## Use Case:
 
+Developers and engineering agents use this skill for vx-managed tool execution, project configuration, Git and GitHub tasks, MCP setup, and CI workflows.
 
-## Reference(s): <br>
-- [ClawHub package page](https://clawhub.ai/loonghao/vx-usage) <br>
-- [Publisher profile](https://clawhub.ai/user/loonghao) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell, TOML, JSON, YAML, Dockerfile, and Starlark examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no executable payload is included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: Broad guidance may redirect Git, GitHub, and project setup work through vx even when it is not needed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Activate the skill only for vx-specific tasks and review its guidance before installation.
+
+Risk: Unpinned MCP servers, GitHub Actions, and container images can change after review.
+
+Mitigation: Pin MCP server versions, GitHub Actions, and container images before use.
+
+Risk: Global skill setup, force updates, or changes to CI, hooks, PATH, and GitHub state may affect the user's environment or repositories.
+
+Mitigation: Require explicit user approval before running these commands or making these changes.
+
+## Reference(s):
+
+- [ClawHub vx-usage release](https://clawhub.ai/loonghao/skills/vx-usage)
+- [vx managed command shim guide](https://github.com/loonghao/vx/blob/main/docs/guide/managed-command-shims.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with command and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.22 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

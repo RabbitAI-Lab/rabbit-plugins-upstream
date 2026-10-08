@@ -7,8 +7,10 @@
 // 接受完整链接、/s/<ref> 路径、裸 share_id 或 slug。
 
 const {
+    emitError,
     CREDENTIAL_MODE_SUDOWORK_PROXY,
     detectCredentialMode,
+    extractShareRef,
     printShareOneScriptError,
     requestShareOneJson,
     resolveDirectApiKey,
@@ -19,19 +21,6 @@ function usage() {
     console.error('  仅对绑定了远程源 URL 的分享有效；非 remote-bound 会返回 NOT_REMOTE_BOUND。');
 }
 
-function extractShareRef(value) {
-    const raw = String(value || '').trim();
-    if (!raw) return null;
-    try {
-        const parsed = raw.includes('://') ? new URL(raw) : null;
-        const path = parsed ? parsed.pathname : raw.split('?')[0].split('#')[0];
-        const parts = path.split('/').filter(Boolean);
-        if (parts.length === 0) return raw;
-        return parts[parts.length - 1] || raw;
-    } catch (_) {
-        return raw;
-    }
-}
 
 const args = process.argv.slice(2);
 let ref = null;
@@ -44,27 +33,22 @@ for (let i = 0; i < args.length; i++) {
     } else if (!arg.startsWith('--') && !ref) {
         ref = arg;
     } else {
-        console.error(`ERROR:UNKNOWN_ARGUMENT:${arg}`);
-        usage();
-        process.exit(1);
+        emitError(`ERROR:UNKNOWN_ARGUMENT:${arg}`);
     }
 }
 
 if (!ref) {
     usage();
-    process.exit(1);
+    emitError('BAD_ARGS', 'Required arguments are missing.');
 }
 
 (async () => {
     const credentialMode = await detectCredentialMode();
     if (credentialMode.mode === CREDENTIAL_MODE_SUDOWORK_PROXY && apiKey) {
-        console.error('ERROR:SUDOWORK_MANAGED_KEY');
-        console.error('Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。');
-        process.exit(1);
+        emitError('ERROR:SUDOWORK_MANAGED_KEY', ['Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。'].join('\n'));
     }
     if (credentialMode.mode !== CREDENTIAL_MODE_SUDOWORK_PROXY && !resolveDirectApiKey(apiKey)) {
-        console.error('ERROR:KEY_NOT_FOUND');
-        process.exit(1);
+        emitError('ERROR:KEY_NOT_FOUND');
     }
 
     const shareRef = encodeURIComponent(extractShareRef(ref));
@@ -75,6 +59,5 @@ if (!ref) {
     process.stdout.write(JSON.stringify(result, null, 2) + '\n');
     console.error(`SHARE_REFRESHED:${extractShareRef(ref)}`);
 })().catch((error) => {
-    printShareOneScriptError(error);
-    process.exit(1);
+    process.exit(printShareOneScriptError(error));
 });

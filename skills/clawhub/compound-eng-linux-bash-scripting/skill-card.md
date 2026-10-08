@@ -1,42 +1,54 @@
-## Description: <br>
-Guides agents to produce defensive GNU Bash 4.4+ scripts for Linux, including safe foundations, argument parsing, production patterns, and ShellCheck/shfmt validation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides defensive Linux Bash scripting guidance for safe argument parsing, production automation, and ShellCheck-compliant scripts.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill when asking an agent to write or review Linux Bash scripts, shell scripts, cron jobs, deployment automation, backup rotation, or CLI tooling. It emphasizes defensive scripting practices, safe handling of untrusted input, and validation with ShellCheck and shfmt. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Bash scripts may include destructive file operations, network calls, cron usage, or system changes. <br>
-Mitigation: Review generated scripts before execution, especially commands that delete files, modify system state, make network requests, or schedule recurring work. <br>
-Risk: Incorrect Bash guidance can lead to unsafe handling of untrusted input or brittle automation. <br>
-Mitigation: Prefer the skill's defensive patterns, avoid eval and shell-built heredocs from external data, and run ShellCheck and shfmt before relying on generated scripts. <br>
+## Use Case:
 
+Developers and engineers use this skill to write and review defensive Bash scripts, cron jobs, and Linux CLI automation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-linux-bash-scripting) <br>
-- [Runtime instructions](artifact/SKILL.md) <br>
-- [Skill specification](artifact/SPEC.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with Bash code blocks and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Targets GNU Bash 4.4+ on Linux and recommends ShellCheck plus shfmt validation before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release evidence) <br>
+Risk: Generated scripts may delete files, use elevated privileges, or change production systems.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review scripts and their targets before execution, particularly destructive commands and sudo usage.
+
+Risk: Scripts handling secrets may expose credentials if run without care.
+
+Mitigation: Review secret handling before running; keep secrets out of process arguments and shell tracing.
+
+## Reference(s):
+
+- [Input and process safety](references/input-and-process-safety.md)
+- [Production patterns](references/production-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with Bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Targets GNU Bash 4.4+ on Linux; recommends ShellCheck and shfmt checks.]
+
+## Skill Version(s):
+
+5.0.1 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,55 @@
-## Description: <br>
-Identifies acquaintances in videos or images through face photo comparison, supports face-database enrollment, and returns structured recognition results with locations and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies previously enrolled acquaintances in images or videos through face comparison and provides recognition reports for home or office monitoring.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Developers and agents use this skill to analyze supplied images or videos for known-person face recognition in home or office monitoring workflows, after the relevant faces have been enrolled in the service database. It can also return cloud-hosted historical recognition reports for the current internal identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Face images or videos and related identity/report metadata are sent to the configured cloud service. <br>
-Mitigation: Use the skill only when users have consent and legal authority for biometric recognition and cloud processing. <br>
-Risk: The local workspace database can contain persistent identity and token data. <br>
-Mitigation: Treat the workspace data directory as sensitive, restrict access, and rotate or remove stored tokens and identities when they are no longer needed. <br>
-Risk: Historical report queries retrieve cloud-hosted recognition records with limited user control. <br>
-Mitigation: Review the service account, report access scope, and retention expectations before using the report-list workflow. <br>
+## Use Case:
 
+Home and office users can compare images or videos against an enrolled face database to identify familiar people and review past recognition reports. Results are advisory and are not suitable for legal identity verification.
 
-## Reference(s): <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-familiar-person-recognition-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Files] <br>
-**Output Format:** [Markdown or JSON structured analysis text with optional saved output file and report-link URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Results may include recognized identities, locations in the media, analysis status, historical report records, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata; artifact frontmatter says 1.0.10) <br>
+Risk: Face-containing images or videos, potentially including home or office surveillance footage, are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with appropriate consent and review the service's account and data-retention expectations before uploading sensitive media.
+
+Risk: The skill can silently create or reuse a local identity, associate reports with it, and store account tokens in a workspace SQLite database.
+
+Mitigation: Review account association and protect access to the workspace database and stored tokens before using the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-familiar-person-recognition-analysis)
+- [Recognition API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured recognition results and report links; Markdown tables for report history]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save results to a file.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release; artifact frontmatter lists 1.0.19)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

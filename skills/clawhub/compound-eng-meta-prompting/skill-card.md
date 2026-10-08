@@ -1,40 +1,49 @@
-## Description: <br>
-Structured reasoning modifiers (/think, /verify, /adversarial, /edge, /confidence, /assumptions, etc.) to stress-test decisions, surface assumptions, or enumerate edge cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Adds structured decision-review patterns to stress-test conclusions, evidence, assumptions, alternatives, and edge cases before committing to a plan.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers, architects, reviewers, and other agent users use this skill to request structured reasoning patterns before committing to important designs, architecture decisions, security-sensitive reviews, or ambiguous plans. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation language may change the agent's response style or reasoning structure when the user did not explicitly request a modifier. <br>
-Mitigation: Use or enable the skill only when automatic structured reasoning is desired; otherwise disable it or invoke comparable reasoning patterns explicitly. <br>
-Risk: Structured reasoning outputs can still contain incorrect assumptions, incomplete verification, or misleading confidence labels. <br>
-Mitigation: Review outputs before relying on them for critical design, architecture, security, or production decisions. <br>
+## Use Case:
 
+Developers and other users reviewing consequential designs, decisions, or ambiguous plans use this skill to surface counterarguments, assumptions, uncertainty, and edge cases.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-meta-prompting) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown or JSON depending on the requested reasoning pattern] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include marked answer sections such as VERIFIED ANSWER, REVISED ANSWER, confidence tiers, assumptions, comparisons, edge cases, or counterarguments.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server-resolved release metadata) <br>
+Risk: Broad natural-language triggers may add review sections or change the response format without an explicit command.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit commands or request a preferred format, and check that the main answer remains clear.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/iliaal/skills/compound-eng-meta-prompting)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Text or Markdown decision records, comparison tables, and optional JSON responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include verification markers, counterarguments, confidence ratings, assumptions, and edge cases.]
+
+## Skill Version(s):
+
+5.0.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,58 @@
-## Description: <br>
-Call the Claude API through RunAPI using Anthropic, OpenAI, Gemini-compatible, or other compatible clients for chat, streaming, multimodal input, tool use, extended thinking, token counting, and protocol-compatible integrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in using Claude models through RunAPI with the Anthropic Messages protocol and optional OpenAI or Gemini client compatibility.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent builders use this skill to configure Claude API calls through RunAPI, including SDK setup, streaming, multimodal requests, token counting, and OpenAI or Gemini protocol compatibility. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Claude prompts and API traffic may be routed to RunAPI using a RunAPI token. <br>
-Mitigation: Install and use the skill only when RunAPI is the intended Claude API route, and configure credentials explicitly through ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL. <br>
-Risk: Broad Claude-related trigger wording may activate the skill for generic Claude help when stricter RunAPI-specific routing is desired. <br>
-Mitigation: Review the trigger wording before deployment and narrow it if the environment should separate general Claude guidance from RunAPI API usage. <br>
+## Use Case:
 
+Developers use this skill to configure RunAPI credentials and call Claude models for chat, streaming, vision, tools, reasoning, and token counting. It also guides developers migrating existing OpenAI or Gemini clients.
 
-## Reference(s): <br>
-- [RunAPI Claude Model Documentation](https://runapi.ai/models/claude.md) <br>
-- [RunAPI Anthropic Provider Documentation](https://runapi.ai/providers/anthropic.md) <br>
-- [RunAPI Model Catalog](https://runapi.ai/models.md) <br>
-- [RunAPI Claude Homepage](https://runapi.ai/models/claude) <br>
-- [ClawHub Skill Page](https://clawhub.ai/runapi-ai/skills/runapi-claude) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/runapi-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline code blocks and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires RunAPI credentials via ANTHROPIC_API_KEY and ANTHROPIC_BASE_URL for the described API flows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.11 (source: server release evidence) <br>
+Risk: Prompts sent through this integration go to RunAPI's service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when routing prompts to RunAPI is intended and permitted by your data-handling policy.
+
+Risk: Using this integration requires a RunAPI API key.
+
+Mitigation: Provide the key through the documented environment variable and protect it as a credential.
+
+## Reference(s):
+
+- [Claude on RunAPI documentation](https://runapi.ai/models/claude.md)
+- [Claude on RunAPI model page](https://runapi.ai/models/claude)
+- [RunAPI Anthropic provider documentation](https://runapi.ai/providers/anthropic.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [Compatibility protocols](references/compatibility-protocols.md)
+- [ClawHub skill release](https://clawhub.ai/runapi-ai/skills/runapi-claude)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with Python examples and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Describes request verification and retry boundaries; no executable files are produced.]
+
+## Skill Version(s):
+
+0.2.17 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

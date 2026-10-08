@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/home-assistant-skill",
   "slug": "home-assistant-skill",
   "ownerHandle": null,
-  "version": "2.1.0",
-  "updatedAt": 1778492552850,
-  "contentHash": "ca2e80fe3fb8f5b750da6f14eb719674e2b8276f6c53f6054b7ad8e0c9cff085",
-  "fetchedAt": "2026-07-26T19:29:20.960Z"
+  "version": "2.5.1",
+  "updatedAt": 1791303314253,
+  "contentHash": "60f4356c844f7135b0be63d7f18b0aa22c90c43df6c800e5cc8561d9781ad915",
+  "fetchedAt": "2026-10-08T14:50:16.171Z"
 }
