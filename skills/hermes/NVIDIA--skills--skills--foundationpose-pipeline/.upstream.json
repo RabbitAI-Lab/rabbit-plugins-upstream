@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/foundationpose-pipeline",
+  "identifier": "NVIDIA/skills/skills/foundationpose-pipeline",
+  "repo": "NVIDIA/skills",
+  "path": "skills/foundationpose-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-10-08T14:14:42Z",
+  "contentHash": "2dc84295bc4ccd7b4c289dcb239ea008f821489687de2592f8db10c70f851f32",
+  "fetchedAt": "2026-10-08T14:43:59.331Z"
+}

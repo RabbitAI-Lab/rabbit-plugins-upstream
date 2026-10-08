@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/relsa-severity-assessment",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/relsa-severity-assessment",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/relsa-severity-assessment",
+  "branch": "main",
+  "pushedAt": "2026-10-08T10:38:14Z",
+  "contentHash": "7766ca20da839366695464e7858ee1bc36822da03b81b4bd87b6bdbd5a9d6ca1",
+  "fetchedAt": "2026-10-08T14:44:00.750Z"
+}

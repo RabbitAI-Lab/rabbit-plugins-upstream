@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/coq",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/coq",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/coq",
+  "branch": "main",
+  "pushedAt": "2026-10-08T10:38:14Z",
+  "contentHash": "299137abd989e53d83d001757f93c9f74f7e9c2b0081a7ebcb40feb09fb79727",
+  "fetchedAt": "2026-10-08T14:44:00.649Z"
+}

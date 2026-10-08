@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/phoenix",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/phoenix",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/phoenix",
+  "branch": "main",
+  "pushedAt": "2026-10-08T10:38:14Z",
+  "contentHash": "7312dd3c7a78b33b83aad5b238ce1b1037ca83737d52dce64ba2eae4723533a7",
+  "fetchedAt": "2026-10-08T14:44:00.730Z"
+}
