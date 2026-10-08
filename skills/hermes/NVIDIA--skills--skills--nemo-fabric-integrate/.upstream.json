@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-fabric-integrate",
+  "identifier": "NVIDIA/skills/skills/nemo-fabric-integrate",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-fabric-integrate",
+  "branch": "main",
+  "pushedAt": "2026-10-08T14:14:42Z",
+  "contentHash": "9047672d934662a76f10f3b218736f731784b87bc3efc2691bff6751d2791362",
+  "fetchedAt": "2026-10-08T14:43:59.371Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/dimensional-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/dimensional-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/dimensional-analysis",
+  "branch": "main",
+  "pushedAt": "2026-10-08T10:38:14Z",
+  "contentHash": "cf9acd6ad7c60dbc83373541436eaa065af83efbf87ec59738df237d4a5c4c21",
+  "fetchedAt": "2026-10-08T14:44:00.662Z"
+}
