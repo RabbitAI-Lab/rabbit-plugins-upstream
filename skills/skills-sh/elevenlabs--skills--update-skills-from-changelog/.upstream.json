@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/elevenlabs/skills/update-skills-from-changelog",
+  "repo": "elevenlabs/skills",
+  "skillId": "update-skills-from-changelog",
+  "branch": "main",
+  "pushedAt": "2026-10-09T13:06:07Z",
+  "contentHash": "081891e71984e5ed21685cb7b531e947c4a419ca34363947b78ccb5a4de56004",
+  "fetchedAt": "2026-10-09T14:27:35.441Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/amazon-workspaces-agent-access",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "amazon-workspaces-agent-access",
+  "branch": "main",
+  "pushedAt": "2026-10-09T14:22:21Z",
+  "contentHash": "62fef4adff32f11e3c479bb172078c6575b9cf272e3a2ee54356f834e7cdc235",
+  "fetchedAt": "2026-10-09T14:28:06.523Z"
+}

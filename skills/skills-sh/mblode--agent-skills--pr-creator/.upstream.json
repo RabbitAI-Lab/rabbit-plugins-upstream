@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mblode/agent-skills/pr-creator",
+  "repo": "mblode/agent-skills",
+  "skillId": "pr-creator",
+  "branch": "main",
+  "pushedAt": "2026-10-08T20:38:02Z",
+  "contentHash": "7b8de83dd4420f9d1e410461e10a1bd9ec7efbfdcb91de969908b8fc3b953737",
+  "fetchedAt": "2026-10-09T14:27:55.582Z"
+}

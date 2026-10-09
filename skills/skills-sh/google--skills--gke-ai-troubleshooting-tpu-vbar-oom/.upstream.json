@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-vbar-oom",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-vbar-oom",
+  "branch": "main",
+  "pushedAt": "2026-10-09T14:18:46Z",
+  "contentHash": "4bed09fbc14c444b55c99ec354caf707281048add634b708baff9a5e3986c910",
+  "fetchedAt": "2026-10-09T14:27:22.501Z"
+}
