@@ -1,0 +1,34 @@
+{
+  "name": "@clawreefantenna/antenna-plugin",
+  "version": "1.6.8",
+  "description": "Antenna for OpenClaw: signed messaging between approved conversations on compatible OpenClaw and Hermes peers.",
+  "homepage": "https://clawreef.io/",
+  "type": "module",
+  "private": true,
+  "license": "MIT",
+  "bin": {
+    "antenna-plugin": "./cli.mjs"
+  },
+  "files": [
+    "*.mjs",
+    "*.sh",
+    "openclaw.plugin.json",
+    "README.md",
+    "MIGRATION.md",
+    "corpus/*.json",
+    "rules/*.json",
+    "RULESETS.md",
+    "CORPORA.md"
+  ],
+  "openclaw": {
+    "extensions": [
+      "./index.mjs"
+    ]
+  },
+  "peerDependencies": {
+    "openclaw": ">=2026.9.5"
+  },
+  "scripts": {
+    "test": "node tests/operator-auth.mjs && node tests/package.mjs && node tests/flow.mjs && node tests/legacy.mjs && node tests/migration-doctor.mjs && node tests/diagnostics.mjs && node tests/resources.mjs && node tests/corpus.mjs && node tests/missing-corpus.mjs"
+  }
+}

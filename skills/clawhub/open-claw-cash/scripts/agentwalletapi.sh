@@ -6,13 +6,15 @@
 # Sensitive env var: AGENTWALLETAPI_KEY (in .env)
 #
 # Commands:
-#   skill-latest                Get latest skill version + zip/install metadata (public, no API key)
+#   skill-latest                Get latest skill version + install metadata (public, no API key)
 #   wallets                     List all wallets
 #   user-tag-get                Read global checkout user tag for this API key owner
-#   user-tag-set <userTag> [--yes]   Set global checkout user tag once (immutable after set)
+#   user-tag-set <userTag> [--yes]   Set global checkout user tag once (immutable after set; 3-8 lowercase chars: a-z, 0-9, ., _, -)
 #   wallet <walletId|publicWalletId|walletLabel> [chain]   Get one wallet detail with balances
+#   rename <walletId|publicWalletId> <newLabel>   Rename a wallet (update its label)
+#   policies                    List governance policies for every wallet accessible to this API key
+#   policy <walletId|publicWalletId|walletLabel>   Get governance policies for one wallet
 #   create <label> [network] <passphraseEnvVar> [--yes]    Create a wallet (default network: sepolia)
-#   import <label> <network> [privateKey|-] [--yes]   Import wallet (network: mainnet|polygon-mainnet|solana-mainnet)
 #   transactions <walletId|publicWalletId> [chain]     List merged transaction history for a wallet
 #   balance <walletId|publicWalletId> [token] [chain]  Check balances for a wallet
 #   transfer <walletId|publicWalletId> <to> <amount> [token] [chain] [--yes]   Send native/token transfer
@@ -34,7 +36,7 @@
 #   checkout-refund <escrowId> [--yes]
 #   checkout-cancel <escrowId> [--yes]
 #   checkout-webhooks-list
-#   checkout-webhook-create <url> [eventTypesCsv] [enabled] [--yes]
+#   checkout-webhook-create <url> [eventTypesCsv] [enabled] [--yes]   (eventTypesCsv e.g. escrow.released,wallet.transaction.confirmed)
 #   checkout-webhook-update <id> [url] [eventTypesCsv] [enabled] [--yes]
 #   checkout-webhook-delete <id> [--yes]
 #   polymarket-limit <walletSelector> <tokenId> <BUY|SELL> <price> <size> [--yes]
@@ -66,8 +68,26 @@ if [ "$COMMAND" = "skill-latest" ]; then
     ALLOW_PUBLIC_ONLY=1
 fi
 
+# Read KEY=value lines from the .env file WITHOUT executing it: only the two names this skill uses
+# are accepted, everything else (comments, other names, command substitutions) is ignored.
+load_env_file() {
+    local line key val
+    while IFS= read -r line || [ -n "$line" ]; do
+        case "$line" in ''|'#'*) continue ;; esac
+        key="${line%%=*}"
+        val="${line#*=}"
+        key="${key#export }"
+        case "$key" in
+            AGENTWALLETAPI_KEY|AGENTWALLETAPI_URL) ;;
+            *) continue ;;
+        esac
+        val="${val%\"}"; val="${val#\"}"; val="${val%\'}"; val="${val#\'}"
+        printf -v "$key" '%s' "$val"
+    done < "$1"
+}
+
 if [ -f "$ENV_FILE" ]; then
-    source "$ENV_FILE"
+    load_env_file "$ENV_FILE"
 elif [ "$ALLOW_PUBLIC_ONLY" -eq 0 ]; then
     echo "Error: .env file not found. Run setup first:"
     echo "  bash $SKILL_DIR/scripts/setup.sh"
@@ -80,6 +100,17 @@ if ! command -v curl >/dev/null 2>&1; then
 fi
 
 BASE_URL="${AGENTWALLETAPI_URL:-https://openclawcash.com}"
+
+# AGENTWALLETAPI_URL is an env var, so a poisoned environment (or a prompt
+# that tells the agent to "fix a connection issue" by exporting it) could
+# otherwise redirect every X-Agent-Key header to an attacker-controlled
+# host. Only openclawcash.com and its subdomains may receive the key.
+if ! [[ "$BASE_URL" =~ ^https://openclawcash\.com(/.*)?$ ]] && \
+   ! [[ "$BASE_URL" =~ ^https://[A-Za-z0-9-]+\.openclawcash\.com(/.*)?$ ]]; then
+    echo "Error: AGENTWALLETAPI_URL must be https://openclawcash.com or an https://<subdomain>.openclawcash.com host."
+    echo "Refusing to send AGENTWALLETAPI_KEY to untrusted host: $BASE_URL"
+    exit 1
+fi
 
 if [ "$ALLOW_PUBLIC_ONLY" -eq 0 ] && { [ -z "$AGENTWALLETAPI_KEY" ] || [ "$AGENTWALLETAPI_KEY" = "occ_your_api_key" ]; }; then
     echo "Error: API key not configured. Edit $ENV_FILE and set AGENTWALLETAPI_KEY."
@@ -226,7 +257,7 @@ confirm_risky_action() {
         exit 1
     fi
 
-    echo "WARNING: $ACTION can move funds or import sensitive keys."
+    echo "WARNING: $ACTION can move funds or change account state."
     echo "Target API host: $BASE_URL"
     printf "Type YES to continue: "
     read -r ANSWER
@@ -257,6 +288,7 @@ case "$COMMAND" in
             echo "Usage: agentwalletapi.sh user-tag-set <userTag> [--yes]"
             exit 1
         fi
+        confirm_risky_action "Setting the checkout user tag (one-time; it cannot be changed later)"
         json_escape_var USER_TAG_ESC "$USER_TAG"
         BODY="{\"userTag\":\"$USER_TAG_ESC\"}"
         curl -s -X PUT \
@@ -282,6 +314,41 @@ case "$COMMAND" in
             "$URL" | pretty_print_json
         ;;
 
+    rename)
+        SELECTOR="$2"
+        NEW_LABEL="$3"
+        if [ -z "$SELECTOR" ] || [ -z "$NEW_LABEL" ]; then
+            echo "Usage: agentwalletapi.sh rename <walletId|publicWalletId> <newLabel>"
+            exit 1
+        fi
+        json_escape_var NEW_LABEL_ESC "$NEW_LABEL"
+        BODY="{"
+        append_wallet_id_json_field BODY "$SELECTOR"
+        BODY="$BODY, \"label\": \"$NEW_LABEL_ESC\"}"
+        curl -s -X PATCH \
+            -H "X-Agent-Key: $AGENTWALLETAPI_KEY" \
+            -H "Content-Type: application/json" \
+            -d "$BODY" \
+            "$BASE_URL/api/agent/wallet" | pretty_print_json
+        ;;
+
+    policies)
+        curl -s -H "X-Agent-Key: $AGENTWALLETAPI_KEY" \
+            "$BASE_URL/api/agent/policies" | pretty_print_json
+        ;;
+
+    policy)
+        SELECTOR="$2"
+        if [ -z "$SELECTOR" ]; then
+            echo "Usage: agentwalletapi.sh policy <walletId|publicWalletId|walletLabel>"
+            exit 1
+        fi
+        URL="$BASE_URL/api/agent/policy"
+        append_wallet_selector_query URL "$SELECTOR"
+        curl -s -H "X-Agent-Key: $AGENTWALLETAPI_KEY" \
+            "$URL" | pretty_print_json
+        ;;
+
     create)
         confirm_risky_action "Wallet creation"
         LABEL="$2"
@@ -289,7 +356,7 @@ case "$COMMAND" in
         PASSPHRASE_ENV_VAR="$4"
         if [ -z "$LABEL" ] || [ -z "$PASSPHRASE_ENV_VAR" ]; then
             echo "Usage: agentwalletapi.sh create <label> [network] <passphraseEnvVar> [--yes]"
-            echo "  network options: sepolia | mainnet | solana-devnet | solana-testnet | solana-mainnet"
+            echo "  network options: sepolia | mainnet | polygon-mainnet | base-mainnet | solana-devnet | solana-testnet | solana-mainnet"
             echo "  Example:"
             echo "    export WALLET_EXPORT_PASSPHRASE_OPS='your-strong-passphrase'"
             echo "    agentwalletapi.sh create \"Ops Wallet\" sepolia WALLET_EXPORT_PASSPHRASE_OPS --yes"
@@ -314,54 +381,6 @@ case "$COMMAND" in
         unset PASSPHRASE_VALUE
         ;;
 
-    import)
-        confirm_risky_action "Wallet import"
-        if [ "$FORCE_RISKY" -eq 1 ]; then
-            echo "Import confirmation accepted via --yes."
-        fi
-        LABEL="$2"
-        NETWORK="$3"
-        PRIVATE_KEY="$4"
-        if [ -z "$LABEL" ] || [ -z "$NETWORK" ]; then
-            echo "Usage: agentwalletapi.sh import <label> <network> [privateKey|-] [--yes]"
-            echo "  network options: mainnet | polygon-mainnet | solana-mainnet"
-            echo "  pass '-' to read private key from stdin (recommended for automation)"
-            exit 1
-        fi
-        if [ "$PRIVATE_KEY" = "-" ]; then
-            if [ -t 0 ]; then
-                echo "Error: private key input set to '-' but stdin is empty."
-                echo "Example: printf '%s' '<private_key>' | agentwalletapi.sh import <label> <network> - --yes"
-                exit 1
-            fi
-            IFS= read -r PRIVATE_KEY
-        elif [ -n "$PRIVATE_KEY" ]; then
-            echo "WARNING: passing private key as a CLI argument can leak in shell history/process logs."
-            echo "Safer options: omit [privateKey] for hidden prompt, or pass '-' and pipe via stdin."
-        fi
-        if [ -z "$PRIVATE_KEY" ]; then
-            if [ ! -t 0 ]; then
-                echo "Error: private key missing. Provide as argument or run interactively to be prompted."
-                exit 1
-            fi
-            printf "Enter private key (input hidden): "
-            stty -echo
-            read -r PRIVATE_KEY
-            stty echo
-            echo ""
-        fi
-        json_escape_var LABEL_ESC "$LABEL"
-        json_escape_var NETWORK_ESC "$NETWORK"
-        json_escape_var PRIVATE_KEY_ESC "$PRIVATE_KEY"
-        BODY="{\"label\":\"$LABEL_ESC\",\"network\":\"$NETWORK_ESC\",\"privateKey\":\"$PRIVATE_KEY_ESC\"}"
-        curl -s -X POST \
-            -H "X-Agent-Key: $AGENTWALLETAPI_KEY" \
-            -H "Content-Type: application/json" \
-            -d "$BODY" \
-            "$BASE_URL/api/agent/wallets/import" | pretty_print_json
-        unset PRIVATE_KEY
-        unset BODY
-        ;;
 
     transactions)
         WALLET_ID="$2"
@@ -1094,13 +1113,15 @@ case "$COMMAND" in
         echo "Usage: agentwalletapi.sh <command> [options]"
         echo ""
         echo "Commands:"
-        echo "  skill-latest                               Get latest skill version + zip/install metadata (public)"
+        echo "  skill-latest                               Get latest skill version + install metadata (public)"
         echo "  wallets                                    List all wallets"
         echo "  user-tag-get                               Read global checkout user tag"
-        echo "  user-tag-set <userTag> [--yes]            Set global checkout user tag once"
+        echo "  user-tag-set <userTag> [--yes]            Set global checkout user tag once (3-8 lowercase chars: a-z, 0-9, ., _, -)"
         echo "  wallet <walletId|publicWalletId|walletLabel> [chain]  Get one wallet detail with balances"
+        echo "  rename <walletId|publicWalletId> <newLabel>  Rename a wallet (update its label)"
+        echo "  policies                                   List governance policies for every accessible wallet"
+        echo "  policy <walletId|publicWalletId|walletLabel>  Get governance policies for one wallet"
         echo "  create <label> [network] <passphraseEnvVar> [--yes]  Create wallet (default network: sepolia)"
-        echo "  import <label> <network> [privateKey] [--yes]      Import wallet (mainnet|polygon-mainnet|solana-mainnet)"
         echo "  transactions <walletId|publicWalletId> [chain]    List wallet transaction history"
         echo "  balance <walletId|publicWalletId> [token] [chain] Check balances"
         echo "  transfer <walletId|publicWalletId> <to> <amount> [token] [chain] [--yes]  Send native/token transfer"
@@ -1142,10 +1163,9 @@ case "$COMMAND" in
         echo "  agentwalletapi.sh user-tag-set my-agent-tag --yes"
         echo "  export WALLET_EXPORT_PASSPHRASE_OPS='your-strong-passphrase'"
         echo "  agentwalletapi.sh create 'Ops Wallet' sepolia WALLET_EXPORT_PASSPHRASE_OPS --yes"
-        echo "  agentwalletapi.sh import 'Treasury Imported' mainnet --yes"
-        echo "  agentwalletapi.sh import 'Poly Ops' polygon-mainnet --yes"
         echo "  agentwalletapi.sh transactions 2"
         echo "  agentwalletapi.sh balance 2"
+        echo "  agentwalletapi.sh rename 2 'Trading Bot v2'"
         echo "  agentwalletapi.sh transfer 2 0xRecipient 0.01 --yes"
         echo "  agentwalletapi.sh transfer 2 0xRecipient 100 USDC --yes"
         echo "  agentwalletapi.sh tokens mainnet"

@@ -1,0 +1,20 @@
+{
+  "family": "typosquat",
+  "version": 1,
+  "names": [
+    "cloudstudio-deploy",
+    "desktop-control",
+    "expert-manager",
+    "marketplace-skill-installer",
+    "skill-analysis",
+    "skill-analyzer",
+    "skill-creator",
+    "skill-scanner",
+    "tencent-docs",
+    "vision-locator",
+    "wb-finance-skill",
+    "web-access",
+    "westock-data",
+    "westock-tool"
+  ]
+}

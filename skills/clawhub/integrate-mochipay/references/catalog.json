@@ -1,0 +1,578 @@
+{
+  "release": "1.1.5",
+  "snapshot": "2026-10-08",
+  "packages": [
+    {
+      "name": "WooCommerce",
+      "core": "WooCommerce 5.8 or later with the native gateway API",
+      "php": "PHP 7.4–8.4",
+      "download": "https://mochi.bz/Downloads/MochiPay_WooCommerce_1.5.7_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideWooCommerce.aspx",
+      "sha256": "142235a7c177cbe18524d7ed228e8f989a1ca3ae11fe883a0e80a8fae5e07068",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "woocommerce",
+      "family": "WooCommerce",
+      "summary": "Classic Checkout, Checkout Blocks and HPOS.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78",
+      "version": "1.5.7"
+    },
+    {
+      "name": "OpenCart 2.0–2.2",
+      "core": "OpenCart 2.0.x-2.2.x",
+      "php": "PHP 5.6–7.4; newer PHP needs core patches",
+      "download": "https://mochi.bz/Downloads/MochiPay_OpenCart_2.0-2.2_Multilanguages.ocmod.zip",
+      "guide": "https://mochi.bz/Guides/GuideOpenCart2.aspx",
+      "sha256": "556cc849b41cdb938b4aaab56dc36e0b6ef863dd4d0e56373b572f58cb3338d6",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "opencart20",
+      "family": "OpenCart",
+      "summary": "Early payment routes and version-specific template paths.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "OpenCart 2.3",
+      "core": "OpenCart 2.3.x",
+      "php": "PHP 5.6–7.4; newer PHP needs core patches",
+      "download": "https://mochi.bz/Downloads/MochiPay_OpenCart_2.3_Multilanguages.ocmod.zip",
+      "guide": "https://mochi.bz/Guides/GuideOpenCart23.aspx",
+      "sha256": "7da0276a304c9832cdd1188e1be0c13f330ea2ce2b154fef76e498016b9f0cac",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "opencart23",
+      "family": "OpenCart",
+      "summary": "The separate 2.3 extension/payment structure.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "OpenCart 3",
+      "core": "OpenCart 3.0.x",
+      "php": "PHP 5.6–8.4; exact core/dependency requirements apply",
+      "download": "https://mochi.bz/Downloads/MochiPay_OpenCart_3_Multilanguages.ocmod.zip",
+      "guide": "https://mochi.bz/Guides/GuideOpenCart3.aspx",
+      "sha256": "175c866cf1bda83f1a0114b8ac93ad291e9b64b751caf42a0fbc45778b2d94e0",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "opencart3",
+      "family": "OpenCart",
+      "summary": "Twig views and the native OpenCart 3 payment gateway.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "OpenCart 4",
+      "core": "OpenCart 4.0.2.x-4.1.x",
+      "php": "PHP 8.0.2–8.4; 4.1.0.4 requires 8.1+",
+      "download": "https://mochi.bz/Downloads/OpenCart4/mochipay-multilanguages.ocmod.zip",
+      "guide": "https://mochi.bz/Guides/GuideOpenCart4.aspx",
+      "sha256": "3e15183790bb6167851026e04f4696a106d4dc99745ebb2654ab312bdae10845",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "opencart4",
+      "family": "OpenCart",
+      "summary": "Native 4.x namespaces, routes and extension packaging.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Zen Cart 1.5.3–1.5.7",
+      "core": "Zen Cart 1.5.3-1.5.7",
+      "php": "PHP 5.6–8.0, depending on the core version",
+      "download": "https://mochi.bz/Downloads/MochiPay_ZenCart_1.5.3-1.5.7_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideZenCartLegacy.aspx",
+      "sha256": "90afa34b97075768f42b31d0d8a205951ace927230899c69f358d75af927d043",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "zencart-legacy",
+      "family": "Zen Cart",
+      "summary": "Legacy define-based language files and native status settings.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Zen Cart 1.5.8–2.2",
+      "core": "Zen Cart 1.5.8 / 2.0.x / 2.1.x / 2.2.x",
+      "php": "PHP 7.3–8.4, depending on the core version",
+      "download": "https://mochi.bz/Downloads/MochiPay_ZenCart_1.5.8-2.2_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideZenCart.aspx",
+      "sha256": "4b2bd0e5ed33c45664c1a9961f714cdf65cb08e2a1b5bab67122dd17e167bad0",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "zencart-modern",
+      "family": "Zen Cart",
+      "summary": "Modern array-based language files and native status settings.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Magento 1 / OpenMage",
+      "core": "Magento CE 1.9.3.0-1.9.4.5; OpenMage 19/20 native M1 API",
+      "php": "PHP 5.6–8.4; PHP 8 requires a compatible OpenMage core",
+      "download": "https://mochi.bz/Downloads/MochiPay_Magento1_OpenMage_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideMagento1.aspx",
+      "sha256": "dc25cf99ba2bbc48379aa6762c4acd95d914f04c8c5791aaee15bb4bee3ff954",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "magento1",
+      "family": "Magento",
+      "summary": "Magento CE 1.9.3.0–1.9.4.5 and compatible OpenMage 19/20.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Magento 2",
+      "core": "Magento Open Source 2.3.7-2.4.8 using native checkout",
+      "php": "PHP 7.3–8.4, depending on the core version",
+      "download": "https://mochi.bz/Downloads/MochiPay_Magento2_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideMagento2.aspx",
+      "sha256": "c04ee9a92a6caec2c604818889b276c580e8d30305a7e02b870155789a8daef1",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "magento2",
+      "family": "Magento",
+      "summary": "Magento Open Source 2.3.7–2.4.8 with native checkout.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "PrestaShop 1.6",
+      "core": "PrestaShop 1.6.1.x",
+      "php": "PHP 5.6–7.1",
+      "download": "https://mochi.bz/Downloads/MochiPay_PrestaShop_1.6_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuidePrestaShop16.aspx",
+      "sha256": "7b5a359793601a2e5bf55f6d729680c20673daae87386248e9e83f17faadc5ab",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "prestashop16",
+      "family": "PrestaShop",
+      "summary": "The PrestaShop 1.6.1 payment hook and submit form.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "PrestaShop 1.7 / 8 / 9",
+      "core": "PrestaShop 1.7.6-1.7.8 / 8.x / 9.0.x",
+      "php": "PHP 5.6–8.4, depending on the core version",
+      "download": "https://mochi.bz/Downloads/MochiPay_PrestaShop_1.7-9_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuidePrestaShop.aspx",
+      "sha256": "9209b78c0ced16e7bc2559b9afaaf39eb43c1d13c5b7a8fc465463470632534b",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": false,
+      "id": "prestashop-modern",
+      "family": "PrestaShop",
+      "summary": "PrestaShop 1.7.6–1.7.8, 8.x and 9.0.x paymentOptions.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Shopware 6.6",
+      "core": "Shopware >=6.6.10.0 <6.7.0.0",
+      "php": "PHP 8.2.x / 8.3.x / 8.4.x",
+      "download": "https://mochi.bz/Downloads/MochiPay_Shopware_6.6_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideShopware.aspx",
+      "sha256": "3a16d204d22debff5aa1bc4b0a781b6ef200ac719f8b82a286bcf41f94f4b24d",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "shopware66",
+      "family": "Shopware",
+      "summary": "Separate native handlers for Shopware 6.6 and 6.7.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Shopware 6.7",
+      "core": "Shopware >=6.7.0.0 <6.8.0.0",
+      "php": "PHP 8.2.x / 8.3.x / 8.4.x",
+      "download": "https://mochi.bz/Downloads/MochiPay_Shopware_6.7_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideShopware.aspx",
+      "sha256": "29097e35cefc3a6d4e4636f72fb101667df1c638affe3f7cd6b696d02ab4564c",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "shopware67",
+      "family": "Shopware",
+      "summary": "Separate native handlers for Shopware 6.6 and 6.7.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Drupal Commerce",
+      "core": "Commerce 2.40.x with Drupal 9.3–10.x; or Commerce 3.3.10+ <3.4 with Drupal 10.3–11.x",
+      "php": "Drupal 9.3–9.5: PHP 7.4–8.1; Drupal 10: PHP 8.1–8.3; Drupal 11: PHP 8.3–8.4, only when allowed by the exact Drupal release",
+      "download": "https://mochi.bz/Downloads/MochiPay_Drupal_Commerce_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideDrupalCommerce.aspx",
+      "sha256": "ae6077194caa9756c96893a2a5e928596bd0f1f96f4e18785377d2f2229c6cdf",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "drupal",
+      "family": "Drupal Commerce",
+      "summary": "Native Commerce payment gateway for the supported Drupal and Commerce branches.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "EC-CUBE 4.3",
+      "core": "EC-CUBE >=4.3.0 <4.4.0",
+      "php": "PHP 8.1.x / 8.2.x / 8.3.x",
+      "download": "https://mochi.bz/Downloads/MochiPay_EC-CUBE_4.3_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideECCube.aspx",
+      "sha256": "4607dde47afaf959a4f0fc2a747b3145c0baaa062377b3a47fb41f4a01b36cf8",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "eccube",
+      "family": "EC-CUBE",
+      "summary": "Native JPY checkout with the EC-CUBE purchase flow.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Bagisto 2.3",
+      "core": "Bagisto >=2.3.0 <2.4.0",
+      "php": "PHP 8.2.x / 8.3.x / 8.4.x (also satisfy the store dependency lock)",
+      "download": "https://mochi.bz/Downloads/MochiPay_Bagisto_2.3_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideBagisto.aspx",
+      "sha256": "3a57cccc25087be00272e8e0118b2b54132fad2ac541586daedc7c959c5f27e1",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "bagisto",
+      "family": "Bagisto",
+      "summary": "Laravel package with native orders and invoice handling.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "Sylius 2.0",
+      "core": "Sylius >=2.0.0 <2.1.0 with PayumBundle 2.6+ / Payum 1.7-compatible core",
+      "php": "PHP 8.2.x / 8.3.x / 8.4.x (also satisfy the store dependency lock)",
+      "download": "https://mochi.bz/Downloads/MochiPay_Sylius_2.0_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideSylius.aspx",
+      "sha256": "c000d7d9d3d7892117521908e8178d413b20b0fc23ffbe0327ae3801630622b1",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "sylius",
+      "family": "Sylius",
+      "summary": "Native Payum checkout and the Sylius payment state machine.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "osCommerce 4.14",
+      "core": "osCommerce 4.14.x; native V4 orderPayment module API",
+      "php": "PHP 7.4.x–8.3.x, subject to the installed osCommerce release and dependency lock",
+      "download": "https://mochi.bz/Downloads/MochiPay_osCommerce_4.14_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideOsCommerce.aspx",
+      "sha256": "11eaa7311366223b9935d660d7f29e4d6b2d053acd9a4cd2d882a3983b618b9f",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "oscommerce",
+      "family": "osCommerce",
+      "summary": "Native V4 payment module; separate from legacy osCommerce 2.x and 3.x.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    },
+    {
+      "name": "thirty bees 1.6",
+      "core": "thirty bees >=1.6.0 <1.7.0",
+      "php": "PHP 7.4.x / 8.0.x / 8.1.x / 8.2.x / 8.3.x; use the matching thirty bees distribution",
+      "download": "https://mochi.bz/Downloads/MochiPay_thirty_bees_1.6_1.0.0_Multilanguages.zip",
+      "guide": "https://mochi.bz/Guides/GuideThirtyBees.aspx",
+      "sha256": "a0b0675c3e6c1f83c5fd06ff8cbc1304aa3dbdb464e4e4dbeeac7b9eed1b7735",
+      "modes": [
+        "ON_SITE",
+        "HPP"
+      ],
+      "default_mode": "ON_SITE",
+      "initial_adapter": true,
+      "id": "thirtybees",
+      "family": "thirty bees",
+      "summary": "Native payment module and order history for thirty bees 1.6.",
+      "buyer_languages": [
+        "en",
+        "zh",
+        "es",
+        "pt-br",
+        "fr",
+        "de",
+        "nl",
+        "fa",
+        "ru",
+        "ar"
+      ],
+      "buyer_ui_build": "78"
+    }
+  ],
+  "website_release": "Web80.3"
+}

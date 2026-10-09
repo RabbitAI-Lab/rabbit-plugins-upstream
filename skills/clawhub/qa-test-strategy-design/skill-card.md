@@ -1,39 +1,55 @@
-## Description: <br>
-Helps QA teams design layered, risk-based test strategies for new projects, iterations, refactors, and urgent fixes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs risk-based test strategies for new projects and iterations, defining test scope, layered coverage, resources, and project-specific entry and exit criteria.
 
-## Publisher: <br>
-[kokxi](https://clawhub.ai/user/kokxi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[kokxi](https://clawhub.ai/user/kokxi)
 
-## Use Case: <br>
-QA engineers, test leads, and development teams use this skill to turn risk assessments and requirement analysis into an actionable test strategy covering scope, layered test approach, resource allocation, and entry and exit criteria. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can be triggered by broad Chinese testing-planning phrases, which may produce a test strategy when the request is not actually about QA strategy. <br>
-Mitigation: Confirm that the user is asking for test strategy design before relying on the generated plan. <br>
-Risk: Generated release, CI/CD, and testing recommendations could be mistaken for approved operational actions. <br>
-Mitigation: Treat outputs as planning guidance only and review them before any release decision, pipeline change, or production action. <br>
+## Use Case:
 
+QA teams and developers use this skill to plan testing for a new project or iteration, prioritizing assessed risks, defining what will and will not be tested, and setting justified release criteria.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown strategy document with structured sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs risk matrices, strategy IDs, requirement traceability, scope definitions, test approach guidance, resource plans, and entry and exit criteria.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.6.0 (source: frontmatter and server evidence) <br>
+Risk: Installing the broader workflow may bring in additional, unreviewed skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review its source and use a pinned, trusted package version before installing.
+
+Risk: Strategy examples could be mistaken for approval to change release or CI/CD settings.
+
+Mitigation: Treat the document as planning guidance and require authorized review before applying operational changes.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/kokxi/skills/qa-test-strategy-design)
+- [Six Elements of Test Strategy](references/six-elements.md)
+- [Test Strategy Document Template](assets/strategy-doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown test strategy document]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes risk and requirement IDs, explicit exclusions, layered testing, resource allocation, and justified entry and exit criteria; does not produce test case tables.]
+
+## Skill Version(s):
+
+1.8.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,39 +1,49 @@
-## Description: <br>
-Agent Directory helps maintain JSON-based agent profiles, including roles, pipeline ownership, status, and long-term planning details. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manages and maintains JSON profiles for agents, including roles, pipeline ownership, status, and long-term goals.
 
-## Publisher: <br>
-[mayf3](https://clawhub.ai/user/mayf3) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mayf3](https://clawhub.ai/user/mayf3)
 
-## Use Case: <br>
-Developers and operators maintaining an agent team directory use this skill to create, validate, and index JSON profiles that track agent roles, pipeline ownership, status, and planning details. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The included scripts read local agent profile JSON files and can rewrite the generated profile index. <br>
-Mitigation: Run the scripts only in the intended workspace and review generated index changes before committing or sharing them. <br>
-Risk: Agent profile data may contain internal group identifiers, workspace names, or planning details. <br>
-Mitigation: Review and redact profile data before sharing generated output outside the intended audience. <br>
+## Use Case:
 
+Developers and operations maintainers use this skill to create, validate, update, and index agent profile JSON files for an agent team directory and pipeline views.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with JSON examples and bash commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read local agent profile JSON files and rewrite docs/agent-profiles/index.json when scripts are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Unsafe path handling in helper scripts can allow crafted local filenames to execute code during validation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the scripts before use, run them only against trusted workspace paths and trusted docs/agent-profiles files, and update them to pass paths as Python arguments and use mktemp before automation or CI use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/mayf3/skills/agent-directory)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON examples and shell command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update or generate agent profile index JSON when its helper scripts are run.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and target metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

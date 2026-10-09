@@ -1,46 +1,59 @@
-## Description: <br>
-Generate multilingual, highly natural audio using Gemini 2.5 text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate natural-sounding Mandarin or English speech from text using Gemini 2.5 TTS through dLazy.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate Chinese or English text-to-speech audio through the dLazy CLI, choosing a prompt and voice for cloud generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local media paths may be processed by dLazy's hosted API and media storage. <br>
-Mitigation: Use only prompts and files appropriate for third-party cloud processing, and confirm the user intends to send them before invocation. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Prefer per-invocation environment variables for temporary use, keep local config permissions restricted, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The skill documentation shows an output schema mismatch for this text-to-speech workflow. <br>
-Mitigation: Inspect the actual CLI JSON response at runtime before downstream processing and avoid assuming the documented image-oriented example is authoritative. <br>
+## Use Case:
 
+Developers and other ClawHub users can guide an agent to generate speech from text, choosing a language and voice for their audio content.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-gemini-2-5-tts) <br>
-- [Publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI homepage from skill metadata](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package from skill metadata](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands; command responses are JSON containing hosted generation result URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; prompts are sent to api.dlazy.com and generated assets are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: frontmatter and server release evidence) <br>
+Risk: Prompts are processed by dLazy's cloud API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive text unless the cloud-processing arrangement is acceptable.
+
+Risk: The dLazy CLI can store an API key locally.
+
+Mitigation: Prefer a per-invocation DLAZY_API_KEY when appropriate; revoke or rotate stored keys when no longer needed.
+
+Risk: The skill relies on a third-party CLI package.
+
+Mitigation: Review the package and its source before installing in sensitive environments.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-gemini-2-5-tts)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Text or Markdown with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI returns JSON containing a generated media URL or an asynchronous task ID.]
+
+## Skill Version(s):
+
+1.3.25 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

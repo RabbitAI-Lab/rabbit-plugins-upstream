@@ -31,9 +31,7 @@ def _make_batch_response(statuses: list[int], errors: list[str | None] | None = 
 
 def _mock_client_with_batch_response(http_resp: MagicMock) -> MagicMock:
     mock_client = MagicMock()
-    mock_client.request_adapter.get_http_response_message = AsyncMock(
-        return_value=http_resp
-    )
+    mock_client.request_adapter.get_http_response_message = AsyncMock(return_value=http_resp)
     return mock_client
 
 
@@ -53,7 +51,11 @@ class TestBatchTriageValidation:
         mock_client = MagicMock()
         with pytest.raises(ValueError, match="must not be empty"):
             await batch_triage(
-                mock_client, message_ids=[], action="move", value="inbox", config=_CFG,
+                mock_client,
+                message_ids=[],
+                action="move",
+                value="inbox",
+                config=_CFG,
             )
 
     async def test_max_20_messages(self):
@@ -61,14 +63,22 @@ class TestBatchTriageValidation:
         ids = [f"AAMkAG{i}=" for i in range(21)]
         with pytest.raises(ValueError, match="Maximum 20"):
             await batch_triage(
-                mock_client, message_ids=ids, action="move", value="inbox", config=_CFG,
+                mock_client,
+                message_ids=ids,
+                action="move",
+                value="inbox",
+                config=_CFG,
             )
 
     async def test_exactly_20_messages_allowed(self):
         mock_client = _mock_client_with_batch_response(_make_batch_response([200] * 20))
         ids = [f"AAMkAG{i}=" for i in range(20)]
         result = await batch_triage(
-            mock_client, message_ids=ids, action="move", value="inbox", config=_CFG,
+            mock_client,
+            message_ids=ids,
+            action="move",
+            value="inbox",
+            config=_CFG,
         )
         assert result["success_count"] == 20
         assert result["failure_count"] == 0
@@ -153,9 +163,24 @@ class TestBatchTriageSingleRequest:
         body = json.loads(req.content.decode("utf-8"))
         assert len(body["requests"]) == 2
         assert body["requests"][0]["method"] == "POST"
-        assert body["requests"][0]["url"] == "/me/messages/AAMkAG1=/move"
+        assert body["requests"][0]["url"] == "/me/messages/AAMkAG1%3D/move"
         assert body["requests"][0]["body"] == {"destinationId": "inbox"}
-        assert body["requests"][1]["url"] == "/me/messages/AAMkAG2=/move"
+        assert body["requests"][1]["url"] == "/me/messages/AAMkAG2%3D/move"
+
+    @pytest.mark.parametrize(
+        "action,value",
+        [("move", "inbox"), ("flag", "flagged"), ("categorize", "Red"), ("mark_read", True)],
+    )
+    async def test_an_id_stays_one_path_segment(self, action, value):
+        """IDs may contain `/` and `+`. Encoded the way the typed SDK encodes them
+        on every other call, so `AA/BB` cannot become two segments of the URL."""
+        mock_client = _mock_client_with_batch_response(_make_batch_response([200]))
+        await batch_triage(
+            mock_client, message_ids=["AA/BB+CC="], action=action, value=value, config=_CFG
+        )
+        req = mock_client.request_adapter.get_http_response_message.call_args.args[0]
+        url = json.loads(req.content.decode("utf-8"))["requests"][0]["url"]
+        assert url.startswith("/me/messages/AA%2FBB%2BCC%3D")
 
 
 class TestBatchTriageActions:

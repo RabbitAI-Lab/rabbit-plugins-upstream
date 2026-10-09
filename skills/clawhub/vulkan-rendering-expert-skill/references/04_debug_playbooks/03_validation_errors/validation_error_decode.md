@@ -42,15 +42,14 @@
 
 ---
 
-## 3. 快速验证路径
+## 3. 快速验证路径（证据驱动决策表）
 
-1. 复制完整 validation message。
-2. 提取 VUID。
-3. 提取 command name。
-4. 提取 object handle 和 object type。
-5. 定位相关 Vulkan 对象创建点。
-6. 定位相关 Vulkan 对象使用点。
-7. 回查对应 API 卡片和官方 Reference Page。
+| # | 检查（成本升序） | 结果 A → 下一步 | 结果 B → 下一步 | 剪枝（排除的假设） |
+|---|---|---|---|---|
+| 1 | VUID 解码（对象 / 函数 / 约束三段） | 命中 §2 的 P0 类别（descriptor / layout、image layout、command buffer 状态）→ 沿 §4 对应链路检查 | 属于 §2 的 P1 / P2 类别（生命周期、sync、feature）→ 检查 2 | — |
+| 2 | 消息中 object handle / object type 定位对象创建点 | 找到创建代码 → 检查 3 | 无 handle 或对不上 → 开 debug object name（§6 Structural Fix）后复现 | — |
+| 3 | 沿 §4 对象链路反查使用点（创建 → 使用 → 销毁顺序） | 使用点违反状态约束（recording state 错误、render pass 外调用）→ §5-3 / §5-4；提前销毁 → §5-5 | 使用点正常 → 检查 4 | 正常时排除 §2 的 P0 CommandBuffer 状态与 P1 生命周期假设 |
+| 4 | 回查对应 API 卡片与官方 Reference Page 的 VUID 约束原文 | 约束明确（feature / extension 未开启）→ §5-7（§2 的 P2） | 仍无法定位根因 → §11 不确定处理 | — |
 
 ---
 
@@ -115,18 +114,22 @@ Producer Access
 
 ## 6. 修复方案
 
-### 最小修复
+### Workaround（临时绕过，现象消失 ≠ 根因修复）
+
+- 临时注释掉触发 validation 的调用以恢复运行（会掩盖问题，仅用于隔离定位）。`[TOOL]`
+
+### Minimal Fix（针对根因的最小修复）
 
 - 先按 VUID 定位具体 API。
 - 不要一次改多个地方。
 - 对照 object handle 找到对应资源。
 - 先修第一条 validation error。
 
-### 稳定修复
+### Structural Fix（结构性 / 防复发修复）
 
-- 为 Vulkan 对象设置 debug name。
-- 建立 VUID 处理记录。
-- 对 descriptor / image layout / command buffer state 建立统一检查辅助函数。
+- 为 Vulkan 对象设置 debug name。`[TOOL]`
+- 建立 VUID 处理记录。`[ENGINE]`
+- 对 descriptor / image layout / command buffer state 建立统一检查辅助函数。`[ENGINE]`
 
 ---
 
@@ -151,7 +154,7 @@ Producer Access
 
 ## 9. 工具证据
 
-Validation message 是主要证据。  
+Validation message 是主要证据。
 必须保留：
 
 - 完整 message

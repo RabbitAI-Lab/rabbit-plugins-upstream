@@ -7,7 +7,8 @@ import os
 import re
 import codecs
 import argparse
-from datetime import datetime
+from datetime import datetime, timedelta
+from workspace_profile import resolve_tracker_root
 
 def parse_args():
     parser = argparse.ArgumentParser(description="Clean up completed items and archive older entries in fix plans.")
@@ -28,7 +29,7 @@ class Node:
         self.children = []
 
 def parse_line(line):
-    m = re.match(r"^(\s*)(-\s*|[*]\s*|[+]\s*|\d+\.\s+)(.*)$", line)
+    m = re.match(r"^(\s*)(-\s+|[*]\s+|[+]\s+|\d+\.\s+)(.*)$", line)
     if m:
         indent = len(m.group(1))
         marker = m.group(2)
@@ -70,6 +71,12 @@ def build_tree(lines_list):
         stack.append(node)
     return forest
 
+# A section-level line is one that starts at column 0. Anything matching this is
+# an entry the tree walk owns; anything else at column 0 (HTML comment, prose)
+# belongs to the section itself and has no node to carry it through a rebuild.
+LIST_ITEM_RE = re.compile(r"^(?:[-*+]\s|\d+\.\s)")
+
+
 def all_descendants_checked(n):
     for c in n.children:
         if c.checked is False:
@@ -78,14 +85,39 @@ def all_descendants_checked(n):
             return False
     return True
 
+COMPLETION_DATE_RE = re.compile(r"(\d{4}-\d{2}-\d{2})[^)\n]*(?:completed|완료)")
+
 def extract_date(text):
+    """Best-effort completion-date guess from a single line of text."""
+    m = COMPLETION_DATE_RE.search(text)
+    if m:
+        return m.group(1)
     dates = re.findall(r"\b(202\d-\d{2}-\d{2})\b", text)
     if dates:
-        return dates[-1]
+        # First literal, not last: a title can reference an unrelated
+        # earlier date (e.g. a priority-demotion date) after its own
+        # leading/true date, and fix_plan.md's own Completed-entry
+        # convention places the authoritative date first
+        # ("- YYYY-MM-DD HH:mm — summary").
+        return dates[0]
     m = re.search(r"\b(202\d-\d{2})\b", text)
     if m:
         return m.group(1) + "-01"
     return datetime.now().strftime("%Y-%m-%d")
+
+def extract_date_from_node(node):
+    """Like extract_date, but also checks child lines for an explicit
+    completion annotation before falling back to the parent title's own
+    date literal(s) — the true completion date is often logged in a
+    child sub-bullet rather than the parent title line."""
+    m = COMPLETION_DATE_RE.search(node.text)
+    if m:
+        return m.group(1)
+    for child in node.children:
+        m = COMPLETION_DATE_RE.search(child.text)
+        if m:
+            return m.group(1)
+    return extract_date(node.text)
 
 def node_to_lines(node):
     lines = []
@@ -149,16 +181,62 @@ def node_to_one_line(node, strip_checkbox=True):
     else:
         return node.text
 
+def node_to_completed_block(node, strip_checkbox=True):
+    """Render a node AND all its descendants as a block of lines for the
+    Completed section — unlike node_to_one_line, this recurses into
+    node.children so a completed subtree's detail is never silently dropped.
+    Synthesizing N child bullets into one prose summary line requires
+    semantic judgment a script cannot safely perform, so this preserves the
+    full text instead (checkbox markers stripped per the Completed-section
+    convention; the caller/human can hand-condense later if desired)."""
+    lines = []
+
+    def marker_for(n):
+        if n.blocked_marker:
+            # All descendants of a node selected for move are checked==True
+            # (is_top_level_complete/is_subtree both require
+            # all_descendants_checked), so a live [BLOCKED] child should not
+            # occur here in practice — kept as a defensive fallback only.
+            return n.marker_type
+        if strip_checkbox:
+            bullet = n.marker_type.strip()
+            return f"{bullet} " if bullet.endswith('.') else "- "
+        if n.checked is True:
+            return f"{n.marker_type.strip()} [x] "
+        if n.checked is False:
+            return f"{n.marker_type.strip()} [ ] "
+        return n.marker_type
+
+    def emit(n):
+        if n.is_list_item:
+            indent_str = " " * n.indent
+            lines.append(f"{indent_str}{marker_for(n)}{n.text}")
+        else:
+            lines.append(n.text)
+        for child in n.children:
+            emit(child)
+
+    emit(node)
+    return lines
+
 def main():
+    # Console codepages other than UTF-8 (e.g. Windows cp949) crash on
+    # print() of tracker text containing em-dashes, Korean, etc. Reconfigure
+    # stdout/stderr to UTF-8 with a safe fallback so the archive-write loop
+    # (which prints each entry's title) never dies mid-write.
+    for stream in (sys.stdout, sys.stderr):
+        if hasattr(stream, "reconfigure"):
+            stream.reconfigure(encoding="utf-8", errors="replace")
+
     args = parse_args()
-    
+
     # 1. Resolve file path
     file_path = args.file
     if not file_path:
         # Search common paths
         cwd = os.getcwd()
         candidates = [
-            os.path.join(cwd, ".ralph", "fix_plan.md"),
+            os.path.join(cwd, resolve_tracker_root(cwd), "fix_plan.md"),
             os.path.join(cwd, "fix_plan.md"),
             os.path.join(cwd, "checklist.md")
         ]
@@ -176,8 +254,19 @@ def main():
     # 2. Resolve cutoff date
     cutoff_date = args.cutoff
     if not cutoff_date:
-        # Defaults to YYYY-MM-01 of the current date
-        cutoff_date = datetime.now().strftime("%Y-%m-01")
+        if args.period == "weekly":
+            # Defaults to the Monday of the current ISO week — matches
+            # check-completed-bloat.js's own "current week start" boundary.
+            # Falling back to the monthly YYYY-MM-01 default here (as before)
+            # silently produced a monthly-equivalent cutoff even when --period
+            # weekly was requested, under-archiving relative to the weekly
+            # threshold the companion guard hook enforces.
+            today = datetime.now()
+            monday = today - timedelta(days=today.weekday())
+            cutoff_date = monday.strftime("%Y-%m-%d")
+        else:
+            # Defaults to YYYY-MM-01 of the current date
+            cutoff_date = datetime.now().strftime("%Y-%m-01")
     print(f"Archive Cutoff Date: {cutoff_date}")
 
     # Read file
@@ -205,6 +294,7 @@ def main():
         sections.append((current_sec_header, current_sec_lines))
 
     completed_entries = []
+    completed_preamble = []
     new_sections = []
 
     for header, sec_lines in sections:
@@ -213,11 +303,21 @@ def main():
             continue
         
         if "## Completed" in header:
+            # The section is regenerated wholesale from the entries collected
+            # below, and only list items become entries. A section-level line
+            # that is not a list item therefore has nothing carrying it across
+            # the rebuild and disappears on every run. Provenance comments —
+            # "these bodies were moved to <store>, search there" — live exactly
+            # at this level, and losing one strands the records it points to.
+            completed_preamble.extend(
+                ln for ln in sec_lines
+                if ln.strip() and not ln[:1].isspace() and not LIST_ITEM_RE.match(ln)
+            )
             forest = build_tree(sec_lines)
             for node in forest:
                 if node.is_list_item and node.checked is True:
                     completed_entries.append({
-                        "date": extract_date(node.text),
+                        "date": extract_date_from_node(node),
                         "node": node
                     })
                 elif node.is_list_item and node.text.strip():
@@ -229,7 +329,7 @@ def main():
                         })
                     else:
                         completed_entries.append({
-                            "date": extract_date(node.text),
+                            "date": extract_date_from_node(node),
                             "node": node
                         })
             continue
@@ -266,7 +366,7 @@ def main():
 
                 if is_top_level_complete or is_subtree:
                     completed_entries.append({
-                        "date": extract_date(node.text),
+                        "date": extract_date_from_node(node),
                         "node": node
                     })
                 else:
@@ -308,8 +408,11 @@ def main():
 
     # Generate new ## Completed lines
     completed_lines = [""]
+    if completed_preamble:
+        completed_lines.extend(completed_preamble)
+        completed_lines.append("")
     for entry in stay_completed:
-        completed_lines.append(node_to_one_line(entry["node"], strip_checkbox=True))
+        completed_lines.extend(node_to_completed_block(entry["node"], strip_checkbox=True))
         completed_lines.append("") # blank line between items
 
     # Add the new ## Completed section before ## REPEAT or at the right place
@@ -333,7 +436,14 @@ def main():
         output_lines.extend(sec_lines)
 
     output_content = "\n".join(output_lines)
-    
+
+    # join() drops the terminator the last line had. Writing the result back
+    # would strip the file's final newline on every run, which shows up as a
+    # spurious "\ No newline at end of file" in the next diff.
+    if raw.endswith(b"\n") and not output_content.endswith("\n"):
+        output_content += "\n"
+
+
     if args.dry_run:
         print("\n=== DRY RUN MODE: No files will be modified ===")
         print(f"Total completed entries found: {len(completed_entries)}")
@@ -349,8 +459,13 @@ def main():
     else:
         output_bytes = output_content.encode('utf-8')
 
-    # Backup original file — timestamped slot so a rerun cannot clobber the only good copy
-    backup_path = f"{file_path}.{datetime.now().strftime('%Y%m%d-%H%M%S')}.bak"
+    # Write archives & backup
+    tracker_dir = os.path.dirname(file_path)
+    bak_dir = os.path.join(tracker_dir, ".bak")
+    os.makedirs(bak_dir, exist_ok=True)
+
+    # Backup original file into .bak/ directory — timestamped slot so a rerun cannot clobber the only good copy
+    backup_path = os.path.join(bak_dir, f"{os.path.basename(file_path)}.{datetime.now().strftime('%Y%m%d-%H%M%S')}.bak")
     with open(backup_path, 'wb') as f:
         f.write(raw)
     print(f"Backup created at {backup_path}")
@@ -392,8 +507,7 @@ def main():
             if entry["node"].text in existing_content:
                 print(f"Skipping duplicate archive entry: {entry['node'].text}")
                 continue
-            line_to_add = node_to_one_line(entry["node"], strip_checkbox=True)
-            archived_lines.append(line_to_add)
+            archived_lines.extend(node_to_completed_block(entry["node"], strip_checkbox=True))
             archived_lines.append("")
             added_count += 1
             

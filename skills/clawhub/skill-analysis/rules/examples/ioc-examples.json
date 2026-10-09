@@ -1,0 +1,12 @@
+{
+  "family": "ioc-example",
+  "version": 2,
+  "_meta": {
+    "is_example": true,
+    "note": "示例情报（演示用）：用于验证 IOC 检测链路与 references/troubleshooting.md Q2 的上下文感知降级（v2.5.4）。本文件使用 RFC 5737 保留测试地址 192.0.2.1（非真实 C2，绝对安全），仅演示检测逻辑，勿用于生产拦截或当作真实威胁证据。",
+    "source": "skill-analysis 维护者构造的演示数据（RFC 5737 保留测试地址）",
+    "recorded_date": "2026-08-13"
+  },
+  "ips": ["192.0.2.1"],
+  "domains": []
+}

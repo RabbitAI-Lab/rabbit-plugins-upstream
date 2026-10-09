@@ -1,43 +1,61 @@
-## Description: <br>
-Node.js backend patterns: layered architecture, TypeScript, validation, error handling, security, observability, logging, metrics, deployment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers in building Node.js and TypeScript backends with layered architecture, validated API boundaries, security, observability, and production practices.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill when building Node.js and server-side TypeScript backends, including REST APIs, middleware, Express/Fastify/Hono/NestJS/Koa servers, tRPC procedures, and Bun servers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated backend changes may affect authentication, credentials, database writes, dependency choices, or deployment settings. <br>
-Mitigation: Review generated code and dependency selections before use, especially where credentials, auth, migrations, production configuration, or deployment behavior are involved. <br>
-Risk: Framework-specific APIs can change over time, and stale guidance can lead to incorrect Express, Fastify, Hono, NestJS, Koa, Bun, or Node.js usage. <br>
-Mitigation: Verify current framework and Node.js documentation before implementing version-sensitive APIs. <br>
+## Use Case:
 
+Developers and engineers use this skill to design, implement, and review Node.js APIs and server-side TypeScript, including validation, error handling, database access, security, and operational behavior.
 
-## Reference(s): <br>
-- [TypeScript Configuration & Patterns](references/typescript-config.md) <br>
-- [Authentication & Security](references/security.md) <br>
-- [API Design Patterns](references/api-design.md) <br>
-- [Database & Production](references/database-production.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline code and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces implementation guidance for backend code, validation, security, observability, testing, and deployment decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release evidence) <br>
+Risk: Suggested commands or dependency choices may not fit the project's environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before running them and prefer project-local or pinned tooling.
+
+Risk: Backend logs or telemetry could expose secrets or sensitive values.
+
+Mitigation: Keep secrets out of source control and exclude sensitive values from logs and telemetry.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-nodejs-backend)
+- [Node.js API documentation](https://nodejs.org/api/)
+- [API boundaries](references/api-boundaries.md)
+- [API design patterns](references/api-design.md)
+- [Async operations and production](references/async-and-production.md)
+- [Database and production](references/database-production.md)
+- [Observability and tracing](references/observability-tracing.md)
+- [Authentication and security](references/security.md)
+- [TypeScript configuration](references/typescript-config.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with code and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Review generated changes and commands before use.]
+
+## Skill Version(s):
+
+5.0.1 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

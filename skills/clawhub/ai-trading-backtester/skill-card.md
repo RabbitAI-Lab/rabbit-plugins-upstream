@@ -1,42 +1,53 @@
-## Description: <br>
-AI-powered quantitative trading strategy backtesting assistant. Designs, codes, and evaluates trading strategies across historical market data. Supports A-share (China), Hong Kong, US equity markets. Covers mean reversion, momentum, breakout, pairs trading, and machine learning-based strategies. Built for quantitative analysts and retail traders. Keywords: trading backtest, quantitative strategy, algorithmic trading, Python backtesting, backtrader, vectorbt, trading strategy, momentum, mean reversion, pairs trading, A-share strategy, financial data, technical indicators. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Guides the design of Python trading-strategy backtests and interpretation of historical performance across A-share, Hong Kong, and US equity markets.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is for research and development only.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Quantitative analysts, retail traders, and developers use this skill to turn trading ideas into Python backtests, compare strategy performance, and review risk-adjusted metrics across A-share, Hong Kong, and US equity markets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated trading code or performance summaries could be mistaken for investment advice. <br>
-Mitigation: Treat outputs as educational research, verify assumptions and calculations, and consult qualified financial professionals before making trading decisions. <br>
-Risk: Generated Python may be run against unintended files, live accounts, or unaudited extensions. <br>
-Mitigation: Review code before execution, run it in a controlled environment with intended historical data only, and do not connect brokerage accounts or API keys unless separately audited. <br>
-Risk: Backtests can overfit historical data or omit market frictions. <br>
-Mitigation: Use out-of-sample testing, include transaction costs and slippage, and stress test strategies before relying on results. <br>
+## Use Case:
 
+Quantitative analysts and retail traders use this skill to draft backtesting code and compare historical strategy performance, costs, and risk assumptions. Users run and verify the generated code themselves; the skill does not execute backtests or place trades.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/ai-trading-backtester) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown with Python code blocks, shell commands, and tabular performance summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated code and backtest results require user review before execution or trading decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Sensitive account details, trading records, credentials, or proprietary strategy parameters could be exposed in prompts or saved outputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use placeholders or anonymized examples; review generated code and reports for sensitive details before saving them.
+
+Risk: Unverified code or unrealistic market, cost, and regulatory assumptions could make historical performance misleading or costly to apply.
+
+Mitigation: Independently test generated code, data timing, execution constraints, fees, and current market rules before using results with real capital.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/ai-trading-backtester)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with Python code blocks and performance tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Example performance figures are illustrative, not verified backtest results.]
+
+## Skill Version(s):
+
+5.0.3 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

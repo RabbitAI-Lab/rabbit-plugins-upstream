@@ -1,48 +1,60 @@
-## Description: <br>
-Zoho Bigin API integration with managed OAuth for managing contacts, companies, pipelines, and products in Bigin CRM. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read and manage Zoho Bigin CRM records through a connected Maton account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read, search, create, update, and delete Zoho Bigin CRM records through Maton-managed OAuth when working with contacts, companies, products, and sales pipelines. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access connected Zoho Bigin CRM data through Maton-managed OAuth. <br>
-Mitigation: Review the Zoho and Maton OAuth scopes before use and install only for accounts whose CRM data the agent is allowed to access. <br>
-Risk: Create, update, and delete operations can mutate business CRM records. <br>
-Mitigation: Require explicit user approval before executing write operations, including confirmation of the target resource and intended effect. <br>
-Risk: Using the wrong connection when multiple Zoho Bigin accounts are configured could affect unintended CRM data. <br>
-Mitigation: Use the Maton-Connection header to select the intended active connection when more than one account is available. <br>
+## Use Case:
 
+Sales teams and their agents use this skill to find and manage contacts, companies, pipelines, and products in a connected Zoho Bigin account. It also guides approved CRM actions and optional automations.
 
-## Reference(s): <br>
-- [Zoho Bigin Skill on ClawHub](https://clawhub.ai/byungkyu/skills/zoho-bigin) <br>
-- [Publisher Profile](https://clawhub.ai/user/byungkyu) <br>
-- [Bigin API Overview](https://www.bigin.com/developer/docs/apis/v2/) <br>
-- [Bigin REST API Documentation](https://www.bigin.com/developer/docs/apis/) <br>
-- [Modules API](https://www.bigin.com/developer/docs/apis/modules-api.html) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Community](https://discord.com/invite/dBfFAcefs2) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown with API endpoint descriptions and Python, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and the MATON_API_KEY environment variable for authenticated requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: CRM writes or account connections can change or expose business data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only requests and obtain explicit user approval before connections or writes; use only required OAuth scopes.
+
+Risk: Authentication credentials or CRM responses may expose sensitive information.
+
+Mitigation: Prefer OAuth, do not reveal or store credentials, and limit displayed record fields to what the task requires.
+
+Risk: Persistent triggers or third-party destinations may keep forwarding event data.
+
+Mitigation: Require explicit approval for automations and external destinations; review and remove triggers when no longer needed.
+
+## Reference(s):
+
+- [Zoho Bigin skill on ClawHub](https://clawhub.ai/byungkyu/skills/zoho-bigin)
+- [Zoho Bigin API overview](https://www.bigin.com/developer/docs/apis/v2/)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton CLI manual](https://cli.maton.ai/manual)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Code, Guidance]
+
+**Output Format:** [Markdown with CRM record summaries and command or code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include personal CRM data; show only fields needed for the task.]
+
+## Skill Version(s):
+
+1.2.6 (source: server-resolved ClawHub release; skill frontmatter lists 1.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

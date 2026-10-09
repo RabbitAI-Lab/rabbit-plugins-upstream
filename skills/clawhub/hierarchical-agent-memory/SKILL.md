@@ -10,15 +10,15 @@ description: >-
   isolation, install the companion skill agent-session-state. Upgrading from
   v2.x? Existing files are preserved — the agent will guide you through
   adding topic-based working memory alongside your current structure.
-license: MIT
+license: MIT-0
 compatibility: "OpenClaw 2026.4.x or later. Requires memory-core plugin."
 metadata:
   openclaw: {"requires": {"bins": ["openclaw"]}}
-  version: "3.1.0"
+  version: "3.1.1"
   clawhub: {"category": "memory", "tags": ["memory", "hierarchy", "topics", "distillation"]}
 ---
 
-# Hierarchical Agent Memory v3.1.0
+# Hierarchical Agent Memory v3.1.1
 
 Agents that run across multiple projects, contacts, and time horizons need memory that scales. Without structure, memory files grow into a single bloated document that triggers lost-in-the-middle degradation. This skill organizes agent memory into a hybrid architecture: topic-based working memory for active projects, and optional time-based archival layers for episodic recall.
 
@@ -56,7 +56,7 @@ For full only: first check whether `memory-wiki` is enabled by inspecting `plugi
 
 ### Layer 1: MEMORY.md — Routing Table
 
-MEMORY.md is loaded into the system prompt every session. It must stay under 3KB to avoid lost-in-the-middle degradation. It contains:
+MEMORY.md is loaded into the system prompt of the main, private session (OpenClaw does not load it in shared or group contexts). It must stay under 3KB to avoid lost-in-the-middle degradation. It contains:
 
 - Active project pointers — one line each, linking to topic files
 - Key contact pointers — linking to contact files
@@ -65,7 +65,7 @@ MEMORY.md is loaded into the system prompt every session. It must stay under 3KB
 
 MEMORY.md is a routing table, not a summary. If you're tempted to write a paragraph in MEMORY.md, it belongs in a topic file instead.
 
-**Security note:** MEMORY.md is injected into the model context every session. Never put secrets, API keys, passwords, or sensitive PII in MEMORY.md or any file it points to. Store credentials in environment variables or `.env` files (excluded from memory). Active Constraints entries (e.g., "do not raise X") are acceptable — they are behavioral directives, not sensitive data.
+**Security note:** MEMORY.md is injected into the model context of every main session. Never put secrets, API keys, passwords, or sensitive PII in MEMORY.md or any file it points to. Store credentials in environment variables or `.env` files (excluded from memory). Active Constraints entries (e.g., "do not raise X") are acceptable — they are behavioral directives, not sensitive data.
 
 Example MEMORY.md:
 
@@ -166,7 +166,7 @@ Durable knowledge compilation is handled by the bundled `memory-wiki` plugin. If
 
 ### Time-Based Layers (when enabled)
 
-Weekly, monthly, and yearly files are generated archives — don't manually edit them. Distillation cron jobs use OpenClaw's built-in `cron` tool — they run as isolated agent sessions within the OpenClaw sandbox. No OS-level schedulers (crontab, systemd, launchd) are created or modified. If a cron job fails, daily notes remain the source of truth and synthesis can be re-run.
+Weekly, monthly, and yearly files are generated archives — don't manually edit them. Distillation cron jobs use OpenClaw's built-in `automations` tool (named `cron` before 2026.8.1) — they run as isolated agent sessions within the OpenClaw sandbox. No OS-level schedulers (crontab, systemd, launchd) are created or modified. If a cron job fails, daily notes remain the source of truth and synthesis can be re-run.
 
 ---
 
