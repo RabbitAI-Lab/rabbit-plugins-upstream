@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-analyze-detection-kpi",
+  "identifier": "NVIDIA/skills/skills/tao-analyze-detection-kpi",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-analyze-detection-kpi",
+  "branch": "main",
+  "pushedAt": "2026-10-09T10:13:44Z",
+  "contentHash": "4c38ac72851c8577fe2a23f1239a1d16c641780e994062c2c6e3040a6fc2f1d6",
+  "fetchedAt": "2026-10-09T14:26:05.822Z"
+}

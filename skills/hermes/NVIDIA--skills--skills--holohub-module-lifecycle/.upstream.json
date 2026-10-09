@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holohub-module-lifecycle",
+  "identifier": "NVIDIA/skills/skills/holohub-module-lifecycle",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holohub-module-lifecycle",
+  "branch": "main",
+  "pushedAt": "2026-10-09T10:13:44Z",
+  "contentHash": "608632298396f9eb75e499d4883224d8613a2fcfc75b232da47e7fdfc405e490",
+  "fetchedAt": "2026-10-09T14:26:05.396Z"
+}

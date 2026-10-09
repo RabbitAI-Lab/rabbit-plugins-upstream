@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/multi-objective-optimization",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/multi-objective-optimization",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/multi-objective-optimization",
+  "branch": "main",
+  "pushedAt": "2026-10-09T07:27:30Z",
+  "contentHash": "98122e744b24e7c0bc246463acb644039587810a5335f85fbb22433a818db4cb",
+  "fetchedAt": "2026-10-09T14:26:07.428Z"
+}

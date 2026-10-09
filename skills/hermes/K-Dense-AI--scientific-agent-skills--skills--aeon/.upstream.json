@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/aeon",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/aeon",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/aeon",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "6a4cbcf09044c6e8a55dc3756a5c197e84b5e7914341edae3382710c50ceeb97",
+  "fetchedAt": "2026-10-09T14:26:22.046Z"
+}
