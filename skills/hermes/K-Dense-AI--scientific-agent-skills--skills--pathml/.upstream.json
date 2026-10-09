@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pathml",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pathml",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pathml",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "3fe0d9a1f27a05306fff8fb84e3e2b6352ac353c6070a72b7332ea9f8b73b183",
+  "fetchedAt": "2026-10-09T14:26:22.127Z"
+}

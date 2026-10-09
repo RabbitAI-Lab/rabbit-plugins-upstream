@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/brenda-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/brenda-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/brenda-database",
+  "branch": "main",
+  "pushedAt": "2026-10-09T07:27:30Z",
+  "contentHash": "35aebe9fa8e005daf75679a0489e9fe3a6775788fd4f031478a733c8a3b86f3e",
+  "fetchedAt": "2026-10-09T14:26:07.216Z"
+}

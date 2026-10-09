@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/cellxgene-census",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/cellxgene-census",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/cellxgene-census",
+  "branch": "main",
+  "pushedAt": "2026-10-09T07:27:30Z",
+  "contentHash": "8c957b6bde8e71e2aee51b6b72b7bdb30ac6a468c887ba21728962db4ba40612",
+  "fetchedAt": "2026-10-09T14:26:07.219Z"
+}

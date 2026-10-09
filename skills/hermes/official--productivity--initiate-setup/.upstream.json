@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/initiate-setup",
+  "identifier": "official/productivity/initiate-setup",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/initiate-setup",
+  "branch": "main",
+  "pushedAt": "2026-10-09T14:00:23Z",
+  "contentHash": "257b62687ee7a3d69e9b8b2c72c87323c92a7a7af56afd7d323b30e8bb9f8eba",
+  "fetchedAt": "2026-10-09T14:26:11.691Z"
+}
