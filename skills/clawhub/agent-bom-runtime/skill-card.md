@@ -1,43 +1,56 @@
-## Description: <br>
-agent-bom runtime helps agents analyze context graphs, correlate runtime audit logs with CVE findings, and query vulnerability analytics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes agent context graphs, correlates runtime audit logs with CVE findings, and queries vulnerability trends.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security engineers use this skill to inspect agent runtime posture, investigate lateral movement in context graphs, correlate user-provided audit logs with CVE findings, and query vulnerability trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided runtime audit logs may contain sensitive operational details. <br>
-Mitigation: Review and minimize audit logs before providing them to the skill. <br>
-Risk: Optional ClickHouse storage can persist vulnerability analytics and runtime data. <br>
-Mitigation: Configure ClickHouse only when persistent analytics storage is intended and approved. <br>
+## Use Case:
 
+Developers and security teams use this skill to inspect agent context graphs, correlate user-supplied runtime audit logs with CVEs, and review vulnerability trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-runtime) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with concise analysis and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference user-provided audit log paths and optional ClickHouse configuration; no API keys are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Installing a third-party CLI introduces package supply-chain risk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the PyPI package and project before installing, as recommended by the release security guidance.
+
+Risk: Optional ClickHouse or kubectl access can expose analytics data or cluster resources.
+
+Mitigation: Configure those connections only when needed and limit access to the intended environment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/msaad00/skills/agent-bom-runtime)
+- [Project homepage listed in skill metadata](https://github.com/msaad00/agent-bom)
+- [agent-bom package on PyPI](https://pypi.org/project/agent-bom/)
+- [Project OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Guidance]
+
+**Output Format:** [Text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Context graph analysis, audit-to-CVE correlation, and vulnerability trend results; no fixed output schema is specified.]
+
+## Skill Version(s):
+
+0.108.3 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

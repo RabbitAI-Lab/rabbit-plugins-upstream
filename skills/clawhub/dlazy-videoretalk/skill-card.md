@@ -1,43 +1,59 @@
-## Description: <br>
-Dlazy Videoretalk helps an agent invoke dLazy's Tongyi VideoRetalk service to regenerate a talking-person video so the speaker's mouth movement matches a supplied audio track, with optional reference-face selection for videos containing multiple people. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create a lip-synced talking-person video from a source video and voice audio, with an optional reference face for multi-person footage.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to call dLazy's hosted VideoRetalk workflow for lip-syncing a person video to a new voice audio track. It is suited for cloud media-generation tasks where the user provides video, audio, and optionally a reference face image. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected local video, audio, and image files may be uploaded to dLazy for processing. <br>
-Mitigation: Install and use the skill only when sending those media files to dLazy is acceptable for the user's workflow. <br>
-Risk: The skill stores a dLazy organization API key locally, and the inspected evidence does not clearly confirm enforcement of the claimed permission protections. <br>
-Mitigation: Prefer passing DLAZY_API_KEY per invocation, verify that any saved config file is readable only by the current user, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Creators and developers use this skill to align a person's mouth movements in a video with new speech audio, optionally selecting a face in multi-person footage.
 
-## Reference(s): <br>
-- [Dlazy Videoretalk on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-videoretalk) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted media URLs or asynchronous task identifiers from dLazy.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Video, audio, and optional face images may be uploaded to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only media you are authorized to process and review dLazy's service terms before submitting sensitive content.
+
+Risk: Logging in can save a dLazy API key locally, and installing the third-party CLI runs external software.
+
+Mitigation: Protect the saved key and review the CLI before use; prefer the pinned on-demand npx command to avoid a global installation.
+
+Risk: The skill's example command and output sample do not match its documented video and audio inputs.
+
+Mitigation: Check the installed CLI's videoretalk help and validate its actual result before relying on the examples.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-videoretalk)
+- [dLazy CLI homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON response]
+
+**Output Format:** [Text guidance and CLI JSON containing a generated-video URL; optional downloaded video file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Asynchronous requests may return a task ID instead of a completed result.]
+
+## Skill Version(s):
+
+1.3.26 (source: ClawHub release evidence; artifact frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

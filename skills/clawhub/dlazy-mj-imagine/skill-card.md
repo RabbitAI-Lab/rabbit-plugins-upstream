@@ -1,43 +1,59 @@
-## Description: <br>
-Midjourney style generation, supports aspect ratio, bot type, and output position for artistic and strongly stylized creative image generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent in generating stylized images through dLazy's Midjourney-style service, with aspect ratio, bot type, and grid or U1–U4 output choices.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agent users use this skill to call the dLazy CLI for Midjourney-style image generation from prompts, aspect ratio settings, bot type, and grid or upsample output choices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and any explicitly referenced media files to third-party dLazy cloud services. <br>
-Mitigation: Use only prompts and files approved for dLazy processing, and avoid passing sensitive or restricted local media. <br>
-Risk: The skill depends on a third-party npm CLI and stores or reads dLazy API credentials for authenticated requests. <br>
-Mitigation: Prefer the pinned `npx @dlazy/cli@1.2.3` command when a global install is not desired, protect `~/.dlazy/config.json`, and rotate or revoke API keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Creators and developers use this skill to request stylized images with chosen aspect ratios, bot types, and grid or selected image outputs.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-mj-imagine) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI source link from skill metadata](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image results are returned as JSON with file URLs; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and release evidence) <br>
+Risk: Prompts and any selected local media are sent to the dLazy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit content you are authorized to share with dLazy.
+
+Risk: Using the skill requires trusting the external dLazy CLI package and service.
+
+Mitigation: Review the CLI and service before installation or use.
+
+Risk: The CLI can persist an API key on the local device.
+
+Mitigation: Use a per-invocation DLAZY_API_KEY when local persistence is unwanted; rotate or revoke keys from the dLazy dashboard when needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-mj-imagine)
+- [dLazy CLI repository (skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Text]
+
+**Output Format:** [Markdown guidance and CLI JSON results containing image URLs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated images may be downloaded locally; asynchronous requests return a task ID instead of immediate outputs.]
+
+## Skill Version(s):
+
+1.3.25 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

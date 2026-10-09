@@ -1,41 +1,49 @@
-## Description: <br>
-Checks or fixes the reading measure of body text by estimating characters per line and recommending readable max-width values for desktop and mobile layouts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks body-text line length and recommends readable CSS widths for desktop and mobile.
 
-## Publisher: <br>
-[monikazapisekstudio](https://clawhub.ai/user/monikazapisekstudio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[monikazapisek](https://clawhub.ai/user/monikazapisek)
 
-## Use Case: <br>
-Designers, developers, and agents use this skill to judge whether body-copy containers are too wide or narrow and to propose readable CSS or Figma sizing fixes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Direct Figma resizing could change design files if the agent is asked to apply a fix. <br>
-Mitigation: Review the proposed width first and only permit direct node resizing when that edit is intended. <br>
-Risk: Line-length estimates can vary by font, content, and container behavior. <br>
-Mitigation: Treat recommendations as typography guidance and verify the result in the actual layout before shipping. <br>
+## Use Case:
 
+Designers and developers use this skill to assess the readability of body-text columns and recommend responsive CSS widths. With Figma access, it can inspect a selected text node and resize it only on explicit request.
 
-## Reference(s): <br>
-- [Server-resolved source provenance](https://github.com/monikazapisekstudio/design-engineering-playbook/tree/main/skills/typesetting-engine-skillset/line-length-optimizer) <br>
-- [ClawHub skill page](https://clawhub.ai/monikazapisekstudio/skills/line-length-optimizer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with CSS snippets and concise reasoning] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include measured or estimated characters per line, desktop/mobile verdicts, and Figma sizing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: A direct edit could change a stylesheet or resize a Figma text node unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present width recommendations first; edit a file or Figma node only when the user explicitly requests it.
+
+## Reference(s):
+
+- [Line Length Optimizer on ClawHub](https://clawhub.ai/monikazapisek/skills/line-length-optimizer)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, CSS code, Guidance]
+
+**Output Format:** [Markdown with inline CSS]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes an estimated or measured characters-per-line verdict, recommended width, and explanation.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release; bundled skill metadata says 1.1.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

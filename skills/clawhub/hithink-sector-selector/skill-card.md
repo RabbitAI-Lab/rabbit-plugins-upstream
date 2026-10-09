@@ -1,45 +1,55 @@
-## Description: <br>
-Screens market sectors using valuation, fund-flow, gain/loss, sector-type, volume, and combined natural-language filters, returning matching sector data from iWenCai. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过同花顺问财按估值、资金流向、涨跌幅等条件筛选中国市场板块并展示结果。
 
-## Publisher: <br>
-[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee)
 
-## Use Case: <br>
-External users and agents use this skill to translate natural-language sector-screening requests into iWenCai sector queries, retrieve matching market-sector data, and present concise results with the final query and data source. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Sector-screening queries are sent to iWenCai using an IWENCAI_API_KEY. <br>
-Mitigation: Avoid confidential trading strategies, account identifiers, and other sensitive information in queries; rotate or revoke API keys if exposed. <br>
-Risk: Market-sector data may be incomplete, paginated, stale, or unavailable. <br>
-Mitigation: Check total result counts against returned rows, paginate when needed, cite iWenCai as the data source, and have users verify market decisions independently. <br>
-Risk: Optional use of other finance or search tools can disclose related query context to additional services. <br>
-Mitigation: Use fallback tools only when necessary and keep sensitive strategy details out of follow-up searches or tool calls. <br>
+## Use Case:
 
+投资研究用户用自然语言筛选中国市场的行业、概念或地域板块，查看符合估值、资金流向和涨跌幅等条件的板块数据。
 
-## Reference(s): <br>
-- [iWenCai web service](https://www.iwencai.com/unifiedwap/chat) <br>
-- [iWenCai SkillHub](https://www.iwencai.com/skillhub) <br>
-- [iWenCai OpenAPI query endpoint](https://openapi.iwencai.com/v1/query2data) <br>
-- [ClawHub skill page](https://clawhub.ai/chen6896qqwee/skills/hithink-sector-selector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown response with optional tables and inline shell commands; CLI output may include JSON or text returned from iWenCai.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses IWENCAI_API_KEY; iWenCai results are paginated with a default limit of 10 and may require retrying relaxed queries or fetching additional pages.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence release metadata, artifact clawhub.json, SKILL.md, and scripts/cli.py) <br>
+Risk: Screening queries and an API key are sent to the documented iWencai service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a private, appropriately scoped API key and omit sensitive personal or account information from queries.
+
+Risk: Market-screening results may be mistaken for investment advice.
+
+Mitigation: Treat returned market data as informational and verify it before making financial decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/chen6896qqwee/skills/hithink-sector-selector)
+- [同花顺问财数据查询](https://www.iwencai.com/unifiedwap/chat)
+- [同花顺问财 SkillHub](https://www.iwencai.com/skillhub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown table with brief explanatory text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports the final screening query and credits 同花顺问财 as the data source.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved ClawHub release and clawhub.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

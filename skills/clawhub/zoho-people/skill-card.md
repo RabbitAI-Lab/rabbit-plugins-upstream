@@ -1,51 +1,61 @@
-## Description: <br>
-Zoho People API integration with managed OAuth for managing employees, departments, designations, attendance, leave, and arbitrary Zoho People forms, including custom forms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read and manage Zoho People HR records, forms, attendance, and leave through an authorized Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Employees, HR operators, and developers use this skill to make targeted Zoho People API requests for employee, department, designation, attendance, leave, and custom form workflows through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive HR records may be exposed through broad employee, attendance, leave, or custom form reads. <br>
-Mitigation: Use the least-privileged Zoho connection available, request only specific records needed for the task, and avoid broad exports unless there is a clear business need. <br>
-Risk: Create, update, or delete operations can change HR records. <br>
-Mitigation: Review the target resource and intended effect with the user before approving any write operation. <br>
-Risk: Requests may target the wrong Zoho People account when multiple Maton connections exist. <br>
-Mitigation: Specify the intended connection with the Maton-Connection header whenever multiple Zoho People connections are available. <br>
-Risk: Maton brokers access to the connected Zoho People account and requires a Maton API key. <br>
-Mitigation: Install only if Maton is trusted for this account, protect MATON_API_KEY as a credential, and rotate or revoke access if it is exposed. <br>
+## Use Case:
 
+Employees and HR teams can ask an agent to retrieve or update specific employee, department, attendance, leave, and form records in their authorized Zoho People account. Developers can set up approved functions and triggers for related workflows.
 
-## Reference(s): <br>
-- [ClawHub Zoho People Skill Page](https://clawhub.ai/byungkyu/skills/zoho-people) <br>
-- [Zoho People API Overview](https://www.zoho.com/people/api/overview.html) <br>
-- [Zoho People Get Bulk Records API](https://www.zoho.com/people/api/bulk-records.html) <br>
-- [Zoho People Fetch Forms API](https://www.zoho.com/people/api/forms-api/fetch-forms.html) <br>
-- [Zoho People Insert Record API](https://www.zoho.com/people/api/insert-records.html) <br>
-- [Zoho People Update Records API](https://www.zoho.com/people/api/update-records.html) <br>
-- [Zoho People Attendance Entries API](https://www.zoho.com/people/api/attendance-entries.html) <br>
-- [Zoho People Add Leave API](https://www.zoho.com/people/api/add-leave.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline Python, JavaScript, HTTP, and shell examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and an authorized Zoho People connection; write operations require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Sensitive employee and leave information may be accessed beyond the user's intended scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account, connection, and exact records; access only records the user requests.
+
+Risk: Writes to records or custom forms may change HR data unexpectedly.
+
+Mitigation: Review the target and payload and obtain explicit approval before each write.
+
+Risk: Hosted functions and persistent triggers can repeatedly process or send HR data.
+
+Mitigation: Review function behavior and trigger destinations, and confirm automation before enabling it.
+
+## Reference(s):
+
+- [ClawHub zoho-people release](https://clawhub.ai/byungkyu/skills/zoho-people)
+- [Maton](https://maton.ai)
+- [Maton documentation](https://docs.maton.ai)
+- [Zoho People API overview](https://www.zoho.com/people/api/overview.html)
+- [Zoho People forms API](https://www.zoho.com/people/api/forms-api/fetch-forms.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Natural-language responses with optional Markdown, code, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the authorized Zoho People connection and the records requested.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

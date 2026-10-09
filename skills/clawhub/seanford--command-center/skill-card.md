@@ -1,43 +1,56 @@
-## Description: <br>
-Mission control dashboard for OpenClaw - real-time session monitoring, LLM usage tracking, cost intelligence, and system vitals. View all your AI agents in one place. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mission control dashboard for OpenClaw - real-time session monitoring, LLM usage tracking, cost intelligence, and system vitals.
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-Developers and operators use Command Center to monitor OpenClaw agent sessions, LLM usage, costs, scheduled jobs, and host vitals from a local dashboard. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dashboard can expose sensitive OpenClaw session, workspace, operator, and transcript-derived data. <br>
-Mitigation: Bind the service to localhost or a protected interface, treat dashboard data as private, and avoid public tunnels unless separately protected. <br>
-Risk: Security evidence reports write/control APIs and defaults that are less constrained than the documentation implies. <br>
-Mitigation: Use a real auth mode such as token, Tailscale, or Cloudflare with a narrow allowlist before remote or shared access. <br>
+## Use Case:
 
+Developers and OpenClaw operators use Command Center to monitor AI agent sessions, LLM usage, costs, system vitals, scheduled jobs, and topic state from a local dashboard.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/seanford/skills/command-center) <br>
-- [OpenClaw Command Center README](https://github.com/jontsai/openclaw-command-center#readme) <br>
-- [OpenClaw Command Center Repository](https://github.com/jontsai/openclaw-command-center) <br>
-- [Architecture Overview](docs/architecture/OVERVIEW.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces instructions for starting and configuring a local OpenClaw dashboard service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence; artifact frontmatter, package.json, and _meta.json report 1.4.1) <br>
+Risk: Default server startup can expose sensitive session data and dashboard controls without authentication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only on a trusted local machine, bind to loopback where possible, and set token, Tailscale, or Cloudflare authentication before exposing the port to any network.
+
+Risk: Dashboard views may reveal recent agent conversations, topics, usage, costs, and workspace state.
+
+Mitigation: Use privacy controls for demos and avoid sharing screenshots, logs, or dashboard access that include sensitive sessions or topics.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/seanford/skills/command-center)
+- [GitHub Repository](https://github.com/jontsai/openclaw-command-center)
+- [README](README.md)
+- [Architecture Overview](docs/architecture/OVERVIEW.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown instructions with shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs a local Node.js dashboard on port 3333; requires Node.js >=18.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata; artifact frontmatter and package.json report 1.4.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

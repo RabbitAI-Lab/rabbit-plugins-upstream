@@ -1,5 +1,48 @@
 # Changelog
 
+## [0.22.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.22.0...invest-skill-v0.22.1) (2026-10-09)
+
+
+### Docs
+
+* **skill:** use FUND:&lt;code&gt; for Chinese off-exchange mutual funds ([1770975](https://github.com/longsizhuo/openInvest/commit/1770975054089f0a6a0a488d464e5dba11492c06))
+
+## [0.22.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.21.2...invest-skill-v0.22.0) (2026-10-08)
+
+
+### Features
+
+* **mcp:** run_committee 上报辩论进度、decisions 支持过滤与截断（[#133](https://github.com/longsizhuo/openInvest/issues/133)） ([#309](https://github.com/longsizhuo/openInvest/issues/309)) ([447ab58](https://github.com/longsizhuo/openInvest/commit/447ab58a7d5875346f4bc92d45fde4640c630d92))
+
+## [0.21.2](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.21.1...invest-skill-v0.21.2) (2026-10-08)
+
+
+### Docs
+
+* **skill:** quote confidence_lookup next to verdicts, keep self-reported confidence as raw ([#295](https://github.com/longsizhuo/openInvest/issues/295)) ([5864ac3](https://github.com/longsizhuo/openInvest/commit/5864ac3a4403137fcc5e4b3c99f160e5d0219c72))
+
+## [0.21.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.21.0...invest-skill-v0.21.1) (2026-10-08)
+
+
+### Docs
+
+* **skill:** explain weekend_dup_excluded in the verdict_review summary ([#292](https://github.com/longsizhuo/openInvest/issues/292)) ([368aa91](https://github.com/longsizhuo/openInvest/commit/368aa916d510601d5a480935c4aa6305b4752328))
+
+## [0.21.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.20.2...invest-skill-v0.21.0) (2026-10-08)
+
+
+### Features
+
+* **verdict-review:** live-only daily review, DB-only prices, summary split by source ([#279](https://github.com/longsizhuo/openInvest/issues/279)) ([4382f7e](https://github.com/longsizhuo/openInvest/commit/4382f7e0b1045e2fea2285d84c4c7982879685e8))
+
+## [0.20.2](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.20.1...invest-skill-v0.20.2) (2026-10-08)
+
+
+### Bug Fixes
+
+* **events:** 触发闸提成共享 service——Hermes 投喂的事件接上委员会触发，两门共享冷却/日上限 ([#261](https://github.com/longsizhuo/openInvest/issues/261)) ([b633cf2](https://github.com/longsizhuo/openInvest/commit/b633cf20f88e3969117013719586fdd6bd5b0eb5))
+* **news:** RSS 抓取加整次总时限与地址校验，add_news_source 只收公网源且不阻塞 MCP ([#262](https://github.com/longsizhuo/openInvest/issues/262)) ([566538f](https://github.com/longsizhuo/openInvest/commit/566538fd1973ab3f19e032ff55452f2fa676f7e2))
+
 ## [0.20.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.20.0...invest-skill-v0.20.1) (2026-07-17)
 
 

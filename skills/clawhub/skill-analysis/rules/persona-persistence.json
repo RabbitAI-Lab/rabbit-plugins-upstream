@@ -1,0 +1,49 @@
+{
+  "family": "persona-persistence",
+  "version": 1,
+  "description": "Persona Persistence / 自改写攻击检测（指令层）：Skill 指示 Agent 改写自身指令、身份文件或跨文件写入配置，从而跨会话持久化、删除后自动恢复。情报源：ClawSouls《Persona Persistence Attacks》（2026-08）、Snyk ToxicSkills、Zenity skills.sh「无感更新/被删自动重装」、ClawHavoc 认知根工具。引擎内置同等默认表（PERSONA_PERSISTENCE_PATTERNS），本文件可在不改引擎的情况下更新规则。",
+  "rules": [
+    {
+      "id": "pp-00",
+      "re": "(?:update|modify|edit|rewrite|append|overwrite|write|更新|修改|改写|重写|追加|写入|覆盖)[^\\n]{0,40}(?:CLAUDE\\.md|AGENTS\\.md|SOUL\\.md|\\.cursorrules|\\.cursor/rules|copilot-instructions\\.md|GEMINI\\.md|ID\\.md|system[-_]prompt)",
+      "label": "身份/人格文件写入（信息：需人工核对写入内容；含对抗指令/外部端点共现时按 pp-05 升级）",
+      "sev": "P3",
+      "why": "指令要求更新/改写 Agent 的持久化指令或身份文件（CLAUDE.md/AGENTS.md/SOUL.md/.cursorrules 等）。此类文件被 Agent 当作最高优先级可信上下文加载，改写将跨会话永久改变 Agent 行为，是 Persona Persistence Attack（ClawSouls 2026-08）与 ClawHavoc「认知根工具」的核心手法。"
+    },
+    {
+      "id": "pp-01",
+      "re": "(?:rewrite|update|modify|overwrite|replace)\\s+(?:your|its|the\\s+agent'?s?)\\s+(?:own\\s+)?(?:instructions?|system\\s*prompt|prompt|config(?:uration)?|rules?|identity|persona|behaviou?r)|(?:重写|改写|更新|修改|替换)(?:(?:你|您|自己|自身|我)(?:的)?){1,3}(?:指令|系统提示|提示词|配置|规则|人格|身份|行为|准则)",
+      "label": "自我指令改写（自指 Persona Persistence）",
+      "sev": "P1",
+      "why": "指令明确要求 Agent 改写「自身的指令/系统提示/配置/身份」。这是跨会话持久化的自指手法：攻击者用看似无害的「学会自我改进」话术，换取对 Agent 指令体系的无限改写权。保守模型可能拒绝，本地开源模型往往照做（模型相关安全缺口）。"
+    },
+    {
+      "id": "pp-02",
+      "re": "(?:re-?install|re-?install|recreate|restore|re-?add|re-?deploy)\\s+(?:itself|yourself|the\\s+skill|the\\s+plugin|this\\s+skill)|(?:被|如果|一旦|当)(?:删除|卸载|移除|禁用)[^\\n]{0,24}(?:自动)?(?:重装|重新安装|恢复|重建|复活)|self[-_]?(?:heal|repair|reinstall|restore)",
+      "label": "自我重装/删除后自动恢复（持久化）",
+      "sev": "P1",
+      "why": "指令要求「被删除/卸载后自动重装或恢复自身」。Zenity 在 skills.sh 观察到的木马 Skill 会在被删除后自动重装（改写 system prompt 实现自愈），使清除失效。正常的 Skill 无此需求。"
+    },
+    {
+      "id": "pp-03",
+      "re": "(?:write|modify|update|append|inject|写入|修改|更新|追加|注入)[^\\n]{0,30}(?:other|another|其他|另一个|其它)[^\\n]{0,24}(?:config|configuration|skill|agent|\\.md\\b|file|配置|技能|文件)",
+      "label": "跨文件写入（向其它配置/技能传播）",
+      "sev": "P1",
+      "why": "指令要求写入「其它配置文件 / 其它 Skill」。Personal Persistence Attack 的 Cross-File Mutation 变体：通过改写别的配置制造难以追踪的第二持久化点；亦可演变为跨 Skill 传播的语义蠕虫。"
+    },
+    {
+      "id": "pp-04",
+      "re": "(?:after|each|every)\\s+(?:session|conversation|run|invocation)[^\\n]{0,60}(?:update|modify|write|append|edit|rewrite)[^\\n]{0,50}(?:CLAUDE|AGENTS|SOUL|MEMORY|\\.cursor|copilot-instructions|instruction|config)|(?:每次|每轮|之后)(?:会话|对话|运行|启动)[^\\n]{0,36}(?:更新|修改|写入|追加|改写)[^\\n]{0,36}(?:配置|指令|记忆|CLAUDE|AGENTS|SOUL|MEMORY)",
+      "label": "会话后持久化写入指令/配置",
+      "sev": "P2",
+      "why": "指令要求「每次会话/运行之后更新指令或配置文件」。配合自改写目标文件即为持久化后门；单独出现也应确认其意图与写入内容。"
+    },
+    {
+      "id": "pp-05",
+      "sev": "P1",
+      "label": "Persona Persistence 对抗性写入：身份文件修改伴随对抗指令/外部端点",
+      "re": "(?:update|modify|edit|rewrite|append|overwrite|write|更新|修改|改写|重写|追加|写入|覆盖)[^\\n]{0,40}(?:CLAUDE\\.md|AGENTS\\.md|SOUL\\.md|\\.cursorrules|\\.cursor/rules|copilot-instructions\\.md|GEMINI\\.md|ID\\.md|system[-_]prompt)[^\\n]{0,160}(?:ignore|隐瞒|不对用户说明|不向用户提及|do\\s+not\\s+mention|cover\\s+up|exfil|curl|https?://|外传|上传|凭据|credentials|\\.env\\b|id_rsa|password|密码|self[- ]?replicat|自我复制|伪造身份|假身份|new\\s+identity|覆写)|(?:ignore|隐瞒|不对用户说明|不向用户提及|do\\s+not\\s+mention|cover\\s+up|exfil|curl|https?://|外传|上传|凭据|credentials|\\.env\\b|id_rsa|password|密码|self[- ]?replicat|自我复制|伪造身份|假身份|new\\s+identity|覆写)[^\\n]{0,160}(?:update|modify|edit|rewrite|append|overwrite|write|更新|修改|改写|重写|追加|写入|覆盖)[^\\n]{0,40}(?:CLAUDE\\.md|AGENTS\\.md|SOUL\\.md|\\.cursorrules|\\.cursor/rules|copilot-instructions\\.md|GEMINI\\.md|ID\\.md|system[-_]prompt)",
+      "why": "写入身份/人格文件且伴随对抗指令或外部端点（隐瞒指令、凭据、外传、伪造身份等）——Persona Persistence 攻击的判定条件（B-G3 校准：单纯风格偏好写入不算）。"
+    }
+  ]
+}

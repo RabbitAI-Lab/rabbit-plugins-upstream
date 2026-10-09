@@ -1,0 +1,41 @@
+{
+  "family": "exfil-combos",
+  "version": 1,
+  "rules": [
+    {
+      "id": "exfil-00",
+      "re": "(?:curl|wget|nc|ncat|POST)[^\\n]{0,500}\\$\\((?:cat|echo|env|printenv)\\b",
+      "label": "命令结果拼入网络请求（数据外传）",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "exfil-01",
+      "re": "data=\\$\\(|&\\w+=\\$\\(cat",
+      "label": "命令结果作为参数外传",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "exfil-02",
+      "re": "(?:curl|wget|POST)[^\\n]{0,500}\\$\\(cat\\s+[^\\n]{0,500}(?:ssh|\\.env|passwd|credential|key)",
+      "label": "读取敏感文件并外传",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "exfil-03",
+      "re": "(?:curl|wget|nc)[^\\n]{0,200}(?:/dev/null\\s{0,4}2>&1|2>&1\\s{0,4}>/dev/null|1?>/dev/null\\s{0,4}2>&1)",
+      "label": "隐蔽外传（网络请求 + 静默重定向）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "exfil-04",
+      "re": "(?:env|printenv|set)\\s*\\|\\s*(?:curl|wget|nc|ncat)|(?:curl|wget)[^\\n]{0,500}(?:env|printenv)",
+      "label": "环境变量扫描并外传",
+      "sev": "P0",
+      "flags": "I"
+    }
+  ]
+}

@@ -1,44 +1,59 @@
-## Description: <br>
-Search Viator tours, activities, attractions, availability, pricing, and exchange-rate information through an MCP server using the Viator Partner API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search Viator tours and activities, compare product details and pricing, and check availability without making bookings.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to search Viator travel products, compare activities or attractions, check details, pricing, availability, and exchange rates, and obtain Viator booking links without making bookings through the skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel search queries may be sent to a third-party commercial travel API. <br>
-Mitigation: Use the skill only when Viator-backed travel search is desired, and avoid sending sensitive personal information in queries. <br>
-Risk: Returned booking links preserve affiliate attribution and may not represent provider-neutral travel planning. <br>
-Mitigation: Confirm the user wants Viator results and review returned product links before relying on them for recommendations or booking decisions. <br>
-Risk: The skill requires a Viator Partner API key. <br>
-Mitigation: Store the API key in the MCP server environment and do not expose it in prompts, shared files, or generated output. <br>
+## Use Case:
 
+Travel planners and agents use this skill to find Viator experiences, compare product details and prices, and check availability before directing travelers to Viator to book.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/viator-mcp) <br>
-- [npm package @chrischall/viator-mcp](https://www.npmjs.com/package/@chrischall/viator-mcp) <br>
-- [Viator Partner Resources](https://partnerresources.viator.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Viator Partner API queries; returned booking and attraction links may preserve affiliate attribution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Installing the third-party connector requires trusting its package or source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the publisher and review the package or source before installing.
+
+Risk: The Viator Partner API key is placed in MCP environment configuration.
+
+Mitigation: Keep the key in a protected configuration and do not commit it to a repository.
+
+Risk: Availability prices use the supplier's currency and may differ from search prices.
+
+Mitigation: Check currencies and current availability before quoting a price or sending a traveler to Viator to book.
+
+## Reference(s):
+
+- [Viator MCP on ClawHub](https://clawhub.ai/chrischall/skills/viator-mcp)
+- [Viator MCP npm package](https://www.npmjs.com/package/@chrischall/viator-mcp)
+- [Viator Partner Resources](https://partnerresources.viator.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only tour recommendations, product details, prices, availability and links to book on Viator.]
+
+## Skill Version(s):
+
+2.1.7 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

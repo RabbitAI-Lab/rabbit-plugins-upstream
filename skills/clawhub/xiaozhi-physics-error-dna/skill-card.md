@@ -1,45 +1,56 @@
-## Description: <br>
-A physics study aid that classifies mistakes into five error dimensions, tracks recurring weak areas, and produces physics error maps and weak-area reports while coordinating with a general correction notebook. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes middle- and high-school physics mistakes across five error dimensions to identify root causes and track learning weaknesses.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-assistant agents use this skill to diagnose physics mistakes, distinguish diagram, concept, formula, process, and math-tool errors, and turn repeated errors into targeted weak-area tracking and review reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill keeps structured physics mistake records and may share summaries with named learning companion skills. <br>
-Mitigation: Use the skill only when users are comfortable with that recordkeeping and summary sharing, and follow the artifact's consent boundaries for long-term archives, reminders, and companion-skill handoffs. <br>
-Risk: Weak-area labels could overstate a student's long-term difficulty if repeated errors are treated as permanent. <br>
-Mitigation: Combine repeated-error signals with verification or student confirmation before marking a persistent weak area, as described in the artifact behavior. <br>
+## Use Case:
 
+Chinese-speaking middle- and high-school students use this skill to diagnose recurring physics mistakes, review weakness trends, and plan targeted practice. It accepts error records from a companion notebook rather than collecting or counting mistakes independently.
 
-## Reference(s): <br>
-- [Physics Error Dimension Table](references/physics-error-dimension-table.md) <br>
-- [Physics Concept Confusion Map](references/physics-concept-confusion-map.md) <br>
-- [Physics Math Tools Checklist](references/physics-math-tools-checklist.md) <br>
-- [Physics Diagram Guide](references/physics-diagram-guide.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-error-dna) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Mainland China-focused; crisis referrals should follow the student's location.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include physics error classifications, weak-area summaries, practice guidance, monthly reports, and handoff summaries for companion learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: A persistent student error profile and cross-skill handoffs can expose learning history beyond the current conversation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require consent before saving or sharing; use the built-in controls to pause memory, stop sharing, export, correct, or delete the profile.
+
+Risk: Tutoring responses to students in crisis could delay appropriate help.
+
+Mitigation: Stop the tutoring workflow when crisis signals appear, direct the student to a trusted adult, and use help resources appropriate to their location.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-error-dna)
+- [Physics error dimensions](references/physics-error-dimension-table.md)
+- [Physics concept confusion map](references/physics-concept-confusion-map.md)
+- [Physics mathematics tools checklist](references/physics-math-tools-checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Chinese-language diagnoses, weakness reports, and structured learning handoffs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Long-term profile updates and sharing require consent; insufficient history is labeled rather than presented as a trend.]
+
+## Skill Version(s):
+
+2.11.1 (source: server-resolved release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

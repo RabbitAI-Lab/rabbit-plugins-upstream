@@ -1,43 +1,56 @@
-## Description: <br>
-MCP server security registry and trust assessment - look up servers in the 1013-entry server security metadata registry, run pre-install marketplace checks, batch fleet risk scoring, assess skill file trust, and run SAST code scans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Looks up MCP server security metadata, checks packages before installation, scores server inventories, assesses skill trust, and supports code scanning.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security reviewers use this skill to evaluate MCP server trust, run pre-install marketplace checks, assess skill files, and perform SAST-oriented code scans before adopting agent tooling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run security lookups and scans over MCP servers, skill files, or code, so results may depend on the exact targets selected for analysis. <br>
-Mitigation: Keep scans pointed at directories, skill files, and server inventories that the operator intends to analyze, and review findings before using them for deployment decisions. <br>
-Risk: Optional Snyk enrichment may contact a third-party vulnerability service when SNYK_TOKEN is provided. <br>
-Mitigation: Provide SNYK_TOKEN only when third-party enrichment is desired, and keep the token in the operator environment rather than embedding it in skill output. <br>
+## Use Case:
 
+Developers and security teams use this skill to check MCP server registry entries, assess skills and package trust, score server inventories, and request code scans.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-registry) <br>
-- [Project homepage](https://github.com/msaad00/agent-bom) <br>
-- [PyPI project](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and plain text with inline shell commands and structured security findings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May report local registry lookup results, skill trust findings, fleet risk scores, and optional Semgrep or Snyk-enriched scan guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Installing the optional third-party agent-bom package adds software to the operator environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package before installing it with pipx or pip.
+
+Risk: Optional Snyk enrichment uses a token and sends scan data to a third-party service.
+
+Mitigation: Keep SNYK_TOKEN in the operator environment, never include it in output, and only scan intended files or repositories.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-registry)
+- [Project homepage (listed in skill metadata)](https://github.com/msaad00/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Registry matches, trust assessments, risk scores, and scan findings depend on the requested tool.]
+
+## Skill Version(s):
+
+0.108.3 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,55 @@
-## Description: <br>
-Discovers AWS-hosted AI agent and MCP-relevant assets, emits canonical agent-bom inventory JSON, and optionally scans or exports that inventory under operator control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators discover AWS-hosted AI agents and related workloads, produce canonical inventory JSON, and optionally scan that inventory with agent-bom.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-Apache-2.0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, security engineers, and cloud operators use this skill to inventory AWS Bedrock, ECS, SageMaker, Lambda, EKS, Step Functions, EC2, and related agentic infrastructure as canonical agent-bom inventory without handing over long-lived cloud credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: AWS discovery can expose sensitive account, resource, and workload metadata in generated inventory files. <br>
-Mitigation: Use read-only AWS profiles or short-lived roles, choose the narrowest required regions and services, and review generated inventory before sharing or exporting it. <br>
-Risk: Using broad or long-lived AWS credentials could expand the impact of accidental disclosure or misuse. <br>
-Mitigation: Prefer AWS SSO, WebIdentity, or STS assumed-role credentials and do not paste or print access key values. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to inventory AI agents and workloads in approved AWS accounts and regions. They can optionally request local agent-bom findings or exports after reviewing the generated inventory.
 
-## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON] <br>
-**Output Format:** [Markdown guidance with bash commands and generated JSON inventory files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes inventory or scan/export files only to operator-selected paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: frontmatter and server release metadata) <br>
+Risk: AWS inventory can expose sensitive cloud architecture when shared or exported.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review inventory before sharing or exporting it and keep generated files at an operator-selected location.
+
+Risk: Broad AWS credentials or unintended account and region selection could expand the inventory scope.
+
+Mitigation: Use a read-only profile or short-lived assumed role, and confirm the account, regions, and services before discovery.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-discover-aws)
+- [Project homepage (declared in skill metadata; source provenance unavailable)](https://github.com/msaad00/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, JSON inventory]
+
+**Output Format:** [Markdown guidance and shell commands; canonical JSON inventory file when executed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Discovery-only by default; local scans and JSON or SARIF exports require operator approval.]
+
+## Skill Version(s):
+
+0.108.3 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

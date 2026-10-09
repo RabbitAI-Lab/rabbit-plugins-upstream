@@ -1,45 +1,59 @@
-## Description: <br>
-Convert static images into dynamic videos using the Vidu Q2 image-to-video model. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents turn static images into short videos with Vidu Q2 through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative users use this skill to invoke dLazy's Vidu Q2 image-to-video CLI, supplying prompts and source images to generate hosted video outputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected prompts, parameters, and media files are sent to dLazy services for generation. <br>
-Mitigation: Confirm the user is comfortable sending the selected inputs to dLazy before invoking the CLI. <br>
-Risk: A dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Use per-invocation DLAZY_API_KEY when persistent storage is not desired, and rotate or revoke keys from the dLazy dashboard when they are no longer needed. <br>
-Risk: A global CLI installation persists on the system. <br>
-Mitigation: Prefer the pinned npx invocation when a non-persistent CLI execution is sufficient. <br>
+## Use Case:
 
+Creators and developers use this skill to guide image-to-video generation from reference images or first and last frames, with optional audio and output settings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-i2v) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return hosted result URLs or an async generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Installing the skill's external dLazy CLI adds a third-party dependency.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the pinned CLI package and its listed source before installing.
+
+Risk: Signing in stores an API key in the local CLI configuration.
+
+Mitigation: Use a per-invocation environment variable instead when persistent key storage is unsuitable.
+
+Risk: Media files supplied for generation are uploaded to dLazy's cloud service.
+
+Mitigation: Submit only media that is appropriate to share with that service.
+
+## Reference(s):
+
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI returns JSON containing a generated asset URL or an asynchronous task ID.]
+
+## Skill Version(s):
+
+1.3.26 (source: server-resolved ClawHub release; supplied skill frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

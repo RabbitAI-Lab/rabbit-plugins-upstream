@@ -14,7 +14,7 @@ triggers:
 metadata:
   author: Monika Zapisek
   project: Design Engineering Playbook
-  version: 1.0
+  version: "1.1.0"
   status: accepted
 ---
 
@@ -45,6 +45,19 @@ Target device: desktop, mobile, or both (default: report both).
 - A concrete fix: `max-width: NNch;` (preferred — `ch` scales with font, unlike a fixed `px`) or an equivalent `px` value if the codebase doesn't use `ch`.
 - Change log explaining the math, not just the answer.
 
+## Questions
+
+This skill is an audit, not an interview. Work in this order: read what the file or the input already says, report, then ask.
+
+- Ask only when a value can't be read and the answer would change the result. One question at a time.
+- Don't ask for anything the request already states or the file shows — say what you took and where it came from.
+- If the question can't be answered, state the assumption and carry on. Never stall the report on it.
+- Always ask before writing to a file or a Figma node.
+
+Questions this skill may need:
+
+- The target device (desktop or mobile), when the container width doesn't make it clear. Without an answer, report both.
+
 ## Workflow
 
 1. **Get characters-per-line.**
@@ -71,6 +84,7 @@ When running with Figma access (Figma MCP / plugin context), read the selected n
 - **`textNode.textAutoResize`** — determines what "width" even means for this node:
   - `NONE` or `HEIGHT` → the node has a fixed width; read `textNode.width` (or the bounding box) directly and treat it as the measured container width.
   - `WIDTH_AND_HEIGHT` (auto-width) → there is no fixed measure to check; the box grows with content. Flag this instead of computing a verdict — recommend switching to `HEIGHT` (auto-height, fixed width) if the intent is a readable paragraph column, since auto-width text has no line wrap at all.
+  - `TRUNCATE` → fixed width and height with the overflow cut off; measure the width as for `NONE`, and flag that part of the text is hidden.
 - **`textNode.fontSize`** and **`textNode.fontName.family`** — needed to convert a pixel width into an estimated character count (characters-per-line ≈ width in px ÷ average glyph width, which scales with `fontSize` and varies by typeface — monospace and condensed faces need a different divisor than a default sans).
 - **Action back to Figma:** if the fix is "too wide," the agent may resize the node's width directly (set `textNode.resize(newWidth, textNode.height)` or the equivalent plugin API call) to the pixel width corresponding to ~65 characters at the node's current `fontSize`/font — but only when the user has asked for a direct fix, not as a silent default. Otherwise, report the recommended width and let the user apply it.
 

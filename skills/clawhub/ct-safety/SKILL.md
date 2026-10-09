@@ -1,0 +1,198 @@
+---
+slug: ct-safety
+displayName: Clinical Trial Safety Signal / 临床试验安全信号专家
+name: ct-safety
+cn_name: 临床试验安全信号专家
+version: 0.10.0
+invocable: true
+required_commands: [python]
+summary: "基于 FDA FAERS 筛查药物-事件安全信号，计算 disproportionality（PRR / ROR / IC / EBGM，含 95% CI）与安全信号评分（0–100，T1–T4）。数据源：FDA FAERS（openFDA drug/event.json）、FDA 标签（drug/label.json）、中国 NMPA 药物警戒通报（cdr-adr.org.cn）、DailyMed 说明书、RxClass MED-RT、openFDA 召回执法、香港 ADR 警报。仅公开数据，零保密输入。"
+license: MIT
+description: "Screen drug–event safety signals via disproportionality analysis (PRR / ROR / IC / EBGM with 95% CIs) on FDA FAERS, with Safety Signal Score (0–100, T1–T4). Sources: FDA FAERS (openFDA drug/event.json), FDA Label (drug/label.json), China NMPA PV bulletins (cdr-adr.org.cn), DailyMed SPL, RxClass MED-RT, openFDA enforcement recalls, Hong Kong ADR Alerts. Public data only; zero confidential input. / 基于 FDA FAERS 筛查药物-事件安全信号，计算 disproportionality（PRR / ROR / IC / EBGM，含 95% CI）与安全信号评分（0–100，T1–T4）。数据源：FDA FAERS（openFDA drug/event.json）、FDA 标签（drug/label.json）、中国 NMPA 药物警戒通报（cdr-adr.org.cn）、DailyMed 说明书、RxClass MED-RT、openFDA 召回执法、香港 ADR 警报。仅公开数据，零保密输入。"
+triggers:
+  - "FAERS safety signal"
+  - "安全性信号分析"
+  - "药物不良反应信号"
+  - "disproportionality analysis"
+  - "ct-safety"
+  - "compare drug X vs Y adverse events"
+  - "FAERS safety comparison"
+  - "active-comparator disproportionality"
+  - "多药安全性对比"
+  - "药物类别头对头安全性比较"
+metadata:
+  openclaw: { emoji: "🛡️" }
+  authors: ["medstatstar", "phoe-zip"]
+  license: "MIT"
+  tags: [clinical-trial, safety, faers, pharmacovigilance, signal-detection]
+  homepage: "https://github.com/medstatstar/ct-safety"
+permissions:
+  scope: "user-space-only"
+  network: "public-retrieval"
+  network_note: "Reads only public sources: FDA FAERS / openFDA (https://api.fda.gov/drug/event.json), optional China PV (cdr-adr.org.cn, no WAF/no key), and optional corroborative sources via corroborative_sources.py — dailymed.nlm.nih.gov (SPL labels), rxnav.nlm.nih.gov (RxClass MED-RT), api.fda.gov drug/enforcement (recalls); all keyless public. No confidential input; ordinary input + public retrieval (A-tier, network=public-retrieval per ct-base §11). NMPA main site is WAF-blocked (HTTP 412) and intentionally excluded. Count-source feasibility is verified per-source (multi_source.COUNT_SOURCE_FEASIBILITY): PMDA JADER (captcha), Health Canada (timeout), VAERS (403), EudraVigilance (BO report, no JSON), VigiAccess (SPA, no API), MHRA iDAP (timeout) are verified blocked/unreachable on 2026-09-01 and intentionally excluded — not silently dropped. Low-frequency, keyless FAERS; optional --api-key raises quota. All retrieval (faers / fda_label / dailymed / rxclass / fda_recall / hk_pv / nmpa_pv) is OUTBOUND to the ct-registry unified endpoint ct-search.coze.site (thin local client). No local fallback path since v0.9.9."
+  filesystem: "read-only to its own files; writes outputs ONLY to the user-specified --out-dir (default: current working directory). No system-path or hidden logging; any operational log (e.g. safety_err.log) is written under --out-dir (out_live/), never outside it, and FAERS raw responses are not persisted unless the user explicitly saves them."
+  data: "no confidential data input. Retrieval requests (drug/event public query keywords) are sent to the ct-registry unified endpoint ct-search.coze.site (thin local client). Only public query parameters + public retrieval results cross the boundary; no confidential user data is ever transmitted."
+
+---
+
+## Language
+
+- **English guide** → [README.md](https://github.com/medstatstar/ct-safety/blob/main/README.md) · **中文指南** → [README_zh-CN.md](https://github.com/medstatstar/ct-safety/blob/main/README_zh-CN.md)
+- This skill responds in the user's input language and auto-switches; runtime prompts switch by locale. Bilingual walkthroughs live in the READMEs.
+
+## Cross-turn Continuity (required)
+
+Family standard: `ct-base/references/continuity.md` (pattern A). Echo the block below after every analysis; on a follow-up (changed `event` / different comparator drug / different measure), read the most recent block in the conversation and override **only the changed fields** — never rely on LLM memory alone:
+
+```
+## Current retrieval settings: drug=… | event=… | comparator=… | measure=PRR | source=FAERS
+```
+
+# Clinical Trial Safety Signal
+
+## Published Application
+
+| Item | Value |
+|---|---|
+| Share link | `https://ct-safety.app.workbuddy.host/` (domainPrefix `ct-safety`) |
+| appId | `wbapp_GyOm0cdJ1qHoaQxlFZOVwl` · deploy metadata: `workbench/app.config.json` |
+
+> **Re-publish rule**: always overwrite with the existing `appId` — never `createNewApp`; after deploy, assert the returned `shareLink` equals the expected URL (ct-base §13.5 dirty-binding red line). Last republished 2026-09-26.
+
+> Safe by default: **overview-first**. Step 1 (overview) runs automatically; Step 2 (detailed retrieval) runs ONLY after the user explicitly confirms.
+>
+> **What counts as explicit confirmation.** Any unambiguous go-ahead — e.g. "yes, run the detail" / "确认，跑详情",
+> or **`skip preview and run` / `跳过预览，直接跑`**. The last one is a *confirmation phrasing*, not a bypass:
+> it means "the overview is enough, run Step 2 now". All Step-2 guardrails apply identically (no heavy download
+> before confirmation, outputs confined to `--out-dir`, no confidential input). Conversely, a generic remark in
+> passing conversation is **not** consent — the go-ahead must be an instruction that explicitly asks for the
+> detail step to run.
+
+## Disclaimer & Intended Use
+
+- **Audience.** This skill is intended for **pharmacovigilance / clinical-trial methodologists and drug-safety professionals**. It is a methodologic signal-screening aid, not end-user health software.
+- **Not a clinical or regulatory decision tool.** All outputs are **statistical disproportionality signals** computed from *spontaneous* adverse-event reports (FDA FAERS), which are subject to reporting bias, under-reporting, and confounding. A signal **does NOT establish causation** and **MUST NOT** be used to start, stop, or change any medication, or to make clinical or regulatory decisions. Always corroborate with RCTs, product labels, and qualified clinical/regulatory judgment (ICH E2 family).
+- **Data flow (transparent).** Reads ONLY public sources — FDA FAERS / openFDA, optional cdr-adr.org.cn PV bulletins, and optional corroborative sources (DailyMed SPL, RxClass MED-RT, openFDA enforcement recalls) — all public, keyless. Writes outputs SOLELY to the user-specified `--out-dir` (default: current working directory). **No system-path or hidden logging**; any operational log (e.g. `safety_err.log`) is written ONLY under `--out-dir` (e.g. `out_live/`), never outside it, and FAERS raw responses are not persisted unless the user explicitly saves them. Zero confidential data input; no confidential user data is transmitted — retrieval queries (drug/event public keywords) are sent to the ct-registry unified endpoint ct-search.coze.site (thin local client). No local fallback path since v0.9.9.
+- **Dev artifacts excluded from every publish target.** The `tests/` directory (regression harness) is not tracked by git and is shipped to **no** publish target — GitHub, ClawHub, or SkillHub (ct-base §16.8). It stays on the maintainer's local disk only; the installed package contains no test code.
+
+## Purpose
+
+Run pharmacovigilance disproportionality analysis on FDA FAERS public adverse-event data to surface potential drug–event safety signals (PRR / ROR / IC / EBGM), supporting clinical-trial safety surveillance and label / signal screening. Optional China official PV bulletins (cdr-adr.org.cn) provide qualitative corroboration only. For *published* safety literature context (reviews / PV papers), chain to **`ct-literature --safety`** — it returns a qualitative CSM subset that corroborates signals but must not enter the FAERS 2×2.
+
+## Data Sources
+
+Two categories — **quantitative** (2×2 disproportionality) and **corroborative** (qualitative labeled-vs-unlabeled judgement). The latter does not feed PRR/ROR (would distort the 2×2); it informs signal prioritization per ICH E2C / CIOMS VIII (labeled = known risk → downgrade; unlabeled = potential new signal → upgrade).
+
+| Category | Source | Access | Status |
+|---|---|---|---|
+| Quantitative | FDA FAERS (`drug/event.json`) | Thin local client (Coze unified endpoint `ct-search.coze.site`). `query_total` / `fetch_case_reports` always local-direct (structured state cannot round-trip through Coze) | Required (A-tier) |
+| Quantitative | **MAUDE device adverse events (`device/event.json`)** — `--device` | Same thin-client single-egress via Coze (`source='maude'`). Device dimension defaults to `patient.device.brand_name`; 2×2 & disproportionality reused unchanged | Optional (requires Coze-side `maude` node deployment) |
+| Quantitative | FDA Label (`drug/label.json`) | Thin local client (Coze unified endpoint). `check_event` local-only | Optional `--with-fda-label` |
+| Corroborative | DailyMed SPL · RxClass MED-RT · openFDA Enforcement | Thin local client (Coze unified endpoint) | Optional `corroborative_sources.py` |
+| Qualitative | cdr-adr.org.cn | Thin local client (Coze `nmpa_pv` node; local keeps keyword expansion + evidence grading + cache) | Optional `--with-cn-pv` |
+| Qualitative (CN add-on) | drugoffice.gov.hk (HK ADR Alerts) | Thin local client (Coze `hk_pv` node) | Coze node written; after deployment |
+
+## RWE Extension References (v0.10.0 · OMOP CDM + HADES)
+
+- **OMOP CDM** (OHDSI, `github.com/OHDSI/CommonDataModel`) — unified data model layer: build PostgreSQL/Snowflake from versioned DDL, ETL HIS / claims / registry data into standard tables so RWE analysis scripts stay source-agnostic.
+- **HADES** (OHDSI, `github.com/OHDSI/Hades`) — RWE analysis tool stack: CohortMethod (propensity-score matching) + CohortDiagnostics (cohort quality diagnostics).
+- **Boundary**: current focus stays FAERS signal detection; both are long-term RWE extension references, decoupled from the existing FAERS quantitative pipeline.
+
+**Key mechanism:** openFDA works keyless (anonymous 240 req/min, 1,000 req/day per IP); an optional free key only raises quota. The key, when used, is **stored locally only** (env var / local `.env`) and sent **only over HTTPS to the official openFDA endpoint** (when using local-direct `query_total` / `fetch_case_reports`) — never to any third party. NMPA main site (nmpa.gov.cn) is WAF-blocked (HTTP 412) for local direct fetch, but is reachable via the Coze browser channel (`--with-nmpa-coze`, source=`nmpa_pv`) — **verified live 2026-09-01** (drug=methotrexate → Bulletin No.75, tier=dedicated bulletin). All data are public adverse-event reports; zero confidential input. Endpoint details, indexable/non-indexable fields, and `count` endpoint pitfalls: `references/fetch_pipeline.md`.
+
+### Architecture — thin local client (default: outbound to Coze)
+
+Since v0.9.9 all safety retrieval uses a **thin local client**: the local side computes (disproportionality / signal_score / check_event); ALL outbound retrieval goes to the Coze unified endpoint `ct-search.coze.site` (shared with ct-registry) via `adapters/coze_dispatch.py` (`FaersShim` / `FdaLabelShim` rebinding, call sites unchanged). **No local fallback** (`--offline` removed). Local-direct exceptions: `query_total` / `fetch_case_reports` (structured state can't round-trip Coze) + `check_event` (pure local). Publish red line + expanded: `references/ADVANCED.md`.
+
+### Blocked / excluded sources (verified 2026-09-01)
+
+Not silently dropped — each tested from this machine; reasons in `multi_source.COUNT_SOURCE_FEASIBILITY` / `corroborative_sources.BLOCKED_SOURCES`; blocked table + planned T1 trio → **`references/blocked_sources.md`**.
+
+## Methods
+
+Four disproportionality measures on the drug–event 2×2 table (plus multiple-testing and corroboration layers):
+
+- **PRR** — signal if PRR ≥ 2 **and** χ² ≥ 4.
+- **ROR** — signal if lower 95% CI > 1.
+- **IC** (UMC/VigiBase Information Component) — signal if lower 95% CI > 0.
+- **EBGM** (FDA MGPS Bayesian shrinkage) — signal if EB05 ≥ 2.
+- **Corroboration layers** — BH-FDR q-value over top-N / benchmarks; PT→SOC MedDRA grouping; Haldane-Anscombe continuity (+0.5/cell; `a==0` → conservative null); aROR (`--compare-drugs`); temporal anomaly CUSUM / rolling-Z / changepoint (`--trend`); Safety Signal Score 0–100 + T1–T4 (`--with-fda-label`); Naranjo (`--with-causality`, qualitative only — never fed into PRR/ROR/IC/EBGM).
+
+Full formulas, thresholds, EBGM/MGPS math, FDR, aROR, trend, and score/tier weighting: `references/methods.md`.
+
+## Features
+
+| Capability | Flag / Source |
+|---|---|
+| Drug–event signal detection (PRR/ROR/IC/EBGM) + multi-method cross-judgement | FAERS |
+| **Device adverse-event signal detection (same 2×2/PRR/ROR/IC/EBGM pipeline)** | MAUDE via `--device` (Coze `source='maude'`, dimension `patient.device.brand_name`; **requires `maude` node deployed in the Coze console first**) |
+| Statistical guards (BH-FDR · PT→SOC · sparse-2×2 `--validate-controls`) | — |
+| HTML + XLSX core deliverables (JSON/MD backup) | — |
+| China official PV bulletins (qualitative only) | `--with-cn-pv` |
+| Labeled / unlabeled corroboration | `corroborative_sources.py` |
+| Temporal anomaly · multi-drug aROR · score 0–100 + T1–T4 | `--trend` · `--compare-drugs` · `--with-fda-label` |
+| Naranjo causality · MedDRA coding · prioritization · PSUR | `--with-causality` · `--code-verbatim` · `--prioritize` · `--psur` |
+| Case-level de-duplication (L1 collapse / L2 flag-only) | `--case-level` |
+| Non-ASCII drug-name auto-translate | `--drug 阿司匹林` → `aspirin` |
+| Chained invocation | `ct-protocol` · `ct-registry` · `ct-literature --safety` |
+
+Full capability table with scenarios and boundaries: `references/ADVANCED.md`.
+
+## Requirements
+
+- Python 3.10+ (Anaconda recommended). Required: `requests`. Optional: `matplotlib` (PNG charts).
+- Network: read-only FAERS public API. An openFDA key is optional (raises quota only) — see below.
+
+## ⚠️ Safety
+
+- Network: retrieval (present / `--out-xlsx`) runs lightweight openFDA `count` facet queries (seconds, no case download); **case-level download requires explicit `--run`** (throttled by HARD_CAP=10000). Reads FAERS public reports ONLY — **zero confidential data or information input** (A-tier, `network=public-retrieval`).
+- China PV bulletins are **qualitative narrative** — NO per-drug-event counts; must **NOT** feed disproportionality; only corroborate a FAERS signal.
+- FAERS re-ingests the same case as follow-up versions and via multiple reporters. Case-level de-duplication fixes the **individual-case listing** only; disproportionality counts come from openFDA **aggregate** endpoints and therefore still carry duplicate-reporting bias. Never claim a signal is "de-duplicated".
+- Signal detection is for screening, not causal conclusion; regulatory submission (DSUR / PBRER / label change) must be assessed per GCP / ICH E2 separately.
+
+## Workflow
+
+Two-step, overview-first (**present summary in context, Excel on demand**):
+1. **Step 1 — Overview (automatic):** `fetch_reports.py --drug X` sends 8 `count` facets, prints the summary to context in seconds, caches `faers_summary_cache.json`. No confirmation needed.
+2. **Step 2 — Detail (only after explicit confirm):** `--out-xlsx` builds the summary Excel from cache; `--run` downloads individual case reports (HARD_CAP 10000) for age/country stats. Signal detection via `ct_safety.py`.
+
+`scripts/overview.py` is deprecated (merged into Step 1). Full workflow, caching, `--parallel`, XLSX layout: `references/fetch_pipeline.md`.
+
+### One-shot signal report (`ct_safety.py`) — two core deliverables
+
+`ct_safety.py --drug X --event Y --run` writes into `--out-dir` and prints a "Core Deliverables" block:
+
+- **`faers_report.html`** — visual report (open in browser preview). **Core ①.**
+- **`faers_report.xlsx`** — ALL raw data (counts, 2×2, four measures, optional Label/CN-PV/Score). **Core ②; audit every number here.** (`faers_report.md` / `*.json` are backups only.)
+
+## API Key (openFDA) — optional, self-configured
+
+The skill runs **without a key**; a free key only raises quota. Provide via CLI `--api-key`, env `OPENFDA_API_KEY` (recommended), or skill-root `.env` (git-ignored; plaintext or `obf:` XOR+base64 per ct-base §5) — never paste keys into chat or shipped files. Details: `references/openfda_api_key.md`.
+
+## Errors
+
+Brief; full table in `references/errors.md`.
+
+- **429 / rate-limited** — exceed openFDA quota; fix: `--api-key` or lower frequency.
+- **Persistent 404 on multi-word PT** — not indexed; swap to standard PT; `total()` auto-downgrades 404→`.exact`.
+- **`--max > 10000`** — clamped to HARD_CAP 10000 (API-return-order first N, selection bias).
+- **Outbound Coze rejected / unreachable** — endpoint not allow-listed / token invalid / `safety_rest_node` undeployed; check Coze deployment status and config.json `auto_approve_endpoints`.
+
+## Comparative Study Design Mode
+
+For "compare X vs Y" / "within-class head-to-head" / "active-comparator" requests, switch to the comparative track (single-drug default otherwise). Steps: ① data prep (`faers-data-prep.md`) → ② study style + 4 workloads (`faers-comparative-design.md`) → ③ metrics / comparators / robustness (`faers-method-library.md`) → ④ evidence tiers + claim boundaries (`evidence-hierarchy.md`).
+
+**Hard rules:** never run disproportionality on unprepared raw counts; present all four configurations then recommend one; label every result `[Tier 1]` signal / `[Tier 2]` comparative / `[Tier 3]` robustness; Tier-4 claims (incidence, causality, benefit–risk, prescribing) forbidden without external data; flag weak comparator indication overlap.
+
+## Pipeline
+
+- `ct-safety` → `ct-protocol`: signals feed the safety monitoring plan.
+- `ct-safety` → `ct-registry`: control-trial safety-design benchmarking (CDE trials).
+- CN-PV is an in-skill qualitative add-on, not a chain target. Units: `references/units.md`. Changelog: `CHANGELOG.md`.
+
+## Regression Tests
+
+Maintainer-only (stdlib, no pytest; **not shipped**): `python tests/mode_b_test.py` (10 hardening cases) and `python tests/mode_c_test.py` (F1–F11). Both offline by default. Details in `references/errors.md`.
+
+## Bug Reporting (ct-base §20.3, adapter: `adapters/bug_report.py`)
+Propose **at most once per session**, only on a strong signal **and** after ≥1 retry — never on repeated tuning. Always two-stage: ① show the sanitized report → ② send only on explicit consent; never re-propose after a decline. Full rules, 11-key whitelist, and CLI: `references/bug_reporting.md`.

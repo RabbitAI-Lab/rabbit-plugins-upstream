@@ -16,8 +16,8 @@ SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd)"
 SCRIPT_DIR="$(cd "$(dirname "$0")" && pwd -W)"
 SKILLS_DIR="$(cd "$SCRIPT_DIR/../.." && pwd -W)"
 WORKSPACE_ROOT="$(cd "$SKILLS_DIR/.." && pwd -W)"
-# 从 _paths.py 读取统一管理的仓库路径
-WORK_REPO="$(python -c "import sys; sys.path.insert(0,'$SCRIPT_DIR'); from _paths import WORK_REPO; print(WORK_REPO)" 2>/dev/null || echo "$HOME/.workbuddy/workbuddy-skills")"
+# 从 _paths.py 读取统一管理的仓库路径（v2.37.0 多仓库：按类型解析）
+WORK_REPO="$(python -c "import sys; sys.path.insert(0,'$SCRIPT_DIR'); from _paths import get_work_repo; print(get_work_repo('skill').as_posix())" 2>/dev/null || echo "$HOME/WorkBuddy/maby_skills")"
 NAME="${1:-}"
 VERSION="${2:-}"
 SKIP_MARKET=false
@@ -36,11 +36,17 @@ detect_type() {
     local name="$1"
     if [ -f "$SKILLS_DIR/$name/_meta.json" ]; then
         echo "skill"
-    elif [ -d "$WORK_REPO/agent/$name" ]; then
+    elif [ -d "$HOME/WorkBuddy/maby_agent/$name" ] || [ -d "$WORK_REPO/../maby_agent/$name" ]; then
         echo "agent"
     else
         echo "unknown"
     fi
+}
+
+# 按类型解析目标仓库（v2.37.0 多仓库）
+resolve_repo() {
+    local ptype="$1"
+    python -c "import sys; sys.path.insert(0,'$SCRIPT_DIR'); from _paths import get_repo_config; import json; print(json.dumps(get_repo_config('$ptype'), ensure_ascii=False))"
 }
 
 # 处理 all 模式：遍历所有项目
@@ -55,7 +61,7 @@ if [ "$NAME" = "all" ]; then
         echo ">>> 技能: $s"
         bash "$0" "$s" "$@" --skip-market 2>&1 || true
     done
-    for agent in "$WORK_REPO/agent"/*/; do
+    for agent in "$HOME/WorkBuddy/maby_agent"/*/; do
         [ ! -d "$agent" ] && continue
         a=$(basename "$agent")
         echo ""
@@ -81,20 +87,26 @@ if [ "$TYPE" = "unknown" ]; then
 fi
 echo "  类型: $TYPE"
 
-# 按类型设置源路径
+# 按类型设置源路径（v2.37.0 多仓库）
 if [ "$TYPE" = "skill" ]; then
     SRC_DIR="$SKILLS_DIR/$NAME"
-    WORK_REPO_DIR="skills/$NAME"
+    REPO_CFG=$(resolve_repo "skill")
+    WORK_REPO_DIR="$NAME"   # maby_skills 仓库根下直接是技能目录
     META_FILE="$SRC_DIR/_meta.json"
 elif [ "$TYPE" = "agent" ]; then
-    SRC_DIR="$SKILLS_DIR/../agent/$NAME"
-    WORK_REPO_DIR="agent/$NAME"
-    META_FILE="$SRC_DIR/rag_assistant/__init__.py"
-    # 兼容：如果 ~/.workbuddy/agent/ 不存在，从 $WORK_REPO 直接读取
+    SRC_DIR="$HOME/WorkBuddy/maby_agent/$NAME"
+    REPO_CFG=$(resolve_repo "agent")
+    WORK_REPO_DIR="$NAME"   # maby_agent 仓库根下直接是智能体目录
+    # 兼容：如果 maby_agent 不存在，从老仓库直接读取
     if [ ! -d "$SRC_DIR" ]; then
-        SRC_DIR="$WORK_REPO/$WORK_REPO_DIR"
+        SRC_DIR="$WORK_REPO/../maby_agent/$NAME"
     fi
+    # 自动检测 __init__.py（不硬编码 rag_assistant/）
+    META_FILE=$(python -c "import sys; sys.path.insert(0,'$SCRIPT_DIR'); from pathlib import Path; d=Path('$SRC_DIR'); fs=sorted(d.rglob('__init__.py')); [print(str(f)) for f in fs if f.parent!=d and '__version__' in f.read_text(errors='ignore')]" 2>/dev/null | head -1)
 fi
+# 从仓库配置解析目标仓库路径与名称
+REPO_NAME=$(echo "$REPO_CFG" | python -c "import sys,json; print(json.load(sys.stdin).get('name','maby_skills'))" 2>/dev/null || echo "maby_skills")
+WORK_REPO=$(echo "$REPO_CFG" | python -c "import sys,json; print(json.load(sys.stdin).get('path',''))" 2>/dev/null || echo "$HOME/WorkBuddy/maby_skills")
 
 SKILL_NAME="$NAME"
 
@@ -104,8 +116,18 @@ if [ -z "$VERSION" ]; then
         META_FILE_WIN=$(cygpath -w "$META_FILE" 2>/dev/null || echo "$META_FILE")
         VERSION=$(python -c "import json; f=open(r'$META_FILE_WIN', encoding='utf-8'); meta=json.load(f); print(meta.get('version',''))" 2>/dev/null || echo "")
     elif [ "$TYPE" = "agent" ]; then
-        META_FILE_WIN=$(cygpath -w "$META_FILE" 2>/dev/null || echo "$META_FILE")
-        VERSION=$(python -c "import re; f=open(r'$META_FILE_WIN'); c=f.read(); m=re.search(r'__version__\s*=\s*\"([^\"]+)\"',c); print(m.group(1) if m else '')" 2>/dev/null || echo "")
+        VERSION=$(python -c "
+import re, sys; sys.path.insert(0,'$SCRIPT_DIR')
+from pathlib import Path
+d=Path('$SRC_DIR')
+for f in sorted(d.rglob('__init__.py')):
+    if f.parent==d: continue
+    try:
+        t=f.read_text(encoding='utf-8')
+        m=re.search(r'__version__\s*=\s*\"([^\"]+)\"',t)
+        if m: print(m.group(1)); break
+    except: pass
+" 2>/dev/null || echo "")
     fi
     if [ -z "$VERSION" ]; then
         echo "❌ 无法读取版本号，请手动指定"; exit 1
@@ -155,12 +177,15 @@ fi
 # 路径配置
 SKILL_MD="$SRC_DIR/SKILL.md"
 META_FILE_JSON="$SRC_DIR/_meta.json"
-REPO_NAME="workbuddy-skills"
 DIST_DIR="$SKILLS_DIR/.dist"
 ZIP_NAME="${SKILL_NAME}-v${VERSION}.zip"
 ZIP_FILE="$DIST_DIR/$ZIP_NAME"
 MANIFEST_FILE="$HOME/.workbuddy/skills/.standardization/git-sync/data/manifest.json"
 README_FILE="$WORK_REPO/README.md"
+
+# 统一临时文件目录（与 _paths.py TEMP_DIR 一致）
+TEMP_DIR="$SCRIPT_DIR/../../.standardization/git-sync/temp"
+mkdir -p "$TEMP_DIR" 2>/dev/null || true
 
 # 读取 description（仅 skill 有 meta.json）
 if [ "$TYPE" = "skill" ] && [ -f "$META_FILE" ]; then
@@ -192,11 +217,20 @@ echo "[2/8] 版本号对比（仓库 vs 本地源文件）..."
 REPO_VER=""
 LOCAL_VER="$VERSION"
 REPO_META_FILE="$WORK_REPO/$WORK_REPO_DIR/_meta.json"
-REPO_INIT_FILE="$WORK_REPO/$WORK_REPO_DIR/rag_assistant/__init__.py"
 if [ -f "$REPO_META_FILE" ]; then
     REPO_VER=$(python "$SCRIPT_DIR/get_meta_version.py" "$REPO_META_FILE" 2>/dev/null || echo "")
-elif [ -f "$REPO_INIT_FILE" ]; then
-    REPO_VER=$(python -c "import re; f=open(r'$REPO_INIT_FILE'); c=f.read(); m=re.search(r'__version__\s*=\s*\"([^\"]+)\"',c); print(m.group(1) if m else '')" 2>/dev/null || echo "")
+else
+    REPO_VER=$(python -c "
+import re; from pathlib import Path
+d=Path('$WORK_REPO/$WORK_REPO_DIR')
+for f in sorted(d.rglob('__init__.py')):
+    if f.parent==d: continue
+    try:
+        t=f.read_text(encoding='utf-8')
+        m=re.search(r'__version__\s*=\s*\"([^\"]+)\"',t)
+        if m: print(m.group(1)); break
+    except: pass
+" 2>/dev/null || echo "")
 fi
 echo "  仓库版本: ${REPO_VER:-（无）}"
 echo "  本地源文件版本: $LOCAL_VER"
@@ -288,6 +322,7 @@ RSYNC_OPTS=(
     --exclude="._*"
     --exclude=".decisions.json"
     --exclude=".sensitive_scan_*.json"
+    --exclude=".standardization/git-sync/temp/*"
     --exclude="zip_out"
     --exclude="preview_server.py"
 )
@@ -315,8 +350,8 @@ find "$DST" -type f | sed "s|$DST/|  - |" | head -20
 # ── 4.5 敏感信息扫描（同步到仓库后、提交前）──────────────────────
 echo ""
 echo "[4.5/8] 扫描敏感信息（强制，不可跳过）..."
-SCAN_OUTPUT="$SCRIPT_DIR/.sensitive_scan_${SKILL_NAME}.json"
-DECISION_FILE="${SCAN_OUTPUT}.decisions.json"
+SCAN_OUTPUT="$TEMP_DIR/sensitive_scan_${SKILL_NAME}.json"
+DECISION_FILE="$TEMP_DIR/sensitive_scan_${SKILL_NAME}.decisions.json"
 python "$SCRIPT_DIR/sensitive_scan.py" scan "$DST" \
     --output "$SCAN_OUTPUT" 2>/dev/null || true
 if [ -s "$SCAN_OUTPUT" ]; then
@@ -432,8 +467,8 @@ echo "[7.5/8] 打包前敏感信息扫描..."
 ZIP_SOURCE="$SRC_DIR"  # 默认用源目录
 ZIP_TMP=""
 
-SCAN_OUTPUT_ZIP="$SCRIPT_DIR/.sensitive_scan_${SKILL_NAME}_zip.json"
-DECISION_FILE_ZIP="${SCAN_OUTPUT_ZIP}.decisions.json"
+SCAN_OUTPUT_ZIP="$TEMP_DIR/sensitive_scan_${SKILL_NAME}_zip.json"
+DECISION_FILE_ZIP="$TEMP_DIR/sensitive_scan_${SKILL_NAME}_zip.decisions.json"
 python "$SCRIPT_DIR/sensitive_scan.py" scan "$SKILLS_DIR/$SKILL_NAME" \
     --output "$SCAN_OUTPUT_ZIP" 2>/dev/null || true
 if [ -s "$SCAN_OUTPUT_ZIP" ]; then

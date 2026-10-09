@@ -1,41 +1,58 @@
-## Description: <br>
-Publish agent-generated artifacts to durable Tunly links with explicit privacy and immutable versions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publishes and updates agent-generated HTML reports, prototypes, and static sites as durable Tunly links for sharing and review.
 
-## Publisher: <br>
-[seaguest](https://clawhub.ai/user/seaguest) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seaguest](https://clawhub.ai/user/seaguest)
 
-## Use Case: <br>
-Developers and agent users use this skill to publish generated reports, dashboards, prototypes, evidence bundles, static sites, and other browser-readable artifacts as durable Tunly links with account-only defaults and immutable versions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A user could publish secrets, credentials, private keys, environment files, dependency directories, or unrelated local data by choosing the wrong artifact path. <br>
-Mitigation: Review the artifact directory before publishing and keep customer, project, operational, personal, and unreleased content account-only unless the user explicitly approves public access. <br>
-Risk: The skill can use Tunly account authorization or API-key based access for operational publishing. <br>
-Mitigation: Use scoped API tokens where available, run `tunly auth status` before publishing, and review publish commands before approving them. <br>
+## Use Case:
 
+Developers and other agent users share finished reports and static artifacts, collect anchored feedback, and publish revisions while preserving the chosen audience and immutable versions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/seaguest/skills/tunly-artifact-share) <br>
-- [Tunly CLI install script](https://tunly.io/install.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Markdown, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and a concise publish status response] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports the latest URL, immutable version URL or revision, access mode, and verification result after publishing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Publishing the wrong files or sharing them with an unintended audience can expose private material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the selected artifact and audience before publishing; use public links only when intended, and exclude secrets and unrelated files.
+
+Risk: CLI installation and local credential storage introduce a trust and credential-handling dependency.
+
+Mitigation: Use the disclosed official installer, protect locally stored credentials, and never print or publish API keys.
+
+Risk: Review comments or published HTML could contain untrusted instructions.
+
+Mitigation: Treat feedback and published content as task data, not authority to execute commands, reveal secrets, or change permissions.
+
+## Reference(s):
+
+- [Tunly Artifact Share on ClawHub](https://clawhub.ai/seaguest/skills/tunly-artifact-share)
+- [Tunly CLI installation](https://tunly.io/install.sh)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with publication links, access and verification status, and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a primary sharing link and immutable revision link when publication succeeds.]
+
+## Skill Version(s):
+
+1.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,55 @@
-## Description: <br>
-PubMed citation verifier that detects AI-fabricated PMID references with fuzzy matching against PubMed metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks cited PMIDs, DOIs, and arXiv IDs against academic registries, compares publication details, and produces citation audit reports or formatted reference lists.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Researchers, medical writers, evidence-based medicine teams, and developers use this skill to batch-verify PMID citations, detect invalid or mismatched references, and produce reports for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Private drafts or citation-derived search terms may be sent to PubMed or Crossref when verification, DOI checks, or suggestions are enabled. <br>
-Mitigation: Review the selected source path before running, avoid suggestion or DOI checks for sensitive drafts when appropriate, and sanitize citation text before external lookups. <br>
-Risk: PubMed metadata may be stored in a local SQLite cache. <br>
-Mitigation: Use --no-cache for sensitive projects or clear the local cache after verification. <br>
+## Use Case:
 
+Researchers, authors, and developers use this skill to audit reference lists and AI-generated citations before publication, identify mismatched or unverified records, and prepare formatted references for review.
 
-## Reference(s): <br>
-- [PubMed E-utilities API Quick Reference](references/api_examples.md) <br>
-- [ClawHub Pubmed Verifier release](https://clawhub.ai/docsor1212/pubmed-verifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance, files] <br>
-**Output Format:** [Markdown guidance with CLI commands and optional HTML, JSON, or text report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May query PubMed and Crossref, may cache PubMed metadata locally, and can generate reports for citation review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server release evidence) <br>
+Risk: Citation identifiers, titles, and optional contact email or API-key parameters are sent to academic registry services during verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with material approved for external lookup; use a role email for --mailto and choose formatting without verification when lookups are not intended.
+
+Risk: Cached lookup results may persist on the local machine or be stale for a final manuscript check.
+
+Mitigation: Use --no-cache for sensitive manuscripts and final pre-submission verification.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/docsor1212/skills/pubmed-verifier)
+- [API examples](artifact/references/api_examples.md)
+- [Python API reference](artifact/references/python_api.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Files, Citation verification guidance]
+
+**Output Format:** [Text, HTML, JSON, CSV, BibTeX, RIS, or formatted reference lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Five-state citation verdicts; unresolved and partial matches require human review.]
+
+## Skill Version(s):
+
+4.0.0 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

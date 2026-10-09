@@ -18,6 +18,19 @@
 
 ---
 
+## 独立监控与推荐配套工具
+
+**Command Center 无需 Spacesuit 即可开箱即用。** 它提供 OpenClaw 会话、健康状态、
+任务、用量和通用仪表板。运行 `COMMAND_CENTER_MODE=core npm start` 可使用仅核心监控模式。
+
+**强烈推荐 Spacesuit 作为配套工具**，提供代理定制方案、领域面板和工作流。
+Spacesuit 可以独立创建工作区框架和采集数据，但**自身不提供人类与代理交互的图形界面**；
+仪表板和现有控制功能由 Command Center 提供。本次扩展系统不新增聊天输入界面。
+
+[只读扩展 API](docs/architecture/extension-api-v1.md) 通过现有状态通道加载明确选择的、
+绑定配置档案的 Spacesuit 快照。在选择定制方案或核心模式之前，默认保留旧版领域面板以兼容
+现有安装，不会悄悄删除面板或数据。详见[职责划分与迁移计划](docs/architecture/core-and-flavors.md)。
+
 ## 为什么需要 Command Center？
 
 你的 AI 代理 24/7 在运行，但你需要实时知道它们在做什么。
@@ -268,6 +281,10 @@ mkdir -p ~/your-workspace/cerebro/orphans
 
 欢迎贡献，提交前请先阅读 [CONTRIBUTING.md](CONTRIBUTING.md)。
 
+### 保留国际化支持
+
+修改界面时，必须保留现有的 `data-i18n` 属性及相关翻译钩子。新增或修改面向用户的文案（包括加载和错误状态）时，必须同步更新所有支持的语言。将翻译标签与动态数值分开，并在相关面板打开时及实时更新后验证英文 → 中文 → 英文切换。完整的代理要求请参阅 [AGENTS.md](AGENTS.md#-preserve-internationalization)。
+
 ### 开发命令
 
 ```bash
@@ -291,3 +308,18 @@ MIT © [Jonathan Tsai](https://github.com/jontsai)
 **[Install from ClawHub](https://www.clawhub.ai/jontsai/command-center)** · **[OpenClaw](https://github.com/openclaw/openclaw)** · **[Discord](https://discord.gg/clawd)**
 
 </div>
+
+## 项目看板（只读预览）
+
+[项目看板](docs/architecture/project-portfolio.md)按工作流阶段汇总不同来源的交付目标，
+而不是将任务或会话当作项目。Spacesuit 提供 Linear/Jira 适配器，Command Center
+提供统一视图。保留来源状态、数据新鲜度和未知指标；安装不会自动连接跟踪系统，
+也不会修改任务状态。当前版本读取明确选择的数据快照。
+
+### 无需任务跟踪器即可浏览会话
+
+作战视图默认显示原生目录中的**所有会话**。可按频道、智能体或活动时段分组；
+有数据时再叠加成果、角色和主题关系。可点击的分组、组合筛选面包屑、密度缩放
+与详情检查器支持无需预先搜索的浏览。隐私规则、快照覆盖范围和未知计费均明确
+标记。参阅[源码试运行指南](docs/operations-source-pilot.md)，无需发布软件包即可
+使用固定版本在其他配置文件中独立测试。

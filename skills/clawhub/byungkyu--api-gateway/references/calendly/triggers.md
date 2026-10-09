@@ -6,7 +6,9 @@
 > - Recognize that every matching booking will be forwarded automatically and continuously, PII included.
 > - Forward only the fields the downstream workflow needs via `body_template` (e.g. name and start time) rather than the whole payload. Cancellation reasons and question responses are often personal — omit them unless required.
 > - Treat join URLs as secrets: anyone holding one may be able to enter the meeting. Do not relay them to public channels or third-party hosts.
-> - Prefer `https://api.maton.ai/` destinations; get explicit user approval before sending invitee data to any external host.
+> - Prefer `api.maton.ai` destinations; get explicit user approval before sending invitee data to any external host.
+
+> **Placeholders:** URL-valued fields are abbreviated so the examples stay readable — `{calendly-api}` stands for `https://api.calendly.com`. Real payloads carry the full URL.
 
 ## Event Types
 
@@ -23,13 +25,13 @@
 ```json
 {
   "created_at": "2026-06-24T22:30:45.105381Z",
-  "created_by": "https://api.calendly.com/users/00000000-0000-0000-0000-0000000000a1",
+  "created_by": "{calendly-api}/users/00000000-0000-0000-0000-0000000000a1",
   "event": "invitee.created",
   "payload": {
     "cancel_url": "https://calendly.com/cancellations/00000000-0000-0000-0000-000000000001",
     "created_at": "2026-06-09T21:37:17.731525Z",
     "email": "john.doe@example.com",
-    "event": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000002",
+    "event": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000002",
     "first_name": null,
     "invitee_scheduled_by": null,
     "last_name": null,
@@ -49,12 +51,12 @@
       "event_guests": [],
       "event_memberships": [
         {
-          "user": "https://api.calendly.com/users/00000000-0000-0000-0000-0000000000a1",
+          "user": "{calendly-api}/users/00000000-0000-0000-0000-0000000000a1",
           "user_email": "support@example.com",
           "user_name": "Acme"
         }
       ],
-      "event_type": "https://api.calendly.com/event_types/00000000-0000-0000-0000-0000000000e1",
+      "event_type": "{calendly-api}/event_types/00000000-0000-0000-0000-0000000000e1",
       "invitees_counter": {
         "total": 1,
         "active": 1,
@@ -77,7 +79,7 @@
       "start_time": "2026-06-10T06:30:00.000000Z",
       "status": "active",
       "updated_at": "2026-06-09T21:37:17.707255Z",
-      "uri": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000002"
+      "uri": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000002"
     },
     "scheduling_method": "api",
     "status": "active",
@@ -92,7 +94,7 @@
       "salesforce_uuid": null
     },
     "updated_at": "2026-06-09T21:37:17.731525Z",
-    "uri": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000002/invitees/00000000-0000-0000-0000-000000000001"
+    "uri": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000002/invitees/00000000-0000-0000-0000-000000000001"
   }
 }
 ```
@@ -106,7 +108,7 @@
 ```json
 {
   "created_at": "2026-06-24T22:30:45.574849Z",
-  "created_by": "https://api.calendly.com/users/00000000-0000-0000-0000-0000000000a1",
+  "created_by": "{calendly-api}/users/00000000-0000-0000-0000-0000000000a1",
   "event": "invitee.canceled",
   "payload": {
     "cancel_url": "https://calendly.com/cancellations/00000000-0000-0000-0000-000000000003",
@@ -118,7 +120,7 @@
     },
     "created_at": "2026-06-17T01:40:15.793613Z",
     "email": "jane.doe@example.com",
-    "event": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000004",
+    "event": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000004",
     "first_name": null,
     "invitee_scheduled_by": null,
     "last_name": null,
@@ -150,12 +152,12 @@
       "event_guests": [],
       "event_memberships": [
         {
-          "user": "https://api.calendly.com/users/00000000-0000-0000-0000-0000000000a1",
+          "user": "{calendly-api}/users/00000000-0000-0000-0000-0000000000a1",
           "user_email": "support@example.com",
           "user_name": "Acme"
         }
       ],
-      "event_type": "https://api.calendly.com/event_types/00000000-0000-0000-0000-0000000000e1",
+      "event_type": "{calendly-api}/event_types/00000000-0000-0000-0000-0000000000e1",
       "invitees_counter": {
         "total": 1,
         "active": 0,
@@ -178,7 +180,7 @@
       "start_time": "2026-07-01T06:30:00.000000Z",
       "status": "canceled",
       "updated_at": "2026-06-17T01:40:57.264331Z",
-      "uri": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000004"
+      "uri": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000004"
     },
     "scheduling_method": "api",
     "status": "canceled",
@@ -193,7 +195,7 @@
       "salesforce_uuid": null
     },
     "updated_at": "2026-06-17T01:40:57.238765Z",
-    "uri": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000004/invitees/00000000-0000-0000-0000-000000000003"
+    "uri": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000004/invitees/00000000-0000-0000-0000-000000000003"
   }
 }
 ```
@@ -207,20 +209,20 @@
 ```json
 {
   "created_at": "2026-06-24T22:34:33.909091Z",
-  "created_by": "https://api.calendly.com/users/00000000-0000-0000-0000-0000000000a1",
+  "created_by": "{calendly-api}/users/00000000-0000-0000-0000-0000000000a1",
   "event": "invitee_no_show.created",
   "payload": {
     "cancel_url": "https://calendly.com/cancellations/00000000-0000-0000-0000-000000000001",
     "created_at": "2026-06-09T21:37:17.731525Z",
     "email": "john.doe@example.com",
-    "event": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000002",
+    "event": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000002",
     "first_name": null,
     "invitee_scheduled_by": null,
     "last_name": null,
     "name": "John Doe",
     "new_invitee": null,
     "no_show": {
-      "uri": "https://api.calendly.com/invitee_no_shows/00000000-0000-0000-0000-0000000000f1",
+      "uri": "{calendly-api}/invitee_no_shows/00000000-0000-0000-0000-0000000000f1",
       "created_at": "2026-06-24T22:34:08.683444Z"
     },
     "old_invitee": null,
@@ -236,12 +238,12 @@
       "event_guests": [],
       "event_memberships": [
         {
-          "user": "https://api.calendly.com/users/00000000-0000-0000-0000-0000000000a1",
+          "user": "{calendly-api}/users/00000000-0000-0000-0000-0000000000a1",
           "user_email": "support@example.com",
           "user_name": "Acme"
         }
       ],
-      "event_type": "https://api.calendly.com/event_types/00000000-0000-0000-0000-0000000000e1",
+      "event_type": "{calendly-api}/event_types/00000000-0000-0000-0000-0000000000e1",
       "invitees_counter": {
         "total": 1,
         "active": 1,
@@ -264,7 +266,7 @@
       "start_time": "2026-06-10T06:30:00.000000Z",
       "status": "active",
       "updated_at": "2026-06-09T21:37:17.707255Z",
-      "uri": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000002"
+      "uri": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000002"
     },
     "scheduling_method": "api",
     "status": "active",
@@ -279,7 +281,7 @@
       "salesforce_uuid": null
     },
     "updated_at": "2026-06-09T21:37:17.731525Z",
-    "uri": "https://api.calendly.com/scheduled_events/00000000-0000-0000-0000-000000000002/invitees/00000000-0000-0000-0000-000000000001"
+    "uri": "{calendly-api}/scheduled_events/00000000-0000-0000-0000-000000000002/invitees/00000000-0000-0000-0000-000000000001"
   }
 }
 ```

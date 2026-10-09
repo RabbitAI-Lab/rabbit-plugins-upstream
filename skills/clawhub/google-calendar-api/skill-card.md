@@ -1,44 +1,64 @@
-## Description: <br>
-Google Calendar API integration with managed OAuth for creating events, listing calendars, checking availability, and managing schedules. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents view calendars, check availability, and manage Google Calendar events through a Maton connection.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to read and manage Google Calendar calendars, events, connections, and availability through Maton-managed OAuth and API or CLI examples. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read and change Google Calendar data through Maton-mediated access. <br>
-Mitigation: Install only if Maton-mediated calendar access is acceptable, and confirm the target calendar, event, connection, and intended effect before create, update, delete, or connection-management commands. <br>
-Risk: Multiple Google Calendar connections can cause requests to affect the wrong account or calendar. <br>
-Mitigation: Specify the intended connection when multiple Google Calendar connections exist and verify the target resource before write operations. <br>
+## Use Case:
 
+People and teams use this skill to review schedules, find free time, and create or update Google Calendar events with their approval.
 
-## Reference(s): <br>
-- [ClawHub Google Calendar Skill](https://clawhub.ai/byungkyu/skills/google-calendar-api) <br>
-- [Google Calendar API Overview](https://developers.google.com/calendar/api/v3/reference) <br>
-- [Google Calendar Events Reference](https://developers.google.com/workspace/calendar/api/v3/reference/events/list) <br>
-- [Google Calendar Free/Busy Reference](https://developers.google.com/workspace/calendar/api/v3/reference/freebusy/query) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with API endpoint examples and inline bash, Python, and JavaScript code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access, MATON_API_KEY, and a Google Calendar OAuth connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: ClawHub release metadata) <br>
+Risk: Calendar access may expose personal scheduling details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the narrowest Google scopes and connection needed, and share only the calendar details necessary for the task.
+
+Risk: Calendar changes can reschedule or cancel events and notify attendees.
+
+Mitigation: Confirm the target event, proposed change, and intended effect with the user before every write.
+
+Risk: Functions, triggers, or destinations can keep running or forwarding data after setup.
+
+Mitigation: Review each automation and destination carefully and obtain separate approval before enabling ongoing forwarding.
+
+Risk: Raw HTTP access requires handling a Maton API key when the CLI is unavailable.
+
+Mitigation: Prefer OAuth login through the CLI; never print, log, or persist an API key.
+
+## Reference(s):
+
+- [Google Calendar skill release](https://clawhub.ai/byungkyu/skills/google-calendar-api)
+- [Google Calendar API reference](https://developers.google.com/calendar/api/v3/reference)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Conversational text or Markdown with optional command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include calendar details from the authorized connection; avoid exposing unnecessary personal data.]
+
+## Skill Version(s):
+
+1.2.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

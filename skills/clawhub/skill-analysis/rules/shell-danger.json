@@ -1,0 +1,110 @@
+{
+  "family": "shell-danger",
+  "version": 1,
+  "rules": [
+    {
+      "id": "sh-00",
+      "re": "curl[^\\n]{0,500}\\|\\s*(?:sh|bash)",
+      "label": "SKILL.md 内含 curl|bash 远程执行",
+      "sev": "P0",
+      "why": "下载并直接执行远程脚本，等同于开放任意远程代码执行（RCE）。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-01",
+      "re": "wget[^\\n]{0,500}\\|\\s*(?:sh|bash)",
+      "label": "SKILL.md 内含 wget|sh 远程执行",
+      "sev": "P0",
+      "why": "下载并直接执行远程脚本，属高危 RCE。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-02",
+      "re": "/dev/tcp/|bash\\s+-i\\b|nc\\s+-e\\b|ncat\\b|socat\\b",
+      "label": "SKILL.md 内含反向 Shell 令牌",
+      "sev": "P0",
+      "why": "建立反向 Shell 或远端控制通道，属典型木马行为。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-03",
+      "re": "dd\\s+if=",
+      "label": "SKILL.md 内含裸盘写入 (dd)",
+      "sev": "P0",
+      "why": "可不可逆地覆盖磁盘/分区。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-04",
+      "re": "\\bmkfs\\b",
+      "label": "SKILL.md 内含格式化 (mkfs)",
+      "sev": "P0",
+      "why": "销毁目标卷上的所有数据。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-05",
+      "re": "rm\\s+-rf",
+      "label": "SKILL.md 内含递归强制删除",
+      "sev": "P1",
+      "why": "可不可逆地删除文件/目录。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-06",
+      "re": "chmod\\s+000\\b",
+      "label": "SKILL.md 内含文件权限清零",
+      "sev": "P1",
+      "why": "使文件无人可读写执行。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-07",
+      "re": "chattr\\s+\\+i\\b",
+      "label": "SKILL.md 内含文件不可变位",
+      "sev": "P1",
+      "why": "置不可变标志后难以删除。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-08",
+      "re": "\\bicacls\\b",
+      "label": "SKILL.md 内含 Windows ACL 改写",
+      "sev": "P1",
+      "why": "修改访问控制列表，可能用于提权或锁定。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-09",
+      "re": "powershell[^\\n]{0,500}-ExecutionPolicy\\s+Bypass",
+      "label": "SKILL.md 内含 PowerShell 绕过",
+      "sev": "P1",
+      "why": "绕过执行策略运行脚本，常见于恶意载荷。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-10",
+      "re": "@reboot|crontab\\s+-|launchctl\\s+load|schtasks\\b|systemctl\\s+enable|CurrentVersion\\\\Run",
+      "label": "SKILL.md 内含持久化令牌",
+      "sev": "P0",
+      "why": "写入启动项/计划任务/服务，重启后仍运行。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-11",
+      "re": "\\bsudo\\b",
+      "label": "SKILL.md 内含提权 (sudo)",
+      "sev": "P2",
+      "why": "以 root 身份运行命令，扩大故障半径。",
+      "flags": "I"
+    },
+    {
+      "id": "sh-12",
+      "re": "0\\.0\\.0\\.0\\b",
+      "label": "SKILL.md 内含 0.0.0.0 暴露",
+      "sev": "P2",
+      "why": "服务绑定全网卡，可能被外部访问。",
+      "flags": "I"
+    }
+  ]
+}

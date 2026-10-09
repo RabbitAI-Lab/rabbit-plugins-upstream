@@ -1,40 +1,49 @@
-## Description: <br>
-Checks that letterform-level detail survives case and tracking transforms, including all-caps tracking, ligature collision checks, true small caps, and inline acronym treatment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Audits letterform fidelity after case and tracking changes, including all-caps spacing, ligature collisions, inline acronyms, and missing glyphs.
 
-## Publisher: <br>
-[monikazapisekstudio](https://clawhub.ai/user/monikazapisekstudio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[monikazapisek](https://clawhub.ai/user/monikazapisek)
 
-## Use Case: <br>
-Designers, design engineers, and agents use this skill to review or propose typography refinements when uppercase transforms, tight tracking, ligatures, small caps, or inline acronyms affect letterform fidelity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Suggested CSS or Figma range changes could alter typography beyond the intended text if applied broadly. <br>
-Mitigation: Review visual changes before applying them broadly and apply range-specific fixes only to the text runs that triggered the check. <br>
+## Use Case:
 
+Designers and developers use this skill to review typography in Figma or CSS, calculate all-caps tracking, and identify ligature, acronym, small-cap, and font-coverage issues before making targeted changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/monikazapisekstudio/skills/glyph-fidelity) <br>
-- [Server-resolved source import](https://github.com/monikazapisekstudio/design-engineering-playbook/tree/main/skills/typesetting-engine-skillset/glyph-fidelity) <br>
-- [Publisher profile](https://clawhub.ai/user/monikazapisekstudio) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Text or Markdown with CSS and Figma API snippets when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes typography calculations, range-specific warnings, and suggested styling changes; Figma writes only on explicit request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: ClawHub release metadata) <br>
+Risk: Unreviewed letter-spacing or font-size edits may alter the intended text appearance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed Figma or file changes and obtain permission before applying targeted edits.
+
+## Reference(s):
+
+- [Glyph Fidelity on ClawHub](https://clawhub.ai/monikazapisek/skills/glyph-fidelity)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Code]
+
+**Output Format:** [Markdown with tracking values and targeted CSS or Figma guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Identifies affected text ranges; Figma ligature changes and glyph-level fallback checks require manual review.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release; artifact metadata: 1.2.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,7 +1,7 @@
 {
   "name": "hithink-astock-selector",
-  "version": "1.0.0",
-  "description": "通过自然语言查询进行 A 股股票筛选，支持行情指标、技术形态、财务指标、行业概念等多条件组合筛选。",
+  "version": "1.0.1",
+  "description": "选股靠感觉，一买就套？一句话说清你要什么——「低估值、主力流入、均线多头」——它从全市场把票筛出来。",
   "license": "MIT",
   "tags": [
     "astock",

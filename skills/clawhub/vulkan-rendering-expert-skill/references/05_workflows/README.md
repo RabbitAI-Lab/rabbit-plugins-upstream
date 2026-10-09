@@ -4,7 +4,7 @@
 
 `05_workflows` 是 Vulkan Expert Skill 的专家工作流模块。
 
-它面向**正向工程任务**，不以单个 API 为入口，也不以故障排查为入口。  
+它面向**正向工程任务**，不以单个 API 为入口，也不以故障排查为入口。
 它解决的问题是：
 
 > 面对一个真实 Vulkan 工程任务，高级 Vulkan 工程师应该如何从需求、对象链路、资源设计、同步设计、实现步骤到验证闭环完成交付。
@@ -65,6 +65,7 @@
 6. 涉及 Android 时，必须设计 Surface / ANativeWindow / pause / resume / rotation / swapchain recreate。
 7. 每个 workflow 必须给出验证闭环：Validation Layer、RenderDoc / AGI、截图、frame time、多帧稳定性。
 8. 不确定 API 细节时，不在 workflow 中编造，转向 `03_api_manual` 或官方文档回查。
+9. 架构级 workflow（renderer / pass / compute / 资源生命周期 / 帧性能主链）在实现步骤前必须包含架构决策（Architecture Decision）阶段（§7.5 模式），决策走 `../02_core_mental_model/engine_architecture.md` §10 的六要素框架。
 
 ---
 

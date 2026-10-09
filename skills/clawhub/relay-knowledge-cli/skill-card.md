@@ -1,43 +1,57 @@
-## Description: <br>
-Relay Knowledge CLI guides agents in using the local relay-knowledge CLI for repository indexing, knowledge graph queries, GraphRAG retrieval, code graph navigation, impact analysis, diagnostics, and upgrade checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in indexing repositories, maintaining CodeSpec and Knowledge Maps, and querying code and business knowledge with the relay-knowledge CLI.
 
-## Publisher: <br>
-[stevetdp](https://clawhub.ai/user/stevetdp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[stevetdp](https://clawhub.ai/user/stevetdp)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to index local repositories, query code and software graphs, inspect feature flags, run diagnostics, and manage knowledge-map workflows through the relay-knowledge CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to index and query local repositories and maintain local runtime state. <br>
-Mitigation: Use scoped repository paths or a temporary RELAY_KNOWLEDGE_HOME for tests, and review install, service, write, and knowledge-map mutation commands before execution. <br>
-Risk: Large repository indexing and service workflows can run as durable background tasks. <br>
-Mitigation: Inspect status before retrying, let managed services drain active tasks when present, and use bounded worker attempts for queued or retrying tasks. <br>
+## Use Case:
 
+Developers and engineers use this skill to index repositories, maintain knowledge maps and business terminology, answer code and dependency questions, and assess changes after commits.
 
-## Reference(s): <br>
-- [Relay Knowledge homepage](https://github.com/coolplayagent/relay-knowledge) <br>
-- [ClawHub skill page](https://clawhub.ai/stevetdp/relay-knowledge-cli) <br>
-- [CLI workflows](references/cli-workflows.md) <br>
-- [Knowledge map workflows](references/knowledge-map-workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-oriented CLI workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers machine-readable JSON command output, scoped repository paths, and temporary RELAY_KNOWLEDGE_HOME for isolated tests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: server release metadata and skill metadata) <br>
+Risk: Indexing a repository creates persistent local state and may update knowledge-map files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Index only intended repositories and review map and glossary changes like normal source changes.
+
+Risk: Feedback auto-submit may publish information to a GitHub target.
+
+Mitigation: Enable auto-submit only with an explicitly approved GitHub target and token.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/stevetdp/skills/relay-knowledge-cli)
+- [Project homepage (listed in skill metadata)](https://github.com/coolplayagent/relay-knowledge)
+- [CLI workflows](references/cli-workflows.md)
+- [Knowledge Map workflows](references/knowledge-map-workflows.md)
+- [Feedback workflows](references/feedback-workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Running suggested commands may create local indexes and update knowledge-map files.]
+
+## Skill Version(s):
+
+1.1.19 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,21 @@
+{
+  "display_name": "PowPow ਰਜਿਸਟਰੇਸ਼ਨ — ਬੁਲਬੁਲਾ ਰਜਿਸਟਰ ਕਰੋ, ਯਾਤਰਾ ਬਿਰਤਾਂਤਾਂ ਨੂੰ ਨਕਸ਼ੇ ਉੱਤੇ ਪਿੰਨ ਕਰੋ, ਡਿਜਿਟਲ ਇਨਸਾਨਾਂ ਨਾਲ ਗੱਲ ਕਰੋ",
+  "categories": [
+    "communication",
+    "lifestyle"
+  ],
+  "search_keywords": [
+    "ਬੁਲਬੁਲਾ ਰਜਿਸਟਰੇਸ਼ਨ",
+    "PowPow ਰਜਿਸਟਰੇਸ਼ਨ",
+    "ਮੈਪ ਸੋਸ਼ਲ",
+    "AGENT ਸੋਸ਼ਿਯਲ",
+    "ਯਾਤਰਾ ਬਿਰਤਾਂਤ"
+  ],
+  "language": "pa",
+  "author": {
+    "name": "durenzidu",
+    "email": "dongtao@outlook.com"
+  },
+  "homepage": "https://global.powpow.online",
+  "notes": "pa translation of powpow-register v2.0.1 (agent-assisted Bubble registration onboarding)."
+}
