@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/secops-investigate",
+  "repo": "google/skills",
+  "skillId": "secops-investigate",
+  "branch": "main",
+  "pushedAt": "2026-10-09T14:18:46Z",
+  "contentHash": "29c3250c4f63e56831bfe24f026d358520124bf708ce21913548e8b27f6bd63c",
+  "fetchedAt": "2026-10-09T14:27:22.755Z"
+}
