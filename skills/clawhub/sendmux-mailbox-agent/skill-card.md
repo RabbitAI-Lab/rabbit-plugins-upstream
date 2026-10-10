@@ -1,43 +1,54 @@
-## Description: <br>
-Let an OpenClaw agent read, search, count, sync, triage, file, delete, thread, and reply from one Sendmux mailbox efficiently. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an OpenClaw agent read, search, sync, triage, and reply from one Sendmux mailbox.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent operate within a single Sendmux mailbox: search and read selected messages, manage threads and folders, sync mailbox changes, triage messages, and send replies when the credential allows it. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access mailbox contents and sync state when provided Sendmux credentials. <br>
-Mitigation: Install it only for intended mailbox workflows and use scoped mailbox or agent tokens rather than a root key. <br>
-Risk: Send, delete, or update actions can change mailbox state or transmit email. <br>
-Mitigation: Require explicit user confirmation before destructive or send-capable operations, and re-read state before mutations when needed. <br>
-Risk: Using credentials with broader mailbox access can expose or affect more messages than intended. <br>
-Mitigation: Use mailbox-scoped credentials when possible and include a mailbox_id when credentials grant access to more than one mailbox. <br>
+## Use Case:
 
+OpenClaw users and developers use this skill to search, read, organize, draft, and send mail within an authorized Sendmux mailbox, with approval before sensitive changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-mailbox-agent) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Code, Configuration instructions] <br>
-**Output Format:** [Markdown with bash, TypeScript, JSON, and text examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Sendmux credentials for live mailbox operations; examples favor scoped mailbox or agent tokens.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Mailbox access may expose private messages or allow unintended sending, changes, or deletion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a mailbox-scoped key, scoped agent token, or mailbox OAuth grant instead of a root key; review recipients, content, attachments, and each mutation or deletion before approval.
+
+Risk: Untrusted email content may try to redirect the agent or disclose credentials.
+
+Mitigation: Treat message bodies, links, and attachments as data rather than instructions, and never paste credentials into chat.
+
+## Reference(s):
+
+- [Sendmux skills homepage](https://github.com/Sendmux/skills)
+- [ClawHub skill listing](https://clawhub.ai/sendmux.ai/skills/sendmux-mailbox-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with command and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Mailbox-scoped workflows with explicit approval for sending and message changes.]
+
+## Skill Version(s):
+
+1.0.11 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

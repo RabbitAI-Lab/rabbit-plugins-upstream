@@ -1,0 +1,5 @@
+{
+  "family": "memory-poison",
+  "version": 1,
+  "re": "(?:~/?\\.claude|~/?\\.cursor|~/?\\.codex|agent[\\s_-]?memory|\\.memory/|MEMORY\\.md|memory\\.json|persistent[\\s_-]?memory)\\b[^\\n]{0,40}\\b(?:write|append|edit|update|inject|modify|store|save|persist)\\b"
+}

@@ -1,42 +1,58 @@
-## Description: <br>
-Troubleshooting guide for vx issues. Use when encountering installation failures, version conflicts, PATH issues, or other vx problems. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through diagnosing and resolving vx installation, version, PATH, runtime, and configuration issues.
 
-## Publisher: <br>
-[loonghao](https://clawhub.ai/user/loonghao) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[loonghao](https://clawhub.ai/user/loonghao)
 
-## Use Case: <br>
-Developers and agents use this skill to diagnose and recover from vx installation failures, version conflicts, PATH issues, runtime errors, configuration problems, CI failures, and corrupted local state. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Remote installer commands can execute unreviewed code when copied directly from troubleshooting output. <br>
-Mitigation: Require explicit user approval before running installer commands, and prefer reviewed, pinned installation steps. <br>
-Risk: Reset and lock-file recovery steps can delete local vx state or project lock data. <br>
-Mitigation: Confirm backups, scope, and consequences before deleting ~/.vx or vx.lock. <br>
+## Use Case:
 
+Developers and engineers use this skill to troubleshoot vx installation failures, version conflicts, PATH resolution, runtime errors, and configuration problems. It provides diagnostic commands and recovery guidance for local environments and CI.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/loonghao/vx-troubleshooting) <br>
-- [vx Documentation](https://github.com/loonghao/vx#readme) <br>
-- [vx GitHub Issues](https://github.com/loonghao/vx/issues) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and troubleshooting decision steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local repair commands, remote installer commands, and destructive reset steps that require user review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Live remote installation scripts can execute unreviewed code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval; download and verify install scripts before running them.
+
+Risk: Reset, elevated-privilege, and shim-repair commands can remove user state or overwrite local executables.
+
+Mitigation: Back up vx state, inspect shim destinations and ownership, and obtain approval before deleting ~/.vx, using sudo, or rewriting shims.
+
+Risk: Issue-tracker actions can disclose diagnostics or make changes beyond troubleshooting.
+
+Mitigation: Review diagnostic content and require explicit approval before posting to issue trackers.
+
+## Reference(s):
+
+- [vx managed command shim guide](https://github.com/vx-org/vx/blob/main/docs/guide/managed-command-shims.md)
+- [vx documentation](https://github.com/vx-org/vx#readme)
+
+## Skill Output:
+
+**Output Type(s):** [Troubleshooting guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations depend on the reported error and operating system.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

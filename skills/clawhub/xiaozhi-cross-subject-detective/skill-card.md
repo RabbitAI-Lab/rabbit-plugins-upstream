@@ -1,41 +1,56 @@
-## Description: <br>
-Guides Chinese-speaking learners through a week-long cross-disciplinary inquiry project that connects a real-world theme across subjects and summarizes the work as project DNA. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+引导学生围绕一个真实主题开展一周的跨学科探索，发现学科间的联系并整理项目记录。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, parents, and learning assistants use this skill to plan and run a cross-subject project around a real topic, explore it from several academic perspectives, and turn the results into reusable study notes and a project DNA summary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect with related learning-note skills and may read or update study records such as Cornell notes and a knowledge accumulation tree. <br>
-Mitigation: Use it only in learning-note workspaces where those records are expected to be available, and review generated note or knowledge-tree updates before keeping them. <br>
-Risk: Cross-subject project guidance can produce broad connections that may need validation for a student's curriculum or age level. <br>
-Mitigation: Review the proposed subject perspectives, prompts, and project DNA summary before treating them as study material. <br>
+## Use Case:
 
+面向小学高段至高中学生及陪同的家长、教师，通过选题、多学科追问和每日联结，形成一周的跨学科项目记录与概念图谱。小学阶段须有家长或教师陪同。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective) <br>
-- [跨学科侦探周项目模板](references/detective-project-template.md) <br>
+### Deployment Geography for Use:
 
+中国大陆；在其他地区面向学生使用前，须先本地化危机求助资源、课程口径、同意规则与隐私告知。
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and structured project notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces subject-view prompts, connection maps, project DNA summaries, and learning-note updates when paired with the related note-taking skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Student project notes and concept-map updates may expose minors' learning records if shared without their consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use consent-gated memory and cross-skill sharing; honor requests to view, correct, delete, pause, export, or restrict sharing of records.
+
+Risk: Mainland China crisis contacts, curricula, and consent assumptions may be unsuitable for students elsewhere.
+
+Mitigation: Localize emergency referrals, curricula, consent language, and privacy notices before use outside Mainland China; stop the learning flow and refer crisis signals to appropriate local support.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-cross-subject-detective)
+- [跨学科侦探周项目记录模板](artifact/references/detective-project-template.md)
+- [跨学科联结模板库](artifact/shared/cross-subject-connections.md)
+- [平台能力与地域约定](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Simplified Chinese conversational guidance and structured Markdown project records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes daily questions, cross-subject connections, a project summary, and consent-gated concept-map updates; without persistent memory, provides a student-saveable daily record instead.]
+
+## Skill Version(s):
+
+2.11.1 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

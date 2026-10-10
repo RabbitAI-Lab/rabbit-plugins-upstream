@@ -1,45 +1,54 @@
-## Description: <br>
-Autonomously edit videos, add captions, and remove silences via BatchEdits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Edit videos with BatchEdits by adding captions, removing silences, and applying saved styles, then check processing status and share download links.
 
-## Publisher: <br>
-[chuckwhisler](https://clawhub.ai/user/chuckwhisler) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chuckwhisler](https://clawhub.ai/user/chuckwhisler)
 
-## Use Case: <br>
-External users and developers use this skill to connect OpenClaw to BatchEdits for video editing workflows, including captions, silence removal, custom style creation, upload processing, status checks, and downloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Videos selected for editing are sent to BatchEdits. <br>
-Mitigation: Install and use the skill only when BatchEdits is trusted for the selected video content. <br>
-Risk: API keys can be exposed if placed directly in the MCP URL. <br>
-Mitigation: Prefer the header-based BATCHEDITS_API_KEY setup or OAuth flow, and avoid sharing configuration or logs that contain credentials. <br>
-Risk: The upload workflow asks the agent to execute an upload command returned by BatchEdits. <br>
-Mitigation: Review the command before execution and confirm it is a narrow, expected upload to BatchEdits for the intended file. <br>
+## Use Case:
 
+People editing videos in their BatchEdits workspace use this skill to upload videos, select or create editing styles, queue processing with their approval, monitor progress, and obtain download links.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/chuckwhisler/skills/batchedits) <br>
-- [Publisher Profile](https://clawhub.ai/user/chuckwhisler) <br>
-- [BatchEdits MCP Endpoint](https://batchedits.com/api/mcp) <br>
-- [BatchEdits OAuth Registration Endpoint](https://batchedits.com/api/oauth/register) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and MCP tool names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce video IDs, processing status, download guidance, and upload commands for selected local video files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Uploaded videos and the workspace API key are shared with BatchEdits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm that BatchEdits is trusted with the videos and key; keep the key in the environment, not in chats or URLs.
+
+Risk: Processing videos consumes video credits.
+
+Mitigation: Confirm each processing request and the number of credits for bulk jobs before queuing.
+
+## Reference(s):
+
+- [BatchEdits on ClawHub](https://clawhub.ai/chuckwhisler/skills/batchedits)
+- [BatchEdits MCP setup guide](https://batchedits.com/mcp/docs)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with status updates and links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Shares temporary download links only for completed videos; processing requires user confirmation.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

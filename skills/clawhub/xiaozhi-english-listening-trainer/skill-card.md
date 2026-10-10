@@ -1,41 +1,60 @@
-## Description: <br>
-Generates personalized English listening practice materials matched to a learner's vocabulary, interests, and sticking points, with fallback guidance when audio or persistent memory features are unavailable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为中文中小学生按词汇水平和兴趣生成英语听力材料，并通过分步练习定位理解障碍。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and English-learning assistants use this skill to create level-appropriate listening passages, comprehension checks, vocabulary notes, and follow-up coaching based on learner profiles and interests. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read or update learner profiles, vocabulary records, listening history, reminders, and reports without clearly documented opt-in controls. <br>
-Mitigation: Review before installation, require explicit learner or guardian consent, and confirm how stored vocabulary, reminders, and progress history can be viewed, disabled, or deleted. <br>
-Risk: The skill's true listening workflow depends on audio generation, speed control, and persistent memory that may not be available in every agent environment. <br>
-Mitigation: Tell learners when audio or memory features are unavailable and use the documented text-based fallback only as a temporary comprehension exercise. <br>
+## Use Case:
 
+中文中小学生在家长或教师适当陪同下练习与自身水平、兴趣匹配的英语听力；教学人员可用分步反馈了解学生的词义、句子结构或语速障碍。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer) <br>
-- [Listening topic templates and material generation guide](references/listening-topic-templates.md) <br>
+### Deployment Geography for Use:
 
+Mainland China (Simplified Chinese K–12 defaults; localize curriculum, consent and crisis referrals before use elsewhere)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style tutoring responses with listening passages, vocabulary notes, comprehension questions, diagnostics, and progress summaries.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on platform TTS, speed control, learner-profile memory, and reminder capabilities.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Learners' interests, vocabulary history and listening progress may be read or saved across learning profiles.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable profile memory and cross-skill sharing only with student or guardian consent; honor requests not to remember, share or save a session.
+
+Risk: Chinese K–12 curriculum and crisis-support defaults may be unsuitable outside mainland China.
+
+Mitigation: Localize curriculum, consent procedures and crisis contacts before deployment elsewhere; use local emergency resources for learners in crisis.
+
+Risk: Without voice playback, a text-only exercise may be mistaken for listening practice.
+
+Mitigation: Provide a reader or device speech playback where possible; clearly label text-only practice as a temporary substitute.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-english-listening-trainer)
+- [Listening topic templates](artifact/references/listening-topic-templates.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+- [Platform capability and fallback guidance](artifact/shared/platform-conventions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational text with listening passages, comprehension questions and feedback; optional spoken playback where available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Practice difficulty and topic adapt to the learner; without voice playback, text-based practice is not equivalent to listening.]
+
+## Skill Version(s):
+
+2.11.1 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

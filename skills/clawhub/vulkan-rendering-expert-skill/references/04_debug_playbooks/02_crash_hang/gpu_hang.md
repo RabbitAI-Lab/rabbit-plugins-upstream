@@ -44,14 +44,15 @@
 
 ---
 
-## 3. 快速验证路径
+## 3. 快速验证路径（证据驱动决策表）
 
-1. **最小范围二分**：把可疑 draw / dispatch 逐个注释，定位触发 hang 的最小命令。`[TOOL]`
-2. **替换为 dummy shader**：把 fragment / compute shader 换成简单输出，确认是否 shader 本身导致。`[TOOL]`
-3. **开启 Validation Layer 的 sync 分支**：重点查找 hazard 报告。`[TOOL]`
-4. **强制单 queue / 单线程提交**：排除跨 queue 同步和多线程录制问题。`[HEUR]`
-5. **缩短 dispatch 维度**：把全局 workgroup 数减少 10 倍，观察是否 watchdog 触发。`[TOOL]`
-6. **RenderDoc / AGI 抓帧**：看 hang 点前后 pipeline state 和 resource 使用。`[TOOL]`
+| # | 检查（成本升序） | 结果 A → 下一步 | 结果 B → 下一步 | 剪枝（排除的假设） |
+|---|---|---|---|---|
+| 1 | logcat / Event Viewer / dmesg：TDR、gpu timeout、watchdog 记录 | 有记录 → 确认 GPU hang → 检查 2 | 无记录 → §11（先排查 CPU 死锁，见 §0 不适用） | 无 GPU 记录时排除 §2 的全部 GPU 侧假设 |
+| 2 | Validation sync 分支 | 有 SYNC-HAZARD → §5-3（storage 读写无 barrier）/ §5-5（跨 queue 缺 ownership） | clean → 检查 3 | clean 时排除 §2 的 P0 内存 hazard / 跨 queue 假设 |
+| 3 | 是否可复现：固定场景必现，还是仅多线程 / 多 queue 偶发 | 必现 → 检查 4 | 仅多线程 / 多 queue 偶发 → 强制单 queue / 单线程提交验证（§2 的 P2 多线程录制假设） | 偶发时排除 §2 的 P0 死循环 shader 假设 |
+| 4 | 复现场景的 pass 类型（compute / graphics） | compute → 检查 5（死循环 / workgroup 方向） | graphics → 检查 5（subpass / barrier 方向） | compute 时排除 §2 的 P1 depth / stencil attachment 冲突假设 |
+| 5 | AGI：GPU 时间轴最后完成的 pass | 停在 compute dispatch → §5-1 / §5-2 死循环、§2 的 P1 大 workgroup；停在 draw / barrier 边界 → §5-6 subpass 自依赖、§5-3 storage 读写 | 时间轴无明确中断点 → §11 不确定处理 | 停在 compute dispatch 时排除 §2 的 P1 attachment 冲突假设 |
 
 ---
 
@@ -93,22 +94,23 @@ Shader Module
 
 ## 6. 修复方案
 
-### 最小修复
+### Workaround（临时绕过，现象消失 ≠ 根因修复）
+
+- 临时改为单 queue 提交，隔离多 queue 同步是否为直接原因（确认后必须恢复并修复同步）。`[TOOL]`
+- 临时用 feature flag 关闭可疑 pass，保其余画面可用（定位期间的临时手段，hang 根因仍在）。`[ENGINE]`
+
+### Minimal Fix（针对根因的最小修复）
 
 - 在可疑 producer / consumer 之间插入明确的 `vkCmdPipelineBarrier`，确保 `srcAccessMask` 覆盖写，`dstAccessMask` 覆盖读，`srcStageMask` 不晚于 producer 的最后一个 stage，`dstStageMask` 不早于 consumer 的第一个 stage。`[SPEC]`
 - 把 compute shader 的 workgroup size 降到硬件 limit 以下，并减少局部数组 / 寄存器占用。`[HEUR]`
 - 对可能无限循环的 shader 增加强制迭代上限或 break 条件。`[ENGINE]`
-- 临时改为单 queue 提交，确认多 queue 同步是否是直接原因。`[TOOL]`
 
-### 稳定修复
+### Structural Fix（结构性 / 防复发修复）
 
 - 建立资源状态跟踪，自动在 read-after-write / write-after-write / write-after-read 场景插入 barrier。`[ENGINE]`
 - 使用 render graph 描述 pass 依赖，由框架生成 barrier 和 subpass dependency。`[ENGINE]`
 - 对跨 queue 资源建立 semaphore + ownership transfer 规范。`[SPEC]`
 - 对长时间 compute 任务拆分到多个 submit，中间插入 fence 让 GPU 有机会响应 watchdog。`[ENGINE]`
-
-### 工程化修复
-
 - 在 CI 中启用 Validation Layer sync 检测和线程 sanitizer。`[TOOL]`
 - 对 shader 加入静态循环边界检查工具和编译期 workgroup 占用估算。`[ENGINE]`
 - 建立 GPU hang 自动二分系统：通过 feature flag 关闭部分 pass 快速定位。`[ENGINE]`

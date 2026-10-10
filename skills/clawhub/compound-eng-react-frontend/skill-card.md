@@ -1,40 +1,60 @@
-## Description: <br>
-React architecture patterns, TypeScript, Next.js, hooks, and testing for component structure, state management, routing, Vitest, React Testing Library, and React code review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides React and Next.js frontend development, including component architecture, state management, Tailwind CSS, testing, and locale synchronization.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill for React and Next.js implementation guidance, code review, state management decisions, and frontend test patterns. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Playwright auth-state files can contain reusable test sessions. <br>
-Mitigation: Use dedicated low-privilege test accounts, keep e2e/.auth files out of version control and CI artifacts, and regenerate sessions when needed. <br>
+## Use Case:
 
+Frontend developers use this skill to implement and review React and Next.js components, choose state and rendering patterns, plan tests, work with Tailwind CSS, and synchronize JSON locale files.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-react-frontend) <br>
-- [Testing React (Vitest + RTL)](references/testing.md) <br>
-- [E2E Testing with Playwright](references/e2e-testing.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with TypeScript and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes React, Next.js, Vitest, React Testing Library, and Playwright patterns.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.1 (source: server release metadata) <br>
+Risk: Test commands may run against untrusted projects.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run command examples only inside trusted project repositories and review them before execution.
+
+Risk: E2E example credentials or saved authentication state may be copied into live workflows.
+
+Mitigation: Use disposable test credentials; replace sample passwords and auth-state paths with project-approved secret handling.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-react-frontend)
+- [Components and state](references/components-and-state.md)
+- [Rendering and frameworks](references/rendering-and-frameworks.md)
+- [Tailwind CSS](references/tailwind.md)
+- [Testing and test selection](references/test-selection.md)
+- [Component and hook testing](references/testing.md)
+- [End-to-end testing](references/e2e-testing.md)
+- [Locale synchronization](references/locale-synchronization.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Context-dependent React and frontend recommendations]
+
+## Skill Version(s):
+
+5.0.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

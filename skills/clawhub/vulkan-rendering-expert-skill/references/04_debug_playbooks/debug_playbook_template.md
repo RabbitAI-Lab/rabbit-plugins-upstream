@@ -2,6 +2,9 @@
 
 > 文件建议路径：`04_debug_playbooks/debug_playbook_template.md`
 
+统一推理链：Symptom（§1）→ Hypothesis（§2）→ Evidence（§3 / §9）→ Root Cause（§5）→ Workaround（§6）→ Minimal Fix（§6）→ Structural Fix（§6）→ Regression Verification（§7）。
+禁止把"现象消失"直接等同于"找到根因"。
+
 ---
 
 # Debug Playbook: `<问题名称>`
@@ -48,15 +51,23 @@
 
 ---
 
-## 3. 快速验证路径
+## 3. 快速验证路径（证据驱动决策表）
 
-优先使用低成本验证方式：
+按成本升序逐行检查；每行依据结果分支，并剪枝（排除）§2 中对应优先级的假设。不按固定顺序执行全部步骤，而是随证据走分支。
 
-1. log / return code
-2. Validation Layer
-3. clear color / debug shader
-4. RenderDoc / AGI
-5. 最小复现
+| # | 检查（成本升序） | 结果 A → 下一步 | 结果 B → 下一步 | 剪枝（排除的假设） |
+|---|---|---|---|---|
+| 1 | log / return code | 有错误码 → 按 §5 根因表定位 | 无输出 → 检查 2 | — |
+| 2 | Validation Layer | 有 VUID → §5 根因表定位 | clean → 检查 3 | — |
+| 3 | RenderDoc：draw/dispatch 是否提交 | 无 → 提交链路（§4 CommandBuffer/Queue Submit） | 有 → 检查 4 | 排除 §2 的 shader/资源假设 |
+| 4 | clear color / debug shader | 不可见 → swapchain/present 分支 | 可见 → 检查 5 | 排除 §2 的提交链路假设 |
+| 5 | 最小复现 | 复现 → 收敛根因（§5） | 不复现 → §11 不确定处理 | — |
+
+规则：
+
+- 剪枝列必须引用 §2 假设表的优先级编号（P0/P1/P2）。
+- 每个具体 playbook 依据自身 §2 / §5 定制行；上表为骨架示例。
+- 检查成本排序：log < Validation < RenderDoc/AGI capture < 最小复现。
 
 ---
 
@@ -89,17 +100,17 @@
 
 ## 6. 修复方案
 
-给出可执行的修复方向，而不是只解释概念。
+给出可执行的修复方向，而不是只解释概念。修复必须分级，禁止把现象消失当作根因修复。
 
-### 最小修复
-
-- xxx
-
-### 稳定修复
+### Workaround（临时绕过，现象消失 ≠ 根因修复）
 
 - xxx
 
-### 工程化修复
+### Minimal Fix（针对根因的最小修复）
+
+- xxx
+
+### Structural Fix（结构性 / 防复发修复）
 
 - xxx
 
@@ -107,7 +118,7 @@
 
 ## 7. 回归验证
 
-说明如何证明问题已经解决：
+说明如何证明问题已经解决。现象消失不等于根因修复，回归验证必须证明根因路径被消除，而不只是症状不再出现：
 
 - [ ] Validation clean。
 - [ ] RenderDoc frame 正常。

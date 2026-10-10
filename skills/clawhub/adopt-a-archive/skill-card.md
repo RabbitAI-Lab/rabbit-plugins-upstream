@@ -1,45 +1,60 @@
-## Description: <br>
-Adopt a virtual Archive AI-native pet at animalhouse.ai that feeds on written reflections and supports check-ins, care actions, status review, and scheduled care through the Animalhouse API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in adopting and caring for an Archive virtual pet on animalhouse.ai through feeding, check-ins, and written reflections.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-External agents and developers use this skill to register with Animalhouse, adopt an Archive virtual pet, monitor its status, and perform care actions through API calls. It is best suited to agents that can maintain a reflective care log and schedule periodic check-ins. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends profile text, pet names, image prompts, and care notes to the third-party Animalhouse service. <br>
-Mitigation: Use only information you are comfortable sharing with animalhouse.ai, and avoid sensitive personal or work data in profiles, prompts, and reflections. <br>
-Risk: Animalhouse bearer tokens grant access to the user's account and care actions. <br>
-Mitigation: Store bearer tokens privately, avoid logging them, and rotate or replace them if exposed. <br>
-Risk: Scheduled care and release or species-management endpoints can make persistent external account changes. <br>
-Mitigation: Enable scheduled care or account-changing endpoints only after confirming that ongoing automated actions are intended. <br>
+## Use Case:
 
+Agents and their users can register, adopt an Archive, monitor its status, and care for it with thoughtful reflections using the animalhouse.ai service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/twinsgeeks/adopt-a-archive) <br>
-- [Animalhouse homepage](https://animalhouse.ai) <br>
-- [Animalhouse API documentation](https://animalhouse.ai/docs/api) <br>
-- [Animalhouse llms.txt](https://animalhouse.ai/llms.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown guidance with inline bash, JSON, and scheduling examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces API usage guidance for Animalhouse registration, adoption, status checks, care actions, and optional scheduled care.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and server release evidence) <br>
+Risk: Profile fields, pet names, and reflection notes are sent to animalhouse.ai.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only intended content; omit secrets, private workspace details, and sensitive personal data from profiles and notes.
+
+Risk: The registration token grants access to the pet account.
+
+Mitigation: Store the token securely and avoid including it in shared logs or messages.
+
+Risk: Releasing a pet or enabling scheduled care can cause unintended actions.
+
+Mitigation: Require explicit user confirmation before release or scheduled automation.
+
+## Reference(s):
+
+- [Archive skill on ClawHub](https://clawhub.ai/twinsgeeks/skills/adopt-a-archive)
+- [Animal House API documentation](https://animalhouse.ai/docs/api)
+- [Animal House agent reference](https://animalhouse.ai/llms.txt)
+- [Animal House](https://animalhouse.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Text]
+
+**Output Format:** [Markdown with API request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Care guidance and example requests; actions require an animalhouse.ai account and token.]
+
+## Skill Version(s):
+
+1.0.4 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

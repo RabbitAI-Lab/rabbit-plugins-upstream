@@ -1,6 +1,8 @@
 <overview>
 How to design MCP tools following prompt-native principles. Tools should be primitives that enable capability, not workflows that encode decisions.
 
+For a CLI rather than an MCP surface, see [cli-agent-interface.md](./cli-agent-interface.md).
+
 **Core principle:** Whatever a user can do, the agent should be able to do. Don't artificially limit the agent--give it the same primitives a power user would have.
 </overview>
 
@@ -57,6 +59,18 @@ Names should describe the capability, not the use case:
 | `deploy_to_production` | `git_push` |
 
 The prompt tells the agent *when* to use primitives. The tool just provides *capability*.
+
+### Writing the description
+
+The name is the handle; the description is the contract the model routes on. Optimize it for precision, not brevity; the common defect is under-description, not verbosity. Write it as a man page: what the tool does, what each parameter means and what values are legal, what it does *not* return, and any caveat that changes the caller's plan (pagination, rate limits, eventual consistency, partial failure). Three or four sentences is a floor for a non-trivial tool, not a ceiling.
+
+The "capability, not use case" rule above still holds, and the boundary is what kind of *when* is being stated. A description may draw the line against sibling tools (what this tool covers, what it does not, which neighbour owns the adjacent case), because that is disambiguation the model needs at routing time and cannot get anywhere else. It must not carry workflow context: which step of a process to call it in, what to do with the result, or which business condition makes it appropriate. That belongs to the prompt or skill orchestrating the tool.
+
+Three things belong somewhere else:
+
+- **Worked examples, sample dialogue, and numbered protocols.** They cost tokens on every request and narrow the model's exploration to the path shown. Put procedure in the skill or prompt that orchestrates the tool.
+- **Triggering boosters** (`CRITICAL:`, `You MUST call this first`). Emphasis is priced in aggregate: once several descriptions shout, none of them carries signal, and the observed failure shifts from under-triggering to over-triggering.
+- **Cross-tool scolding** (`ALWAYS use this instead of X`, `NEVER use Y for this`). A preference for one tool belongs in that tool's own description, stated positively. Scattered across its rivals it decays the moment either tool changes.
 </principle>
 
 <principle name="simple-inputs">
@@ -112,6 +126,8 @@ async ({ key }) => {
 <design_template>
 ## Tool Design Template
 
+Require `storage.get` to return `undefined` only for a missing key; stored `null`, `false`, `0`, and empty strings remain valid values.
+
 ```typescript
 import { createSdkMcpServer, tool } from "@anthropic-ai/claude-agent-sdk";
 import { z } from "zod";
@@ -130,9 +146,9 @@ export const serverName = createSdkMcpServer({
         return {
           content: [{
             type: "text",
-            text: item ? JSON.stringify(item, null, 2) : `Not found: ${key}`,
+            text: item === undefined ? `Not found: ${key}` : JSON.stringify(item, null, 2),
           }],
-          isError: !item,
+          isError: item === undefined,
         };
       }
     ),
@@ -308,66 +324,51 @@ Use your judgment about importance ratings.
 
 **This pattern is specifically for agent-native apps** where you want the agent to have full access to an external API--the same access a user would have. It follows the core agent-native principle: "Whatever the user can do, the agent can do."
 
-If you're building a constrained agent with limited capabilities, static tool mapping may be intentional. But for agent-native apps integrating with HealthKit, HomeKit, GraphQL, or similar APIs:
+If you're building a constrained agent with limited capabilities, static tool mapping may be intentional. But for agent-native apps integrating with GraphQL, OpenAPI, or other APIs exposing authorized capability metadata:
 
 **Static Tool Mapping (Anti-pattern for Agent-Native):**
 Build individual tools for each API capability. Always out of date, limits agent to only what you anticipated.
 
 ```typescript
-// ❌ Static: Every API type needs a hardcoded tool
-tool("read_steps", async ({ startDate, endDate }) => {
-  return healthKit.query(HKQuantityType.stepCount, startDate, endDate);
-});
-
-tool("read_heart_rate", async ({ startDate, endDate }) => {
-  return healthKit.query(HKQuantityType.heartRate, startDate, endDate);
-});
-
-tool("read_sleep", async ({ startDate, endDate }) => {
-  return healthKit.query(HKCategoryType.sleepAnalysis, startDate, endDate);
-});
-
-// When HealthKit adds glucose tracking... you need a code change
+function readSteps(client: MetricClient, start: string, end: string): Promise<unknown> {
+  return client.read("steps", start, end);
+}
+function readHeartRate(client: MetricClient, start: string, end: string): Promise<unknown> {
+  return client.read("heartRate", start, end);
+}
+function readSleep(client: MetricClient, start: string, end: string): Promise<unknown> {
+  return client.read("sleep", start, end);
+}
 ```
+
+Every newly exposed metric needs another binding when only these static functions are registered.
 
 **Dynamic Capability Discovery (Preferred):**
 Build a meta-tool that discovers what's available, and a generic tool that can access anything.
 
 ```typescript
-// ✅ Dynamic: Agent discovers and uses any capability
+function listAvailableCapabilities(client: MetricClient): Promise<MetricType[]> {
+  return client.listTypes();
+}
 
-// Discovery tool - returns what's available at runtime
-tool("list_available_capabilities", async () => {
-  const quantityTypes = await healthKit.availableQuantityTypes();
-  const categoryTypes = await healthKit.availableCategoryTypes();
-
-  return {
-    text: `Available health metrics:\n` +
-          `Quantity types: ${quantityTypes.join(", ")}\n` +
-          `Category types: ${categoryTypes.join(", ")}\n` +
-          `\nUse read_health_data with any of these types.`
-  };
-});
-
-// Generic access tool - type is a string, API validates
-tool("read_health_data", {
-  dataType: z.string(),  // NOT z.enum - let HealthKit validate
-  startDate: z.string(),
-  endDate: z.string(),
-  aggregation: z.enum(["sum", "average", "samples"]).optional()
-}, async ({ dataType, startDate, endDate, aggregation }) => {
-  // HealthKit validates the type, returns helpful error if invalid
-  const result = await healthKit.query(dataType, startDate, endDate, aggregation);
-  return { text: JSON.stringify(result, null, 2) };
-});
+function readMetric(
+  client: MetricClient,
+  dataType: string,
+  start: string,
+  end: string,
+): Promise<unknown> {
+  return client.read(dataType, start, end);
+}
 ```
+
+Use the complete `MetricClient` implementation below. Register discovery and generic access as tools with string type-name inputs, while the authenticated server validates names and grants. Do not assume a native library exposes an enumeration or metadata endpoint that it does not implement.
 
 **When to Use Each Approach:**
 
 | Dynamic (Agent-Native) | Static (Constrained Agent) |
 |------------------------|---------------------------|
 | Agent should access anything user can | Agent has intentionally limited scope |
-| External API with many endpoints (HealthKit, HomeKit, GraphQL) | Internal domain with fixed operations |
+| External API with authorized metadata (GraphQL, OpenAPI) | Internal domain with fixed operations |
 | API evolves independently of your code | Tightly coupled domain logic |
 | You want full action parity | You want strict guardrails |
 
@@ -375,72 +376,73 @@ tool("read_health_data", {
 
 **Complete Dynamic Pattern:**
 
-```swift
-// 1. Discovery tool: What can I access?
-tool("list_health_types", "Get available health data types") { _ in
-    let store = HKHealthStore()
+Use the provider's authenticated metadata API rather than inventing language-level enumeration. This complete TypeScript client discovers and reads arbitrary authorized metric types; the URL is installed by trusted configuration.
 
-    let quantityTypes = HKQuantityTypeIdentifier.allCases.map { $0.rawValue }
-    let categoryTypes = HKCategoryTypeIdentifier.allCases.map { $0.rawValue }
-    let characteristicTypes = HKCharacteristicTypeIdentifier.allCases.map { $0.rawValue }
+```typescript
+type MetricType = { name: string; readable: boolean; writable: boolean };
 
-    return ToolResult(text: """
-        Available HealthKit types:
+class MetricClient {
+  private readonly baseURL: URL;
+  private readonly token: string;
 
-        ## Quantity Types (numeric values)
-        \(quantityTypes.joined(separator: ", "))
-
-        ## Category Types (categorical data)
-        \(categoryTypes.joined(separator: ", "))
-
-        ## Characteristic Types (user info)
-        \(characteristicTypes.joined(separator: ", "))
-
-        Use read_health_data or write_health_data with any of these.
-        """)
-}
-
-// 2. Generic read: Access any type by name
-tool("read_health_data", "Read any health metric", {
-    dataType: z.string().describe("Type name from list_health_types"),
-    startDate: z.string(),
-    endDate: z.string()
-}) { request in
-    // Let HealthKit validate the type name
-    guard let type = HKQuantityTypeIdentifier(rawValue: request.dataType)
-                     ?? HKCategoryTypeIdentifier(rawValue: request.dataType) else {
-        return ToolResult(
-            text: "Unknown type: \(request.dataType). Use list_health_types to see available types.",
-            isError: true
-        )
+  constructor(baseURL: URL, token: string) {
+    if (!baseURL.pathname.endsWith("/")) {
+      throw new Error("Metric API base URL must end with a slash");
     }
+    this.baseURL = new URL(baseURL);
+    this.token = token;
+  }
 
-    let samples = try await healthStore.querySamples(type: type, start: startDate, end: endDate)
-    return ToolResult(text: samples.formatted())
-}
+  private async request(path: string, query?: Record<string, string>): Promise<unknown> {
+    const url = new URL(path, this.baseURL);
+    for (const [key, value] of Object.entries(query ?? {})) {
+      url.searchParams.set(key, value);
+    }
+    const response = await fetch(url, {
+      headers: { Authorization: `Bearer ${this.token}` },
+      redirect: "error",
+      signal: AbortSignal.timeout(5000),
+    });
+    if (!response.ok) throw new Error(`Metric API returned ${response.status}`);
+    return response.json();
+  }
 
-// 3. Context injection: Tell agent what's available in system prompt
-func buildSystemPrompt() -> String {
-    let availableTypes = healthService.getAuthorizedTypes()
+  async listTypes(): Promise<MetricType[]> {
+    const body = await this.request("types");
+    if (!Array.isArray(body)) throw new Error("Invalid metric inventory");
+    return body.map(item => {
+      if (typeof item !== "object" || item === null ||
+          typeof item.name !== "string" || typeof item.readable !== "boolean" ||
+          typeof item.writable !== "boolean") {
+        throw new Error("Invalid metric capability");
+      }
+      return { name: item.name, readable: item.readable, writable: item.writable };
+    });
+  }
 
-    return """
-    ## Available Health Data
+  async read(typeName: string, start: string, end: string): Promise<unknown> {
+    const types = await this.listTypes();
+    if (!types.some(type => type.name === typeName && type.readable)) {
+      throw new Error("Metric type is unavailable or not authorized");
+    }
+    return this.request("samples", { type: typeName, start, end });
+  }
 
-    You have access to these health metrics:
-    \(availableTypes.map { "- \($0)" }.joined(separator: "\n"))
-
-    Use read_health_data with any type above. For new types not listed,
-    use list_health_types to discover what's available.
-    """
+  async context(): Promise<string> {
+    const types = await this.listTypes();
+    return JSON.stringify({ availableMetricTypes: types });
+  }
 }
 ```
+
+This example specifies a service contract: `GET types` returns capability objects, and `GET samples` validates the supplied type and time range against the authenticated caller's grants. Implement those endpoints in the existing PHP, Python, or TypeScript service. The client check improves diagnostics; the server must independently enforce grants. Preserve returned inventory as labeled app data, not interpolated developer instructions. Add a primitive write endpoint only for discovered writable capabilities and the caller's actual write authority.
 
 **Benefits:**
 - Agent can use any API capability, including ones added after your code shipped
 - API is the validator, not your enum definition
 - Smaller tool surface (2-3 tools vs N tools)
 - Agent naturally discovers capabilities by asking
-- Works with any API that has introspection (HealthKit, GraphQL, OpenAPI)
+- Works with APIs that actually expose authorized metadata or introspection
 </principle>
 
 <principle name="crud-completeness">
@@ -483,14 +485,16 @@ If any operation is missing, users will eventually ask for it and the agent will
 <principle name="tool-annotations">
 ## Tool Annotations
 
-Every tool must declare its behavioral hints so clients can make safe decisions without reading implementation:
+Declare behavioral hints to describe the tool's claimed semantics:
 
 | Annotation | Values | Purpose |
 |-----------|--------|---------|
-| `readOnlyHint` | `true`/`false` | Tool does not modify state. Clients can auto-approve. |
+| `readOnlyHint` | `true`/`false` | Claims that the tool does not modify state. |
 | `destructiveHint` | `true`/`false` | Tool may irreversibly delete or overwrite data. |
-| `idempotentHint` | `true`/`false` | Calling twice with same args produces same result. |
+| `idempotentHint` | `true`/`false` | Repeated calls with the same arguments have no additional environmental effect; responses may differ. |
 | `openWorldHint` | `true`/`false` | Tool interacts with external entities beyond the server's control. |
+
+Treat annotations as untrusted unless the server is trusted, as required by the [MCP tools specification](https://modelcontextprotocol.io/specification/2025-11-25/server/tools#tool). Neither an annotation nor a read-like tool name grants authority. Permit automatic approval only under operator policy for a trusted server whose verified behavior fits the approved scope. Recheck that scope when implementations or tool inventories change; wildcard approvals include future matching tools.
 
 ```typescript
 tool("delete_item", "Delete an item by key", {
@@ -527,6 +531,50 @@ return {
 **Pagination contract:** List endpoints must return `has_more`, `next_offset`, and `total_count`. Default page size 20-50 items. Never load all results into memory.
 </principle>
 
+<principle name="output-data-minimization">
+## Tool Output Carries Classification, Not Payload
+
+Tool output is model input: whatever a tool returns lands in the context window, in transcripts, and in whatever the agent writes next. Two cases leak by default.
+
+**Caught exceptions.** A caught exception's message must not be returned to the model as tool output. Raw exception text routinely carries credentials from a connection string, local filesystem paths, the request payload that triggered the failure, and upstream response bodies. Log the full detail server-side, and return a fixed, generic tool-facing failure message plus a correlation identifier the operator can use to find the log entry. The recovery hint from the Actionable Errors principle still applies; the tool author writes it, and it is never copied from the exception. The test is origin, not syntax: an exception the tool's own code raised, whose message the tool author wrote from values the tool itself computed (a typed `ValidationError` carrying a rejected field name, a row count, a configured limit), is already the Actionable Errors shape and may be returned as-is. Interpolation is not the line; provenance is. Anything raised outside the tool's own code (a library, driver, filesystem, or upstream response), and any message that splices in a value the tool received rather than derived (a connection string, a resolved path, a request payload, an upstream response body), takes the generic message plus correlation identifier.
+
+```typescript
+} catch (err) {
+  const correlationId = randomUUID();
+  logger.error({ correlationId, err }, "read_item failed");
+  return {
+    text: `read_item failed (ref ${correlationId}). Retry, or give the reference to the operator.`,
+    isError: true,
+  };
+}
+```
+
+**Detection tools.** A tool whose job is detection (a secret scanner, a PII sweep, a credential audit) must discard the raw matched text and every capture group at detection time and forward only classification metadata: rule identifier, rule description, path, line, confidence. A reporting tool that carries the matched secret "for context" is itself a re-leak vector, and the output schema should have no field capable of holding the raw match; a `snippet` or `match` string field is the defect regardless of what the implementation currently puts in it.
+
+```json
+{ "rule": "aws-access-key-id", "description": "AWS access key ID",
+  "path": "config/prod.env", "line": 12, "confidence": "high" }
+```
+</principle>
+
+<principle name="bounded-scan-incompleteness">
+## Bounded Scans Report Incompleteness
+
+A lookup or search tool that scans a bounded or paginated set can find a match and still not know whether it is unique, or find nothing and still not know whether the item is absent. Whenever the scan stopped at a size or count cap, or skipped unreadable or malformed records, return an explicit `incomplete` signal (a status field plus the reason and how far the scan got) distinct from `not_found` and from a confirmed unique match. A tool that collapses "scan truncated" into "not found" produces false negatives, and one that reports "unique" from a partial scan produces false positives; the agent then acts on both as facts. Callers that need absence or uniqueness reject `incomplete` and narrow the query or raise the cap rather than treating it as a pass.
+
+```json
+{ "status": "incomplete", "matches": [{ "id": "exp_41" }],
+  "scanned": 500, "cap": 500, "unreadable": 2,
+  "hint": "narrow by dateRange or continue with next_offset=500" }
+```
+</principle>
+
+<principle name="live-action-opt-in">
+## Live Actions Need an Opt-In Beyond Credentials
+
+Credential presence is necessary but not sufficient authorization for a tool that spends money, sends a message, submits, uploads, or otherwise acts on an external system. Gate the live path behind a separate explicit opt-in (an environment variable such as `ALLOW_LIVE=1` or a `--live` flag) that the operator sets only for the authorized run, so a configured environment does not make every invocation a real transaction. Ship a credential-free dry-run that exercises the full pipeline (validation, request construction, response handling) and returns placeholder output labelled as such, not a no-op that skips the code the live path depends on.
+</principle>
+
 <principle name="transport-selection">
 ## Transport Selection
 
@@ -534,9 +582,9 @@ return {
 |-----------|------------|
 | **stdio** | Local/single-client tools, CLI integrations, same-machine only |
 | **Streamable HTTP** | Remote/multi-client, production deployments, cross-network |
-| **SSE** | Deprecated -- avoid for new servers |
+| **SSE** | Deprecated; avoid for new servers |
 
-For local HTTP servers, bind to `127.0.0.1` (not `0.0.0.0`) and validate the `Origin` header to prevent DNS rebinding attacks.
+For local HTTP servers, bind to loopback and validate allowed origins. Also validate parsed `Host` or HTTP authority against the names and ports actually served, even when `Origin` is absent. A local allowlist typically uses `localhost`, `127.0.0.1`, or `[::1]` with the configured port. Reject missing, malformed, or unlisted authority values; do not accept an arbitrary domain because it resolves to loopback. For a reverse proxy, explicitly configure the served names and trust forwarded authority only from that proxy. Test an allowed local request and a foreign Host with no Origin, as well as an invalid Origin. The [MCP transport specification](https://modelcontextprotocol.io/specification/2025-11-25/basic/transports#security-warning) requires Origin validation; the [Python SDK transport checks](https://github.com/modelcontextprotocol/python-sdk/blob/main/src/mcp/server/transport_security.py) demonstrate the separate Host check. Neither check replaces authentication.
 </principle>
 
 <principle name="tool-naming-multi-server">
@@ -550,13 +598,13 @@ When multiple MCP servers coexist, prefix tool names with the service: `slack_se
 
 Do not ship an MCP server without a quality gate. Build a 10-question evaluation set before the server is merged:
 
-- **10 human-readable Q/A pairs** -- each question is a realistic user ask (`"How many commits did Alice land on the payments module in Q3 2025?"`), each answer is a single string-comparable value (`"27"`, `"2024-08-14"`, `"kieran@example.com"`).
+- **10 human-readable Q/A pairs**: each question is a realistic user ask (`"How many commits did Alice land on the payments module in Q3 2025?"`), each answer is a single string-comparable value (`"27"`, `"2024-08-14"`, `"kieran@example.com"`).
 - **Multi-hop**: each question requires calling 2-3 tools in sequence (list → filter → aggregate). Single-tool questions don't stress the capability graph.
 - **Read-only**: questions never mutate state. Every eval run must be reproducible.
 - **Closed / historical data**: answers derive from data that doesn't change over time (a closed quarter, an archived project, a committed git range). Live data makes answers drift and the eval becomes noise.
 - **Dozens of invocations per run**: the full eval should fire 20-40 tool calls. Servers that look fine on a single call often break on the 15th (rate limits, pagination edge cases, state pollution).
 
-Run the eval in CI. Scoring is binary per question: exact string match or fail. Pass threshold: 9/10. Investigate any drop from a prior run -- eval regressions usually indicate a tool schema change broke client inference.
+Run the eval in CI. Scoring is binary per question: exact string match or fail. Pass threshold: 9/10. Investigate any drop from a prior run; eval regressions usually indicate a tool schema change broke client inference.
 
 **What the eval catches that unit tests don't:**
 - Vague tool descriptions that cause the agent to call the wrong tool
@@ -577,10 +625,16 @@ The eval is the single best proxy for "does a real agent successfully use this s
 - [ ] CRUD operations are separate tools (not one mega-tool)
 - [ ] No business logic in tool implementations
 - [ ] Error states clearly communicated via `isError`
-- [ ] Descriptions explain what the tool does, not when to use it
+- [ ] Descriptions state capability and the boundary against sibling tools, never workflow context (see Writing the description)
+- [ ] Descriptions carry no worked examples, numbered protocols, `CRITICAL:`-style boosters, or cross-tool `ALWAYS`/`NEVER` scolding
+- [ ] Descriptions pass the machine-parsed-text rules: one directive per sentence, simple tenses, noun stacks capped at three, no dropped referents
 - [ ] Tool annotations set (`readOnlyHint`, `destructiveHint`, `idempotentHint`, `openWorldHint`)
 - [ ] Error messages include recovery suggestions, not just failure descriptions
 - [ ] List endpoints paginate with `has_more`, `next_offset`, `total_count`
+- [ ] Bounded or paginated lookups return `incomplete` (distinct from not-found and unique) when a cap or unreadable records cut the scan short
+- [ ] Money-spending or live-external-effect tools require an explicit opt-in separate from credentials and ship a credential-free, labelled dry-run
+- [ ] Caught exceptions raised outside the tool's own code, or splicing in a value the tool received rather than derived, return a fixed generic message plus a correlation identifier; the raw exception text goes to the server log only. The tool's own validation errors, written by the author from values the tool computed, pass through as-is
+- [ ] Detection tools (secret, PII, credential scanners) emit rule identifier, description, path, line, and confidence; the output schema has no field that can hold the raw match
 - [ ] Multi-server tool names use service prefix (`service_action_resource`)
 - [ ] 10 Q/A eval pairs defined before merge (read-only, multi-hop, closed-data); eval passes ≥ 9/10 in CI on every PR; regressions investigated before shipping. See the Evaluation principle above.
 

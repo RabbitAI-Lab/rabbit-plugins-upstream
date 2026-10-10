@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/slack-api",
   "slug": "slack-api",
   "ownerHandle": null,
-  "version": "1.0.11",
-  "updatedAt": 1782600465114,
-  "contentHash": "54d9e6a71a6fa4832094c12d7e1c4d45f30fc9debe5f855549c98ea2ee094a55",
-  "fetchedAt": "2026-07-26T18:22:53.684Z"
+  "version": "1.2.10",
+  "updatedAt": 1790940112044,
+  "contentHash": "ba31216c2726ce2986b1d91b9588d820efdd0888c9210d550c809da6410ff21b",
+  "fetchedAt": "2026-10-10T14:09:22.559Z"
 }

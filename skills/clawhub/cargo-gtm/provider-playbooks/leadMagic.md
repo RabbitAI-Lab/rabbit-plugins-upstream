@@ -20,7 +20,7 @@ Mid-tier email finder whose hits come **pre-annotated**: `findEmail` (0.5) retur
 - ✅ **Chain rung at the 0.5 tier** — interchangeable with `hunter.findEmail` / `findyMail.findEmail`; run it on the rows the earlier rung missed ([`../references/alternatives.md`](../references/alternatives.md)).
 - ✅ **MX-aware triage** — `mx_provider`, `mx_security_gateway`, and `has_mx` in the hit payload help flag risky domains before paid verification.
 - ✅ **Firmographics for free on hits** — company name, industry, size, founded, location, and LinkedIn URL ride along with each found email; useful when coalescing chain results.
-- ✅ **Email → LinkedIn URL** — `enrichProfile` de-anonymizes an email-only row when `FullEnrich.reverseEmailLookup` (2) missed; set `isPersonal: true` for personal addresses.
+- ✅ **Email → LinkedIn URL** — `enrichProfile` de-anonymizes an email-only row when `FullEnrich.reverseEmailLookup` (1) missed; set `isPersonal: true` for personal addresses.
 
 ## Patterns
 
@@ -29,7 +29,7 @@ Mid-tier email finder whose hits come **pre-annotated**: `findEmail` (0.5) retur
 ```bash
 # Run on the rows the earlier rung missed
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"findEmail","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"findEmail"}' \
   --records '[
     {"firstName":"Alice","lastName":"Smith","domain":"acme.com"},
     {"firstName":"Bob","lastName":"Jones","companyName":"Globex"}
@@ -43,7 +43,7 @@ cargo-ai orchestration action execute-batch \
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"enrichProfile","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"enrichProfile"}' \
   --records '[{"email":"alice@acme.com"},{"email":"bob.jones@gmail.com","isPersonal":true}]' \
   --wait-until-finished
 ```
@@ -54,7 +54,7 @@ Returns `profile_url`. Validate the URL with `linkedin.enrichProfile` before tru
 
 - **`status` is the provider grading its own homework.** Whatever `findEmail.status` claims, the hit still goes through `waterfall.verifyEmail` (0.1) before any sequencer — verification hard rules in [`../references/waterfall-strategy.md`](../references/waterfall-strategy.md).
 - **`mx_security_gateway: true` is a deliverability warning**, not a reason to auto-drop — route those rows to REVIEW rather than silently discarding (verdict semantics in [`../references/contact-accuracy.md`](../references/contact-accuracy.md)).
-- **`enrichProfile` at 3 credits is pricier than `FullEnrich.reverseEmailLookup` (2)** for the same email → LinkedIn job. Use it as the fallback, not the opener.
+- **`enrichProfile` at 3 credits is pricier than `FullEnrich.reverseEmailLookup` (1)** for the same email → LinkedIn job. Use it as the fallback, not the opener.
 
 ## Anti-patterns
 
@@ -68,6 +68,13 @@ Returns `profile_url`. Validate the URL with `linkedin.enrichProfile` before tru
 - Every hit flows to the VERIFY stage: free pre-cull → `waterfall.verifyEmail` (0.1). leadMagic has **no verify action of its own**.
 - `enrichProfile` — LinkedIn-URL-resolution fallback after `FullEnrich.reverseEmailLookup`.
 
+## Recurring use
+
+No scheduled fit — **per-record enrichment only**; found emails and profile URLs are stable, so a scheduled re-pull just re-bills unchanged rows.
+
+- **In-play gate:** as a chain rung, run `findEmail` (0.5) only where the email column is still empty *and* the earlier rung already missed; gate `enrichProfile` (3) on an empty LinkedIn-URL column.
+- **Right trigger:** the recurring shape here is a play fired by rows *entering* the segment (new prospects without an email), not a cron sweep over the whole model.
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.** Note the capitalization: `leadMagic` (camel-case with capital `M`).
+`{"kind":"connector","integrationSlug":"leadMagic","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.** Note the capitalization: `leadMagic` (camel-case with capital `M`).

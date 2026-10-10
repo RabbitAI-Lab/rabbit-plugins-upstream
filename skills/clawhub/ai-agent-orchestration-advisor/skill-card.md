@@ -1,40 +1,57 @@
-## Description: <br>
-AI-powered advisor that helps developers compare multi-agent frameworks, design orchestration architectures, and generate Python starter code for agent workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers compare multi-agent frameworks and design architectures, starter code, evaluations, and guardrails without installing, running, or deploying frameworks.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, AI engineers, data scientists, and product managers use this skill to select an agent orchestration framework, plan multi-agent architectures, and draft implementation scaffolds for agent workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Framework, benchmark, and cost claims may become stale in a rapidly changing agent ecosystem. <br>
-Mitigation: Verify recommendations and numeric claims against current official framework and provider documentation before making architecture or spending decisions. <br>
-Risk: Broad agent-framework discussions may trigger the advisor even when the user has not provided enough constraints for a reliable recommendation. <br>
-Mitigation: Confirm the use case, hosting constraints, state requirements, team experience, and review gates before applying generated architecture or code. <br>
+## Use Case:
 
+Developers and AI engineers use this skill to select multi-agent frameworks and plan agent topology, starter code, evaluation, guardrails, and costs. Product and data teams can use its trade-off analysis to scope production workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/ai-agent-orchestration-advisor) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Markdown with comparison tables, architecture recommendations, checklists, and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include framework trade-off analysis, starter code, production checklist items, and human review checkpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Example integrations may send business data to external search or third-party services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review each proposed tool and use approved internal services where data must remain private.
+
+Risk: Adapting starter code without safeguards may expose secrets or sensitive content in logs.
+
+Mitigation: Keep secrets in environment variables, minimize input data, and redact logs before use.
+
+Risk: Framework recommendations and generated code may be unsuitable for a particular production environment.
+
+Mitigation: Human-review recommendations and examples, then test them against the team's security, evaluation, and deployment requirements.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/ai-agent-orchestration-advisor)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with comparison tables, architecture diagrams, and Python code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory output only; example code requires review and adaptation before execution.]
+
+## Skill Version(s):
+
+3.0.2 (source: SKILL.md frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

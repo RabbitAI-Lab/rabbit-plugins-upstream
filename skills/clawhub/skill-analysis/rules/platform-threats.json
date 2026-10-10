@@ -1,0 +1,158 @@
+{
+  "family": "platform-threats",
+  "version": 1,
+  "rules": [
+    {
+      "id": "plat-00",
+      "re": "\\bicacls\\b",
+      "label": "Windows ACL 改写 (icacls)",
+      "sev": "P1",
+      "why": "修改文件/目录访问控制列表，可能用于提权或锁定文件。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-01",
+      "re": "\\bTakeOwnership\\b",
+      "label": "Windows 所有权夺取 (TakeOwnership)",
+      "sev": "P1",
+      "why": "夺取对象所有权，可绕过原有权限限制。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-02",
+      "re": "Set-ExecutionPolicy\\b",
+      "label": "PowerShell 执行策略修改",
+      "sev": "P1",
+      "why": "放宽脚本执行限制，可能绕过系统安全护栏。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-03",
+      "re": "\\bmsiexec\\b",
+      "label": "Windows 安装包执行 (msiexec)",
+      "sev": "P2",
+      "why": "静默安装/卸载软件，可能开辟未受监控的安装路径。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-04",
+      "re": "\\battrib\\b[^\\n]{0,500}\\+[rhs]",
+      "label": "Windows 文件隐藏属性 (attrib +r/+s/+h)",
+      "sev": "P1",
+      "why": "将文件设为只读/系统/隐藏，可能用于藏匿或防删。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-05",
+      "re": "chmod\\s+000\\b",
+      "label": "文件权限清零 (chmod 000，拒绝访问)",
+      "sev": "P1",
+      "why": "使文件无人可读写执行，造成拒绝服务。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-06",
+      "re": "chattr\\s+\\+i\\b",
+      "label": "文件不可变位 (chattr +i，防删除/篡改)",
+      "sev": "P1",
+      "why": "置不可变标志后连 root 也无法删除，可用于驻留。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-07",
+      "re": "powershell[^\\n]{0,500}-ExecutionPolicy\\s+Bypass",
+      "label": "PowerShell 绕过执行策略",
+      "sev": "P1",
+      "why": "绕过 PowerShell 执行策略运行脚本，常见于恶意载荷。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-08",
+      "re": "-WindowStyle\\s+Hidden|-w\\s+hidden",
+      "label": "隐藏窗口执行",
+      "sev": "P1",
+      "why": "以隐藏窗口方式运行，规避用户察觉。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-09",
+      "re": "\\bwscript\\b|\\bcscript\\b",
+      "label": "Windows 脚本宿主 (wscript/cscript)",
+      "sev": "P2",
+      "why": "通过 Windows 脚本宿主执行脚本，常用于载荷投递。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-10",
+      "re": "taskkill\\s+/f|Stop-Service\\b|systemctl\\s+(?:disable|stop)|kill\\s+-9\\b",
+      "label": "终止服务/进程",
+      "sev": "P2",
+      "why": "停止安全软件或服务，可能破坏主机防护。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-11",
+      "re": "0\\.0\\.0\\.0\\b",
+      "label": "监听绑定到 0.0.0.0（对所有网络接口暴露）",
+      "sev": "P2",
+      "why": "服务绑定到全网卡，可能被局域网或公网直接访问。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-12",
+      "re": "--disable-web-security\\b",
+      "label": "浏览器禁用 Web 安全（--disable-web-security）",
+      "sev": "P0",
+      "why": "强制禁用浏览器同源策略等核心防御，可跨域窃取数据、读取 Cookie、执行任意脚本（启明星辰恶意 Skill 九类之一）。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-13",
+      "re": "--allow-running-insecure-content\\b",
+      "label": "浏览器允许运行不安全内容",
+      "sev": "P1",
+      "why": "允许 HTTPS 页面加载/执行混合不安全内容，破坏传输安全边界。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-14",
+      "re": "--no-sandbox\\b",
+      "label": "浏览器/进程禁用沙箱（--no-sandbox）",
+      "sev": "P1",
+      "why": "禁用进程级沙箱隔离，使页面漏洞可直接攻击宿主系统。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-15",
+      "re": "--ignore-certificate-errors\\b|--ignore-ssl-errors\\b",
+      "label": "跳过证书校验（--ignore-certificate-errors）",
+      "sev": "P1",
+      "why": "忽略 TLS 证书错误，为中间人/恶意端点开放通道。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-16",
+      "re": "--allow-insecure-localhost\\b",
+      "label": "允许不安全 localhost",
+      "sev": "P2",
+      "why": "允许对本地回环地址的不安全内容/证书放行，可能被本机恶意页面利用。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-17",
+      "re": "--unsafely-treat-insecure-origin-as-secure\\b",
+      "label": "将不安全源视为安全源",
+      "sev": "P1",
+      "why": "强制把 HTTP 源当 HTTPS 处理，破坏安全上下文，常与凭据窃取配合。",
+      "flags": "I"
+    },
+    {
+      "id": "plat-18",
+      "re": "--disable-features=(?:WebSecurity|SafeBrowsing|BlinkGenPropertyTrees)|--disable-webgl\\b|--disable-notifications\\b|--disable-popup-blocking\\b",
+      "label": "浏览器禁用防护特性（WebSecurity/SafeBrowsing 等）",
+      "sev": "P2",
+      "why": "批量关闭浏览器防护特性，扩大可利用面。",
+      "flags": "I"
+    }
+  ]
+}

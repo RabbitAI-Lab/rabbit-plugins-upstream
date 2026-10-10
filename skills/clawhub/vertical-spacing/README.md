@@ -2,14 +2,16 @@
 
 **Compute vertical margin/padding/Auto Layout gap against a grid base — correctly, including vertical-trim.**
 
-Snaps spacing values to a grid base (8px, or 4px for denser UI), applies the proximity rule (elements above a heading get more room than elements below it), and corrects for vertical-trim's effect on optical spacing — a set `gap: 16px` reads as ~11px when the text inside has default (untrimmed) leading.
+Snaps spacing values to a grid base (8px, or 4px for denser UI), applies the proximity rule (elements above a heading get more room than elements below it), and accounts for vertical-trim's effect on optical spacing without assuming a universal pixel correction.
 
 ## What it does
 
 - Snaps every margin/padding/gap value to a clean multiple of the grid base; flags off-grid values found in existing input.
 - Applies the Gestalt proximity rule asymmetrically around headings (top spacing ≫ bottom spacing).
-- **Vertical-trim correction**: checks `textLeadingTrim` on any text layers inside the spacing context before giving a final value — if trim is off, the optical gap is smaller than the set value; recommends either compensating or turning trim on.
-- With Figma access: reads the selected Auto Layout frame's `layoutMode`, `itemSpacing`, and padding directly, plus child text nodes' `textLeadingTrim`, and can write corrected values back on explicit request.
+- Checks groups from the inside out: an internal gap must not exceed the gap around its group; reversed and ambiguous groupings are reported by meaning, not just by number.
+- **Vertical-trim correction**: checks `leadingTrim` on any text layers inside the spacing context before giving a final value — if trim is off, the optical gap is smaller than the set value; recommends either compensating or turning trim on.
+- With Figma access: reads the selected Auto Layout frame's `layoutMode`, `itemSpacing`, and padding directly, plus child text nodes' `leadingTrim`, and can write corrected values back on explicit request.
+- Reads first and asks only when a missing value changes the result; every write requires permission.
 
 ## When to use
 
@@ -40,4 +42,4 @@ MIT — see `LICENSE`. Author: **[Monika Zapisek](https://monikazapisek.com)**. 
 
 ---
 
-*Part of the [Design Engineering Playbook](https://github.com/monikazapisekstudio/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*
+*Part of the [Design Engineering Playbook](https://github.com/monikazapisek/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*

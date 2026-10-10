@@ -1,44 +1,63 @@
-## Description: <br>
-Structural code quality metrics, lattice verification, and refactor loops for agent-written code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluate and improve code with Topos for complexity reduction, structural security checks, and refactor verification.
 
-## Publisher: <br>
-[krv-labs](https://clawhub.ai/user/krv-labs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[krv-labs](https://clawhub.ai/user/krv-labs)
 
-## Use Case: <br>
-Developers and AI coding agents use this skill to assess local repositories, identify structural code quality issues, verify refactors, and optimize toward SILVER or GOLD lattice medals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installation uses an external install script and an npm package dependency. <br>
-Mitigation: Review the install script and npm package source before installation. <br>
-Risk: The tool reads local project code and git state and can write dependency graph artifacts. <br>
-Mitigation: Use it only on repositories that are acceptable for local analysis and review generated artifacts before committing them. <br>
-Risk: Topos scores are advisory structural signals rather than proof of functional correctness or full security assurance. <br>
-Mitigation: Run normal tests, linters, security tooling, and code review before accepting refactors. <br>
+## Use Case:
 
+Developers and coding agents use Topos to assess local code quality, identify structural issues, and check whether refactors improve code without sacrificing correctness.
 
-## Reference(s): <br>
-- [Topos documentation](https://docs.krv.ai/topos/) <br>
-- [Topos agent contract](https://docs.krv.ai/topos/agents.html) <br>
-- [ClawHub listing](https://clawhub.ai/krv-labs/skills/topos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, guidance] <br>
-**Output Format:** [CLI tables and ranked file lists, markdown reports, and MCP structured payloads with agent_contract fields.] <br>
-**Output Parameters:** [Medal verdict, pillar scores, ranked refactor targets, and assessment status.] <br>
-**Other Properties Related to Output:** [May write .gitnexus dependency graph artifacts when dependency graph generation is used; source edits are performed only if the agent acts on the guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 0.4.2) <br>
+Risk: The installation instructions pipe an unpinned remote script directly to bash.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before running it and prefer a pinned release or package-manager installation when available.
+
+Risk: Installing across all supported agent harnesses may change more configurations than intended.
+
+Mitigation: Avoid `topos install --all` unless registration across all supported harnesses is desired.
+
+Risk: Structural security scores may be mistaken for a full security audit.
+
+Mitigation: Treat scores as advisory and use dedicated security review for high-stakes code.
+
+Risk: Suggested structural refactors may change program behavior.
+
+Mitigation: Review changes and run relevant project tests or linters after each edit.
+
+## Reference(s):
+
+- [Topos documentation](https://docs.krv.ai/topos/)
+- [Topos agent guidance](https://docs.krv.ai/topos/agents.html)
+- [ClawHub skill listing](https://clawhub.ai/krv-labs/skills/topos)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Text or Markdown guidance with suggested commands and summarized assessment results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structural scores and refactor suggestions are advisory; verify behavior with project tests.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved ClawHub release; skill frontmatter says 0.9.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
