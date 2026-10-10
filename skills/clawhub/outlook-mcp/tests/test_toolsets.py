@@ -2,7 +2,7 @@
 
 import asyncio
 
-from mcp.server.fastmcp import FastMCP
+from mcp.server.mcpserver import MCPServer
 
 from outlook_mcp import toolsets
 
@@ -64,27 +64,38 @@ def test_select_multiple_groups():
 
 def test_read_tool_is_read_only():
     ann = toolsets.annotation_for("outlook_list_inbox")
-    assert ann.readOnlyHint is True
+    assert ann.read_only_hint is True
 
 
 def test_delete_tool_is_destructive():
     ann = toolsets.annotation_for("outlook_delete_message")
-    assert ann.readOnlyHint is False
-    assert ann.destructiveHint is True
+    assert ann.read_only_hint is False
+    assert ann.destructive_hint is True
 
 
-def test_send_tool_is_additive_write():
+def test_send_tool_is_destructive():
+    """Sending is irreversible and leaves the mailbox: not an "additive" write.
+
+    Clients read `destructiveHint=False` as safe to auto-approve among writes,
+    and an email cannot be unsent (see test_send_tools_are_marked_destructive).
+    """
     ann = toolsets.annotation_for("outlook_send_message")
-    assert ann.readOnlyHint is False
-    assert ann.destructiveHint is False
+    assert ann.read_only_hint is False
+    assert ann.destructive_hint is True
 
 
-# ── configure applied to a real FastMCP instance ──────────────────────
+def test_an_additive_write_is_not_destructive():
+    ann = toolsets.annotation_for("outlook_create_contact")
+    assert ann.read_only_hint is False
+    assert ann.destructive_hint is False
+
+
+# ── configure applied to a real MCPServer instance ──────────────────────
 
 
 def _mini_server():
-    """A throwaway FastMCP with a few real-named tools from distinct groups."""
-    m = FastMCP("mini")
+    """A throwaway MCPServer with a few real-named tools from distinct groups."""
+    m = MCPServer("mini")
 
     @m.tool(name="outlook_list_inbox")
     def _li() -> str:  # mail, read-only
@@ -117,7 +128,7 @@ def test_configure_gates_and_annotates():
     assert names == {"outlook_create_event", "outlook_auth_status"}
     # surviving read-only annotation applied
     ann = {t.name: t.annotations for t in asyncio.run(m.list_tools())}
-    assert ann["outlook_auth_status"].readOnlyHint is True
+    assert ann["outlook_auth_status"].read_only_hint is True
 
 
 def test_configure_none_keeps_all_but_still_annotates():
@@ -125,7 +136,7 @@ def test_configure_none_keeps_all_but_still_annotates():
     toolsets.configure(m, None)
     tools = {t.name: t for t in asyncio.run(m.list_tools())}
     assert len(tools) == 4  # nothing gated
-    assert tools["outlook_delete_message"].annotations.destructiveHint is True
+    assert tools["outlook_delete_message"].annotations.destructive_hint is True
 
 
 # ── guardrail: every live tool is classified ──────────────────────────

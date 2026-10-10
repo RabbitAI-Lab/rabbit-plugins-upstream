@@ -1,0 +1,132 @@
+{
+  "family": "ransomware",
+  "version": 1,
+  "description": "v3.2.8 — 勒索病毒（Ransomware）专项检测规则。覆盖勒索攻击链各阶段的静态特征：赎金勒索信话术、文件批量加密遍历（AES/RSA/ChaCha20/Fernet）、删除卷影副本/备份、终止安全与备份服务、已知勒索家族名与加密文件后缀、SSH 弱口令横向扫描、进程伪装、ESXi 虚拟机加密、双重勒索（数据窃取+加密）。勒索行为一旦命中即为最高危（P0/P1），报告会给出高危提示。",
+  "sources": [
+    "国家计算机病毒应急处理中心「Sorry」勒索病毒预警（2026-08-10，CVE-2026-41940）",
+    "FBI-CISA #StopRansomware 联合公告（Play/Akira/Medusa）",
+    "CISA AA25-071A（Medusa）",
+    "Sophos State of Ransomware 2025",
+    "MITRE ATT&CK 勒索软件 TTPs"
+  ],
+  "rules": [
+    {
+      "id": "rw-001",
+      "re": "(?i)your\\s+files\\s+(?:have\\s+been|are|will\\s+be)\\s+encrypted|ransom\\s*note|赎金|勒索信|支付.{0,10}(?:比特币|赎金|BTC)|TOR\\s+Browser|\\bdecrypt\\s+(?:your\\s+)?files\\b|\\bTOX\\s+ID\\b|\\.onion\\b|contact\\s+us\\s+.{0,30}(?:decrypt|unlock)",
+      "label": "赎金勒索信 / 赎金话术（勒索病毒特征）",
+      "sev": "P1",
+      "why": "检出勒索信或赎金话术特征（your files have been encrypted / 赎金 / TOR Browser / TOX ID / .onion / bitcoin 支付 / contact us to decrypt）。勒索病毒加密文件后会在各目录投放勒索信，要求通过加密通信工具联系并支付赎金。若出现在 Skill 脚本/文档中，视为高置信勒索特征。"
+    },
+    {
+      "id": "rw-002",
+      "re": "(?i)Crypto\\.Cipher\\.AES|AES\\.new\\s*\\(|from\\s+Crypto\\.Cipher\\s+import\\s+AES|AES\\.MODE_(?:CBC|GCM|CTR|EAX)",
+      "label": "AES 文件加密（勒索常见加密算法）",
+      "sev": "P2",
+      "why": "检出 AES 加密调用（Crypto.Cipher.AES / AES.new / AES.MODE_CBC 等）。AES 是勒索病毒最常用的文件加密算法（如 Sorry 家族 AES 加密文件 + RSA 加密密钥）。AES 本身是合法密码学，但若配合文件遍历加密/追加后缀/勒索信，即为勒索特征，需结合上下文判断。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-003",
+      "re": "(?i)RSA\\.(?:import_key|generate|construct)\\s*\\(|PKCS1_OAEP|from\\s+Crypto\\.PublicKey\\s+import\\s+RSA",
+      "label": "RSA 非对称加密（勒索密钥封装）",
+      "sev": "P2",
+      "why": "检出 RSA 加密调用。勒索病毒常用 AES 加密文件、再用 RSA 加密 AES 密钥（双重加密闭环），使受害者无法自行解密。RSA 本身合法，但组合 AES 文件加密 + 勒索信即为典型勒索特征。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-004",
+      "re": "(?i)vssadmin(\\.exe)?\\s+delete\\s+shadows|wbadmin\\s+delete\\s+catalog|bcdedit\\s*/set\\s+[^\\n]{0,500}(?:recoveryenabled|bootstatuspolicy)",
+      "label": "删除卷影副本 / 破坏系统恢复（勒索确认前兆）",
+      "sev": "P0",
+      "why": "检出删除 Windows 卷影副本（vssadmin delete shadows）或破坏系统恢复（wbadmin delete catalog / bcdedit）的命令。删除卷影副本是勒索病毒加密前阻断数据恢复的标准前置动作，FBI-CISA 将其视为勒索攻击的高置信确认信号。一旦命中即视为勒索前兆（P0）。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-005",
+      "re": "(?i)(?:sc|net)\\s+stop\\s+[^\\n]{0,60}?(?:backup|sql|antivirus|\\bav\\b|defender|vss|acronis|veeam)|systemctl\\s+stop\\s+[^\\n]{0,60}?(?:mysql|postgres|mongodb|redis|backup|antivirus|postfix)|taskkill[^\\n]{0,60}?(?:\\bav\\b|defender|security)",
+      "label": "终止安全/备份/数据库服务（勒索扫清障碍）",
+      "sev": "P1",
+      "why": "检出终止安全防护、备份或数据库服务的命令（sc stop / net stop / systemctl stop / taskkill 针对 AV 进程）。勒索病毒加密前会先终止数据库、杀毒、备份服务以扫清障碍、阻断数据恢复。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-006",
+      "re": "(?i)\\b(?:LockBit|Lockbit5|Akira|Medusa|Qilin|BlackCat|ALPHV|Cl0p|Black\\s*Basta|DragonForce|Interlock|WannaCry|Locky|CryptoLocker|Petya|NotPetya|Ryuk|Dharma|Phobos|Djvu|TellYouThePass|Mallox|RansomHub|8Base|EightBase|Cactus|Rhysida|BianLian|Hunters\\s*International|AvosLocker|Nokoyawa|Babuk|BlackMatter|REvil|Sodinokibi|NetWalker|DoppelPaymer|MountLocker|BlackByte|BlackSuit|DarkSide|Scattered\\s*Spider|SafePay|Lynx|Sinobi|Worldleaks|Karakurt|RansomHouse|Avaddon|Egregor|BadRabbit)\\b",
+      "label": "已知勒索病毒家族名（IOC 命中）",
+      "sev": "P1",
+      "why": "检出已知勒索病毒家族名（LockBit/Akira/Medusa/Qilin/BlackCat/Cl0p/WannaCry/TellYouThePass 等）。这些是勒索软件即服务（RaaS）或勒索家族标识，出现在 Skill 脚本/文档中高置信指向勒索行为或勒索情报。（注：Play/Sorry/Royal/Conti 等普通词家族靠后缀/勒索信规则覆盖，避免误报。）",
+      "flags": "I"
+    },
+    {
+      "id": "rw-007",
+      "re": "(?i)\\.(?:lockbit|lockbit5|akira|medusa|qilin|blackcat|clop|cl0p|locky|wannacry|cryptolocker|petya|notpetya|ryuk|conti|dharma|phobos|djvu|sorry|locked|encrypted|locked_lb4|qilin2026|akira2026|mallox|royal|8base|cactus|rhysida|bianlian|avos|avoslocker|babuk|blackmatter|revil|maze|netwalker|doppelpaymer|mountlocker|hive|blackbyte|blacksuit|darkside|ransomhub|fog|karakurt|nokoyawa|badrabbit)\\b",
+      "label": "已知勒索加密文件后缀（IOC 命中）",
+      "sev": "P1",
+      "why": "检出已知勒索加密文件后缀（.lockbit/.akira/.medusa/.sorry/.locked/.encrypted 等）。勒索病毒加密文件后会追加专属后缀标识受害文件，是勒索攻击的直接 IOC。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-008",
+      "re": "(?i)\\b(?:22|2222|22222)\\b.{0,40}(?:ssh|暴力|爆破|弱口令|brute)|ssh.{0,40}(?:暴力|爆破|弱口令|brute)|paramiko.{0,80}(?:connect|SSHClient)",
+      "label": "SSH 弱口令横向扫描（勒索内网扩散）",
+      "sev": "P1",
+      "why": "检出 SSH 端口（22/2222/22222）弱口令爆破/横向扫描特征。勒索病毒（如 Sorry 家族）加密后通过 SSH 弱口令向其他主机横向传播，造成内网大面积感染。"
+    },
+    {
+      "id": "rw-009",
+      "re": "(?i)(?:^|[\\/\"'\\s])sshd(?:$|[\\/\"'\\s.])",
+      "label": "进程伪装（sshd 文件名，勒索驻留规避）",
+      "sev": "P2",
+      "why": "检出伪装成 sshd 进程的文件名。勒索病毒（如 Sorry 家族）落地后伪装成常见 sshd 进程以规避检测。出现在 Skill 脚本/文件命名中提示可疑驻留行为。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-010",
+      "re": "(?i)ChaCha20|chacha20_poly1305|from\\s+Crypto\\.Cipher\\s+import\\s+ChaCha20",
+      "label": "ChaCha20 加密（Akira 等勒索算法）",
+      "sev": "P2",
+      "why": "检出 ChaCha20 加密调用。Akira 勒索家族使用 ChaCha20 加密文件 + RSA 封装密钥。ChaCha20 本身合法，但组合文件遍历加密即为勒索特征。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-011",
+      "re": "(?i)cryptography\\.fernet|from\\s+cryptography\\.fernet\\s+import\\s+Fernet|Fernet\\(",
+      "label": "Fernet 对称加密（勒索/窃密常见）",
+      "sev": "P2",
+      "why": "检出 cryptography.fernet 加密调用。Fernet 是 Python 常用的对称加密，勒索脚本与数据窃取脚本常见。需结合加密目标（是否遍历加密文件）判断。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-012",
+      "re": "(?i)vim-cmd\\s+vmsvc/power\\.off|esxcli\\s+vm\\s+process\\s+kill|/vmfs/volumes/|vmkfstools\\s+-c",
+      "label": "ESXi 虚拟机加密（勒索虚拟化层攻击）",
+      "sev": "P1",
+      "why": "检出 ESXi/vSphere 虚拟机加密特征（vim-cmd 关机虚拟机 / esxcli 杀进程 / vmfs 卷 / vmkfstools）。Akira 等勒索家族有专门 ESXi 加密器，加密 .vmdk 一次性瘫痪大量虚拟机。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-013",
+      "re": "(?i)\\brclone\\b|rclone\\.exe",
+      "label": "rclone 数据外传（双重勒索数据窃取）",
+      "sev": "P2",
+      "why": "检出 rclone 工具调用。Akira/Medusa 等勒索团伙在加密前用 rclone 把数据外传到攻击者控制的云存储（AWS S3/Mega/Dropbox），实施「窃取+加密」双重勒索。rclone 不是标准企业工具，出现即高度可疑。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-014",
+      "re": "(?i)Set-MpPreference\\s+-DisableRealtimeMonitoring|DisableRealtimeMonitoring\\s*\\$?true|powershell[^\\n]{0,500}Set-MpPreference",
+      "label": "禁用杀软实时防护（勒索扫清障碍）",
+      "sev": "P1",
+      "why": "检出通过 PowerShell 禁用 Windows Defender 实时防护（Set-MpPreference -DisableRealtimeMonitoring）。Akira 等勒索家族加密前会禁用端侧防护，是高置信的勒索/恶意前置动作。",
+      "flags": "I"
+    },
+    {
+      "id": "rw-015",
+      "re": "(?i)leak\\s+site|data\\s+leak|double\\s+extortion|双重勒索|泄露.{0,10}(?:站点|网站|平台)|publish.{0,20}(?:victim|your\\s+data)|we\\s+will\\s+(?:publish|leak|release)\\s+your\\s+data",
+      "label": "双重勒索 / 数据泄露站点威胁（勒索升级手法）",
+      "sev": "P1",
+      "why": "检出双重勒索或数据泄露站点（DLS）威胁话术：勒索团伙除加密外，威胁若不支付赎金将把窃取数据发布到泄露站点（如 RansomHub/BlackCat/Cl0p 的 .onion 泄露站），部分还叠加 DDoS 三重勒索。检出「泄露数据 + 威胁公开」组合即视为勒索升级特征。"
+    }
+  ],
+  "context": "本规则族为勒索行为启发式检测：单个加密算法（AES/RSA/ChaCha20）本身是合法密码学，只有组合「文件遍历加密 + 追加后缀 + 勒索信 + 删除卷影副本 + 终止服务」等多项特征时才构成高置信勒索判定。命中 P0（删除卷影副本）应直接视为勒索前兆；P1（勒索信/家族名/后缀/终止服务/SSH 扫描/ESXi/禁用杀软）需结合用途人工复核。对二进制（如 GO 编译的 ELF 勒索样本），静态文本规则无法穿透，需杀毒软件/沙箱动态分析兜底——本规则主要覆盖「以脚本/Skill 形态出现的勒索行为」。"
+}

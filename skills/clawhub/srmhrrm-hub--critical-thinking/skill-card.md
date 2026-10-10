@@ -1,40 +1,54 @@
-## Description: <br>
-Install a durable Challenge the Direction rule into an agent's AGENTS.md after explicit user approval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install a durable Challenge the Direction rule into an agent's AGENTS.md after explicit user approval.
 
-## Publisher: <br>
-[srmhrrm-hub](https://clawhub.ai/user/srmhrrm-hub) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[srmhrrm-hub](https://clawhub.ai/user/srmhrrm-hub)
 
-## Use Case: <br>
-Developers and agent operators use this skill to install a persistent decision-quality rule in a workspace AGENTS.md so future agent sessions challenge weak premises before consequential work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally changes a workspace AGENTS.md instruction file, which can affect later sessions that load that file. <br>
-Mitigation: Review the exact target path and rule block before approving installation, and verify that the rule appears exactly once after editing. <br>
-Risk: Installing the rule in the wrong instruction file may fail to affect the intended workspace or may influence an unintended workspace. <br>
-Mitigation: Confirm the active AGENTS.md path before editing and rely on the skill's requirement to stop when the target or authority hierarchy is unclear. <br>
+## Use Case:
 
+Developers and agent operators use this skill to add a durable decision-quality rule to a workspace AGENTS.md so the agent challenges weak premises before consequential work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/srmhrrm-hub/skills/critical-thinking) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown rule block with concise installation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user approval before editing AGENTS.md; repeated use should be idempotent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: A persistent instruction change can alter agent behavior in the wrong workspace if the target AGENTS.md is misidentified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Show the exact target path before editing, require explicit user approval, and report that the rule applies only where that AGENTS.md is loaded.
+
+Risk: Repeated installation attempts could duplicate or conflict with existing decision-quality instructions.
+
+Mitigation: Check for an equivalent section first, preserve unrelated instructions, and re-read the file to verify the rule appears exactly once.
+
+## Reference(s):
+
+- [Critical Thinking on ClawHub](https://clawhub.ai/srmhrrm-hub/skills/critical-thinking)
+- [srmhrrm-hub Publisher Profile](https://clawhub.ai/user/srmhrrm-hub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Markdown instructions and status text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May edit the active workspace AGENTS.md only after explicit user approval.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

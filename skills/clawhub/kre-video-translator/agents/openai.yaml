@@ -1,0 +1,4 @@
+interface:
+  display_name: "Kre Video Translator"
+  short_description: "Translate local or URL media into subtitles or video"
+  default_prompt: "Use $kre-video-translator to translate this media through the production service, review the final subtitle JSON, then ask whether the user wants subtitle files or a burned-in video."

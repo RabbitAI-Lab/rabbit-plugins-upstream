@@ -1,0 +1,135 @@
+{
+  "family": "obfuscation",
+  "version": 1,
+  "description": "v2.6.0 — 针对加密/混淆/加固工具（如 skill-protector/omnicogg）的隐蔽载荷检测规则。静态分析无法检测所有深层次混淆（如运行时动态解密、VM 混淆、pyarmor 编译字节码），本规则族仅标记「已识别的混淆/加密迹象」，需结合动态分析做最终判定。",
+  "limitations": "静态检测的覆盖率上限：对 pyarmor/terser 高级混淆后的可执行字节码，只能通过签名/文件头/结构特征识别「该文件已被混淆」而无法还原其真实行为。建议配合沙箱动态执行或人工逆向。",
+  "rules": [
+    {
+      "id": "obf-001",
+      "re": "\\b__pyarmor__\\b|\\bpytransform\\b|^\\.pyarmor\\b|\\bpyarmor\\s+runtime\\b",
+      "label": "PyArmor 混淆签名（Python 脚本已经过商业级编译混淆）",
+      "sev": "P1",
+      "why": "PyArmor 是商业 Python 混淆器，可将源码编译为字节码并加密。静态分析无法穿透其保护层看到真实逻辑，该脚本的真实行为可能与表面不符。若文件同时缺乏合理使用混淆的商业理由，风险升级。"
+    },
+    {
+      "id": "obf-002",
+      "re": "\\b__sv_guard_dec__\\b|\\b__sv_guard_b__\\b|\\b__sv_guard_o__\\b|\\b__sv_guard_k__\\b",
+      "label": "内置字符串表加密（skill-protector 内置回退方案特征）",
+      "sev": "P1",
+      "why": "检测到 skill-protector 内置混淆引擎注入的 XOR 字符串表解密器（__sv_guard_dec__/__sv_guard_b__ 等），说明该脚本的字符串常量已被加密隐藏。这是本地离线混淆的典型特征，方案本身不强但会阻碍静态审计。"
+    },
+    {
+      "id": "obf-003",
+      "re": "\\b__import__\\s*\\(\\s*['\"](?:base64|builtins|codecs|io|marshal|types)['\"]\\s*\\)",
+      "label": "混淆式动态导入（通过 __import__ 隐藏真实依赖）",
+      "sev": "P1",
+      "why": "使用 __import__() 而非顶层 import 语句动态引入 base64/codecs/marshal 等模块是典型的反静态分析手法，用于隐藏脚本的真实依赖关系。若配合字符串表加密，说明脚本在刻意逃避代码审查。"
+    },
+    {
+      "id": "obf-004",
+      "re": "def\\s+deobfuscate|def\\s+_?decrypt|def\\s+_xor_|def\\s+_unpack|def\\s+_decode_blob",
+      "label": "脚本内建自定义解密/解混淆函数",
+      "sev": "P1",
+      "why": "脚本包含自定义解密/解混淆函数（deobfuscate / _xor_ / _decode_blob 等），可能用于运行时动态解码隐藏载荷。此类函数通常是多层混淆链路的一环，应结合上下文确认其解码目标和执行时机。"
+    },
+    {
+      "id": "obf-005",
+      "re": "\\bXOR\\b.*\\b(?:decrypt|encode|stream|cipher)|\\bxor\\s*\\(",
+      "label": "自定义 XOR 加密/解密实现",
+      "sev": "P2",
+      "why": "脚本自实现了 XOR 加密/解密逻辑。XOR 常被用于离线加固方案中加密字符串表或数据文件，虽不一定是恶意行为，但会阻碍审计。需确认加解密的触发条件与目标数据。"
+    },
+    {
+      "id": "obf-006",
+      "re": "\\beval\\s*\\(|\\bexec\\s*\\(|\\bcompile\\s*\\(.*?(?:eval|exec|single)",
+      "label": "动态代码执行（eval / exec / compile）",
+      "sev": "P0",
+      "why": "使用 eval/exec/compile 动态执行代码是极危险模式——任何从外部或加密数据中来的字符串都可能被执行。在混淆/加密加固后的脚本中出现此类调用，风险翻倍，因为执行内容无法被静态分析。"
+    },
+    {
+      "id": "obf-007",
+      "re": "\\bgetattr\\s*\\([^)]+,\\s*['\"][a-zA-Z_][a-zA-Z0-9_]*['\"]\\s*\\)\\s*\\(",
+      "label": "getattr 动态函数调用（可能绕过静态名称检测）",
+      "sev": "P2",
+      "why": "通过 getattr 动态获取函数并调用，可绕过基于函数名的静态检测（如「把 exec 存为变量再 getattr 调用」）。此类模式在混淆/加固后的代码中较为常见。"
+    },
+    {
+      "id": "obf-008",
+      "re": "\\bMANIFEST\\.json\\b|\\bMANIFEST\\.sig\\b|\\b_guard\\.(?:py|js)\\b|\\bk_enc\\b.*[\\\"'][a-f0-9]+[\\\"']",
+      "label": "离线加固框架产物（MANIFEST.sig / _guard / k_enc）",
+      "sev": "P2",
+      "why": "检测到 skill-protector 类离线加固框架的产物特征：MANIFEST.json（文件哈希清单）、MANIFEST.sig（RSA 签名）、_guard.py/js（运行时完整性守卫）或加密密钥片段。该 Skill 可能已通过离线加固工具处理，部分或全部代码已被混淆/加密。"
+    },
+    {
+      "id": "obf-009",
+      "re": "\\bRSA\\b.*\\b(?:\\.sign|\\.verify|generate_keypair|_rsa_verify|_modpow)\\b",
+      "label": "自实现 RSA 签名/验签（非标准库密码）",
+      "sev": "P2",
+      "why": "脚本包含了自实现的 RSA 密码学操作（模幂运算、签名/验签）。自实现密码学易引入漏洞（如缺少填充方案），且在 Skill 上下文中可能用于构建不可检测的签名验证链或绕过安全审查。"
+    },
+    {
+      "id": "obf-010",
+      "re": "['\"]use strict['\"]\\s*;\\s*(?:const|let|var)\\s+\\w+\\s*=\\s*require\\s*\\(",
+      "label": "terser/uglify 混淆后的 JS（单行无空格模式）",
+      "sev": "P2",
+      "why": "JS 文件疑似经过 terser/uglify 压缩混淆，变量名被缩短、空格被消除，显著降低可读性并增加审计难度。虽然压缩可能是合法的性能优化（如生产构建），但在 Skill 分发场景下缺乏合理理由。"
+    },
+    {
+      "id": "obf-011",
+      "re": "[0-7]{3,18}(?:\\s*,\\s*[0-7]{3,18}){10,60}",
+      "label": "大段八进制/Unicode 转义序列（疑似编码隐藏）",
+      "sev": "P2",
+      "why": "文件中存在大段八进制转义序列，可能用于隐藏字符串内容。虽然部分转义是合法的（如路径中的空格），但连续大量出现的八进制序列通常是刻意混淆。"
+    },
+    {
+      "id": "obf-012",
+      "re": "\\b(?:a85decode|b85decode|base85|_decod85|ascii85)\\b",
+      "label": "Base85/Ascii85 编解码器（非标准编码方案）",
+      "sev": "P2",
+      "why": "代码中包含 Base85/Ascii85 编解码引用。Base85 不像 Base64 那样普及，使用非标准编码通常是为了规避基于 Base64 关键词的检测规则，是刻意增强的混淆手段。"
+    },
+    {
+      "id": "obf-013",
+      "re": "__subclasses__\\s*\\(|__bases__\\s*\\(|__mro__\\s*\\(|__class__\\s*\\.\\s*__bases__|__subclasshook__\\s*\\(|__getattribute__\\s*\\(\\s*['\"]__(?:subclasses|bases|mro)",
+      "label": "对象图遍历沙箱逃逸基元（__subclasses__/__bases__ 找回系统对象）",
+      "sev": "P2",
+      "why": "通过 object/type 的对象图遍历（().__class__.__bases__[0].__subclasses__() 等）找回 os/subprocess/ctypes 等系统对象，是已知 Python 沙箱逃逸手法，用于绕过 sys.addaudithook 审计钩子。少数合法库（序列化/调试）也会用到，故标 P2 建议人工复核；动态层已有 AST 预筛（P1）实锤，此处为静态纵深。"
+    },
+    {
+      "id": "obf-014",
+      "re": "ctypes\\.(?:CDLL|windll|WinDLL|cdll|pythonapi|cast|POINTER)\\b",
+      "label": "ctypes 直接调用系统库（绕过 Python 审计钩子）",
+      "sev": "P2",
+      "why": "通过 ctypes 直接调用 libc/Win32 API 可绕过 Python 层审计钩子（addaudithook），是常见沙箱逃逸向量。动态层已拦截 ctypes 导入（P1），此处静态标记作为纵深；合法场景（调用原生库）需结合上下文排除。"
+    },
+    {
+      "id": "obf-015",
+      "re": "\\.(?:gi_frame|f_back|f_globals|f_locals|f_code|cr_frame|gi_code|gi_yieldfrom)\\b",
+      "label": "栈帧逃逸基元（gi_frame/f_back 回溯调用栈绕过审计钩子）",
+      "sev": "P2",
+      "why": "通过生成器/协程持有的栈帧（gi_frame）沿 f_back 链回溯到沙箱外部栈帧，或读 f_globals/f_locals 取回被隐藏的全局/局部命名空间（含 os/subprocess），是绕过 sys.addaudithook 的已知手法（2026 年 mossfern/GFCTF 逃逸题实证）。审计钩子拦截的是「操作」而非「数据访问」，此类逃逸只能靠 AST/静态标记。动态层 AST 预筛已标记 P1/P2，此处为静态纵深。"
+    },
+    {
+      "id": "obf-016",
+      "re": "\\b(?:pickle|_pickle)\\.(?:loads|load)\\s*\\(",
+      "label": "pickle 反序列化（可触发任意代码执行）",
+      "sev": "P2",
+      "why": "pickle 反序列化会调用对象的 __reduce__/__setstate__ 钩子，可被构造为任意代码执行（RCE）。反序列化不可信数据是经典漏洞，且执行发生在 C 层还原流程中，审计钩子难以拦截。若反序列化的数据来源不可信（网络/文件/外部输入），风险升级。"
+    },
+    {
+      "id": "obf-017",
+      "re": "(?:chr\\s*\\(\\s*95\\s*\\)|[\\\"']_+[\\\"']\\s*\\*\\s*[2-9]|[\\\"']__[\\\"']\\s*\\+|\\+\\s*[\\\"'](?:class__|globals__|builtins__|subclasses__|init__|dict__)[\\\"']|[\\\"'](?:class__|globals__|builtins__|subclasses__)[\\\"'])",
+      "label": "dunder 名运行时构造（CVE-2026-53710/81096 类沙箱逃逸：字符串拼接绕过字面量黑名单）",
+      "sev": "P1",
+      "why": "运行时用 chr(95)/字符串拼接构造 __class__/__subclasses__ 等 dunder 名，可绕过基于字面量黑名单的沙箱检查后沿类层次走到 subprocess（CVE-2026-53710 ToolUniverse 同根因，均为 10.0）；静态检出此类构造即可在执行前拦截逃逸准备。"
+    },
+    {
+      "id": "obf-018",
+      "re": "getattr\\s*\\(\\s*_?_?builtins_?_?\\s*(?:,|\\))",
+      "label": "getattr(__builtins__) 直取内建命名空间（沙箱逃逸基元）",
+      "sev": "P1",
+      "why": "直接 getattr(__builtins__) 取内建命名空间，可动态取出 exec/eval/__import__ 等被禁符号，是 Python 沙箱逃逸的标准基元之一（CVE-2026-53710 分析中的关键一步）。"
+    }
+  ],
+  "context": "skill-protector v1.1.1 使用了上述多项技术：pyarmor/terser 混淆、XOR 字符串表、RSA 签名、guard 注入、Base85 字符串打包、__import__ 动态导入。本规则族覆盖了其核心隐蔽路径。对于「超出静态分析能力」的场景（如 pyarmor 编译后的字节码、运行时动态解密的数据），需要在报告中明确提示局限性并建议动态分析。"
+}

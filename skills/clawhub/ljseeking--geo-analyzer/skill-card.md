@@ -1,43 +1,57 @@
-## Description: <br>
-Analyzes how well a specific brand or product is mentioned and represented by LLMs for Generative Engine Optimization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a brand's presence and sentiment in LLM-generated industry recommendations, extracting mention context and competitor comparisons.
 
-## Publisher: <br>
-[ljseeking](https://clawhub.ai/user/ljseeking) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ljseeking](https://clawhub.ai/user/ljseeking)
 
-## Use Case: <br>
-Developers, marketers, and brand analysts use this skill to test whether a target brand appears in LLM-generated industry recommendations, assess mention sentiment, identify competitors, and receive a concise GEO analysis report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Brand names, category keywords, and generated analysis text are sent to DeepSeek and may be sensitive brand-research data. <br>
-Mitigation: Use a dedicated DeepSeek API key, avoid submitting confidential brand research unless approved, and confirm that DeepSeek data handling is acceptable for the deployment context. <br>
-Risk: The skill consumes DeepSeek API quota and may incur usage costs. <br>
-Mitigation: Review expected API usage before running large batches and monitor the API key's quota or billing controls. <br>
-Risk: Unpinned Python dependencies can change behavior across installs. <br>
-Mitigation: Pin and review dependency versions before production deployment. <br>
+## Use Case:
 
+External users, developers, and marketing analysts use this skill to test whether a target brand appears in model-generated recommendations for a category, then review sentiment, mention context, competitor mentions, and a short GEO analysis report.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ljseeking/geo-analyzer) <br>
-- [Skill homepage](https://github.com/LJseeking/lifesignal) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [JSON containing structured GEO results and a natural-language analysis report] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires DEEPSEEK_API_KEY and sends brand name, category keyword, and generated analysis text to the DeepSeek API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Brand name, category keyword, and generated analysis text are sent to DeepSeek under the user's API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when that data can be shared with DeepSeek under the applicable account terms and data handling requirements.
+
+Risk: LLM-based GEO conclusions can be influenced by crafted inputs and should not be treated as definitive market evidence.
+
+Mitigation: Treat the report as advisory and review important conclusions before using them for business decisions.
+
+Risk: Dependencies are declared with minimum versions rather than pinned versions.
+
+Mitigation: Use pinned dependencies or a reviewed lockfile before production deployment.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ljseeking/skills/geo-analyzer)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [JSON containing structured brand mention data and a human-readable GEO analysis report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires DEEPSEEK_API_KEY and sends brand name, category keyword, and generated analysis text to the DeepSeek API.]
+
+## Skill Version(s):
+
+1.0.5 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

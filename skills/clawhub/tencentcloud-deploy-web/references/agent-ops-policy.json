@@ -1,0 +1,66 @@
+{
+  "version": "2.0",
+  "statement": [
+    {
+      "effect": "allow",
+      "action": [
+        "name/dnspod:*",
+        "name/teo:*",
+        "name/lighthouse:*",
+        "name/ssl:*",
+        "name/tat:*",
+        "name/domain:Describe*",
+        "name/domain:CheckDomain"
+      ],
+      "resource": [
+        "*"
+      ]
+    },
+    {
+      "effect": "deny",
+      "action": [
+        "name/lighthouse:CreateInstances",
+        "name/lighthouse:CreateDisks",
+        "name/lighthouse:RenewInstances",
+        "name/lighthouse:RenewDisks",
+        "name/lighthouse:ModifyInstancesBundle",
+        "name/lighthouse:ResizeDisks",
+        "name/lighthouse:ModifyInstancesRenewFlag",
+        "name/lighthouse:ModifyDisksRenewFlag",
+        "name/lighthouse:IsolateInstances",
+        "name/lighthouse:IsolateDisks",
+        "name/lighthouse:TerminateInstances",
+        "name/lighthouse:TerminateDisks",
+        "name/lighthouse:ResetInstance",
+        "name/teo:CreatePlan",
+        "name/teo:CreatePlanForZone",
+        "name/teo:RenewPlan",
+        "name/teo:UpgradePlan",
+        "name/teo:IncreasePlanQuota",
+        "name/teo:ModifyPlan",
+        "name/teo:DestroyPlan",
+        "name/teo:DeleteZone",
+        "name/dnspod:CreateDeal",
+        "name/dnspod:CreateAndPayDeal",
+        "name/dnspod:PayOrderWithBalance",
+        "name/dnspod:ModifyPackageAutoRenew",
+        "name/dnspod:ModifyVasAutoRenewStatus",
+        "name/dnspod:ModifyDomainOwner",
+        "name/dnspod:DeleteDomain",
+        "name/ssl:CreateCertificate",
+        "name/ssl:CreateCertificateByPackage",
+        "name/ssl:CertificateOrderSubmit",
+        "name/ssl:CancelCertificateOrder",
+        "name/ssl:RevokeCertificate",
+        "name/ssl:DeleteCertificate",
+        "name/ssl:DeleteCertificates",
+        "name/domain:DescribeTemplate",
+        "name/domain:DescribeTemplateList",
+        "name/domain:DescribePhoneEmailList"
+      ],
+      "resource": [
+        "*"
+      ]
+    }
+  ]
+}

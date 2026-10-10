@@ -21,6 +21,10 @@
     monthlyCost: "-",
     avgTokens: "-",
     avgCost: "-",
+    extensionMode: "legacy",
+    intel: 0,
+    pipeline: 0,
+    monetization: 0,
     lastUpdated: null,
   };
 
@@ -34,7 +38,7 @@
    */
   async function loadSidebar() {
     try {
-      const response = await fetch("/partials/sidebar.html");
+      const response = await fetch("partials/sidebar.html");
       if (!response.ok) throw new Error("Failed to load sidebar");
 
       const html = await response.text();
@@ -72,7 +76,7 @@
    */
   function isMainPage() {
     const path = window.location.pathname;
-    return path === "/" || path === "/index.html";
+    return path.endsWith("/") || path.endsWith("/index.html");
   }
 
   /**
@@ -97,7 +101,11 @@
           // Default to vitals on main page with no hash
           item.classList.add("active");
         }
-      } else if (itemHref === currentPath) {
+      } else if (
+        itemHref &&
+        !itemHref.startsWith("#") &&
+        new URL(itemHref, window.location.href).pathname === currentPath
+      ) {
         // Exact page match (like /jobs.html)
         item.classList.add("active");
       }
@@ -127,7 +135,7 @@
         } else {
           // On other page: navigate to main page with hash
           e.preventDefault();
-          window.location.href = "/" + targetHash;
+          window.location.href = "./" + targetHash;
         }
       });
     });
@@ -142,7 +150,7 @@
       return;
     }
 
-    eventSource = new EventSource("/api/events");
+    eventSource = window.DashboardEvents.connect();
 
     eventSource.onopen = () => {
       console.log("[Sidebar SSE] Connected");
@@ -179,7 +187,7 @@
    */
   async function fetchSidebarState() {
     try {
-      const response = await fetch("/api/state");
+      const response = await fetch("api/state");
       const data = await response.json();
       handleStateUpdate(data);
     } catch (error) {
@@ -191,6 +199,7 @@
    * Handle state updates and update badges
    */
   function handleStateUpdate(data) {
+    sidebarState.extensionMode = data.extensions?.mode || "legacy";
     // Update session count
     if (data.sessions) {
       sidebarState.sessions = data.sessions.length || 0;
@@ -201,7 +210,12 @@
 
     // Update cron count
     if (data.cron) {
-      sidebarState.cron = Array.isArray(data.cron) ? data.cron.length : 0;
+      sidebarState.cron =
+        data.cronStatus && data.cronStatus !== "available"
+          ? "—"
+          : Array.isArray(data.cron)
+            ? data.cron.length
+            : "—";
     }
 
     // Update jobs count (from jobs API if available)
@@ -216,7 +230,25 @@
 
     // Update cerebro count
     if (data.cerebro) {
-      sidebarState.cerebro = data.cerebro.topicCount || data.cerebro.totalTopics || 0;
+      sidebarState.cerebro =
+        data.cerebro.topics?.total ?? data.cerebro.topicCount ?? data.cerebro.totalTopics ?? "—";
+    }
+
+    // Update intel count
+    if (data.intel) {
+      sidebarState.intel = data.intel.totalFiles || 0;
+    }
+
+    // Update pipeline count
+    if (data.pipeline) {
+      sidebarState.pipeline = Array.isArray(data.pipeline.pipelines)
+        ? data.pipeline.pipelines.length
+        : 0;
+    }
+
+    // Update monetization count
+    if (data.monetization) {
+      sidebarState.monetization = data.monetization.totalFirms || 0;
     }
 
     // Update operators count
@@ -229,7 +261,10 @@
     // Update token stats
     if (data.tokenStats) {
       sidebarState.tokens = data.tokenStats.totalFormatted || data.tokenStats.total || "-";
-      sidebarState.cost = data.tokenStats.estCostFormatted || data.tokenStats.estCost || "-";
+      sidebarState.cost =
+        data.tokenStats.costStatus === "partial" && data.tokenStats.recordedCost != null
+          ? `${data.tokenStats.recordedCost}*`
+          : data.tokenStats.estCostFormatted || data.tokenStats.estCost || "N/A";
       sidebarState.monthlyCost =
         data.tokenStats.estMonthlyCostFormatted || data.tokenStats.estMonthlyCost || "-";
       sidebarState.avgTokens = data.tokenStats.avgTokensPerSession || "-";
@@ -254,12 +289,21 @@
       "nav-memory-count": sidebarState.memory,
       "nav-cerebro-count": sidebarState.cerebro,
       "nav-operator-count": sidebarState.operators,
+      "nav-intel-count": sidebarState.intel,
+      "nav-pipeline-count": sidebarState.pipeline,
+      "nav-monetization-count": sidebarState.monetization,
       "nav-tokens": sidebarState.tokens,
       "nav-cost": sidebarState.cost,
       "nav-monthly-cost": sidebarState.monthlyCost,
       "nav-avg-tokens": sidebarState.avgTokens,
       "nav-avg-cost": sidebarState.avgCost,
     };
+
+    for (const section of ["intel", "pipeline", "monetization"]) {
+      document.querySelectorAll(`[data-section="${section}"]`).forEach((el) => {
+        el.style.display = sidebarState.extensionMode === "legacy" ? "" : "none";
+      });
+    }
 
     for (const [id, value] of Object.entries(updates)) {
       const el = document.getElementById(id);
@@ -320,12 +364,14 @@
   // Fetch jobs count separately (since it's a different API)
   async function fetchJobsCount() {
     try {
-      const response = await fetch("/api/jobs");
+      const response = await fetch("api/jobs");
       const data = await response.json();
-      sidebarState.jobs = data.jobs?.length || 0;
+      sidebarState.jobs = response.ok && Array.isArray(data.jobs) ? data.jobs.length : "—";
       updateBadges();
     } catch (error) {
       // Jobs API may not be available
+      sidebarState.jobs = "—";
+      updateBadges();
     }
   }
 

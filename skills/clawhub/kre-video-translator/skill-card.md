@@ -1,43 +1,59 @@
-## Description: <br>
-Translate local audio or video files into multilingual .srt subtitles with KreTrans. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Translates local or URL audio and video through Kre Video Translator, supports review of timestamped subtitle JSON, and exports subtitle files or burned-in video.
 
-## Publisher: <br>
-[skz7s](https://clawhub.ai/user/skz7s) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[skz7s](https://clawhub.ai/user/skz7s)
 
-## Use Case: <br>
-External users and developers use this skill to translate local audio or video files into subtitle files, including workflows where a URL or magnet source is downloaded first and then processed as a local media file. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected media audio, filenames, and language settings are sent to KreTrans for translation. <br>
-Mitigation: Use a revocable KreTrans API key and avoid highly sensitive recordings unless the user trusts the service. <br>
-Risk: URL or magnet inputs require external download tools before translation. <br>
-Mitigation: Confirm the source and download tooling before processing, or ask the user to provide a local media file instead. <br>
+## Use Case:
 
+Creators and developers use this skill to translate audio or video, review timed subtitles, and deliver subtitle files or a video with burned-in captions.
 
-## Reference(s): <br>
-- [Setup](references/setup.md) <br>
-- [KreTrans Homepage](https://kretrans.com) <br>
-- [KreTrans API Documentation](https://kretrans.com/api-docs) <br>
-- [KreTrans API Key Management](https://kretrans.com/console#api-management) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with shell commands and generated .srt subtitle files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates one primary .srt subtitle output for the selected target language; translation jobs are asynchronous and require KRETRANS_API_KEY, ffmpeg, Python, and requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: release metadata) <br>
+Risk: Selected media, filenames, prompts, and optional subtitle references are sent to Kre's production service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the material is appropriate to share before submitting it.
+
+Risk: An API key is stored locally for service access.
+
+Mitigation: Enter the key through the local setup flow, not chat, and protect the credential file.
+
+Risk: Missing media tools may prompt a local package-manager installation.
+
+Mitigation: Require explicit approval; prefer preinstalled FFmpeg and yt-dlp on managed systems.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/skz7s/skills/kre-video-translator)
+- [Kre API documentation](https://kretrans.com/en/api)
+- [Runtime and recovery guide](references/setup.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, JSON, Files, Shell commands]
+
+**Output Format:** [Text guidance and local subtitle JSON, SRT, or MP4 files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Video export requires an original local video and FFmpeg with subtitle support.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

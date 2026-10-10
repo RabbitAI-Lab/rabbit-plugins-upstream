@@ -1,45 +1,53 @@
-## Description: <br>
-Polish body text before publishing, in Polish or English, by fixing hanging single-letter conjunctions and prepositions, adding orphan guards, flagging widow risks, and handling ragged-edge risks without rewriting copy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Polishes Polish and English body text for publication by controlling line breaks, punctuation, and spacing without rewriting the copy.
 
-## Publisher: <br>
-[monikazapisekstudio](https://clawhub.ai/user/monikazapisekstudio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[monikazapisek](https://clawhub.ai/user/monikazapisek)
 
-## Use Case: <br>
-Writers, editors, designers, and developers use this skill before publishing long-form Markdown, HTML, or plain text to apply microtypography fixes without changing the copy's wording. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Invisible typography characters such as NBSPs, soft hyphens, smart quotes, and dash substitutions may matter in code-like snippets, URLs, or HTML attributes. <br>
-Mitigation: Review the returned text before publishing and avoid applying the skill to code, tables, short UI strings, URLs, and markup attributes unless the user explicitly confirms the target. <br>
-Risk: Widow, ragged-edge, and hanging-punctuation outcomes depend on the final rendered layout. <br>
-Mitigation: Treat layout-dependent items as review flags or CSS/design-tool suggestions and verify them after the content is rendered. <br>
-Risk: English strict single-letter handling and dash style can vary by house style. <br>
-Mitigation: Ask for or confirm the intended English typography mode when the input does not already show a consistent style. <br>
+## Use Case:
 
+Writers, designers, and developers use this skill to prepare Polish or English long-form copy for publication in plain text, Markdown, HTML, or selected Figma text layers. It suggests or applies spacing and punctuation fixes, reports widow and ragged-edge risks, and records the changes for review.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/monikazapisekstudio/skills/microtypography) <br>
-- [Server-resolved GitHub source](https://github.com/monikazapisekstudio/design-engineering-playbook/tree/main/skills/typesetting-engine-skillset/microtypography) <br>
-- [Design Engineering Playbook](https://github.com/monikazapisekstudio/design-engineering-playbook) <br>
-- [Dry-run test results](examples/test-results.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance] <br>
-**Output Format:** [Same format as the input text, plus a concise Markdown change log and manual-review flags.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May insert NBSP, soft hyphen, dash, quote, multiplication-sign, and CSS guidance changes while preserving wording.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: ClawHub release metadata) <br>
+Risk: Invisible or subtle Unicode spacing changes can affect rendering and localization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the change log and inspect the edited text in the target font and renderer, especially for multilingual copy.
+
+Risk: Editing selected Figma text nodes can change published copy or styling.
+
+Mitigation: Review proposed changes before approving writes to files or Figma nodes.
+
+## Reference(s):
+
+- [Microtypography on ClawHub](https://clawhub.ai/monikazapisek/skills/microtypography)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Edited plain text, Markdown, or HTML with a change log; optional Figma text-node edits and CSS suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Preserves wording and input format; file and Figma writes require user approval.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release; bundled skill version: 1.3.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -74,7 +74,7 @@ function rise(sel, t, d = 0.5) {
     { opacity: 1, y: 0, duration: d, ease: "power2.out" }, t);
 }
 
-// 同步构建（不要放在 setTimeout / Promise / async 里）
+// 同步构建（不要放在延时回调、Promise 或 async 里）
 enter("card-01", 0.8);
 rise("#c01-kicker", 1.0);
 rise("#c01-title", 1.3);
@@ -152,7 +152,7 @@ window.__timelines["main"] = tl;
 | 视频无声 | `<audio>` 没单独加 | 加独立 `<audio>` 元素 |
 | 时间线不动 | timeline 没注册或注册晚了 | 检查 `window.__timelines["<id>"]` 且 id 匹配 |
 | Lint 报 font | `@font-face` 缺 | 补字体声明 |
-| 渲染卡第一帧 | GSAP 放 async/setTimeout 里 | 同步写在 `<script>` 顶部 |
+| 渲染卡第一帧 | GSAP 放异步延时回调里 | 同步写在 `<script>` 顶部 |
 | 黑屏 +1 | 用了 `video.play()` | 删掉，让 hyperframes 控制 |
 
 ## 9. 渲染完核对

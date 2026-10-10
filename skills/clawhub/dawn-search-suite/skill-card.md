@@ -1,41 +1,49 @@
-## Description: <br>
-Comprehensive search and information extraction skill for real-time search, JavaScript-rendered page scraping, content research, and AI news tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助代理进行实时搜索、动态网页抓取、多引擎内容研究和中文 AI 资讯查询。
 
-## Publisher: <br>
-[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee)
 
-## Use Case: <br>
-Developers, researchers, and agent builders use this skill to search across sources, extract URL and dynamic page content, parse PDFs, cross-check research results, and follow Chinese AI news and daily trend updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may fetch and extract content from third-party websites, including dynamic pages. <br>
-Mitigation: Use it only with public or authorized resources, and respect applicable terms, robots policies, and privacy constraints. <br>
-Risk: Search, scraping, and news outputs can be incomplete, outdated, or inconsistent across engines and source pages. <br>
-Mitigation: Review important results against primary sources before relying on them for decisions or publication. <br>
+## Use Case:
 
+开发者和研究人员可用它搜索网页、抓取动态页面、交叉核对资料并追踪中文 AI 资讯。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chen6896qqwee/skills/dawn-search-suite) <br>
-- [Publisher profile](https://clawhub.ai/user/chen6896qqwee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text research, search, scraping, and news summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include search results, extracted page content, PDF-derived notes, cross-check analysis, and AI news digests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and artifact clawhub.json) <br>
+Risk: Search queries and requested URLs may be shared with external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid private, authenticated, or sensitive pages unless you understand the underlying tool behavior.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/chen6896qqwee/skills/dawn-search-suite)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown or plain text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search findings, extracted content, research summaries, or AI news updates, depending on the request.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release and clawhub.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

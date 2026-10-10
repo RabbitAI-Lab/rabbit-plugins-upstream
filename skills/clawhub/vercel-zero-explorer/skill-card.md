@@ -1,42 +1,55 @@
-## Description: <br>
-AI-powered guide for understanding, using, and building with Vercel Zero, including syntax, .0 files, native tools, explicit effects, structured JSON diagnostics, and AI-native workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides conceptual guidance, command references, and examples for exploring Vercel Zero's graph-first development workflow.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers, AI agent builders, language designers, and researchers use this skill to learn Vercel Zero concepts, generate illustrative Zero snippets, and reason about AI-native development workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Technical claims and examples for Vercel Zero may become outdated or may not match the current official Zero implementation. <br>
-Mitigation: Verify guidance and code examples against current official Zero documentation before relying on them. <br>
-Risk: Generated API examples may encourage users to place secrets in prompts or sample code. <br>
-Mitigation: Use placeholders for credentials and avoid entering secrets into generated examples. <br>
+## Use Case:
 
+Developers and researchers use this skill to understand Vercel Zero concepts, interpret diagnostics, and plan agent workflows without installing or executing the toolchain.
 
-## Reference(s): <br>
-- [Zero Official Documentation](https://vercel.com/docs/zero) <br>
-- [Vercel Zero GitHub Repository](https://github.com/vercel-labs/zero) <br>
-- [AI Agent Programming Language Analysis](https://blog.csdn.net/irpywp/article/details/161167783) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with explanatory text, tables, and fenced code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only reference output; no executable behavior or privileged access is declared.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Experimental Zero commands and examples may become outdated or behave differently between versions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin the version being evaluated and verify command syntax and behavior against current Zero documentation.
+
+Risk: Running sample commands or sharing diagnostics could expose sensitive data or affect a live workspace.
+
+Mitigation: Run commands yourself only in an isolated, disposable workspace; avoid production data and redact secrets and identifying details before sharing diagnostics.
+
+## Reference(s):
+
+- [Vercel Zero Explorer on ClawHub](https://clawhub.ai/gechengling/skills/vercel-zero-explorer)
+- [Zero documentation](https://vercel.com/docs/zero)
+- [Zero source and getting-started reference](https://github.com/vercel-labs/zero)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands]
+
+**Output Format:** [Markdown with illustrative code and command snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reference material only; the skill does not install tools or execute commands.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

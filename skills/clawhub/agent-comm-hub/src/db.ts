@@ -179,6 +179,40 @@ db.exec(`
   CREATE INDEX IF NOT EXISTS idx_consumed_log       ON consumed_log(agent_id, resource);
 `);
 
+// ─── Feature B: 人在环授权队列 ──────────────────────────
+// auth_requests：Agent 执行中遇到的敏感操作授权请求；auth_grants：可选的信任窗口。
+// 幂等建表（CREATE TABLE IF NOT EXISTS），老库自动迁移。
+db.exec(`
+  CREATE TABLE IF NOT EXISTS auth_requests (
+    id              TEXT PRIMARY KEY,                 -- req_<timestamp>_<rand>
+    agent_id        TEXT NOT NULL,                    -- 请求方 Agent
+    task_id         TEXT,                             -- 关联任务（可空）
+    op_type         TEXT NOT NULL,                    -- 见 AUTH_OP_TYPES
+    op_payload      TEXT,                             -- JSON：具体操作参数，供人类判定
+    status          TEXT NOT NULL DEFAULT 'pending',  -- pending|approved|rejected|expired
+    created_at      INTEGER NOT NULL,
+    expires_at      INTEGER NOT NULL,                 -- created_at + AUTH_REQUEST_TTL_MS
+    resolved_by     TEXT,                             -- 决议人（人类操作者 ID / admin）
+    resolved_at     INTEGER,
+    decision_reason TEXT
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_auth_status ON auth_requests(status);
+  CREATE INDEX IF NOT EXISTS idx_auth_agent  ON auth_requests(agent_id);
+
+  -- 可选：信任窗口（时间窗口信任粒度，见设计文档 §9 决策 3）
+  CREATE TABLE IF NOT EXISTS auth_grants (
+    id          TEXT PRIMARY KEY,
+    agent_id    TEXT NOT NULL,
+    op_category TEXT NOT NULL,                        -- 类目级信任（如 'external_api'）
+    granted_by  TEXT NOT NULL,
+    granted_at  INTEGER NOT NULL,
+    expires_at  INTEGER NOT NULL
+  );
+
+  CREATE INDEX IF NOT EXISTS idx_grant_agent_cat ON auth_grants(agent_id, op_category);
+`);
+
 // ─── SSE 事件日志（D1）：全局单调 seq，支持重连精确补发 + 首连补发 ──
 // delivered=0 表示尚未成功投递，用于首连补发；id 即 SSE 的 Last-Event-ID
 db.exec(`
@@ -1187,4 +1221,34 @@ export function fts5IntegrityCheck(): { ok: boolean; details: string } {
     }
   }
   return { ok: checks.length === 0, details: checks.join("; ") || "OK" };
+}
+
+/**
+ * 数据库整体完整性自检（PRAGMA integrity_check）。
+ *
+ * 用途：早期暴露「磁盘文件损坏」（SQLITE_CORRUPT），避免像 3.0.25 联调那样
+ * 直到回写失败才在 err.log 里成片刷 `database disk image is malformed`。
+ * 注意：进程重启无法修复盘损，必须由运维用 `sqlite3 .recover` 重建。
+ *
+ * - 健康：{ ok: true, details: "ok" }
+ * - 损坏：{ ok: false, details: "<首行损坏描述>" }（最多拼接前 3 行）
+ * - PRAGMA 本身抛错（库彻底打不开）：{ ok: false, details: "integrity_check_error: ..." }
+ */
+export function integrityCheckDb(): { ok: boolean; details: string } {
+  try {
+    const rows = db.prepare("PRAGMA integrity_check").all() as Array<Record<string, string>>;
+    const first = rows[0]?.["integrity_check"] ?? "ok";
+    if (first === "ok") {
+      return { ok: true, details: "ok" };
+    }
+    const details = rows
+      .slice(0, 3)
+      .map((r) => r["integrity_check"] ?? "")
+      .filter(Boolean)
+      .join("; ");
+    return { ok: false, details };
+  } catch (err) {
+    // 连 PRAGMA 本身都抛错，视为盘损
+    return { ok: false, details: `integrity_check_error: ${getErrorMessage(err)}` };
+  }
 }

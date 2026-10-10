@@ -1,0 +1,118 @@
+# Agent vekâlet akışı ve script sözleşmesi — powpow-register
+
+SKILL.md'deki adımların yürütme ayrıntıları. Tüm komutlar `node scripts/powpow-register.mjs <alt komut> [parametreler]`
+biçimindedir; script **sıfır bağımlılıktır**, **Node ≥ 18** gerektirir, tüm istekler yalnızca
+`https://global.powpow.online`'a gider.
+
+## Güvenlik tasarımı (neden böyle tasarlandı)
+
+| Tasarım | Gerekçe |
+|---|---|
+| Şifre yalnızca `POWPOW_REGISTER_PASSWORD` ortam değişkeniyle geçer | Sürecin komut satırı parametreleri aynı makinedeki diğer süreçlere görünür (argv sızıntı yüzeyi); ortam değişkeni script içinde okunur okunmaz kullanılır |
+| Şifre **asla durum dosyasına yazılmaz**, asla loglarda görünmez | Durum dosyası diskte kalabilir; sohbetteki üretim modunda bir kez gösterilmesinin nedeni kullanıcının kaydetmesidir |
+| Durum dosyası sistem geçici dizininde (`os.tmpdir()/powpow-register-state.json`, 0600) | Yalnızca email / username / nickname / token / outTradeNo alanlarını içerir, `cleanup` tek komutla temizler |
+| Agent'ın elindeki JWT, resmî `me?token=` uç noktasından tarayıcı cookie'sine dönüştürülür | Platformun HarmonyOS WebView için tasarlanmış resmî köprüsüdür; imza doğrulaması yalnızca imza + geçerlilik süresine bakar, cihaz parmak izine bağlamaz, kullanıcının tarayıcısı kullanabilir |
+| Ödemede yalnızca create-order / query / kasa açma yapılır | Ödeme eylemi ve ödeme belgeleri her zaman kullanıcı ile Alipay'in resmî kasası arasındadır, agent araya girmez |
+
+## Komut başvurusu
+
+| Komut | Temel parametreler | İşlev / zamanı |
+|---|---|---|
+| `status` | —— | Akış ilerlemesini görür (durum dosyasını okur); sohbet kesildikten sonra önce bunu çalıştırın |
+| `gen-password` | —— | 24 karakterlik güçlü şifre üretir (büyük + küçük harf ve rakam içerir), stdout'da **yalnızca bu kez** gösterilir |
+| `prepare-suggest` | `--username --nickname --email` | Onaylanmış bilgileri durum dosyasına işler (sonrasında register'da tekrar geçmeye gerek yok) |
+| `send-code` | `--email` | Platformun 6 haneli doğrulama kodu göndermesini tetikler (10 dakika geçerli, 60s bekleme) |
+| `register` | `--code` (zorunlu); `--username --nickname --avatar --phone` (isteğe bağlı, durum dosyasında varsa geçilmez) | pending hesap oluşturur; şifre `POWPOW_REGISTER_PASSWORD` ortam değişkeniyle; başarılı olunca JWT otomatik olarak durum dosyasına yazılır |
+| `login-link` | `--target pending` veya `--target home` | Tek tıkla giriş bağlantısı üretir (çift bağlantı tasarımı, aşağıda) |
+| `create-order` | `--package monthly\|quarterly\|yearly` | Alipay siparişi oluşturur; ödeme sayfası dosya yolu + outTradeNo döner (otomatik olarak durum dosyasına işlenir) |
+| `query` | —— | Sipariş durumunu sorar `paid / pending / closed / unknown` (outTradeNo durum dosyasından), 10–15s arayla yoklanır |
+| `refresh-login` | şifre ortam değişkeniyle | Yeniden giriş yapıp **yeni JWT** alır (abonelik beyanı NONE'dan ACTIVE'e döner), para geçtikten sonra mutlaka çalıştırılır |
+| `whoami` | —— | Durum dosyasındaki token ile hesabı ve abonelik durumunu sorgular (etkinleşmenin tutup tutmadığını doğrular) |
+| `cleanup` | —— | Durum dosyasını siler (kapanışta mutlaka çalıştırılır) |
+
+**Ortam değişkeni geçişi** (şifre asla komut satırına çıkmaz):
+
+```bash
+# bash / zsh / WSL
+POWPOW_REGISTER_PASSWORD='<şifre>' node scripts/powpow-register.mjs register --code 123456
+# PowerShell
+$env:POWPOW_REGISTER_PASSWORD = '<şifre>'; node scripts/powpow-register.mjs register --code 123456
+# cmd
+set POWPOW_REGISTER_PASSWORD=<şifre> && node scripts/powpow-register.mjs register --code 123456
+```
+
+## Çift bağlantı mekanizması (temel tasarım)
+
+Platformun oturum durumu HttpOnly cookie'dir; agent başkasının tarayıcısına doğrudan cookie yerleştiremez;
+köprü, resmî `/api/auth/me?token=<JWT>&redirect=<site içi yol>` uç noktasıdır: imza doğrulama → pending
+kullanıcıya otomatik oturum oluşturma → `Set-Cookie: powpow_token` (HttpOnly / SameSite=Lax / 7 gün) → redirect
+doğrulaması (yalnızca tek eğik çizgiyle başlama, `//` ve ters eğik çizgi yasak, çözümlenince aynı kaynak olma) →
+hedef sayfaya 307 geçici yönlendirme.
+
+- **Bağlantı 1 (kayıt başarılı olur olmaz verilir)**: `--target pending` → `/subscription`'a düşer.
+  Kullanıcının tarayıcısı «yarı oturum» durumuna girer: abonelik sayfası ve Alipay geri dönüş sayfası görülebilir
+  ve işlenebilir; içerik sayfaları yine ödeme duvarınca abonelik sayfasına itilir (üç katmanlı koruma: JWT claims
+  geçit denetimi → DB yeniden kontrol → çekirdek API denetimi; normal davranıştır).
+- **Bağlantı 2 (paid doğrulandıktan sonra verilir)**: önce `refresh-login` ile yeni JWT alınır (ödeme yalnızca
+  DB'yi günceller, verilmiş JWT'nin claims'ini değiştirmez; yenilenmezse «ödedim ama üye değilim» gibi görünür),
+  sonra `--target home` → ana sayfaya düşer, tam üye durumu.
+
+## Tam sıralama (normal yol)
+
+```
+1.  status                          # Ortam öz denetimi
+2.  (Adım 2: bilgiler sohbette onaylanır, şifre iki seçeneklidir; üretim modu: gen-password → kullanıcıya hemen kaydettirilir)
+3.  prepare-suggest --username U --nickname N --email E
+4.  send-code --email E             # → kullanıcı e-postasına gidip kodu okur (sohbetten tek ayrılış ①)
+5.  POWPOW_REGISTER_PASSWORD=*** register --code 123456 [--avatar pic.jpg]
+6.  login-link --target pending     # → bağlantı 1 kullanıcıya verilir
+7.  (kullanıcı paketi seçer) create-order --package monthly
+8.  start <ödeme sayfası dosyası>   # Windows; macOS'ta open, Linux'ta xdg-open
+    # → kullanıcı Alipay kasasında öder (sohbetten ayrılış ②)
+9.  query (her 10–15s) paid olana dek
+10. refresh-login                   # ACTIVE beyanlı yeni JWT alınır
+11. login-link --target home        # → bağlantı 2 kullanıcıya verilir
+12. whoami                          # subscriptionStatus: ACTIVE doğrulanır (isteğe bağlı)
+13. cleanup                         # durum dosyası temizlenir
+```
+
+## Komut → platform API eşlemesi
+
+| Script komutu | Platform arayüzü |
+|---|---|
+| `send-code` | `POST /api/auth/register/send-code` |
+| `register` | `POST /api/auth/register` (multipart, profil fotoğrafı doğrudan yüklenir) |
+| `login-link` | `GET /api/auth/me?token=…&redirect=…` (bağlantının kendisi, tarayıcı tıkladığında etkili olur) |
+| `create-order` | `POST /api/payment/alipay/create-order` (Bearer) |
+| `query` | `GET /api/payment/alipay/query?outTradeNo=…` (Bearer) |
+| `refresh-login` | `POST /api/auth/login` (`{step:1, username, password}`) |
+| `whoami` | `GET /api/auth/me?token=…` |
+
+Kural kaynakları: kayıt alanları ve hız sınırları için `registration-flow.md`; paketler ve etkinleştirme zinciri
+için `payment-and-activation.md` (ikisinde de platform kaynak dosyaları belirtilidir).
+
+## Script düzeyinde hata yönetimi
+
+| Belirti | Yönetim |
+|---|---|
+| `Node sürümü çok düşük` | Salt yol gösterme moduna dönün, inatla denemeyin |
+| Ağ hatası / zaman aşımı | Bir kez tekrar deneyin; yine başarısızsa kullanıcı ağı kontrol etsin, sonra devam (durum dosyası duruyor, baştan `status` ile kurtarılır) |
+| register iş hatası verir (kullanıcı adı var vb.) | SKILL.md Adım 5'teki tabloya göre yönetilir, **doğrulama kodu yeniden gönderilmez** (10 dakika içinde hâlâ geçerlidir) |
+| register 「邮箱验证码错误或已过期」 (doğrulama kodu hatalı ya da süresi geçmiş) der | Süre aşımı → `send-code` yeniden |
+| `create-order`'dan sonra kullanıcı ödeme sayfasını kapattı | Doğrudan `create-order` yeniden (eski sipariş 2 saatte otomatik kapanır) |
+| `query` sürekli pending | Kullanıcı ödememiş olabilir; bir cümle sorun. Gerçekten ödediyse → payment-and-activation.md'deki teşhis tablosunu izleyin |
+| `refresh-login` 403 `pending_payment` | Ödeme henüz hesaba geçmedi, Adım 9'a dönüp yoklamaya devam |
+| Durum dosyası kayboldu (yanlışlıkla silindi / makine değişti) | `whoami`/`refresh-login` kullanılamaz; kullanıcıya, bağlantı 1'i açtığı tarayıcıda abonelik sayfasını yenileterek durumu doğrulatın ya da yeniden giriş yaptırın (web modu) |
+
+## Geri dönüş modu (salt yol gösterme)
+
+Aşağıdaki durumlardan herhangi biri olursa hemen v1 tarzı salt yol göstermeye dönülür, script daha fazla
+uğraştırılmaz:
+
+- Node ≥ 18 yok ya da script art arda iki kez aynı tür hatayı verdi;
+- Kullanıcı açıkça «ben web'de kendim yaparım» dedi;
+- Şirket/cihaz politikası scriptin ağa çıkmasını kısıtlıyor.
+
+Geri dönüş sonrası: kayıt sayfası https://global.powpow.online/register ve abonelik sayfası
+https://global.powpow.online/subscription verilir, `registration-flow.md` kurallarına göre eşlik edilir, ton
+değişmez, her tur yine «sonraki adım» bloğuyla kapanır.

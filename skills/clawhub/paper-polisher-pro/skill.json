@@ -1,7 +1,8 @@
 {
   "name": "paper-polisher-pro",
-  "version": "1.1.0",
-  "description": "Academic AI detector fingerprinting Chinese LLMs. 9-layer engine, F1=98.3% on 2026 models.",
-  "author": "docsor1212",
-  "changelog": "v1.1.0: 9-layer detection engine, 1002 patterns, 501 synonyms, 10x 2026 flagship models benchmarked (F1 98.3%)"
+  "version": "5.1.0",
+  "description": "AI writing detector (author self-check) + academic polishing guidance + terminology protection, 100% local. 11-layer recalibrated rule engine + token-spectrum layer + length-routed fusion + optional supervised Qwen3-0.6B ONNX layer (AUROC 1.0 held-out) + LLM fingerprint attribution (GLM/DeepSeek/Qwen/Kimi/MiniMax/GPT/Claude/Gemini) + journal precheck + AIGC compliance label check + paragraph attribution + sentence-level rewrite suggestions (guidance, never auto-rewrite). Eval-driven: base-engine numbers reproduce via the bundled held-out evaluation; supervised-layer figures are author-side held-out measurements.",
+  "author": "DoctorQ Lab",
+  "changelog": "v5.1.0: rewrite-closure & batch-report release — rewrite-effect regression check (pp_rewrite_check.py: original vs revised engine-source comparison — document score/risk-band migration, paragraph-level difflib-aligned deltas, feature-type clears vs remaining, edit extent; relative reference under this engine's criteria only; pp.py rewrite-check + pp_api.rewrite_check); batch HTML summary report (pp_batch_report.py: totals/mean/band cards, score histogram, per-file table; renders the existing --batch --csv, no engine re-run); batch-CSV concurrency semantics and degraded_notice reading guide documented in FAQ. 查论文润色、智能降重、学术表达优化等口径与 FAQ 保持不变。零新增依赖。",
+  "license": "MIT-0"
 }

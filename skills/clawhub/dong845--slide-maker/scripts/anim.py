@@ -138,20 +138,69 @@ class Build:
             f'</p:seq></p:childTnLst></p:cTn></p:par>'
             f'</p:tnLst></p:timing>'
         )
-        # timing is the last child of <p:sld> (after cSld / clrMapOvr / transition)
-        self.slide._element.append(parse_xml(xml))
+        # 🔴 CT_Slide allows exactly ONE <p:timing> (maxOccurs=1) and orders its children
+        # cSld, clrMapOvr?, transition?, timing?, extLst? — so this can neither append blindly
+        # nor add a second one.
+        #
+        # It used to do both. Measured: two `Build(s)` on one slide, each calling apply(), left
+        # `['cSld', 'clrMapOvr', 'timing', 'timing']`; `prs.save()` raised nothing, LibreOffice
+        # rendered it happily, `lint_layout` reported clean, and `preflight_check.py` — which
+        # only asks whether the string 'p:timing' appears — read the duplicate as *more*
+        # compliant. PowerPoint is the one consumer that enforces the schema, so the first
+        # signal would have been a user seeing "PowerPoint found a problem and needs to repair".
+        # That is the failure class no gate in this toolkit could see: every check is geometric,
+        # pixel-based or semantic, and none of them looks at whether the part is well-formed
+        # against ECMA-376.
+        #
+        # A second apply() on one slide is a BUILD ERROR, not something to merge: the steps of
+        # the second Build were never in the first one's sequence, so silently keeping either
+        # tree ships a deck whose click order is not what the author wrote.
+        sld = self.slide._element
+        if sld.find(qn("p:timing")) is not None:
+            raise ValueError(
+                "anim: this slide already carries a <p:timing> — Build.apply() ran twice on it. "
+                "CT_Slide allows exactly one, and a second one makes the file schema-invalid: "
+                "PowerPoint refuses to open it while python-pptx, LibreOffice and every lint "
+                "here stay silent. Use ONE Build per slide and put every beat in its steps.")
+        node = parse_xml(xml)
+        ext = sld.find(qn("p:extLst"))
+        if ext is not None:
+            ext.addprevious(node)          # timing precedes extLst — append would invert them
+        else:
+            sld.append(node)
         return len(self.steps)
+
+
+# The slide-level transitions this writes. Deliberately short: SKILL.md's motion rule is that
+# transitions are "optional, secondary, off the critical path" and a deck with none plus good
+# appear-builds beats one with a fade on every slide — so this is a small set of calm, widely
+# supported elements, not a catalogue. `cut` is the honest way to say "no transition, explicitly".
+_TRANSITIONS = {
+    "fade": "<p:fade/>",
+    "cut": "<p:cut/>",
+    "wipe": '<p:wipe dir="d"/>',
+    "push": '<p:push dir="u"/>',
+}
 
 
 def slide_transition(slide, kind="fade", duration=0.5):
     """Add a simple slide-level transition (subtle; 'fade' is the safe default).
-    Goes before <p:timing> in the slide; call before Build.apply() if you use both."""
+
+    `kind` is one of 'fade' | 'cut' | 'wipe' | 'push'. Goes before <p:timing> in the slide; call
+    before Build.apply() if you use both."""
+    if kind not in _TRANSITIONS:
+        # Raise rather than fall back. `kind` was accepted and never read for as long as this
+        # function existed — grep found it exactly once in the file, in the signature — while the
+        # body hardcoded <p:fade/>, so every deck that asked for 'push' silently got a fade and
+        # nothing anywhere said so. A wrong name must now be louder than a wrong result.
+        raise ValueError("slide_transition(kind={!r}): unknown transition. One of: {}."
+                         .format(kind, " · ".join(sorted(_TRANSITIONS))))
     dur_ms = int(duration * 1000)
-    # PowerPoint transition element; p14 fade is widely supported
+    # PowerPoint transition element; p14 timing attr is widely supported
     xml = (
         f'<p:transition xmlns:p="{P_NS}" '
         f'xmlns:p14="http://schemas.microsoft.com/office/powerpoint/2010/main" '
-        f'spd="med" p14:dur="{dur_ms}"><p:fade/></p:transition>'
+        f'spd="med" p14:dur="{dur_ms}">{_TRANSITIONS[kind]}</p:transition>'
     )
     el = parse_xml(xml)
     # insert before timing if present, else append

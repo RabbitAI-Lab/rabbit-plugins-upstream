@@ -1,47 +1,57 @@
-## Description: <br>
-Create and configure scheduled TIMER triggers for Huawei Cloud FunctionGraph functions using Quartz Cron expressions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps create and configure scheduled TIMER triggers for Huawei Cloud FunctionGraph functions using Quartz Cron expressions or fixed rates.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud engineers use this skill to create, validate, and verify scheduled TIMER triggers for Huawei Cloud FunctionGraph functions using Cron or Rate schedules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires Huawei Cloud credentials that can create or manage FunctionGraph triggers. <br>
-Mitigation: Use a least-privilege test account first, keep credentials in environment variables, and avoid exposing real secrets in logged terminals. <br>
-Risk: The skill can perform real cloud changes against the function URN and schedule provided by the user. <br>
-Mitigation: Verify the function URN, trigger name, schedule, region, and project before execution, and start with a disabled or test trigger when practical. <br>
-Risk: Troubleshooting guidance may weaken TLS if SSL verification is disabled with real credentials. <br>
-Mitigation: Do not disable SSL verification for real credentials or production use. <br>
+## Use Case:
 
+Developers and engineers use this skill to schedule existing Huawei Cloud FunctionGraph functions, configure timer triggers, and check creation results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/huaweiclouddev/skills/huawei-cloud-functiongraph-trigger-create) <br>
-- [SDK Installation Guide](references/sdk-installation-guide.md) <br>
-- [IAM Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Acceptance Criteria](references/acceptance-criteria.md) <br>
-- [Cron Expression Reference](references/cron-reference.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Code, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces commands and scripts that can create real Huawei Cloud FunctionGraph TIMER triggers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Broad credentials or IAM permissions could affect unintended functions or regions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use temporary credentials and scope IAM permissions to the intended region, project and function; avoid wildcard or delete permissions unless needed.
+
+Risk: Frequent schedules or testing against production triggers could cause unwanted invocations or disruption.
+
+Mitigation: Confirm the target resource and schedule before creation; avoid one-minute test schedules and cleanup deletes on production triggers.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-functiongraph-trigger-create)
+- [Cron Expression Reference](artifact/references/cron-reference.md)
+- [IAM Policies](artifact/references/iam-policies.md)
+- [SDK Installation Guide](artifact/references/sdk-installation-guide.md)
+- [Verification Method](artifact/references/verification-method.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown instructions and commands; JSON trigger-creation status when the script runs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes trigger identifier, schedule and enabled status on success, or an error code on failure.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
