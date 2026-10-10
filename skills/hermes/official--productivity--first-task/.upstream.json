@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/first-task",
+  "identifier": "official/productivity/first-task",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/first-task",
+  "branch": "main",
+  "pushedAt": "2026-10-10T13:47:42Z",
+  "contentHash": "a418586f472a838efbd9e5e79d8ac84cf4c9fbdded6605c7cedaae07ba149dc0",
+  "fetchedAt": "2026-10-10T13:48:57.493Z"
+}

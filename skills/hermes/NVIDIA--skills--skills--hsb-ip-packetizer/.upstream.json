@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/hsb-ip-packetizer",
+  "identifier": "NVIDIA/skills/skills/hsb-ip-packetizer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/hsb-ip-packetizer",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "5e7d6a7f7fa1efd836460a5869dd613b0e774aa5a9b88d66326d34786a8f224d",
+  "fetchedAt": "2026-10-10T13:48:50.970Z"
+}

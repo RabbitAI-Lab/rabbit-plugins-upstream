@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/ginkgo-cloud-lab",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/ginkgo-cloud-lab",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/ginkgo-cloud-lab",
+  "branch": "main",
+  "pushedAt": "2026-10-10T12:26:51Z",
+  "contentHash": "379c23badfa0c6d4c2526f9d2507a313e5b9e2363120153c1659c1f1ce9b74c2",
+  "fetchedAt": "2026-10-10T13:48:52.499Z"
+}

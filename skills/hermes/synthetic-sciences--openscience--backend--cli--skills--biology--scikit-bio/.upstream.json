@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/scikit-bio",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/scikit-bio",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/scikit-bio",
+  "branch": "main",
+  "pushedAt": "2026-10-10T12:26:51Z",
+  "contentHash": "459b6a24b67188ad285257e04bbb29bd9153da60761df3ba79300d7567eb7371",
+  "fetchedAt": "2026-10-10T13:48:52.621Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/polars-bio",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/polars-bio",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/polars-bio",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "f97d0f559fbab99bc714d5cb0cd74e53d1547dd15b6e0e4334a1ec68b59c9d67",
+  "fetchedAt": "2026-10-10T13:49:05.228Z"
+}

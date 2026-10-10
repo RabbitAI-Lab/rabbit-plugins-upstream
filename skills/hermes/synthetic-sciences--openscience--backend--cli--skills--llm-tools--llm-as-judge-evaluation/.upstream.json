@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/llm-as-judge-evaluation",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/llm-as-judge-evaluation",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/llm-as-judge-evaluation",
+  "branch": "main",
+  "pushedAt": "2026-10-10T12:26:51Z",
+  "contentHash": "3cfefa2493ccfd331998d38a830065464c09b96afc661c6c4ac946872e656664",
+  "fetchedAt": "2026-10-10T13:48:52.537Z"
+}
