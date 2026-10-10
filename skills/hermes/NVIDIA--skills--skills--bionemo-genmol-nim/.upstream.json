@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-genmol-nim",
+  "identifier": "NVIDIA/skills/skills/bionemo-genmol-nim",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-genmol-nim",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "134d4c88dd99930fc3d706e52308954dc27ecb5c740a452cd8ca6109227456f9",
+  "fetchedAt": "2026-10-10T13:48:50.962Z"
+}

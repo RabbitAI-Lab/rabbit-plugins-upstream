@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/shap",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/shap",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/shap",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "d121deaaf6d19f89d2c8c8f7c4f6d51bce147d3bc5f5ff8cb96b8099d73e25a5",
+  "fetchedAt": "2026-10-10T13:49:05.276Z"
+}

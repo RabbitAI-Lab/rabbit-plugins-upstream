@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/bionemo-nims",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/bionemo-nims",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/bionemo-nims",
+  "branch": "main",
+  "pushedAt": "2026-10-10T12:26:51Z",
+  "contentHash": "bfd3350d1247d763740562788b1595066d3b0b8b75ef9f6215df3ec50edf32eb",
+  "fetchedAt": "2026-10-10T13:48:52.436Z"
+}

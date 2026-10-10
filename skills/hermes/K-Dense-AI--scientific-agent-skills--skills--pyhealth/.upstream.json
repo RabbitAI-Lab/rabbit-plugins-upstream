@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pyhealth",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pyhealth",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pyhealth",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "aee347ce2a1ecbaf90b35508ca28162fcc1b4c446100f680597575493bc74d21",
+  "fetchedAt": "2026-10-10T13:49:05.239Z"
+}

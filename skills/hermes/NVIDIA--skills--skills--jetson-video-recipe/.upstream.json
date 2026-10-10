@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-video-recipe",
+  "identifier": "NVIDIA/skills/skills/jetson-video-recipe",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-video-recipe",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "129ff8efc819cab099c67880597be658d5d1a7a4c8e140ad45b6771fff80d741",
+  "fetchedAt": "2026-10-10T13:48:50.999Z"
+}

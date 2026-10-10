@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/lm-evaluation-harness",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/lm-evaluation-harness",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/lm-evaluation-harness",
+  "branch": "main",
+  "pushedAt": "2026-10-10T12:26:51Z",
+  "contentHash": "c6db89d243aaccd49ea897a87d20e925cf99789f2ebebf23795dfa92f152a23f",
+  "fetchedAt": "2026-10-10T13:48:52.483Z"
+}
