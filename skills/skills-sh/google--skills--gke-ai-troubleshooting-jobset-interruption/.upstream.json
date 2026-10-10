@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-jobset-interruption",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-jobset-interruption",
+  "branch": "main",
+  "pushedAt": "2026-10-09T19:32:48Z",
+  "contentHash": "1c9b89a0177b7b27cfb0f00d0608e6ad0856480099a76fec08943ce127ad364f",
+  "fetchedAt": "2026-10-10T13:50:30.209Z"
+}

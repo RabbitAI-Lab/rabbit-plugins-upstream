@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/aws/agent-toolkit-for-aws/aws-marketplace-metering",
+  "repo": "aws/agent-toolkit-for-aws",
+  "skillId": "aws-marketplace-metering",
+  "branch": "main",
+  "pushedAt": "2026-10-10T09:44:16Z",
+  "contentHash": "67da42a815c92a7882d96307ad0178e228af71b634e4aa1f1a9b5b6d621c69cd",
+  "fetchedAt": "2026-10-10T13:51:17.947Z"
+}
