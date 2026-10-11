@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/pretext",
+  "identifier": "official/creative/pretext",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/pretext",
+  "branch": "main",
+  "pushedAt": "2026-10-11T14:03:36Z",
+  "contentHash": "748afb2de54dfe7ff1dafd8f3dd761af30ae632b37a09dcd94a1a7ef23a5d8a3",
+  "fetchedAt": "2026-10-11T14:08:27.946Z"
+}

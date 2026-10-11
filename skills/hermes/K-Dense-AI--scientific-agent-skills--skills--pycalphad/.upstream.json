@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pycalphad",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pycalphad",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pycalphad",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "fffe025a9bf79c5b1fa14cceaf27a95dcff6d19249441e924878319519959444",
+  "fetchedAt": "2026-10-11T14:08:32.614Z"
+}

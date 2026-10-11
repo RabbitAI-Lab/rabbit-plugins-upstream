@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/timesfm-forecasting",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/timesfm-forecasting",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/timesfm-forecasting",
+  "branch": "main",
+  "pushedAt": "2026-10-05T09:39:11Z",
+  "contentHash": "bf4058d90322a8bbdcafb998a0846d813c7f369dbe1d6fc7b5d338547d17af3f",
+  "fetchedAt": "2026-10-11T14:08:32.662Z"
+}

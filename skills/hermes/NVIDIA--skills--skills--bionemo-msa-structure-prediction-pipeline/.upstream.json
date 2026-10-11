@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-msa-structure-prediction-pipeline",
+  "identifier": "NVIDIA/skills/skills/bionemo-msa-structure-prediction-pipeline",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-msa-structure-prediction-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "34c04b36ba42d8fe391c10690ef555305c76aef6296e77c31f634715891ab4d3",
+  "fetchedAt": "2026-10-11T14:08:21.558Z"
+}
