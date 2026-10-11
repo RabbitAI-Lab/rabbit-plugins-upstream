@@ -1,0 +1,217 @@
+{
+  "version": "1.0",
+  "description": "Catalog of administrative officer duties covered by the admin-assistant skill. automation: autonomous = the agent can do it end-to-end; assisted = agent drafts, human approves; manual = human-only, agent reminds/tracks.",
+  "categories": [
+    {
+      "id": "calendar-scheduling",
+      "name": "Calendar & Scheduling",
+      "automation": "autonomous",
+      "items": [
+        {"id": "cal-01", "title": "Maintain master calendar & avoid double-booking", "cadence": "daily"},
+        {"id": "cal-02", "title": "Schedule meetings, send invites, book rooms/virtual links", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "cal-03", "title": "Protect focus blocks and enforce meeting-free windows", "cadence": "daily"},
+        {"id": "cal-04", "title": "Send agenda + pre-read 24h before each meeting", "cadence": "on-demand"},
+        {"id": "cal-05", "title": "Reconcile next-day calendar and flag conflicts", "cadence": "daily"}
+      ]
+    },
+    {
+      "id": "correspondence",
+      "name": "Correspondence & Inbox",
+      "automation": "autonomous",
+      "items": [
+        {"id": "cor-01", "title": "Triage inbox: urgent / awaiting-reply / FYI / unsubscribe", "cadence": "daily"},
+        {"id": "cor-02", "title": "Draft routine replies for human approval", "cadence": "daily", "automation": "assisted"},
+        {"id": "cor-03", "title": "Maintain incoming/outgoing correspondence register", "cadence": "daily"},
+        {"id": "cor-04", "title": "Chase unanswered threads older than 48h", "cadence": "daily"},
+        {"id": "cor-05", "title": "Standard acknowledgement of received requests (SLA)", "cadence": "on-demand"}
+      ]
+    },
+    {
+      "id": "documents",
+      "name": "Document Drafting & Word Processing",
+      "automation": "assisted",
+      "items": [
+        {"id": "doc-01", "title": "Draft memos, letters, notices, circulars", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "doc-02", "title": "Prepare meeting agendas and minutes", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "doc-03", "title": "Prepare reports and status dashboards", "cadence": "weekly", "automation": "assisted"},
+        {"id": "doc-04", "title": "Maintain templates & house style (letterhead, fonts, sign-off)", "cadence": "on-demand"},
+        {"id": "doc-05", "title": "Proofread, format and version-control before issue", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "doc-06", "title": "Track every document to be drafted in docs.py", "cadence": "continuous", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "records",
+      "name": "Records, Filing & Information Management",
+      "automation": "autonomous",
+      "items": [
+        {"id": "rec-01", "title": "File documents to the correct folder with naming convention", "cadence": "daily", "automation": "autonomous"},
+        {"id": "rec-02", "title": "Maintain filing index / document register", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "rec-03", "title": "Apply retention schedule and archive/dispose per policy", "cadence": "monthly", "automation": "assisted"},
+        {"id": "rec-04", "title": "Backup critical files and verify restore", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "rec-05", "title": "Control access to confidential records", "cadence": "on-demand", "automation": "assisted"}
+      ]
+    },
+    {
+      "id": "meetings",
+      "name": "Meeting & Committee Coordination",
+      "automation": "assisted",
+      "items": [
+        {"id": "mtg-01", "title": "Prepare agenda, papers and packs", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "mtg-02", "title": "Record attendance and take minutes", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "mtg-03", "title": "Publish minutes within 48h", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "mtg-04", "title": "Track action items to closure in tasks.py", "cadence": "daily", "automation": "autonomous"},
+        {"id": "mtg-05", "title": "Maintain action/decision log", "cadence": "weekly", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "travel",
+      "name": "Travel & Itinerary Management",
+      "automation": "assisted",
+      "items": [
+        {"id": "trv-01", "title": "Research and book flights, hotels, ground transport", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "trv-02", "title": "Prepare itinerary with contacts, times, confirmations", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "trv-03", "title": "Track visas, passports, insurance and expiry dates", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "trv-04", "title": "Prepare travel authorisation and expense claim forms", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "trv-05", "title": "Send pre-travel brief and post-travel follow-ups", "cadence": "on-demand", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "procurement",
+      "name": "Procurement & Vendor Management",
+      "automation": "assisted",
+      "items": [
+        {"id": "prc-01", "title": "Collect requirements and raise purchase requisitions", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "prc-02", "title": "Obtain and compare quotations (min. 3 where policy requires)", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "prc-03", "title": "Raise purchase orders and track delivery", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "prc-04", "title": "Match invoices to PO/GRN and forward for payment", "cadence": "weekly", "automation": "assisted"},
+        {"id": "prc-05", "title": "Maintain approved vendor list and contract renewal dates", "cadence": "monthly", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "finance",
+      "name": "Finance, Budget & Expense Administration",
+      "automation": "assisted",
+      "items": [
+        {"id": "fin-01", "title": "Track petty cash and reconcile balances", "cadence": "weekly", "automation": "assisted"},
+        {"id": "fin-02", "title": "Process expense claims with receipts", "cadence": "weekly", "automation": "assisted"},
+        {"id": "fin-03", "title": "Monitor budget vs actual and flag overruns", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "fin-04", "title": "Maintain invoice register and payment due dates", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "fin-05", "title": "Prepare monthly finance admin summary", "cadence": "monthly", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "hr-admin",
+      "name": "HR & People Administration",
+      "automation": "assisted",
+      "items": [
+        {"id": "hr-01", "title": "Maintain staff list, contacts and org chart", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "hr-02", "title": "Onboarding/offboarding checklist (accounts, assets, access)", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "hr-03", "title": "Track leave, attendance and timesheets", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "hr-04", "title": "Track probation, contract and appraisal dates", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "hr-05", "title": "Maintain training and certification records", "cadence": "quarterly", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "facilities",
+      "name": "Office & Facilities Management",
+      "automation": "assisted",
+      "items": [
+        {"id": "fac-01", "title": "Monitor stationery/pantry supplies and reorder", "cadence": "weekly", "automation": "assisted"},
+        {"id": "fac-02", "title": "Log maintenance issues and chase vendors", "cadence": "daily", "automation": "autonomous"},
+        {"id": "fac-03", "title": "Manage access cards, keys and seating plan", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "fac-04", "title": "Health & safety checks (fire, first aid, walkways)", "cadence": "monthly", "automation": "assisted"},
+        {"id": "fac-05", "title": "Office cleanliness and housekeeping schedule", "cadence": "weekly", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "compliance",
+      "name": "Compliance, Licences & Statutory Deadlines",
+      "automation": "autonomous",
+      "items": [
+        {"id": "cmp-01", "title": "Maintain register of licences, permits and certifications", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "cmp-02", "title": "Alert 60/30/7 days before any renewal or filing deadline", "cadence": "daily", "automation": "autonomous"},
+        {"id": "cmp-03", "title": "Track statutory/official returns and submissions", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "cmp-04", "title": "Maintain policy register and review cycle", "cadence": "quarterly", "automation": "autonomous"},
+        {"id": "cmp-05", "title": "Keep audit trail and evidence folder", "cadence": "continuous", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "visitors",
+      "name": "Visitor & Reception Management",
+      "automation": "assisted",
+      "items": [
+        {"id": "vis-01", "title": "Maintain visitor log and expected-visitor list", "cadence": "daily", "automation": "autonomous"},
+        {"id": "vis-02", "title": "Issue visit confirmations and directions/parking info", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "vis-03", "title": "Prepare badges, meeting room and refreshments", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "vis-04", "title": "Host/escort and security briefing where required", "cadence": "on-demand", "automation": "manual"}
+      ]
+    },
+    {
+      "id": "reporting",
+      "name": "Reporting & Performance Tracking",
+      "automation": "autonomous",
+      "items": [
+        {"id": "rep-01", "title": "Daily activity and open-item summary", "cadence": "daily", "automation": "autonomous"},
+        {"id": "rep-02", "title": "Weekly operations report", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "rep-03", "title": "Monthly management report / KPI pack", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "rep-04", "title": "Quarterly review pack and action tracker", "cadence": "quarterly", "automation": "autonomous"},
+        {"id": "rep-05", "title": "Maintain dashboards for pending tasks and documents", "cadence": "daily", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "data-systems",
+      "name": "Data Entry & Systems Upkeep",
+      "automation": "autonomous",
+      "items": [
+        {"id": "dat-01", "title": "Keep contact database accurate and de-duplicated", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "dat-02", "title": "Data entry into CRM/ERP/HRIS with validation", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "dat-03", "title": "Spreadsheet hygiene: formulas, formats, versioning", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "dat-04", "title": "Master data cleanup and quality checks", "cadence": "monthly", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "followups",
+      "name": "Follow-ups, Escalation & SLA Tracking",
+      "automation": "autonomous",
+      "items": [
+        {"id": "flw-01", "title": "Track every commitment made in meetings and email", "cadence": "daily", "automation": "autonomous"},
+        {"id": "flw-02", "title": "Escalate items past SLA with a clear owner and date", "cadence": "daily", "automation": "autonomous"},
+        {"id": "flw-03", "title": "Maintain RAG status of open commitments", "cadence": "weekly", "automation": "autonomous"},
+        {"id": "flw-04", "title": "Close-the-loop confirmation after each delivery", "cadence": "on-demand", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "events",
+      "name": "Events & Logistics Coordination",
+      "automation": "assisted",
+      "items": [
+        {"id": "evt-01", "title": "Event plan: venue, catering, AV, agenda, invites", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "evt-02", "title": "RSVP tracking and reminders", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "evt-03", "title": "Day-of run sheet and contingency plan", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "evt-04", "title": "Post-event feedback survey and report", "cadence": "on-demand", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "it-admin",
+      "name": "IT & Tools Administration",
+      "automation": "assisted",
+      "items": [
+        {"id": "ita-01", "title": "Track software licences, seats and renewal dates", "cadence": "monthly", "automation": "autonomous"},
+        {"id": "ita-02", "title": "Request accounts/permissions and revoke on exit", "cadence": "on-demand", "automation": "assisted"},
+        {"id": "ita-03", "title": "Asset register: laptops, phones, peripherals", "cadence": "quarterly", "automation": "autonomous"},
+        {"id": "ita-04", "title": "Verify backups and log restore tests", "cadence": "weekly", "automation": "autonomous"}
+      ]
+    },
+    {
+      "id": "confidentiality",
+      "name": "Confidentiality, Data Protection & Risk",
+      "automation": "assisted",
+      "items": [
+        {"id": "cnf-01", "title": "Classify documents (public/internal/confidential/restricted)", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "cnf-02", "title": "Handle personal data per privacy policy (minimise, mask, secure)", "cadence": "continuous", "automation": "autonomous"},
+        {"id": "cnf-03", "title": "Maintain incident/issue log and report within SLA", "cadence": "on-demand", "automation": "autonomous"},
+        {"id": "cnf-04", "title": "Review sharing permissions periodically", "cadence": "monthly", "automation": "autonomous"}
+      ]
+    }
+  ]
+}

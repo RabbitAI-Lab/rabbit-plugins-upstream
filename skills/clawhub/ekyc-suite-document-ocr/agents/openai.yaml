@@ -1,4 +1,4 @@
 interface:
   display_name: "eKYC Suite Document OCR"
-  short_description: "Extract structured fields from eKYC documents"
-  default_prompt: "Use eKYC Suite Document OCR to extract structured fields from a consented ID card, bank card, driver license, or vehicle license image."
+  short_description: "KYC document OCR Skill for document verification Skill, ID card OCR, Chinese ID card OCR, Chinese national ID card OCR, bank card OCR, driver license OCR, and vehicle license OCR"
+  default_prompt: "Use eKYC Suite Document OCR for KYC document OCR, document verification, document verification Skill searches, identity document OCR, ID card OCR, Chinese ID card OCR, Chinese national ID card OCR, bank card OCR, driver license OCR, or vehicle license OCR from a consented document image."

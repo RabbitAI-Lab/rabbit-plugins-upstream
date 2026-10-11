@@ -1,15 +1,43 @@
 {
   "name": "apple-music-dj",
-  "version": "3.1.0",
-  "description": "Intelligent Apple Music personalization engine — taste profiling, playlist generation, discovery, and insights",
+  "version": "3.3.1",
+  "description": "Your AI Apple Music curator — taste profiling, playlists from your real listening, discovery and insights. Try the built-in demo with no tokens.",
   "author": "Andernet (Matthew Anderson)",
   "license": "MIT",
   "homepage": "https://github.com/and3rn3t/apple-music-dj",
-  "tags": ["music", "apple-music", "playlists", "personalization", "musickit", "discovery"],
+  "tags": [
+    "music",
+    "apple-music",
+    "playlists",
+    "personalization",
+    "musickit",
+    "discovery",
+    "listening-history",
+    "taste-profile",
+    "playlist-import",
+    "music-discovery",
+    "spotify-import",
+    "demo"
+  ],
   "category": "music",
   "emoji": "🎧",
   "requires": {
-    "bins": ["curl", "jq", "python3"],
-    "env": ["APPLE_MUSIC_DEV_TOKEN", "APPLE_MUSIC_USER_TOKEN"]
-  }
+    "bins": [
+      "curl",
+      "jq",
+      "python3"
+    ]
+  },
+  "envVars": [
+    {
+      "name": "APPLE_MUSIC_DEV_TOKEN",
+      "required": false,
+      "description": "MusicKit developer token. Needed for your own music; not for the demo."
+    },
+    {
+      "name": "APPLE_MUSIC_USER_TOKEN",
+      "required": false,
+      "description": "Music User Token. Needed for your own music; not for the demo."
+    }
+  ]
 }

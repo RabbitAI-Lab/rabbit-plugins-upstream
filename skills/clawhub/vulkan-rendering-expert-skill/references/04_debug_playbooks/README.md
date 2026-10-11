@@ -4,7 +4,7 @@
 
 `04_debug_playbooks` 是 Vulkan Expert Skill 的调试专家手册模块。
 
-它以真实工程问题为入口，不以 API 为入口。  
+它以真实工程问题为入口，不以 API 为入口。
 它的目标是让 AI 像高级 Vulkan 渲染工程师一样，根据现象快速建立排查路径：
 
 ```text
@@ -73,6 +73,19 @@
 6. Android 问题必须考虑 Surface / ANativeWindow / pause / resume / rotation / resize。
 7. 不确定时不下确定结论，必须要求或建议补充 Validation message、VUID、RenderDoc/AGI capture、logcat、关键代码片段。
 8. 每个 Playbook 必须链接相关 API 卡片。
+9. 统一推理链：Symptom → Hypothesis → Evidence → Root Cause → Workaround → Minimal Fix → Structural Fix → Regression Verification；每个 Playbook 的章节（§1-§7）即按此链路组织。
+10. 禁止把“现象消失”直接等同于“找到根因”；Validation clean 不能作为唯一成功标准。
+11. §3 快速验证路径必须为证据驱动决策表：按成本升序检查、依据结果分支、剪枝列引用 §2 假设编号；不写线性步骤清单。
+
+修复分级说明（对应模板 §6 与各 Playbook 的小节）：
+
+| 级别 | 含义 | 命名映射（v1.0.3 及以前） |
+|---|---|---|
+| Workaround | 临时绕过，现象消失但根因未除 | 最小修复 |
+| Minimal Fix | 针对根因的最小修复 | 稳定修复 |
+| Structural Fix | 结构性 / 防复发修复 | 工程化修复 |
+
+> 结论性输出前需通过 `../00_expert_entry/verification_gate.md` 的 G1-G6 关卡；修改影响面推理见 `../02_core_mental_model/regression_reasoning.md`；回归清单见 `../07_integration_pack/regression_checklist.md`。
 
 ---
 
@@ -97,11 +110,9 @@
 │
 ├── 03_validation_errors/
 │   ├── validation_error_decode.md
-│   ├── descriptor_binding_error.md
-│   ├── image_layout_error.md
-│   ├── synchronization_hazard.md
-│   ├── memory_leak.md
-│   └── pipeline_layout_error.md
+│   ├── descriptor_pipeline_layout_errors.md   （合并 descriptor_binding_error + pipeline_layout_error）
+│   ├── layout_sync_hazard_errors.md           （合并 image_layout_error + synchronization_hazard）
+│   └── memory_leak.md
 │
 ├── 04_resource_sync/
 │   ├── compute_no_output.md
@@ -111,16 +122,14 @@
 │   └── android_surface_lifecycle.md
 │
 └── 06_performance_symptoms/
-    ├── cpu_frame_time_high.md
+    ├── cpu_overhead_symptoms.md        （合并 cpu_frame_time_high + descriptor_update_overhead）
     ├── gpu_frame_time_high.md
-    ├── bandwidth_high.md
-    ├── barrier_overuse.md
-    ├── descriptor_update_overhead.md
-    ├── fullscreen_pass_cost.md
-    ├── draw_call_bottleneck.md
-    ├── pipeline_creation_stutter.md
-    └── startup_time_high.md
+    ├── bandwidth_fullscreen_cost.md    （合并 bandwidth_high + fullscreen_pass_cost）
+    ├── barrier_draw_call_stall.md      （合并 barrier_overuse + draw_call_bottleneck）
+    └── pipeline_startup_stutter.md     （合并 pipeline_creation_stutter + startup_time_high）
 ```
+
+> 每个合并文件内部以 `## Debug Playbook: <原 playbook 名>` 作为锚点保留全部内容，向量检索仍可命中原 playbook 主题。
 
 ---
 
@@ -132,27 +141,21 @@
 01_visual_issues/black_screen.md
 01_visual_issues/flickering.md
 01_visual_issues/depth_test_wrong.md
-03_validation_errors/validation_error_decode.md
-03_validation_errors/descriptor_binding_error.md
-03_validation_errors/image_layout_error.md
-03_validation_errors/synchronization_hazard.md
-03_validation_errors/memory_leak.md
-03_validation_errors/pipeline_layout_error.md
 02_crash_hang/swapchain_recreate_crash.md
 02_crash_hang/gpu_hang.md
 02_crash_hang/device_lost.md
-05_android_specific/android_surface_lifecycle.md
+03_validation_errors/validation_error_decode.md
+03_validation_errors/descriptor_pipeline_layout_errors.md
+03_validation_errors/layout_sync_hazard_errors.md
+03_validation_errors/memory_leak.md
 04_resource_sync/compute_no_output.md
 04_resource_sync/compute_graphics_sync_error.md
-06_performance_symptoms/cpu_frame_time_high.md
+05_android_specific/android_surface_lifecycle.md
+06_performance_symptoms/cpu_overhead_symptoms.md
 06_performance_symptoms/gpu_frame_time_high.md
-06_performance_symptoms/bandwidth_high.md
-06_performance_symptoms/barrier_overuse.md
-06_performance_symptoms/descriptor_update_overhead.md
-06_performance_symptoms/fullscreen_pass_cost.md
-06_performance_symptoms/draw_call_bottleneck.md
-06_performance_symptoms/pipeline_creation_stutter.md
-06_performance_symptoms/startup_time_high.md
+06_performance_symptoms/bandwidth_fullscreen_cost.md
+06_performance_symptoms/barrier_draw_call_stall.md
+06_performance_symptoms/pipeline_startup_stutter.md
 ```
 
 这些 Playbook 覆盖黑屏、闪烁、Crash、GPU Hang、Device Lost、Validation Error、Descriptor、Image Layout、Sync Hazard、Compute 无输出、Android 生命周期和常见性能症状。

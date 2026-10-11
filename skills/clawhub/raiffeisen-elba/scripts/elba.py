@@ -118,9 +118,15 @@ WORKSPACE_ROOT = _find_workspace_root()
 CONFIG_DIR = WORKSPACE_ROOT / "raiffeisen-elba"
 CONFIG_FILE = CONFIG_DIR / "config.json"
 STATE_ROOT = WORKSPACE_ROOT / "raiffeisen-elba"
-PROFILE_DIR = STATE_ROOT / ".pw-profile"
-SESSION_URL_FILE = PROFILE_DIR / "last_url.txt"
-TOKEN_CACHE_FILE = PROFILE_DIR / "token.json"
+
+def get_profile_dir(profile_name="default"):
+    if profile_name == "default":
+        return STATE_ROOT / ".pw-profile"
+    return STATE_ROOT / f".pw-profile-{profile_name}"
+
+PROFILE_DIR = get_profile_dir()
+SESSION_URL_FILE = None
+TOKEN_CACHE_FILE = None
 DEBUG_DIR = STATE_ROOT / "debug"
 
 # Ephemeral outputs (documents, canonical exports) go to /tmp by default.
@@ -131,10 +137,6 @@ DEFAULT_OUTPUT_DIR = _TMP_ROOT / "openclaw" / "elba"
 # Harden state directory permissions (best-effort)
 if STATE_ROOT.exists():
     _harden_path(STATE_ROOT)
-    if PROFILE_DIR.exists():
-        _harden_path(PROFILE_DIR)
-    if TOKEN_CACHE_FILE.exists():
-        _harden_path(TOKEN_CACHE_FILE)
 
 URL_LOGIN = "https://sso.raiffeisen.at/mein-login/identify"
 URL_DASHBOARD = "https://mein.elba.raiffeisen.at/bankingws-widgetsystem/meine-produkte/dashboard"
@@ -162,22 +164,55 @@ def _load_config() -> dict:
     return {}
 
 
-def load_credentials():
-    """Load credentials from config.json."""
+# Active profile state
+_ACTIVE_PROFILE = "default"
+
+def set_active_profile(profile_name):
+    global _ACTIVE_PROFILE, PROFILE_DIR, SESSION_URL_FILE, TOKEN_CACHE_FILE
+    _ACTIVE_PROFILE = profile_name
+    PROFILE_DIR = get_profile_dir(profile_name)
+    SESSION_URL_FILE = PROFILE_DIR / "last_url.txt"
+    TOKEN_CACHE_FILE = PROFILE_DIR / "token.json"
+
+def load_credentials(profile_name=None):
+    """Load credentials from config.json for the specified profile."""
+    if profile_name is None:
+        profile_name = _ACTIVE_PROFILE
+        
     cfg = _load_config()
-    elba_id = cfg.get("elba_id")
+    
+    # Try to load from specific profile
+    if profile_name != "default" and "profiles" in cfg:
+        profiles = cfg.get("profiles", {})
+        if profile_name in profiles:
+            prof = profiles[profile_name]
+            return prof.get("elba_id"), prof.get("pin")
+            
+    # Fallback to top-level if profile not found or default profile requested
+    elba_id = cfg.get("elba_id") 
     pin = cfg.get("pin")
     if elba_id and pin:
         return elba_id, pin
+        
     return None, None
 
-
-def get_institution_name() -> str:
+def get_institution_name(profile_name=None) -> str:
     """Return the institution name for canonical JSON output.
 
     Uses the 'alias' key from config.json if set, otherwise defaults to 'elba'.
     """
-    return _load_config().get("alias", "elba")
+    if profile_name is None:
+        profile_name = _ACTIVE_PROFILE
+        
+    cfg = _load_config()
+    if profile_name != "default" and "profiles" in cfg:
+        profiles = cfg.get("profiles", {})
+        if profile_name in profiles:
+            prof = profiles[profile_name]
+            if "alias" in prof:
+                return prof.get("alias")
+                
+    return cfg.get("alias", "elba")
 
 
 
@@ -469,16 +504,14 @@ def login(page, elba_id, pin, timeout_seconds: int | None = None):
         
         if "mein.elba.raiffeisen.at" in page.url:
             print("[login] Login successful!", file=sys.stderr)
-            
-            # Navigate to the full dashboard to ensure all cookies are set
-            print("[login] Loading products dashboard to establish session...", file=sys.stderr)
-            # domcontentloaded is usually enough; occasionally Playwright reports net::ERR_ABORTED
-            # even though the SPA is usable. Treat that as a warning and continue.
+
+            # Let ELBA finish its own post-pushTAN redirect. Forcing a dashboard
+            # navigation here can restart the SSO flow and invalidate approval.
             try:
-                page.goto(URL_DASHBOARD, wait_until="domcontentloaded", timeout=15000)
-            except Exception as e:
-                print(f"[login] WARNING: Dashboard navigation error: {e}", file=sys.stderr)
-            time.sleep(3)
+                page.wait_for_load_state("domcontentloaded", timeout=15000)
+            except Exception:
+                pass
+            time.sleep(5)
             
             # Verify we didn't get redirected back to login
             if "sso.raiffeisen.at" in page.url or "mein-login" in page.url:
@@ -836,7 +869,7 @@ def _extract_bearer_token(page):
     }""")
     
     if token:
-        print(f"[token] Found token in storage: {token[:20]}...", flush=True, file=sys.stderr)
+        print("[token] Found token in storage", flush=True, file=sys.stderr)
     return token
 
 def _load_cached_token():
@@ -914,7 +947,7 @@ def _get_bearer_token(context, page):
     
     token = _extract_bearer_token_from_storage_state(context)
     if token:
-        print(f"[token] Found token in storage state: {token[:20]}...", flush=True, file=sys.stderr)
+        print("[token] Found token in storage state", flush=True, file=sys.stderr)
         _save_cached_token(token)
         return token
     
@@ -930,7 +963,7 @@ def _get_bearer_token(context, page):
         auth_header = request.headers.get('authorization', '')
         if auth_header.startswith('Bearer '):
             captured_token['value'] = auth_header[7:]
-            print(f"[token] Captured: {captured_token['value'][:20]}...", flush=True, file=sys.stderr)
+            print("[token] Captured", flush=True, file=sys.stderr)
         route.continue_()
     
     # Hard time-limit the capture phase so we never hang here.
@@ -941,21 +974,15 @@ def _get_bearer_token(context, page):
     try:
         start = time.time()
 
-        # Force a fresh navigation so the SPA triggers API calls (cache can short-circuit).
         try:
-            page.goto("about:blank", timeout=5000)
+            # Keep the approved ELBA page alive. Navigating away to about:blank
+            # can lose the SSO handoff before the token-bearing SPA requests fire.
+            if "mein.elba.raiffeisen.at" in page.url:
+                page.reload(wait_until="domcontentloaded", timeout=15000)
+            else:
+                page.goto(URL_DASHBOARD, wait_until="domcontentloaded", timeout=15000)
         except Exception:
             pass
-
-        try:
-            # networkidle is brittle for SPA apps; use domcontentloaded with a timeout.
-            page.goto(URL_DASHBOARD, wait_until="domcontentloaded", timeout=15000)
-        except Exception:
-            # If navigation fails, try a reload to trigger requests
-            try:
-                page.reload(wait_until="domcontentloaded", timeout=15000)
-            except Exception:
-                pass
 
         # Give it a moment for API calls to fire.
         time.sleep(3)
@@ -1722,8 +1749,11 @@ def _canonicalize_elba_transaction(tx: dict) -> dict:
     return out
 
 
-def cmd_transactions(headless=True, account=None, date_from=None, date_to=None, output=None, fmt="json"):
-    """Download transactions for an account (logs in automatically if needed)."""
+def cmd_transactions(headless=True, account=None, date_from=None, date_to=None, output=None, fmt="json", json_output=False):
+    """Download transactions for an account (logs in automatically if needed).
+
+    With json_output and no output path, the JSON is printed to stdout instead of written to a file.
+    """
     if not account or not date_from or not date_to:
         print("Missing required arguments: --account, --from, --until", file=sys.stderr)
         sys.exit(1)
@@ -1798,8 +1828,9 @@ def cmd_transactions(headless=True, account=None, date_from=None, date_to=None, 
                 raw_path = _write_debug_json("transactions-raw", transactions)
                 print(f"[debug] Raw transactions saved to: {raw_path}", file=sys.stderr)
 
-            # Resolve output base (even if there are 0 transactions)
+            # Resolve output base (even if there are 0 transactions); None means print JSON to stdout
             acc_clean = _safe_filename_component(account, default="account")
+            file_base = None
             if output:
                 out_path = _safe_output_path(output, WORKSPACE_ROOT)
                 if out_path.is_dir() or str(output).endswith(os.sep):
@@ -1810,7 +1841,7 @@ def cmd_transactions(headless=True, account=None, date_from=None, date_to=None, 
                     _safe_output_path(str(out_path.parent), WORKSPACE_ROOT)
                     out_path.parent.mkdir(parents=True, exist_ok=True)
                     file_base = out_path
-            else:
+            elif not json_output:
                 base_name = f"transactions_{acc_clean}_{date_from}_{date_to}"
                 DEFAULT_OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
                 file_base = DEFAULT_OUTPUT_DIR / base_name
@@ -1832,7 +1863,10 @@ def cmd_transactions(headless=True, account=None, date_from=None, date_to=None, 
                 if raw_path:
                     wrapper["rawPath"] = str(raw_path)
 
-            if fmt == "json":
+            if file_base is None:
+                print(json.dumps(wrapper, ensure_ascii=False, indent=2))
+                print(f"[transactions] {len(canonical)} transaction(s) found", file=sys.stderr)
+            elif fmt == "json":
                 out_file = file_base.with_suffix(".json")
                 out_file.write_text(json.dumps(wrapper, ensure_ascii=False, indent=2))
                 print(f"[transactions] Saved JSON: {out_file}", file=sys.stderr)
@@ -2316,6 +2350,7 @@ def main():
     # Global flags (keep ordering consistent with george.py)
     parser.add_argument("--visible", action="store_true", help="Show browser")
     parser.add_argument("--login-timeout", type=int, default=DEFAULT_LOGIN_TIMEOUT, help="Seconds to wait for pushTAN approval (default: 300)")
+    parser.add_argument("--profile", default="default", help="Profile name to use (default: default)")
     parser.add_argument("--debug", action="store_true", help="Save bank-native payloads to workspace/raiffeisen-elba/debug (default: off)")
 
     subparsers = parser.add_subparsers(dest="command", required=True)
@@ -2332,6 +2367,7 @@ def main():
     transactions_parser.add_argument("--until", dest="date_to", required=True, help="End date (YYYY-MM-DD)")
     transactions_parser.add_argument("--format", dest="fmt", choices=["csv", "json"], default="json", help="Output format")
     transactions_parser.add_argument("--out", dest="output", help="Output file base or directory")
+    transactions_parser.add_argument("--json", action="store_true", help="Output as JSON (to stdout unless --out is given)")
 
     portfolio_parser = subparsers.add_parser("portfolio", help="Fetch depot portfolio positions")
     portfolio_parser.add_argument("--depot-id", required=True, help="Depot ID (digits-only)")
@@ -2346,6 +2382,13 @@ def main():
     depot_tx_parser.add_argument("--out", dest="output", help="Output file or directory")
 
     args = parser.parse_args()
+
+    if args.command == "transactions" and args.json and args.fmt == "csv":
+        parser.error("transactions: --json cannot be combined with --format csv")
+
+    # Initialize profile state early based on --profile
+    profile_name = getattr(args, "profile", "default")
+    set_active_profile(profile_name)
 
     global DEBUG_ENABLED
     DEBUG_ENABLED = bool(getattr(args, "debug", False))
@@ -2370,7 +2413,8 @@ def main():
             date_from=getattr(args, 'date_from', None),
             date_to=getattr(args, 'date_to', None),
             output=getattr(args, 'output', None),
-            fmt=getattr(args, 'fmt', "json")
+            fmt=getattr(args, 'fmt', "json"),
+            json_output=getattr(args, 'json', False)
         )
     elif args.command == "portfolio":
         cmd_portfolio(

@@ -1,42 +1,53 @@
-## Description: <br>
-Enforces fresh verification evidence before any completion claim. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enforces fresh verification evidence before any completion claim, including test, fix, and handoff claims, and prompts scope clarification before ambiguous edits.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this discipline skill to require immediate, command-backed verification before claiming work is complete. It also helps agents confirm ambiguous change scope before editing and select verification strategies suited to the change type. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can cause agents to propose or run broad verification commands on large projects or long-running suites. <br>
-Mitigation: Review proposed verification commands when they touch large projects, long-running test suites, or broad filesystem scope. <br>
-Risk: Incorrect or stale verification guidance could lead an agent to overstate completion confidence. <br>
-Mitigation: Require fresh command output and explicit failure reporting before accepting any completion claim. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to choose and run claim-matched checks before reporting work complete, while preserving unrelated changes and disclosing verification gaps.
 
-## Reference(s): <br>
-- [Isolated Verification](references/isolated-verification.md) <br>
-- [System-Wide Test Check](references/system-wide-test-check.md) <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured completion reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the agent to provide fresh verification evidence, scope confirmation, and command results before completion claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Verification checks or migrations may affect a non-disposable database, service, or unrelated local changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm targets are disposable and the requested scope is authorized before running checks; stop and clarify when they are not.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion)
+- [Proof integrity](artifact/references/proof-integrity.md)
+- [Change verification strategies](artifact/references/change-strategies.md)
+- [Verification oracles](artifact/references/verification-oracles.md)
+- [Claims and failures](artifact/references/claims-and-failures.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with commands and verification results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports checks performed, skipped checks, and residual risks.]
+
+## Skill Version(s):
+
+5.1.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

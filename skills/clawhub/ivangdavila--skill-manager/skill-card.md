@@ -1,41 +1,54 @@
-## Description: <br>
-Manage installed skills lifecycle: suggest by context, track installations, check updates, and cleanup unused. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Manage installed skills lifecycle: suggest by context, track installations, check updates, and cleanup unused.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Developers and agent users use Skill Manager to identify context-relevant skills, manage install, update, and removal workflows, and maintain a concise local inventory of accepted and declined skills. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Skill installation and update commands can download and execute code from the ClawHub registry. <br>
-Mitigation: Review each skill before approving installation or update, and require explicit user consent before running npx clawhub install, update, or uninstall commands. <br>
-Risk: The local inventory records installed skills and user-stated decline reasons in ~/skill-manager/inventory.md. <br>
-Mitigation: Keep decline reasons brief and avoid sensitive information; use the inventory only for skill lifecycle tracking. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Skill Manager on ClawHub](https://clawhub.ai/ivangdavila/skill-manager) <br>
-- [Skill Lifecycle Management](lifecycle.md) <br>
-- [Context-Based Skill Suggestions](suggestions.md) <br>
+## Use Case:
 
+Developers and agent users use this skill to manage installed ClawHub skills by suggesting context-relevant skills, tracking installed and declined skills, checking for updates, and guiding cleanup with user consent.
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user approval before install, update, or removal actions; inventory entries are stored locally in ~/skill-manager/inventory.md.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.3 (source: SKILL.md frontmatter and server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill manages installed skills through unpinned remote ClawHub CLI commands that can execute changing code and alter the user's agent environment.
+
+Mitigation: Prefer a reviewed and pinned ClawHub CLI version or a vetted local CLI, review skills before installing, and require explicit user consent before install, update, or removal.
+
+Risk: Declined-skill reasons are stored locally and could include sensitive details if recorded too broadly.
+
+Mitigation: Store only the minimal stated reason needed to avoid repeated suggestions, and avoid recording sensitive details.
+
+## Reference(s):
+
+- [Skill Manager ClawHub page](https://clawhub.ai/ivangdavila/skills/skill-manager)
+- [Skill Lifecycle Management](lifecycle.md)
+- [Context-Based Skill Suggestions](suggestions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Markdown guidance with inline shell commands and inventory entries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires explicit user consent before install, update, or removal actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,28 +3,131 @@
 from __future__ import annotations
 
 import mimetypes
+import ntpath
 import os
+import tempfile
+from pathlib import Path
 from typing import Any
 
 from outlook_mcp.config import Config
+from outlook_mcp.errors import LEAVE_SETTINGS_TO_THE_USER
 from outlook_mcp.permissions import (
     CATEGORY_MAIL_DRAFTS,
     CATEGORY_MAIL_SEND,
     check_permission,
 )
-from outlook_mcp.validation import validate_email, validate_graph_id
+from outlook_mcp.tools.mail_drafts import require_draft
+from outlook_mcp.validation import sanitize_output, validate_email, validate_graph_id
 
 # 3MB threshold — files above this use upload sessions
 _LARGE_FILE_THRESHOLD = 3 * 1024 * 1024
 # Chunk size for upload sessions (320 KiB aligned, as required by Graph)
 _UPLOAD_CHUNK_SIZE = 320 * 1024 * 10  # 3.2 MB chunks
 
+# Where resolving a path can reach the network — see _network_path_outside.
+_WINDOWS = os.name == "nt"
 
-def _validate_save_path(save_path: str) -> str:
-    """Validate save_path — reject path traversal attempts."""
-    if ".." in save_path:
-        raise ValueError(f"Path traversal not allowed in save_path: {save_path}")
-    return save_path
+
+def _network_path_outside(path: str, bases: tuple[str, ...]) -> bool:
+    r"""True if ``path`` names a network or device location outside every base.
+
+    Windows only, and lexical on purpose — ``ntpath`` reads the string and never
+    the filesystem. ``Path.resolve()`` opens a path to canonicalise it, and for
+    ``\\host\share\x`` that means connecting to ``host`` and signing in as the
+    logged-in user, before the confinement check has had its chance to refuse.
+    So this one class is judged by its text, and resolving stays the authority
+    for everything else.
+
+    A path that begins with two separators covers UNC (``\\host\share``,
+    ``//host/share``), the long-path form (``\\?\UNC\host\share``) and the
+    device namespace (``\\.\…``). The two leading characters are read
+    straight off the string rather than from ``ntpath.splitdrive``: before
+    Python 3.12 that function finds no drive in some of these spellings that
+    pathlib then treats as one, and the check has to agree with what gets
+    resolved, on every version.
+
+    An ``attachments_dir`` that itself sits on a share is the operator's
+    choice, so a path lexically inside one of ``bases`` goes through to the
+    resolver. Only a base that is a network path can vouch for one — a local
+    root normalises to an empty prefix, which every path starts with.
+    """
+    if not _starts_with_two_separators(path):
+        return False
+    target = ntpath.normcase(ntpath.normpath(path))
+    for base in bases:
+        if not _starts_with_two_separators(base):
+            continue
+        root = ntpath.normcase(ntpath.normpath(base)).rstrip("\\")
+        if root and (target == root or target.startswith(root + "\\")):
+            return False
+    return True
+
+
+def _starts_with_two_separators(path: str) -> bool:
+    return len(path) >= 2 and path[0] in "\\/" and path[1] in "\\/"
+
+
+def resolve_attachment_path(path: str, attachments_dir: str) -> str:
+    """Resolve ``path`` inside ``attachments_dir``, or refuse.
+
+    These tools take a filesystem path from the model, and the model takes
+    instructions from email. So the path is untrusted input: "attach the file at
+    <path> and reply" is a working exfiltration primitive unless the reachable
+    set is bounded. Every read and write goes through here.
+
+    Confinement is resolved, not textual. A substring test for ``..`` — which is
+    all this did before 1.20.0 — passes an absolute path to anywhere, and passes
+    a symlink sitting innocently inside the directory. Resolving first collapses
+    both, and comparing against the resolved base means a sibling directory
+    sharing a name prefix cannot slip through either.
+
+    A relative path is taken as relative to ``attachments_dir``, so an agent that
+    passes a bare filename lands somewhere predictable instead of the process's
+    working directory.
+
+    One class is refused by its text first: on Windows a network path is turned
+    away before it is resolved, because there resolving is itself the harm (see
+    ``_network_path_outside``). That check only ever adds a refusal — whatever
+    it lets through still has to resolve inside the directory.
+    """
+    if not path or not path.strip() or "\x00" in path:
+        raise ValueError("Attachment path must be a non-empty path containing no null bytes.")
+
+    configured = Path(os.path.expanduser(attachments_dir))
+    base = configured
+    created = not base.exists()
+    base.mkdir(parents=True, exist_ok=True)
+    if created:
+        # Ours to lock down. Never chmod a directory the user pointed us at.
+        # POSIX-only: on Windows os.chmod sets nothing but the read-only attribute, so this
+        # cannot enforce owner-only access and the path's Windows ACL governs instead — see
+        # the note above `_ensure_dir` in config.py (#85).
+        base.chmod(0o700)
+    base = base.resolve()
+
+    expanded = os.path.expanduser(path)
+    # Before resolve(), which on Windows is what makes the connection.
+    if _WINDOWS and _network_path_outside(expanded, (str(configured), str(base))):
+        raise ValueError(
+            f"Attachment path is a network or device location outside the permitted "
+            f"directory: {path}. Attachments may only be read from or written to "
+            f"{attachments_dir}."
+        )
+    candidate = Path(expanded)
+    if not candidate.is_absolute():
+        candidate = base / candidate
+    # strict=False by default: download writes a file that does not exist yet.
+    resolved = candidate.resolve()
+
+    if not resolved.is_relative_to(base):
+        raise ValueError(
+            f"Attachment path is outside the permitted directory: {path}. "
+            f"Attachments may only be read from or written to {attachments_dir}, "
+            "the server's attachments_dir setting. To send a file, ask the user to "
+            "put it there; to save one, pass a path inside it (a bare filename lands "
+            f"there). {LEAVE_SETTINGS_TO_THE_USER}"
+        )
+    return str(resolved)
 
 
 def _make_inline_attachment(file_path: str) -> Any:
@@ -69,11 +172,64 @@ async def list_attachments(
     }
 
 
+def _validated_download_target(save_path: str, attachments_dir: str) -> str:
+    """Refuse a download target that cannot land, before any Graph call.
+
+    Two shapes used to slip past the confinement check and blow up late:
+    ``save_path`` resolving to the attachments directory itself (``"."`` is
+    relative to it, and ``is_relative_to`` is satisfied) sent ``dirname()`` one
+    level *above* the fence, so the temp file landed next to ``config.json``;
+    and a path whose parent does not exist made it all the way through the
+    fetch before ``mkstemp`` raised FileNotFoundError — an OS error whose text
+    never reaches the model. Both are caller-input problems, so both are
+    ValueError, checked before a single byte is requested.
+    """
+    resolved = Path(save_path)
+    if resolved.is_dir():
+        raise ValueError(
+            f"Attachment download target is a directory, not a file: "
+            f"{resolved}. Pass a file path inside {attachments_dir}."
+        )
+    if not resolved.parent.is_dir():
+        raise ValueError(
+            f"Attachment download directory does not exist: {resolved.parent}. "
+            "Create it first — downloads do not create directories on demand."
+        )
+    return save_path
+
+
+def write_download(save_path: str, content: bytes) -> None:
+    """Land downloaded bytes at ``save_path`` atomically, readable by the owner only.
+
+    All bytes are in hand before this is called, and they go to a temp file in
+    the target's own directory (``mkstemp``: created 0600, exclusively) that
+    ``os.replace`` then moves into place. So a failed write never truncates a
+    file already under that name, and a symlink planted at the target after the
+    path check is replaced rather than written through — the bytes cannot be
+    redirected to whatever it pointed at. Shared by the mail and To Do downloads.
+    """
+    fd, tmp_path = tempfile.mkstemp(
+        dir=os.path.dirname(save_path), prefix=".download-", suffix=".tmp"
+    )
+    try:
+        with os.fdopen(fd, "wb") as f:
+            f.write(content)
+        os.replace(tmp_path, save_path)
+    except BaseException:
+        try:
+            os.unlink(tmp_path)
+        except OSError:
+            pass
+        raise
+
+
 async def download_attachment(
     graph_client: Any,
     message_id: str,
     attachment_id: str,
     save_path: str,
+    *,
+    config: Config,
 ) -> dict:
     """Download an attachment.
 
@@ -82,7 +238,8 @@ async def download_attachment(
     """
     message_id = validate_graph_id(message_id)
     attachment_id = validate_graph_id(attachment_id)
-    _validate_save_path(save_path)
+    save_path = resolve_attachment_path(save_path, config.attachments_dir)
+    save_path = _validated_download_target(save_path, config.attachments_dir)
 
     attachment = (
         await graph_client.me.messages.by_message_id(message_id)
@@ -92,15 +249,24 @@ async def download_attachment(
     # The msgraph SDK (Kiota) already base64-decodes contentBytes into raw bytes
     # during deserialization, so content_bytes is the raw file content. Decoding
     # again corrupts binary files / raises UnicodeDecodeError (issue #25).
-    content = attachment.content_bytes
+    # An attached email or a link to a cloud file is a different model with no
+    # content_bytes at all; a file attachment can come back with None. Either
+    # way there is nothing to save, and nothing is touched.
+    content = getattr(attachment, "content_bytes", None)
+    if content is None:
+        kind = getattr(attachment, "odata_type", None)
+        kind = f" ({kind})" if isinstance(kind, str) else ""
+        raise ValueError(
+            f"Attachment {attachment_id} has no file content to save{kind} — it may "
+            "be an attached email or a link to a cloud file. Nothing was written."
+        )
 
-    with open(save_path, "wb") as f:
-        f.write(content)
+    write_download(save_path, content)
     return {
         "saved_to": save_path,
-        "name": attachment.name,
+        "name": sanitize_output(attachment.name or ""),
         "size": attachment.size,
-        "content_type": attachment.content_type,
+        "content_type": sanitize_output(attachment.content_type or ""),
     }
 
 
@@ -157,7 +323,10 @@ async def send_with_attachments(
     validated_bcc = [validate_email(e) for e in bcc] if bcc else []
     validated_reply_to = [validate_email(e) for e in reply_to] if reply_to else []
 
-    # Validate all files exist
+    # Confine every path before touching the filesystem, then validate existence.
+    attachment_paths = [
+        resolve_attachment_path(path, config.attachments_dir) for path in attachment_paths
+    ]
     for path in attachment_paths:
         if not os.path.isfile(path):
             raise FileNotFoundError(f"Attachment file not found: {path}")
@@ -247,10 +416,9 @@ async def send_with_attachments(
             upload_body = CreateUploadSessionPostRequestBody()
             upload_body.attachment_item = att_item
 
-            session = (
-                await graph_client.me.messages.by_message_id(draft.id)
-                .attachments.create_upload_session.post(upload_body)
-            )
+            session = await graph_client.me.messages.by_message_id(
+                draft.id
+            ).attachments.create_upload_session.post(upload_body)
 
             await _upload_large_file(session.upload_url, file_path, file_size)
 
@@ -281,7 +449,10 @@ async def attach_to_draft(
     check_permission(config, CATEGORY_MAIL_DRAFTS, "outlook_attach_to_draft")
     draft_id = validate_graph_id(draft_id)
 
-    # Validate all files exist before any API call
+    # Confine every path before touching the filesystem, then validate existence.
+    attachment_paths = [
+        resolve_attachment_path(path, config.attachments_dir) for path in attachment_paths
+    ]
     for path in attachment_paths:
         if not os.path.isfile(path):
             raise FileNotFoundError(f"Attachment file not found: {path}")
@@ -295,6 +466,10 @@ async def attach_to_draft(
             large_files.append((path, file_size))
         else:
             small_files.append(path)
+
+    if attachment_paths:
+        # After the paths are confined and found, before anything is uploaded.
+        await require_draft(graph_client, draft_id, "outlook_attach_to_draft")
 
     attachment_ids: list[str] = []
     msg_builder = graph_client.me.messages.by_message_id(draft_id)
@@ -352,6 +527,7 @@ async def remove_draft_attachment(
     draft_id = validate_graph_id(draft_id)
     attachment_id = validate_graph_id(attachment_id)
 
+    await require_draft(graph_client, draft_id, "outlook_remove_draft_attachment")
     await (
         graph_client.me.messages.by_message_id(draft_id)
         .attachments.by_attachment_id(attachment_id)

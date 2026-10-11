@@ -691,7 +691,7 @@ Generated JSON parameter schema:
 
 Action slug: `info`
 
-Price: `10` credits
+Price: `3` credits
 
 Get image dimensions and mode without modifying the image.
 

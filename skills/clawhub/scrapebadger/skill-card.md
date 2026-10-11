@@ -1,45 +1,51 @@
-## Description: <br>
-Web scraping platform for Twitter/X data, Vinted marketplace data, and general web scraping API access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using ScrapeBadger APIs for web scraping, search, social media, marketplace, and real-estate data.
 
-## Publisher: <br>
-[0xghostcasper](https://clawhub.ai/user/0xghostcasper) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[0xghostcasper](https://clawhub.ai/user/0xghostcasper)
 
-## Use Case: <br>
-Developers and agents use this skill to call ScrapeBadger APIs for Twitter/X lookups, Vinted marketplace queries, page scraping, screenshots, anti-bot detection, structured extraction, and batch scraping jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a ScrapeBadger API key and API calls can consume credits. <br>
-Mitigation: Use a revocable key, keep it in SCRAPEBADGER_API_KEY, monitor account usage and credits, and rotate the key if exposure is suspected. <br>
-Risk: Scraping requests may send target URLs, page content, prompts, or extraction criteria to an external service. <br>
-Mitigation: Avoid submitting secrets, internal-only URLs, personal data, or regulated content unless authorized to send that data to ScrapeBadger. <br>
-Risk: Using scraping endpoints against third-party sites can create compliance or terms-of-service risk. <br>
-Mitigation: Confirm that the requested targets and data collection are authorized before running scraping, screenshot, extraction, or batch jobs. <br>
+## Use Case:
 
+Developers and agents use this reference to prepare authenticated ScrapeBadger requests for public web content, search results, and platform data.
 
-## Reference(s): <br>
-- [ScrapeBadger Documentation](https://docs.scrapebadger.com) <br>
-- [ScrapeBadger Dashboard](https://scrapebadger.com/dashboard) <br>
-- [ScrapeBadger MCP Server](https://mcp.scrapebadger.com/mcp) <br>
-- [ClawHub Skill Page](https://clawhub.ai/0xghostcasper/scrapebadger) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, API calls, shell commands, configuration] <br>
-**Output Format:** [Markdown with HTTP endpoint examples and JSON request bodies] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SCRAPEBADGER_API_KEY and sends requests to ScrapeBadger's external APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence, SKILL.md frontmatter, package.json) <br>
+Risk: Requests to an external scraping and search service may disclose submitted URLs, prompts, or sensitive data to ScrapeBadger and upstream providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit secrets, private URLs, regulated personal data, or confidential prompts unless applicable data-handling requirements are acceptable.
+
+## Reference(s):
+
+- [ScrapeBadger documentation](https://docs.scrapebadger.com)
+- [ScrapeBadger MCP server](https://mcp.scrapebadger.com/mcp)
+- [ClawHub skill listing](https://clawhub.ai/0xghostcasper/skills/scrapebadger)
+
+## Skill Output:
+
+**Output Type(s):** [Text, API requests, Shell commands, Guidance]
+
+**Output Format:** [Markdown with HTTP request examples and JSON snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requests require a ScrapeBadger API key and may consume credits.]
+
+## Skill Version(s):
+
+1.4.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

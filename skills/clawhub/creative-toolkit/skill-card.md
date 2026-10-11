@@ -1,45 +1,56 @@
-## Description: <br>
-This skill helps agents generate and manage AI images and videos through multi-provider routing, prompt enhancement, curated prompt search, and local ComfyUI workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using MeiGen tools for image and video generation, image editing, discovery, and optional creative planning while preserving the caller's choices and budget.
 
-## Publisher: <br>
-[jau123](https://clawhub.ai/user/jau123) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jau123](https://clawhub.ai/user/jau123)
 
-## Use Case: <br>
-Developers and creative teams use this skill to route image and video generation requests across configured providers, enhance prompts, search curated examples, and manage local ComfyUI workflows. It is intended for AI image and video creation workflows, not generic chat, code generation, document writing, video editing, or audio generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill runs a pinned third-party npm package and depends on user-configured image or video providers. <br>
-Mitigation: Install only after reviewing the pinned package and configure API credentials only for providers the user trusts. <br>
-Risk: Reference images may be sent to the selected external provider during generation. <br>
-Mitigation: Use local ComfyUI for workflows that should keep reference images local, or avoid sending sensitive reference images to external providers. <br>
+## Use Case:
 
+Creators and developers use this skill to connect MeiGen tools, find inspiration, and coordinate image, video, and specialized image-editing tasks within an existing workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jau123/skills/creative-toolkit) <br>
-- [Project homepage](https://github.com/jau123/MeiGen-AI-Design-MCP) <br>
-- [Provider configuration](references/providers.md) <br>
-- [Troubleshooting and security notes](references/troubleshooting.md) <br>
-- [MeiGen model comparison](https://www.meigen.ai/model-comparison) <br>
-- [meigen npm package](https://www.npmjs.com/package/meigen) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with MCP tool calls, shell commands, JSON configuration snippets, and returned URLs or file paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include generated media URLs and local save paths returned by configured providers; the skill does not inspect generated images.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.36 (source: release evidence and frontmatter) <br>
+Risk: Prompts, references, job details, and selected account-library content may be sent to MeiGen cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review OAuth permissions and share only the content needed for the requested task.
+
+Risk: Paid generation and image workflows may use purchased credits.
+
+Mitigation: Check current prices and the approved budget before starting paid work or accepting a changed price.
+
+## Reference(s):
+
+- [MeiGen on ClawHub](https://clawhub.ai/jau123/skills/creative-toolkit)
+- [MeiGen OpenClaw setup](https://www.meigen.ai/mcp?tab=openclaw)
+- [Providers and configuration](references/providers.md)
+- [Troubleshooting and data handling](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with commands and tool-use guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return task status, handles, and completed media URLs from connected tools.]
+
+## Skill Version(s):
+
+3.1.0 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

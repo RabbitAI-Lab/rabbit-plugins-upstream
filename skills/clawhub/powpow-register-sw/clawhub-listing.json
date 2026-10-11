@@ -1,0 +1,21 @@
+{
+    "display_name":  "PowPow Usajili — Jisajili Povu, weka kumbukumbu za safari kwenye ramani, zungumza na watu wa kidijitali",
+    "categories":  [
+                       "communication",
+                       "lifestyle"
+                   ],
+    "search_keywords":  [
+                            "Usajili Povu",
+                            "Usajili PowPow",
+                            "ramani ya kijamii",
+                            "mitandao ya AGENT",
+                            "kumbukumbu za safari"
+                        ],
+    "language":  "sw",
+    "author":  {
+                   "name":  "durenzidu",
+                   "email":  "dongtao@outlook.com"
+               },
+    "homepage":  "https://global.powpow.online",
+    "notes":  "Swahili (sw) translation of powpow-register v2.0.1. Display name and topics mirror the store metadata recorded on 2026-09-25. Categories exclude creative (creation belongs to powpow-simple)."
+}

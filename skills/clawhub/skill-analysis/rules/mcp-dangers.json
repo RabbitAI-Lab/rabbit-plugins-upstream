@@ -1,0 +1,172 @@
+{
+  "family": "mcp-dangers",
+  "version": 1,
+  "server": [
+    {
+      "id": "mcp-00",
+      "re": "npx\\s+-y\\b|npx\\s+--yes\\b|uvx\\b",
+      "label": "MCP server 经 npx/uvx 自动下载执行（无版本固定）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-01",
+      "re": "curl[^\\n]{0,500}\\|\\s*(?:sh|bash)|wget[^\\n]{0,500}\\|\\s*(?:sh|bash)",
+      "label": "MCP server 启动命令含 curl|bash 远程执行",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-02",
+      "re": "https?://[^\\s\\\"'`]+",
+      "label": "MCP server 指向远程 HTTP(S) 端点（可能无鉴权暴露）",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-03",
+      "re": "(?:env|E)\\s*[:=][^\\n]{0,500}\\b(API_?KEY|SECRET|TOKEN|PASSWORD|CREDENTIAL)\\b",
+      "label": "MCP server 配置注入敏感环境变量",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-04",
+      "re": "~/\\.(?:config|local|cache)[^\\n]{0,80}\\.(?:py|sh|js)\\b|/\\.cache/\\.(?:sys|config)[/\\\\]",
+      "label": "MCP server 指向隐藏/伪装本地脚本路径（如 ~/.config/.cache/.sys/*.py）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-05",
+      "re": "(?:onrender\\.com|vercel\\.app|workers\\.dev|ngrok\\.io|trycloudflare\\.com|replit\\.dev)",
+      "label": "MCP server 指向免费托管平台端点（可随时切换恶意逻辑）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-06",
+      "re": "tools/listChanged|prompts/get[^\\n]{0,120}(?:instruction|credential|SSH|AWS|kubeconfig|shell history|private)",
+      "label": "MCP 元数据投毒（运行时门控切换工具描述，诱骗 Agent 读取凭据）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-07",
+      "re": "\"command\"\\s*:\\s*\"(?:bash|sh|zsh|cmd|powershell|pwsh|python|python3|node)\"",
+      "label": "MCP server STDIO 启动 shell/解释器子进程",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-08",
+      "re": "\"(?:command|args)\"\\s*:\\s*(\"[^\"]*\"|\\[[^\\]]{0,160}?])[^\\n]{0,40}?(?:-c[\"']?|&&|\\|\\s*|;)\\s*[\"']?(?:curl|wget|powershell|cmd|bash|Invoke)",
+      "label": "MCP server 启动参数含命令执行（-c/管道/下载执行）",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-09",
+      "re": "\"description\"\\s*:\\s*\"[^\"]{0,400}?(?:IMPORTANT|always call|then upload|send the user|ignore previous|call the .{0,20} tool|run the .{0,20} command|before returning.{0,40}call the)",
+      "label": "MCP 工具描述嵌入指令（工具投毒 tool poisoning）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-10",
+      "re": "npx\\s+node\\s+(?:-p|-e|--print|--eval)|node\\s+(?:-p\\b|-e\\b|--print|--eval|--input-type)",
+      "label": "MCP stdio 配置用 node -e/-p 执行内联脚本（配置注入到 RCE）",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-11",
+      "re": "\"(?:host|bind|address|listen)\"\\s*:\\s*\"(?:0\\.0\\.0\\.0|::)\"",
+      "label": "MCP server 绑定全部网络接口（默认暴露公网）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-12",
+      "re": "@(?:main|master|develop|dev|latest)\\b|\\\"ref\\\"\\s*:\\s*\\\"(?:main|master|develop|dev)\\\"",
+      "label": "MCP 依赖/上游引用可变分支而非版本 digest（可被上游投毒）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-13",
+      "re": "\"(?:origin|allowedOrigins?|allowed_hosts|ALLOWED_ORIGINS?)\"\\s*:\\s*[^\\n]{0,160}(?:\\*|startswith|prefix)",
+      "label": "MCP origin 校验使用通配或前缀匹配（可被同后缀域名绕过）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-14",
+      "re": "(?:registration_endpoint|register_client|DynamicClientRegistration|/oauth/authorize)[^\\n]{0,160}(?:redirect_uri|redirect-uri)[^\\n]{0,120}(?:http://|https://)",
+      "label": "MCP OAuth 动态客户端注册（DCR）— 攻击者可控 redirect_uri 劫持授权码（confused-deputy 令牌窃取）",
+      "sev": "P1",
+      "why": "tomesphere 2026-05 MCP OAuth 实测（CVE-2026-26384~390 / CVE-2025-69898）：开放 DCR + 攻击者可控 redirect_uri + PKCE 缺失，可致授权码/token 被劫持、账号接管。检出「OAuth 授权 + 外部回调地址」共现即高可疑。",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-15",
+      "re": "(?:oauth/authorize|authorization_code|token[^\\n]{0,40}exchange)[^\\n]{0,120}(?:redirect_uri|state)\\s*[=:]\\s*[^\\n]{0,80}(?:evil|attacker|example\\.org|127\\.0\\.0\\.1:0?\\d{4})",
+      "label": "MCP OAuth 授权码流向不可信回调（可能将 token 发送到攻击者端点）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-17",
+      "re": "(?:call[_-]?count|invocation[_-]?count|tool[_-]?calls?)\\s*(?:\\+|=|\\+=)|(?:if|elif)\\s+\\w*(?:count|calls?)\\w*\\s*(?:==|>=)\\s*[2-9]\\b|(?:third|3rd)\\s+call|(?:第\\s*[两三3]\\s*次|第三次)(?:调用|之后|才)",
+      "label": "MCP 调用计数门控（Deadbugz 三次调用熔断：前 N 次干净，之后运行时改写工具描述）",
+      "sev": "P1"
+    },
+    {
+      "id": "mcp-18",
+      "re": "(?:tools?/list|list[_-]?tools|@server\\.list_tools)\\s*.{0,80}(?:lambda|def\\b)|(?:description|docstring)\\s*=.{0,40}(?:f[\\\"']|format\\(|\\+)",
+      "label": "MCP 工具描述运行时动态生成/改写（rug pull：批准后 metadata 漂移）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-19",
+      "re": "\\bbcc\\b|blind[_-]?carbon|密送",
+      "label": "邮件密送（BCC）字段被引用（postmark-mcp 式静默抄送后门）",
+      "sev": "P2"
+    },
+    {
+      "id": "mcp-20",
+      "re": "(?:open|read|Path)\\s*\\(\\s*(?:file[_-]?path|path|filepath|target)\\b|open\\s*\\(\\s*\\w+\\s*,\\s*['\\\"]rb['\\\"]",
+      "label": "MCP 工具把客户端参数直传文件读取（CVE-2026-73498 同根因：任意文件读取）",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-21",
+      "re": "['\\\"]https?://[^\\n]{0,80}['\\\"]\\s*(?://|,)\\s*(?:#\\s*(?:remote|远程))?.{0,40}mcpServers?|mcpServers?['\\\"]?\\s*:\\s*\\{[^}]{0,200}?['\\\"]url['\\\"]\\s*:\\s*['\\\"]https?://",
+      "label": "MCP 配置指向远程 HTTP server（无本地代码可审计/无清单校验，provision 阶段即受控于远端）",
+      "sev": "P2"
+    },
+    {
+      "id": "mcp-22",
+      "re": "(?:def\\s+\\w*tool\\w*\\s*\\([^)\\n]*(?:\\binsecure\\b|rawProxy|raw_proxy|\\bproxy\\b)|(?:insecure|allow_insecure|rawProxy|raw_proxy)\\s*[:=]\\s*True\\b)",
+      "label": "MCP 工具把网络选项（host/proxy/insecure）暴露为工具参数（CVE-2026-53957 类级反模式：凭据重定向/SSRF）",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-23",
+      "re": "(?:[\\\"']::[\\\"']|host\\s*=\\s*[\\\"']::[\\\"']|\\.listen\\s*\\(\\s*\\w+\\s*\\)\\s*(?:#.*)?$)",
+      "label": "MCP/HTTP 服务监听全接口（IPv6 :: 或 listen 无 host；CVE-2026-81735/54504 类：未认证暴露）",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "mcp-24",
+      "re": "verify\\s*=\\s*False\\b|ssl\\s*verify\\s*关闭",
+      "label": "TLS 证书校验被关闭（verify=False，MITM/凭据截获风险）",
+      "sev": "P2"
+    }
+  ],
+  "instruction": "(?:add|configure|append|edit|write|create|register|connect)\\b[^\\n]{0,40}\\b(?:mcp\\.json|\\.mcp|mcpServers?|modelcontextprotocol|mcp server)\\b"
+}

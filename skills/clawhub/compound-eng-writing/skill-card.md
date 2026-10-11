@@ -1,41 +1,52 @@
-## Description: <br>
-Prose editing, rewriting, and humanizing text for natural tone across copy, documentation, blog posts, emails, and PRs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Edits and rewrites human-facing prose for a natural tone, or audits drafts for AI-like writing patterns without rewriting them.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Writers, developers, and reviewers use this skill to audit and rewrite prose so it sounds direct, specific, and less machine-generated. It supports copy, docs, blog posts, emails, PR descriptions, and similar text-heavy work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may change tone or wording aggressively during edits. <br>
-Mitigation: Review suggested edits before publishing or merging them, especially where tone, attribution, or meaning matters. <br>
+## Use Case:
 
+Writers, developers, and other users can refine copy, documentation, emails, and PR descriptions while preserving the author's meaning and voice, or request a detect-only audit of a draft.
 
-## Reference(s): <br>
-- [Two-Phase Audit Workflow](references/audit-workflow.md) <br>
-- [Before/After Examples](references/examples.md) <br>
-- [Extended Phrase Reference](references/phrases.md) <br>
-- [PR and MR Description Style](references/pr-descriptions.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text with audit notes, corrected text, and concise change summaries when appropriate] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, network access, credential handling, or persistence is described in the release evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Strong style edits may change the intended tone or meaning.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Specify the audience and tone, and review the result against the original draft before use.
+
+## Reference(s):
+
+- [ia-writing ClawHub release](https://clawhub.ai/iliaal/skills/compound-eng-writing)
+- [Audit workflow](references/audit-workflow.md)
+- [Editing and voice](references/editing-and-voice.md)
+- [PR and MR description style](references/pr-descriptions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Plain text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Edits return the corrected text; detect-only audits list observed patterns and suggested fixes.]
+
+## Skill Version(s):
+
+5.1.0 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

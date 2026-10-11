@@ -4,17 +4,22 @@ metadata:
   version: "0.1.1"
 name: commit-tidy
 depends-on:
+  - cleanup
   - git-repo
 description: |
   Analyze staged/committed changes and recommend split, squash, or commit-message strategy.
-  Topics — interactive-amend (worktree-based amend+rebase loop),
+  Topics — conflict-commit-review (per-chunk review gate for conflict-residue commit messages),
+  hunk-split (single-hunk staging via git apply --cached),
+  interactive-amend (worktree-based amend+rebase loop),
   soft-reset-amend (soft-reset top N + selective re-commit),
-  staging-discipline (`git diff --cached --name-only` audit + sensitive-dir gate for rules/agents/docs),
-  security-scan (PUBLIC repo 4-grep secret pattern check before commit),
-  message-discipline (Conventional Commit tags, PUBLIC English enforcement, operation-type continuity, --amend refresh, source-code .md behavior verbs).
+  staging-discipline (staged-set audit + sensitive-dir gate),
+  security-scan (PUBLIC repo secret pattern check),
+  message-discipline (Conventional Commit tags, PUBLIC English, --amend refresh).
   Use when: "commit split", "squash commits", "tidy commits", "amend earlier", "interactive amend",
   "soft reset", "rewrite commits", "PUBLIC repo commit", "secret in commit", "commit message",
-  "commit author identity", "commit message English", "staging discipline".
+  "commit author identity", "commit message English", "staging discipline", "hunk split",
+  "stage one hunk", "git apply --cached", "non-interactive git add -p",
+  "conflict commit", "Conflicts message", "review conflict resolution", "bad merge resolution".
 ---
 
 # Commit Tidy
@@ -23,6 +28,8 @@ description: |
 
 | Topic | Description | Guide |
 |-------|-------------|-------|
+| conflict-commit-review | Per-chunk review gate for commits whose message carries conflict residue — scope, decide by evidence, group by trade-off, ask per group | [conflict-commit-review.md](./conflict-commit-review.md) |
+| hunk-split | Non-interactive single-hunk staging via `git apply --cached` when `git add -p` isn't usable | [hunk-split.md](./hunk-split.md) |
 | interactive-amend | Worktree-based amend+rebase loop for earlier/multiple commits | [interactive-amend.md](./interactive-amend.md) |
 | message-discipline | Commit message conventions — Conventional Commit tags, PUBLIC English enforcement, --amend refresh, source-code .md behavior verbs, operation-type continuity | [message-discipline.md](./message-discipline.md) |
 | security-scan | PUBLIC repo commit body 4-grep secret pattern check (PAT/Vault/API key/Base64) before commit | [security-scan.md](./security-scan.md) |
@@ -37,6 +44,34 @@ Analyze staged/unstaged changes and recommend whether to split into multiple com
 - User asks "should I split this commit?"
 - Reviewing changes that touch many files
 - Ensuring atomic, reviewable commits
+
+## Mandatory Invocation Gate (HARD STOP)
+
+- **5+ Files / Large-Scale Modification Gate**: Whenever 5+ files are modified/added/deleted, or a broad cross-directory refactoring, skill renaming, or multi-component edit occurs, invoking `commit-tidy` before committing is **MANDATORY** (`HARD STOP`). Monolithic single-commit attempts without a commit-tidy split & staging review are strictly prohibited.
+- **Repeated Red→Green Cycle Gate**: Whenever a branch accumulates **two or more Red→Green pairs**, invoking `commit-tidy` **before the first push of that branch** is MANDATORY (`HARD STOP`), regardless of how few files the cycles touch. The 5+ files gate above does not cover this case — TDD cycles typically rewrite **one** file repeatedly, so a three-cycle branch can reach seven commits while never tripping a file-count threshold.
+
+  Two consequences make the range-level judgement necessary even when each cycle felt self-contained:
+
+  | Consequence | Why it needs the range, not the cycle |
+  |---|---|
+  | Repeated-single-file squash candidates | "Squash-scan scope" below scans the range grouped **by file**. A branch where every commit touches the same file is precisely that scan's target, and no single cycle can see the pattern |
+  | Push-limit collision | A repo may cap commits per push (`.githooks/pre-push`, `PUSH_MAX_COMMITS`). Seven commits against a limit of five forces either a staged push or an override — both decisions belong before the push, not after |
+
+  **The verdict may well be "keep them all"** — different Conventional Commit types (`test` / `feat` / `docs`) are disqualified from squashing by "Don't squash" below, and when each Red encodes a *different* discovery (especially one found by executing the code after an earlier Green) squashing would fabricate a history in which every test predates every implementation. The requirement is that the judgement was **made**, not that it collapses anything.
+
+  | # | Don't | Do |
+  |---|-------|----|
+  | 1 | Treat each Red→Green pair as its own unit task, satisfy the per-task commit obligation, and push the accumulated branch without a range-level pass | From the second Green onward, run `commit-tidy` over `origin/<base>..HEAD` before the first push |
+  | 2 | Invoke `commit-tidy` only after the branch is already pushed | A squash then requires a force-push, which narrows the options to ones needing CI checks and user approval. Order is the whole point |
+  | 3 | Skip the gate because the cycles touch a single file | Single-file is the *trigger*, not an exemption — see the table above |
+
+## Squash-scan scope (HARD STOP)
+
+**A user-named commit range is the minimum scope, never the maximum.** The moment any squash candidate is found — whether self-discovered or pointed at by the user — scan the *entire* unpushed range (`git log --name-only @{u}..HEAD`) grouped by file for the same repeated-single-file pattern before proposing a squash plan. See `staging-discipline.md` "Full-range squash-candidate scan" for the procedure. Presenting a squash plan for only the range the user mentioned, while an identical streak sits elsewhere in the same unpushed history, is a violation — the assistant surfaces the full picture, not just the part the user already knew about.
+
+## Conflict-residue commits (HARD STOP)
+
+**Before proposing any squash, reword, reorder, or push plan, grep the range's commit *messages* for conflict residue** (`git log --oneline <base>..<branch> | grep -iE 'conflict'`). Any hit is disqualified from every fast path in this skill until its diff has been reviewed hunk by hunk, with an ask per trade-off group. A clean `git status` and a marker scan that finds no `<<<<<<<` prove nothing here — they detect *abandoned* resolutions, while the dangerous case is one that was completed with the wrong side kept. See [conflict-commit-review.md](./conflict-commit-review.md) for the scoping, evidence, grouping, and verification procedure.
 
 ## Split Decision Criteria
 
@@ -58,6 +93,11 @@ Analyze staged/unstaged changes and recommend whether to split into multiple com
 4. **Large diff size**
    - 500+ lines changed across unrelated areas
    - Multiple components modified independently
+
+## Reset & Rollback Commit Tidy Rule (HARD STOP)
+
+- **Mandatory Amend on Rollback**: When recovering initial configurations or adding files after a repository reset/rollback to the Initial Commit state, do not accumulate new commits; **always merge changes into the existing initialization commit via `git commit --amend`**.
+- **Clean Single Initial Commit**: Organize initial repository setups (`CLAUDE.md`, `index.md`, `log.md`, `pages/`) into a single clean, self-contained initial commit to maximize history readability.
 
 5. **Different reviewers needed**
    - Changes require different domain expertise
@@ -168,6 +208,8 @@ Look for natural split points:
 
 Provide specific recommendations. **Every recommended commit includes a body by default** (see `message-discipline.md` "Default commit message structure"). The body is free-form — it does not have to enumerate per-file changes.
 
+**Mandatory Interactive Ask Gate (HARD STOP)**: Autonomous commit execution or git push without user confirmation is STRICTLY FORBIDDEN. After presenting the split/squash recommendation, you MUST present the split options to the user via `AskUserQuestion` to obtain explicit approval before executing any `git commit` or `git push`. Even when `git pull --rebase` is required or executed, automatically running `git push` afterwards is strictly forbidden without a new `AskUserQuestion` confirmation.
+
 ```
 ## Analysis Results
 
@@ -232,6 +274,37 @@ Read each matched file. If a local mapping exists (e.g., "new topic = `feat:`, i
 | `feat(skill-X): add new-topic.md` (new topic file present) | same rule | `feat(skill-X): add new-topic topic` (unchanged) |
 
 See `message-discipline.md` → "Working-tree-specific commit-type override (HARD STOP)" for the full self-check.
+
+### Step 4.6: Prior-merge regression check (HARD STOP — before presenting the split as ready)
+
+**Before declaring a split "confirmed / ready to execute", check whether any staged file's skill was already the subject of a merged PR — especially a squash-merged one.** A squash-merge collapses individual commits (including "address review findings" fix commits) into one commit on the base branch. Staged changes that touch the same files can silently regress a bug that a findings-application commit already fixed, and a structural/pattern-scan diff will not reveal it.
+
+```bash
+# has this skill already got a merged PR? (repo-specific owner/repo)
+gh pr list -R <owner>/<repo> --state merged --search "<skill-name>" --json number,title,mergedAt,baseRefName
+
+# resolve the actual base (do not assume origin/main — staging repos use next-feat/next-fix)
+gh pr view <N> -R <owner>/<repo> --json baseRefName -q '.baseRefName'
+
+# if the PR had multiple commits before merge, list them — findings-application
+# commits are recognizable by "review findings" / "internal review" / "address feedback"
+gh api repos/<owner>/<repo>/pulls/<N>/commits --jq '.[] | {sha: .sha[0:7], message: .commit.message}'
+```
+
+Diff the staged content against the **actual resolved base ref** (not an assumed default) — and read the **full** diff, not a `head -N` or `grep`-filtered slice:
+
+```bash
+git diff origin/<actual-base> -- <file>
+```
+
+For any hunk that overlaps a findings-application commit's touched lines, and for any changed logic that is testable (regex assignment, conditional branch, script behavior), **execute the changed line(s)** to confirm behavior — a diff read is not a substitute for running the code.
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Conclude "purely additive, no regression" from `grep -E '^\+##'` / `head -100` pattern-scan of a diff | Read the full diff line by line; treat any hunk overlapping a findings-application commit's region as requiring explicit re-verification |
+| 2 | Diff staged changes against `origin/main` when the actual PR base was a staging branch (`next-feat`/`next-fix`) | Resolve the actual merge base via `gh pr view --json baseRefName` first, then diff against that ref |
+| 3 | Declare "no regression" without executing/testing the changed logic | Run the actual code path (`bash -c`, a grep match test, a unit test) before asserting correctness |
+| 4 | Present a split as "confirmed / ready to execute" before this check has run on every touched skill | This check is part of split-readiness — gate Step 5 (and any user-facing "ready" claim) on it passing |
 
 ### Step 5: Execute split (if requested)
 

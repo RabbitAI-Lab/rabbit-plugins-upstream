@@ -1,41 +1,49 @@
-## Description: <br>
-Session retrospective and skill audit for reflecting on sessions, reviewing lessons learned, and auditing what went well or wrong. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews a session for lessons learned and audits skills for actionable improvements.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and agent users use this skill to review a completed session, identify mistakes, friction, wasted effort, and wins, and decide which lessons should be preserved. It also audits invoked skills and proposes concrete improvements or diffs when skill changes are warranted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved memories or skill edits can influence future agent behavior if approved without review. <br>
-Mitigation: Review each proposed memory entry or skill diff before approving persistence. <br>
-Risk: Session retrospectives may quote or summarize sensitive conversation content. <br>
-Mitigation: Do not persist secrets, credentials, private URLs, customer data, unredacted personal information, or machine-specific paths. <br>
+## Use Case:
 
+Developers use this skill to review a session's mistakes, friction, successes, and operational lessons, then propose prioritized improvements and skill changes. Durable memory is saved only with appropriate authorization.
 
-## Reference(s): <br>
-- [ia-reflect on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-reflect) <br>
-- [Skill specification](artifact/SPEC.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with findings, prioritized improvements, review prompts, and proposed diffs when skill audits are requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose memory entries or skill edits for user approval; review proposed changes before they are persisted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.1 (source: server release evidence) <br>
+Risk: Saved lessons, especially cross-project memory, can affect future agent behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed memory entries carefully and authorize the specific items before they are saved.
+
+## Reference(s):
+
+- [Capture and remedy routing](references/capture-and-routing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Evidence-linked findings, prioritized proposed changes, and optional authorized memory entries.]
+
+## Skill Version(s):
+
+5.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

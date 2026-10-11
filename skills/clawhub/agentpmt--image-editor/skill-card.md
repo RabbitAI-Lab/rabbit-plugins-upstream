@@ -1,45 +1,56 @@
-## Description: <br>
-Image Editor helps agents edit and transform PNG, JPEG, and WebP images through AgentPMT-hosted remote actions such as resize, crop, rotate, blur, invert, text overlay, drawing, compositing, background transparency, and multi-step workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in editing and creating images through AgentPMT's hosted image editor, including resizing, cropping, overlays, and chained transformations.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-Developers and agents use this skill to automate image-editing tasks such as thumbnail creation, watermarking, screenshot annotation, branded graphics, image format conversion, and chained transformations through AgentPMT remote tool calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image inputs are sent to AgentPMT-hosted infrastructure and may include sensitive or regulated visual data. <br>
-Mitigation: Avoid confidential screenshots, IDs, private photos, and regulated data unless account and retention requirements allow it. <br>
-Risk: Stored image outputs are enabled by default and return file links. <br>
-Mitigation: Use return_base64 or store_file=false where supported when persistent stored output links are not needed. <br>
-Risk: Account secrets or payment credentials could be exposed if included in prompts or logs. <br>
-Mitigation: Use the AgentPMT setup skills for credential handling and keep tool inputs scoped to the minimum content needed. <br>
+## Use Case:
 
+Agents and developers use this skill to create and edit images for thumbnails, branded graphics, watermarks, and other visual assets using AgentPMT's remote tool.
 
-## Reference(s): <br>
-- [AgentPMT Image Editor marketplace page](https://www.agentpmt.com/marketplace/image-editor) <br>
-- [ClawHub Image Editor skill page](https://clawhub.ai/agentpmt/skills/image-editor) <br>
-- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup) <br>
-- [What AgentPMT is](https://clawhub.ai/agentpmt/what-is-agentpmt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Files, JSON, Configuration instructions, Guidance] <br>
-**Output Format:** [JSON tool-call arguments and JSON responses that may include file IDs, signed URLs, or base64 image data] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces edited image outputs in png, jpeg, or webp; stored files are enabled by default, inline base64 is optional and limited to 10 MB, and stored files expire after 7 days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Image inputs and referenced URLs are sent to AgentPMT-hosted infrastructure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive, regulated, or private-link images unless remote processing is approved.
+
+Risk: Edited outputs are stored remotely by default.
+
+Mitigation: Set store_file=false when persistent storage is not needed.
+
+## Reference(s):
+
+- [Image Editor action schema](schema.md)
+- [Image Editor on ClawHub](https://clawhub.ai/agentpmt/skills/image-editor)
+- [AgentPMT Image Editor marketplace page](https://www.agentpmt.com/marketplace/image-editor)
+- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, JSON request examples]
+
+**Output Format:** [Markdown instructions with JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Remote tool can return image metadata, a stored file link, or inline base64 output; stored files expire after seven days and inline base64 is limited to 10 MB.]
+
+## Skill Version(s):
+
+1.0.1 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
