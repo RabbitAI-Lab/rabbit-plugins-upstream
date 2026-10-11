@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-inference",
+  "repo": "google/skills",
+  "skillId": "gke-inference",
+  "branch": "main",
+  "pushedAt": "2026-10-09T19:32:48Z",
+  "contentHash": "ed5e4592a06965be92d839c4a06c2bb2795b9820a0ec5ae1b5c126bc19e27153",
+  "fetchedAt": "2026-10-11T14:13:09.475Z"
+}

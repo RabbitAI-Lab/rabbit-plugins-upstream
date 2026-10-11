@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/iam-helper-for-troubleshooting",
+  "repo": "google/skills",
+  "skillId": "iam-helper-for-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-10-09T19:32:48Z",
+  "contentHash": "157f37b0c8dcce0cad32fcf2b8ecdad9850245aaa2bc56aec7635682d76f4783",
+  "fetchedAt": "2026-10-11T14:13:09.985Z"
+}
