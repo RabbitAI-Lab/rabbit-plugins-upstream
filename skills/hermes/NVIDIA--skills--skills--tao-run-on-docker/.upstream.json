@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-on-docker",
+  "identifier": "NVIDIA/skills/skills/tao-run-on-docker",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-on-docker",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "876cde9014b7e0b28b07721bd2c8fae42731e04ec0ca15fe9cee42dee79022a0",
+  "fetchedAt": "2026-10-11T14:08:21.883Z"
+}

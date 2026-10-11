@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/accelerate",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/accelerate",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/accelerate",
+  "branch": "main",
+  "pushedAt": "2026-10-10T12:26:51Z",
+  "contentHash": "5069f42aae3d76228d6eb0779145a941faabf10be5abc7d673dacd3690f55575",
+  "fetchedAt": "2026-10-11T14:08:23.227Z"
+}

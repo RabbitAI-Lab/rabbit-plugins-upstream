@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/pyvene",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/pyvene",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/pyvene",
+  "branch": "main",
+  "pushedAt": "2026-10-10T12:26:51Z",
+  "contentHash": "d2141fbce58cf6c70d2b8c4e65056ac758dfec05ce02a86060363cba08f83acd",
+  "fetchedAt": "2026-10-11T14:08:23.321Z"
+}
