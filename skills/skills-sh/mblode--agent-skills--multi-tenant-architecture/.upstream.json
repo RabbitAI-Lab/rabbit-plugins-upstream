@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mblode/agent-skills/multi-tenant-architecture",
+  "repo": "mblode/agent-skills",
+  "skillId": "multi-tenant-architecture",
+  "branch": "main",
+  "pushedAt": "2026-10-10T22:50:38Z",
+  "contentHash": "358f9e81a8525367eb31341093bda01d36fbc38bd904c66fd70c3b4c63934b34",
+  "fetchedAt": "2026-10-11T14:13:45.035Z"
+}
