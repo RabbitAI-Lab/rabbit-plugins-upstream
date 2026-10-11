@@ -143,7 +143,7 @@ Each series value is an array of raw data points.
 - `estimates`: Point estimates
 - `ci_low` / `ci_high`: Confidence interval bounds
 - `overall` (optional): Diamond summary estimate
-- `ref_line` (optional): Reference/null line (default: 0)
+- `ref_line` (optional): Reference/null line. Default: auto by `measure` (OR/RR/HR → 1.0, MD/SMD → 0.0; log-scale data pass `ref_line`: 0 explicitly)
 
 ### Enhanced (v1.3.0) — Recommended for meta-analysis
 
@@ -328,7 +328,125 @@ EGPA,5,45,30,10,10
 
 ---
 
-## Dual Y-Axis Line Chart (`--type dual_axis`)
+## Volcano Plot (`--type volcano`, v4.4)
+
+```json
+{
+  "log2fc": [2.1, -1.3, 0.1],
+  "pvalue": [1e-6, 0.03, 0.7],
+  "names": ["GeneA", "GeneB", "GeneC"],
+  "fc_cut": 1.0,
+  "p_cut": 0.05,
+  "top": 10
+}
+```
+
+- `log2fc` / `pvalue`: 两个**等长**数值数组；p ∈ (0, 1]（p=0 请用最小可表示值如 1e-300）。
+- `names`（可选）：与 log2fc 等长的名称数组；显著性 Top-N 自动标注。
+- `fc_cut`（默认 1.0）/ `p_cut`（默认 0.05）/ `top`（默认 10）：阈值与标注数量。
+- 形态：x=log2FC，y=-log10(p)；上调暖橙/下调蓝/非显著灰；阈值虚线 + 计数事实框。
+- 组学差异表达（基因/蛋白/代谢物）；多组比较请改用 line/bar 系列。
+
+---
+
+## UpSet Plot (`--type upset`, v4.7)
+
+```json
+{
+  "title": "五组学平台差异基因交集",
+  "sets": {
+    "转录组": ["TP53", "KRAS", "EGFR", "BRCA1"],
+    "蛋白组": ["TP53", "EGFR", "MYC", "BRCA1"],
+    "甲基化": ["TP53", "BRCA1", "CDKN2A"],
+    "eQTL": ["KRAS", "EGFR", "PTEN"],
+    "GWAS": ["TP53", "BRCA1", "ERBB2"]
+  },
+  "top_n": 12,
+  "min_size": 1,
+  "sort": "size"
+}
+```
+
+- `sets`：**≥2 个**集合（推荐 ≥5；2~4 集合用 venn 更直观），值为元素列表，自动求交集并集；
+  元素为字符串/数值标量，集合数上限 30。
+- `top_n`（默认 12，取 1~50）：按排序展示前 N 个交集；未展示交集只计入 stderr 事实行。
+- `min_size`（默认 1）：过滤元素数小于该值的交集。
+- `sort`：`size`（默认，交集大小降序）或 `degree`（交集度数优先）；同数据同图（确定性三键 tie-break）。
+- 形态：顶部=交集大小柱（计数直标）；中部=点阵（行=集合、列=交集，实心点+竖连线）；
+  左下=集合总大小横条。标题放 JSON `title` 字段（CLI `--title` 对自管图型不生效）。
+
+---
+
+## Raincloud Plot (`--type raincloud`, v4.9)
+
+```json
+{
+  "labels": ["活动期", "低活动期", "健康对照"],
+  "datasets": {
+    "活动期": [12.1, 14.2, 15.8, 13.4, 16.1],
+    "低活动期": [6.2, 7.1, 5.8, 6.9],
+    "健康对照": [3.1, 2.8, 3.5, 3.0]
+  },
+  "jitter": 0.08,
+  "cloud_scale": 1.0
+}
+```
+
+- 分布三合一（Allen et al. 2021 现代形态）：左=KDE 半小提琴「云」（密度形状）+中=箱线「五数概括」
+  （IQR 箱+中位粗线+1.5×IQR 须）+右=抖动原始点「雨」（确定性抖动，同数据同图）。
+- schema 与 violin 完全相同（labels 可省略，省略时用 datasets 键名）。
+- `jitter`（默认 0.08，取 0~0.3）：雨滴横向散布幅度；`cloud_scale`（默认 1.0，取 0~2.0）：云的宽度缩放，0=隐藏云（仅箱+雨，stderr 告知）。
+- `--stats auto/multi/bootstrap` 与 box/violin 同样适用（显著性括号自动标注）。
+- 方差为 0 的组（全同值）KDE 退化 → 云自动退化为标记线并在 stderr 告知（零静默）。
+
+---
+
+## Waterfall Plot (`--type waterfall`, v4.8)
+
+```json
+{
+  "change": [-45.2, -62.0, -28.7, 12.6, 41.7],
+  "names": ["P001", "P002", "P003", "P004", "P005"],
+  "group": ["PR", "PR", "SD", "PD", "PD"],
+  "pr_cut": -30.0,
+  "pd_cut": 20.0,
+  "sort": "desc"
+}
+```
+
+- `change`：必填，每例（患者/样本）自基线最佳变化百分比（肿瘤缩小为负、增大为正）。
+- `names`（可选）：x 轴标识（如患者编号）；缺省 P01…Pnn。
+- `group`（可选）：缓解类别（如 RECIST CR/PR/SD/PD）——按类别着色+图例+计数事实框；
+  全为 CR/PR/SD/PD（大小写不敏感，图例与计数归一为大写规范形）时用规范语义色，其余类别用主题色。
+  未给 group 时按阈值分桶着色（≤pr_cut 缓解蓝/中间稳定灰/≥pd_cut 进展橙）。
+- `pr_cut`（默认 -30）/ `pd_cut`（默认 20）：阈值虚线（须 pr_cut<0<pd_cut）。
+- `sort`：`desc`（默认，变化降序=经典瀑布形态，并列按输入序）或 `input`（保持给定顺序）。
+- `--show-values`：柱端数值标注；`y_label` 自定义 y 轴标题。
+
+---
+
+## Slope Chart (`--type slope`, v4.2)
+
+```json
+{
+  "left_label": "基线",
+  "right_label": "12 周",
+  "items": {
+    "药物A": [72, 85],
+    "药物B": [65, 61],
+    "对照": [70, 71]
+  }
+}
+```
+
+- `items`: **恰好 2 个数值** `[左值, 右值]` 每项；至少 2 项。
+- `left_label` / `right_label`（可选）：两端列标题（默认 Before/After）。
+- 形态：每项一条左→右连线，两端直标"名称+数值"（自动避让）；
+  最大上升项主题色强调、最大下降项暖橙。多时点请改用 line。
+
+---
+
+## Dual Y-Axis Chart (`--type dual_axis`) — left bars + right lines
 
 ```json
 {
@@ -351,8 +469,15 @@ EGPA,5,45,30,10,10
 ```
 
 - `labels`: X-axis labels (time points).
-- `left` / `y1`: Series for the **left Y-axis** (solid lines).
-- `right` / `y2`: Series for the **right Y-axis** (dashed lines).
+- `left` / `y1`: Series for the **left Y-axis** — drawn as grouped BARS by default (v3.10).
+- `right` / `y2`: Series for the **right Y-axis** — drawn as dashed LINES by default (v3.10).
+- `left_type` (optional, v3.10): `"bar"` (default) or `"line"` — form of the left-axis series.
+- `right_type` (optional, v3.10): `"line"` (default) or `"bar"` — form of the right-axis series.
+- `left_floor` / `right_floor` (optional, v3.10): numeric lower bound for that Y-axis —
+  e.g. `"right_floor": 35` starts a percentage axis at a clean 35 (journal convention);
+  default keeps matplotlib's 5% margin. Ignored (with a warning) if ≥ the data maximum.
+- Legend: merged from both axes, drawn frameless in a reserved top band (never occludes data);
+  CLI `--legend-loc` / `--legend-outside` override.
 - `left_errors` / `y1_errors` (optional): Error band values for left axis series.
 - `right_errors` / `y2_errors` (optional): Error band values for right axis series.
 - `left_ylabel` (optional): Left Y-axis label.
@@ -495,3 +620,45 @@ Draw colored blocks connected by arrows, with optional group boxes and annotatio
 - `annotations` (array): Free-text labels at arbitrary positions:
   - `text`, `x`, `y`: Content and position
   - `fontsize`, `color`, `weight`, `ha`, `va` (optional): Styling
+
+
+## PRISMA 流程图（`-t prisma`，v2.1.0 新增）
+
+PRISMA 2020 系统综述流程图。必需字段：`records_identified`、`studies_included`。
+
+```json
+{
+  "records_identified": 128,
+  "duplicates_removed": 23,
+  "records_screened": 105,
+  "records_excluded": 61,
+  "reports_sought": 44,
+  "reports_not_retrieved": 3,
+  "reports_assessed": 41,
+  "exclusion_reasons": {"Wrong population": 5, "Wrong intervention": 7, "No usable data": 4},
+  "studies_included": 25,
+  "lang": "en"
+}
+```
+
+规则：
+- 中间字段可省略，自动按流水线推导（screened = identified − duplicates，sought = screened −
+  excluded，assessed = sought − not_retrieved）。
+- **自洽性闸门**：显式给出的数字必须与推导一致，`exclusion_reasons` 合计 + `studies_included`
+  必须等于 `reports_assessed`，否则 ERROR（exit 1）拒绝出图。
+- `lang: "zh"` 输出中文标准措辞（识别/筛选/纳入）；`exclusion_reasons` 的键始终按你给的内容
+  原样渲染（中英文均可）。
+- 数值为 0 且未显式给出的侧盒自动省略。
+
+## JSON vs CSV 能力对照（v3.1 收拢）
+
+| 能力 | JSON | CSV/TSV |
+|---|---|---|
+| 基础绘图（柱/线/散点/箱/小提琴等） | ✅ | ✅ |
+| 误差棒 + 显著性标记 | ✅ `errors`/`significance` | ❌ 请改用 JSON |
+| KM 风险表/log-rank | ✅ 原始 [时间,事件] 格式 | ❌ |
+| 多因素 Cox 森林图 | ✅ 逐例试者数据 | ✅ 长表 CSV 亦可 |
+| 组合图 panels / 复杂布局 | ✅ | ❌ |
+| Excel 直读 | — | `--sheet` 需 `.xlsx` |
+
+> 原则：需要误差棒、统计标注或复杂结构时用 JSON；简单数值用 CSV 即可。

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/alibabacloud-ecs-diagnose",
   "slug": "alibabacloud-ecs-diagnose",
   "ownerHandle": null,
-  "version": "0.0.3",
-  "updatedAt": 1782117513533,
-  "contentHash": "005ebb8fd03c186f27c5c748f1fe497267f4ef37ce1c8c1c9c753d62d51f76b6",
-  "fetchedAt": "2026-07-26T18:25:42.973Z"
+  "version": "0.0.5",
+  "updatedAt": 1791528124269,
+  "contentHash": "0bbbd8e4a6e1e95eb6d2dde295081b89c3c131b67991a076ed888fa72c5f5c93",
+  "fetchedAt": "2026-10-11T14:23:38.792Z"
 }

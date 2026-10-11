@@ -1,45 +1,54 @@
-## Description: <br>
-Assesses ornamental fish color vibrancy from aquarium images or videos by extracting HSV saturation and brightness signals, comparing them with species-specific baselines, and returning a structured vibrancy report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Assesses ornamental-fish color from images or videos and reports vibrancy scores, trends, and aquarium care guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers use this skill to analyze ornamental fish footage from aquarium cameras or uploaded files, estimate color vibrancy, review HSV and baseline-comparison signals, and query prior cloud reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fish images, videos, and report queries may be sent to LifeEmergence cloud APIs. <br>
-Mitigation: Use the skill only with footage approved for cloud processing, and confirm retention, authorization, and sharing expectations before deployment. <br>
-Risk: The skill may silently create or reuse an internal identity and store user or token records in the workspace data directory. <br>
-Mitigation: Run it in a dedicated workspace, restrict access to local data files, and review or clear stored identity and token records in shared environments. <br>
-Risk: The security evidence reports incomplete disclosure around cloud uploads, report history queries, and local token handling. <br>
-Mitigation: Review the ClawHub security summary and the relevant artifact behavior before using the skill with sensitive aquarium footage or production accounts. <br>
+## Use Case:
 
+Aquarium keepers, fish farms, and aquarium app developers use this skill to review fish color changes and receive husbandry suggestions from image or video assessments. It can also retrieve previous assessment reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-color-brightness-assessment-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Structured JSON or Markdown text with report links and optional file output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include vibrancy scores, HSV values, species baseline comparisons, trend summaries, alert levels, recommended actions, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Fish images or videos and report requests are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are comfortable sending to the service; avoid sensitive media.
+
+Risk: The skill silently creates or reuses an account identity and stores service tokens locally.
+
+Mitigation: Review and manage the stored account context and local data before using the skill in a shared workspace.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-fish-color-brightness-assessment-analysis)
+- [Assessment API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured assessment report or Markdown history table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include vibrancy scores, color measurements, trends, care suggestions, and report links.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,55 @@
-## Description: <br>
-Helps students identify and improve recurring Chinese grammar issues by tracking error patterns only after explicit consent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Simplified Chinese grammar coach that helps students identify six common sentence-error types and, with consent, track recurring errors and progress.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to check Chinese writing, identify repeated grammar-error patterns, practice targeted corrections, and generate progress summaries when the student asks for them. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can build a grammar-error history that may reveal learning patterns. <br>
-Mitigation: Enable tracking only after explicit user consent and avoid storing or sharing the history when the user has not opted in. <br>
-Risk: Sharing grammar-history summaries with related learning or reminder skills could expose more information than needed. <br>
-Mitigation: Share only the minimum necessary fields with related skills and only when the user permits that specific use. <br>
-Risk: Grammar correction guidance may be misleading if accepted without review. <br>
-Mitigation: Use the skill's prompt-and-practice flow to help the student verify the correction instead of treating suggestions as final answers. <br>
+## Use Case:
 
+Students and educators use this skill to diagnose and practice correcting Chinese sentence errors. With consent, it can maintain a recurring-error profile and provide progress summaries and writing-time prompts.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-grammar-tracker) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Grammar error library](references/grammar-error-library.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and conversational text with structured correction prompts, practice exercises, reminders, and progress reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Consent-gated tracking of grammar-error history and minimal sharing with related learning skills when the user permits it.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-99999.0.2 (source: server release metadata; artifact frontmatter reports 2.0.1) <br>
+Risk: Learner error records or reminders may be retained or shared without effective consent controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before enabling persistence, verify the host enforces consent, deletion, pause, cross-skill and guardian-sharing restrictions, and reminder opt-in.
+
+Risk: Grammar assessments and progress claims may be inaccurate when the host lacks memory or cross-session statistics.
+
+Mitigation: Review uncertain classifications and limit progress reporting to available session data rather than inventing history.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-chinese-grammar-tracker)
+- [Grammar error library](artifact/references/grammar-error-library.md)
+- [High-school sentence guidance](artifact/references/chinese-hs-sentence.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Markdown]
+
+**Output Format:** [Conversational Chinese text and optional Markdown progress reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional consent-controlled grammar-error profile and reminder handoffs; without persistence or cross-session statistics, report only current-session results.]
+
+## Skill Version(s):
+
+2.11.1 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,45 +1,58 @@
-## Description: <br>
-Identifies abnormal behaviors such as limb tremors, convulsions, stiffness, and gait abnormalities through video recognition to support home risk monitoring for patients with chronic conditions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes patient images and videos for tremors, convulsions, stiffness, and gait abnormalities to support home monitoring.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, caregivers, and healthcare-support teams use this skill to submit local or URL-based monitoring media for abnormal movement analysis and to retrieve cloud-hosted report history. Results are for auxiliary monitoring and should not replace clinical diagnosis or physician judgment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive health-related monitoring videos may be sent to the lifeemergence cloud service and associated with report history. <br>
-Mitigation: Use only with explicit consent from recorded individuals, review the provider's privacy and retention terms, and avoid sensitive household footage unless those terms are acceptable. <br>
-Risk: The skill silently creates or reuses an identity and can persist service tokens locally. <br>
-Mitigation: Limit workspace access and review or clear the workspace data database when persisted service tokens or identity-linked history should not remain. <br>
-Risk: Behavior-recognition results could be mistaken for medical diagnosis. <br>
-Mitigation: Present results as auxiliary monitoring only and defer diagnosis, treatment changes, and urgent care decisions to qualified medical professionals. <br>
+## Use Case:
 
+Care teams and developers use this skill to review patient footage for possible movement abnormalities and retrieve prior monitoring reports. Results support monitoring, not clinical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-parkinson-epilepsy-behavior-recognition-analysis) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Structured text, Markdown tables, and JSON-style analysis output with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs can include abnormal-behavior analysis, monitoring suggestions, cloud report history, and exported report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server-resolved release metadata; SKILL.md frontmatter reports 1.0.9) <br>
+Risk: Sensitive patient videos, image URLs, and report history requests are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm patient consent and review the service's privacy, retention, and data-handling terms before use with real footage.
+
+Risk: The skill creates or reuses a local workspace identity database that may store service tokens.
+
+Mitigation: Review local data storage and account-linking expectations; protect access to the workspace.
+
+Risk: Monitoring results may be mistaken for a medical diagnosis.
+
+Mitigation: Treat results as monitoring aids and refer clinical decisions to qualified healthcare professionals.
+
+## Reference(s):
+
+- [Analysis API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured report text or JSON; Markdown table for report history]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links or be saved to a file.]
+
+## Skill Version(s):
+
+1.0.15 (source: ClawHub release metadata; bundled SKILL.md declares 1.0.19)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

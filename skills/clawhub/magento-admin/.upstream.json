@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/magento-admin",
   "slug": "magento-admin",
   "ownerHandle": null,
-  "version": "5.6.1",
-  "updatedAt": 1778492676634,
-  "contentHash": "4e726be2989c0fdb366a2b4f7911c5759a2808a1198552d603d306ab9dafbb98",
-  "fetchedAt": "2026-07-26T19:23:42.913Z"
+  "version": "5.7.0",
+  "updatedAt": 1791020766509,
+  "contentHash": "f3a75fd9d69e6d81af0cfd2ebacb658bc87a5d335c012832ebe6f06604248171",
+  "fetchedAt": "2026-10-11T14:35:57.371Z"
 }

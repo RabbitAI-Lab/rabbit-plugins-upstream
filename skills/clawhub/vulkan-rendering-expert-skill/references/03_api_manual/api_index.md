@@ -38,6 +38,7 @@
 | `VkSurfaceKHR` | `02_surface_swapchain/surface.md` |
 | `VkSwapchainKHR` | `02_surface_swapchain/swapchain.md` |
 | Swapchain Recreate | `02_surface_swapchain/swapchain_recreate.md` |
+| Desktop Windowing（SDL/GLFW/Win32） | `02_surface_swapchain/desktop_windowing.md` |
 
 ---
 
@@ -111,6 +112,7 @@
 | `VkPipelineCache` | `06_pipeline/pipeline_cache.md` |
 | Specialization Constants | `06_pipeline/specialization_constants.md` |
 | Dynamic State | `06_pipeline/dynamic_state.md` |
+| Mesh / Task Shader（`VK_EXT_mesh_shader`） | `06_pipeline/mesh_shader.md` |
 
 ---
 

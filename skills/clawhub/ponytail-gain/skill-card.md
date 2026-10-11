@@ -1,40 +1,49 @@
-## Description: <br>
-Show ponytail measured impact as a scoreboard: less code, less cost, more speed, from the benchmark medians. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Displays published Ponytail 5 benchmark results as a one-shot scoreboard without changing the current repository.
 
-## Publisher: <br>
-[dietrichgebert](https://clawhub.ai/user/dietrichgebert) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dietrichgebert](https://clawhub.ai/user/dietrichgebert)
 
-## Use Case: <br>
-Developers and external users invoke this skill to display a one-shot Ponytail benchmark scoreboard for code, cost, and speed impact. The output is meant to communicate published benchmark medians without claiming repository-specific savings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the published benchmark figures as proof of savings in their own repository. <br>
-Mitigation: Present the figures as benchmark medians only and avoid reporting per-repository savings without a measured baseline. <br>
-Risk: A display-oriented skill could be misused if expanded to make changes or persist state. <br>
-Mitigation: Keep invocation limited to a one-shot scoreboard and review any future changes for file edits, persistence, credentials, or privileged access. <br>
+## Use Case:
 
+Developers and other agent users can view the published Ponytail 5 benchmark comparison for code size, tokens, cost, time, and quality checks without altering their repository.
 
-## Reference(s): <br>
-- [Ponytail repository](https://github.com/DietrichGebert/ponytail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown/plain text scoreboard with ASCII bars] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [One-shot display; no file edits, mode changes, persistence, credentials, or privileged access are requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.4 (source: server release metadata) <br>
+Risk: Published benchmark figures could be mistaken for measured savings in the current repository.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present the figures as published benchmark claims only; do not claim repository-specific savings without a measured baseline.
+
+## Reference(s):
+
+- [Ponytail project homepage](https://github.com/DietrichGebert/ponytail)
+
+## Skill Output:
+
+**Output Type(s):** [Text]
+
+**Output Format:** [Plain-text scoreboard with labeled bars and percentages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One-shot display; no edits, persistent state, or repository-specific savings calculations.]
+
+## Skill Version(s):
+
+5.1.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

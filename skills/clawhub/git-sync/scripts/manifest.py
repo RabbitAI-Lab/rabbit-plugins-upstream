@@ -74,13 +74,15 @@ def save_manifest(data):
 def expand_path(p):
     return os.path.expanduser(p)
 
+from _paths import WORK_REPO
+
 def get_repo_path(repo_name, data):
-    """从 manifest.json 获取仓库路径，支持 ~ 展开"""
+    """从 manifest.json 获取仓库路径，回退到 _paths.WORK_REPO"""
     repos = data.get("repos", {})
     if repo_name not in repos:
-        return None
+        return str(WORK_REPO)
     p = repos[repo_name].get("path", "")
-    return expand_path(p) if p else None
+    return expand_path(p) if p else str(WORK_REPO)
 
 def get_uploaded_items(data, repo_name):
     """获取清单中 uploaded=True 的条目名称集合"""

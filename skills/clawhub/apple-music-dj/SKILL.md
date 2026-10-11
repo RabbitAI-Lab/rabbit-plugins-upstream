@@ -1,22 +1,25 @@
 ---
 name: apple-music-dj
 description: >
-  Ultimate personalization engine for Apple Music. Analyzes listening history, Apple Music Replay
-  stats, library data, and taste patterns to create intelligent playlists directly in the user's
-  Apple Music library via the MusicKit API. Supports deep cuts discovery, mood/activity playlists,
-  trend scouting, constellation discovery ("surprise me"), playlist refresh/evolution,
-  automated weekly curation via cron, taste DNA cards, compatibility scoring, listening insights,
-  catalog gap analysis, album deep dives, artist rabbit holes, daily song drops, concert prep,
-  and personalized new release radar. Use this skill whenever the user mentions Apple Music,
-  playlists, music recommendations, listening habits, music taste, "what should I listen to",
-  discovering new music, mood playlists, workout playlists, deep cuts, hidden gems, trending music,
-  "surprise me", refreshing a playlist, or anything related to curating their music experience.
-  Also trigger on: "DJ", "mix", "playlist for", "music for", "songs like", "similar to",
-  "what's hot", "new releases for me", "taste DNA", "taste card", "compatibility", "how compatible",
-  "year in review", "listening stats", "what have I missed", "album deep dive", "rabbit hole",
-  "concert prep", "seeing [artist] live", "daily song", "what should I listen to right now",
-  or OpenClaw in the context of music.
-version: 3.1.0
+  Your AI Apple Music curator. Builds playlists from your real listening history, finds songs
+  like any artist or song, makes decade throwbacks and two-person blends, shows how your taste
+  changes over time, and rebuilds playlists from a Spotify export or text list. Anything that
+  changes your account is opt-in and confirmed first, and a built-in demo lets you try it with no
+  tokens. Also covers mood and activity playlists,
+  deep cuts, trending picks, taste DNA cards, compatibility scores, listening insights and year
+  in review, catalog gap analysis, album deep dives, artist rabbit holes, daily song drops,
+  concert prep, a new release radar, and scheduled weekly curation via cron. Use whenever the
+  user mentions Apple Music, playlists, music recommendations, listening habits, music taste,
+  "what should I listen to", discovering new music, mood or workout playlists, deep cuts, hidden
+  gems, trending music, "surprise me", refreshing a playlist, or anything related to curating
+  their music experience. Also trigger on: "DJ", "mix", "playlist for", "music for", "songs
+  like", "similar to", "more like", "what's hot", "new releases for me", "taste DNA", "taste
+  card", "compatibility", "how compatible", "year in review", "listening stats", "what have I
+  missed", "album deep dive", "rabbit hole", "concert prep", "seeing [artist] live", "daily
+  song", "what should I listen to right now", "blend", "throwback", "[decade] playlist", "taste
+  drift", "how has my taste changed", "import my playlist", "I didn't like track", "add the
+  missing albums", "set up Apple Music tokens", "try the demo", or OpenClaw in the context of music.
+version: 3.3.1
 emoji: 🎧
 author: Andernet (Matthew Anderson) <and3rn3t@icloud.com>
 homepage: https://github.com/and3rn3t/apple-music-dj
@@ -28,19 +31,50 @@ tags:
   - personalization
   - musickit
   - discovery
+  - listening-history
+  - taste-profile
+  - playlist-import
+  - music-discovery
+  - spotify-import
+  - demo
 category: music
 icon: assets/icon.svg
 metadata:
   openclaw:
     requires:
-      env:
-        - APPLE_MUSIC_DEV_TOKEN
-        - APPLE_MUSIC_USER_TOKEN
       bins:
         - curl
         - jq
         - python3
     primaryEnv: APPLE_MUSIC_DEV_TOKEN
+    envVars:
+      - name: APPLE_MUSIC_DEV_TOKEN
+        required: false
+        description: MusicKit developer token (JWT). Needed for anything that reads your Apple Music; not for the demo. scripts/setup_auth.py creates it.
+      - name: APPLE_MUSIC_USER_TOKEN
+        required: false
+        description: Music User Token from signing in with Apple. Needed for your own listening data and playlists; not for the demo. scripts/setup_auth.py gets it.
+      - name: APPLE_MUSIC_STOREFRONT
+        required: false
+        description: Two-letter storefront code (e.g. us) to override region auto-detection.
+      - name: APPLE_KEY_ID
+        required: false
+        description: MusicKit key ID, read only by setup_auth.py / generate_dev_token.py to sign a developer token.
+      - name: APPLE_TEAM_ID
+        required: false
+        description: Apple Developer Team ID, read only by setup_auth.py / generate_dev_token.py.
+      - name: APPLE_PRIVATE_KEY_PATH
+        required: false
+        description: Path to your MusicKit .p8 signing key, read only by setup_auth.py / generate_dev_token.py. Never sent anywhere.
+      - name: APPLE_TOKEN_EXPIRY
+        required: false
+        description: Developer-token lifetime in seconds for generate_dev_token.py (default and maximum 180 days).
+      - name: APPLE_MUSIC_API_BASE
+        required: false
+        description: Testing/demo hook pointing the API wrapper at a local mock. Loopback addresses only; anything else is refused.
+      - name: APPLE_MUSIC_DJ_DEMO
+        required: false
+        description: Set by demo.py for the scripts it runs, to mark demo mode. Not meant to be set by hand.
     platforms:
       - macos
       - linux
@@ -54,10 +88,42 @@ metadata:
 
 An intelligent Apple Music personalization engine for OpenClaw. Reads your listening history,
 Replay stats, ratings, and library to build a deep taste profile — then generates playlists
-using five strategies, surfaces insights about your listening, and writes everything directly
-to your Apple Music library. Also includes shareable Taste DNA Cards, compatibility scoring,
-catalog gap analysis, album deep dives, artist rabbit holes, daily song drops, concert prep
-playlists, and personalized new release radar.
+using eight strategies, surfaces insights about your listening, and creates the playlists you
+ask for in your own Apple Music library. Also includes shareable Taste DNA Cards, compatibility
+scoring, catalog gap analysis, album deep dives, artist rabbit holes, daily song drops, concert
+prep playlists, and personalized new release radar.
+
+## At a glance
+
+**What it does:** reads your Apple Music listening (recently played, heavy rotation, library,
+ratings, Replay), builds a taste profile, and turns it into playlists and insights.
+
+**Try saying**
+
+| You say | You get |
+|---|---|
+| "Analyze my taste" | A Taste DNA profile and a shareable card |
+| "Songs like Phoebe Bridgers" | A playlist of similar artists, filtered through your taste |
+| "Make me a 90s throwback" | A decade playlist built from your own artists |
+| "Blend my taste with my sister's" | One playlist for two listeners |
+| "How has my taste changed since spring?" | A drift report from your saved snapshots |
+| "Import this Spotify playlist" | A matched Apple Music playlist (preview first) |
+| "I didn't like track 7" | Rated down and kept out of future playlists |
+
+**What it needs:** for your own music, an Apple Developer account (for a MusicKit token) and an
+Apple Music subscription. The skill loads without tokens so it can offer the demo first. `scripts/setup_auth.py` gets both tokens in one step (sign in with Apple in the
+browser). Tokens live in environment variables.
+
+**No account yet?** `python3 scripts/demo.py tour` runs the real scripts against a fictional
+listener and a local sample catalog — no tokens, nothing sent to Apple, nothing written to an account.
+
+**Safety:** read-only by default. Creating playlists, favoriting, rating, adding albums and
+scheduling cron jobs are opt-in and confirmed first (the scripts preview by default and write only
+with an explicit `--create` / `--yes` / `--apply` / `--confirm`). **Editing an existing playlist can
+remove tracks** (`playlist_health.py fix --apply` removes duplicate copies and adds a replacement for each unavailable track (it leaves the unavailable entry in place);
+`build_playlist.sh refresh|remove` add or remove tracks) — show the exact changes and get a yes first.
+Scheduled jobs run unattended once installed, so installing one needs a reviewed `--confirm` digest.
+Local data is owner-only (`~/.apple-music-dj/`). See `SECURITY.md`.
 
 ## Architecture
 
@@ -89,15 +155,33 @@ User Request
 
 ## Prerequisites
 
-Two environment variables must be set. If the user doesn't have them, walk them through
-`references/auth-setup.md` before doing anything else.
+Two environment variables are needed for anything that reads or changes the user's Apple Music:
+`APPLE_MUSIC_DEV_TOKEN` and `APPLE_MUSIC_USER_TOKEN`. They are declared as optional (`envVars`,
+`required: false`) rather than in `requires.env`, so OpenClaw still loads this skill for someone
+who hasn't set them up yet; this section is how you handle that. Every script that talks to
+Apple checks for them at run time and stops with a pointer to `setup_auth.py`. If they're missing:
+
+1. **Offer the demo first** so the user sees what they'd get: run `python3 scripts/demo.py tour`
+   and show the output. It needs no tokens, uses a fictional listener and a local sample catalog,
+   and never touches an account. Say clearly that the demo results aren't theirs. Any other
+   request can be shown in demo mode too: `python3 scripts/demo.py run <script> [args]`, with
+   `DEMO_PROFILE` standing in for the profile path (e.g. `demo.py run strategy_engine.py --strategy
+   mood --mood focus --profile DEMO_PROFILE`). Never present a demo playlist as created in their library.
+2. **Then set up real tokens**: ask the user to run `python3 scripts/setup_auth.py` **in their own
+   terminal**. It signs the developer token from their MusicKit key, opens a local page where
+   they sign in with Apple, and prints the `export` lines (or `--env-file PATH` writes them to an
+   owner-only file). Don't run it yourself or ask them to paste tokens into the chat. Full manual
+   steps: `references/auth-setup.md`.
 
 | Variable | Purpose |
 |---|---|
 | `APPLE_MUSIC_DEV_TOKEN` | JWT signed with MusicKit private key (Apple Developer portal) |
 | `APPLE_MUSIC_USER_TOKEN` | Per-user authorization token (obtained via MusicKit JS `authorize()`) |
 
-Verify with: `scripts/apple_music_api.sh verify`
+Verify with: `scripts/apple_music_api.sh verify` (or the fuller `scripts/verify_setup.sh`).
+`python3 scripts/setup_auth.py status` shows how long each token has left; the profiler and
+`verify_setup.sh` warn when the developer token is within 14 days of expiry or the user token is
+nearing the ~6 months these usually last.
 
 ## Taste Profiling
 
@@ -134,7 +218,7 @@ If the user has limited history:
 
 ## Playlist Strategies
 
-Five strategies. Read detailed algorithms in `references/playlist-strategies.md`.
+Eight strategies. Read detailed algorithms in `references/playlist-strategies.md`.
 
 ### Strategy 1: Deep Cuts Explorer
 **Triggers:** "deep cuts", "hidden gems", "B-sides", "underrated", "album tracks"
@@ -157,7 +241,46 @@ Journey from familiar artists outward to new territory in 3 "rings" of distance.
 ### Strategy 5: Playlist Refresh / Evolution
 **Triggers:** "refresh my [playlist]", "update my [playlist]", "evolve", "getting stale"
 Analyzes existing playlist's sonic signature, adds fresh matching tracks, optionally
-prunes overplayed songs.
+prunes overplayed songs. Changing the original playlist adds or removes tracks, so show the
+proposed additions and removals and only apply them after a yes.
+
+### Strategy 6: Similar ("songs like X")
+**Triggers:** "songs like [artist/song]", "more like [artist]", "similar to", "more like track 3"
+Starts from one artist or song, pulls in its top songs plus similar artists' top songs, and
+scores everything against both the starting point's genres and the user's taste.
+
+Run: `python3 scripts/strategy_engine.py --strategy similar --similar-to "Radiohead" --profile <profile.json> --storefront <sf>`
+Add `--similar-type artist|song` if the name is ambiguous (default detects it).
+For "more like track N" of a DJ playlist, get the song first:
+`python3 scripts/feedback.py info --playlist-name "<name>" --position N`, then pass
+`--similar-to "<name> <artist>" --similar-type song`.
+
+### Strategy 7: Era Throwback
+**Triggers:** "90s playlist", "throwback", "[decade] throwback", "music from the 2000s"
+A decade playlist built from the user's own artists and genres, not a generic nostalgia list.
+
+Run: `python3 scripts/strategy_engine.py --strategy era --decade 90s --profile <profile.json> --storefront <sf>`
+Without `--decade` it uses the user's top era.
+
+### Strategy 8: Blend
+**Triggers:** "blend", "playlist for me and [person]", "something we'd both like", "road trip with my partner"
+One playlist for two listeners: artists they share, plus each person's favorites that fit the
+other's genres. Neither listener supplies more than 60% of the tracks. The output includes
+their compatibility score.
+
+The other person builds their own profile with their own tokens
+(`python3 scripts/taste_profiler.py --output friend.json`) and shares the JSON file.
+Run: `python3 scripts/strategy_engine.py --strategy blend --profile <mine.json> --profile-b <friend.json> --storefront <sf>`
+
+### Options shared by all strategies
+- `--include-library` — allow songs already in the library (refresh, similar and era skip them by default)
+- `--create` — create the playlist in Apple Music (without it, only JSON is printed)
+- `--favorite` — with `--create`, also add every track to the user's Apple Music favorites.
+  **This writes to the user's account — confirm with them first.**
+
+Energy arcs: playlists are sequenced by an energy arc — a wave (medium opener → peak in the middle →
+wind-down) by default, rising for workout/anger moods, falling for sleep/focus/sad. Tempo-ordered
+playlists also transition more smoothly with Apple Music's AutoMix, which is worth mentioning.
 
 ## Engagement Features
 
@@ -216,6 +339,43 @@ Run: `python3 scripts/catalog_explorer.py gap-analysis <profile.json> <storefron
 Present as: "You love Radiohead but you've only heard 3 of their 9 albums. Here's what
 you're missing, ranked by how much you'd probably like each one."
 
+**Add them to the library:** `... gap-analysis <profile.json> <storefront> --add-missing 5`
+previews the newest 5 missing albums and changes nothing. **Adding writes to the user's
+library — show them the preview and get a yes before re-running with `--yes`.**
+
+### Taste Drift
+**Triggers:** "taste drift", "how has my taste changed lately", "what's changed since [date]",
+"am I listening to different stuff", "what's new in my taste"
+Every fresh `taste_profiler.py` build saves a small dated snapshot (no song IDs) to
+`~/.apple-music-dj/snapshots/`. Drift compares the newest one with the snapshot closest to
+the chosen date: genres rising and falling, artists entering or leaving the top 20, era shift,
+variety/mainstream/energy changes, and whether the listener archetype changed.
+
+Run: `python3 scripts/taste_drift.py [--since 90d | --from 2026-01-01] [--profile <profile.json>] --format text`
+Needs at least two snapshots from different days. If there are fewer, say so and suggest
+setting up the monthly drift job (below); use Listening Insights → Timeline for long-range history from Replay.
+Card: `python3 scripts/taste_drift.py > drift.json` then
+`python3 scripts/taste_card.py <profile.json> --mode drift --data drift.json [--format text]`.
+
+### Import a Playlist
+**Triggers:** "import my Spotify playlist", "move this playlist to Apple Music", "rebuild this list in Apple Music"
+Rebuilds a playlist from a CSV (e.g. an Exportify export with ISRC codes) or a text file of
+`Artist - Title` lines. Matches by ISRC first, then a strict title + artist search; anything
+unclear is reported as unmatched instead of guessed.
+
+Preview: `python3 scripts/import_playlist.py <file>`
+Create: `python3 scripts/import_playlist.py <file> --create --name "<name>"` (writes to the library — confirm first)
+Show the user the exact / fuzzy / unmatched counts and list the unmatched ones.
+
+### Feedback
+**Triggers:** "I didn't like track 7", "thumbs down that song", "I loved track 3", "never play that again"
+Rates the song in Apple Music and updates the cached profile so later playlists skip it
+immediately: `python3 scripts/feedback.py dislike --playlist-name "<name>" --position 7 --profile <profile.json>`
+(or pass song IDs; `like` and `clear` also exist). Without `--yes` it only previews; add `--yes` once the user has confirmed. Positions are 1-based within playlists the DJ
+created; omit `--playlist-name` for the most recent one. **This writes a rating to the user's account**,
+so only do it on the user's explicit say-so, and name the song and the rating you are about to write
+when it isn't obvious which track they mean.
+
 ### Album Deep Dive
 **Triggers:** "tell me about [album]", "album deep dive", "what's on [album]",
 "should I listen to [album]", "break down [album]"
@@ -255,9 +415,12 @@ Run: `python3 scripts/daily_pick.py now <profile.json> <storefront>`
 **Triggers:** "seeing [artist] live", "concert prep", "going to [artist] show",
 "setlist for [artist]", "get ready for [artist] concert"
 Builds a prep playlist: top songs (likely setlist material) + deep cuts to learn before
-the show. Creates directly in Apple Music library.
+the show. **Preview first:** by default the script writes nothing to Apple Music — it prints the
+proposed name, description and track list as JSON. Show that to the user and, only after they
+say yes, re-run the same command with `--create`. If the preview shows `"name_exists": true`, a
+playlist with that name is already in the library and creation would be skipped — pick another name.
 
-Run: `scripts/concert_prep.sh <storefront> <artist_name> [playlist_name]`
+Run: `scripts/concert_prep.sh <storefront> <artist_name> [playlist_name] [--create]`
 
 ### Personalized New Release Radar
 **Triggers:** "new releases", "what's new from my artists", "any new music",
@@ -275,7 +438,13 @@ Run: `scripts/new_releases.sh <profile.json> <storefront> [--create-playlist]`
 | "Show my taste card" | Generate and display Taste DNA Card |
 | "Make me a playlist" | Ask what kind, then select strategy |
 | "Surprise me" | Constellation Discovery — no questions asked |
-| "More like [artist]" | Deep Cuts + Constellation hybrid seeded from named artist |
+| "More like [artist]" / "Songs like [song]" | Similar strategy (Strategy 6) |
+| "Make me a 90s throwback" | Era strategy (Strategy 7) |
+| "Blend my taste with [friend]'s" | Blend strategy (Strategy 8), needs their profile JSON |
+| "How has my taste changed lately?" | Taste drift report |
+| "Import this Spotify playlist" | Playlist import (preview first) |
+| "I didn't like track 7" | Feedback — rate down and update the profile |
+| "Add the missing albums" | Gap analysis `--add-missing` (preview, then confirm) |
 | "Refresh my workout playlist" | Strategy 5 on the named playlist |
 | "What have I been into?" | Present recent listening summary |
 | "How compatible am I with [artist]?" | Run compatibility score |
@@ -284,16 +453,22 @@ Run: `scripts/new_releases.sh <profile.json> <storefront> [--create-playlist]`
 | "Take me on a rabbit hole from [artist]" | Artist chain exploration |
 | "Give me one song" | Daily song drop |
 | "What should I listen to right now?" | Context-aware instant pick |
-| "I'm seeing [artist] next week" | Concert prep playlist |
+| "I'm seeing [artist] next week" | Concert prep playlist (preview first, create on a yes) |
 | "Any new releases for me?" | Personalized new release scan |
 | "My year in review" | Year in review (previous year) |
 | "Set up weekly playlists" | Configure cron (see below) |
 
 ## Cron / Automated Playlists
 
-OpenClaw has first-class cron and heartbeat support. This skill can automate:
+OpenClaw has first-class cron and heartbeat support. This skill can automate the jobs below.
+Unlike interactive requests, **a scheduled job runs unattended and writes on its own** if it is a
+writing job. By default `setup_cron.py install` only schedules the report-only jobs (new releases,
+daily drop, health check). The **weekly mix creates a playlist in the library without asking**, so it is opt-in: it is installed only when named
+(`--jobs weekly-mix`). Installing any job is the user's approval, which is why `install` needs a
+reviewed `--confirm` digest — say so when setting one up, and tell the user plainly that the weekly
+mix will create playlists without asking each time.
 
-**Weekly Mix** (recommended default):
+**Weekly Mix** (opt-in — install with `setup_cron.py install --jobs weekly-mix`):
 ```
 Schedule: Every Sunday at 9:00 AM (user's local time)
 Task:
@@ -311,7 +486,8 @@ Schedule: Daily at 8:00 AM
 Task:
   1. scripts/new_releases.sh <profile> <storefront>
   2. If found: notify user with artist + album/single name
-  3. Optionally: --create-playlist to auto-create a playlist
+  3. Only if the user asked for scheduled playlist creation: add --create-playlist (the
+     built-in `new-releases` job reports only and never writes)
 ```
 
 **Daily Song Drop:**
@@ -328,11 +504,29 @@ Schedule: Weekly (Saturday)
 Task:
   1. Scan user's playlists
   2. Flag any tracks removed from Apple Music catalog (404 on lookup)
-  3. Suggest replacements
+  3. Suggest replacements (report only: the scheduled job runs `playlist_health.py check`;
+     removing duplicate copies or adding replacement tracks needs
+     `playlist_health.py fix <id> --apply`, which previews by default and is never run unattended)
+```
+
+**Monthly Drift** (opt-in — install with `setup_cron.py install --jobs monthly-drift`):
+```
+Schedule: 2nd of each month at 9:00 AM
+Task:
+  1. Rebuild the taste profile (saves a dated snapshot)
+  2. python3 scripts/taste_drift.py --profile <profile> --since 30d --format text
+  3. Notify user with the one-line summary
 ```
 
 When the user asks to set up automation, configure via OpenClaw's cron system and
-confirm the schedule with them before activating.
+confirm the schedule with them before activating. A crontab entry keeps running until removed,
+so **always run `python3 scripts/setup_cron.py install --dry-run [--jobs ...]` first and show the
+user the exact lines it prints, along with its `Digest:`; only after they say yes, run the same
+command with `--confirm <digest>`.** This is enforced in code: `install` without a matching
+`--confirm` changes nothing and exits 2, and a digest only matches the exact lines it was printed
+for (change a job, path or storefront and it no longer matches). The installer also validates its
+arguments, quotes every value, and creates owner-only log files. `setup_cron.py status` / `remove`
+let the user review or undo it.
 
 ## Assembly Rules
 
@@ -345,6 +539,10 @@ After any strategy produces candidate tracks, apply before creating:
 4. Tracks 16–22: Sustain interest, new textures
 5. Tracks 23–28: Wind down
 6. Final track: Memorable closer, not filler
+
+The strategy engine applies this arc automatically: each track gets an `energy` value (0–1)
+from its genres, and `sequence_tracks` orders by a wave, rising or falling arc before enforcing
+the spacing rules below.
 
 **Hard rules:**
 - Min 5 tracks between same-artist repeats
@@ -368,8 +566,8 @@ Detection order:
 
 | Code | Meaning | Action |
 |---|---|---|
-| 401 | Dev token invalid/expired | Regenerate JWT. See `references/auth-setup.md` |
-| 403 | User token expired (~6mo) | Re-authorize via browser. No refresh flow exists |
+| 401 | Dev token invalid/expired | Ask the user to run `python3 scripts/setup_auth.py --new-dev-token` |
+| 403 | User token expired (~6mo) | Ask the user to run `python3 scripts/setup_auth.py` (browser sign-in). No refresh flow exists |
 | 404 | Resource removed from catalog | Skip, log warning, continue |
 | 429 | Rate limited | Exponential backoff: 1s→2s→4s→8s, max 3 retries |
 | Empty data | New user or privacy settings | Fall back: Replay → recs → manual seeds |
@@ -390,7 +588,7 @@ some bands in that orbit" — not "Here's an awesome playlist just for you!"
 
 | File | Read when... |
 |---|---|
-| `references/auth-setup.md` | User needs token setup help |
+| `references/auth-setup.md` | User needs token setup help (start with `setup_auth.py`) |
 | `references/api-reference.md` | Need endpoint details, formats, genre IDs |
 | `references/playlist-strategies.md` | Before executing any playlist strategy |
 | `references/troubleshooting.md` | User hits errors, things aren't working |
@@ -410,24 +608,62 @@ stores, and transmits.
 | Ratings (loved/disliked) | `/v1/me/ratings/songs` | Explicit preferences |
 | Recommendations | `/v1/me/recommendations` | Apple's inference data |
 | Replay summaries | `/v1/me/music-summaries` | Annual listening stats |
+| Recently added | `/v1/me/library/recently-added` | What the user is into right now |
+| Recent radio stations | `/v1/me/recent/radio-stations` | Light genre signal from station titles |
 | Storefront | `/v1/me/storefront` | Region detection |
+
+**Requirements.** Always needed: `curl`, `jq`, `python3` (3.10+). Needed for your own music (not for
+the demo): `APPLE_MUSIC_DEV_TOKEN`, `APPLE_MUSIC_USER_TOKEN` — declared under `envVars` with
+`required: false` so the skill stays loadable before setup, and checked by each script at run time. Optional, each used by one feature only: `APPLE_MUSIC_STOREFRONT` (override region
+detection); `crontab` (scheduling); and for generating a developer token yourself with
+`setup_auth.py` or `generate_dev_token.py`, `APPLE_KEY_ID`, `APPLE_TEAM_ID`, `APPLE_PRIVATE_KEY_PATH` (your MusicKit
+`.p8` signing key, read only by that script and never sent anywhere) plus the `PyJWT` and
+`cryptography` packages. **License:** MIT (see `LICENSE`); ClawHub distributes published skills
+under MIT-0.
+
+**Data written to the user's account (only on request — always confirm first):**
+
+| Action | Endpoint | Triggered by |
+|---|---|---|
+| Create playlist / add tracks | `/v1/me/library/playlists` | `--create`, playlist import |
+| Add albums to library | `/v1/me/library` | gap analysis `--add-missing N --yes` |
+| Add to favorites | `/v1/me/favorites` | `--create --favorite` |
+| Add / remove tracks in an existing playlist | `/v1/me/library/playlists/{id}/tracks` | `playlist_health.py fix --apply`, `build_playlist.sh refresh` / `remove` |
+| Rate / un-rate a song | `/v1/me/ratings/songs/{id}` | `feedback.py like/dislike/clear` |
 
 **Data stored locally:**
 
 | File | Contents | Location |
 |---|---|---|
 | Taste profile cache | Aggregated taste data (JSON) | `~/.apple-music-dj/taste_profile.json` |
+| Taste snapshots | Genre/artist/era weights, no song IDs (last 52, one per day) | `~/.apple-music-dj/snapshots/` |
+| Cron job logs | Output of scheduled jobs (playlist names, picks) — only if cron is installed | `~/.apple-music-dj/logs/` (files `0600`) |
+| Playlist history | Names and track IDs of playlists the DJ created | `~/.apple-music-dj/playlist_history.json` |
+| Storefront cache | Your two-letter region code (e.g. `us`) | `~/.apple-music-dj/storefront.cache` |
+| User config (optional) | Defaults you write yourself; the skill only reads it | `~/.apple-music-dj/config.json` |
 | Taste DNA Card | Generated SVG image | User-specified output path |
+| User-token age record | A 16-hex-digit SHA-256 fingerprint of the user token (not the token) and the date it was first seen, for the renewal reminder | `~/.apple-music-dj/user_token_seen.json` |
+| Token env file | The two `export` lines — only if the user passes `setup_auth.py --env-file PATH` | `PATH` (mode `0600`) |
+| Demo data | The fictional demo listener's profile and snapshots | `~/.apple-music-dj-demo/` (`demo.py reset` removes it) |
 
 **Data NOT collected:**
 - No data is sent to any third-party service
 - No analytics or telemetry
-- No data leaves the user's machine (all API calls go directly to Apple)
-- Tokens are never logged or stored by the skill (env vars only)
+- The only destination is Apple: requests go directly to `https://api.music.apple.com` (and, during
+  `setup_auth.py`, MusicKit JS from Apple's CDN), and nothing is sent to anyone else
+- Tokens are never logged, and never stored unless the user asks (`setup_auth.py --env-file`)
+- To keep tokens off the process list, the API wrapper and `verify_setup.sh` hand them to `curl` through
+  a temporary owner-only (`0600`) config file that is deleted on exit, Ctrl-C and `kill`
+- `setup_auth.py` serves its sign-in page on `127.0.0.1` only, behind a random one-time URL, and
+  stops as soon as the token arrives; the page loads Apple's MusicKit JS from Apple's CDN
+- `demo.py` runs its sample API on `127.0.0.1` only for the length of one command, strips real
+  Apple credentials from the scripts it runs, and refuses `setup_cron.py` and paths into `~/.apple-music-dj/`
 
 **Cache management:**
 - Taste profile cache has a 7-day TTL by default
-- Cache can be cleared: `rm -rf ~/.apple-music-dj/`
+- The user can clear it by deleting the `~/.apple-music-dj/` folder (list it first with
+  `ls -la ~/.apple-music-dj`; it holds their profile, snapshots, history and cron logs). Never delete
+  it on your own initiative.
 - Use `--max-age 0` to bypass cache and fetch fresh data
 
 ## Scripts
@@ -437,14 +673,19 @@ stores, and transmits.
 | `scripts/_common.py` | Python | Shared utilities (API calls, profile loading, search) |
 | `scripts/apple_music_api.sh` | Bash | API wrapper — all endpoints, retry logic |
 | `scripts/taste_profiler.py` | Python | Taste DNA profiler with caching |
-| `scripts/build_playlist.sh` | Bash | Playlist creation & refresh (create or add tracks) |
+| `scripts/build_playlist.sh` | Bash | Playlist creation & refresh (create or add tracks); previews unless `--yes` is the last argument |
 | `scripts/generate_dev_token.py` | Python | Developer JWT generator |
+| `scripts/setup_auth.py` | Python | Guided setup: dev token + browser sign-in for the user token; `status` shows time left |
+| `scripts/demo.py` | Python | Demo mode — tour or run any script against a local sample catalog, no tokens |
 | `scripts/taste_card.py` | Python | Shareable Taste DNA Card (SVG/text) |
 | `scripts/compatibility.py` | Python | Taste compatibility scoring (artist or profile) |
 | `scripts/listening_insights.py` | Python | Timeline, streaks, milestones, year in review |
 | `scripts/catalog_explorer.py` | Python | Gap analysis, album deep dive, artist rabbit hole |
 | `scripts/daily_pick.py` | Python | Daily song drop & instant recommendation |
 | `scripts/playlist_history.py` | Python | Playlist creation history tracking |
+| `scripts/taste_drift.py` | Python | Taste drift between dated snapshots |
+| `scripts/import_playlist.py` | Python | Import a CSV/text playlist via ISRC + strict search |
+| `scripts/feedback.py` | Python | Like/dislike songs and update the profile |
 | `scripts/concert_prep.sh` | Bash | Concert prep playlist builder |
 | `scripts/new_releases.sh` | Bash | Personalized new release radar |
 | `scripts/verify_setup.sh` | Bash | Setup verification (prereqs, tokens, API) |
@@ -494,10 +735,28 @@ stores, and transmits.
 → Context-aware pick. Time of day + taste → instant recommendation.
 
 **"I'm seeing Phoebe Bridgers next month"**
-→ Concert prep playlist. Top songs + deep cuts, created in Apple Music.
+→ Concert prep playlist. Show the preview (top songs + deep cuts); create it in Apple Music on a yes.
 
 **"Any new releases from my artists?"**
 → New release radar. Scan top artists + genre discoveries, report findings.
 
 **"How was my 2025 in music?"**
 → Year in review. Listen time, top artists, obscurity score, narrative insights.
+
+**"Give me songs like Phoebe Bridgers"**
+→ Strategy 6 (Similar). Her best songs plus similar artists, weighted toward the user's taste.
+
+**"Make me a 90s throwback"**
+→ Strategy 7 (Era). 90s albums from their own top artists, plus genre-matched finds.
+
+**"Make a playlist for me and my sister"**
+→ Strategy 8 (Blend). Ask for her profile JSON; shared artists first, balanced 60/40 at most.
+
+**"How has my taste changed since spring?"**
+→ Taste drift with `--from`. Rising/falling genres, new top artists, archetype change.
+
+**"I didn't like track 7 of that playlist"**
+→ Feedback. Rate it down, update the profile, confirm it won't come back.
+
+**"Move my Spotify playlist over"**
+→ Import. Preview match counts, list unmatched tracks, then create on a yes.

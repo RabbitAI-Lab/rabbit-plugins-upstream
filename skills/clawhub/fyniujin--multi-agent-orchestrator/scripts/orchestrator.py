@@ -1,11 +1,21 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-编排引擎入口 - 多Agent协作编排引擎 v4.0
+编排引擎入口 - 多Agent协作编排引擎 v5.3
 
 功能：统一入口，整合 DAG 验证、状态管理、执行调度、错误恢复、报告生成
-支持人工审批节点、HTML 甘特图、历史执行对比、硬件自适应
-新增动态工作流：if-else 条件分支、switch 多路分支、for-each 动态节点、while-loop 循环
+支持人工审批节点（含超时策略）、HTML 甘特图、历史执行对比、硬件自适应
+动态工作流：if-else 条件分支、switch 多路分支、for-each 动态节点、while-loop 循环
+新增：子流水线引用（pipeline 节点）、执行回放 / Time Travel（快照机制+保留策略）
+新增：统一状态恢复子系统（合并断点续传 + 快照恢复）
+新增：统一可视化命令（visualize --format md|html|both，整合报告 + 甘特图）
+新增：Self-Improving 循环（evaluate 节点，质量评估 + 自动重试）
+新增：成本追踪（节点级 token/cost 聚合，对接 cn-llm-router）
+新增：官方流水线模板库（4类预置模板 + 依赖探测渲染）
+新增：任务级重试策略（节点级 retry 块 + 退避 + 降级链）
+新增：统一错误恢复命令 recover（retry/fallback/impact 三合一）
+新增：条件表达式增强（re_safe + 字符串函数）
+新增：节点类型归组（7→4类，认知层归组）
 零第三方依赖，仅使用 Python 标准库
 
 ★★★ 安全说明 ★★★
@@ -238,16 +248,41 @@ def cmd_step(args):
                     preview = json.dumps(dep_data, ensure_ascii=False)[:300]
                     print(f"  [{dep}] → {preview}")
 
+            # 超时策略
+            timeout_seconds = node.get('timeout_seconds', 0)
+            timeout_action = node.get('timeout_action', 'reject')
+
+            if timeout_seconds and timeout_seconds > 0:
+                print(f"\n⏰ 超时设置：{timeout_seconds}秒后自动{'通过' if timeout_action == 'approve' else '拒绝'}")
+
             print(f"\n请确认是否继续执行后续节点？")
             print(f"  [Y] 同意 - 继续执行")
             print(f"  [N] 拒绝 - 中止流水线")
             print(f"{'=' * 60}")
 
-            try:
-                choice = input("  请输入 (Y/N): ").strip().upper()
-            except (EOFError, KeyboardInterrupt):
-                print("\n  已取消。")
-                sys.exit(0)
+            choice = None
+            if timeout_seconds and timeout_seconds > 0:
+                import select
+                print(f"  请输入 (Y/N): ", end='', flush=True)
+                try:
+                    rlist, _, _ = select.select([sys.stdin], [], [], timeout_seconds)
+                    if rlist:
+                        choice = sys.stdin.readline().strip().upper()
+                    else:
+                        choice = 'Y' if timeout_action == 'approve' else 'N'
+                        print(f"\n  ⏰ 审批超时（{timeout_seconds}秒），自动{'通过' if timeout_action == 'approve' else '拒绝'}")
+                except (OSError, IOError):
+                    try:
+                        choice = input("  请输入 (Y/N): ").strip().upper()
+                    except (EOFError, KeyboardInterrupt):
+                        print("\n  已取消。")
+                        sys.exit(0)
+            else:
+                try:
+                    choice = input("  请输入 (Y/N): ").strip().upper()
+                except (EOFError, KeyboardInterrupt):
+                    print("\n  已取消。")
+                    sys.exit(0)
 
             if choice == 'Y':
                 node['status'] = 'completed'
@@ -305,34 +340,22 @@ def cmd_status(args):
 
 
 def cmd_resume(args):
-    """断点续传（重置失败节点为待执行，给予全新重试机会）
+    """断点续传（统一状态恢复子系统）
 
     安全说明：
     - 使用 --force 跳过确认提示
-    - 重置前会显示将要影响的节点数量
+    - 重置前自动创建恢复前快照（防误操作）
     - 已完成的节点不受影响
-
-    使用场景：
-    - 节点因网络/超时问题失败后，修复问题
-    - 节点因 AI 客户端崩溃导致 running 状态残留
-    - abort 后重新启动
     """
     if not args:
         print("错误：缺少[state.json路径]")
         print("用法：python orchestrator.py resume <state.json> [--force]")
-        print("示例：python orchestrator.py resume pipeline_state.json")
-        print("       python orchestrator.py resume pipeline_state.json --force")
-        print("")
-        print("★★★ 使用场景 ★★★")
-        print("  - 节点因网络/超时问题失败后，修复问题")
-        print("  - 节点因 AI 客户端崩溃导致 running 状态残留")
-        print("  - abort 后重新启动")
         sys.exit(1)
 
-    # --force 在非交互式环境中自动确认
     force = '--force' in args
     state_path = args[0]
-    state_store.resume_pipeline(state_path, force=force)
+    import state_recovery
+    state_recovery.restore_to_node(state_path, None, 'resume', force=force)
 
 
 def cmd_report(args):
@@ -366,8 +389,35 @@ def cmd_impact(args):
     error_recovery.analyze_downstream_impact(args[0], args[1])
 
 
+def cmd_recover(args):
+    """统一错误恢复入口：retry/fallback/impact"""
+    if not args:
+        print("用法：python orchestrator.py recover <retry|fallback|impact> <state.json> <node_id> [error_msg]")
+        sys.exit(1)
+    sub = args[0]
+    if sub == 'retry':
+        if len(args) < 3:
+            print("用法：python orchestrator.py recover retry <state.json> <node_id> [error_msg]")
+            sys.exit(1)
+        error_msg = args[3] if len(args) > 3 else "未知错误"
+        error_recovery.execute_retry(args[1], args[2], error_msg)
+    elif sub == 'fallback':
+        if len(args) < 3:
+            print("用法：python orchestrator.py recover fallback <state.json> <node_id> [error_msg]")
+            sys.exit(1)
+        error_msg = args[3] if len(args) > 3 else "未知错误"
+        error_recovery.execute_fallback(args[1], args[2], error_msg)
+    elif sub == 'impact':
+        if len(args) < 3:
+            print("用法：python orchestrator.py recover impact <state.json> <node_id>")
+            sys.exit(1)
+        error_recovery.analyze_downstream_impact(args[1], args[2])
+    else:
+        print(f"未知 recover 子命令：{sub}")
+
+
 USAGE = """
-编排引擎 - 多Agent协作编排引擎 v4.0
+编排引擎 - 多Agent协作编排引擎 v5.3
 ================================
 
 用法：python orchestrator.py <command> [args]
@@ -377,15 +427,18 @@ USAGE = """
   step <state.json>                            ★☆☆ 逐步执行（获取下一个待执行节点）
   status <state.json>                          ★★☆ 查看流水线状态（只读）
   resume <state.json> [--force]                ★★☆ 断点续传（重置失败节点）
-  report <state.json> [output]                 ★★☆ 生成 Markdown 执行报告
-  gantt <state.json> [output.html]              ★★☆ 生成 HTML 甘特图（可视化时间轴）
+  visualize <state.json> [--format md|html|both] [output]  ★★★ 统一可视化（MD+HTML）
+  report <state.json> [output]                 ★★☆ 生成 Markdown 执行报告（visualize --format md 别名）
+  gantt <state.json> [output.html]              ★★☆ 生成 HTML 甘特图（visualize --format html 别名）
   validate <pipeline.json>                     ★☆  验证 DAG 结构（只读，不修改文件）
   plan <pipeline.json>                         ★☆  查看执行计划（只读，不修改文件）
   history <state.json>                         ★☆☆ 查看执行历史记录
   compare <state.json>                         ★☆☆ 对比最近5次执行（耗时/成功率/重试）
   hardware                                     ★☆☆ 硬件检测与参数推荐
   check-update                                 ☆☆  检查是否有新版本
+  snapshot <cmd> <state.json> [node_id]        ☆☆  快照管理（list/show/restore/diff）
   impact <state.json> <node_id>                ☆☆  分析下游影响（只读）
+  template <cmd> [template_file]              ☆☆  预置模板库（list/show/check/render）
 
 典型工作流：
   1. python orchestrator.py plan pipeline.json         # 查看执行计划
@@ -397,7 +450,12 @@ USAGE = """
   7. python orchestrator.py gantt state.json            # 生成 HTML 甘特图
   8. python orchestrator.py report state.json           # 生成 Markdown 报告
 
-★★★ 新功能 v4.0（动态工作流）★★★
+★★★ 新功能 v5.0（子流水线 + 执行回放）★★★
+  - 子流水线引用：type: pipeline，引用已注册的子流水线隔离执行
+  - 执行回放 / Time Travel：节点快照 + 增量存储 + 从快照恢复 + 执行对比
+  - 快照命令：snapshot list/show/restore/diff
+
+★★★ v4.0 功能（动态工作流）★★★
   - if-else 条件分支：type: condition，按条件走 on_true / on_false
   - switch 多路分支：type: switch，按值命中 cases / default
   - for-each 动态节点：type: for-each，按列表长度展开子节点并汇合
@@ -432,6 +490,43 @@ def cmd_gantt(args):
     pipeline_reporter.generate_html_gantt(args[0], output)
 
 
+def cmd_visualize(args):
+    """统一可视化（MD 报告 + HTML 甘特图）
+
+    安全说明：
+    - 输出文件可能包含节点输出的敏感信息
+    - 建议生成的文件妥善保管，避免泄露
+    """
+    if not args:
+        print("错误：缺少[state.json路径]")
+        print("用法：python orchestrator.py visualize <state.json> [--format md|html|both] [output]")
+        print("示例：python orchestrator.py visualize pipeline_state.json --format both")
+        print("      python orchestrator.py visualize pipeline_state.json --format md report.md")
+        print("")
+        print("⚠️ 安全提示：输出文件可能包含敏感数据，请妥善保管")
+        sys.exit(1)
+
+    state_path = args[0]
+    fmt = 'both'
+    output = None
+
+    # 解析参数
+    i = 1
+    while i < len(args):
+        if args[i] == '--format' and i + 1 < len(args):
+            fmt = args[i + 1]
+            i += 2
+        else:
+            output = args[i]
+            i += 1
+
+    if fmt not in ('md', 'html', 'both'):
+        print(f"错误：无效格式 [{fmt}]，可选：md / html / both")
+        sys.exit(1)
+
+    pipeline_reporter.generate_visualization(state_path, output, fmt)
+
+
 def cmd_history(args):
     """查看执行历史"""
     if not args:
@@ -462,6 +557,109 @@ def cmd_check_update(args):
     update_checker.check_update()
 
 
+def cmd_snapshot(args):
+    """快照管理：list/show/restore/diff"""
+    import snapshot_store
+    if not args:
+        print("用法：python orchestrator.py snapshot <list|show|restore|diff> <state.json> [node_id]")
+        sys.exit(1)
+    sub = args[0]
+    if sub == 'list':
+        snapshot_store.list_snapshots(args[1])
+    elif sub == 'show':
+        snapshot_store.show_snapshot(args[1], args[2])
+    elif sub == 'restore':
+        snapshot_store.restore_snapshot(args[1], args[2])
+    elif sub == 'diff':
+        snapshot_store.diff_snapshots(args[1], args[2], args[3])
+    else:
+        print(f"未知 snapshot 子命令：{sub}")
+
+
+def cmd_dashboard(args):
+    """启动 Web 控制台（只读服务 + ECharts 甘特图）"""
+    import web_dashboard
+    state_dir = args[0] if args else '.'
+    port = int(args[1]) if len(args) > 1 else web_dashboard.DASHBOARD_PORT
+    print(f"🖥️  Web 控制台启动中...")
+    print(f"   地址：http://127.0.0.1:{port}")
+    print(f"   状态目录：{state_dir}")
+    print(f"   按 Ctrl+C 停止")
+    web_dashboard.start_dashboard(state_dir, port)
+
+
+def cmd_mcp(args):
+    """启动 MCP Server（stdio JSON-RPC）"""
+    import mcp_server
+    mcp_server.main()
+
+
+def cmd_cost(args):
+    """成本桥接：回填实测成本（cn-llm-router 可用时）"""
+    import cost_bridge
+    if not args:
+        print("用法：python orchestrator.py cost <state_dir> [--pipeline <name>] [--check] [--summary]")
+        print("  --check    仅检测 cn-llm-router 是否可用")
+        print("  --summary  输出单个状态文件的成本汇总")
+        sys.exit(1)
+
+    state_dir = args[0]
+    # 去掉前两个位置参数
+    remaining_args = args[1:]
+
+    import sys as _sys
+    _sys.argv = ['cost_bridge.py', state_dir] + remaining_args
+    cost_bridge.main()
+
+
+def cmd_template(args):
+    """预置流水线模板库：list/show/check/render"""
+    import template_lib
+    if not args:
+        print("用法：python orchestrator.py template <list|show|check|render> [template_file]")
+        sys.exit(1)
+    sub = args[0]
+    if sub == 'list':
+        template_lib.list_templates()
+    elif sub == 'show':
+        if len(args) < 2:
+            print("错误：请指定模板文件名")
+            print("用法：python orchestrator.py template show <template_file>")
+            sys.exit(1)
+        template_lib.show_template(args[1])
+    elif sub == 'check':
+        if len(args) < 2:
+            print("错误：请指定模板文件名")
+            print("用法：python orchestrator.py template check <template_file>")
+            sys.exit(1)
+        req, opt = template_lib.check_dependencies(args[1])
+        if not req and not opt:
+            print("✅ 所有依赖均已满足")
+        else:
+            if req:
+                print(f"❌ 缺失必需依赖：{', '.join(d['skill_id'] for d in req)}")
+            if opt:
+                print(f"⚠️ 缺失可选依赖：{', '.join(d['skill_id'] for d in opt)}")
+    elif sub == 'render':
+        if len(args) < 2:
+            print("错误：请指定模板文件名")
+            print("用法：python orchestrator.py template render <template_file> [output.json]")
+            sys.exit(1)
+        output_path = args[2] if len(args) > 2 else None
+        pipeline = template_lib.render_pipeline(args[1])
+        if pipeline:
+            if output_path:
+                import json as _json
+                with open(output_path, 'w', encoding='utf-8') as f:
+                    _json.dump(pipeline, f, ensure_ascii=False, indent=2)
+                print(f"✅ 已渲染到 {output_path}")
+            else:
+                import json as _json
+                print(_json.dumps(pipeline, ensure_ascii=False, indent=2))
+    else:
+        print(f"未知 template 子命令：{sub}")
+
+
 if __name__ == '__main__':
     if len(sys.argv) < 2 or sys.argv[1] in ('-h', '--help'):
         print(USAGE)
@@ -479,11 +677,21 @@ if __name__ == '__main__':
         'resume': cmd_resume,
         'report': cmd_report,
         'gantt': cmd_gantt,
+        'visualize': cmd_visualize,
         'history': cmd_history,
         'compare': cmd_compare,
         'hardware': cmd_hardware,
         'check-update': cmd_check_update,
         'impact': cmd_impact,
+        'snapshot': cmd_snapshot,
+        'template': cmd_template,
+        'recover': cmd_recover,
+        'dashboard': cmd_dashboard,
+        'mcp': cmd_mcp,
+        'cost': cmd_cost,
+        # 旧命令别名（向后兼容）
+        'retry': lambda a: cmd_recover(['retry'] + a),
+        'fallback': lambda a: cmd_recover(['fallback'] + a),
     }
 
     if cmd not in commands:

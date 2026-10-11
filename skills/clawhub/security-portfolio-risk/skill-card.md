@@ -1,42 +1,53 @@
-## Description: <br>
-Provides AI-driven portfolio risk analysis for China A-shares with VaR, stress testing, tail risk, factor exposure, and risk attribution for fund managers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps analysts assess China-market portfolio risk using VaR, stress tests, tail-risk measures, factor exposures, and risk-contribution analysis.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Fund managers, risk analysts, and institutional investors use this skill to structure portfolio risk analysis, including VaR, CVaR, stress testing, drawdown review, factor exposure analysis, and risk attribution for China-market portfolios. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive portfolio or client data may be shared during analysis requests. <br>
-Mitigation: Use anonymized or appropriately approved data, and avoid sharing confidential client or portfolio details unless permitted. <br>
-Risk: Regulatory or investment claims may be outdated or unsuitable for a specific decision. <br>
-Mitigation: Verify regulatory and investment claims against official sources and professional review before acting. <br>
-Risk: The skill may activate during broad finance discussions where portfolio risk analysis is not intended. <br>
-Mitigation: Confirm the requested task and scope before applying portfolio risk guidance. <br>
+## Use Case:
 
+Fund managers and risk analysts use this skill to assess a holdings portfolio's VaR, stress losses, concentration, factor exposures, and risk contributions. Its methods and examples require independent validation before investment or reporting decisions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/security-portfolio-risk) <br>
+### Deployment Geography for Use:
 
+China (market focus)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with Python code examples and structured analysis prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include financial risk metric explanations, stress-test scenarios, and portfolio analysis templates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and frontmatter) <br>
+Risk: Historical data and model assumptions can produce misleading portfolio risk estimates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently validate inputs, assumptions, and results through established risk-review procedures before relying on them.
+
+Risk: Portfolio details or unverified regulatory claims could be exposed or relied on inappropriately.
+
+Mitigation: Provide only anonymized holdings, weights, and return data; verify regulatory claims and reportable results with the appropriate compliance team.
+
+## Reference(s):
+
+- [Security Portfolio Risk on ClawHub](https://clawhub.ai/gechengling/skills/security-portfolio-risk)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown analysis, tables, and illustrative Python code]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No direct market-data access or code execution; independently review results before use.]
+
+## Skill Version(s):
+
+3.0.4 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

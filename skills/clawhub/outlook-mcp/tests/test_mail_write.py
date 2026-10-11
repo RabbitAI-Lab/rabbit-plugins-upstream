@@ -18,7 +18,10 @@ class TestSendMessage:
         mock_client = AsyncMock()
         mock_client.me.send_mail.post = AsyncMock()
         result = await send_message(
-            mock_client, to=["valid@test.com"], subject="Test", body="Hello",
+            mock_client,
+            to=["valid@test.com"],
+            subject="Test",
+            body="Hello",
             config=_CFG,
         )
         assert result["status"] == "sent"
@@ -29,7 +32,10 @@ class TestSendMessage:
         mock_client = AsyncMock()
         with pytest.raises(ValueError):
             await send_message(
-                mock_client, to=["not-an-email"], subject="Test", body="Hello",
+                mock_client,
+                to=["not-an-email"],
+                subject="Test",
+                body="Hello",
                 config=_CFG,
             )
 
@@ -38,7 +44,10 @@ class TestSendMessage:
         mock_client = AsyncMock()
         with pytest.raises(ReadOnlyError):
             await send_message(
-                mock_client, to=["a@b.com"], subject="Test", body="Hello",
+                mock_client,
+                to=["a@b.com"],
+                subject="Test",
+                body="Hello",
                 config=_CFG_RO,
             )
 
@@ -84,7 +93,11 @@ class TestSendMessage:
         mock_client = AsyncMock()
         mock_client.me.send_mail.post = AsyncMock()
         await send_message(
-            mock_client, to=["to@test.com"], subject="Test", body="Hello", config=_CFG,
+            mock_client,
+            to=["to@test.com"],
+            subject="Test",
+            body="Hello",
+            config=_CFG,
         )
         request_body = mock_client.me.send_mail.post.call_args.args[0]
         assert request_body.message.reply_to is None
@@ -122,7 +135,10 @@ class TestReply:
         msg_builder.reply_all.post = AsyncMock()
         mock_client.me.messages.by_message_id.return_value = msg_builder
         result = await reply(
-            mock_client, message_id="AAMkAG123=", body="Thanks!", reply_all=True,
+            mock_client,
+            message_id="AAMkAG123=",
+            body="Thanks!",
+            reply_all=True,
             config=_CFG,
         )
         assert result["reply_all"] is True
@@ -143,7 +159,10 @@ class TestForward:
         msg_builder.forward.post = AsyncMock()
         mock_client.me.messages.by_message_id.return_value = msg_builder
         result = await forward(
-            mock_client, message_id="AAMkAG123=", to=["a@b.com"], config=_CFG,
+            mock_client,
+            message_id="AAMkAG123=",
+            to=["a@b.com"],
+            config=_CFG,
         )
         assert result["status"] == "forwarded"
         msg_builder.forward.post.assert_called_once()
@@ -153,5 +172,72 @@ class TestForward:
         mock_client = AsyncMock()
         with pytest.raises(ReadOnlyError):
             await forward(
-                mock_client, message_id="AAMkAG123=", to=["a@b.com"], config=_CFG_RO,
+                mock_client,
+                message_id="AAMkAG123=",
+                to=["a@b.com"],
+                config=_CFG_RO,
             )
+
+
+class TestReplyContentType:
+    """#41 shape found by the dead-parameter guard: is_html was accepted and ignored.
+
+    Graph's reply action takes `comment` as plain text only. Markup has to ride
+    on the action's `message` field as an ItemBody, so setting `comment` for an
+    HTML reply silently strips it.
+    """
+
+    async def test_plain_reply_uses_comment(self):
+        mock_client = MagicMock()
+        msg_builder = MagicMock()
+        msg_builder.reply.post = AsyncMock()
+        mock_client.me.messages.by_message_id.return_value = msg_builder
+
+        await reply(mock_client, message_id="AAMkAG123=", body="Thanks!", config=_CFG)
+
+        posted = msg_builder.reply.post.call_args[0][0]
+        assert posted.comment == "Thanks!"
+        assert posted.message is None
+
+    async def test_html_reply_rides_on_message_body(self):
+        from msgraph.generated.models.body_type import BodyType
+
+        mock_client = MagicMock()
+        msg_builder = MagicMock()
+        msg_builder.reply.post = AsyncMock()
+        mock_client.me.messages.by_message_id.return_value = msg_builder
+
+        await reply(
+            mock_client,
+            message_id="AAMkAG123=",
+            body="<b>Thanks!</b>",
+            is_html=True,
+            config=_CFG,
+        )
+
+        posted = msg_builder.reply.post.call_args[0][0]
+        assert posted.message.body.content == "<b>Thanks!</b>"
+        assert posted.message.body.content_type is BodyType.Html
+        # Setting both would duplicate the text in the sent reply.
+        assert posted.comment is None
+
+    async def test_html_reply_all_rides_on_message_body(self):
+        from msgraph.generated.models.body_type import BodyType
+
+        mock_client = MagicMock()
+        msg_builder = MagicMock()
+        msg_builder.reply_all.post = AsyncMock()
+        mock_client.me.messages.by_message_id.return_value = msg_builder
+
+        await reply(
+            mock_client,
+            message_id="AAMkAG123=",
+            body="<i>All</i>",
+            reply_all=True,
+            is_html=True,
+            config=_CFG,
+        )
+
+        posted = msg_builder.reply_all.post.call_args[0][0]
+        assert posted.message.body.content_type is BodyType.Html
+        assert posted.comment is None

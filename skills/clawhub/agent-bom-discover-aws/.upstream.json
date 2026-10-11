@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-discover-aws",
   "slug": "agent-bom-discover-aws",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946265063,
-  "contentHash": "12c9b9f08646bd8bb81b436cdd8ff0db9e30729ad93c6de9b760702b5de84ccd",
-  "fetchedAt": "2026-07-26T18:04:23.068Z"
+  "version": "0.108.4",
+  "updatedAt": 1791600152338,
+  "contentHash": "21b2ba8734c51e63696535d60a4535e7aa7a83a52986564a8740b987f90edcb6",
+  "fetchedAt": "2026-10-11T14:16:09.665Z"
 }

@@ -1,44 +1,59 @@
-## Description: <br>
-Structural code quality metrics, lattice verification, and refactor loops for agent-written code. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents to assess code structure, reduce complexity, and verify refactors with Topos.
 
-## Publisher: <br>
-[krv-labs](https://clawhub.ai/user/krv-labs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[krv-labs](https://clawhub.ai/user/krv-labs)
 
-## Use Case: <br>
-Developers and AI coding agents use this skill to assess local repositories, identify structural code quality issues, verify refactors, and optimize toward SILVER or GOLD lattice medals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Installation uses an external install script and an npm package dependency. <br>
-Mitigation: Review the install script and npm package source before installation. <br>
-Risk: The tool reads local project code and git state and can write dependency graph artifacts. <br>
-Mitigation: Use it only on repositories that are acceptable for local analysis and review generated artifacts before committing them. <br>
-Risk: Topos scores are advisory structural signals rather than proof of functional correctness or full security assurance. <br>
-Mitigation: Run normal tests, linters, security tooling, and code review before accepting refactors. <br>
+## Use Case:
 
+Developers and coding agents use Topos to identify structural code-quality issues, prioritize refactors, and assess changes in local repositories.
 
-## Reference(s): <br>
-- [Topos documentation](https://docs.krv.ai/topos/) <br>
-- [Topos agent contract](https://docs.krv.ai/topos/agents.html) <br>
-- [ClawHub listing](https://clawhub.ai/krv-labs/skills/topos) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, guidance] <br>
-**Output Format:** [CLI tables and ranked file lists, markdown reports, and MCP structured payloads with agent_contract fields.] <br>
-**Output Parameters:** [Medal verdict, pillar scores, ranked refactor targets, and assessment status.] <br>
-**Other Properties Related to Output:** [May write .gitnexus dependency graph artifacts when dependency graph generation is used; source edits are performed only if the agent acts on the guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 0.4.2) <br>
+Risk: Installation instructions pipe an unverified remote script directly to a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installer before running it and prefer a pinned release or verified package when available.
+
+Risk: Registering Topos with every supported agent harness may change more local integrations than intended.
+
+Mitigation: Avoid `topos install --all` unless broad registration is desired.
+
+Risk: Structural refactoring advice does not establish functional correctness or complete security coverage.
+
+Mitigation: Review proposed edits, run project tests, and use dedicated security checks for high-stakes code.
+
+## Reference(s):
+
+- [Topos documentation](https://docs.krv.ai/topos/)
+- [Topos agent guidance](https://docs.krv.ai/topos/agents.html)
+- [ClawHub release](https://clawhub.ai/krv-labs/skills/topos)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, JSON, Shell commands, Code guidance]
+
+**Output Format:** [Text guidance, CLI reports, and structured MCP results]
+
+**Output Parameters:** [1D; medal verdicts, pillar scores, ranked refactor targets, and change assessments]
+
+**Other Properties Related to Output:** [Dependency-graph generation may write local .gitnexus files; suggested edits need separate review and testing.]
+
+## Skill Version(s):
+
+1.0.17 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

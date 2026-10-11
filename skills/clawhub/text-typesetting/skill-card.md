@@ -1,40 +1,55 @@
-## Description: <br>
-Use when setting or reviewing line-height, letter-spacing, and vertical-trim or leading-trim for a text style. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps set and review line-height, letter-spacing, and vertical trim for body text, headings, labels, and captions.
 
-## Publisher: <br>
-[monikazapisekstudio](https://clawhub.ai/user/monikazapisekstudio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[monikazapisek](https://clawhub.ai/user/monikazapisek)
 
-## Use Case: <br>
-Designers and design engineers use this skill to calculate coherent line-height and letter-spacing values for body text, headings, UI labels, and captions. When Figma access is available, it can inspect selected text properties and propose or apply spacing changes only when requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Direct edits to selected Figma text layers can introduce incorrect line-height, letter-spacing, OpenType, or paragraph-indent values if the recommendation does not fit the design context. <br>
-Mitigation: Review proposed values and rationales before approving any direct Figma changes, especially when vertical trim, kerning, OpenType features, or paragraph indent are involved. <br>
+## Use Case:
 
+Designers and developers use this skill to calculate and review spacing for individual text styles and to propose corrections for selected Figma text layers.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/monikazapisekstudio/skills/text-typesetting) <br>
-- [Design Engineering Playbook](https://github.com/monikazapisekstudio/design-engineering-playbook) <br>
-- [Author website](https://monikazapisek.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration] <br>
-**Output Format:** [Markdown with CSS or token snippets and concise rationale] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose Figma text property changes and should apply them only after explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release metadata) <br>
+Risk: Proposed Figma spacing changes could alter shared text styles or variables across multiple designs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the affected style or variable and approve any changes before they are applied.
+
+Risk: Measuring x-height in Figma creates and removes a temporary layer.
+
+Mitigation: Request permission before measuring, or use a clearly labeled fallback when permission is unavailable.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/monikazapisek/skills/text-typesetting)
+- [Skill workflow](SKILL.md)
+- [Skill overview](README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Configuration instructions]
+
+**Output Format:** [Markdown with CSS or design-token snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes recommended line-height and letter-spacing values with brief rationale; Figma changes require explicit approval.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

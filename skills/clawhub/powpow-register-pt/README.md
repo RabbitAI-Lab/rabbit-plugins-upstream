@@ -1,0 +1,78 @@
+# powpow-register
+
+Assistente de registro no PowPow Bolha (edição OpenClaw): leva um usuário novo de «não sei o que é a
+Bolha» até «conta ativada, login com um clique, hora de jogar» — apresentação do produto (com capturas de
+tela), registro delegado ao agent (com upload de avatar), pedido de assinatura via Alipay e acompanhamento
+do pagamento, login com um clique de link duplo, diagnóstico de erros.
+
+**Desde a v2.0.0 o modo é de gestão delegada pelo agent**: o script principal `scripts/powpow-register.mjs`
+é zero dependências (Node ≥ 18), o usuário não sai da conversa em nenhum momento, exceto duas brezes
+ausências: ir ao e-mail ver o código de verificação e pagar no caixa do Alipay. Sem Node, ou quando o
+usuário quer fazer por conta própria, recuo automático para o modo de orientação pura.
+
+## Instalação
+
+```
+openclaw skills install @durenzidu/powpow-register
+```
+
+## Funcionalidades
+
+1. **Apresentação do produto**: abertura de ~120 caracteres + capturas de tela embutidas no pacote
+   (`assets/screenshots/`, 6 imagens: página do mapa, página de detalhes de um post etc.; escolha 1–3
+   conforme a cena; sem hospedagem externa, funciona offline).
+2. **Registro delegado**: o agent sugere proativamente nome de usuário/apelido, senha com duas opções
+   (fornecida pelo usuário ou gerada pelo agent), envio e envio do código de verificação, upload direto do
+   avatar (≤5 MB, não SVG), tratamento automático dos erros comuns (ocupado / expirado / limite de
+   frequência).
+3. **Login com um clique (link duplo)**: assim que o registro dá certo, entrega-se o link de
+   «semi-sessão» que cai direto na página de assinatura; após cair o pagamento, troca-se por um novo
+   estado de sessão e entrega-se o link de membro completo que cai direto na home (pela ponte oficial
+   `me?token=` da plataforma, que planta automaticamente o cookie HttpOnly).
+4. **Pagamento da assinatura**: no canal Alipay o agent faz o pedido por delegação (mensal ¥6.99 /
+   trimestral ¥19.99 / anual ¥69.99, compra única sem renovação automática) + consulta em loop até cair;
+   usuários no exterior recuam para o PayPal; QR code WeChat / Huawei IAP apenas indica-se o caminho.
+5. **Diagnóstico de erros**: código de verificação não chega, nome de usuário/e-mail ocupados, 403 não
+   ativado, conta bloqueada e outros problemas comuns, todos vindos do código-fonte da plataforma com as
+   fontes citadas.
+
+## Estrutura de arquivos
+
+```
+powpow-register/
+├── SKILL.md                            # Guia principal (condições de disparo, fluxo de 8 etapas, normas de tom, regras firmes)
+├── README.md
+├── .clawhubignore
+├── assets/
+│   └── screenshots/                    # Capturas do produto embutidas (powpow-01~06.jpg)
+├── scripts/
+│   └── powpow-register.mjs             # Script principal (zero dependências Node≥18, 11 subcomandos)
+└── references/
+    ├── agent-flow.md                   # Contrato do script, sequência completa, mecanismo de link duplo, design de segurança
+    ├── registration-flow.md            # Regras de campos, limites, tabela de diagnóstico (com fontes no código)
+    ├── payment-and-activation.md       # Contrato Alipay vibepay, cadeia de ativação, diagnóstico dos canais
+    └── screenshots.md                  # Inventário das capturas embutidas + consulta rápida por cena
+```
+
+## Segurança
+
+- **Senha**: entra no processo do script apenas por variável de ambiente, nunca em argumento de linha de
+  comando, nunca no disco, nunca no arquivo de estado; a senha gerada pelo agent é exibida uma única vez
+  para o usuário salvar.
+- **Código de verificação**: usado apenas na interface oficial de registro, descartado após o uso; o
+  arquivo de estado (e-mail/nome de usuário/token/número do pedido) fica no diretório temporário do
+  sistema, apagado de uma vez pelo `cleanup` ao fim do fluxo.
+- **Pagamento**: o agent só cria o pedido, abre o caixa e consulta o pagamento; jamais toca na conta
+  Alipay do usuário ou nas suas credenciais de pagamento, jamais paga por ele. O pagamento acontece
+  sempre entre o usuário e o caixa oficial do Alipay.
+- Todas as requisições vão apenas para o domínio oficial `https://global.powpow.online`; nenhuma chave incluída.
+
+## Licença
+
+MIT-0 (licença unificada do ClawHub).
+
+## Links
+
+- Site oficial: https://global.powpow.online
+- Registro: https://global.powpow.online/register
+- Conheça a Bolha (vídeo): https://www.bilibili.com/video/BV1Wu826UEVz/

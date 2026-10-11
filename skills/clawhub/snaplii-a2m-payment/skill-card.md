@@ -1,45 +1,58 @@
-## Description: <br>
-This skill helps agents browse, quote, purchase, and manage Snaplii gift cards and bill payments using a pre-funded Snaplii Cash balance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents browse and purchase prepaid gift cards, check Snaplii Cash balances, pay bills, and send phone-number transfers through Snaplii.
 
-## Publisher: <br>
-[snapliiai](https://clawhub.ai/user/snapliiai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[snapliiai](https://clawhub.ai/user/snapliiai)
 
-## Use Case: <br>
-External users and agents use this skill to browse eligible Snaplii gift cards and bill payees, preview cashback or voucher savings, and complete explicitly confirmed purchases or bill payments from a pre-funded Snaplii Cash balance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Canada and United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes gateway or base-url switching inside a financial workflow. <br>
-Mitigation: Use gateway switching only when deliberately connecting to a trusted Snaplii environment. <br>
-Risk: Purchases and bill payments can spend a user's pre-funded Snaplii Cash balance. <br>
-Mitigation: Before execution, verify the amount, biller or brand, region, and that payment is coming only from Snaplii Cash. <br>
-Risk: The workflow handles sensitive API keys and gift card redemption details. <br>
-Mitigation: Enter API keys only through hidden CLI prompts and show redemption details only when the user explicitly requests them. <br>
+## Use Case:
 
+People using an AI agent can browse and buy gift cards, check their Snaplii Cash balance, pay bills, or transfer funds to another person's phone number.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/snapliiai/snaplii-a2m-payment) <br>
-- [Snaplii CLI on PyPI](https://pypi.org/project/snaplii-cli/) <br>
-- [Snaplii app for iOS](https://apps.apple.com/app/snaplii/id1596924498) <br>
-- [Snaplii app for Android](https://play.google.com/store/apps/details?id=com.snaplii.app) <br>
+### Deployment Geography for Use:
 
+Canada and United States
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and concise transaction summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes user-confirmed payment flows and defers sensitive redemption details until explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.11.0 (source: server release metadata) <br>
+Risk: Gift-card purchases and transfer creation can spend prepaid funds without a fresh confirmation for each transaction.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set narrow API-key permissions and low spending and transfer limits in the Snaplii app; review the amount and recipient before acting.
+
+Risk: A bill payment to the wrong biller or account may be irreversible.
+
+Mitigation: Check the biller, account, and amount, and obtain explicit current-turn confirmation before payment.
+
+Risk: API keys, phone numbers, gift-card codes, and PINs are sensitive.
+
+Mitigation: Use secure credential entry for keys and avoid disclosing sensitive details unless the user requests them.
+
+## Reference(s):
+
+- [Snaplii skill release on ClawHub](https://clawhub.ai/snapliiai/skills/snaplii-a2m-payment)
+- [Snaplii AI Payment](https://aipayment.snaplii.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown transaction summaries and redemption guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May contain sensitive payment details or gift-card redemption codes; disclose them only when requested.]
+
+## Skill Version(s):
+
+1.13.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
