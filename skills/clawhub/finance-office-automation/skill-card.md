@@ -1,40 +1,57 @@
-## Description: <br>
-Automates financial office tasks including document templates, email drafting, report summarization, and workflow approval guidance for daily productivity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps financial office teams draft documents, meeting minutes, emails, reports, checklists, and approval workflow maps without carrying out institutional actions.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial professionals use this skill to draft meeting minutes, emails, reports, and structured approval workflows. It provides bilingual templates and productivity guidance for routine office automation tasks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger phrases may activate the skill for emails, reports, or workflow advice when the user did not intend to use it. <br>
-Mitigation: Narrow trigger phrases or require explicit user intent before applying the skill to financial-office drafting or workflow guidance. <br>
-Risk: Generated financial-office templates or workflow guidance could be used without checking current policy or regulatory requirements. <br>
-Mitigation: Review generated documents and approval workflows against applicable internal policies and official regulatory sources before use. <br>
+## Use Case:
 
+Financial institution office, operations, and support staff use the skill to prepare document templates, meeting records, correspondence, reporting checklists, workflow maps, and efficiency summaries for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-office-automation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with structured templates and code-style snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Bilingual English and Chinese content; no external tools or credentials indicated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: Regulatory summaries and example workflow thresholds may be outdated or differ from institutional requirements.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current requirements against official institutional policy before using drafts or workflow thresholds.
+
+Risk: Sensitive customer or non-public business information could be exposed if pasted into prompts.
+
+Mitigation: Remove customer identifiers, credentials, account numbers, and non-public data before prompting; use placeholders where needed.
+
+Risk: Drafts could be mistaken for approved actions or final submissions.
+
+Mitigation: Have authorized staff review outputs and follow institutional approval and submission processes.
+
+## Reference(s):
+
+- [Finance Office Automation release](https://clawhub.ai/gechengling/skills/finance-office-automation)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown prose, tables, templates, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts for review; no approvals, email sending, or institutional system access.]
+
+## Skill Version(s):
+
+3.0.4 (source: skill frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

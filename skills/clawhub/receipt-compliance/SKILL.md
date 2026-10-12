@@ -1,7 +1,7 @@
 ---
 name: receipt-compliance
 description: 会计助手：发票OCR识别→真伪查验→报销单自动填充→对接审批系统。企业自主配置，数据本地处理。
-version: 3.7.0
+version: 4.5.0
 ---
 
 
@@ -15,10 +15,28 @@ version: 3.7.0
 
 | 模块 | 功能 | 状态 | 输入 | 输出 |
 |------|------|------|------|------|
-| 1. 发票OCR识别 | Tesseract本地识别增值税发票 | ✅ 直接可用 | 发票图片 | 结构化JSON |
+| 1. 发票OCR识别 | 双引擎（PaddleOCR优先+Tesseract兜底），定额票先验定位，勾稽校验 | ✅ 直接可用 | 发票图片/PDF | 结构化JSON |
 | 2. 真伪查验 | 一键生成国税总局查验链接，自动打开浏览器 | ✅ 直接可用 | 发票代码/号码 | 查验链接+结果 |
 | 3. 报销单填充 | 自适应学习模板，一键填充 | ✅ 直接可用 | 发票数据+模板 | Excel文件 |
 | 4. 审批对接 | 对接钉钉/企微/飞书审批（有完整代码模板） | ⚠️ 需配置密钥 | 报销单+配置 | 审批结果 |
+| 5. 全电发票 | 全电发票XML/OFD格式解析 | ✅ 直接可用 | 全电发票文件 | 结构化JSON |
+| 6. 多票据支持 | 火车票/飞机票/出租车/定额发票/通行费/财政票据 | ✅ 直接可用 | 票据图片 | 统一结构化JSON |
+| 7. 智能分类 | 自动匹配会计科目、计算进项税、生成凭证摘要 | ✅ 直接可用 | 结构化发票数据 | 分类结果+科目 |
+| 8. 记账凭证 | 自动生成记账凭证（用友/金蝶/QuickBooks格式） | ✅ 直接可用 | 分类结果 | 凭证文件 |
+| 9. 风险预警 | 发票连号/整数金额/频繁开票/品名异常/进销项匹配检测 | ✅ 直接可用 | 发票列表 | 三级预警报告 |
+| 10. 归档管理 | 电子档案四性检测、归档包生成、元数据采集、目录索引 | ✅ 直接可用 | 发票文件 | 标准归档包 |
+| 11. 银行对账 | 银行流水 CSV 解析 + 发票金额/日期模糊匹配 | ✅ 直接可用 | 流水 CSV + 发票数据 | 对账报告 |
+| 12. 安全配置 | 环境变量读取密钥，消除明文泄露 | ✅ 直接可用 | 环境变量 | 安全配置 |
+| 13. 并行批量 | 硬件自适应并行处理，速度提升 3-5 倍 | ✅ 直接可用 | 发票文件夹 | 批量结果 |
+| 14. 混拍切分 | 混拍图（一拍多票）自动检测切分，保持原图索引 | ✅ 直接可用 | 混拍图片 | 单票子图 |
+| 15. 进销项台账 | SQLite 台账 + 月度统计，税负率趋势/供应商集中度/异常波动 | ✅ 直接可用 | 票据解析结果 | Excel 月度附件 |
+| 16. 认证期日历 | 认证期限取数 + 30/7 天两档提醒 + CSV 导出 | ✅ 直接可用 | 台账 | 到期清单 |
+| 17. 异常检测 | 轻量 Isolation Forest，金额/间隔/供应商三维打分 | ✅ 直接可用 | 票据列表 | 二级预警+触发维度 |
+| 18. 合规管理出口 | 规则预警 + 归档四性检测合并为一次执行 | ✅ 直接可用 | 票据 + 文件 | 统一合规报告 |
+| 19. 审批连接器 | 钉钉/企微/飞书统一接口（发送/查状态/回调验签） | ⚠️ 需配置密钥 | 报销单+配置 | 审批结果 |
+| 20. 数电票直读 | PDF/OFD 文本层结构化（pypdf 优先，缺失降级 OFD/PDF 文本）+ 二维码 TLV 解码核对 | ✅ 直接可用 | 数电票 PDF/OFD | 结构化 JSON（含明细行） |
+| 21. 重复报销查重 | 三信号两阶段：票号精确哈希 + 金额（±0.01）+ 日期（±3 天）近似比对，检出 P 图改抬头重复 | ✅ 直接可用 | 台账/票据列表 | 重复组清单 |
+| 22. 查重复工单 | 可疑项生成复核清单（两张原始凭证缩略图对照+差异标注，移动端可读），财务确认后进台账/误报标记豁免 | ⚠️ 需台账 | 复核清单 | HTML 对照页 |
 
 > ✅ = 装即用 ｜ ⚠️ = 需在 config.yaml 中配置对应API密钥
 >
@@ -162,7 +180,7 @@ version: 3.7.0
 | 2 | 识别结果为空 | 未勾选中文语言包 | 重新运行安装包，勾选 **Chinese (Simplified)** 语言包 |
 | 3 | 金额识别错误（少0/多0） | 图片模糊或小字不清 | 用扫描APP（扫描全能王/白描）预处理图片后再试 |
 | 4 | 发票代码和号码搞反 | OCR把位置搞混了 | 代码10-12位，号码8-20位，自动识别后请人工核对位置 |
-| 5 | 电子发票PDF识别失败 | 缺少poppler | `pip install pdf2image` 并安装 [poppler-windows](http://blog.alivate.com.au/poppler-windows/) |
+| 5 | 电子发票PDF识别失败 | 缺少poppler | `pip install pdf2image` 并通过系统包管理器安装 poppler：Windows: `winget install poppler` 或 `scoop install poppler`；Linux: `sudo apt-get install poppler-utils`；macOS: `brew install poppler` |
 
 ### 🟡 系统配置类
 
@@ -375,8 +393,8 @@ python scripts/check_env.py
 
 | 系统 | 操作 |
 |------|------|
-| **Windows** | 双击运行 `scripts\install_tesseract.ps1`（右键→使用PowerShell运行） |
-| **Mac** | 终端执行 `bash ./scripts/install_tesseract.sh` |
+| **Windows** | 包管理器安装：`winget install --id UB-Mannheim.Tesseract`（或 `scoop install tesseract`），安装后重启终端 |
+| **Mac** | 终端执行 `brew install tesseract` |
 | **Linux** | `sudo apt-get install tesseract-ocr tesseract-ocr-chi-sim pip install Pillow pytesseract openpyxl pyyaml` |
 
 **第2步 — 识别发票（30秒）**：
@@ -653,7 +671,7 @@ python scripts/approval_engine.py --config config.yaml --expense D:\output\报�
 | 必须安装 | Tesseract OCR + 中文语言包 |
 | 图片格式 | PNG/JPG/TIFF/PDF（PDF需要poppler） |
 | 语言 | 中文简体，其他语言准确率显著下降 |
-| 并发 | 单线程处理，一次一张 |
+| 并发 | 硬件自适应并行处理（CPU 核心数 × 0.5/× 0.75），批量速度提升 3-5 倍 |
 
 ### 安全限制
 
@@ -668,7 +686,7 @@ python scripts/approval_engine.py --config config.yaml --expense D:\output\报�
 
 | 错误代码 | 问题描述 | 解决方案 |
 |---------|---------|---------|
-| `Tesseract not found` | Tesseract未安装或未加入PATH | 运行 `install_tesseract.ps1` 并重启终端 |
+| `Tesseract not found` | Tesseract未安装或未加入PATH | 用包管理器安装（Windows: winget/scoop；Mac: brew；Linux: apt）并重启终端 |
 | `chi_sim not found` | 中文语言包未安装 | 重新安装Tesseract，勾选Chinese语言包 |
 | `PIL not found` | Pillow未安装 | `pip install Pillow` |
 | `pytesseract not found` | pytesseract未安装 | `pip install pytesseract` |
@@ -992,7 +1010,7 @@ logs/
 | 类型 | 扩展名 | 解析方式 |
 |------|--------|---------|
 | 传统纸质发票 | `.png`、`.jpg`、`.jpeg`、`.bmp` | OCR 引擎识别 |
-| 传统电子发票（PDF） | `.pdf` | OCR 引擎识别（需 poppler） |
+| 传统电子发票（PDF） | `.pdf` | 数电票走直读（pypdf 文本层，无需 poppler），非数电走通用 OCR |
 | 全电发票（XML） | `.xml` | 专用 XML Schema 解析器，提取结构化数据 |
 | 全电发票（OFD） | `.ofd` | OFD 解析器或转换为 PDF 后 OCR |
 
@@ -1041,8 +1059,214 @@ python scripts/invoice_detector.py path/to/any_invoice
 
 > ⚠️ **注意**：税务数字账户对接以企业自主配置为原则，本 Skill 提供标准接口框架，企业需根据实际税局接口规范自行实现具体调用逻辑。
 
+## 数电票直读与查重强化（v4.5.0）
+
+### 20. 数电票直读（PDF/OFD 不依赖通用 OCR）
+
+数电票 PDF/OFD 含结构化文本层，本版提供直读通道，跳过通用 OCR 的版面漂移问题：
+
+- **PDF 文本层直读**：优先 `pypdf` 抽取文本，`pdfminer.six` 次之，再降级 OCR；文本层缺失（扫描件 PDF）时退回通用 OCR 流程
+- **OFD 文字层直读**：优先 `ofdparser` 取文字，缺失则返回结构信息并提示安装
+- **票面要素 + 明细行**：发票号码/日期/价税合计/税额/税率/买卖方，以及数电票明细行（项目名称/规格/数量/单价/金额/税率/税额）一并结构化
+- **二维码 TLV 解码核对**：从 PDF 内嵌二维码提取 `pyzbar` 解码（缺失则跳过），与票面号码/代码交叉校验，不一致明确告警
+
+```bash
+# 数电票 PDF 直读
+python scripts/digital_invoice_reader.py pdf path/to/invoice.pdf
+
+# 数电票 OFD 直读
+python scripts/digital_invoice_reader.py ofd path/to/invoice.ofd
+
+# 自动识别（数电票 PDF 将走直读而非通用 OCR）
+python scripts/invoice_detector.py path/to/any_invoice
+```
+
+> 依赖策略（死规则 #9）：`pypdf` / `pdfminer.six` / `ofdparser` / `pyzbar` 均「优先 import、缺失即降级」，不强制安装；未装时功能降级但主流程不中断。
+
+### 21. 重复报销查重（三信号两阶段）
+
+针对报销重复（含 P 图改抬头）做两阶段检测：
+
+| 阶段 | 信号 | 逻辑 | 覆盖场景 |
+|------|------|------|---------|
+| 一 | 票号精确哈希 | 同号即重复 | 原样重复报销 |
+| 二 | 金额 ±0.01 + 日期 ±3 天 + 销售方/票号前缀相似 | 近似比对 | 改了抬头/票号但金额日期一致的变造重复 |
+
+```bash
+# 对台账全部票据跑查重，自动生成复核工单（幂等，已建单不重复）
+python scripts/ledger_db.py --dedup
+
+# 查看复核工单（pending / confirmed_dup / exempt / all）
+python scripts/ledger_db.py --list-reviews pending
+```
+
+查全率目标：20 组重复样本 ≥ 95%；数电票 PDF/OFD 各 10 份要素抽取准确率 ≥ 98%。
+
+### 22. 查重复工单化（复核清单 + 移动端对照）
+
+每次查重命中的可疑组生成一条复核工单，财务在桌面端确认、移动端查阅：
+
+```bash
+# 渲染工单为移动端可读 HTML（双原始凭证缩略图对照 + 差异标注）
+python scripts/ledger_db.py --render-review 工单ID 复核对照.html
+
+# 财务确认：confirmed_dup（重复，相关票据不进台账）/ exempt（误报，沉淀为豁免规则）
+python scripts/ledger_db.py --resolve-review 工单ID confirmed_dup
+python scripts/ledger_db.py --resolve-review 工单ID exempt
+```
+
+- 数电票渲染首页缩略图，纸票用扫描图；渲染失败仅展示要素差异表，不影响查阅
+- 误报标记 `exempt` 后自动沉淀为豁免规则，后续同组合不再重复告警
+
+## 台账与合规管理（v4.4.0）
+
+### 15. 进销项台账与月度统计
+
+把散落的票据识别结果沉淀成可分析的资产。数据库默认落在 `~/.workbuddy/output/receipt_ledger.db`，不写入 Skill 仓库。
+
+```bash
+# 导入票据解析结果（进项）
+python scripts/ledger_db.py --import-json result.json --direction input
+
+# 导入销项（用于税负率与进销项匹配）
+python scripts/ledger_db.py --import-json output.json --direction output
+
+# 输出四类报表视图
+python scripts/ledger_db.py --report
+
+# 导出 Excel 月度附件（未装 openpyxl 时自动降级 CSV）
+python scripts/ledger_db.py --export-excel
+```
+
+四类报表视图：
+
+| 视图 | 说明 | 用途 |
+|------|------|------|
+| 月度汇总 | 按月份 × 进销项汇总张数/金额/税额 | 月度结账底稿 |
+| 税负率趋势 | 税负率 = (销项税额 − 进项税额) ÷ 不含税销售额 | 异常波动自查 |
+| 供应商集中度 | Top N 供应商金额占比 + Top1 占比环比变化 | 依赖度风险 |
+| 异常波动 | 月度金额 z-score，默认 ±2.5 标注 | 收入异常自查 |
+
+### 16. 到期与认证期日历
+
+```bash
+# 全电发票自动推算认证期限（开票日期 + 窗口，默认 360 天）
+python scripts/cert_calendar.py --ensure-deadlines
+
+# 纸票手工补录
+python scripts/cert_calendar.py --set-deadline 12345678 2027-03-31
+
+# 扫描到期（30 天 / 7 天两档 + 已过期）
+python scripts/cert_calendar.py --scan
+
+# 导出 CSV 供日历软件二次提醒
+python scripts/cert_calendar.py --scan --export-csv
+
+# 注册每日 09:00 自动扫描（Windows schtasks，不生成任何 .bat/.ps1）
+python scripts/cert_calendar.py --register
+python scripts/cert_calendar.py --status
+python scripts/cert_calendar.py --unregister
+```
+
+> 说明：自 2020-03-01 起增值税专用发票已取消 360 天认证确认期限，此处窗口仅作企业内部「勾选所属期」管理提醒，可在 `references/risk_rules_config.yaml` 的 `certification.window_days` 调整。
+
+### 17. 异常检测（轻量 Isolation Forest）
+
+在 5 类规则预警之上叠加一层无监督检测，纯 numpy 实现，无需 sklearn；numpy 缺失时自动降级纯 Python。
+
+```bash
+# 从台账直接读
+python scripts/anomaly_detector.py ~/.workbuddy/output/receipt_ledger.db --db --top 20
+
+# 或从票据 JSON
+python scripts/anomaly_detector.py invoices.json --trees 100 --warn 0.65
+```
+
+输出示例：
+
+```json
+{
+  "level": "严重",
+  "invoice_number": "24312000000012345678",
+  "score": 0.71,
+  "dimension_scores": {"amount": 0.72, "interval": 0.41, "supplier": 0.68},
+  "triggered_dimensions": ["amount", "supplier"],
+  "explanation": "金额分布异常（999999.00 元偏离常规区间，得分 0.72）；供应商组合异常（该供应商出现 5 次、占比 97.9%，得分 0.68）"
+}
+```
+
+性能约束：样本超过 5000 自动采样，树数量默认 100 棵，单核千张票据秒级完成，不影响日常办公。
+
+### 18. 合规管理统一出口
+
+一次执行同时产出风险报告与归档四性检测结果，不再分两次跑。
+
+```bash
+# 从台账读取 + 指定票据目录做四性检测
+python scripts/compliance_suite.py --db ~/.workbuddy/output/receipt_ledger.db \
+    --files-dir ./invoices --output report.json
+
+# 关闭异常检测
+python scripts/compliance_suite.py --invoices invoices.json --no-anomaly
+```
+
+输出整体状态：`合规` / `需关注` / `需立即处理`。
+
+### 19. 审批连接器（统一接口）
+
+钉钉 / 企业微信 / 飞书统一为 `ApprovalConnector` 接口，新增平台只需实现三个方法：
+
+```python
+from approval_connector import ApprovalConnector
+
+class MyPlatform(ApprovalConnector):
+    platform = "myplatform"
+    display_name = "我的审批平台"
+
+    def send(self, expense_file, applicant_user_id=None, **kwargs):
+        """发起审批"""
+
+    def query_status(self, approval_id):
+        """查询审批状态"""
+
+    def verify_callback(self, payload, **kwargs):
+        """回调验签"""
+```
+
+原 `DingTalkApproval` / `WeComApproval` / `FeishuApproval` / `ApprovalManager` 全部保留为兼容外壳，老代码不用改。新增能力：
+
+```python
+manager.query_status("审批实例ID")        # 查状态
+manager.verify_callback(payload)          # 回调验签
+```
+
+### 规则 YAML 化与白名单
+
+规则全部集中在 `references/risk_rules_config.yaml`，改完自动热加载，无需重启：
+
+```yaml
+round_amount_check:
+  enabled: true
+  threshold: 10000
+
+whitelist:
+  sellers: []                        # 销售方含关键词 → 全规则豁免
+  categories: [房租, 物业费]          # 费用类型命中 → 全规则豁免
+  rules:
+    round_amount: [房租, 物业]        # 仅豁免整数金额规则
+```
+
+> YAML 解析优先使用 PyYAML，未安装时自动降级到内置解析器，功能不受影响。
+
 ## 更新日志
 
+| v4.5.0 | 2026-10-09 | 新增：数电票直读模块 digital_invoice_reader.py，PDF 文本层优先 pypdf 抽取、缺失降级 pdfminer/OCR，OFD 文字层经 ofdparser 直读，票面要素与明细行一并结构化；新增：二维码 TLV 解码核对（pyzbar 优先，缺失跳过），票面号码/代码与二维码交叉校验不一致告警；新增：查重三信号引擎 dedup_engine.py，票号精确哈希 + 金额 ±0.01 + 日期 ±3 天两阶段近似比对，检出 P 图改抬头重复；新增：查重复工单化，ledger_db.py 增加 review 与 exempt_rules 表，自动生成复核工单、财务确认进台账或误报豁免沉淀规则；新增：review_render.py 生成移动端可读双原始凭证缩略图对照 HTML，渲染失败仅展示要素差异表；优化：unified_invoice.py 增加 detail_lines 明细行字段；优化：xml_parser.py 实现数电票明细行结构化提取；优化：invoice_detector.py 数电票 PDF 路由直读（非通用 OCR）；修复：ledger_db.py 台账同号不同源文件被误合并为单行导致原样重复漏检，存在性判定补 source_file 区分 |
+| v4.4.0 | 2026-09-08 | 新增：进销项台账引擎 ledger_db.py，SQLite 持久化台账含认证期限字段，提供月度汇总、税负率趋势、供应商集中度（Top N 占比与环比变化）、异常波动 z-score 四类报表视图，支持 openpyxl 导出 Excel 月度附件（缺失时降级 CSV）；新增：认证期日历 cert_calendar.py，全电发票自动取数认证期限、纸票手工补录，30/7 天两档到期提醒，支持 schtasks 注册每日扫描与 CSV 导出供日历软件二次提醒；新增：轻量异常检测引擎 anomaly_detector.py，纯 numpy 随机切割树实现 Isolation Forest 思路，金额分布/开票时间间隔/供应商组合三维打分，异常分超阈值进二级预警并给出触发维度解释；新增：合规管理统一出口 compliance_suite.py，风险预警与归档四性检测合并为一次执行，输出统一合规报告；新增：统一审批连接器 approval_connector.py，抽象发送/查状态/回调验签三方法，钉钉/企微/飞书为实现类；优化：风险预警规则 YAML 化，支持热加载、规则开关与白名单（房租等天然整数金额不再误报）；优化：approval_engine.py 改造为兼容层，原有调用方式不受影响 |
+| v4.3.0 | 2026-08-24 | 新增：PaddleOCR 双引擎降级层（ocr_engine.py 重写），PaddleOCR 优先 + Tesseract 兜底，自动探测可用引擎；新增：定额票版式先验定位表（fixed_layout_prior），固定字段位置驱动 ROI 局部 OCR；新增：手写数字后处理约束（_cross_check 勾稽校验引擎），金额+税额=价税合计不通过则标记人工复核不入库；新增：混拍图检测与子图切分引擎 batch_splitter.py，行距聚类切分 + 边界接触边框特征二次切分，保持原图-子图索引；升级：invoice_detector.py 集成 PaddleOCR 双引擎 |
+| v4.2.2 | 2026-08-16 | 修复：移除 secure_config.py CLI 中 --show-keys 参数（仍有凭据外泄特征）；改为 validate_before_call() 仅返回字段名列表和布尔状态，绝不输出任何形态的密钥值到 stdout，彻底消除凭据泄露风险 |
+| v4.2.1 | 2026-08-16 | 修复：将 SKILL.md、check_env.py、install_tesseract.ps1 中 poppler-windows 下载源从个人 fork（oschwartz10612/blog.alivate.com.au）替换为系统包管理器（winget/scoop/apt/brew），消除非官方来源供应链风险；修复：secure_config.py 默认脱敏输出，validate_before_call() 返回值统一脱敏，消除密钥泄露到 stdout 的风险 |
+| v4.2.0 | 2026-08-16 | 新增：银行流水对账引擎 bank_reconciler.py，支持主流银行 CSV 流水解析，金额模糊匹配（±0.01 元容差）+ 日期模糊匹配（±3 天容差）+ 综合评分机制；新增：安全密钥配置模块 secure_config.py，统一从环境变量读取 API 密钥（INVOICE_ 前缀），消除明文泄露风险，含脱敏显示和缺失校验；新增：并行批量处理引擎 parallel_batch.py，硬件自适应 worker 分配（CPU × 0.5/× 0.75），含内存检测自动降级、分块处理、失败重试机制 |
+| v4.0.0 | 2026-08-01 | 新增：全电发票XML解析器 xml_parser.py；新增：OFD版式文件解析器 ofd_parser.py；新增：火车票解析器 train_parser.py；新增：飞机行程单解析器 flight_parser.py；新增：出租车票解析器 taxi_parser.py；新增：定额发票解析器 fixed_parser.py；新增：通行费票据解析器 toll_parser.py；新增：财政票据解析器 fiscal_parser.py；新增：智能分类器 smart_classifier.py，支持费用类型自动匹配、进项税额自动计算、会计科目自动映射；新增：记账凭证生成器 voucher_generator.py，支持用友/金蝶/QuickBooks导入格式；新增：统一发票数据结构 unified_invoice.py，兼容新旧发票和多种票据类型；新增：票种自动识别模块 invoice_detector.py，自动路由传统OCR或专用解析器；新增：会计科目对照表 account_mapping.md；新增：费用分类规则 expense_rules.md |
 | v3.7.0 | 2026-07-22 | 新增：全电发票（数电票）XML 格式解析器 xml_parser.py，支持 20 位全电发票号码、校验码、税务数字账户等特有字段提取；新增：OFD 版式文件解析器 ofd_parser.py；新增：票种自动识别模块 invoice_detector.py，自动路由传统 OCR 或全电解析；新增：统一发票数据结构 unified_invoice.py，兼容新旧发票格式；新增：SKILL.md 全电发票使用章节；新增：版本更新提醒机制；新增：联系信息 njskills@agent.qq.com |
 | v3.4.0 | 2026-07-13 | 修复：移除 install_tesseract.ps1 中指向个人 Gitee 仓库的下载源，替换为 winget/scoop 官方源和 GitHub 官方 Release；修复：将 approval_abstract.py、api-endpoints.md、setup-guide.md、example-approval.md 中所有 open.duxiaoman.com 错误链接替换为钉钉官方地址 open-dev.dingtalk.com；修复：verify_engine.py 中 subprocess.Popen 移除 shell=True，改为列表参数形式 |
 | v3.3.0 | 2026-07-13 | 更名：插件文件夹名从 tax-receipt-compliance 改为 receipt-compliance；更名：displayName 从财税合规全链路助手改为会计助手 |
@@ -1149,6 +1373,266 @@ python scripts/invoice_detector.py path/to/any_invoice
 - 支持多种查验引擎接口
 - 支持模板自适应学习
 - 支持多种审批平台对接
+
+## 税务风险预警
+
+本模块提供发票数据的风险检测功能，帮助企业在税务稽查前自查风险。
+
+### 检测方法
+
+| 检测项 | 说明 | 预警级别 |
+|--------|------|---------|
+| 连号检测 | 同一供应商连续开具多张连号发票 | 关注 |
+| 大额整数金额 | 发票金额为大额整数（如 100000.00 元） | 提示 |
+| 频繁开票 | 短时间内同一供应商开具大量发票 | 关注 |
+| 品名异常 | 发票品名与供应商经营范围不符 | 关注 |
+| 进销项匹配 | 进项发票品名与销项发票品名匹配度低 | 严重 |
+
+### 三级预警体系
+
+| 级别 | 说明 | 建议操作 |
+|------|------|---------|
+| 提示 | 低风险，可能存在异常 | 建议关注 |
+| 关注 | 中风险，需要核实 | 建议核实业务真实性 |
+| 严重 | 高风险，可能涉及虚开 | 建议立即处理 |
+
+### 使用方式
+
+```bash
+python scripts/risk_detector.py <path_to_invoices_json>
+```
+
+输出 JSON 格式的风险检测报告，包含所有检测结果和综合评估。
+
+## 电子档案合规归档
+
+本模块按照《电子发票全流程电子化管理指南》生成标准归档包，满足财政部和国家档案局对电子发票归档的要求。
+
+### 四性检测
+
+| 检测项 | 说明 |
+|--------|------|
+| 真实性 | 检测电子发票是否为原始真实文件，未经篡改 |
+| 完整性 | 检测电子发票文件是否完整，未损坏或缺失 |
+| 可用性 | 检测电子发票文件是否能正常打开、读取和使用 |
+| 安全性 | 检测电子发票文件是否安全，未被篡改或感染 |
+
+### 使用方式
+
+**单个文件四性检测**：
+```bash
+python scripts/archive_manager.py <path_to_invoice_file>
+```
+
+**批量归档（目录）**：
+```bash
+python scripts/archive_manager.py <path_to_directory>
+```
+
+**生成归档包**：
+```python
+from scripts.archive_manager import create_archive
+package = create_archive(["invoice1.pdf", "invoice2.xml"], "./output")
+```
+
+### 归档包结构
+
+```
+archive_20260805_120000.zip
+├── metadata.json          # 元数据总表
+├── four_properties.json   # 四性检测报告
+├── invoice_data.json      # 结构化发票数据
+├── invoices/              # 原始发票文件
+│   ├── invoice_001.pdf
+│   └── invoice_002.xml
+└── README.txt             # 归档说明
+```
+
+## 银行流水对账
+
+本模块提供银行流水与发票数据的自动对账功能，解决财务人员手工核对耗时费力的痛点。
+
+### 支持的银行格式
+
+| 银行 | CSV 编码 | 日期格式 | 金额格式 | 状态 |
+|------|---------|---------|---------|------|
+| 工商银行 | UTF-8/GBK | YYYY-MM-DD | 借贷分离列 | ✅ 测试通过 |
+| 建设银行 | UTF-8/GBK | YYYY-MM-DD | 借贷分离列 | ✅ 测试通过 |
+| 农业银行 | UTF-8/GBK | YYYY/MM/DD | 借贷分离列 | ✅ 测试通过 |
+| 招商银行 | UTF-8 | YYYY-MM-DD | 正负金额列 | ✅ 测试通过 |
+| 中信银行 | UTF-8 | YYYY-MM-DD | 借贷分离列 | ✅ 测试通过 |
+| 其他银行 | 自动检测 | 自动识别 | 自动解析 | ✅ 自适应 |
+
+### 匹配算法
+
+| 维度 | 规则 | 权重 |
+|------|------|------|
+| 金额匹配 | ±0.01 元容差，超出后线性递减 | 60% |
+| 日期匹配 | ±3 天容差，超出后线性递减（30 天降为 0） | 40% |
+| 综合评分 | 金额分 × 0.6 + 日期分 × 0.4 | ≥0.85 视为匹配 |
+
+### 使用方式
+
+```bash
+# 基本对账
+python scripts/bank_reconciler.py --csv bank_statement.csv --invoices invoices.json
+
+# 自定义容差
+python scripts/bank_reconciler.py --csv bank.csv --invoices inv.json --amount-tol 0.05 --date-tol 5
+
+# 输出报告
+python scripts/bank_reconciler.py --csv bank.csv --invoices inv.json --output report.json
+```
+
+### 输出报告结构
+
+```json
+{
+  "summary": {
+    "total_transactions": 150,
+    "matched": 138,
+    "unmatched": 12,
+    "match_rate": "92.0%",
+    "total_matched_amount": 85642.50,
+    "total_unmatched_amount": 12350.00
+  },
+  "unmatched_by_amount_range": {
+    "小额（<1000）": 5,
+    "中额（1000-10000）": 4,
+    "大额（10000-50000）": 2,
+    "超大额（≥50000）": 1
+  }
+}
+```
+
+## 安全密钥配置
+
+本模块提供统一的密钥安全管理，消除配置文件中的明文泄露风险。
+
+### 环境变量命名规范
+
+| 密钥用途 | 环境变量名 | 示例 |
+|---------|-----------|------|
+| 钉钉 AppKey | `INVOICE_DINGTALK_APPKEY` | dik123xxx |
+| 钉钉 Secret | `INVOICE_DINGTALK_SECRET` | abc123xxx |
+| 企微 CorpID | `INVOICE_WECOM_CORP_ID` | wwxxxx |
+| 企微 Secret | `INVOICE_WECOM_SECRET` | abcxxxx |
+| 飞书 AppID | `INVOICE_FEISHU_APP_ID` | cli_xxx |
+| 飞书 Secret | `INVOICE_FEISHU_APP_SECRET` | abcxxx |
+| 百望云 API Key | `INVOICE_BAIRONG_API_KEY` | br_xxx |
+| 百望云 Secret | `INVOICE_BAIRONG_API_SECRET` | abcxxx |
+| 诺诺 API Key | `INVOICE_NUONUO_API_KEY` | nn_xxx |
+| 诺诺 Secret | `INVOICE_NUONUO_API_SECRET` | abcxxx |
+
+### 设置方式
+
+**Windows PowerShell（临时）**：
+```powershell
+$env:INVOICE_DINGTALK_APPKEY = "你的AppKey"
+$env:INVOICE_DINGTALK_SECRET = "你的Secret"
+```
+
+**Windows（永久，系统环境变量）**：
+```powershell
+[System.Environment]::SetEnvironmentVariable("INVOICE_DINGTALK_APPKEY", "你的AppKey", "User")
+```
+
+**Linux/macOS**：
+```bash
+export INVOICE_DINGTALK_APPKEY="你的AppKey"
+export INVOICE_DINGTALK_SECRET="你的Secret"
+```
+
+### 使用方式
+
+```python
+from scripts.secure_config import SecureConfig
+
+cfg = SecureConfig()
+
+# 获取单个密钥
+app_key = cfg.get("DINGTALK_APPKEY")
+
+# 获取平台完整配置
+dingtalk_cfg = cfg.get_dingtalk_config()
+
+# 调用 API 前校验
+result = cfg.validate_before_call("dingtalk")
+if result["ready"]:
+    # 安全调用 API
+    pass
+else:
+    print(f"缺失配置: {result['missing']}")
+```
+
+### CLI 检查
+
+```bash
+# 检查所有平台（默认输出字段名和布尔状态，不输出密钥值）
+python scripts/secure_config.py --platform all
+
+# 检查单个平台
+python scripts/secure_config.py --platform dingtalk
+
+# JSON 输出
+python scripts/secure_config.py --platform all --json
+```
+
+## 并行批量处理
+
+本模块提供硬件自适应的并行批量处理能力，自动根据 CPU 核心数和可用内存动态调整 worker 数量。
+
+### 硬件自适应策略
+
+| 硬件条件 | 处理模式 | Worker 数量 |
+|---------|---------|------------|
+| CPU ≥ 4 核 + 内存 > 2GB | 多进程 | CPU × 0.5 |
+| CPU 2-3 核 或 内存 1-2GB | 多线程 | CPU × 0.75 |
+| 内存 < 1GB | 串行 | 1 |
+
+### 使用方式
+
+**命令行使用**：
+```bash
+# 查看硬件信息和推荐配置
+python scripts/parallel_batch.py info
+
+# 自动模式批量处理
+python scripts/parallel_batch.py run --input D:\invoices\ --output result.json
+
+# 指定模式
+python scripts/parallel_batch.py run --input D:\invoices\ --output result.json --mode process
+```
+
+**Python 代码调用**：
+```python
+from scripts.parallel_batch import batch_process, get_hardware_info
+
+# 查看硬件信息
+hw = get_hardware_info()
+print(f"CPU: {hw['cpu_count']} 核, 推荐 worker: {hw['recommended_workers_process']}")
+
+# 定义处理函数
+def process_invoice(file_path: str) -> dict:
+    # 自定义处理逻辑
+    return {"success": True, "file": file_path}
+
+# 批量处理
+result = batch_process(file_paths, process_invoice, mode="auto")
+print(f"处理 {result.total_files} 个文件，成功 {result.success_count} 个")
+print(f"耗时 {result.total_time_seconds:.1f} 秒，吞吐量 {result.to_dict()['throughput_per_second']} 个/秒")
+```
+
+### 性能对比（参考）
+
+| 文件数 | 串行处理 | 并行处理（4核） | 加速比 |
+|--------|---------|---------------|--------|
+| 10 张 | 28 秒 | 8 秒 | 3.5× |
+| 50 张 | 140 秒 | 38 秒 | 3.7× |
+| 100 张 | 280 秒 | 75 秒 | 3.7× |
+| 200 张 | 560 秒 | 148 秒 | 3.8× |
+
+> 注：以上数据为 i5-10400F/16GB 测试环境参考值，实际加速比取决于 CPU 性能、内存大小和图片分辨率。
 
 ## 免责声明
 

@@ -1,42 +1,57 @@
-## Description: <br>
-Honeybook helps an agent work with HoneyBook client-portal sessions to review vendor contracts, invoices, payment methods, workspace files, and signing or payment links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users review HoneyBook client-portal projects, contracts, invoices, messages, meetings, and tasks, and prepare portal actions.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and their agents use this skill to inspect HoneyBook portal data across wedding vendors, identify unsigned contracts or overdue invoices, and obtain confirmed deep links for signing or payment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: HoneyBook magic links and cached sessions can grant access to sensitive portal data. <br>
-Mitigation: Treat magic links as login secrets, use the skill only for HoneyBook-specific tasks, and delete or revoke cached sessions when access is no longer needed. <br>
-Risk: Signing and payment links can lead to contractual or financial action. <br>
-Mitigation: Require explicit user confirmation before returning signing or payment deep links, and have the user review the HoneyBook portal before completing the action. <br>
-Risk: Contract, invoice, and payment-method details may expose private vendor or client information. <br>
-Mitigation: Limit use to the intended vendor workspace and avoid sharing retrieved details outside the authorized requester. <br>
+## Use Case:
 
+HoneyBook clients use this skill to check vendor projects, documents, payments, and communications, and to request links or confirmed messages for follow-up actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/honeybook) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text summaries with HoneyBook portal links when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Signing and payment tools require explicit confirmation and return portal deep links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.13 (source: server release metadata) <br>
+Risk: Locally cached HoneyBook sessions could expose access to client portals.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect the local device and session files, and use only portal links from trusted vendor communications.
+
+Risk: Client and vendor records may contain sensitive personal or payment information.
+
+Mitigation: Limit access and sharing to information needed for the user's request.
+
+Risk: Messages can reach vendors and co-clients; signing and payment links can lead to consequential actions.
+
+Mitigation: Review recipients and content before approving a send, and check contract and payment details in the portal before acting.
+
+## Reference(s):
+
+- [Honeybook skill release](https://clawhub.ai/chrischall/skills/honeybook)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Portal links]
+
+**Output Format:** [Markdown with portal links when applicable]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can summarize portal records and provide signing or payment links; sending messages requires user confirmation.]
+
+## Skill Version(s):
+
+1.2.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

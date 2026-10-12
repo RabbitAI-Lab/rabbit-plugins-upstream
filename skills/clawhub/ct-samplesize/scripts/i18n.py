@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 # -*- coding: utf-8 -*-
 """
-i18n.py -- bilingual (EN/ZH) localization for ct-samplesize
+i18n.py -- bilingual (EN/ZH) localization for the ct- skill library (shared base layer)
 
 Provides:
   - is_chinese_os(): detect if the OS locale is Chinese
@@ -99,7 +99,7 @@ def _current_lang():
 # ═══════════════════════════════════════════════════════════════════════════
 
 _MESSAGES = {
-    # ── Dry run / 安全预览 ──
+    # ── Generic messages shared by ALL ct- skills / 全库通用消息 ──
     "dry_run.not_executed": {
         "en": "[DRY RUN — code not executed. Remove --dry-run to execute.]",
         "zh": "[DRY RUN — 代码未执行。去掉 --dry-run 以执行。]",
@@ -107,10 +107,6 @@ _MESSAGES = {
     "safe_preview.not_executed": {
         "en": "[SAFE PREVIEW] R code was NOT executed. Re-run with --yes to compute the result.",
         "zh": "[安全预览] R 代码未执行。追加 --yes 重新运行以计算结果。]",
-    },
-    "safe_preview.not_executed_curve": {
-        "en": "[SAFE PREVIEW] R code was NOT executed. Re-run with --yes to compute and save the curve.",
-        "zh": "[安全预览] R 代码未执行。追加 --yes 重新运行以计算并保存曲线。]",
     },
     "exec.running": {
         "en": "[EXECUTING R CODE...]",
@@ -120,10 +116,6 @@ _MESSAGES = {
         "en": "[INFO] R code is shown by default in preview mode. Re-run with --show-code while using --yes to also display it during execution.",
         "zh": "[提示] 预览模式默认展示 R 代码。执行时追加 --show-code 可同时查看代码。]",
     },
-    "info.r_not_detected_python_fallback": {
-        "en": "[INFO] R not detected -> using built-in pure-Python Monte-Carlo fallback (scripts/adaptive_simulator.py).",
-        "zh": "[提示] 未检测到 R → 改用内置纯 Python 蒙特卡洛备用引擎 (scripts/adaptive_simulator.py)。]",
-    },
     "info.result_saved": {
         "en": "Result JSON saved to: {path}",
         "zh": "结果 JSON 已保存至：{path}",
@@ -132,8 +124,6 @@ _MESSAGES = {
         "en": "PNG saved to: {path}",
         "zh": "PNG 已保存至：{path}",
     },
-
-    # ── Errors / 错误 ──
     "error.rscript_not_found": {
         "en": "[ERROR] Rscript not found or invalid. Set RSCRIPT_PATH env or install R.",
         "zh": "[错误] 未找到 Rscript 或路径无效。请设置 RSCRIPT_PATH 环境变量或安装 R。",
@@ -158,10 +148,6 @@ _MESSAGES = {
         "en": "[ERROR] Rscript not found or invalid. Is R installed?",
         "zh": "[错误] 未找到 Rscript 或路径无效。是否已安装 R？]",
     },
-    "error.test_required": {
-        "en": "--test is required (unless using --install-all-packages)",
-        "zh": "--test 为必选参数（--install-all-packages 除外）",
-    },
     "error.generic": {
         "en": "ERROR: {msg}",
         "zh": "错误：{msg}",
@@ -170,64 +156,6 @@ _MESSAGES = {
         "en": "ERROR: {msg}",
         "zh": "错误：{msg}",
     },
-    "error.unknown_test": {
-        "en": "ERROR: Unknown test type",
-        "zh": "错误：未知的检验类型",
-    },
-    "error.effect_name_required": {
-        "en": "ERROR: --effect_name required",
-        "zh": "错误：--effect_name 为必填参数",
-    },
-    "error.effect_name_invalid": {
-        "en": "ERROR: --effect_name must be a valid R identifier",
-        "zh": "错误：--effect_name 必须是合法的 R 标识符",
-    },
-    "error.auc1_or_effect_required": {
-        "en": "ERROR: --auc1 or --effect required",
-        "zh": "错误：--auc1 或 --effect 为必填参数",
-    },
-    "error.design_must_be_one_of": {
-        "en": "ERROR: --design must be one of: {options}",
-        "zh": "错误：--design 必须是以下之一：{options}",
-    },
-    "error.spending_func_must_be_one_of": {
-        "en": "ERROR: --spending_func must be one of: {options}",
-        "zh": "错误：--spending_func 必须是以下之一：{options}",
-    },
-    "error.adaptive_type_must_be_one_of": {
-        "en": "ERROR: --adaptive_type must be one of: {options}",
-        "zh": "错误：--adaptive_type 必须是以下之一：{options}",
-    },
-    "error.curve_not_supported": {
-        "en": "ERROR: curve mode (--n_seq / --power_seq) is not yet supported for --test '{test}'.",
-        "zh": "错误：曲线模式 (--n_seq / --power_seq) 暂不支持 --test '{test}'。",
-    },
-    "error.curve_supported_types": {
-        "en": "Supported test types for curves:",
-        "zh": "曲线模式支持的检验类型：",
-    },
-    "error.curve_param_missing": {
-        "en": "ERROR: parameter missing/invalid for curve of '{test}': {err}",
-        "zh": "错误：'{test}' 曲线参数缺失或无效：{err}",
-    },
-    "error.curve_requires_seq": {
-        "en": "ERROR: curve mode requires --n_seq or --power_seq",
-        "zh": "错误：曲线模式需要 --n_seq 或 --power_seq",
-    },
-    "error.invalid_sequence": {
-        "en": "ERROR: invalid sequence spec: {err}",
-        "zh": "错误：无效的序列规格：{err}",
-    },
-    "error.invalid_plot_effects": {
-        "en": "ERROR: invalid --plot_effects: {err}",
-        "zh": "错误：无效的 --plot_effects：{err}",
-    },
-    "error.effect_sizes_invalid": {
-        "en": "Invalid --effect_sizes {value}: only digits, dots, commas, minus and spaces are allowed.",
-        "zh": "无效的 --effect_sizes {value}：仅允许数字、点、逗号、减号和空格。",
-    },
-
-    # ── Validation messages / 校验消息 ──
     "validation.failed": {
         "en": "Parameter validation failed:",
         "zh": "参数校验失败：",
@@ -240,8 +168,6 @@ _MESSAGES = {
         "en": "--{label} must be < {bound} (got {val})",
         "zh": "--{label} 必须 < {bound}（当前值 {val}）",
     },
-
-    # ── Install / CRAN 安装 ──
     "install.cmd_header": {
         "en": "[R package commands — for review only, NOT executed]",
         "zh": "[R 包安装命令 — 仅供审阅，未执行]",
@@ -266,8 +192,6 @@ _MESSAGES = {
         "en": "[R CODE — will be executed by Rscript]",
         "zh": "[R 代码 — 将由 Rscript 执行]",
     },
-
-    # ── Section headers / 分节标题 ──
     "header.r_code": {
         "en": "[R CODE — generated for this analysis]",
         "zh": "[R 代码 — 本次分析生成]",
@@ -277,208 +201,302 @@ _MESSAGES = {
         "zh": "[R 包安装命令 — 仅供审阅，未执行]",
     },
 
-    # ── Sequence parsing / 序列解析 ──
-    "error.seq_format": {
-        "en": "auto sequence needs start:step:stop, got {spec}",
-        "zh": "自动序列格式为 起始:步长:终止，当前为 {spec}",
+    # ── Excel report (ct-registry export_xlsx.py) / Excel 报告专用键 ──
+    # NOTE: these are FRAME labels only. Raw data values (e.g. CDE Chinese
+    # status "进行中", Chinese conditions) are NEVER translated — data fidelity.
+    # / 仅界面框架标签。原始数据值（如 CDE 中文状态、中文适应症）一律不翻译，保持数据保真。
+    "xlsx.sheet.readme":   {"en": "README",                 "zh": "说明"},
+    "xlsx.sheet.summary":  {"en": "Search Results Summary", "zh": "检索结果概要"},
+    "xlsx.sheet.master":   {"en": "Trial Master Table",     "zh": "试验总表"},
+    "xlsx.sheet.raw":      {"en": "Raw Details",            "zh": "原始明细"},
+
+    "xlsx.banner.title":   {"en": "Clinical Trial Search Report",
+                            "zh": "临床试验检索报告"},
+    "xlsx.banner.summary": {"en": "Clinical Trial Search Results Summary",
+                            "zh": "临床试验检索结果概要"},
+    "xlsx.banner.master":  {"en": "Clinical Trial Master Table",
+                            "zh": "临床试验明细总表"},
+    "xlsx.banner.raw":     {"en": "Raw Details (normalized field snapshot)",
+                            "zh": "原始明细（归一化字段快照）"},
+
+    "xlsx.cover.topic":     {"en": "Search topic: ",
+                             "zh": "检索主题："},
+    "xlsx.cover.generated": {"en": "This workbook was auto-generated by ct-registry; a single file, readable offline.",
+                             "zh": "本工作簿由 ct-registry 自动生成，单文件离线可读。"},
+
+    "xlsx.kpi.total":    {"en": "Total Trials",        "zh": "总试验数"},
+    "xlsx.kpi.total_sub":{"en": "selected projects",   "zh": "条入选项目"},
+    "xlsx.kpi.who":      {"en": "WHO ICTRP",           "zh": "WHO ICTRP"},
+    "xlsx.kpi.who_sub":  {"en": "global mirror registry", "zh": "全球镜像库"},
+    "xlsx.kpi.cde":      {"en": "China CDE",           "zh": "中国 CDE"},
+    "xlsx.kpi.cde_sub":  {"en": "official drug registry", "zh": "官方药品库"},
+    "xlsx.kpi.span":     {"en": "Registration Year Span", "zh": "注册年份跨度"},
+    "xlsx.kpi.span_sub": {"en": "first public listing year", "zh": "首次公示年份"},
+
+    "xlsx.readme.scope_title": {"en": "Search Overview", "zh": "检索概览"},
+    "xlsx.scope.topic":   {"en": "Search topic", "zh": "检索主题"},
+    "xlsx.scope.range":   {"en": "Search scope", "zh": "检索范围"},
+    "xlsx.scope.range_val": {"en": "WHO ICTRP (global mirror of 14+ primary registries) + China CDE",
+                             "zh": "WHO ICTRP（全球镜像 14+ 一级注册库）+ 中国 CDE"},
+    "xlsx.scope.source":  {"en": "Data source", "zh": "数据来源"},
+    "xlsx.scope.source_val": {"en": "WHO ICTRP detail API (via unified endpoint); CDE drug trial registry platform",
+                              "zh": "WHO ICTRP 详情接口（经统一端点）；CDE 药物临床试验登记平台"},
+    "xlsx.scope.quota":   {"en": "Quota note", "zh": "配额说明"},
+    "xlsx.scope.quota_val": {"en": "Free to use; to conserve shared resources, the daily cap is 10 demands (counted by demand_id). See README.",
+                             "zh": "当前免费使用；为充分利用共享资源，每日上限 10 个需求（按 demand_id 计），详见 README"},
+
+    "xlsx.readme.field_title": {"en": "Field Dictionary", "zh": "字段说明"},
+    "xlsx.field.col":          {"en": "Field",   "zh": "字段"},
+    "xlsx.field.meaning":      {"en": "Meaning", "zh": "含义"},
+    "xlsx.field.registry_id":  {"en": "Registry ID", "zh": "登记号"},
+    "xlsx.field.registry_id_desc": {"en": "Unique ID per registry (NCT / ChiCTR / DRKS / CTIS / jRCT / ACTRN, etc.)",
+                                    "zh": "各注册库唯一编号（NCT / ChiCTR / DRKS / CTIS / jRCT / ACTRN 等）"},
+    "xlsx.field.source":       {"en": "Source", "zh": "数据来源"},
+    "xlsx.field.conditions":   {"en": "Conditions", "zh": "适应症"},
+    "xlsx.field.conditions_desc": {"en": "Health condition(s)",
+                                   "zh": "Health condition(s) / 健康状况"},
+    "xlsx.field.study_type":   {"en": "Study Type", "zh": "研究类型"},
+    "xlsx.field.study_type_desc": {"en": "Study type (Observational / Interventional, etc.)",
+                                   "zh": "Study type（Observational / Interventional 等）"},
+    "xlsx.field.phase":        {"en": "Phase", "zh": "分期"},
+    "xlsx.field.phase_desc":   {"en": "Phase (some observational studies have no phase)",
+                                "zh": "Phase（部分观察性研究无分期）"},
+    "xlsx.field.enrollment":   {"en": "Enrollment", "zh": "样本量"},
+    "xlsx.field.enrollment_desc": {"en": "Target sample size / actual total enrolled",
+                                   "zh": "Target sample size / 实际入组总人数"},
+    "xlsx.field.status":       {"en": "Status", "zh": "状态"},
+    "xlsx.field.status_desc":  {"en": "Recruitment status (Recruiting / Completed, etc.; colour-coded in the master table)",
+                                "zh": "Recruitment status（招募中 / 已完成 等，颜色编码见总表）"},
+    "xlsx.field.sponsor":      {"en": "Sponsor", "zh": "申办方"},
+    "xlsx.field.sponsor_desc": {"en": "Primary sponsor / applicant name",
+                                "zh": "Primary sponsor / 申请人名称"},
+    "xlsx.field.countries":    {"en": "Countries", "zh": "国家"},
+    "xlsx.field.countries_desc": {"en": "Countries of recruitment (CDE is always China)",
+                                  "zh": "Countries of recruitment（CDE 恒为 China）"},
+    "xlsx.field.start_date":   {"en": "Registration Date", "zh": "注册日期"},
+    "xlsx.field.start_date_desc": {"en": "Date of registration / first public listing",
+                                   "zh": "Date of registration / 首次公示信息日期"},
+    "xlsx.field.primary_outcome": {"en": "Primary Outcome", "zh": "主要终点"},
+    "xlsx.field.primary_outcome_desc": {"en": "Primary Outcome(s)", "zh": "Primary Outcome(s)"},
+    "xlsx.field.title":        {"en": "Title", "zh": "标题"},
+    "xlsx.field.url":          {"en": "Homepage", "zh": "首页链接"},
+    "xlsx.field.url_desc":     {"en": "Click to open each registry's official page (blue underline)",
+                                "zh": "点击直达各注册库官方页面（蓝色下划线）"},
+    "xlsx.field.interventions":   {"en": "Interventions", "zh": "干预措施"},
+    "xlsx.field.secondary_outcome": {"en": "Secondary Outcome", "zh": "次要终点"},
+    "xlsx.field.inclusion":     {"en": "Inclusion Criteria", "zh": "入选标准"},
+    "xlsx.field.exclusion":     {"en": "Exclusion Criteria", "zh": "排除标准"},
+    "xlsx.field.comparator":    {"en": "Comparator", "zh": "对照药"},
+    "xlsx.field.age_min":       {"en": "Min Age", "zh": "最小年龄"},
+    "xlsx.field.age_max":       {"en": "Max Age", "zh": "最大年龄"},
+    "xlsx.field.gender":        {"en": "Gender", "zh": "性别"},
+
+    "xlsx.col.count":        {"en": "Count",  "zh": "试验数"},
+    "xlsx.col.share":        {"en": "Share",  "zh": "占比"},
+    "xlsx.col.metric":       {"en": "Metric", "zh": "指标"},
+    "xlsx.col.value":        {"en": "Value",  "zh": "数值"},
+    "xlsx.col.enroll_band":  {"en": "Enrollment Band", "zh": "样本量区间"},
+    "xlsx.col.category":     {"en": "Category", "zh": "分类"},
+    "xlsx.total":            {"en": "Total", "zh": "合计"},
+    "xlsx.unknown":          {"en": "(unknown)", "zh": "(未知)"},
+    "xlsx.no_data":          {"en": "(no data)", "zh": "(无数据)"},
+
+    "xlsx.block.phase":        {"en": "1. Phase Distribution", "zh": "一、分期分布"},
+    "xlsx.block.status":       {"en": "2. Recruitment Status", "zh": "二、招募状态分布"},
+    "xlsx.block.source":       {"en": "3. Data Source", "zh": "三、数据来源分布"},
+    "xlsx.block.ind":          {"en": "4. Conditions (Top 12)", "zh": "四、适应症分布 (Top 12)"},
+    "xlsx.block.countries":    {"en": "5. Recruitment Countries/Regions (Top 12)", "zh": "五、招募国家/地区分布 (Top 12)"},
+    "xlsx.block.timeline":     {"en": "6. Registration Trend by Year", "zh": "六、逐年注册趋势"},
+    "xlsx.block.sponsor":      {"en": "7. Sponsors (Top 15)", "zh": "七、申办方分布 (Top 15)"},
+    "xlsx.block.enrollment":   {"en": "8. Enrollment Summary", "zh": "八、样本量汇总"},
+    "xlsx.block.phase_status": {"en": "9. Phase × Status Cross-tab", "zh": "九、分期 × 状态 交叉分布"},
+
+    "xlsx.label.phase":        {"en": "Phase", "zh": "分期"},
+    "xlsx.label.status":       {"en": "Status", "zh": "状态"},
+    "xlsx.label.source":       {"en": "Data Source", "zh": "数据来源"},
+    "xlsx.label.ind":          {"en": "Conditions", "zh": "适应症"},
+    "xlsx.label.countries":    {"en": "Countries/Regions", "zh": "国家/地区"},
+    "xlsx.label.timeline":     {"en": "Registration Year", "zh": "注册年份"},
+    "xlsx.label.sponsor":      {"en": "Sponsor", "zh": "申办方"},
+    "xlsx.label.enrollment":   {"en": "Enrollment", "zh": "样本量"},
+    "xlsx.label.phase_status": {"en": "Phase＼Status", "zh": "分期＼状态"},
+
+    "xlsx.note.status_color": {"en": "Colour matches the master-table status coding",
+                               "zh": "颜色与总表状态编码一致"},
+    "xlsx.note.source":       {"en": "WHO ICTRP (global mirror) vs China CDE",
+                               "zh": "WHO ICTRP（全球镜像）vs 中国 CDE"},
+    "xlsx.note.top12":        {"en": "Top 12 only", "zh": "仅显示前 12 位"},
+    "xlsx.note.top12_cde":    {"en": "Top 12 only; CDE is always China",
+                               "zh": "仅显示前 12 位；CDE 恒为 China"},
+    "xlsx.note.top15":        {"en": "Top 15 only", "zh": "仅显示前 15 位"},
+    "xlsx.note.enroll":       {"en": "Target / actual enrollment statistics",
+                               "zh": "目标/实际入组人数统计"},
+    "xlsx.note.crosstab":     {"en": "Row totals in the last column; the colour scale shows counts",
+                               "zh": "每行合计见末列；色阶表示数量"},
+
+    "xlsx.stat.n":      {"en": "Trials with data", "zh": "有数据试验数"},
+    "xlsx.stat.total":  {"en": "Total enrollment", "zh": "总样本量"},
+    "xlsx.stat.median": {"en": "Median enrollment", "zh": "中位样本量"},
+    "xlsx.stat.mean":   {"en": "Mean enrollment", "zh": "平均样本量"},
+    "xlsx.stat.min":    {"en": "Min enrollment", "zh": "最小样本量"},
+    "xlsx.stat.max":    {"en": "Max enrollment", "zh": "最大样本量"},
+
+    "xlsx.chart.enroll_hist": {"en": "Enrollment Band Distribution",
+                               "zh": "样本量区间分布"},
+
+    "xlsx.doc.title": {"en": "Clinical Trial Search Results", "zh": "临床试验检索结果"},
+    "xlsx.footer":    {"en": "Page &P of &N · Generated &D",
+                       "zh": "第 &P 页 / 共 &N 页 · 生成于 &D"},
+
+    "xlsx.summary.intro": {
+        "en": ("The tables and charts below are auto-aggregated from the search results: "
+               "each section shows a distribution table on the left and its chart on the right; "
+               "the share column carries a data bar, so distributions and trends are grasped "
+               "at a glance. Extended dimensions include data source, country/region, "
+               "enrollment and phase×status."),
+        "zh": ("下列数据表与图表由检索结果自动汇总生成：每个分区左侧为分布数据表、"
+               "右侧为对应统计图；占比列带数据条，便于一眼掌握分布与趋势。"
+               "含「数据来源 / 国家地区 / 样本量 / 分期×状态」等扩展维度。"),
     },
-    "error.seq_step_nonzero": {
-        "en": "step must be non-zero in auto sequence",
-        "zh": "步长不能为零",
-    },
-    "error.seq_empty": {
-        "en": "empty sequence: {spec}",
-        "zh": "空序列：{spec}",
+    "xlsx.caveat.text": {
+        "en": ("Data caveats: ① If a CDE search returns empty in both Chinese and English, it means the drug "
+               "has no China drug registration; ② some WHO records lack study type / phase — a source-coverage "
+               "issue; ③ primary/secondary outcomes and inclusion/exclusion criteria are preserved verbatim, "
+               "not translated; ④ the WHO advanced-search Phases field is narrow, so phase is verified against "
+               "the normalized detail."),
+        "zh": ("数据局限：① CDE 经中英双检索为空时表示该药暂无中国药物登记；"
+               "② 部分 WHO 记录缺研究类型/分期的，属源数据覆盖问题；"
+               "③ 主要/次要终点与入排标准原文保留，未做翻译；"
+               "④ WHO 高级检索 Phases 归一化字段较窄，分期以详情归一化复核为准。"),
     },
 
-    # ── Python fallback section headers / 纯 Python 备用引擎分节标题 ──
-    "r_header.roc_power": {
-        "en": "\n========== ROC Sample Size (Power given N) ==========",
-        "zh": "\n========== ROC 样本量 (给定 N 求功效) ==========",
-    },
-    "r_header.roc_n": {
-        "en": "\n========== ROC Sample Size ==========",
-        "zh": "\n========== ROC 样本量 ==========",
-    },
-    "r_header.poisson_power": {
-        "en": "\n========== Poisson Rate Comparison (Power given N) ==========",
-        "zh": "\n========== Poisson 率比较 (给定 N 求功效) ==========",
-    },
-    "r_header.poisson_n": {
-        "en": "\n========== Poisson Rate Comparison ==========",
-        "zh": "\n========== Poisson 率比较 ==========",
-    },
-    "r_header.cluster_power": {
-        "en": "\n========== Cluster-RCT (Power given N) ==========",
-        "zh": "\n========== 整群随机对照 (给定 N 求功效) ==========",
-    },
-    "r_header.cluster_n": {
-        "en": "\n========== Cluster-Randomized Design ==========",
-        "zh": "\n========== 整群随机设计 ==========",
-    },
-    "r_header.vaccine_power": {
-        "en": "\n========== Vaccine Efficacy (Power given N) ==========",
-        "zh": "\n========== 疫苗效力 (给定 N 求功效) ==========",
-    },
-    "r_header.vaccine_n": {
-        "en": "\n========== Vaccine Efficacy ==========",
-        "zh": "\n========== 疫苗效力 ==========",
-    },
-    "r_header.multi_endpoints_power": {
-        "en": "\n========== Multiple Endpoints (Power given N) ==========",
-        "zh": "\n========== 多终点 (给定 N 求功效) ==========",
-    },
-    "r_header.multi_endpoints_n": {
-        "en": "\n========== Multiple Endpoints ==========",
-        "zh": "\n========== 多终点 ==========",
-    },
-    "r_header.ttest_ind_power": {
-        "en": "\n========== Two-Sample T-Test (Power given N) ==========",
-        "zh": "\n========== 两样本 T 检验 (给定 N 求功效) ==========",
-    },
-    "r_header.ttest_ind_n": {
-        "en": "\n========== Two-Sample T-Test ==========",
-        "zh": "\n========== 两样本 T 检验 ==========",
-    },
-    "r_header.ttest_paired_power": {
-        "en": "\n========== Paired T-Test (Power given N) ==========",
-        "zh": "\n========== 配对 T 检验 (给定 N 求功效) ==========",
-    },
-    "r_header.ttest_paired_n": {
-        "en": "\n========== Paired T-Test ==========",
-        "zh": "\n========== 配对 T 检验 ==========",
-    },
-    "r_header.ttest_one_power": {
-        "en": "\n========== One-Sample T-Test (Power given N) ==========",
-        "zh": "\n========== 单样本 T 检验 (给定 N 求功效) ==========",
-    },
-    "r_header.ttest_one_n": {
-        "en": "\n========== One-Sample T-Test ==========",
-        "zh": "\n========== 单样本 T 检验 ==========",
-    },
-    "r_header.anova_power": {
-        "en": "\n========== One-Way ANOVA (Power given N) ==========",
-        "zh": "\n========== 单因素方差分析 (给定 N 求功效) ==========",
-    },
-    "r_header.anova_n": {
-        "en": "\n========== One-Way ANOVA ==========",
-        "zh": "\n========== 单因素方差分析 ==========",
-    },
-    "r_header.prop_one_power": {
-        "en": "\n========== One-Sample Proportion Test (Power given N) ==========",
-        "zh": "\n========== 单组率检验 (给定 N 求功效) ==========",
-    },
-    "r_header.prop_one_n": {
-        "en": "\n========== One-Sample Proportion Test ==========",
-        "zh": "\n========== 单组率检验 ==========",
-    },
-    "r_header.prop_two_power": {
-        "en": "\n========== {label} (Power given N) ==========",
-        "zh": "\n========== {label} (给定 N 求功效) ==========",
-    },
-    "r_header.prop_two_n": {
-        "en": "\n========== {label} ==========",
-        "zh": "\n========== {label} ==========",
-    },
-    "r_header.ni_prop_power": {
-        "en": "\n========== Non-Inferiority (Proportions, Power given N) ==========",
-        "zh": "\n========== 非劣效 (率, 给定 N 求功效) ==========",
-    },
-    "r_header.ni_prop_n": {
-        "en": "\n========== Non-Inferiority (Proportions) ==========",
-        "zh": "\n========== 非劣效 (率) ==========",
-    },
-    "r_header.survival_power": {
-        "en": "\n========== Survival (Log-Rank, Power given N) ==========",
-        "zh": "\n========== 生存分析 (Log-Rank, 给定 N 求功效) ==========",
-    },
-    "r_header.survival_n": {
-        "en": "\n========== Survival (Log-Rank Test) ==========",
-        "zh": "\n========== 生存分析 (Log-Rank 检验) ==========",
-    },
-    "r_header.rank_mantel_power": {
-        "en": "\n========== Stratified Log-Rank (Mantel-Cox, Power given N) ==========",
-        "zh": "\n=== 分层 Log-Rank (Mantel-Cox, 给定 N 求功效) =========",
-    },
-    "r_header.rank_mantel_n": {
-        "en": "\n========== Stratified Log-Rank Test ==========",
-        "zh": "\n========== 分层 Log-Rank 检验 ==========",
-    },
+    # ── status colour legend (README) / 状态色图例 ──
+    "xlsx.legend.title":       {"en": "Status Colour Legend", "zh": "状态颜色图例"},
+    "xlsx.legend.notyet":      {"en": "Not yet recruiting", "zh": "尚未招募"},
+    "xlsx.legend.recruiting":  {"en": "Recruiting", "zh": "招募中"},
+    "xlsx.legend.inprogress":  {"en": "Ongoing / In progress", "zh": "进行中"},
+    "xlsx.legend.completed":   {"en": "Completed", "zh": "已完成"},
+    "xlsx.legend.stopped":     {"en": "Withdrawn / Terminated / Suspended", "zh": "撤回 / 终止 / 暂停"},
+    "xlsx.legend.unknown":     {"en": "Unknown / Pending", "zh": "未知 / 待定"},
+    # ── FAERS / drug-safety Excel (ct-safety export_xlsx.py) / 药物安全 Excel 专用键 ──
+    # SAME rule as ct-registry: raw DATA VALUES (reaction PTs, country codes, drug
+    # names, indication text) are NEVER translated; only UI frame labels + code→label
+    # mappings for FAERS enum fields (sex / serious / reporttype / drug role).
+    # / 与 ct-registry 同规则：原始数据值（反应 PT、国家代码、药名、指征文本）一律不翻译；
+    # 仅界面框架标签 + FAERS 枚举字段（性别/严重性/报告类型/药物角色）的 编码→标签 映射。
+    "xlsx.safety.doc_title":      {"en": "FAERS Adverse Event Report", "zh": "FAERS 不良事件报告"},
+    "xlsx.safety.banner":         {"en": "FAERS Adverse Event Search Report",
+                                   "zh": "FAERS 不良事件检索报告"},
+    "xlsx.safety.cover.generated": {
+        "en": "Auto-generated by ct-safety from openFDA FAERS public data (drug/event.json). Single file, readable offline.",
+        "zh": "由 ct-safety 基于 openFDA FAERS 公开数据（drug/event.json）自动生成，单文件离线可读。"},
+    "xlsx.safety.watermark": {
+        "en": "ct-safety", "zh": "ct-safety"},
+    "xlsx.safety.scope.source":     {"en": "Data source", "zh": "数据来源"},
+    "xlsx.safety.scope.source_val": {
+        "en": "openFDA FAERS (FDA Adverse Event Reporting System) public API",
+        "zh": "openFDA FAERS（FDA 不良事件报告系统）公开 API"},
+    "xlsx.safety.scope.drug":      {"en": "Drug / medicinal product", "zh": "药物 / 药品"},
+    "xlsx.safety.scope.field":     {"en": "Search field", "zh": "检索字段"},
+    "xlsx.safety.scope.date":      {"en": "Date filter (receivedate)", "zh": "日期筛选（报告接收日）"},
+    "xlsx.safety.scope.total":     {"en": "Total matching reports", "zh": "匹配报告总数"},
+    "xlsx.safety.scope.downloaded": {"en": "Downloaded (first N)", "zh": "已下载（API 返回顺序前 N 条）"},
+    "xlsx.safety.scope.downloaded_fast": {
+        "en": "count mode — full matched population (no case download)",
+        "zh": "count 模式 — 全量匹配报告（未下载逐条个案）"},
+    "xlsx.safety.scope.mode":      {"en": "Mode", "zh": "分析模式"},
+    "xlsx.safety.mode_fast":       {
+        "en": "count-facet fast fetch (full matched population, seconds)",
+        "zh": "count 分面快取（全量匹配报告，秒级生成）"},
 
-    # ── Python fallback labels / 纯 Python 备用引擎标签 ──
-    "label.alpha": {"en": "Alpha:", "zh": "Alpha:"},
-    "label.power": {"en": "Power:", "zh": "Power:"},
-    "label.achieved_power": {"en": "Achieved power:", "zh": "达成功效:"},
-    "label.h0_auc": {"en": "H0 AUC:", "zh": "H0 AUC:"},
-    "label.h1_auc": {"en": "H1 AUC:", "zh": "H1 AUC:"},
-    "label.sample_size": {"en": "Sample size:", "zh": "样本量:"},
-    "label.rate_ratio": {"en": "Rate Ratio:", "zh": "率比:"},
-    "label.sample_size_per_group": {"en": "Sample size per group:", "zh": "每组样本量:"},
-    "label.deff": {"en": "Design effect (DEFF):", "zh": "设计效应 (DEFF):"},
-    "label.cluster_size_m": {"en": "Cluster size m:", "zh": "群组大小 m:"},
-    "label.icc": {"en": "ICC:", "zh": "ICC:"},
-    "label.total_sample_size": {"en": "Total sample size:", "zh": "总样本量:"},
-    "label.effective_n_per_group": {"en": "Effective individual n per group (n_total/2/DEFF):", "zh": "有效个体 n 每组 (总 n/2/DEFF):"},
-    "label.implied_n_clusters": {"en": "Implied n clusters per group:", "zh": "隐含群组数 (每组):"},
-    "label.adjusted_n_per_group": {"en": "Adjusted n per group:", "zh": "调整后每组 n:"},
-    "label.clusters_per_group": {"en": "Clusters per group:", "zh": "群组数 (每组):"},
-    "label.total_clusters": {"en": "Total:", "zh": "总群组数:"},
-    "label.adjusted_total": {"en": "Adjusted total:", "zh": "调整后总样本量:"},
-    "label.ve": {"en": "VE:", "zh": "VE:"},
-    "label.n_per_group_total": {"en": "n per group:", "zh": "每组 n:"},
-    "label.n_per_group": {"en": "n per group:", "zh": "每组 n:"},
-    "label.total_n": {"en": "Total N:", "zh": "总 N:"},
-    "label.total_n_surv": {"en": "Total N:", "zh": "总 N:"},
-    "label.correlation": {"en": "Correlation:", "zh": "相关系数:"},
-    "label.adjusted_n": {"en": "Adjusted n:", "zh": "调整后 n:"},
-    "label.single_endpoint_n": {"en": "Single endpoint n:", "zh": "单终点 n:"},
-    "label.cohens_d": {"en": "Cohen's d:", "zh": "Cohen's d:"},
-    "label.n_pairs": {"en": "n (pairs):", "zh": "n (对子数):"},
-    "label.n_total": {"en": "n:", "zh": "n:"},
-    "label.k_groups": {"en": "k groups:", "zh": "k 组:"},
-    "label.f_effect": {"en": "f:", "zh": "f:"},
-    "label.h0_proportion": {"en": "H0 proportion (p0):", "zh": "H0 率 (p0):"},
-    "label.h1_proportion": {"en": "H1 proportion (p1):", "zh": "H1 率 (p1):"},
-    "label.side": {"en": "Side:", "zh": "单/双侧:"},
-    "label.given_n": {"en": "Given n:", "zh": "给定 n:"},
-    "label.target_power": {"en": "Target power:", "zh": "目标功效:"},
-    "label.n_total_result": {"en": "n (total):", "zh": "n (合计):"},
-    "label.control_h0": {"en": "Control / H0 (p1):", "zh": "对照组 / H0 (p1):"},
-    "label.treatment_h1": {"en": "Treatment / H1 (p2):", "zh": "处理组 / H1 (p2):"},
-    "label.given_n_per_group": {"en": "Given n per group:", "zh": "给定每组 n:"},
-    "label.control_rate_ni": {"en": "对照组有效率 p1:", "zh": "对照组有效率 p1:"},
-    "label.treatment_rate_ni": {"en": "试验组有效率 p2:", "zh": "试验组有效率 p2:"},
-    "label.ni_margin": {"en": "非劣效界值 delta:", "zh": "非劣效界值 delta:"},
-    "label.total_n_ni": {"en": "总样本量 N:", "zh": "总样本量 N:"},
-    "label.each_group": {"en": "每组:", "zh": "每组:"},
-    "label.control_rate_ni_short": {"en": "对照组有效率 p1: {p1}", "zh": "对照组有效率 p1: {p1}"},
-    "label.treatment_rate_ni_short": {"en": "试验组有效率 p2: {p2}", "zh": "试验组有效率 p2: {p2}"},
-    "label.assumed_diff": {"en": "假设真实差异 |p1-p2|: ", "zh": "假设真实差异 |p1-p2|: "},
-    "label.ni_margin_short": {"en": "非劣效界值 delta: {margin}", "zh": "非劣效界值 delta: {margin}"},
-    "label.one_sided_alpha": {"en": "单侧 α: {alpha}, 把握度: {power}, 1:1 分配", "zh": "单侧 α: {alpha}, 把握度: {power}, 1:1 分配"},
-    "label.result_header": {"en": "--- 结果 ---", "zh": "--- 结果 ---"},
-    "label.n_per_arm": {"en": "每组样本量 n1:", "zh": "每组样本量 n1:"},
-    "label.total_sample_size_result": {"en": "总样本量 N:", "zh": "总样本量 N:"},
-    "label.with_dropout": {"en": "含 10% 脱落率:", "zh": "含 10% 脱落率:"},
-    "label.hazard_ratio_surv": {"en": "Hazard ratio:", "zh": "风险比:"},
-    "label.total_events": {"en": "Total events:", "zh": "总事件数:"},
-    "label.approx_n_per_group_surv": {"en": "Approx n per group (event_rate={event_rate}):", "zh": "近似每组 n (event_rate={event_rate}):"},
-    "label.hr_format": {"en": "Hazard ratio: {hr}", "zh": "风险比: {hr}"},
-    "label.total_events_needed": {"en": "Total events needed (Schoenfeld):", "zh": "所需总事件数 (Schoenfeld):"},
-    "label.each_group_n": {"en": "Each group n:", "zh": "每组 n:"},
-    "label.dropout_note": {"en": "\n含10%脱落率:", "zh": "\n含10%脱落率:"},
-    "label.dropout_note_inline": {"en": "含10%脱落率:", "zh": "含10%脱落率:"},
-    "label.survival_note": {"en": "\n注意: 当前仅计算所需事件数。如需样本量请提供参数", "zh": "\n注意: 当前仅计算所需事件数。如需样本量请提供参数"},
+    "xlsx.safety.scope.cap":       {"en": "Hard cap", "zh": "硬上限"},
+    "xlsx.safety.caveat": {
+        "en": ("Data caveats: ① Reports are the FIRST N in API return order — NOT a random sample; "
+               "do not treat proportions as population estimates. ② FAERS is spontaneous reporting, "
+               "subject to under-reporting and confounding. ③ Age uses mixed units (YR/MON/WK/DY/HR); "
+               "normalized to years before binning. ④ Reaction / indication / drug-role text is split "
+               "from semicolon-joined fields and counted verbatim."),
+        "zh": ("数据局限：① 下载为 API 返回顺序前 N 条，非随机抽样，比例不可当作总体估计；"
+               "② FAERS 为自发呈报，存在漏报与混杂偏倚；③ 年龄单位混杂（年/月/周/天/时），"
+               "分箱前已统一折算为岁；④ 反应/指征/药物角色由分号拼接字段拆分后原文计数。")},
 
-    # ── adaptive_simulator.py ──
-    "header.adaptive_sim": {
-        "en": "ADAPTIVE TRIAL SIMULATION",
-        "zh": "自适应试验仿真",
-    },
-    "error.matplotlib_unavailable": {
-        "en": "[WARN] matplotlib unavailable, skipped visualization: {msg}",
-        "zh": "[警告] matplotlib 不可用，已跳过可视化：{msg}",
-    },
+    "xlsx.safety.kpi.downloaded":     {"en": "Downloaded", "zh": "已下载"},
+    "xlsx.safety.kpi.downloaded_sub": {"en": "reports (cap 10000)", "zh": "条（上限10000）"},
+    "xlsx.safety.kpi.total":          {"en": "Total Matching", "zh": "匹配总数"},
+    "xlsx.safety.kpi.total_sub":      {"en": "in FAERS", "zh": "条（全库）"},
+    "xlsx.safety.kpi.serious":        {"en": "Serious", "zh": "严重报告"},
+    "xlsx.safety.kpi.serious_sub":    {"en": "count", "zh": "条"},
+    "xlsx.safety.kpi.serious_rate":   {"en": "Serious Rate", "zh": "严重率"},
+    "xlsx.safety.kpi.serious_rate_sub": {"en": "serious / total", "zh": "严重/总计"},
+    "xlsx.safety.kpi.male":           {"en": "Male", "zh": "男性"},
+    "xlsx.safety.kpi.female":         {"en": "Female", "zh": "女性"},
+    "xlsx.safety.kpi.median_age":     {"en": "Median Age", "zh": "中位年龄"},
+    "xlsx.safety.kpi.median_age_sub": {"en": "years (normalized)", "zh": "岁（已折算）"},
+    "xlsx.safety.kpi.year_span":      {"en": "Report Year Span", "zh": "报告年份跨度"},
+    "xlsx.safety.kpi.year_span_sub":  {"en": "first – last", "zh": "首 – 末"},
+    "xlsx.safety.kpi.population":     {"en": "Analyzed Population", "zh": "分析基数"},
+    "xlsx.safety.kpi.population_sub": {"en": "all matching reports (count)", "zh": "全部匹配报告（count）"},
+
+    "xlsx.safety.block.serious":    {"en": "1. Seriousness", "zh": "一、严重性分布"},
+    "xlsx.safety.block.sex":        {"en": "2. Sex", "zh": "二、性别分布"},
+    "xlsx.safety.block.report_type": {"en": "3. Report Type", "zh": "三、报告类型"},
+    "xlsx.safety.block.country":    {"en": "4. Primary Source Country (Top 12)", "zh": "四、报告来源国家 (Top 12)"},
+    "xlsx.safety.block.age":        {"en": "5. Age Distribution", "zh": "五、年龄分布"},
+    "xlsx.safety.block.year":       {"en": "6. Annual Reporting Trend", "zh": "六、逐年报告趋势"},
+    "xlsx.safety.block.reaction":   {"en": "7. Top Reaction Terms (Top 15)", "zh": "七、高频反应事件 (Top 15)"},
+    "xlsx.safety.block.indication": {"en": "8. Top Indications (Top 12)", "zh": "八、高频用药指征 (Top 12)"},
+    "xlsx.safety.block.drug_role":  {"en": "9. Drug Role", "zh": "九、药物角色分布"},
+
+    "xlsx.safety.label.serious":    {"en": "Seriousness", "zh": "严重性"},
+    "xlsx.safety.label.sex":        {"en": "Sex", "zh": "性别"},
+    "xlsx.safety.label.report_type": {"en": "Report Type", "zh": "报告类型"},
+    "xlsx.safety.label.country":    {"en": "Country", "zh": "国家"},
+    "xlsx.safety.label.age":        {"en": "Age Band (years)", "zh": "年龄段（岁）"},
+    "xlsx.safety.label.year":       {"en": "Report Year", "zh": "报告年份"},
+    "xlsx.safety.label.reaction":   {"en": "Reaction (PT)", "zh": "反应事件 (PT)"},
+    "xlsx.safety.label.indication": {"en": "Indication", "zh": "用药指征"},
+    "xlsx.safety.label.drug_role":  {"en": "Drug Role", "zh": "药物角色"},
+
+    # FAERS enum code → label mappings (codes are language-neutral, never translated)
+    "xlsx.safety.serious_yes":   {"en": "Serious", "zh": "严重"},
+    "xlsx.safety.serious_no":    {"en": "Non-serious", "zh": "非严重"},
+    "xlsx.safety.sex_m":         {"en": "Male", "zh": "男性"},
+    "xlsx.safety.sex_f":         {"en": "Female", "zh": "女性"},
+    "xlsx.safety.sex_unknown":   {"en": "Unknown", "zh": "未知"},
+    "xlsx.safety.rt_initial":    {"en": "Initial", "zh": "初始报告"},
+    "xlsx.safety.rt_followup":   {"en": "Follow-up", "zh": "随访报告"},
+    "xlsx.safety.rt_unknown":    {"en": "Unknown", "zh": "未知"},
+    "xlsx.safety.role_suspect":    {"en": "Suspect drug", "zh": "怀疑药"},
+    "xlsx.safety.role_concomitant": {"en": "Concomitant", "zh": "合并用药"},
+    "xlsx.safety.role_interaction": {"en": "Interaction", "zh": "相互作用"},
+
+    "xlsx.safety.note.top12":  {"en": "Top 12 only", "zh": "仅显示前 12 位"},
+    "xlsx.safety.note.top15":  {"en": "Top 15 only", "zh": "仅显示前 15 位"},
+    "xlsx.safety.note.age":    {"en": "Age normalized to years before binning", "zh": "分箱前年龄已折算为岁"},
+    "xlsx.safety.note.year":   {"en": "By report receivedate year", "zh": "按报告接收年份"},
+    "xlsx.safety.note.role":   {"en": "All drug roles across the report", "zh": "报告内全部药物角色计数"},
+    "xlsx.safety.note.age_skip_fast": {
+        "en": "Age distribution is NOT count-able via the API (404) → omitted; use non-fast mode to download cases.",
+        "zh": "年龄分布无法经 API 分面统计（404）→ 此处略；如需年龄请用非 --fast 模式下载个案。"},
+    "xlsx.safety.raw_fast_note": {
+        "en": "Count fast mode did not download case-level records. Use non --fast mode to fetch raw cases.",
+        "zh": "count 快取模式未下载逐条个案；如需原始个案请用非 --fast 模式下载。"},
+
+    "xlsx.safety.col.count":    {"en": "Reports", "zh": "报告数"},
+    "xlsx.safety.summary_intro": {
+        "en": ("The tables and charts below are auto-aggregated from the downloaded FAERS cases: "
+               "each section shows a distribution table on the left and its chart on the right; the "
+               "share column carries a data bar. Nine dimensions cover seriousness, sex, report type, "
+               "source country, age, annual trend, top reactions, top indications and drug role."),
+        "zh": ("下列数据表与图表由下载的 FAERS 个案自动汇总生成：每个分区左侧为分布数据表、"
+               "右侧为对应统计图；占比列带数据条。涵盖严重性、性别、报告类型、来源国家、年龄、"
+               "逐年趋势、高频反应、高频指征与药物角色九个维度。")},
+    "xlsx.safety.summary_intro_fast": {
+        "en": ("The dimensions below are aggregated from openFDA count facets over the FULL matched "
+               "population (generated in seconds, no selection bias). Age is NOT count-able via the "
+               "API, so the age block is omitted — eight dimensions are shown."),
+        "zh": ("以下维度基于 openFDA count 分面对「全部匹配报告」聚合生成（秒级、无选择偏倚）。"
+               "年龄无法经 API 分面统计，故略去年龄块；共展示八个维度。")},
 }
 
 
@@ -507,3 +525,44 @@ def t(key, **kwargs):
 
 # Back-compatible alias
 _ = t
+
+_MESSAGES.update({
+    "kw_gate.empty": {"en": "[ct_registry][KW-SYSTEM] No expandable keywords.", "zh": "[ct_registry][KW-SYSTEM] 无可扩展的关键字。"},
+    "kw_gate.title": {"en": "Keyword system (auto-expand + EN/ZH translation) - confirm / supplement before searching", "zh": "关键字体系（自动扩展 + 中英互译）- 请确认 / 补充后再检索"},
+    "kw_gate.original": {"en": "Original: {base}  |  Intent: {intent}", "zh": "原文：{base}  ｜  意图：{intent}"},
+    "kw_gate.zh": {"en": "Chinese candidates", "zh": "中文候选"},
+    "kw_gate.en": {"en": "English candidates", "zh": "英文候选"},
+    "kw_gate.per_source": {"en": "Per-source assignment", "zh": "按源分配"},
+    "kw_gate.ctgov": {"en": "CT.gov + WHO (English exact)", "zh": "CT.gov + WHO（英文·精确）"},
+})
+
+_MESSAGES.update({
+    "kw_gate.cde": {"en": "CDE + ChiCTR (Chinese substring)", "zh": "CDE + ChiCTR（中文·子串）"},
+    "kw_gate.risk": {"en": "Risk note:", "zh": "风险提示："},
+    "kw_gate.speculative": {"en": "Speculative terms (review / removable):", "zh": "推测词（建议留意/可删）："},
+    "kw_gate.confirm": {"en": "Please confirm:", "zh": "请确认："},
+    "kw_gate.opt_adopt": {"en": "1. Adopt the above keyword system (recommended)", "zh": "1. 采用以上关键字体系（推荐）"},
+    "kw_gate.opt_del": {"en": "2. Delete specific terms (reply: del term, e.g. del sitagliptin)", "zh": "2. 删除某些词（回复：删 词，如删 曲格列汀）"},
+    "kw_gate.opt_add": {"en": "3. Add your own terms (reply: add term, e.g. add repaglinide)", "zh": "3. 补充我自己的词（回复：加 词，如加 瑞格列奈）"},
+})
+
+_MESSAGES.update({
+    "kw_gate.opt_scope": {"en": "4. Narrow / widen scope (e.g. only saxagliptin)", "zh": "4. 改用更窄 / 更宽范围（如只搜 沙格列汀）"},
+    "kw_gate.opt_cancel": {"en": "0. Cancel", "zh": "0. 取消"},
+    "kw_gate.after": {"en": "(Search proceeds to scope/quota confirmation only after you confirm)", "zh": "（确认后才进入检索范围/配额确认 - 正式检索）"},
+    "kw_gate.axis_condition": {"en": "Condition", "zh": "疾病/适应症"},
+    "kw_gate.axis_intervention": {"en": "Intervention/Drug", "zh": "干预/药物"},
+    "kw_gate.title_multi": {"en": "Keyword system #{i} ({axis}) - auto-expand + EN/ZH translation", "zh": "关键字体系 #{i}（{axis}）- 自动扩展 + 中英互译"},
+    "kw_gate.multi_confirm": {"en": "Please confirm (the {n} keyword systems above are handled together):", "zh": "请确认（以上 {n} 组关键字体系一并处理）："},
+    "kw_gate.stopped": {"en": "[ct_registry][KW-GATE] keyword system not confirmed - search stopped. confirm/supplement, then re-run.", "zh": "[ct_registry][KW-GATE] 关键字体系未确认 - 已停止检索。请确认/补充后，重新运行。"},
+})
+
+_MESSAGES.update({
+    "kw_gate.none": {"en": "none", "zh": "无"},
+    "kw_gate.multi_opt_adopt": {"en": "1. Adopt all the above keyword systems (recommended)", "zh": "1. 全部采用（推荐）"},
+    "kw_gate.intent_disease": {"en": "Disease/Condition", "zh": "疾病/适应症"},
+    "kw_gate.intent_intervention": {"en": "Intervention/Mechanism", "zh": "干预/机制"},
+    "kw_gate.intent_drug": {"en": "Drug (specific)", "zh": "药物(具体)"},
+    "kw_gate.intent_drug_class": {"en": "Drug class", "zh": "药物类别"},
+    "kw_gate.intent_auto": {"en": "Auto-detect", "zh": "自动识别"},
+})

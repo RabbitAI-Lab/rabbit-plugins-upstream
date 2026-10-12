@@ -8,7 +8,10 @@
     <link rel="stylesheet" href="css/dashboard.css" />
     <script src="js/lib/morphdom.min.js"></script>
     <script src="js/i18n.js"></script>
+    <script src="js/extensions.js"></script>
+    <script src="js/cost-scenario.js"></script>
     <!-- Shared Sidebar Loader -->
+    <script src="js/state-stream.js"></script>
     <script src="js/sidebar.js"></script>
   </head>
   <body>
@@ -65,7 +68,10 @@
       <div class="stats-bar">
         <div class="stat">
           <div class="stat-value" id="total-tokens">-</div>
-          <div class="stat-label" data-i18n="stats.totalTokens">Total Tokens</div>
+          <div class="stat-label">
+            <span data-i18n="stats.totalTokens">Total Tokens</span> ·
+            <span id="token-period-label">-</span>
+          </div>
         </div>
         <div class="stat">
           <div class="stat-value" id="input-tokens">-</div>
@@ -89,7 +95,13 @@
           style="cursor: pointer"
         >
           <div class="stat-value" id="est-cost">-</div>
-          <div class="stat-label" data-i18n="stats.estCost24h">Est. Cost (24h) 📊</div>
+          <div class="stat-label">
+            <span data-i18n="stats.estApiCost">Est. API Cost</span> ·
+            <span id="cost-period-label">-</span> <span id="cost-provisional-label"></span>
+            <span id="cost-coverage-label" data-i18n="cost.partialSubtotal" hidden
+              >Partial subtotal</span
+            >
+          </div>
         </div>
         <div
           class="stat"
@@ -122,7 +134,7 @@
               "
               onclick="event.stopPropagation()"
             >
-              <option value="24h">24h</option>
+              <option value="24h" data-i18n="cost.todayWindow">Today (UTC)</option>
               <option value="3dma">3dma</option>
               <option value="7dma" selected>7dma</option>
             </select>
@@ -362,40 +374,18 @@
               <div class="utilization-icon openai">⚡</div>
               <div>
                 <div class="utilization-title">Codex (OpenAI)</div>
-                <div class="utilization-subtitle">ChatGPT Plus</div>
+                <div class="utilization-subtitle" id="codex-plan">Plan unavailable</div>
               </div>
             </div>
-            <div>
-              <div class="quota-stats">
-                <span>5-Hour Usage</span>
-                <span><span class="quota-value" id="codex-5h-pct">0%</span> used</span>
-              </div>
-              <div class="quota-bar">
-                <div class="quota-bar-fill low" id="codex-5h-bar" style="width: 0%"></div>
-              </div>
-            </div>
-            <div style="margin-top: 8px">
-              <div class="quota-stats">
-                <span>Daily Usage</span>
-                <span><span class="quota-value" id="codex-day-pct">0%</span> used</span>
-              </div>
-              <div class="quota-bar">
-                <div class="quota-bar-fill low" id="codex-day-bar" style="width: 0%"></div>
-              </div>
-            </div>
+            <div id="codex-windows"><span class="quota-value">N/A</span> — Usage unavailable</div>
             <div
-              style="
-                margin-top: 16px;
-                padding-top: 12px;
-                border-top: 1px solid var(--border);
-                font-size: 0.75rem;
-                color: var(--text-muted);
-              "
+              id="codex-status"
+              style="margin-top: 12px; font-size: 0.75rem; color: var(--text-muted)"
             >
-              <div style="display: flex; justify-content: space-between">
-                <span>Tasks Today</span>
-                <span id="codex-tasks">0</span>
-              </div>
+              Waiting for usage data
+            </div>
+            <div style="margin-top: 8px; font-size: 0.75rem; color: var(--text-muted)">
+              Account quota · not token totals
             </div>
           </div>
         </div>
@@ -1130,6 +1120,147 @@
           </div>
         </div>
 
+        <section class="section" id="extensions-section">
+          <div class="section-header">
+            <div class="section-title" data-i18n="extensions.title">Companion extensions</div>
+            <a
+              class="btn-secondary"
+              href="https://github.com/jontsai/openclaw-spacesuit"
+              target="_blank"
+              rel="noopener noreferrer"
+              data-i18n="extensions.learn"
+              >About Spacesuit ↗</a
+            >
+          </div>
+          <div class="vitals-panel" id="extension-content">
+            <p class="extension-note" data-i18n="extensions.companion">
+              Command Center works on its own. Spacesuit is its highly recommended companion for
+              agent flavors and workflows.
+            </p>
+          </div>
+        </section>
+
+        <!-- Intel Pipeline Section -->
+        <div class="section" id="intel-section" data-legacy-panel>
+          <div class="section-header">
+            <div class="section-title">
+              📋 Intel Pipeline
+              <span class="section-count" id="intel-count">0</span>
+            </div>
+          </div>
+          <div class="vitals-panel">
+            <div class="vitals-grid">
+              <!-- Fresh -->
+              <div class="vital-card">
+                <div class="vital-header">
+                  <span class="vital-label" style="color: var(--green)">🟢 Fresh (&lt;6h)</span>
+                </div>
+                <div class="vital-value" id="intel-fresh-count" style="color: var(--green)">0</div>
+              </div>
+              <!-- Aging -->
+              <div class="vital-card">
+                <div class="vital-header">
+                  <span class="vital-label" style="color: var(--yellow)">🟡 Aging (6-24h)</span>
+                </div>
+                <div class="vital-value" id="intel-aging-count" style="color: var(--yellow)">0</div>
+              </div>
+              <!-- Stale -->
+              <div class="vital-card">
+                <div class="vital-header">
+                  <span class="vital-label" style="color: var(--red)">🔴 Stale (&gt;24h)</span>
+                </div>
+                <div class="vital-value" id="intel-stale-count" style="color: var(--red)">0</div>
+              </div>
+              <!-- Agent Assignments -->
+              <div class="vital-card">
+                <div class="vital-header">
+                  <span class="vital-label">👤 Agents</span>
+                </div>
+                <div
+                  id="intel-agents"
+                  style="margin-top: 8px; font-size: 0.8rem; color: var(--text-muted)"
+                >
+                  -
+                </div>
+              </div>
+            </div>
+            <!-- File list -->
+            <div style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border)">
+              <div
+                style="
+                  font-size: 0.75rem;
+                  color: var(--text-muted);
+                  margin-bottom: 8px;
+                  text-transform: uppercase;
+                  letter-spacing: 0.5px;
+                "
+              >
+                Recent Files
+              </div>
+              <div id="intel-file-list" style="font-size: 0.8rem">
+                <em style="color: var(--text-muted)">Loading...</em>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Pipeline Viewer Section -->
+        <div class="section" id="pipeline-section" data-legacy-panel>
+          <div class="section-header">
+            <div class="section-title">
+              🔄 Pipelines
+              <span class="section-count" id="pipeline-count">0</span>
+            </div>
+          </div>
+          <div class="vitals-panel">
+            <div id="pipeline-list">
+              <em style="color: var(--text-muted); font-size: 0.8rem">Loading...</em>
+            </div>
+          </div>
+        </div>
+
+        <!-- Monetization Tracker Section -->
+        <div class="section" id="monetization-section" data-legacy-panel>
+          <div class="section-header">
+            <div class="section-title">
+              💰 Monetization
+              <span class="section-count" id="monetization-count">0 firms</span>
+            </div>
+          </div>
+          <div class="vitals-panel">
+            <div class="vitals-grid">
+              <!-- Summary cards -->
+              <div class="vital-card">
+                <div class="vital-header">
+                  <span class="vital-label">📊 Total Firms</span>
+                </div>
+                <div class="vital-value" id="monetization-total">0</div>
+              </div>
+              <div class="vital-card">
+                <div class="vital-header">
+                  <span class="vital-label" style="color: var(--red)">🔥 High Priority</span>
+                </div>
+                <div class="vital-value" id="monetization-high" style="color: var(--red)">0</div>
+              </div>
+              <div class="vital-card">
+                <div class="vital-header">
+                  <span class="vital-label" style="color: var(--green)">💵 Revenue Active</span>
+                </div>
+                <div class="vital-value" id="monetization-revenue" style="color: var(--green)">
+                  0
+                </div>
+              </div>
+            </div>
+            <!-- Firm cards -->
+            <div
+              id="monetization-firms"
+              style="margin-top: 16px; padding-top: 16px; border-top: 1px solid var(--border)"
+            >
+              <em style="color: var(--text-muted); font-size: 0.8rem">Loading...</em>
+            </div>
+          </div>
+        </div>
+
         <!-- Operators Section -->
         <div class="section" id="operators-section">
           <div class="section-header">
@@ -1470,31 +1601,50 @@
     <div id="cost-modal-overlay" class="detail-overlay hidden" onclick="closeCostModal()"></div>
     <div id="cost-modal" class="detail-panel hidden" style="max-width: 500px">
       <div class="detail-header">
-        <h2>💰 Cost Breakdown (24h)</h2>
+        <h2>
+          <span data-i18n="cost.title">💰 Cost Breakdown</span> ·
+          <span id="cost-modal-title">-</span>
+        </h2>
         <button class="close-btn" onclick="closeCostModal()">✕</button>
       </div>
       <div class="detail-content" id="cost-modal-content">
         <div class="detail-section">
-          <h3>📊 Token Usage</h3>
+          <h3 data-i18n="cost.tokenUsage">📊 Token Usage</h3>
           <div class="detail-box" id="cost-tokens"></div>
         </div>
         <div class="detail-section">
-          <h3>💵 Pricing Rates (Claude Opus)</h3>
+          <h3 data-i18n="cost.pricingBasis">💵 Pricing Basis</h3>
           <div class="detail-box" id="cost-rates"></div>
         </div>
         <div class="detail-section">
-          <h3>🧮 Calculation</h3>
+          <h3 data-i18n="cost.calculation">🧮 Calculation</h3>
           <div class="detail-box" id="cost-calculation"></div>
         </div>
         <div
           class="detail-section"
           style="background: rgba(63, 185, 80, 0.1); border-radius: 8px; padding: 16px"
         >
-          <h3>✨ Est. Savings</h3>
+          <h3 data-i18n="cost.billing">✨ Billing &amp; Recent Averages</h3>
           <div class="detail-box" id="cost-savings"></div>
+          <label for="savings-baseline" data-i18n="cost.baselineLabel"
+            >Monthly spend baseline (USD)</label
+          >
+          <input
+            id="savings-baseline"
+            type="number"
+            min="0"
+            step="0.01"
+            onchange="setSavingsBaseline(this.value)"
+          />
+          <p data-i18n="cost.scenarioHelp">
+            Enter subscription plus API spending for the same usage scope. This browser-only
+            assumption is not read from your bills. Projection = recorded calendar-day average × 30
+            minus your baseline; not realized savings.
+          </p>
+          <p id="savings-scenario-output" role="status"></p>
         </div>
         <div class="detail-section">
-          <h3>🔥 Top Sessions by Tokens (24h)</h3>
+          <h3 data-i18n="cost.sessions">🔥 Current Sessions (Lifetime Tokens)</h3>
           <div class="detail-box" id="cost-top-sessions" style="font-size: 0.85rem"></div>
         </div>
       </div>
@@ -1959,7 +2109,7 @@
       async function fetchSessions(page = 1) {
         // Build URL with status filter
         const statusFilter = sessionFilters.status;
-        let url = `/api/sessions?page=${page}&pageSize=${paginationState.pageSize}`;
+        let url = `api/sessions?page=${page}&pageSize=${paginationState.pageSize}`;
         if (statusFilter && statusFilter !== "all") {
           url += `&status=${statusFilter}`;
         }
@@ -2057,7 +2207,7 @@
       // Unified state fetch - single API call for all dashboard data
       async function fetchData() {
         try {
-          const response = await fetch("/api/state");
+          const response = await fetch("api/state");
           if (!response.ok) throw new Error(`HTTP ${response.status}`);
           const state = await response.json();
           renderFullState(state);
@@ -2088,10 +2238,14 @@
         if (state.capacity) renderCapacity(state.capacity);
         if (state.operators) renderOperators(state.operators);
         if (state.llmUsage) renderLlmUsage(state.llmUsage);
-        if (state.cron) renderCron(state.cron);
+        if (state.cron) renderCron(state.cron, state.cronStatus);
         if (state.memory) renderMemory(state.memory);
         if (state.cerebro) renderCerebro(state.cerebro);
         if (state.subagents) renderSubagents(state.subagents);
+        window.ExtensionPanels?.render(state.extensions);
+        if (state.intel) renderIntel(state.intel);
+        if (state.pipeline) renderPipeline(state.pipeline);
+        if (state.monetization) renderMonetization(state.monetization);
       }
 
       // Legacy fallback - multiple API calls (used if /api/state fails)
@@ -2100,28 +2254,28 @@
 
         // Fire off all requests in parallel
         const promises = [
-          fetch("/api/vitals")
+          fetch("api/vitals")
             .then((r) => r.json())
             .catch(() => null),
-          fetch("/api/sessions")
+          fetch("api/sessions")
             .then((r) => r.json())
             .catch(() => null),
-          fetch("/api/operators")
+          fetch("api/operators")
             .then((r) => r.json())
             .catch(() => null),
-          fetch("/api/llm-usage")
+          fetch("api/llm-usage")
             .then((r) => r.json())
             .catch(() => null),
-          fetch("/api/cron")
+          fetch("api/cron")
             .then((r) => r.json())
             .catch(() => null),
-          fetch("/api/memory")
+          fetch("api/memory")
             .then((r) => r.json())
             .catch(() => null),
-          fetch("/api/cerebro")
+          fetch("api/cerebro")
             .then((r) => r.json())
             .catch(() => null),
-          fetch("/api/subagents")
+          fetch("api/subagents")
             .then((r) => r.json())
             .catch(() => null),
         ];
@@ -2135,7 +2289,7 @@
         if (sessions?.tokenStats) renderTokenStats(sessions.tokenStats);
         if (operators) renderOperators(operators);
         if (llm) renderLlmUsage(llm);
-        if (cron?.cron) renderCron(cron.cron);
+        if (cron?.cron) renderCron(cron.cron, cron.cronStatus);
         if (memory?.memory) renderMemory(memory.memory);
         if (cerebro) renderCerebro(cerebro);
         if (subagents?.subagents) renderSubagents(subagents.subagents);
@@ -2312,7 +2466,7 @@
                         <div class="card-header">
                             <div class="card-icon ${iconClass}">${icon}</div>
                             <div class="card-title-area">
-                                <div class="card-title">${escapeHtml(s.label)}</div>
+                                <div class="card-title" title="${escapeHtml(s.channelId ? `${s.channelId} · ${s.channelNameStatus || "unresolved"}` : "")}">${escapeHtml(s.label)}</div>
                                 <div class="card-subtitle">${s.kind} • ${model}</div>
                                 ${originatorHtml}
                             </div>
@@ -2341,7 +2495,21 @@
       }
 
       // Render just cron jobs (for progressive loading)
-      function renderCron(cron) {
+      function renderCron(
+        cron,
+        status = document.getElementById("cron-source-status")?.dataset.status || "available",
+      ) {
+        const notice = document.getElementById("cron-source-status") || document.createElement("p");
+        notice.id = "cron-source-status";
+        notice.dataset.status = status;
+        notice.setAttribute("data-i18n", "cron.sourceUnavailable");
+        notice.textContent = (window.I18N?.t || ((_key, _params, fallback) => fallback))(
+          "cron.sourceUnavailable",
+          {},
+          "Scheduled-job data is loading, incomplete, or stale. Counts are not authoritative.",
+        );
+        notice.hidden = status === "available";
+        document.getElementById("cron-jobs").before(notice);
         const cronEl = document.getElementById("cron-jobs");
         cronData = cron; // Store for re-rendering after privacy changes
 
@@ -2357,7 +2525,11 @@
         $set("cron-count", "textContent", cronCountText);
         $set("nav-cron-count", "textContent", cron.length);
 
-        if (visibleCrons.length === 0) {
+        if (visibleCrons.length === 0 && status !== "available") {
+          cronEl.replaceChildren();
+          $set("cron-count", "textContent", "—");
+          $set("nav-cron-count", "textContent", "—");
+        } else if (visibleCrons.length === 0) {
           smartUpdate(
             cronEl,
             `
@@ -2380,7 +2552,7 @@
                         <div class="cron-icon">⏰</div>
                         <div class="cron-info">
                             <div class="cron-name">${escapeHtml(c.name)}</div>
-                            <div class="cron-schedule">${c.schedule}</div>
+                            <div class="cron-schedule">${escapeHtml(c.schedule)}</div>
                             ${humanSchedule}
                         </div>
                         <div class="cron-meta">
@@ -2480,7 +2652,7 @@
       // Refresh operators data
       async function refreshOperators() {
         try {
-          const res = await fetch("/api/operators");
+          const res = await fetch("api/operators");
           const data = await res.json();
           renderOperators(data);
         } catch (e) {
@@ -2502,29 +2674,61 @@
         localStorage.setItem("savingsWindow", window);
       }
 
-      // Update savings display based on selected window
-      function updateSavingsDisplay(stats, windowKey) {
-        const savingsStat = document.getElementById("savings-stat");
-        const savingsEl = document.getElementById("est-savings");
-
-        if (!stats || !savingsStat || !savingsEl) return;
-
-        // Get the window-specific data or fall back to 24h
-        const windowData = stats.savingsWindows?.[windowKey] || stats.savingsWindows?.["24h"];
-
-        if (windowData?.estSavings) {
-          savingsEl.textContent = windowData.estSavings;
-          savingsEl.title = `${windowData.savingsPercent}% saved vs ${stats.planName} ($${stats.planCost}/mo) [${windowData.label}]`;
-          savingsStat.style.display = "block";
-        } else if (stats.estSavings) {
-          // Fallback to legacy 24h savings
-          savingsEl.textContent = stats.estSavings;
-          savingsEl.title = `${stats.savingsPercent}% saved vs ${stats.planName} ($${stats.planCost}/mo)`;
-          savingsStat.style.display = "block";
-        } else {
-          savingsStat.style.display = "none";
-        }
+      function getSavingsBaseline() {
+        const raw = localStorage.getItem("costBaseline:" + location.pathname);
+        return raw === null || raw.trim() === "" ? null : Number(raw);
       }
+      function setSavingsBaseline(raw) {
+        const key = "costBaseline:" + location.pathname;
+        if (raw.trim() === "" || !Number.isFinite(Number(raw)) || Number(raw) < 0)
+          localStorage.removeItem(key);
+        else localStorage.setItem(key, raw);
+        updateSavingsDisplay(currentTokenStats, getSavingsWindowPref());
+      }
+      function updateSavingsDisplay(stats, windowKey) {
+        const card = document.getElementById("savings-stat");
+        const value = document.getElementById("est-savings");
+        const output = document.getElementById("savings-scenario-output");
+        const text = (key, params, fallback) => window.I18N?.t(key, params, fallback) || fallback;
+        const baseline = getSavingsBaseline();
+        const input = document.getElementById("savings-baseline");
+        if (document.activeElement !== input) input.value = baseline === null ? "" : baseline;
+        const scenario = CostScenario.estimate(stats?.costWindows, windowKey, baseline);
+        card.style.display = scenario ? "block" : "none";
+        if (!scenario) {
+          output.textContent = text(
+            "cost.scenarioUnavailable",
+            {},
+            "Set a baseline and wait for usage data to calculate a savings scenario.",
+          );
+          return;
+        }
+        const dollars = (n) => `${n < 0 ? "-" : ""}$${Math.abs(n).toFixed(2)}`;
+        value.textContent = dollars(scenario.difference) + (scenario.partial ? "*" : "");
+        value.style.color = scenario.difference < 0 ? "var(--yellow)" : "var(--green)";
+        const summary = text(
+          "cost.scenarioSummary",
+          {
+            projected: dollars(scenario.projected),
+            baseline: dollars(baseline),
+            difference: dollars(scenario.difference),
+            days: scenario.days,
+          },
+          "",
+        );
+        const quality = scenario.partial
+          ? text(
+              "cost.scenarioPartial",
+              {},
+              "Partial pricing: projected subtotal only; missing costs excluded.",
+            )
+          : "";
+        output.textContent = summary + " " + quality;
+        value.title = output.textContent;
+      }
+      window.addEventListener("i18n:updated", () =>
+        updateSavingsDisplay(currentTokenStats, getSavingsWindowPref()),
+      );
 
       // Render token stats
       function renderTokenStats(stats) {
@@ -2532,12 +2736,23 @@
         currentTokenStats = stats; // Store for window switching
 
         $set("total-tokens", "textContent", stats.total || "0");
+        $set("token-period-label", "textContent", stats.costPeriod || "Unavailable");
+        $set(
+          "total-tokens",
+          "title",
+          "Input + output tokens; cached tokens are shown in the cost breakdown.",
+        );
         $set("active-sessions", "textContent", stats.activeCount || 0);
         $set("input-tokens", "textContent", stats.input || "0");
         $set("output-tokens", "textContent", stats.output || "0");
-        $set("est-cost", "textContent", stats.estCost || "$0.00");
+        const partialCost = stats.costStatus === "partial" && stats.recordedCost != null;
+        const displayCost = partialCost ? `${stats.recordedCost}*` : stats.estCost || "N/A";
+        $set("est-cost", "textContent", displayCost);
+        document.getElementById("cost-coverage-label").hidden = !partialCost;
+        $set("cost-period-label", "textContent", stats.costPeriod || "Unavailable");
+        $set("cost-provisional-label", "textContent", stats.costRefreshing ? "(provisional)" : "");
         $set("nav-tokens", "textContent", stats.total || "0");
-        $set("nav-cost", "textContent", stats.estCost || "$0.00");
+        $set("nav-cost", "textContent", displayCost);
         $set("nav-monthly-cost", "textContent", stats.estMonthlyCost || "-");
         $set("nav-avg-tokens", "textContent", stats.avgTokensPerSession || "-");
         $set("nav-avg-cost", "textContent", stats.avgCostPerSession || "-");
@@ -2807,14 +3022,66 @@
         return el;
       }
 
+      function renderCodexUsage(codex) {
+        $set("codex-plan", "textContent", codex?.plan || "Plan unavailable");
+        const container = document.getElementById("codex-windows");
+        if (!container) return;
+        const stale = codex?.status === "stale";
+        const windows = codex?.windows || [];
+        container.innerHTML = windows.length
+          ? windows
+              .map((window) => {
+                const known =
+                  !stale &&
+                  codex?.status !== "error" &&
+                  typeof window.usedPercent === "number" &&
+                  Number.isFinite(window.usedPercent) &&
+                  window.usedPercent >= 0 &&
+                  window.usedPercent <= 100;
+                const percent = known ? Math.round(window.usedPercent) : null;
+                const remaining = percent === null ? null : 100 - percent;
+                const reset = Number.isFinite(window.resetAt)
+                  ? new Date(window.resetAt).toLocaleString()
+                  : null;
+                const color =
+                  percent === null
+                    ? "gray"
+                    : percent < 50
+                      ? "low"
+                      : percent < 80
+                        ? "medium"
+                        : "high";
+                return `<div style="margin-top: 8px"><div class="quota-stats"><span>${escapeHtml(window.label)} usage</span>${percent === null ? '<span class="quota-value">N/A</span>' : ""}</div>
+                  ${percent === null ? '<div class="quota-bar" aria-hidden="true"></div>' : `<div class="quota-bar quota-split" role="meter" aria-label="${escapeHtml(window.label)} quota used" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${percent}" aria-valuetext="${percent}% used, ${remaining}% remaining"><div class="quota-used ${color}" style="width: ${percent}%"></div><div class="quota-remaining" style="width: ${remaining}%"></div></div><div class="quota-legend"><span><i class="quota-swatch quota-used ${color}" aria-hidden="true"></i><span class="quota-value">${percent}% used</span></span><span><i class="quota-swatch quota-remaining" aria-hidden="true"></i><span class="quota-value">${remaining}% remaining</span></span></div>`}
+                  ${reset ? `<div style="font-size: 0.7rem; color: var(--text-muted)">Resets ${escapeHtml(reset)}</div>` : ""}</div>`;
+              })
+              .join("")
+          : '<span class="quota-value">N/A</span> — Usage unavailable';
+        const observed = codex?.lastSynced ? new Date(codex.lastSynced) : null;
+        $set(
+          "codex-status",
+          "textContent",
+          stale
+            ? "Stale — waiting for a fresh reading"
+            : codex?.status === "error"
+              ? "Provider usage unavailable"
+              : codex?.status === "available" && observed && Number.isFinite(observed.getTime())
+                ? "Updated " + observed.toLocaleTimeString()
+                : "Usage unavailable",
+        );
+      }
+
       function renderLlmUsage(data) {
         // Wrap in try-catch to prevent crashes from blocking other renders
         try {
+          renderCodexUsage(data?.codex);
           // Handle auth errors - show clear error state instead of 0%
           if (data?.errorType === "auth" || data?.claude?.session?.error) {
-            const errorMsg = "⚠️ Auth Error";
-            const clickableError =
-              '<a href="#" onclick="openAuthModal(); return false;" style="color:#f59e0b; text-decoration: underline; cursor: pointer;">Auth Error - Click to Fix</a>';
+            const authError = data?.errorType === "auth";
+            const errorMsg = authError ? "⚠️ Auth Error" : "Usage unavailable";
+            const clickableError = authError
+              ? '<a href="#" onclick="openAuthModal(); return false;" style="color:#f59e0b; text-decoration: underline; cursor: pointer;">Auth Error - Click to Fix</a>'
+              : "Usage unavailable";
 
             // Session card
             $set("claude-session-pct", "innerHTML", '<span style="color:#f59e0b">N/A</span>');
@@ -2853,22 +3120,6 @@
               compactWeekBar.className = "quota-bar-fill gray";
             }
 
-            // Compact cards - Codex (show 0% but with gray bars since we don't track Codex via API)
-            const codex5hEl = document.getElementById("codex-5h-pct");
-            const codex5hBar = document.getElementById("codex-5h-bar");
-            const codexDayEl = document.getElementById("codex-day-pct");
-            const codexDayBar = document.getElementById("codex-day-bar");
-            if (codex5hEl) codex5hEl.textContent = "0%";
-            if (codex5hBar) {
-              codex5hBar.style.width = "0%";
-              codex5hBar.className = "quota-bar-fill low";
-            }
-            if (codexDayEl) codexDayEl.textContent = "0%";
-            if (codexDayBar) {
-              codexDayBar.style.width = "0%";
-              codexDayBar.className = "quota-bar-fill low";
-            }
-            $set("codex-tasks", "textContent", "0 total");
             $set("llm-sync-time", "textContent", errorMsg);
 
             // Still render routing data if available
@@ -2883,7 +3134,6 @@
               );
 
               // Task routing counts
-              $set("codex-tasks", "textContent", total + " total");
               $set("claude-task-count", "textContent", ct);
               $set("codex-task-count", "textContent", cx);
             }
@@ -2999,7 +3249,6 @@
           const totalTasks = data.routing?.total || 0;
           const claudeTasks = data.routing?.claudeTasks || 0;
           const codexTasks = data.routing?.codexTasks || 0;
-          $set("codex-tasks", "textContent", totalTasks + " total");
           $set("claude-task-count", "textContent", claudeTasks);
           $set("codex-task-count", "textContent", codexTasks);
 
@@ -3026,7 +3275,7 @@
 
       async function fetchRoutingStats() {
         try {
-          const res = await fetch("/api/routing-stats?hours=24");
+          const res = await fetch("api/routing-stats?hours=24");
           const data = await res.json();
           renderRoutingStats(data);
         } catch (e) {
@@ -3083,7 +3332,7 @@
 
       async function fetchLlmUsage() {
         try {
-          const res = await fetch("/api/llm-usage");
+          const res = await fetch("api/llm-usage");
           const data = await res.json();
           renderLlmUsage(data);
           // Also fetch detailed routing stats
@@ -3097,7 +3346,7 @@
         // Use the split render functions (avoids code duplication)
         if (data.vitals) renderVitals(data.vitals);
         if (data.sessions) renderSessions(data.sessions, data.pagination, data.statusCounts);
-        if (data.cron) renderCron(data.cron);
+        if (data.cron) renderCron(data.cron, data.cronStatus);
         if (data.tokenStats) {
           renderTokenStats(data.tokenStats);
           // Also update the detailed stats
@@ -3105,22 +3354,10 @@
           $set("input-tokens", "textContent", data.tokenStats.input);
           $set("output-tokens", "textContent", data.tokenStats.output);
           $set("active-sessions", "textContent", data.tokenStats.activeCount);
-          $set("est-cost", "textContent", data.tokenStats.estCost);
           $set("nav-tokens", "textContent", data.tokenStats.total);
-          $set("nav-cost", "textContent", data.tokenStats.estCost);
           $set("nav-monthly-cost", "textContent", data.tokenStats.estMonthlyCost || "-");
           $set("nav-avg-tokens", "textContent", data.tokenStats.avgTokensPerSession || "-");
           $set("nav-avg-cost", "textContent", data.tokenStats.avgCostPerSession || "-");
-
-          // Show savings if positive
-          const savingsStat = document.getElementById("savings-stat");
-          const savingsEl = document.getElementById("est-savings");
-          if (data.tokenStats.estSavings && savingsStat && savingsEl) {
-            savingsEl.textContent = data.tokenStats.estSavings;
-            savingsStat.style.display = "block";
-          } else if (savingsStat) {
-            savingsStat.style.display = "none";
-          }
         }
 
         // Capacity
@@ -3294,6 +3531,163 @@
       }
 
       // Detail panel
+
+      // ============================================================================
+      // INTEL PIPELINE RENDERER
+      // ============================================================================
+      function renderIntel(intel) {
+        if (!intel) return;
+
+        $set("intel-count", "textContent", intel.totalFiles || 0);
+        $set("nav-intel-count", "textContent", intel.totalFiles || 0);
+        $set("intel-fresh-count", "textContent", intel.freshCount || 0);
+        $set("intel-aging-count", "textContent", intel.agingCount || 0);
+        $set("intel-stale-count", "textContent", intel.staleCount || 0);
+
+        // Agent assignments
+        const agentsEl = document.getElementById("intel-agents");
+        if (agentsEl && intel.assignments) {
+          const entries = Object.entries(intel.assignments);
+          if (entries.length > 0) {
+            agentsEl.innerHTML = entries
+              .sort((a, b) => b[1] - a[1])
+              .map(
+                ([agent, count]) =>
+                  `<span style="margin-right: 10px"><strong>${escapeHtml(agent)}</strong>: ${count}</span>`,
+              )
+              .join("");
+          } else {
+            agentsEl.textContent = "No agents assigned";
+          }
+        }
+
+        // File list (show up to 10)
+        const listEl = document.getElementById("intel-file-list");
+        if (listEl && intel.files) {
+          if (intel.files.length === 0) {
+            listEl.innerHTML = '<em style="color: var(--text-muted)">No intel files found</em>';
+            return;
+          }
+          const filesHtml = intel.files
+            .slice(0, 10)
+            .map((f) => {
+              const ageText = formatRelativeTime(f.ageMs);
+              return `<div class="intel-file-row">
+              <span class="intel-freshness-dot ${f.freshness}"></span>
+              <span class="intel-file-name">${escapeHtml(f.name)}</span>
+              <span class="intel-file-agent">${escapeHtml(f.agent)}</span>
+              <span class="intel-file-age ${f.freshness}">${ageText}</span>
+            </div>`;
+            })
+            .join("");
+          smartUpdate(listEl, filesHtml);
+        }
+      }
+
+      // ============================================================================
+      // PIPELINE VIEWER RENDERER
+      // ============================================================================
+      function renderPipeline(pipeline) {
+        if (!pipeline) return;
+
+        const pipelines = pipeline.pipelines || [];
+        $set("pipeline-count", "textContent", pipelines.length);
+        $set("nav-pipeline-count", "textContent", pipelines.length);
+
+        const listEl = document.getElementById("pipeline-list");
+        if (!listEl) return;
+
+        if (pipelines.length === 0) {
+          listEl.innerHTML =
+            '<em style="color: var(--text-muted)">No pipeline files found. Create *-PIPELINE.md or *-QUEUE.md in intel/</em>';
+          return;
+        }
+
+        const html = pipelines
+          .map((p) => {
+            const statusBadges = Object.entries(p.statusCounts)
+              .sort((a, b) => b[1] - a[1])
+              .map(([status, count]) => {
+                return `<span class="pipeline-status-badge"><span class="status-count">${count}</span> ${escapeHtml(status)}</span>`;
+              })
+              .join("");
+
+            const modifiedDate = new Date(p.lastModified);
+            const modifiedText = formatRelativeTime(Date.now() - modifiedDate.getTime());
+
+            return `<div class="pipeline-card">
+            <div class="pipeline-header">
+              <span class="pipeline-name">${escapeHtml(p.name)}</span>
+              <span class="pipeline-total">${p.totalItems} items</span>
+            </div>
+            <div class="pipeline-statuses">${statusBadges || '<span style="color: var(--text-muted); font-size: 0.75rem">No status columns detected</span>'}</div>
+            <div class="pipeline-last-modified">Updated ${modifiedText}</div>
+          </div>`;
+          })
+          .join("");
+
+        smartUpdate(listEl, html);
+      }
+
+      // ============================================================================
+      // MONETIZATION TRACKER RENDERER
+      // ============================================================================
+      function renderMonetization(monetization) {
+        if (!monetization) return;
+
+        $set("monetization-count", "textContent", (monetization.totalFirms || 0) + " firms");
+        $set("nav-monetization-count", "textContent", monetization.totalFirms || 0);
+        $set("monetization-total", "textContent", monetization.totalFirms || 0);
+        $set("monetization-high", "textContent", monetization.highPriority || 0);
+        $set("monetization-revenue", "textContent", monetization.revenueFirms || 0);
+
+        const firmsEl = document.getElementById("monetization-firms");
+        if (!firmsEl) return;
+
+        const firms = monetization.firms || [];
+        if (firms.length === 0) {
+          firmsEl.innerHTML =
+            '<em style="color: var(--text-muted)">No firms tracked. Create intel/MONETIZATION-TRACKER.md</em>';
+          return;
+        }
+
+        const html =
+          '<div class="monetization-grid">' +
+          firms
+            .map((f) => {
+              const priority = (f.priority || "").toUpperCase();
+              const priorityClass = ["HIGH", "MEDIUM", "LOW"].includes(priority)
+                ? priority
+                : "UNKNOWN";
+              const blockerHtml =
+                f.blocker && f.blocker !== "-"
+                  ? `<div class="monetization-blocker">⚠ ${escapeHtml(f.blocker)}</div>`
+                  : "";
+
+              return `<div class="monetization-card">
+            <div class="monetization-card-header">
+              <span class="monetization-firm-name">${escapeHtml(f.name)}</span>
+              <span class="monetization-priority ${priorityClass}">${escapeHtml(f.priority || "?")}</span>
+            </div>
+            <div class="monetization-detail"><strong>Revenue:</strong> ${escapeHtml(f.revenue || "-")}</div>
+            <div class="monetization-detail"><strong>Next:</strong> ${escapeHtml(f.milestone || "-")}</div>
+            ${blockerHtml}
+          </div>`;
+            })
+            .join("") +
+          "</div>";
+
+        smartUpdate(firmsEl, html);
+      }
+
+      // Helper: format relative time from milliseconds
+      function formatRelativeTime(ms) {
+        if (ms < 60000) return "just now";
+        if (ms < 3600000) return Math.round(ms / 60000) + "m ago";
+        if (ms < 86400000) return Math.round(ms / 3600000) + "h ago";
+        return Math.round(ms / 86400000) + "d ago";
+      }
+
       function openDetail(sessionKey, label) {
         document.getElementById("detail-title").textContent = label;
         document.getElementById("detail-panel").classList.remove("hidden");
@@ -3313,6 +3707,8 @@
       }
 
       function closeDetail() {
+        detailGeneration++;
+        detailController?.abort();
         document.getElementById("detail-panel").classList.remove("visible");
         document.getElementById("detail-overlay").classList.remove("visible");
         setTimeout(() => {
@@ -3321,28 +3717,55 @@
         }, 200);
       }
 
-      // Cost breakdown modal
+      // One bounded request; don't leave an empty panel while it loads.
       let cachedCostData = null;
-
+      let costController = null;
+      let costGeneration = 0;
+      function renderCostState(message) {
+        for (const id of [
+          "cost-tokens",
+          "cost-rates",
+          "cost-calculation",
+          "cost-savings",
+          "cost-top-sessions",
+        ]) {
+          document.getElementById(id).innerHTML = `<em>${escapeHtml(message)}</em>`;
+        }
+      }
       async function openCostModal() {
         document.getElementById("cost-modal").classList.remove("hidden");
         document.getElementById("cost-modal").classList.add("visible");
         document.getElementById("cost-modal-overlay").classList.remove("hidden");
         document.getElementById("cost-modal-overlay").classList.add("visible");
-
-        // Fetch cost breakdown data
+        costController?.abort();
+        const controller = new AbortController();
+        costController = controller;
+        const generation = ++costGeneration;
+        renderCostState("Loading cost data…");
+        const timer = setTimeout(() => controller.abort(), 10000);
         try {
-          const res = await fetch("/api/cost-breakdown");
+          const res = await fetch("api/cost-breakdown", { signal: controller.signal });
+          if (!res.ok) throw new Error(`HTTP ${res.status}`);
           const data = await res.json();
+          if (!data || data.error) throw new Error(data?.error || "Invalid cost response");
+          if (generation !== costGeneration) return;
           cachedCostData = data;
           renderCostBreakdown(data);
         } catch (e) {
-          document.getElementById("cost-tokens").innerHTML =
-            '<em style="color:var(--red)">Failed to load cost data</em>';
+          if (generation === costGeneration)
+            renderCostState(
+              e.name === "AbortError"
+                ? "Cost request timed out. Close and reopen to retry."
+                : "Cost data unavailable. Close and reopen to retry.",
+            );
+        } finally {
+          clearTimeout(timer);
         }
       }
 
       function closeCostModal() {
+        costGeneration++;
+        costController?.abort();
         document.getElementById("cost-modal").classList.remove("visible");
         document.getElementById("cost-modal-overlay").classList.remove("visible");
         setTimeout(() => {
@@ -3381,7 +3804,7 @@
 
         try {
           // Fetch operator data from API
-          const res = await fetch("/api/operators");
+          const res = await fetch("api/operators");
           const data = await res.json();
 
           // Find the operator by ID or name
@@ -3509,7 +3932,7 @@
       // Load privacy settings from server (called on page load)
       async function loadPrivacyFromServer() {
         try {
-          const res = await fetch("/api/privacy");
+          const res = await fetch("api/privacy");
           if (res.ok) {
             const settings = await res.json();
             privacySettingsCache = settings;
@@ -3553,7 +3976,7 @@
         if (privacySaveTimeout) clearTimeout(privacySaveTimeout);
         privacySaveTimeout = setTimeout(async () => {
           try {
-            const res = await fetch("/api/privacy", {
+            const res = await fetch("api/privacy", {
               method: "POST",
               headers: { "Content-Type": "application/json" },
               body: JSON.stringify(privacySettingsCache),
@@ -3928,108 +4351,72 @@
       }
 
       function renderCostBreakdown(data) {
-        // Token usage
-        document.getElementById("cost-tokens").innerHTML = `
-          <div class="detail-row"><span class="detail-label">Input Tokens</span><span class="detail-value">${(data.inputTokens || 0).toLocaleString()}</span></div>
-          <div class="detail-row"><span class="detail-label">Output Tokens</span><span class="detail-value">${(data.outputTokens || 0).toLocaleString()}</span></div>
-          <div class="detail-row"><span class="detail-label">Cache Read</span><span class="detail-value">${(data.cacheRead || 0).toLocaleString()}</span></div>
-          <div class="detail-row"><span class="detail-label">Cache Write</span><span class="detail-value">${(data.cacheWrite || 0).toLocaleString()}</span></div>
-          <div class="detail-row"><span class="detail-label">API Requests</span><span class="detail-value">${(data.requests || 0).toLocaleString()}</span></div>
-        `;
-
-        // Pricing rates
-        document.getElementById("cost-rates").innerHTML = `
-          <div class="detail-row"><span class="detail-label">Input</span><span class="detail-value">$${data.rates?.input || "15.00"}/1M tokens</span></div>
-          <div class="detail-row"><span class="detail-label">Output</span><span class="detail-value">$${data.rates?.output || "75.00"}/1M tokens</span></div>
-          <div class="detail-row"><span class="detail-label">Cache Read</span><span class="detail-value">$${data.rates?.cacheRead || "1.50"}/1M tokens (90% discount)</span></div>
-          <div class="detail-row"><span class="detail-label">Cache Write</span><span class="detail-value">$${data.rates?.cacheWrite || "18.75"}/1M tokens (25% premium)</span></div>
-        `;
-
-        // Calculation breakdown
+        if (!data || typeof data.status !== "string") {
+          renderCostState("Cost data unavailable");
+          return;
+        }
+        const count = (n) => (Number.isFinite(n) ? n.toLocaleString() : "N/A");
+        const money = (n) => (Number.isFinite(n) ? `$${formatCurrency(n, 4)}` : "N/A");
+        const row = (label, value, tooltip = "") =>
+          `<div class="detail-row"><span class="detail-label" title="${escapeHtml(tooltip)}">${escapeHtml(label)}</span><span class="detail-value">${escapeHtml(value)}</span></div>`;
+        document.getElementById("cost-modal-title").textContent = data.period || "Unavailable";
+        const note =
+          data.status === "unavailable"
+            ? "Usage unavailable; not a zero-cost reading."
+            : data.status === "partial"
+              ? "Some usage has no recorded price; total cost is unavailable."
+              : data.refreshing
+                ? "Provisional snapshot — OpenClaw is refreshing its usage records."
+                : "";
+        document.getElementById("cost-tokens").innerHTML =
+          `<p>${escapeHtml(note)}</p>` +
+          row("Input tokens", count(data.inputTokens)) +
+          row("Output tokens", count(data.outputTokens)) +
+          row("Cache read", count(data.cacheRead)) +
+          row("Cache write", count(data.cacheWrite)) +
+          row("API requests", count(data.requests));
+        document.getElementById("cost-rates").innerHTML =
+          `<p>${escapeHtml(data.pricingBasis || "Pricing unavailable")}</p><p>No single rate is applied across different models.</p>`;
         const calc = data.calculation || {};
-        document.getElementById("cost-calculation").innerHTML = `
-          <div class="detail-row"><span class="detail-label">Input Cost</span><span class="detail-value">$${formatCurrency(calc.inputCost, 2)}</span></div>
-          <div class="detail-row"><span class="detail-label">Output Cost</span><span class="detail-value">$${formatCurrency(calc.outputCost, 2)}</span></div>
-          <div class="detail-row"><span class="detail-label">Cache Read Cost</span><span class="detail-value">$${formatCurrency(calc.cacheReadCost, 2)}</span></div>
-          <div class="detail-row"><span class="detail-label">Cache Write Cost</span><span class="detail-value">$${formatCurrency(calc.cacheWriteCost, 2)}</span></div>
-          <div class="detail-row" style="border-top: 1px solid var(--border); padding-top: 8px; margin-top: 8px;">
-            <span class="detail-label"><strong>Est. API Cost</strong></span>
-            <span class="detail-value"><strong>$${formatCurrency(data.totalCost)}</strong></span>
-          </div>
-        `;
-
-        // Savings - show all three windows (24h, 3da, 7da)
-        const planCost = data.planCost || 200;
-        const planName = data.planName || "Claude Code Max";
-        const windows = data.windows || {};
-
-        // Build savings rows for each window
-        const windowOrder = ["24h", "3d", "7d"];
-        const windowLabels = { "24h": "24h", "3d": "3dma", "7d": "7dma" };
-
-        let savingsHtml = `
-          <div class="detail-row"><span class="detail-label">${planName}</span><span class="detail-value">$${planCost}/month</span></div>
-          <div style="margin-top: 12px; margin-bottom: 8px; font-size: 0.85rem; color: var(--text-muted);">Projected Monthly Cost by Window:</div>
-        `;
-
-        let hasSavings = false;
-        for (const key of windowOrder) {
-          const w = windows[key];
-          if (!w) continue;
-
-          const monthlyProjected = w.monthlyProjected || 0;
-          const savings = w.monthlySavings || 0;
-          const pct = w.savingsPercent || 0;
-
-          if (savings > 0) hasSavings = true;
-
-          const savingsStr =
-            savings > 0
-              ? `<span style="color: var(--green);">↓$${Math.round(savings).toLocaleString()}/mo (${pct}%)</span>`
-              : `<span style="color: var(--text-muted);">-</span>`;
-
-          savingsHtml += `
-            <div class="detail-row">
-              <span class="detail-label">${windowLabels[key]}</span>
-              <span class="detail-value">$${Math.round(monthlyProjected).toLocaleString()}/mo ${savingsStr}</span>
-            </div>
-          `;
-        }
-
-        if (!hasSavings) {
-          savingsHtml += `
-            <p style="margin-top: 12px; font-size: 0.85rem; color: var(--text-muted);">
-              📈 Keep going! Once your monthly cost exceeds $${planCost}, you'll start seeing savings.
-            </p>
-          `;
-        }
-
-        document.getElementById("cost-savings").innerHTML = savingsHtml;
-
-        // Top sessions by tokens
-        const topSessions = data.topSessions || [];
-        if (topSessions.length > 0) {
-          document.getElementById("cost-top-sessions").innerHTML = topSessions
-            .map((s, i) => {
-              const tokensFormatted =
-                s.tokens >= 1000000
-                  ? (s.tokens / 1000000).toFixed(1) + "M"
-                  : s.tokens >= 1000
-                    ? (s.tokens / 1000).toFixed(1) + "k"
-                    : s.tokens;
-              const statusIcon = s.active ? "🟢" : "⚪";
-              return `<div class="detail-row">
-              <span class="detail-label">${statusIcon} ${s.label.substring(0, 30)}${s.label.length > 30 ? "..." : ""}</span>
-              <span class="detail-value">${tokensFormatted}</span>
-            </div>`;
-            })
-            .join("");
-        } else {
-          document.getElementById("cost-top-sessions").innerHTML =
-            '<em style="color: var(--text-muted)">No session data available</em>';
-        }
+        const costText = (key, fallback) => window.I18N?.t(key, {}, fallback) || fallback;
+        document.getElementById("cost-calculation").innerHTML =
+          row(
+            costText("cost.recordedSubtotal", "Recorded API-equivalent subtotal"),
+            money(data.recordedCost),
+          ) +
+          row(
+            costText("cost.missingEntries", "Entries without pricing"),
+            count(data.missingCostEntries),
+          ) +
+          row("Input cost", money(calc.inputCost)) +
+          row("Output cost", money(calc.outputCost)) +
+          row("Cache read cost", money(calc.cacheReadCost)) +
+          row("Cache write cost", money(calc.cacheWriteCost)) +
+          row(
+            data.refreshing ? "API equivalent (provisional)" : "API equivalent",
+            money(data.totalCost),
+          );
+        document.getElementById("cost-savings").innerHTML =
+          `<p>${escapeHtml(data.savingsReason || "Savings unavailable")}</p>` +
+          Object.values(data.windows || {})
+            .map((w) => row(w.label, money(w.dailyAvg)))
+            .join("") +
+          "<p>Calendar-day averages include the current partial day; they are not a monthly bill forecast.</p>";
+        document.getElementById("cost-top-sessions").innerHTML =
+          `<p>${escapeHtml(data.topSessionsScope || "Session totals")}</p>` +
+          ((data.topSessions || [])
+            .map((s) =>
+              row(
+                String(s.label || "Session").slice(0, 120),
+                count(s.tokens),
+                s.channelId ? `${s.channelId} · ${s.channelNameStatus || "unresolved"}` : "",
+              ),
+            )
+            .join("") || "<em>No session data available</em>");
       }
 
+      let detailController = null;
+      let detailGeneration = 0;
       async function fetchSessionDetail(key) {
         // Handle null/undefined sessionKey
         if (!key) {
@@ -4039,11 +4426,14 @@
         }
 
         // Add timeout to prevent hanging forever
+        detailController?.abort();
         const controller = new AbortController();
+        detailController = controller;
+        const generation = ++detailGeneration;
         const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
         try {
-          const res = await fetch(`/api/session?key=${encodeURIComponent(key)}`, {
+          const res = await fetch(`api/session?key=${encodeURIComponent(key)}`, {
             signal: controller.signal,
           });
           clearTimeout(timeoutId);
@@ -4054,6 +4444,7 @@
 
           const data = await res.json();
 
+          if (generation !== detailGeneration) return;
           // Check for API error response
           if (data.error) {
             console.error("API error:", data.error);
@@ -4064,6 +4455,7 @@
           renderDetail(data);
         } catch (e) {
           clearTimeout(timeoutId);
+          if (generation !== detailGeneration) return;
           console.error("Failed to fetch detail:", e);
           const msg =
             e.name === "AbortError" ? "Request timed out" : e.message || "Failed to load session";
@@ -4084,6 +4476,7 @@
       function renderDetail(data) {
         // Update the title with the best available channel name
         const titleEl = document.getElementById("detail-title");
+        titleEl.title = data.channelId || "";
         const channelName = data.groupChannel || data.channel || "Session Details";
         titleEl.textContent = channelName;
 
@@ -4102,8 +4495,8 @@
         smartUpdate(
           document.getElementById("detail-overview"),
           `
-                <div class="detail-row"><span class="detail-label">Channel</span><span class="detail-value">${data.channel || "-"}</span></div>
-                <div class="detail-row"><span class="detail-label">Model</span><span class="detail-value">${data.model || "-"}</span></div>
+                <div class="detail-row"><span class="detail-label">Channel</span><span class="detail-value">${escapeHtml(data.channel || "-")}</span></div>
+                <div class="detail-row"><span class="detail-label">Model</span><span class="detail-value">${escapeHtml(data.model || "-")}</span></div>
                 <div class="detail-row"><span class="detail-label">Total Tokens</span><span class="detail-value">${data.tokens?.toLocaleString() || "-"}</span></div>
                 <div class="detail-row"><span class="detail-label">Input / Output</span><span class="detail-value">${(data.inputTokens || 0).toLocaleString()} / ${(data.outputTokens || 0).toLocaleString()}</span></div>
                 ${cacheDisplay}
@@ -4115,8 +4508,20 @@
         // Summary
         smartUpdate(
           document.getElementById("detail-summary"),
-          data.summary || "<em>No summary</em>",
+          escapeHtml(data.summary || "No summary") +
+            (data.historyScope ? `<p>${escapeHtml(data.historyScope)}</p>` : ""),
         );
+
+        // Missing storage is unknown, not evidence of no messages or action items.
+        if (data.transcriptAvailable === false) {
+          for (const id of ["links", "attention", "facts", "tools", "messages"]) {
+            smartUpdate(
+              document.getElementById(`detail-${id}`),
+              '<em style="color: var(--text-muted)">Transcript unavailable</em>',
+            );
+          }
+          return;
+        }
 
         // Links/References
         const allText = (data.messages || []).map((m) => m.text).join(" ");
@@ -4193,7 +4598,7 @@
             data.tools
               .map(
                 (t) =>
-                  `<span class="tool-tag"><code>${t.name}</code> <span class="tool-count">×${t.count}</span></span>`,
+                  `<span class="tool-tag"><code>${escapeHtml(t.name)}</code> <span class="tool-count">×${t.count}</span></span>`,
               )
               .join(""),
           );
@@ -4302,7 +4707,7 @@
         setConnectionStatus("connecting", i18nText("app.connecting", {}, "Connecting..."));
 
         try {
-          eventSource = new EventSource("/api/events");
+          eventSource = window.DashboardEvents.connect();
 
           eventSource.onopen = function () {
             console.log("[SSE] Connected");
@@ -4418,7 +4823,7 @@
       // Update topic status API call
       async function updateTopicStatus(topicId, status) {
         try {
-          const res = await fetch(`/api/cerebro/topic/${encodeURIComponent(topicId)}/status`, {
+          const res = await fetch(`api/cerebro/topic/${encodeURIComponent(topicId)}/status`, {
             method: "POST",
             headers: { "Content-Type": "application/json" },
             body: JSON.stringify({ status }),
@@ -4504,31 +4909,12 @@
           sessionBar.className = `quota-bar-fill ${sessionPct < 50 ? "low" : sessionPct < 80 ? "medium" : "high"}`;
           weekBar.className = `quota-bar-fill ${weekPct < 50 ? "low" : weekPct < 80 ? "medium" : "high"}`;
         }
-
-        // Codex quotas
-        if (quotaData.codex) {
-          const h5Pct = Math.round((quotaData.codex.usage5h || 0) * 100);
-          const dayPct = Math.round((quotaData.codex.usageDay || 0) * 100);
-
-          document.getElementById("codex-5h-pct").textContent = `${h5Pct}%`;
-          document.getElementById("codex-day-pct").textContent = `${dayPct}%`;
-          document.getElementById("codex-tasks").textContent = quotaData.codex.tasksToday || 0;
-
-          const h5Bar = document.getElementById("codex-5h-bar");
-          const dayBar = document.getElementById("codex-day-bar");
-
-          h5Bar.style.width = `${h5Pct}%`;
-          dayBar.style.width = `${dayPct}%`;
-
-          h5Bar.className = `quota-bar-fill ${h5Pct < 50 ? "low" : h5Pct < 80 ? "medium" : "high"}`;
-          dayBar.className = `quota-bar-fill ${dayPct < 50 ? "low" : dayPct < 80 ? "medium" : "high"}`;
-        }
       }
 
       // Quick Actions
       async function runHealthCheck() {
         try {
-          const response = await fetch("/api/action?action=health-check");
+          const response = await fetch("api/action?action=health-check");
           const data = await response.json();
 
           if (data.success) {
@@ -4543,7 +4929,7 @@
 
       async function getGatewayStatus() {
         try {
-          const response = await fetch("/api/action?action=gateway-status");
+          const response = await fetch("api/action?action=gateway-status");
           const data = await response.json();
 
           if (data.success) {
@@ -4558,7 +4944,7 @@
 
       async function pruneStalesSessions() {
         try {
-          const response = await fetch("/api/action?action=prune-stale");
+          const response = await fetch("api/action?action=prune-stale");
           const data = await response.json();
 
           if (data.success) {
@@ -4596,7 +4982,7 @@
 
         connectSSE();
         // Populate version badge from server (single source of truth: package.json)
-        fetch("/api/about")
+        fetch("api/about")
           .then((r) => r.json())
           .then((d) => {
             const el = document.getElementById("app-version");
@@ -4604,7 +4990,7 @@
           })
           .catch(() => {});
         // Fetch optional dependency status (once)
-        fetch("/api/vitals")
+        fetch("api/vitals")
           .then((r) => r.json())
           .then((d) => {
             if (d.optionalDeps) optionalDeps = d.optionalDeps;

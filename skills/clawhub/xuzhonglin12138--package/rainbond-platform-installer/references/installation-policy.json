@@ -1,0 +1,87 @@
+{
+  "schema": "rainskills.platform-installation-policy.v2",
+  "minimums": {
+    "cpu_cores": 2,
+    "memory_bytes": 4294967296,
+    "disk_bytes": 10737418240
+  },
+  "required_ports": [80, 443, 7070],
+  "supported_control_platforms": ["linux", "darwin", "win32"],
+  "supported_platforms": ["linux", "darwin"],
+  "supported_architectures": ["x64", "arm64"],
+  "installer": {
+    "url": "https://get.rainbond.com/",
+    "allowed_origins": ["https://get.rainbond.com"],
+    "trust": "https-origin+runtime-validation",
+    "max_bytes": 2097152,
+    "tested_rainbond_version": "v6.9.6-release",
+    "reviewed_at": "2026-08-04"
+  },
+  "roi": {
+    "allowed_origin": "https://get.rainbond.com",
+    "allowed_path_prefix": "/roi/",
+    "max_bytes": 134217728,
+    "max_redirects": 3,
+    "trust": "https-origin+published-checksum-discovery+runtime-validation",
+    "reviewed_at": "2026-08-14",
+    "artifacts": {
+      "amd64": {
+        "url": "https://get.rainbond.com/roi/roi-amd64",
+        "checksum_urls": [
+          "https://get.rainbond.com/roi/roi-amd64.sha256"
+        ]
+      },
+      "arm64": {
+        "url": "https://get.rainbond.com/roi/roi-arm64",
+        "checksum_urls": [
+          "https://get.rainbond.com/roi/roi-arm64.sha256"
+        ]
+      }
+    }
+  },
+  "helm": {
+    "allowed_origin": "https://chart.rainbond.com",
+    "index_url": "https://chart.rainbond.com/index.yaml",
+    "chart_name": "rainbond/rainbond",
+    "release": "rainbond",
+    "namespace": "rbd-system",
+    "minimum_kubernetes_version": "1.24.0",
+    "max_bytes": 134217728,
+    "max_redirects": 3,
+    "trust": "https-origin+published-index-digest+local-sha256-lock",
+    "reviewed_at": "2026-08-15"
+  },
+  "windows": {
+    "minimum_build": 19041,
+    "supported_architectures": ["x64"],
+    "supported_product_types": ["workstation"],
+    "distro_name": "Rainbond",
+    "networking_modes": ["nat"],
+    "managed_ports": [80, 443, 7070],
+    "preflight_allowed_origins": [
+      "https://wslstorestorage.blob.core.windows.net",
+      "https://mirror.nju.edu.cn",
+      "https://mirrors.tuna.tsinghua.edu.cn",
+      "https://cloud-images.ubuntu.com",
+      "https://get.rainbond.com",
+      "https://registry.cn-hangzhou.aliyuncs.com"
+    ],
+    "ubuntu_rootfs": {
+      "urls": [
+        "https://mirror.nju.edu.cn/ubuntu-cloud-images/wsl/jammy/20250318/ubuntu-jammy-wsl-amd64-ubuntu22.04lts.rootfs.tar.gz",
+        "https://mirrors.tuna.tsinghua.edu.cn/ubuntu-cloud-images/wsl/jammy/20250318/ubuntu-jammy-wsl-amd64-ubuntu22.04lts.rootfs.tar.gz",
+        "https://cloud-images.ubuntu.com/wsl/jammy/20250318/ubuntu-jammy-wsl-amd64-ubuntu22.04lts.rootfs.tar.gz"
+      ],
+      "max_bytes": 536870912,
+      "trust": "https-origin+wsl-import-validation"
+    },
+    "legacy_wsl_kernel": {
+      "url": "https://wslstorestorage.blob.core.windows.net/wslblob/wsl_update_x64.msi",
+      "sha256": "4d09c776c8d45f70a202281d18e19be1118f53159b0c217a5274a31ce18525fe",
+      "trust": "sha256-pinned+authenticode"
+    },
+    "wsl_web_update": {
+      "trust": "os-signed-update"
+    }
+  }
+}

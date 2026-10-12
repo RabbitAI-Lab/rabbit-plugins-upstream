@@ -1,167 +1,123 @@
 #!/usr/bin/env python3
+# -*- coding: utf-8 -*-
 """
-docx-writer 模板脚本。
-使用方法：
+docx-writer 内容脚本（模板：academic）
+
+用法
+----
   1. 复制此文件到工作目录
-  2. 修改 OUTPUT、FIG_DIR 路径
-  3. 修改 FN_TEXT_MAP 为脚注内容
-  4. 在 build_content() 中用 B('文本{F1}') 编写正文
-  5. python build_docx.py
+  2. 改 TEMPLATE_NAME / OUTPUT / FIG_DIR / FN_TEXT_MAP（也可用下面的 CLI 参数覆盖）
+  3. 在 build_content() 里用 B/H1/H2/H3/Tc/add_img/add_tbl 写内容
+  4. python build_docx.py
+
+CLI（全部可选，缺省即文件内常量，**向后兼容**）
+  --template NAME   模板名或 yaml/json 路径（默认 academic）
+  --out FILE        输出 docx（默认 输出路径.docx，写当前工作目录）
+  --fig-dir DIR     图片基准目录（默认 图片目录）
+  --fn-map REF      脚注映射：JSON 文件路径或内联 JSON（默认文件内 FN_TEXT_MAP）
+
+排版全部来自 templates/<TEMPLATE_NAME>.yaml，本文件只负责内容。
+要换体例，只需改 TEMPLATE_NAME（academic / push / news / ...），正文代码不用动。
 """
-import sys, os
-from lxml import etree
-import docx as dx
-from docx.shared import Pt, Cm
+import sys, os, json, argparse
 
 sys.stdout.reconfigure(encoding='utf-8')
+sys.stderr.reconfigure(encoding='utf-8')
 
-W_NS = 'http://schemas.openxmlformats.org/wordprocessingml/2006/main'
-fb = lambda t: '{%s}%s' % (W_NS, t)
+from docx_engine import Template, Builder
 
-# ═══════════════════ 配置 ═══════════════════
-SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
-SKILL_DIR = os.path.dirname(SCRIPT_DIR)
-TEMPLATE = os.path.join(SKILL_DIR, 'template.docx')
-OUTPUT = r'输出路径.docx'
+# ═══════════════════ 配置（可被 CLI 覆盖） ═══════════════════
+TEMPLATE_NAME = 'academic'          # templates/ 下的模板名（或 yaml 绝对路径）
+OUTPUT = r'输出路径.docx'             # 默认写当前工作目录
 FIG_DIR = r'图片目录'
-
 FN_TEXT_MAP = {
     'F1': '作者. 标题. 期刊, 年份, 卷(期): 页码.',
 }
 
-# ═══════════════════ 加载模板 ═══════════════════
-doc = dx.Document(TEMPLATE)
-body = doc.element.body
-for child in list(body):
-    local = etree.QName(child).localname if child.tag is not etree.Comment else ''
-    if local != 'sectPr':
-        body.remove(child)
+# 由 _init() 建立；B/H1/... 等薄封装依赖它
+_b = None
 
-for rel in doc.part.rels.values():
-    if 'footnotes' in rel.reltype:
-        fn_elem = rel.target_part.element
-        for fn in list(fn_elem):
-            if fn.get(fb('type'), '') not in ('separator', 'continuationSeparator'):
-                fn_elem.remove(fn)
-        for fn in list(fn_elem):
-            if fn.get(fb('type')) == 'separator':
-                fn.set(fb('id'), '-1')
-            elif fn.get(fb('type')) == 'continuationSeparator':
-                fn.set(fb('id'), '0')
-        break
 
-# ═══════════════════ 排版函数（不改） ═══════════════════
-def set_font(r, cn='宋体', en='Times New Roman', sz=Pt(10.5)):
-    r.font.name = en; r.font.size = sz
-    rPr = r._element.find(fb('rPr'))
-    if rPr is None: rPr = etree.SubElement(r._element, fb('rPr'))
-    rf = rPr.find(fb('rFonts'))
-    if rf is None: rf = etree.SubElement(rPr, fb('rFonts'))
-    rf.set(fb('eastAsia'), cn); rf.set(fb('ascii'), en); rf.set(fb('hAnsi'), en)
+def _init(template_name=None, fn_map=None):
+    global _b
+    _b = Builder(Template.load(template_name or TEMPLATE_NAME))
+    _b.fn_map.update(fn_map if fn_map is not None else FN_TEXT_MAP)
+    return _b
 
-def P(text, cn='宋体', en='Times New Roman', sz=Pt(10.5), align=None, fi=Cm(0.74), ls=1.5):
-    p = doc.add_paragraph()
-    if align == 'center': p.alignment = 1
-    if fi: p.paragraph_format.first_line_indent = fi
-    if ls: p.paragraph_format.line_spacing = ls
-    segs = text.split('{')
-    for seg in segs:
-        if '}' in seg:
-            fn_name, rest = seg.split('}', 1)
-            fn = p.add_footnote(FN_TEXT_MAP[fn_name])
-            fn_p = fn.find(fb('p'))
-            if fn_p is not None:
-                pp = fn_p.find(fb('pPr'))
-                if pp is None: pp = etree.SubElement(fn_p, fb('pPr'))
-                ps = pp.find(fb('pStyle'))
-                if ps is None: ps = etree.SubElement(pp, fb('pStyle'))
-                ps.set(fb('val'), '12')
-            for r in fn.findall('.//' + fb('r')):
-                t = r.find(fb('t'))
-                if t is not None and t.text and t.text.strip():
-                    rPr = r.find(fb('rPr'))
-                    if rPr is None: rPr = etree.SubElement(r, fb('rPr'))
-                    rf = rPr.find(fb('rFonts'))
-                    if rf is None: rf = etree.SubElement(rPr, fb('rFonts'))
-                    rf.set(fb('eastAsia'), '宋体')
-                    rf.set(fb('ascii'), 'Times New Roman')
-                    rf.set(fb('hAnsi'), 'Times New Roman')
-                    for tag in ['sz', 'szCs']:
-                        el = rPr.find(fb(tag))
-                        if el is None: el = etree.SubElement(rPr, fb(tag))
-                        el.set(fb('val'), '18')
-            if rest:
-                r2 = p.add_run(rest); set_font(r2, cn, en, sz)
-        elif seg:
-            r = p.add_run(seg); set_font(r, cn, en, sz)
-    return p
 
-def B(t): return P(t)
-def Bs(t): return P(t, sz=Pt(9))
-def H1(t): return P(t, cn='黑体', en='Arial', sz=Pt(12), align='center', fi=None)
-def H2(t): return P(t, cn='黑体', en='Arial', sz=Pt(12))
-def H3(t): return P(t, cn='黑体', en='Arial', sz=Pt(10.5))
-def Tc(t): return P(t, sz=Pt(9), align='center', fi=None)
+# 模块导入即按默认配置初始化（保持原「import 后 _b/B() 即可用」行为）
+_init()
 
-def add_img(path, cap, w=Cm(14)):
-    if os.path.exists(path):
-        doc.add_picture(path, width=w)
-        p = doc.paragraphs[-1]; p.alignment = 1
-        p.paragraph_format.first_line_indent = Pt(0)
-    Tc(cap)
+
+# ═══════════════════ 排版函数（薄封装，勿改） ═══════════════════
+def B(t):   return _b.para(t, style='body')        # 正文
+def Bs(t):  return _b.para(t, style='abstract')    # 小字正文（摘要）
+def H1(t):  return _b.heading(t, style='h1')       # 一级标题
+def H2(t):  return _b.heading(t, style='h2')       # 二级标题
+def H3(t):  return _b.heading(t, style='h3')       # 三级标题
+def Tc(t):  return _b.caption(t)                   # 表题/图题
+
+
+def add_img(path, cap):
+    p = path if os.path.isabs(path) else os.path.join(FIG_DIR, path)
+    return _b.image(p, caption=cap)
+
 
 def add_tbl(h, rows):
-    t = doc.add_table(rows=1+len(rows), cols=len(h))
-    t.style = 'Table Grid'
-    for row in t.rows:
-        for cell in row.cells:
-            tc = cell._tc; tcPr = tc.find(fb('tcPr'))
-            if tcPr is None: tcPr = etree.SubElement(tc, fb('tcPr'))
-            b = etree.SubElement(tcPr, fb('tcBorders'))
-            for s in ['top','left','bottom','right']:
-                el = etree.SubElement(b, fb(s)); el.set(fb('val'), 'nil')
-    for i, x in enumerate(h):
-        cell = t.rows[0].cells[i]; cell.text = ''
-        run = cell.paragraphs[0].add_run(x)
-        run.font.size = Pt(9); run.font.bold = True
-        cell.paragraphs[0].alignment = 1
-        tc = cell._tc; tcPr = tc.find(fb('tcPr'))
-        b = tcPr.find(fb('tcBorders'))
-        for s in ['top','bottom']:
-            el = etree.SubElement(b, fb(s))
-            el.set(fb('val'), 'single'); el.set(fb('sz'), '4')
-    for ri, r in enumerate(rows):
-        for ci, v in enumerate(r):
-            cell = t.rows[ri+1].cells[ci]; cell.text = ''
-            run = cell.paragraphs[0].add_run(str(v))
-            run.font.size = Pt(9)
-            cell.paragraphs[0].alignment = 1
-            if ri == len(rows) - 1:
-                tc = cell._tc; tcPr = tc.find(fb('tcPr'))
-                b = tcPr.find(fb('tcBorders'))
-                el = etree.SubElement(b, fb('bottom'))
-                el.set(fb('val'), 'single'); el.set(fb('sz'), '4')
-    return t
+    return _b.table(h, rows)
+
+
+def Fx(latex, cap=None):
+    """行间公式（XeLaTeX 真排版 → 紧裁 PNG，居中）。"""
+    return _b.formula(latex, caption=cap)
+
+
+def Lx(text, lx_map, style='body'):
+    """含行内公式占位 {X1} 的段落，如 Lx('由 {X1} 可得', {'X1': r'\\alpha_0'})。"""
+    return _b.para(text, style=style, lx_map=lx_map)
+
 
 # ═══════════════════ 正文 ═══════════════════
 def build_content():
-    # 在这里用 B/H1/H2/H3/Tc/add_img/add_tbl 编写内容
     # 示例：
-    # B('这是正文{F1}')
+    # H1('一、引言')
+    # B('这是正文{F1}。')
+    # add_img('fig1.png', '图1  示意')
+    # add_tbl(['列1', '列2'], [['a', 'b']])
     pass
 
-build_content()
 
-# ═══════════════════ 后处理：上标 ═══════════════════
-for p in body.findall('.//' + fb('p')):
-    for r in p.findall('.//' + fb('r')):
-        if r.find(fb('footnoteReference')) is not None:
-            rPr = r.find(fb('rPr'))
-            if rPr is None: rPr = etree.SubElement(r, fb('rPr'))
-            va = rPr.find(fb('vertAlign'))
-            if va is None: va = etree.SubElement(rPr, fb('vertAlign'))
-            va.set(fb('val'), 'superscript')
+def _load_fn_map(ref):
+    """ref = JSON 文件路径 或 内联 JSON 字符串。"""
+    if os.path.exists(ref):
+        with open(ref, 'r', encoding='utf-8') as f:
+            return json.load(f)
+    return json.loads(ref)
 
-# ═══════════════════ 保存 ═══════════════════
-doc.save(OUTPUT)
-print(f'Saved: {OUTPUT}', file=sys.stderr)
+
+def main(argv=None):
+    global TEMPLATE_NAME, OUTPUT, FIG_DIR, FN_TEXT_MAP
+    ap = argparse.ArgumentParser(
+        description='docx-writer 内容脚本（不带参数时行为与原来完全一致）')
+    ap.add_argument('--template', default=TEMPLATE_NAME,
+                    help='模板名或 yaml/json 路径（默认 %(default)s）')
+    ap.add_argument('--out', default=OUTPUT,
+                    help='输出 docx 路径（默认 %(default)s，写当前工作目录）')
+    ap.add_argument('--fig-dir', default=FIG_DIR,
+                    help='图片基准目录（默认 %(default)s）')
+    ap.add_argument('--fn-map', default=None,
+                    help='脚注映射：JSON 文件路径或内联 JSON（默认文件内 FN_TEXT_MAP）')
+    a = ap.parse_args(argv)
+
+    TEMPLATE_NAME, OUTPUT, FIG_DIR = a.template, a.out, a.fig_dir
+    if a.fn_map:
+        FN_TEXT_MAP = _load_fn_map(a.fn_map)
+
+    _init(TEMPLATE_NAME, FN_TEXT_MAP)
+    build_content()
+    _b.save(OUTPUT)
+    print('Saved: %s' % OUTPUT, file=sys.stderr)
+
+
+if __name__ == '__main__':
+    main()

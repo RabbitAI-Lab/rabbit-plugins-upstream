@@ -1,6 +1,8 @@
 # 餐饮零售 BI 公式实战库
 
-> 蒸馏自两段连续的餐饮 BI 分析师履职（**餐饮连锁 A + 餐饮连锁 B**，均为多门店连锁餐饮品牌），覆盖**观远 BI / Guandata** 平台上的常用 ETL SQL、卡片表达式、时间宏。所有品牌名、表名、密集业务字段已去敏，可自由复用。
+> 蒸馏自两段连续的餐饮 BI 分析师履职（**餐饮连锁 A + 餐饮连锁 B**，均为多门店连锁餐饮品牌），覆盖**观远 BI / Guandata** 平台上的常用 ETL SQL、卡片表达式、时间宏；第 [10 册](10-task-and-touch-recovery.md)另以本仓库样板间的任务池实现为蓝本。所有品牌名、表名、密集业务字段已去敏，可自由复用。
+
+门店问题先读 [实战问题入口](实战问题入口.md)：注册归因、激励结算、核销排错、开业留客、日常读数与储值事件。口径仍由下面 10 册统一维护。
 
 ## 路由表
 
@@ -15,6 +17,7 @@
 | NULL / 空字符串 / 'null' 字面值三态 / 字段口径歧义 / 通用字段词典 | [07-data-quality-traps.md](07-data-quality-traps.md) |
 | **ETL 工程范式**（10-CTE DWD 宽表 / 轻节点重 SQL vs 重节点轻 SQL / 财务双源对账 / POS 归一化 / Cohort 网格）| [08-etl-engineering-patterns.md](08-etl-engineering-patterns.md) |
 | **39 个 V1 生产 ETL 索引清单**（按 11 个业务域分类 + 每 ETL 的节点/输入/输出/SQL 节点速查 + 复用决策表）| [09-etl-catalog.md](09-etl-catalog.md) |
+| **任务与触达回收**（白盒 NBA 任务池模型 / 九类任务×优先级×圈选依据 / 任务生成 SQL / 防打扰与仲裁 / 漏斗三率回收 / **差评客户挽回**）| [10-task-and-touch-recovery.md](10-task-and-touch-recovery.md) |
 
 ## 通用字段词典
 
@@ -57,11 +60,17 @@ ETL 输入表统一称作 `input1`（观远 SmartETL 默认入参名），其余
 - **写新 ETL 节点之前**：先看 [01](01-date-and-time.md)（确定时间范围）+ [07](07-data-quality-traps.md)（确定字段三态处理），再去对应业务文件抄公式。
 - **建卡 / 写卡片字段表达式**：直接去 [03](03-revenue-kpi.md) / [05](05-coupon-and-discount.md) 拿对应 KPI。
 - **接到"为什么这俩数对不上"的甩锅**：去 [07](07-data-quality-traps.md) 对一遍口径，80% 是 NULL / 重复字段名 / 三态判断不一致。
+- **分层做完要落成运营动作**（召回 / 提频 / 任务派导购）：去 [10](10-task-and-touch-recovery.md) 抄任务池模型和回收口径——分层是弹药，任务池是扳机。
 
 ## 来源标记
 
 - 🅰️ = 餐饮连锁 A 实战
 - 🅱️ = 餐饮连锁 B 实战
 - ⚪ = 两家通用 / 行业通用
+- 🏠 = 本仓库样板间实现（模拟数据，结构与口径可引用，数值不可当基准；主要出现在 [10 册](10-task-and-touch-recovery.md)）
 
 格式参考 [02-customer-and-membership.md](02-customer-and-membership.md) 第一段。
+
+## 代码块的适用位置
+
+`sql` 是可独立解析的 Spark SQL 示例，`guandata` 是观远卡片字段表达式，`clickhouse` 是 ClickHouse 示例，`sql-fragment` 是需放入 SELECT / WHERE 的片段。静态解析不能证明示例已在目标表上执行。批处理示例的 `${as_of_date}` 须由同一运行批次传入。

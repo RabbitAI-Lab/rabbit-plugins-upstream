@@ -15,8 +15,11 @@ For cron jobs (no_agent=True), set DEFAULT_BIRTHDAY below to your
 agent's creation/deployment date. The sign is then computed automatically.
 """
 
+from __future__ import annotations
+
 import argparse
 import html as html_lib
+import json
 import re
 import sys
 import urllib.request
@@ -45,38 +48,32 @@ VALID_SIGNS = {
     "pisces",
 }
 
-# Zodiac sign boundaries: for each sign, (name, (month, day_of_first_day)).
-# A date belongs to a sign if month == cutoff_month and day < cutoff_day.
-ZODIAC_BOUNDARIES = [
-    ("capricorn",   (1, 20)),   # Dec 22 – Jan 19
-    ("aquarius",    (2, 19)),   # Jan 20 – Feb 18
-    ("pisces",      (3, 21)),   # Feb 19 – Mar 20
-    ("aries",       (4, 20)),   # Mar 21 – Apr 19
-    ("taurus",      (5, 21)),   # Apr 20 – May 20
-    ("gemini",      (6, 21)),   # May 21 – Jun 20
-    ("cancer",      (7, 23)),   # Jun 21 – Jul 22
-    ("leo",         (8, 23)),   # Jul 23 – Aug 22
-    ("virgo",       (9, 23)),   # Aug 23 – Sep 22
-    ("libra",       (10, 23)),  # Sep 23 – Oct 22
-    ("scorpio",     (11, 22)),  # Oct 23 – Nov 21
-    ("sagittarius", (12, 22)),  # Nov 22 – Dec 21
+# First day of each sign, latest in the year first. Matches astroclaw.xyz/api/sign.
+SIGN_STARTS = [
+    ("capricorn",   (12, 22)),  # Dec 22 – Jan 19
+    ("sagittarius", (11, 22)),  # Nov 22 – Dec 21
+    ("scorpio",     (10, 23)),  # Oct 23 – Nov 21
+    ("libra",       (9, 23)),   # Sep 23 – Oct 22
+    ("virgo",       (8, 23)),   # Aug 23 – Sep 22
+    ("leo",         (7, 23)),   # Jul 23 – Aug 22
+    ("cancer",      (6, 21)),   # Jun 21 – Jul 22
+    ("gemini",      (5, 21)),   # May 21 – Jun 20
+    ("taurus",      (4, 20)),   # Apr 20 – May 20
+    ("aries",       (3, 21)),   # Mar 21 – Apr 19
+    ("pisces",      (2, 19)),   # Feb 19 – Mar 20
+    ("aquarius",    (1, 20)),   # Jan 20 – Feb 18
 ]
+
+API_BASE = "https://www.astroclaw.xyz"
 
 
 def calculate_sign(birthday: date) -> str:
     """Return the zodiac sign for a given birth date."""
-    month, day = birthday.month, birthday.day
-
-    # Handle Capricorn (wraps Dec–Jan)
-    if (month == 12 and day >= 22) or (month == 1 and day <= 19):
-        return "capricorn"
-
-    # Check remaining signs by boundary
-    for sign, (cutoff_month, cutoff_day) in ZODIAC_BOUNDARIES:
-        if month == cutoff_month and day < cutoff_day:
+    key = (birthday.month, birthday.day)
+    for sign, start in SIGN_STARTS:
+        if key >= start:
             return sign
-
-    return "aquarius"  # fallback (shouldn't be reached)
+    return "capricorn"  # Jan 1 – Jan 19
 
 
 def validate_sign(sign: str) -> str:
@@ -101,19 +98,23 @@ def sanitize_forecast(raw_forecast: str, max_chars: int = 500) -> str:
     return text or "Forecast not available today."
 
 
-def fetch_forecast(sign: str, forecast_date: date) -> str:
-    """Fetch and extract today's forecast for a given sign."""
-    sign = validate_sign(sign)
-    url = f"https://astroclaw.xyz/forecasts/{forecast_date}/{sign}/"
-    with urllib.request.urlopen(url, timeout=15) as resp:
-        html = resp.read().decode()
+def fetch_forecast(sign: str, forecast_date: date | None = None) -> tuple[str, str]:
+    """Fetch a forecast; returns (forecast date, sanitized text).
 
-    m = re.search(
-        r'id="horoscope-content"[^>]*>\s*\n\s*(.*?)\s*\n\s*</div>',
-        html, re.DOTALL
-    )
-    forecast = m.group(1).strip() if m else "Forecast not available today."
-    return sanitize_forecast(forecast)
+    Without a date this reads the latest published forecast, which avoids 404s
+    around midnight UTC and in time zones ahead of UTC.
+    """
+    sign = validate_sign(sign)
+    if forecast_date:
+        url = f"{API_BASE}/api/forecasts/{forecast_date}/{sign}.json"
+    else:
+        url = f"{API_BASE}/api/forecasts/today/{sign}.json"
+
+    request = urllib.request.Request(url, headers={"X-Astroclaw-Agent": "astroclaw-skill-script"})
+    with urllib.request.urlopen(request, timeout=15) as resp:
+        data = json.load(resp)
+
+    return data["date"], sanitize_forecast(data.get("horoscope", ""))
 
 
 def main():
@@ -130,7 +131,7 @@ def main():
     )
     parser.add_argument(
         "--date", "-d",
-        help="Forecast date (YYYY-MM-DD). Defaults to today."
+        help="Forecast date (YYYY-MM-DD). Defaults to the latest published forecast."
     )
     args = parser.parse_args()
 
@@ -154,12 +155,12 @@ def main():
     else:
         sign = "aquarius"  # no birthday set, sensible default
 
-    # Forecast date
-    forecast_date = date.fromisoformat(args.date) if args.date else date.today()
+    # Forecast date (None means the latest published forecast)
+    forecast_date = date.fromisoformat(args.date) if args.date else None
 
     # Fetch
     try:
-        forecast = fetch_forecast(sign, forecast_date)
+        published_date, forecast = fetch_forecast(sign, forecast_date)
     except Exception as e:
         print(f"⚠️  AstroClaw fetch failed: {e}")
         sys.exit(1)
@@ -171,7 +172,7 @@ def main():
         print(f"Sign: {sign.title()} (born {birthday})")
     else:
         print(f"Sign: {sign.title()}")
-    print(f"Date: {forecast_date}")
+    print(f"Date: {published_date}")
     print()
     print(forecast)
     print()

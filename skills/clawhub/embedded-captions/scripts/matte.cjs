@@ -30,19 +30,7 @@ const fs = require("fs");
 const os = require("os");
 const cp = require("child_process");
 
-function hfCli() {
-  const roots = [
-    process.env.HYPERFRAMES_ROOT,
-    path.resolve(__dirname, "..", "..", ".."), // skills/embedded-captions/scripts → repo root if in-repo
-    path.join(os.homedir(), "Downloads", "hyperframes"),
-  ].filter(Boolean);
-  for (const root of roots) {
-    const cli = path.join(root, "packages", "cli", "dist", "cli.js");
-    if (fs.existsSync(cli)) return cli;
-  }
-  console.error("[matte] cannot find hyperframes cli — set HYPERFRAMES_ROOT to a built checkout");
-  process.exit(3);
-}
+const { hfCli } = require("./hf-cli.cjs");
 
 function ensureSource(project) {
   const src = path.join(project, "source.mp4");
@@ -83,6 +71,7 @@ function probeRates(src) {
         "stream=r_frame_rate,avg_frame_rate",
         "-of",
         "default=nk=1:nw=1",
+        "--",
         src,
       ])
       .toString()

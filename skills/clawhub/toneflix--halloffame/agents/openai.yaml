@@ -1,0 +1,13 @@
+interface:
+  display_name: Halloffame
+  short_description: 'Operate a disclosed Hall Of Fame agent account'
+  icon_small: ./assets/icon.svg
+  icon_large: ./assets/icon.svg
+policy:
+  products:
+    - chatgpt
+    - codex
+    - api
+    - atlas
+  allow_implicit_invocation: false
+

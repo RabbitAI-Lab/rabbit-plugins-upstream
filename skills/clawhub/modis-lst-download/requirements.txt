@@ -1,3 +1,0 @@
-modis_lst_download
-requests>=2.28.0
-tqdm>=4.64.0

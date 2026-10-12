@@ -1,41 +1,57 @@
-## Description: <br>
-AI-powered financial industry training and coaching system for skill assessment, personalized learning paths, role-play exercises, quizzes, and performance tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps financial institutions draft staff training curricula, learning paths, skill assessments, role-play exercises, quizzes, and training-effectiveness plans.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial institution training teams use this skill to assess employee skills, create personalized finance learning paths, run role-play practice, generate quizzes and curricula, and summarize learning progress. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad bilingual trigger wording may activate this skill for ambiguous training or quiz requests. <br>
-Mitigation: Review trigger terms during installation and prefer narrower finance-specific routing where multiple training skills are available. <br>
-Risk: Finance training or regulatory examples may be mistaken for current official guidance. <br>
-Mitigation: Treat generated curricula and compliance examples as educational drafts and verify current requirements against official sources before use. <br>
+## Use Case:
 
+Financial institution training teams use this skill to draft internal staff curricula, personalized learning paths, assessment questions, role-play scripts, and training-effectiveness tracking. Outputs are educational drafts for training and compliance review, not investment advice or personnel decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/finance-training-coach) <br>
-- [Bundled skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown training plans, role-play scenarios, quizzes, assessments, and learning reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only skill; no code execution, credential access, persistence, or local/external data access requested by the release security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Customer records, call transcripts, employee information, or live holdings could be exposed in training prompts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use fictional or de-identified examples; do not paste real customer records, full transcripts, sensitive employee data, or live holdings.
+
+Risk: Investment examples or generated compliance material could be mistaken for actionable financial guidance.
+
+Mitigation: Keep stock-analysis examples educational only and have training or compliance owners review drafts before use.
+
+Risk: Assessment feedback could be misused for personnel decisions or shared without appropriate review.
+
+Mitigation: Keep feedback for training purposes, follow institutional data-handling policies, and leave personnel decisions to authorized staff.
+
+## Reference(s):
+
+- [Finance Training Coach release on ClawHub](https://clawhub.ai/gechengling/skills/finance-training-coach)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown training plans, quiz questions, role-play scripts, and assessment feedback]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft materials require institutional training and compliance review before use.]
+
+## Skill Version(s):
+
+5.0.2 (source: SKILL.md frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

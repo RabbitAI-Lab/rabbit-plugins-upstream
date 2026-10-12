@@ -6,7 +6,7 @@ last-reviewed: 2026-07-09
 
 # mixrank (Mixrank)
 
-Premium person/company enrichment — two actions, both **4 credits**, the most expensive general enrichers in the catalog (above `peopleDataLabs` at 3, `cargo.enrichProspectDetails` at 2, `waterfall.enrichCompany` at 1). Its earner is identifier flexibility: `findPerson` matches from **any** of email, phone, name (+ company), or social URL — including **phone-only reverse lookup**, which the cheaper chain doesn't do. Treat it as the last backfill rung, never the first stop.
+Premium person/company enrichment — two actions, both **4 credits**, the most expensive general enrichers in the catalog (above `peopleDataLabs` at 3, `waterfall.enrichContact` at 2, `waterfall.enrichCompany` at 1). Its earner is identifier flexibility: `findPerson` matches from **any** of email, phone, name (+ company), or social URL — including **phone-only reverse lookup**, which the cheaper chain doesn't do. Treat it as the last backfill rung, never the first stop.
 
 ## Credits-based actions
 
@@ -18,7 +18,7 @@ Premium person/company enrichment — two actions, both **4 credits**, the most 
 ## What it's for
 
 - ✅ **Reverse-phone lookup** — `findPerson` with just `phone` identifies who a number belongs to; no cheaper action in the catalog takes phone as an input key.
-- ✅ **Weak-identifier person backfill** — rows where cargo native (2) and `waterfall` missed and all you have is a name + company or a stray social URL.
+- ✅ **Weak-identifier person backfill** — rows where `aiArk` (0.1) and `waterfall` (2) missed and all you have is a name + company or a stray social URL.
 - ✅ **Company resolution from a bare name** — `findCompany` with `name` only, when there's no domain to key on (though `oceanio.enrichCompany` at 1 also takes weak identifiers — try it first).
 - ❌ **Default ENRICH rung** — at 4 credits it's 2–4× the standard chain; a 1,000-row batch through mixrank is 4,000 credits.
 - ❌ **Email/phone *finding*** — mixrank resolves *who someone is* from an identifier; to find missing emails/phones, use the CONTACT chains (`FullEnrich`, `prospeo`, …).
@@ -29,7 +29,7 @@ Premium person/company enrichment — two actions, both **4 credits**, the most 
 
 ```bash
 cargo-ai orchestration action execute \
-  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson"}' \
   --data '{"phone":"+14155551234"}' \
   --wait-until-finished
 ```
@@ -39,7 +39,7 @@ cargo-ai orchestration action execute \
 ```bash
 # Only on rows the cheaper enrich rungs missed
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson","config":{}}' \
+  --action '{"kind":"connector","integrationSlug":"mixrank","actionSlug":"findPerson"}' \
   --records '[
     {"firstName":"Alice","lastName":"Smith","companyName":"Acme","domain":"acme.com"},
     {"socialUrl":"https://linkedin.com/in/bobjones"}
@@ -57,11 +57,18 @@ Stack every identifier you have per row — more keys, better match confidence a
 
 ## Position in the waterfall
 
-**ENRICH stage, last rung.** Person: `linkedin.enrichProfile` (0.25) → `cargo.enrichProspectDetails` (2) → `peopleDataLabs` (3) → **mixrank (4)**. Company: `waterfall.enrichCompany` / `oceanio.enrichCompany` (1) → `peopleDataLabs.enrichCompany` (3) → **mixrank (4)**. Promote it out of order only for the phone-keyed niche. See [`../references/stage-action-map.md`](../references/stage-action-map.md).
+**ENRICH stage, last rung.** Person: `aiArk.enrichPerson` (0.1) → `linkedin.enrichProfile` (0.25) → `waterfall.enrichContact` (2) → `peopleDataLabs` (3) → **mixrank (4)**. Company: `waterfall.enrichCompany` / `oceanio.enrichCompany` (1) → `peopleDataLabs.enrichCompany` (3) → **mixrank (4)**. Promote it out of order only for the phone-keyed niche. See [`../references/stage-action-map.md`](../references/stage-action-map.md).
+
+## Recurring use
+
+No scheduled fit — **last-rung, per-record backfill only**; at 4 credits a recurring blanket pass is the fastest way to torch a budget.
+
+- **In-play gate:** double gate — run only where the cheaper rungs' output fields are still empty *and* at least one identifier is present (the no-required-fields pitfall means an empty row bills 4 credits on every re-evaluation).
+- **Time-sensitivity:** identity resolution is stable — re-running `findPerson` / `findCompany` on a matched row re-buys the same answer, and fixed-cost-on-miss means even a "retry later" pass must be deliberately scoped.
 
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"mixrank","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`.**
+`{"kind":"connector","integrationSlug":"mixrank","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`.**
 
 ## Pairs with
 

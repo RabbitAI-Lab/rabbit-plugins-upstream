@@ -1,0 +1,2606 @@
+[CmdletBinding()]
+param(
+  [Parameter(Mandatory = $true)]
+  [ValidateSet("Preflight", "InspectState", "InspectSourceFile", "ProtectState", "PrepareWsl", "ProvisionRainbond", "ConvergeInstalledPlatform", "InstallMachineBundle", "EnableWsl", "UpdateWsl", "VerifyWsl", "RegisterResume", "RegisterFinalize", "RequestReboot", "Finalize", "ImportDistro", "PrepareRuntime", "ConfigureNetwork", "VerifyNetwork", "PrepareDocker", "InstallRainbond", "VerifyDeployment", "WslKeepalive")]
+  [string]$Action,
+
+  [string]$RequestPath = "",
+
+  [string]$ResultPath = "",
+
+  [string]$TargetPath = "",
+
+  [ValidateSet("file", "directory")]
+  [string]$ExpectedKind = "file",
+
+  [string]$UserSid = "",
+
+  [string]$UserHome = ""
+)
+
+$ErrorActionPreference = "Stop"
+Set-StrictMode -Version Latest
+try {
+  $utf8Encoding = [Text.UTF8Encoding]::new($false)
+  [Console]::OutputEncoding = $utf8Encoding
+  $OutputEncoding = $utf8Encoding
+} catch {
+  # Keep the current Windows code page if this host does not expose a console.
+}
+
+function Assert-PathInsideRoot([string]$Candidate, [string]$Root) {
+  $candidateFull = [IO.Path]::GetFullPath($Candidate).TrimEnd("\")
+  $rootFull = [IO.Path]::GetFullPath($Root).TrimEnd("\")
+  if (-not $candidateFull.Equals($rootFull, [StringComparison]::OrdinalIgnoreCase) -and
+      -not $candidateFull.StartsWith($rootFull + "\", [StringComparison]::OrdinalIgnoreCase)) {
+    throw "TargetPath must stay inside UserHome"
+  }
+  return $candidateFull
+}
+
+function Convert-IdentityToSid($IdentityReference) {
+  $value = [string]$IdentityReference
+  if ($value -match "^S-\d-") { return $value }
+  $account = [Security.Principal.NTAccount]::new($value)
+  return $account.Translate([Security.Principal.SecurityIdentifier]).Value
+}
+
+function Get-StateAcl([string]$PathValue, [string]$Kind) {
+  if ($Kind -eq "directory") { return [IO.Directory]::GetAccessControl($PathValue) }
+  return [IO.File]::GetAccessControl($PathValue)
+}
+
+function Set-StateAcl([string]$PathValue, [string]$Kind, $Acl) {
+  if ($Kind -eq "directory") {
+    [IO.Directory]::SetAccessControl($PathValue, $Acl)
+    return
+  }
+  [IO.File]::SetAccessControl($PathValue, $Acl)
+}
+
+$sourceFileInspectorType = @'
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Runtime.InteropServices;
+using System.Security.AccessControl;
+using System.Security.Cryptography;
+using Microsoft.Win32.SafeHandles;
+
+public sealed class SourceFileFacts {
+  public string ownerSid { get; set; }
+  public string[] writableSids { get; set; }
+  public string[] readableSids { get; set; }
+  public bool reparsePoint { get; set; }
+  public string fileIdentity { get; set; }
+}
+
+public static class SourceFileInspector {
+  private const uint GENERIC_READ = 0x80000000;
+  private const uint READ_CONTROL = 0x00020000;
+  private const uint FILE_SHARE_READ = 0x00000001;
+  private const uint OPEN_EXISTING = 3;
+  private const uint FILE_FLAG_OPEN_REPARSE_POINT = 0x00200000;
+  private const uint FILE_ATTRIBUTE_DIRECTORY = 0x00000010;
+  private const uint FILE_ATTRIBUTE_DEVICE = 0x00000040;
+  private const uint FILE_ATTRIBUTE_REPARSE_POINT = 0x00000400;
+  private const uint OWNER_SECURITY_INFORMATION = 0x00000001;
+  private const uint DACL_SECURITY_INFORMATION = 0x00000004;
+  private const uint SDDL_REVISION_1 = 1;
+  private const uint WRITE_MASK = 0x00000002 | 0x00000004 | 0x00010000 | 0x00040000 | 0x00080000 | 0x40000000 | 0x10000000;
+  private const uint READ_MASK = 0x00000001 | 0x00000008 | 0x00000080 | 0x00020000 | 0x80000000 | 0x10000000;
+
+  [StructLayout(LayoutKind.Sequential)]
+  private struct FILETIME {
+    public uint Low;
+    public uint High;
+  }
+
+  [StructLayout(LayoutKind.Sequential)]
+  private struct BY_HANDLE_FILE_INFORMATION {
+    public uint FileAttributes;
+    public FILETIME CreationTime;
+    public FILETIME LastAccessTime;
+    public FILETIME LastWriteTime;
+    public uint VolumeSerialNumber;
+    public uint FileSizeHigh;
+    public uint FileSizeLow;
+    public uint NumberOfLinks;
+    public uint FileIndexHigh;
+    public uint FileIndexLow;
+  }
+
+  [DllImport("kernel32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+  private static extern SafeFileHandle CreateFileW(
+    string fileName,
+    uint desiredAccess,
+    uint shareMode,
+    IntPtr securityAttributes,
+    uint creationDisposition,
+    uint flagsAndAttributes,
+    IntPtr templateFile
+  );
+
+  [DllImport("kernel32.dll", SetLastError = true)]
+  [return: MarshalAs(UnmanagedType.Bool)]
+  private static extern bool GetFileInformationByHandle(
+    SafeFileHandle file,
+    out BY_HANDLE_FILE_INFORMATION information
+  );
+
+  [DllImport("advapi32.dll", SetLastError = true)]
+  private static extern uint GetSecurityInfo(
+    SafeFileHandle handle,
+    uint objectType,
+    uint securityInformation,
+    out IntPtr owner,
+    out IntPtr group,
+    out IntPtr dacl,
+    out IntPtr sacl,
+    out IntPtr securityDescriptor
+  );
+
+  [DllImport("advapi32.dll", CharSet = CharSet.Unicode, SetLastError = true)]
+  [return: MarshalAs(UnmanagedType.Bool)]
+  private static extern bool ConvertSecurityDescriptorToStringSecurityDescriptorW(
+    IntPtr securityDescriptor,
+    uint requestedRevision,
+    uint securityInformation,
+    out IntPtr stringSecurityDescriptor,
+    out uint stringSecurityDescriptorLength
+  );
+
+  [DllImport("kernel32.dll")]
+  private static extern IntPtr LocalFree(IntPtr memory);
+
+  public static SourceFileFacts Inspect(string fullPath) {
+    using (SafeFileHandle handle = CreateFileW(
+      fullPath,
+      GENERIC_READ | READ_CONTROL,
+      FILE_SHARE_READ,
+      IntPtr.Zero,
+      OPEN_EXISTING,
+      FILE_FLAG_OPEN_REPARSE_POINT,
+      IntPtr.Zero
+    )) {
+      if (handle.IsInvalid) throw new InvalidOperationException("SourceFileOpenFailed");
+
+      BY_HANDLE_FILE_INFORMATION information;
+      if (!GetFileInformationByHandle(handle, out information)) {
+        throw new InvalidOperationException("SourceFileInformationFailed");
+      }
+      if ((information.FileAttributes & FILE_ATTRIBUTE_REPARSE_POINT) != 0) {
+        throw new InvalidOperationException("SourceFileReparsePointRejected");
+      }
+      if ((information.FileAttributes & (FILE_ATTRIBUTE_DIRECTORY | FILE_ATTRIBUTE_DEVICE)) != 0) {
+        throw new InvalidOperationException("SourceFileKindRejected");
+      }
+
+      IntPtr owner;
+      IntPtr group;
+      IntPtr dacl;
+      IntPtr sacl;
+      IntPtr securityDescriptor;
+      uint securityResult = GetSecurityInfo(
+        handle,
+        1,
+        OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
+        out owner,
+        out group,
+        out dacl,
+        out sacl,
+        out securityDescriptor
+      );
+      if (securityResult != 0 || securityDescriptor == IntPtr.Zero) {
+        throw new InvalidOperationException("SourceFileSecurityFailed");
+      }
+
+      string sddl;
+      IntPtr sddlPointer = IntPtr.Zero;
+      try {
+        uint sddlLength;
+        if (!ConvertSecurityDescriptorToStringSecurityDescriptorW(
+          securityDescriptor,
+          SDDL_REVISION_1,
+          OWNER_SECURITY_INFORMATION | DACL_SECURITY_INFORMATION,
+          out sddlPointer,
+          out sddlLength
+        )) {
+          throw new InvalidOperationException("SourceFileSecurityConversionFailed");
+        }
+        sddl = Marshal.PtrToStringUni(sddlPointer);
+      } finally {
+        if (sddlPointer != IntPtr.Zero) LocalFree(sddlPointer);
+        LocalFree(securityDescriptor);
+      }
+
+      RawSecurityDescriptor descriptor = new RawSecurityDescriptor(sddl);
+      if (descriptor.Owner == null || descriptor.DiscretionaryAcl == null) {
+        throw new InvalidOperationException("SourceFileDaclMissing");
+      }
+      HashSet<string> writable = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+      HashSet<string> readable = new HashSet<string>(StringComparer.OrdinalIgnoreCase);
+      foreach (GenericAce genericAce in descriptor.DiscretionaryAcl) {
+        QualifiedAce qualifiedAce = genericAce as QualifiedAce;
+        KnownAce knownAce = genericAce as KnownAce;
+        if (qualifiedAce == null || knownAce == null || qualifiedAce.AceQualifier != AceQualifier.AccessAllowed) continue;
+        string sid = qualifiedAce.SecurityIdentifier.Value;
+        uint accessMask = unchecked((uint)knownAce.AccessMask);
+        if ((accessMask & WRITE_MASK) != 0) writable.Add(sid);
+        if ((accessMask & READ_MASK) != 0) readable.Add(sid);
+      }
+
+      long length = ((long)information.FileSizeHigh << 32) | information.FileSizeLow;
+      string digest;
+      using (FileStream stream = new FileStream(handle, FileAccess.Read, 4096, false)) {
+        using (SHA256 hasher = SHA256.Create()) {
+          digest = BitConverter.ToString(hasher.ComputeHash(stream)).Replace("-", "").ToLowerInvariant();
+        }
+      }
+      return new SourceFileFacts {
+        ownerSid = descriptor.Owner.Value,
+        writableSids = writable.OrderBy(value => value, StringComparer.OrdinalIgnoreCase).ToArray(),
+        readableSids = readable.OrderBy(value => value, StringComparer.OrdinalIgnoreCase).ToArray(),
+        reparsePoint = false,
+        fileIdentity = "sha256:" + digest + ":" + length.ToString()
+      };
+    }
+  }
+}
+'@
+
+if ($Action -eq "InspectSourceFile") {
+  Add-Type -TypeDefinition $sourceFileInspectorType -Language CSharp
+}
+
+function Get-StateAclFacts([string]$PathValue, [string]$Kind, [string]$HomeValue, [bool]$RequireInsideHome = $true) {
+  $fullPath = if ($RequireInsideHome) {
+    Assert-PathInsideRoot $PathValue $HomeValue
+  } else {
+    [IO.Path]::GetFullPath($PathValue)
+  }
+  $stream = $null
+  try {
+    if ($Kind -eq "file") {
+      $stream = [IO.File]::Open($fullPath, [IO.FileMode]::Open, [IO.FileAccess]::Read, [IO.FileShare]::Read)
+    }
+    $item = Get-Item -LiteralPath $fullPath -Force
+    if (($Kind -eq "file" -and $item.PSIsContainer) -or ($Kind -eq "directory" -and -not $item.PSIsContainer)) {
+      throw "TargetPath kind mismatch"
+    }
+    $reparsePoint = [bool]($item.Attributes -band [IO.FileAttributes]::ReparsePoint)
+    $acl = Get-StateAcl $fullPath $Kind
+    $writeMask = [Security.AccessControl.FileSystemRights]::WriteData -bor
+      [Security.AccessControl.FileSystemRights]::CreateFiles -bor
+      [Security.AccessControl.FileSystemRights]::AppendData -bor
+      [Security.AccessControl.FileSystemRights]::Delete -bor
+      [Security.AccessControl.FileSystemRights]::ChangePermissions -bor
+      [Security.AccessControl.FileSystemRights]::TakeOwnership
+    $readMask = [Security.AccessControl.FileSystemRights]::ReadData -bor
+      [Security.AccessControl.FileSystemRights]::ReadAttributes -bor
+      [Security.AccessControl.FileSystemRights]::ReadExtendedAttributes -bor
+      [Security.AccessControl.FileSystemRights]::ReadPermissions
+    $writableSids = @($acl.Access |
+      Where-Object {
+        $_.AccessControlType -eq [Security.AccessControl.AccessControlType]::Allow -and
+        ([int64]$_.FileSystemRights -band [int64]$writeMask) -ne 0
+      } |
+      ForEach-Object { Convert-IdentityToSid $_.IdentityReference } |
+      Sort-Object -Unique)
+    $readableSids = @($acl.Access |
+      Where-Object {
+        $_.AccessControlType -eq [Security.AccessControl.AccessControlType]::Allow -and
+        ([int64]$_.FileSystemRights -band [int64]$readMask) -ne 0
+      } |
+      ForEach-Object { Convert-IdentityToSid $_.IdentityReference } |
+      Sort-Object -Unique)
+    $fileIdentity = $null
+    if ($Kind -eq "file" -and -not $reparsePoint) {
+      $hasher = [Security.Cryptography.SHA256]::Create()
+      try {
+        $digest = [BitConverter]::ToString($hasher.ComputeHash($stream)).Replace("-", "").ToLowerInvariant()
+      } finally {
+        $hasher.Dispose()
+      }
+      $fileIdentity = "sha256:${digest}:$($stream.Length)"
+    }
+    return [ordered]@{
+      ownerSid = Convert-IdentityToSid $acl.Owner
+      writableSids = $writableSids
+      readableSids = $readableSids
+      reparsePoint = $reparsePoint
+      fileIdentity = $fileIdentity
+    }
+  } finally {
+    if ($null -ne $stream) { $stream.Dispose() }
+  }
+}
+
+function Protect-StatePath([string]$PathValue, [string]$Kind, [string]$Sid, [string]$HomeValue) {
+  if ([Security.Principal.WindowsIdentity]::GetCurrent().User.Value -ne $Sid) {
+    throw "ProtectState SID does not match the current user"
+  }
+  $fullPath = Assert-PathInsideRoot $PathValue $HomeValue
+  $item = Get-Item -LiteralPath $fullPath -Force
+  if (($Kind -eq "file" -and $item.PSIsContainer) -or ($Kind -eq "directory" -and -not $item.PSIsContainer)) {
+    throw "TargetPath kind mismatch"
+  }
+  if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) { throw "TargetPath may not be a reparse point" }
+
+  $acl = Get-StateAcl $fullPath $Kind
+  $acl.SetAccessRuleProtection($true, $false)
+  foreach ($rule in @($acl.Access)) { [void]$acl.RemoveAccessRuleAll($rule) }
+  $owner = [Security.Principal.SecurityIdentifier]::new($Sid)
+  $acl.SetOwner($owner)
+  $inheritance = if ($Kind -eq "directory") {
+    [Security.AccessControl.InheritanceFlags]::ContainerInherit -bor [Security.AccessControl.InheritanceFlags]::ObjectInherit
+  } else {
+    [Security.AccessControl.InheritanceFlags]::None
+  }
+  foreach ($writerSid in @($Sid, "S-1-5-18", "S-1-5-32-544")) {
+    $identity = [Security.Principal.SecurityIdentifier]::new($writerSid)
+    $rule = [Security.AccessControl.FileSystemAccessRule]::new(
+      $identity,
+      [Security.AccessControl.FileSystemRights]::FullControl,
+      $inheritance,
+      [Security.AccessControl.PropagationFlags]::None,
+      [Security.AccessControl.AccessControlType]::Allow
+    )
+    [void]$acl.AddAccessRule($rule)
+  }
+  Set-StateAcl $fullPath $Kind $acl
+}
+
+if ($Action -eq "InspectState" -or $Action -eq "InspectSourceFile" -or $Action -eq "ProtectState") {
+  if ([string]::IsNullOrWhiteSpace($TargetPath) -or [string]::IsNullOrWhiteSpace($UserHome) -or
+      [string]$UserSid -notmatch "^S-\d-(?:\d+-)+\d+$") {
+    throw "State action parameters are invalid"
+  }
+  if ($Action -eq "ProtectState") { Protect-StatePath $TargetPath $ExpectedKind $UserSid $UserHome }
+  $aclFacts = if ($Action -eq "InspectSourceFile") {
+    if ($ExpectedKind -ne "file") { throw "InspectSourceFile kind mismatch" }
+    [SourceFileInspector]::Inspect([IO.Path]::GetFullPath($TargetPath))
+  } else {
+    Get-StateAclFacts $TargetPath $ExpectedKind $UserHome
+  }
+  if ($Action -eq "InspectState" -or $Action -eq "InspectSourceFile") { $aclFacts | ConvertTo-Json -Depth 4 -Compress }
+  exit 0
+}
+
+function Get-Origin([string]$Value) {
+  return ([System.Uri]$Value).GetLeftPart([System.UriPartial]::Authority)
+}
+
+function Test-OriginReachability([string]$Origin, [string[]]$AllowedOrigins) {
+  $current = $Origin
+  $redirects = @()
+  for ($attempt = 0; $attempt -lt 5; $attempt += 1) {
+    try {
+      $response = Invoke-WebRequest -Uri $current -Method Head -MaximumRedirection 0 -UseBasicParsing -TimeoutSec 15
+      return [ordered]@{ origin = $Origin; reachable = $true; redirectOrigins = $redirects }
+    } catch {
+      $responseProperty = $_.Exception.PSObject.Properties["Response"]
+      $webResponse = if ($null -ne $responseProperty) { $responseProperty.Value } else { $null }
+      if ($null -eq $webResponse) {
+        return [ordered]@{ origin = $Origin; reachable = $false; redirectOrigins = $redirects }
+      }
+      $statusCode = [int]$webResponse.StatusCode
+      if ($statusCode -ge 400 -and $statusCode -lt 500) {
+        return [ordered]@{ origin = $Origin; reachable = $true; redirectOrigins = $redirects }
+      }
+      if ($statusCode -lt 300 -or $statusCode -ge 500) {
+        return [ordered]@{ origin = $Origin; reachable = $false; redirectOrigins = $redirects }
+      }
+      $location = [string]$webResponse.Headers["Location"]
+      if ([string]::IsNullOrWhiteSpace($location)) {
+        return [ordered]@{ origin = $Origin; reachable = $false; redirectOrigins = $redirects }
+      }
+      $next = [System.Uri]::new([System.Uri]$current, $location)
+      $nextOrigin = $next.GetLeftPart([System.UriPartial]::Authority)
+      $redirects += $nextOrigin
+      if ($AllowedOrigins -notcontains $nextOrigin) {
+        return [ordered]@{ origin = $Origin; reachable = $true; redirectOrigins = $redirects }
+      }
+      $current = $next.AbsoluteUri
+    }
+  }
+  return [ordered]@{ origin = $Origin; reachable = $false; redirectOrigins = $redirects }
+}
+
+function Convert-IPv4ToInteger([string]$Address) {
+  $parts = @($Address.Split(".") | ForEach-Object { [uint64][int]$_ })
+  if ($parts.Count -ne 4 -or @($parts | Where-Object { $_ -gt 255 }).Count -gt 0) {
+    throw "Invalid IPv4 address: $Address"
+  }
+  return ($parts[0] * 16777216) + ($parts[1] * 65536) + ($parts[2] * 256) + $parts[3]
+}
+
+function Get-CidrRange([string]$Prefix) {
+  $values = $Prefix.Split("/", 2)
+  if ($values.Count -ne 2) { throw "Invalid IPv4 prefix: $Prefix" }
+  $prefixLength = [int]$values[1]
+  if ($prefixLength -lt 0 -or $prefixLength -gt 32) { throw "Invalid IPv4 prefix: $Prefix" }
+  $address = Convert-IPv4ToInteger $values[0]
+  $hostBits = 32 - $prefixLength
+  $size = [uint64][Math]::Pow(2, $hostBits)
+  $start = [uint64]([Math]::Floor($address / $size) * $size)
+  return [ordered]@{ start = $start; end = $start + $size - 1; prefixLength = $prefixLength }
+}
+
+function Test-CidrOverlap([string]$Left, [string]$Right) {
+  $leftRange = Get-CidrRange $Left
+  $rightRange = Get-CidrRange $Right
+  return $leftRange.start -le $rightRange.end -and $rightRange.start -le $leftRange.end
+}
+
+function Get-AvailableSubnet {
+  $routePrefixes = @(Get-NetRoute -AddressFamily IPv4 -ErrorAction SilentlyContinue |
+    ForEach-Object { [string]$_.DestinationPrefix } |
+    Where-Object { $_ -and $_ -ne "0.0.0.0/0" })
+  for ($octet = 255; $octet -ge 1; $octet -= 1) {
+    $candidate = "172.31.$octet.0/30"
+    $overlaps = @($routePrefixes | Where-Object { Test-CidrOverlap $candidate $_ })
+    if ($overlaps.Count -eq 0) { return $candidate }
+  }
+  return $null
+}
+
+function Get-PortProxyTuples {
+  $tuples = @()
+  foreach ($line in @(netsh.exe interface portproxy show v4tov4 2>$null)) {
+    if ([string]$line -match "^\s*(\S+)\s+(\d+)\s+(\S+)\s+(\d+)\s*$") {
+      $tuples += [ordered]@{
+        listenAddress = $Matches[1]
+        listenPort = [int]$Matches[2]
+        connectAddress = $Matches[3]
+        connectPort = [int]$Matches[4]
+      }
+    }
+  }
+  return $tuples
+}
+
+function Invoke-Preflight($Request) {
+  $operatingSystem = Get-CimInstance Win32_OperatingSystem
+  $computer = Get-CimInstance Win32_ComputerSystem
+  $processors = @(Get-CimInstance Win32_Processor)
+  $systemDrive = Get-CimInstance Win32_LogicalDisk -Filter "DeviceID='$($operatingSystem.SystemDrive)'"
+  $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+  $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+  $tokenElevated = $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+  $groupOutput = (& "$env:SystemRoot\System32\whoami.exe" /groups /fo csv /nh 2>$null | Out-String)
+  $isAdministrator = $groupOutput -match "S-1-5-32-544"
+  $uacValue = Get-ItemPropertyValue -Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Policies\System" -Name EnableLUA -ErrorAction SilentlyContinue
+  $wslCommand = Get-Command "$env:SystemRoot\System32\wsl.exe" -ErrorAction SilentlyContinue
+  $wslInstalled = $null -ne $wslCommand
+  $wslStatus = ""
+  $distroNames = @()
+  if ($wslInstalled) {
+    $statusProbe = Invoke-NativeCapture $wslCommand.Source @("--status")
+    $wslStatus = $statusProbe.output
+    $listProbe = Invoke-NativeCapture $wslCommand.Source @("--list", "--quiet")
+    if ($listProbe.exitCode -eq 0) {
+      $distroNames = @($listProbe.output -split "`r?`n" | ForEach-Object { [string]$_ -replace "\u0000", "" } | Where-Object { $_ })
+    }
+  }
+  $networkingMode = "nat"
+  $wslConfig = Join-Path ([Environment]::GetFolderPath("UserProfile")) ".wslconfig"
+  if (Test-Path -LiteralPath $wslConfig -PathType Leaf) {
+    $networkLine = Get-Content -LiteralPath $wslConfig | Where-Object { $_ -match "^\s*networkingMode\s*=" } | Select-Object -Last 1
+    if ($networkLine) { $networkingMode = (($networkLine -split "=", 2)[1]).Trim().ToLowerInvariant() }
+  }
+
+  $managedPorts = @($Request.policy.windows.managed_ports | ForEach-Object { [int]$_ })
+  $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue | ForEach-Object {
+    [ordered]@{ address = [string]$_.LocalAddress; port = [int]$_.LocalPort; pid = [int]$_.OwningProcess }
+  })
+  $occupiedPorts = @($listeners | Where-Object { $managedPorts -contains $_.port } | ForEach-Object { $_.port } | Sort-Object -Unique)
+  $portProxyTuples = @(Get-PortProxyTuples)
+  $scheduledTasks = @(Get-ScheduledTask -TaskName "RainSkills-*" -ErrorAction SilentlyContinue | ForEach-Object { $_.TaskName })
+  $programDataRoot = Join-Path $env:ProgramData "RainSkills"
+  $unknownObjects = @()
+  if ($distroNames -contains [string]$Request.policy.windows.distro_name) { $unknownObjects += "distro:$($Request.policy.windows.distro_name)" }
+  if ($scheduledTasks.Count -gt 0) { $unknownObjects += @($scheduledTasks | ForEach-Object { "task:$_" }) }
+  if (Test-Path -LiteralPath $programDataRoot) { $unknownObjects += "directory:$programDataRoot" }
+
+  $allowedOrigins = @($Request.policy.windows.preflight_allowed_origins | ForEach-Object { Get-Origin ([string]$_) })
+  $originChecks = @($allowedOrigins | ForEach-Object { Test-OriginReachability $_ $allowedOrigins })
+  $architecture = if ($env:PROCESSOR_ARCHITECTURE -eq "AMD64") { "x64" } else { $env:PROCESSOR_ARCHITECTURE.ToLowerInvariant() }
+  $rebootPending = (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending") -or
+    (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired")
+
+  return [ordered]@{
+    productType = if ([int]$operatingSystem.ProductType -eq 1) { "workstation" } else { "server" }
+    buildNumber = [int]$operatingSystem.BuildNumber
+    architecture = $architecture
+    currentUserSid = $identity.User.Value
+    localAppData = [Environment]::GetFolderPath("LocalApplicationData")
+    isAdministrator = [bool]$isAdministrator
+    uacEnabled = [bool]([int]$uacValue -eq 1)
+    cpuCores = [int]$computer.NumberOfLogicalProcessors
+    memoryBytes = [long]$computer.TotalPhysicalMemory
+    diskBytes = [long]$systemDrive.FreeSpace
+    virtualizationEnabled = [bool]($computer.HypervisorPresent -or @($processors | Where-Object { $_.VirtualizationFirmwareEnabled }).Count -gt 0)
+    tokenElevated = [bool]$tokenElevated
+    rebootPending = [bool]$rebootPending
+    wslInstalled = [bool]$wslInstalled
+    wslDefaultVersion = if ($wslStatus -match "(?im)default version:\s*(\d+)") { [int]$Matches[1] } else { $null }
+    wslNetworkingMode = $networkingMode
+    occupiedPorts = $occupiedPorts
+    unknownManagedObjects = $unknownObjects
+    availableSubnet = Get-AvailableSubnet
+    originChecks = $originChecks
+    listeners = $listeners
+    portProxyTuples = $portProxyTuples
+    distroNames = $distroNames
+    scheduledTasks = $scheduledTasks
+  }
+}
+
+function Test-IsElevated {
+  $identity = [Security.Principal.WindowsIdentity]::GetCurrent()
+  $principal = [Security.Principal.WindowsPrincipal]::new($identity)
+  return $principal.IsInRole([Security.Principal.WindowsBuiltInRole]::Administrator)
+}
+
+function Get-PropertyValue($Object, [string]$Name, $DefaultValue = $null) {
+  if ($null -ne $Object -and $Object.PSObject.Properties.Name -contains $Name) { return $Object.$Name }
+  return $DefaultValue
+}
+
+function Invoke-NativeCapture([string]$FilePath, [string[]]$Arguments) {
+  $previousPreference = $ErrorActionPreference
+  $output = ""
+  $exitCode = 1
+  try {
+    # Some inbox WSL probes write expected compatibility errors to stderr.
+    $ErrorActionPreference = "Continue"
+    $output = (& $FilePath @Arguments 2>&1 | Out-String)
+    $exitCode = $LASTEXITCODE
+  } finally {
+    $ErrorActionPreference = $previousPreference
+  }
+  return [ordered]@{
+    output = [string]$output
+    exitCode = [int]$exitCode
+  }
+}
+
+function Assert-NoExecutableFields($Value) {
+  if ($null -eq $Value -or $Value -is [string] -or $Value.GetType().IsPrimitive) { return }
+  if ($Value -is [Collections.IDictionary]) {
+    foreach ($key in $Value.Keys) {
+      if ([string]$key -match "^(?i:command|script)$") { throw "Request may not contain command or script" }
+      Assert-NoExecutableFields $Value[$key]
+    }
+    return
+  }
+  if ($Value -is [Collections.IEnumerable]) {
+    foreach ($item in $Value) { Assert-NoExecutableFields $item }
+    return
+  }
+  foreach ($property in @($Value.PSObject.Properties)) {
+    if ($property.Name -match "^(?i:command|script)$") { throw "Request may not contain command or script" }
+    Assert-NoExecutableFields $property.Value
+  }
+}
+
+function Write-ActionResult($Request, $Facts, [string]$Status = "ok") {
+  $result = [ordered]@{
+    schema = "rainskills.windows-result.v1"
+    action = $Action
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    nonce = $Request.nonce
+    status = $Status
+    facts = $Facts
+  }
+  $json = $result | ConvertTo-Json -Depth 16
+  [IO.File]::WriteAllText($ResultPath, $json + [Environment]::NewLine, [Text.UTF8Encoding]::new($false))
+}
+
+function Write-ActionErrorResult($Request, $ErrorRecord) {
+  $message = ([string]$ErrorRecord.Exception.Message -replace '[\x00-\x08\x0b\x0c\x0e-\x1f\x7f]', ' ').Trim()
+  if ([string]::IsNullOrWhiteSpace($message)) { $message = "Unknown Windows helper failure" }
+  if ($message.Length -gt 2000) { $message = $message.Substring(0, 2000) }
+  Write-ActionResult $Request ([ordered]@{
+    failedAction = $Action
+    failureMessage = $message
+  }) "error"
+}
+
+function Read-ActionResult($Request) {
+  if (-not (Test-Path -LiteralPath $ResultPath -PathType Leaf)) { return $null }
+  $resultInfo = Get-Item -LiteralPath $ResultPath -Force
+  if ($resultInfo.PSIsContainer -or ($resultInfo.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "Elevated Windows helper result must be a regular non-reparse file"
+  }
+  $result = Get-Content -LiteralPath $ResultPath -Raw -Encoding UTF8 | ConvertFrom-Json
+  if ($result.schema -ne "rainskills.windows-result.v1" -or $result.action -ne $Action -or
+      $result.operation_id -ne $Request.operation_id -or
+      $result.installation_id -ne $Request.installation_id -or
+      $result.nonce -ne $Request.nonce) {
+    throw "Elevated Windows helper result identity mismatch"
+  }
+  return $result
+}
+
+function Invoke-ElevatedSelf {
+  foreach ($value in @($PSCommandPath, $RequestPath, $ResultPath)) {
+    if ([string]$value -match '"') { throw "Elevated helper paths may not contain quotes" }
+  }
+  $arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $PSCommandPath +
+    '" -Action ' + $Action + ' -RequestPath "' + $RequestPath + '" -ResultPath "' + $ResultPath + '"'
+  $process = Start-Process -FilePath "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" `
+    -ArgumentList $arguments -Verb RunAs -Wait -PassThru
+  $result = Read-ActionResult $request
+  if ($process.ExitCode -ne 0 -and ($null -eq $result -or $result.status -ne "error")) {
+    throw "Elevated Windows helper failed with exit code $($process.ExitCode)"
+  }
+  if ($null -eq $result) { throw "Elevated Windows helper did not write a result" }
+}
+
+function Get-MachineRoot($Request) {
+  return Join-Path (Join-Path $env:ProgramData "RainSkills") ([string]$Request.installation_id)
+}
+
+function Assert-ManagedMachineRoot([string]$MachineRoot, [string]$InstallationId) {
+  $expectedRoot = [IO.Path]::GetFullPath((Join-Path (Join-Path $env:ProgramData "RainSkills") $InstallationId)).TrimEnd("\")
+  $actualRoot = [IO.Path]::GetFullPath($MachineRoot).TrimEnd("\")
+  if (-not $actualRoot.Equals($expectedRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Machine root is outside the installation-specific ProgramData path"
+  }
+  $item = Get-Item -LiteralPath $actualRoot -Force
+  if (-not $item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "Machine root must be a regular non-reparse directory"
+  }
+}
+
+function Set-MachineItemAcl([string]$PathValue, [bool]$IsDirectory, [string]$OriginalSid) {
+  $acl = if ($IsDirectory) {
+    [Security.AccessControl.DirectorySecurity]::new()
+  } else {
+    [Security.AccessControl.FileSecurity]::new()
+  }
+  $acl.SetAccessRuleProtection($true, $false)
+  $inheritance = if ($IsDirectory) {
+    [Security.AccessControl.InheritanceFlags]::ContainerInherit -bor
+      [Security.AccessControl.InheritanceFlags]::ObjectInherit
+  } else {
+    [Security.AccessControl.InheritanceFlags]::None
+  }
+  foreach ($entry in @(
+    [ordered]@{ sid = "S-1-5-18"; rights = [Security.AccessControl.FileSystemRights]::FullControl },
+    [ordered]@{ sid = "S-1-5-32-544"; rights = [Security.AccessControl.FileSystemRights]::FullControl },
+    [ordered]@{ sid = $OriginalSid; rights = [Security.AccessControl.FileSystemRights]::ReadAndExecute }
+  )) {
+    $rule = [Security.AccessControl.FileSystemAccessRule]::new(
+      [Security.Principal.SecurityIdentifier]::new($entry.sid),
+      $entry.rights,
+      $inheritance,
+      [Security.AccessControl.PropagationFlags]::None,
+      [Security.AccessControl.AccessControlType]::Allow
+    )
+    [void]$acl.AddAccessRule($rule)
+  }
+  if ($IsDirectory) {
+    [IO.Directory]::SetAccessControl($PathValue, $acl)
+  } else {
+    [IO.File]::SetAccessControl($PathValue, $acl)
+  }
+}
+
+function Set-MachineRootAcl([string]$MachineRoot, [string]$OriginalSid) {
+  $items = @((Get-Item -LiteralPath $MachineRoot -Force)) +
+    @(Get-ChildItem -LiteralPath $MachineRoot -Force -Recurse)
+  foreach ($item in $items) {
+    if ($item.Attributes -band [IO.FileAttributes]::ReparsePoint) {
+      throw "ProgramData machine bundle may not contain reparse points"
+    }
+    $takeOwnershipResult = & "$env:SystemRoot\System32\takeown.exe" /f $item.FullName 2>&1
+    if ($LASTEXITCODE -ne 0) {
+      throw "Failed to take temporary ownership of $($item.FullName): $($takeOwnershipResult -join ' ')"
+    }
+    Set-MachineItemAcl $item.FullName $item.PSIsContainer $OriginalSid
+  }
+  $ownerResult = & "$env:SystemRoot\System32\icacls.exe" $MachineRoot /setowner "*S-1-5-32-544" /t 2>&1
+  if ($LASTEXITCODE -ne 0) { throw "Failed to restore ProgramData machine bundle ownership: $($ownerResult -join ' ')" }
+  $verifyResult = & "$env:SystemRoot\System32\icacls.exe" $MachineRoot /verify /t 2>&1
+  if ($LASTEXITCODE -ne 0) { throw "ProgramData machine bundle ACL verification failed: $($verifyResult -join ' ')" }
+}
+
+function Assert-FileDigest([string]$FilePath, [string]$ExpectedDigest) {
+  $item = Get-Item -LiteralPath $FilePath -Force
+  if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "Digest source must be a regular non-reparse file"
+  }
+  $actual = (Get-FileHash -LiteralPath $FilePath -Algorithm SHA256).Hash.ToLowerInvariant()
+  if ($actual -ne ([string]$ExpectedDigest).ToLowerInvariant()) { throw "SHA-256 mismatch for $FilePath" }
+  return $actual
+}
+
+function Assert-FileDigestOneOf([string]$FilePath, [string[]]$ExpectedDigests) {
+  if ($ExpectedDigests.Count -lt 1 -or @($ExpectedDigests | Where-Object { [string]$_ -notmatch "^[a-fA-F0-9]{64}$" }).Count -gt 0) {
+    throw "Machine bundle contains an invalid SHA-256 value"
+  }
+  $item = Get-Item -LiteralPath $FilePath -Force
+  if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "Digest source must be a regular non-reparse file"
+  }
+  $actual = (Get-FileHash -LiteralPath $FilePath -Algorithm SHA256).Hash.ToLowerInvariant()
+  $allowed = @($ExpectedDigests | ForEach-Object { ([string]$_).ToLowerInvariant() })
+  if ($allowed -notcontains $actual) { throw "SHA-256 mismatch for $FilePath" }
+  return $actual
+}
+
+function Write-MachineLease([string]$MachineRoot, $Request) {
+  $leasePath = Join-Path $MachineRoot "lease.json"
+  if (Test-Path -LiteralPath $leasePath) {
+    $leaseInfo = Get-Item -LiteralPath $leasePath -Force
+    if ($leaseInfo.PSIsContainer -or ($leaseInfo.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+      throw "Existing machine lease must be a regular non-reparse file"
+    }
+    $leaseInfo.IsReadOnly = $false
+    Remove-Item -LiteralPath $leasePath -Force
+  }
+  $lease = [ordered]@{
+    schema = "rainskills.windows-machine-lease.v1"
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    original_user_sid = $Request.user_sid
+    nonce = $Request.nonce
+    updated_at = [DateTime]::UtcNow.ToString("o")
+  }
+  [IO.File]::WriteAllText($leasePath, (($lease | ConvertTo-Json -Depth 4) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+}
+
+function Assert-SafePackageVersion([string]$PackageVersion) {
+  if ([string]::IsNullOrWhiteSpace($PackageVersion) -or
+      $PackageVersion.Length -gt 128 -or
+      $PackageVersion -notmatch '^[0-9A-Za-z][0-9A-Za-z.+-]*$') {
+    throw "Invalid package_version"
+  }
+  return $PackageVersion
+}
+
+function Test-RegularMachineBundleFile([string]$FilePath, [string]$Description) {
+  if (-not (Test-Path -LiteralPath $FilePath)) { return $false }
+  $item = Get-Item -LiteralPath $FilePath -Force
+  if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "$Description must be a regular non-reparse file"
+  }
+  return $true
+}
+
+function Restore-MachineBundleFile(
+  [string]$FinalPath,
+  [string]$BackupPath,
+  [bool]$HadExisting,
+  [bool]$Published
+) {
+  if (-not $Published) { return }
+  if ($HadExisting) {
+    if (-not (Test-RegularMachineBundleFile $BackupPath "Machine bundle rollback backup")) {
+      throw "Machine bundle rollback backup is missing"
+    }
+    if (Test-RegularMachineBundleFile $FinalPath "Published machine bundle file") {
+      [IO.File]::Replace($BackupPath, $FinalPath, $null)
+    } else {
+      [IO.File]::Move($BackupPath, $FinalPath)
+    }
+    return
+  }
+  if (Test-RegularMachineBundleFile $FinalPath "Published machine bundle file") {
+    Remove-Item -LiteralPath $FinalPath -Force
+  }
+}
+
+function Remove-MachineBundleTemporaryFile([string]$FilePath, [string]$Description) {
+  if (Test-RegularMachineBundleFile $FilePath $Description) {
+    Remove-Item -LiteralPath $FilePath -Force
+  }
+}
+
+function Publish-MachineBundleTransaction(
+  $Request,
+  [string]$SourceHelper,
+  [string]$ExpectedHelperDigest,
+  [string]$BootstrapSource,
+  [string]$BootstrapDigest,
+  [string]$MachineHelper,
+  [string]$MachineBootstrap,
+  [string]$ManifestPath,
+  $Manifest
+) {
+  $transactionId = [Guid]::NewGuid().ToString("N")
+  $helperStage = "$MachineHelper.$transactionId.stage"
+  $bootstrapStage = "$MachineBootstrap.$transactionId.stage"
+  $manifestStage = "$ManifestPath.$transactionId.stage"
+  $helperBackup = "$MachineHelper.$transactionId.backup"
+  $bootstrapBackup = "$MachineBootstrap.$transactionId.backup"
+  $manifestBackup = "$ManifestPath.$transactionId.backup"
+  $helperHadExisting = Test-RegularMachineBundleFile $MachineHelper "Existing machine helper"
+  $bootstrapHadExisting = Test-RegularMachineBundleFile $MachineBootstrap "Existing machine bootstrap"
+  $manifestHadExisting = Test-RegularMachineBundleFile $ManifestPath "Existing machine manifest"
+  $helperPublished = $false
+  $bootstrapPublished = $false
+  $manifestPublished = $false
+
+  try {
+    Copy-Item -LiteralPath $SourceHelper -Destination $helperStage
+    Copy-Item -LiteralPath $BootstrapSource -Destination $bootstrapStage
+    [void](Assert-FileDigest $helperStage $ExpectedHelperDigest)
+    [void](Assert-FileDigest $bootstrapStage $BootstrapDigest)
+    [IO.File]::WriteAllText($manifestStage, (($Manifest | ConvertTo-Json -Depth 6) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+    $stagedManifest = Get-Content -LiteralPath $manifestStage -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($stagedManifest.schema -ne "rainskills.windows-machine-bundle.v1" -or
+        $stagedManifest.operation_id -ne $Request.operation_id -or
+        $stagedManifest.installation_id -ne $Request.installation_id -or
+        $stagedManifest.original_user_sid -ne $Request.user_sid -or
+        $stagedManifest.helper_sha256 -ne $ExpectedHelperDigest -or
+        $stagedManifest.bootstrap_sha256 -ne $BootstrapDigest) {
+      throw "Staged machine manifest verification failed"
+    }
+    [void](Assert-SafePackageVersion ([string]$stagedManifest.package_version))
+
+    if ($helperHadExisting) {
+      [IO.File]::Replace($helperStage, $MachineHelper, $helperBackup)
+    } else {
+      [IO.File]::Move($helperStage, $MachineHelper)
+    }
+    $helperPublished = $true
+    if ($bootstrapHadExisting) {
+      [IO.File]::Replace($bootstrapStage, $MachineBootstrap, $bootstrapBackup)
+    } else {
+      [IO.File]::Move($bootstrapStage, $MachineBootstrap)
+    }
+    $bootstrapPublished = $true
+    if ($manifestHadExisting) {
+      [IO.File]::Replace($manifestStage, $ManifestPath, $manifestBackup)
+    } else {
+      [IO.File]::Move($manifestStage, $ManifestPath)
+    }
+    $manifestPublished = $true
+    [void](Assert-MachineManifest $Request)
+  } catch {
+    $publicationError = $_
+    $rollbackFailures = [Collections.Generic.List[string]]::new()
+    try {
+      Restore-MachineBundleFile $ManifestPath $manifestBackup $manifestHadExisting $manifestPublished
+    } catch {
+      $rollbackFailures.Add($_.Exception.Message)
+    }
+    try {
+      Restore-MachineBundleFile $MachineBootstrap $bootstrapBackup $bootstrapHadExisting $bootstrapPublished
+    } catch {
+      $rollbackFailures.Add($_.Exception.Message)
+    }
+    try {
+      Restore-MachineBundleFile $MachineHelper $helperBackup $helperHadExisting $helperPublished
+    } catch {
+      $rollbackFailures.Add($_.Exception.Message)
+    }
+    if ($rollbackFailures.Count -gt 0) {
+      throw "Machine bundle publication failed: $($publicationError.Exception.Message); rollback failed: $($rollbackFailures -join '; ')"
+    }
+    throw $publicationError
+  } finally {
+    foreach ($stagePath in @($manifestStage, $bootstrapStage, $helperStage)) {
+      Remove-MachineBundleTemporaryFile $stagePath "Machine bundle staging file"
+    }
+  }
+
+  foreach ($backupPath in @($manifestBackup, $bootstrapBackup, $helperBackup)) {
+    Remove-MachineBundleTemporaryFile $backupPath "Machine bundle backup file"
+  }
+}
+
+function Invoke-InstallMachineBundle($Request) {
+  $payload = $Request.payload
+  $sourceHelper = [string](Get-PropertyValue $payload "helper_path")
+  $expectedHelperDigest = [string](Get-PropertyValue $payload "helper_sha256")
+  $recoveryRoot = [string](Get-PropertyValue $payload "recovery_root")
+  $recoveryManifestDigest = [string](Get-PropertyValue $payload "recovery_manifest_sha256")
+  $nodePath = [string](Get-PropertyValue $payload "node_path")
+  $recoveryEntry = [string](Get-PropertyValue $payload "recovery_entry")
+  $bootstrapSource = [string](Get-PropertyValue $payload "bootstrap_path")
+  $bootstrapDigest = [string](Get-PropertyValue $payload "bootstrap_sha256")
+  $packageVersion = [string](Get-PropertyValue $payload "package_version")
+  [void](Assert-SafePackageVersion $packageVersion)
+  $controlMode = [string](Get-PropertyValue $payload "control_mode" "windows-native")
+  $controlDistro = Get-PropertyValue $payload "control_distro"
+  $controlNodePath = Get-PropertyValue $payload "control_node_path"
+  $controlRecoveryEntry = Get-PropertyValue $payload "control_recovery_entry"
+  if ($controlMode -notin @("windows-native", "wsl")) { throw "Unsupported control_mode" }
+  if ($controlMode -eq "wsl") {
+    foreach ($value in @($controlDistro, $controlNodePath, $controlRecoveryEntry)) {
+      if ([string]::IsNullOrWhiteSpace([string]$value) -or [string]$value -match '[\x00-\x1f\x7f"]') {
+        throw "Invalid WSL control path or distro"
+      }
+    }
+    if (-not ([string]$controlNodePath).StartsWith("/") -or
+        -not ([string]$controlRecoveryEntry).StartsWith("/")) {
+      throw "WSL control paths must be absolute Linux paths"
+    }
+  }
+  if (-not (Test-Path -LiteralPath $recoveryRoot -PathType Container) -or
+      -not (Test-Path -LiteralPath $nodePath -PathType Leaf) -or
+      -not (Test-Path -LiteralPath $recoveryEntry -PathType Leaf)) {
+    throw "Recovery bundle or Node runtime is missing"
+  }
+  [void](Assert-FileDigest $sourceHelper $expectedHelperDigest)
+  [void](Assert-FileDigest $bootstrapSource $bootstrapDigest)
+  [void](Assert-FileDigest (Join-Path $recoveryRoot "manifest.json") $recoveryManifestDigest)
+
+  $machineRoot = Get-MachineRoot $Request
+  $machineHelper = Join-Path $machineRoot "windows-platform.ps1"
+  $manifestPath = Join-Path $machineRoot "machine-manifest.json"
+  $machineRootCreated = $false
+  if (Test-Path -LiteralPath $machineRoot) {
+    Assert-ManagedMachineRoot $machineRoot $Request.installation_id
+    Set-MachineRootAcl $machineRoot $Request.user_sid
+    if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) { throw "Unknown existing RainSkills machine directory" }
+    $existing = Assert-MachineManifestIdentity $Request
+    Assert-UpgradableMachineBundle $Request $existing $expectedHelperDigest $bootstrapDigest
+  } else {
+    New-Item -ItemType Directory -Path $machineRoot | Out-Null
+    $machineRootCreated = $true
+    Assert-ManagedMachineRoot $machineRoot $Request.installation_id
+  }
+  $machineBootstrap = Join-Path $machineRoot "wsl-bootstrap.sh"
+  $manifest = [ordered]@{
+    schema = "rainskills.windows-machine-bundle.v1"
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    original_user_sid = $Request.user_sid
+    helper_sha256 = $expectedHelperDigest
+    bootstrap_sha256 = $bootstrapDigest
+    package_version = $packageVersion
+    recovery_root = $recoveryRoot
+    recovery_manifest_sha256 = $recoveryManifestDigest
+    recovery_entry = $recoveryEntry
+    node_path = $nodePath
+    control_mode = $controlMode
+    control_distro = if ($controlMode -eq "wsl") { [string]$controlDistro } else { $null }
+    control_node_path = if ($controlMode -eq "wsl") { [string]$controlNodePath } else { $null }
+    control_recovery_entry = if ($controlMode -eq "wsl") { [string]$controlRecoveryEntry } else { $null }
+  }
+  try {
+    Publish-MachineBundleTransaction $Request $sourceHelper $expectedHelperDigest $bootstrapSource `
+      $bootstrapDigest $machineHelper $machineBootstrap $manifestPath $manifest
+  } catch {
+    if ($machineRootCreated -and (Test-Path -LiteralPath $machineRoot -PathType Container)) {
+      Assert-ManagedMachineRoot $machineRoot $Request.installation_id
+      if (@(Get-ChildItem -LiteralPath $machineRoot -Force).Count -eq 0) {
+        Remove-Item -LiteralPath $machineRoot -Force
+      }
+    }
+    throw
+  }
+  Write-MachineLease $machineRoot $Request
+  Set-MachineRootAcl $machineRoot $Request.user_sid
+  [void](Assert-MachineManifest $Request)
+  return [ordered]@{ machineBundleVerified = $true; machineRoot = $machineRoot; helperPath = $machineHelper }
+}
+
+function Get-TrustedWslPath {
+  $wslPath = "$env:SystemRoot\System32\wsl.exe"
+  if (-not (Test-Path -LiteralPath $wslPath -PathType Leaf)) { return $null }
+  $signature = Get-AuthenticodeSignature -LiteralPath $wslPath
+  if ($signature.Status -ne [Management.Automation.SignatureStatus]::Valid -or
+      [string]$signature.SignerCertificate.Subject -notmatch "Microsoft") {
+    throw "wsl.exe does not have a valid Microsoft Authenticode signature"
+  }
+  return $wslPath
+}
+
+function Get-WslRuntimeFacts {
+  $wslFeature = Get-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux
+  $vmpFeature = Get-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform
+  $wslPath = Get-TrustedWslPath
+  $versionOutput = ""
+  $statusOutput = ""
+  if ($wslPath) {
+    $versionProbe = Invoke-NativeCapture $wslPath @("--version")
+    $versionOutput = $versionProbe.output
+    $versionExitCode = $versionProbe.exitCode
+    $statusProbe = Invoke-NativeCapture $wslPath @("--status")
+    $statusOutput = $statusProbe.output
+  } else {
+    $versionExitCode = 1
+  }
+  $defaultVersion = Get-ItemPropertyValue -Path "HKCU:\Software\Microsoft\Windows\CurrentVersion\Lxss" `
+    -Name DefaultVersion -ErrorAction SilentlyContinue
+  $rebootPending = (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\Component Based Servicing\RebootPending") -or
+    (Test-Path "HKLM:\SOFTWARE\Microsoft\Windows\CurrentVersion\WindowsUpdate\Auto Update\RebootRequired")
+  return [ordered]@{
+    wslFeatureState = [string]$wslFeature.State
+    virtualMachinePlatformFeatureState = [string]$vmpFeature.State
+    wslPath = $wslPath
+    wslVersion = if ($versionOutput -match "(?m)(\d+\.\d+(?:\.\d+){0,2})") { $Matches[1] } else { $null }
+    wslVersionCommandSucceeded = [bool]($versionExitCode -eq 0)
+    wslDefaultVersion = if ($null -ne $defaultVersion) { [int]$defaultVersion } elseif ($statusOutput -match "(?im)default version:\s*(\d+)") { [int]$Matches[1] } else { $null }
+    rebootPending = [bool]$rebootPending
+  }
+}
+
+function Install-LegacyWslKernel($Request) {
+  $machineRoot = Get-MachineRoot $Request
+  $msiPath = Join-Path $machineRoot "wsl_update_x64.msi"
+  $artifact = $Request.policy.windows.legacy_wsl_kernel
+  Invoke-WebRequest -Uri $artifact.url -OutFile $msiPath -UseBasicParsing
+  [void](Assert-FileDigest $msiPath $artifact.sha256)
+  $signature = Get-AuthenticodeSignature -LiteralPath $msiPath
+  if ($signature.Status -ne [Management.Automation.SignatureStatus]::Valid -or
+      [string]$signature.SignerCertificate.Subject -notmatch "Microsoft") {
+    throw "Legacy WSL kernel MSI does not have a valid Microsoft Authenticode signature"
+  }
+  $process = Start-Process -FilePath "$env:SystemRoot\System32\msiexec.exe" `
+    -ArgumentList @("/i", $msiPath, "/quiet", "/norestart") -Wait -PassThru
+  if ($process.ExitCode -notin @(0, 3010)) { throw "Legacy WSL kernel installation failed: $($process.ExitCode)" }
+}
+
+function Invoke-EnableWsl($Request) {
+  $facts = Get-WslRuntimeFacts
+  $restartNeeded = $false
+  if ($facts.wslFeatureState -ne "Enabled") {
+    $featureResult = Enable-WindowsOptionalFeature -Online -FeatureName Microsoft-Windows-Subsystem-Linux -All -NoRestart
+    $restartNeeded = $restartNeeded -or [bool]$featureResult.RestartNeeded
+  }
+  if ($facts.virtualMachinePlatformFeatureState -ne "Enabled") {
+    $featureResult = Enable-WindowsOptionalFeature -Online -FeatureName VirtualMachinePlatform -All -NoRestart
+    $restartNeeded = $restartNeeded -or [bool]$featureResult.RestartNeeded
+  }
+  if ($restartNeeded) {
+    $pendingFacts = Get-WslRuntimeFacts
+    $pendingFacts["rebootPending"] = $true
+    return $pendingFacts
+  }
+  $wslPath = "$env:SystemRoot\System32\wsl.exe"
+  if (Test-Path -LiteralPath $wslPath -PathType Leaf) {
+    $versionProbe = Invoke-NativeCapture $wslPath @("--version")
+    if ($versionProbe.exitCode -ne 0) {
+      $updateProbe = Invoke-NativeCapture $wslPath @("--update", "--web-download")
+      if ($updateProbe.output) { Write-Host ($updateProbe.output.TrimEnd()) }
+      if ($updateProbe.exitCode -ne 0) { Install-LegacyWslKernel $Request }
+    }
+  } else {
+    throw "wsl.exe is unavailable after enabling Windows features; reboot and resume are required"
+  }
+  & $wslPath --set-default-version 2 | ForEach-Object { Write-Host $_ }
+  if ($LASTEXITCODE -ne 0) { throw "Failed to set WSL default version 2" }
+  return Get-WslRuntimeFacts
+}
+
+function Invoke-UpdateWsl($Request) {
+  $wslPath = Get-TrustedWslPath
+  if (-not $wslPath) { throw "wsl.exe is not installed" }
+  $updateProbe = Invoke-NativeCapture $wslPath @("--update", "--web-download")
+  if ($updateProbe.output) { Write-Host ($updateProbe.output.TrimEnd()) }
+  if ($updateProbe.exitCode -ne 0) { Install-LegacyWslKernel $Request }
+  return Get-WslRuntimeFacts
+}
+
+function Get-ManagedDistroNames {
+  $wslPath = Get-TrustedWslPath
+  if (-not $wslPath) { throw "wsl.exe is not installed" }
+  return @(& $wslPath --list --quiet 2>$null |
+    ForEach-Object { ([string]$_ -replace "\u0000", "").Trim() } |
+    Where-Object { $_ })
+}
+
+function Convert-WindowsPathForDistro([string]$WindowsPath) {
+  $wslPath = Get-TrustedWslPath
+  $converted = (& $wslPath -d Rainbond -u root --exec wslpath -u $WindowsPath 2>&1 | Out-String).Trim()
+  if ($LASTEXITCODE -ne 0 -or $converted -notmatch "^/mnt/[a-zA-Z]/") {
+    throw "wslpath -u failed for the managed helper path"
+  }
+  return $converted
+}
+
+function Format-StageElapsed([TimeSpan]$Elapsed) {
+  $totalHours = [int][Math]::Floor($Elapsed.TotalHours)
+  if ($totalHours -gt 0) {
+    return ("{0:00}:{1:00}:{2:00}" -f $totalHours, $Elapsed.Minutes, $Elapsed.Seconds)
+  }
+  return ("{0:00}:{1:00}" -f ([int][Math]::Floor($Elapsed.TotalMinutes)), $Elapsed.Seconds)
+}
+
+function Write-StageHeartbeat([int]$StageNumber, [int]$StageCount, [string]$Label, $Watch) {
+  Write-Host ("[..] {0}/{1} {2} {3}" -f $StageNumber, $StageCount, $Label, (Format-StageElapsed $Watch.Elapsed))
+}
+
+function Invoke-ProvisionStage([int]$StageNumber, [int]$StageCount, [string]$Label, $StageAction) {
+  if ($StageNumber -lt 1 -or $StageNumber -gt $StageCount -or $StageCount -ne 7) {
+    throw "Provisioning stage identity is invalid"
+  }
+  $watch = [Diagnostics.Stopwatch]::StartNew()
+  Write-Host ("[..] {0}/{1} {2} {3}" -f $StageNumber, $StageCount, $Label, (Format-StageElapsed $watch.Elapsed))
+  $result = & $StageAction
+  $watch.Stop()
+  Write-Host ("[OK] {0}/{1} {2} {3}" -f $StageNumber, $StageCount, $Label, (Format-StageElapsed $watch.Elapsed))
+  return $result
+}
+
+function ConvertTo-SafeDiagnosticLine([string]$Line, [int]$MaximumLength = 0) {
+  $safe = [string]$Line
+  $safe = [regex]::Replace($safe, "$([char]27)\[[0-?]*[ -/]*[@-~]", "")
+  $safe = $safe.Replace("`r", " ")
+  $safe = [regex]::Replace($safe, "[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]", "")
+  $safe = [regex]::Replace($safe, "(?i)(Authorization:\s*Bearer\s+)[^\s]+", '$1[REDACTED]')
+  $safe = [regex]::Replace($safe, "eyJ[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+\.[A-Za-z0-9_-]+", "[REDACTED]")
+  $secretPattern = "(?i)((?:password|device[_-]?code|access[_-]?token|refresh[_-]?token)\s*[:=]\s*[`"']?)[^&\s,`"']+"
+  $safe = [regex]::Replace($safe, $secretPattern, '$1[REDACTED]')
+  $safe = $safe.Trim()
+  if ($MaximumLength -gt 0 -and $safe.Length -gt $MaximumLength) {
+    $safe = $safe.Substring(0, $MaximumLength)
+  }
+  return $safe
+}
+
+function Initialize-OperationDiagnosticLog($Request) {
+  $operationId = [string]$Request.operation_id
+  if ($operationId -notmatch "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$") {
+    throw "Diagnostic log operation id is invalid"
+  }
+  $machineRoot = Get-MachineRoot $Request
+  Assert-ManagedMachineRoot $machineRoot ([string]$Request.installation_id)
+  $machineRootFull = [IO.Path]::GetFullPath($machineRoot).TrimEnd("\")
+  $logRoot = Join-Path $machineRootFull "logs"
+  if (Test-Path -LiteralPath $logRoot) {
+    $logRootItem = Get-Item -LiteralPath $logRoot -Force
+    if (-not $logRootItem.PSIsContainer -or ($logRootItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+      throw "Diagnostic log directory must be a regular non-reparse directory"
+    }
+  } else {
+    [void][IO.Directory]::CreateDirectory($logRoot)
+  }
+  $logRootFull = [IO.Path]::GetFullPath($logRoot).TrimEnd("\")
+  if (-not $logRootFull.StartsWith($machineRootFull + "\", [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Diagnostic log directory is outside the managed machine root"
+  }
+  $logPath = Join-Path $logRootFull ($operationId + ".log")
+  $logPathFull = [IO.Path]::GetFullPath($logPath)
+  if (-not [IO.Path]::GetDirectoryName($logPathFull).Equals($logRootFull, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Diagnostic log path is outside the operation log directory"
+  }
+  if (Test-Path -LiteralPath $logPathFull) {
+    $logItem = Get-Item -LiteralPath $logPathFull -Force
+    if ($logItem.PSIsContainer -or ($logItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+      throw "Diagnostic log must be a regular non-reparse file"
+    }
+  } else {
+    $stream = [IO.File]::Open($logPathFull, [IO.FileMode]::CreateNew, [IO.FileAccess]::Write, [IO.FileShare]::Read)
+    $stream.Dispose()
+  }
+  Set-MachineRootAcl $machineRootFull ([string]$Request.user_sid)
+  $verifiedItem = Get-Item -LiteralPath $logPathFull -Force
+  if ($verifiedItem.PSIsContainer -or ($verifiedItem.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "Diagnostic log changed during ACL protection"
+  }
+  return $logPathFull
+}
+
+function Write-OperationDiagnosticLine([string]$LogPath, [string]$Line) {
+  $safeLine = ConvertTo-SafeDiagnosticLine $Line
+  if ([string]::IsNullOrWhiteSpace($safeLine)) { return }
+  $item = Get-Item -LiteralPath $LogPath -Force
+  if ($item.PSIsContainer -or ($item.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "Diagnostic log is no longer a regular file"
+  }
+  [IO.File]::AppendAllText($LogPath, $safeLine + [Environment]::NewLine, [Text.UTF8Encoding]::new($false))
+}
+
+function ConvertFrom-PlatformProgressEvent([string]$Line) {
+  if ([string]::IsNullOrWhiteSpace($Line)) { return $null }
+  try {
+    $event = $Line | ConvertFrom-Json -ErrorAction Stop
+  } catch {
+    return $null
+  }
+  $requiredKeys = @("schema", "stage", "status", "timestamp")
+  $actualKeys = @($event.PSObject.Properties.Name)
+  if ($actualKeys.Count -ne $requiredKeys.Count -or
+      @($actualKeys | Where-Object { $requiredKeys -notcontains $_ }).Count -gt 0) {
+    return $null
+  }
+  if ([string]$event.schema -ne "rainskills.platform-progress.v1" -or
+      [string]$event.stage -notin @("preparing-docker", "installing-rainbond", "verifying-rainbond") -or
+      [string]$event.status -notin @("started", "heartbeat", "completed")) {
+    return $null
+  }
+  $parsedTimestamp = [DateTimeOffset]::MinValue
+  $timestampStyle = [Globalization.DateTimeStyles]::AssumeUniversal -bor [Globalization.DateTimeStyles]::AdjustToUniversal
+  if (-not [DateTimeOffset]::TryParseExact(
+      [string]$event.timestamp,
+      "yyyy-MM-dd'T'HH:mm:ss'Z'",
+      [Globalization.CultureInfo]::InvariantCulture,
+      $timestampStyle,
+      [ref]$parsedTimestamp)) {
+    return $null
+  }
+  return $event
+}
+
+function Update-PlatformProgressState($Event, [hashtable]$States) {
+  $stage = [string]$Event.stage
+  $status = [string]$Event.status
+  $current = $null
+  if ($States.ContainsKey($stage)) { $current = [string]$States[$stage] }
+  if ($status -eq "started") {
+    if ($null -ne $current) { return $false }
+    $States[$stage] = "started"
+    return $true
+  }
+  if ($status -eq "heartbeat") { return [bool]($current -eq "started") }
+  if ($status -eq "completed" -and $current -eq "started") {
+    $States[$stage] = "completed"
+    return $true
+  }
+  return $false
+}
+
+function Invoke-DistroBootstrap($Request, [string]$BootstrapAction, [string]$HostAddress = "", [string]$GuestAddress = "", [string]$InstallerPath = "", [string]$InstallerDigest = "") {
+  $wslPath = Get-TrustedWslPath
+  $machineRoot = Get-MachineRoot $Request
+  $manifest = Assert-MachineManifest $Request
+  $bootstrapPath = Join-Path $machineRoot "wsl-bootstrap.sh"
+  [void](Assert-FileDigest $bootstrapPath $manifest.bootstrap_sha256)
+  $linuxBootstrap = Convert-WindowsPathForDistro $bootstrapPath
+  $arguments = @("-d", "Rainbond", "-u", "root", "--", "/bin/bash", $linuxBootstrap,
+    "--action", $BootstrapAction, "--installation-id", [string]$Request.installation_id)
+  if ($HostAddress) { $arguments += @("--host-address", $HostAddress) }
+  if ($GuestAddress) { $arguments += @("--guest-address", $GuestAddress) }
+  if ($InstallerPath) { $arguments += @("--installer-path", $InstallerPath) }
+  if ($InstallerDigest) { $arguments += @("--installer-sha256", $InstallerDigest) }
+  $diagnosticLogPath = Initialize-OperationDiagnosticLog $Request
+  $lastMeaningfulOutput = ""
+  $progressStates = @{}
+  $progressWatches = @{}
+  $progressLabels = @{
+    "preparing-docker" = "Preparing Docker"
+    "installing-rainbond" = "Installing Rainbond"
+    "verifying-rainbond" = "Waiting for Rainbond readiness"
+  }
+  $previousPreference = $ErrorActionPreference
+  try {
+    $ErrorActionPreference = "Continue"
+    & $wslPath @arguments 2>&1 | ForEach-Object {
+      $line = ConvertTo-SafeDiagnosticLine ([string]$_)
+      if ($line) { Write-OperationDiagnosticLine $diagnosticLogPath $line }
+      $event = ConvertFrom-PlatformProgressEvent $line
+      if ($null -ne $event) {
+        if (Update-PlatformProgressState $event $progressStates) {
+          $stage = [string]$event.stage
+          if ([string]$event.status -eq "started") {
+            $progressWatches[$stage] = [Diagnostics.Stopwatch]::StartNew()
+          } elseif ([string]$event.status -eq "heartbeat" -and $progressWatches.ContainsKey($stage)) {
+            Write-Host ("     {0} ({1})" -f $progressLabels[$stage], (Format-StageElapsed $progressWatches[$stage].Elapsed))
+          } elseif ([string]$event.status -eq "completed" -and $progressWatches.ContainsKey($stage)) {
+            $progressWatches[$stage].Stop()
+          }
+        }
+        return
+      }
+      if ($line -and $line -notmatch 'rainskills\.platform-progress\.v1') {
+        $lastMeaningfulOutput = ConvertTo-SafeDiagnosticLine $line 240
+      }
+    }
+    $exitCode = $LASTEXITCODE
+  } finally {
+    $ErrorActionPreference = $previousPreference
+  }
+  if ($exitCode -ne 0) {
+    if ($lastMeaningfulOutput) {
+      throw "Managed WSL bootstrap action failed: ${BootstrapAction}: $lastMeaningfulOutput. Diagnostic log: $diagnosticLogPath"
+    }
+    throw "Managed WSL bootstrap action failed: $BootstrapAction. Diagnostic log: $diagnosticLogPath"
+  }
+}
+
+function ConvertTo-NativeProcessArgument([string]$Value) {
+  if ($Value -match '"') { throw "Native process arguments cannot contain quotes" }
+  if ($Value -notmatch '\s') { return $Value }
+  return '"' + $Value + '"'
+}
+
+function Invoke-WslImportWithProgress($Request, [string]$WslPath, [string]$DistroRoot, [string]$RootfsPath) {
+  $diagnosticLogPath = Initialize-OperationDiagnosticLog $Request
+  $arguments = @("--import", "Rainbond", $DistroRoot, $RootfsPath, "--version", "2")
+  $startInfo = [Diagnostics.ProcessStartInfo]::new()
+  $startInfo.FileName = $WslPath
+  $startInfo.Arguments = (($arguments | ForEach-Object { ConvertTo-NativeProcessArgument ([string]$_) }) -join " ")
+  $startInfo.UseShellExecute = $false
+  $startInfo.CreateNoWindow = $true
+  $startInfo.RedirectStandardOutput = $true
+  $startInfo.RedirectStandardError = $true
+  $process = [Diagnostics.Process]::new()
+  $process.StartInfo = $startInfo
+  $watch = [Diagnostics.Stopwatch]::StartNew()
+  try {
+    if (-not $process.Start()) { throw "wsl --import Rainbond did not start" }
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    while (-not $process.WaitForExit(10000)) {
+      Write-StageHeartbeat 2 7 "Importing the Rainbond WSL environment" $watch
+    }
+    $stdout = $stdoutTask.Result
+    $stderr = $stderrTask.Result
+    $lastMeaningfulOutput = ""
+    foreach ($rawLine in @(($stdout + "`n" + $stderr) -split "`r?`n")) {
+      $safeLine = ConvertTo-SafeDiagnosticLine ([string]$rawLine)
+      if ($safeLine) {
+        Write-OperationDiagnosticLine $diagnosticLogPath $safeLine
+        $lastMeaningfulOutput = ConvertTo-SafeDiagnosticLine $safeLine 240
+      }
+    }
+    if ($process.ExitCode -ne 0) {
+      if ($lastMeaningfulOutput) {
+        throw "wsl --import Rainbond failed: $lastMeaningfulOutput. Diagnostic log: $diagnosticLogPath"
+      }
+      throw "wsl --import Rainbond failed. Diagnostic log: $diagnosticLogPath"
+    }
+  } finally {
+    $watch.Stop()
+    $process.Dispose()
+  }
+}
+
+function Invoke-BoundedDistroBootstrap($Request, [string]$BootstrapAction, [DateTime]$Deadline) {
+  if ($BootstrapAction -ne "ProbeRainbond") { throw "Unsupported bounded WSL bootstrap action" }
+  $wslPath = Get-TrustedWslPath
+  $machineRoot = Get-MachineRoot $Request
+  $manifest = Assert-MachineManifest $Request
+  $bootstrapPath = Join-Path $machineRoot "wsl-bootstrap.sh"
+  [void](Assert-FileDigest $bootstrapPath $manifest.bootstrap_sha256)
+  $linuxBootstrap = Convert-WindowsPathForDistro $bootstrapPath
+  $arguments = @("-d", "Rainbond", "-u", "root", "--", "/bin/bash", $linuxBootstrap,
+    "--action", $BootstrapAction, "--installation-id", [string]$Request.installation_id)
+  $remainingMilliseconds = [int][Math]::Floor(($Deadline - [DateTime]::UtcNow).TotalMilliseconds)
+  if ($remainingMilliseconds -le 0) { throw "Timed out before the managed WSL readiness probe started" }
+  $timeoutMilliseconds = [Math]::Min(45000, $remainingMilliseconds)
+
+  $startInfo = [Diagnostics.ProcessStartInfo]::new()
+  $startInfo.FileName = $wslPath
+  $startInfo.Arguments = (($arguments | ForEach-Object { ConvertTo-NativeProcessArgument ([string]$_) }) -join " ")
+  $startInfo.UseShellExecute = $false
+  $startInfo.CreateNoWindow = $true
+  $startInfo.RedirectStandardOutput = $true
+  $startInfo.RedirectStandardError = $true
+  $process = [Diagnostics.Process]::new()
+  $process.StartInfo = $startInfo
+  try {
+    if (-not $process.Start()) { throw "Managed WSL readiness probe did not start" }
+    $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+    $stderrTask = $process.StandardError.ReadToEndAsync()
+    if (-not $process.WaitForExit($timeoutMilliseconds)) {
+      $process.Kill()
+      $process.WaitForExit()
+      throw "Timed out while running the managed WSL readiness probe"
+    }
+    $stdout = $stdoutTask.Result
+    $stderr = $stderrTask.Result
+    if ($process.ExitCode -ne 0) {
+      $lastLine = @((($stderr + "`n" + $stdout) -split "`r?`n") | ForEach-Object { $_.Trim() } | Where-Object { $_ }) |
+        Select-Object -Last 1
+      if ($lastLine) { throw "Managed WSL readiness probe failed: $lastLine" }
+      throw "Managed WSL readiness probe failed"
+    }
+  } finally {
+    $process.Dispose()
+  }
+}
+
+function Get-DistroIdentity($Request) {
+  $wslPath = Get-TrustedWslPath
+  $identity = (& $wslPath -d Rainbond -u root -- cat /etc/rainskills-installation-id 2>$null | Out-String).Trim()
+  return $identity
+}
+
+function Assert-SystemdPidOne($Request) {
+  $wslPath = Get-TrustedWslPath
+  $startProbe = Invoke-NativeCapture $wslPath @("-d", "Rainbond", "-u", "root", "--exec", "/bin/true")
+  if ($startProbe.exitCode -ne 0) { throw "Failed to start the managed Rainbond distro" }
+  $pidOneProbe = Invoke-NativeCapture $wslPath @("-d", "Rainbond", "-u", "root", "--exec", "cat", "/proc/1/comm")
+  $pidOneLines = @($pidOneProbe.output -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ })
+  $pidOne = $pidOneLines | Select-Object -Last 1
+  if ($pidOneProbe.exitCode -ne 0 -or $pidOne -ne "systemd") { throw "PID 1 in the managed Rainbond distro is not systemd" }
+  if ((Get-DistroIdentity $Request) -ne $Request.installation_id) { throw "Managed distro identity mismatch" }
+  return $true
+}
+
+function Invoke-ImportDistro($Request) {
+  if ([string]$Request.policy.windows.distro_name -ne "Rainbond") { throw "The policy distro name must be Rainbond" }
+  $payload = $Request.payload
+  $rootfsPath = Assert-PathInsideRoot ([string](Get-PropertyValue $payload "rootfs_path")) ([Environment]::GetFolderPath("UserProfile"))
+  $distroRoot = [IO.Path]::GetFullPath([string](Get-PropertyValue $payload "distro_root")).TrimEnd("\")
+  $expectedDistroRoot = [IO.Path]::GetFullPath((Join-Path ([Environment]::GetFolderPath("LocalApplicationData")) "RainSkills\Distros\$($Request.installation_id)")).TrimEnd("\")
+  if (-not $distroRoot.Equals($expectedDistroRoot, [StringComparison]::OrdinalIgnoreCase)) {
+    throw "Managed distro root is outside the installation-specific LocalAppData path"
+  }
+  $rootfsItem = Get-Item -LiteralPath $rootfsPath -Force
+  if ($rootfsItem.PSIsContainer -or $rootfsItem.Length -lt 1) { throw "Ubuntu rootfs is not a non-empty file" }
+  $distroNames = Get-ManagedDistroNames
+  if ($distroNames -contains "Rainbond") {
+    if ((Get-DistroIdentity $Request) -ne $Request.installation_id) {
+      throw "An existing Rainbond WSL distro is not owned by this installation"
+    }
+    Invoke-DistroBootstrap $Request "PrepareRuntime"
+  } else {
+    if (Test-Path -LiteralPath $distroRoot) { throw "Unknown existing Rainbond distro directory" }
+    New-Item -ItemType Directory -Path $distroRoot -Force | Out-Null
+    $wslPath = Get-TrustedWslPath
+    try {
+      Invoke-WslImportWithProgress $Request $wslPath $distroRoot $rootfsPath
+    } catch {
+      if ((Get-ManagedDistroNames) -notcontains "Rainbond" -and (Test-Path -LiteralPath $distroRoot)) {
+        Remove-Item -LiteralPath $distroRoot -Recurse -Force
+      }
+      throw
+    }
+    try {
+      Invoke-DistroBootstrap $Request "PrepareRuntime"
+      & $wslPath --terminate Rainbond | Out-Null
+      if ($LASTEXITCODE -ne 0) { throw "Failed to terminate the managed Rainbond distro after enabling systemd" }
+    } catch {
+      $setupFailure = $_
+      & $wslPath --unregister Rainbond 2>$null | Out-Null
+      if ((Get-ManagedDistroNames) -notcontains "Rainbond" -and (Test-Path -LiteralPath $distroRoot)) {
+        Remove-Item -LiteralPath $distroRoot -Recurse -Force
+      }
+      throw $setupFailure
+    }
+  }
+  [void](Assert-SystemdPidOne $Request)
+  return [ordered]@{
+    distroIdentityVerified = $true
+    systemdReady = $true
+    distroName = "Rainbond"
+    distroRoot = $distroRoot
+  }
+}
+
+function Invoke-PrepareRuntime($Request) {
+  if ((Get-ManagedDistroNames) -notcontains "Rainbond" -or (Get-DistroIdentity $Request) -ne $Request.installation_id) {
+    throw "The managed Rainbond distro is missing or has the wrong identity"
+  }
+  Invoke-DistroBootstrap $Request "PrepareRuntime"
+  $wslPath = Get-TrustedWslPath
+  & $wslPath --terminate Rainbond | Out-Null
+  if ($LASTEXITCODE -ne 0) { throw "Failed to restart the managed Rainbond distro" }
+  [void](Assert-SystemdPidOne $Request)
+  return [ordered]@{ distroIdentityVerified = $true; systemdReady = $true }
+}
+
+function Get-WslNetworkingMode {
+  $configPath = Join-Path ([Environment]::GetFolderPath("UserProfile")) ".wslconfig"
+  if (-not (Test-Path -LiteralPath $configPath -PathType Leaf)) { return "nat" }
+  $line = Get-Content -LiteralPath $configPath |
+    Where-Object { $_ -match "^\s*networkingMode\s*=" } |
+    Select-Object -Last 1
+  if (-not $line) { return "nat" }
+  return (($line -split "=", 2)[1]).Trim().ToLowerInvariant()
+}
+
+function Get-WslAdapter {
+  $wslPath = Get-TrustedWslPath
+  $routeProbe = Invoke-NativeCapture $wslPath @("-d", "Rainbond", "-u", "root", "--exec", "ip", "-4", "route", "show", "default")
+  $gateways = @($routeProbe.output -split "`r?`n" | ForEach-Object {
+    if ($_.Trim() -match "^default\s+via\s+((?:\d{1,3}\.){3}\d{1,3})(?:\s|$)") { $Matches[1] }
+  } | Sort-Object -Unique)
+  $parsedGateway = $null
+  if ($routeProbe.exitCode -ne 0 -or $gateways.Count -ne 1 -or
+      -not [Net.IPAddress]::TryParse([string]$gateways[0], [ref]$parsedGateway) -or
+      $parsedGateway.AddressFamily -ne [Net.Sockets.AddressFamily]::InterNetwork) {
+    throw "Unable to identify the managed Rainbond WSL default gateway"
+  }
+  $gateway = [string]$gateways[0]
+  $interfaceIndexes = @(Get-NetIPAddress -AddressFamily IPv4 -IPAddress $gateway -ErrorAction SilentlyContinue |
+    ForEach-Object { [int]$_.InterfaceIndex } | Sort-Object -Unique)
+  if ($interfaceIndexes.Count -ne 1) {
+    throw "Unable to map the managed Rainbond WSL default gateway to one Windows interface"
+  }
+  $adapters = @(Get-NetAdapter -InterfaceIndex $interfaceIndexes[0] -IncludeHidden -ErrorAction SilentlyContinue |
+    Where-Object { $_.Status -eq "Up" })
+  if ($adapters.Count -ne 1 -or
+      ($adapters[0].Name -notlike "*WSL*" -and $adapters[0].InterfaceDescription -notlike "*Hyper-V Virtual Ethernet*")) {
+    throw "The managed Rainbond WSL default gateway is not backed by an active WSL adapter"
+  }
+  return $adapters[0]
+}
+
+function Get-WslHnsNetworkId($Adapter) {
+  if (Get-Command Get-HnsNetwork -ErrorAction SilentlyContinue) {
+    $networks = @(Get-HnsNetwork | Where-Object { $_.Name -eq "WSL" -or $_.Name -eq "WSL (Hyper-V firewall)" })
+    if ($networks.Count -eq 1) { return [string]$networks[0].ID }
+  }
+  return [string]$Adapter.InterfaceGuid
+}
+
+function Get-NetworkManifestPath($Request) {
+  return Join-Path (Get-MachineRoot $Request) "managed-network.json"
+}
+
+function New-SecureNonce {
+  $bytes = [byte[]]::new(32)
+  $generator = [Security.Cryptography.RandomNumberGenerator]::Create()
+  try { $generator.GetBytes($bytes) } finally { $generator.Dispose() }
+  return -join ($bytes | ForEach-Object { $_.ToString("x2") })
+}
+
+function Assert-NetworkManifestDigest($Request) {
+  $manifestPath = Get-NetworkManifestPath $Request
+  $digestPath = Join-Path (Get-MachineRoot $Request) "managed-network.sha256"
+  if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf) -or
+      -not (Test-Path -LiteralPath $digestPath -PathType Leaf)) {
+    throw "Managed network manifest or digest is missing"
+  }
+  $expected = (Get-Content -LiteralPath $digestPath -Raw).Trim().ToLowerInvariant()
+  [void](Assert-FileDigest $manifestPath $expected)
+}
+
+function Normalize-ScheduledTaskExecutable([string]$Executable) {
+  if ([string]::IsNullOrWhiteSpace($Executable)) { return "" }
+  $expanded = [Environment]::ExpandEnvironmentVariables($Executable.Trim().Trim([char]34))
+  try {
+    return [IO.Path]::GetFullPath($expanded).TrimEnd("\")
+  } catch {
+    return $expanded
+  }
+}
+
+function Get-ScheduledTaskContractMismatches($Task, [string]$ExpectedExecutable, [string]$ExpectedArguments, [string]$ExpectedUserId, [string]$ExpectedRunLevel) {
+  $mismatches = @()
+  $tasks = @($Task)
+  if ($tasks.Count -ne 1) { return @("task-count") }
+  $taskValue = $tasks[0]
+  $actions = @($taskValue.Actions)
+  if ($actions.Count -ne 1) {
+    $mismatches += "action-count"
+  } else {
+    $actualExecutable = Normalize-ScheduledTaskExecutable ([string]$actions[0].Execute)
+    $normalizedExpectedExecutable = Normalize-ScheduledTaskExecutable $ExpectedExecutable
+    if (-not $actualExecutable.Equals($normalizedExpectedExecutable, [StringComparison]::OrdinalIgnoreCase)) {
+      $mismatches += "executable"
+    }
+    $actualArguments = ([string]$actions[0].Arguments).Trim()
+    $normalizedExpectedArguments = $ExpectedArguments.Trim()
+    if (-not $actualArguments.Equals($normalizedExpectedArguments, [StringComparison]::Ordinal)) {
+      $mismatches += "arguments"
+    }
+  }
+
+  try {
+    $actualSid = Convert-IdentityToSid $taskValue.Principal.UserId
+    $expectedSid = Convert-IdentityToSid $ExpectedUserId
+    if (-not $actualSid.Equals($expectedSid, [StringComparison]::OrdinalIgnoreCase)) {
+      $mismatches += "principal"
+    }
+  } catch {
+    $mismatches += "principal"
+  }
+  if (-not [string]::IsNullOrWhiteSpace($ExpectedRunLevel) -and
+      -not ([string]$taskValue.Principal.RunLevel).Equals($ExpectedRunLevel, [StringComparison]::OrdinalIgnoreCase)) {
+    $mismatches += "run-level"
+  }
+  return $mismatches
+}
+
+function Assert-ScheduledTaskContract($Task, [string]$ExpectedExecutable, [string]$ExpectedArguments, [string]$ExpectedUserId, [string]$ExpectedRunLevel, [string]$Label) {
+  $mismatches = @(Get-ScheduledTaskContractMismatches $Task $ExpectedExecutable $ExpectedArguments $ExpectedUserId $ExpectedRunLevel)
+  if ($mismatches.Count -gt 0) {
+    throw "$Label read-back mismatch: $($mismatches -join ', ')"
+  }
+}
+
+function Wait-ScheduledTaskRunning(
+  [string]$TaskName,
+  [int]$TimeoutSeconds = 15,
+  [string]$ReadinessResultPath = "",
+  $Request = $null,
+  [string]$ReadinessNonce = ""
+) {
+  $deadline = [DateTime]::UtcNow.AddSeconds($TimeoutSeconds)
+  $task = $null
+  $readinessState = "not-required"
+  do {
+    $task = Get-ScheduledTask -TaskName $TaskName -ErrorAction SilentlyContinue
+    $runtimeLeaseReady = $false
+    if (-not [string]::IsNullOrWhiteSpace($ReadinessResultPath)) {
+      $readinessState = "missing"
+      if (Test-Path -LiteralPath $ReadinessResultPath -PathType Leaf) {
+        $readinessInfo = Get-Item -LiteralPath $ReadinessResultPath -Force
+        if ($readinessInfo.PSIsContainer -or ($readinessInfo.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+          throw "Managed WSL keepalive readiness result must be a regular non-reparse file"
+        }
+        $readiness = Get-Content -LiteralPath $ReadinessResultPath -Raw -Encoding UTF8 | ConvertFrom-Json
+        if ($readiness.schema -ne "rainskills.windows-result.v1" -or
+            $readiness.action -ne "WslKeepalive" -or
+            $readiness.operation_id -ne $Request.operation_id -or
+            $readiness.installation_id -ne $Request.installation_id -or
+            $readiness.nonce -ne $ReadinessNonce) {
+          throw "Managed WSL keepalive readiness result identity mismatch"
+        }
+        if ($readiness.status -eq "error") {
+          $failureMessage = ConvertTo-SafeDiagnosticLine ([string](Get-PropertyValue $readiness.facts "failureMessage" "Unknown WSL keepalive failure")) 500
+          throw "Managed WSL keepalive task failed: $failureMessage"
+        }
+        if ($readiness.status -eq "ok" -and
+            [bool](Get-PropertyValue $readiness.facts "runtimeLeaseReady" $false)) {
+          $runtimeLeaseReady = $true
+          $readinessState = "ready"
+        } else {
+          $readinessState = "not-ready"
+        }
+      }
+    }
+    if ($null -ne $task -and [string]$task.State -eq "Running" -and
+        ([string]::IsNullOrWhiteSpace($ReadinessResultPath) -or $runtimeLeaseReady)) {
+      return $task
+    }
+    Start-Sleep -Milliseconds 250
+  } while ([DateTime]::UtcNow -lt $deadline)
+
+  $state = if ($null -eq $task) { "missing" } else { [string]$task.State }
+  $info = Get-ScheduledTaskInfo -TaskName $TaskName -ErrorAction SilentlyContinue
+  $lastResult = if ($null -eq $info) { "unavailable" } else { [string]$info.LastTaskResult }
+  throw "Managed WSL keepalive task did not become ready: state=$state, readiness=$readinessState, LastTaskResult=$lastResult"
+}
+
+function Register-NetworkMaintenance($Request, $Manifest) {
+  $machineRoot = Get-MachineRoot $Request
+  $machineHelper = Join-Path $machineRoot "windows-platform.ps1"
+  $powershellPath = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
+  $nonce = [string]$Manifest.maintenance_nonce
+  $maintenanceRequest = Join-Path $machineRoot "request-$nonce.json"
+  $maintenanceResult = Join-Path $machineRoot "result-$nonce.json"
+  $requestValue = [ordered]@{
+    schema = "rainskills.windows-request.v1"
+    action = "ConfigureNetwork"
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    nonce = $nonce
+    user_sid = $Request.user_sid
+    policy = $Request.policy
+    payload = [ordered]@{
+      subnet = $Manifest.subnet
+      host_address = $Manifest.host_address
+      guest_address = $Manifest.guest_address
+      maintenance = $true
+    }
+  }
+  [IO.File]::WriteAllText($maintenanceRequest, (($requestValue | ConvertTo-Json -Depth 12) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+
+  $keepaliveNonce = [string]$Manifest.keepalive_nonce
+  $keepaliveRequest = Join-Path $machineRoot "request-$keepaliveNonce.json"
+  $keepaliveResult = Join-Path $machineRoot "result-$keepaliveNonce.json"
+  $keepaliveRequestValue = [ordered]@{
+    schema = "rainskills.windows-request.v1"
+    action = "WslKeepalive"
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    nonce = $keepaliveNonce
+    user_sid = $Request.user_sid
+    policy = $Request.policy
+    payload = [ordered]@{ runtime_lease = $true }
+  }
+  [IO.File]::WriteAllText($keepaliveRequest, (($keepaliveRequestValue | ConvertTo-Json -Depth 12) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+  Set-MachineRootAcl $machineRoot $Request.user_sid
+  $arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $machineHelper +
+    '" -Action ConfigureNetwork -RequestPath "' + $maintenanceRequest + '" -ResultPath "' + $maintenanceResult + '"'
+  $taskAction = New-ScheduledTaskAction -Execute $powershellPath -Argument $arguments
+  $trigger = New-ScheduledTaskTrigger -AtLogOn -User $Request.user_sid
+  $trigger.Delay = "PT10S"
+  $principal = New-ScheduledTaskPrincipal -UserId $Request.user_sid -LogonType Interactive -RunLevel Highest
+  $networkTaskName = "RainSkills-Network-$($Request.installation_id)"
+  Register-VerifiedTask $networkTaskName $taskAction $trigger $principal
+
+  $keepaliveTaskName = "RainSkills-Keepalive-$($Request.installation_id)"
+  $keepaliveArguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $machineHelper +
+    '" -Action WslKeepalive -RequestPath "' + $keepaliveRequest + '" -ResultPath "' + $keepaliveResult + '"'
+  $keepaliveAction = New-ScheduledTaskAction -Execute $powershellPath -Argument $keepaliveArguments
+  $keepaliveTrigger = New-ScheduledTaskTrigger -AtLogOn -User $Request.user_sid
+  $keepaliveTrigger.Delay = "PT20S"
+  $keepalivePrincipal = New-ScheduledTaskPrincipal -UserId $Request.user_sid -LogonType Interactive -RunLevel Highest
+  $keepaliveSettings = New-ScheduledTaskSettingsSet `
+    -ExecutionTimeLimit ([TimeSpan]::Zero) `
+    -RestartCount 3 `
+    -RestartInterval (New-TimeSpan -Minutes 1) `
+    -MultipleInstances IgnoreNew `
+    -AllowStartIfOnBatteries `
+    -DontStopIfGoingOnBatteries `
+    -StartWhenAvailable
+  $reuseKeepalive = $false
+  $existingKeepalive = Get-ScheduledTask -TaskName $keepaliveTaskName -ErrorAction SilentlyContinue
+  if ($null -ne $existingKeepalive) {
+    $keepaliveMismatches = @(Get-ScheduledTaskContractMismatches $existingKeepalive $powershellPath $keepaliveArguments $Request.user_sid "Highest")
+    if ($keepaliveMismatches.Count -eq 0 -and [string]$existingKeepalive.State -eq "Running") {
+      try {
+        [void](Wait-ScheduledTaskRunning $keepaliveTaskName 1 $keepaliveResult $Request $keepaliveNonce)
+        $reuseKeepalive = $true
+      } catch {
+        $reuseKeepalive = $false
+      }
+    }
+    if (-not $reuseKeepalive -and [string]$existingKeepalive.State -eq "Running") {
+      Stop-ScheduledTask -TaskName $keepaliveTaskName -ErrorAction SilentlyContinue
+    }
+  }
+  if (-not $reuseKeepalive) {
+    if (Test-Path -LiteralPath $keepaliveResult) {
+      $keepaliveResultInfo = Get-Item -LiteralPath $keepaliveResult -Force
+      if ($keepaliveResultInfo.PSIsContainer -or ($keepaliveResultInfo.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+        throw "Managed WSL keepalive result must be a regular non-reparse file"
+      }
+      Remove-Item -LiteralPath $keepaliveResult -Force
+    }
+    Register-VerifiedTask $keepaliveTaskName $keepaliveAction $keepaliveTrigger $keepalivePrincipal $keepaliveSettings
+    Start-ScheduledTask -TaskName $keepaliveTaskName
+    [void](Wait-ScheduledTaskRunning $keepaliveTaskName 15 $keepaliveResult $Request $keepaliveNonce)
+  }
+  return [ordered]@{ network = $networkTaskName; keepalive = $keepaliveTaskName }
+}
+
+function Assert-WslKeepaliveTask($Request) {
+  Assert-NetworkManifestDigest $Request
+  $manifest = Get-Content -LiteralPath (Get-NetworkManifestPath $Request) -Raw -Encoding UTF8 | ConvertFrom-Json
+  $taskName = "RainSkills-Keepalive-$($Request.installation_id)"
+  $task = Get-ScheduledTask -TaskName $taskName -ErrorAction SilentlyContinue
+  $machineRoot = Get-MachineRoot $Request
+  $machineHelper = Join-Path $machineRoot "windows-platform.ps1"
+  $keepaliveNonce = [string]$manifest.keepalive_nonce
+  $keepaliveRequest = Join-Path $machineRoot "request-$keepaliveNonce.json"
+  $keepaliveResult = Join-Path $machineRoot "result-$keepaliveNonce.json"
+  $expectedExecutable = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
+  $expectedArguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $machineHelper +
+    '" -Action WslKeepalive -RequestPath "' + $keepaliveRequest + '" -ResultPath "' + $keepaliveResult + '"'
+  Assert-ScheduledTaskContract $task $expectedExecutable $expectedArguments $Request.user_sid "Highest" "Managed WSL keepalive task"
+  [void](Wait-ScheduledTaskRunning $taskName 15 $keepaliveResult $Request $keepaliveNonce)
+  return $taskName
+}
+
+function Test-ExpectedPortProxy($Tuples, [string]$GuestAddress, [int[]]$Ports) {
+  foreach ($port in $Ports) {
+    $matches = @($Tuples | Where-Object {
+      $_.listenAddress -eq "127.0.0.1" -and $_.listenPort -eq $port -and
+      $_.connectAddress -eq $GuestAddress -and $_.connectPort -eq $port
+    })
+    if ($matches.Count -ne 1) { return $false }
+  }
+  $managed = @($Tuples | Where-Object { $Ports -contains $_.listenPort })
+  return $managed.Count -eq $Ports.Count
+}
+
+function Invoke-ConfigureNetwork($Request) {
+  if ((Get-WslNetworkingMode) -ne "nat") { throw "WSL networkingMode must remain nat" }
+  if ((Get-DistroIdentity $Request) -ne $Request.installation_id) { throw "Managed distro identity mismatch" }
+  $payload = $Request.payload
+  $subnet = [string](Get-PropertyValue $payload "subnet")
+  $hostAddress = [string](Get-PropertyValue $payload "host_address")
+  $guestAddress = [string](Get-PropertyValue $payload "guest_address")
+  if ($subnet -notmatch "^172\.31\.(\d{1,3})\.0/30$") {
+    throw "Managed network addresses are invalid"
+  }
+  $thirdOctet = $Matches[1]
+  if ($hostAddress -ne "172.31.$thirdOctet.1" -or $guestAddress -ne "172.31.$thirdOctet.2") {
+    throw "Managed host and guest addresses do not belong to the selected /30"
+  }
+  $adapter = Get-WslAdapter
+  $hnsNetworkId = Get-WslHnsNetworkId $adapter
+  $manifestPath = Get-NetworkManifestPath $Request
+  $existing = $null
+  if (Test-Path -LiteralPath $manifestPath -PathType Leaf) {
+    Assert-NetworkManifestDigest $Request
+    $existing = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+    if ($existing.installation_id -ne $Request.installation_id -or $existing.subnet -ne $subnet -or
+        $existing.adapter_ifindex -ne $adapter.ifIndex -or $existing.hns_network_id -ne $hnsNetworkId) {
+      throw "Managed network manifest does not match current WSL facts"
+    }
+  }
+  $existingAddress = @(Get-NetIPAddress -AddressFamily IPv4 -IPAddress $hostAddress -ErrorAction SilentlyContinue)
+  if ($existingAddress.Count -gt 0 -and @($existingAddress | Where-Object { $_.InterfaceIndex -ne $adapter.ifIndex }).Count -gt 0) {
+    throw "The managed host address is owned by another interface"
+  }
+  if ($existingAddress.Count -eq 0) {
+    New-NetIPAddress -InterfaceIndex $adapter.ifIndex -IPAddress $hostAddress -PrefixLength 30 -AddressFamily IPv4 | Out-Null
+  }
+  Invoke-DistroBootstrap $Request "ConfigureGuestNetwork" $hostAddress $guestAddress
+
+  $ports = @($Request.policy.windows.managed_ports | ForEach-Object { [int]$_ })
+  $obsoletePortProxies = @()
+  if ($existing) {
+    foreach ($entry in @($existing.portproxy)) {
+      $listenAddress = [string](Get-PropertyValue $entry "listenAddress")
+      $listenPort = [int](Get-PropertyValue $entry "listenPort")
+      $connectAddress = [string](Get-PropertyValue $entry "connectAddress")
+      $connectPort = [int](Get-PropertyValue $entry "connectPort")
+      if ($ports -contains $listenPort) { continue }
+      if ($listenAddress -ne "127.0.0.1" -or $connectAddress -ne $guestAddress -or
+          $connectPort -ne $listenPort -or $listenPort -lt 1 -or $listenPort -gt 65535) {
+        throw "Obsolete managed portproxy manifest entry is invalid"
+      }
+      $obsoletePortProxies += [ordered]@{
+        listenAddress = $listenAddress
+        listenPort = $listenPort
+        connectAddress = $connectAddress
+        connectPort = $connectPort
+      }
+    }
+  }
+  $currentTuples = @(Get-PortProxyTuples)
+  foreach ($obsolete in $obsoletePortProxies) {
+    $matches = @($currentTuples | Where-Object {
+      $_.listenAddress -eq $obsolete.listenAddress -and $_.listenPort -eq $obsolete.listenPort -and
+      $_.connectAddress -eq $obsolete.connectAddress -and $_.connectPort -eq $obsolete.connectPort
+    })
+    if ($matches.Count -ne 1) { throw "Obsolete managed portproxy rule changed outside RainSkills" }
+    & "$env:SystemRoot\System32\netsh.exe" interface portproxy delete v4tov4 `
+      listenaddress=$($obsolete.listenAddress) listenport=$($obsolete.listenPort) | Out-Null
+    if ($LASTEXITCODE -ne 0) { throw "Failed to remove obsolete managed portproxy for port $($obsolete.listenPort)" }
+  }
+  $currentTuples = @(Get-PortProxyTuples)
+  $conflicts = @($currentTuples | Where-Object {
+    $ports -contains $_.listenPort -and -not (
+      $_.listenAddress -eq "127.0.0.1" -and $_.connectAddress -eq $guestAddress -and $_.connectPort -eq $_.listenPort
+    )
+  })
+  if ($conflicts.Count -gt 0) { throw "Unknown or externally changed portproxy rules use RainSkills managed ports" }
+  foreach ($port in $ports) {
+    $present = @($currentTuples | Where-Object {
+      $_.listenAddress -eq "127.0.0.1" -and $_.listenPort -eq $port -and
+      $_.connectAddress -eq $guestAddress -and $_.connectPort -eq $port
+    }).Count -eq 1
+    if (-not $present) {
+      & "$env:SystemRoot\System32\netsh.exe" interface portproxy add v4tov4 `
+        listenaddress=127.0.0.1 listenport=$port connectaddress=$guestAddress connectport=$port | Out-Null
+      if ($LASTEXITCODE -ne 0) { throw "Failed to create managed loopback portproxy for port $port" }
+    }
+  }
+  $tuples = @(Get-PortProxyTuples)
+  if (-not (Test-ExpectedPortProxy $tuples $guestAddress $ports)) { throw "Managed portproxy read-back mismatch" }
+  $maintenanceNonce = if ($existing) { [string](Get-PropertyValue $existing "maintenance_nonce") } else { "" }
+  if ([string]::IsNullOrWhiteSpace($maintenanceNonce)) { $maintenanceNonce = New-SecureNonce }
+  $keepaliveNonce = if ($existing) { [string](Get-PropertyValue $existing "keepalive_nonce") } else { "" }
+  if ([string]::IsNullOrWhiteSpace($keepaliveNonce)) { $keepaliveNonce = New-SecureNonce }
+  $manifest = [ordered]@{
+    schema = "rainskills.windows-managed-network.v1"
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    hns_network_id = $hnsNetworkId
+    adapter_ifindex = [int]$adapter.ifIndex
+    subnet = $subnet
+    host_address = $hostAddress
+    guest_address = $guestAddress
+    portproxy = @($tuples | Where-Object { $ports -contains $_.listenPort })
+    maintenance_nonce = $maintenanceNonce
+    keepalive_nonce = $keepaliveNonce
+    acl_owner = "S-1-5-32-544"
+    writable_sids = @("S-1-5-18", "S-1-5-32-544")
+  }
+  [IO.File]::WriteAllText($manifestPath, (($manifest | ConvertTo-Json -Depth 8) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+  $manifestDigest = (Get-FileHash -LiteralPath $manifestPath -Algorithm SHA256).Hash.ToLowerInvariant()
+  [IO.File]::WriteAllText((Join-Path (Get-MachineRoot $Request) "managed-network.sha256"), $manifestDigest + [Environment]::NewLine, [Text.UTF8Encoding]::new($false))
+  Set-MachineRootAcl (Get-MachineRoot $Request) $Request.user_sid
+  $maintenanceTasks = Register-NetworkMaintenance $Request $manifest
+  return [ordered]@{
+    networkManifestVerified = $true
+    portproxyVerified = $true
+    subnet = $subnet
+    hostAddress = $hostAddress
+    guestAddress = $guestAddress
+    hnsNetworkId = $hnsNetworkId
+    adapterIfIndex = [int]$adapter.ifIndex
+    maintenanceTask = $maintenanceTasks.network
+    keepaliveTask = $maintenanceTasks.keepalive
+  }
+}
+
+function Invoke-VerifyNetwork($Request) {
+  $manifestPath = Get-NetworkManifestPath $Request
+  Assert-NetworkManifestDigest $Request
+  $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+  $adapter = Get-WslAdapter
+  if ($manifest.operation_id -ne $Request.operation_id -or $manifest.installation_id -ne $Request.installation_id -or
+      $manifest.adapter_ifindex -ne $adapter.ifIndex -or $manifest.hns_network_id -ne (Get-WslHnsNetworkId $adapter)) {
+    throw "Managed network identity changed"
+  }
+  $ports = @($Request.policy.windows.managed_ports | ForEach-Object { [int]$_ })
+  if (-not (Test-ExpectedPortProxy @(Get-PortProxyTuples) $manifest.guest_address $ports)) {
+    throw "Managed portproxy snapshot changed"
+  }
+  $hostAddress = @(Get-NetIPAddress -InterfaceIndex $adapter.ifIndex -IPAddress $manifest.host_address -ErrorAction SilentlyContinue)
+  if ($hostAddress.Count -ne 1) { throw "Managed host address is missing" }
+  if ((Get-DistroIdentity $Request) -ne $Request.installation_id) { throw "Managed distro identity mismatch" }
+  [void](Assert-WslKeepaliveTask $Request)
+  return [ordered]@{
+    networkManifestVerified = $true
+    portproxyVerified = $true
+    subnet = $manifest.subnet
+    hostAddress = $manifest.host_address
+    guestAddress = $manifest.guest_address
+  }
+}
+
+function Get-VerifiedManagedNetwork($Request) {
+  [void](Invoke-VerifyNetwork $Request)
+  $manifest = Get-Content -LiteralPath (Get-NetworkManifestPath $Request) -Raw -Encoding UTF8 | ConvertFrom-Json
+  return $manifest
+}
+
+function Invoke-PrepareDocker($Request) {
+  $network = Get-VerifiedManagedNetwork $Request
+  Invoke-DistroBootstrap $Request "PrepareDocker" ([string]$network.host_address) ([string]$network.guest_address)
+  $wslPath = Get-TrustedWslPath
+  & $wslPath -d Rainbond -u root -- docker info *> $null
+  if ($LASTEXITCODE -ne 0) { throw "Docker is not ready in the managed Rainbond distro" }
+  return [ordered]@{ dockerReady = $true; networkGateReady = $true; systemdReady = $true }
+}
+
+function Invoke-InstallRainbond($Request) {
+  $network = Get-VerifiedManagedNetwork $Request
+  $installerPath = Assert-PathInsideRoot ([string](Get-PropertyValue $Request.payload "installer_path")) ([Environment]::GetFolderPath("UserProfile"))
+  $installerDigest = [string](Get-PropertyValue $Request.payload "installer_sha256")
+  if ($installerDigest -notmatch "^[a-f0-9]{64}$") { throw "Rainbond installer SHA-256 is invalid" }
+  [void](Assert-FileDigest $installerPath $installerDigest)
+  $linuxInstaller = Convert-WindowsPathForDistro $installerPath
+  Invoke-DistroBootstrap $Request "InstallRainbond" ([string]$network.host_address) `
+    ([string]$network.guest_address) $linuxInstaller $installerDigest
+  $wslPath = Get-TrustedWslPath
+  $status = (& $wslPath -d Rainbond -u root -- docker inspect rainbond --format "{{.State.Status}}" 2>$null | Out-String).Trim()
+  if ($status -ne "running") { throw "Rainbond outer container is not running after installation" }
+  return [ordered]@{ dockerReady = $true; rainbondRuntimeVerified = $true; containerRunning = $true }
+}
+
+function Invoke-VerifyDeployment($Request) {
+  $network = Get-VerifiedManagedNetwork $Request
+  Invoke-DistroBootstrap $Request "VerifyRainbond" ([string]$network.host_address) ([string]$network.guest_address)
+  $wslPath = Get-TrustedWslPath
+  $startedAtProbe = Invoke-NativeCapture $wslPath @("-d", "Rainbond", "-u", "root", "--", "docker", "inspect", "rainbond", "--format", "{{.State.StartedAt}}")
+  $containerStartedAt = @($startedAtProbe.output -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ }) |
+    Select-Object -Last 1
+  if ($startedAtProbe.exitCode -ne 0 -or [string]::IsNullOrWhiteSpace([string]$containerStartedAt)) {
+    throw "Rainbond outer container start timestamp is unavailable"
+  }
+  $windowsReachable = $false
+  try {
+    $response = Invoke-WebRequest -Uri "http://127.0.0.1:7070/" -UseBasicParsing -TimeoutSec 15
+    $windowsReachable = $response.StatusCode -ge 200 -and $response.StatusCode -lt 500
+  } catch {
+    $windowsReachable = $false
+  }
+  $ports = @($Request.policy.windows.managed_ports | ForEach-Object { [int]$_ })
+  $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue)
+  $portsListening = @($ports | Where-Object { $port = $_; @($listeners | Where-Object { $_.LocalPort -eq $port }).Count -gt 0 })
+  return [ordered]@{
+    installationId = [string]$Request.installation_id
+    containerRunning = $true
+    nodeReady = $true
+    componentsReady = $true
+    wslConsoleReachable = $true
+    windowsConsoleReachable = [bool]$windowsReachable
+    portsListening = $portsListening
+    containerStartedAt = [string]$containerStartedAt
+    guestAddress = [string]$network.guest_address
+    windowsConsoleUrl = "http://127.0.0.1:7070"
+    controlConsoleUrl = "http://127.0.0.1:7070"
+  }
+}
+
+function Invoke-ProbeDeployment($Request, [DateTime]$Deadline) {
+  Invoke-BoundedDistroBootstrap $Request "ProbeRainbond" $Deadline
+  $network = Get-VerifiedManagedNetwork $Request
+  $wslPath = Get-TrustedWslPath
+  $startedAtProbe = Invoke-NativeCapture $wslPath @("-d", "Rainbond", "-u", "root", "--", "docker", "inspect", "rainbond", "--format", "{{.State.StartedAt}}")
+  $containerStartedAt = @($startedAtProbe.output -split "`r?`n" | ForEach-Object { $_.Trim() } | Where-Object { $_ }) |
+    Select-Object -Last 1
+  if ($startedAtProbe.exitCode -ne 0 -or [string]::IsNullOrWhiteSpace([string]$containerStartedAt)) {
+    throw "Rainbond outer container start timestamp is unavailable"
+  }
+
+  try {
+    $response = Invoke-WebRequest -Uri "http://127.0.0.1:7070/" -UseBasicParsing -TimeoutSec 10
+    $windowsReachable = $response.StatusCode -ge 200 -and $response.StatusCode -lt 500
+  } catch {
+    $windowsReachable = $false
+  }
+  $ports = @($Request.policy.windows.managed_ports | ForEach-Object { [int]$_ })
+  $listeners = @(Get-NetTCPConnection -State Listen -ErrorAction SilentlyContinue)
+  $portsListening = @($ports | Where-Object { $port = $_; @($listeners | Where-Object { $_.LocalPort -eq $port }).Count -gt 0 })
+  if (-not $windowsReachable -or $portsListening.Count -ne $ports.Count) {
+    throw "Windows loopback readiness probe failed"
+  }
+  return [ordered]@{
+    installationId = [string]$Request.installation_id
+    containerRunning = $true
+    nodeReady = $true
+    componentsReady = $true
+    wslConsoleReachable = $true
+    windowsConsoleReachable = $true
+    portsListening = $portsListening
+    containerStartedAt = [string]$containerStartedAt
+    guestAddress = [string]$network.guest_address
+    windowsConsoleUrl = "http://127.0.0.1:7070"
+    controlConsoleUrl = "http://127.0.0.1:7070"
+  }
+}
+
+function Invoke-StableDeployment($Request) {
+  $deadline = [DateTime]::UtcNow.AddSeconds(120)
+  $lastFailure = "readiness evidence did not remain stable"
+  for ($round = 1; $round -le 3; $round++) {
+    $samples = @()
+    $roundFailure = ""
+    for ($probe = 1; $probe -le 3; $probe++) {
+      if ([DateTime]::UtcNow -ge $deadline) {
+        $roundFailure = "stability deadline expired"
+        break
+      }
+      try {
+        $samples += ,(Invoke-ProbeDeployment $Request $deadline)
+      } catch {
+        $roundFailure = [string]$_.Exception.Message
+      }
+      if ($probe -lt 3 -and [DateTime]::UtcNow.AddSeconds(5) -lt $deadline) { Start-Sleep -Seconds 5 }
+    }
+    $startedAtValues = @($samples | ForEach-Object { [string]$_.containerStartedAt } | Select-Object -Unique)
+    if ($samples.Count -eq 3 -and $startedAtValues.Count -eq 1) {
+      $verified = $samples[-1]
+      return [ordered]@{
+        installationId = [string]$verified.installationId
+        containerRunning = [bool]$verified.containerRunning
+        nodeReady = [bool]$verified.nodeReady
+        componentsReady = [bool]$verified.componentsReady
+        wslConsoleReachable = [bool]$verified.wslConsoleReachable
+        windowsConsoleReachable = [bool]$verified.windowsConsoleReachable
+        portsListening = $verified.portsListening
+        guestAddress = [string]$verified.guestAddress
+        windowsConsoleUrl = [string]$verified.windowsConsoleUrl
+        controlConsoleUrl = [string]$verified.controlConsoleUrl
+        stableProbeCount = 3
+        containerStartedAt = [string]$startedAtValues[0]
+      }
+    }
+    $lastFailure = if ($roundFailure) { $roundFailure } else { "Rainbond outer container restarted during readiness sampling" }
+    if ([DateTime]::UtcNow -ge $deadline) { break }
+  }
+  throw "RAINBOND_RUNTIME_UNSTABLE: $lastFailure"
+}
+
+function Invoke-DeviceFlowReadiness($Request) {
+  try {
+    $response = Invoke-WebRequest -Uri "http://127.0.0.1:7070/console/mcp/device/code" `
+      -Method Post -ContentType "application/x-www-form-urlencoded" `
+      -Body "client_id=rainskills&scope=mcp" -UseBasicParsing -TimeoutSec 15
+    if ($response.StatusCode -lt 200 -or $response.StatusCode -ge 300) { throw "unexpected HTTP status" }
+    $body = $response.Content | ConvertFrom-Json
+    if ([string]::IsNullOrWhiteSpace([string]$body.device_code)) { throw "device_code is missing" }
+    if ([string]$body.user_code -notmatch '^[23456789BCDFGHJKMNPQRTVWXY]{4}-[23456789BCDFGHJKMNPQRTVWXY]{4}$') {
+      throw "user_code is invalid"
+    }
+    $expiresIn = 0
+    $interval = 0
+    if (-not [int]::TryParse([string]$body.expires_in, [ref]$expiresIn) -or $expiresIn -le 0 -or
+        -not [int]::TryParse([string]$body.interval, [ref]$interval) -or $interval -le 0) {
+      throw "device code timing is invalid"
+    }
+    return [ordered]@{ deviceFlowHttpReachable = $true }
+  } catch {
+    throw "CONSOLE_DEVICE_FLOW_UNAVAILABLE: Rainbond Console Device Flow readiness check failed"
+  }
+}
+
+function Get-TaskNames($Request) {
+  return [ordered]@{
+    machine = "RainSkills-Machine-$($Request.installation_id)"
+    user = "RainSkills-User-$($Request.installation_id)"
+    finalizer = "RainSkills-Finalize-$($Request.installation_id)"
+  }
+}
+
+function Assert-MachineManifestIdentity($Request) {
+  $machineRoot = Get-MachineRoot $Request
+  $manifestPath = Join-Path $machineRoot "machine-manifest.json"
+  if (-not (Test-Path -LiteralPath $manifestPath -PathType Leaf)) { throw "Machine manifest is missing" }
+  $manifest = Get-Content -LiteralPath $manifestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+  if ($manifest.schema -ne "rainskills.windows-machine-bundle.v1" -or
+      $manifest.operation_id -ne $Request.operation_id -or
+      $manifest.installation_id -ne $Request.installation_id -or
+      $manifest.original_user_sid -ne $Request.user_sid) {
+    throw "Machine manifest identity mismatch"
+  }
+  return $manifest
+}
+
+function Assert-UpgradableMachineBundle($Request, $Manifest, [string]$NewHelperDigest, [string]$NewBootstrapDigest) {
+  $machineRoot = Get-MachineRoot $Request
+  # rc.13 could replace the helper before its manifest write was denied.
+  $interruptedRc13HelperDigest = "b2315dcec815187f3f48144981487bf2646dad5ed0de12a1125b99c45ecf18fd"
+  [void](Assert-FileDigestOneOf (Join-Path $machineRoot "windows-platform.ps1") @(
+    $Manifest.helper_sha256,
+    $NewHelperDigest,
+    $interruptedRc13HelperDigest
+  ))
+  [void](Assert-FileDigestOneOf (Join-Path $machineRoot "wsl-bootstrap.sh") @($Manifest.bootstrap_sha256, $NewBootstrapDigest))
+  [void](Assert-FileDigest (Join-Path $Manifest.recovery_root "manifest.json") $Manifest.recovery_manifest_sha256)
+}
+
+function Assert-MachineManifest($Request) {
+  $machineRoot = Get-MachineRoot $Request
+  $manifest = Assert-MachineManifestIdentity $Request
+  [void](Assert-FileDigest (Join-Path $machineRoot "windows-platform.ps1") $manifest.helper_sha256)
+  [void](Assert-FileDigest (Join-Path $machineRoot "wsl-bootstrap.sh") $manifest.bootstrap_sha256)
+  [void](Assert-FileDigest (Join-Path $manifest.recovery_root "manifest.json") $manifest.recovery_manifest_sha256)
+  [void](Assert-SafePackageVersion ([string](Get-PropertyValue $manifest "package_version")))
+  return $manifest
+}
+
+function Register-VerifiedTask([string]$TaskName, $ActionValue, $Trigger, $Principal, $Settings = $null) {
+  if ($null -ne $Settings) {
+    Register-ScheduledTask -TaskName $TaskName -Action $ActionValue -Trigger $Trigger -Principal $Principal -Settings $Settings -Force | Out-Null
+  } else {
+    Register-ScheduledTask -TaskName $TaskName -Action $ActionValue -Trigger $Trigger -Principal $Principal -Force | Out-Null
+  }
+  $task = Get-ScheduledTask -TaskName $TaskName
+  Assert-ScheduledTaskContract $task ([string]$ActionValue.Execute) ([string]$ActionValue.Arguments) `
+    ([string]$Principal.UserId) ([string]$Principal.RunLevel) "Scheduled task $TaskName"
+}
+
+function Invoke-RegisterResume($Request) {
+  $manifest = Assert-MachineManifest $Request
+  $names = Get-TaskNames $Request
+  $machineRoot = Get-MachineRoot $Request
+  $machineHelper = Join-Path $machineRoot "windows-platform.ps1"
+  $machineRequest = Join-Path $machineRoot "request-$($Request.nonce).json"
+  $machineResult = Join-Path $machineRoot "result-$($Request.nonce).json"
+  $machineRequestValue = [ordered]@{
+    schema = "rainskills.windows-request.v1"
+    action = "VerifyWsl"
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    nonce = $Request.nonce
+    user_sid = $Request.user_sid
+    policy = $Request.policy
+    payload = [ordered]@{ resume = $true }
+  }
+  [IO.File]::WriteAllText($machineRequest, (($machineRequestValue | ConvertTo-Json -Depth 12) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+  Set-MachineRootAcl $machineRoot $Request.user_sid
+  $powershellPath = "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe"
+  $machineArguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $machineHelper +
+    '" -Action VerifyWsl -RequestPath "' + $machineRequest + '" -ResultPath "' + $machineResult + '"'
+  $machineAction = New-ScheduledTaskAction -Execute $powershellPath -Argument $machineArguments
+  $machineTrigger = New-ScheduledTaskTrigger -AtLogOn -User $Request.user_sid
+  $machineTrigger.Delay = "PT15S"
+  $machinePrincipal = New-ScheduledTaskPrincipal -UserId $Request.user_sid -LogonType Interactive -RunLevel Highest
+  Register-VerifiedTask $names.machine $machineAction $machineTrigger $machinePrincipal
+
+  if ($manifest.control_mode -eq "wsl") {
+    $wslExecutable = "$env:SystemRoot\System32\wsl.exe"
+    $userArguments = '-d "' + $manifest.control_distro + '" --exec "' + $manifest.control_node_path +
+      '" "' + $manifest.control_recovery_entry + '" platform install --onboarding-id ' +
+      $Request.operation_id + ' --target local-windows --yes'
+    $userAction = New-ScheduledTaskAction -Execute $wslExecutable -Argument $userArguments
+  } else {
+    $userArguments = '"' + $manifest.recovery_entry + '" platform install --onboarding-id ' +
+      $Request.operation_id + ' --target local-windows --yes'
+    $userAction = New-ScheduledTaskAction -Execute $manifest.node_path -Argument $userArguments
+  }
+  $userTrigger = New-ScheduledTaskTrigger -AtLogOn -User $Request.user_sid
+  $userTrigger.Delay = "PT45S"
+  $userPrincipal = New-ScheduledTaskPrincipal -UserId $Request.user_sid -LogonType Interactive
+  Register-VerifiedTask $names.user $userAction $userTrigger $userPrincipal
+  return [ordered]@{ recoveryTasksVerified = $true; machineTask = $names.machine; userTask = $names.user }
+}
+
+function Invoke-RegisterFinalize($Request) {
+  $manifest = Assert-MachineManifest $Request
+  $names = Get-TaskNames $Request
+  $machineRoot = Get-MachineRoot $Request
+  $machineHelper = Join-Path $machineRoot "windows-platform.ps1"
+  $nonceBytes = [byte[]]::new(32)
+  [Security.Cryptography.RandomNumberGenerator]::Create().GetBytes($nonceBytes)
+  $finalizerNonce = -join ($nonceBytes | ForEach-Object { $_.ToString("x2") })
+  $finalizerRequest = Join-Path $machineRoot "request-$finalizerNonce.json"
+  $finalizerResult = Join-Path $machineRoot "result-$finalizerNonce.json"
+  $finalizerRequestValue = [ordered]@{
+    schema = "rainskills.windows-request.v1"
+    action = "Finalize"
+    operation_id = $Request.operation_id
+    installation_id = $Request.installation_id
+    nonce = $finalizerNonce
+    user_sid = $Request.user_sid
+    policy = $Request.policy
+    payload = [ordered]@{ terminal_nonce = $finalizerNonce }
+  }
+  [IO.File]::WriteAllText($finalizerRequest, (($finalizerRequestValue | ConvertTo-Json -Depth 12) + [Environment]::NewLine), [Text.UTF8Encoding]::new($false))
+  $arguments = '-NoProfile -NonInteractive -ExecutionPolicy Bypass -File "' + $machineHelper +
+    '" -Action Finalize -RequestPath "' + $finalizerRequest + '" -ResultPath "' + $finalizerResult + '"'
+  $taskAction = New-ScheduledTaskAction -Execute "$env:SystemRoot\System32\WindowsPowerShell\v1.0\powershell.exe" -Argument $arguments
+  $trigger = New-ScheduledTaskTrigger -AtLogOn -User $Request.user_sid
+  $trigger.Delay = "PT2M"
+  $principal = New-ScheduledTaskPrincipal -UserId $Request.user_sid -LogonType Interactive -RunLevel Highest
+  Register-VerifiedTask $names.finalizer $taskAction $trigger $principal
+  Set-MachineRootAcl $machineRoot $Request.user_sid
+  return [ordered]@{
+    finalizerTaskVerified = $true
+    finalizerTask = $names.finalizer
+    finalizerNonce = $finalizerNonce
+    recoveryRoot = $manifest.recovery_root
+  }
+}
+
+function Invoke-RequestReboot($Request) {
+  $names = Get-TaskNames $Request
+  foreach ($name in @($names.machine, $names.user, $names.finalizer)) {
+    if (-not (Get-ScheduledTask -TaskName $name -ErrorAction SilentlyContinue)) { throw "Recovery task is missing: $name" }
+  }
+  return [ordered]@{ restartRequested = $true; recoveryTasksVerified = $true }
+}
+
+function Invoke-Finalize($Request) {
+  $machineRoot = Get-MachineRoot $Request
+  $requestedStatus = [string](Get-PropertyValue $Request.payload "status")
+  if ($requestedStatus -eq "success") {
+    $fresh = Invoke-VerifyDeployment $Request
+    if (-not $fresh.windowsConsoleReachable) { throw "Cannot finalize before fresh deployment verification passes" }
+    $names = Get-TaskNames $Request
+    foreach ($name in @($names.machine, $names.user, $names.finalizer)) {
+      Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAction SilentlyContinue
+    }
+    Remove-Item -LiteralPath (Join-Path $machineRoot "lease.json") -Force -ErrorAction SilentlyContinue
+    return [ordered]@{ finalized = $true; verified = $true }
+  }
+  $terminalMarker = Join-Path $machineRoot "terminal-result.json"
+  if (-not (Test-Path -LiteralPath $terminalMarker -PathType Leaf)) {
+    return [ordered]@{ finalized = $false; waitingForTerminalMarker = $true }
+  }
+  $terminal = Get-Content -LiteralPath $terminalMarker -Raw -Encoding UTF8 | ConvertFrom-Json
+  if ($terminal.operation_id -ne $Request.operation_id -or $terminal.installation_id -ne $Request.installation_id -or
+      $terminal.nonce -ne $Request.nonce -or $terminal.status -notin @("success", "cancelled", "failed")) {
+    throw "Terminal marker identity mismatch"
+  }
+  $names = Get-TaskNames $Request
+  foreach ($name in @($names.machine, $names.user, $names.finalizer)) {
+    Unregister-ScheduledTask -TaskName $name -Confirm:$false -ErrorAction SilentlyContinue
+  }
+  Remove-Item -LiteralPath (Join-Path $machineRoot "lease.json") -Force -ErrorAction SilentlyContinue
+  return [ordered]@{ finalized = $true }
+}
+
+function Invoke-PrepareWsl($Request) {
+  Write-Host "[1/2] Preparing the protected RainSkills recovery bundle..."
+  try {
+    $bundle = Invoke-InstallMachineBundle $Request
+  } catch {
+    throw "InstallMachineBundle failed: $($_.Exception.Message)"
+  }
+  Write-Host "[2/2] Enabling and verifying WSL 2..."
+  try {
+    $wsl = Invoke-EnableWsl $Request
+  } catch {
+    throw "EnableWsl failed: $($_.Exception.Message)"
+  }
+  $facts = [ordered]@{
+    machineBundleVerified = [bool]$bundle.machineBundleVerified
+    machineRoot = [string]$bundle.machineRoot
+    helperPath = [string]$bundle.helperPath
+    wslFeatureState = [string]$wsl.wslFeatureState
+    virtualMachinePlatformFeatureState = [string]$wsl.virtualMachinePlatformFeatureState
+    wslPath = $wsl.wslPath
+    wslVersion = $wsl.wslVersion
+    wslVersionCommandSucceeded = [bool]$wsl.wslVersionCommandSucceeded
+    wslDefaultVersion = $wsl.wslDefaultVersion
+    rebootPending = [bool]$wsl.rebootPending
+    wslVerified = $false
+    recoveryTasksVerified = $false
+    finalizerTaskVerified = $false
+    finalizerNonce = $null
+  }
+  if ($facts.rebootPending) {
+    Write-Host "Registering verified post-reboot recovery tasks..."
+    $resume = Invoke-RegisterResume $Request
+    $finalizer = Invoke-RegisterFinalize $Request
+    $facts.recoveryTasksVerified = [bool]($resume.recoveryTasksVerified -and $finalizer.finalizerTaskVerified)
+    $facts.finalizerTaskVerified = [bool]$finalizer.finalizerTaskVerified
+    $facts.finalizerNonce = [string]$finalizer.finalizerNonce
+  } else {
+    $verified = Get-WslRuntimeFacts
+    $facts.wslFeatureState = [string]$verified.wslFeatureState
+    $facts.virtualMachinePlatformFeatureState = [string]$verified.virtualMachinePlatformFeatureState
+    $facts.wslPath = $verified.wslPath
+    $facts.wslVersion = $verified.wslVersion
+    $facts.wslVersionCommandSucceeded = [bool]$verified.wslVersionCommandSucceeded
+    $facts.wslDefaultVersion = $verified.wslDefaultVersion
+    $facts.rebootPending = [bool]$verified.rebootPending
+    $facts.wslVerified = [bool](
+      $verified.wslFeatureState -eq "Enabled" -and
+      $verified.virtualMachinePlatformFeatureState -eq "Enabled" -and
+      $verified.wslPath -and
+      $verified.wslVersionCommandSucceeded -and
+      $verified.wslDefaultVersion -eq 2 -and
+      -not $verified.rebootPending
+    )
+  }
+  return $facts
+}
+
+function Invoke-ConvergeInstalledPlatform($Request) {
+  Write-Host "[1/5] Updating the protected RainSkills helper..."
+  $bundle = Invoke-InstallMachineBundle $Request
+  Write-Host "[2/5] Reconciling fixed local networking..."
+  $configured = Invoke-ConfigureNetwork $Request
+  Write-Host "[3/5] Converging the existing Rainbond runtime..."
+  Invoke-DistroBootstrap $Request "ConvergeInstalledRainbond" `
+    ([string]$configured.hostAddress) ([string]$configured.guestAddress)
+  Write-Host "[4/5] Refreshing recovery tasks..."
+  $resume = Invoke-RegisterResume $Request
+  Write-Host "[5/5] Verifying stable deployment and Device Flow readiness..."
+  $stability = Invoke-StableDeployment $Request
+  $deviceFlow = Invoke-DeviceFlowReadiness $Request
+  return [ordered]@{
+    installationId = [string]$Request.installation_id
+    machineBundleVerified = [bool]$bundle.machineBundleVerified
+    distroIdentityVerified = $true
+    systemdReady = $true
+    networkGateReady = [bool]$configured.networkManifestVerified
+    dockerReady = $true
+    rainbondRuntimeVerified = [bool]$stability.containerRunning
+    networkManifestVerified = [bool]$configured.networkManifestVerified
+    portproxyVerified = [bool]$configured.portproxyVerified
+    recoveryTasksVerified = [bool]$resume.recoveryTasksVerified
+    containerRunning = [bool]$stability.containerRunning
+    nodeReady = [bool]$stability.nodeReady
+    componentsReady = [bool]$stability.componentsReady
+    wslConsoleReachable = [bool]$stability.wslConsoleReachable
+    windowsConsoleReachable = [bool]$stability.windowsConsoleReachable
+    portsListening = $stability.portsListening
+    stableProbeCount = [int]$stability.stableProbeCount
+    containerStartedAt = [string]$stability.containerStartedAt
+    deviceFlowHttpReachable = [bool]$deviceFlow.deviceFlowHttpReachable
+    subnet = [string]$configured.subnet
+    hostAddress = [string]$configured.hostAddress
+    guestAddress = [string]$stability.guestAddress
+    windowsConsoleUrl = [string]$stability.windowsConsoleUrl
+    controlConsoleUrl = [string]$stability.controlConsoleUrl
+  }
+}
+
+function Start-WslRuntimeLease() {
+  $wslPath = Get-TrustedWslPath
+  $arguments = @("-d", "Rainbond", "-u", "root", "--exec", "/bin/sleep", "infinity")
+  $startInfo = [Diagnostics.ProcessStartInfo]::new()
+  $startInfo.FileName = $wslPath
+  $startInfo.Arguments = (($arguments | ForEach-Object { ConvertTo-NativeProcessArgument ([string]$_) }) -join " ")
+  $startInfo.UseShellExecute = $false
+  $startInfo.CreateNoWindow = $true
+  $startInfo.RedirectStandardOutput = $true
+  $startInfo.RedirectStandardError = $true
+  $process = [Diagnostics.Process]::new()
+  $process.StartInfo = $startInfo
+  if (-not $process.Start()) {
+    $process.Dispose()
+    throw "Rainbond WSL runtime lease did not start"
+  }
+  $stdoutTask = $process.StandardOutput.ReadToEndAsync()
+  $stderrTask = $process.StandardError.ReadToEndAsync()
+  Start-Sleep -Seconds 1
+  $process.Refresh()
+  if ($process.HasExited) {
+    $lastLine = @((($stderrTask.Result + "`n" + $stdoutTask.Result) -split "`r?`n") |
+      ForEach-Object { ConvertTo-SafeDiagnosticLine ([string]$_) 240 } | Where-Object { $_ }) |
+      Select-Object -Last 1
+    $exitCode = $process.ExitCode
+    $process.Dispose()
+    if ($lastLine) {
+      throw "Rainbond WSL runtime lease exited during startup: exitCode=${exitCode}: $lastLine"
+    }
+    throw "Rainbond WSL runtime lease exited during startup: exitCode=$exitCode"
+  }
+  $process | Add-Member -NotePropertyName RainSkillsStdoutTask -NotePropertyValue $stdoutTask
+  $process | Add-Member -NotePropertyName RainSkillsStderrTask -NotePropertyValue $stderrTask
+  return $process
+}
+
+function Stop-WslRuntimeLease($Lease) {
+  if ($null -eq $Lease) { return }
+  try {
+    $Lease.Refresh()
+    if (-not $Lease.HasExited) {
+      Stop-Process -Id $Lease.Id -Force -ErrorAction SilentlyContinue
+      [void]$Lease.WaitForExit(5000)
+    }
+    $Lease.Dispose()
+  } catch {
+    # The permanent keepalive task owns the distro after provisioning finishes.
+  }
+}
+
+function Invoke-WslKeepalive($Request) {
+  if ((Get-ManagedDistroNames) -notcontains "Rainbond" -or
+      (Get-DistroIdentity $Request) -ne $Request.installation_id) {
+    throw "Managed Rainbond distro is unavailable for the WSL keepalive task"
+  }
+  if (Test-Path -LiteralPath $ResultPath -PathType Leaf) {
+    Remove-Item -LiteralPath $ResultPath -Force
+  }
+  $lease = Start-WslRuntimeLease
+  try {
+    Write-ActionResult $Request ([ordered]@{ runtimeLeaseReady = $true })
+    $lease.WaitForExit()
+    $exitCode = $lease.ExitCode
+    $lastLine = @((($lease.RainSkillsStderrTask.Result + "`n" + $lease.RainSkillsStdoutTask.Result) -split "`r?`n") |
+      ForEach-Object { ConvertTo-SafeDiagnosticLine ([string]$_) 240 } | Where-Object { $_ }) |
+      Select-Object -Last 1
+    if ($lastLine) {
+      throw "Rainbond WSL keepalive exited unexpectedly: exitCode=${exitCode}: $lastLine"
+    }
+    throw "Rainbond WSL keepalive exited unexpectedly: exitCode=$exitCode"
+  } finally {
+    $lease.Dispose()
+  }
+}
+
+function Invoke-ProvisionRainbond($Request) {
+  $bundle = Invoke-ProvisionStage 1 7 "Updating the protected RainSkills helper" {
+    try {
+      Invoke-InstallMachineBundle $Request
+    } catch {
+      throw "InstallMachineBundle failed: $($_.Exception.Message)"
+    }
+  }
+  $runtimeLease = $null
+  try {
+    $imported = Invoke-ProvisionStage 2 7 "Importing the Rainbond WSL environment" {
+      Invoke-ImportDistro $Request
+    }
+    $runtimeLease = Start-WslRuntimeLease
+    $networkStage = Invoke-ProvisionStage 3 7 "Configuring fixed local networking" {
+      $configuredResult = Invoke-ConfigureNetwork $Request
+      $networkResult = Invoke-VerifyNetwork $Request
+      return [ordered]@{ configured = $configuredResult; network = $networkResult }
+    }
+    $configured = $networkStage.configured
+    $network = $networkStage.network
+    $docker = Invoke-ProvisionStage 4 7 "Preparing Docker inside the Rainbond environment" {
+      Invoke-PrepareDocker $Request
+    }
+    $installed = Invoke-ProvisionStage 5 7 "Installing Rainbond" {
+      Invoke-InstallRainbond $Request
+    }
+    $verified = Invoke-ProvisionStage 6 7 "Verifying Rainbond inside WSL" {
+      Invoke-VerifyDeployment $Request
+    }
+    $verified = Invoke-ProvisionStage 7 7 "Verifying Windows loopback access" {
+      if (-not [bool]$verified.windowsConsoleReachable) {
+        throw "Rainbond Console is not reachable through Windows loopback"
+      }
+      return $verified
+    }
+    return [ordered]@{
+      installationId = [string]$Request.installation_id
+      machineBundleVerified = [bool]$bundle.machineBundleVerified
+      distroIdentityVerified = [bool]$imported.distroIdentityVerified
+      systemdReady = [bool]$imported.systemdReady
+      networkGateReady = [bool]$docker.networkGateReady
+      dockerReady = [bool]$docker.dockerReady
+      rainbondRuntimeVerified = [bool]$installed.rainbondRuntimeVerified
+      networkManifestVerified = [bool]($configured.networkManifestVerified -and $network.networkManifestVerified)
+      portproxyVerified = [bool]$network.portproxyVerified
+      containerRunning = [bool]$verified.containerRunning
+      nodeReady = [bool]$verified.nodeReady
+      componentsReady = [bool]$verified.componentsReady
+      wslConsoleReachable = [bool]$verified.wslConsoleReachable
+      windowsConsoleReachable = [bool]$verified.windowsConsoleReachable
+      portsListening = $verified.portsListening
+      subnet = [string]$network.subnet
+      hostAddress = [string]$network.hostAddress
+      guestAddress = [string]$verified.guestAddress
+      windowsConsoleUrl = [string]$verified.windowsConsoleUrl
+      controlConsoleUrl = [string]$verified.controlConsoleUrl
+    }
+  } finally {
+    Stop-WslRuntimeLease $runtimeLease
+  }
+}
+
+$request = $null
+$resultIdentityValidated = $false
+try {
+  if ([string]::IsNullOrWhiteSpace($RequestPath) -or [string]::IsNullOrWhiteSpace($ResultPath)) {
+    throw "RequestPath and ResultPath are required for this action"
+  }
+  $requestInfo = Get-Item -LiteralPath $RequestPath
+  if ($requestInfo.PSIsContainer -or ($requestInfo.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+    throw "RequestPath must be a regular non-reparse file"
+  }
+  $request = Get-Content -LiteralPath $RequestPath -Raw -Encoding UTF8 | ConvertFrom-Json
+  $requiredRequestKeys = @("schema", "action", "operation_id", "installation_id", "nonce", "user_sid", "policy")
+  if ($Action -ne "Preflight") { $requiredRequestKeys += "payload" }
+  $actualRequestKeys = @($request.PSObject.Properties.Name)
+  if ($request.schema -ne "rainskills.windows-request.v1" -or $request.action -ne $Action) {
+    throw "Request schema or action mismatch"
+  }
+  if (@($actualRequestKeys | Where-Object { $requiredRequestKeys -notcontains $_ }).Count -gt 0 -or
+      @($requiredRequestKeys | Where-Object { $actualRequestKeys -notcontains $_ }).Count -gt 0) {
+    throw "Request contains unsupported or missing fields"
+  }
+  if ($actualRequestKeys -contains "command" -or $actualRequestKeys -contains "script") {
+    throw "Request may not contain command or script"
+  }
+  Assert-NoExecutableFields $request
+  $uuidPattern = "^[0-9a-fA-F]{8}-[0-9a-fA-F]{4}-[1-5][0-9a-fA-F]{3}-[89abAB][0-9a-fA-F]{3}-[0-9a-fA-F]{12}$"
+  if ([string]$request.operation_id -notmatch $uuidPattern -or
+      [string]$request.installation_id -notmatch $uuidPattern -or
+      [string]$request.nonce -notmatch "^[0-9a-f]{64}$") {
+    throw "Request identifiers are invalid"
+  }
+  $requestFullPath = [IO.Path]::GetFullPath($RequestPath)
+  $resultFullPath = [IO.Path]::GetFullPath($ResultPath)
+  if ([IO.Path]::GetDirectoryName($requestFullPath) -ne [IO.Path]::GetDirectoryName($resultFullPath) -or
+      [IO.Path]::GetFileName($requestFullPath) -ne "request-$($request.nonce).json" -or
+      [IO.Path]::GetFileName($resultFullPath) -ne "result-$($request.nonce).json") {
+    throw "RequestPath and ResultPath are outside the nonce-bound operation directory"
+  }
+  if (Test-Path -LiteralPath $ResultPath) {
+    $resultInfo = Get-Item -LiteralPath $ResultPath
+    if ($resultInfo.PSIsContainer -or ($resultInfo.Attributes -band [IO.FileAttributes]::ReparsePoint)) {
+      throw "ResultPath must be a regular non-reparse file"
+    }
+  }
+  $resultIdentityValidated = $true
+
+  $machineActions = @("PrepareWsl", "ProvisionRainbond", "ConvergeInstalledPlatform", "InstallMachineBundle", "EnableWsl", "UpdateWsl", "VerifyWsl", "RegisterResume", "RegisterFinalize", "RequestReboot", "Finalize", "ImportDistro", "PrepareRuntime", "ConfigureNetwork", "VerifyNetwork", "PrepareDocker", "InstallRainbond", "VerifyDeployment", "WslKeepalive")
+  if ($machineActions -contains $Action -and -not (Test-IsElevated)) {
+    Invoke-ElevatedSelf
+    exit 0
+  }
+  if ($machineActions -contains $Action -and
+      [Security.Principal.WindowsIdentity]::GetCurrent().User.Value -ne [string]$request.user_sid) {
+    throw "Post-UAC SID does not match the original user"
+  }
+
+  $status = "ok"
+  switch ($Action) {
+    "Preflight" { $facts = Invoke-Preflight $request }
+    "PrepareWsl" { $facts = Invoke-PrepareWsl $request }
+    "ProvisionRainbond" { $facts = Invoke-ProvisionRainbond $request }
+    "ConvergeInstalledPlatform" { $facts = Invoke-ConvergeInstalledPlatform $request }
+    "InstallMachineBundle" { $facts = Invoke-InstallMachineBundle $request }
+    "EnableWsl" { $facts = Invoke-EnableWsl $request }
+    "UpdateWsl" { $facts = Invoke-UpdateWsl $request }
+    "VerifyWsl" {
+      $facts = Get-WslRuntimeFacts
+      $facts["wslVerified"] = [bool](
+        $facts.wslFeatureState -eq "Enabled" -and
+        $facts.virtualMachinePlatformFeatureState -eq "Enabled" -and
+        $facts.wslPath -and
+        $facts.wslVersionCommandSucceeded -and
+        $facts.wslDefaultVersion -eq 2 -and
+        -not $facts.rebootPending
+      )
+      if (-not $facts.wslVerified) { $status = "blocked" }
+    }
+    "RegisterResume" { $facts = Invoke-RegisterResume $request }
+    "RegisterFinalize" { $facts = Invoke-RegisterFinalize $request }
+    "RequestReboot" { $facts = Invoke-RequestReboot $request }
+    "Finalize" { $facts = Invoke-Finalize $request }
+    "ImportDistro" { $facts = Invoke-ImportDistro $request }
+    "PrepareRuntime" { $facts = Invoke-PrepareRuntime $request }
+    "ConfigureNetwork" { $facts = Invoke-ConfigureNetwork $request }
+    "VerifyNetwork" { $facts = Invoke-VerifyNetwork $request }
+    "PrepareDocker" { $facts = Invoke-PrepareDocker $request }
+    "InstallRainbond" { $facts = Invoke-InstallRainbond $request }
+    "VerifyDeployment" { $facts = Invoke-VerifyDeployment $request }
+    "WslKeepalive" { $facts = Invoke-WslKeepalive $request }
+    default { throw "Unsupported fixed action" }
+  }
+  Write-ActionResult $request $facts $status
+  if ($Action -eq "RequestReboot") { Restart-Computer -Force }
+} catch {
+  $failure = $_
+  if ($resultIdentityValidated -and $null -ne $request) {
+    try { Write-ActionErrorResult $request $failure } catch { }
+  }
+  Write-Error "$Action failed: $($failure.Exception.Message)"
+  exit 1
+}

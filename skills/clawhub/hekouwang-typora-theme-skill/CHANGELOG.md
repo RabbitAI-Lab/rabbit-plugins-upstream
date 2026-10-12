@@ -1,5 +1,49 @@
 # Changelog
 
+## 1.4.1 — 2026-10-12
+
+skill-doctor 体检修复。
+
+- SKILL.md 补说明：从 ClawHub / SkillHub 安装需先 clone 开源仓库，命令在仓库根目录执行
+- 目录说明补 `verify_export_pdf.py`
+- skill-card 版本号与许可证说明对齐 frontmatter
+
+## 1.4.0 — 2026-10-12
+
+同步主题 1.2.0（主题画廊与升级指南）。
+
+- 付费清单改为 V1 / V2 Pro / V3–V6（各含浅/深，共 12 个 CSS），V2 Pro 与免费 V2 分立
+- 新增 `verify_layout.py`（多窗口宽度、窄屏、表格、源码模式几何预检）与 `verify_export_pdf.py`（A4/A5、长代码、长表）
+- 构建内置 `contrast_check.py`，对文字、链接、代码、按钮、任务框做最小对比度校正与审计
+- 排版：响应式正文阅读列 `--hk-reading-measure`、宽屏技术画布、小字/表格/代码块字号 token
+- `!important` 规则收窄为「编辑区零」，导出段可用于覆盖 Typora 打印基础样式
+- 截图验收改为 `demo/主题展示样张.md` → `docs/previews/`
+
+## 1.3.3 — 2026-08-12
+
+ClawHub 分类：`creative`；误建 slug `hekouwang-typora-theme` 已合并进本 skill。
+
+## 1.3.2 — 2026-08-12
+
+P2：商业化可发现性 + SEO。
+
+- summary 补英文关键词（Typora theme / CJK long-form）
+- README.zh 补 30 秒验收命令块
+
+## 1.3.1 — 2026-08-12
+
+本地与 ClawHub 1.3.0 对齐，并统一 standalone / monorepo 双布局说明。
+
+- `version` 升至 1.3.1；`homepage` 指向主题开源仓 `hekouwang-typora-theme`
+- `summary` / 正文定位改为 **中文长文浅色 + 深色**（不再写「复刻 Claude 桌面」）
+- SKILL.md 补 **安装布局** 说明：skill 目录即工作区，或 monorepo 内 `skills/` 软链
+- 目录树补 `references/`；与 ClawHub 1.3.0 文案合并
+
+## 1.3.0 — 2026-08-06（ClawHub）
+
+- 产品收窄为 **CJK 长文专用**（Hekouwang + Dark）；移除 Claude 聊天变体叙事
+- skill 真源迁入 `skills/hekouwang-typora-theme/` 布局；纸感 chrome 与 README 样张更新
+
 ## 1.0.1 — 2026-07-20
 
 发布渠道适配，无功能变更。

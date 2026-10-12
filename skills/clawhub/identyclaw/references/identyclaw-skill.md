@@ -22,7 +22,7 @@ ClawHub may show **API key required** on the skill page. For IdentyClaw that mea
 
 | Artifact | Purpose |
 | --- | --- |
-| MCP `doc:skills` | Same runnable cheat sheet as repo `references/skills.md` (plugin-first + multi-API) |
+| MCP `doc:skills` | Same runnable cheat sheet as repo `public/references/skills.md` (plugin-first + multi-API) |
 | MCP `doc:discovery` | Discovery index for MCP-only clients |
 | ClawHub plugin `@identyclaw/openclaw-identyclaw-plugin` **v1.6.0+** | Executable tools (`identyclaw_ensure_session`, `identyclaw_create_hola`, `identyclaw_verify_hola`, …) |
 | ClawHub plugin `@identyclaw/openclaw-a2a-plugin` | Agent-to-agent P2P JWTs (separate from HTTP API sessions) |
@@ -33,8 +33,8 @@ The **skill** teaches when and how to use IdentyClaw workflows (API session vs H
 
 **Other runtimes:** Hermes (`hermes-identyclaw-skill/`), IronClaw, NanoClaw, Cursor — host login is first-class; see `doc:reference:agent-frameworks`. Do not treat curl as an OpenClaw fallback.
 
-**Source of truth for ClawHub skill:** [openclaw-identyclaw-plugin/skill/SKILL.md](https://github.com/discernible-io/openclaw-identyclaw-plugin/blob/main/skill/SKILL.md). **Canonical MCP cheat sheet:** `references/skills.md` (MCP `doc:skills`). Bundled skill `references/` are synced from this repo at publish.
+**Source of truth for ClawHub skill:** [openclaw-identyclaw-plugin/skill/SKILL.md](https://github.com/discernible-io/openclaw-identyclaw-plugin/blob/main/skill/SKILL.md). **Canonical MCP cheat sheet:** `public/references/skills.md` (MCP `doc:skills`). Bundled skill `public/references/` are synced from this repo at publish.
 
 ## Bundled references (skill package)
 
-After install, deep specs live under the skill bundle `references/` (synced from this repo at publish time): login (incl. federation), HOLA, discovery, collaboration envelope, OpenClaw webhooks, DID method, and more.
+After install, deep specs live under the skill bundle `public/references/` (synced from this repo at publish time): login (incl. federation), HOLA, discovery, collaboration envelope, OpenClaw webhooks, DID method, and more.

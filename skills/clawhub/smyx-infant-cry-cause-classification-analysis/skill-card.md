@@ -1,45 +1,60 @@
-## Description: <br>
-Classifies likely infant cry causes from audio or audio-video input and returns confidence, secondary causes, acoustic feature summaries, directional soothing suggestions, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes infant crying in supplied audio or video and reports likely causes, confidence, and caregiving hints.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External developers and product teams use this skill to connect baby-monitoring or parenting workflows to infant cry cause classification, historical report lookup, and structured caregiver-facing result summaries. Outputs should be treated as parenting support rather than medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive infant audio or video may be uploaded to a cloud service for processing. <br>
-Mitigation: Use only with guardian consent, avoid unnecessary recordings, and confirm that cloud processing, retention, and access controls meet the deployment's privacy requirements. <br>
-Risk: The skill may silently create or reuse account identity data and retrieve cloud history tied to that identity. <br>
-Mitigation: Review identity handling before installation, isolate workspace state where needed, and confirm that history retrieval is appropriate for the user and environment. <br>
-Risk: Cry cause classifications can be mistaken for medical conclusions. <br>
-Mitigation: Present results as acoustic classification and directional soothing support only, and direct caregivers to professional care for persistent abnormal crying or concerning symptoms. <br>
+## Use Case:
 
+Caregivers and childcare teams can submit infant cry recordings for a cloud-based cause classification and review linked past reports. Results are caregiving aids, not medical diagnoses.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-infant-cry-cause-classification-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [Infant Cry Cause Classification API Documentation](artifact/references/api_doc.md) <br>
-- [Common Analysis API Documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured text, with optional saved report files when an output path is provided.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces likely cry cause, confidence, secondary causes, cry duration, acoustic feature summary, soothing hint, history listings, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Sensitive infant audio or video and report history are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain guardian consent and confirm retention, access, and deletion controls with the publisher before submitting real recordings.
+
+Risk: The skill creates or reuses local identity records and stores tokens without a visible identity prompt.
+
+Mitigation: Review account binding and token storage before deployment, and protect local identity records from unauthorized access.
+
+Risk: A probable cry-cause classification may be mistaken for a medical diagnosis.
+
+Mitigation: Use results only as caregiving guidance; seek medical care for persistent or concerning symptoms.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-infant-cry-cause-classification-analysis)
+- [Infant cry classification API reference](references/api_doc.md)
+- [Analysis API error codes](skills/smyx_analysis/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Text or JSON analysis report; Markdown links for report history]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Likely cause and confidence, caregiving hints, report links, and optional saved output file.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved ClawHub release; bundled frontmatter says 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

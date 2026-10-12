@@ -1,40 +1,49 @@
-## Description: <br>
-Todo List Promax helps an agent capture personal tasks from chat messages and attachments, classify them, manage completion or deletion, and remind the user about unfinished dated tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures personal todos from chat messages and attachments, organizes them by due date and priority, and offers opt-in daily reminders.
 
-## Publisher: <br>
-[z-zihan](https://clawhub.ai/user/z-zihan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-zihan](https://clawhub.ai/user/z-zihan)
 
-## Use Case: <br>
-External users use this skill to maintain a local personal todo list from natural-language chat, including task capture, lookup, completion, deletion confirmation, modification, single-step undo, attachment handling, and daily reminders. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill persistently stores original task messages and attachments under the workspace, which may include secrets, private documents, credentials, or sensitive personal details. <br>
-Mitigation: Use it only for non-sensitive todos, avoid attaching private files or credentials, and review the workspace todo-list directory before sharing or archiving the workspace. <br>
-Risk: The security evidence notes conflicting English and Chinese instructions about whether raw source messages are shown in normal todo queries. <br>
-Mitigation: Confirm the active language behavior before relying on query output, and treat stored source messages as potentially visible until the publisher aligns the instructions. <br>
+## Use Case:
 
+Individuals use this skill to capture, review, update, and prioritize personal tasks in chat, with optional reminders for unfinished tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/z-zihan/todo-list-promax) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown tables, plain-language confirmations, reminder text, JSON-backed todo records, and cron setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist todo records, original source messages, attachments, backups, and cleanup logs under the workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.0 (source: frontmatter and server release evidence) <br>
+Risk: Original todo messages and attachments remain in local workspace storage, potentially retaining sensitive details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid including unrelated sensitive information in todo requests; use the documented trim/delete controls or remove the todo directory to clear stored originals.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/z-zihan/skills/todo-list-promax)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Chat confirmations and task lists in Markdown; local JSON task records]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional daily reminder summaries; original messages and attachments are stored locally.]
+
+## Skill Version(s):
+
+2.2.2 (source: SKILL.md frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

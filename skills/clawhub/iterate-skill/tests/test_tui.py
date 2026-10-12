@@ -1,0 +1,336 @@
+"""TUI 渲染器接口契约测试.
+
+覆盖：
+- question() 只打印问题头、返回 None（接口契约，防止签名与实现漂移）
+- prompt_prefix() 已移除（曾返回 rich 标记字符串，会被当作 input() 提示
+  文本直接显示，造成 `[iterate.dim]` 标记泄露到终端）
+- _display_width() CJK 全角/半角宽度计算
+- 各渲染方法（banner/intro/section/info/hint/warning/error/success/bullet/
+  key_value/numbered_list/panel/cancel/empty_line）输出到注入 console
+- error() 通过 stderr console 输出（注入模式下与主 console 复用）
+- cli._should_show_banner 的 --no-banner / ITERATE_NO_BANNER / --json 逻辑
+"""
+
+from __future__ import annotations
+
+import argparse
+import sys
+from pathlib import Path
+from typing import Any, get_type_hints
+
+REPO_ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(REPO_ROOT))
+
+from iterate_cli import cli
+from iterate_cli.tui import TUI, _display_width
+
+
+class _RecordingConsole:
+    """记录 print 调用的假 Console，仅实现 TUI 用到的接口."""
+
+    def __init__(self) -> None:
+        self.calls: list[tuple[Any, ...]] = []
+
+    @property
+    def is_terminal(self) -> bool:
+        return False
+
+    def print(self, *args: Any, **kwargs: Any) -> None:
+        self.calls.append(args)
+
+
+def _make_tui() -> tuple[TUI, _RecordingConsole]:
+    console = _RecordingConsole()
+    return TUI(console=console), console
+
+
+def _rendered(console: _RecordingConsole) -> str:
+    """将 console 记录的所有调用拼成纯文本（忽略 rich 标记）. """
+    return "\n".join(" ".join(str(arg) for arg in call) for call in console.calls)
+
+
+class TestQuestionContract:
+    def test_return_annotation_is_none(self) -> None:
+        """question() 声明的返回类型必须是 None（与实现一致）."""
+        hints = get_type_hints(TUI.question)
+        assert hints.get("return") is type(None), (
+            "question() 签名声明的返回类型应为 None，当前为 "
+            f"{hints.get('return')!r}"
+        )
+
+    def test_question_returns_none(self) -> None:
+        tui, _ = _make_tui()
+        assert tui.question("继续吗？") is None
+
+    def test_question_prints_marker_and_message(self) -> None:
+        tui, console = _make_tui()
+        tui.question("请输入维度编号")
+        rendered = " ".join(str(arg) for arg in console.calls[0])
+        assert "请输入维度编号" in rendered
+
+
+class TestPromptPrefixRemoved:
+    def test_prompt_prefix_not_defined(self) -> None:
+        """prompt_prefix() 应已删除：无调用方，且会把 rich 标记泄露进提示文本."""
+        assert not hasattr(TUI, "prompt_prefix"), (
+            "TUI.prompt_prefix 应删除（死代码，返回值含 rich 标记会被 "
+            "input() 直接显示）"
+        )
+
+
+class TestDisplayWidth:
+    def test_ascii_is_single_width(self) -> None:
+        assert _display_width("abc123") == 6
+
+    def test_cjk_is_double_width(self) -> None:
+        assert _display_width("中文") == 4
+
+    def test_mixed_width(self) -> None:
+        assert _display_width("iter-中文") == 9  # 5 ascii + 4 cjk
+
+    def test_control_characters_skipped(self) -> None:
+        assert _display_width("\x00\x01a") == 1
+
+    def test_fullwidth_punctuation(self) -> None:
+        # 全角冒号/括号按双宽计算
+        assert _display_width("：（）") == 6
+
+    def test_emoji_is_double_width(self) -> None:
+        # Emoji 在多数终端按 2 列渲染（U+1F000–U+1FAFF）
+        assert _display_width("🚀") == 2
+        assert _display_width("a🚀") == 3
+
+    def test_combining_and_variation_selectors_are_zero_width(self) -> None:
+        # 组合用记号与变体选择符（VS16）宽度为 0，跟随前一字符
+        assert _display_width("e\u0301") == 1  # e + combining acute
+        assert _display_width("✋\ufe0f") == 1  # ️hand + VS16 (counted 1 via 0-width VS16)
+        assert _display_width("中\u0301") == 2  # CJK + combining
+
+    def test_del_and_c1_controls_skipped(self) -> None:
+        assert _display_width("\x7f\x80\x81a") == 1
+
+
+class TestRenderMethods:
+    def test_banner_renders_iterate_ascii(self) -> None:
+        tui, console = _make_tui()
+        tui.banner()
+        rendered = _rendered(console)
+        assert "ITERATE" in rendered or "██" in rendered
+
+    def test_intro_renders_title_and_subtitle(self) -> None:
+        tui, console = _make_tui()
+        tui.intro("Iterate Skill", "项目知识库初始化")
+        rendered = _rendered(console)
+        assert "Iterate Skill" in rendered
+        assert "项目知识库初始化" in rendered
+        assert "◆" in rendered
+
+    def test_section_renders_title(self) -> None:
+        tui, console = _make_tui()
+        tui.section("技术栈 / Tech Stack")
+        assert "技术栈 / Tech Stack" in _rendered(console)
+
+    def test_info_hint_bullet_render_content(self) -> None:
+        tui, console = _make_tui()
+        tui.info("信息行")
+        tui.hint("提示行")
+        tui.bullet("列表项")
+        rendered = _rendered(console)
+        assert "信息行" in rendered
+        assert "提示行" in rendered
+        assert "列表项" in rendered
+
+    def test_warning_renders_warning_symbol(self) -> None:
+        tui, console = _make_tui()
+        tui.warning("警告")
+        assert "⚠" in _rendered(console)
+        assert "警告" in _rendered(console)
+
+    def test_error_renders_error_symbol(self) -> None:
+        # 注入 console 时 _stderr_console 复用同一实例，error 也写入同一 console
+        tui, console = _make_tui()
+        tui.error("出错")
+        assert "✗" in _rendered(console)
+        assert "出错" in _rendered(console)
+
+    def test_success_renders_check_mark(self) -> None:
+        tui, console = _make_tui()
+        tui.success("成功")
+        assert "✓" in _rendered(console)
+        assert "成功" in _rendered(console)
+
+    def test_key_value_pads_label(self) -> None:
+        tui, console = _make_tui()
+        tui.key_value("语言", "zh")
+        rendered = _rendered(console)
+        assert "语言" in rendered
+        assert "zh" in rendered
+
+    def test_numbered_list_with_markers(self) -> None:
+        tui, console = _make_tui()
+        tui.numbered_list(["a", "b"], markers=["✓", ""])
+        rendered = _rendered(console)
+        assert "1." in rendered
+        assert "2." in rendered
+        assert "✓" in rendered
+
+    def test_panel_renders_content_and_title(self) -> None:
+        from rich.panel import Panel
+
+        tui, console = _make_tui()
+        tui.panel("面板内容", title="面板标题")
+        assert len(console.calls) == 1
+        panel = console.calls[0][0]
+        assert isinstance(panel, Panel)
+        assert "面板内容" in str(panel.renderable)
+        assert "面板标题" in str(panel.title)
+
+    def test_markup_in_user_text_is_escaped(self) -> None:
+        """User-supplied text must not be parsed as rich markup (F24).
+
+        A hostile/mistyped message like ``[red]x[/]`` must be escaped to
+        ``\\[red\\]x\\[/\\]`` so rich prints it literally instead of applying
+        the style tag.
+        """
+        tui, console = _make_tui()
+        tui.info("[red]breaks[/]")
+        tui.error("[bold]oops[/]")
+        tui.hint("[italic]hint[/]")
+        tui.warning("[cyan]warn[/]")
+        tui.success("[green]ok[/]")
+        tui.bullet("[magenta]item[/]")
+        tui.key_value("k", "[blue]v[/]")
+        tui.numbered_list(["[red]first[/]"])
+        tui.question("[red]q?[/]")
+        tui.panel("[red]content[/]", title="[red]title[/]")
+        tui.intro("[red]title[/]", "[blue]sub[/]")
+        tui.section("[red]sec[/]")
+        rendered = _rendered(console)
+        assert r"\[red]breaks\[/]" in rendered
+        assert r"\[bold]oops\[/]" in rendered
+        assert r"\[green]ok\[/]" in rendered
+        # The literal bracket form must never reach the console unresolved.
+        assert "[red]breaks[/]" not in rendered
+
+    def test_cancel_renders_cancelled(self) -> None:
+        tui, console = _make_tui()
+        tui.cancel()
+        rendered = _rendered(console)
+        assert "已取消" in rendered
+
+    def test_empty_line_renders(self) -> None:
+        tui, console = _make_tui()
+        tui.empty_line()
+        assert len(console.calls) == 1
+
+
+class TestShouldShowBanner:
+    def _args(self, **overrides: Any) -> argparse.Namespace:
+        defaults: dict[str, Any] = {"no_banner": False, "json": False}
+        defaults.update(overrides)
+        return argparse.Namespace(**defaults)
+
+    def test_default_shows_banner_on_tty(self, monkeypatch) -> None:
+        monkeypatch.delenv("ITERATE_NO_BANNER", raising=False)
+        monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
+        assert cli._should_show_banner(self._args()) is True
+
+    def test_no_banner_flag_disables(self, monkeypatch) -> None:
+        monkeypatch.delenv("ITERATE_NO_BANNER", raising=False)
+        monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
+        assert cli._should_show_banner(self._args(no_banner=True)) is False
+
+    def test_env_var_disables(self, monkeypatch) -> None:
+        monkeypatch.setenv("ITERATE_NO_BANNER", "1")
+        monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
+        assert cli._should_show_banner(self._args()) is False
+
+    def test_empty_env_var_keeps_banner_on_tty(self, monkeypatch) -> None:
+        monkeypatch.setenv("ITERATE_NO_BANNER", "")
+        monkeypatch.setattr(sys.stdout, "isatty", lambda: True)
+        assert cli._should_show_banner(self._args()) is True
+
+    def test_redirected_stdout_disables_banner(self, monkeypatch) -> None:
+        """A pipe must never receive the eight-line ASCII banner.
+
+        Regression: it was written to stdout regardless of redirection, so
+        `v=$(iterate --version)` captured block art plus the version line,
+        contradicting the call site's own promise of a bare parseable line.
+        """
+        monkeypatch.delenv("ITERATE_NO_BANNER", raising=False)
+        monkeypatch.setattr(sys.stdout, "isatty", lambda: False)
+        assert cli._should_show_banner(self._args()) is False
+
+    def test_redirected_stdout_beats_an_empty_env_var(self, monkeypatch) -> None:
+        monkeypatch.setenv("ITERATE_NO_BANNER", "")
+        monkeypatch.setattr(sys.stdout, "isatty", lambda: False)
+        assert cli._should_show_banner(self._args()) is False
+
+
+class TestJsonHelpText:
+    """``iterate --help`` must name every command that accepts ``--json``.
+
+    Regression: the help listed only "status/show/doctor/refresh/config", so a
+    script author reading it would wrongly conclude that
+    `iterate guard pre-check --json`, `invariant`, `fingerprint` and `update`
+    had no structured mode — all four do (verified against the subparsers).
+    """
+
+    JSON_CAPABLE = (
+        "status",
+        "show",
+        "doctor",
+        "refresh",
+        "config",
+        "guard",
+        "invariant",
+        "fingerprint",
+        "update",
+    )
+
+    @staticmethod
+    def _help_text() -> str:
+        return cli._build_parser().format_help()
+
+    @staticmethod
+    def _json_option_help() -> str:
+        """The unwrapped `--json` option string, independent of wrapping.
+
+        `format_help()` hard-wraps to the terminal width, so grepping a line of
+        it for a command name breaks whenever the sentence happens to wrap
+        between two commands.
+        """
+        parser = cli._build_parser()
+        for action in parser._actions:
+            if "--json" in getattr(action, "option_strings", []):
+                return action.help or ""
+        raise AssertionError("the global --json flag is missing")
+
+    def test_every_json_capable_command_is_listed(self) -> None:
+        json_help = self._json_option_help()
+        for command in self.JSON_CAPABLE:
+            assert command in json_help, (
+                f"`--json` help does not mention `{command}`: {json_help!r}"
+            )
+
+    def test_help_still_notes_that_interactive_commands_reject_it(self) -> None:
+        assert "interactive" in self._help_text().lower()
+
+    def test_the_flag_really_exists_on_each_listed_subcommand(self) -> None:
+        """The help must not promise a flag a subcommand lacks."""
+        import argparse
+
+        parser = cli._build_parser()
+        subactions = [
+            a for a in parser._actions if isinstance(a, argparse._SubParsersAction)
+        ]
+        assert subactions, "expected subparsers"
+        choices = subactions[0].choices
+        for command in self.JSON_CAPABLE:
+            assert command in choices, command
+            flags = {
+                opt
+                for action in choices[command]._actions
+                for opt in getattr(action, "option_strings", [])
+            }
+            assert "--json" in flags, f"`{command}` does not accept --json"

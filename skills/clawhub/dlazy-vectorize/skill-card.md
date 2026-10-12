@@ -1,45 +1,59 @@
-## Description: <br>
-Image-to-SVG tool: converts raster images (PNG/JPG) into color vector SVG and returns the URL, suitable for lossless scaling and vectorization of logos, icons, and flat illustrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts PNG and JPG images into color vector SVGs and returns a hosted result URL for logos, icons, and flat illustrations.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative production teams use this skill to convert user-selected raster image assets into scalable vector output through the dLazy CLI and hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-selected images may be uploaded to dLazy's hosted service and returned as hosted files. <br>
-Mitigation: Use the skill only with images appropriate for third-party processing and review service terms before sending sensitive assets. <br>
-Risk: The CLI uses an API key saved in local user configuration or supplied through DLAZY_API_KEY. <br>
-Mitigation: Use per-invocation environment variables when persistent local credentials are not desired, and rotate or revoke keys when access is no longer needed. <br>
-Risk: A global CLI install persists a third-party binary on the system. <br>
-Mitigation: Use the pinned npx invocation when a non-persistent install path is preferred. <br>
+## Use Case:
 
+Designers and developers use this skill to turn raster logos, icons, and flat illustrations into scalable vector assets through the dLazy CLI.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-vectorize) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Files, Configuration instructions] <br>
-**Output Format:** [JSON response with hosted output URL; optional downloaded file when --save is used] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; accepts an image URL or local image path and supports asynchronous task polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.5 (source: frontmatter and server release metadata) <br>
+Risk: Images passed as local paths may be uploaded to dLazy, and outputs are hosted by dLazy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the images are suitable for third-party processing before submitting them.
+
+Risk: Login can save a dLazy API key locally.
+
+Mitigation: Protect the local key and rotate or revoke it if exposed.
+
+Risk: Installing the external dLazy CLI adds a third-party dependency.
+
+Mitigation: Review the linked source and package before installation; use the documented npx option if a persistent global install is unwanted.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-vectorize)
+- [dLazy CLI source linked in skill metadata](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, JSON, Image URL]
+
+**Output Format:** [Markdown instructions and CLI JSON response containing a hosted result URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional local download; asynchronous requests may initially return a task ID instead of a result URL.]
+
+## Skill Version(s):
+
+1.2.27 (source: ClawHub release; artifact frontmatter: 1.2.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/beatclaw",
   "slug": "beatclaw",
   "ownerHandle": null,
-  "version": "1.44.0",
-  "updatedAt": 1783589058123,
-  "contentHash": "8aa750ae1252298e4778175f9c47f134c71f2e5fba17e88c7900e42f358871ba",
-  "fetchedAt": "2026-07-26T18:17:31.748Z"
+  "version": "1.61.0",
+  "updatedAt": 1790964590960,
+  "contentHash": "bd24335f6b45c2ef0cbdc7e5508e8878ad346bdd02982e523bf360f0bb492f49",
+  "fetchedAt": "2026-10-12T18:18:04.598Z"
 }

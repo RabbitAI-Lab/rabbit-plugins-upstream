@@ -1,45 +1,60 @@
-## Description: <br>
-Dlazy Script To Video helps agents turn a script or scene breakdown into a storyboarded, shot-by-shot video workflow using the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns scripts into storyboarded, shot-by-shot videos using dLazy's hosted generation service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and creative teams use this skill when they want an agent to start or continue dLazy storyboard projects that convert scripts, screenplay material, or shot lists into multi-shot video plans and generated video assets. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends prompts and options to the external dLazy API. <br>
-Mitigation: Review prompts for sensitive information before use and only run the skill with an approved dLazy account and API key. <br>
-Risk: Files attached with --files are uploaded to dLazy media storage. <br>
-Mitigation: Attach only files that are approved for upload to dLazy and omit private or regulated content unless the user has confirmed it is permitted. <br>
-Risk: A global CLI install persists the dLazy package on the local system. <br>
-Mitigation: Use the pinned npx invocation when a temporary, non-global execution path is preferred. <br>
+## Use Case:
 
+Creators and video production teams use this skill to turn scripts or scene breakdowns into multi-shot storyboarded videos with consistent characters, audio, and subtitles.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-script-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stream responses from the dLazy CLI and may reference uploaded user-provided files when the user explicitly attaches files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and ClawHub release evidence) <br>
+Risk: Prompts and attached files may be sent to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Attach only files intended for dLazy and avoid sharing sensitive prompts.
+
+Risk: Signing in can store a dLazy API key locally.
+
+Mitigation: Protect the local configuration or use a per-invocation API key; rotate the key if exposed.
+
+Risk: A global CLI installation persists on the user's machine.
+
+Mitigation: Use the pinned npx invocation when a persistent installation is not wanted.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-script-to-video)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Video]
+
+**Output Format:** [Streaming text responses and hosted video-generation results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped conversations support follow-up requests.]
+
+## Skill Version(s):
+
+1.0.25 (source: ClawHub release metadata; bundled skill frontmatter says 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

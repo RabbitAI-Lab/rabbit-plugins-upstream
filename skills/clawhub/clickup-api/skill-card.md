@@ -1,46 +1,60 @@
-## Description: <br>
-ClickUp API integration with managed OAuth for accessing and managing tasks, lists, folders, spaces, workspaces, users, and webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage ClickUp tasks, project structures, users, and webhooks through a connected account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers, project managers, and agent operators use this skill to query and manage ClickUp work items, project hierarchy, users, OAuth connections, and webhooks through Maton-managed OAuth. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform write, delete, connection, and webhook actions in a connected ClickUp account. <br>
-Mitigation: Confirm the exact ClickUp account, connection, target resource, intended effect, and webhook destination before approving those actions. <br>
-Risk: MATON_API_KEY grants access through Maton-managed OAuth and must remain private. <br>
-Mitigation: Store MATON_API_KEY only in the agent environment or approved secret storage, and do not paste or log the key in prompts, commands, or output. <br>
-Risk: Maton brokers access to the user's ClickUp account. <br>
-Mitigation: Install and use the skill only when the user trusts Maton for the relevant ClickUp account and workflow. <br>
+## Use Case:
 
+People managing ClickUp projects can ask an agent to find or update tasks and project structures, or configure approved webhooks and automations through their connected account.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/clickup-api) <br>
-- [ClickUp API Overview](https://developer.clickup.com/docs/Getting%20Started.md) <br>
-- [ClickUp LLM Reference](https://developer.clickup.com/llms.txt) <br>
-- [Maton](https://maton.ai) <br>
-- [Maton Settings](https://maton.ai/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with API endpoint snippets and Python, JavaScript, and shell command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires network access and MATON_API_KEY. Generated requests can read, create, update, delete, and manage webhooks in the connected ClickUp account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Connecting the wrong account or granting unnecessary ClickUp access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the account and connection with the user and authorize only the scopes needed for the task.
+
+Risk: Writes, webhooks, triggers, and destinations may change data or establish ongoing data flows.
+
+Mitigation: Prefer read-only calls and confirm each write and automation destination before enabling it.
+
+Risk: A raw Maton API key can be exposed when used outside the CLI.
+
+Mitigation: Prefer OAuth through the CLI; if a key is required, keep it out of logs, command lines, and persistent files.
+
+## Reference(s):
+
+- [ClickUp skill release](https://clawhub.ai/byungkyu/skills/clickup-api)
+- [ClickUp API overview](https://developer.clickup.com/docs/Getting%20Started.md)
+- [Maton documentation](https://docs.maton.ai)
+- [Maton homepage](https://maton.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown with commands, code examples, and API guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses and actions depend on the connected ClickUp account's permissions.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

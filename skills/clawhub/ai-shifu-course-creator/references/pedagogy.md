@@ -4,10 +4,12 @@ Authoritative source for **Teaching Prompt** pedagogy: interaction-policy effect
 
 ## Required References
 
+- `data-contracts.md#input-contract`
 - `data-contracts.md#interaction-policy`
 - `data-contracts.md#variable-table`
 - `prompt-contracts.md#prompt-semantics`
 - `prompt-contracts.md#artifact-responsibilities`
+- `prompt-contracts.md#personalization-directions`
 - `markdownflow.md#variables`
 - `markdownflow.md#interactions`
 - `markdownflow.md#branching-on-user-input`
@@ -34,6 +36,20 @@ A `disabled` lesson is not incomplete merely because it has no interaction. All 
 
 ## Lesson Design
 
+### Course Entry
+
+Treat the first lesson of the first chapter in the approved course order as the course-entry lesson. Determine it from the approved chapter and lesson sequence rather than from a lesson-id naming convention.
+
+In standard one-on-one teaching, the standard teaching branch of combined delivery, and explicit text-only delivery, use the course-entry lesson's single brief direct-teaching lead-in to establish the first relationship before beginning lesson-specific teaching:
+
+- Open with a brief, natural greeting.
+- Introduce the course in terms of the learner problem it will help address, then connect that purpose directly to the first lesson's core question and objective.
+- When `course_author_name` is non-empty, briefly introduce that named teacher identity. Use only the supplied name and other author information explicitly verified in the approved source or author constraints; never invent a title, affiliation, experience, achievement, learner result, or other credential.
+- Keep the greeting, course introduction, optional teacher introduction, learner hook, and lesson objective inside one brief learner-visible lead-in. Do not turn them into a separate welcome sequence, biography, course outline, interaction, slide, or image, and do not impose a word-count or sentence-count quota.
+- Move immediately from that lead-in into the first lesson's resolved teaching action and preserve the selected lesson loop.
+
+In every later lesson, do not repeat the course greeting, course introduction, or teacher self-introduction. Begin with the lesson-specific direct teaching start below. Pure classroom slides remain instructor-paced and do not add Teaching Agent greeting or self-introduction; their first projected page follows the pure-slide rules in [Visual-Text Coordination](#visual-text-coordination).
+
 ### Lesson Loop
 
 Every lesson must satisfy one of these behavior-equivalent loops, as selected by the [Interaction Policy Precedence](#interaction-policy-precedence) matrix:
@@ -46,13 +62,14 @@ The default loop applies when `unspecified` leaves the baseline active or when a
 A lesson missing a phase required by its selected loop is incomplete. The following constraints apply to both loops:
 
 - **One core question per lesson**: each lesson resolves exactly one teachable question.
-- **Direct teaching start**: in standard one-on-one teaching and the standard teaching branch of combined delivery, begin with one brief text lead-in that establishes a scenario, asks a guiding question, activates prior experience, states the task, or starts a practice. Do not use a structural title, hierarchy label, ordering marker, copied source heading, slide, or image as the opening, and do not impose a word-count or sentence-count quota on the lead-in. Pure classroom slides instead begin with slide-facing content, while an explicit text-only constraint keeps the direct teaching start in text.
+- **Direct teaching start**: in standard one-on-one teaching and the standard teaching branch of combined delivery, begin with one brief text lead-in that establishes a scenario, asks a guiding question, activates prior experience, states the task, or starts a practice. For the course-entry lesson, incorporate the relationship-building behavior from [Course Entry](#course-entry) into that same lead-in. Do not use a structural title, hierarchy label, ordering marker, copied source heading, slide, or image as the opening, and do not impose a word-count or sentence-count quota on the lead-in. Pure classroom slides instead begin with slide-facing content, while an explicit text-only constraint keeps the direct teaching start in text.
 - **Opening frame**: in standard one-on-one teaching, the standard teaching branch of combined delivery, and explicit text-only delivery, establish the lesson objective within the direct teaching start.
 - **Reusable result**: each lesson produces at least one reusable deliverable.
 - **Action tasks** must be immediately executable by the learner or explicitly linked to a downstream lesson; do not create orphan actions.
 - **Carryover statements** are allowed only when cross-lesson dependency is explicitly permitted; otherwise remove them together with any unbound carryover variables.
 - **Non-interactive close**: end with a summary, decision checkpoint, or action rather than a new learner interaction.
 - **Content-shaped structure**: adapt the number and teaching purpose of content turns to the source and core question rather than manufacturing filler to make lessons look identical.
+- **Explanation depth**: identify where a concept, mechanism, reasoning step, or application needs detailed explanation for the learner to understand or act. Resolve the supplied facts, intermediate relationships, relevant boundaries, and intended understanding at that position. A concise lead-in or summary need not become a detailed explanation; presentation brevity and personalization choices must not remove needed reasoning. Apply the selected delivery mode when expressing that depth.
 
 ### Teaching Patterns
 
@@ -99,6 +116,16 @@ When `pre_content_thinking` or `lesson_end_self_check` is selected and applies, 
 4. **Action translation** — Turn conceptual understanding into an immediately executable step.
 5. **Reflection loop** — Ask learners to compare current understanding with prior assumptions.
 
+### Examples and Analogies
+
+Use examples or analogies to address an identified comprehension need: an abstract concept, unfamiliar mechanism, easily confused distinction, or difficult transfer to action. Choose the aid that makes that point easier to understand; there is no per-lesson quota and no requirement to use both. An existing source example or direct demonstration can already meet the need. Avoid repeating it without a new teaching purpose, and prefer a direct explanation or worked example when an analogy would introduce more unfamiliar ideas than it resolves.
+
+- **Examples**: provide enough situation, relevant conditions, and reasoning or action steps for the learner to see how the concept works. Connect the result back to the intended concept, judgment, or application instead of leaving an anecdote to speak for itself.
+- **Analogies**: choose a familiar source situation and make the explanatory correspondence to the target concept clear. Preserve the relationship that does the explanatory work, not just a superficial resemblance. Where the comparison could support a false inference, identify the relevant difference or limit. Return to the target concept and its evidence; an analogy is an aid to understanding, not evidence that the claim is true.
+- **Background fit**: when the relevant direction is selected under [prompt-contracts.md#personalization-directions](prompt-contracts.md#personalization-directions), choose meaningful tasks, situations, terminology, or constraints within the shared learner-context boundaries; otherwise use the course baseline. Merely changing a character's job title does not establish fit. A role label alone does not establish knowledge, experience, or familiarity with a proposed analogy. When relevant context is missing, use the course-appropriate default defined by that shared contract.
+
+Resolve each needed example's or analogy's position, teaching purpose, essential conditions or relationships, and intended takeaway as part of the lesson design. These decisions remain the same across direction selections; [teaching-prompt.md#personalization-directions](teaching-prompt.md#personalization-directions) materializes the selected adaptation or the course baseline without adding or removing teaching aids.
+
 ### Interaction Design
 
 These are the teaching rules for permitted interactions. For interaction syntax, see [markdownflow.md#interactions](markdownflow.md#interactions); for branching runtime behavior, see [markdownflow.md#branching-on-user-input](markdownflow.md#branching-on-user-input).
@@ -128,7 +155,7 @@ These are the teaching decisions for whether to collect an answer, how often to 
 
 ### Visual-Text Coordination
 
-This section defines how slides and explanatory text divide teaching responsibility. Resolve where they appear, what each must contain, and the teaching purpose each serves independently of the normalized Teaching Prompt personalization level; that level changes only content-expression specificity inside the resolved structure and never changes the teaching effect required here. Image composition and asset handling remain separate authoring concerns; MarkdownFlow's resulting runtime behavior is defined in [markdownflow.md#images](markdownflow.md#images).
+This section defines how slides and explanatory text divide teaching responsibility. Resolve where they appear, what each must contain, and the teaching purpose each serves independently of the selected personalization directions; those directions change only their permitted expression inside the resolved structure and never change the teaching effect required here. Image composition and asset handling remain separate authoring concerns; MarkdownFlow's resulting runtime behavior is defined in [markdownflow.md#images](markdownflow.md#images).
 
 For standard one-on-one teaching and the standard teaching branch of combined delivery, except under an explicit text-only constraint, fix the qualitative cadence **brief text lead-in → substantive visual unit → concise but complete text explanation**, then repeat one visual-and-explanation pair for each remaining substantive teaching turn. Every lesson in this mode contains at least one substantive visual unit. A visual unit is one slide or one standalone image; a slide containing an image still counts as one visual unit. Do not place two visual units back to back or defer several visuals' explanations to one later block. After the lead-in, every learner-visible prose block other than the unchanged interaction control described below belongs to the explanation for the immediately preceding visual; fold supporting details and transitions into that explanation rather than inserting an unpaired text turn between pairs.
 
@@ -140,7 +167,7 @@ Treat a question-bearing interaction in this mode as one visual-and-explanation 
 
 | Scenario | Authority and requirements |
 | --- | --- |
-| Standard visual-text teaching | Apply the cadence above with at least one substantive visual unit. Use additional slides only for presentation-worthy relationships, contrasts, sequences, evidence, cases, conclusions, rules, boundaries, or decision points. State each visual's teaching purpose and required information clearly, group related material instead of making one page per fact, and keep every visual and following explanation understandable as one teaching turn. Once resolved, keep every visual's and explanation's presence, position, and teaching purpose independent of the personalization level. |
-| Author-provided image file | Under the standard visual-text scope above, use the asset as one substantive visual unit for an identified teaching purpose rather than as decoration, and give it the required following explanation before any later visual. The pure-slide row overrides paired-explanation expectations, while an explicit text-only constraint overrides image use entirely. Keep selected image presence and explanation placement fixed while the personalization level controls only permitted ordinary wording, elaboration, and non-exact example detail. |
-| Pure slides | Produce a classroom-ready deck controlled by a human instructor: slide-facing direction and learner-visible content only, with enough information and relationships for the instructor to teach from the projected result. Resolve the exact slide count, sequence position, teaching purpose of each slide and required content slot, required content-slot presence and placement, content groups, visual hierarchy, and semantic layout independently of the personalization level and keep them fixed. The level controls only non-exact title, body, already-required example identity and detail, transition, and feedback wording inside that structure. Do not instruct the Teaching Agent to narrate, verbally explain, or address a single learner, and omit long spoken paragraphs. When an interaction is permitted, include its complete learner-facing question, resolved options and control in their required order, and concise visible feedback states. |
-| Explicit text-only constraint | Use no slides, images, diagrams, visual directions, or layout instructions. Give complete teaching direction for every core concept, including its required facts, boundaries, reasoning, and examples where needed; keep the teaching and paragraph sequence fixed while the selected personalization level controls ordinary explanation wording, elaboration, example detail, transition wording, and feedback wording. |
+| Standard visual-text teaching | Apply the cadence above with at least one substantive visual unit. Use additional slides only for presentation-worthy relationships, contrasts, sequences, evidence, cases, conclusions, rules, boundaries, or decision points. State each visual's teaching purpose and required information clearly, group related material instead of making one page per fact, and keep every visual and following explanation understandable as one teaching turn. Once resolved, keep every visual's and explanation's presence, position, and teaching purpose independent of the personalization directions. |
+| Author-provided image file | Under the standard visual-text scope above, use the asset as one substantive visual unit for an identified teaching purpose rather than as decoration, and give it the required following explanation before any later visual. The pure-slide row overrides paired-explanation expectations, while an explicit text-only constraint overrides image use entirely. Keep selected image presence and explanation placement fixed while selected directions affect only their permitted ordinary expression. |
+| Pure slides | Produce a classroom-ready deck controlled by a human instructor: slide-facing direction and learner-visible content only, with enough information and relationships for the instructor to teach from the projected result. Resolve the exact slide count, sequence position, teaching purpose of each slide and required content slot, required content-slot presence and placement, content groups, visual hierarchy, and semantic layout independently of the personalization directions and keep them fixed. Selected directions affect only their permitted ordinary expression inside that structure. Do not instruct the Teaching Agent to narrate, verbally explain, or address a single learner, and omit long spoken paragraphs. When an interaction is permitted, include its complete learner-facing question, resolved options and control in their required order, and concise visible feedback states. |
+| Explicit text-only constraint | Use no slides, images, diagrams, visual directions, or layout instructions. Give complete teaching direction for every core concept, including its required facts, boundaries, reasoning, and examples where needed; keep the teaching and paragraph sequence fixed while the selected directions affect only their permitted ordinary expression. |

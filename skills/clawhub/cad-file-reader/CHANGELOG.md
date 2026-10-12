@@ -1,0 +1,364 @@
+## 0.28.5 — 2026-10-12（真图回归纳入发布预检）
+- `run_preflight.sh` 强制纳入真图回归（`--manifest <真图清单>` 时执行 8 张真图回归，缺清单明确跳过并提示），全量自测 + 发布合规扫描统一为发布预检。
+- 三平台版本基准对齐：SKillHub 运营更新不回写本机，仅以本机功能更新发布。
+
+## 0.28.1 — 2026-10-12（完整性校验强化，三平台重新发布）
+
+- `install_vendor.sh` 改用同 Release 的 `SHA256SUMS` 对完整包做 SHA-256 校验；校验文件缺失或哈希不一致一律拒绝解压/执行。
+- 移除无校验文件的旧版本回退下载路径，只允许当前版本（含校验文件）下载；离线/缺校验文件时给出明确报错和 pip 兜底提示；默认版本更新为 0.28.1。
+- 三个算量技能的 `ensure_base.sh` 同步增加底座完整包 SHA-256 校验与包内 manifest 版本校验，杜绝“下载即信任”。
+
+## 0.27.0 — 2026-10-11（文档与安装优化，发布 SkillHub/GitHub/clawhub）
+
+按 SkillHub 评测优化：文档瘦身 + 安装一条命令 + 依赖自检 + 30 秒样例演示。
+
+- README 由 16KB 精简到 3KB：移除历史小版本堆叠概览，只保留最新能力一句话、一条命令安装、快速开始与边界链接。
+- CAPABILITIES 改为能力/边界矩阵（约15KB → 约4KB），删除与 SKILL/pack-index 重复的命令示例；业务边界统一引用 pack-index。
+- 新增 `scripts/setup.sh`：Python 3.10 检查 → vendor 补齐 → `.env`（PYTHONPATH）→ 依赖自检，一条命令完成轻量包安装。
+- 新增 `scripts/deps_check.sh --minimal`：输出 numpy/ezdwg/ezdxf/fontTools 可用性与降级提示。
+- `scripts/install_vendor.sh` 增加幂等分支：vendor 已存在直接“已存在，未变更”，无需重复下载；支持 `CAD_FORCE_INSTALL=1` 强制重装；安装后提示 NOTICE 许可证。
+- 新增 `scripts/demo.sh` + `examples/sample_room.dxf`：一条命令跑完整识图→测量→契约校验，展示首屏 JSON（证据/置信度/复核）。
+- `manifest.json`：description 标注安装一条命令；scripts 清单补充 setup/deps_check/demo。
+- `run_preflight.sh` 新增 outputs 跳过（历史发布校验文件不入扫描）。
+- 验证：全量自测 128/128 通过；样例 DXF 识图/测量/契约校验通过；脱敏扫描 0 命中。
+
+## 0.26.4 — 2026-10-09（本地优化，未发布）
+
+输出深度用户可选 + Word/Excel 导出。
+
+- 精简模式改为显式选项：默认完整输出；`--concise` 精简候选主干（省 Token），`--full`/`--with-evidence` 恢复完整；`CAD_CONCISE=1` 可全局设为精简默认。
+- `run_cad.sh` 支持 `--concise` 并在转发前剥离开关；`cad_scan.py` 同步支持 `--concise/--full/--with-evidence`。
+- 新增 `scripts/cad_export.py`：把雷达扫描结构化结果导出为 Excel(.xlsx) / Word(.docx)，多 Sheet/分节（构件候选、规格表、钢筋汇总、建筑做法）；`cad_scan --format xlsx|docx` 可用（需 `--out`）。
+- SKILL.md 增加精简输出与 xlsx/docx 用法示例。
+
+## 0.26.3 — 2026-10-09（本地优化，未发布）
+
+精简输出契约，降低下游 Token 开销。
+
+- 默认精简契约：`CAD_CONCISE=1` 时 `contract.candidates`/`review_candidates` 只保留候选主干字段，`evidence` 置空、不展开长数组；`--full`/`--with-evidence` 可恢复完整证据。
+- `scripts/run_cad.sh` 默认设置精简模式，并支持 `--full`/`--with-evidence` 开关。
+- `cad_contract.py` 支持 `concise=` 参数；校验对精简候选向后兼容。
+- SKILL.md 补充精简输出用法说明。
+
+## 0.26.2 — 2026-10-09（本地优化，未发布）
+
+继续补充专业识图规则包并强化契约。
+
+- 新增 `packs/doors-windows-stairs-insulation-waterproof/`：门窗/楼梯/保温/防水识图候选（门窗编号、楼梯梯段/休息平台/栏杆扶手、保温层/防水层、标高/编号证据），输出统一候选契约。
+- 新增 `packs/fire-prevention-accessibility-green-energy/`：防火/无障碍/绿建节能识图候选（防火分区、疏散路线、防火门/卷帘、无障碍坡道/通道/卫生间、屋顶绿化/雨水花园/光伏/节能做法，编号/标高证据）。
+- 新增入口 `scripts/cad_doors_windows_stairs_insulation_waterproof.sh`、`scripts/cad_fire_prevention_accessibility_green_energy.sh`（及 .py 配套入口）。
+- `rules/legends.json` 扩充 2 组图例词库：门窗楼梯保温防水、防火无障碍绿建节能。
+- 契约增强：候选输出 `confidence_score`（0–1 主置信度，与 confidence 同值），schema/校验同步支持。
+
+## 0.26.1 — 2026-10-09（本地优化，未发布）
+
+按专业方向建议新增两个规则包并扩展图例词库。
+
+- 新增 `packs/bridge-tunnel-road-traffic/`：桥梁/隧道/道路线形/交通设施识图候选（桥墩、桥台、盖梁、支座、隧道洞口、衬砌、路线中线/平竖曲线、交通标志标线、护栏、信号灯），输出图纸类型/系统/构件/桩号坐标/图层证据。
+- 新增 `packs/pile-foundation-slope/`：桩基/基坑/边坡/地基处理识图候选（桩型、承台、支护桩、地下连续墙、内支撑、锚索、锚杆、挡墙、抗滑桩、护坡、搅拌桩/CFG/强夯、监测点），输出图纸类型/系统/构件/桩号标高/图层证据。
+- 新增入口 `scripts/cad_bridge_tunnel_road_traffic.sh`、`scripts/cad_pile_foundation_slope.sh`，注册到统一候选契约（final_quantity=false）。
+- `rules/legends.json` 扩充 2 组图例词库：桥梁隧道道路交通 15 词、桩基基坑边坡 24 词。
+- 验证：两个新规则包自测 2 项通过。
+
+## 0.26.0 — 2026-10-08
+
+新增 PDF 图纸识图能力与发布合规修复（按本机 skill-publisher / skill-architect 审计落地）。
+
+- 新增本机 PDF 识图入口 `scripts/cad_pdf_ocr.sh` / `.py`：先用 pdf-inspector 做类型分流（`text/scanned/mixed` → `pdf_vector/pdf_raster/pdf_hybrid`），矢量页取原生文字与变换矩阵，扫描/混合页用 `pdftoppm` 渲染后调本机 image-ocr 出线性文字候选。
+- 输出 `page_index` / `page_bbox`（PDF 点）、`source_bbox_px`、扫描/混合页缺图层口径（`missing_layer/missing_unit/missing_scale`），全部候选固定 `final_quantity=false`、进 `review_candidates`。
+- 图签栏元数据锚点：版式优先（右下角区域）+ 关键词回退，`pdf_meta.title_block` 只做跨格式元数据锚点，需人工核对。
+- 矢量 PDF 原生文字坐标复核入口 `scripts/cad_pdf_vec.sh` / `.py`：`x/y/width/height/font/font_size/page`，单位 PDF 点，不参与测量。
+- 两级缓存（文件级 PDF 元数据 + 页面级 OCR 行结果）与页面级 `--workers` 并行（默认≤3），`--classify-only`、`--force`、`--cache-dir`。
+- 契约增强：`source_format` 字段标识 `pdf_vector/pdf_raster/pdf_hybrid`；`cad_contract.py` 注册 `pdf_meta` 章节；`cad_validate` 校验 PDF 契约样例。
+- 发布合规修复：移除脚本内硬编码本机绝对路径（本机绝对路径），改为环境变量 + `Path.home()` 运行时回退；文档脚本引用改为显式完整文件名，避免发布检查误报 missing_script。
+- 验证：全量自测 124 项通过；发布前脱敏扫描 70 文件命中 0 处；本机真实 DWG 回归 3/3 pass（结构/总图/电气）；缓存验证 3/3 `cache_hits=1`。
+
+## 0.25.0 — 2026-10-05
+
+按优化建议落地 P0/P1 识图准确率与契约增强（纯规则/轻量知识表，不引入视觉模型）。
+
+- 旋转感知标注：`cad_scan` DXF 流式解码与 `read_cad` 捕获文字实体旋转角（`rotation`）；`cad_scan.analyse()` 按 0-180° 每 5° 分桶加入位置键，同位置不同旋转拆分为独立标注位置，`cad_interpret._scope_key` 同步带上旋转桶，供斜向标注正确归属与证据追溯。
+- 图例知识表：新增 `scripts/cad_legend.py`、`scripts/cad_legend.sh` 与 `rules/legends.json`，按专业扩充到 14 组 205 个关键词（消防报警、照明、动力、弱电智能、给排水、暖通、消防水、钢结构、市政、人防、预制、装饰、幕墙、测量标注），支持 `symbols` 符号指纹表（12 组块/符号别名）优先匹配块引用；同名 INSERT 文字不再覆盖块指纹。输出 `legend_matches` 候选和 `discipline_refs`。
+- 契约增强：candidate 新增可选 `rotation`、`confidence_scores`（证据子项强度）、`discipline_refs`（跨专业视角），schema 与 `cad_validate` 向后兼容。
+- `cad_contract.py` 注册 `legend_matches` 章节；`test_cad_legend.py` 3 项（含符号指纹去重优先级），完整自测 95 项通过。
+- 端到端示例验证：图例词库命中 6 条候选，`cad_validate.sh` 校验通过。
+- 边界不变：全部候选固定 `final_quantity=false`，不输出工程量/材料量/造价；图例词库只做识图辅助不改算量口径。
+
+## 0.24.0 — 2026-10-05
+
+新增纵深专业识图引擎与 5 个深化识图包（按建议继续补充）。
+
+- 新增通用引擎 `scripts/cad_deep_geometry.py`：读取 `cad_scan` 详情 JSON，按 `--pack` 加载对应规则包，输出 `*.<pack>.json/md/csv` 与 `cad-file-reader/v0` contract，统一固定 `final_quantity=false`。
+- 新增 `packs/hvac-plumbing-geometry/` + `scripts/cad_hvac_plumbing_geometry.sh`：给水/排水/消防水/暖通/防排烟/泵房/支吊架图纸类型与系统，管道、风管、风机盘管/风口/设备、支吊架构件，管径（DN/De/D）、标高、设备/立管编号候选。
+- 新增 `packs/interior-finish-geometry/` + `scripts/cad_interior_finish_geometry.sh`：精装修平面/立面/节点/做法表/门窗表/固定家具，地面/墙面/顶棚/踢脚/家具/防水构件，做法编号/材料/标高/节点候选。
+- 新增 `packs/curtain-wall-geometry/` + `scripts/cad_curtain_wall_geometry.sh`：玻璃/石材/金属/单元式幕墙，立柱/横梁/面板/开启/预埋件/胶条构件，分格/标高/板块/预埋编号候选。
+- 新增 `packs/civil-defense-geometry/` + `scripts/cad_civil_defense_geometry.sh`：防护单元/人防墙/防护密闭门/防爆波活门/滤毒通风/洗消/人防电气，门号/抗力等级/标高/设备编号候选。
+- 新增 `packs/precast-geometry/` + `scripts/cad_precast_geometry.sh`：预制墙/叠合板/预制楼梯/预制梁柱/预埋件/连接节点，构件编号/桁架筋/标高/预埋编号候选。
+- `cad_contract.py` 注册 `hvac_plumbing_geometry`、`interior_finish_geometry`、`curtain_wall_geometry`、`civil_defense_geometry`、`precast_geometry`（line）章节。
+- 新增 5 组（10 项）合成回归；完整自测 87 项通过。
+- 边界不变：只出识图与证据候选，不展开管道长度/风管面积、不输出饰面面积/排版数量/幕墙面积/板块数量/人防或预制构件数量/体积、材料量或造价。
+- 真实回归：本机知识库 7 张真图验证（结构/总图场地/给排水喷淋/人防/精装修/幕墙/预制装配）7/7 pass；幕墙用会展2#立面/LM，预制装配用安置五装配式改铝膜结构，回归清单仅存本机、发布前脱敏。
+- 发布前脱敏自检通过（扫描 63 文件，命中 0 处）。
+
+## 0.23.0 — 2026-10-05
+
+新增结构识图候选包与总图/场地识图候选包（按用户建议补充的两个专业识图能力）。
+
+- 新增 `packs/structural-geometry/`（SKILL.md + rules.json）与 `scripts/cad_structural_geometry.sh`、`scripts/cad_structural_geometry.py`：识别结构平面/配筋/基础/楼梯/节点详图/柱表/结构说明等图纸类型，混凝土/钢筋/基础/楼梯/预制/加固系统，梁/板/柱/墙/基础/楼梯/洞口加强/节点加强构件，HPB300/HRB400 配筋标注（直径@间距、纵筋/箍筋/附加筋/负筋/拉筋/分布筋），KL/WKL/KZ/YBZ/GBZ/LB/WB/Q/CT/FB/JZL 结构编号，节点/轴网/标高候选；输出 `*_structural.json/md/csv` 与 contract。
+- 新增 `packs/site-geometry/`（SKILL.md + rules.json）与 `scripts/cad_site_geometry.sh`、`scripts/cad_site_geometry.py`：识别总平面、竖向、管线综合、道路纵横断面、挡土墙/边坡、停车、景观图纸与系统，红线/道路/人行道/路缘石/停车位/挡墙/护坡/排水沟/雨水口/检查井/管线/高程点/土方挖填/绿化铺装构件，桩号/坐标/标高/盘区编号标注候选；输出 `*_site.json/md/csv` 与 contract。
+- `cad_contract.py` 注册 `rebars`（text）、`structural_geometry`（line）、`site_geometry`（line）章节；统一候选契约保持 `final_quantity=false`。
+- 缺几何、缺图纸类型、缺比例/单位、缺图层、配筋/标高/桩号未绑定几何进入 `review`；不默认按比例推算。
+- 新增结构识图测试 2 项（结构提取通过、缺比例/几何进入复核）与场地识图测试 2 项；完整自测 77 项通过。
+- 真实回归：`run_real_dwg_regression.sh` 支持 `kind=electrical|structural|site`；本机知识库结构 DWG（会展梁板）与总平面 DWG（济南国贸总平面图）均通过（2/2 pass）。
+- 边界不变：本技能只做识图和证据候选，不输出混凝土方量、钢筋吨位、土方量、道路面积、管线长度汇总、材料量或造价。
+
+## 0.22.0 — 2026-10-05
+
+电气识图继续增强：新增消防、弱点/弱电与智能化识图能力（建筑电气之后第二步）。
+
+- 新增 `domain_rules`：`fire_protection`（消防）、`weak_current`（弱点/弱电）、`intelligent_building`（智能化）三领域系统映射；`domain_of` / `domain_candidates` 把系统、设备、回路、路由、标注候选按领域分组，JSON/Summary/Markdown/CSV 输出 `fire_protection`、`weak_current`、`intelligent_building` 字段和 `domain`/`domain_label`。
+- 图纸类型扩充：消防水/喷淋平面、消防联动平面、防排烟平面、气体灭火平面、智能化平面、综合布线平面（PDS）、CCTV 平面、广播/会议（PA/AV）平面。
+- 专业系统扩充：消防水、喷淋、气体灭火、防排烟、疏散、消防联动、消防泵、综合布线、门禁、广播/会议、BAS、能耗计量、智能照明、IBMS、停车等。
+- 路由规则新增消防火警环路（`fire_loop`，system=fire_alarm）和弱电信号总线（`signal_bus`，system=weak_current）。
+- 设备规则新增防火卷帘/防火门、消防泵、消防控制主机、排烟口/阀/风机、网络设备、摄像机、门禁设备、广播音箱、DDC/BAS 传感器、能耗计量表、智能照明面板等。
+- 回路前缀扩充 FAS/FA/FBF/FB/FBN/XFB/XS/XQ/CCTV/PDS/ACS/PA/AV/IBMS/BMS；规格识别扩充 UTP/STP/CAT5E/CAT6/GYXTW/GYTA/FIBER 等弱电/光缆线型。
+- `cad_contract.py` 注册 `fire_protection`、`weak_current`、`intelligent_building` 章节（device），统一候选契约保持 `final_quantity=false`。
+- 新增 `test_fire_weak_current_intelligent_domains` 回归；电气识图测试 4 项通过。
+- 新增本机真实 DWG 回归入口 `scripts/run_real_dwg_regression.sh` / `.py`：读取 `--manifest` 真图清单，串接 `cad_scan` + `cad_electrical_geometry`，按领域候选数核对并输出脱敏报告；真图清单在技能包之外，发布内容不含真实图纸路径。
+- 真实回归验证：酒店消防报警、会展弱电、I-1号楼智能化三张本机知识库 DWG 均通过，消防/弱点/智能化领域候选均>0（3/3 pass）。
+- 下一步按发布流程执行 skill-publisher，发布前运行脱敏守卫。
+
+## 0.21.0 — 2026-10-05
+
+新增电气专业识图中间数据模块（第一步：建筑电气）。
+
+- 新增 `scripts/cad_electrical_geometry.sh` 与 `packs/electrical-geometry/`（SKILL.md + rules.json）：识别变配电、照明、动力、应急照明、火灾报警、安防、弱电智能化、防雷接地图纸类型与系统。
+- 输出桥架/母线/导管/电缆/导线路由候选、配电箱/柜、灯具、开关插座、探测器、报警设备、防雷接地设备候选，以及回路编号（WL/WP/WE/EM/L/M）与回路规格标注候选。
+- 回路只做候选与复核，不展开芯数/线长；不输出电气材料量、负荷、照度、母排、造价或结算量。
+- `cad_contract.py` 注册 `circuits/specs/lightning` 章节，统一候选契约保持 `final_quantity=false`。
+- 新增 `test_cad_electrical_geometry.py`（3 项）；完整自测通过。
+- 仍未接入：真实电气 DWG 回归图；消防/智能化按约定排在电气之后，不在本版本。
+
+## 0.20.1 — 2026-10-05
+
+修复 SkillHub 轻量包自动下载与概况增强。
+
+- `scripts/install_vendor.sh` 兼容 `cad-file-reader-full-<ver>.zip` 与 `cad-file-reader-<ver>-full.zip` 两种 GitHub Release 命名，安装后可自动下载对应版本 vendor。
+- Manifest / SKILL/README 概况补充 P0–P5 优化简介：统一候选契约/置信度分层、大图缓存与局部解析、图层/块语义、MEP 拓扑增强、图纸对比。
+- 完整自测 69 项通过。
+
+## 0.20.0 — 2026-10-05
+
+发布前重构整理（无功能/契约变更）。
+
+- 新增 `scripts/cad_common.py`，抽取 `compact`、`load_rules`、`pattern_hit`、`match_rule`、`segment_length`、`peak_rss_mb`、`file_name` 等跨脚本公共函数。
+- `cad_semantics.sh`、`cad_compare.sh` 改用统一入口 `scripts/run_cad.sh`，移除硬编码 Python 路径。
+- 完整自测 69 项通过。
+
+# 更新记录
+
+
+
+## 0.19.0 — 2026-10-04
+
+识图候选可信度、语义/拓扑/对比与交接稳定性增强。
+
+- 新增 `cad-file-reader/v0` 统一候选契约：`confirmed_evidence`、`inferred_candidate` 和 `review_required` 三层置信度；标准复核原因词表、中文 `review_notes`、确定性候选 ID 和交接校验。
+- 新增大图证据缓存、`--roi` / `--sheet` 局部解析、缓存读写观测和 `cad_cache_admin` 安全治理。
+- 新增 `cad_semantics.py` / `cad_semantics.sh`：图层语义、块语义和块实例关联候选；支持上限与关联半径控制。
+- `cad_mep_geometry` 新增 `mep_relations`：设备—管段、立管—管段、端点连接和系统冲突关联；缺图层/系统、冲突或距离异常进入复核。
+- 新增 `cad_compare.py` / `cad_compare.sh`：对比图层、块、文字和几何的增删与移动；同图对比输出 0 变化。
+- 新增图层/块语义与图纸对比回归测试；完整测试 69 项通过。
+- 本地解析边界不变：所有候选固定 `final_quantity=false`，不输出最终工程量、材料量、造价或结算量。
+
+## 0.18.0 — 2026-09-20
+
+测量候选层与识图/算量边界强化。
+
+- 新增 `cad_measure.py` / `cad_measure.sh` 和 `packs/measurement-candidates/`。
+- 从 `cad_scan` 详情、装饰、安装、钢结构、市政识图 JSON 生成长度、面积、体积候选。
+- 输出契约：`cad-measurement-candidates/v1`；每条候选包含图面值、换算值、比例/单位/空间依据、计算式、置信度、复核原因、源 ID 和证据坐标。
+- 闭合多边形使用鞋带公式；显式文字测量值可直接采用；外接框面积只作定位证据；体积只在显式体积或面积×显式厚度/高度时生成待复核候选。
+- `model` 空间只按坐标单位换算；只有 `paper/layout` 空间且比例明确时才应用 `1:N`；缺比例/单位时 `value=null` 并转 `review`。
+- 所有测量固定 `final_quantity=false`；不重新引入扣减、重叠、做法映射、损耗、分账、清单量、材料量、造价或结算量。
+- 新增 7 项合成回归，覆盖显式测量、多边形面积、缺单位复核、外接框复核、体积复核、MEP 路由证据和 paper-space 比例。
+
+## 0.17.0 — 2026-09-20
+
+识图与算量职责拆分。
+
+- `cad-file-reader` 收口为识图、几何候选、证据提取和复核边界；不再输出最终工程量、体积、面积、材料量、造价或结算量。
+- 原梁、板、柱、墙、楼梯、洞口、预制底板、混凝土等级分账和结构算量流水线迁移到 `tujian-suanliang`（本机目录 `shangwu-suanliang`）。
+- 删除 `cad_quantity_pipeline.sh`、`--axis-grid`、`--axis-label`、`--thk-mm`、`--col-height-mm`、`--floor-beam-json`、`--floor-label`、混凝土 CSV/Markdown 和楼层梁混凝土初算输出。
+- 保留 `cad_scan`/`cad_interpret` 的文字、图层、图框、几何线段、构件标注、净跨/支座候选和原文证据，供专项算量 skill 调用。
+- 更新 manifest、pack-index、README、CAPABILITIES 和 agent 入口，移除算量路由。
+
+# Changelog
+
+## 0.16.0 — 2026-09-20
+
+市政专业识图中间数据层。
+
+- 新增 `cad_municipal_geometry.py` / `cad_municipal_geometry.sh` 和 `packs/municipal-geometry/`。
+- 识别道路、排水、管网、桥梁、涵洞、隧道、挡墙、交通和道路照明等市政图纸类型和专业系统。
+- 支持道路中线、路缘石、人行道、路面结构层、路基、边沟、检查井、雨水口、管道、桥墩、桥台、桩基、承台、箱梁、涵洞和隧道衬砌等构件候选。
+- 提取桩号、标高、`X/Y` 坐标、管径、坡度、尺寸、材料、做法和规范引用证据。
+- 输出契约：`cad-municipal-geometry/v1`；保留图层、几何、文件、图框、坐标和原文证据。
+- 缺比例/单位、缺几何、图层未分类、系统/构件无法映射、材料或标高缺失时进入 `review`。
+- 只做识图和证据，不输出面积、长度汇总、数量、材料量、造价或结算量。
+
+## 0.15.0 — 2026-09-20
+
+钢结构识图中间数据层。
+
+- 新增 `cad_steel_geometry.py` / `cad_steel_geometry.sh` 和 `packs/steel-geometry/`。
+- 识别钢结构图纸类型、结构系统、构件、截面、连接、材料、涂装、节点、轴网/标高和钢构件几何候选。
+- 支持钢柱、钢梁、桁架、支撑、檩条、拉条、墙梁、平台、钢楼梯、栏杆、预埋件、节点板和加劲肋。
+- 支持 H 型钢、槽钢、角钢、圆管、方矩管、C/Z 型檩条和钢板截面，以及常用钢材牌号和涂装做法。
+- 输出契约：`cad-steel-geometry/v1`；保留图层、几何、文件、图框、坐标和原文证据。
+- 缺比例/单位、缺几何、图层未分类、构件编号无法映射或截面/材料缺失时进入 `review`。
+- 只做识图和证据，不输出钢材重量、面积、长度汇总、材料量、造价或结算量。
+
+## 0.14.0 — 2026-09-20
+
+安装识图增强：系统拓扑与竖向路由候选。
+
+- 新增 `topology`：按文件、图框和专业系统建立路由连通分量，输出闭合环、分支、开放端点、孤立段和复核原因。
+- 新增 `vertical_routes`：把 `JL/PL/WL/...` 等立管编号和竖向文字关联到最近路由段，保留图面距离、方向、图层、文件、图框和证据。
+- 新增竖向几何图层规则 `RISER/立管/竖向/竖管/管井/SHAFT`；只有几何命中而无编号证据时强制进入 `review`。
+- 输出契约升级为 `cad-mep-geometry/v2`；新增 `--link-tolerance` 关联距离参数。
+- 增加通用合成回归：闭合环拓扑、开放端点拓扑、立管关联和竖向几何复核。
+- 只做识图、关联和拓扑候选；不输出安装工程量、材料量、损耗、造价或结算量。
+
+## 0.13.0 — 2026-09-20
+
+安装专业识图中间数据。
+
+- 新增 `cad_mep_geometry.py` / `cad_mep_geometry.sh` 和 `packs/mep-geometry/`，从 `cad_scan` 详情 JSON 提取安装识图候选。
+- 识别图纸类型：平面、系统、干线、详图、材料表/图例。
+- 识别专业系统：电气、给排水、消防水、暖通、火灾报警、应急照明、弱电和燃气。
+- 识别路由段：电线、导管、电缆、桥架、母线、给水管、排水管、消防管、喷淋管、风管、燃气管和通用 MEP。
+- 识别设备/器具：配电箱、灯具、开关插座、风机、风口、风阀、水泵、阀门、喷头、探测器、报警设备、卫生器具和仪表。
+- 提取回路规格、管径、风管尺寸、设备编号、系统标签、楼层标签和立管编号候选。
+- 增加端点吸附、开放端点、汇聚/分支和孤立段连通性审计。
+- 输出契约：`cad-mep-geometry/v1`；保留图层、几何、文件、图框、坐标和原文证据。
+- 缺几何、缺比例/单位、MEP 图层未分类或立管归属不明进入 `review`。
+- 只输出安装识图候选和证据；不输出安装工程量、材料量、损耗、造价或结算量。
+
+## 0.12.0 — 2026-09-20
+
+P2 外墙分格与保温分区候选。
+
+- 新增 `exterior_wall_zones`：识别外墙、保温层、防火隔离带、女儿墙内侧和立面饰面候选。
+- 提取材料、保温/隔离带厚度、显式标高和对应图层几何证据。
+- 保温、防火隔离带和女儿墙内侧缺厚度、缺标高或标高冲突时进入 `review`。
+- 标高单位缺失时按 `m` 暂记并强制进入复核，不自动确认。
+- 输出契约升级为 `cad-descriptive-geometry/v7`，摘要和 Markdown/CSV 增加外墙分区字段。
+- 增加通用合成图回归：外墙/保温/隔离带/女儿墙材料与厚度识别、缺几何强制复核。
+- 只输出候选中间数据，不输出外墙面积、保温面积、材料量或最终工程量。
+
+## 0.11.0 — 2026-09-20
+
+P1 楼梯/坡道/台阶初稿。
+
+- 新增 `stair_ramp_steps`：识别楼梯、坡道、台阶文字和对应图层几何候选。
+- 提取显式展开面积/投影面积、级数、坡度、尺寸和分项材料文字证据。
+- 保留匹配图层的几何外接框和线段证据；几何外接框不当作可确认面积。
+- 缺显式面积、缺材料、缺匹配几何或文字缺坐标时进入 `review`。
+- 输出契约升级为 `cad-descriptive-geometry/v6`，摘要和 Markdown/CSV 增加初稿字段。
+- 增加通用合成图回归：三类构件识别、面积/材料保留、缺面积强制复核。
+- 只输出待确认初稿，不自动确认展开面积、材料量或最终工程量。
+
+## 0.10.0 — 2026-09-20
+
+P1 顶棚分区候选。
+
+- 新增 `ceiling_zones`：提取主吊顶、检修口、灯具带、造型分区和梁/降板影响候选。
+- 按坐标绑定显式吊顶标高/高度证据；`mm` 归一为 `m` 后检查冲突。
+- 检修口、灯具带和造型分区按外接框包含关系挂到主吊顶，保留父分区索引。
+- 缺显式标高、标高冲突、坐标轴超限、主/附属混合候选或复杂非轴对齐造型进入 `review`。
+- 输出契约升级为 `cad-descriptive-geometry/v5`，摘要和 Markdown/CSV 增加顶棚分区字段。
+- 增加通用合成图回归：检修口父子分区、标高证据和缺标高强制复核。
+- 只输出可复核中间数据，不输出吊顶面积、扣减面积、材料量或最终工程量。
+
+## 0.9.0 — 2026-09-20
+
+P1 墙面分段候选。
+
+- 新增 `wall_segments`：把闭合轴对齐房间边界拆成 `clear` / `opening` 子段。
+- 按坐标绑定显式墙高、墙面高度、层高或净高证据；`mm` 归一为 `m` 后检查冲突。
+- opening 子段保留门窗编号、门窗图层和几何线段证据；不计算扣减面积或墙面面积。
+- 缺墙高、墙高冲突、非轴对齐墙段、零长度墙段、无效边界或未绑定房间进入 `review`。
+- 输出契约升级为 `cad-descriptive-geometry/v4`，摘要新增墙段总数与候选数。
+- 增加通用合成图回归：洞口分段、显式墙高候选、无墙高强制复核。
+
+## 0.8.0 — 2026-09-20
+
+P0 通用识图中间数据增强。
+
+- 新增闭合房间边界候选：输出多边形、外接框、绑定房间名和证据线段；坐标轴数量超限时显式截断并转入复核。
+- 新增门窗洞口到墙线和房间的归属候选：输出墙图层、墙线段、图面距离、房间边界和待确认原因。
+- 新增做法编号到节点详图索引候选：保留做法、节点、文件、图框和坐标证据。
+- 房间边界、节点索引和门窗几何的异常项统一进入 `review`。
+- 输出契约升级为 `cad-descriptive-geometry/v3`；文件索引统一还原为真实文件名。
+- 降低闭合搜索坐标轴上限到 24，防止复杂图盲目扩大组合；截断项必须复核。
+- 增加通用合成图回归：闭合房间、洞口贴墙、做法节点和缺几何复核。
+
+## 0.7.0 — 2026-09-20
+
+P0 装饰中间数据修正。
+
+- `C15~C89` 等混凝土强度等级不再误判为窗编号，`C30/C35/C40` 增加回归覆盖。
+- 房间词所在行未绑定做法编号时转入待复核，不生成空做法房间表。
+- 门窗、比例、单位和几何索引还原 `cad_scan` 文件索引为真实文件名。
+- 单位识别支持图面显式单位和带 `m/mm` 尺寸上下文；缺单位保持待复核。
+- 真实项目详情 JSON 回归通过；具体项目数据只保留在本机，不进入发布包。
+
+## 0.6.0 — 2026-09-20
+
+新增画法几何 / 装饰中间数据层。
+
+- 新增 `packs/descriptive-geometry/SKILL.md` 和识图规则 JSON。
+- 新增 `cad_descriptive_geometry.sh`：从 `cad_scan --detail-json` 提炼视图、比例、单位、房间、门窗和做法候选。
+- 输出 JSON / Markdown / CSV 证据台账，保留图层、坐标、图框和原文。
+- 增加平面/立面/剖面/详图投影校验边界，候选不直接计入工程量。
+- 增加合成详情 JSON 行为测试，覆盖视图、房间、门窗、做法和证据输出。
+
+## 0.5.0 — 2026-09-18
+
+规范/图集辅助与 Token 架构升级。
+
+- 新增 `cad_normative`：从图纸说明中识别规范/图集引用，匹配 54 条元数据，其中 46 条可定位知识库相对入口。
+- 支持斜杠/无斜杠变体、基础编号/年版编号匹配，自动提示现行、旧版、待确认和未索引状态。
+- 输出缺少设计输入（混凝土等级、抗震等级、保护层等）与多图框参数冲突；只提示风险，不判定条文合规。
+- 主入口文档从约 106 KB 精简到约 7.5 KB；算量流程说明从约 105 KB 精简到约 2 KB，长流程保留在专用包历史文件中按需读取。
+- 规范索引仅保存编号、名称、专业、状态和资料入口元数据；不复制条文全文。
+- `cad_interpret` 增强编号归一化与图集分类；修正 GB50854-2013 的专业归类。
+- 保留既有低内存 CAD 扫描、按图框/楼层取数、结构算量流水线、证据台账和退出码机制。
+
+## 0.2.3 — 2026-09-14
+
+修文档与退出码，不加功能。
+
+- 修正误导文案：入口闸只属于 `read_cad.sh`/`convert_dwg.sh` 全量路径；`cad_scan.sh` 快速路径不设体积闸。
+- `cad_scan` 结果不完整时改为退出码 4，避免批量脚本把残缺量当完整量。
+- 报告顶栏告警扩展到全部数据缺失类型。
+
+## 0.2.2 — 2026-09-14
+
+发布页文案与版本说明修正。
+
+## 0.2.0 — 2026-09-14
+
+按楼层取数与结果可核对。
+
+- 新增 `--floor-label` 按图名只统计目标楼层图框。
+- 每条文字带图层名，支持集中标注/原位标注归属和 `--detail-json` 全量台账。
+- 图框编号与坐标范围可复现，截断显式告警。
+
+## 0.28.0 — 2026-10-12（运行时自动自举 + 显式依赖底座）
+
+- 新增 `scripts/ensure_runtime.sh`：任意 `run_cad.sh` 入口启动时先自检 vendor（ezdwg/ezdxf/fontTools），齐全则跳过、不联网；缺失时默认自动调 `install_vendor.sh` 从 GitHub Release 补齐。
+- `CAD_AUTO_SETUP=0` 可关闭自动下载，给出明确手动安装指引；`install_vendor.sh` 的 curl 增加 `--max-time`（默认 600 秒）。
+- 三个算量 skill（土建/安装/装饰）将改为显式依赖本底座：安装任一算量 skill 时自动检测并补齐 cad-file-reader，无需用户手动安装；仍保留 `SKILL_NO_BASE=1` 降级路径（离线/只用已有扫描与表格）。
+- 验证：本机完整包 vendor 已存在（幂等跳过）；缺失 vendor 时自动下载路径经 dry-run 核对 Release 命名。
