@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/warp-compile-time-optimizer",
+  "identifier": "NVIDIA/skills/skills/warp-compile-time-optimizer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/warp-compile-time-optimizer",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "6ff54fb5b7b934bdb506e1650ebae40686808bb2622ae158ef3d480f7924219a",
+  "fetchedAt": "2026-10-12T16:48:00.837Z"
+}

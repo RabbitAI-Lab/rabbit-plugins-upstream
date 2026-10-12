@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/paidf-cosmos-predict",
+  "identifier": "NVIDIA/skills/skills/paidf-cosmos-predict",
+  "repo": "NVIDIA/skills",
+  "path": "skills/paidf-cosmos-predict",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "ca2e4a65530fa6b3791ceca7edf0e3737c0a979d3eef69deb09baa7bec565373",
+  "fetchedAt": "2026-10-12T16:48:00.399Z"
+}

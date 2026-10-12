@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/archify",
+  "identifier": "official/creative/archify",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/archify",
+  "branch": "main",
+  "pushedAt": "2026-10-12T16:42:18Z",
+  "contentHash": "b21fb7554f5f224059e4da9374ecbb24645d50ec430c9eae6ad077701b2505ad",
+  "fetchedAt": "2026-10-12T16:48:06.768Z"
+}

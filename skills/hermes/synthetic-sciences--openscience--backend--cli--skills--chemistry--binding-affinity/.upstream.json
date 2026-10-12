@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/binding-affinity",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/binding-affinity",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/binding-affinity",
+  "branch": "main",
+  "pushedAt": "2026-10-12T12:43:30Z",
+  "contentHash": "dd14474b7eb3691e1335053764c7c666a7150c354b65bb7a544edeb216151814",
+  "fetchedAt": "2026-10-12T16:47:59.259Z"
+}
