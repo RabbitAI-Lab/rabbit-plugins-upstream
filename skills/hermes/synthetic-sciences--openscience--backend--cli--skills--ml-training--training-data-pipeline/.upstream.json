@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/training-data-pipeline",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/training-data-pipeline",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/training-data-pipeline",
+  "branch": "main",
+  "pushedAt": "2026-10-12T12:43:30Z",
+  "contentHash": "ae7ddb70572bf049b0ba71ccd2e07e7932f856ffa91cc68a3146f6aad3ce56b3",
+  "fetchedAt": "2026-10-12T16:47:59.428Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/dynamical-systems",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/dynamical-systems",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/dynamical-systems",
+  "branch": "main",
+  "pushedAt": "2026-10-12T12:43:30Z",
+  "contentHash": "7618beb184a6d35c3ef0f5b57c064eb037bb3ff00f628e6d89685f27bbceb126",
+  "fetchedAt": "2026-10-12T16:47:59.301Z"
+}

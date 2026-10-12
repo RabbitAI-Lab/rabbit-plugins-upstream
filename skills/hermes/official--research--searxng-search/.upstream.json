@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/research/searxng-search",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "ed579dfaf2f1e7fe4eec6b8914b4354f0f124e5b3eec65ae3b014fbdb6f775b1",
-  "fetchedAt": "2026-07-26T17:03:57.017Z"
+  "pushedAt": "2026-10-12T16:42:18Z",
+  "contentHash": "1abb6363e5e64594484d581719d1cdab2d1bbe069286a49d9dd4bdd10df99349",
+  "fetchedAt": "2026-10-12T16:48:06.875Z"
 }
