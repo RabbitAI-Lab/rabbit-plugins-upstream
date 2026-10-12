@@ -1,45 +1,55 @@
-## Description: <br>
-帮助独立教师基于真实学习档案生成阶段报告、进步展示、续课建议和教师确认后的续费沟通话术。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据指定学员的学习记录起草有据可查的阶段报告及续课建议，供教师审核后使用。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External independent teachers use this skill to turn lesson logs and learning records into stage reports, renewal recommendations, and parent-ready communication drafts for teacher review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use sensitive student workspace records when drafting reports and renewal messages. <br>
-Mitigation: Keep student aliases enabled, avoid real names or family details, and use only records the teacher is permitted to share. <br>
-Risk: Parent-facing reports could become misleading if progress is exaggerated, unsupported by records, or framed as guaranteed score improvement. <br>
-Mitigation: Base report content on actual lesson logs, student analysis, dashboard records, and progress evidence; avoid score, ranking, or admission promises. <br>
-Risk: Renewal messages could be sent before a teacher checks factual accuracy and tone. <br>
-Mitigation: Require teacher confirmation before sending any report or renewal communication through parent communication workflows. <br>
+## Use Case:
 
+独立教师根据指定学员的课后记录、作业跟进及课时信息，起草事实、进步和计划三段式报告，并准备不施压的续课沟通建议；家长可见内容须经授权检查和教师审定。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-renewal-report) <br>
-- [阶段报告与续课沟通模板](references/renewal-report-template.md) <br>
-- [阶段报告模板（中期 / 续费 / 期末）](references/stage-report-templates.md) <br>
-- [续费沟通话术库](references/renewal-communication-scripts.md) <br>
+### Deployment Geography for Use:
 
+Mainland China; localize legal, crisis-support, curriculum and consent assumptions before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Chinese Markdown reports, tables, templates, and parent communication scripts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires teacher review before parent-facing use; drafts should use student aliases and recorded learning data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Drafting a report involves a selected student's sensitive learning history and consent fields.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Identify the student before reading records, limit access to relevant fields, check consent for parent-facing content, and require teacher review before sharing.
+
+Risk: The legal, crisis-support, curriculum and consent guidance assumes Mainland China.
+
+Mitigation: Localize these assumptions before using the skill with students or parents elsewhere.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-renewal-report)
+- [Stage report templates](artifact/references/stage-report-templates.md)
+- [Renewal communication scripts](artifact/references/renewal-communication-scripts.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown report and renewal communication draft]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-reviewed draft only; no messages are sent by the skill.]
+
+## Skill Version(s):
+
+2.11.1 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

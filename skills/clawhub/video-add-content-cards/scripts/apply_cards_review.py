@@ -30,6 +30,7 @@ def _review_entries(plan, review):
     if len(plan_ids) != len(set(plan_ids)):
         raise ValueError("plan card ids must be unique")
 
+    plan_by_id = {card["id"]: card for card in plan_cards}
     by_id = {}
     for entry in entries:
         if not isinstance(entry, dict):
@@ -52,6 +53,31 @@ def _review_entries(plan, review):
             raise ValueError(f"selected card copy is blank: {card_id}")
         if entry["selected"] and not placement:
             raise ValueError(f"selected card placement is missing: {card_id}")
+        treatment = entry.get("visual_treatment")
+        if treatment is None:
+            plan_treatment = plan_by_id[card_id].get("visual_treatment", {})
+            if not isinstance(plan_treatment, dict):
+                raise ValueError(f"plan visual_treatment must be an object: {card_id}")
+            treatment = plan_treatment.get("layout") or "default"
+        if not isinstance(treatment, str):
+            raise ValueError(f"review visual_treatment must be a string: {card_id}")
+        build_cards_plan.validate_visual_treatment(
+            plan_by_id[card_id].get("card_type"), treatment
+        )
+        entry = {**entry, "visual_treatment": treatment}
+        if entry["selected"] and treatment in build_cards_plan.CHART_LAYOUTS:
+            candidate = copy.deepcopy(plan_by_id[card_id])
+            candidate["visual_treatment"] = {
+                **candidate.get("visual_treatment", {}),
+                "layout": treatment,
+            }
+            data = copy.deepcopy(entry.get("data"))
+            if not isinstance(data, dict):
+                raise ValueError(f"selected chart data is missing: {card_id}")
+            data.setdefault("status", "draft")
+            candidate["data"] = data
+            build_cards_plan.validate_chart_data(candidate, treatment)
+            entry["data"] = data
         by_id[card_id] = entry
 
     missing = set(plan_ids) - set(by_id)
@@ -72,17 +98,45 @@ def apply_review(plan, review):
         entry = entries[card["id"]]
         if not entry["selected"]:
             continue
+        approved_copy = entry["copy"].strip()
+        existing_copy = card.get("copy", {})
+        if not isinstance(existing_copy, dict):
+            existing_copy = {}
+        display = existing_copy.get("display", {})
+        if not isinstance(display, dict):
+            display = {}
         card["copy"] = {
-            **card.get("copy", {}),
+            **existing_copy,
             "status": "approved",
-            "text": entry["copy"].strip(),
+            "text": approved_copy,
+            "display": {**display, "title": approved_copy},
         }
-        card["placement"] = {"status": "approved", "region": entry["placement"]}
+        existing_placement = card.get("placement", {})
+        if not isinstance(existing_placement, dict):
+            existing_placement = {}
+        card["placement"] = {
+            **existing_placement,
+            "status": "approved",
+            "region": entry["placement"],
+            "face_clearance": "pending",
+            "caption_clearance": "pending",
+            "review_still": None,
+            "clearance_decision_mode": None,
+            "clearance_rationale": "",
+        }
         card["visual_treatment"] = {
             **card.get("visual_treatment", {}),
             "status": "approved",
             "theme": theme,
+            "layout": entry["visual_treatment"],
         }
+        if entry["visual_treatment"] in build_cards_plan.CHART_LAYOUTS:
+            card["data"] = {**copy.deepcopy(entry["data"]), "status": "approved"}
+            build_cards_plan.validate_chart_data(
+                card, entry["visual_treatment"], require_approved=True
+            )
+        else:
+            card.pop("data", None)
         selected_cards.append(card)
 
     selected_ids = [card["id"] for card in selected_cards]
@@ -96,18 +150,29 @@ def apply_review(plan, review):
     return updated
 
 
-def write_json_atomic(path, data):
+def write_json_atomic(path, data, *, project_lease_held=False):
     path = Path(path).resolve()
-    path.parent.mkdir(parents=True, exist_ok=True)
-    with tempfile.NamedTemporaryFile(
-        dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
-    ) as handle:
-        temporary = Path(handle.name)
-    try:
-        build_cards_plan.projectlib.write_json(temporary, data)
-        os.replace(temporary, path)
-    finally:
-        temporary.unlink(missing_ok=True)
+    project_root = build_cards_plan.projectlib._project_root_for_write(path)
+
+    def stage_and_replace(*, project_lease_held):
+        path.parent.mkdir(parents=True, exist_ok=True)
+        with tempfile.NamedTemporaryFile(
+            dir=path.parent, prefix=f".{path.name}.", suffix=".tmp", delete=False
+        ) as handle:
+            temporary = Path(handle.name)
+        try:
+            build_cards_plan.projectlib.write_json(
+                temporary, data, project_lease_held=project_lease_held
+            )
+            os.replace(temporary, path)
+        finally:
+            temporary.unlink(missing_ok=True)
+
+    if project_root is None or project_lease_held:
+        stage_and_replace(project_lease_held=project_lease_held)
+        return
+    with build_cards_plan.projectlib.project_mutation_lease(project_root):
+        stage_and_replace(project_lease_held=True)
 
 
 def main(argv=None):
@@ -116,11 +181,26 @@ def main(argv=None):
     parser.add_argument("review")
     parser.add_argument("output", nargs="?")
     args = parser.parse_args(argv)
-    plan = json.loads(Path(args.plan).read_text(encoding="utf-8"))
-    review = json.loads(Path(args.review).read_text(encoding="utf-8"))
-    output = args.output or args.plan
-    write_json_atomic(output, apply_review(plan, review))
-    print(Path(output).resolve())
+    plan_path = Path(args.plan).resolve()
+    output = Path(args.output).resolve() if args.output else plan_path
+    project_root = build_cards_plan.projectlib._project_root_for_write(plan_path)
+
+    def apply_and_write(*, project_lease_held):
+        plan = json.loads(plan_path.read_text(encoding="utf-8"))
+        review = json.loads(Path(args.review).read_text(encoding="utf-8"))
+        output_root = build_cards_plan.projectlib._project_root_for_write(output)
+        write_json_atomic(
+            output,
+            apply_review(plan, review),
+            project_lease_held=project_lease_held and output_root == project_root,
+        )
+
+    if project_root is None:
+        apply_and_write(project_lease_held=False)
+    else:
+        with build_cards_plan.projectlib.project_mutation_lease(project_root):
+            apply_and_write(project_lease_held=True)
+    print(output)
 
 
 if __name__ == "__main__":

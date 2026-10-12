@@ -1,44 +1,55 @@
-## Description: <br>
-Discover Snowflake Cortex, Snowpark, notebook, Streamlit, MCP, and AI-observability assets from the operator's environment, emit canonical agent-bom inventory JSON, and scan it without giving agent-bom long-lived Snowflake credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discovers Snowflake AI and workload assets using operator-approved read-only access, writes canonical agent-bom inventory JSON, and scans the inventory only on request.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to inventory Snowflake AI and Cortex infrastructure into schema-valid agent-bom JSON, then optionally scan that inventory for findings when requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent may use the operator's existing Snowflake authentication context to query inventory. <br>
-Mitigation: Use a least-privilege, read-only Snowflake role and only operator-approved accounts, warehouses, databases, and schemas. <br>
-Risk: Snowflake passwords, private keys, passphrases, or OAuth tokens could be exposed if pasted into chat. <br>
-Mitigation: Use SSO, OAuth, or key-pair authentication from the local environment and do not paste credential material into chat. <br>
-Risk: Generated inventory files may contain sensitive infrastructure details. <br>
-Mitigation: Write inventory only to an operator-selected path and review the local JSON before sharing or scanning it. <br>
+## Use Case:
 
+Developers and Snowflake operators use this skill to inventory Cortex, Snowpark, notebook, Streamlit, MCP, and AI-observability assets and optionally scan the resulting inventory for findings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-snowflake) <br>
-- [agent-bom project homepage](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-selected local inventory JSON and optional agent-bom findings JSON; credential-like values are redacted before persistence or export.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: release metadata and skill frontmatter) <br>
+Risk: Discovery could expose sensitive Snowflake inventory or use broader access than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use an operator-approved account and read-only role, choose the output path, and keep secrets out of chat.
+
+Risk: Locally installed discovery code may not match the reviewed skill.
+
+Mitigation: Verify the agent-bom installation and its provenance before connecting to a real Snowflake account.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-discover-snowflake)
+- [agent-bom project homepage (skill metadata; import provenance unavailable)](https://github.com/msaad00/agent-bom)
+- [agent-bom package](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, JSON files]
+
+**Output Format:** [Shell commands and canonical inventory JSON; optional JSON scan findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inventory is written to an operator-selected path; scanning occurs only when requested.]
+
+## Skill Version(s):
+
+0.108.4 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

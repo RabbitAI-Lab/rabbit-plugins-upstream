@@ -1,45 +1,56 @@
-## Description: <br>
-Gov Procurement Analyst helps suppliers, procurement agents, and purchasing teams analyze Chinese government procurement opportunities, bid decisions, compliance risks, contracts, policies, and bid-document drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Chinese government procurement opportunities, bid eligibility, supplier information, and compliance, and helps draft procurement and bidding materials.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Suppliers, bid teams, procurement agents, and purchasing units use this skill to find public procurement notices, match opportunities to an enterprise profile, assess bid viability, draft bid materials, and review compliance or contract risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can persist sensitive company profile data, qualifications, historical projects, and generated bid materials on the local machine. <br>
-Mitigation: Use explicit invocation, avoid sensitive certificates unless local-only processing is confirmed, and review how to list, delete, or disable stored profiles, archives, and material libraries. <br>
-Risk: Broad triggers, timed pushes, and update actions may produce or deliver procurement analysis outside the user's intended scope. <br>
-Mitigation: Confirm the target project, company, and delivery channel before relying on reports, and disable scheduled pushes or update actions when they are not needed. <br>
-Risk: Bid, contract, policy, and complaint guidance may be incomplete or unsuitable for a specific procurement matter. <br>
-Mitigation: Have qualified procurement, legal, or finance reviewers check generated reports and filing materials before submission. <br>
+## Use Case:
 
+Suppliers, bid teams, procurement agencies, and purchasing organizations use this skill to find Chinese public-sector opportunities, assess whether to bid, review procurement risks, and prepare related documents.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/gov-procurement-analyst) <br>
-- [Procurement platforms and compliance guide](references/procurement-platforms.md) <br>
-- [Anti-scraping best practices](references/anti-scraping-best-practices.md) <br>
-- [Enterprise profiling and matching algorithm](references/enterprise-profiling.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown-style reports and guidance with optional JSON files from helper scripts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May persist local enterprise profiles, bid archives, material libraries, generated bid documents, and script output files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.7.0 (source: frontmatter, release evidence, README version history) <br>
+Risk: Company profiles, bids, competitor information, and collaboration records may be retained locally over time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm where records are stored, restrict access, and establish a deletion and retention process before use.
+
+Risk: Claims of local-only privacy may not cover certificate recognition, monitoring, notifications, or updates.
+
+Mitigation: Before enabling OCR, multimodal recognition, scheduled monitoring, webhooks, or updates, verify what data leaves the machine and disable unneeded integrations.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/fyniujin/skills/gov-procurement-analyst)
+- [Procurement platforms and collection guidance](references/procurement-platforms.md)
+- [Enterprise profiling and matching](references/enterprise-profiling.md)
+- [Collection best practices](references/anti-scraping-best-practices.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Narrative reports and checklists; structured JSON from helper scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes bid assessments, compliance findings, and draft procurement materials that require human review.]
+
+## Skill Version(s):
+
+5.4.0 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

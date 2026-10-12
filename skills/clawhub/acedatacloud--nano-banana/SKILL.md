@@ -1,0 +1,105 @@
+---
+name: nano-banana-image
+description: Generate or edit images with Nano Banana through AceDataCloud, including the 2.1 model.
+license: Apache-2.0
+metadata:
+  author: acedatacloud
+  version: "1.0"
+compatibility: Requires ACEDATACLOUD_API_TOKEN in .env file (get an API key at https://platform.acedata.cloud/console/applications). Optionally pair with mcp-nano-banana for tool-use.
+---
+
+# NanoBanana Image Generation
+
+Generate and edit AI images through AceDataCloud's NanoBanana (Gemini-based) API.
+
+## First-time setup
+
+1. Install the official Skill with `clawhub install @acedatacloud/nano-banana`. Check that the ClawHub publisher is **@acedatacloud**.
+2. Sign in at [AceDataCloud → Applications](https://platform.acedata.cloud/console/applications), open **General application**, and check Nano Banana access, balance, and current pricing. Copy its API key, or select **Manage Keys → Create** for a separate key. Copy the key value without `Bearer `; a `platform-...` management token is not a service API key.
+3. If you enable **Allowed APIs** restrictions, include `/nano-banana/images` and `/nano-banana/tasks`. Advanced workflows below may call additional routes.
+4. On the OpenClaw Gateway host, put `ACEDATACLOUD_API_TOKEN=your_api_key_here` in `~/.openclaw/.env`, then restart the Gateway and start a new session. For a direct terminal test, run `export ACEDATACLOUD_API_TOKEN="your_api_key_here"` in that shell. Never put the key in a prompt or commit an `.env` file.
+5. Run the **Quick Start** below. If this workflow returns a task ID, query that same task until it finishes; do not submit the same billable request again just to check progress.
+
+[Illustrated key setup, first run, and troubleshooting](https://github.com/AceDataCloud/Skills#first-run-with-clawhub-and-openclaw) · [Token details](https://github.com/AceDataCloud/Skills/blob/main/skills/_shared/authentication.md)
+
+## Quick Start
+
+```bash
+curl -X POST https://api.acedata.cloud/nano-banana/images \
+  -H "Authorization: Bearer $ACEDATACLOUD_API_TOKEN" \
+  -H "Content-Type: application/json" \
+  -d '{"action": "generate", "prompt": "a watercolor painting of a French countryside village", "model": "nano-banana"}'
+```
+
+> **Async:** See [async task polling](https://github.com/AceDataCloud/Skills/blob/main/skills/_shared/async-tasks.md). Poll via `POST /nano-banana/tasks` with `{"id": "..."}`.
+## Models
+
+| Model | Best For |
+|-------|----------|
+| `nano-banana` | Standard image generation (default) |
+| `nano-banana-2-lite` | Fast, lightweight second-generation model |
+| `nano-banana-2` | Improved quality, second generation |
+| `nano-banana-2.1` | Latest efficient model; 1K, 2K, and 4K generation and editing |
+| `nano-banana-pro` | Highest quality, most detailed output |
+| `nano-banana:official` | Official channel variant of `nano-banana` |
+| `nano-banana-2-lite:official` | Official channel variant of `nano-banana-2-lite` |
+| `nano-banana-2:official` | Official channel variant of `nano-banana-2` |
+| `nano-banana-pro:official` | Official channel variant of `nano-banana-pro` |
+
+## Workflows
+
+### 1. Text-to-Image
+
+```json
+POST /nano-banana/images
+{
+  "action": "generate",
+  "prompt": "a photorealistic macro shot of morning dew on a spider web",
+  "model": "nano-banana-2.1",
+  "aspect_ratio": "16:9",
+  "resolution": "2K"
+}
+```
+
+### 2. Image Editing
+
+Edit existing images using natural language instructions — no mask needed. Pass source images via `image_urls`.
+
+```json
+POST /nano-banana/images
+{
+  "action": "edit",
+  "prompt": "change the background to a starry night sky",
+  "image_urls": ["https://example.com/photo.jpg"],
+  "model": "nano-banana-2.1",
+  "resolution": "2K"
+}
+```
+
+## Parameters
+
+| Parameter | Values | Description |
+|-----------|--------|-------------|
+| `action` | `"generate"`, `"edit"` | Operation mode |
+| `model` | `"nano-banana"`, `"nano-banana-2-lite"`, `"nano-banana-2"`, `"nano-banana-2.1"`, `"nano-banana-pro"`, `"nano-banana:official"`, `"nano-banana-2-lite:official"`, `"nano-banana-2:official"`, `"nano-banana-pro:official"` | Model to use; 2.1 has no `:official` variant |
+| `prompt` | string | Image description or editing instruction |
+| `image_urls` | array of strings | Source image URLs (required for edit action) |
+| `aspect_ratio` | `"1:1"`, `"3:2"`, `"2:3"`, `"16:9"`, `"9:16"`, `"4:3"`, `"3:4"` | Output aspect ratio |
+| `resolution` | `"1K"`, `"2K"`, `"4K"` | Default 1K; `nano-banana` and `nano-banana-2-lite` support only 1K; 2, 2.1, and Pro support all three resolutions |
+| `callback_url` | string | Async callback URL; returns a task ID immediately |
+
+To use 2.1, explicitly set `model:"nano-banana-2.1"`; omitting `model` still selects `nano-banana`. For nonblocking requests, set `async:true`, retain `task_id`, and poll `/nano-banana/tasks` to terminal success before returning an image. No `nano-banana-2.1:official` variant is published.
+
+The same 2.1 model is also accepted by `POST /openai/images/generations` (public alias `/v1/images/generations`) and `POST /openai/images/edits` (public alias `/v1/images/edits`). Those use their own OpenAI-compatible schemas (`image` for JSON editing, not `image_urls`; `size` rather than this endpoint's `resolution`/`aspect_ratio`). Check that endpoint's current schema before reusing a request; do not assume identical response fields. Prices depend on the current service/package; consult live pricing rather than hard-coding a per-call USD amount.
+
+## Gotchas
+
+- Editing does **NOT** require a mask — just describe the change in natural language
+- Editing uses the same `/nano-banana/images` endpoint with `action: "edit"` and `image_urls` array (not a separate `/edit` path)
+- `nano-banana-2.1` supports 1K, 2K, and 4K; `nano-banana-pro` offers the highest quality
+- `:official` variants (e.g., `nano-banana:official`) route through the official channel
+- Task polling uses `id` (not `task_id`) in the `/nano-banana/tasks` request body
+- Aspect ratio uses colon notation (e.g., `"16:9"`) not pixel dimensions
+- The Gemini-based model excels at understanding complex, conversational editing instructions
+
+> **MCP:** `pip install mcp-nano-banana` | Hosted: `https://nanobanana.mcp.acedata.cloud/mcp` | See [all MCP servers](https://github.com/AceDataCloud/Skills/blob/main/skills/_shared/mcp-servers.md)

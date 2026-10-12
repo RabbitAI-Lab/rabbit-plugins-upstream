@@ -1,6 +1,11 @@
 ---
 name: postnext-social-manager
-description: Manage social media through PostNext - schedule, publish, and analyze posts across Twitter/X, Instagram, LinkedIn, Threads, YouTube, TikTok, and Bluesky via the PostNext public API. Use when the user wants to draft, schedule, or publish social posts, upload media for posts, check what is queued, or read social analytics (engagement, best time to post, audience growth) and has a PostNext account and API key.
+description: Manage social media through PostNext - schedule, publish, and analyze posts across Twitter/X, Instagram, LinkedIn, Threads, YouTube, TikTok, and Bluesky via the PostNext public API. Use when the user wants to draft, schedule, or publish social posts, upload media for posts, check what is queued, cancel a scheduled post or delete a post from PostNext, read social analytics (engagement, best time to post, audience growth) or refresh them with an analytics sync, and has a PostNext account and API key. Publishing, scheduling, cancelling, deleting and uploading always preview first and need the user's approval.
+allowed-tools: Bash(./postnext:*), Bash(curl:*), Bash(jq:*), Read
+metadata:
+  requires:
+    bins: [bash, curl, jq]
+    env: [POSTNEXT_API_KEY]
 ---
 
 # PostNext Social Manager
@@ -20,11 +25,20 @@ Two ways to use this skill:
 ## The core loop
 
 1. **Connect** (one-time, done by the user in the PostNext web app - there is no API to connect a channel). Confirm what is connected: `postnext channels`.
-2. **Upload media** if the post has an image or video: `postnext upload ./clip.mp4` prints an asset URL.
+2. **Upload media** if the post has an image or video: `postnext upload ./clip.mp4` prints an asset URL (or pass the file straight to `--media` in step 3).
 3. **Compose + publish now** or **schedule**:
    - `postnext post --provider twitter --text "..." --media ./a.png`
    - `postnext schedule --provider instagram --text "..." --media ./a.jpg --at 2026-07-25T14:00:00Z`
+
+   Every command that changes the account (`post`, `schedule`, `cancel`, `delete`, `upload`) first prints a **preview and sends nothing** (exit code 3). Show the preview to the user. Only after they approve it, run the identical command again with `--confirm <code>` from the preview. The code covers that exact operation: if the text, media, time or target changes, preview again and get a fresh approval.
 4. **Measure**: `postnext analytics overview`, `postnext analytics best-time twitter`, `postnext results`.
+
+## Safety
+
+- The API key acts on the user's real social accounts. Use a dedicated key, and never paste it into posts, logs or URLs.
+- Confirm with the user before any publish, schedule, cancel, delete or upload. The helper enforces this: without the `--confirm` code from its own preview it sends nothing. Never pass a code the user has not approved, and never reuse one for a changed operation.
+- `delete` removes the post from PostNext only. It does not remove an already-published post from the platform.
+- The helper only talks to `https://api-app.postnext.io`. Do not point raw curl recipes at any other host with the key.
 
 ## Four traps this skill exists to prevent
 

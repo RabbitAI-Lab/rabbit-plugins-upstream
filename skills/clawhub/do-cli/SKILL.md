@@ -120,11 +120,17 @@ do habit log 01J9Z2K7Q8ABCDEF0123456789 --value 30 --at 2026-06-18T21:00:00Z
 
 # Read entities: `do <entity> list` / `do <entity> get <id>`
 do tasks list --filter unsorted     # the GTD inbox
+do tasks list --area <areaId> --status todo,in_progress --tag errand --due-before 2026-10-12
+do tasks list --updated-since 2026-10-11T08:00:00Z   # what changed since a sync
 do habits list
 do notes get 01J9Z2K7Q8ABCDEF0123456789
 
 # Pipe JSON into jq (auto-JSON because stdout is piped)
 do today | jq '.items[] | select(.bucket == "overdue") .title'
+
+# Sync: what changed since your last cursor (store .nextCursor, rerun while .hasMore)
+do changes --since now                 # a fresh cursor, no history
+do changes --since 812345-12 --entity task,project
 ```
 
 Readable entities: `tasks`, `habits`, `occurrences`, `shopping-lists`,

@@ -1,39 +1,59 @@
-## Description: <br>
-Analyzes fixed-camera elder-care video to detect loneliness-related behaviors, compute a loneliness index, and produce warm companionship recommendations and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes elder-care video for loneliness-related behaviors and produces a structured report with companionship suggestions and access to historical reports.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External care teams, family caregivers, and smart-aging platform developers use this skill to review consented video from solitary-living elder homes or private care rooms, identify loneliness indicators, and generate structured care recommendations. It also supports cloud report history lookup for previously generated loneliness and companionship reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-loneliness-comfort-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+Caregivers and elder-care service developers use the skill to review footage for possible loneliness-related behaviors, receive companionship suggestions, and view previous reports.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with structured analysis results, report links, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Handles sensitive private-room video and cloud report history; use only with explicit consent and review cloud retention and access controls before deployment.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.4) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Private elder-care video or audio is uploaded to external services.
+
+Mitigation: Obtain explicit informed consent from the elder and relevant caregivers, including approval for cloud upload, before use.
+
+Risk: Identity records and tokens may be created or stored without clear user control.
+
+Mitigation: Ask the publisher how identifiers and tokens are stored and deleted, and require clear approval for account creation.
+
+Risk: Cloud reports and history may retain sensitive information.
+
+Mitigation: Confirm report retention, history access, and deletion options with the publisher before deploying in a home or care facility.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-loneliness-comfort-analysis)
+- [API documentation](references/api_doc.md)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text]
+
+**Output Format:** [Structured text or JSON analysis reports and Markdown history tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes report links and may be saved to a local file.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release metadata; artifact frontmatter lists 1.0.16)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -5,7 +5,7 @@
 #
 # voice_plan.json 格式:
 # {
-#   "provider": "dashscope",   # dashscope | openai | say
+#   "provider": "say",         # only local macOS say is supported
 #   "voice": "longxiaobai",    # 音色
 #   "speed": 1.0,
 #   "scenes": [
@@ -29,6 +29,18 @@ if [[ -z "$PLAN_FILE" || -z "$OUT_DIR" ]]; then
   exit 1
 fi
 
+if [[ ! -f "$PLAN_FILE" ]]; then
+  echo "ERROR: plan file does not exist" >&2
+  exit 1
+fi
+
+case "$OUT_DIR" in
+  /|""|.|..)
+    echo "ERROR: choose a dedicated output directory" >&2
+    exit 1
+    ;;
+esac
+
 mkdir -p "$OUT_DIR"
 
 # 解析 JSON（用 jq）
@@ -42,43 +54,20 @@ echo "Scenes: $COUNT"
 echo "Output: $OUT_DIR"
 
 case "$PROVIDER" in
-  dashscope)
-    if [[ -z "${DASHSCOPE_API_KEY:-}" ]]; then
-      echo "ERROR: DASHSCOPE_API_KEY not set" >&2
-      exit 1
-    fi
-    python3 - "$PLAN_FILE" "$OUT_DIR" <<'PY'
-import sys, os, json, subprocess
-plan, out_dir = sys.argv[1], sys.argv[2]
-with open(plan) as f:
-    cfg = json.load(f)
-voice = cfg["voice"]
-for scene in cfg["scenes"]:
-    sid, text = scene["id"], scene["text"]
-    out_mp3 = f"{out_dir}/{sid}.mp3"
-    print(f"  TTS [{sid}] {len(text)} chars -> {out_mp3}")
-    # 调用 dashscope Python SDK
-    import dashscope
-    from dashscope.audio.tts import SpeechSynthesizer
-    dashscope.api_key = os.environ["DASHSCOPE_API_KEY"]
-    result = SpeechSynthesizer.call(
-        model="cosyvoice-v1",
-        voice=voice,
-        text=text,
-        format="mp3",
-        sample_rate=24000,
-    )
-    with open(out_mp3, "wb") as f:
-        f.write(result.get_audio_data())
-PY
-    ;;
-
   say)
     for i in $(seq 0 $((COUNT-1))); do
       SID=$(jq -r ".scenes[$i].id" "$PLAN_FILE")
       TEXT=$(jq -r ".scenes[$i].text" "$PLAN_FILE")
+      if [[ ! "$SID" =~ ^[A-Za-z0-9_-]+$ ]]; then
+        echo "ERROR: scene id '$SID' must contain only letters, digits, _ or -" >&2
+        exit 1
+      fi
       AIFF="$OUT_DIR/${SID}.aiff"
       MP3="$OUT_DIR/${SID}.mp3"
+      if [[ -e "$AIFF" || -e "$MP3" ]]; then
+        echo "ERROR: refusing to overwrite existing scene output: $SID" >&2
+        exit 1
+      fi
       echo "  say [$SID] $TEXT"
       say -v "$VOICE" -o "$AIFF" "$TEXT"
       ffmpeg -y -loglevel error -i "$AIFF" -codec:a libmp3lame -qscale:a 2 "$MP3"
@@ -86,34 +75,8 @@ PY
     done
     ;;
 
-  openai)
-    if [[ -z "${OPENAI_API_KEY:-}" ]]; then
-      echo "ERROR: OPENAI_API_KEY not set" >&2
-      exit 1
-    fi
-    python3 - "$PLAN_FILE" "$OUT_DIR" <<'PY'
-import sys, os, json
-plan, out_dir = sys.argv[1], sys.argv[2]
-with open(plan) as f:
-    cfg = json.load(f)
-voice = cfg["voice"]
-for scene in cfg["scenes"]:
-    sid, text = scene["id"], scene["text"]
-    out_mp3 = f"{out_dir}/{sid}.mp3"
-    print(f"  TTS [{sid}] {len(text)} chars -> {out_mp3}")
-    import openai
-    client = openai.OpenAI(api_key=os.environ["OPENAI_API_KEY"])
-    with client.audio.speech.with_streaming_response.create(
-        model="tts-1",
-        voice=voice,
-        input=text,
-    ) as resp:
-        resp.stream_to_file(out_mp3)
-PY
-    ;;
-
   *)
-    echo "ERROR: unknown provider '$PROVIDER' (expected: dashscope | say | openai)" >&2
+    echo "ERROR: unknown provider '$PROVIDER' (only local 'say' is supported)" >&2
     exit 1
     ;;
 esac
@@ -122,12 +85,20 @@ esac
 echo ""
 echo "Concatenating scenes..."
 LIST_FILE=$(mktemp)
+trap 'rm -f "$LIST_FILE"' EXIT
 for i in $(seq 0 $((COUNT-1))); do
   SID=$(jq -r ".scenes[$i].id" "$PLAN_FILE")
+  if [[ ! "$SID" =~ ^[A-Za-z0-9_-]+$ ]]; then
+    echo "ERROR: scene id '$SID' must contain only letters, digits, _ or -" >&2
+    exit 1
+  fi
   echo "file '$OUT_DIR/${SID}.mp3'" >> "$LIST_FILE"
 done
-ffmpeg -y -loglevel error -f concat -safe 0 -i "$LIST_FILE" -c copy "$OUT_DIR/full.mp3"
-rm "$LIST_FILE"
+if [[ -e "$OUT_DIR/full.mp3" ]]; then
+  echo "ERROR: refusing to overwrite existing full.mp3" >&2
+  exit 1
+fi
+ffmpeg -n -loglevel error -f concat -safe 0 -i "$LIST_FILE" -c copy "$OUT_DIR/full.mp3"
 
 echo ""
 echo "Done. Files in $OUT_DIR:"

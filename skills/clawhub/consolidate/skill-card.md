@@ -1,48 +1,59 @@
-## Description: <br>
-Consolidate and respond to external PR and issue feedback by gathering AI reviews, classifying findings, posting review summaries, and registering deferred items. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Consolidates external feedback on pull requests and issues into classified findings, review decisions, and published review summaries.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and maintainers use this skill to consolidate external pull request or issue feedback, classify findings by validity and severity, decide review posture, post summaries, and carry forward deferred follow-up work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make persistent GitHub review and repository tracking changes. <br>
-Mitigation: Use interactive review for drafted posts and run only with accounts and repositories where review-state mutation authority is intended. <br>
-Risk: Headless execution may post REQUEST_CHANGES, comments, or tracking updates without sufficient user review. <br>
-Mitigation: Avoid headless runs on repositories where automatic review or tracking-file edits would be inappropriate. <br>
+## Use Case:
 
+Developers and maintainers use this skill to collect AI and internal code reviews, assess findings against a pull request, decide on fixes, and publish review summaries and formal reviews.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/consolidate) <br>
-- [README](README.md) <br>
-- [Skill Definition](SKILL.md) <br>
-- [PR Workflow](pr.md) <br>
-- [Collect AI Reviews](collect.md) <br>
-- [Analyze and Classify](classify.md) <br>
-- [Decide Review Response](decide.md) <br>
-- [Post Summary and Review](post.md) <br>
-- [Next Action Ask](next.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown review summaries, GitHub review or comment bodies, status text, shell commands, and tracking guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may lead to persistent GitHub review state changes and deferred-item tracking updates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: frontmatter, release evidence, and changelog released 2026-07-23) <br>
+Risk: Review automation can publish or change PR comments and formal reviews using a GitHub token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted GitHub account with limited token permissions and enable interactive review before posting.
+
+Risk: Reviewing external-contributor branches may run untrusted tests or builds.
+
+Mitigation: Disable local test and build execution or run it in a sandbox before reviewing untrusted branches.
+
+Risk: Plugin or hook installation can alter the local development environment.
+
+Mitigation: Review the installation behavior and install only in a trusted development environment.
+
+## Reference(s):
+
+- [Consolidate on ClawHub](https://clawhub.ai/drumrobot/skills/consolidate)
+- [Superpowers code-review skills](https://github.com/obra/superpowers)
+- [Receiving Code Review](https://skills.sh/obra/superpowers/receiving-code-review)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Shell commands]
+
+**Output Format:** [Markdown review findings, PR summaries, and formal reviews]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May publish or update GitHub PR comments and formal reviews.]
+
+## Skill Version(s):
+
+0.8.0 (source: skill metadata and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

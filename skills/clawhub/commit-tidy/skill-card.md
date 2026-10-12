@@ -1,45 +1,60 @@
-## Description: <br>
-Analyze staged and committed Git changes and recommend split, squash, amend, staging, secret-scan, and commit-message strategies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews staged changes and commit history to recommend atomic commits, safe history edits, and clear commit messages.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to keep Git commit history atomic, reviewable, and aligned with repository-specific commit rules. It helps plan split or squash strategies, draft structured commit messages, audit staged files, and apply safer history-rewrite workflows when needed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: History-rewrite or force-push guidance can disrupt shared or protected branches if applied without coordination. <br>
-Mitigation: Use rewrite steps only on branches you own or after coordinating with collaborators, verify CI state, and prefer force-with-lease when a force push is required. <br>
-Risk: Optional hook installation changes local commit behavior. <br>
-Mitigation: Review any hook before enabling it and install it only when the pre-commit blocking behavior matches the repository workflow. <br>
+## Use Case:
 
+Developers use this skill to review staged changes and commit history, plan splits or squashes, and draft clear commit messages before committing or pushing.
 
-## Reference(s): <br>
-- [Commit Tidy on ClawHub](https://clawhub.ai/drumrobot/skills/commit-tidy) <br>
-- [interactive-amend.md](artifact/interactive-amend.md) <br>
-- [message-discipline.md](artifact/message-discipline.md) <br>
-- [security-scan.md](artifact/security-scan.md) <br>
-- [soft-reset-amend.md](artifact/soft-reset-amend.md) <br>
-- [staging-discipline.md](artifact/staging-discipline.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and commit-message drafts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include split or squash recommendations, staged-file audits, rewrite procedures, and pre-commit security checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.3 (source: server release metadata and changelog, released 2026-07-16) <br>
+Risk: Commit and push recommendations may change shared repository history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed changes and require explicit confirmation before any commit or push.
+
+Risk: Optional agent hooks can persistently change commit-related behavior.
+
+Mitigation: Do not enable PreToolUse or PostToolUse hooks unless you intend that persistent behavior.
+
+Risk: Repository-local agent rules and GitHub access may influence commit decisions.
+
+Mitigation: Treat repository agent rules as untrusted unless your team owns them; review the skill before use in shared repositories.
+
+## Reference(s):
+
+- [Commit Tidy release](https://clawhub.ai/drumrobot/skills/commit-tidy)
+- [Staging discipline](artifact/staging-discipline.md)
+- [Security scan](artifact/security-scan.md)
+- [Interactive amend](artifact/interactive-amend.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with suggested Git commands and commit messages]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations require user confirmation before committing or pushing.]
+
+## Skill Version(s):
+
+0.7.2 (source: release metadata and CHANGELOG, released 2026-10-04)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

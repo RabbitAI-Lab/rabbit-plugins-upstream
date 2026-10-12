@@ -1,41 +1,53 @@
-## Description: <br>
-Dawn Office Suite helps agents work with Word, PowerPoint, Excel, PDF, and general office-document tasks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户处理 Word、PPT、Excel 和 PDF 文档，包括排版、公式、演示文稿设计及 PDF 提取、合并与转换。
 
-## Publisher: <br>
-[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to create, read, edit, convert, and refine office documents across .docx, .pptx, .xlsx, PDF, and related office workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Untrusted office documents can contain macros, embedded links, or other active content that may create security or privacy risk. <br>
-Mitigation: Use normal caution with untrusted documents and avoid asking the skill to run macros, follow external links, or take credentialed cloud actions unless those actions are explicitly reviewed and user-directed. <br>
-Risk: Generated document edits, formulas, conversions, or formatting guidance may be incomplete or incorrect for a user's specific file. <br>
-Mitigation: Review the proposed changes and validate important documents before relying on the output. <br>
+## Use Case:
 
+员工及其他办公用户可借助此技能获取 Word、PPT、Excel 和 PDF 文档处理与排版指导。
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/chen6896qqwee/skills/dawn-office-suite) <br>
-- [Publisher profile](https://clawhub.ai/user/chen6896qqwee) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or plain text with optional code, shell-command, or configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May describe or produce document edits, extraction steps, conversion guidance, formulas, formatting guidance, and office workflow recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and clawhub.json) <br>
+Risk: Office documents provided to the agent may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review which local files you provide before invoking the skill.
+
+Risk: Converted or edited documents may contain errors or formatting changes.
+
+Mitigation: Check the resulting documents before relying on or sharing them.
+
+## Reference(s):
+
+- [办公文档全栈 on ClawHub](https://clawhub.ai/chen6896qqwee/skills/dawn-office-suite)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide creation and editing of office documents; review resulting files before use.]
+
+## Skill Version(s):
+
+2.0.1 (source: ClawHub release, clawhub.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

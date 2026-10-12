@@ -1,44 +1,53 @@
-## Description: <br>
-Select complete short-form moments from a verified Open Recut main delivery, extract approved horizontal derivatives, and optionally render reviewed 9:16 versions using shared transcript/timeline evidence and hash-bound review decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plans and reviews short-form video candidates, extracts horizontal clips, and optionally delivers reviewed 9:16 versions from a verified project render.
 
-## Publisher: <br>
-[whitetowerai](https://clawhub.ai/user/whitetowerai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whitetowerai](https://clawhub.ai/user/whitetowerai)
 
-## Use Case: <br>
-Developers and video-production agents use this skill to convert a verified Open Recut main delivery into reviewed horizontal shorts and optional 9:16 vertical outputs while preserving transcript, timeline, and review traceability. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes local video, transcript, and timeline files and can create or overwrite derivative shorts outputs in the project's final/shorts area. <br>
-Mitigation: Install it only for projects where local media processing is acceptable, and review generated candidate and vertical pages before approving final outputs. <br>
-Risk: Incorrect candidate or crop decisions can produce misleading or low-quality shorts. <br>
-Mitigation: Inspect the bound candidate page, vertical preview, contact sheets, media probes, and warnings; revise or skip when the evidence does not support approval. <br>
-Risk: Changed project inputs can invalidate prior decisions or approvals. <br>
-Mitigation: Rely on the skill's hash-bound receipts and validation checks, and rerun review steps after regenerated source media, transcripts, candidates, pages, or plans. <br>
+## Use Case:
 
+Video editors and developers use this skill to select transcript-grounded short clips, review candidates and vertical crops, and produce approved horizontal and optional vertical derivatives of a finished video.
 
-## Reference(s): <br>
-- [Video To Shorts Skill Protocol](SKILL.md) <br>
-- [Video To Shorts README](README.md) <br>
-- [ClawHub skill page](https://clawhub.ai/whitetowerai/skills/video-to-shorts) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, JSON, Markdown, HTML, Media files] <br>
-**Output Format:** [Markdown protocol with PowerShell commands plus project-local JSON, Markdown summaries, HTML review pages, and derivative MP4 files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Writes work, review, cache, and final/shorts artifacts under the target project; review gates are hash-bound.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Local source media, transcripts, and review outputs may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted local projects and process a copy when source media or project metadata is sensitive.
+
+Risk: Unreviewed candidates or vertical crops may not reflect the intended edit.
+
+Mitigation: Inspect candidate and vertical review pages and approve delivery explicitly before rendering final shorts.
+
+## Reference(s):
+
+- [Video To Shorts on ClawHub](https://clawhub.ai/whitetowerai/skills/video-to-shorts)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown, JSON]
+
+**Output Format:** [Markdown guidance, commands, and JSON plans and review decisions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Final clips require a verified main render and explicit candidate approval; vertical clips also require review.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

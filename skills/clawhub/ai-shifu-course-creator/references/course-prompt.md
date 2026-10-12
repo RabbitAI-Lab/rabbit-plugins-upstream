@@ -7,6 +7,7 @@ Course-level materialization contract for the Course Prompt artifact.
 - `language-policy.md`
 - `prompt-contracts.md#prompt-semantics`
 - `prompt-contracts.md#artifact-responsibilities`
+- `prompt-contracts.md#personalization-directions`
 - `data-contracts.md#input-contract`
 - `data-contracts.md#variable-table`
 - `markdownflow.md#variables`
@@ -21,6 +22,8 @@ Use this file to materialize one course-wide artifact from the six-section templ
 
 The template's `# Slides` section is the single runtime owner for presentation requirements that apply uniformly to every slide rather than to a particular slide position or teaching purpose. Teaching Prompts decide each lesson's slide count, order, teaching purposes, required content, relationship to explanatory text, and any position- or purpose-specific treatment; the Course Prompt applies the shared presentation rules without changing those decisions.
 
+The course author's intended audience and course constraints remain hard boundaries. The platform may supply learner context at delivery time; the Course Prompt tells the Teaching Agent how to use that context within the authored boundaries without serializing platform-owned learner-profile fields into the course artifact.
+
 - Apply shared Prompt semantics and the Course Prompt versus Teaching Prompt authority boundary from [prompt-contracts.md](prompt-contracts.md).
 - Resolve any variable references in the completed artifact against [markdownflow.md#variables](markdownflow.md#variables).
 
@@ -30,7 +33,7 @@ The template's `# Slides` section is the single runtime owner for presentation r
 2. Copy the complete [Fillable Template](#fillable-template), preserving its six sections and their order.
 3. Apply [Placeholder Sources and Context](#placeholder-sources-and-context) using already-collected artifacts and the listed context constraints.
 4. Render section headings and body text in `resolved_target_language`. The English template is canonical structure, not a language default.
-5. Keep every non-placeholder instruction. Adapt wording only when needed to preserve the same rule in `resolved_target_language`.
+5. Replace each placeholder with concrete course-specific instructions from its mapped source; do not copy the fill guidance or unselected alternatives into the artifact. Keep every non-placeholder instruction, adapting wording only to preserve the same rule in `resolved_target_language`.
 6. Run the [Materialization Checks](#materialization-checks).
 
 ## Fillable Template
@@ -44,7 +47,7 @@ The template's `# Slides` section is the single runtime owner for presentation r
 # Task
 
 - The current course is _XXX_. Your goal is to help the learner master XXX.
-- Follow the current user message's delivery mode. In standard one-on-one teaching, address the learner directly in the second person and do not use group-addressing terms such as "everyone", "class", or "students". In pure classroom slides, produce projection-ready content for a human instructor and do not narrate or address a single learner.
+- XXX
 - Do not introduce yourself.
 - Do not greet the learner.
 - Do not proactively guide the learner to the next step at the end.
@@ -52,8 +55,9 @@ The template's `# Slides` section is the single runtime owner for presentation r
 # Teaching Techniques
 
 - Treat the current user message as authoritative for the lesson's teaching method, explanation path, content sequence, pacing, examples, practice, interactions, feedback, and close.
-- Follow those instructions faithfully. Do not replace, reorder, omit, or supplement them with a generic course-level teaching framework.
-- Limit the Course Prompt's teaching contribution to the presentation layer: adjust tone, wording, formatting, and slide presentation without changing the current user message's pedagogical intent or lesson flow.
+- Follow those instructions faithfully. Do not replace, reorder, omit, or supplement them.
+- XXX
+- Do not quote, summarize, or mention the learner profile. If the context is empty, `UNKNOWN`, irrelevant, or unavailable, use neutral course-appropriate defaults and do not infer missing facts.
 
 # Writing Style
 
@@ -71,7 +75,7 @@ The template's `# Slides` section is the single runtime owner for presentation r
 # Slides
 
 - Only create a slide, PPT, visual page, or classroom projection page when the current user message explicitly requests one. Do not proactively create visuals.
-- Follow the current user message's delivery mode and slide-text relationship. Do not add Teaching Agent narration, a full text explanation, or presenter notes unless that user message requests them.
+- Follow the current user message's slide-text relationship. Do not add Teaching Agent narration, a full text explanation, or presenter notes unless that user message requests them.
 - Create a presentation-style slide rather than a standalone illustration.
 - In-slide option labels must not be interactive.
 - Keep in-slide text concise and prompt-like. Make every element fully visible, avoid overlap, and use a simple hierarchy.
@@ -87,6 +91,8 @@ The template's `# Slides` section is the single runtime owner for presentation r
 | Teaching field (`the field of XXX`) | Dominant topic from Segmentation, cross-checked with `course_index` core questions. |
 | Course name (`The current course is *XXX*`) | First heading in `README.md`. |
 | Mastery goal (`help the learner master XXX`) | Orchestration course-level goal aggregated from `course_index` core questions. |
+| Delivery instructions (standalone `XXX` under Task) | Resolved delivery mode from Course Design Intake. For standard one-on-one teaching, write a direct instruction to address the learner in the second person and avoid group-addressing terms such as "everyone", "class", or "students". For pure classroom slides, write a direct instruction to produce projection-ready content for a human instructor without narration or addressing a single learner. Include only the selected behavior, without mode labels or comparisons. Only when both modes are selected, include both behaviors and let the current user message select the applicable one. |
+| Personalization instructions (standalone `XXX` under Teaching Techniques) | Resolved `personalization_directions` from Course Design Intake, with effects defined in `prompt-contracts.md#personalization-directions`. Write direct teaching instructions for exactly the selected directions, using relevant explicitly stated learner background and preferences. For `[]`, write a direct instruction to teach from the source, author requirements, and intended audience without individual-background adaptation. Do not output the field name, enum values, selection interface, unselected adaptation instructions, or an if-selected rule. |
 
 Use these inputs as context constraints while wording the applicable fill values; they do not add placeholders to the template:
 
@@ -97,8 +103,11 @@ Use these inputs as context constraints while wording the applicable fill values
 ## Materialization Checks
 
 - The six template sections are present in their original order and localized to `resolved_target_language`.
-- The optional named Role identity item is either absent or contains a non-empty name. The remaining four `XXX` occurrences are replaced with course-specific content derived from the mapped sources, and the completed artifact contains no unresolved `XXX` placeholder.
+- The optional named Role identity item is either absent or contains a non-empty name. The remaining six `XXX` occurrences are replaced with course-specific content derived from the mapped sources, and the completed artifact contains no unresolved `XXX` placeholder.
+- Delivery instructions state the selected behavior directly. A single-mode course contains no unselected delivery alternative, mode-selection guidance, or authoring explanation; conditional delivery instructions appear only when both modes were selected.
 - Every non-placeholder template instruction remains represented with the same behavior.
-- The fill values satisfy the learner-profile, topic-scope, and delivery-mode context constraints above.
+- The fill values satisfy the `course_profile`, topic-scope, and delivery-mode context constraints above.
+- The learner-context instructions enable exactly the resolved directions under `prompt-contracts.md#personalization-directions`; `[]` produces the uniform course baseline. No unselected direction is enabled implicitly through a generic personalization rule or style instruction. Selected language style can vary within the shared clear, restrained, warm baseline; otherwise that baseline stays course-wide.
+- The artifact contains no authoring field name or enum array, platform learner-profile tags, internal learner-profile variable names, or unresolved personalization placeholder.
 - Every presentation requirement that applies uniformly to every slide remains in the `# Slides` section. The section does not special-case a cover or any other slide position or teaching purpose, and it does not change lesson-specific slide structure or pedagogy supplied by the current user message.
 - The completed artifact follows [prompt-contracts.md](prompt-contracts.md), and any variable references have the runtime behavior defined in [markdownflow.md#variables](markdownflow.md#variables), without copying those rules into this file.

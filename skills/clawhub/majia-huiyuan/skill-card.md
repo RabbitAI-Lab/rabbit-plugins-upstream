@@ -1,47 +1,56 @@
-## Description: <br>
-会员运营 · 马甲实战版 is an agent skill that helps users design, diagnose, and explain a simulated chain-store membership data platform, including dataset structures, Spark SQL metric formulas, ETL references, dashboard planning, DDL guidance, and data-quality troubleshooting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides membership analytics for a simulated chain restaurant, including metric definitions, segmentation, warehouse SQL, and dashboard designs.
 
-## Publisher: <br>
-[maojiebc](https://clawhub.ai/user/maojiebc) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[maojiebc](https://clawhub.ai/user/maojiebc)
 
-## Use Case: <br>
-Business, operations, and data teams use this skill as a membership-data consultant for caliber and formula Q&A, staged data-warehouse design, gap checks against a 54-dataset checklist, DDL drafting, role-based dashboard planning, data-quality troubleshooting, and training material. The included business data is simulated, so structures and metric definitions are reusable but sample values are not evidence of real performance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Dashboard templates may include custom card scripts that fetch card data through the viewer's BI session. <br>
-Mitigation: Review or remove custom card scripts that call /api/card/.../data before importing the Guandata dashboard JSON into a live BI tenant. <br>
-Risk: Production adaptation for member, employee, or customer-contact data can introduce sensitive-data handling obligations. <br>
-Mitigation: Apply access controls, consent checks, and internal data-governance review before using the skill's structures with real operational data. <br>
-Risk: The included sample values are simulated and can be mistaken for real business benchmarks. <br>
-Mitigation: Use the structures, field definitions, and metric formulas as references, but do not use sample values as real operating data or industry baselines. <br>
+## Use Case:
 
+Membership operations teams and data analysts use this Chinese-first reference to define metrics, plan audience segments and outreach measurement, and adapt SQL, schemas, and dashboards. Its example data is simulated, not real customer data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maojiebc/skills/majia-huiyuan) <br>
-- [Project homepage](https://github.com/maojiebc/majia-huiyuan) <br>
-- [Agent task guide](artifact/AGENTS.md) <br>
-- [Machine-readable index](artifact/llms.txt) <br>
-- [Formula library index](artifact/公式库/README.md) <br>
-- [Architecture diagram](https://raw.githubusercontent.com/maojiebc/majia-huiyuan/main/docs/architecture.png) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with SQL, DDL, checklists, file-path citations, and occasional shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Answers should cite artifact-relative source paths and distinguish simulated sample values from reusable structures and formulas.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.1 (source: evidence.release.version, manifest.json, and SKILL.md metadata) <br>
+Risk: Adapting membership or employee schemas to real data may expose personal identifiers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use scoped read-only credentials, mask or tokenize identifiers, and keep row-level records out of prompts and group chats.
+
+Risk: Unvalidated example SQL or metric definitions may produce misleading operational decisions.
+
+Mitigation: Review business rules and test SQL against the intended data and platform before production use.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/maojiebc/skills/majia-huiyuan)
+- [Author-listed project homepage](https://github.com/maojiebc/majia-huiyuan)
+- [Membership metrics reference cards](artifact/口径卡片/README.md)
+- [Formula library](artifact/公式库/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with SQL examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Examples use simulated data; SQL and business rules require validation before production use.]
+
+## Skill Version(s):
+
+1.5.0 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

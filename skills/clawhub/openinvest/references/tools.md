@@ -3,7 +3,7 @@
 > This file is the **tool documentation** — SKILL.md only covers workflow (issue #133 Decision 6:
 > Tool Usage is delegated to MCP schema auto-discovery; the Skill shrinks to the orchestration protocol).
 >
-> - **MCP users** (Claude Code plugin / codex mcp): the 18 tools come with auto-discovered schemas,
+> - **MCP users** (Claude Code plugin / codex mcp): the tools come with auto-discovered schemas,
 >   so you usually don't need this file; only consult this table for the long-tail endpoints MCP
 >   doesn't cover (trades/config/events/...)
 > - **CLI/REST agents** (Gemini / Cursor / scripts): this file is the complete reference
@@ -18,9 +18,9 @@
 | `strategy` | Universal | View strategy | target_assets + Dreaming insights |
 | `history [-n N]` | Universal | View the transaction log | last N trades + committee verdicts |
 | `live_prices` | Universal | Background market data | VIX / TNX / USDCNY / AUDCNY / NDQ / GC=F |
-| `discipline` | Universal | "what did the committee block / how is my discipline" (委员会拦了什么/纪律如何) | inaction rate (HOLD share) + count of blocked impulsive actions + counterfactual money saved/lost (read-only, zero LLM, aligned with ADR-023). Equivalent to `GET /api/discipline` |
-| `decisions [--days N]` | Universal | "how many recommendations did I follow / which ones weren't executed" (我听了几次建议/哪些没执行) | verdict↔intervention↔execution↔outcome join + adoption rate (read-only, zero LLM). Equivalent to `GET /api/decisions` (issue #133 Decision 9) |
-| `ingest_event` | Write | agent feeds news into the event ledger (normalization + severity grading, idempotent; requires backend LLM key) | `--title --url [--snippet --source --ts]` |
+| `discipline` | Universal | "what did the committee block / how is my discipline" (委员会拦了什么/纪律如何) | inaction rate (HOLD share of **live** verdicts) + count of blocked impulsive actions + counterfactual money saved/lost (read-only, zero LLM, aligned with ADR-023). Equivalent to `GET /api/discipline` |
+| `decisions [--days N] [--symbol S] [--verdict V] [--limit N]` | Universal | "how many recommendations did I follow / which ones weren't executed" (我听了几次建议/哪些没执行) | verdict↔intervention↔execution↔outcome join + adoption rate (read-only, zero LLM). Lists the newest 20 by default (`--limit 0` = all); `count` / `summary` cover every match. Same data as `GET /api/decisions` (issue #133 Decision 9) |
+| `ingest_event` | Write | agent feeds news into the event ledger (normalization + severity grading, idempotent; requires backend LLM key). Holding-relevant severity ≥ mid non-neutral items auto-trigger a rate-limited committee re-run (`committee_task_id` in the result); disabled in advisory mode | `--title --url [--snippet --source --ts]` |
 | `record_execution DECISION_ID [--rejected] [--reason "..."]` | Universal, write | Write back when the user says "I didn't buy / I bought it" (我没买/我买了) | Idempotent append to executions.jsonl. **When the user rejects a recommendation, proactively ask why before recording** (you are the collection end of the Reason Loop). Equivalent to `POST /api/decisions/execution` |
 | `what_if [--symbol X --pct N \| --gold-pct N \| --ndq-pct N]` | Universal | "how much do I lose if X drops Y%" (X 跌 Y% 我亏多少) | Arithmetic scenario, no LLM |
 | `correlate --symbols A,B[,C...] [--period 6mo] [--with-llm]` | "btw" side-query | The user **asks in passing** "do A and B move alike?" (A 跟 B 像不像) (no writes to memory/.committee; pure query, returns results) | pairwise correlation matrix + sector + macro linkage |
@@ -29,10 +29,10 @@
 | `run_committee SYM [--force]` | Direct | One-shot full committee | verdict JSON + CIO memo |
 | `deposit -c CCY -a N` | Universal, write | Deposit cash (any currency) | JSON new balance |
 | `withdraw -c CCY -a N` | Universal, write | Withdraw cash; errors on insufficient balance | JSON new balance |
-| `buy --symbol S --units N --price P [-c CCY] [--kind etf/equity/...]` | Universal, write | Add to / open a position (weighted average cost) | JSON action + estimated cost |
+| `buy --symbol S --units N --price P [-c CCY] [--kind etf/equity/...] [--existing-position]` | Universal, write | Add to / open a position (weighted average cost), paid from ledger cash (refuses if cash is short). `--existing-position` (MCP: separate tool `record_existing_position`; an older MCP server answers `Unknown tool` — don't fall back to `buy`): record a position the user held **before** onboarding that `status` doesn't list yet (re-adding a listed symbol counts it twice) — cash unchanged, history `funding_source: external_funding`, `source: skill_cli:existing_position`; refused in REST remote mode. Does not add the symbol to `target_assets` (that's `track_asset`) | JSON action + estimated cost + `funding_source` |
 | `sell --symbol S --units N --price P` | Universal, write | Reduce a position (returns cash per the holding's cost_currency) | JSON remaining units |
 | `delete_holding --symbol S [--force]` | Universal, write | Delete a holding row (units must be 0, or use --force) | JSON deleted |
-| `import [--file F \| --text T] [--commit]` | Universal, read/write | Free-text/CSV holdings description → LLM-parsed structured holdings (broker-position paste, bulk entry). Preview-only by default; `--commit` performs a non-destructive write (only adds new symbols; cash only fills currencies currently at 0; re-importing is idempotent). Equivalent to POST /api/holdings/import | JSON `{parsed, committed, summary?}` |
+| `import [--file F \| --text T] [--commit]` | Universal, read/write | Free-text/CSV holdings description → LLM-parsed structured holdings (broker-position paste, bulk entry). Preview-only by default; `--commit` performs a non-destructive write (only adds new symbols; cash only fills currencies currently at 0; re-importing is idempotent). Equivalent to POST /api/holdings/import. `parsed.warnings` (present only when non-empty) names each off-exchange fund whose amount could not be converted to units (stays 0 units) — tell the user | JSON `{parsed, committed, summary?}` |
 | `config [--set KEY VALUE] [--clear KEY]` | Universal, read/write | Read/modify the whitelist of API-configurable parameters (concentration_lens / **cash_opportunity_cost_rule** (opportunity-cost rule, default OFF, ADR-024) / risk_profile / gold_defense_dca / dreaming.llm_verify / **dca.auto_dca_enabled / dca.auto_dca_amount_cny** — auto-DCA switch and amount, ADR-018 / **event.watch_schedule** — event_watch scan-window crontab (interpreted in Asia/Shanghai; default Beijing 8:00 to 2:30 next day; the scheduler picks changes up automatically within ≤10 minutes, no restart needed) / **event.sentinel_enabled / event.sentinel_atr_mult / event.sentinel_cooldown_min / event.sentinel_schedule** — price-anomaly sentinel (vertical-move detection; sends an alert email first, then triggers the committee, ADR-025): master switch / trigger multiple (× daily ATR, default 0.8) / cooldown minutes for the same symbol + same direction (default 120) / scan-window crontab (default every 5 minutes). There are also several event.*/staleness.* keys — see GET /api/config for the full list). No args = read everything. Equivalent to GET/PUT /api/config (ADR-017) | JSON of all effective values |
 
 **The subcommand names are a closed set — any command not in the table above does not exist.**
@@ -59,8 +59,10 @@ so the user can verify the preview, then `--commit` for the non-destructive writ
 **Prefer CLI subcommands / MCP tools**; only curl the endpoints below (default :8765) for
 long-tail operations not covered by CLI/MCP. The Web API is marked deprecated (the GUI is
 retired; the remaining endpoints serve remote hub mode, and no new endpoints will be added).
-For remote scenarios, prefer the hub's remote MCP (`openinvest-mcp --http`, 18 tools direct);
+For remote scenarios, prefer the hub's remote MCP (`openinvest-mcp --http`, all tools direct);
 REST forwarding only backfills the long tail MCP doesn't cover.
+If the hub sets `INVEST_API_TOKEN`, every `/api/*` call (except `/api/health`) must carry
+`-H "Authorization: Bearer $INVEST_API_TOKEN"` — loopback included; otherwise it returns 401.
 
 Call these when the user says "record a trade" (记一笔交易) / "I plan to buy X" (我打算买 X) /
 "mark as executed" (标记成交) / "add a new asset" (加新资产):
@@ -79,7 +81,8 @@ Call these when the user says "record a trade" (记一笔交易) / "I plan to bu
 | `POST /api/gold/buy` / `/sell` | Gold buy/sell (sell_fee computed automatically) | `{grams, price_per_gram}` |
 | `POST /api/strategy/asset` | Add a target_assets entry. **Native equivalents already exist**: MCP `track_asset` / CLI `track_asset` (plus `untrack_asset`, `set_allocations`) — prefer the native ones; stop curling this | `{symbol, channel?, max_single_invest_cny}` |
 | `GET /api/events/recent?hours=24&min_severity=low&limit=50` | List news perceived by the event layer in the last N hours (ADR-006). For debugging / "what is the system currently aware of" (系统现在感知到什么) | — |
-| `GET /api/discipline` | Committee discipline ledger: inaction rate (HOLD share) + count of blocked impulsive actions + counterfactual P&L (aligned with ADR-023; lets the agent show "what it blocked") | — |
+| `GET /api/discipline` | Committee discipline ledger: inaction rate (HOLD share of live verdicts) + count of blocked impulsive actions + counterfactual P&L (aligned with ADR-023; lets the agent show "what it blocked") | — |
+| `GET /api/verdict_review/summary` | Verdict hit rates split into `live` / `backtest` / `contaminated` buckets (ADR-022). Only `live` is performance; never sum buckets; a `null` rate means n<30; weekend duplicates (weekend-closed assets, Friday's close reused) are excluded and counted in `weekend_dup_excluded` | — |
 | `GET /api/decisions?days=90` | Unified decision view: verdict↔intervention↔execution↔outcome join + adoption rate (issue #133 Decision 9) | — |
 | `POST /api/decisions/execution` | Write back the user's execution/rejection of a verdict + the reason (idempotent, ADR-016) | `{decision_id: "2026-07-03/GC=F", executed: false, reason?: "..."}` |
 | `POST /api/events/check` | Manually run event_watch once (fetch news + normalize + store + trigger the committee on hits). Synchronous, 30-90s | — |

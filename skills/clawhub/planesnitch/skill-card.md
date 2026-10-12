@@ -1,45 +1,60 @@
-## Description: <br>
-Self-hosted aircraft monitor that watches configured locations for matching aircraft, emergency squawks, custom ICAO lists, low-flying aircraft, or all aircraft using public ADS-B APIs or a self-hosted ultrafeeder, then sends alerts to Telegram or webhooks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users through configuring a self-hosted aircraft monitor that polls ADS-B sources and alerts on selected aircraft near named locations.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-External users and developers use this skill to configure and run a Docker-based aircraft alerting service for locations they care about. It is suited for proximity alerts, emergency-squawk monitoring, ICAO watchlists, CSV-based watchlists, and webhook or Telegram delivery. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured location coordinates and matched aircraft data leave the host when polling ADS-B sources and sending alerts to Telegram or webhook targets. <br>
-Mitigation: Use a trusted ADS-B source or a self-hosted ultrafeeder when location privacy matters, and configure only Telegram chats, bots, and webhook endpoints you control or explicitly trust. <br>
-Risk: config.yaml can contain Telegram bot tokens, webhook URLs, and authorization headers in plaintext. <br>
-Mitigation: Keep config.yaml private, do not commit or paste it into shared channels, and mount it read-only as documented. <br>
-Risk: Webhook delivery posts aircraft and location alert payloads to arbitrary configured URLs. <br>
-Mitigation: Vet webhook URLs before adding them and include notification targets in the deployment threat model. <br>
+## Use Case:
 
+Aircraft spotters and developers use this skill to set up location-based monitoring for emergency squawks, watchlisted aircraft, and low-flying planes, with alerts sent to Telegram or webhooks.
 
-## Reference(s): <br>
-- [Setup guide](references/setup.md) <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/planesnitch) <br>
-- [Project homepage](https://github.com/psyb0t/docker-planesnitch) <br>
-- [plane-alert-db CSV watchlists](https://github.com/sdr-enthusiasts/plane-alert-db) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown with YAML configuration examples and shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Docker and a local config.yaml; alert delivery depends on the configured ADS-B source, Telegram target, or webhook endpoint.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.1 (source: server release evidence) <br>
+Risk: The setup runs an unpinned Docker image that handles location data and notification credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the image and pin it to a trusted version or digest before installation.
+
+Risk: The configuration contains Telegram tokens or webhook credentials.
+
+Mitigation: Keep config.yaml private and mount it read-only.
+
+Risk: Configured locations leave the host during polling, and matched aircraft data leaves it in alerts.
+
+Mitigation: Use only ADS-B sources, Telegram chats, and webhook endpoints you control or trust.
+
+## Reference(s):
+
+- [planesnitch on ClawHub](https://clawhub.ai/psyb0t/skills/planesnitch)
+- [planesnitch project documentation](https://github.com/psyb0t/docker-planesnitch)
+- [Setup and configuration reference](references/setup.md)
+- [plane-alert-db aircraft watchlists](https://github.com/sdr-enthusiasts/plane-alert-db)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with YAML and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Instructions for Docker deployment and configurable Telegram or webhook alerts.]
+
+## Skill Version(s):
+
+1.8.7 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

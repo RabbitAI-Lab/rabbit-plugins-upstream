@@ -18,6 +18,44 @@ English | [简体中文](README.zh-CN.md)
 
 ---
 
+## Standalone monitoring, recommended companion
+
+### Human-readable costs and channels
+
+Click **Est. API Cost** to enter a monthly spend baseline for the savings scenario.
+The baseline is stored only in this browser and dashboard path; no plan price is
+assumed. The selected calendar-day average is projected to 30 days and compared
+with your baseline. Include subscription and API spending for the same scope.
+Incomplete pricing stays marked partial, and negative differences are displayed.
+This is a what-if comparison, not realized savings or a billing forecast.
+
+Channel names come from OpenClaw's native directory, cached per provider/account
+for five minutes. Channel IDs remain in session-title and cost-breakdown tooltips.
+Unknown channels have an explicit generic label; stale cached names retain their
+status in the tooltip. No workspace-specific channel map or provider credentials
+are embedded in the dashboard. Directory reads are bounded and asynchronous.
+
+Cron Jobs lists OpenClaw automations through its read-only CLI API, cached for
+30 seconds. Loading, partial and stale catalogs are labeled; missing legacy JSON
+files no longer imply zero automations. AI Jobs is a separate optional provider:
+without it the page shows "not connected", not an empty successful job catalog.
+
+**Command Center works out of the box without Spacesuit.** It owns OpenClaw
+sessions, health, jobs, usage and the common dashboard. For a minimal core-only
+view, run `COMMAND_CENTER_MODE=core npm start`.
+
+**Spacesuit is the highly recommended companion** for per-agent flavors, domain
+panels and workflows. Spacesuit can scaffold a workspace and collect data by itself,
+but it has **no graphical human–agent interaction surface of its own**; Command
+Center provides the dashboard and supported controls. The extension system does
+not add a chat composer.
+
+The [read-only extension API](docs/architecture/extension-api-v1.md) loads explicit,
+profile-bound Spacesuit snapshots through the existing state feed. Legacy built-in
+domain panels remain the default compatibility mode until you select a flavor or
+core-only mode; existing panels and data are not silently removed. See the
+[ownership and migration plan](docs/architecture/core-and-flavors.md).
+
 ## Why Command Center?
 
 Your AI agents are running 24/7. You need to know what they're doing.
@@ -375,6 +413,10 @@ The complete dashboard with all panels visible.
 
 Contributions welcome! Please read [CONTRIBUTING.md](CONTRIBUTING.md).
 
+### Preserve localization
+
+UI changes must preserve existing `data-i18n` attributes and related translation hooks. Update every supported locale when adding or changing user-facing text, including loading and error states. Keep translated labels separate from dynamic values, and verify English → Chinese → English switching with the affected panel open and after live updates. See [AGENTS.md](AGENTS.md#-preserve-internationalization) for the full agent requirements.
+
 ### Development
 
 ```bash
@@ -398,3 +440,25 @@ MIT © [Jonathan Tsai](https://github.com/jontsai)
 **[Install from ClawHub](https://www.clawhub.ai/jontsai/command-center)** · **[OpenClaw](https://github.com/openclaw/openclaw)** · **[Discord](https://discord.gg/clawd)**
 
 </div>
+
+## Project portfolio (read-only preview)
+
+The [Projects board](docs/architecture/project-portfolio.md) groups delivery outcomes
+by workflow stage across explicitly selected tracker sources. Spacesuit supplies
+Linear/Jira adapters; Command Center supplies the unified view without depending
+on a tracker. Native statuses, source freshness and missing metrics stay visible.
+This slice consumes snapshots, not a live tracker connection configured at install.
+No tasks are moved and no external tracker records are changed.
+
+### Operations map (read-only snapshot)
+
+Explore outcomes, roles, agents, and topics with evidence-labeled relationships in `operations.html`. See [the work graph contract](docs/work-graph.md) for collectors, limitations, and privacy behavior.
+
+### Browse sessions without tracker setup
+
+Operations opens on **All sessions** from the native catalog. Group by channel,
+agent or activity; layer in outcome/role/topic relationships when available.
+Clickable stacks, composable breadcrumbs, density zoom and an inspector replace
+search-first navigation. Privacy, snapshot coverage and unknown accounting stay
+explicit. See the [source-build pilot guide](docs/operations-source-pilot.md) to
+test a pinned revision under another profile without publishing a package.

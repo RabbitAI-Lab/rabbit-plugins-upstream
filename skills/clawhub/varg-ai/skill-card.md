@@ -1,57 +1,62 @@
-## Description: <br>
-Generate AI videos, images, speech, and music with varg for videos, animations, talking characters, slideshows, product showcases, social content, or single-asset generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate videos, images, speech, and music with varg through cloud or local rendering workflows.
 
-## Publisher: <br>
-[securityqq](https://clawhub.ai/user/securityqq) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[securityqq](https://clawhub.ai/user/securityqq)
 
-## Use Case: <br>
-Developers, creators, and agent users use this skill to generate media assets and composed videos through varg cloud rendering or local rendering workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles API credentials and account sign-in. <br>
-Mitigation: Set VARG_API_KEY through the user's shell or a secret manager, avoid pasting raw keys into agent context, and do not commit .env or credential files. <br>
-Risk: The skill can consume paid API credits or direct the user to checkout flows. <br>
-Mitigation: Confirm estimated cost, available balance, and user intent before full renders, purchases, or checkout-session creation. <br>
-Risk: Cloud rendering submits TSX code and media inputs to varg services. <br>
-Mitigation: Review render code, prompts, and media files before submission, especially when project or user-provided files are included. <br>
-Risk: The artifact includes self-update guidance. <br>
-Mitigation: Require explicit user confirmation before updating the skill and re-read changed files before using updated instructions. <br>
-Risk: Setup and rendering workflows may create or modify local project files. <br>
-Mitigation: Review generated files such as examples, credentials, .env additions, and render outputs before committing or sharing them. <br>
+## Use Case:
 
+Creators and developers use this skill to plan and generate media assets or composed videos, using the varg cloud API or local rendering tools.
 
-## Reference(s): <br>
-- [Varg homepage](https://varg.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/securityqq/skills/varg-ai) <br>
-- [Cloud Render Mode](references/cloud-render.md) <br>
-- [Local Render Mode](references/local-render.md) <br>
-- [varg API Reference (v2)](references/gateway-api.md) <br>
-- [Model Catalog](references/models.md) <br>
-- [Component Reference](references/components.md) <br>
-- [Recipes & Patterns](references/recipes.md) <br>
-- [Prompt Engineering Guide](references/prompting.md) <br>
-- [Common Errors & Debugging](references/common-errors.md) <br>
-- [BYOK](references/byok.md) <br>
-- [Complete Templates](references/templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, TSX code, and JSON snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide agents to create render files, configure credentials, submit cloud jobs, or run local rendering commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.8 (source: server release metadata) <br>
+Risk: Prompts, rendering code, asset URLs, and authenticated jobs are sent to varg.ai during cloud workflows.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the service only when sharing that content with varg.ai is acceptable.
+
+Risk: Credential setup may persist the API key in a local credentials file or append it to a project .env file.
+
+Mitigation: Prefer a session-scoped environment variable or OS secret store; only write project secrets to a gitignored file.
+
+Risk: The skill suggests a self-update command that may replace installed skill content.
+
+Mitigation: Review the update and its source before running it.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/securityqq/skills/varg-ai)
+- [varg homepage](https://varg.ai)
+- [Cloud rendering guide](references/cloud-render.md)
+- [Local rendering guide](references/local-render.md)
+- [Gateway API reference](references/gateway-api.md)
+- [Model selection guide](references/models.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Media generation requires an API key and may incur usage charges; local rendering also requires bun and ffmpeg.]
+
+## Skill Version(s):
+
+2.0.10 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

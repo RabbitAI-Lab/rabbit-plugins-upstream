@@ -1,43 +1,59 @@
-## Description: <br>
-Screens A-share stocks from natural-language queries using market, technical, financial, industry, and concept conditions, returning matching stock data from iWencai. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Screens Chinese A-share stocks from natural-language criteria covering market activity, technical patterns, financials, and sectors using iWenCai data.
 
-## Publisher: <br>
-[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee)
 
-## Use Case: <br>
-External users and agents use this skill to translate A-share screening requests into iWencai queries, retrieve matching stock records, and present paginated results with the data source identified. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends user stock-screening queries to the third-party iWencai service with an IWENCAI_API_KEY. <br>
-Mitigation: Install only if the user trusts iWencai for these queries and provide the key through the IWENCAI_API_KEY environment variable. <br>
-Risk: Passing the API key on the command line can expose it through shell history or process listings. <br>
-Mitigation: Prefer environment-variable configuration and avoid including secrets directly in command invocations. <br>
+## Use Case:
 
+A-share investors and analysts use this skill to screen stocks with conversational filters and review matching market data from iWenCai. Screening results are not personalized financial advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chen6896qqwee/skills/hithink-astock-selector) <br>
-- [iWencai web query interface](https://www.iwencai.com/unifiedwap/chat) <br>
-- [iWencai SkillHub](https://www.iwencai.com/skillhub) <br>
-- [iWencai OpenAPI query endpoint](https://openapi.iwencai.com/v1/query2data) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API responses and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Returns paginated stock data, query metadata, trace IDs, and retry guidance when no matching data is found.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: clawhub.json, release evidence, and skill documentation) <br>
+Risk: Stock-screening queries and an iWenCai API key are sent to an external provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only when the user intends to query iWenCai and is comfortable sharing their screening criteria and API key with that provider.
+
+Risk: Market-data screening may be mistaken for personalized investment advice.
+
+Mitigation: Label results as screening data, cite iWenCai as the source, and avoid personalized buy or sell recommendations.
+
+Risk: Optional enrichment may send the user's request to additional search or finance tools.
+
+Mitigation: Seek explicit user consent before invoking additional tools for enrichment.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/chen6896qqwee/skills/hithink-astock-selector)
+- [iWenCai stock screening](https://www.iwencai.com/unifiedwap/chat)
+- [iWenCai SkillHub](https://www.iwencai.com/skillhub)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text]
+
+**Output Format:** [Markdown stock-screening tables and plain-language summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Identifies the final screening query and attributes results to iWenCai; results may be paginated.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved ClawHub release and clawhub.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

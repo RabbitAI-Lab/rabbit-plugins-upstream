@@ -1,26 +1,27 @@
 openapi: 3.0.3
 info:
   title: FarmDash Signal Architect API
-  version: 1.1.1
+  version: 1.2.0
   description: |
-    Zero-custody intelligence and control API for DeFi agents and serious airdrop farmers:
-    structured opportunity intelligence, quote generation, user-authorized onchain execution,
-    x402 flows, and fee history. FarmDash never receives private
-    keys or seed phrases and never holds user funds. Wallet-affecting operations
-    require the documented local signature or bounded delegation gates.
+    Customer-controlled intelligence and workflow API for DeFi agents and serious airdrop farmers:
+    structured opportunity intelligence, quote generation, user-authorized transaction preparation,
+    x402 flows, and fee history. FarmDash does not request seed phrases or raw wallet private keys.
+    Compatibility swap routes do not custody user funds; separately configured venue or MPC
+    delegations remain subject to their provider controls and explicit policy bounds.
 
     ## Authentication
-    - **Scout (Free)**: No auth. 5 requests/24h per IP.
-    - **Pioneer**: `Authorization: Bearer <PIONEER_KEY>`. 500 requests/day.
+    - **Scout (Free)**: No auth. 30 requests/24h per IP.
+    - **Pioneer**: `Authorization: Bearer <PIONEER_KEY>`. 1,500 requests/day.
     - **Syndicate**: `Authorization: Bearer <SYNDICATE_KEY>`. $199/mo USDC, 50,000 requests/day, webhooks, unrestricted CORS, and advanced control/session tooling for teams and serious agents.
     - **Swap execution**: Requires fresh quote review plus EIP-191 agent wallet signature.
     - **Delegation/autopilot**: Requires explicit user-configured budgets, allowlists, and revocation path.
     - **Privacy**: Public wallet addresses, token addresses, chain IDs, amounts, signatures, request IDs, and analytics headers may be sent to FarmDash; private keys and seed phrases are never sent.
 
     ## Dust Storm Protocol
-    If an upstream API fails, FarmDash returns safe zero values with a
-    `warnings` array containing `{ kind: "dust_storm", message: "..." }`
-    instead of crashing. Your agent stays alive and retries on the next cycle.
+    If an upstream API fails, FarmDash returns a typed error or a previously
+    validated stale response with a `warnings` array containing
+    `{ kind: "dust_storm", message: "..." }`. Missing data remains unknown
+    rather than being converted into a synthetic zero.
 
     ## x402 Payment Wall
     When free-tier limits are exceeded, responses include `X-Payment-*` headers
@@ -38,13 +39,14 @@ servers:
 paths:
   /v1/agent/protocols:
     get:
-      operationId: getTrailHeat
-      summary: Get Trail Heat protocol dataset
+      operationId: getProtocolCatalog
+      summary: Get catalog protocol directory (discovery heuristic scores)
       description: |
-        Returns the live ranked Trail Heat protocol dataset.
-        Live scoring uses calibrated TVL, seven-day TVL momentum, chain diversification,
-        category baseline comparison, and FarmDash evidence prior when upstream data is available.
-        Static tracker pages use a calibrated catalog fallback with TVL, status, category prior,
+        Returns the curated FarmDash catalog with EDITORIAL discovery heuristic scores (catalog-editorial-v1). NOT live Trail Heat — canonical quantitative Trail Heat: /v1/trail-heat.
+        Live quantitative Trail Heat uses calibrated TVL, seven-day TVL momentum, chain diversification,
+        and category outperformance when upstream data is available. Editorial notes are separate
+        metadata and excluded from the quantitative score. Static tracker pages use a distinct catalog
+        discovery heuristic with TVL, status, category prior,
         hot momentum, and recency.
         Scout tier receives top 3 with encrypted numeric values.
         Pioneer/Syndicate tiers receive the full unencrypted dataset.
@@ -52,6 +54,8 @@ paths:
       security:
         - bearerAuth: []
         - {}
+      parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
       responses:
         '200':
           description: Protocol dataset
@@ -72,7 +76,7 @@ paths:
               description: USDC contract on Base
             X-Payment-Amount:
               schema: { type: string }
-              description: Amount in token decimals (e.g. 990000 = 0.99 USDC)
+              description: Quoted amount in token decimals (e.g. 10000 = 0.01 USDC default overage)
             X-Payment-Chain-Id:
               schema: { type: string }
               description: "8453 (Base)"
@@ -99,6 +103,8 @@ paths:
       security:
         - bearerAuth: []
         - {}
+      parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
       responses:
         '200':
           description: Chain breakdown data
@@ -118,18 +124,29 @@ paths:
   /agents/quote:
     get:
       operationId: getSwapQuote
-      summary: Get a token swap quote without executing
+      summary: Get a token swap quote
       description: |
-        Returns an unsigned preview quote showing expected output, fee breakdown,
-        protocol selection, and FarmDash execution guardrails. No authentication required.
-        Useful for agents to compare pricing before committing a signed swap.
-        Route selection: x402 (Base-to-Base) > Li.Fi (cross-chain) > 0x (single-chain EVM).
-        When wallet and risk inputs are supplied, the response also includes
-        allowance checks, depeg/health warnings, quote-decay diagnostics, and
-        positive-net-edge guidance.
-        Include walletAddress to receive an intent_id for the mandatory /v1/simulate preflight.
+        Provider-neutral market estimate by default: returns an explicitly
+        labelled `market_estimate` (reference price, approximate output,
+        server fee tier, route compatibility, freshness) WITHOUT calling 0x,
+        LI.FI, or Relay trading APIs. Browsing, polling, previews, and
+        wallet-supplied GETs all receive estimation — a `walletAddress` alone
+        is exploratory context, never execution intent, and never fans out
+        into provider APIs. The estimate is intelligence, not a provider
+        quote: no executable calldata, no provider attribution, no liquidity
+        confirmation, never `executionReady: true`.
+        For execution, POST `/v1/agent/quote-intent` with exact parameters, a
+        real wallet, and an idempotency key to receive a firm single-provider
+        quote bound to an `intentId`; then re-call this endpoint with the
+        identical parameters plus `intentId` to serve the stored firm quote
+        with zero new provider calls. Changed parameters never reuse a stale
+        quote (`intent_params_changed`); unknown/expired intents return
+        `intent_not_found`. One intent contacts exactly one primary provider;
+        a sequential alternate follows only a genuine primary failure.
+        `mock=true` is not supported and returns a typed 400 without contacting a provider.
       tags: [Swap]
       parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
         - in: query
           name: fromChainId
           required: true
@@ -160,13 +177,13 @@ paths:
           required: false
           schema:
             type: string
-            enum: [lifi, zerox, x402]
+            enum: [lifi, relay]
           description: Force a specific routing protocol (auto-selected if omitted)
         - in: query
           name: walletAddress
           required: false
           schema: { type: string, pattern: '^0x[a-fA-F0-9]{40}$' }
-          description: Optional wallet used for approval and allowance checks
+          description: Optional real wallet. Exploratory context only — a wallet alone never triggers provider quoting. For execution, POST /api/v1/agent/quote-intent.
         - in: query
           name: toAddress
           required: false
@@ -202,9 +219,14 @@ paths:
           required: false
           schema: { $ref: '#/components/schemas/SwapSafetyMode' }
           description: "`strict` halts on severe quote decay, `balanced` downgrades that condition to a warning"
+        - in: query
+          name: intentId
+          required: false
+          schema: { type: string }
+          description: Execution-intent ID from POST /api/v1/agent/quote-intent. Serves the stored firm quote with zero new provider calls when all other parameters exactly match the intent; mismatches return intent_params_changed, unknown IDs return intent_not_found.
       responses:
         '200':
-          description: Swap quote
+          description: Market estimate (default) or stored firm quote when intentId is supplied and parameters match
           content:
             application/json:
               schema:
@@ -217,8 +239,141 @@ paths:
                 $ref: '#/components/schemas/ErrorResponse'
         '402':
           description: Free-tier limit exceeded
+        '404':
+          description: Unknown/expired intentId (intent_not_found)
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '422':
+          description: Typed quote failure. Categories carry machine-readable retryable flags (e.g. no_liquidity/unsupported_pair retryable false; provider_rate_limited/provider_unavailable retryable true). Read attempts[] evidence per provider.
         '429':
           description: Rate limit exceeded
+        '502':
+          description: Typed live quote provider degradation (retryable). Includes provider rate-limit code quote_provider_rate_limited.
+        '504':
+          description: Live quote provider timed out. Code quote_provider_timeout, retryable true.
+
+  /v1/agent/market-estimate:
+    get:
+      operationId: getMarketEstimate
+      summary: Get a provider-neutral market estimate
+      description: |
+        Explicit estimation endpoint for browsing, previews, and walletless
+        exploration. Returns an explicitly labelled market_estimate (reference
+        price, approximate output, server fee tier, freshness) and makes zero
+        0x/LI.FI/Relay trading calls. Never executable, never attributed.
+        For execution, POST /v1/agent/quote-intent.
+      tags: [Swap]
+      parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
+        - in: query
+          name: fromChainId
+          required: true
+          schema: { type: integer }
+        - in: query
+          name: toChainId
+          required: true
+          schema: { type: integer }
+        - in: query
+          name: fromToken
+          required: true
+          schema: { type: string, pattern: '^0x[a-fA-F0-9]{40}$' }
+        - in: query
+          name: toToken
+          required: true
+          schema: { type: string, pattern: '^0x[a-fA-F0-9]{40}$' }
+        - in: query
+          name: fromAmount
+          required: true
+          schema: { type: string, pattern: '^\d+$' }
+      responses:
+        '200':
+          description: Market estimate
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwapQuoteResponse'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '429':
+          description: Rate limit exceeded
+
+  /v1/agent/quote-intent:
+    post:
+      operationId: createQuoteIntent
+      summary: Create an execution intent with a firm single-provider quote
+      description: |
+        Explicit execution intent. Requires exact chain pair, token pair,
+        amount, real wallet/taker, destination, slippage, and a client
+        idempotency key; the fee tier is resolved server-side before any
+        provider call. One intent contacts exactly one primary provider; a
+        sequential alternate follows only a genuine primary failure.
+        Identical intents reuse the stored firm quote (HTTP 200 reused:true);
+        changed parameters never reuse a stale quote. The firm quote flows
+        through simulate, approval, and prepare without further provider
+        quote requests. Quote is not execution; FarmDash never signs or
+        broadcasts.
+      tags: [Swap]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [fromChainId, toChainId, fromToken, toToken, fromAmount, walletAddress, toAddress, slippage, idempotencyKey]
+              properties:
+                fromChainId: { type: integer }
+                toChainId: { type: integer }
+                fromToken: { type: string }
+                toToken: { type: string }
+                fromAmount: { type: string }
+                walletAddress: { type: string }
+                toAddress: { type: string }
+                slippage: { type: number, minimum: 0.01, maximum: 5 }
+                protocol: { type: string, enum: [lifi, relay] }
+                idempotencyKey: { type: string }
+      responses:
+        '201':
+          description: Firm quote bound to a new execution intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwapQuoteResponse'
+        '200':
+          description: Stored firm quote reused for an identical intent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SwapQuoteResponse'
+        '400':
+          description: Invalid parameters
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '402':
+          description: Free-tier limit exceeded
+        '409':
+          description: This idempotencyKey was already used for a materially different request (idempotency_conflict). Generate a new key for a new logical swap.
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '413':
+          description: Request body too large. Execution-facing bodies are capped at 32 KB.
+        '429':
+          description: Rate limit exceeded
+        '502':
+          description: Typed live quote provider degradation
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
 
   /v1/simulate:
     post:
@@ -232,6 +387,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SwapSimulationRequest'
+      parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
       responses:
         '200':
           description: Simulation report
@@ -254,7 +411,9 @@ paths:
         Execution Alpha routing, and enforces Risk Sentinel guardrails before
         returning ready-to-broadcast transaction calldata.
 
-        FarmDash NEVER touches funds. The protocol (Li.Fi / 0x / x402) executes the swap.
+        FarmDash does not broadcast the returned compatibility-swap transaction. FarmDash prepares
+        the transaction calldata for the user or agent wallet to broadcast. Automatic routing dynamically
+        selects across active providers (LI.FI, Relay; 0x paused until reinstated).
         The FarmDash treasury receives the fee haircut directly from the protocol.
 
         **Signing**: The agent must sign the deterministic payload:
@@ -270,6 +429,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SwapRequest'
+      parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
       responses:
         '200':
           description: Executable swap quote with transaction calldata
@@ -313,16 +474,20 @@ paths:
   /agents/history:
     get:
       operationId: getSwapHistory
-      summary: Get fee event history
+      summary: Get your own fee event history (tenant-bound)
       description: |
-        Returns paginated swap fee events logged by Signal Architect.
-        Optionally filter by agent address. Use `?metrics=true` to get
-        aggregate revenue metrics instead of individual events.
+        Returns paginated swap fee events owned by the wallet bound to your
+        API key. Requires a Pioneer or Syndicate bearer key; anonymous/scout
+        callers receive 401 authentication_required. Any agentAddress that
+        differs from the authenticated wallet returns 403 cross_tenant_denied.
+        Use `?metrics=true` to get aggregate revenue metrics for your own
+        wallet instead of individual events. For the public leaderboard,
+        use GET /v1/agent/leaderboard (server-aggregated totals only).
       tags: [History]
       security:
         - bearerAuth: []
-        - {}
       parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
         - in: query
           name: agentAddress
           required: false
@@ -369,6 +534,8 @@ paths:
       security:
         - bearerAuth: []
         - {}
+      parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
       responses:
         '200':
           description: Usage guide
@@ -399,6 +566,8 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/RiskSentinelRequest'
+      parameters:
+        - $ref: '#/components/parameters/X-ClawHub-Skill'
       responses:
         '200':
           description: Risk analysis
@@ -418,6 +587,17 @@ paths:
           description: Rate limit exceeded
 
 components:
+  parameters:
+    X-ClawHub-Skill:
+      name: X-ClawHub-Skill
+      in: header
+      required: false
+      schema:
+        type: string
+        pattern: '^[a-zA-Z0-9-]{1,128}$'
+        example: farmdash-signal-architect
+      description: 'ClawHub skill attribution. An installed FarmDash skill sends its canonical skill slug (e.g. farmdash-signal-architect) on every FarmDash API request so anonymous Scout usage can be attributed to the skill that drove it. Optional and analytics-only: absence never blocks a request, and malformed values are ignored. This is a skill identity, never a wallet address, API key, or user ID.'
+
   securitySchemes:
     bearerAuth:
       type: http
@@ -452,7 +632,7 @@ components:
           properties:
             amount:
               type: string
-              example: '0.99 USDC'
+              example: '0.01 USDC'
             chain:
               type: string
               example: Base
@@ -466,7 +646,7 @@ components:
         protocol_name:
           type: string
           example: Hyperliquid
-        trail_heat_score:
+        discovery_heuristic_score:
           oneOf:
             - type: number
               description: Numeric score (paid tiers)
@@ -616,7 +796,7 @@ components:
       properties:
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, relay]
         estimatedOutput:
           type: string
           description: Expected output amount in wei
@@ -746,15 +926,13 @@ components:
         slippage:
           type: number
           minimum: 0.01
-          maximum: 50
+          maximum: 5
           default: 0.5
           description: Slippage tolerance in percent
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, relay]
           description: Force protocol (auto-selected if omitted)
-        volumeHintUSD:
-          type: number
         expectedUpsideUsd:
           type: number
           description: Optional upside estimate in USD for positive-net-edge checks
@@ -773,7 +951,7 @@ components:
           description: Optional wallet address used for on-chain approval checks
         safetyMode:
           $ref: '#/components/schemas/SwapSafetyMode'
-          description: Agent-supplied USD estimate — unlocks volume fee discounts (>=10k = 35bps, >=100k = 25bps)
+          description: Agent-supplied USD estimate — unlocks volume fee discounts (>=10k = 45bps, >=100k = 40bps, >=1m = 30bps; default 50bps)
         simulationId:
           type: string
           description: Fresh successful simulation_id from POST /v1/simulate
@@ -793,7 +971,7 @@ components:
       properties:
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, relay]
         routeReason:
           type: string
         mevProtection:
@@ -812,7 +990,7 @@ components:
             properties:
               protocol:
                 type: string
-                enum: [lifi, zerox, x402]
+                enum: [lifi, zerox, relay]
               estimatedOutput: { type: string }
               feeAmountUsd: { type: number }
               gasEstimateUsd: { type: number, nullable: true }
@@ -915,7 +1093,7 @@ components:
           example: swap_halted
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, relay]
         executionAlpha:
           $ref: '#/components/schemas/ExecutionAlphaReport'
         riskReport:
@@ -934,7 +1112,7 @@ components:
         toAddress: { type: string, pattern: '^0x[a-fA-F0-9]{40}$' }
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, relay]
         slippage: { type: number }
         expectedUpsideUsd: { type: number }
         riskBufferUsd: { type: number }
@@ -956,7 +1134,7 @@ components:
           enum: [manual, quoted]
         selectedProtocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, relay]
           nullable: true
         executionAlpha:
           allOf:
@@ -994,7 +1172,7 @@ components:
           format: date-time
         protocol:
           type: string
-          enum: [lifi, zerox, x402]
+          enum: [lifi, zerox, relay]
         from_token:
           type: string
         to_token:
