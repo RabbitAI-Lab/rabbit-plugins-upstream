@@ -1,48 +1,59 @@
-## Description: <br>
-Assists agents with evaluating Xinchuang and IT informationization bids by querying procurement history, competitor signals, pricing benchmarks, and producing decision reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于历史招投标数据评估IT项目的投标价值、竞争格局、报价参考和潜在风险。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Bid teams, proposal teams, and agents use this skill to decide whether to pursue IT, system integration, cloud, cybersecurity, data center, smart city, and Xinchuang procurement opportunities. It analyzes buyer history, incumbent suppliers, likely competitors, comparable pricing, qualification risks, and produces a traceable bid-decision report. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global; intended for Chinese IT procurement and Xinchuang bid data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register an account when no API key is configured, using a stable hashed MAC-derived device identifier for trial-usage deduplication. <br>
-Mitigation: Prefer supplying ZLBX_API_KEY through a trusted secret mechanism; allow auto-registration only after explicit user consent and disclose the collected device attributes before registration. <br>
-Risk: API keys may be stored locally and used for quota-consuming bid-data queries. <br>
-Mitigation: Keep local credential files private, never paste API keys into conversation, and tell users the expected query-credit cost before running a full report. <br>
-Risk: Generated reports and source links may contain signed access parameters or commercially sensitive project and company context. <br>
-Mitigation: Review Markdown and HTML reports before sharing, treat report links containing signed parameters as sensitive, and remove or restrict links when distribution is not intended. <br>
-Risk: Bid recommendations may be incomplete or misleading if public procurement data is missing, stale, or interpreted too strongly. <br>
-Mitigation: Keep conclusions tied to cited data, mark data gaps and confidence levels, use cautious wording for real organizations, and treat reports as reference material rather than business, legal, or procurement advice. <br>
+## Use Case:
 
+投标团队可输入具体IT招标项目，获取采购方历史、潜在竞争者、报价区间及投标风险分析，辅助决定是否参与。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/liu-jiapeng/skills/xinchuang-it-bid-decision) <br>
-- [Workflow Guide](references/workflow.md) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-Registration Flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, HTML, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown decision report with optional self-contained HTML report file and concise operational guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved auto-registration; full analysis usually consumes 12-25 query credits, while quick analysis uses about 5-8.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Automatic account registration can fingerprint a device and create locally stored API credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide your own ZLBX_API_KEY to skip registration; require informed consent before registering and remove stored credentials when no longer needed.
+
+Risk: Generated reports and signed source links may disclose share-sensitive project information or grant access to linked records.
+
+Mitigation: Review reports and signed links before sharing, and limit access to their saved copies.
+
+Risk: Historical procurement data and inferred competitor or price estimates can be incomplete or misleading for business decisions.
+
+Mitigation: Check cited records, data gaps and current tender requirements independently before making a bid decision.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/xinchuang-it-bid-decision)
+- [Analysis workflow](artifact/references/workflow.md)
+- [Report template](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, HTML reports]
+
+**Output Format:** [Markdown decision report and optional shareable HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides a recommendation, supporting evidence, pricing range, risk assessment and source links; full analyses normally export an HTML copy.]
+
+## Skill Version(s):
+
+1.0.6 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

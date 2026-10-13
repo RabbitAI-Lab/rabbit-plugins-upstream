@@ -64,15 +64,16 @@ SELECT * FROM input
 - Position: (500,100)
 - SqlScript:
 ```sql
-WITH order_agg AS (
+WITH params AS (SELECT DATE '2026-06-24' AS as_of_date),
+order_agg AS (
   SELECT
     `门店ID`,
-    SUBSTR(CAST(`业务日期` AS STRING), 1, 7) AS `年月`,
+    TRUNC(CAST(`业务日期` AS DATE), 'MM') AS `年月`,
     SUM(`实付金额`) AS `实际销售额`,
-    COUNT(DISTINCT CASE WHEN (`会员ID` IS NOT NULL AND `会员ID` <> '') THEN `订单ID` END) AS `实际会员订单数`
-  FROM input2
-  WHERE `订单状态` = '已完成'
-  GROUP BY `门店ID`, SUBSTR(CAST(`业务日期` AS STRING), 1, 7)
+    COUNT(DISTINCT CASE WHEN (`会员ID` IS NOT NULL AND LOWER(REGEXP_REPLACE(`会员ID`, r'(?U)^[\s\x1c-\x1f]+|[\s\x1c-\x1f]+$', '')) NOT IN ('', 'null')) THEN `订单ID` END) AS `实际会员订单数`
+  FROM input2 CROSS JOIN params p
+  WHERE `订单状态` = '已完成' AND `业务日期` <= p.as_of_date
+  GROUP BY `门店ID`, TRUNC(CAST(`业务日期` AS DATE), 'MM')
 )
 SELECT
   t.`门店ID`, t.`年月`, t.`目标指标`, t.`目标值`,
@@ -94,21 +95,25 @@ SELECT
     WHEN t.`目标指标` = '销售额' THEN t.`目标值` - COALESCE(o.`实际销售额`, 0)
     WHEN t.`目标指标` = '会员订单数' THEN t.`目标值` - COALESCE(o.`实际会员订单数`, 0)
     ELSE 0
-  END AS `目标缺口`
+  END AS `目标缺口`,
+  p.as_of_date AS `数据快照日期`
 FROM input1 t
 LEFT JOIN order_agg o ON t.`门店ID` = o.`门店ID` AND t.`年月` = o.`年月`
+CROSS JOIN params p
+WHERE TRUNC(CAST(t.`年月` AS DATE), 'MM') <= TRUNC(p.as_of_date, 'MM')
 ```
 - 等价SQL:
 ```sql
-WITH order_agg AS (
+WITH params AS (SELECT DATE '2026-06-24' AS as_of_date),
+order_agg AS (
   SELECT
     `门店ID`,
-    SUBSTR(CAST(`业务日期` AS STRING), 1, 7) AS `年月`,
+    TRUNC(CAST(`业务日期` AS DATE), 'MM') AS `年月`,
     SUM(`实付金额`) AS `实际销售额`,
-    COUNT(DISTINCT CASE WHEN (`会员ID` IS NOT NULL AND `会员ID` <> '') THEN `订单ID` END) AS `实际会员订单数`
-  FROM input2
-  WHERE `订单状态` = '已完成'
-  GROUP BY `门店ID`, SUBSTR(CAST(`业务日期` AS STRING), 1, 7)
+    COUNT(DISTINCT CASE WHEN (`会员ID` IS NOT NULL AND LOWER(REGEXP_REPLACE(`会员ID`, r'(?U)^[\s\x1c-\x1f]+|[\s\x1c-\x1f]+$', '')) NOT IN ('', 'null')) THEN `订单ID` END) AS `实际会员订单数`
+  FROM input2 CROSS JOIN params p
+  WHERE `订单状态` = '已完成' AND `业务日期` <= p.as_of_date
+  GROUP BY `门店ID`, TRUNC(CAST(`业务日期` AS DATE), 'MM')
 )
 SELECT
   t.`门店ID`, t.`年月`, t.`目标指标`, t.`目标值`,
@@ -130,9 +135,12 @@ SELECT
     WHEN t.`目标指标` = '销售额' THEN t.`目标值` - COALESCE(o.`实际销售额`, 0)
     WHEN t.`目标指标` = '会员订单数' THEN t.`目标值` - COALESCE(o.`实际会员订单数`, 0)
     ELSE 0
-  END AS `目标缺口`
+  END AS `目标缺口`,
+  p.as_of_date AS `数据快照日期`
 FROM input1 t
 LEFT JOIN order_agg o ON t.`门店ID` = o.`门店ID` AND t.`年月` = o.`年月`
+CROSS JOIN params p
+WHERE TRUNC(CAST(t.`年月` AS DATE), 'MM') <= TRUNC(p.as_of_date, 'MM')
 ```
 
 

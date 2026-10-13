@@ -1,42 +1,57 @@
-## Description: <br>
-AI assistant for China insurance live streaming that generates compliant scripts, explains products, engages audiences, and optimizes sales conversion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates draft live-stream scripts, product explanations, audience responses, compliance checklists, and sales follow-up copy for mainland China insurance sales teams.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance companies, agents, and supervised marketing teams use this skill to draft live-stream scripts, product explanations, audience responses, and sales conversion content for China-focused insurance marketing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Insurance sales and marketing content may be regulated and may require review before use. <br>
-Mitigation: Use only in licensed or supervised insurance marketing workflows and route outputs through approved compliance review. <br>
-Risk: Outputs could be mistaken for compliance, investment, underwriting, or claims decisions. <br>
-Mitigation: Do not use the skill as a substitute for compliance review, investment advice, underwriting, or claims decisions. <br>
-Risk: Lead-generation and audience interaction workflows may involve sensitive customer information. <br>
-Mitigation: Collect and process customer information only with clear consent and approved data-handling procedures. <br>
+## Use Case:
 
+Insurance agents and marketing or compliance teams use this skill to draft and review live-stream sales scripts, customer engagement copy, and follow-up messaging before institutional approval.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/insurance-digital-live) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces insurance live-streaming scripts, compliance language, audience interaction responses, and sales conversion guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Draft sales language or regulatory claims may be inaccurate or noncompliant.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current rules against official or institutional sources and obtain institutional compliance approval before publishing.
+
+Risk: Customer identifiers or screenshots shared for drafting may expose private information.
+
+Mitigation: Use fictional examples; do not enter real identifiers or screenshots, and review drafts for sensitive details before use.
+
+Risk: Lead-capture and follow-up wording may be used without required review.
+
+Mitigation: Obtain compliance approval for lead-capture flows and follow-up messages before deployment.
+
+## Reference(s):
+
+- [Insurance Digital Live on ClawHub](https://clawhub.ai/gechengling/skills/insurance-digital-live)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Conversational text and Markdown drafts, templates, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts only; no publishing or access to customer systems.]
+
+## Skill Version(s):
+
+5.0.2 (source: frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

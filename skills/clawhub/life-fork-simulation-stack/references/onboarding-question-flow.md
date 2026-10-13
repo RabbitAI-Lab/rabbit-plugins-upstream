@@ -1,5 +1,13 @@
 # 2-3 轮用户画像问答
 
+> Language scope: Simplified Chinese reference material by design. Adapt conversational reports to the user's chosen language; the optional bundled HTML layout targets Chinese readers.
+
+## 追问前的隐私提示
+
+首次询问家庭、财务、健康或身份情况前，先说：“只需描述相关处境，可用化名、年龄段和大致范围，也可跳过任何问题。请避免发送证件号码、账号密码、精确住址、病历原件或第三人的私人记录。”
+
+敏感信息均可省略，不要求材料原件。已有信息足够时直接复盘。默认不额外保存个人资料、检索其他报告或写入长期记忆；聊天留存由宿主服务控制，无法承诺零留存或删除。用户需要导出时，仅保存明确授权的当前报告，并提醒其留意文件中的个人经历。
+
 目标：在用户最开始的 2-3 个问答里建立足够可用的基本画像，再决定是否进入深度模拟。
 
 ## 总原则

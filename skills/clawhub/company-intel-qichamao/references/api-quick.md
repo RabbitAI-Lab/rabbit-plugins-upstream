@@ -1,7 +1,7 @@
 # 工具速查（企业情报所用子集）
 
 > 与 zlbx-bidding SKILL 同一套 api_v2 接口，此处只收录本 SKILL 用到的 9 个工具的关键参数。
-> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`，Header 带 `X-API-Key` + `X-Client: company-intel/1.0.0`。
+> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/get_company_profile`），Header 带 `X-API-Key` + `X-Client: company-intel/1.0.2`。
 
 ## 通用概念
 
@@ -22,7 +22,7 @@
 - `keywords`（OR） AND `keyword_groups` 每组（组内 OR） AND NOT `exclude_keywords`
 - 例·公司×品类交集：`{"keywords": ["公司全称"], "match_modes": ["winner"], "keyword_groups": [{"keywords": ["视频监控"], "match_modes": ["sm","title"]}]}`
 
-**金额参数名差异**：search_bids 用 `min_amount/max_amount`；query_bids_advanced 与 aggregate 的 filters 用 `min_money/max_money`。单位都是元。
+**金额参数已统一**：所有筛项目金额的工具都用 `min_amount`/`max_amount`，单位一律**万元**（用户说「500 万以上」就传 `500`）。旧的 `min_money`/`max_money`（单位元）已移除，不再用于金额筛选；REST可能忽略未知字段，MCP可能报参数错误，不要继续使用旧参数。只有价格类工具例外：`get_top_brands`/`get_price_trends` 用 `min_price`/`max_price`，单位是**元**（产品单价，不是项目金额）。传错的后果是空结果**且照常扣积分**。
 
 **响应**：`{"success": true, "data": {...}, "meta": {"cost_units": 1}}`；分页 `page`/`page_size`（默认 20，最大 50；search_company 最大 20）。
 
@@ -48,16 +48,16 @@
 
 ### query_bids_advanced — ④ 中标履历明细
 `{"keywords": ["公司全称"], "match_modes": ["winner"], "bid_process": [7,8], "begin_date": "3年前", "sort_field": "money", "sort_order": "desc", "page_size": 20}`
-支持 `keyword_groups`/`exclude_keywords`；金额筛选参数为 `min_money/max_money`（元）。
+支持 `keyword_groups`/`exclude_keywords`；金额筛选参数为 `min_amount/max_amount`（万元）。
 → `total` + `items`: `bid_id`、`title`、`pub_time`、`money`/`money_wan`、`caller_name`、`winner_names`、`sm_names`、`url`（公告页，带 sk）。
 
 ### search_bids — ④ 备用常规搜索
-`keywords`(必填) + `match_modes` + `bid_type`(招标/中标/全部) + `bid_process` + `begin_date/end_date` + `provinces/cities` + `min_amount/max_amount`（元）。快速单条件查询时用；需要排序/排除词时用 query_bids_advanced。
+`keywords`(必填) + `match_modes` + `bid_type`(招标/中标/全部) + `bid_process` + `begin_date/end_date` + `provinces/cities` + `min_amount/max_amount`（**万元**）。快速单条件查询时用；需要排序/排除词时用 query_bids_advanced。
 
 ### aggregate_bids_advanced — ④ 聚合统计（中标实力的量化底座）
 `{"filters": {"keywords": ["公司全称"], "match_modes": ["winner"], "bid_type": 2, "begin_date": "3年前"}, "group_by": ["year"]}`
 - `group_by` 可选：`month`/`quarter`/`year`/`province`/`city`/`industry`/`brand`/`company_type`/`bid_method`；`compare_with`: `yoy`/`qoq`。
-- filters 的金额参数为 `min_money/max_money`；`bid_type`: 1=招标 2=中标。
+- filters 的金额参数为 `min_amount/max_amount`（万元）；`bid_type`: 1=招标 2=中标。
 → `total_count`、`total_amount`/`total_amount_wan` + `buckets`: 每桶 `key`、`count`、`sum_amount`/`sum_amount_wan`、`avg_amount`（带 compare 时含 `yoy_count`/`yoy_amount`）。
 
 ### find_competitors — ⑤ 竞争对手（投标重叠度）

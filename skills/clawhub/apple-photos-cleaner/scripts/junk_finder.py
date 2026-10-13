@@ -39,7 +39,7 @@ def find_junk(
     with PhotosDB(db_path) as conn:
         cursor = conn.cursor()
 
-        results = {
+        results: dict[str, Any] = {
             "screenshots": [],
             "old_screenshots": [],
             "low_quality": [],
@@ -140,7 +140,7 @@ def find_junk(
         """)
 
         burst_size = 0
-        for row in cursor.fetchall():
+        for row in cursor:
             asset_id = row["Z_PK"]
             filename = row["ZFILENAME"]
             created = coredata_to_datetime(row["ZDATECREATED"])
@@ -177,7 +177,7 @@ def find_junk(
                 ORDER BY a.ZDATECREATED DESC
             """)
 
-            for row in cursor.fetchall():
+            for row in cursor:
                 asset_id = row["Z_PK"]
                 filename = row["ZFILENAME"]
                 created = coredata_to_datetime(row["ZDATECREATED"])

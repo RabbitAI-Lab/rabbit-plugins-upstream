@@ -230,8 +230,7 @@ def is_hidden(row) -> bool:
 def is_trashed(row) -> bool:
     """Check if an asset is in the trash."""
     d = dict(row) if not isinstance(row, dict) else row
-    trashed_state = d.get("ZTRASHEDSTATE", 0)
-    return trashed_state == 1
+    return bool(d.get("ZTRASHEDSTATE", 0) == 1)
 
 
 def get_quality_score(row) -> Optional[float]:
@@ -253,7 +252,7 @@ def get_quality_score(row) -> Optional[float]:
     if not isinstance(row, dict):
         row = dict(row)
 
-    scores = []
+    scores: list[float] = []
 
     # Positive scores (higher is better)
     if row.get("ZPLEASANTCOMPOSITIONSCORE") is not None:
@@ -275,34 +274,34 @@ def get_quality_score(row) -> Optional[float]:
 
 def format_date_range(start: Optional[datetime], end: Optional[datetime]) -> str:
     """Format a date range as a human-readable string."""
-    if start is None and end is None:
-        return "Unknown"
-    if start is None:
-        return f"Until {end.strftime('%Y-%m-%d')}"
-    if end is None:
+    if start is not None and end is not None:
+        if start.date() == end.date():
+            return start.strftime("%Y-%m-%d")
+        return f"{start.strftime('%Y-%m-%d')} to {end.strftime('%Y-%m-%d')}"
+    if start is not None:
         return f"From {start.strftime('%Y-%m-%d')}"
-    if start.date() == end.date():
-        return start.strftime("%Y-%m-%d")
-    return f"{start.strftime('%Y-%m-%d')} to {end.strftime('%Y-%m-%d')}"
+    if end is not None:
+        return f"Until {end.strftime('%Y-%m-%d')}"
+    return "Unknown"
 
 
 def detect_face_schema(cursor: sqlite3.Cursor) -> dict[str, str]:
     """
     Detect which schema version Photos is using for ZDETECTEDFACE table.
-    
+
     Returns dict with 'person_fk' and 'asset_fk' keys pointing to correct column names.
-    
+
     Older macOS: ZPERSON, ZASSET
     Newer macOS (Sequoia+): ZPERSONFORFACE, ZASSETFORFACE
     """
     cursor.execute("PRAGMA table_info(ZDETECTEDFACE)")
     columns = {row[1] for row in cursor.fetchall()}
-    
-    if 'ZPERSONFORFACE' in columns and 'ZASSETFORFACE' in columns:
-        return {'person_fk': 'ZPERSONFORFACE', 'asset_fk': 'ZASSETFORFACE'}
+
+    if "ZPERSONFORFACE" in columns and "ZASSETFORFACE" in columns:
+        return {"person_fk": "ZPERSONFORFACE", "asset_fk": "ZASSETFORFACE"}
     else:
         # Fallback to old schema
-        return {'person_fk': 'ZPERSON', 'asset_fk': 'ZASSET'}
+        return {"person_fk": "ZPERSON", "asset_fk": "ZASSET"}
 
 
 class PhotosDB:
@@ -428,6 +427,64 @@ def escape_applescript(s: str) -> str:
     double-escaping.
     """
     return s.replace("\\", "\\\\").replace('"', '\\"')
+
+
+# Photos exposes an asset's AppleScript `id` as "<UUID>/L0/001" for library assets.
+LOCAL_IDENTIFIER_SUFFIX = "/L0/001"
+
+
+def require_uuid_support(cursor: sqlite3.Cursor, operation: str) -> None:
+    """Verify the ZASSET table exposes ZUUID.
+
+    Targeting assets by UUID is what keeps AppleScript operations bounded to the
+    assets the user actually reviewed. Filenames are not unique — the same
+    IMG_0042.HEIC can appear many times across devices and re-imports — so a
+    filename match can hit assets outside the previewed set. If the column is
+    missing we refuse to proceed rather than silently falling back.
+
+    Args:
+        cursor: Open cursor on the Photos database.
+        operation: Human-readable name of the caller, used in the error message.
+
+    Raises:
+        RuntimeError: If ZASSET has no ZUUID column.
+    """
+    cursor.execute("PRAGMA table_info(ZASSET)")
+    columns = {row[1] for row in cursor.fetchall()}
+    if "ZUUID" not in columns:
+        raise RuntimeError(
+            f"ZASSET.ZUUID not found in this Photos database. {operation} cannot safely "
+            "identify assets without it and will not run. Please open an issue with "
+            "your macOS version."
+        )
+
+
+def build_identifier_lists(items: list[dict]) -> tuple[str, str]:
+    """Build the AppleScript `id` and filename list literals for *items*.
+
+    Both lists are positional: index *i* of the id list and index *i* of the
+    name list describe the same asset, which lets the generated script confirm
+    that a resolved item is the one the database pointed at.
+
+    Args:
+        items: Dicts carrying a "uuid" and a "filename".
+
+    Returns:
+        A ``(id_list, name_list)`` pair of comma-separated AppleScript literals.
+
+    Raises:
+        ValueError: If any item is missing a UUID.
+    """
+    missing = [item.get("filename", "<unknown>") for item in items if not item.get("uuid")]
+    if missing:
+        raise ValueError(
+            f"Refusing to build an AppleScript: {len(missing)} item(s) have no UUID "
+            f"(e.g. {missing[0]!r}). Matching by filename alone is unsafe."
+        )
+
+    id_list = ", ".join(f'"{escape_applescript(item["uuid"] + LOCAL_IDENTIFIER_SUFFIX)}"' for item in items)
+    name_list = ", ".join(f'"{escape_applescript(item["filename"] or "")}"' for item in items)
+    return id_list, name_list
 
 
 def sanitize_folder_name(name: str) -> str:

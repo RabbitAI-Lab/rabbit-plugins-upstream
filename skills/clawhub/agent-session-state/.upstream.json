@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-session-state",
   "slug": "agent-session-state",
   "ownerHandle": null,
-  "version": "2.1.4",
-  "updatedAt": 1778492412046,
-  "contentHash": "2b83bc7518e50de7de9064775d8dec540b4e665eb314e722bd3faa97307202c8",
-  "fetchedAt": "2026-07-26T19:36:10.951Z"
+  "version": "2.3.1",
+  "updatedAt": 1791040627445,
+  "contentHash": "63cbc418b8707418c264ce9dc5109399831cdc3401de95069a65b7d270fb2d35",
+  "fetchedAt": "2026-10-13T15:38:46.926Z"
 }

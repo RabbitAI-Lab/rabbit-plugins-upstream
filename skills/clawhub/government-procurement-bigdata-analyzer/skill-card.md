@@ -1,44 +1,60 @@
-## Description: <br>
-政府采购招标大数据查询与分析助手，用于搜索政府、事业单位和央国企采购公告，分析中标、供应商、价格趋势和政采商机。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps analyze Chinese government procurement notices, awards, suppliers, buyers, market trends, and upcoming opportunities.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users and business development teams use this skill to query and analyze Chinese government procurement, bidding, award, contract, supplier, competitor, and pricing data. It helps identify sales opportunities, monitor expiring projects, evaluate procurement trends, and profile government buyers or winning suppliers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically register a device, send host identifiers to the provider, and store an API key in ~/.zlbx/config.json. <br>
-Mitigation: Review before installing; prefer supplying a manually created ZLBX_API_KEY unless the user explicitly accepts automatic registration and local key storage. <br>
-Risk: Recharge or login links, returned contact data, and stored API keys may be sensitive. <br>
-Mitigation: Treat generated links, contact results, and local credentials as sensitive, and avoid sharing them in public logs or transcripts. <br>
+## Use Case:
 
+Procurement analysts and business development teams use the skill to find Chinese public-sector tenders and awards, assess buyers and suppliers, and examine pricing and market trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bigdata-analyzer) <br>
-- [API search reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Automatic registration reference](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown responses with JSON API request examples and analytical summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May use the ZLBX_API_KEY environment variable or a local ~/.zlbx/config.json API key; automatic registration may create and store an API key when no key is configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Automatic registration transmits a persistent hashed MAC-derived device identifier to the procurement-data service for trial deduplication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the privacy behavior and consent before auto-registration; configure ZLBX_API_KEY yourself to avoid the automatic registration flow.
+
+Risk: Automatic registration stores the returned API key locally in ~/.zlbx/config.json.
+
+Mitigation: Prefer a trusted secret mechanism for ZLBX_API_KEY; if auto-registration is used, review the local configuration and treat the stored key as a secret.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zhiliaobiaoxun/skills/government-procurement-bigdata-analyzer)
+- [Publisher skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Procurement search API reference](artifact/references/api-search.md)
+- [Company analysis API reference](artifact/references/api-company.md)
+- [Company registry API reference](artifact/references/api-registry.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Account API reference](artifact/references/api-account.md)
+- [Automatic registration and privacy guidance](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Guidance]
+
+**Output Format:** [Markdown with linked results and summary tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results state applied filters and monetary units; data access requires an API key and may use account credits.]
+
+## Skill Version(s):
+
+1.0.7 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

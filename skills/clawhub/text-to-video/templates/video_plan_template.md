@@ -53,7 +53,7 @@
 - **音调：** [0]
 - **采样率：** [24000]
 - **格式：** [mp3]
-- **API Key 环境变量：** [例如 DASHSCOPE_API_KEY]
+- **本地音色：** [例如 Tingting]
 - **切分策略：** [按场景切，避免跨场景串句]
 
 ## 5. 视觉设计
@@ -66,10 +66,10 @@
 ## 6. 制作步骤
 
 1. 拷贝底视频到 `<项目>/input-video.mp4`
-2. 跑 `npx hyperframes tts` 或外部 API 生成音轨到 `<项目>/audio.mp3`
+2. 用本地 `say` 生成音轨到 `<项目>/audio.mp3`
 3. 按本方案包 2. 写 `<项目>/index.html`
-4. 跑 `npx hyperframes lint && npx hyperframes inspect`
-5. 跑 `npx hyperframes render --output final.mp4`
+4. 跑 `hyperframes lint && hyperframes inspect`
+5. 跑 `hyperframes render --output final.mp4`
 
 ## 7. 风险与备选
 

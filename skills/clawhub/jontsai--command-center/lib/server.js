@@ -1,7 +1,11 @@
 #!/usr/bin/env node
 var __getOwnPropNames = Object.getOwnPropertyNames;
 var __commonJS = (cb, mod) => function __require() {
-  return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  try {
+    return mod || (0, cb[__getOwnPropNames(cb)[0]])((mod = { exports: {} }).exports, mod), mod.exports;
+  } catch (e) {
+    throw mod = 0, e;
+  }
 };
 
 // src/utils.js
@@ -291,8 +295,15 @@ var require_jobs = __commonJS({
     async function handleJobsRequest2(req, res, pathname, query, method) {
       const api = await getAPI();
       if (!api) {
-        res.writeHead(500, { "Content-Type": "application/json" });
-        res.end(JSON.stringify({ error: "Jobs API not available" }));
+        const listing = pathname === "/api/jobs" && method === "GET";
+        res.writeHead(listing ? 200 : 503, { "Content-Type": "application/json" });
+        res.end(
+          JSON.stringify({
+            status: "unavailable",
+            jobs: null,
+            error: "AI Jobs provider is not configured or could not be loaded"
+          })
+        );
         return;
       }
       try {
@@ -436,6 +447,8 @@ var require_openclaw = __commonJS({
     var { execFileSync, execFile } = require("child_process");
     var { promisify } = require("util");
     var execFileAsync = promisify(execFile);
+    var SESSION_LIST_COMMAND = "sessions --agent main --limit all";
+    var CLI_MAX_BUFFER = 16 * 1024 * 1024;
     function getSafeEnv() {
       return {
         PATH: process.env.PATH,
@@ -453,6 +466,7 @@ var require_openclaw = __commonJS({
     function buildArgs(args2) {
       const profile = process.env.OPENCLAW_PROFILE || "";
       const profileArgs = profile ? ["--profile", profile] : [];
+      if (Array.isArray(args2)) return [...profileArgs, ...args2];
       const cleanArgs = args2.replace(/\s*2>&1\s*/g, " ").replace(/\s*2>\/dev\/null\s*/g, " ").trim();
       return [...profileArgs, ...cleanArgs.split(/\s+/).filter(Boolean)];
     }
@@ -461,6 +475,7 @@ var require_openclaw = __commonJS({
         const result = execFileSync("openclaw", buildArgs(args2), {
           encoding: "utf8",
           timeout: 3e3,
+          maxBuffer: CLI_MAX_BUFFER,
           env: getSafeEnv(),
           stdio: ["pipe", "pipe", "pipe"]
         });
@@ -469,11 +484,12 @@ var require_openclaw = __commonJS({
         return null;
       }
     }
-    async function runOpenClawAsync2(args2) {
+    async function runOpenClawAsync2(args2, { timeout = 2e4 } = {}) {
       try {
         const { stdout } = await execFileAsync("openclaw", buildArgs(args2), {
           encoding: "utf8",
-          timeout: 2e4,
+          timeout,
+          maxBuffer: CLI_MAX_BUFFER,
           env: getSafeEnv()
         });
         return stdout;
@@ -492,7 +508,8 @@ var require_openclaw = __commonJS({
       runOpenClaw: runOpenClaw2,
       runOpenClawAsync: runOpenClawAsync2,
       extractJSON: extractJSON2,
-      getSafeEnv
+      getSafeEnv,
+      SESSION_LIST_COMMAND
     };
   }
 });
@@ -1225,12 +1242,33 @@ var require_operators = __commonJS({
       setTimeout(() => refreshOperatorsAsync(dataDir, getOpenClawDir2), 2e3);
       setInterval(() => refreshOperatorsAsync(dataDir, getOpenClawDir2), 5 * 60 * 1e3);
     }
+    function calculateOperatorStats2(operatorData, allSessions) {
+      const operatorsWithStats = operatorData.operators.map((op) => {
+        const userSessions = allSessions.filter((s) => {
+          const userId = s.originator?.userId;
+          if (!userId) return false;
+          return userId === op.id || userId === op.metadata?.slackId;
+        });
+        return {
+          ...op,
+          stats: {
+            activeSessions: userSessions.filter((s) => s.active).length,
+            totalSessions: userSessions.length,
+            lastSeen: userSessions.length > 0 ? new Date(
+              Date.now() - Math.min(...userSessions.map((s) => s.minutesAgo)) * 6e4
+            ).toISOString() : op.lastSeen
+          }
+        };
+      });
+      return { ...operatorData, operators: operatorsWithStats };
+    }
     module2.exports = {
       loadOperators: loadOperators2,
       saveOperators: saveOperators2,
       getOperatorBySlackId: getOperatorBySlackId2,
       refreshOperatorsAsync,
-      startOperatorsRefresh: startOperatorsRefresh2
+      startOperatorsRefresh: startOperatorsRefresh2,
+      calculateOperatorStats: calculateOperatorStats2
     };
   }
 });
@@ -1317,39 +1355,95 @@ var require_topics = __commonJS({
   }
 });
 
+// src/channel-directory.js
+var require_channel_directory = __commonJS({
+  "src/channel-directory.js"(exports2, module2) {
+    var { stripVTControlCharacters } = require("node:util");
+    function createChannelDirectory({ run, now = Date.now, refreshMs = 3e5 }) {
+      const scopes = /* @__PURE__ */ new Map();
+      function lookup(provider, id, account = "") {
+        if (!["slack", "discord"].includes(provider) || !id || !/^[a-zA-Z0-9_-]*$/.test(account))
+          return { name: null, status: "unavailable" };
+        const key = JSON.stringify([provider, account]);
+        if (!scopes.has(key)) {
+          if (scopes.size >= 8) return { name: null, status: "unavailable" };
+          scopes.set(key, {
+            names: /* @__PURE__ */ new Map(),
+            nextCheck: 0,
+            pending: null,
+            status: "loading",
+            observedAt: null
+          });
+        }
+        const scope = scopes.get(key);
+        if (!scope.pending && now() >= scope.nextCheck) {
+          scope.nextCheck = now() + refreshMs;
+          scope.pending = Promise.resolve().then(async () => {
+            try {
+              const args2 = [
+                "directory",
+                "groups",
+                "list",
+                "--channel",
+                provider,
+                "--limit",
+                "1000",
+                "--json"
+              ];
+              if (account) args2.push("--account", account);
+              const raw = await run(args2, { timeout: 1e4 });
+              if (typeof raw !== "string" || Buffer.byteLength(raw) > 4 * 1024 * 1024)
+                throw Error("invalid_directory");
+              const rows = JSON.parse(stripVTControlCharacters(raw));
+              if (!Array.isArray(rows) || rows.length > 1e3) throw Error("invalid_directory");
+              const names = /* @__PURE__ */ new Map();
+              for (const row of rows) {
+                if (typeof row?.id !== "string" || typeof row.name !== "string") continue;
+                const name = row.name.trim().slice(0, 120);
+                const channelId = row.id.replace(/^channel:/, "").toLowerCase();
+                if (!name || !/^[a-z0-9_-]+$/i.test(channelId)) continue;
+                if (names.has(channelId) && names.get(channelId) !== name)
+                  throw Error("ambiguous_directory");
+                names.set(channelId, name);
+              }
+              scope.names = names;
+              scope.status = rows.length === 1e3 ? "partial" : "available";
+              scope.observedAt = now();
+            } catch {
+              scope.status = scope.observedAt === null ? "unavailable" : "stale";
+            } finally {
+              scope.pending = null;
+              scope.nextCheck = now() + refreshMs;
+            }
+          });
+        }
+        return {
+          name: scope.names.get(id.toLowerCase()) || null,
+          status: scope.status,
+          observedAt: scope.observedAt
+        };
+      }
+      return { lookup, settled: () => Promise.all([...scopes.values()].map((s) => s.pending)) };
+    }
+    module2.exports = { createChannelDirectory };
+  }
+});
+
 // src/sessions.js
 var require_sessions = __commonJS({
   "src/sessions.js"(exports2, module2) {
+    var { SESSION_LIST_COMMAND } = require_openclaw();
     var fs2 = require("fs");
     var path2 = require("path");
     var { detectTopics } = require_topics();
-    var CHANNEL_MAP = {
-      c0aax7y80np: "#cc-meta",
-      c0ab9f8sdfe: "#cc-research",
-      c0aan4rq7v5: "#cc-finance",
-      c0abxulk1qq: "#cc-properties",
-      c0ab5nz8mkl: "#cc-ai",
-      c0aan38tzv5: "#cc-dev",
-      c0ab7wwhqvc: "#cc-home",
-      c0ab1pjhxef: "#cc-health",
-      c0ab7txvcqd: "#cc-legal",
-      c0aay2g3n3r: "#cc-social",
-      c0aaxrw2wqp: "#cc-business",
-      c0ab19f3lae: "#cc-random",
-      c0ab0r74y33: "#cc-food",
-      c0ab0qrq3r9: "#cc-travel",
-      c0ab0sbqqlg: "#cc-family",
-      c0ab0slqdba: "#cc-games",
-      c0ab1ps7ef2: "#cc-music",
-      c0absbnrsbe: "#cc-dashboard"
-    };
-    function parseSessionLabel(key) {
+    var { createChannelDirectory } = require_channel_directory();
+    var CHANNEL_MAP = {};
+    function parseSessionLabel(key, resolvedName = null) {
       const parts = key.split(":");
-      if (parts.includes("slack")) {
+      if (parts.includes("slack") || parts.includes("discord")) {
         const channelIdx = parts.indexOf("channel");
         if (channelIdx >= 0 && parts[channelIdx + 1]) {
-          const channelId = parts[channelIdx + 1].toLowerCase();
-          const channelName = CHANNEL_MAP[channelId] || `#${channelId}`;
+          const channelName = resolvedName || (parts.includes("slack") ? "Slack channel" : "Discord channel");
           if (parts.includes("thread")) {
             const threadTs = parts[parts.indexOf("thread") + 1];
             const ts = parseFloat(threadTs);
@@ -1370,104 +1464,195 @@ var require_sessions = __commonJS({
     }
     function createSessionsModule2(deps) {
       const { getOpenClawDir: getOpenClawDir2, getOperatorBySlackId: getOperatorBySlackId2, runOpenClaw: runOpenClaw2, runOpenClawAsync: runOpenClawAsync2, extractJSON: extractJSON2 } = deps;
-      let sessionsCache = { sessions: [], timestamp: 0, refreshing: false };
-      const SESSIONS_CACHE_TTL = 1e4;
-      function getSessionOriginator(sessionId) {
+      const directory = deps.channelDirectory || createChannelDirectory({ run: runOpenClawAsync2 });
+      function channelIdentity(session) {
+        const parts = (session.key || "").split(":");
+        const provider = parts.includes("slack") ? "slack" : parts.includes("discord") ? "discord" : null;
+        const index = parts.indexOf("channel");
+        if (!provider || index < 0 || !parts[index + 1]) return null;
+        const id = parts[index + 1];
+        const account = session.accountId || session.origin?.accountId || session.deliveryContext?.accountId || "";
+        const result = directory.lookup(provider, id, account);
+        const metadataName = session.groupChannel;
+        const readableMetadata = typeof metadataName === "string" && !metadataName.toLowerCase().includes(id.toLowerCase()) ? metadataName : null;
+        const name = result.name ? `#${result.name.replace(/^#/, "")}` : readableMetadata;
+        return {
+          channelId: id,
+          channelName: name,
+          channelNameStatus: result.name ? result.status : readableMetadata ? "metadata" : "unresolved",
+          channelAccount: account,
+          channelNameObservedAt: result.observedAt || null
+        };
+      }
+      let sessionsCache = { sessions: [], raw: [], timestamp: 0, refreshing: false };
+      let sessionsRefreshPromise = null;
+      const detailCache = /* @__PURE__ */ new Map();
+      const SESSIONS_CACHE_TTL = 6e4;
+      const transcriptMetadataCache = /* @__PURE__ */ new Map();
+      let transcriptPathIndex = null;
+      let transcriptPathIndexTimestamp = 0;
+      const TRANSCRIPT_PATH_INDEX_TTL = 3e5;
+      function getSessionsDir() {
+        const openclawDir = getOpenClawDir2();
+        return path2.join(openclawDir, "agents", "main", "sessions");
+      }
+      function getBaseSessionIdFromTranscriptFile(file) {
+        if (!file.endsWith(".jsonl") || file.includes(".deleted.")) return null;
+        const name = file.slice(0, -".jsonl".length);
+        const exactUuidMatch = name.match(
+          /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
+        );
+        if (exactUuidMatch) return { sessionId: name, exact: true };
+        const suffixedUuidMatch = name.match(
+          /^([0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12})-/i
+        );
+        if (suffixedUuidMatch) return { sessionId: suffixedUuidMatch[1], exact: false };
+        return { sessionId: name, exact: true };
+      }
+      function getTranscriptPathIndex() {
+        const now = Date.now();
+        if (transcriptPathIndex && now - transcriptPathIndexTimestamp < TRANSCRIPT_PATH_INDEX_TTL) {
+          return transcriptPathIndex;
+        }
+        const sessionsDir = getSessionsDir();
+        const index = /* @__PURE__ */ new Map();
         try {
-          if (!sessionId) return null;
-          const openclawDir = getOpenClawDir2();
-          const transcriptPath = path2.join(
-            openclawDir,
-            "agents",
-            "main",
-            "sessions",
-            `${sessionId}.jsonl`
-          );
-          if (!fs2.existsSync(transcriptPath)) return null;
-          const content = fs2.readFileSync(transcriptPath, "utf8");
-          const lines = content.trim().split("\n");
-          for (let i = 0; i < Math.min(lines.length, 10); i++) {
-            try {
-              const entry = JSON.parse(lines[i]);
-              if (entry.type !== "message" || !entry.message) continue;
-              const msg = entry.message;
-              if (msg.role !== "user") continue;
-              let text = "";
-              if (typeof msg.content === "string") {
-                text = msg.content;
-              } else if (Array.isArray(msg.content)) {
-                const textPart = msg.content.find((c) => c.type === "text");
-                if (textPart) text = textPart.text || "";
-              }
-              if (!text) continue;
-              const slackUserMatch = text.match(/\]\s*([\w.-]+)\s*\(([A-Z0-9]+)\):/);
-              if (slackUserMatch) {
-                const username = slackUserMatch[1];
-                const userId = slackUserMatch[2];
-                const operator = getOperatorBySlackId2(userId);
-                return {
-                  userId,
-                  username,
-                  displayName: operator?.name || username,
-                  role: operator?.role || "user",
-                  avatar: operator?.avatar || null
-                };
-              }
-            } catch (e) {
+          const files = fs2.readdirSync(sessionsDir);
+          for (const file of files) {
+            const transcript = getBaseSessionIdFromTranscriptFile(file);
+            if (!transcript) continue;
+            if (!index.has(transcript.sessionId) || transcript.exact) {
+              index.set(transcript.sessionId, path2.join(sessionsDir, file));
             }
           }
-          return null;
         } catch (e) {
-          return null;
         }
+        transcriptPathIndex = index;
+        transcriptPathIndexTimestamp = now;
+        return transcriptPathIndex;
+      }
+      function findTranscriptPath(sessionId) {
+        if (!sessionId) return null;
+        const exactPath = path2.join(getSessionsDir(), `${sessionId}.jsonl`);
+        if (fs2.existsSync(exactPath)) return exactPath;
+        return getTranscriptPathIndex().get(sessionId) || null;
+      }
+      function readTranscriptPrefix(transcriptPath, maxBytes = 5e4) {
+        const fd = fs2.openSync(transcriptPath, "r");
+        try {
+          const buffer = Buffer.alloc(maxBytes);
+          const bytesRead = fs2.readSync(fd, buffer, 0, maxBytes, 0);
+          return buffer.toString("utf8", 0, bytesRead);
+        } finally {
+          fs2.closeSync(fd);
+        }
+      }
+      function extractOriginatorFromLines(lines) {
+        for (let i = 0; i < Math.min(lines.length, 10); i++) {
+          try {
+            const entry = JSON.parse(lines[i]);
+            if (entry.type !== "message" || !entry.message) continue;
+            const msg = entry.message;
+            if (msg.role !== "user") continue;
+            let text = "";
+            if (typeof msg.content === "string") {
+              text = msg.content;
+            } else if (Array.isArray(msg.content)) {
+              const textPart = msg.content.find((c) => c.type === "text");
+              if (textPart) text = textPart.text || "";
+            }
+            if (!text) continue;
+            const slackUserMatch = text.match(/\]\s*([\w.-]+)\s*\(([A-Z0-9]+)\):/);
+            if (slackUserMatch) {
+              const username = slackUserMatch[1];
+              const userId = slackUserMatch[2];
+              const operator = getOperatorBySlackId2(userId);
+              return {
+                userId,
+                username,
+                displayName: operator?.name || username,
+                role: operator?.role || "user",
+                avatar: operator?.avatar || null
+              };
+            }
+            const senderIdMatch = text.match(/"sender_id":\s*"([A-Z0-9]+)"/);
+            const senderMatch = text.match(/"sender":\s*"([^"]+)"/);
+            if (senderIdMatch) {
+              const userId = senderIdMatch[1];
+              const username = senderMatch ? senderMatch[1] : userId;
+              const operator = getOperatorBySlackId2(userId);
+              return {
+                userId,
+                username,
+                displayName: operator?.name || username,
+                role: operator?.role || "user",
+                avatar: operator?.avatar || null
+              };
+            }
+          } catch (e) {
+          }
+        }
+        return null;
+      }
+      function extractTopicFromLines(lines) {
+        let textSamples = [];
+        for (const line of lines.slice(0, 30)) {
+          try {
+            const entry = JSON.parse(line);
+            if (entry.type === "message" && entry.message?.content) {
+              const msgContent = entry.message.content;
+              if (Array.isArray(msgContent)) {
+                msgContent.forEach((c) => {
+                  if (c.type === "text" && c.text) {
+                    textSamples.push(c.text.slice(0, 500));
+                  }
+                });
+              } else if (typeof msgContent === "string") {
+                textSamples.push(msgContent.slice(0, 500));
+              }
+            }
+          } catch (e) {
+          }
+        }
+        if (textSamples.length === 0) return null;
+        const topics = detectTopics(textSamples.join(" "));
+        return topics.length > 0 ? topics.slice(0, 2).join(", ") : null;
+      }
+      function getSessionMetadata(sessionId) {
+        if (!sessionId) return { originator: null, topic: null };
+        try {
+          const transcriptPath = findTranscriptPath(sessionId);
+          if (!transcriptPath) return { originator: null, topic: null };
+          const stat = fs2.statSync(transcriptPath);
+          const cached = transcriptMetadataCache.get(sessionId);
+          if (cached && cached.transcriptPath === transcriptPath && cached.mtimeMs === stat.mtimeMs && cached.size === stat.size) {
+            return cached.metadata;
+          }
+          const content = readTranscriptPrefix(transcriptPath, 5e4);
+          const lines = content.split("\n").filter((l) => l.trim());
+          const metadata = {
+            originator: extractOriginatorFromLines(lines),
+            topic: extractTopicFromLines(lines)
+          };
+          transcriptMetadataCache.set(sessionId, {
+            transcriptPath,
+            mtimeMs: stat.mtimeMs,
+            size: stat.size,
+            metadata
+          });
+          return metadata;
+        } catch (e) {
+          return { originator: null, topic: null };
+        }
+      }
+      function getSessionOriginator(sessionId) {
+        return getSessionMetadata(sessionId).originator;
       }
       function getSessionTopic(sessionId) {
-        if (!sessionId) return null;
-        try {
-          const openclawDir = getOpenClawDir2();
-          const transcriptPath = path2.join(
-            openclawDir,
-            "agents",
-            "main",
-            "sessions",
-            `${sessionId}.jsonl`
-          );
-          if (!fs2.existsSync(transcriptPath)) return null;
-          const fd = fs2.openSync(transcriptPath, "r");
-          const buffer = Buffer.alloc(5e4);
-          const bytesRead = fs2.readSync(fd, buffer, 0, 5e4, 0);
-          fs2.closeSync(fd);
-          if (bytesRead === 0) return null;
-          const content = buffer.toString("utf8", 0, bytesRead);
-          const lines = content.split("\n").filter((l) => l.trim());
-          let textSamples = [];
-          for (const line of lines.slice(0, 30)) {
-            try {
-              const entry = JSON.parse(line);
-              if (entry.type === "message" && entry.message?.content) {
-                const msgContent = entry.message.content;
-                if (Array.isArray(msgContent)) {
-                  msgContent.forEach((c) => {
-                    if (c.type === "text" && c.text) {
-                      textSamples.push(c.text.slice(0, 500));
-                    }
-                  });
-                } else if (typeof msgContent === "string") {
-                  textSamples.push(msgContent.slice(0, 500));
-                }
-              }
-            } catch (e) {
-            }
-          }
-          if (textSamples.length === 0) return null;
-          const topics = detectTopics(textSamples.join(" "));
-          return topics.length > 0 ? topics.slice(0, 2).join(", ") : null;
-        } catch (e) {
-          return null;
-        }
+        return getSessionMetadata(sessionId).topic;
       }
       function mapSession(s) {
-        const minutesAgo = s.ageMs ? s.ageMs / 6e4 : Infinity;
+        const minutesAgo = typeof s.ageMs === "number" && s.ageMs >= 0 ? s.ageMs / 6e4 : Infinity;
         let channel = "other";
         if (s.key.includes("slack")) channel = "slack";
         else if (s.key.includes("telegram")) channel = "telegram";
@@ -1478,9 +1663,11 @@ var require_sessions = __commonJS({
         if (s.key.includes(":subagent:")) sessionType = "subagent";
         else if (s.key.includes(":cron:")) sessionType = "cron";
         else if (s.key === "agent:main:main") sessionType = "main";
-        const originator = getSessionOriginator(s.sessionId);
-        const label = s.groupChannel || s.displayName || parseSessionLabel(s.key);
-        const topic = getSessionTopic(s.sessionId);
+        const metadata = getSessionMetadata(s.sessionId);
+        const originator = metadata.originator;
+        const identity = channelIdentity(s);
+        const label = identity ? parseSessionLabel(s.key, identity.channelName) : s.groupChannel || s.displayName || parseSessionLabel(s.key);
+        const topic = metadata.topic;
         const totalTokens = s.totalTokens || 0;
         const sessionAgeMinutes = Math.max(1, Math.min(minutesAgo, 24 * 60));
         const burnRate = Math.round(totalTokens / sessionAgeMinutes);
@@ -1488,7 +1675,8 @@ var require_sessions = __commonJS({
           sessionKey: s.key,
           sessionId: s.sessionId,
           label,
-          groupChannel: s.groupChannel || null,
+          ...identity,
+          groupChannel: identity?.channelName || s.groupChannel || null,
           displayName: s.displayName || null,
           kind: s.kind,
           channel,
@@ -1497,6 +1685,9 @@ var require_sessions = __commonJS({
           recentlyActive: minutesAgo < 60,
           minutesAgo: Math.round(minutesAgo),
           tokens: s.totalTokens || 0,
+          lifetimeTokens: typeof s.totalTokens === "number" ? s.totalTokens : null,
+          inputTokens: typeof s.inputTokens === "number" ? s.inputTokens : null,
+          outputTokens: typeof s.outputTokens === "number" ? s.outputTokens : null,
           model: s.model,
           originator,
           topic,
@@ -1507,22 +1698,32 @@ var require_sessions = __commonJS({
           }
         };
       }
-      async function refreshSessionsCache() {
-        if (sessionsCache.refreshing) return;
+      function refreshSessionsCache() {
+        if (sessionsRefreshPromise) return sessionsRefreshPromise;
+        sessionsRefreshPromise = performSessionsRefresh().finally(() => {
+          sessionsRefreshPromise = null;
+        });
+        return sessionsRefreshPromise;
+      }
+      async function performSessionsRefresh() {
         sessionsCache.refreshing = true;
         try {
-          const output = await runOpenClawAsync2("sessions --json 2>/dev/null");
+          const output = await runOpenClawAsync2(`${SESSION_LIST_COMMAND} --json`);
           const jsonStr = extractJSON2(output);
           if (jsonStr) {
             const data = JSON.parse(jsonStr);
             const sessions2 = data.sessions || [];
             const mapped = sessions2.map((s) => mapSession(s));
+            const withOriginator = mapped.filter((s) => s.originator != null);
             sessionsCache = {
               sessions: mapped,
+              raw: sessions2,
               timestamp: Date.now(),
               refreshing: false
             };
-            console.log(`[Sessions Cache] Refreshed: ${mapped.length} sessions`);
+            console.log(
+              `[Sessions Cache] Refreshed: ${mapped.length} sessions (${withOriginator.length} with originator)`
+            );
           }
         } catch (e) {
           console.error("[Sessions Cache] Refresh error:", e.message);
@@ -1535,7 +1736,15 @@ var require_sessions = __commonJS({
         if (isStale && !sessionsCache.refreshing) {
           refreshSessionsCache();
         }
-        return sessionsCache.sessions;
+        return sessionsCache.sessions.map((session, index) => {
+          const identity = channelIdentity(sessionsCache.raw[index] || { key: session.sessionKey });
+          return identity ? {
+            ...session,
+            ...identity,
+            label: parseSessionLabel(session.sessionKey, identity.channelName),
+            groupChannel: identity.channelName
+          } : session;
+        });
       }
       function getSessions(options = {}) {
         const limit = Object.prototype.hasOwnProperty.call(options, "limit") ? options.limit : 20;
@@ -1546,7 +1755,7 @@ var require_sessions = __commonJS({
           return returnCount ? { sessions: cached, totalCount } : cached;
         }
         try {
-          const output = runOpenClaw2("sessions --json 2>/dev/null");
+          const output = runOpenClaw2(`${SESSION_LIST_COMMAND} --json`);
           const jsonStr = extractJSON2(output);
           if (jsonStr) {
             const data = JSON.parse(jsonStr);
@@ -1563,34 +1772,29 @@ var require_sessions = __commonJS({
         }
         return returnCount ? { sessions: [], totalCount: 0 } : [];
       }
-      function readTranscript(sessionId) {
-        const openclawDir = getOpenClawDir2();
-        const transcriptPath = path2.join(
-          openclawDir,
-          "agents",
-          "main",
-          "sessions",
-          `${sessionId}.jsonl`
-        );
+      function readTranscript(sessionId, { withStatus = false } = {}) {
+        const result = (entries, available) => withStatus ? { entries, available } : entries;
+        const transcriptPath = findTranscriptPath(sessionId);
         try {
-          if (!fs2.existsSync(transcriptPath)) return [];
+          if (!transcriptPath) return result([], false);
           const content = fs2.readFileSync(transcriptPath, "utf8");
-          return content.trim().split("\n").map((line) => {
+          const entries = content.trim().split("\n").map((line) => {
             try {
               return JSON.parse(line);
             } catch {
               return null;
             }
           }).filter(Boolean);
+          return result(entries, !content.trim() || entries.length > 0);
         } catch (e) {
           console.error("Failed to read transcript:", e.message);
-          return [];
+          return result([], false);
         }
       }
-      function getSessionDetail(sessionKey) {
+      function getSessionDetail(sessionKey, supplied = {}) {
         try {
-          const listOutput = runOpenClaw2("sessions --json 2>/dev/null");
-          let sessionInfo = null;
+          const listOutput = supplied.sessionInfo ? null : runOpenClaw2(`${SESSION_LIST_COMMAND} --json`);
+          let sessionInfo = supplied.sessionInfo || null;
           const jsonStr = extractJSON2(listOutput);
           if (jsonStr) {
             const data = JSON.parse(jsonStr);
@@ -1599,7 +1803,7 @@ var require_sessions = __commonJS({
           if (!sessionInfo) {
             return { error: "Session not found" };
           }
-          const transcript = readTranscript(sessionInfo.sessionId);
+          const { entries: transcript, available: transcriptAvailable } = supplied.transcript || readTranscript(sessionInfo.sessionId, { withStatus: true });
           let messages = [];
           let tools = {};
           let facts = [];
@@ -1667,12 +1871,12 @@ var require_sessions = __commonJS({
               });
             }
           });
-          let summary = "No activity yet.";
+          let summary = transcriptAvailable ? "No activity yet." : "Transcript unavailable \u2014 session metadata only.";
           const userMessages = messages.filter((m) => m.role === "user");
           const assistantMessages = messages.filter((m) => m.role === "assistant");
           let topics = [];
           if (messages.length > 0) {
-            summary = `${messages.length} messages (${userMessages.length} user, ${assistantMessages.length} assistant). `;
+            summary = `${messages.length}${supplied.recent ? " recent" : ""} messages (${userMessages.length} user, ${assistantMessages.length} assistant). `;
             const allText = messages.map((m) => m.text).join(" ");
             topics = detectTopics(allText);
             if (topics.length > 0) {
@@ -1682,39 +1886,27 @@ var require_sessions = __commonJS({
           const toolsArray = Object.entries(tools).map(([name, count]) => ({ name, count })).sort((a, b) => b.count - a.count);
           const ageMs = sessionInfo.ageMs || 0;
           const lastActive = ageMs < 6e4 ? "Just now" : ageMs < 36e5 ? `${Math.round(ageMs / 6e4)} minutes ago` : ageMs < 864e5 ? `${Math.round(ageMs / 36e5)} hours ago` : `${Math.round(ageMs / 864e5)} days ago`;
-          let channelDisplay = "Other";
-          if (sessionInfo.groupChannel) {
-            channelDisplay = sessionInfo.groupChannel;
-          } else if (sessionInfo.displayName) {
-            channelDisplay = sessionInfo.displayName;
-          } else if (sessionKey.includes("slack")) {
-            const parts = sessionKey.split(":");
-            const channelIdx = parts.indexOf("channel");
-            if (channelIdx >= 0 && parts[channelIdx + 1]) {
-              const channelId = parts[channelIdx + 1].toLowerCase();
-              channelDisplay = CHANNEL_MAP[channelId] || `#${channelId}`;
-            } else {
-              channelDisplay = "Slack";
-            }
-          } else if (sessionKey.includes("telegram")) {
-            channelDisplay = "Telegram";
-          }
-          const finalTotalTokens = totalInputTokens + totalOutputTokens || sessionInfo.totalTokens || 0;
-          const finalInputTokens = totalInputTokens || sessionInfo.inputTokens || 0;
-          const finalOutputTokens = totalOutputTokens || sessionInfo.outputTokens || 0;
+          const identity = channelIdentity({ ...sessionInfo, key: sessionKey });
+          const channelDisplay = identity?.channelName || (identity ? parseSessionLabel(sessionKey) : sessionInfo.groupChannel || sessionInfo.displayName || parseSessionLabel(sessionKey));
+          const finalTotalTokens = supplied.recent ? sessionInfo.totalTokens || 0 : totalInputTokens + totalOutputTokens || sessionInfo.totalTokens || 0;
+          const finalInputTokens = supplied.recent ? sessionInfo.inputTokens || 0 : totalInputTokens || sessionInfo.inputTokens || 0;
+          const finalOutputTokens = supplied.recent ? sessionInfo.outputTokens || 0 : totalOutputTokens || sessionInfo.outputTokens || 0;
           const modelDisplay = (detectedModel || sessionInfo.model || "-").replace("anthropic/", "").replace("openai/", "");
           return {
             key: sessionKey,
+            transcriptAvailable,
             kind: sessionInfo.kind,
             channel: channelDisplay,
-            groupChannel: sessionInfo.groupChannel || channelDisplay,
+            ...identity,
+            groupChannel: channelDisplay,
             model: modelDisplay,
             tokens: finalTotalTokens,
             inputTokens: finalInputTokens,
             outputTokens: finalOutputTokens,
-            cacheRead: totalCacheRead,
-            cacheWrite: totalCacheWrite,
-            estCost: totalCost > 0 ? `$${totalCost.toFixed(4)}` : null,
+            cacheRead: supplied.recent ? null : totalCacheRead,
+            cacheWrite: supplied.recent ? null : totalCacheWrite,
+            historyScope: supplied.recent ? "Recent messages only; metadata totals cover the session." : null,
+            estCost: !supplied.recent && totalCost > 0 ? `$${totalCost.toFixed(4)}` : null,
             lastActive,
             summary,
             topics,
@@ -1732,15 +1924,74 @@ var require_sessions = __commonJS({
           return { error: e.message };
         }
       }
+      async function getSessionDetailAsync(sessionKey) {
+        if (!sessionsCache.timestamp) {
+          void refreshSessionsCache();
+          return { error: "Session catalog is loading; retry shortly." };
+        } else getSessionsCached();
+        const sessionInfo = sessionsCache.raw.find((s) => s.key === sessionKey);
+        if (!sessionInfo)
+          return {
+            error: sessionsCache.timestamp ? "Session not found" : "Session catalog unavailable; retry shortly."
+          };
+        const cached = detailCache.get(sessionKey);
+        if (cached && cached.sessionId === sessionInfo.sessionId && Date.now() - cached.timestamp < 3e4)
+          return cached.promise;
+        const entry = { timestamp: Date.now(), sessionId: sessionInfo.sessionId, promise: null };
+        entry.promise = (async () => {
+          try {
+            const output = await runOpenClawAsync2(
+              [
+                "gateway",
+                "call",
+                "chat.history",
+                "--params",
+                JSON.stringify({ sessionKey, limit: 50 }),
+                "--timeout",
+                "5000",
+                "--json"
+              ],
+              { timeout: 7e3 }
+            );
+            const data = JSON.parse(extractJSON2(output));
+            if (data?.sessionKey === sessionKey && (!data.sessionId || data.sessionId === sessionInfo.sessionId) && Array.isArray(data.messages)) {
+              return getSessionDetail(sessionKey, {
+                sessionInfo,
+                recent: true,
+                transcript: {
+                  available: true,
+                  entries: data.messages.map((message) => ({
+                    type: "message",
+                    message,
+                    timestamp: message.timestamp
+                  }))
+                }
+              });
+            }
+          } catch {
+          }
+          return getSessionDetail(sessionKey, { sessionInfo });
+        })();
+        detailCache.set(sessionKey, entry);
+        while (detailCache.size > 100) detailCache.delete(detailCache.keys().next().value);
+        return entry.promise;
+      }
       return {
+        findTranscriptPath,
         getSessionOriginator,
         getSessionTopic,
         mapSession,
         refreshSessionsCache,
         getSessionsCached,
+        getCatalogStatus: () => ({
+          observedAt: sessionsCache.timestamp ? new Date(sessionsCache.timestamp).toISOString() : null,
+          status: !sessionsCache.timestamp ? "loading" : Date.now() - sessionsCache.timestamp > SESSIONS_CACHE_TTL ? "stale" : "ready",
+          refreshing: sessionsCache.refreshing
+        }),
         getSessions,
         readTranscript,
         getSessionDetail,
+        getSessionDetailAsync,
         parseSessionLabel
       };
     }
@@ -1752,6 +2003,7 @@ var require_sessions = __commonJS({
 var require_cron = __commonJS({
   "src/cron.js"(exports2, module2) {
     var fs2 = require("fs");
+    var { stripVTControlCharacters } = require("node:util");
     var path2 = require("path");
     function cronToHuman(expr) {
       if (!expr || expr === "\u2014") return null;
@@ -1813,59 +2065,87 @@ var require_cron = __commonJS({
       }
       return expr;
     }
-    function getCronJobs2(getOpenClawDir2) {
-      try {
-        const cronPath = path2.join(getOpenClawDir2(), "cron", "jobs.json");
-        if (fs2.existsSync(cronPath)) {
-          const data = JSON.parse(fs2.readFileSync(cronPath, "utf8"));
-          return (data.jobs || []).map((j) => {
-            let scheduleStr = "\u2014";
-            let scheduleHuman = null;
-            if (j.schedule) {
-              if (j.schedule.kind === "cron" && j.schedule.expr) {
-                scheduleStr = j.schedule.expr;
-                scheduleHuman = cronToHuman(j.schedule.expr);
-              } else if (j.schedule.kind === "once") {
-                scheduleStr = "once";
-                scheduleHuman = "One-time";
-              }
-            }
-            let nextRunStr = "\u2014";
-            if (j.state?.nextRunAtMs) {
-              const next = new Date(j.state.nextRunAtMs);
-              const now = /* @__PURE__ */ new Date();
-              const diffMs = next - now;
-              const diffMins = Math.round(diffMs / 6e4);
-              if (diffMins < 0) {
-                nextRunStr = "overdue";
-              } else if (diffMins < 60) {
-                nextRunStr = `${diffMins}m`;
-              } else if (diffMins < 1440) {
-                nextRunStr = `${Math.round(diffMins / 60)}h`;
-              } else {
-                nextRunStr = `${Math.round(diffMins / 1440)}d`;
-              }
-            }
-            return {
-              id: j.id,
-              name: j.name || j.id.slice(0, 8),
-              schedule: scheduleStr,
-              scheduleHuman,
-              nextRun: nextRunStr,
-              enabled: j.enabled !== false,
-              lastStatus: j.state?.lastStatus
-            };
-          });
+    function normalizeJobs(jobs) {
+      return jobs.map((j) => {
+        if (!j || typeof j.id !== "string") throw new Error("invalid_cron_job");
+        const schedule = j.schedule || {};
+        let scheduleStr = "\u2014", scheduleHuman = null;
+        if (schedule.kind === "cron" && typeof schedule.expr === "string") {
+          scheduleStr = schedule.expr;
+          scheduleHuman = cronToHuman(schedule.expr);
+        } else if (["once", "at"].includes(schedule.kind)) {
+          scheduleStr = "once";
+          scheduleHuman = "One-time";
+        } else if (schedule.kind === "every" && Number.isFinite(schedule.everyMs)) {
+          scheduleStr = `every ${schedule.everyMs / 1e3}s`;
         }
-      } catch (e) {
-        console.error("Failed to get cron:", e.message);
+        const nextMs = j.nextRunAtMs ?? j.state?.nextRunAtMs;
+        let nextRun = "\u2014";
+        if (Number.isFinite(nextMs)) {
+          const mins = Math.round((nextMs - Date.now()) / 6e4);
+          nextRun = mins < 0 ? "overdue" : mins < 60 ? `${mins}m` : mins < 1440 ? `${Math.round(mins / 60)}h` : `${Math.round(mins / 1440)}d`;
+        }
+        return {
+          id: j.id,
+          name: typeof j.name === "string" ? j.name : j.id.slice(0, 8),
+          schedule: scheduleStr,
+          scheduleHuman,
+          nextRun,
+          enabled: j.enabled !== false,
+          lastStatus: j.lastRunStatus ?? j.state?.lastStatus
+        };
+      });
+    }
+    function getCronJobs(getOpenClawDir2) {
+      try {
+        const file = path2.join(getOpenClawDir2(), "cron", "jobs.json");
+        if (fs2.existsSync(file))
+          return normalizeJobs(JSON.parse(fs2.readFileSync(file, "utf8")).jobs || []);
+      } catch {
       }
       return [];
     }
-    module2.exports = {
-      cronToHuman,
-      getCronJobs: getCronJobs2
-    };
+    function createCronHost2({ run, now = Date.now, refreshMs = 3e4 }) {
+      let snapshot = { jobs: [], status: "loading", observedAt: null }, pending = null, nextCheck = 0;
+      function refresh() {
+        if (pending) return pending;
+        nextCheck = now() + refreshMs;
+        pending = Promise.resolve().then(async () => {
+          try {
+            const raw = await run(
+              ["cron", "list", "--agent", "main", "--all", "--json", "--timeout", "5000"],
+              { timeout: 8e3 }
+            );
+            if (typeof raw !== "string" || Buffer.byteLength(raw) > 4 * 1024 * 1024)
+              throw new Error("invalid_cron_catalog");
+            const data = JSON.parse(stripVTControlCharacters(raw).trim());
+            if (!Array.isArray(data.jobs) || data.jobs.length > 1e3)
+              throw new Error("invalid_cron_catalog");
+            snapshot = {
+              jobs: normalizeJobs(data.jobs),
+              status: data.hasMore || data.total > data.jobs.length ? "partial" : "available",
+              observedAt: now()
+            };
+          } catch {
+            snapshot = {
+              ...snapshot,
+              status: snapshot.observedAt === null ? "unavailable" : "stale"
+            };
+          }
+          return snapshot;
+        }).finally(() => {
+          pending = null;
+          nextCheck = now() + refreshMs;
+        });
+        return pending;
+      }
+      function getState() {
+        if (now() >= nextCheck && !pending) void refresh();
+        return snapshot;
+      }
+      return { getState, refresh };
+    }
+    module2.exports = { cronToHuman, getCronJobs, normalizeJobs, createCronHost: createCronHost2 };
   }
 });
 
@@ -2066,12 +2346,106 @@ created: ${(/* @__PURE__ */ new Date()).toISOString().split("T")[0]}
   }
 });
 
+// src/usage-report.js
+var require_usage_report = __commonJS({
+  "src/usage-report.js"(exports2, module2) {
+    var { runOpenClawAsync: runOpenClawAsync2, extractJSON: extractJSON2 } = require_openclaw();
+    var TTL = 3e5;
+    var MAX_AGE = 9e5;
+    var DAY = 864e5;
+    function normalizeUsageReport(report, now = Date.now()) {
+      if (!report || !Array.isArray(report.daily) || !Number.isFinite(report.updatedAt) || report.updatedAt > now + 6e4)
+        throw new Error("Invalid usage report");
+      const today = new Date(now).toISOString().slice(0, 10);
+      const fields = ["input", "output", "cacheRead", "cacheWrite", "totalCost", "missingCostEntries"];
+      const dates = /* @__PURE__ */ new Set();
+      for (const row of report.daily) {
+        if (!/^\d{4}-\d{2}-\d{2}$/.test(row.date) || dates.has(row.date) || fields.some((k) => !Number.isFinite(row[k]) || row[k] < 0))
+          throw new Error("Invalid usage bucket");
+        dates.add(row.date);
+      }
+      const bucket = (days) => {
+        const start = new Date(now - (days - 1) * DAY).toISOString().slice(0, 10);
+        const rows = report.daily.filter((r) => r.date >= start && r.date <= today);
+        const sum = (k) => rows.reduce((n, r) => n + (Number.isFinite(r[k]) ? r[k] : 0), 0);
+        const missing = sum("missingCostEntries");
+        return {
+          input: sum("input"),
+          output: sum("output"),
+          cacheRead: sum("cacheRead"),
+          cacheWrite: sum("cacheWrite"),
+          cost: sum("totalCost"),
+          missingCostEntries: missing,
+          costComplete: missing === 0,
+          requests: null,
+          inputCost: rows.every((r) => Number.isFinite(r.inputCost)) ? sum("inputCost") : null,
+          outputCost: rows.every((r) => Number.isFinite(r.outputCost)) ? sum("outputCost") : null,
+          cacheReadCost: rows.every((r) => Number.isFinite(r.cacheReadCost)) ? sum("cacheReadCost") : null,
+          cacheWriteCost: rows.every((r) => Number.isFinite(r.cacheWriteCost)) ? sum("cacheWriteCost") : null,
+          tokensNoCache: sum("input") + sum("output"),
+          tokensWithCache: sum("input") + sum("output") + sum("cacheRead") + sum("cacheWrite")
+        };
+      };
+      const windows = { "24h": bucket(1), "3d": bucket(3), "7d": bucket(7) };
+      return {
+        ...windows["24h"],
+        windows,
+        available: true,
+        source: "gateway",
+        period: "Today (UTC)",
+        periodKey: today,
+        updatedAt: report.updatedAt,
+        refreshing: report.cacheStatus?.status === "refreshing",
+        pendingFiles: report.cacheStatus?.pendingFiles || 0
+      };
+    }
+    function createUsageReportCache({ run = runOpenClawAsync2, now = Date.now } = {}) {
+      let snapshot = null, pending = null, attemptedAt = null, error = null;
+      function refresh() {
+        if (pending) return pending;
+        if (attemptedAt !== null && now() - attemptedAt < TTL) return Promise.resolve(snapshot);
+        attemptedAt = now();
+        pending = (async () => {
+          try {
+            const output = await run([
+              "gateway",
+              "call",
+              "usage.cost",
+              "--params",
+              JSON.stringify({ days: 7, agentId: "main", mode: "utc" }),
+              "--json"
+            ]);
+            snapshot = normalizeUsageReport(JSON.parse(extractJSON2(output)), now());
+            error = null;
+          } catch {
+            error = "Usage report unavailable";
+          } finally {
+            pending = null;
+          }
+          return snapshot;
+        })();
+        return pending;
+      }
+      function get() {
+        void refresh();
+        if (!snapshot) return null;
+        const stale = now() - snapshot.updatedAt > MAX_AGE || snapshot.periodKey !== new Date(now()).toISOString().slice(0, 10);
+        return { ...snapshot, available: !stale, stale, error };
+      }
+      return { refresh, get };
+    }
+    var usageReportCache = createUsageReportCache();
+    module2.exports = { normalizeUsageReport, createUsageReportCache, usageReportCache };
+  }
+});
+
 // src/tokens.js
 var require_tokens = __commonJS({
   "src/tokens.js"(exports2, module2) {
     var fs2 = require("fs");
     var path2 = require("path");
     var { formatNumber, formatTokens } = require_utils();
+    var { usageReportCache } = require_usage_report();
     var TOKEN_RATES = {
       input: 15,
       // $15/1M input tokens
@@ -2083,10 +2457,44 @@ var require_tokens = __commonJS({
       // $18.75/1M (25% premium on input)
     };
     var tokenUsageCache = { data: null, timestamp: 0, refreshing: false };
-    var TOKEN_USAGE_CACHE_TTL = 3e4;
+    var TOKEN_USAGE_CACHE_TTL = 3e5;
+    var tokenUsageFileCache = /* @__PURE__ */ new Map();
     var refreshInterval = null;
     function emptyUsageBucket() {
       return { input: 0, output: 0, cacheRead: 0, cacheWrite: 0, cost: 0, requests: 0 };
+    }
+    function addUsageToBucket(bucket, usage) {
+      bucket.input += usage.input;
+      bucket.output += usage.output;
+      bucket.cacheRead += usage.cacheRead;
+      bucket.cacheWrite += usage.cacheWrite;
+      bucket.cost += usage.cost;
+      bucket.requests++;
+      bucket.missingCostEntries = (bucket.missingCostEntries || 0) + (usage.costKnown === false ? 1 : 0);
+    }
+    function collectTokenUsageEvents(content, sevenDaysAgo) {
+      const events = [];
+      const lines = content.trim().split("\n");
+      for (const line of lines) {
+        if (!line) continue;
+        try {
+          const entry = JSON.parse(line);
+          const entryTime = entry.timestamp ? new Date(entry.timestamp).getTime() : 0;
+          if (entryTime < sevenDaysAgo || !entry.message?.usage) continue;
+          const u = entry.message.usage;
+          events.push({
+            time: entryTime,
+            input: u.input || 0,
+            output: u.output || 0,
+            cacheRead: u.cacheRead || 0,
+            cacheWrite: u.cacheWrite || 0,
+            cost: Number.isFinite(u.cost?.total) ? u.cost.total : 0,
+            costKnown: Number.isFinite(u.cost?.total)
+          });
+        } catch (e) {
+        }
+      }
+      return events;
     }
     async function refreshTokenUsageAsync2(getOpenClawDir2) {
       if (tokenUsageCache.refreshing) return;
@@ -2102,61 +2510,48 @@ var require_tokens = __commonJS({
         const usage24h = emptyUsageBucket();
         const usage3d = emptyUsageBucket();
         const usage7d = emptyUsageBucket();
+        let unreadableFiles = 0;
+        const seenFiles = /* @__PURE__ */ new Set();
         const batchSize = 50;
         for (let i = 0; i < jsonlFiles.length; i += batchSize) {
           const batch = jsonlFiles.slice(i, i + batchSize);
           await Promise.all(
             batch.map(async (file) => {
               const filePath = path2.join(sessionsDir, file);
+              seenFiles.add(filePath);
               try {
                 const stat = await fs2.promises.stat(filePath);
-                if (stat.mtimeMs < sevenDaysAgo) return;
-                const content = await fs2.promises.readFile(filePath, "utf8");
-                const lines = content.trim().split("\n");
-                for (const line of lines) {
-                  if (!line) continue;
-                  try {
-                    const entry = JSON.parse(line);
-                    const entryTime = entry.timestamp ? new Date(entry.timestamp).getTime() : 0;
-                    if (entryTime < sevenDaysAgo) continue;
-                    if (entry.message?.usage) {
-                      const u = entry.message.usage;
-                      const input = u.input || 0;
-                      const output = u.output || 0;
-                      const cacheRead = u.cacheRead || 0;
-                      const cacheWrite = u.cacheWrite || 0;
-                      const cost = u.cost?.total || 0;
-                      if (entryTime >= oneDayAgo) {
-                        usage24h.input += input;
-                        usage24h.output += output;
-                        usage24h.cacheRead += cacheRead;
-                        usage24h.cacheWrite += cacheWrite;
-                        usage24h.cost += cost;
-                        usage24h.requests++;
-                      }
-                      if (entryTime >= threeDaysAgo) {
-                        usage3d.input += input;
-                        usage3d.output += output;
-                        usage3d.cacheRead += cacheRead;
-                        usage3d.cacheWrite += cacheWrite;
-                        usage3d.cost += cost;
-                        usage3d.requests++;
-                      }
-                      usage7d.input += input;
-                      usage7d.output += output;
-                      usage7d.cacheRead += cacheRead;
-                      usage7d.cacheWrite += cacheWrite;
-                      usage7d.cost += cost;
-                      usage7d.requests++;
-                    }
-                  } catch (e) {
-                  }
+                if (stat.mtimeMs < sevenDaysAgo) {
+                  tokenUsageFileCache.delete(filePath);
+                  return;
+                }
+                const cached = tokenUsageFileCache.get(filePath);
+                let events = cached?.events;
+                if (!cached || cached.mtimeMs !== stat.mtimeMs || cached.size !== stat.size) {
+                  const content = await fs2.promises.readFile(filePath, "utf8");
+                  events = collectTokenUsageEvents(content, sevenDaysAgo);
+                  tokenUsageFileCache.set(filePath, {
+                    mtimeMs: stat.mtimeMs,
+                    size: stat.size,
+                    events
+                  });
+                }
+                for (const event of events) {
+                  if (event.time < sevenDaysAgo) continue;
+                  if (event.time >= oneDayAgo) addUsageToBucket(usage24h, event);
+                  if (event.time >= threeDaysAgo) addUsageToBucket(usage3d, event);
+                  addUsageToBucket(usage7d, event);
                 }
               } catch (e) {
+                unreadableFiles++;
+                tokenUsageFileCache.delete(filePath);
               }
             })
           );
           await new Promise((resolve) => setImmediate(resolve));
+        }
+        for (const filePath of tokenUsageFileCache.keys()) {
+          if (!seenFiles.has(filePath)) tokenUsageFileCache.delete(filePath);
         }
         const finalizeBucket = (bucket) => ({
           ...bucket,
@@ -2164,6 +2559,10 @@ var require_tokens = __commonJS({
           tokensWithCache: bucket.input + bucket.output + bucket.cacheRead + bucket.cacheWrite
         });
         const result = {
+          available: jsonlFiles.length > 0 && unreadableFiles === 0,
+          source: "legacy-jsonl",
+          period: "24h",
+          updatedAt: Date.now(),
           // Primary (24h) for backward compatibility
           ...finalizeBucket(usage24h),
           // All three windows
@@ -2183,12 +2582,17 @@ var require_tokens = __commonJS({
       }
     }
     function getDailyTokenUsage2(getOpenClawDir2) {
+      const modern = usageReportCache.get();
+      if (modern) return modern;
       const now = Date.now();
       const isStale = now - tokenUsageCache.timestamp > TOKEN_USAGE_CACHE_TTL;
       if (isStale && !tokenUsageCache.refreshing && getOpenClawDir2) {
         refreshTokenUsageAsync2(getOpenClawDir2);
       }
       const emptyResult = {
+        available: false,
+        source: "unavailable",
+        period: "Usage unavailable",
         input: 0,
         output: 0,
         cacheRead: 0,
@@ -2230,7 +2634,11 @@ var require_tokens = __commonJS({
           }
         }
       };
-      return tokenUsageCache.data || emptyResult;
+      return tokenUsageCache.data ? {
+        ...tokenUsageCache.data,
+        available: tokenUsageCache.data.available && now - tokenUsageCache.timestamp < 9e5,
+        stale: now - tokenUsageCache.timestamp >= 9e5
+      } : emptyResult;
     }
     function calculateCostForBucket(bucket, rates = TOKEN_RATES) {
       const inputCost = bucket.input / 1e6 * rates.input;
@@ -2245,81 +2653,68 @@ var require_tokens = __commonJS({
         totalCost: inputCost + outputCost + cacheReadCost + cacheWriteCost
       };
     }
-    function getCostBreakdown2(config, getSessions, getOpenClawDir2) {
-      const usage = getDailyTokenUsage2(getOpenClawDir2);
-      if (!usage) {
-        return { error: "Failed to get usage data" };
-      }
-      const costs = calculateCostForBucket(usage);
-      const planCost = config.billing?.claudePlanCost || 200;
-      const planName = config.billing?.claudePlanName || "Claude Code Max";
-      const windowConfigs = {
-        "24h": { days: 1, label: "24h" },
-        "3d": { days: 3, label: "3dma" },
-        "7d": { days: 7, label: "7dma" }
-      };
+    function buildCostBreakdown(usage, topSessions = []) {
+      const available = usage?.available === true;
+      const missing = usage?.missingCostEntries || 0;
+      const costKnown = available && missing === 0 && Number.isFinite(usage.cost);
+      const num = (key) => available && Number.isFinite(usage[key]) ? usage[key] : null;
       const windows = {};
-      for (const [key, windowConfig] of Object.entries(windowConfigs)) {
-        const bucket = usage.windows?.[key] || usage;
-        const bucketCosts = calculateCostForBucket(bucket);
-        const dailyAvg = bucketCosts.totalCost / windowConfig.days;
-        const monthlyProjected = dailyAvg * 30;
-        const monthlySavings = monthlyProjected - planCost;
+      for (const [key, days] of [
+        ["24h", 1],
+        ["3d", 3],
+        ["7d", 7]
+      ]) {
+        const bucket = usage?.windows?.[key];
+        const complete = available && bucket && !(bucket.missingCostEntries > 0) && Number.isFinite(bucket.cost);
         windows[key] = {
-          label: windowConfig.label,
-          days: windowConfig.days,
-          totalCost: bucketCosts.totalCost,
-          dailyAvg,
-          monthlyProjected,
-          monthlySavings,
-          savingsPercent: monthlySavings > 0 ? Math.round(monthlySavings / monthlyProjected * 100) : 0,
-          requests: bucket.requests,
-          tokens: {
-            input: bucket.input,
-            output: bucket.output,
-            cacheRead: bucket.cacheRead,
-            cacheWrite: bucket.cacheWrite
-          }
+          label: key === "24h" ? usage?.period : `${days}-day average`,
+          totalCost: complete ? bucket.cost : null,
+          dailyAvg: complete ? bucket.cost / days : null,
+          recordedCost: available && Number.isFinite(bucket?.cost) ? bucket.cost : null,
+          missingCostEntries: available ? bucket?.missingCostEntries ?? null : null
         };
       }
       return {
-        // Raw token counts (24h for backward compatibility)
-        inputTokens: usage.input,
-        outputTokens: usage.output,
-        cacheRead: usage.cacheRead,
-        cacheWrite: usage.cacheWrite,
-        requests: usage.requests,
-        // Pricing rates
-        rates: {
-          input: TOKEN_RATES.input.toFixed(2),
-          output: TOKEN_RATES.output.toFixed(2),
-          cacheRead: TOKEN_RATES.cacheRead.toFixed(2),
-          cacheWrite: TOKEN_RATES.cacheWrite.toFixed(2)
-        },
-        // Cost calculation breakdown (24h)
+        status: available ? missing ? "partial" : "available" : "unavailable",
+        period: usage?.period || "Usage unavailable",
+        source: usage?.source || "unavailable",
+        updatedAt: usage?.updatedAt || null,
+        refreshing: usage?.refreshing || false,
+        stale: usage?.stale || false,
+        missingCostEntries: missing,
+        inputTokens: num("input"),
+        outputTokens: num("output"),
+        cacheRead: num("cacheRead"),
+        cacheWrite: num("cacheWrite"),
+        requests: num("requests"),
+        totalCost: costKnown ? usage.cost : null,
+        recordedCost: num("cost"),
         calculation: {
-          inputCost: costs.inputCost,
-          outputCost: costs.outputCost,
-          cacheReadCost: costs.cacheReadCost,
-          cacheWriteCost: costs.cacheWriteCost
+          inputCost: costKnown ? num("inputCost") : null,
+          outputCost: costKnown ? num("outputCost") : null,
+          cacheReadCost: costKnown ? num("cacheReadCost") : null,
+          cacheWriteCost: costKnown ? num("cacheWriteCost") : null
         },
-        // Totals (24h for backward compatibility)
-        totalCost: costs.totalCost,
-        planCost,
-        planName,
-        // Period
-        period: "24 hours",
-        // Multi-window data for moving averages
+        pricingBasis: "Recorded per-model API-equivalent costs from OpenClaw; not subscription charges.",
+        savingsReason: "Subscription savings are not inferred from usage or account quota.",
         windows,
-        // Top sessions by tokens
-        topSessions: getTopSessionsByTokens(5, getSessions)
+        topSessions,
+        topSessionsScope: "Current sessions \u2014 lifetime token totals, not this reporting window."
       };
+    }
+    function getCostBreakdown2(config, getSessions, getOpenClawDir2) {
+      return buildCostBreakdown(
+        getDailyTokenUsage2(getOpenClawDir2),
+        getTopSessionsByTokens(5, getSessions)
+      );
     }
     function getTopSessionsByTokens(limit = 5, getSessions) {
       try {
         const sessions2 = getSessions({ limit: null });
         return sessions2.filter((s) => s.tokens > 0).sort((a, b) => b.tokens - a.tokens).slice(0, limit).map((s) => ({
           label: s.label,
+          channelId: s.channelId || null,
+          channelNameStatus: s.channelNameStatus || null,
           tokens: s.tokens,
           channel: s.channel,
           active: s.active
@@ -2329,7 +2724,7 @@ var require_tokens = __commonJS({
         return [];
       }
     }
-    function getTokenStats2(sessions2, capacity, config = {}) {
+    function getTokenStats2(sessions2, capacity) {
       let activeMainCount = capacity?.main?.active ?? 0;
       let activeSubagentCount = capacity?.subagent?.active ?? 0;
       let activeCount = activeMainCount + activeSubagentCount;
@@ -2351,70 +2746,53 @@ var require_tokens = __commonJS({
         });
       }
       const usage = getDailyTokenUsage2();
-      const totalInput = usage?.input || 0;
-      const totalOutput = usage?.output || 0;
-      const total = totalInput + totalOutput;
-      const costs = calculateCostForBucket(usage);
-      const estCost = costs.totalCost;
-      const planCost = config?.billing?.claudePlanCost ?? 200;
-      const planName = config?.billing?.claudePlanName ?? "Claude Code Max";
-      const monthlyApiCost = estCost * 30;
-      const monthlySavings = monthlyApiCost - planCost;
-      const savingsPositive = monthlySavings > 0;
-      const sessionCount = sessions2?.length || 1;
-      const avgTokensPerSession = Math.round(total / sessionCount);
-      const avgCostPerSession = estCost / sessionCount;
-      const windowConfigs = {
-        "24h": { days: 1, label: "24h" },
-        "3dma": { days: 3, label: "3dma" },
-        "7dma": { days: 7, label: "7dma" }
-      };
-      const savingsWindows = {};
-      for (const [key, windowConfig] of Object.entries(windowConfigs)) {
-        const bucketKey = key.replace("dma", "d").replace("24h", "24h");
-        const bucket = usage.windows?.[bucketKey === "24h" ? "24h" : bucketKey] || usage;
-        const bucketCosts = calculateCostForBucket(bucket);
-        const dailyAvg = bucketCosts.totalCost / windowConfig.days;
-        const monthlyProjected = dailyAvg * 30;
-        const windowSavings = monthlyProjected - planCost;
-        const windowSavingsPositive = windowSavings > 0;
-        savingsWindows[key] = {
-          label: windowConfig.label,
-          estCost: `$${formatNumber(dailyAvg)}`,
-          estMonthlyCost: `$${Math.round(monthlyProjected).toLocaleString()}`,
-          estSavings: windowSavingsPositive ? `$${formatNumber(windowSavings)}/mo` : null,
-          savingsPercent: windowSavingsPositive ? Math.round(windowSavings / monthlyProjected * 100) : 0,
-          requests: bucket.requests
-        };
-      }
+      const report = buildCostBreakdown(usage);
+      const known = usage?.available === true;
+      const total = known ? usage.input + usage.output : null;
+      const money = (value) => Number.isFinite(value) ? `$${formatNumber(value)}` : "N/A";
       return {
-        total: formatTokens(total),
-        input: formatTokens(totalInput),
-        output: formatTokens(totalOutput),
-        cacheRead: formatTokens(usage?.cacheRead || 0),
-        cacheWrite: formatTokens(usage?.cacheWrite || 0),
-        requests: usage?.requests || 0,
+        total: known ? formatTokens(total) : "N/A",
+        input: known ? formatTokens(usage.input) : "N/A",
+        output: known ? formatTokens(usage.output) : "N/A",
+        cacheRead: known ? formatTokens(usage.cacheRead) : "N/A",
+        cacheWrite: known ? formatTokens(usage.cacheWrite) : "N/A",
+        requests: known ? usage.requests : null,
         activeCount,
         activeMainCount,
         activeSubagentCount,
         mainLimit,
         subagentLimit,
-        estCost: `$${formatNumber(estCost)}`,
-        planCost: `$${planCost.toFixed(0)}`,
-        planName,
-        // 24h savings (backward compatible)
-        estSavings: savingsPositive ? `$${formatNumber(monthlySavings)}/mo` : null,
-        savingsPercent: savingsPositive ? Math.round(monthlySavings / monthlyApiCost * 100) : 0,
-        estMonthlyCost: `$${Math.round(monthlyApiCost).toLocaleString()}`,
-        // Multi-window savings (24h, 3da, 7da)
-        savingsWindows,
-        // Per-session averages
-        avgTokensPerSession: formatTokens(avgTokensPerSession),
-        avgCostPerSession: `$${avgCostPerSession.toFixed(2)}`,
-        sessionCount
+        estCost: money(report.totalCost),
+        recordedCost: Number.isFinite(report.recordedCost) ? money(report.recordedCost) : null,
+        missingCostEntries: report.missingCostEntries,
+        costWindows: report.windows,
+        costPeriod: report.period,
+        costStatus: report.status,
+        costRefreshing: report.refreshing,
+        planCost: "N/A",
+        planName: "Plan not inferred",
+        estSavings: null,
+        savingsPercent: 0,
+        estMonthlyCost: "N/A",
+        savingsWindows: Object.fromEntries(
+          Object.entries(report.windows).map(([key, w]) => [
+            key === "24h" ? key : key + "ma",
+            {
+              label: w.label,
+              estCost: money(w.dailyAvg),
+              estMonthlyCost: "N/A",
+              estSavings: null,
+              savingsPercent: 0
+            }
+          ])
+        ),
+        avgTokensPerSession: "N/A",
+        avgCostPerSession: "N/A",
+        sessionCount: sessions2?.length || 0
       };
     }
     function startTokenUsageRefresh2(getOpenClawDir2) {
+      void usageReportCache.refresh();
       refreshTokenUsageAsync2(getOpenClawDir2);
       if (refreshInterval) {
         clearInterval(refreshInterval);
@@ -2427,10 +2805,12 @@ var require_tokens = __commonJS({
     module2.exports = {
       TOKEN_RATES,
       emptyUsageBucket,
+      collectTokenUsageEvents,
       refreshTokenUsageAsync: refreshTokenUsageAsync2,
       getDailyTokenUsage: getDailyTokenUsage2,
       calculateCostForBucket,
       getCostBreakdown: getCostBreakdown2,
+      buildCostBreakdown,
       getTopSessionsByTokens,
       getTokenStats: getTokenStats2,
       startTokenUsageRefresh: startTokenUsageRefresh2
@@ -2445,11 +2825,13 @@ var require_llm_usage = __commonJS({
     var path2 = require("path");
     var { execFile } = require("child_process");
     var { getSafeEnv } = require_openclaw();
-    var llmUsageCache = { data: null, timestamp: 0, refreshing: false };
+    var llmUsageCache = { data: null, timestamp: 0, refreshing: false, lastAttempt: 0 };
     var LLM_CACHE_TTL_MS = 6e4;
+    var MAX_USAGE_AGE_MS = 2 * LLM_CACHE_TTL_MS;
     function refreshLlmUsageAsync() {
-      if (llmUsageCache.refreshing) return;
+      if (llmUsageCache.refreshing || Date.now() - llmUsageCache.lastAttempt < LLM_CACHE_TTL_MS) return;
       llmUsageCache.refreshing = true;
+      llmUsageCache.lastAttempt = Date.now();
       const profile = process.env.OPENCLAW_PROFILE || "";
       const args2 = profile ? ["--profile", profile, "status", "--usage", "--json"] : ["status", "--usage", "--json"];
       execFile(
@@ -2478,12 +2860,53 @@ var require_llm_usage = __commonJS({
         }
       );
     }
+    function validPercent(value) {
+      return typeof value === "number" && Number.isFinite(value) && value >= 0 && value <= 100 ? Math.round(value) : null;
+    }
+    function applyUsageFreshness(data, now = Date.now()) {
+      const observedAt = Date.parse(data.timestamp);
+      const stale = !Number.isFinite(observedAt) || observedAt > now + 6e4 || now - observedAt > MAX_USAGE_AGE_MS;
+      if (!stale) return { ...data, stale: false };
+      return {
+        ...data,
+        stale: true,
+        codex: {
+          ...data.codex,
+          status: "stale",
+          windows: (data.codex?.windows || []).map((window) => ({ ...window, usedPercent: null })),
+          usage5hPct: null,
+          usageDayPct: null,
+          usageWeekPct: null,
+          tasksToday: null
+        }
+      };
+    }
     function transformLiveUsageData(usage) {
       const anthropic = usage.providers?.find((p) => p.provider === "anthropic");
       const codexProvider = usage.providers?.find((p) => p.provider === "openai-codex");
+      const openai = usage.providers?.find((p) => p.provider === "openai") || codexProvider;
+      const timestamp = usage.updatedAt ? new Date(usage.updatedAt).toISOString() : (/* @__PURE__ */ new Date()).toISOString();
+      const windows = (openai?.error ? [] : openai?.windows || []).map((window) => ({
+        label: String(window.label || "Usage"),
+        usedPercent: validPercent(window.usedPercent),
+        resetAt: Number.isFinite(window.resetAt) ? window.resetAt : null
+      }));
+      const codex = {
+        provider: openai?.provider || null,
+        plan: typeof openai?.plan === "string" ? openai.plan : null,
+        status: openai?.error ? "error" : windows.some((w) => w.usedPercent !== null) ? "available" : "unavailable",
+        error: openai?.error || null,
+        windows,
+        lastSynced: timestamp,
+        sessionsToday: null,
+        tasksToday: null,
+        usage5hPct: windows.find((w) => w.label === "5h")?.usedPercent ?? null,
+        usageDayPct: windows.find((w) => w.label === "Day")?.usedPercent ?? null,
+        usageWeekPct: windows.find((w) => w.label === "Week")?.usedPercent ?? null
+      };
       if (anthropic?.error) {
         return {
-          timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+          timestamp,
           source: "error",
           error: anthropic.error,
           errorType: anthropic.error.includes("403") ? "auth" : "unknown",
@@ -2493,7 +2916,7 @@ var require_llm_usage = __commonJS({
             sonnet: { usedPct: null, remainingPct: null, resets: null, error: anthropic.error },
             lastSynced: null
           },
-          codex: { sessionsToday: 0, tasksToday: 0, usage5hPct: 0, usageDayPct: 0 },
+          codex,
           routing: {
             total: 0,
             claudeTasks: 0,
@@ -2507,8 +2930,6 @@ var require_llm_usage = __commonJS({
       const session5h = anthropic?.windows?.find((w) => w.label === "5h");
       const weekAll = anthropic?.windows?.find((w) => w.label === "Week");
       const sonnetWeek = anthropic?.windows?.find((w) => w.label === "Sonnet");
-      const codex5h = codexProvider?.windows?.find((w) => w.label === "5h");
-      const codexDay = codexProvider?.windows?.find((w) => w.label === "Day");
       const formatReset = (resetAt) => {
         if (!resetAt) return "?";
         const diff = resetAt - Date.now();
@@ -2518,32 +2939,27 @@ var require_llm_usage = __commonJS({
         return Math.round(diff / 864e5) + "d";
       };
       return {
-        timestamp: (/* @__PURE__ */ new Date()).toISOString(),
+        timestamp,
         source: "live",
         claude: {
           session: {
-            usedPct: Math.round(session5h?.usedPercent || 0),
-            remainingPct: Math.round(100 - (session5h?.usedPercent || 0)),
+            usedPct: validPercent(session5h?.usedPercent),
+            remainingPct: validPercent(session5h?.usedPercent) === null ? null : 100 - validPercent(session5h?.usedPercent),
             resetsIn: formatReset(session5h?.resetAt)
           },
           weekly: {
-            usedPct: Math.round(weekAll?.usedPercent || 0),
-            remainingPct: Math.round(100 - (weekAll?.usedPercent || 0)),
+            usedPct: validPercent(weekAll?.usedPercent),
+            remainingPct: validPercent(weekAll?.usedPercent) === null ? null : 100 - validPercent(weekAll?.usedPercent),
             resets: formatReset(weekAll?.resetAt)
           },
           sonnet: {
-            usedPct: Math.round(sonnetWeek?.usedPercent || 0),
-            remainingPct: Math.round(100 - (sonnetWeek?.usedPercent || 0)),
+            usedPct: validPercent(sonnetWeek?.usedPercent),
+            remainingPct: validPercent(sonnetWeek?.usedPercent) === null ? null : 100 - validPercent(sonnetWeek?.usedPercent),
             resets: formatReset(sonnetWeek?.resetAt)
           },
           lastSynced: (/* @__PURE__ */ new Date()).toISOString()
         },
-        codex: {
-          sessionsToday: 0,
-          tasksToday: 0,
-          usage5hPct: Math.round(codex5h?.usedPercent || 0),
-          usageDayPct: Math.round(codexDay?.usedPercent || 0)
-        },
+        codex,
         routing: { total: 0, claudeTasks: 0, codexTasks: 0, claudePct: 0, codexPct: 0, codexFloor: 20 }
       };
     }
@@ -2552,8 +2968,8 @@ var require_llm_usage = __commonJS({
       if (!llmUsageCache.data || now - llmUsageCache.timestamp > LLM_CACHE_TTL_MS) {
         refreshLlmUsageAsync();
       }
-      if (llmUsageCache.data && llmUsageCache.data.source !== "error") {
-        return llmUsageCache.data;
+      if (llmUsageCache.data) {
+        return applyUsageFreshness(llmUsageCache.data);
       }
       const stateFile = path2.join(statePath, "llm-routing.json");
       try {
@@ -2584,10 +3000,15 @@ var require_llm_usage = __commonJS({
                 lastSynced: data.claude?.last_synced || null
               },
               codex: {
-                sessionsToday: data.codex?.sessions_today || 0,
-                tasksToday: data.codex?.tasks_today || 0,
-                usage5hPct: data.codex?.usage_5h_pct || 0,
-                usageDayPct: data.codex?.usage_day_pct || 0
+                status: "unavailable",
+                plan: null,
+                windows: [],
+                lastSynced: null,
+                sessionsToday: null,
+                tasksToday: null,
+                usage5hPct: null,
+                usageDayPct: null,
+                usageWeekPct: null
               },
               routing: {
                 total: data.routing?.total_tasks || 0,
@@ -2606,15 +3027,30 @@ var require_llm_usage = __commonJS({
       return {
         timestamp: (/* @__PURE__ */ new Date()).toISOString(),
         source: "error",
-        error: "API key lacks user:profile OAuth scope",
-        errorType: "auth",
+        error: "Usage data unavailable",
+        errorType: "unavailable",
         claude: {
-          session: { usedPct: null, remainingPct: null, resetsIn: null, error: "Auth required" },
-          weekly: { usedPct: null, remainingPct: null, resets: null, error: "Auth required" },
-          sonnet: { usedPct: null, remainingPct: null, resets: null, error: "Auth required" },
+          session: {
+            usedPct: null,
+            remainingPct: null,
+            resetsIn: null,
+            error: "Usage data unavailable"
+          },
+          weekly: { usedPct: null, remainingPct: null, resets: null, error: "Usage data unavailable" },
+          sonnet: { usedPct: null, remainingPct: null, resets: null, error: "Usage data unavailable" },
           lastSynced: null
         },
-        codex: { sessionsToday: 0, tasksToday: 0, usage5hPct: 0, usageDayPct: 0 },
+        codex: {
+          status: "unavailable",
+          plan: null,
+          windows: [],
+          lastSynced: null,
+          sessionsToday: null,
+          tasksToday: null,
+          usage5hPct: null,
+          usageDayPct: null,
+          usageWeekPct: null
+        },
         routing: { total: 0, claudeTasks: 0, codexTasks: 0, claudePct: 0, codexPct: 0, codexFloor: 20 }
       };
     }
@@ -2686,6 +3122,7 @@ var require_llm_usage = __commonJS({
       setInterval(() => refreshLlmUsageAsync(), LLM_CACHE_TTL_MS);
     }
     module2.exports = {
+      applyUsageFreshness,
       refreshLlmUsageAsync,
       transformLiveUsageData,
       getLlmUsage: getLlmUsage2,
@@ -2698,6 +3135,7 @@ var require_llm_usage = __commonJS({
 // src/actions.js
 var require_actions = __commonJS({
   "src/actions.js"(exports2, module2) {
+    var { SESSION_LIST_COMMAND } = require_openclaw();
     var ALLOWED_ACTIONS = /* @__PURE__ */ new Set([
       "gateway-status",
       "gateway-restart",
@@ -2725,7 +3163,7 @@ var require_actions = __commonJS({
             results.note = "Dashboard cannot restart gateway for safety";
             break;
           case "sessions-list":
-            results.output = runOpenClaw2("sessions 2>&1") || "No sessions";
+            results.output = runOpenClaw2(SESSION_LIST_COMMAND) || "No sessions";
             results.success = true;
             break;
           case "cron-list":
@@ -2734,7 +3172,7 @@ var require_actions = __commonJS({
             break;
           case "health-check": {
             const gateway = runOpenClaw2("gateway status 2>&1");
-            const sessions2 = runOpenClaw2("sessions --json 2>&1");
+            const sessions2 = runOpenClaw2(`${SESSION_LIST_COMMAND} --json`);
             let sessionCount = 0;
             try {
               const data = JSON.parse(sessions2);
@@ -2750,7 +3188,7 @@ var require_actions = __commonJS({
             break;
           }
           case "clear-stale-sessions": {
-            const staleOutput = runOpenClaw2("sessions --json 2>&1");
+            const staleOutput = runOpenClaw2(`${SESSION_LIST_COMMAND} --json`);
             let staleCount = 0;
             try {
               const staleJson = extractJSON2(staleOutput);
@@ -2815,26 +3253,34 @@ var require_data = __commonJS({
 // src/state.js
 var require_state = __commonJS({
   "src/state.js"(exports2, module2) {
+    var { SESSION_LIST_COMMAND } = require_openclaw();
     var fs2 = require("fs");
     var os = require("os");
     var path2 = require("path");
     var { execFileSync } = require("child_process");
     var { formatBytes, formatTimeAgo } = require_utils();
     function createStateModule2(deps) {
+      const legacyExtensions = { schemaVersion: 1, mode: "legacy", items: [] };
       const {
         CONFIG: CONFIG2,
         getOpenClawDir: getOpenClawDir2,
         getSessions,
         getSystemVitals: getSystemVitals2,
-        getCronJobs: getCronJobs2,
+        getCronJobs,
+        getCronStatus = () => "available",
         loadOperators: loadOperators2,
+        calculateOperatorStats: calculateOperatorStats2,
         getLlmUsage: getLlmUsage2,
         getDailyTokenUsage: getDailyTokenUsage2,
         getTokenStats: getTokenStats2,
         getCerebroTopics: getCerebroTopics2,
         runOpenClaw: runOpenClaw2,
         extractJSON: extractJSON2,
-        readTranscript
+        readTranscript,
+        getIntelStats,
+        getPipelineStats,
+        getMonetizationStats,
+        getExtensions = () => legacyExtensions
       } = deps;
       const PATHS2 = CONFIG2.paths;
       let cachedState = null;
@@ -2889,7 +3335,21 @@ var require_state = __commonJS({
         }
         return activities.reverse();
       }
-      function getCapacity() {
+      function countActiveSessionsForCapacity(result, sessions2) {
+        const fiveMinMs = 5 * 60 * 1e3;
+        for (const s of sessions2) {
+          const ageMs = typeof s.ageMs === "number" ? s.ageMs : (s.minutesAgo || 0) * 60 * 1e3;
+          if (ageMs > fiveMinMs) continue;
+          const key = s.key || s.sessionKey || "";
+          if (key.includes(":subagent:") || key.includes(":cron:")) {
+            result.subagent.active++;
+          } else {
+            result.main.active++;
+          }
+        }
+        return result;
+      }
+      function getCapacity(preloadedSessions = null) {
         const result = {
           main: { active: 0, max: 12 },
           subagent: { active: 0, max: 24 }
@@ -2908,23 +3368,15 @@ var require_state = __commonJS({
           }
         } catch (e) {
         }
+        if (Array.isArray(preloadedSessions)) {
+          return countActiveSessionsForCapacity(result, preloadedSessions);
+        }
         try {
-          const output = runOpenClaw2("sessions --json 2>/dev/null");
+          const output = runOpenClaw2(`${SESSION_LIST_COMMAND} --json`);
           const jsonStr = extractJSON2(output);
           if (jsonStr) {
             const data = JSON.parse(jsonStr);
-            const sessions2 = data.sessions || [];
-            const fiveMinMs = 5 * 60 * 1e3;
-            for (const s of sessions2) {
-              if (s.ageMs > fiveMinMs) continue;
-              const key = s.key || "";
-              if (key.includes(":subagent:") || key.includes(":cron:")) {
-                result.subagent.active++;
-              } else {
-                result.main.active++;
-              }
-            }
-            return result;
+            return countActiveSessionsForCapacity(result, data.sessions || []);
           }
         } catch (e) {
           console.error("Failed to get capacity from sessions, falling back to filesystem:", e.message);
@@ -3068,7 +3520,9 @@ var require_state = __commonJS({
       }
       function getFullState() {
         const now = Date.now();
-        if (cachedState && now - lastStateUpdate < STATE_CACHE_TTL) {
+        const extensions = getExtensions();
+        if (cachedState && cachedState.extensions.mode === extensions.mode && now - lastStateUpdate < STATE_CACHE_TTL) {
+          if (cachedState.extensions !== extensions) cachedState = { ...cachedState, extensions };
           return cachedState;
         }
         let sessions2 = [];
@@ -3082,6 +3536,9 @@ var require_state = __commonJS({
         let memory = {};
         let cerebro = {};
         let subagents = [];
+        let intel = {};
+        let pipeline = {};
+        let monetization = {};
         let allSessions = [];
         let totalSessionCount = 0;
         try {
@@ -3097,7 +3554,7 @@ var require_state = __commonJS({
           console.error("[State] vitals:", e.message);
         }
         try {
-          capacity = getCapacity();
+          capacity = getCapacity(allSessions);
         } catch (e) {
           console.error("[State] capacity:", e.message);
         }
@@ -3121,22 +3578,7 @@ var require_state = __commonJS({
         }
         try {
           const operatorData = loadOperators2();
-          const operatorsWithStats = operatorData.operators.map((op) => {
-            const userSessions = allSessions.filter(
-              (s) => s.originator?.userId === op.id || s.originator?.userId === op.metadata?.slackId
-            );
-            return {
-              ...op,
-              stats: {
-                activeSessions: userSessions.filter((s) => s.active).length,
-                totalSessions: userSessions.length,
-                lastSeen: userSessions.length > 0 ? new Date(
-                  Date.now() - Math.min(...userSessions.map((s) => s.minutesAgo)) * 6e4
-                ).toISOString() : op.lastSeen
-              }
-            };
-          });
-          operators = { ...operatorData, operators: operatorsWithStats };
+          operators = calculateOperatorStats2(operatorData, allSessions);
         } catch (e) {
           console.error("[State] operators:", e.message);
         }
@@ -3146,7 +3588,7 @@ var require_state = __commonJS({
           console.error("[State] llmUsage:", e.message);
         }
         try {
-          cron = getCronJobs2();
+          cron = getCronJobs();
         } catch (e) {
           console.error("[State] cron:", e.message);
         }
@@ -3179,6 +3621,23 @@ var require_state = __commonJS({
         } catch (e) {
           console.error("[State] subagents:", e.message);
         }
+        if (extensions.mode === "legacy") {
+          try {
+            intel = getIntelStats();
+          } catch (e) {
+            console.error("[State] intel:", e.message);
+          }
+          try {
+            pipeline = getPipelineStats();
+          } catch (e) {
+            console.error("[State] pipeline:", e.message);
+          }
+          try {
+            monetization = getMonetizationStats();
+          } catch (e) {
+            console.error("[State] monetization:", e.message);
+          }
+        }
         cachedState = {
           vitals,
           sessions: sessions2,
@@ -3188,9 +3647,12 @@ var require_state = __commonJS({
           operators,
           llmUsage,
           cron,
+          cronStatus: getCronStatus(),
           memory,
           cerebro,
           subagents,
+          ...extensions.mode === "legacy" ? { intel, pipeline, monetization } : {},
+          extensions,
           pagination: {
             page: 1,
             pageSize: 20,
@@ -3230,7 +3692,7 @@ var require_state = __commonJS({
       function getSubagentStatus() {
         const subagents = [];
         try {
-          const output = runOpenClaw2("sessions --json 2>/dev/null");
+          const output = runOpenClaw2(`${SESSION_LIST_COMMAND} --json`);
           const jsonStr = extractJSON2(output);
           if (jsonStr) {
             const data = JSON.parse(jsonStr);
@@ -3319,6 +3781,1096 @@ var require_state = __commonJS({
   }
 });
 
+// src/extension-redaction.js
+var require_extension_redaction = __commonJS({
+  "src/extension-redaction.js"(exports2, module2) {
+    function redactExtensionText(value) {
+      return String(value).replace(
+        /-----BEGIN [^-\r\n]*PRIVATE KEY-----[\s\S]*?(?:-----END [^-\r\n]*PRIVATE KEY-----|$)/g,
+        "[REDACTED PRIVATE KEY]"
+      ).replace(/\b(Basic|Bearer)\s+[A-Za-z0-9._~+/=-]{8,}/gi, "$1 [REDACTED]").replace(/\bBearer\s+[A-Za-z0-9._~+/=-]{8,}/gi, "Bearer [REDACTED]").replace(
+        /\b(?:gh[pousr]_[A-Za-z0-9]{16,}|github_pat_[A-Za-z0-9_]{16,}|sk-[A-Za-z0-9_-]{16,}|xox[baprs]-[A-Za-z0-9-]{16,})\b/g,
+        "[REDACTED]"
+      ).replace(
+        /\b((?:api[_ -]?key|access[_ -]?token|refresh[_ -]?token|client[_ -]?secret|password|authorization)\s*[:=]\s*)(?:"[^"\r\n]*"|'[^'\r\n]*'|[^\s,;]+)/gi,
+        "$1[REDACTED]"
+      );
+    }
+    module2.exports = { redactExtensionText };
+  }
+});
+
+// src/extensions.js
+var require_extensions = __commonJS({
+  "src/extensions.js"(exports2, module2) {
+    var fs2 = require("node:fs");
+    var path2 = require("node:path");
+    var { redactExtensionText } = require_extension_redaction();
+    var LIMITS = Object.freeze({
+      selectionBytes: 16384,
+      snapshotBytes: 262144,
+      extensions: 8,
+      panels: 8,
+      metrics: 24,
+      columns: 12,
+      rows: 100,
+      text: 2048,
+      label: 256
+    });
+    var ID = /^[a-z][a-z0-9-]*\.[a-z][a-z0-9-]*$/;
+    var KEY = /^[a-z][a-z0-9_-]*$/;
+    var VERSION = /^\d+\.\d+\.\d+$/;
+    var MODES = /* @__PURE__ */ new Set(["core", "legacy", "extensions"]);
+    var STALE_MS = 5 * 60 * 1e3;
+    function record(value2) {
+      return value2 !== null && typeof value2 === "object" && !Array.isArray(value2);
+    }
+    function text(value2, max = LIMITS.text) {
+      return typeof value2 === "string" && value2.length <= max;
+    }
+    function value(value2) {
+      return text(value2) || typeof value2 === "number" && Number.isFinite(value2);
+    }
+    function key(value2) {
+      return text(value2, 64) && KEY.test(value2) && !["constructor", "prototype", "__proto__"].includes(value2);
+    }
+    function localized(label) {
+      if (!record(label) || !text(label.en, LIMITS.label) || !label.en.trim() || !text(label["zh-CN"], LIMITS.label) || !label["zh-CN"].trim())
+        throw new Error("invalid");
+      return { en: redactExtensionText(label.en), "zh-CN": redactExtensionText(label["zh-CN"]) };
+    }
+    function list(items, max) {
+      if (!Array.isArray(items) || items.length > max) throw new Error("invalid");
+      return items;
+    }
+    function validId(id) {
+      return text(id, 100) && ID.test(id);
+    }
+    function validVersion(version) {
+      return text(version, 32) && VERSION.test(version);
+    }
+    function unique(items) {
+      return new Set(items).size === items.length;
+    }
+    function validatePanels(panels) {
+      const result = list(panels, LIMITS.panels).map((panel) => {
+        if (!record(panel) || !key(panel.id)) throw new Error("invalid");
+        const clean = { id: panel.id, type: panel.type, title: localized(panel.title) };
+        if (panel.type === "metrics") {
+          clean.metrics = list(panel.metrics, LIMITS.metrics).map((metric) => {
+            if (!record(metric) || !value(metric.value)) throw new Error("invalid");
+            return {
+              label: localized(metric.label),
+              value: typeof metric.value === "string" ? redactExtensionText(metric.value) : metric.value
+            };
+          });
+        } else if (panel.type === "table") {
+          clean.columns = list(panel.columns, LIMITS.columns).map((column) => {
+            if (!record(column) || !key(column.key)) throw new Error("invalid");
+            return { key: column.key, label: localized(column.label) };
+          });
+          if (!clean.columns.length || !unique(clean.columns.map((c) => c.key)))
+            throw new Error("invalid");
+          clean.rows = list(panel.rows, LIMITS.rows).map((row) => {
+            if (!record(row)) throw new Error("invalid");
+            const result2 = {};
+            for (const column of clean.columns) {
+              const cell = row[column.key];
+              if (cell !== null && !value(cell)) throw new Error("invalid");
+              result2[column.key] = typeof cell === "string" ? redactExtensionText(cell) : cell;
+            }
+            return result2;
+          });
+        } else throw new Error("invalid");
+        return clean;
+      });
+      if (!unique(result.map((panel) => panel.id))) throw new Error("invalid");
+      return result;
+    }
+    async function readBoundedJson(workspace, relative, maxBytes) {
+      const root = await fs2.promises.realpath(workspace);
+      let filename = root;
+      const segments = relative.split("/");
+      for (let i = 0; i < segments.length; i++) {
+        filename = path2.join(filename, segments[i]);
+        const stat = await fs2.promises.lstat(filename);
+        if (stat.isSymbolicLink() || i < segments.length - 1 && !stat.isDirectory()) {
+          throw new Error("unsafe");
+        }
+      }
+      const parent = await fs2.promises.realpath(path2.dirname(filename));
+      if (parent !== path2.dirname(filename)) throw new Error("unsafe");
+      const handle = await fs2.promises.open(
+        filename,
+        fs2.constants.O_RDONLY | fs2.constants.O_NOFOLLOW | fs2.constants.O_NONBLOCK
+      );
+      try {
+        const stat = await handle.stat();
+        if (!stat.isFile() || stat.size > maxBytes) throw new Error("invalid");
+        const buffer = Buffer.alloc(maxBytes + 1);
+        let bytes = 0;
+        while (bytes <= maxBytes) {
+          const read = await handle.read(buffer, bytes, buffer.length - bytes, bytes);
+          if (!read.bytesRead) break;
+          bytes += read.bytesRead;
+        }
+        if (bytes > maxBytes) throw new Error("invalid");
+        return JSON.parse(buffer.subarray(0, bytes).toString("utf8"));
+      } finally {
+        await handle.close();
+      }
+    }
+    function createExtensionHost2({
+      workspace,
+      profile = "",
+      agentId = "main",
+      mode = process.env.COMMAND_CENTER_MODE,
+      now = Date.now,
+      refreshMs = 5e3,
+      timeoutMs = 1e3,
+      readJson = readBoundedJson
+    }) {
+      let cached = { schemaVersion: 1, mode: "core", items: [], diagnostic: "loading" };
+      let lastRefresh = -Infinity;
+      let inFlight = null;
+      const reads = /* @__PURE__ */ new Map();
+      const explicit = mode !== void 0 && mode !== "";
+      if (explicit && !MODES.has(mode)) {
+        cached = { schemaVersion: 1, mode: "core", items: [], diagnostic: "invalid_mode" };
+      } else if (mode === "core" || mode === "legacy") {
+        cached = { schemaVersion: 1, mode, items: [] };
+      }
+      const fixed = explicit && !MODES.has(mode) || mode === "core" || mode === "legacy";
+      const fail = (diagnostic) => ({ schemaVersion: 1, mode: "core", items: [], diagnostic });
+      async function boundedRead(relative, cap) {
+        let operation = reads.get(relative);
+        if (!operation) {
+          if (reads.size >= LIMITS.extensions + 1) throw new Error("read_limit");
+          operation = Promise.resolve().then(() => readJson(workspace, relative, cap));
+          reads.set(relative, operation);
+          operation.then(
+            () => reads.delete(relative),
+            () => reads.delete(relative)
+          );
+        }
+        let timer;
+        try {
+          return await Promise.race([
+            operation,
+            new Promise((_, reject) => {
+              timer = setTimeout(() => {
+                const error = new Error("timeout");
+                error.code = "ETIMEDOUT";
+                reject(error);
+              }, timeoutMs);
+            })
+          ]);
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+      async function load() {
+        let selection;
+        try {
+          selection = await boundedRead("state/command-center/extensions.json", LIMITS.selectionBytes);
+        } catch (error) {
+          if (error.code === "ENOENT" && !explicit)
+            return { schemaVersion: 1, mode: "legacy", items: [] };
+          return fail(
+            error.code === "ENOENT" ? "selection_unavailable" : error.code === "ETIMEDOUT" ? "refresh_timeout" : "selection_invalid"
+          );
+        }
+        try {
+          if (!record(selection) || selection.schemaVersion !== 1 || selection.profile !== profile || selection.agentId !== agentId || !MODES.has(selection.mode))
+            throw new Error("invalid");
+          list(selection.enabled, LIMITS.extensions);
+          if (!selection.enabled.every(
+            (entry) => record(entry) && validId(entry.id) && validVersion(entry.version)
+          ) || !unique(selection.enabled.map((entry) => entry.id)))
+            throw new Error("invalid");
+        } catch {
+          return fail("selection_invalid");
+        }
+        const selectedMode = explicit ? mode : selection.mode;
+        if (selectedMode !== "extensions") return { schemaVersion: 1, mode: selectedMode, items: [] };
+        const items = await Promise.all(
+          selection.enabled.map(async (entry) => {
+            const unavailable = (status, diagnostic) => ({
+              id: entry.id,
+              status,
+              observedAt: null,
+              panels: [],
+              diagnostic
+            });
+            let snapshot;
+            try {
+              snapshot = await boundedRead(
+                `state/command-center/extensions/${entry.id}.json`,
+                LIMITS.snapshotBytes
+              );
+            } catch (error) {
+              return unavailable(
+                error.code === "ENOENT" ? "unavailable" : "error",
+                error.code === "ENOENT" ? "snapshot_unavailable" : error.code === "ETIMEDOUT" ? "snapshot_timeout" : "snapshot_invalid"
+              );
+            }
+            try {
+              if (!record(snapshot) || snapshot.schemaVersion !== 1 || snapshot.id !== entry.id || snapshot.version !== entry.version || snapshot.profile !== profile || snapshot.agentId !== agentId || !["ready", "unavailable", "error"].includes(snapshot.status) || !text(snapshot.observedAt, 40) || !/^\d{4}-\d{2}-\d{2}T.*(?:Z|[+-]\d{2}:\d{2})$/.test(snapshot.observedAt))
+                throw new Error("invalid");
+              const observed = Date.parse(snapshot.observedAt);
+              if (!Number.isFinite(observed) || observed > now() + 6e4) throw new Error("invalid");
+              const panels = validatePanels(snapshot.panels);
+              return {
+                id: entry.id,
+                status: snapshot.status === "ready" && now() - observed > STALE_MS ? "stale" : snapshot.status,
+                observedAt: snapshot.observedAt,
+                panels: snapshot.status === "ready" ? panels : []
+              };
+            } catch {
+              return unavailable("error", "snapshot_invalid");
+            }
+          })
+        );
+        return { schemaVersion: 1, mode: "extensions", items };
+      }
+      function refresh() {
+        if (fixed) return Promise.resolve(cached);
+        if (inFlight) return inFlight;
+        lastRefresh = now();
+        inFlight = load().then(
+          (result) => {
+            cached = result;
+            return cached;
+          },
+          () => {
+            cached = fail("refresh_failed");
+            return cached;
+          }
+        ).finally(() => {
+          inFlight = null;
+        });
+        return inFlight;
+      }
+      function getState() {
+        if (!fixed && now() - lastRefresh >= refreshMs) void refresh();
+        if (cached.mode === "extensions") {
+          const items = cached.items.map(
+            (item) => item.status === "ready" && now() - Date.parse(item.observedAt) > STALE_MS ? { ...item, status: "stale" } : item
+          );
+          if (items.some((item, i) => item !== cached.items[i])) cached = { ...cached, items };
+        }
+        return cached;
+      }
+      return { getState, refresh };
+    }
+    module2.exports = { createExtensionHost: createExtensionHost2, LIMITS, STALE_MS, validatePanels };
+  }
+});
+
+// src/projects.js
+var require_projects = __commonJS({
+  "src/projects.js"(exports2, module2) {
+    var fs2 = require("node:fs");
+    var path2 = require("node:path");
+    var { redactExtensionText } = require_extension_redaction();
+    var LIMITS = Object.freeze({
+      selectionBytes: 16384,
+      snapshotBytes: 1048576,
+      sources: 8,
+      projects: 200,
+      links: 20
+    });
+    var STALE_MS = 5 * 60 * 1e3;
+    var ID = /^[a-z][a-z0-9-]{0,63}$/;
+    var STAGES = /* @__PURE__ */ new Set(["inbox", "planned", "doing", "review", "done", "canceled", "unknown"]);
+    var HEALTH = /* @__PURE__ */ new Set(["on-track", "at-risk", "blocked", "off-track", "unknown"]);
+    var STATUSES = /* @__PURE__ */ new Set(["ready", "partial", "error", "unavailable"]);
+    var record = (value) => value !== null && typeof value === "object" && !Array.isArray(value);
+    var invalid = () => {
+      throw new Error("invalid");
+    };
+    function string(value, max, required = false) {
+      if (typeof value !== "string" || value.length > max || required && !value.trim() || Array.from(value).some((character) => {
+        const code = character.charCodeAt(0);
+        return code < 32 && ![9, 10, 13].includes(code) || code === 127;
+      }))
+        invalid();
+      return value;
+    }
+    function id(value) {
+      if (typeof value !== "string" || !ID.test(value)) invalid();
+      return value;
+    }
+    function identifier(value) {
+      string(value, 128, true);
+      if (redactExtensionText(value) !== value) invalid();
+      return value;
+    }
+    function display(value, max = 256, required = false) {
+      return redactExtensionText(string(value, max, required));
+    }
+    function list(value, max) {
+      if (!Array.isArray(value) || value.length > max) invalid();
+      return value;
+    }
+    function timestamp(value) {
+      string(value, 40, true);
+      if (!/^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}(?:\.\d{1,9})?(?:Z|[+-]\d{2}:\d{2})$/.test(value) || !Number.isFinite(Date.parse(value)))
+        invalid();
+      date(value.slice(0, 10));
+      return value;
+    }
+    function date(value) {
+      if (value === null || value === void 0) return null;
+      string(value, 10);
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(value) || !Number.isFinite(Date.parse(value)) || new Date(value).toISOString().slice(0, 10) !== value)
+        invalid();
+      return value;
+    }
+    function count(value) {
+      if (value === null || value === void 0) return null;
+      if (!Number.isSafeInteger(value) || value < 0) invalid();
+      return value;
+    }
+    function safeUrl(value) {
+      if (value === null || value === void 0) return null;
+      string(value, 2048, true);
+      let url;
+      try {
+        url = new URL(value);
+      } catch {
+        invalid();
+      }
+      if (url.protocol !== "https:" || url.username || url.password || /\s/.test(value) || redactExtensionText(value) !== value)
+        invalid();
+      return url.href;
+    }
+    function validateProject(project) {
+      if (!record(project) || !["project", "epic", "milestone"].includes(project.kind) || !STAGES.has(project.stage) || !HEALTH.has(project.health))
+        invalid();
+      const counts = project.counts === void 0 ? {} : project.counts;
+      if (!record(counts)) invalid();
+      const normalizedCounts = {
+        total: count(counts.total),
+        done: count(counts.done),
+        blocked: count(counts.blocked)
+      };
+      if (normalizedCounts.total !== null && [normalizedCounts.done, normalizedCounts.blocked].some(
+        (v) => v !== null && v > normalizedCounts.total
+      ))
+        invalid();
+      return {
+        id: identifier(project.id),
+        title: display(project.title, 256, true),
+        url: safeUrl(project.url),
+        kind: project.kind,
+        stage: project.stage,
+        nativeStatus: display(project.nativeStatus),
+        nativeStatusId: project.nativeStatusId === void 0 || project.nativeStatusId === null ? null : identifier(project.nativeStatusId),
+        health: project.health,
+        owner: project.owner === void 0 || project.owner === null ? null : display(project.owner),
+        summary: display(project.summary === void 0 ? "" : project.summary, 2048),
+        updatedAt: project.updatedAt === void 0 || project.updatedAt === null ? null : timestamp(project.updatedAt),
+        targetDate: date(project.targetDate),
+        counts: normalizedCounts,
+        agents: list(project.agents === void 0 ? [] : project.agents, LIMITS.links).map(
+          (v) => display(v, 256, true)
+        ),
+        sessionKeys: list(
+          project.sessionKeys === void 0 ? [] : project.sessionKeys,
+          LIMITS.links
+        ).map((v) => display(v, 512, true)),
+        dependencies: list(
+          project.dependencies === void 0 ? [] : project.dependencies,
+          LIMITS.links
+        ).map((dependency) => {
+          if (!record(dependency)) invalid();
+          return { sourceId: id(dependency.sourceId), projectId: identifier(dependency.projectId) };
+        })
+      };
+    }
+    function validateProjectSnapshot(snapshot, { sourceId, provider, profile = "", agentId = "main", now = Date.now } = {}) {
+      if (!record(snapshot) || snapshot.schemaVersion !== 1 || snapshot.sourceId !== sourceId || snapshot.provider !== provider || snapshot.profile !== profile || snapshot.agentId !== agentId || !STATUSES.has(snapshot.status))
+        invalid();
+      const observedAt = timestamp(snapshot.observedAt);
+      if (Date.parse(observedAt) > now() + 6e4) invalid();
+      const projects = list(snapshot.projects, LIMITS.projects).map(validateProject);
+      if (new Set(projects.map((p) => p.id)).size !== projects.length) invalid();
+      return {
+        status: snapshot.status,
+        observedAt,
+        // Failed imports may carry validated last-known data with its original time.
+        // The host exposes these only as stale, never as successful fresh data.
+        projects
+      };
+    }
+    async function readBoundedJson(workspace, relative, maxBytes) {
+      const root = await fs2.promises.realpath(workspace);
+      const parts = relative.split("/");
+      let filename = root;
+      let expected;
+      for (let i = 0; i < parts.length; i++) {
+        filename = path2.join(filename, parts[i]);
+        const stat = await fs2.promises.lstat(filename);
+        if (stat.isSymbolicLink() || (i < parts.length - 1 ? !stat.isDirectory() : !stat.isFile()))
+          invalid();
+        expected = stat;
+      }
+      if (expected.size > maxBytes || await fs2.promises.realpath(filename) !== filename) invalid();
+      const handle = await fs2.promises.open(
+        filename,
+        fs2.constants.O_RDONLY | fs2.constants.O_NOFOLLOW | fs2.constants.O_NONBLOCK
+      );
+      try {
+        const stat = await handle.stat();
+        if (!stat.isFile() || stat.size > maxBytes || stat.ino !== expected.ino || stat.dev !== expected.dev || await fs2.promises.realpath(filename) !== filename)
+          invalid();
+        const buffer = Buffer.alloc(maxBytes + 1);
+        let bytes = 0;
+        while (bytes <= maxBytes) {
+          const read = await handle.read(buffer, bytes, buffer.length - bytes, bytes);
+          if (!read.bytesRead) break;
+          bytes += read.bytesRead;
+        }
+        if (bytes > maxBytes || await fs2.promises.realpath(filename) !== filename) invalid();
+        return JSON.parse(buffer.subarray(0, bytes).toString("utf8"));
+      } finally {
+        await handle.close();
+      }
+    }
+    function portfolioStatus(sources) {
+      const active = sources.filter((source) => source.status !== "disabled");
+      if (!active.length) return "unavailable";
+      if (active.every((source) => source.status === "ready")) return "ready";
+      if (active.some((source) => ["ready", "partial", "stale"].includes(source.status)))
+        return "partial";
+      return active.some((source) => source.status === "error") ? "error" : "unavailable";
+    }
+    function createProjectHost2({
+      workspace,
+      profile = "",
+      agentId = "main",
+      now = Date.now,
+      readJson = readBoundedJson,
+      timeoutMs = 1e3,
+      refreshMs = 5e3
+    }) {
+      let cached = { schemaVersion: 1, status: "unavailable", sources: [], diagnostic: "loading" };
+      let lastRefresh = -Infinity;
+      let inFlight;
+      const reads = /* @__PURE__ */ new Map();
+      const lastValid = /* @__PURE__ */ new Map();
+      const selectionPath = "state/command-center/project-sources.json";
+      const failed = (diagnostic, status = "error") => ({
+        schemaVersion: 1,
+        status,
+        sources: [],
+        diagnostic
+      });
+      async function boundedRead(relative, cap) {
+        let operation = reads.get(relative);
+        if (!operation) {
+          if (relative !== selectionPath && reads.size >= LIMITS.sources) throw new Error("read_limit");
+          operation = Promise.resolve().then(() => readJson(workspace, relative, cap));
+          reads.set(relative, operation);
+          operation.then(
+            () => reads.delete(relative),
+            () => reads.delete(relative)
+          );
+        }
+        let timer;
+        try {
+          return await Promise.race([
+            operation,
+            new Promise((_, reject) => {
+              timer = setTimeout(() => {
+                const error = new Error("timeout");
+                error.code = "ETIMEDOUT";
+                reject(error);
+              }, timeoutMs);
+            })
+          ]);
+        } finally {
+          clearTimeout(timer);
+        }
+      }
+      async function load() {
+        let selection;
+        try {
+          selection = await boundedRead(selectionPath, LIMITS.selectionBytes);
+        } catch (error) {
+          lastValid.clear();
+          return failed(
+            error.code === "ENOENT" ? "selection_unavailable" : "selection_invalid",
+            error.code === "ENOENT" ? "unavailable" : "error"
+          );
+        }
+        let entries;
+        try {
+          if (!record(selection) || selection.schemaVersion !== 1 || selection.profile !== profile || selection.agentId !== agentId)
+            invalid();
+          entries = list(selection.sources, LIMITS.sources).map((entry) => {
+            if (!record(entry) || typeof entry.enabled !== "boolean") invalid();
+            return {
+              id: id(entry.id),
+              provider: id(entry.provider),
+              label: display(entry.label, 256, true),
+              enabled: entry.enabled
+            };
+          });
+          if (new Set(entries.map((entry) => entry.id)).size !== entries.length) invalid();
+        } catch {
+          lastValid.clear();
+          return failed("selection_invalid");
+        }
+        const selected = new Set(
+          entries.filter((entry) => entry.enabled).map((entry) => JSON.stringify([entry.id, entry.provider]))
+        );
+        for (const key of lastValid.keys()) if (!selected.has(key)) lastValid.delete(key);
+        const sources = await Promise.all(
+          entries.map(async (entry) => {
+            const base = { id: entry.id, provider: entry.provider, label: entry.label };
+            const key = JSON.stringify([entry.id, entry.provider]);
+            if (!entry.enabled) return { ...base, status: "disabled", observedAt: null, projects: [] };
+            const failure = (status, diagnostic, observedAt = null) => {
+              const previous = lastValid.get(key);
+              return previous ? { ...base, ...previous, status: "stale", diagnostic } : { ...base, status, observedAt, projects: [], diagnostic };
+            };
+            try {
+              const input = await boundedRead(
+                `state/command-center/projects/${entry.id}.json`,
+                LIMITS.snapshotBytes
+              );
+              const result = validateProjectSnapshot(input, {
+                sourceId: entry.id,
+                provider: entry.provider,
+                profile,
+                agentId,
+                now
+              });
+              const previous = lastValid.get(key);
+              if (["error", "unavailable"].includes(result.status)) {
+                if (result.projects.length && (!previous || Date.parse(result.observedAt) >= Date.parse(previous.observedAt))) {
+                  lastValid.set(key, result);
+                }
+                return failure(result.status, `source_${result.status}`, result.observedAt);
+              }
+              if (previous && Date.parse(result.observedAt) < Date.parse(previous.observedAt))
+                return failure("error", "snapshot_older");
+              lastValid.set(key, result);
+              return {
+                ...base,
+                ...result,
+                status: now() - Date.parse(result.observedAt) > STALE_MS ? "stale" : result.status
+              };
+            } catch (error) {
+              return failure(
+                error.code === "ENOENT" ? "unavailable" : "error",
+                error.code === "ENOENT" ? "snapshot_unavailable" : error.code === "ETIMEDOUT" ? "snapshot_timeout" : "snapshot_invalid"
+              );
+            }
+          })
+        );
+        return { schemaVersion: 1, status: portfolioStatus(sources), sources };
+      }
+      function refresh() {
+        if (inFlight) return inFlight;
+        lastRefresh = now();
+        inFlight = load().then(
+          (result) => {
+            cached = result;
+            return getCached();
+          },
+          () => {
+            cached = failed("refresh_failed");
+            return cached;
+          }
+        ).finally(() => {
+          inFlight = null;
+        });
+        return inFlight;
+      }
+      function getCached() {
+        const sources = cached.sources.map(
+          (source) => ["ready", "partial"].includes(source.status) && now() - Date.parse(source.observedAt) > STALE_MS ? { ...source, status: "stale" } : source
+        );
+        if (sources.some((source, i) => source !== cached.sources[i]))
+          cached = { ...cached, sources, status: portfolioStatus(sources) };
+        return cached;
+      }
+      function getState() {
+        if (now() - lastRefresh >= refreshMs) void refresh();
+        return getCached();
+      }
+      return { getState, refresh };
+    }
+    module2.exports = { createProjectHost: createProjectHost2, validateProjectSnapshot, readBoundedJson, LIMITS, STALE_MS };
+  }
+});
+
+// src/work-graph.js
+var require_work_graph = __commonJS({
+  "src/work-graph.js"(exports2, module2) {
+    var { readBoundedJson } = require_projects();
+    var { redactExtensionText } = require_extension_redaction();
+    var KINDS = /* @__PURE__ */ new Set(["outcome", "task", "run", "agent", "role", "topic"]);
+    var STATES = /* @__PURE__ */ new Set([
+      "planned",
+      "doing",
+      "review",
+      "done",
+      "canceled",
+      "unknown",
+      "active",
+      "waiting",
+      "finished"
+    ]);
+    var RELATIONS = {
+      contains: [["outcome", "task"], ["task"]],
+      "works-on": [["task"], ["run"]],
+      runs: [["agent"], ["run"]],
+      role: [["task", "run"], ["role"]],
+      topic: [["task"], ["topic"]],
+      blocks: [["task"], ["task"]]
+    };
+    var bad = () => {
+      throw new Error("invalid");
+    };
+    var list = (x, n) => {
+      if (!Array.isArray(x) || x.length > n) bad();
+      return x;
+    };
+    function string(x, n = 256) {
+      if (typeof x !== "string" || x.length > n || /[\x00-\x08\x0b\x0c\x0e-\x1f]/.test(x)) bad();
+      return redactExtensionText(x);
+    }
+    function id(x) {
+      const s = string(x, 2048);
+      if (!s || s !== x) bad();
+      return s;
+    }
+    function date(x, now) {
+      string(x, 40);
+      if (!/^\d{4}-\d\d-\d\dT/.test(x) || !Number.isFinite(Date.parse(x)) || new Date(x).toISOString().slice(0, 10) !== x.slice(0, 10) || Date.parse(x) > now + 6e4)
+        bad();
+      return x;
+    }
+    function validateWorkGraph(graph, { profile = "", agentId = "main", now = Date.now() } = {}) {
+      if (!graph || graph.schemaVersion !== 1 || graph.profile !== profile || graph.agentId !== agentId)
+        bad();
+      const observedAt = date(graph.observedAt, now);
+      const sources = list(graph.sources, 8).map((s) => ({
+        id: id(s.id),
+        provider: string(s.provider, 32),
+        observedAt: date(s.observedAt, now),
+        complete: s.complete === true
+      }));
+      const sourceIds = new Set(sources.map((s) => s.id));
+      if (sourceIds.size !== sources.length) bad();
+      const nodes = list(graph.nodes, 2e3).map((n) => {
+        if (!KINDS.has(n.kind) || !STATES.has(n.state) || !sourceIds.has(n.sourceId) && !["agent", "role"].includes(n.kind))
+          bad();
+        return {
+          id: id(n.id),
+          sourceId: id(n.sourceId),
+          kind: n.kind,
+          title: string(n.title),
+          state: n.state,
+          nativeStatus: string(n.nativeStatus || ""),
+          observedAt: date(n.observedAt, now),
+          nativeId: n.nativeId ? id(n.nativeId) : null,
+          identifier: n.identifier ? string(n.identifier) : null,
+          sessionKey: n.sessionKey ? id(n.sessionKey) : null,
+          agent: n.agent ? id(n.agent) : null
+        };
+      });
+      const index = new Map(nodes.map((n) => [n.id, n]));
+      if (index.size !== nodes.length) bad();
+      const unique = /* @__PURE__ */ new Set();
+      const edges = list(graph.edges, 5e3).map((e) => {
+        const from = index.get(e.from), to = index.get(e.to), types = RELATIONS[e.relation];
+        if (!from || !to || e.from === e.to || !types || !types[0].includes(from.kind) || !types[1].includes(to.kind) || !["observed", "inferred"].includes(e.basis))
+          bad();
+        if (["contains", "works-on", "blocks", "topic"].includes(e.relation) && from.sourceId !== to.sourceId)
+          bad();
+        if (["contains", "blocks", "runs"].includes(e.relation) && e.basis !== "observed") bad();
+        const k = JSON.stringify([e.from, e.to, e.relation, e.basis]);
+        if (unique.has(k)) bad();
+        unique.add(k);
+        return {
+          from: e.from,
+          to: e.to,
+          relation: e.relation,
+          basis: e.basis,
+          evidence: string(e.evidence, 512)
+        };
+      });
+      const children = /* @__PURE__ */ new Map();
+      for (const e of edges)
+        if (e.relation === "contains") {
+          if (!children.has(e.from)) children.set(e.from, []);
+          children.get(e.from).push(e.to);
+        }
+      const visited = /* @__PURE__ */ new Set(), stack = /* @__PURE__ */ new Set();
+      function visit(k) {
+        if (stack.has(k)) bad();
+        if (visited.has(k)) return;
+        stack.add(k);
+        for (const child of children.get(k) || []) visit(child);
+        stack.delete(k);
+        visited.add(k);
+      }
+      for (const k of index.keys()) visit(k);
+      const stale = sources.some((s) => now - Date.parse(s.observedAt) > 3e5);
+      return {
+        schemaVersion: 1,
+        profile,
+        agentId,
+        observedAt,
+        status: stale ? "stale" : sources.some((s) => !s.complete) || (graph.warnings || []).length ? "partial" : "ready",
+        sources,
+        nodes,
+        edges,
+        warnings: list(graph.warnings || [], 20).map((x) => string(x, 64))
+      };
+    }
+    function createWorkGraphHost2({
+      workspace,
+      profile = "",
+      agentId = "main",
+      readJson = readBoundedJson,
+      now = Date.now
+    }) {
+      let pending = null, cached = { status: "unavailable", nodes: [], edges: [], sources: [] }, last = -Infinity;
+      async function load() {
+        try {
+          cached = validateWorkGraph(
+            await readJson(workspace, "state/command-center/work-graph.json", 2097152),
+            { profile, agentId, now: now() }
+          );
+        } catch {
+          cached = { status: "unavailable", nodes: [], edges: [], sources: [] };
+        }
+        return cached;
+      }
+      function refresh() {
+        if (pending) return pending;
+        if (now() - last < 1e3) return Promise.resolve(cached);
+        last = now();
+        pending = load().finally(() => {
+          pending = null;
+        });
+        return pending;
+      }
+      return { refresh };
+    }
+    module2.exports = { validateWorkGraph, createWorkGraphHost: createWorkGraphHost2 };
+  }
+});
+
+// src/intel.js
+var require_intel = __commonJS({
+  "src/intel.js"(exports2, module2) {
+    var fs2 = require("fs");
+    var path2 = require("path");
+    function createIntelModule2(deps) {
+      const { CONFIG: CONFIG2 } = deps;
+      const SIX_HOURS = 6 * 60 * 60 * 1e3;
+      const TWENTY_FOUR_HOURS = 24 * 60 * 60 * 1e3;
+      function getFreshness(ageMs) {
+        if (ageMs < SIX_HOURS) return "fresh";
+        if (ageMs < TWENTY_FOUR_HOURS) return "aging";
+        return "stale";
+      }
+      function getIntelStats() {
+        const intelDir = path2.join(CONFIG2.paths.workspace, "intel");
+        const now = Date.now();
+        const result = {
+          totalFiles: 0,
+          freshCount: 0,
+          agingCount: 0,
+          staleCount: 0,
+          files: [],
+          assignments: /* @__PURE__ */ Object.create(null)
+        };
+        if (!fs2.existsSync(intelDir)) {
+          return result;
+        }
+        const entries = fs2.readdirSync(intelDir, { withFileTypes: true });
+        for (const entry of entries) {
+          if (!entry.isFile() || !entry.name.endsWith(".md")) continue;
+          const filePath = path2.join(intelDir, entry.name);
+          let stat;
+          try {
+            stat = fs2.statSync(filePath);
+          } catch (e) {
+            continue;
+          }
+          const ageMs = now - stat.mtimeMs;
+          const freshness = getFreshness(ageMs);
+          let agent = null;
+          try {
+            const fd = fs2.openSync(filePath, "r");
+            let head;
+            try {
+              const buffer = Buffer.alloc(1024);
+              const bytesRead = fs2.readSync(fd, buffer, 0, 1024, 0);
+              head = buffer.toString("utf8", 0, bytesRead);
+            } finally {
+              fs2.closeSync(fd);
+            }
+            const lines = head.split("\n").slice(0, 10);
+            for (const line of lines) {
+              const match = line.match(/(?:\*\*)?Agent(?:\*\*)?:\s*(.+)/i);
+              if (match) {
+                agent = match[1].replace(/\*\*/g, "").replace(/\s*[|(].*$/, "").trim();
+                break;
+              }
+              const matchCz = line.match(/(?:\*\*)?Zpracoval(?:\*\*)?:\s*(.+)/i);
+              if (matchCz) {
+                agent = matchCz[1].replace(/\*\*/g, "").replace(/\s*[|(].*$/, "").trim();
+                break;
+              }
+              const matchAutor = line.match(/(?:\*\*)?Autor(?:\*\*)?:\s*(.+)/i);
+              if (matchAutor) {
+                agent = matchAutor[1].replace(/\*\*/g, "").replace(/,.*/, "").trim();
+                break;
+              }
+            }
+          } catch (e) {
+          }
+          const fileInfo = {
+            name: entry.name,
+            agent: agent || "Unknown",
+            modified: stat.mtime.toISOString(),
+            ageMs,
+            freshness
+          };
+          result.files.push(fileInfo);
+          if (freshness === "fresh") result.freshCount++;
+          else if (freshness === "aging") result.agingCount++;
+          else result.staleCount++;
+          const agentKey = fileInfo.agent;
+          result.assignments[agentKey] = (result.assignments[agentKey] || 0) + 1;
+        }
+        result.totalFiles = result.files.length;
+        result.files.sort((a, b) => a.ageMs - b.ageMs);
+        return result;
+      }
+      return { getIntelStats };
+    }
+    module2.exports = { createIntelModule: createIntelModule2 };
+  }
+});
+
+// src/markdown-table.js
+var require_markdown_table = __commonJS({
+  "src/markdown-table.js"(exports2, module2) {
+    function splitTableRow(line) {
+      line = line.trim();
+      if (!line.startsWith("|")) return [];
+      const cells = [];
+      let cell = "";
+      for (let i = 1; i < line.length; i++) {
+        const char = line[i];
+        if (char === "\\" && ["|", "\\"].includes(line[i + 1])) {
+          cell += line[++i];
+        } else if (char === "|") {
+          cells.push(cell.trim());
+          cell = "";
+          if (i === line.length - 1) return cells;
+        } else {
+          cell += char;
+        }
+      }
+      cells.push(cell.trim());
+      return cells;
+    }
+    function isTableSeparator(line, columnCount) {
+      const cells = splitTableRow(line);
+      return cells.length === columnCount && cells.every((cell) => /^:?-{3,}:?$/.test(cell));
+    }
+    module2.exports = { splitTableRow, isTableSeparator };
+  }
+});
+
+// src/pipeline.js
+var require_pipeline = __commonJS({
+  "src/pipeline.js"(exports2, module2) {
+    var fs2 = require("fs");
+    var path2 = require("path");
+    var { splitTableRow, isTableSeparator } = require_markdown_table();
+    function createPipelineModule2(deps) {
+      const { CONFIG: CONFIG2 } = deps;
+      function parseMarkdownTable(content) {
+        const lines = content.split("\n");
+        const tables = [];
+        let headers = [];
+        let inTable = false;
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          if (line.startsWith("|") && line.includes("|") && !inTable) {
+            const cells = splitTableRow(line);
+            const nextLine = (lines[i + 1] || "").trim();
+            if (isTableSeparator(nextLine, cells.length)) {
+              headers = cells.map((c) => c.toLowerCase().replace(/[^a-z0-9]/g, "_"));
+              inTable = true;
+              i++;
+              continue;
+            }
+          }
+          if (inTable && line.startsWith("|")) {
+            const cells = splitTableRow(line);
+            if (cells.some(Boolean)) {
+              const row = /* @__PURE__ */ Object.create(null);
+              headers.forEach((h, idx) => {
+                row[h] = cells[idx] || "";
+              });
+              tables.push(row);
+            }
+          } else if (inTable && !line.startsWith("|")) {
+            inTable = false;
+          }
+        }
+        return tables;
+      }
+      function getPipelineStats() {
+        const intelDir = path2.join(CONFIG2.paths.workspace, "intel");
+        const result = {
+          pipelines: []
+        };
+        if (!fs2.existsSync(intelDir)) {
+          return result;
+        }
+        const entries = fs2.readdirSync(intelDir, { withFileTypes: true });
+        for (const entry of entries) {
+          if (!entry.isFile()) continue;
+          if (!entry.name.endsWith(".md")) continue;
+          const nameUpper = entry.name.toUpperCase();
+          if (!nameUpper.includes("PIPELINE") && !nameUpper.includes("QUEUE")) continue;
+          const filePath = path2.join(intelDir, entry.name);
+          let content;
+          try {
+            content = fs2.readFileSync(filePath, "utf8");
+          } catch (e) {
+            continue;
+          }
+          let stat;
+          try {
+            stat = fs2.statSync(filePath);
+          } catch (e) {
+            continue;
+          }
+          const rows = parseMarkdownTable(content);
+          const totalItems = rows.length;
+          const statusCounts = /* @__PURE__ */ Object.create(null);
+          for (const row of rows) {
+            const statusValue = row.status || row.email_odesl_n_ || row.stav || "";
+            if (statusValue) {
+              const normalized = statusValue.replace(/[*_]/g, "").trim().toUpperCase();
+              if (normalized && normalized !== "-") {
+                statusCounts[normalized] = (statusCounts[normalized] || 0) + 1;
+              }
+            }
+          }
+          const name = entry.name.replace(/\.md$/i, "").replace(/-/g, " ").replace(/\b\w/g, (c) => c.toUpperCase());
+          result.pipelines.push({
+            name,
+            file: entry.name,
+            totalItems,
+            statusCounts,
+            lastModified: stat.mtime.toISOString()
+          });
+        }
+        result.pipelines.sort((a, b) => new Date(b.lastModified) - new Date(a.lastModified));
+        return result;
+      }
+      return { getPipelineStats };
+    }
+    module2.exports = { createPipelineModule: createPipelineModule2 };
+  }
+});
+
+// src/monetization.js
+var require_monetization = __commonJS({
+  "src/monetization.js"(exports2, module2) {
+    var fs2 = require("fs");
+    var path2 = require("path");
+    var { splitTableRow, isTableSeparator } = require_markdown_table();
+    function hasPositiveRevenue(value) {
+      const amount = value.replace(/\*\*/g, "").trim();
+      const match = amount.match(
+        /^(?:(?:[$€£]|USD|EUR|GBP|CZK|KČ)\s*)?([+-]?(?:\d{1,3}(?:,\d{3})+|\d+)(?:\.\d+)?)\s*(?:USD|EUR|GBP|CZK|KČ)?(?:\s*\/(?:mo|month|yr|year))?$/i
+      );
+      return !!match && Number(match[1].replace(/,/g, "")) > 0;
+    }
+    function createMonetizationModule2(deps) {
+      const { CONFIG: CONFIG2 } = deps;
+      function getMonetizationStats() {
+        const trackerPath = path2.join(CONFIG2.paths.workspace, "intel", "MONETIZATION-TRACKER.md");
+        const result = {
+          firms: [],
+          totalFirms: 0,
+          highPriority: 0,
+          revenueFirms: 0
+        };
+        if (!fs2.existsSync(trackerPath)) {
+          return result;
+        }
+        let content;
+        try {
+          content = fs2.readFileSync(trackerPath, "utf8");
+        } catch (e) {
+          return result;
+        }
+        const lines = content.split("\n");
+        let headers = [];
+        let inTable = false;
+        for (let i = 0; i < lines.length; i++) {
+          const line = lines[i].trim();
+          const cells = splitTableRow(line);
+          if (!inTable && cells.length) {
+            const normalizedHeaders = cells.map(
+              (cell) => cell.replace(/\*\*/g, "").trim().toLowerCase()
+            );
+            if (normalizedHeaders.some((header) => ["firma", "company", "firm"].includes(header)) && isTableSeparator(lines[i + 1] || "", cells.length)) {
+              headers = normalizedHeaders;
+              inTable = true;
+              i++;
+              continue;
+            }
+          }
+          if (inTable && cells.length) {
+            const column = (...names) => {
+              const index = headers.findIndex((header) => names.includes(header));
+              return (cells[index] || "").trim();
+            };
+            const firm = {
+              name: column("firma", "company", "firm").replace(/\*\*/g, "").trim(),
+              revenue: column("revenue"),
+              milestone: column("milestone"),
+              blocker: column("blocker"),
+              priority: column("priority").replace(/\*\*/g, "").trim().toUpperCase()
+            };
+            if (!firm.name || firm.name === "-") continue;
+            result.firms.push(firm);
+            if (firm.priority === "HIGH") result.highPriority++;
+            if (hasPositiveRevenue(firm.revenue)) {
+              result.revenueFirms++;
+            }
+          } else if (inTable && !line.startsWith("|")) {
+            inTable = false;
+          }
+        }
+        result.totalFirms = result.firms.length;
+        return result;
+      }
+      return { getMonetizationStats };
+    }
+    module2.exports = { createMonetizationModule: createMonetizationModule2 };
+  }
+});
+
 // src/index.js
 var http = require("http");
 var fs = require("fs");
@@ -3375,10 +4927,12 @@ var {
   loadOperators,
   saveOperators,
   getOperatorBySlackId,
-  startOperatorsRefresh
+  startOperatorsRefresh,
+  calculateOperatorStats
 } = require_operators();
 var { createSessionsModule } = require_sessions();
-var { getCronJobs } = require_cron();
+var { createCronHost } = require_cron();
+var cronHost = createCronHost({ run: runOpenClawAsync });
 var { getCerebroTopics, updateTopicStatus } = require_cerebro();
 var {
   getDailyTokenUsage,
@@ -3391,6 +4945,12 @@ var { getLlmUsage, getRoutingStats, startLlmUsageRefresh } = require_llm_usage()
 var { executeAction } = require_actions();
 var { migrateDataDir } = require_data();
 var { createStateModule } = require_state();
+var { createExtensionHost } = require_extensions();
+var { createProjectHost } = require_projects();
+var { createWorkGraphHost } = require_work_graph();
+var { createIntelModule } = require_intel();
+var { createPipelineModule } = require_pipeline();
+var { createMonetizationModule } = require_monetization();
 var PORT = CONFIG.server.port;
 var DASHBOARD_DIR = path.join(__dirname, "../public");
 var PATHS = CONFIG.paths;
@@ -3425,20 +4985,44 @@ var sessions = createSessionsModule({
   runOpenClawAsync,
   extractJSON
 });
+var extensionHost = createExtensionHost({
+  workspace: PATHS.workspace,
+  profile: process.env.OPENCLAW_PROFILE || "",
+  agentId: process.env.OPENCLAW_AGENT || "main"
+});
+var projectHost = createProjectHost({
+  workspace: PATHS.workspace,
+  profile: process.env.OPENCLAW_PROFILE || "",
+  agentId: process.env.OPENCLAW_AGENT || "main"
+});
+var workGraphHost = createWorkGraphHost({
+  workspace: PATHS.workspace,
+  profile: process.env.OPENCLAW_PROFILE || "",
+  agentId: process.env.OPENCLAW_AGENT || "main"
+});
+var intelModule = createIntelModule({ CONFIG });
+var pipelineModule = createPipelineModule({ CONFIG });
+var monetizationModule = createMonetizationModule({ CONFIG });
 var state = createStateModule({
   CONFIG,
   getOpenClawDir,
   getSessions: (opts) => sessions.getSessions(opts),
   getSystemVitals,
-  getCronJobs: () => getCronJobs(getOpenClawDir),
+  getCronJobs: () => cronHost.getState().jobs,
+  getCronStatus: () => cronHost.getState().status,
   loadOperators: () => loadOperators(DATA_DIR),
+  calculateOperatorStats,
   getLlmUsage: () => getLlmUsage(PATHS.state),
   getDailyTokenUsage: () => getDailyTokenUsage(getOpenClawDir),
   getTokenStats,
   getCerebroTopics: (opts) => getCerebroTopics(PATHS.cerebro, opts),
   runOpenClaw,
   extractJSON,
-  readTranscript: (sessionId) => sessions.readTranscript(sessionId)
+  readTranscript: (sessionId) => sessions.readTranscript(sessionId),
+  getExtensions: () => extensionHost.getState(),
+  getIntelStats: () => intelModule.getIntelStats(),
+  getPipelineStats: () => pipelineModule.getPipelineStats(),
+  getMonetizationStats: () => monetizationModule.getMonetizationStats()
 });
 process.nextTick(() => migrateDataDir(DATA_DIR, LEGACY_DATA_DIR));
 startOperatorsRefresh(DATA_DIR, getOpenClawDir);
@@ -3486,11 +5070,12 @@ function serveStatic(req, res) {
 }
 function handleApi(req, res) {
   const sessionsList = sessions.getSessions();
-  const capacity = state.getCapacity();
+  const capacity = state.getCapacity(sessions.getSessions({ limit: null }));
   const tokenStats = getTokenStats(sessionsList, capacity, CONFIG);
   const data = {
     sessions: sessionsList,
-    cron: getCronJobs(getOpenClawDir),
+    cron: cronHost.getState().jobs,
+    cronStatus: cronHost.getState().status,
     system: state.getSystemStatus(),
     activity: state.getRecentActivity(),
     tokenStats,
@@ -3500,7 +5085,7 @@ function handleApi(req, res) {
   res.writeHead(200, { "Content-Type": "application/json" });
   res.end(JSON.stringify(data, null, 2));
 }
-var server = http.createServer((req, res) => {
+var server = http.createServer(async (req, res) => {
   res.setHeader("Access-Control-Allow-Origin", "*");
   const urlParts = req.url.split("?");
   const pathname = urlParts[0];
@@ -3532,6 +5117,27 @@ var server = http.createServer((req, res) => {
   }
   if (pathname === "/api/status") {
     handleApi(req, res);
+  } else if (pathname === "/api/work-graph") {
+    if (req.method !== "GET") {
+      res.writeHead(405, { Allow: "GET" });
+      res.end();
+      return;
+    }
+    const graph = await workGraphHost.refresh();
+    res.writeHead(200, { "Content-Type": "application/json", "Cache-Control": "no-store" });
+    res.end(JSON.stringify(graph));
+  } else if (pathname === "/api/projects") {
+    if (req.method !== "GET") {
+      res.writeHead(405, { "Content-Type": "application/json", Allow: "GET" });
+      res.end(JSON.stringify({ error: "Read-only project view" }));
+      return;
+    }
+    await projectHost.refresh();
+    res.writeHead(200, {
+      "Content-Type": "application/json",
+      "Cache-Control": "no-store"
+    });
+    res.end(JSON.stringify(projectHost.getState()));
   } else if (pathname === "/api/session") {
     const sessionKey = query.get("key");
     if (!sessionKey) {
@@ -3539,7 +5145,7 @@ var server = http.createServer((req, res) => {
       res.end(JSON.stringify({ error: "Missing session key" }));
       return;
     }
-    const detail = sessions.getSessionDetail(sessionKey);
+    const detail = await sessions.getSessionDetailAsync(sessionKey);
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(detail, null, 2));
   } else if (pathname === "/api/cerebro") {
@@ -3663,7 +5269,7 @@ var server = http.createServer((req, res) => {
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify({ vitals, optionalDeps }, null, 2));
   } else if (pathname === "/api/capacity") {
-    const capacity = state.getCapacity();
+    const capacity = state.getCapacity(sessions.getSessions({ limit: null }));
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(JSON.stringify(capacity, null, 2));
   } else if (pathname === "/api/sessions") {
@@ -3689,13 +5295,14 @@ var server = http.createServer((req, res) => {
     const totalPages = Math.ceil(total / pageSize);
     const offset = (page - 1) * pageSize;
     const displaySessions = filteredSessions.slice(offset, offset + pageSize);
-    const tokenStats = getTokenStats(allSessions, state.getCapacity(), CONFIG);
-    const capacity = state.getCapacity();
+    const tokenStats = getTokenStats(allSessions, state.getCapacity(allSessions), CONFIG);
+    const capacity = state.getCapacity(sessions.getSessions({ limit: null }));
     res.writeHead(200, { "Content-Type": "application/json" });
     res.end(
       JSON.stringify(
         {
           sessions: displaySessions,
+          catalog: sessions.getCatalogStatus(),
           pagination: {
             page,
             pageSize,
@@ -3713,35 +5320,21 @@ var server = http.createServer((req, res) => {
       )
     );
   } else if (pathname === "/api/cron") {
-    const cron = getCronJobs(getOpenClawDir);
+    const snapshot = cronHost.getState();
+    const cron = snapshot.jobs;
     res.writeHead(200, { "Content-Type": "application/json" });
-    res.end(JSON.stringify({ cron }, null, 2));
+    res.end(JSON.stringify({ cron, cronStatus: snapshot.status }, null, 2));
   } else if (pathname === "/api/operators") {
     const method = req.method;
     const data = loadOperators(DATA_DIR);
     if (method === "GET") {
       const allSessions = sessions.getSessions({ limit: null });
-      const operatorsWithStats = data.operators.map((op) => {
-        const userSessions = allSessions.filter(
-          (s) => s.originator?.userId === op.id || s.originator?.userId === op.metadata?.slackId
-        );
-        return {
-          ...op,
-          stats: {
-            activeSessions: userSessions.filter((s) => s.active).length,
-            totalSessions: userSessions.length,
-            lastSeen: userSessions.length > 0 ? new Date(
-              Date.now() - Math.min(...userSessions.map((s) => s.minutesAgo)) * 6e4
-            ).toISOString() : op.lastSeen
-          }
-        };
-      });
+      const operatorsWithStats = calculateOperatorStats(data, allSessions);
       res.writeHead(200, { "Content-Type": "application/json" });
       res.end(
         JSON.stringify(
           {
-            operators: operatorsWithStats,
-            roles: data.roles,
+            ...operatorsWithStats,
             timestamp: Date.now()
           },
           null,
@@ -3855,7 +5448,7 @@ server.listen(PORT, () => {
     }
     checkOptionalDeps();
   }, 100);
-  const SESSIONS_CACHE_TTL = 1e4;
+  const SESSIONS_CACHE_TTL = sessions.SESSIONS_CACHE_TTL || 6e4;
   setInterval(() => sessions.refreshSessionsCache(), SESSIONS_CACHE_TTL);
 });
 var sseRefreshing = false;
@@ -3863,7 +5456,7 @@ setInterval(() => {
   if (sseClients.size > 0 && !sseRefreshing) {
     sseRefreshing = true;
     try {
-      const fullState = state.refreshState();
+      const fullState = state.getFullState();
       broadcastSSE("update", fullState);
       broadcastSSE("heartbeat", { clients: sseClients.size, timestamp: Date.now() });
     } catch (e) {

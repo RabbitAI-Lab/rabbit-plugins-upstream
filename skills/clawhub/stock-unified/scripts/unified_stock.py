@@ -17,6 +17,7 @@
 
 import sys, os, json, time, hashlib, re
 import urllib.request
+import requests as _requests
 from pathlib import Path
 from datetime import datetime, timedelta
 from typing import Dict, List, Optional, Any, Tuple
@@ -34,6 +35,13 @@ EAST_HEADERS = {
 }
 
 SINA_BASE = "https://hq.sinajs.cn"
+
+# 新浪复用连接池（大幅加速批量日K/板块拉取）
+_sina_session = _requests.Session()
+_sina_session.headers.update({
+    "User-Agent": "Mozilla/5.0",
+    "Referer": "https://finance.sina.com.cn",
+})
 
 # 数据源状态缓存
 _source_status = {}
@@ -99,7 +107,7 @@ def _ensure_market_prefix(code: str) -> str:
     # 指数代码：000001 → sh000001, 399001 → sz399001
     if code in A_INDEX_MAP:
         return A_INDEX_MAP[code][0]
-    if code.startswith(('6', '9')):
+    if code.startswith(('6', '9', '5')):
         return f"sh{code}"
     elif code.startswith(('0', '3')):
         return f"sz{code}"
@@ -113,7 +121,7 @@ def _tdx_market(code: str) -> int:
     code = code.strip()
     if code.startswith(('6', '9')):
         return 1
-    elif code.startswith(('0', '2', '3')):
+    elif code.startswith(('0', '2', '3', '1')):  # 1开头=深市ETF/基金
         return 0
     elif code.startswith(('4', '8')):
         return 0
@@ -509,11 +517,13 @@ def sina_get_futures(symbols: List[str]) -> List[Dict]:
 
 
 def ak_get_financial(code: str) -> Dict:
-    """akshare：财务摘要"""
+    """akshare：财务摘要（按报告期降序，取最新）"""
     import akshare as ak
     try:
         df = ak.stock_financial_abstract_ths(symbol=code)
         if df is not None and not df.empty:
+            if "报告期" in df.columns:
+                df = df.sort_values("报告期", ascending=False)
             return df.to_dict(orient="records")[:5]
     except:
         pass
@@ -530,6 +540,109 @@ def ak_get_profit_forecast(code: str) -> List[Dict]:
     except:
         pass
     return []
+
+
+# ======================================================================
+# ETF 数据（akshare）— 大王 2026-09-08 钦定整合
+#   ETF历史行情：fund_etf_hist_em（东财）
+#   ETF资金流：stock_individual_fund_flow（东财个股资金流，ETF适用）
+# ======================================================================
+
+def _etf_market(code: str) -> str:
+    """ETF 市场前缀：5开头=上交所(sh)，1开头=深交所(sz)"""
+    code = code.strip()
+    if code.startswith('5'):
+        return 'sh'
+    return 'sz'
+
+
+def get_etf_hist(code: str, days: int = 60) -> Dict:
+    """ETF 历史日K — 主：通达信pytdx（稳定，不依赖HTTP代理）；降级：akshare东财"""
+    raw = tdx_get_kline(code, days)
+    if raw and len(raw) > 0 and "error" not in raw[0]:
+        data = []
+        prev_close = None
+        for r in raw:
+            chg = 0.0
+            if prev_close and prev_close > 0:
+                chg = (r["close"] - prev_close) / prev_close * 100
+            data.append({
+                "date": r["date"], "open": r["open"], "close": r["close"],
+                "high": r["high"], "low": r["low"],
+                "vol": r.get("vol", 0), "amount": r.get("amount", 0),
+                "change_pct": round(chg, 2),
+            })
+            prev_close = r["close"]
+        closes = [d["close"] for d in data if d["close"] > 0]
+        ma5 = round(sum(closes[-5:]) / min(5, len(closes)), 3) if len(closes) >= 3 else None
+        ma10 = round(sum(closes[-10:]) / min(10, len(closes)), 3) if len(closes) >= 7 else None
+        ma20 = round(sum(closes[-20:]) / min(20, len(closes)), 3) if len(closes) >= 15 else None
+        latest = closes[-1] if closes else 0
+        prev = closes[-2] if len(closes) >= 2 else latest
+        return {
+            "code": code, "days": len(data), "data": data, "source": "pytdx",
+            "ma": {"MA5": ma5, "MA10": ma10, "MA20": ma20},
+            "latest": latest, "prev": prev,
+            "change_1d": round((latest - prev) / prev * 100, 2) if prev > 0 else 0,
+        }
+
+    # 降级：akshare 东财
+    import akshare as ak
+    start = (datetime.now() - timedelta(days=days * 2 + 15)).strftime('%Y%m%d')
+    end = datetime.now().strftime('%Y%m%d')
+    try:
+        df = ak.fund_etf_hist_em(symbol=code, period='daily',
+                                 start_date=start, end_date=end, adjust='qfq')
+        if df is None or df.empty:
+            return {"code": code, "error": "无数据", "data": []}
+        data = []
+        for _, r in df.iterrows():
+            data.append({
+                "date": str(r['日期']),
+                "open": float(r['开盘']), "close": float(r['收盘']),
+                "high": float(r['最高']), "low": float(r['最低']),
+                "vol": float(r['成交量']), "amount": float(r['成交额']),
+                "change_pct": float(r['涨跌幅']) if r.get('涨跌幅') is not None else 0.0,
+            })
+        closes = [d["close"] for d in data if d["close"] > 0]
+        ma5 = round(sum(closes[-5:]) / min(5, len(closes)), 3) if len(closes) >= 3 else None
+        ma10 = round(sum(closes[-10:]) / min(10, len(closes)), 3) if len(closes) >= 7 else None
+        ma20 = round(sum(closes[-20:]) / min(20, len(closes)), 3) if len(closes) >= 15 else None
+        latest = closes[-1] if closes else 0
+        prev = closes[-2] if len(closes) >= 2 else latest
+        return {
+            "code": code, "days": len(data), "data": data, "source": "akshare",
+            "ma": {"MA5": ma5, "MA10": ma10, "MA20": ma20},
+            "latest": latest, "prev": prev,
+            "change_1d": round((latest - prev) / prev * 100, 2) if prev > 0 else 0,
+        }
+    except Exception as e:
+        return {"code": code, "error": str(e), "data": []}
+
+
+def get_etf_flow(code: str, days: int = 60) -> Dict:
+    """ETF 资金流历史（akshare 东财个股资金流，ETF适用）"""
+    import akshare as ak
+    market = _etf_market(code)
+    try:
+        df = ak.stock_individual_fund_flow(stock=code, market=market)
+        if df is None or df.empty:
+            return {"code": code, "error": "无数据", "data": []}
+        data = []
+        for _, r in df.iterrows():
+            data.append({
+                "date": str(r['日期']),
+                "close": float(r['收盘价']),
+                "change_pct": float(r['涨跌幅']) if r.get('涨跌幅') is not None else 0.0,
+                "main_net": float(r['主力净流入-净额']) if r.get('主力净流入-净额') is not None else 0.0,
+                "super_net": float(r['超大单净流入-净额']) if r.get('超大单净流入-净额') is not None else 0.0,
+                "big_net": float(r['大单净流入-净额']) if r.get('大单净流入-净额') is not None else 0.0,
+                "mid_net": float(r['中单净流入-净额']) if r.get('中单净流入-净额') is not None else 0.0,
+                "small_net": float(r['小单净流入-净额']) if r.get('小单净流入-净额') is not None else 0.0,
+            })
+        return {"code": code, "days": len(data), "data": data}
+    except Exception as e:
+        return {"code": code, "error": str(e), "data": []}
 
 
 # ======================================================================
@@ -551,6 +664,60 @@ def _merge_quotes(sources: List[tuple]) -> Dict:
         except Exception:
             pass
     return all_data
+
+
+def tencent_get_quotes(codes: List[str]) -> List[Dict]:
+    """腾讯财经：实时行情（备用源，ETF/指数支持好）"""
+    result = []
+    code_list = [_ensure_market_prefix(c) for c in codes]
+    try:
+        url = f"https://qt.gtimg.cn/q={','.join(code_list)}"
+        req = urllib.request.Request(url, headers={
+            "User-Agent": "Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36"
+        })
+        with urllib.request.urlopen(req, timeout=10) as resp:
+            data = resp.read().decode('gbk', errors='ignore')
+        for code, sina_code in zip(codes, code_list):
+            m = re.search(rf'v_{re.escape(sina_code)}="([^"]*)"', data)
+            if not m:
+                result.append({"code": code, "error": "解析失败"})
+                continue
+            parts = m.group(1).split('~')
+            # 腾讯字段: 1名称 2代码 3现价 4昨收 5今开 6成交量(手) ...
+            if len(parts) < 6:
+                result.append({"code": code, "error": "数据不完整"})
+                continue
+            name = parts[1]
+            price = float(parts[3]) if parts[3] else 0
+            last_close = float(parts[4]) if parts[4] else 0
+            open_p = float(parts[5]) if parts[5] else 0
+            high = float(parts[33]) if len(parts) > 33 and parts[33] else 0
+            low = float(parts[34]) if len(parts) > 34 and parts[34] else 0
+            volume = int(float(parts[6]) * 100) if parts[6] else 0  # 手→股
+            amount = float(parts[37]) if len(parts) > 37 and parts[37] else 0
+            change_pct = 0
+            if last_close > 0 and price > 0:
+                change_pct = round((price - last_close) / last_close * 100, 2)
+            is_pre = (price == 0 and volume == 0)
+            result.append({
+                "code": code,
+                "name": name,
+                "price": price,
+                "change_pct": change_pct,
+                "open": open_p,
+                "high": high,
+                "low": low,
+                "last_close": last_close,
+                "vol": volume,
+                "amount": amount,
+                "is_pre_market": is_pre,
+                "is_index": code in A_INDEX_MAP or "指数" in name,
+                "_src": "tencent",
+            })
+    except Exception as e:
+        for code in codes:
+            result.append({"code": code, "error": str(e)})
+    return result
 
 
 def get_realtime(codes: List[str]) -> Dict:
@@ -591,12 +758,32 @@ def get_realtime(codes: List[str]) -> Dict:
                     d["is_pre_market"] = False
                     result[code] = d
 
+    # 兜底：腾讯源（仅补新浪/通达信都失败或价格=0的标的）
+    failed = [c for c in all_codes if c not in result or result[c].get("price", 0) <= 0]
+    if failed:
+        tx_data = tencent_get_quotes(failed)
+        for d in tx_data:
+            if "error" not in d and d.get("price", 0) > 0:
+                code = d.get("code", "")
+                if code and code in result:
+                    result[code].update({"price": d["price"], "name": d.get("name", result[code].get("name", "")),
+                                        "open": d.get("open", 0), "high": d.get("high", 0),
+                                        "low": d.get("low", 0), "vol": d.get("vol", 0),
+                                        "amount": d.get("amount", 0), "last_close": d.get("last_close", 0),
+                                        "change_pct": d.get("change_pct", 0),
+                                        "is_pre_market": False, "_src": "tencent"})
+                elif code:
+                    d["is_pre_market"] = False
+                    result[code] = d
+
     return result
 
 
 def get_kline(code: str, days: int = 30) -> Dict:
-    """统一K线（主用pytdx），附带均线计算"""
+    """统一K线（pytdx 优先 → 新浪兜底），附带均线计算"""
     raw = tdx_get_kline(code, days)
+    if not raw or (len(raw) == 1 and "error" in raw[0]):
+        raw = sina_get_kline(code, days)  # 通达信挂了走新浪
     if not raw or (len(raw) == 1 and "error" in raw[0]):
         return {"error": raw[0].get("error", "获取失败") if raw else "无数据", "data": []}
     
@@ -705,6 +892,147 @@ def get_financial(code: str) -> Dict:
         "abstract": ak_get_financial(code),
         "forecast": ak_get_profit_forecast(code),
     }
+
+
+def sina_get_kline(code: str, days: int = 90) -> List[Dict]:
+    """新浪财经：日K线（前复权），返回与 tdx_get_kline 同构的 list"""
+    try:
+        mkt = 'sh' if code.startswith(('6', '9', '5')) else 'sz'
+        url = (f'https://money.finance.sina.com.cn/quotes_service/api/json_v2.php/'
+               f'CN_MarketData.getKLineData?symbol={mkt}{code}&scale=240&ma=no&datalen={days}')
+        data = _sina_session.get(url, timeout=8).json()
+        result = []
+        for x in data:
+            result.append({
+                "date": x["day"],
+                "open": float(x["open"]),
+                "high": float(x["high"]),
+                "low": float(x["low"]),
+                "close": float(x["close"]),
+                "vol": float(x["volume"]),  # 股
+                "amount": 0.0,
+            })
+        return result
+    except Exception as e:
+        return [{"error": str(e), "source": "sina"}]
+
+
+def sina_get_sector_list(kind: str = 'hangye') -> List[Dict]:
+    """新浪：板块列表。kind='hangye'=证监会84行业，kind='class'=概念板块（约175个）。
+    含涨跌幅，按涨跌幅降序。"""
+    param = 'class' if kind == 'class' else 'hangye'
+    try:
+        url = f'http://vip.stock.finance.sina.com.cn/q/view/newFLJK.php?param={param}'
+        data = _sina_session.get(url, timeout=10).content.decode('gbk')
+        m = re.search(r'=\s*(\{.*\})', data, re.S)
+        obj = json.loads(m.group(1))
+        result = []
+        for key, val in obj.items():
+            p = val.split(',')
+            if len(p) < 6:
+                continue
+            try:
+                result.append({
+                    "node": p[0],
+                    "name": p[1],
+                    "count": int(p[2]) if p[2].isdigit() else 0,
+                    "change_pct": float(p[5]) if p[5] else 0.0,
+                })
+            except (ValueError, IndexError):
+                continue
+        result.sort(key=lambda x: -x["change_pct"])
+        return result
+    except Exception as e:
+        return [{"error": str(e), "source": "sina"}]
+
+
+def sina_get_sector_stocks(node: str) -> List[Dict]:
+    """新浪：板块成分股（node 如 hangye_ZA01），自动翻页取全"""
+    all_stocks = []
+    try:
+        for page in range(1, 20):
+            url = (f'http://vip.stock.finance.sina.com.cn/quotes_service/api/json_v2.php/'
+                   f'Market_Center.getHQNodeData?page={page}&num=100&sort=symbol&asc=1'
+                   f'&node={node}&symbol=&_s_r_a=page')
+            data = _sina_session.get(url, timeout=10).json()
+            if not data:
+                break
+            for x in data:
+                all_stocks.append({
+                    "code": str(x.get("code", "")),
+                    "name": x.get("name", ""),
+                    "change_pct": float(x.get("changepercent", 0) or 0),
+                })
+            if len(data) < 100:
+                break
+        return all_stocks
+    except Exception as e:
+        return all_stocks if all_stocks else [{"error": str(e), "source": "sina"}]
+
+
+def get_sector_strength_map(kind: str = 'hangye') -> Dict:
+    """板块强度映射：{股票代码: {sector, change_pct}}
+    kind='hangye'=证监会84行业；kind='class'=概念板块。并发翻页拉全部成分股。"""
+    from concurrent.futures import ThreadPoolExecutor, as_completed
+    sectors = sina_get_sector_list(kind)
+    if not sectors or "error" in sectors[0]:
+        return {"error": "板块列表获取失败", "map": {}, "sectors": []}
+
+    code_map = {}
+    members = {}   # 板块名 -> 成员代码列表（供轮动聚合用）
+    with ThreadPoolExecutor(max_workers=16) as ex:
+        futs = {ex.submit(sina_get_sector_stocks, s["node"]): s for s in sectors}
+        for f in as_completed(futs):
+            s = futs[f]
+            try:
+                stocks = f.result()
+            except Exception:
+                continue
+            if not stocks or "error" in stocks[0]:
+                continue
+            codes = []
+            for st in stocks:
+                c = st.get("code", "")
+                if c and c not in code_map:
+                    code_map[c] = {"sector": s["name"], "change_pct": s["change_pct"]}
+                if c:
+                    codes.append(c)
+            members[s["name"]] = codes
+    return {"error": None, "map": code_map, "members": members, "sectors": sectors}
+
+
+def _parse_amt(s) -> float:
+    """解析金额字符串 '1632.21万' / '2.02亿' -> float(元)"""
+    if s is None:
+        return 0.0
+    s = str(s).strip()
+    if not s:
+        return 0.0
+    try:
+        if s.endswith('亿'):
+            return float(s[:-1]) * 1e8
+        if s.endswith('万'):
+            return float(s[:-1]) * 1e4
+        return float(s)
+    except ValueError:
+        return 0.0
+
+
+def get_fund_flow_map() -> Dict:
+    """同花顺：全市场个股资金净流入（即时）→ {股票代码: {net, amount}}"""
+    import akshare as ak
+    try:
+        df = ak.stock_fund_flow_individual(symbol='即时')
+        m = {}
+        for _, row in df.iterrows():
+            code = str(row['股票代码']).zfill(6)
+            m[code] = {
+                'net': _parse_amt(row['净额']),
+                'amount': _parse_amt(row['成交额']),
+            }
+        return {'error': None, 'map': m}
+    except Exception as e:
+        return {'error': str(e), 'map': {}}
 
 
 def get_status() -> Dict:
@@ -1240,6 +1568,8 @@ def main():
     parser.add_argument("--index-daily", type=str, help="A股指数近N天日K (逗号分隔, 如: SH,SZ,CYB,KC50)")
     parser.add_argument("--breadth", action="store_true", help="市场宽度(涨跌家数/情绪)")
     parser.add_argument("--north-flow", type=int, default=0, help="北向资金流(回溯天数)")
+    parser.add_argument("--etf-hist", type=str, help="ETF历史K线 (代码, 如: 512480)")
+    parser.add_argument("--etf-flow", type=str, help="ETF资金流 (代码, 如: 512480)")
     parser.add_argument("--status", action="store_true", help="数据源状态")
     parser.add_argument("--json", action="store_true", help="JSON格式输出")
     args = parser.parse_args()
@@ -1411,6 +1741,39 @@ def main():
                 print(f"  利润预测:")
                 for item in data["forecast"][:3]:
                     print(f"    {item}")
+
+    elif args.etf_hist:
+        data = get_etf_hist(args.etf_hist, args.days)
+        if args.json:
+            _print_json(data)
+        elif "error" in data:
+            print(f"  ❌ {data['error']}")
+        else:
+            ma = data.get("ma", {})
+            print(f"\n📦 ETF {data['code']} 日K (最近{data.get('days',0)}天)")
+            print(f"  现价: ¥{data['latest']:.3f} | 近1日 {data.get('change_1d',0):+.2f}%")
+            print(f"  均线: " + "  ".join(f"{k}=¥{v}" for k, v in ma.items() if v))
+            rows = []
+            for d in data["data"][-args.days:]:
+                rows.append([d["date"], f"{d['open']:.3f}", f"{d['close']:.3f}",
+                             f"{d['high']:.3f}", f"{d['low']:.3f}", f"{d['change_pct']:+.2f}%",
+                             f"{d['amount']/1e8:.2f}亿"])
+            _print_table(rows, ["日期", "开", "收", "高", "低", "涨跌", "成交额"])
+
+    elif args.etf_flow:
+        data = get_etf_flow(args.etf_flow, args.days)
+        if args.json:
+            _print_json(data)
+        elif "error" in data:
+            print(f"  ❌ {data['error']}")
+        else:
+            print(f"\n💰 ETF {data['code']} 资金流 (最近{data.get('days',0)}天)")
+            rows = []
+            for d in data["data"][-args.days:]:
+                rows.append([d["date"], f"{d['close']:.3f}", f"{d['change_pct']:+.2f}%",
+                             f"{d['main_net']/1e8:+.2f}亿", f"{d['super_net']/1e8:+.2f}亿",
+                             f"{d['big_net']/1e8:+.2f}亿", f"{d['small_net']/1e8:+.2f}亿"])
+            _print_table(rows, ["日期", "收盘", "涨跌", "主力净流入", "超大单", "大单", "小单"])
 
     elif args.us_index:
         symbols = [s.strip().upper() for s in args.us_index.split(",")]

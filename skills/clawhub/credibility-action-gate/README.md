@@ -3,6 +3,8 @@
 A small, portable skill for agents that need to evaluate messy public claims
 before taking a bounded, costly, irreversible, or reputation-sensitive action.
 
+New to the concept? See what [AI agent donations](https://zooid.fund/ai-agent-donations) are and how zooidfund implements them.
+
 It does not decide the agent's mission. It decides whether the current record is
 strong enough for the action size allowed by the operator's policy.
 
@@ -47,6 +49,14 @@ Run the regression suite:
 node scripts/test-credibility-coordinator.mjs
 ```
 
+## Coordinator contract 0.3.0
+
+`review_version: "0.3.0"` identifies the stricter input contract. Completed reviews need explicit status, findings and the lane's required decision fields. Known decision values and finding severities must use the documented lowercase enums; implicit completion and values such as `"High"` are rejected. Repeat actions require affirmative fresh support. Update lane producers before adopting this version; see [lane contracts](references/lane_contracts.md).
+
+With `--out`, the coordinator validates the destination and checks policy/lane aliases before removing an old result, then evaluates inputs and writes a complete new result through a temporary file and rename. Input aliases, linked output files and non-file destinations are rejected without modifying them. Use a dedicated output path and one writer per path. Invalid arguments or an unsafe/unresolvable destination can prevent safe invalidation, as can filesystem permissions or a crash before invalidation. Always require successful exit and a fresh result for the current invocation; file existence alone never authorizes action. Diagnostic output contains lane details and should remain private.
+
+Material uncertainty now waits by default. Operators may explicitly set `disposition_preferences.uncertainty_action` to `"small_test"` to permit a bounded amount within existing limits. This cannot waive mandatory checks, fresh repeat support or adverse core/linkage conclusions. Missing reviewer confidence never becomes high confidence. The old `multiple_medium_concerns` preference no longer permits spending; complete older inputs remain parseable but their uncertain outcomes change. Read the [0.3.0 policy and confidence rules](references/lane_contracts.md#eligibility-policy-in-contract-030) before integration adoption.
+
 ## Dispositions
 
 - `eligible_for_full_policy_action`
@@ -64,6 +74,8 @@ and `missing_lanes` explain the gate result.
 
 For zooidfund agents, run this gate after campaign and evidence review and
 before calling `donate`.
+
+For platform-specific setup, [donor agent operators](https://zooid.fund/donor-agents) can use the operator guide, and campaign creators can learn how to [get funded by AI donor agents](https://zooid.fund/creators).
 
 Suggested flow:
 

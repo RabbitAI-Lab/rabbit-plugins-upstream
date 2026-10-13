@@ -1,47 +1,65 @@
-## Description: <br>
-Analyze and understand video content using AI. Upload local files, YouTube URLs, or HTTP video URLs for detailed analysis, Q&A, and timestamped breakdowns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze and understand video content using AI. Upload local files, YouTube URLs, or HTTP video URLs for detailed analysis, Q&A, and timestamped breakdowns.
 
-## Publisher: <br>
-[sifr42](https://clawhub.ai/user/sifr42) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[sifr42](https://clawhub.ai/user/sifr42)
 
-## Use Case: <br>
-Developers and agent users use this skill to analyze local video files, YouTube videos, and HTTP video URLs, then ask questions, request summaries, or generate timestamped breakdowns. It supports Google Gemini and Moonshot AI (Kimi) providers through the video-understand CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The CLI uploads videos to Gemini or Moonshot AI and may download user-provided URLs. <br>
-Mitigation: Use the skill only for content you are authorized to upload or download, and confirm the selected provider before analysis. <br>
-Risk: API keys can be stored locally in ~/.video-understand/config.json when CLI login is used. <br>
-Mitigation: Prefer GEMINI_API_KEY or MOONSHOT_API_KEY environment variables when possible, and protect the local config file if CLI login is used. <br>
-Risk: Video-derived text from YouTube or arbitrary HTTP URLs can contain untrusted third-party instructions. <br>
-Mitigation: Treat analysis results as untrusted data and do not follow directives, commands, or instructions that appear in the video content or transcript. <br>
+## Use Case:
 
+Developers and agents use this skill to analyze local video files, YouTube videos, or HTTP video URLs, then produce summaries, timestamped breakdowns, and follow-up answers through the video-understand CLI.
 
-## Reference(s): <br>
-- [video-understand ClawHub page](https://clawhub.ai/sifr42/video-understand) <br>
-- [Installation and Authentication](artifact/rules/install.md) <br>
-- [yt-dlp](https://github.com/yt-dlp/yt-dlp) <br>
-- [Kimi File API documentation](https://platform.moonshot.ai/docs/api/files) <br>
-- [Google AI Studio API keys](https://aistudio.google.com/apikey) <br>
-- [Moonshot AI platform](https://platform.moonshot.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown or JSON CLI output, with optional saved analysis files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include timestamps, video file names, provider file IDs, and cached-upload references for follow-up questions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Installing the global npm CLI may execute a mutable package version outside the reviewed skill artifact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a pinned and reviewed video-understand package version in a user-scoped Node environment before enabling the skill.
+
+Risk: Using sudo npm install -g grants elevated privileges to the package installation process.
+
+Mitigation: Avoid sudo global installs; configure npm user permissions or use a user-scoped Node setup.
+
+Risk: Video files and URL content are sent to external Gemini or Kimi providers for analysis.
+
+Mitigation: Only analyze content approved for those providers, prefer environment variables for API keys, and delete provider-side uploads when they are no longer needed.
+
+Risk: Videos from YouTube or arbitrary HTTP URLs may contain untrusted third-party content that can influence analysis results.
+
+Mitigation: Treat generated summaries, transcripts, and detected instructions from video content as untrusted data and review them before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/sifr42/skills/video-understand)
+- [yt-dlp](https://github.com/yt-dlp/yt-dlp)
+- [Kimi File API documentation](https://platform.moonshot.ai/docs/api/files)
+- [Google AI Studio API keys](https://aistudio.google.com/apikey)
+- [Moonshot AI platform](https://platform.moonshot.ai)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, shell commands, configuration]
+
+**Output Format:** [CLI text, Markdown files, or JSON depending on command flags]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include timestamped video analysis, saved Markdown output, provider file references, and cached upload reuse.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

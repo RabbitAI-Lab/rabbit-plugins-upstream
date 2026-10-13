@@ -1,50 +1,61 @@
-## Description: <br>
-Helps math teachers turn exam writing into a structured assessment design workflow using goals, assessment blueprints, difficulty gradients, implementation rules, and result analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese-language middle and high school math teachers plan assessment blueprints, select and label candidate questions, and review item-level statistics before teacher-approved record updates.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Math teachers and tutoring staff use this skill to design diagnostic, formative, summative, and selective math assessments. It produces blueprints, difficulty planning, implementation guidance, and post-assessment analysis frameworks without replacing teacher judgment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Student assessment records or rankings could expose sensitive education data if used directly in reports or downstream systems. <br>
-Mitigation: Use pseudonyms where possible, confirm before reading student profiles or writing results, and avoid rankings or public score disclosures unless a teacher explicitly authorizes the use. <br>
-Risk: Assessment items could include unauthorized copyrighted textbook or question-bank material. <br>
-Mitigation: Require source and copyright status labels for items, prefer original or authorized material, and do not copy unauthorized question banks. <br>
-Risk: Users may treat generated assessment guidance as a complete exam, grading decision, or final student evaluation. <br>
-Mitigation: Keep outputs as teacher-reviewed design frameworks, analysis templates, and teaching suggestions rather than final exams or automated scores. <br>
+## Use Case:
 
+Math teachers use this skill to draft assessment blueprints and candidate items for Chinese middle and high school courses, then examine item difficulty, discrimination, and reliability. Teachers verify questions and approve each update to classroom records; the skill does not grade students or make individual diagnoses.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-exam-designer) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
-- [双向细目表模板](references/blueprint-template.md) <br>
-- [数学测评设计流程](references/exam-design-process.md) <br>
-- [数学测评结果分析模板](references/result-analysis-rubric.md) <br>
-- [双向细目表样板](references/blueprint-sample.md) <br>
-- [难度梯度样板](references/difficulty-gradient-sample.md) <br>
-- [测评分析报告模板（班级）](references/class-report-sample.md) <br>
-- [测评分析报告模板（学员）](references/student-report-sample.md) <br>
+### Deployment Geography for Use:
 
+Global (designed around Chinese-language school math curricula and local examination requirements)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces assessment blueprints, rubrics, report templates, and implementation guidance; it does not generate complete exams or score student work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and frontmatter) <br>
+Risk: Classroom records could expose student-level information beyond the assessment task.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit access to needed fields and tier counts, not per-student tier identities; enforce consent checks before sharing.
+
+Risk: Unverified candidate questions or incorrect item statistics could affect assessment quality.
+
+Mitigation: Have teachers check generated items, calculations, and source attribution before use or record updates.
+
+Risk: Premature disclosure of confidential examination questions or unauthorized reuse of copyrighted items.
+
+Mitigation: Do not provide unreleased examination materials; check permissions and label item sources before reuse.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-exam-designer)
+- [Assessment blueprint template](references/blueprint-template.md)
+- [Assessment design process](references/exam-design-process.md)
+- [Item statistics and results rubric](references/result-analysis-rubric.md)
+- [AI-generated item checks](shared/ai-item-check.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Chinese-language text and Markdown tables for assessment blueprints, candidate questions, and item-level statistics]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Candidate questions require teacher verification; classroom record updates require teacher confirmation.]
+
+## Skill Version(s):
+
+2.11.1 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

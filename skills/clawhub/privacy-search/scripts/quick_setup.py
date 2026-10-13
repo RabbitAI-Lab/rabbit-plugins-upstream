@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 """
-V1.1: 一键安装启动脚本
+一键安装启动脚本
 - 自动创建 venv
 - 安装依赖
 - 配置 config.yaml
 - 启动 SearXNG
 - 验证安装
+
+版本号从 SKILL.md 解析，避免与实际发版脱节。
 """
 
 import os
@@ -13,6 +15,25 @@ import shutil
 import subprocess
 import sys
 from pathlib import Path
+
+# 不生成 __pycache__（死规则 13）
+sys.dont_write_bytecode = True
+
+# 本脚本在依赖安装之前运行，只能依赖标准库。
+# version_util 无第三方依赖，可安全导入。
+try:
+    from version_util import get_current_version, display_width
+except ImportError:
+    try:
+        from .version_util import get_current_version, display_width
+    except ImportError:
+        def get_current_version() -> str:
+            """极端情况下（文件缺失）不因取不到版本号而中断安装"""
+            return ""
+
+        def display_width(text: str) -> int:
+            """兜底实现：仅粗略区分全角与半角"""
+            return sum(2 if ord(ch) > 0x2E80 else 1 for ch in text)
 
 
 def run(cmd: list, check: bool = True, capture: bool = False) -> subprocess.CompletedProcess:
@@ -29,11 +50,17 @@ def run(cmd: list, check: bool = True, capture: bool = False) -> subprocess.Comp
 
 
 def main():
+    version = get_current_version()
+    title = "隐私搜索 %s- 一键安装启动" % (("v%s " % version) if version else "")
+    # 边框按标题实际显示宽度对齐：中文与emoji占两列
+    width = display_width(title)
+    pad = max(0, 58 - width)
+    left = pad // 2
     print("""
 ╔══════════════════════════════════════════════════════════════╗
-║         隐私搜索 v1.1 - 一键安装启动                        ║
+║  {space_l}{title}{space_r}  ║
 ╚══════════════════════════════════════════════════════════════╝
-""")
+""".format(title=title, space_l=" " * left, space_r=" " * (pad - left)))
 
     base_dir = Path(__file__).parent.parent
     scripts_dir = base_dir / "scripts"
@@ -99,21 +126,20 @@ def main():
     if result.returncode == 0:
         print("   ✅ update_checker.py 可运行")
 
-    print("""
+    # V1.9 优化：简化输出，一条命令出结果
+    python_cmd = "python" if os.name != "nt" else "python"
+    print(f"""
 ╔══════════════════════════════════════════════════════════════╗
 ║  ✅ 安装完成！                                              ║
 ╠══════════════════════════════════════════════════════════════╣
-║  快速使用：                                                 ║
-║  1. 启动 SearXNG（可选）：                                  ║
-║     python scripts/searxng_manager start --method pip     ║
-║  2. 开始搜索：                                              ║
-║     python scripts/search.py "关键词"                       ║
-║  3. 隐私搜索：                                              ║
-║     python scripts/search.py "关键词" --privacy strict     ║
-║  4. 查看隐私状态：                                          ║
-║     python scripts/privacy report                           ║
-║  5. 检查更新：                                              ║
-║     python scripts/update_checker check                     ║
+║  一条命令开始搜索：                                         ║
+║                                                              ║
+║     {python_cmd} scripts/search.py "关键词"                  ║
+║                                                              ║
+║  可选：                                                     ║
+║     --privacy strict    隐私模式（默认 normal）              ║
+║     --engines baidu,bing 指定引擎                            ║
+║     --selftest          体检引擎状态                         ║
 ╚══════════════════════════════════════════════════════════════╝
 """)
 

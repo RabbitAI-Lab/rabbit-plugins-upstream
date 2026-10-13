@@ -2,6 +2,7 @@
 
 ## 目录
 - [search_company - 搜索公司](#search_company)
+- [工商五项工具](#工商五项工具)
 - [get_company_profile - 公司画像](#get_company_profile)
 - [get_company_business_keywords - 主营业务关键词](#get_company_business_keywords)
 - [get_company_partners - 合作客户与供应商](#get_company_partners)
@@ -78,6 +79,10 @@ POST /api_v2/search_company
 - 需要覆盖总部与各地分公司的完整市场表现
 
 ---
+
+## 工商五项工具
+
+见 `references/api-registry.md`：请求参数、字段口径、分页、3积分计费、失败不扣费、来源与时间。
 
 ## get_company_profile - 公司画像 {#get_company_profile}
 
@@ -165,7 +170,7 @@ POST /api_v2/search_company
 | `end_date` | str | 否 | 统计结束日期 |
 | `provinces` | list[str] | 否 | 省份列表 |
 | `keywords` | list[str] | 否 | 产品关键词过滤 |
-| `min_amount` | float | 否 | 最低合作金额（元） |
+| `min_amount` | float | 否 | 最低合作金额，**单位万元**（服务端 ×10000 后与元口径的合作额比较） |
 | `limit` | int | 否 | 返回数量，默认20，最大100 |
 
 ### 响应结构
@@ -219,6 +224,8 @@ POST /api_v2/search_company
 | `end_date` | str | 筛选截止日期 |
 | `role` | int | 1=招标联系人，2=中标联系人，0=全部（默认） |
 | `limit` | int | 返回数量，默认5，最大20 |
+
+> 联系电话按账户分层返回：付费账户完整电话；免费/试用账户脱敏（`contact_privacy: "masked"`），提示一次「充值可查看完整联系方式」即可。按返回原样展示，不补全、不成批导出。
 
 ### 响应结构
 

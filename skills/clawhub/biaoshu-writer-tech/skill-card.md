@@ -1,48 +1,65 @@
-## Description: <br>
-Biaoshu Writer Tech lets an agent use an App Key to call the Zhaocaimiao open API for tender-file interpretation, package extraction, bid document generation, and optional compliance review. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps procurement teams interpret tender documents, draft bid submissions, review compliance, and compare bids for similarity through a cloud service.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Developers and business users use this skill to process local tender and bid documents through the Zhaocaimiao cloud API, generate editable bid documents, produce reports, and review bid files for compliance risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain sensitive commercial, pricing, or personal information and are uploaded to the Zhaocaimiao cloud service for processing. <br>
-Mitigation: Confirm user consent before upload and avoid using the skill for documents that should not leave the user's environment. <br>
-Risk: App Keys can be exposed if pasted into chat history or if key-bearing recharge or bind links are shared. <br>
-Mitigation: Prefer manual credential setup when users do not want keys in chat, store local credentials with restricted permissions, and never forward links containing App Key or bind_key parameters. <br>
-Risk: Bid generation consumes credits tied to the App Key account. <br>
-Mitigation: Check balance before generation and confirm the user intends to spend credits before submitting generation jobs. <br>
-Risk: Generated bid files, interpretation reports, and compliance findings may be incomplete or require business and legal judgment. <br>
-Mitigation: Review generated files and risk findings before submitting bids or relying on compliance conclusions externally. <br>
+## Use Case:
 
+Procurement and bid-writing teams use this skill to assess tender requirements, prepare bid documents, review compliance issues, and compare legally held submissions for similarity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/biaoshu-writer-tech) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage reference](references/usage.md) <br>
-- [Zhaocaimiao service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [Zhaocaimiao open API base](https://biaoshu.zhiliaobiaoxun.com/api/open/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown and text guidance, local HTML reports, and .docx bid documents] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include absolute local file paths for generated reports or bid documents; long-running API jobs may stream progress before results are retrieved.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.5 (source: server release metadata and artifact script constant) <br>
+Risk: Tender and bid documents are transferred to the vendor cloud, potentially exposing confidential procurement material.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only files authorized for external processing; confirm the vendor's retention, deletion, and data-use terms before submitting sensitive material.
+
+Risk: API keys may be stored locally or pasted into chat.
+
+Mitigation: Avoid sharing keys in chat where possible, restrict access to stored credentials, and rotate keys if exposed.
+
+Risk: Trial and account setup may collect device information and phone or SMS details.
+
+Mitigation: Review account enrollment and data-collection terms before starting a trial or registering.
+
+Risk: Generation, review, and similarity checks may incur paid usage; automated assessments may need verification.
+
+Mitigation: Review billing terms and available balance before paid tasks, and have a qualified reviewer check conclusions before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/biaoshu-writer-tech)
+- [Bailian bid-writing service](https://biaoshu.zhiliaobiaoxun.com/)
+- [Usage workflow](artifact/references/usage.md)
+- [API documentation](artifact/references/api.md)
+- [Bid similarity documentation](artifact/references/api-duplicate.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Files]
+
+**Output Format:** [Markdown responses and generated HTML, DOCX, or JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Bid documents may be delivered by short-lived download link; reports can be saved locally.]
+
+## Skill Version(s):
+
+2.0.6 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

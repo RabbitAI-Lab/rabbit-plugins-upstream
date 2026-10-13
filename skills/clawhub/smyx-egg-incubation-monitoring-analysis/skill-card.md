@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes turtle or snake egg images or videos to identify shell, vascular, embryo, and quality signals and produce incubation monitoring reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes images or video of incubating turtle and snake eggs to report visible development signals, potential concerns, and monitoring history.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile breeders, farm operators, and hobbyist keepers use this skill to review turtle or snake egg media, monitor fertilization and development signals, and retrieve incubation progress reports. The skill can support smart incubator or breeding-management workflows where users still make final husbandry decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Egg photos, videos, URLs, and history queries are sent to cloud services for analysis and report lookup. <br>
-Mitigation: Use only media intended for this service, avoid unrelated sensitive content, and confirm users understand that analysis and history retrieval rely on external services. <br>
-Risk: The skill creates or reuses a local identity and stores account tokens locally. <br>
-Mitigation: Review local token storage and account handling before deployment, and prefer a release that clearly documents identity creation, token retention, and user consent. <br>
-Risk: Incorrect incubation classifications could affect husbandry decisions. <br>
-Mitigation: Treat visual classifications as decision support and require users to combine reports with species guidance, temperature and humidity logs, and professional reptile breeding judgment. <br>
+## Use Case:
 
+Reptile breeders and hobbyists use egg images or video to review incubation progress, identify possible warning signs, and consult past reports. Results are advisory and should not replace a reptile veterinarian's assessment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-egg-incubation-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-like structured report text with optional report links and Markdown tables for history queries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include incubation stage classifications, alert levels, recommended actions, disclaimers, and report export links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.5) <br>
+Risk: Egg images or videos and internal identity values are sent to the publisher's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get informed consent before uploading; confirm the destination, retention and deletion terms, and who can access report history.
+
+Risk: The skill silently creates or reuses persistent account credentials and stores identity and tokens in a local SQLite database.
+
+Mitigation: Disclose account creation before use, limit access to local credential storage, and prefer an explicit opt-in identity flow.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-egg-incubation-monitoring-analysis)
+- [Egg incubation API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown reports and history tables; optional JSON or saved report file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include developmental stage, warning signals, suggested actions, and links to past reports.]
+
+## Skill Version(s):
+
+1.0.16 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

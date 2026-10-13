@@ -1,51 +1,59 @@
-## Description: <br>
-Orchestrates local multi-agent pipelines with DAG validation, shared state, retries, resume support, execution reports, Gantt visualization, approval gates, hardware-aware recommendations, update checks, and dynamic control flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Orchestrates multi-agent pipelines with DAG scheduling, shared state, recovery workflows, execution reporting, approval steps, visualization, a local dashboard, and MCP tool exposure.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and agent operators use this skill to define, validate, and step through local multi-agent DAG workflows, including conditionals, branch routing, retries, approvals, reports, and resume flows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved state, error messages, and generated reports can contain sensitive node outputs. <br>
-Mitigation: Do not store secrets in node outputs or error messages, and keep state and report files in deliberate, access-controlled locations. <br>
-Risk: Untrusted pipeline JSON can drive misleading workflow behavior or unwanted local state and report outputs. <br>
-Mitigation: Use trusted pipeline definitions, review DAG files before execution, and choose state and report paths deliberately. <br>
-Risk: Generated HTML reports may include content supplied by pipeline nodes. <br>
-Mitigation: Review generated HTML reports before opening or sharing them when pipeline content comes from someone else. <br>
+## Use Case:
 
+Developers and workflow operators use this skill to define, validate, execute, resume, and report on multi-agent DAG pipelines for collection, analysis, approval, and reporting workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/multi-agent-orchestrator) <br>
-- [DAG scheduling guide](references/dag-scheduling-guide.md) <br>
-- [State sharing protocol](references/state-sharing-protocol.md) <br>
-- [Error recovery patterns](references/error-recovery-patterns.md) <br>
-- [Anti-patterns](references/anti-patterns.md) <br>
-- [Examples](references/examples.md) <br>
-- [Deep FAQ](references/faq-deep.md) <br>
-- [Pipeline DAG template](templates/pipeline_dag_template.json) <br>
-- [Dynamic control flow template](templates/control_flow_template.json) <br>
-- [State schema](templates/state_schema.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON pipeline and state files, Python shell commands, Markdown execution reports, and HTML Gantt reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local JSON state and report files; generated reports may contain node output data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The local web dashboard exposes pipeline data too broadly and has unsafe file-read and HTML injection issues according to the security summary.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the dashboard only with trusted local pipeline directories, keep it bound to localhost, and fix path containment and HTML escaping before sensitive workflows.
+
+Risk: Pipeline task outputs are stored on disk and can include sensitive workflow data.
+
+Mitigation: Avoid placing secrets or private account data in pipeline outputs, restrict access to state and report files, and remove retained state when it is no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/multi-agent-orchestrator)
+- [DAG scheduling guide](artifact/references/dag-scheduling-guide.md)
+- [State sharing protocol](artifact/references/state-sharing-protocol.md)
+- [Error recovery patterns](artifact/references/error-recovery-patterns.md)
+- [Usage examples](artifact/references/examples.md)
+- [Deep FAQ](artifact/references/faq-deep.md)
+- [Anti-patterns](artifact/references/anti-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown with JSON configuration examples and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces local pipeline state, reports, HTML visualizations, dashboard views, and MCP tool responses when the supporting scripts are used.]
+
+## Skill Version(s):
+
+5.4.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

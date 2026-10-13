@@ -1,39 +1,53 @@
-## Description: <br>
-AI-powered options strategy helper for China-market options pricing, Greeks calculation, multi-leg strategy analysis, and volatility trading. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides educational pricing, Greeks, multi-leg strategy, volatility, and margin analysis for China exchange-traded options.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Options traders, risk managers, and finance-focused developers use this skill to analyze option pricing inputs, Greeks, common multi-leg strategies, and volatility scenarios for China-market options. It supports educational and analytical workflows, not licensed investment advice or automated trading authority. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill discusses options strategies and market conditions that may be time-sensitive or unsuitable for some users. <br>
-Mitigation: Verify regulatory and market claims against official sources and do not rely on the skill as licensed financial advice, suitability review, broker pricing, or a risk control system. <br>
-Risk: Broad finance trigger phrases may invoke the skill in contexts where users expect trading authority or personalized recommendations. <br>
-Mitigation: Use narrower trigger phrases when deploying and require human review before applying any analysis to real trading decisions. <br>
+## Use Case:
 
+Options traders, risk managers, and researchers use this skill to explore China exchange-traded option pricing, strategy payoffs, volatility, and margin scenarios. Its analysis is educational and does not place trades or access accounts.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China (exchange-traded options market)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with explanatory text and code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include option pricing calculations, Greeks summaries, strategy analysis tables, scenario guidance, and risk disclaimers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: server release metadata and skill frontmatter) <br>
+Risk: Outdated exchange rules or inaccurate margin assumptions could mislead options analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify option rules and margin formulas against current exchange and clearing-house sources before relying on results.
+
+Risk: Providing account or client details for analysis could expose sensitive financial information.
+
+Mitigation: Share only necessary market inputs and approximate funding amounts; omit account numbers, exact balances, passwords, client identities, and non-public trading records.
+
+## Reference(s):
+
+- [Security Options Strategy release](https://clawhub.ai/gechengling/skills/security-options-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown explanations, calculations, tables, and illustrative Python snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Illustrative outputs require independent review before trading decisions.]
+
+## Skill Version(s):
+
+3.0.3 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

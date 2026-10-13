@@ -10,36 +10,54 @@ When images are visible, inspect them and write task-relevant facts into the cho
 
 For style-reference generation, also read `style-reference.md`.
 
+## Unzoom Upscaled Sources First
+
+Run supplied artwork through `POST /unzoom` (MCP `unzoom_image`, 0.1 generations) before any reference, style, init, or conversion image field — official docs name upscaled input as the most common cause of poor output. Skip it when the source is already at native pixel scale, and note it needs at least 256×256 to detect the grid at all. Its result is opaque, so follow with `remove-background` when the sprite must stay cut out.
+
+## MCP Inline Image Transport
+
+Large base64-only MCP inputs can be truncated by the client. When exact pixels matter and no URL field
+exists, use the equivalent REST route; never silently shrink or quantize a user image.
+
+## REST Upload References
+
+When a public PixelLab tool accepts an image URL and the source has no usable URL, REST `POST /uploads` accepts a PNG, JPEG, or image Pillow reads as multipart `file` and returns a temporary `ref`. Pass that `ref` only to fields documented to accept an image URL. The bearer-authenticated upload runs no generation and is not charged; it is hidden after three days and deleted a day later. Do not use it for fields that specifically require a base64 image.
+
+For a local image without a PixelLab API token, MCP `get_upload_url` returns a user-bound upload URL valid for 15 minutes; upload the file with multipart `file` to its `POST /uploads/{ticket}` destination, then use the returned `upload:<id>` only in documented image-URL fields. This is a separate short-lived ticket flow.
+
 ## Goal Router
 
 | User goal | Use this role | Meaning | Common fields/endpoints |
 |---|---|---|---|
-| "Use this as the subject" | Subject reference | The output should depict the same object, character, or subject, while text still guides details. | `reference_images` in `generate-image-v2`; `reference_image` in some character routes. |
-| "Use this exact character" | Identity/character reference | Preserve the existing character identity and rotate, animate, or derive states from it. | `reference_image` in `create-character-v3`; `reference_image` with `method=rotate_character` in `create-character-pro`; `directions` in 4/8-direction character routes. |
-| "Turn this portrait into a character" | Portrait conversion input | The supplied bust/face portrait is the source image to convert into a full-body character sprite. | `image` in `portrait-character-pro` with `direction=portrait_to_character`; MCP `create_portrait_character` when visible. |
-| "Make a portrait from this character" | Character conversion input | The supplied full-body character sprite is the source image to convert into a bust portrait. | `image` in `portrait-character-pro` with `direction=character_to_portrait`; MCP `create_portrait_character` when visible. |
-| "Make it look like this" | Style reference | Copy visual style, pixel size, palette feel, rendering, or tile shape, not the exact subject identity. | `style_image`, `style_images`, `reference_image` in `create-character-pro` style methods. |
+| "Use this as the subject" | Subject reference | The output should depict the same object, character, or subject, while text still guides details. | `reference_images` in MCP `create_image_pro` / REST `generate-image-v2` (up to 4 labelled entries on both — MCP entries accept a preferred `url` or inline base64 plus a `usage` note; REST uses an array with `usage_description`); `reference_image` in some character routes. |
+| "Use this exact character" | Identity/character reference | Preserve the existing character identity and rotate, animate, or derive states from it. | MCP `create_character(mode="v3", reference_image_url=...)` (prefer the URL form — MCP clients truncate large inline base64; with a reference, `n_directions` may be 4 or 8) / REST `create-character-v3.reference_image`; `reference_image` with `method=rotate_character` in `create-character-pro` (REST-only — MCP `mode="pro"` rejects `reference_image_base64`); `directions` in REST 4/8-direction character routes; MCP `create_character(mode="v3")` now accepts `direction_images` alongside a south-facing reference sprite. |
+| "Turn this portrait into a character" | Portrait conversion input | The supplied bust/face portrait is the source image to convert into a full-body character sprite. | `image` in `portrait-character-pro` with `direction=portrait_to_character`; MCP `create_portrait_character.image_url` (preferred — clients can alter or truncate inline base64) or `image` when visible. |
+| "Make a portrait from this character" | Character conversion input | The supplied full-body character sprite is the source image to convert into a bust portrait. | `image` in `portrait-character-pro` with `direction=character_to_portrait`; MCP `create_portrait_character.image_url` (preferred) or `image` when visible. |
+| "Make this portrait talk" | Vocal portrait input | Generate mouth shapes from a portrait, either statelessly or stored on a managed character. | Raw portrait `portrait` in REST `vocal-animation` / `image` in MCP `create_vocal_animation`, or attach it first with `POST /characters/{id}/portrait` / `set_character_portrait`. |
+| "Make it look like this" | Style reference | Copy visual style, pixel size, palette feel, rendering, or tile shape, not the exact subject identity. | MCP `create_image_pro.style_image_url` (preferred) or `style_image_base64`, plus `style_copy`; REST `generate-image-v2.style_image`+`style_options`; `style_images`; `reference_image` in `create-character-pro` style methods; managed `style_character_id` / `style_object_id` when a completed 8-direction asset should supply style and scale. |
 | "Use this rough design" | Concept image | Use the image as a design idea or sketch; text can reinterpret it. | `concept_image` in `generate-ui-v2`; `concept_image` with `method=create_from_concept` in `create-character-pro`. |
-| "Use this UI style" | UI style reference | Copy visual styling for a structured UI asset, not necessarily the layout. | `style_image` in `create-ui-asset`; if the user needs layout guidance instead, use `concept_image` in `generate-ui-v2` or shape `pieces`/`elements` in `create-ui-asset`. |
-| "Start from this and transform it" | Init/source image | The supplied image is the starting state to modify, not merely inspiration. | `init_image` in PixFlux, BitForge, and map object routes. |
-| "Edit/convert this image" | Target image | This is the image being edited, converted, resized, pixelated, or inpainted. | `image` in `edit-image`, `image-to-pixelart`, `image-to-pixelart-pro`; `edit_images` in `edit-images-v2`; `inpainting_image` for BitForge/inpaint targets; pair with `mask_image` only when the user supplies an edit-area mask. |
-| "Add an effect/trail/aura to this sprite" | Target image | The supplied image is the canvas to preserve and augment. Add the requested VFX to the existing sprite/image rather than generating a separate object, unless the user explicitly asks for a reusable layer or isolated effect asset. | `image` in `edit-image`; `edit_images` in `edit-images-v2` for multi-image edits. |
-| "Match these colors" | Palette reference | Extract or force colors from the supplied image/palette, not its subject. | `color_image`, `color_palette`. |
-| "Animate from/to these frames" | Frame reference | The image is an animation boundary or motion anchor. | `first_frame`, `last_frame`, character south frame for animation prompt enhancement. |
-| "Match this terrain/tile" | Terrain/tile style reference | Copy style/material/shape for a terrain layer, transition, or tile variant. | `lower_reference_image`, `upper_reference_image`, `transition_reference_image`, `style_images` in `create-tiles-pro`. |
+| "Use this UI style" | UI style reference | Copy visual styling for a structured UI asset, not necessarily the layout. Only the art style is copied — never the reference's content or layout. | `style_image` in `create-ui-asset` or MCP `create_ui_asset.style_image_base64`; if the user needs layout guidance instead, use `concept_image` in `generate-ui-v2` or shape `pieces`/`elements` in `create-ui-asset`. |
+| "Start from this and transform it" | Init/source image | The supplied image is the starting state to modify, not merely inspiration. | MCP `create_image_pixflux.init_image_url` (preferred) or `init_image_base64`, plus `init_image_strength`; REST `init_image` in `create-image-pixflux`; REST-only `init_image` in BitForge and map-object routes (MCP `create_map_object` uses `background_image`+`inpainting` instead, not an init image). |
+| "Edit/convert this image" | Target image | This is the image being edited, converted, resized, pixelated, or inpainted. | `image` in `edit-image`, `edit-image-pixen`, `image-to-pixelart`, `image-to-pixelart-pro`, `image-to-pixelart-pro-flash`; `edit_images` in `edit-images-v2`; `inpainting_image` for BitForge/inpaint targets; pair with `mask_image` only when the user supplies an edit-area mask. MCP prefers `image_urls` / `reference_image_url` in `edit_image`, `image_url` in `edit_image_pixen` and `image_to_pixelart`, and `image_url` / `mask_image_url` in `inpaint_image`; the corresponding base64 fields remain alternatives. |
+| "Describe this pixel art" / ask PixelLab a visual question | Prompt source image | Request PixelLab's generic 1–3 sentence image description or a custom image-grounded answer; no image is generated. | REST `POST /image-to-text` requires `image` and accepts an optional `prompt`; there is no MCP equivalent. See the SKILL.md Intent Router for route choice. |
+| "Add a static effect/trail/aura to this sprite" | Target image | The supplied image is the canvas to preserve and augment; edit it only when the user wants a still composite. Edit routes return the whole edited image, not an isolated effect layer. | `image` in `edit-image`; `edit_images` in `edit-images-v2` for multi-image edits; MCP `edit_image.image_urls` (preferred) or `images_base64`. |
+| "Add an animated effect/trail/aura to this sprite" | Composition subject | Use the supplied sprite as the VFX Workbench `--sprite` anchor, not as an edit target. If the moving object is a separate supplied projectile, pass that image with `--projectile`; these roles are independent. Review the rendered subject and any front-layer overlap. | MCP `vfx_workbench`; see [VFX Workbench](vfx-workbench.md). |
+| "Match these colors" | Palette reference | Extract or force colors from the supplied image/palette, not its subject. | `color_image`, `color_palette`; MCP `create_image_pixflux.color_image_url` (preferred) or `color_image_base64`. |
+| "Animate from/to these frames" | Frame reference | The image is an animation boundary or motion anchor. | `first_frame`, `last_frame`, character south frame for animation prompt enhancement. MCP prefers `first_frame_url`/`last_frame_url`; inline base64 remains available. |
+| "Match this terrain/tile" | Terrain/tile reference | Use Pro REST `lower_reference_image` or `upper_reference_image` to make the shared terrain match an existing tileset tile exactly; use `transition_reference_image` as a style reference. These are REST-only fields — MCP tileset tools take only `lower_base_tile_id`/`upper_base_tile_id`. For tile-variant style references, use `style_images` in MCP `create_tiles_pro` / REST `create-tiles-pro` (also `style_images` on `create_1_direction_object`, `style_image_base64` on `create_8_direction_object`). See `references/tileset.md` for route behavior. |
 
 ## Endpoint Semantics
 
-These are REST v2 routes unless current MCP docs or visible MCP tools expose a matching image-edit tool; do not route supplied-image edits to managed MCP tools just because MCP is configured. Only counter-intuitive or collision-prone fields are listed; where the field name plainly matches the role (`remove-background.image` = target, `resize.reference_image` = image to resize, `edit-image.image` = edit target), take it at face value.
+These are REST v2 routes; MCP `edit_image`/`inpaint_image`/`animate_image`/`animate_image_pixminimax` cover the same edit/inpaint/animate roles directly (fields noted above) and need no managed asset — do not route supplied-image edits to *managed* MCP tools (`create_*_state`) just because MCP is configured; those regenerate a managed asset, not an in-place edit. PixMiniMax-specific frame and prompt rules live in `animation.md`. Only counter-intuitive or collision-prone fields are listed; where the field name plainly matches the role (`remove-background.image` = target, `resize.reference_image` = image to resize, `edit-image.image` = edit target), take it at face value.
 
 - `create-character-v3`
-  - `reference_image`: south-facing character to rotate into 8 directions (else generates from text); `outline` and `detail` are ignored when it is set.
+  - `reference_image`: front-on, south-facing character to rotate into 8 directions (else generates from text); whichever way the source faces is treated as south. A three-quarter view offsets all direction labels by 45°, and there is no facing override; use a front-on frame or re-pose it before a paid call. `outline` and `detail` are ignored when it is set.
 - `create-character-pro` (image role depends on `method`)
   - `method=create_with_style`: `reference_image` is a style reference.
   - `method=create_from_concept`: `concept_image` seeds the design; `reference_image` adds style guidance.
   - `method=rotate_character`: `reference_image` is the existing character to rotate.
 - 4/8-direction character routes
-  - `directions`: per-direction reference images (provided used as-is, missing generated); bipedal templates require south if any are provided, quadrupeds require south and east.
+  - `directions`: per-direction REST references (provided used as-is, missing generated). MCP v3 also accepts additional views through `direction_images`; see `preset-skeleton-template-animation.md` for preservation, matching, body-plan, and import-cost rules.
 - `portrait-character-pro`
   - `image` is the source to convert, not a style reference.
   - `direction=portrait_to_character`: source must be a bust portrait; output is a full-body sprite. Use `view` and `result_size` to control the sprite.
@@ -49,13 +67,21 @@ These are REST v2 routes unless current MCP docs or visible MCP tools expose a m
 - `edit-images-v2`
   - `edit_images`: targets to edit.
   - `reference_image`: used only with `method=edit_with_reference`, never with `method=edit_with_text`. No mask input or layer output is documented.
-- `image-to-pixelart` / `image-to-pixelart-pro`
-  - `image`: target to convert, not a style reference.
+- `image-to-pixelart` / `image-to-pixelart-pro` / `image-to-pixelart-pro-flash`
+  - `image`: target to convert, not a style reference. Pro Flash also accepts MCP URL/base64/source-image-ID forms and saves its completed output in the gallery.
+  - Base route sizes: input `image_size` up to 2048×2048, output `output_size` up to 512×512. `fixer` (MCP `faithful`) keeps the source rather than reinterpreting it — pair it with `init_image_strength` 100-300. Above roughly 300 the model stops transforming and hands back the source instead of pixel art, so do not raise it further to be "more faithful".
   - Treat "same size", "exact size", "exact resolution", and similar as a fixed output-size request; inspect the input dimensions when the size is implied.
-  - No fixed size requested: prefer `image-to-pixelart-pro`. Fixed size within `image-to-pixelart` `output_size` limits: use normal `image-to-pixelart`.
-  - Fixed size outside those limits: warn that Pro cannot guarantee exact dimensions before spending credits; if the user proceeds, use Pro, verify dimensions, then ask before PixelLab `resize` or local resize/pad/crop.
+  - No output size requested: prefer the older REST-only `image-to-pixelart-pro`, which detects native pixel scale and chooses the output automatically. Pro Flash is documented as the same conversion at 6 generations per image and is an explicit alternative; its output quality has not been tested here.
+  - Fixed size within `image-to-pixelart` `output_size` limits: use normal `image-to-pixelart`.
+  - Fixed size outside those limits: warn that the older Pro route cannot guarantee exact dimensions before spending credits; if the user proceeds, use Pro, verify dimensions, then ask before PixelLab `resize` or local resize/pad/crop.
 
-For animation frame anchors (`first_frame`, `last_frame`) and idle-loop risk, see `animation.md`.
+For animation frame anchors (`first_frame`, `last_frame`) and idle-loop risk, see `animation.md`. Uploaded animations report `n_frames`; values above 1 mean the animation remains intact.
+
+For explicit Pro Flash work, read `pro-flash.md`: an owned `source_image_id` or supplied south-facing first frame anchors character/object rotations; the pixel converter is a separate six-generation conversion route; `style_image` guides appearance, while `edit_image_pro_flash`/`inpaint_image_pro_flash` take a target image or MCP-owned source ID. The inpaint mask is a separate same-size black/white image, not a style reference.
+
+Exact-mask edits: avoid MCP `inpaint_image` and REST `inpaint-v3` until fixed; live tests changed
+pixels outside the mask or ignored the masked region. For other inpainting, verify both regions and
+report failures without retrying or repairing silently.
 
 ## Clarify When Ambiguous
 

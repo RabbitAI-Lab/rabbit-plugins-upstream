@@ -1,47 +1,60 @@
-## Description: <br>
-Story Short Write helps agents plan, draft, revise, and format Chinese short web fiction with an emphasis on emotional pacing, hooks, reversals, and platform-ready manuscript files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Chinese short-form web fiction from story concept and outline through drafting, revision, and delivery, with an emphasis on emotional pacing.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and creative-writing agents use this skill to develop short Chinese web-fiction stories from an initial emotional target through outline, scene drafting, revision, quality checks, and final manuscript formatting. It is especially focused on short-form commercial web-fiction conventions such as hooks, reversals, genre patterns, and platform submission polish. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is designed to create and revise local story files, so drafts in the working directory can be overwritten or substantially changed during normal use. <br>
-Mitigation: Use version control or backups before running the workflow in folders that contain valuable manuscripts. <br>
-Risk: Generated fiction guidance and quality checks may still produce weak, inconsistent, or platform-mismatched story choices. <br>
-Mitigation: Review outlines, manuscript drafts, and final checks before publication or submission. <br>
+## Use Case:
 
+Authors and writing assistants use this skill to plan, draft, and revise Chinese short web fiction with a chosen emotional effect, genre style, and delivery format.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-short-write) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [短篇正文格式](references/short-format.md) <br>
-- [短篇写作工作流详解](references/writing-workflow.md) <br>
-- [短篇写作通用底座](references/short-craft.md) <br>
-- [题材写作公式](references/genre-writing-formulas.md) <br>
-- [输出契约：story-short-analyze ↔ story-short-write](references/output-contract.md) <br>
-- [网文质量检查清单](references/quality-checklist.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Text, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown prose, manuscript files, outlines, checklists, and occasional shell commands for validation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates and updates local story project files such as settings, outlines, manuscript drafts, and comparison notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.13 (source: server release evidence; artifact frontmatter reports 1.0.0) <br>
+Risk: The writing workflow may create or modify story project files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a writing workspace where file edits are expected, and review story changes before publishing.
+
+Risk: Optional author-preference memory may persist across sessions.
+
+Mitigation: Review the memory behavior and avoid recording preferences if cross-session persistence is unwanted.
+
+Risk: The workflow runs local Node and Python checks and reads benchmark or reference folders.
+
+Mitigation: Review the included checks and provide access only to intended story and reference materials.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/worldwonderer/skills/story-short-write)
+- [Project link supplied in skill metadata (import provenance unavailable)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Writing workflow](artifact/references/writing-workflow.md)
+- [Author memory protocol](artifact/references/author-memory.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Writing guidance]
+
+**Output Format:** [Chinese-language story plans, manuscript, and revision guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces story project files; optional author-preference memory can persist across sessions.]
+
+## Skill Version(s):
+
+1.1.22 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

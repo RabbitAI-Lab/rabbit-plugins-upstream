@@ -1,46 +1,62 @@
-## Description: <br>
-Supplier due diligence assistant that helps procurement and project teams assess a company's qualifications, delivery capacity, bid history, partner relationships, public risk signals, and side-by-side supplier comparisons using tender and bidding data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Produces evidence-linked supplier due-diligence reports from Chinese bidding records, covering delivery history, business relationships, competitors, and public risk signals.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement teams, tender owners, general contractors, and business reviewers use this skill to investigate suppliers or subcontractors before selection or onboarding. It produces company background reports and two-supplier comparisons focused on verifiable bidding records, customer relationships, delivery history, and public risk disclosures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Company search terms are sent to the Zhiliaobiaoxun vendor API. <br>
-Mitigation: Install and use the skill only when sending supplier or company names to Zhiliaobiaoxun is acceptable for the due-diligence task. <br>
-Risk: Auto-registration can store an API key in ~/.zlbx/config.json. <br>
-Mitigation: Prefer a preconfigured ZLBX_API_KEY when credential persistence is not desired, and protect any local config file that contains an API key. <br>
-Risk: Generated reports, signed sk links, recharge auto-login links, and returned phone numbers may expose sensitive account or business information. <br>
-Mitigation: Treat generated reports and links as sensitive, share them only with authorized reviewers, and use contact lookup only for legitimate procurement or due-diligence needs. <br>
+## Use Case:
 
+Procurement teams, project owners, and contractors use the skill to check a supplier's claimed experience and delivery capacity, or compare two prospective suppliers using bidding history and cited public information.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/supplier-qualification-checker) <br>
-- [Tool Quick Reference](references/api-quick.md) <br>
-- [Auto Registration Flow](references/auto-register.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Seven-Step Workflow](references/workflow.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown due-diligence reports with optional self-contained HTML report files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May require ZLBX_API_KEY, may store an API key in ~/.zlbx/config.json after user-approved auto-registration, and writes generated reports under ~/zlbx-company-intel-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: The service uses an API key stored in a local configuration file when an environment key is unavailable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect the API key and local configuration file; avoid including credentials in reports or shared material.
+
+Risk: Trial registration sends a hashed MAC address and system metadata for account deduplication.
+
+Mitigation: Obtain user consent before registration, or use an existing API key to skip device-based registration.
+
+Risk: Report links may contain sk sign-in-bypass parameters, and exported HTML may expose those links.
+
+Mitigation: Treat reports and links as sensitive and limit sharing, including recharge and login URLs.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/supplier-qualification-checker)
+- [API quick reference](references/api-quick.md)
+- [Supplier review workflow](references/workflow.md)
+- [Report templates](references/report-template.md)
+- [Account registration and recovery](references/auto-register.md)
+- [Publisher's skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, HTML, Guidance]
+
+**Output Format:** [Cited Markdown report with an optional shareable HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single-supplier review or two-supplier comparison; includes source links and a summary of evidence limits.]
+
+## Skill Version(s):
+
+1.0.5 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

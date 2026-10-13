@@ -1,41 +1,55 @@
-## Description: <br>
-This skill helps students create personalized 30-day study plans, execution check-ins, parent-facing dashboards, and exam-prep schedules from their stated goals and authorized learning-profile data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为中国大陆中小学生制定可执行的学习计划：小学高段按周安排，初高中按30天安排，并在学生开启后跟进执行情况。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and guardians use this skill to turn learning goals, weak areas, time constraints, and authorized learning-profile summaries into practical study plans, weekly adjustment prompts, printable family dashboards, and exam-prep schedules. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose sensitive student learning-profile, emotional-profile, or progress details in parent-facing outputs. <br>
-Mitigation: Use parent-facing dashboards only with clear student and guardian consent, and avoid emotional or diagnostic summaries unless there is explicit agreement and a real need. <br>
-Risk: Plans based on historical learning data may overstate what a student can complete or create pressure through family monitoring. <br>
-Mitigation: Confirm time limits with the student, preserve the skill's iteration step before execution, and frame family dashboard guidance as supportive actions rather than performance judgment. <br>
+## Use Case:
 
+Students in upper primary, middle and high school use this skill to turn goals and weak-subject summaries into manageable weekly or 30-day study schedules and exam preparation plans. Upper-primary students use it with a parent or teacher present; family dashboards and progress follow-up are optional.
 
-## Reference(s): <br>
-- [Plan Templates](references/plan-templates.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan) <br>
+### Deployment Geography for Use:
 
+Mainland China (Simplified Chinese K12 learning context); localize emergency contacts, curriculum and minor-consent rules before use elsewhere.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text plans] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces study-plan schedules, learning-profile analyses, weekly review prompts, parent dashboard text, and exam-prep guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Using mainland China curriculum assumptions or emergency contacts outside their intended region may misdirect students.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict use to the Simplified Chinese mainland K12 context until curriculum, emergency contacts and minor-consent requirements are localized.
+
+Risk: Learning-profile access, family dashboards or reminders could expose a minor's information without appropriate consent.
+
+Mitigation: Keep each capability off by default; obtain separate opt-in before access, parent-visible sharing or reminder queuing, and apply guardian-consent requirements for younger students.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-learning-plan)
+- [Study plan templates](references/plan-templates.md)
+- [Grade-band guidance](shared/grade-bands.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese text and Markdown study schedules and optional family dashboard]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Upper-primary weekly plans; middle- and high-school 30-day plans; optional progress reviews and parent-visible summaries.]
+
+## Skill Version(s):
+
+2.11.1 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -7,7 +7,7 @@ Thanks for your interest in improving `text-to-video`!
 - **Issues** — for bug reports / feature requests, please use [GitHub Issues](https://github.com/MinibeanAI/text-to-video/issues). Include:
   - Claude Code / claude.ai version
   - Node.js version (`node -v`)
-  - Output of `npx hyperframes doctor`
+  - Output of `hyperframes doctor`
   - Minimal reproduction steps
 - **PRs** — fork → branch → commit → push → open a PR. Keep diffs small; one concern per PR.
 

@@ -1,40 +1,53 @@
-## Description: <br>
-AI assistant for bank credit due diligence covering borrower analysis, financial review, industry risk, ESG factors, and investigation report drafting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an advisory framework for corporate credit due diligence, including borrower and financial analysis, industry risk assessment, investigation reports, and draft lending recommendations.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Bank credit officers, loan analysts, and risk managers use this skill as an internal analytical framework for borrower due diligence, financial health review, industry and ESG risk assessment, and report drafting. It supports analysis and templates but does not make final credit approval or rejection decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Credit due diligence is a high-stakes banking workflow, and generated ratings, facility amounts, pricing guidance, collateral suggestions, or report text could be mistaken for final lending decisions. <br>
-Mitigation: Use the skill only as an advisory aid for trained credit staff, and require formal policy review plus authorized approval before relying on outputs for lending action. <br>
-Risk: Borrower analysis may involve customer PII, confidential financial data, or other sensitive banking information. <br>
-Mitigation: Do not enter real customer PII or confidential borrower data unless the institution permits it and appropriate data protection controls are in place. <br>
+## Use Case:
 
+Bank credit officers, loan analysts, and risk managers use this skill to structure corporate borrower due diligence, review financial and industry risks, and draft investigation reports and credit facility recommendations for human review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/bank-credit-due-diligence) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Conversational guidance and Markdown-style report templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, shell commands, persistent storage, network calls, or credential collection are included in the artifact.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Borrower records may contain personal or confidential financial information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use de-identified, aggregated inputs; share real records only when institutional policy permits and data protections are in place.
+
+Risk: Incorrect calculations, ratings, regulatory assumptions, or lending recommendations could mislead credit decisions.
+
+Mitigation: Have qualified credit staff verify source facts, calculations, applicable requirements, and recommendations; retain final decisions within authorized bank processes.
+
+## Reference(s):
+
+- [Bank Credit Due Diligence on ClawHub](https://clawhub.ai/gechengling/skills/bank-credit-due-diligence)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown analysis, checklists, tables, and draft reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory output only; requires review by qualified credit staff before use.]
+
+## Skill Version(s):
+
+4.1.3 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

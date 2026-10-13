@@ -302,7 +302,7 @@ def analyze_locations(
             last = max(dates) if dates else None
 
             # Count by year-month
-            by_month = defaultdict(int)
+            by_month: defaultdict[str, int] = defaultdict(int)
             for p in cluster_photos:
                 if p["created_dt"]:
                     key = p["created_dt"].strftime("%Y-%m")
@@ -324,10 +324,10 @@ def analyze_locations(
                 placeholders = ",".join("?" * len(photo_ids))
                 cursor.execute(
                     f"""
-                    SELECT DISTINCT p.ZFULLNAME, COUNT(df.{schema['asset_fk']}) as count
+                    SELECT DISTINCT p.ZFULLNAME, COUNT(df.{schema["asset_fk"]}) as count
                     FROM ZPERSON p
-                    JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema['person_fk']}
-                    WHERE df.{schema['asset_fk']} IN ({placeholders})
+                    JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema["person_fk"]}
+                    WHERE df.{schema["asset_fk"]} IN ({placeholders})
                     AND p.ZFULLNAME IS NOT NULL AND p.ZFULLNAME != ''
                     GROUP BY p.Z_PK
                     ORDER BY count DESC

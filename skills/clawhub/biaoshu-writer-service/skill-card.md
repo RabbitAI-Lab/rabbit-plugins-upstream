@@ -1,48 +1,60 @@
-## Description: <br>
-侧重把成稿改到能打。对照招标文件要求，它对已生成或已有的技术标、商务标逐段润色精修，补齐待填项，排查废标红线并完成合规审查，输出更稳的 .docx。凡涉及撰写标书、精修投标文件、成稿把关，都通过 App Key 调用本 SKILL。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps prepare bids by interpreting tender documents, generating DOCX proposals, reviewing compliance, and comparing bid documents for similarity.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External bid and proposal teams use this skill to interpret tender documents, generate or refine bid documents, and review compliance issues through the 招采猫 cloud API. It is intended for users who can provide local tender or bid files and operate under an App Key account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial, pricing, or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com for processing. <br>
-Mitigation: Confirm the user understands and accepts the upload before processing files, and avoid using the skill for documents that must not leave the user's organization. <br>
-Risk: The App Key can consume account points and access account-scoped data. <br>
-Mitigation: Store the App Key in ~/.zcm/config.json, avoid pasting it into chat, do not echo it back to the user, and reset it on the service if exposure is suspected. <br>
-Risk: Bid document generation can consume account points. <br>
-Mitigation: Check balance and confirm point-consuming generation steps before submitting them. <br>
-Risk: Changing ZCM_BASE could redirect uploads to a non-default endpoint. <br>
-Mitigation: Leave ZCM_BASE unset unless the user intentionally chooses and reviews an alternate endpoint. <br>
+## Use Case:
 
+Bidding teams and other external users can interpret tender requirements, draft proposal documents, review compliance risks, and compare two or three bids for similarity before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/biaoshu-writer-service) <br>
-- [Publisher profile](https://clawhub.ai/user/dragonzu) <br>
-- [招采猫 platform](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](references/api.md) <br>
-- [Usage reference](references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance plus local HTML, Word, and .docx output file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses an App Key-authenticated cloud API; generated bid documents and reports are written locally and may be retained server-side under the user's account.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+Risk: Tender and bid files are sent to a vendor cloud for processing and may contain confidential business information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain authorization before uploading files and avoid sending documents that cannot be shared with the vendor.
+
+Risk: The automatic trial collects device fingerprint details, and registration can collect phone and SMS data, despite the stated permissions excluding these categories.
+
+Mitigation: Review the data practices before installation; use an explicit website-issued API key instead of automatic trial registration if device fingerprint collection is unacceptable.
+
+Risk: Generated bids and similarity or compliance findings can be incomplete or mistaken; paid operations consume account credits.
+
+Mitigation: Confirm costs and review the generated documents and findings with a qualified person before relying on them or submitting a bid.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/biaoshu-writer-service)
+- [Service website](https://biaoshu.zhiliaobiaoxun.com/?ch=s97)
+- [API overview](artifact/references/api.md)
+- [Usage guide](artifact/references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Guidance]
+
+**Output Format:** [Conversational summaries, HTML reports, DOCX proposals, and JSON results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated files may be delivered through short-lived download links; generation, review, and similarity checks can consume account credits.]
+
+## Skill Version(s):
+
+1.0.5 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,52 @@
-## Description: <br>
-Modern PHP 8.4 and Laravel patterns: architecture, Eloquent, migrations, queues, testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents working on Laravel applications with PHP 8.4 patterns for architecture, Eloquent, migrations, queues, and testing.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill for opinionated PHP 8.4 and Laravel guidance covering application architecture, Eloquent, migrations, queues, Blade, artisan, PHPUnit, PHPStan, and framework-based PHP application work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated Laravel or PHP recommendations may include migrations, database updates, scheduled jobs, deploy cache commands, or other project-level actions that can affect real application data when a user chooses to run them. <br>
-Mitigation: Review generated code and commands before execution, especially before running migrations, database updates, scheduled jobs, deploy/cache commands, or production deployment steps. <br>
+## Use Case:
 
+Developers and engineers use this skill to implement and review framework-based PHP applications, including Laravel persistence, HTTP behavior, and tests. It is not intended for PHP internals or standalone libraries.
 
-## Reference(s): <br>
-- [Laravel Ecosystem Patterns](references/laravel-ecosystem.md) <br>
-- [Testing Laravel (PHPUnit)](references/testing.md) <br>
-- [Feature Testing Patterns](references/feature-testing.md) <br>
-- [Mocking and Faking](references/mocking-and-faking.md) <br>
-- [Factory Patterns](references/factories.md) <br>
-- [Production Performance](references/production-performance.md) <br>
-- [Laravel Pitfalls - Deep Reference](references/pitfalls-deep.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with PHP code examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory coding and testing guidance; the skill itself has no executable payload.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Following development guidance may lead an agent to inspect project code or run local validation commands in sensitive repositories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed commands and their scope before execution, especially in sensitive repositories.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-php-laravel)
+- [Framework patterns](references/framework-patterns.md)
+- [Persistence and jobs](references/persistence-and-jobs.md)
+- [Testing and pitfalls](references/testing-and-pitfalls.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands]
+
+**Output Format:** [Markdown with PHP and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations should be checked against the target application's Laravel version and behavior.]
+
+## Skill Version(s):
+
+5.1.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

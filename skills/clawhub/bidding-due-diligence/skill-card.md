@@ -1,47 +1,60 @@
-## Description: <br>
-该技能帮助用户在投资、合作、并购或签约前，基于公开招投标数据生成企业经营实态尽调报告，覆盖中标流水、订单趋势、客户结构、履约能力、竞对和公开风险。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于招投标记录生成单家公司或双公司对比的经营实态尽调报告，涵盖合同走势、客户关系、竞争格局与有来源的公开风险信息。
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users, investors, procurement teams, and business development teams use this skill to evaluate a company's operating reality before investment, partnership, acquisition, supplier selection, or contract signing. It produces single-company due diligence reports and two-company comparison reports using tender and bidding records, public risk checks, and clearly stated data boundaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The vendor may receive company queries and, during auto-registration, a hashed device identifier. <br>
-Mitigation: Install only if you trust the publisher; prefer setting ZLBX_API_KEY manually and use auto-registration only after explicit consent. <br>
-Risk: Persistent credentials and signed login-bypass links are sensitive. <br>
-Mitigation: Protect local credential files, avoid sharing generated sk or auto-login links, and rotate credentials if exposed. <br>
-Risk: Reports and optional HTML files can contain business-sensitive due diligence findings, contact data, and signed links. <br>
-Mitigation: Review reports before forwarding, request contact data only for a legitimate business reason, and keep shared files within the intended audience. <br>
+## Use Case:
 
+投资、并购或合作前需要初步核查企业的用户，可用它分析公开招投标记录中的经营活动、客户结构和竞争态势，并查看附有来源的公开风险信息。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bidding-due-diligence) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Enterprise intelligence workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports in chat, with optional local HTML report files generated from structured report data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based account setup; may use vendor APIs, WebSearch, local credential storage, and local report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Account setup may store an API key locally and use Zhiliaobiaoxun's service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the service and obtain user consent before account registration; keep the API key private.
+
+Risk: HTML reports may expose business-sensitive findings through shareable signed links.
+
+Mitigation: Review reports and recipients before sharing; treat signed links as sensitive.
+
+Risk: Incomplete public records or unverified allegations could mislead due-diligence decisions.
+
+Mitigation: Check source links, distinguish facts from interpretations, and avoid treating the report as investment or legal advice.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bidding-due-diligence)
+- [知了标讯 Skill 文档](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [企业情报工作流](artifact/references/workflow.md)
+- [报告模板](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, HTML report]
+
+**Output Format:** [Markdown report in conversation and shareable HTML file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes source links; HTML reports may contain signed links and business-sensitive findings.]
+
+## Skill Version(s):
+
+1.0.5 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

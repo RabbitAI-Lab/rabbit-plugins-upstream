@@ -1,44 +1,57 @@
-## Description: <br>
-AI 招投标分析师用自然语言调度知了标讯招中标数据接口，生成商机研判、市场洞察、竞对画像和投标决策分析。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps analyze procurement notices, winning bids, companies, competitors, and market opportunities using natural-language queries.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Business development, bidding, procurement sourcing, and market analysis users can use this skill to search tender and award data, analyze buyers and suppliers, profile companies, identify competitors, and produce structured opportunity reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically register a device, send local device and user identifiers, and save an API key when no API key is already configured. <br>
-Mitigation: Prefer manually setting ZLBX_API_KEY; allow automatic registration only after explicit consent to identifier collection and local key storage. <br>
-Risk: The skill can generate login or recharge links when quota is exhausted. <br>
-Mitigation: Review links before opening them and use the publisher's normal account or billing flow when automatic login is not appropriate. <br>
+## Use Case:
 
+Procurement teams, suppliers, and market analysts use this skill to search Chinese tender and award notices, assess potential opportunities, and summarize company and market activity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-tender-bid-analyst) <br>
-- [Bid Search API Reference](references/api-search.md) <br>
-- [Company Analysis API Reference](references/api-company.md) <br>
-- [Market Analysis API Reference](references/api-market.md) <br>
-- [Automatic Registration Flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global (focused on Chinese procurement data)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown analysis reports with structured summaries and JSON API request/response handling] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ZLBX_API_KEY or a locally stored API key to query external tender, company, and market-analysis APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Procurement queries are sent to Zhiliaobiaoxun's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if sharing those queries with the service is acceptable.
+
+Risk: Automatic account registration collects platform, architecture, and a MAC-derived hash and stores an API key locally.
+
+Mitigation: Prefer setting ZLBX_API_KEY through normal secret management; if using automatic registration, confirm the device-feature collection prompt first and protect the stored key.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/ai-tender-bid-analyst)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Search API reference](references/api-search.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account registration reference](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include tender statistics, company comparisons, and opportunity assessments.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

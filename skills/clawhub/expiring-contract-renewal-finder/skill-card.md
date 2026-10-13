@@ -1,49 +1,61 @@
-## Description: <br>
-Discovers renewal and replacement opportunities by scanning proposed projects, procurement intentions, and contracts expiring within a 0-180 day window, then ranks the results into an opportunity report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户发现即将到期的采购合同与续约机会，并结合拟建项目和采购意向生成优先排序的商机清单。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External sales, business development, and capture teams use this skill to find public procurement opportunities where existing contracts are nearing expiration, planned purchases are emerging, or proposed projects create early engagement windows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can store credentials locally and may create a free-trial account through device-derived registration when no API key is configured. <br>
-Mitigation: Prefer supplying ZLBX_API_KEY through the environment; if using the free-trial flow, review the consent prompt and understand that platform, CPU architecture, and a hashed MAC-derived value are used before an API key is stored in ~/.zlbx/config.json. <br>
-Risk: Generated opportunity reports may preserve login-bypass links returned by the API. <br>
-Mitigation: Treat generated HTML reports and any sk-bearing links as sensitive, and avoid broad sharing unless granting access through those links is acceptable. <br>
-Risk: API scans consume account credits and may send business search terms to the third-party service. <br>
-Mitigation: Confirm the intended scan scope and expected credit use before running a scan, and avoid submitting sensitive internal strategy terms as search keywords. <br>
+## Use Case:
 
+Sales and business-development teams use this skill to find Chinese procurement opportunities by industry, product, and region, identify incumbent suppliers, and prioritize upcoming contract renewals alongside planned projects and purchase intentions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/expiring-contract-renewal-finder) <br>
-- [Publisher Profile](https://clawhub.ai/user/dragonzu) <br>
-- [Workflow Guide](references/workflow.md) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-registration Flow](references/auto-register.md) <br>
-- [HTML Report Renderer](scripts/render_report.py) <br>
-- [ZhiLiao Opportunity Platform](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown opportunity list with an optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes ranked opportunities, source links, data notes, cost estimates, and an absolute path for generated HTML reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and user changelog) <br>
+Risk: Automatic registration sends a hashed MAC-derived device identifier and platform details to the service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide your own ZLBX_API_KEY to skip registration, or explicitly consent before device information is collected and sent.
+
+Risk: Saved credentials, HTML reports, and signed announcement links may expose account access or sensitive opportunity details if shared.
+
+Mitigation: Restrict access to ~/.zlbx/config.json and reports; do not publish signed links, recharge or login links, or saved reports broadly.
+
+Risk: Searches consume paid service credits and procurement results may be incomplete or out of date.
+
+Mitigation: Review the estimated credit usage before scanning and verify high-priority opportunities against their linked source notices.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/expiring-contract-renewal-finder)
+- [API quick reference](references/api-quick.md)
+- [Opportunity-scanning workflow](references/workflow.md)
+- [Report template](references/report-template.md)
+- [Auto-registration procedure](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, HTML reports, Guidance]
+
+**Output Format:** [Prioritized opportunity list in Markdown, with an optional saved HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes opportunity rankings, source links, and suggested next steps; full scans save a shareable HTML report.]
+
+## Skill Version(s):
+
+1.0.7 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
