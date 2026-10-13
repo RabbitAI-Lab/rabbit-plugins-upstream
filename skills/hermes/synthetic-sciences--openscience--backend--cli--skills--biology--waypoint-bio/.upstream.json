@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/waypoint-bio",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/waypoint-bio",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/waypoint-bio",
+  "branch": "main",
+  "pushedAt": "2026-10-13T03:08:20Z",
+  "contentHash": "e3209122a1df4e1e3ace54a70ddb0a8142d735af3a3b0ef3405265ed921b9d86",
+  "fetchedAt": "2026-10-13T15:07:42.111Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/quantum/qutip",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/quantum/qutip",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/quantum/qutip",
+  "branch": "main",
+  "pushedAt": "2026-10-13T03:08:20Z",
+  "contentHash": "411b02362f52026c1affb160fa2470dfcddfdf06d90846bbff3c2b21d2104e0c",
+  "fetchedAt": "2026-10-13T15:07:42.053Z"
+}

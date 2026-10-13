@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/ode-solver",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/ode-solver",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/ode-solver",
+  "branch": "main",
+  "pushedAt": "2026-10-13T03:08:20Z",
+  "contentHash": "fe0a12de9e82daaf258fac5f3d4275be1836003d2e485734cbfb4561c2167843",
+  "fetchedAt": "2026-10-13T15:07:41.993Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/smiles-validation",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/smiles-validation",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/smiles-validation",
+  "branch": "main",
+  "pushedAt": "2026-10-13T03:08:20Z",
+  "contentHash": "54b1c898501c3340162c40812d975a1a1df598f9c7ddf8475fbf910c13666033",
+  "fetchedAt": "2026-10-13T15:07:42.074Z"
+}
