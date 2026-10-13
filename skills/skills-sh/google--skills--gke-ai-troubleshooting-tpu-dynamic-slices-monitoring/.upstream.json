@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-dynamic-slices-monitoring",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-dynamic-slices-monitoring",
+  "branch": "main",
+  "pushedAt": "2026-10-13T11:17:54Z",
+  "contentHash": "0e88cfbb57e00067310fb993ec9fbb6f41145bf8d1eef764f8d4fc1b130431f0",
+  "fetchedAt": "2026-10-13T15:08:58.038Z"
+}
