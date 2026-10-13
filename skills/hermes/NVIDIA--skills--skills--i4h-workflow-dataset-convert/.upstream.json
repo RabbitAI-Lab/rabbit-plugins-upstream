@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-dataset-convert",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-dataset-convert",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-dataset-convert",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "1466298d3ffd27c6728ec9423512d768d4bc44207c5be92b8b7eb6d35347fb61",
+  "fetchedAt": "2026-10-13T15:07:43.029Z"
+}

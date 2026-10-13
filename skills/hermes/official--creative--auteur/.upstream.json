@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/auteur",
+  "identifier": "official/creative/auteur",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/auteur",
+  "branch": "main",
+  "pushedAt": "2026-10-13T15:05:40Z",
+  "contentHash": "0c6f74ec376f3c61d858b9ba6b48b99f797505b516568bcb319f727c137244c2",
+  "fetchedAt": "2026-10-13T15:07:49.317Z"
+}

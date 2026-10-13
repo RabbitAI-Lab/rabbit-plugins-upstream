@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/pinecone",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/pinecone",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/pinecone",
+  "branch": "main",
+  "pushedAt": "2026-10-13T03:08:20Z",
+  "contentHash": "a31313cf6756d1cb4e32df0fa61ee188a0ef9f5abad8c2cff0e9bf61fb8e9699",
+  "fetchedAt": "2026-10-13T15:07:42.017Z"
+}

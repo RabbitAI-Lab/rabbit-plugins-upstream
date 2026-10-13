@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/rtvi-cv-customize-model",
+  "identifier": "NVIDIA/skills/skills/rtvi-cv-customize-model",
+  "repo": "NVIDIA/skills",
+  "path": "skills/rtvi-cv-customize-model",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "2429f24d2c9f089659b1f127e72cd5ac25aad74c47829b4c0b6a0a3478be20dd",
+  "fetchedAt": "2026-10-13T15:07:43.356Z"
+}

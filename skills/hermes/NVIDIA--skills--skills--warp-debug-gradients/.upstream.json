@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/warp-debug-gradients",
+  "identifier": "NVIDIA/skills/skills/warp-debug-gradients",
+  "repo": "NVIDIA/skills",
+  "path": "skills/warp-debug-gradients",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "a181d9c35c85a9c0b278dd6561fb17ae1f9a36e9ac4224e572c1f87251eb7fc5",
+  "fetchedAt": "2026-10-13T15:07:43.555Z"
+}

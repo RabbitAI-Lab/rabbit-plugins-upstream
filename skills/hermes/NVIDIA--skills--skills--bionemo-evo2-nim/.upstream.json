@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-evo2-nim",
+  "identifier": "NVIDIA/skills/skills/bionemo-evo2-nim",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-evo2-nim",
+  "branch": "main",
+  "pushedAt": "2026-10-09T15:27:20Z",
+  "contentHash": "3ccbd77c05be86e0636584b518e9af5899126b27b2e5c9fd36c724a24ca6c1b2",
+  "fetchedAt": "2026-10-13T15:07:43.013Z"
+}
