@@ -1,41 +1,50 @@
-## Description: <br>
-Quick reference for ponytail's modes, skills, and commands. One-shot display. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a one-shot quick reference to Ponytail's modes, skills, and commands.
 
-## Publisher: <br>
-[dietrichgebert](https://clawhub.ai/user/dietrichgebert) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dietrichgebert](https://clawhub.ai/user/dietrichgebert)
 
-## Use Case: <br>
-Developers and agent users use Ponytail Help to display a quick reference for Ponytail modes, related skills, activation and deactivation commands, default-mode configuration, and update steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Activating the broader Ponytail workflow can change an agent's behavior for the session. <br>
-Mitigation: Enable Ponytail modes intentionally and use the documented stop or normal-mode commands when the workflow is no longer wanted. <br>
-Risk: Optional default-mode and auto-update settings can make Ponytail active or update automatically in supported hosts. <br>
-Mitigation: Review configuration and marketplace auto-update settings before enabling them. <br>
+## Use Case:
 
+Developers using Ponytail in Codex CLI, Claude Code, or OpenCode consult this reference for its modes, commands, configuration options, and update instructions.
 
-## Reference(s): <br>
-- [Ponytail documentation](https://github.com/DietrichGebert/ponytail) <br>
-- [Ponytail Help on ClawHub](https://clawhub.ai/dietrichgebert/skills/ponytail-help) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reference text with inline shell and JSON code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [One-shot display; no persistence, credentials, or file writes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.4 (source: server release evidence) <br>
+Risk: Enabling auto-update or changing the default mode could make Ponytail activate automatically in future sessions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the linked Ponytail project and enable these options only if automatic activation is intended.
+
+## Reference(s):
+
+- [Ponytail project homepage](https://github.com/DietrichGebert/ponytail)
+- [Ponytail Help on ClawHub](https://clawhub.ai/dietrichgebert/skills/ponytail-help)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Configuration instructions]
+
+**Output Format:** [Markdown reference card]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One-shot display; does not change modes or persist settings.]
+
+## Skill Version(s):
+
+5.2.0 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

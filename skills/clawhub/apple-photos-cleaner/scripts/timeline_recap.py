@@ -6,10 +6,17 @@ Groups photos by day/event clusters and includes context like people, locations,
 
 import argparse
 import sys
-from datetime import datetime, timedelta
+from datetime import date, datetime, timedelta
 from typing import Any, Optional
 
-from _common import PhotosDB, coredata_to_datetime, datetime_to_coredata, detect_face_schema, format_date_range, output_json
+from _common import (
+    PhotosDB,
+    coredata_to_datetime,
+    datetime_to_coredata,
+    detect_face_schema,
+    format_date_range,
+    output_json,
+)
 
 
 def generate_timeline(
@@ -140,10 +147,10 @@ def generate_timeline(
                 placeholders = ",".join("?" * len(photo_ids))
                 cursor.execute(
                     f"""
-                    SELECT DISTINCT p.ZFULLNAME, COUNT(df.{schema['asset_fk']}) as count
+                    SELECT DISTINCT p.ZFULLNAME, COUNT(df.{schema["asset_fk"]}) as count
                     FROM ZPERSON p
-                    JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema['person_fk']}
-                    WHERE df.{schema['asset_fk']} IN ({placeholders})
+                    JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema["person_fk"]}
+                    WHERE df.{schema["asset_fk"]} IN ({placeholders})
                     GROUP BY p.Z_PK
                     ORDER BY count DESC
                 """,
@@ -192,15 +199,15 @@ def generate_timeline(
 
         # Group events by day
         timeline = []
-        current_day = None
-        day_events = []
+        current_day: Optional[date] = None
+        day_events: list[dict[str, Any]] = []
 
         for event in events:
             event_date = event["start_time"].date()
 
             if current_day is None or event_date != current_day:
                 # Save previous day
-                if day_events:
+                if current_day is not None and day_events:
                     timeline.append(
                         {
                             "date": current_day.isoformat(),
@@ -218,7 +225,7 @@ def generate_timeline(
                 day_events.append(format_event(event))
 
         # Add last day
-        if day_events:
+        if current_day is not None and day_events:
             timeline.append(
                 {
                     "date": current_day.isoformat(),

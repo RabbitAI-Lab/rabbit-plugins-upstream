@@ -1,43 +1,58 @@
-## Description: <br>
-Generates weekly learning review reports from authorized learning activity, including progress evidence, weak points, next-week priorities, and optional family-facing summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+将学生一周的学习记录整理为有依据的周报，并引导学生反思进步、困难和下周的一个重点。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to turn weekly learning records into evidence-based review reports, concrete next-week priorities, and optional family-sharing summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Weekly reviews may summarize learning activity, emotional state, stress, or crisis-related observations that are sensitive if shared too broadly. <br>
-Mitigation: Use the skill only for an explicit review request, collect only the minimum necessary fields, and review family-facing reports before sharing. <br>
-Risk: Crisis signals such as self-harm thoughts, bullying, serious harm, or sustained despair could be softened if treated like normal learning feedback. <br>
-Mitigation: Do not reframe crisis signals as positive progress; alert guardians plainly and seek professional or emergency help when immediate danger is present. <br>
-Risk: Sparse or incomplete weekly data can make conclusions sound more certain than the evidence supports. <br>
-Mitigation: State when data is limited, identify which days or records support the review, and avoid firm judgments when evidence is incomplete. <br>
+## Use Case:
 
+Chinese-speaking K12 students use this skill to review a week's learning, identify evidence of progress and choose a focused next step. With the student's consent, it can prepare a family-facing summary and arrange a review reminder.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review) <br>
-- [Weekly review report template](references/review-report-template.md) <br>
+### Deployment Geography for Use:
 
+Mainland China by default; other regions require localized crisis-support contacts.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown learning review reports with structured sections and concise action recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce separate student-facing and family-facing report variants when appropriate.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: A minor's learning or emotional information could be shared with family members or retained without their agreement.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm consent before family sharing or saving review summaries, omit emotional details without separate permission, and honor pause, delete, and sharing controls.
+
+Risk: Sparse weekly records can make progress metrics and recommendations misleading.
+
+Mitigation: State when records are incomplete, avoid unsupported totals or completion rates, and limit conclusions to available evidence.
+
+Risk: Crisis guidance may be inappropriate if mainland China contact details are used elsewhere.
+
+Mitigation: Confirm the student's location and use locally appropriate help channels; refer safety concerns to trusted adults or emergency services rather than continuing the review.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review)
+- [Weekly review report templates](references/review-report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Chinese-language weekly review and optional family summary in Markdown or text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a short three-question review for younger students; may include one next-week priority and up to three actions.]
+
+## Skill Version(s):
+
+2.11.1 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

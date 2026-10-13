@@ -1,6 +1,6 @@
 # 商机雷达 · 五步工作流执行手册
 
-> 所有请求带 Header：`X-API-Key` + `X-Client: opportunity-radar/1.0.2`。
+> 所有请求带 Header：`X-API-Key` + `X-Client: opportunity-radar/1.0.3`。
 > 工具参数速查见 `api-quick.md`。每步都有「降级策略」——数据缺失时照做，不要中断也不要编造。
 
 ## 模式选择
@@ -13,12 +13,12 @@
 
 ## ① 意图解析（0 次调用）
 
-**目标**：从用户表述中提炼行业词、地区、金额门槛，三路共用同一口径。
+**目标**：把用户的自然语言需求翻译成三路共用的查询要素。
 
 从用户表述中提取：
 - **关键词组**：行业词 + 产品词，各自准备 2-4 个同义/关联词（如"安防" → ["安防","视频监控","雪亮工程"]）。三路共用同一组关键词，保证清单口径一致。
 - **地区**：省/市（用户没说就不传，全国范围）。
-- **金额门槛**：换算成**万元**（拟建、临期的 min_amount 单位是万元；意向路 search_bids 的 min_amount 单位是元，注意换算）。
+- **金额门槛**：三路的 `min_amount` **单位都是万元**（拟建 `search_proposed_projects`、临期 `search_expiring_projects`、意向 `search_bids` 一致）。用户说「500 万以上」就传 `500`，**不要传 5000000** —— 那会把金额门槛放大一万倍，结果是 500 亿、查不到东西且照常扣积分。
 - **时间窗**：拟建/意向默认近 90 天发布；临期默认未来 180 天到期（工具默认值，不传即可）。
 
 用户信息不足时**不要追问超过一句**：给一个默认方案（"我按 XX 理解，先扫一轮"）直接开工。
@@ -29,13 +29,11 @@
 
 1. **拟建路**：`search_proposed_projects`（keywords, provinces/cities, min_amount 万元, begin_date=90 天前, page_size=20）
    - 结果多时可加 `approval_status_code=3`（办结）再查一次——办结的拟建项目最接近落地，单独标记。
-2. **意向路**：`search_bids`（keywords, bid_process=[1], provinces/cities, min_amount 元, begin_date=90 天前, page_size=20）
+2. **意向路**：`search_bids`（keywords, bid_process=[1], provinces/cities, min_amount 万元, begin_date=90 天前, page_size=20）
 3. **临期路**：`search_expiring_projects`（keywords, provinces/cities, min_amount 万元, page_size=20；默认窗口今天→+180 天）
    - 政企客户为主的用户可加 `company_type`（政府/事业单位/学校/医院/军队/国企/其他）收窄。
 
 每路各取 Top N（默认 20），关键词多于一组时按组分次查询，注意调用预算。
-
-> 行业示例：查「河南 × 医疗设备」时，拟建路关键词可扩为「医疗设备」+关联词，意向/临期路复用同一组词并加 监护仪 等产品词收窄。
 
 **降级**：
 - 某路 total=0 → 换更宽的关键词（去掉修饰词）重试一次；仍为 0 → 清单中如实标注「该路暂无匹配商机」，不硬凑。

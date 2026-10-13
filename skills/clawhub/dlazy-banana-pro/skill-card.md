@@ -1,45 +1,56 @@
-## Description: <br>
-Dlazy Banana Pro lets agents generate or edit images with Nano Banana Pro through the dLazy CLI, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate and edit images with Nano Banana Pro from text prompts or reference images.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill to request generated or edited images from dLazy's hosted Nano Banana Pro service, including prompts with optional reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local files may be sent to dLazy API and media storage endpoints. <br>
-Mitigation: Use only data approved for dLazy processing, avoid sensitive local files unless permitted, and confirm file paths before invocation. <br>
-Risk: Login stores a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistence is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: The security summary notes a minor risk of broad auto-triggering. <br>
-Mitigation: Confirm user intent before running commands that upload files, call the hosted service, or consume account credits. <br>
+## Use Case:
 
+Creators and developers use this skill to generate or edit images from prompts and optional reference images through the dLazy service.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-banana-pro) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Repository](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, images] <br>
-**Output Format:** [JSON returned by the dLazy CLI, typically containing generated image URLs or an asynchronous task ID.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy authentication; selected local input files may be uploaded to dLazy endpoints, and async jobs can be polled with a generateId.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.8 (source: frontmatter and server release evidence) <br>
+Risk: The external CLI requires a dLazy account and API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the pinned CLI before installing and manage the API key in your dLazy account.
+
+Risk: Local images supplied to the CLI are uploaded to dLazy; generated images may be saved locally.
+
+Mitigation: Provide only images intended for upload and approve the destination before using --save.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-banana-pro)
+- [dLazy CLI project (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Image links, Image files, Shell commands]
+
+**Output Format:** [Image URLs or saved image files, with JSON command results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated image assets may be downloaded to a user-approved path.]
+
+## Skill Version(s):
+
+1.2.31 (source: ClawHub release metadata; skill frontmatter lists 1.2.8)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

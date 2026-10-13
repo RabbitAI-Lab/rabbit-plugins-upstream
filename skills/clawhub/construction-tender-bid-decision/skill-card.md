@@ -1,52 +1,61 @@
-## Description: <br>
-面向施工、市政、装修、园林、公路和房建等工程项目，帮助投标团队基于知了标讯历史招中标数据评估是否投标、潜在竞争者、报价区间、资质门槛和废标风险。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes construction tenders using historical bid and award data to recommend whether to bid, identify likely competitors, estimate a bid range, and flag qualification risks.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-投标、商务和项目团队可用此技能对具体工程类招标项目做投标决策分析，形成是否参与、竞争格局、报价参考、资质门槛、废标风险和后续行动建议。它适合需要基于公开招中标历史数据快速评估施工项目机会和风险的商业场景。 <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register an account, collect device-derived identifiers, and write credentials to ~/.zlbx/config.json. <br>
-Mitigation: Prefer a user-provided ZLBX_API_KEY when available; if no key exists, obtain explicit consent before registration and collect only the documented platform, architecture, and hashed MAC values. <br>
-Risk: Generated HTML reports and citation links may contain signed access URLs and commercially sensitive bid-analysis conclusions. <br>
-Mitigation: Treat reports as sensitive business documents, share them only with intended recipients, and preserve API-returned links without exposing unnecessary additional records. <br>
-Risk: Bid recommendations based on incomplete public tender data could mislead business decisions or create reputational risk when discussing real organizations. <br>
-Mitigation: Separate facts from inferences, state data gaps and confidence, avoid accusatory language, and require numeric claims, company names, and amounts to come from returned data. <br>
-Risk: Full analysis consumes paid API credits and may exceed the expected budget for broad investigations. <br>
-Mitigation: Tell the user the expected credit range before analysis, use the quick mode when requested, and pause for approval before exceeding the documented call budget. <br>
+## Use Case:
 
+Construction contractors and bid teams use this skill to assess a specific tender, compare past awards and likely competitors, and prepare an evidence-backed bid decision and pricing reference.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/construction-tender-bid-decision) <br>
-- [Publisher profile](https://clawhub.ai/user/dragonzu) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Bid decision workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
-- [ZLBX API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [ZLBX account portal](https://ai.zhiliaobiaoxun.com/?ch=s69) <br>
-- [ZLBX business intelligence portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, HTML, guidance, configuration] <br>
-**Output Format:** [Markdown bid-decision report with an optional self-contained HTML report and concise setup or account guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved auto-registration. Complete analysis uses about 12-25 API calls; quick analysis uses about 5-8 API calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Trial registration collects a hashed MAC-derived device identifier.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the collection before consenting to registration; use a preconfigured API key to skip automatic registration.
+
+Risk: Automatic registration stores an API key locally.
+
+Mitigation: Protect the local credential file and avoid sharing or including the key in reports.
+
+Risk: Reports may contain signed bid-record links or auto-login links that grant access to their recipients.
+
+Mitigation: Treat generated HTML reports and signed links as sensitive; share them only with trusted recipients.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dragonzu/skills/construction-tender-bid-decision)
+- [Vendor skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Analysis workflow](references/workflow.md)
+- [Report template](references/report-template.md)
+- [API quick reference](references/api-quick.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, HTML report]
+
+**Output Format:** [Markdown bid-decision report, with an HTML export in full mode]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes supporting bid records, a confidence rating, data gaps, and a suggested bid range; full analysis consumes account credits.]
+
+## Skill Version(s):
+
+1.0.8 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

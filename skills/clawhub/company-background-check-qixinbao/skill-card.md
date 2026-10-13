@@ -1,51 +1,56 @@
-## Description: <br>
-Generates company background-check reports from a bidding and tendering perspective, including business profile, customers and suppliers, bidding strength, competitors, public risk signals, and optional company comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于招投标数据生成企业背景调查或双公司对比报告，涵盖主营业务、客户与供应商、中标实力、竞争格局及公开风险。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Business users, procurement teams, sales teams, and agents use this skill to investigate a named company through public bidding and tendering data. It is suited for single-company diligence, supplier review, competitor context, and two-company comparisons. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Company queries are sent to the third-party 知了标讯 service and may consume account credits. <br>
-Mitigation: Use only for company queries the user is comfortable sharing with the service, and disclose expected credit use before starting a report. <br>
-Risk: Generated reports and returned platform links may contain signed access parameters such as sk or sid. <br>
-Mitigation: Treat exported reports and signed links as sensitive, and share them only with recipients who should have equivalent access. <br>
-Risk: The skill can store credentials and generated reports locally. <br>
-Mitigation: Protect ~/.zlbx/config.json and the local report output directory, and avoid committing exported reports or credentials to shared repositories. <br>
-Risk: Company diligence reports may be incomplete or misleading if public bidding data, public web sources, or scanner-visible evidence are incomplete. <br>
-Mitigation: Keep conclusions tied to cited data, state data gaps clearly, and verify important findings through official or primary sources before business decisions. <br>
+## Use Case:
 
+企业采购、销售及投标团队可按公司名称调查中国企业的公开招投标表现、客户关系与竞争对手，或比较两家公司以辅助尽调。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/company-background-check-qixinbao) <br>
-- [Workflow Guide](artifact/references/workflow.md) <br>
-- [API Quick Reference](artifact/references/api-quick.md) <br>
-- [Report Template](artifact/references/report-template.md) <br>
-- [Automatic Registration Flow](artifact/references/auto-register.md) <br>
-- [知了标讯 API Endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/) <br>
-- [知了标讯 Registration and Recharge](https://ai.zhiliaobiaoxun.com/?ch=s114) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown company intelligence report with an optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved trial registration; generated reports may be written under ~/zlbx-company-intel-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Optional account setup uses a hashed MAC-derived device identifier and stores a persistent API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain consent before registration, or provide an existing API key to skip it; protect the local credential file.
+
+Risk: Shareable HTML reports and URLs with sk or sid parameters may grant access to report data or linked records.
+
+Mitigation: Keep reports and access-bearing links private, and review them before sharing.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dragonzu/skills/company-background-check-qixinbao)
+- [API quick reference](artifact/references/api-quick.md)
+- [Investigation workflow](artifact/references/workflow.md)
+- [Report templates](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, HTML files]
+
+**Output Format:** [Conversational report and locally saved HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports single-company and two-company reports with source links; HTML reports may contain access-bearing links.]
+
+## Skill Version(s):
+
+1.0.5 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

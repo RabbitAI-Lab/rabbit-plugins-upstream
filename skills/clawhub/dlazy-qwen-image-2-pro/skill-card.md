@@ -1,46 +1,60 @@
-## Description: <br>
-Generates images with Alibaba Bailian qwen-image-2.0-pro through the dLazy CLI, supporting prompts, reference images, size selection, prompt rewriting, dry-run cost estimates, and asynchronous task polling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates images from text prompts with Qwen Image 2 Pro through dLazy, including designs with detailed text and mixed Chinese-English layouts.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call dLazy's hosted qwen-image-2-pro image generation service from an agent workflow. It is intended for creating image outputs from prompts and optional reference images while receiving structured CLI results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local files are sent to dLazy's hosted service for generation. <br>
-Mitigation: Avoid sending sensitive prompts or confidential files unless the dLazy service terms and organizational policy allow it. <br>
-Risk: The CLI stores an API key in the user's local configuration unless the key is supplied per invocation. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable or npx for ephemeral use, and rotate or revoke the key from the dLazy dashboard when access changes. <br>
-Risk: Generated outputs are hosted by dLazy and returned as files.dlazy.com URLs. <br>
-Mitigation: Treat returned URLs according to data handling requirements before sharing or embedding them in downstream workflows. <br>
+## Use Case:
 
+Creators, designers, and developers use this skill to generate images from prompts, including layouts with complex text and photorealistic detail.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-qwen-image-2-pro) <br>
-- [Publisher profile](https://clawhub.ai/user/dlazyai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [CLI commands and JSON responses containing generated image URLs or asynchronous task status] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and network access to api.dlazy.com and files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release metadata) <br>
+Risk: Prompts and referenced local media are sent to dLazy's hosted service, which also hosts generated outputs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential prompts or files without approval for external processing and hosting.
+
+Risk: Login can save a dLazy API key on the user's device.
+
+Mitigation: Protect the local credential and rotate or revoke it if exposed.
+
+Risk: Running the third-party CLI installs or executes its package in the user's environment.
+
+Mitigation: Review the package source before use; prefer the pinned on-demand npx command when a global install is unnecessary.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-qwen-image-2-pro)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Image URLs]
+
+**Output Format:** [Markdown guidance and commands; JSON image-result links from the CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can save generated images locally or return an asynchronous task ID.]
+
+## Skill Version(s):
+
+1.3.28 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -7,7 +7,7 @@ Use this replaceable domain module for AI-native products, agent workflows,
 LLM-powered applications, multi-agent systems, copilots, AI assistants, RAG
 products, tool-using agents, evaluation platforms, prompt/model operations, and
 human-in-the-loop automation. A replacement `domain-*.md` must preserve the
-same 15 section headings used here and in `domain-module-template.md`.
+core section headings used here and in `domain-module-template.md`.
 
 ## Contents
 
@@ -28,6 +28,8 @@ same 15 section headings used here and in `domain-module-template.md`.
 - Evaluation Profile
 - Acceptance Checklist
 
+> Use only the slices relevant to the project. State arrows and YAML/field lists below are design sketches, not executable schemas or a complete workflow. Instantiate the normal, exception and recovery paths, guards, data owner, permissions and version effects before handoff. A pattern does not override an authorized project decision or create a legal obligation. Where confidence is useful, declare its measurement and limits; do not invent a calibrated score from model self-report.
+
 ## Domain Purpose
 
 - Business outcome: deliver trustworthy AI-assisted or AI-core outcomes with
@@ -42,6 +44,25 @@ same 15 section headings used here and in `domain-module-template.md`.
 - AI must not autonomously decide: high-impact legal, financial, medical,
   safety, enforcement, account closure, payment, or irreversible business
   actions without explicit authorized human accountability.
+
+### Current Baseline and Change Watch (verified 2026-08-29)
+
+| Evidence class | Current signal | Requirement effect |
+|---|---|---|
+| design_guidance | `KS-AI-AGENT-IMPLEMENTATION-2026` adds current agent policy direction; `KS-AI-GBZ185-SERIES-2026` covers agent architecture, identity, description, discovery, interaction and tool calling; `KS-AI-MCP-2026-07-28` resets MCP around a stateless core and formal extensions | declare policy applicability, protocol/profile versions, identity/authority, capability metadata, discovery, auth, tool side effects, compatibility and migration tests instead of saying only “supports agents/MCP” |
+| binding_baseline | existing privacy, data-security, AI-content-labeling and anthropomorphic-interaction rules remain applicable by product scenario | resolve whether content, interaction, personal data and high-impact writeback rules apply; keep accountable human gates and audit evidence |
+| change_watch | `KS-AI-NIST-AGENT-STANDARDS-2026` and `KS-AI-AGENT-SECURITY-DRAFT-2026` signal stronger identity, permission, tool, data, log and shutdown controls | use them for threat modeling and re-verification only; initiatives, consultations and draft projects cannot create a compliance hard stop |
+| compatibility guard | MCP 2026-07-28 deprecates legacy lifecycle/SSE features with a migration window | never silently break older clients; record supported versions, deprecated paths, fallback and coexistence evidence |
+
+### AI Transformation Horizon
+
+| Axis | From -> toward | Non-negotiable product guard |
+|---|---|---|
+| product unit | isolated chatbot/agent -> governed agent capability deployed across workflows | capability identity, owner, purpose, tools, data scope, version and retirement are explicit |
+| architecture | prompt plus tools -> context plane + identity/authority + registry/discovery + runtime + memory + evaluation + human control | protocol support names exact version/profile; tool side effects and delegation chains remain inspectable |
+| operation | foreground request -> durable/event-driven/multi-agent execution | checkpoint, budget, cancellation, retry, conflict resolution, incident handling and human takeover are designed |
+| value loop | fluent output -> verified state change, accepted artifact, cycle-time/quality improvement and failure evidence | optimize business outcome within safety limits; do not use task volume or model confidence as proof |
+| ecosystem | proprietary plugins -> portable skills/tools/agents with declared trust boundaries | preserve export, interoperability, source authority and least privilege; open protocol does not equal trusted component |
 
 ## First-Principles Domain Lens
 
@@ -132,7 +153,9 @@ events:
 AIUseCase: idea -> shaped -> specified -> evaluated -> launched -> monitored -> retired
 AgentDefinition: draft -> test_ready -> approved -> active -> deprecated | suspended
 PromptVersion: draft -> candidate -> evaluated -> active -> rolled_back | archived
-AgentRun: created -> retrieving_context -> reasoning -> tool_pending -> human_review -> completed
+AgentRun: created -> retrieving_context -> reasoning -> completed (authorized answer with no consequential write)
+AgentRun: reasoning -> tool_pending -> completed (explicitly authorized bounded action)
+AgentRun: reasoning | tool_pending -> human_review -> completed (required approval bound to the action/content version)
 AgentRun: reasoning | tool_pending -> refused | failed | fallback
 ChildAgent: queued -> running -> waiting_on_tool | progress_visible -> completed | failed | cancelled
 HumanReview: pending -> approved | edited_and_approved | rejected | escalated
@@ -202,7 +225,7 @@ Rules:
    -> human gate -> eval set -> trace fields.
 3. Runtime answer: user request -> permission check -> context retrieval ->
    model/tool execution -> citation/refusal -> human gate when needed -> output.
-4. Tool writeback: proposed action -> policy check -> reviewer approval ->
+4. Tool writeback: proposed action -> policy check -> reviewer approval where required ->
    idempotent tool call -> audit/event -> rollback path.
 5. Evaluation loop: anchor calibration -> golden/adversarial run -> threshold
    check -> regression triage -> prompt/model/tool update -> release decision.
@@ -294,7 +317,7 @@ Mocked matrices and simulated reviewers cannot satisfy expert review or audit.
 
 ## Acceptance Checklist
 
-- [ ] All 15 domain module sections are present.
+- [ ] Relevant domain slices and their applicability are explicit; the pack structure is not a mandatory PRD outline.
 - [ ] AI centrality is classified per module: AI-incidental, AI-supporting, or AI-core.
 - [ ] Agent/tool/write scopes and human gates are explicit.
 - [ ] Context sources have freshness, permission, citation, and reliability rules.

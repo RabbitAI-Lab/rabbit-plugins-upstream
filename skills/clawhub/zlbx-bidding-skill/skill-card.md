@@ -1,47 +1,60 @@
-## Description: <br>
-Helps agents query and analyze Zhiliaobiaoxun procurement, bidding, award, company, supplier, competitor, market, and price-trend data through documented API workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users search and analyze Chinese bidding notices, suppliers, companies, pricing, and procurement trends through the 知了标讯 data service.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and procurement analysts use this skill to search bid notices, inspect award details, analyze companies and competitors, identify likely suppliers, and summarize procurement market trends from Zhiliaobiaoxun data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement, supplier, competitor, company, and contact lookup queries are sent to a third-party Zhiliaobiaoxun service using the user's API key. <br>
-Mitigation: Use the skill only for queries appropriate to share with that service and avoid including unnecessary sensitive details. <br>
-Risk: Broad searches can expose or process more business information than needed for the task. <br>
-Mitigation: Specify exact entities, date ranges, regions, and product terms so requests stay narrowly scoped. <br>
-Risk: Company matching and market analysis may return related entities that need business review before action. <br>
-Mitigation: Review matched company lists and analysis outputs before relying on them for procurement or competitive decisions. <br>
+## Use Case:
 
+Procurement and bidding professionals use this skill to find tender opportunities, investigate companies and potential suppliers, and assess competitors, prices, and market trends in Chinese procurement data.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/zlbx-bidding-skill) <br>
-- [Artifact: skill instructions](SKILL.md) <br>
-- [Artifact: bid search API reference](references/api-search.md) <br>
-- [Artifact: company analysis API reference](references/api-company.md) <br>
-- [Artifact: market analysis API reference](references/api-market.md) <br>
-- [Zhiliaobiaoxun API key setup](https://ai.zhiliaobiaoxun.com/?ch=s01) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API request guidance, configuration] <br>
-**Output Format:** [Markdown or text with JSON API request examples and summarized bid-intelligence results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends user procurement, company, supplier, competitor, and contact lookup queries to the Zhiliaobiaoxun API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.2 (source: server evidence release.version) <br>
+Risk: Bidding queries are sent to a third-party data provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the service only when comfortable sharing the query with that provider; avoid submitting sensitive details unnecessarily.
+
+Risk: Without an existing API key, trial registration can transmit a hashed device identifier and create an account.
+
+Mitigation: Require explicit opt-in before collecting device details or registering; configure ZLBX_API_KEY manually to bypass registration.
+
+Risk: Auto-registration stores an API key locally and can generate login and recharge links.
+
+Mitigation: Protect the local key, avoid sharing login links, and review the recharge flow before using trial credentials.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/zlbx-bidding-skill)
+- [知了标讯 skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Bidding search API reference](references/api-search.md)
+- [Automatic registration and account guidance](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and linked result tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include bidding notice links, company and market analysis, and account guidance.]
+
+## Skill Version(s):
+
+1.4.7 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

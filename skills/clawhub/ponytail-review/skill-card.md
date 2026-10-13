@@ -1,39 +1,50 @@
-## Description: <br>
-Review a diff for over-engineering and identify deletions, standard-library replacements, native platform features, speculative abstractions, and shorter equivalents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews code changes for bugs, security issues, scaling problems, missing tests, performance concerns, and unnecessary complexity, with concrete fixes for each finding.
 
-## Publisher: <br>
-[dietrichgebert](https://clawhub.ai/user/dietrichgebert) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dietrichgebert](https://clawhub.ai/user/dietrichgebert)
 
-## Use Case: <br>
-Developers use this skill during code review to find unnecessary complexity in diffs and get terse suggestions for what to remove or simplify. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill intentionally gives terse deletion and simplification suggestions that may miss correctness, security, or performance concerns. <br>
-Mitigation: Use it as a complexity-focused pass and run a normal review for bugs, security, and performance before relying on the results. <br>
+## Use Case:
 
+Developers and engineers use this skill to review code changes and receive prioritized, actionable findings before shipping.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dietrichgebert/skills/ponytail-review) <br>
-- [Project homepage](https://github.com/DietrichGebert/ponytail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text review findings, one line per finding] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Ends with a net lines possible summary when findings exist; says Lean already. Ship. when there is nothing to cut.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.4 (source: server release evidence) <br>
+Risk: A finding can be misleading if related code or expected load is overlooked.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm each finding against the diff, callers, tests, and the relevant deployment assumptions before acting on it.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/DietrichGebert/ponytail)
+- [ClawHub skill page](https://clawhub.ai/dietrichgebert/skills/ponytail-review)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code review guidance]
+
+**Output Format:** [Markdown review report with prioritized findings and a verdict]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Each finding describes a concrete failure, a fix, and the impact of leaving it unresolved.]
+
+## Skill Version(s):
+
+5.2.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,60 @@
-## Description: <br>
-地方标讯极速检索-比地招标，当用户指定省份、城市或特定地域进行下沉标讯搜索时调用，必须严格应用地域过滤器参数，快速返回按时间倒序排列的地方采购公告及预算金额。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches local Chinese procurement notices by province, city, or region and returns recent announcements with available budget amounts.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External procurement analysts, sales teams, and agent users use this skill to search Chinese tender notices by keyword, geography, amount, and date, then retrieve details or summarize local opportunities. It also supports company, competitor, contact, and market-intelligence lookups when those broader procurement-analysis workflows are requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary flags that this skill exposes broader company, contact, competitor, and market-intelligence features than the local tender-search description suggests. <br>
-Mitigation: Use it only when the full procurement-intelligence scope is acceptable, and require explicit user intent before company expansion, contact lookup, competitor analysis, or market aggregation. <br>
-Risk: The skill requires a sensitive API key and can consume account quota. <br>
-Mitigation: Use a dedicated ZLBX_API_KEY, store it in the agent environment or approved secret store, monitor quota, and avoid exposing the key in prompts or logs. <br>
-Risk: Search terms, company names, and contact lookups may reveal sensitive business interests to an external procurement API. <br>
-Mitigation: Avoid confidential search terms, apply region filters when needed, and review results before sharing them outside the intended workflow. <br>
+## Use Case:
 
+Procurement teams and other external users search Chinese provincial and city-level tender announcements with location filters, review recent opportunities and budgets, and optionally investigate companies or market trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/tender-express-search-bidizhaobiao) <br>
-- [Bidizhaobiao API key setup](https://ai.zhiliaobiaoxun.com/?ch=s27) <br>
-- [Tender Search API Reference](references/api-search.md) <br>
-- [Company Analysis API Reference](references/api-company.md) <br>
-- [Market Analysis API Reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global (search coverage focuses on Chinese provincial and city-level procurement)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API request examples and retrieved procurement data] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and may consume API quota for each request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: Search and optional registration information is sent to the Zhiliaobiaoxun/Bidizhaobiao service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the destination and submitted data before use; avoid sharing sensitive search or registration details.
+
+Risk: Automatic registration uses device-derived identifiers and stores an API key locally.
+
+Mitigation: Ask for consent before registration; set ZLBX_API_KEY manually to avoid device-based registration and protect the local key.
+
+Risk: Company, contact, account, and market features extend beyond local tender search and may consume credits.
+
+Mitigation: Use only the requested features and check credit costs before making additional queries.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/tender-express-search-bidizhaobiao)
+- [Provider skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Tender search API reference](artifact/references/api-search.md)
+- [Automatic registration reference](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with tender summaries and links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Location-filtered results are presented newest first, with budget amounts when available.]
+
+## Skill Version(s):
+
+2.0.5 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

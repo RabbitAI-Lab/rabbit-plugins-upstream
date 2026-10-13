@@ -1,0 +1,16 @@
+{
+  "generated_by": "gen_engine_hashes.py (sandbox mode)",
+  "generated_at": "2026-09-30T03:09:04Z",
+  "note": "SHA-256 of analyzer runtime files (engine.zip 内 analyze_skill.py 的完整性由其哈希覆盖); scan_self_integrity verifies these at runtime to detect tampering/injection.",
+  "files": {
+    "scripts/analyze_skill.txt": "1ed903fe9ea109d31fb9c4f5fdfe9053dce83849a4528734d0300acf5110191d",
+    "scripts/build_engine.py": "d5aee173d3e982ae470dc48ea3c6a82c39d0f2c98a49bffa21a622206fe01a38",
+    "scripts/sandbox_run.py": "594f10124beab3973b42868f0e2e03cb5bd1a2de1276cac41be290ff4760f8e4",
+    "scripts/_load_engine.py": "ee8038c09dddcc19d337827d662e3751782b7715605a1a859dbcd53e96b492e9",
+    "scripts/nosec.py": "e29ff25e6336802c508e70e443710e57cfff7442824e87fb80c7df8f925f611f",
+    "scripts/selfcheck.py": "eae61a3e2c6d22f79263242e8719aee8ae54a7a46e137b8d0f726e1d4013354c",
+    "scripts/watchdog.py": "1d8584d0220afde4db5311630b8935554f7bfb4b922bb71db51e6f6272667535",
+    "scripts/logger.py": "7649cfb95ff7afccd4601b1443973780471d7ee5992b0ad78f2840f11123c7fc",
+    "scripts/verify_signature.py": "76699333d793b49bc6d1e9160d5e8979133d4531ca5810c9f327f675a0792d6c"
+  }
+}

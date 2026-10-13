@@ -1,45 +1,64 @@
-## Description: <br>
-Generate high-quality images with Vidu Q2, including text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates Vidu Q2 images from text prompts or reference images through dLazy.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke dLazy's hosted Vidu Q2 image generation service for prompt-based image creation and image-conditioned edits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and selected local image inputs may be uploaded to dLazy's hosted service. <br>
-Mitigation: Avoid submitting sensitive prompts or files unless the deployment's data-handling requirements allow use of dLazy's hosted API. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Broad image-generation requests could trigger the skill unintentionally. <br>
-Mitigation: Invoke it explicitly with Vidu Q2 or dLazy terms, matching the security guidance's overbroad-trigger caution. <br>
+## Use Case:
 
+Creators and developers use this skill to request images from text prompts or reference images using Vidu Q2 through the dLazy service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-t2i) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated image outputs are returned as hosted URLs; asynchronous requests may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: Authentication stores a dLazy API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect the local configuration and rotate or revoke the key if exposed.
+
+Risk: Prompts and selected local reference images are sent to the dLazy cloud service.
+
+Mitigation: Confirm the content is appropriate to share before submitting prompts or uploading images.
+
+Risk: Image-generation requests may consume dLazy credits.
+
+Mitigation: Confirm paid requests with the user and check the cost estimate before execution.
+
+Risk: Installing the third-party CLI adds executable software to the environment.
+
+Mitigation: Review the pinned package before use; choose the on-demand npx option if a persistent installation is unnecessary.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-viduq2-t2i)
+- [dLazy CLI homepage (listed in skill metadata; import provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, JSON]
+
+**Output Format:** [Text with shell commands and JSON image-result metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Successful requests return image URLs; asynchronous requests return a task ID.]
+
+## Skill Version(s):
+
+1.3.28 (source: ClawHub release evidence; artifact frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

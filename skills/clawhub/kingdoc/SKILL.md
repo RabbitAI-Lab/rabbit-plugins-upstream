@@ -1,6 +1,6 @@
 ---
 name: kingdoc
-version: 3.3.0
+version: 4.3.5
 description: >
 ---
 
@@ -60,13 +60,7 @@ sudo apt-get install tesseract-ocr tesseract-ocr-chi-sim
 
 ### 3. 配置并加载
 
-```bash
-# Linux/macOS
-bash setup.sh
-# Windows (PowerShell)
-powershell -ExecutionPolicy Bypass -File setup.ps1
-```
-脚本引导输入 App ID/Secret，自动生成 `config.json`、`mcp-config.json`、模板与图标，并采集本机硬件画像。
+**首次配置由 AI 引导完成**：直接告诉我你的金山开放平台 **App ID / App Secret**，我会自动生成 `config.json`、`mcp-config.json`、模板与图标，并采集本机硬件画像。无需手动执行安装命令。
 
 ---
 
@@ -155,12 +149,14 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 |------|----------|--------|------|------|---------|---------|
 | 智能文档 | smart_note | ⭐⭐⭐ | ✅ 自动 | ✅ 本地生成+上传 | smartcanvas | Markdown→DOCX→上传覆盖 |
 | 文字文档 | doc | ⭐⭐⭐ | ✅ 自动 | ✅ 本地生成+上传 | doc | python-docx→上传覆盖 |
+| 智能画布 | smart_canvas | ⭐⭐⭐ | ✅ 自动 | ✅ 元素级 CRUD+增量追加 | 智能画布 | element_api + Markdown 追加 |
 | 电子表格 | sheet | ⭐⭐⭐ | ✅ 自动 | ✅ API 精细编辑 | sheet | 金山 et API（单元格/公式） |
 | 演示文稿 | ppt | ⭐⭐⭐ | ✅ 自动 | ✅ 本地生成+上传 | slide | python-pptx→上传覆盖 |
 | 多维表格 | smartsheet | ⭐⭐⭐ | ✅ 自动 | ✅ API 精细编辑 | smartsheet | 金山 dbt API（记录/字段/视图） |
 | 收集表 | form | ⭐⭐⭐ | ✅ 自动 | ✅ API 配置 | form | 金山 form API |
-| 思维导图 | mindmap | ⭐⭐⭐ | ✅ 自动 | ✅ 本地渲染+上传 | mind | mermaid→SVG→上传 |
-| 流程图 | flowchart | ⭐⭐⭐ | ✅ 自动 | ✅ 本地渲染+上传 | flowchart | mermaid→SVG→上传 |
+| 可视化 | visualization | ⭐⭐⭐ | ✅ 自动 | ✅ 本地渲染+上传 | — | mermaid→SVG→上传 |
+| 历史管理 | history_mgmt | ⭐⭐⭐ | — | ✅ 统一管理 | — | 回收站+版本历史统一入口 |
+| 全文搜索 | content_search | ⭐⭐⭐ | — | ✅ 全文搜索 | — | 内容搜索 API（超越腾讯） |
 | 附件 | attachment | ⭐⭐⭐ | ✅ 自动 | — | — | 本地文件直接上传 |
 
 ---
@@ -304,7 +300,361 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 
 ---
 
-## 11. 完整场景案例（v3.0.0 新增）
+## 11. 文档内容合规检查（v3.4.0 新增，自研正则+规则引擎）
+
+> 政企客户对文档内容有严格合规要求，手动检查耗时易遗漏。
+> 本模块提供**敏感词扫描 + 数据泄露检测 + 格式规范检查 + 密级标注**，零外部依赖。
+
+### 11.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.compliance.sensitive` | 敏感词扫描 | 输入全文 → 返回命中词+位置+上下文+风险等级 |
+| `kdoc.compliance.leak` | 数据泄露检测 | 扫描手机号/身份证号/银行卡号/邮箱 → 风险等级+脱敏显示 |
+| `kdoc.compliance.format` | 格式规范检查 | 输入文件路径 → 返回不合规清单（支持 DOCX/PPTX/TXT/MD） |
+| `kdoc.compliance.classify` | 密级自动标注 | 输入全文 → 建议密级（公开/内部/秘密/机密） |
+
+### 11.2 工作流程
+
+```
+① 敏感词扫描：kdoc.file.content → 取全文 → compliance.sensitive() → 命中列表+位置
+② 泄露检测：compliance.leak() → 正则匹配手机/身份证/银行卡/邮箱 → 风险等级
+③ 格式检查：kdoc.local.docx 解析 → compliance.format() → 不合规清单
+④ 密级标注：compliance.classify() → 关键词+规则 → 建议密级
+```
+
+### 11.3 敏感词库管理
+
+- **内置词包（权威来源）**：`references/sensitive_packs/`（base 通用包 + 教培/医疗/金融/政务四行业包，YAML 受限子集，合规风险分类描述，不含字面违规词）
+- **外部行业词包**：环境变量 `KINGDOC_EXTERNAL_PACKS_DIR` 或参数 `external_packs_dir` 加载企业本地词库（外部同名包覆盖内置包）
+- **用户黑名单**：`references/user_blacklist.txt`（追加自定义敏感词）
+- **用户白名单**：`references/user_whitelist.txt`（跳过误判词）
+- **已弃用**：旧版 `references/sensitive_words.txt` 为合规分类描述明文镜像，仅供查阅，引擎不再加载；更新词包请编辑 `references/sensitive_packs/` 对应文件
+
+### 11.4 数据泄露检测能力
+
+| 类型 | 正则匹配 | 额外校验 | 风险等级 |
+|------|---------|---------|---------|
+| 手机号 | 1[3-9]\d{9} | — | high |
+| 身份证号 | 18位 | 校验码验证 | critical |
+| 银行卡号 | 16-19位 | Luhn 算法 | critical |
+| 邮箱地址 | 标准邮箱正则 | — | medium |
+| IP地址 | IPv4 | — | low |
+
+### 11.5 格式规范检查
+
+| 检查项 | 规范 | 严重度 |
+|--------|------|--------|
+| 字体 | 宋体 | warning |
+| 字号 | 10-14pt | warning |
+| 行距 | 1.5倍行距 | info |
+| 页边距 | 2.54cm/3.17cm | info |
+| 行长度 | ≤80字符 | info |
+| 标题层级 | 长文档必须有 H1 | warning |
+
+### 11.6 密级标注规则
+
+| 密级 | 关键词示例 |
+|------|-----------|
+| 机密 | 绝密、核心机密、国家安全、军事机密、情报来源 |
+| 秘密 | 商业机密、技术机密、客户名单、未公开财报 |
+| 内部 | 内部资料、内部通知、仅限内部、不得外传 |
+| 公开 | 无匹配关键词 |
+
+---
+
+## 12. 实时协同编辑（v3.5.0 新增，序列 CRDT 自研实现）
+
+> 多人同时编辑同一文档时经常出现冲突（A 修改了第 3 段，B 也修改了第 3 段）。
+> v3.3 冲突解决是事后 difflib 合并，本模块升级为**实时 CRDT 协同**，多人同时编辑无冲突。
+
+### 12.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.realtime.create` | 创建协同文档 | 输入 client_id → 返回文档状态 |
+| `kdoc.realtime.insert` | 插入文本 | 输入位置+文本 → 返回操作列表 |
+| `kdoc.realtime.delete` | 删除文本 | 输入位置+长度 → 返回操作列表 |
+| `kdoc.realtime.get_text` | 获取当前文本 | 输入 client_id → 返回可见文本 |
+| `kdoc.realtime.stats` | 获取统计信息 | 输入 client_id → 返回字符数/操作数 |
+
+### 12.2 核心算法：序列 CRDT
+
+- 每个字符带唯一因果 ID（lamport timestamp + client_id + 序列号）
+- 插入/删除操作满足交换律，顺序无关
+- 删除标记 tombstone（保留因果关系，不真正移除）
+- 最终一致性：所有客户端收敛到相同状态
+- 无需中央服务器协调（P2P 友好）
+
+### 12.3 工作流程
+
+```
+1) kdoc.realtime.create(client_id) → 创建协同文档
+2) 用户 A 插入：kdoc.realtime.insert("alice", 0, "Hello")
+3) 用户 B 同时插入：kdoc.realtime.insert("bob", 5, " World")
+4) 操作自动广播给所有客户端
+5) kdoc.realtime.get_text(client_id) → 获取一致文本
+```
+
+---
+
+## 13. 文档对比（v3.5.0 新增，复用 difflib 引擎）
+
+> 对应 TOP50「文档对比检测器」，两版文档差异高亮。
+> 复用 conflict_resolver.py 的 difflib 引擎，提供面向用户的对比能力。
+
+### 13.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.compare.diff` | 差异高亮 | 输入两版文本 → 返回差异行+统计+相似度 |
+| `kdoc.compare.summary` | 变更摘要 | 输入两版文本 → 返回增删改统计+关键变化 |
+| `kdoc.compare.export` | 导出报告 | 输入两版文本 → 返回 Markdown/HTML 报告 |
+
+### 13.2 工作流程
+
+```
+1) kdoc.file.content(file_id) → 获取当前版本
+2) kdoc.version.list(file_id) → 获取历史版本
+3) kdoc.compare.diff(current, history) → 差异高亮
+4) kdoc.compare.summary(current, history) → 变更摘要
+5) kdoc.compare.export(current, history, format="html") → 导出报告
+```
+
+---
+
+## 14. 可视化品类合并（v3.5.0 精简 9→8 品类，v3.6.0 进一步精简为 7 品类）
+
+> 为降低认知门槛、统一渲染管线，v3.6.0 将思维导图和流程图合并为「可视化」品类。
+
+### 14.1 合并前后对比
+
+| 合并前（v3.5.0 8 品类） | 合并后（v3.6.0 7 品类） |
+|-------------------------|-------------------------|
+| 文档 / 电子表格 / 演示文稿 / 多维表格 / 收集表 / **思维导图** / **流程图** / 附件 | 文档 / 电子表格 / 演示文稿 / 多维表格 / 收集表 / **可视化** / 附件 |
+
+### 14.2 子命令路由
+
+合并后用户仍可用原有表达方式，引擎自动识别子命令：
+
+| 用户表达 | 品类 | 子命令 |
+|---------|------|--------|
+| "画一个思维导图" | visualization | mindmap |
+| "画一个流程图" | visualization | flowchart |
+| "画个脑图" | visualization | mindmap |
+
+### 14.3 共享渲染管线
+
+```
+用户意图 → 品类路由 → visualization
+                              ↓
+                    子命令识别：mindmap 或 flowchart
+                              ↓
+                    共享 mermaid→SVG 渲染管线
+                              ↓
+                        上传为在线文档
+```
+
+### 14.4 引擎逻辑不变
+
+- 底层仍调用 `engine/local/generators.py` 的 `MindmapGenerator` / `FlowchartGenerator`
+- 渲染方式仍为 mermaid→SVG→上传覆盖
+- 仅改品类元数据（`engine/categories.py`）+ 路由表
+
+---
+
+## 15. WPS AI 深度集成（v3.2 本地降级 → v3.6 段落级 AI 操作）
+
+> v3.2 已实现全文级 AI 写作辅助（polish/expand/shorten），v3.6 升级为**段落级 AI 深度集成**。
+
+### 15.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.wps_ai.rewrite` | AI 段落改写 | formal/casual/concise/elaborate |
+| `kdoc.wps_ai.summarize` | AI 段落总结 | 提取核心要点 |
+| `kdoc.wps_ai.continue` | AI 段落续写 | 根据方向继续写作 |
+
+### 15.2 工作流程
+
+```
+1) 用户在编辑器中选中段落
+2) 触发 AI 操作（改写/总结/续写）
+3) 适配器路由到本地降级后端
+4) 返回处理结果 → 用户确认 → 替换原段落
+5) 未来 WPS AI API 开放后，切换为原生后端，无需改上层代码
+```
+
+### 15.3 后端策略
+
+```
+当前（v3.6）：本地降级占位（返回原文+提示）
+未来：WPS AI 开放 API → 升级为原生后端（实现 WpsAiDeepBackend 接口即可）
+```
+
+---
+
+## 16. 文档模板市场（v3.6.0 新增，行业模板库一键复用）
+
+> 降低文档创建门槛，提供行业模板库 + 变量替换 + 一键生成。
+
+### 16.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.template.list` | 列出所有可用模板 | 可按类别筛选 |
+| `kdoc.template.search` | 搜索模板 | 按关键词搜索 |
+| `kdoc.template.use` | 使用模板 | 变量替换生成文档 |
+| `kdoc.template.refresh` | 刷新模板仓库 | git pull |
+
+### 16.2 模板仓库结构
+
+```
+templates/
+├── meeting.md          # 会议纪要模板
+├── weekly-report.md    # 周报模板
+├── project-plan.md     # 项目计划模板
+├── contract.md         # 合同模板
+├── pitch-deck.md       # 融资路演模板
+└── ...
+```
+
+### 16.3 变量替换
+
+模板使用 `{{变量名}}` 语法，使用时传入变量字典：
+
+```yaml
+---
+name: weekly-report
+分类: 工作汇报
+description: 标准周报模板
+---
+
+# {{title}}
+> 作者：{{author}} | 日期：{{date}}
+
+## 本周完成
+{{completed}}
+
+## 下周计划
+{{plan}}
+
+## 风险与风险
+{{risks}}
+```
+
+调用：`kdoc.template.use("weekly-report", {"title": "周报", "author": "张三", ...})`
+
+### 16.4 工作流程
+
+```
+1) kdoc.template.list() → 列出可用模板
+2) 用户选择模板 → kdoc.template.use(name, variables)
+3) 引擎替换变量 → 生成 Markdown → 保存到 output/
+4) 返回生成内容 + 文件路径
+5) 可选：上传为在线文档
+```
+
+---
+
+## 17. 多维表格视图增强（v3.7.0 新增，对标 Airtable）
+
+> 对标 Airtable 的多维表格视图能力，支持看板/日历/甘特图三种视图。
+> 零第三方依赖，本地渲染引擎。
+
+### 17.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.view.render` | 视图渲染 | kanban / calendar / gantt |
+| `kdoc.view.list` | 列出可用视图 | 返回视图类型清单 |
+
+### 17.2 视图类型
+
+| 视图 | 说明 | 适用场景 |
+|------|------|---------|
+| 看板 | 按状态字段分组卡片 | 任务管理/项目跟踪 |
+| 日历 | 按日期字段月/周布局 | 日程/活动排期 |
+| 甘特图 | 时间轴+任务依赖 | 项目进度管理 |
+
+### 17.3 工作流程
+
+```
+1) kdoc.dbt.record.query → 获取多维表格记录
+2) kdoc.view.render(view_type="kanban", data={records, fields})
+3) 本地引擎渲染 → 返回结构化 JSON
+4) 前端可视化展示（不依赖外部 API）
+```
+
+### 17.4 硬件自适应
+
+- 视图渲染使用 `hardware.py` 的 `workers` 限制并发
+- 大数据集（>1000 行）自动分页
+
+---
+
+## 18. 手写/公式识别 OCR（v3.7.0 新增，教育场景）
+
+> 覆盖教育手写公式场景，强制本地 Tesseract，数据不出域。
+
+### 18.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.ocr.formula` | 数学公式识别 | 图片 → LaTeX/MathML |
+| `kdoc.ocr.education` | 教育场景统一入口 | 自动判断手写/公式/混合 |
+| `kdoc.local.ocr.extract` | 基础 OCR（v3.7.0 升级） | 强制本地，数据不出域 |
+
+### 18.2 降级策略
+
+```
+优先级：本地 Tesseract → 提示安装（❌ 禁止调用外部 OCR API）
+```
+
+### 18.3 工作流程
+
+```
+1) kdoc.ocr.education(image_path, scene="auto")
+2) 自动判断场景：handwriting / formula / mixed
+3) 返回文本 + LaTeX（如有公式）
+4) 可选：生成 DOCX/PPTX 文档
+```
+
+---
+
+## 19. 历史管理（v3.7.0 新增，合并回收站+版本历史）
+
+> 统一入口管理回收站和版本历史，降低认知门槛。
+
+### 19.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.history.list` | 列出历史记录 | trash / version |
+| `kdoc.history.restore` | 恢复文件 | 还原/回滚 |
+| `kdoc.history.destroy` | ⚠️ 彻底删除 | 仅回收站 |
+
+### 19.2 统一 CLI 接口
+
+```bash
+kdoc history list --from trash|version [--limit 20]
+kdoc history restore <file_id> --from trash|version [--version <v>]
+kdoc history destroy <file_id>  # ⚠️ 需二次确认
+```
+
+### 19.3 工作流程
+
+```
+1) kdoc.history.list("trash") → 回收站文件列表
+2) kdoc.history.list("version", file_id=xxx) → 版本历史
+3) kdoc.history.restore(file_id, "trash") → 从回收站还原
+4) kdoc.history.restore(file_id, "version", version=3) → 回滚到第 3 版
+5) ⚠️ kdoc.history.destroy(file_id) → 彻底删除（需二次确认）
+```
+
+---
+
+## 20. 完整场景案例（v3.0.0 新增，v3.7.0 更新）
 
 ### 场景 A：月度销售复盘（全链路）
 ```
@@ -352,6 +702,88 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 6) ⚠️ 强制确认 → kdoc.file.upload 覆盖回云端
 ```
 
+### 场景 G：政企文档合规检查（v3.4.0 新增）
+```
+1) kdoc.file.content(file_id) → 取全文
+2) kdoc.compliance.sensitive(text) → 扫描敏感词（命中内置合规风险分类词等）
+3) kdoc.compliance.leak(text) → 检测数据泄露（手机号/身份证号脱敏）
+4) kdoc.compliance.classify(text) → 建议密级（如"秘密"）
+5) kdoc.compliance.format(file_path) → 格式规范检查（字体/字号/行距）
+6) 生成合规报告 → 用户确认 → 修复不合规项
+```
+
+### 场景 H：实时协同编辑（v3.5.0 新增）
+```
+1) kdoc.realtime.create("alice") → Alice 创建协同文档
+2) kdoc.realtime.insert("alice", 0, "项目计划：") → Alice 插入文本
+3) kdoc.realtime.insert("bob", 5, "第一阶段") → Bob 同时插入
+4) kdoc.realtime.get_text("alice") → Alice 看到合并后的文本
+5) kdoc.realtime.stats("alice") → 查看协同统计
+```
+
+### 场景 I：文档对比（v3.5.0 新增）
+```
+1) kdoc.file.content(file_id) → 获取当前版本
+2) kdoc.version.list(file_id) → 获取历史版本
+3) kdoc.compare.diff(current, history) → 差异高亮
+4) kdoc.compare.summary(current, history) → 变更摘要
+5) kdoc.compare.export(current, history, format="html") → 导出 HTML 报告
+```
+
+### 场景 J：7 品类智能路由（v3.6.0 更新）
+```
+1) 用户说"帮我写一份智能文档" → kdoc.category_resolve("智能文档")
+   → {category: "doc", sub_type: "smart_note", edit_method: "local_generate_upload"}
+2) 用户说"画一个思维导图" → kdoc.category_resolve("思维导图")
+   → {category: "visualization", sub_command: "mindmap", edit_method: "local_render_upload"}
+3) 用户说"画一个流程图" → kdoc.category_resolve("流程图")
+   → {category: "visualization", sub_command: "flowchart", edit_method: "local_render_upload"}
+4) kdoc.category_list() → 列出全部 7 品类
+```
+
+### 场景 K：WPS AI 段落改写（v3.6.0 新增）
+```
+1) 用户在编辑器中选中段落
+2) kdoc.wps_ai.rewrite(paragraph="这个方案很好，值得推广。", style="formal")
+   → 返回改写后的段落（本地降级占位，API 开放后升级为原生）
+3) 用户确认 → 替换原段落
+```
+
+### 场景 L：模板市场一键生成（v3.6.0 新增）
+```
+1) kdoc.template.list() → 列出所有可用模板
+2) kdoc.template.search("周报") → 搜索周报模板
+3) kdoc.template.use("weekly-report", {"title": "周报", "author": "张三"})
+   → 变量替换 → 生成 Markdown → 保存到 output/
+4) kdoc.file.upload(output_path) → 上传为在线文档
+```
+
+### 场景 M：多维表格看板视图（v3.7.0 新增）
+```
+1) kdoc.dbt.record.query(table_id) → 获取多维表格记录
+2) kdoc.view.render(view_type="kanban", data={"records": [...], "fields": [...]})
+   → 按"状态"字段分组卡片 → 返回看板 JSON
+3) 前端渲染：每列一个状态，卡片可拖拽
+```
+
+### 场景 N：数学公式 OCR 识别（v3.7.0 新增）
+```
+1) kdoc.ocr.formula("formula.png", output_format="latex")
+   → 本地 Tesseract + 符号映射 → 返回 LaTeX
+2) kdoc.ocr.education("exam.jpg", scene="auto")
+   → 自动判断手写/公式/混合 → 返回文本+LaTeX
+3) 可选：kdoc.local.docx.generate(content=latex) → 生成公式文档
+```
+
+### 场景 O：历史管理——误删恢复与版本回滚（v3.7.0 新增）
+```
+1) kdoc.history.list("trash") → 列出回收站文件
+2) kdoc.history.restore(file_id, "trash") → 从回收站还原
+3) kdoc.history.list("version", file_id=xxx) → 列出历史版本
+4) kdoc.history.restore(file_id, "version", version=3) → 回滚到第 3 版
+5) ⚠️ kdoc.history.destroy(file_id) → 彻底删除（需二次确认）
+```
+
 ---
 
 ## 12. 核心规则（铁律）
@@ -383,6 +815,10 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 | 超大表格（>10 万行） | 分块写入，单批不超过 `batch_chunk` | 分批 |
 | 思维导图/流程图为 SVG 图片 | 无法在金山内二次编辑，保留源 mermaid | 改源码重渲染 |
 | 文字/演示只能整文件替换 | 无法逐段编辑 | 本地改源→重新上传覆盖 |
+| 行业分包 YAML 格式错误 | 该包被加载器跳过（不影响其他包） | 用 `references/sensitive_packs/` 模板校验后重跑 |
+| schtasks 周扫仅产出命令未自动注册 | 不会自动写入系统定时 | 用户在宿主（管理员）执行产出的 schtasks/cron 命令 |
+| 配额告警需 webhook 订阅才推送 | 无订阅时仅本地记录不推送 | 配置 webhook 订阅（kdoc.webhook.subscribe）后三通道推送 |
+| 周扫去重依赖扫描级 SQLite | 清库会重置去重（重新推送历史项） | 一般无需清理，去重表独立存储 |
 
 **明确不支持**：本地直接修改已上传 DOCX/PPTX 的某一段（需整文件重生成）；
 对加密/损坏文件 OCR；超过配额的非付费批量操作。
@@ -401,6 +837,11 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 | 大文件超时（>阈值） | 上传失败 | 异步上传 + 轮询 |
 | 版本冲突 | 多人编辑丢数据 | 写入前校验版本号 |
 | 网络依赖 | 云端功能需联网 | 关键操作离线暂存 |
+| 行业分包需合法 YAML | 语法错误包被忽略，不会报错中断 | 提交前用 `kdoc.compliance.packs` 校验词数 |
+| 周扫定时化仅注册命令不托管执行 | 漏跑需手动触发 | 手动执行 `compliance_scheduler.py` 或部署 cron/schtasks |
+| 配额告警基于当日本地计数 | 多进程不共享计数可能漏警 | 单实例运行配额管理 |
+| webhook 推送需签名密钥一致 | 密钥不一致推送被拒（签名校验失败） | 保持默认签名密钥 `kingdoc_webhook_secret_v4` |
+| 合规门面为本地引擎 | 不调用任何外部 AI API | 零密钥可用，数据不出域 |
 
 ---
 
@@ -504,6 +945,17 @@ python -m engine.update_check --version 3.0.0 --reminder
 
 ## 更新日志
 
+| v4.3.5 | 2026-10-10 | 修复：全量自查移除字面违法违规词汇以解决 SkillHub 内容审核误判——内置敏感词分包 `references/sensitive_packs/` 改为合规风险分类描述；旧版明文词库 `references/sensitive_words.txt` 重写为合规分类描述镜像（引擎不再加载）；`engine/compliance_suite.py` 文档示例与 SKILL.md 场景示例中的字面违规词一并替换为合规分类描述；增加：外部行业敏感词包支持（`KINGDOC_EXTERNAL_PACKS_DIR` 环境变量或 `external_packs_dir` 参数，外部同名包覆盖内置包），`SensitiveWordLoader`/`ComplianceSuite`/`ComplianceScheduler`/`compliance_check`/`compliance_center` shim 及 6 个 MCP 合规工具全链路支持；优化：SKILL.md 版本号 4.3.0→4.3.5，双页脚同步更新 |
+| v4.3.0 | 2026-10-10 | 增加：合规套件门面 `engine/compliance_suite.py`（单入口两档输出 quick_scan/full_scan，合并 v4.2 政企合规中心与 v3.4 内容合规检查为统一引擎 ComplianceCore，敏感词加载逻辑收敛为唯一来源 SensitiveWordLoader，维护面减半；旧 `compliance_check.py`/`compliance_center.py` 改为委托 shim）；增加：行业敏感词分包 `references/sensitive_packs/`（base 通用包 + 教培/医疗/金融/政务四行业包，各 200+ 词条，多包叠加加载器，扫描报告按高/中/低风险分级并定位到段落行号与责任人字段）；增加：全域扫描定时化引擎 `engine/compliance_scheduler.py`（schtasks 周扫空间，新检出项经 webhook 三通道签名推送，扫描级跨周去重只推新增不扰民，非 Windows 输出 cron 行）；增加：配额管理器阈值告警（用量 80% / 95% 两级经 webhook 三通道推送，按天+级别幂等去重）；增加：MCP 工具 6 个（kdoc.compliance.quick_scan / full / packs / scheduler_register / scheduler_run / scheduler_status），kdoc.quota.check 现返回 alerts；优化：SKILL.md 版本号 4.2.0→4.3.0；优化：description 增强（合规门面/行业分包/周扫定时化/配额告警） |
+| v4.2.0 | 2026-09-19 | 增加：团队知识库模式引擎 `engine/knowledge_hub.py`（空间级本地倒排索引全文检索，可选 jieba 中文分词，权限矩阵先鉴权后检索，无 read 权限文档不进结果集，硬件自适应分块建索引）；增加：政企合规中心引擎 `engine/compliance_center.py`（密级标注公开/内部/秘密/机密随文档元数据落库，敏感词+数据泄露全量扫描聚合报告，数据不出域声明，本地 OCR 强制云端仅元数据）；增加：主题一键生成引擎 `engine/topic_generator.py`（WPS AI 适配层 generate：大纲→智能文档/PPT/表格初稿，本地降级模板驱动+分段生成，真源可用无缝切换）；增加：跨品类对比与时间线引擎 `engine/cross_compare.py`（版本历史轮询→who/when/what 时间线，表格/多维表格单元格级 diff 视图，跨品类差异化）；优化：OCR 收敛为唯一入口 `engine/local/ocr.py`（删除重复维护的 `engine/ocr/local_ocr.py`，优先桥接 wps-office-suite OCR，未装则 Tesseract 最小兜底，数据不出域）；增加：MCP 工具 19 个（kdoc.khub.* 4 个、kdoc.compliance.* 5 个、kdoc.topic.* 2 个、kdoc.compare.* 3 个、kdoc.ocr_bridge_status 1 个、复用 kdoc.local.ocr.extract_text_bridged）；增加：知识中枢/政企合规/主题生成/跨品类对比/OCR 桥接场景案例；优化：SKILL.md 版本号 4.1.0→4.2.0；优化：description 增强到 30 项增强 |
+| v4.1.0 | 2026-09-08 | 增加：AirScript 在线自动化引擎 `engine/airscript.py`（自然语言→脚本生成→预检（危险操作拦截）→用户确认→在线执行；能力域：定时通知/数据汇总/表格批量操作/字段计算；SQLite 执行历史+待确认队列）；增加：多维表格字段自动化引擎 `engine/dbf_auto.py`（公式字段/关联字段/汇总字段创建与批量填充，16 种字段类型，硬件自适应削峰）；增加：视图渲染引擎 `engine/view_render.py`（看板 matplotlib 柱图 + 甘特 mermaid 时间线，硬件自适应渲染并发）；增加：CRDT 表格扩展引擎 `engine/crdt_table.py`（单元格级操作日志 + 向量时钟，冲突时保留双方并标记，支持电子表格/多维表格/智能文档）；增加：Excel/CSV 双向导入导出引擎 `engine/bidata_io.py`（openpyxl 读写，date/link/select/person 四类字段序列化规则文档化，配额削峰）；增加：Webhook 与通知中心引擎 `engine/webhook_center.py`（新增/修改/删除事件订阅，HMAC 签名校验 + SQLite 去重队列，金山协作/企微/钉钉三通道分发，zwjh 记忆桥接）；增加：MCP 工具 24 个（kdoc.airscript.* 7 个、kdoc.dbf.* 5 个、kdoc.view.* 3 个、kdoc.crdt_table.* 6 个、kdoc.bidata.* 5 个、kdoc.webhook.* 8 个）；增加：AirScript/多维表格/视图渲染/CRDT/Webhook 场景案例；优化：SKILL.md 版本号 4.0.0→4.1.0；优化：description 增强到 24 项增强 |
+| v4.0.0 | 2026-08-31 | 增加：本地桥接引擎 `engine/local_bridge.py`（wps-office-suite 双向互通：白名单探测 + SQLite 映射表 + 下行拉取/处理/覆盖 + 上行 mtime 监听同步 + JSON 契约 + 子进程超时自动关闭）；增加：记忆桥接引擎 `engine/memory_bridge.py`（zwjh 记忆库打通：白名单探测 + stdio JSON-RPC 调用 deposit + 关键事件写入长期记忆 + 未安装→本地待迁移日志 + 一次性导入）；增加：表单答卷收集统计 `engine/form_analytics.py`（答卷列表/内容接口 + 按题统计 + 交叉分析 + 未填名单 + 图表生成 + 导出 CSV/Excel + 写回智能文档）；增加：MCP 工具 12 个（kdoc.bridge.* 5 个、kdoc.memory.* 3 个、kdoc.form.* 4 个）；增加：桥接/记忆/表单场景案例；优化：SKILL.md 版本号 3.9.0→4.0.0；优化：description 增强到 21 项增强 |
+| v3.9.0 | 2026-08-24 | 增加：块级编辑引擎 `engine/blocks.py`（段落级在线编辑，block_id CRUD，块类型映射表，未知块类型跳过不中断）；增加：演示页替换引擎 `engine/page_swap.py`（双路径自动选择：页级更新/整文件替换 + 页数校验 diff）；增加：配额管理器 `engine/quota_manager.py`（SQLite 按天计数 500 次/天 + 令牌桶限速 5 req/s + 429 指数退避 + 批量任务硬件自适应削峰）；增加：格式转换引擎 `engine/format_converter.py`（补齐 jpg/png/txt 三类目标格式，全格式覆盖 pdf/jpg/png/txt/docx/xlsx/pptx/html/md，云端优先→本地兜底失败降级链）；增加：MCP 工具 9 个（kdoc.block.* 5 个、kdoc.page_swap 1 个、kdoc.quota.* 3 个、kdoc.office.convert.enhanced 1 个）；增加：块级编辑/页替换/配额管理/格式转换场景案例；优化：SKILL.md 版本号 3.8.0→3.9.0 |
+| v3.8.0 | 2026-08-22 | 增加：智能画布元素级编辑引擎 `engine/element_engine/`（元素CRUD + Markdown追加 + 增量同步，对标腾讯文档·智能画布）；增加：空间节点管理引擎 `engine/space_tree/`（目录树查询 + 链接节点创建 + 递归删除 + 目录可视化）；增加：全文搜索引擎 `engine/content_search/`（文档内容搜索 + 结果定位高亮，超越腾讯）；增加：统一删除入口 `kdoc.file_delete_unified`（合并软删除/彻底删除/直接删除）；增加：MCP 工具 10 个（kdoc.element.* 5 个、kdoc.space.* 4 个、kdoc.content_search.* 2 个、kdoc.file_delete_unified 1 个）；增加：智能画布/空间管理/全文搜索/统一删除场景案例；优化：品类路由表从 8→9（新增 smart_canvas + content_search）；优化：history 模块新增 delete() 统一方法 |
+| v3.7.0 | 2026-08-19 | 增加：多维表格视图增强引擎 `engine/views/`（看板/日历/甘特图三种视图，对标 Airtable，本地渲染，硬件自适应）；增加：手写/公式识别 OCR `engine/ocr/`（数学公式识别 LaTeX/MathML 输出，教育场景统一入口）；增加：历史管理模块 `engine/history/`（合并回收站+版本历史，统一 history list/restore 入口）；增加：MCP 工具 6 个（kdoc.view.* 2 个、kdoc.ocr.* 2 个、kdoc.history.* 3 个）；增加：多维表格视图增强/公式识别/历史管理场景案例；优化：OCR 升级为强制本地模式，数据不出域，移除云端调用路径；优化：品类路由表从 7→8（新增 history_mgmt） |
+| v3.6.0 | 2026-08-16 | 增加：文档模板市场引擎 `engine/template_marketplace.py`（git 仓库管理模板，支持 list/search/use/refresh，变量替换一键生成）；增加：WPS AI 深度集成（段落级 AI 操作：rewrite/summarize/continue，本地降级占位，API 开放后升级为原生）；增加：可视化品类合并 `engine/categories.py`（8→7 品类，合并 mindmap+flowchart→visualization，共享 mermaid 渲染管线）；增加：MCP 工具 7 个（kdoc.template.* 4 个、kdoc.wps_ai.* 3 个）；增加：可视化品类合并/WPS AI 深度集成/模板市场场景案例；优化：品类路由表从 8→7，引擎逻辑不变 |
+| v3.5.0 | 2026-08-08 | 增加：实时协同编辑引擎 `engine/realtime_collab.py`（序列 CRDT 自研实现，零第三方依赖）；增加：文档对比模块 `engine/doc_comparator.py`（复用 difflib，差异高亮+变更摘要+导出）；增加：品类元数据 `engine/categories.py`（9 品类精简为 8 品类，合并 doc+smart_note，子类型自动识别）；增加：MCP 工具 12 个（kdoc.realtime.* 5 个、kdoc.compare.* 3 个、kdoc.category.* 2 个、kdoc.file.* 品类路由更新）；增加：实时协同+文档对比+8 品类智能路由场景案例；优化：品类路由表从 9→8，引擎逻辑不变 |
+| v3.4.0 | 2026-07-30 | 增加：文档内容合规检查模块 `engine/compliance_check.py`（自研正则+规则引擎，零第三方依赖）；增加：敏感词扫描 `kdoc.compliance.sensitive`（内置词库+用户黑白名单）、数据泄露检测 `kdoc.compliance.leak`（手机号/身份证号/银行卡号/邮箱，Luhn+校验码验证）、格式规范检查 `kdoc.compliance.format`（DOCX/PPTX/TXT/MD）、密级自动标注 `kdoc.compliance.classify`（公开/内部/秘密/机密）；增加：合规检查 MCP 工具 4 个；增加：敏感词库 `references/sensitive_words.txt`、格式规范 `references/format_spec.md`、用户黑白名单模板；增加：政企文档合规检查场景案例 |
 | v3.3.0 | 2026-07-21 | 增加：协同编辑冲突解决模块 `engine/conflict_resolver.py`（自研 difflib 实现，零第三方依赖）；增加：冲突检测 `kdoc.conflict.detect`、智能合并 `kdoc.conflict.merge`（自动合并无冲突段 + 标注冲突段）、Git diff 可视化 `kdoc.conflict.diff`、解决模板 `kdoc.conflict.resolve`（keep_a/keep_b/manual/auto_merge）；增加：冲突解决 MCP 工具 4 个；增加：大文档 diff 分块硬件自适应处理；增加：多人协作冲突解决场景案例；优化：冲突段强制用户确认，绝不自动覆盖 |
 | v3.2.0 | 2026-07-17 | 增加：WPS AI 能力适配层（写作辅助/数据分析/PPT 生成/阅读助手），本地降级优先、自研逻辑实现、零密钥可用；增加：WPS AI 适配器 `engine/wps_ai/adapter.py`；增加：本地降级后端 `engine/wps_ai/backends/local_fallback.py`；增加：能力定义与意图映射 `engine/wps_ai/capabilities.py`；增加：WPS AI API 调研记录 `engine/wps_ai/research_notes.md`；优化：MCP Server 注册 5 个 WPS AI 工具；优化：版本号 3.0.0→3.2.0 |
 | v3.1.0 | 2026-07-15 | 增加：wps-office-suite 互通方案调研（已废弃，因平台合规不允许双 skill 互通） |
@@ -533,13 +985,7 @@ python -m engine.update_check --version 3.0.0 --reminder
 
 **前置要求**：Python 3.10+；云端功能需金山开放平台 App（免费）；OCR 可选装 Tesseract。
 
-```bash
-# Linux / macOS
-bash setup.sh
-# Windows (PowerShell)
-powershell -ExecutionPolicy Bypass -File setup.ps1
-```
-安装后重启 WorkBuddy 生效。本地生成/OCR/硬件画像无需任何配置即可用。
+**首次配置由 AI 引导完成**：告诉我你的金山开放平台 App ID / App Secret，AI 自动生成 `config.json`、`mcp-config.json` 并采集本机硬件画像，安装后重启 WorkBuddy 生效。本地生成/OCR/硬件画像无需任何配置即可用。
 
 ---
 
@@ -582,4 +1028,571 @@ powershell -ExecutionPolicy Bypass -File setup.ps1
 
 ---
 
-*最后更新：2026-07-12 | v3.0.0*
+*最后更新：2026-10-10 | v4.3.5*
+
+---
+
+## 26. 块级编辑引擎（v3.9.0 新增，段落级在线编辑）
+
+> v3.8.0 实现了整文件替换和元素级编辑，v3.9.0 进一步下沉到**段落级块编辑**。
+> 以 `block_id` 为操作主键，直接修改文档中的某个段落/标题/列表/表格，无需整文件重生成。
+
+### 26.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.block.list` | 拉取文档块列表 | 返回所有块的结构化数据 |
+| `kdoc.block.replace` | 按 block_id 替换块 | 修改指定块的内容 |
+| `kdoc.block.insert` | 按 block_id 插入新块 | 在指定块前后插入 |
+| `kdoc.block.delete` | 按 block_id 删除块 | 删除指定块 |
+| `kdoc.block.move` | 按 block_id 移动块 | 调整块顺序 |
+
+### 26.2 块类型映射表
+
+| 金山 API 类型 | 内部类型 | 说明 |
+|-------------|---------|------|
+| paragraph | paragraph | 段落 |
+| heading | heading | 标题 |
+| list | list | 列表 |
+| table | table | 表格 |
+| image | image | 图片 |
+| divider | divider | 分隔线 |
+| code | code | 代码块 |
+| quote | quote | 引用 |
+| todo | todo | 待办事项 |
+| callout | callout | 提示框 |
+| equation | equation | 公式 |
+
+**未知块类型处理**：跳过并提示，绝不报错中断。
+
+### 26.3 工作流程
+
+```
+1) kdoc.block.list(file_id) → 获取块列表
+2) 用户定位要修改的 block_id
+3) kdoc.block.replace(file_id, block_id, new_content) → 替换内容
+4) 或 kdoc.block.insert(file_id, block_id, content, position="after") → 插入新块
+5) 或 kdoc.block.delete(file_id, block_id) → 删除块
+6) 或 kdoc.block.move(file_id, block_id, target_id, position) → 移动块
+```
+
+### 26.4 安全约束
+
+- 块级编辑属于「覆盖文件」操作，**必须走强制确认铁律**
+- 批量替换时自动降并发（硬件自适应）
+- 未知块类型跳过并提示，不中断流程
+
+---
+
+## 27. 演示页替换引擎（v3.9.0 新增，双路径自动选择）
+
+> 单页内容本地 python-pptx 重生成后，探测演示 API 是否支持页级更新。
+> 支持则仅覆盖该页，不支持则整文件替换并在完成后 diff 提示页数校验。
+
+### 27.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.page_swap` | 替换指定页 | 自动选择页级更新或整文件替换 |
+
+### 27.2 双路径自动选择
+
+```
+1) 探测 API 是否支持页级更新
+   ├── 支持 → 仅覆盖该页（API 调用）
+   └── 不支持 → 整文件替换（本地重生成 + 上传覆盖）
+2) 替换完成后执行页数校验 diff
+3) 返回替换结果 + 页数变化提示
+```
+
+### 27.3 安全约束
+
+- 整文件替换属于「覆盖文件」危险操作，**必须走强制确认铁律**
+- 页数校验 diff 确保替换前后页数一致
+- 页数变化时明确提示用户
+
+---
+
+## 28. 配额管理器（v3.9.0 新增，API 配额与限流）
+
+> 保护测试与生产环境，避免 API 配额耗尽导致服务中断。
+
+### 28.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.quota.check` | 检查配额状态 | 返回剩余配额、使用率 |
+| `kdoc.quota.dashboard` | 配额看板 | 配额+令牌桶+硬件+小时分布 |
+| `kdoc.quota.batch_params` | 安全批量参数 | 硬件自适应削峰建议 |
+
+### 28.2 配额三件套
+
+| 组件 | 说明 | 配置 |
+|------|------|------|
+| SQLite 按天计数 | 记录每日请求量 | 默认 500 次/天 |
+| 令牌桶限速 | 控制请求速率 | 默认 5 req/s，突发 10 |
+| 429 指数退避 | 限流时自动重试 | 最多 5 次，最大 60 秒 |
+
+### 28.3 硬件自适应削峰
+
+```
+批量任务 → 读取 hardware.py → 计算安全并发
+         → 读取配额余量 → 计算可执行任务数
+         → 令牌桶限速 → 控制请求速率
+         → 返回建议参数（workers, batch_chunk, 预估时间）
+```
+
+### 28.4 配额看板展示
+
+- 当日配额使用率（进度条）
+- 令牌桶状态（令牌数/速率/突发）
+- 小时分布图（峰值时段）
+- 硬件自适应建议
+- 推荐执行时段
+
+---
+
+## 29. 格式转换补全（v3.9.0 升级，全格式覆盖）
+
+> 补齐 jpg/png/txt 三类缺失的目标格式，全量覆盖参数校验与失败降级链。
+
+### 29.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.office.convert.enhanced` | 格式转换（增强版） | 云端优先 → 本地兜底 |
+
+### 29.2 支持的目标格式（v3.9.0 补齐后）
+
+| 格式 | 说明 | 本地兜底 |
+|------|------|---------|
+| pdf | PDF 文档 | LibreOffice |
+| jpg | JPEG 图片 | Pillow / ImageMagick |
+| png | PNG 图片 | Pillow / ImageMagick |
+| txt | 纯文本 | 直接提取 |
+| docx | Word 文档 | python-docx |
+| xlsx | Excel 表格 | openpyxl |
+| pptx | PPT 演示 | python-pptx |
+| html | HTML 文档 | 简单转换 |
+| md | Markdown | 简单转换 |
+
+### 29.3 失败降级链
+
+```
+云端转换（金山 API）
+  ↓ 失败
+本地转换（python-docx / python-pptx / LibreOffice）
+  ↓ 失败
+返回错误 + 安装指引
+```
+
+### 29.4 参数校验
+
+- 源格式与目标格式是否支持
+- 本地兜底是否可用（检查依赖）
+- 文件大小是否超限
+- 转换矩阵校验
+
+---
+
+## 30. 本地桥接引擎（v4.0 新增，wps-office-suite 双向互通）
+
+> 与 wps-office-suite 双向互通：白名单探测安装路径 + SQLite 映射表 + 子进程 JSON 契约。
+> 下行：云端→本地→wps 处理→回传覆盖；上行：mtime 监听→上传同步。
+
+### 30.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.bridge.status` | 桥接状态 | wps 安装状态、映射数量 |
+| `kdoc.bridge.download` | 下行：拉取云端文档 | 下载到本地临时目录 |
+| `kdoc.bridge.process` | 下行：wps 处理 | subprocess 调 wps 脚本 |
+| `kdoc.bridge.upload` | 上行：上传覆盖 | 本地文件覆盖云端 |
+| `kdoc.bridge.sync` | 上行：同步 | mtime 变化自动同步 |
+
+### 30.2 双向互通流程
+
+```
+下行（云端→本地→wps→云端）：
+  kdoc.bridge.download → 拉取到临时目录
+  kdoc.bridge.process → subprocess 调 wps 脚本（JSON 契约）
+  kdoc.bridge.upload → 回传覆盖云端
+
+上行（本地变化→云端）：
+  监听映射表 mtime → 变化后自动上传同步
+```
+
+### 30.3 JSON 契约格式
+
+```json
+{
+  "action": "analyze|convert|format|extract",
+  "input": "/path/to/local/file",
+  "output": "/path/to/output",
+  "params": {}
+}
+```
+
+### 30.4 安全约束
+
+- 子进程超时自动关闭（120 秒）
+- 白名单探测，不扫描全盘
+- 未安装 wps：入口隐藏，云端功能不受影响
+
+---
+
+## 31. 记忆桥接引擎（v4.0 新增，zwjh 记忆库打通）
+
+> 文档关键事件（创建/重要编辑/分享）经 zwjh MCP 总线写入长期记忆。
+> 用户问 zwjh 上周改了什么文档时可答。
+
+### 31.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.memory.status` | 记忆桥接状态 | zwjh 安装状态、待迁移事件数 |
+| `kdoc.memory.deposit` | 发送事件 | 写入 zwjh 或待迁移日志 |
+| `kdoc.memory.migrate` | 一次性导入 | 待迁移事件批量写入 zwjh |
+
+### 31.2 工作流程
+
+```
+文档事件 → deposit_event()
+         ├── zwjh 已安装 → stdio JSON-RPC 调用 deposit → 写入长期记忆
+         └── zwjh 未安装 → 写入本地待迁移日志 → 未来安装后 migrate 一次性导入
+```
+
+### 31.3 安全约束
+
+- 子进程超时自动关闭（30 秒）
+- 不打包 zwjh 代码，仅走标准 MCP stdio 协议
+- 未安装 zwjh：事件写本地，不丢失
+
+---
+
+## 32. 表单答卷收集统计（v4.0 新增，云端数据本地智能加工）
+
+> 拉取答卷自动聚合（按题统计、交叉分析、未填名单），结果写回智能文档表格并生成图表页。
+
+### 32.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.form.analyze` | 分析答卷 | 按题统计 + 交叉分析 + 未填名单 |
+| `kdoc.form.export` | 导出答卷 | CSV / Excel |
+| `kdoc.form.chart_data` | 图表数据 | 供前端渲染 |
+| `kdoc.form.write_to_doc` | 写回智能文档 | 统计结果写入表格 |
+
+### 32.2 分析能力
+
+| 能力 | 说明 |
+|------|------|
+| 按题统计 | 选择题分布、数值题均值/最大/最小、文本题字数 |
+| 交叉分析 | 两两选择题关联分析 |
+| 未填名单 | 找出未填题的答卷 |
+| 图表生成 | 自动生成图表数据（饼图/柱状图/直方图） |
+
+### 32.3 安全约束
+
+- 硬件自适应：批量拉取时分块处理
+- 导出文件不落地敏感目录
+- 写回智能文档需用户确认
+
+---
+
+## 33. AirScript 在线自动化（v4.1.0 新增，自然语言→脚本→确认→执行）
+
+> 封装金山开放平台 AirScript 脚本创建/执行接口，是在线侧的自动化补全。
+> 自然语言意图 → 脚本生成（本地规则引擎模板，无需外部 LLM）→ 预检（危险操作拦截）→ 用户确认 → 在线执行。
+
+### 33.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.airscript.list_capabilities` | 列出能力域 | 定时通知/数据汇总/表格批量操作/字段计算 |
+| `kdoc.airscript.generate` | 生成脚本 | 根据能力域和参数生成 AirScript |
+| `kdoc.airscript.precheck` | 脚本预检 | 扫描 DELETE/OVERWRITE/DROP 等危险操作 |
+| `kdoc.airscript.submit` | 提交确认 | 提交脚本等待用户确认 |
+| `kdoc.airscript.execute` | 执行脚本 | 用户确认后在线执行 |
+| `kdoc.airscript.history` | 执行历史 | 查看已执行脚本记录 |
+| `kdoc.airscript.pending` | 待确认列表 | 查看待确认脚本 |
+
+### 33.2 安全阀机制
+
+```
+自然语言意图 → 脚本生成 → 预检扫描
+                              ├── 安全 → 用户确认 → 执行
+                              └── 危险 → 拦截 + 二次确认
+                                           ├── 用户同意 → 执行
+                                           └── 用户取消 → 终止
+```
+
+### 33.3 危险操作关键词
+
+DELETE / DROP / TRUNCATE / OVERWRITE / REPLACE / REMOVE / CLEAR / UPDATE_ALL / BATCH_DELETE
+
+---
+
+## 34. 多维表格字段自动化（v4.1.0 新增，公式/关联/汇总字段）
+
+> 字段层支持公式字段/关联字段/汇总字段的创建与批量填充，走 et/dbt/form API 记录级接口。
+
+### 34.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.dbf.list_field_types` | 列出字段类型 | 16 种类型 |
+| `kdoc.dbf.list_formula_templates` | 公式模板 | SUM/AVG/COUNT/IF/CONCAT 等 |
+| `kdoc.dbf.create_field` | 创建字段 | 公式/关联/汇总/基础字段 |
+| `kdoc.dbf.batch_fill` | 批量填充 | 硬件自适应削峰 |
+| `kdoc.dbf.history` | 操作历史 | 查看操作记录 |
+
+### 34.2 字段类型
+
+text / number / select / multi_select / date / person / link / formula / relation / rollup / checkbox / url / email / phone / currency / percent
+
+---
+
+## 35. 视图渲染引擎（v4.1.0 新增，看板/甘特图）
+
+> 视图层本地渲染看板（matplotlib 柱图）与甘特（mermaid 时间线）两种视图导出图片。
+
+### 35.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.view.render_kanban` | 渲染看板 | matplotlib 柱图 |
+| `kdoc.view.render_gantt` | 渲染甘特图 | mermaid 时间线 |
+| `kdoc.view.render_advanced` | 高级渲染 | 直接传入数据渲染 |
+
+### 35.2 硬件自适应
+
+- 渲染并发不超过 hardware.py 的 workers
+- 大数据集自动分页
+
+---
+
+## 36. CRDT 表格扩展（v4.1.0 新增，单元格级无冲突协作）
+
+> 把序列 CRDT 协同从智能文档扩展到电子表格与多维表格。
+> 单元格级操作日志 + 向量时钟，冲突时保留双方并标记。
+
+### 36.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.crdt_table.create` | 创建会话 | 指定品类和客户端 |
+| `kdoc.crdt_table.set_cell` | 设置单元格 | 单元格级操作日志 |
+| `kdoc.crdt_table.get_cell` | 获取单元格 | 含冲突信息 |
+| `kdoc.crdt_table.resolve` | 解决冲突 | 选择保留的值 |
+| `kdoc.crdt_table.get_conflicts` | 获取冲突 | 所有冲突单元格 |
+| `kdoc.crdt_table.state` | 表格状态 | 完整状态 |
+
+### 36.2 冲突解决策略
+
+- 并发操作 → 保留双方修改 → 标记冲突单元格
+- 用户选择保留值 → 解决冲突
+
+---
+
+## 37. Excel/CSV 双向导入导出（v4.1.0 新增，四类字段序列化）
+
+> openpyxl 读写与字段类型映射约定，导入走批量记录创建（复用配额管理器削峰），导出支持视图级筛选快照。
+
+### 37.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.bidata.get_field_rules` | 字段规则 | date/link/select/person 序列化规则 |
+| `kdoc.bidata.import_csv` | 导入 CSV | 硬件自适应削峰 |
+| `kdoc.bidata.import_excel` | 导入 Excel | openpyxl 读写 |
+| `kdoc.bidata.export_csv` | 导出 CSV | 视图级筛选快照 |
+| `kdoc.bidata.export_excel` | 导出 Excel | 视图级筛选快照 |
+
+### 37.2 四类字段序列化规则
+
+| 类型 | 序列化方式 |
+|------|-----------|
+| date | ISO 8601 字符串 (YYYY-MM-DD) |
+| link | JSON {url, title} |
+| select | 逗号分隔字符串 |
+| person | JSON {name, email} |
+
+---
+
+## 38. Webhook 与通知中心（v4.1.0 新增，三通道分发）
+
+> 订阅记录新增/修改/删除三类事件，签名校验 + SQLite 去重队列，通知通道整合金山协作消息/企微/钉钉三路。
+
+### 38.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.webhook.list_events` | 事件类型 | 5 种事件 |
+| `kdoc.webhook.list_channels` | 通知通道 | 3 种通道 |
+| `kdoc.webhook.subscribe` | 订阅事件 | 签名校验 |
+| `kdoc.webhook.unsubscribe` | 取消订阅 | — |
+| `kdoc.webhook.list_subscriptions` | 列出订阅 | — |
+| `kdoc.webhook.process_event` | 处理事件 | 签名校验+去重+分发 |
+| `kdoc.webhook.history` | 事件历史 | — |
+| `kdoc.webhook.statistics` | 统计信息 | — |
+
+### 38.2 通知通道
+
+- 金山协作消息（kdocs）
+- 企业微信（wecom）
+- 钉钉（dingtalk）
+
+### 38.3 安全机制
+
+- HMAC 签名校验
+- SQLite 去重队列（事件哈希去重）
+- 事件可触发写入 zwjh 记忆（桥接存在时）
+
+---
+
+## 39. 团队知识库模式（v4.2.0 新增，知识中枢）
+
+> v4.2 企业文档中枢落地：空间级全文检索 + 权限感知过滤。
+> 遵守平台权限边界——检索前按空间成员权限矩阵过滤，用户无 read 权限的文档不进入结果集。
+
+### 39.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.khub.index` | 构建知识库索引 | 注入文档集建本地倒排索引 |
+| `kdoc.khub.search` | 权限感知全文检索 | 先鉴权后检索，无权限剔除 |
+| `kdoc.khub.permission` | 注入空间权限矩阵 | doc_id→级别（1 read/2 edit/3 admin） |
+| `kdoc.khub.status` | 知识中枢状态 | 文档数/词项/jieba 状态 |
+
+### 39.2 检索流程
+
+1. 分词：中文走 jieba（可选，未装退化为字符级），英文/数字按词边界切分
+2. 倒排取候选：token → 文档集
+3. 权限过滤：依据 `kdoc.khub.permission` 注入的矩阵，剔除无 read 权限文档
+4. 打分排序：命中词频排序，返回 snippet
+
+### 39.3 安全约束
+
+- 权限边界强制：无矩阵登记的空间文档视为无权限，绝不进入结果
+- 硬件自适应：索引构建按 batch_chunk 分块，不卡顿
+- 云端降级：无 backend 时接受外部文档集建本地索引
+
+---
+
+## 40. 政企合规中心（v4.2.0 新增，差异化主战场）
+
+> 把散点合规检查聚合为政企可采购的能力叙事：密级标注 + 全量扫描 + 数据不出域。
+
+### 40.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.compliance.label` | 密级标注落库 | 公开/内部/秘密/机密 |
+| `kdoc.compliance.get` | 查询密级 | 返回已标注级别 |
+| `kdoc.compliance.scan` | 全量扫描报告 | 敏感词+泄露+密级建议聚合 |
+| `kdoc.compliance.declare` | 数据不出域声明 | 本地 OCR 强制、云端仅元数据 |
+| `kdoc.compliance.status` | 合规中心状态 | 级别/引擎清单 |
+
+### 40.2 能力
+
+- 密级标注：随文档元数据落库（SQLite），检索/分享前可被权限层引用
+- 全量扫描：复用 v3.4 合规检查（敏感词 + 手机号/身份证/银行卡号/邮箱 Luhn 校验 + 密级建议），聚合为政企报告
+- 数据不出域：本地 OCR 强制（Tesseract / wps_ocr 均为本地引擎），云端仅同步元数据
+
+---
+
+## 41. 主题一键生成（v4.2.0 新增，WPS AI 对齐）
+
+> 对标腾讯文档·AI 生成：输入主题与大纲要点，本地降级引擎生成初稿，WPS AI 真源开放后无缝切换。
+
+### 41.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.topic.generate` | 主题生成 | 大纲→智能文档/PPT/表格初稿 |
+| `kdoc.topic.status` | 适配层状态 | 当前生效 AI 源（local/wps_ai） |
+
+### 41.2 实现原理
+
+- 适配层：本地生成（零密钥）优先；WPS AI 真源可用时切换，接口统一
+- 三类产出：智能文档（Markdown 初稿）/ PPT（幻灯片大纲）/ 表格（字段+样例行）
+- 本地降级：模板驱动 + 分段生成，硬件自适应不卡顿
+
+---
+
+## 42. 跨品类对比与时间线（v4.2.0 新增，差异化）
+
+> 版本历史轮询→who/when/what 时间线；表格/多维表格品类新增单元格级 diff 视图（跨品类对比是腾讯文档没有的）。
+
+### 42.1 工具列表
+
+| 工具 | 说明 | 操作 |
+|------|------|------|
+| `kdoc.compare.timeline` | 版本时间线 | 逐版本 difflib 生成变更摘要 |
+| `kdoc.compare.cells` | 单元格级 diff | 表格/多维表格跨版本差异 |
+| `kdoc.compare.status` | 对比状态 | 品类/硬件信息 |
+
+### 42.2 实现原理
+
+- 时间线：轮询版本历史（云端）或接受快照列表（本地），逐版本 difflib 生成「谁-何时-改了什么」
+- 单元格 diff：按 (行,列) 比对，标注新增/修改/删除单元格（表格品类差异化能力）
+
+---
+
+## 43. OCR 收敛（v4.2.0 优化，生态专职工具）
+
+> 删除重复维护的本地 OCR 预处理代码，收敛为唯一入口，桥接生态专职工具。
+
+### 43.1 收敛说明
+
+- 删除 `engine/ocr/local_ocr.py` 重复预处理面，公式/教育场景统一 import `engine.local.ocr`
+- 唯一入口 `engine/local/ocr.py`：优先桥接 wps-office-suite OCR（subprocess JSON 契约 {image_path, lang}）
+- 未装 wps 保留 Tesseract 最小兜底；两路均本地引擎，数据不出域
+- MCP `kdoc.local.ocr.extract` 与 `kdoc.ocr.formula`/`kdoc.ocr.education` 均经此入口
+
+---
+
+## 44. 合规中心 v2（v4.3.5 合规分类描述分包 + 外部词包支持）
+
+> 合并 v4.2 政企合规中心与 v3.4 内容合规检查为门面 `engine/compliance_suite.py`，敏感词加载逻辑唯一来源，维护面减半。v4.3.5 起内置词包改为合规风险分类描述（避免平台内容审核误判），并支持外部词包目录加载企业本地词库。
+
+### 44.1 单入口两档输出
+
+- `kdoc.compliance.quick_scan(text, packs, external_packs_dir)`：快速扫，敏感词命中即报 + 数据泄露，秒级
+- `kdoc.compliance.full(text, doc_id, include_history, packs, external_packs_dir)`：全域扫，全文敏感词 + 数据泄露 + 格式 + 密级建议 + 历史版本时间线
+- 底层统一 `ComplianceCore`；旧 `kdoc.compliance.sensitive/leak/format/classify` 与 `kdoc.compliance.label/scan/declare` 仍可用（委托门面）
+
+### 44.2 行业敏感词分包
+
+- `references/sensitive_packs/`：`base` 通用包 + `edu`（教培）/ `medical`（医疗）/ `finance`（金融）/ `gov`（政务）四行业包，各 200+ 分类描述词条
+- `kdoc.compliance.packs(external_packs_dir)` 查看词数、责任人字段与来源；`packs` 参数多包叠加（如 `"edu,finance"`）
+- 扫描报告按高/中/低三档风险分级，并定位到段落行号与责任人字段（包元数据）
+
+### 44.3 外部行业敏感词包（v4.3.5 新增）
+
+- 企业可在本地维护真实敏感词库，通过两种方式加载：
+  - 环境变量 `KINGDOC_EXTERNAL_PACKS_DIR` 指向包含 `.yaml` 词包的目录
+  - 各 MCP 工具参数 `external_packs_dir` 临时指定（优先级高于环境变量）
+- 外部目录中的同名 `.yaml` 包会覆盖内置包；不同名包与内置包合并展示
+- 词包格式与内置一致：`pack:`/`name:`/`responsible_field:`/`risk_default:`/`words:`
+
+### 44.4 全域扫描定时化
+
+- `kdoc.compliance.scheduler_register(space_id, packs, weekday, scan_time, external_packs_dir)`：Windows 产出 schtasks 命令；非 Windows 产出 cron 行
+- `kdoc.compliance.scheduler_run(space_id, docs, packs, external_packs_dir)`：执行一次扫描，仅推送新增（扫描级跨周去重 + webhook 签名核验，只推新增不扰民）
+- `kdoc.compliance.scheduler_status(external_packs_dir)`：查看已注册任务与去重计数
+
+### 44.5 配额阈值告警
+
+- 配额管理器用量越过 80% / 95% 时经 webhook 三通道推送（按天+级别幂等，不重复打扰）
+- `kdoc.quota.check` 现返回 `alerts` 字段，含已触发级别与推送状态
+
+### 44.6 安全约束
+
+- 子进程超时自动关闭，不残留
+- 绝不调用任何外部 OCR API（数据不出域）
+
+---
+
+*最后更新：2026-10-10 | v4.3.5*

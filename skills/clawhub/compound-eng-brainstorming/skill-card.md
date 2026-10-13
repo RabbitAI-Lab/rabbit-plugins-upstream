@@ -1,40 +1,57 @@
-## Description: <br>
-Pre-implementation exploration workflow for deep interviews, approach comparison, and design documentation before coding. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps clarify vague feature ideas through questions, approach comparisons, and a pre-implementation design.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and product or engineering collaborators use this workflow to clarify vague feature ideas, compare implementation approaches, and capture an approved design direction before planning or coding. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow may inspect relevant project context and create a design record that influences later implementation. <br>
-Mitigation: Review the brainstorm output and design document before proceeding to planning or implementation. <br>
-Risk: Ambiguous requirements or uncorrected assumptions can lead to an inaccurate design direction. <br>
-Mitigation: Confirm the scope synthesis, approach trade-offs, and listed assumptions before treating the design as approved. <br>
+## Use Case:
 
+Developers and teams use this skill to explore unclear feature requirements, compare design approaches, and document decisions before implementation.
 
-## Reference(s): <br>
-- [Deep Interview Layer](references/deep-interview.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Conversational guidance and Markdown design documents] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create a design document under docs/brainstorms/ after user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release metadata) <br>
+Risk: Brainstorming may read project context and create a design file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the project material shared with the agent and approve the proposed design before handoff.
+
+Risk: Unattended decisions or commits may exceed the intended scope.
+
+Mitigation: Delegate headless execution and its decision scope explicitly; allow commits only with clear authorization.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/iliaal/skills/compound-eng-brainstorming)
+- [Deep interview](references/deep-interview.md)
+- [Interview and approaches](references/interview-and-approaches.md)
+- [Scope synthesis](references/scope-synthesis.md)
+- [Design and handoff](references/design-and-handoff.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summary or design document]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May save a dated design document under docs/brainstorms/.]
+
+## Skill Version(s):
+
+5.1.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,145 @@
+#!/usr/bin/env python3
+"""Detect an assertion that cannot tell the arms apart.
+
+--pilot runs BEFORE the with-skill arm is dispatched, over one baseline run per
+guard eval. A discriminating assertion the baseline passes is not evidence about
+the skill, and finding that out after one run costs one run; finding it out
+after the full matrix costs the matrix, which is what iteration-1 did.
+
+Without --pilot it runs over the finished iteration and flags any discriminating
+assertion the baseline passed in EVERY run. One baseline failure anywhere is
+enough to show the assertion can discriminate; unanimity is the signal.
+"""
+import argparse
+import json
+import pathlib
+import sys
+
+import yaml
+
+# Importable as `from evals import check_discrimination` (repo root on sys.path) AND runnable as
+# `python3 evals/check_discrimination.py`, where sys.path[0] is evals/ and the package would
+# otherwise not import at all. A ModuleNotFoundError traceback exits 1, which is
+# this file's code for "findings" -- so without this, a broken invocation and a
+# real finding look identical to anything reading the exit code.
+_REPO_ROOT = pathlib.Path(__file__).resolve().parents[1]
+if str(_REPO_ROOT) not in sys.path:
+    sys.path.insert(0, str(_REPO_ROOT))
+
+from evals import runlib
+from evals.grade import AWAITING_READER_GRADE  # noqa: E402
+from evals import schema  # noqa: E402
+
+ASSERTIONS = pathlib.Path(__file__).resolve().parent / "assertions.yaml"
+
+
+def _baseline_rows(iteration_dir):
+    """eval_id -> assertion_id -> [(passed, evidence)], baseline arm only.
+
+    The evidence rides along because THREE different causes produce
+    ``passed: None`` and they need three different remedies -- see pilot().
+    """
+    out = {}
+    for eval_id, arm, _n, run in runlib.iter_runs(iteration_dir):
+        if arm != "baseline":
+            continue
+        path = run.dir / "grading.json"
+        if not path.is_file():
+            continue
+        doc = json.loads(path.read_text(encoding="utf-8"))
+        for row in doc.get("expectations", []):
+            out.setdefault(eval_id, {}).setdefault(
+                row.get("assertion_id"), []).append(
+                    (row.get("passed"), str(row.get("evidence") or "")))
+    return out
+
+
+def _guards(doc):
+    return [(e["id"], a) for e in doc["evals"] for a in e["assertions"]
+            if a["role"] == "discriminating"
+            and "baseline" in (a.get("arms") or schema.ARMS)]
+
+
+def pilot(iteration_dir, doc):
+    rows = _baseline_rows(iteration_dir)
+    findings = []
+    for eval_id, a in _guards(doc):
+        if eval_id not in rows:
+            findings.append(
+                f"NO_PILOT_RUN: eval-{eval_id} has no graded baseline run. The "
+                "pilot exists so a useless assertion costs one run instead of "
+                "the whole matrix — do not dispatch with_skill yet.")
+            continue
+        graded = rows[eval_id].get(a["id"], [])
+        results = [passed for passed, _ in graded]
+        if not results:
+            findings.append(f"NO_PILOT_RUN: eval-{eval_id} baseline run does not "
+                            f"grade {a['id']}")
+        elif all(r is None for r in results) and any(
+                AWAITING_READER_GRADE in ev for _, ev in graded):
+            # A row a program cannot settle is not a scenario that failed to
+            # reach a branch. Telling its author to rewrite the scenario sends
+            # them to fix something that works, and leaves the row ungraded
+            # afterwards. Measured on A0-3 in the iteration-2 pilot, where the
+            # message below got every clause of its diagnosis wrong.
+            findings.append(
+                f"NEEDS_READER_GRADE: {a['id']} is decided by a reader, not by "
+                f"a checker, and no verdict has been written yet. Open the run's "
+                f"grading.json, set `passed`, and write the quote or file:line "
+                f"it rests on into `evidence`. Whether this guard discriminates "
+                f"cannot be known until someone does.")
+        elif all(r is None for r in results):
+            findings.append(
+                f"GUARD_NOT_EXERCISED: {a['id']} was not exercised in the "
+                "baseline pilot. The scenario does not reach the branch — fix "
+                "the scenario, not the assertion. This is exactly how "
+                "iteration-1's A2-3 came to measure nothing.")
+        elif all(r for r in results if r is not None):
+            findings.append(
+                f"BASELINE_PASSED_A_GUARD: {a['id']} is marked discriminating "
+                f"and the baseline passed it. Either the scenario does not "
+                f"force the branch, or the property is the model's rather than "
+                f"the skill's — re-role it to regression with a written reason, "
+                f"or rewrite the scenario. Do not run the with_skill arm on it "
+                f"as it stands. Falsifier on record: {a['falsifier']}")
+    return findings
+
+
+def posthoc(iteration_dir, doc):
+    rows = _baseline_rows(iteration_dir)
+    findings = []
+    for eval_id, a in _guards(doc):
+        results = [passed for passed, _ in rows.get(eval_id, {}).get(a["id"], [])
+                   if passed is not None]
+        if results and all(results):
+            findings.append(
+                f"NON_DISCRIMINATING: {a['id']} passed in all {len(results)} "
+                "baseline run(s). It is not evidence about the skill. Re-role "
+                "it or change the scenario before iteration-3; the lint will "
+                "fail while it is still marked discriminating.")
+    return findings
+
+
+def main(argv=None):
+    parser = argparse.ArgumentParser(description=__doc__)
+    parser.add_argument("--iteration", required=True)
+    parser.add_argument("--pilot", action="store_true")
+    parser.add_argument("--assertions-inline", default=None,
+                        help="JSON document, for tests; otherwise "
+                             "evals/assertions.yaml is read")
+    args = parser.parse_args(argv)
+
+    iteration = pathlib.Path(args.iteration)
+    if not iteration.is_dir():
+        print(f"cannot run: {iteration} does not exist", file=sys.stderr)
+        return 2
+    doc = (json.loads(args.assertions_inline) if args.assertions_inline
+           else yaml.safe_load(ASSERTIONS.read_text(encoding="utf-8")))
+    findings = pilot(iteration, doc) if args.pilot else posthoc(iteration, doc)
+    for f in findings:
+        print(f)
+    return 1 if findings else 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

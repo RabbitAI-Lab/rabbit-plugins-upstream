@@ -1,45 +1,61 @@
-## Description: <br>
-医疗设备商机雷达 helps agents find early hospital and public-health procurement opportunities by scanning proposed projects, purchase intentions, and expiring service contracts, then ranking leads by budget, urgency, and fit. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scans hospital construction projects, procurement intentions, and expiring service contracts to identify and prioritize early medical-equipment sales opportunities.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Sales and business development users use this skill to identify and prioritize early medical equipment, consumables, reagent, maintenance, and hospital IT opportunities. It is intended for China-focused hospital and health-system procurement lead discovery from public bidding and project data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China-focused; usable globally by users monitoring Chinese hospital procurement data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill persists account credentials and generated reports may contain signed links that bypass login for anyone who receives the report. <br>
-Mitigation: Use a manually configured API key when possible, store credentials securely, and remove signed links before sharing reports unless recipients are intended to have access. <br>
-Risk: Scans consume vendor credits, and consent-based auto-registration sends platform, CPU architecture, and a hashed MAC-derived identifier to the vendor. <br>
-Mitigation: Review the estimated query cost before running scans and use a preconfigured API key to skip auto-registration when device-derived registration is not acceptable. <br>
+## Use Case:
 
+Medical-device sales teams and other external users provide a product line or region to find and rank prospective hospital purchases, with supporting public procurement signals and suggested follow-up actions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/medical-equipment-opportunity-radar) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Workflow Guide](references/workflow.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-Registration Flow](references/auto-register.md) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, configuration, guidance] <br>
-**Output Format:** [Markdown opportunity lists with optional self-contained HTML report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based auto-registration; scans consume vendor credits and generated reports may include signed links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Automatic account registration submits device features, including a hashed network identifier.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing and use a preconfigured ZLBX_API_KEY to avoid registration and device-feature submission.
+
+Risk: The skill saves an API key and generated reports under the user's home directory.
+
+Mitigation: Limit access to local credentials and reports, and remove them when no longer needed.
+
+Risk: Reports and links may contain signed access or auto-login parameters.
+
+Mitigation: Treat reports and signed links as sensitive; do not forward them publicly.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/medical-equipment-opportunity-radar)
+- [Scanning workflow](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Report template](artifact/references/report-template.md)
+- [Account registration guidance](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Guidance]
+
+**Output Format:** [Prioritized Markdown opportunity list; optional self-contained HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes source links, ranking reasons, data gaps, and suggested next actions.]
+
+## Skill Version(s):
+
+1.0.7 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

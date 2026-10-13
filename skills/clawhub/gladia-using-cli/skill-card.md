@@ -1,44 +1,59 @@
-## Description: <br>
-Terminal transcription of audio files and URLs with the Gladia CLI (gladia speech-to-text). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through terminal transcription of prerecorded audio files and URLs using the Gladia CLI, then helps answer questions grounded in the transcript.
 
-## Publisher: <br>
-[gladiaio](https://clawhub.ai/user/gladiaio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gladiaio](https://clawhub.ai/user/gladiaio)
 
-## Use Case: <br>
-Developers and agents use this skill to run Gladia CLI transcription for local audio files, http(s) URLs, or YouTube URLs, then answer follow-up questions grounded in the captured transcript. It is intended for shell-based, one-off transcription workflows rather than application integration or live audio. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Transcribing local files sends audio content to Gladia's service. <br>
-Mitigation: Confirm the audio can be shared with Gladia before transcription and avoid processing sensitive files without user approval. <br>
-Risk: Using gladia auth set stores the API key locally. <br>
-Mitigation: Prefer GLADIA_API_KEY or a per-command key when persistent local credentials are not desired. <br>
-Risk: Follow-up answers can become misleading if they rely on details absent from the transcript output. <br>
-Mitigation: Ground answers only in captured output and rerun transcription with JSON or diarization flags when timestamps or speakers are required. <br>
+## Use Case:
 
+Developers and other CLI users use this skill to transcribe prerecorded audio from local files or URLs and answer questions using the resulting text, timestamps, or speaker labels.
 
-## Reference(s): <br>
-- [CLI vs SDK Routing Guide](artifact/references/cli-vs-sdk.md) <br>
-- [Gladia CLI repository](https://github.com/gladiaio/gladia-cli/) <br>
-- [Pre-recorded quickstart](https://docs.gladia.io/chapters/pre-recorded-stt/quickstart) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides command selection for Gladia CLI transcription; command output may be text, JSON, SRT, or VTT depending on flags.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The suggested installation command pipes a changing remote script directly into a shell.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Download and inspect the installer before running it; prefer a pinned or package-manager installation if available.
+
+Risk: Transcribing local files or URLs sends audio to Gladia.
+
+Mitigation: Upload only audio or URLs that the user is authorized to send to Gladia.
+
+Risk: The local authentication command stores an API key in ~/.gladia.
+
+Mitigation: Use an environment variable when local persistence is inappropriate and protect any stored credentials.
+
+## Reference(s):
+
+- [CLI vs SDK routing guide](references/cli-vs-sdk.md)
+- [Gladia CLI documentation and installation](https://github.com/gladiaio/gladia-cli/)
+- [Gladia prerecorded transcription quickstart](https://docs.gladia.io/chapters/pre-recorded-stt/quickstart)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Natural-language answers and CLI instructions; transcripts may be text, JSON, SRT, or VTT]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Answers should be grounded in captured transcripts, with timestamps and speakers when available.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

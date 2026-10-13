@@ -1,46 +1,66 @@
-## Description: <br>
-Read-only log search and aggregation for VMware Aria Operations for Logs (vRealize Log Insight), enabling agents to investigate centralized ESXi, vCenter, and VM logs without write actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search and investigate VMware Log Insight logs, identify volume spikes, and inspect fields and alerts without changing appliance data.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, SREs, and VMware administrators use this skill to query centralized Log Insight data, inspect raw log lines behind incidents, detect log-volume spikes, and retrieve read-only alert history for troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queried appliance logs may contain sensitive production data. <br>
-Mitigation: Use a read-only Log Insight service account, scope queries to the incident window, and avoid exposing raw log output beyond the authorized troubleshooting context. <br>
-Risk: Local credential files can expose appliance credentials if filesystem permissions or secret handling are weak. <br>
-Mitigation: Keep ~/.vmware-log-insight/.env chmod 600 or inject credentials from a secret manager at process start. <br>
-Risk: Disabling TLS verification can expose credentials or log data outside controlled lab environments. <br>
-Mitigation: Leave TLS verification enabled by default and disable it only for explicitly controlled self-signed lab appliances. <br>
+## Use Case:
 
+Infrastructure engineers and incident responders use this skill to investigate centralized VMware logs, spot log spikes, and review alert history during troubleshooting.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-log-insight) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured tool-result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Log Insight queries may return truncated result envelopes and completion flags that agents should surface to users.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: Log queries may expose sensitive operational data if credentials have excessive access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a read-only Log Insight account with the minimum access needed.
+
+Risk: Passwords stored in a local .env file are only obfuscated, not encrypted.
+
+Mitigation: Inject passwords from a secret manager rather than storing them in .env; protect any local .env file with restrictive permissions.
+
+Risk: Disabling TLS verification can expose appliance credentials and log data in transit.
+
+Mitigation: Keep TLS verification enabled outside self-signed lab environments.
+
+Risk: Installing an external package introduces software supply-chain exposure.
+
+Mitigation: Review the uv/PyPI package source before production use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-log-insight)
+- [Publisher profile](https://clawhub.ai/user/zw008)
+- [Capabilities](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance, Shell commands]
+
+**Output Format:** [Structured JSON query results and concise Markdown summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only log events, time-series aggregates and spikes, fields, and alert details; search results indicate when incomplete.]
+
+## Skill Version(s):
+
+1.9.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

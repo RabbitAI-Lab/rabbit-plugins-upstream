@@ -1,42 +1,57 @@
-## Description: <br>
-AI assistant for financial compliance audits offering checklists, risk identification, audit report generation, and regulatory update tracking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps financial-institution compliance and audit teams draft checklists, evidence requests, risk assessments, reports, and remediation trackers.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Compliance officers and internal audit teams use this skill to prepare financial compliance audits, generate audit checklists, identify regulatory and control risks, draft audit reports, and track regulatory updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Compliance guidance or regulatory update summaries may be incomplete, stale, or jurisdiction-specific. <br>
-Mitigation: Validate outputs against current official regulator publications and internal legal or compliance review before operational use. <br>
-Risk: Audit prompts may include sensitive customer, transaction, or privileged legal material. <br>
-Mitigation: Share only necessary data and use the skill only in environments approved for that data, consistent with the security guidance. <br>
-Risk: Generated checklists and audit reports can miss organization-specific controls or remediation obligations. <br>
-Mitigation: Treat outputs as drafts and reconcile them with internal control frameworks, policies, and accountable reviewer sign-off. <br>
+## Use Case:
 
+Compliance officers and internal auditors at financial institutions use this skill to prepare internal checks, assess findings, draft audit materials, and track remediation. Its outputs are drafts for qualified staff to review and sign off, not formal compliance or legal opinions.
 
-## Reference(s): <br>
-- [Finance Compliance Audit on ClawHub](https://clawhub.ai/gechengling/finance-compliance-audit) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with checklists, report sections, and compliance review notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include jurisdiction- or policy-sensitive compliance guidance that requires professional review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Outdated or inaccurate regulatory references could misdirect an audit.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify regulatory references against current official sources before relying on them.
+
+Risk: Sharing audit materials may expose customer or transaction information.
+
+Mitigation: Provide only necessary, masked or aggregated data; do not submit identifiable records.
+
+Risk: Draft ratings or reports could be mistaken for approved findings or formal opinions.
+
+Mitigation: Have qualified compliance or audit staff review and sign off before formal reporting or submission.
+
+## Reference(s):
+
+- [Finance Compliance Audit on ClawHub](https://clawhub.ai/gechengling/skills/finance-compliance-audit)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Text and Markdown drafts, including checklists, tables, and report outlines]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft material requiring qualified compliance or internal audit review before formal use.]
+
+## Skill Version(s):
+
+3.0.3 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

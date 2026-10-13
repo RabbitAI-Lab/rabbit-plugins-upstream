@@ -1,44 +1,62 @@
-## Description: <br>
-招投标快捷检索引擎-标找找，当用户需要快速查询特定关键词的招标或中标公告时调用，优先调用基础搜索工具提取项目名称、金额和链接，输出精简直接的列表。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Chinese tender and award notices by keyword and returns concise lists of project names, amounts, and links.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and procurement teams use this skill to search tender and award notices, retrieve bid details, analyze companies, compare suppliers, and summarize procurement market signals from the Biaozhaozhao API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release is described as a quick tender search tool while enabling broader procurement intelligence, contact lookup, and web-enhanced research. <br>
-Mitigation: Install only when those broader procurement-intelligence capabilities are expected, and scope use to legitimate business research. <br>
-Risk: Search terms, company names, and related queries may be sent to the Biaozhaozhao API and sometimes to web search during analysis features. <br>
-Mitigation: Avoid entering confidential strategy, regulated personal data, or sensitive customer information unless disclosure to those services is approved. <br>
-Risk: Returned contact details can include sensitive business or personal data. <br>
-Mitigation: Use contact information only for authorized procurement workflows; avoid bulk harvesting, unsolicited outreach, or retention beyond business need. <br>
+## Use Case:
 
+Business users and procurement teams use this skill to find tender and award notices, check project details, and explore related company and market data.
 
-## Reference(s): <br>
-- [Biaozhaozhao API documentation](https://ai.zhiliaobiaoxun.com/docs/api/) <br>
-- [Biaozhaozhao API access portal](https://ai.zhiliaobiaoxun.com) <br>
-- [ClawHub skill release page](https://clawhub.ai/liu-jiapeng/tender-search-biaozhaozhao) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown summaries with structured lists and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY for authenticated Biaozhaozhao API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Optional automatic registration sends a hashed device identifier to the vendor.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain informed consent before collecting device features; configure your own ZLBX_API_KEY to skip automatic registration.
+
+Risk: Automatic registration stores an API key in ~/.zlbx/config.json.
+
+Mitigation: Protect access to the local credential file and do not disclose the key in responses.
+
+Risk: Queries can expose business contacts and consume paid account credits.
+
+Mitigation: Limit lookups to the user's request, preserve masked contact details, and check credit costs before expanding searches.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/tender-search-biaozhaozhao)
+- [Skill usage documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Tender search API reference](artifact/references/api-search.md)
+- [Company analysis API reference](artifact/references/api-company.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Automatic registration and consent flow](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Concise Markdown lists with project names, amounts, and source links; optional company and market summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include company and contact data; some lookups consume account credits.]
+
+## Skill Version(s):
+
+1.0.7 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

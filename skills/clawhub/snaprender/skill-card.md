@@ -1,43 +1,55 @@
-## Description: <br>
-SnapRender helps agents capture screenshots of URLs, HTML, or Markdown as image files, with options for device emulation, dark mode, full-page capture, and ad or cookie-banner blocking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+SnapRender lets agents capture web pages as screenshots, read them as markdown, and watch for changes through its API.
 
-## Publisher: <br>
-[user0856](https://clawhub.ai/user/user0856) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[user0856](https://clawhub.ai/user/user0856)
 
-## Use Case: <br>
-Developers and agents use SnapRender to inspect web pages and rendered HTML or Markdown visually by generating screenshot files and response metadata through the SnapRender service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: URLs, HTML, Markdown, and signed screenshot links are sent to an external third-party screenshot service. <br>
-Mitigation: Use the skill for public or non-sensitive pages by default, redact private HTML or Markdown before rendering, and create signed URLs only when link sharing is intended until expiration. <br>
-Risk: The skill requires a sensitive SNAPRENDER_API_KEY credential. <br>
-Mitigation: Use the preconfigured environment variable as documented and avoid exposing the API key in prompts, command output, or generated artifacts. <br>
+## Use Case:
 
+Agents and developers use SnapRender to capture and compare website screenshots, extract page text, and monitor a page for changes.
 
-## Reference(s): <br>
-- [SnapRender ClawHub listing](https://clawhub.ai/user0856/snaprender) <br>
-- [SnapRender signup](https://snap-render.com/auth/signup) <br>
-- [SnapRender screenshot API](https://app.snap-render.com/v1/screenshot) <br>
-- [SnapRender signed URL API](https://app.snap-render.com/v1/screenshot/sign) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, files, json metadata, guidance] <br>
-**Output Format:** [Markdown guidance with bash commands, saved screenshot files, and JSON response metadata] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl, jq, and SNAPRENDER_API_KEY; examples save screenshots and response metadata under /tmp.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release evidence) <br>
+Risk: Target URLs, screenshots, and extracted page content are sent to SnapRender.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid internal, authenticated, confidential, regulated, or non-consensual targets unless the user explicitly approves.
+
+Risk: Page watching can persist remotely and send email alerts.
+
+Mitigation: Confirm the exact URL, notification settings, and how to disable the schedule before creating one.
+
+## Reference(s):
+
+- [SnapRender skill on ClawHub](https://clawhub.ai/user0856/skills/snaprender)
+- [SnapRender agent integration](https://snap-render.com/ai-agents)
+- [SnapRender documentation](https://snap-render.com/docs)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Markdown, Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Screenshot image or PDF files, extracted text or markdown, and API command examples]
+
+**Output Parameters:** [1D text; 2D screenshots]
+
+**Other Properties Related to Output:** [Scheduled page monitoring can send email notifications.]
+
+## Skill Version(s):
+
+1.6.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

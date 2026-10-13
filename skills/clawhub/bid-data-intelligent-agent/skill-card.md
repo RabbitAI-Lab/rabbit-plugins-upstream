@@ -1,46 +1,64 @@
-## Description: <br>
-招中标数据智能体-AI驱动的标讯分析Agent helps AI agents search Chinese tender and award notices, retrieve bid details, analyze companies and markets, and produce structured procurement intelligence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents search and analyze Chinese procurement notices, company bidding activity, suppliers, and market trends.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External AI-agent users and developers use this skill to query bid notices, inspect company procurement activity, compare suppliers and competitors, analyze market trends, and generate structured reports or dashboard-ready data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may contact the vendor service and transmit local device or user identifiers during automatic registration. <br>
-Mitigation: Prefer a manually configured API key and require explicit user confirmation before registration or any transmission of device or user identifiers. <br>
-Risk: The skill may store a vendor API key locally after automatic registration. <br>
-Mitigation: Review the target configuration path and credential contents before persistence, restrict file permissions, and avoid automatic credential storage in shared or managed environments. <br>
-Risk: The security scan reports suspicious behavior around account creation, credential persistence, and recharge or login-link flows. <br>
-Mitigation: Require explicit confirmation before contact lookup, registration, credential persistence, recharge guidance, or login-link generation, and install only where vendor-service use is acceptable. <br>
+## Use Case:
 
+Agents and analysts use this skill to find procurement opportunities, review tender and award notices, profile companies and competitors, and summarize purchasing trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bid-data-intelligent-agent) <br>
-- [Bid search API reference](artifact/references/api-search.md) <br>
-- [Company analysis API reference](artifact/references/api-company.md) <br>
-- [Market analysis API reference](artifact/references/api-market.md) <br>
-- [Automatic registration flow](artifact/references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown, JSON, and API request payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can call vendor APIs, persist an API key in local configuration when auto-registering, and return procurement, company, and market analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Procurement and company-analysis queries are sent to an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential information without authorization and review the service's data handling before use.
+
+Risk: Optional account registration collects device attributes and stores an API key locally.
+
+Mitigation: Prefer your own ZLBX_API_KEY; obtain informed consent before registration, review the device fields, and protect ~/.zlbx/config.json.
+
+Risk: Contact information and auto-login links may expose personal or account access data.
+
+Mitigation: Respect masked contact data, avoid bulk contact exports, and share auto-login links only with intended recipients.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/bid-data-intelligent-agent)
+- [Publisher skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Search API reference](artifact/references/api-search.md)
+- [Company API reference](artifact/references/api-company.md)
+- [Business registry API reference](artifact/references/api-registry.md)
+- [Market API reference](artifact/references/api-market.md)
+- [Account API reference](artifact/references/api-account.md)
+- [Optional account registration](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Natural-language summaries and structured Markdown reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include notice links, company details, market statistics, and contact data subject to account-level masking.]
+
+## Skill Version(s):
+
+1.0.7 (source: skill frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

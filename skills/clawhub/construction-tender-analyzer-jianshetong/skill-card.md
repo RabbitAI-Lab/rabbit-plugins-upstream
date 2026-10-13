@@ -1,46 +1,58 @@
-## Description: <br>
-工程建设招投标分析-建设通，当搜索词包含工程、施工、建筑、市政、监理、设计等建筑业专属词汇时触发，聚焦工程项目金额、中标单位资质背景，重点提取建筑类项目核心字段并进行业绩汇总。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes construction tender and award records, including project amounts, winning bidders, company qualifications, and past performance.
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External users and agents use this skill to query Jianshetong/ZLBX tender APIs for construction procurement search, bid detail retrieval, company tender history, competitor analysis, and market intelligence. It is most useful when an agent needs structured summaries of project amounts, purchasing entities, winning bidders, qualifications, and related business opportunities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive ZLBX_API_KEY for third-party API access. <br>
-Mitigation: Use a dedicated limited API key, store it only in the agent environment, and rotate or revoke it if exposed. <br>
-Risk: The API scope is broader than construction tender summaries and can query company contacts, market intelligence, and lead-generation data. <br>
-Mitigation: Enable the skill only for workflows that need this broader procurement intelligence and require confirmation before contact lookups, company matching, or lead-generation queries. <br>
-Risk: Submitting confidential strategy, deal terms, or sensitive business context to the third-party service may expose private information. <br>
-Mitigation: Limit prompts and API parameters to the minimum tender, company, region, date, and product filters needed for the task. <br>
+## Use Case:
 
+Construction procurement teams and analysts use this skill to search tender notices, compare project awards, and summarize winning companies and market activity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/construction-tender-analyzer-jianshetong) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [ZLBX API key application page](https://ai.zhiliaobiaoxun.com/?ch=s33) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request examples and structured API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and calls third-party HTTP APIs; responses may include company, contact, tender, bid, and market intelligence data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: If no API key is configured, trial registration sends a hashed device identifier to the provider and stores the returned key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require informed consent before registration; configure an API key manually to avoid device-based trial registration.
+
+Risk: The skill uses a third-party service API and may lead users to account or payment links.
+
+Mitigation: Review the service and account links before use, and limit access to the API key and locally stored credentials.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/pkuycl/skills/construction-tender-analyzer-jianshetong)
+- [Service API](https://mcp-server.zhiliaobiaoxun.com/api_v2/)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Search API reference](references/api-search.md)
+- [Company API reference](references/api-company.md)
+- [Account registration guidance](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tender and award summaries with project amounts, winning bidders, company details, and links to available records.]
+
+## Skill Version(s):
+
+1.0.8 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

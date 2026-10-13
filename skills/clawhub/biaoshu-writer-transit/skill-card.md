@@ -1,47 +1,60 @@
-## Description: <br>
-凭 App Key 调用招采猫开放 API，帮助用户解读招标文件、生成投标文件并审查合规风险。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助投标人员解读招标文件、生成投标文件，并审查合规性及多份标书的相似风险。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Organizations and agents preparing bid responses use this skill to process user-provided tender documents through 招采猫, generate editable .docx bid files, and produce interpretation or compliance reports after confirming upload and billing implications. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial or personal information and are uploaded to 招采猫 cloud processing. <br>
-Mitigation: Confirm user consent before upload and remind users that task results and generated files are described as retained on the service for about 7 days. <br>
-Risk: The App Key grants access to the user's 招采猫 account and may be exposed if pasted into chat or included in links. <br>
-Mitigation: Keep the App Key private, prefer manual credential-file setup for sensitive use, and never echo the key or forward links containing App Key or bind_key parameters. <br>
-Risk: Bid generation can consume account credits and long-running jobs may continue after a local command stops. <br>
-Mitigation: Check balance before generation, surface billing implications, and resume existing jobs by job_id instead of resubmitting work that could duplicate charges. <br>
-Risk: Generated bid documents and compliance reports may be incomplete or require professional review before submission. <br>
-Mitigation: Review all generated .docx files, reports, risk findings, and source evidence before relying on them for procurement decisions. <br>
+## Use Case:
 
+投标人员和采购团队可上传招标或投标文件，获取招标要求解读、投标文件草稿、合规审查及标书查重结果。文件由第三方云服务处理，部分操作按可用字数计费。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/biaoshu-writer-transit) <br>
-- [招采猫 platform](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](artifact/references/api.md) <br>
-- [Usage guide](artifact/references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance, JSON status/results, HTML or Word reports, and generated .docx bid documents.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses user-provided local tender and bid files, an App Key credential, optional output-directory configuration, and writes generated artifacts under biaoshu-bailian-files/ unless configured otherwise.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.5 (source: server release metadata and artifact script constant) <br>
+Risk: Tender and bid documents are sent to a third-party cloud service for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm authorization and confidentiality requirements before uploading sensitive documents.
+
+Risk: Automatic trial enrollment collects device characteristics despite incomplete disclosure in the skill's permissions summary.
+
+Mitigation: Avoid the trial unless the user consents to device fingerprinting; use a separately obtained API key instead.
+
+Risk: Saved API keys and keys pasted into chat can expose paid account access.
+
+Mitigation: Use a dedicated, revocable key; keep it out of chat and links, and restrict access to saved credentials.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/biaoshu-writer-transit)
+- [百炼标书服务](https://biaoshu.zhiliaobiaoxun.com/)
+- [API overview](references/api.md)
+- [Usage guide](references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Guidance]
+
+**Output Format:** [Conversational summaries, HTML or Word reports, and DOCX bid documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated documents may be delivered by short-lived download link; review all bid content before submission.]
+
+## Skill Version(s):
+
+2.0.6 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

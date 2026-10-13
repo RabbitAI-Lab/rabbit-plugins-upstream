@@ -1,46 +1,62 @@
-## Description: <br>
-能源电力采招分析仪-电力招标网，当查询词包含电网、电力、新能源、光伏、储能、风电时触发，需重点针对国网/南网等大型央企采购项目进行聚合，分析特定能源设备或工程的中标集中度。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes Chinese energy and power procurement notices, including bid activity and award concentration for equipment and projects.
 
-## Publisher: <br>
-[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack)
 
-## Use Case: <br>
-Procurement, sales, and market-analysis users can query bid notices, company participation, supplier concentration, brand pricing, and expiring projects for energy and power-sector opportunities. The skill helps an agent call a third-party procurement API and summarize returned bid, company, contact, and market data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends procurement, company, product, market, and contact queries to a third-party API using ZLBX_API_KEY. <br>
-Mitigation: Install only where that data sharing is acceptable, protect the API key as a sensitive credential, and avoid submitting confidential query terms unless approved. <br>
-Risk: The documented tools include broader procurement and company analysis than the energy-power description suggests. <br>
-Mitigation: Constrain use to intended energy and power-sector searches and review query scope before relying on results. <br>
-Risk: Returned project contact data may be sensitive business information. <br>
-Mitigation: Handle contact details under applicable privacy, outreach, and data-retention rules, and avoid unsolicited profiling or outreach. <br>
+## Use Case:
 
+Procurement analysts and sales teams search Chinese energy-sector tenders and awards, compare buyers and suppliers, and assess award concentration. Additional company, contact, and cross-industry research is available when specifically requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thuanlynham-stack/energy-power-bid-analyzer-dianlizhaobiaowang) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [ZhiLiaoBiaoXun API key portal](https://ai.zhiliaobiaoxun.com/?ch=s38) <br>
+### Deployment Geography for Use:
 
+China (procurement data coverage; no deployment restriction stated)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API Calls, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API request and response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends procurement, company, product, and market queries to a third-party service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Automatic account creation transmits hashed device characteristics and stores an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require informed consent before collecting device characteristics or registering; provide an existing API key to bypass registration and protect locally stored credentials.
+
+Risk: Company and procurement research can expose contact details or expand beyond the energy-sector task.
+
+Mitigation: Request contact and broader company research only when needed; preserve masked contacts and avoid bulk contact exports.
+
+Risk: Paid data queries and recharge links can incur costs or prompt account actions.
+
+Mitigation: Review query costs and account status before extended research; use recharge links only when explicitly needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/thuanlynham-stack/skills/energy-power-bid-analyzer-dianlizhaobiaowang)
+- [Bid search API reference](references/api-search.md)
+- [Market analysis API reference](references/api-market.md)
+- [Company data API reference](references/api-company.md)
+- [Account and usage reference](references/api-account.md)
+- [Account registration and privacy workflow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Guidance]
+
+**Output Format:** [Markdown summaries and tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes search criteria, dated bid results and monetary amounts when available; requires ZLBX_API_KEY or user-approved account registration.]
+
+## Skill Version(s):
+
+1.0.8 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

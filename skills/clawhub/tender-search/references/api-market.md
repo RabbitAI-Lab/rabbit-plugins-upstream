@@ -24,8 +24,8 @@
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
 | `exclude_keywords` | list[str] | 排除关键词 |
-| `min_amount` | float | 最低金额（元） |
-| `max_amount` | float | 最高金额（元） |
+| `min_amount` | float | 最低金额（万元） |
+| `max_amount` | float | 最高金额（万元） |
 | `limit` | int | 返回数量，默认20，最大100 |
 | `sort_field` | str | 排序字段：`count`/`amount`/`pub_time`，默认 `count` |
 
@@ -58,7 +58,7 @@
 {
   "keywords": ["人工智能", "AI"],
   "provinces": ["北京"],
-  "min_amount": 1000000,
+  "min_amount": 100,
   "sort_field": "amount"
 }
 ```
@@ -80,8 +80,8 @@
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
 | `exclude_keywords` | list[str] | 排除关键词 |
-| `min_amount` | float | 最低金额（元） |
-| `max_amount` | float | 最高金额（元） |
+| `min_amount` | float | 最低金额（万元） |
+| `max_amount` | float | 最高金额（万元） |
 | `limit` | int | 返回数量，默认20，最大100 |
 | `sort_field` | str | 排序字段：`count`/`amount`/`pub_time`，默认 `count` |
 
@@ -136,6 +136,7 @@
 | `end_date` | str | 统计结束日期 |
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
+| `counties` | list[str] | 区县列表 |
 | `limit` | int | 返回品牌数量，默认10，最大50 |
 
 ### 响应结构
@@ -192,8 +193,8 @@
 | `filters.end_date` | str | 结束日期 |
 | `filters.provinces` | list[str] | 省份列表 |
 | `filters.cities` | list[str] | 城市列表 |
-| `filters.min_money` | float | 最低金额（元） |
-| `filters.max_money` | float | 最高金额（元） |
+| `filters.min_amount` | float | 最低金额（万元） |
+| `filters.max_amount` | float | 最高金额（万元） |
 | `group_by` | list[str] | **必填**，聚合维度 |
 | `metrics` | list[str] | 统计指标，默认 `["count", "sum_amount"]` |
 | `compare_with` | str | 对比类型：`yoy`=同比，`qoq`=环比 |
@@ -293,6 +294,7 @@
 | `end_date` | str | 统计结束日期 |
 | `provinces` | list[str] | 省份列表 |
 | `cities` | list[str] | 城市列表 |
+| `counties` | list[str] | 区县列表 |
 | `limit` | int | 返回记录数量，默认20，最大200 |
 
 ### 响应结构
@@ -357,9 +359,17 @@
 
 | 工具 | 金额参数 | 单位 |
 |------|---------|------|
-| search_bids | `min_amount`, `max_amount` | 元 |
-| query_bids_advanced | `min_money`, `max_money` | 元 |
-| aggregate_bids_advanced | `filters.min_money`, `filters.max_money` | 元 |
-| get_top_brands / get_price_trends | `min_price`, `max_price` | 元 |
+| search_bids | `min_amount`, `max_amount` | **万元** |
+| query_bids_advanced | `min_amount`, `max_amount` | **万元** |
+| search_expiring_projects / search_proposed_projects | `min_amount`, `max_amount` | **万元** |
+| get_company_partners | `min_amount` | **万元** |
+| aggregate_bids_advanced | `filters.min_amount`, `filters.max_amount` | **万元** |
+| get_top_brands / get_price_trends | `min_price`, `max_price` | 元（产品单价，非项目金额） |
 
-响应中 `money` 单位为元，`money_wan` 单位为万元。
+响应侧的元口径字段各接口不同名：标讯搜索是 `money`（对应 `money_wan`）、聚合是
+`sum_amount` / `total_amount`（对应 `sum_amount_wan`）、Top 类是 `total_amount`
+（对应 `total_amount_wan`）、合作伙伴是 `cooperation_amount`（对应 `cooperation_amount_wan`）。
+
+拟建项目（`search_proposed_projects`）与其他工具一致：`money` 是元、`money_wan` 是万元，
+另有 `money_format` 可读串。（2026-09-12 之前这里写着「拟建的 money 本身就是万元」，
+那是错的，且当时 `min_amount` 筛选因此完全失效，见 ADR-0004。）

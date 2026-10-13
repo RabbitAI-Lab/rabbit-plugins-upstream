@@ -1,43 +1,54 @@
-## Description: <br>
-Run AEO audits, preview branch audits, changed-page sitemap audits, local/private preview audits with explicit opt-in, sitemap origin rewriting, static-output audits, regression comparisons, site fixes, schema validation, and llms.txt generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents audit and improve websites for AI search visibility, including preview and static-site audits, regression comparisons, schema checks, and llms.txt generation.
 
-## Publisher: <br>
-[arberx](https://clawhub.ai/user/arberx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arberx](https://clawhub.ai/user/arberx)
 
-## Use Case: <br>
-Developers, site owners, and marketing teams use Aeo to audit public, staging, local, or static websites for answer-engine optimization, schema quality, AI access files, and regressions, then generate prioritized fixes and related files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can run a networked npm audit tool against public, staging, localhost, private, or static site targets. <br>
-Mitigation: Audit local or private targets only for systems the user controls, and require explicit opt-in before using local/private access. <br>
-Risk: The skill can propose or apply AEO-related file and code changes. <br>
-Mitigation: Review proposed fixes before allowing writes, preserve existing site behavior, and rerun the audit when practical. <br>
-Risk: Untrusted target URLs, paths, or flags could make shell execution unsafe if passed through directly. <br>
-Mitigation: Validate URLs or local paths, quote each argument, pass flags as literal tokens, and reject shell metacharacters or newlines. <br>
+## Use Case:
 
+Developers and site owners use this skill to assess website visibility to AI systems, prioritize fixes, validate structured data, compare releases, and create AI-readable site files.
 
-## Reference(s): <br>
-- [Aeo homepage](https://ainyc.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/arberx/skills/aeo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown summaries with JSON or agent-format audit results, shell commands, code/configuration changes, and generated llms.txt or robots.txt files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call a networked npm audit tool and may write llms.txt, llms-full.txt, or robots.txt when the user requests generation or fixes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.0 (source: server release metadata) <br>
+Risk: Website audits can access local or private previews when explicitly enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Audit only sites and local previews you are authorized to test; enable private-target access only on explicit request.
+
+Risk: Generated llms.txt, llms-full.txt, or robots.txt changes may alter how crawlers access site content.
+
+Mitigation: Review generated files and site fixes before committing or deploying them.
+
+## Reference(s):
+
+- [ClawHub AEO skill release](https://clawhub.ai/arberx/skills/aeo)
+- [Canonry website](https://canonry.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration files]
+
+**Output Format:** [Markdown guidance, JSON audit reports, and text files such as llms.txt and robots.txt]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May propose or apply site fixes after user confirmation.]
+
+## Skill Version(s):
+
+7.3.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

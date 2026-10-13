@@ -1,37 +1,53 @@
-## Description: <br>
-Generates compliant, multi-format financial marketing content, including articles, social media posts, video scripts, and content planning for financial teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps financial marketing teams plan, draft, adapt, and review multi-format content using templates, calendars, compliance checklists, and quality scoring.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Financial marketing teams use this skill to draft educational and promotional content across articles, social posts, short video scripts, and editorial calendars. Compliance and legal reviewers should validate product claims, risk disclosures, return statements, and jurisdiction-specific requirements before publication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated financial marketing content may include inaccurate regulatory notes, unsupported product claims, missing risk disclosures, or jurisdiction-specific compliance gaps. <br>
-Mitigation: Treat generated copy and regulatory notes as draft assistance only; have qualified compliance or legal reviewers check claims, disclosures, return statements, and jurisdiction-specific requirements before publication. <br>
+## Use Case:
 
+Financial marketing and compliance teams use this skill to plan content, prepare drafts for articles, social posts, posters, and video scripts, and review them before business and compliance approval. Outputs are drafts, not publishable copy or investment advice.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown or plain text content drafts with structured templates, tables, and planning guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bilingual English and Chinese marketing drafts, content calendars, compliance prompts, and risk-disclosure reminders.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Regulatory examples or generated financial claims may be inaccurate or unsuitable for publication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat examples as reference material and require qualified compliance review and business confirmation before publishing.
+
+Risk: Inputs may expose customer information or nonpublic product data.
+
+Mitigation: Provide only necessary public product details and use fictional or de-identified examples.
+
+## Reference(s):
+
+- [Finance Content Factory release on ClawHub](https://clawhub.ai/gechengling/skills/finance-content-factory)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Draft content, planning tables, review checklists, and quality assessments in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [All public-facing content requires human business confirmation and qualified compliance review before publication.]
+
+## Skill Version(s):
+
+3.0.3 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

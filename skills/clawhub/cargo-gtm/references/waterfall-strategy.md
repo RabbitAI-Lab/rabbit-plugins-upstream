@@ -67,21 +67,25 @@ Don't skip step 5 — email finders return catch-all addresses that look valid b
 Goal: get firmographics (industry, size, geo, founded, …) for a company given domain.
 
 ```
-1. cargo.matchBusiness → cargo.enrichBusinessFirmographics (0.5 + 0.5 cred)  ← default
-2. waterfall.enrichCompany (1 cred)                                          ← unmatched cargo
-3. peopleDataLabs.enrichCompany (3 cred)                                     ← still unmatched
+1. aiArk.enrichCompany (0.01 cred)             ← default; domain or LinkedIn URL
+2. companyEnrich.enrichByDomain (0.25 cred)    ← rows aiArk returned thin
+3. waterfall.enrichCompany (1 cred)            ← still empty
+4. peopleDataLabs.enrichCompany (3 cred)       ← last resort
 ```
 
-For tech-stack signals, run `cargo.enrichBusinessTechnographics` (1) on matched companies; fall back to `theirStack.searchTechnologies` (0.5) for unmatched.
+Every rung keys on the domain, so there is no id-resolution step and each escalation runs on the residue of the one above it.
+
+For tech-stack signals, run `builtwith.getDomainSummary` (**free**) across the whole list first, then `builtwith.enrichDomain` (1) or `theirStack.searchTechnologies` (0.5) only on the rows the free summary left ambiguous.
 
 ## Chain — Enrich person details
 
 Goal: get title, location, role, employment for a person given name + company (or email or LinkedIn).
 
 ```
-1. cargo.matchProspect → cargo.enrichProspectDetails (0.5 + 2 cred)  ← default
-2. waterfall.enrichContact (2 cred)                                  ← unmatched cargo
-3. peopleDataLabs.enrichPerson (3 cred)                              ← still unmatched
+1. aiArk.enrichPerson (0.1 cred)      ← default when a LinkedIn URL is in hand
+2. waterfall.enrichContact (2 cred)   ← no URL, or aiArk came back empty
+3. apolloio.enrichPerson (1 cred)     ← niche coverage on the residue
+4. peopleDataLabs.enrichPerson (3 cred)
 ```
 
 ## Chain — LinkedIn URL resolution
@@ -91,7 +95,7 @@ Goal: get the correct LinkedIn URL for a person given name + company.
 ```
 1. linkedin.findProfileUrl (0.25 cred)
 2. linkedin.enrichProfile on candidate (0.25 cred)   ← validation step (mandatory)
-3. FullEnrich.reverseEmailLookup (2 cred)            ← only if email available
+3. FullEnrich.reverseEmailLookup (1 cred)            ← only if email available
 ```
 
 See [`../recipes/linkedin-url-lookup.md`](../recipes/linkedin-url-lookup.md) for the strict-validation pattern. Don't skip step 2 — false positive rate is high without validation.

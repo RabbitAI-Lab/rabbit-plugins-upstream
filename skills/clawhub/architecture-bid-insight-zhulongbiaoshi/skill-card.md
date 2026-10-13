@@ -1,49 +1,58 @@
-## Description: <br>
-建筑工程标讯洞察-筑龙标事，当针对基建、大型工程进行追踪查询或寻找潜在参标单位时调用，优先使用潜在供应商推荐和临期项目接口，为建筑行业用户提供前瞻性建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助建筑行业用户查询工程招投标信息、追踪项目进展，并发现潜在供应商和临期项目商机。
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External construction, procurement, and business-development users use this skill to search bids, inspect bid details, analyze companies and competitors, identify expiring projects, and summarize market opportunities through the Zhiliaobiaoxun API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bid keywords, company names, bid URLs, and related search parameters are sent to the third-party Zhiliaobiaoxun API. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, keep query scope narrow, and avoid submitting confidential or unauthorized business information. <br>
-Risk: Company matching can broaden analysis across headquarters, subsidiaries, and branch entities. <br>
-Mitigation: Ask the agent to confirm matched companies before broad headquarters or subsidiary analysis when precision matters. <br>
-Risk: Project contact details may be retrieved or shared during company and bid analysis. <br>
-Mitigation: Retrieve or disclose contact details only for legitimate, authorized business purposes. <br>
-Risk: The skill requires the sensitive ZLBX_API_KEY credential. <br>
-Mitigation: Provide the key through the configured environment variable and avoid pasting or exposing it in prompts, logs, or shared outputs. <br>
+## Use Case:
 
+建筑行业用户可检索中国工程招投标公告、分析企业与市场、追踪项目阶段，并识别潜在参标单位和续约机会。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/architecture-bid-insight-zhulongbiaoshi) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [Zhiliaobiaoxun API key registration](https://ai.zhiliaobiaoxun.com/?ch=s34) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Markdown] <br>
-**Output Format:** [Markdown narrative with JSON request examples and API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends bid keywords, company names, bid URLs, and related search parameters to the Zhiliaobiaoxun API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Automatic trial registration sends a stable hashed MAC-derived device identifier to the service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the privacy implications and obtain consent before registration; configure your own ZLBX_API_KEY to avoid automatic registration.
+
+Risk: Automatically generated API keys are stored locally and account or contact features may expose sensitive information.
+
+Mitigation: Protect ~/.zlbx/config.json and use contact and account-management features only when needed for the intended workflow.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/pkuycl/skills/architecture-bid-insight-zhulongbiaoshi)
+- [Skill usage documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Bid search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account registration guidance](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include bid details, company information, market summaries and project recommendations.]
+
+## Skill Version(s):
+
+1.0.8 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

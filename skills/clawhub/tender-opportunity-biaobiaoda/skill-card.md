@@ -1,45 +1,63 @@
-## Description: <br>
-Monitors Chinese tender opportunities through the 标标达/知了标讯 API and helps agents search bid notices, analyze companies and competitors, estimate pricing, and surface expiring projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps procurement teams find Chinese tender opportunities and assess bidding prospects using notice searches, company information, competitor history, and award prices.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Procurement, sales, and bid strategy teams use this skill to find relevant tender opportunities, inspect tender details, analyze suppliers and competitors, and review market pricing signals from 标标达/知了标讯 data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement research terms, company names, and contact-related queries are sent to an external tender-data provider. <br>
-Mitigation: Use the skill only when the 标标达/知了标讯 service is approved for the data being queried, and avoid submitting non-public bid strategy or private customer lists. <br>
-Risk: A shared or broadly scoped API key could expose tender research usage or quota to unintended users. <br>
-Mitigation: Configure a dedicated ZLBX_API_KEY for agent use and rotate or revoke it according to the organization's credential policy. <br>
-Risk: Ambiguous company shorthand can broaden analysis to unintended legal entities. <br>
-Mitigation: Ask the agent to show matched companies before broad analyses of shorthand or ambiguous company names. <br>
+## Use Case:
 
+Procurement and bidding teams use this skill to search tender notices, investigate potential suppliers and competitors, and compare historical awards before deciding which projects to pursue.
 
-## Reference(s): <br>
-- [招投标商机监控雷达-标标达 on ClawHub](https://clawhub.ai/liu-jiapeng/tender-opportunity-biaobiaoda) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or concise text summaries with structured tender, company, competitor, and pricing analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends procurement, company, and contact-related queries to an external 标标达/知了标讯 service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: Tender and company queries are sent to a third-party bidding-data service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the data shared in queries and use the service only if its data handling is acceptable.
+
+Risk: Optional account setup uses platform, CPU architecture, and a hashed MAC address to create an account.
+
+Mitigation: Request informed consent before setup; configure an existing ZLBX_API_KEY to skip device-based registration.
+
+Risk: Auto-registration persists an API key in ~/.zlbx/config.json; some searches consume credits and contact results may contain sensitive details.
+
+Mitigation: Protect local credentials, confirm paid searches and recharge decisions, and do not expand masked contacts or export them in bulk.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/liu-jiapeng/skills/tender-opportunity-biaobiaoda)
+- [Product skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Tender search API reference](artifact/references/api-search.md)
+- [Company analysis API reference](artifact/references/api-company.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Account API reference](artifact/references/api-account.md)
+- [Optional account registration procedure](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Guidance]
+
+**Output Format:** [Markdown with tender summaries, comparisons, and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include vendor-provided contact details and paid-query results; preserve masked contacts.]
+
+## Skill Version(s):
+
+2.0.5 (source: frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,61 @@
-## Description: <br>
-A Chinese-language tutoring skill that explains math concepts through familiar analogies, visual reasoning, step-by-step decomposition, and understanding checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Explains middle- and high-school math concepts in Chinese through everyday analogies, visualizations, and step-by-step reasoning.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to turn formula-memorization questions into concept explanations, especially for algebra rules, functions, geometry visualization, probability, and statistics. It guides the agent to build intuition first, introduce formal math language second, and verify understanding through examples, counterexamples, transfer tasks, and links to prior knowledge. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate broadly for math-understanding requests. <br>
-Mitigation: Use it for concept explanation and tutoring workflows where Chinese-language math guidance is intended, and confirm that the selected skill matches the learner's request before relying on its output. <br>
-Risk: Connected learning-progress updates or reminder creation could affect a learner's study record or schedule. <br>
-Mitigation: Confirm such updates with the user or apply the connected skills' controls before recording progress or creating reminders. <br>
+## Use Case:
 
+Chinese-speaking middle- and high-school students use this skill to understand mathematical ideas and explain why formulas work, rather than to solve a particular exercise. It checks understanding with examples and questions.
 
-## Reference(s): <br>
-- [Analogy Bank](references/analogy-bank.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-concept-explainer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Global (localize curriculum and crisis-support guidance outside mainland China)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured prompts, analogies, explanations, and checks for understanding] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-language tutoring guidance; no executable code or hidden data access found in the artifact] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Student learning records or parent summaries may expose sensitive information when memory or sharing is enabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review profile and sharing controls first; use pause, deletion, or no-sharing options when appropriate.
+
+Risk: Curriculum assumptions and crisis-support advice may not fit locations outside mainland China.
+
+Mitigation: Localize curriculum and support resources before using the skill in another region.
+
+Risk: An analogy or generated practice question may oversimplify a concept or be mathematically incorrect.
+
+Mitigation: Check explanations against definitions and review generated questions before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/qizhitang/skills/xiaozhi-math-concept-explainer)
+- [Middle-school analogy bank](references/analogy-bank.md)
+- [High-school foundational concepts](references/math-hs1-concepts.md)
+- [High-school required concepts](references/math-hs2-concepts.md)
+- [High-school elective concepts](references/math-hs3-concepts.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Chinese-language conversational text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Short explanations, analogies, visual descriptions, and understanding-check questions.]
+
+## Skill Version(s):
+
+2.11.1 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
