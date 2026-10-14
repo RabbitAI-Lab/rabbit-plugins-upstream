@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-storage-troubleshooting",
+  "repo": "google/skills",
+  "skillId": "gke-storage-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-10-14T09:57:08Z",
+  "contentHash": "f8f09ba6e84beb83f087f6d7fff392c40a12ef9879d838cf9de4245417873344",
+  "fetchedAt": "2026-10-14T12:56:56.580Z"
+}

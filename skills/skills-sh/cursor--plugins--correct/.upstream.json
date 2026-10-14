@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/correct",
+  "repo": "cursor/plugins",
+  "skillId": "correct",
+  "branch": "main",
+  "pushedAt": "2026-10-14T07:04:32Z",
+  "contentHash": "86f88ec0adda98bcede119d3861312c362d17bc91829c73eb4caa5f1208a9791",
+  "fetchedAt": "2026-10-14T12:55:41.470Z"
+}

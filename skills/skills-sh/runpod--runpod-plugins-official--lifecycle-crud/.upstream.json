@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/lifecycle-crud",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "lifecycle-crud",
+  "branch": "main",
+  "pushedAt": "2026-10-14T04:23:29Z",
+  "contentHash": "7fea7d9fa95fcdb24c09490819e8fe14bfa2374228da8d2875b1c88111283a2f",
+  "fetchedAt": "2026-10-14T12:57:19.384Z"
+}
