@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/automate-me",
+  "repo": "cursor/plugins",
+  "skillId": "automate-me",
+  "branch": "main",
+  "pushedAt": "2026-10-14T07:04:32Z",
+  "contentHash": "093e06a092c5535ff783965831498587ff0ccc2d753c43c1fb7c5057f2e5e09f",
+  "fetchedAt": "2026-10-14T12:55:41.249Z"
+}

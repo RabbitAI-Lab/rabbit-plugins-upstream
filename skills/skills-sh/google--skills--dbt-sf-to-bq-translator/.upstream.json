@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/dbt-sf-to-bq-translator",
+  "repo": "google/skills",
+  "skillId": "dbt-sf-to-bq-translator",
+  "branch": "main",
+  "pushedAt": "2026-10-14T09:57:08Z",
+  "contentHash": "77797fe80f73b8b3eb05c9abca1f007e971a5fbed4bb00b4d7da34c11414faea",
+  "fetchedAt": "2026-10-14T12:56:56.533Z"
+}

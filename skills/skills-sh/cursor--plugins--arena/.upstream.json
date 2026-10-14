@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/arena",
+  "repo": "cursor/plugins",
+  "skillId": "arena",
+  "branch": "main",
+  "pushedAt": "2026-10-14T07:04:32Z",
+  "contentHash": "955c44fd7adadcb9d997a045f9b0eea582d9abac32e39fa0f35839d34173e924",
+  "fetchedAt": "2026-10-14T12:55:41.110Z"
+}
