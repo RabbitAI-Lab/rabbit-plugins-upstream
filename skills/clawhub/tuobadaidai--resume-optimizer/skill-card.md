@@ -1,45 +1,57 @@
-## Description: <br>
-Resume Optimizer evaluates and rewrites user-provided resumes against optional job descriptions, produces before/after scoring reports, and exports ATS-compatible DOCX/PDF resume files. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+求职简历三阶段优化引擎+效果对比报告：先全局评估（含JD匹配度雷达图），再简历改写（工作经验STAR+项目经验软性叙述+数据补全追问），最后效果对比+Word/PDF导出。
 
-## Publisher: <br>
-[tuobadaidai](https://clawhub.ai/user/tuobadaidai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tuobadaidai](https://clawhub.ai/user/tuobadaidai)
 
-## Use Case: <br>
-Job seekers and career-support agents use this skill to assess resumes, align them to optional job descriptions, rewrite experience using STAR-style evidence, and prepare ATS-friendly export files without inventing claims. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Resume and job-description inputs can contain sensitive personal or employment information. <br>
-Mitigation: Redact unnecessary sensitive details before use and share only the information needed for the optimization task. <br>
-Risk: Generated DOCX/PDF resume exports remain on disk after the workflow completes. <br>
-Mitigation: Choose the output directory deliberately, review generated files, and remove local copies that are no longer needed. <br>
-Risk: PDF export depends on local conversion tooling and Python dependencies. <br>
-Mitigation: For higher-assurance environments, pin dependencies and use a trusted absolute LibreOffice path before enabling PDF conversion. <br>
+## Use Case:
 
+External users and agents assisting job seekers use this skill to evaluate resumes against optional job descriptions, rewrite resume sections with STAR, JD-tailoring, and ATS guidance, and produce comparison reports plus optional DOCX/PDF exports.
 
-## Reference(s): <br>
-- [ATS Compatibility Optimization Guide](references/ats-optimization.md) <br>
-- [JD Tailoring Method](references/jd-tailoring.md) <br>
-- [STAR Methodology and Strong Verb Library](references/star-methodology.md) <br>
-- [Edge Cases and Fault Tolerance](references/edge-cases.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and resume drafts, with optional DOCX/PDF files generated from Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses user-provided resume and job-description content; DOCX/PDF export writes files to a chosen output directory.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: The export helper writes generated resume files and has insufficiently constrained file-writing behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only in a controlled workspace, avoid shared directories for sensitive resumes, and choose plain output filenames without slashes or '..'.
+
+Risk: The export helper uses unpinned document-export dependencies.
+
+Mitigation: Pin and audit python-docx and reportlab before running the export helper.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tuobadaidai/skills/resume-optimizer)
+- [ATS 兼容性优化指南](references/ats-optimization.md)
+- [JD 定向定制方法](references/jd-tailoring.md)
+- [STAR 方法论与强动词库](references/star-methodology.md)
+- [边界场景与容错处理](references/edge-cases.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, files, guidance]
+
+**Output Format:** [Markdown reports and rewritten resume content; optional DOCX/PDF files from an export helper.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces resume evaluations, JD keyword mappings, before/after rewrites, score comparisons, radar-chart guidance, and optional export commands.]
+
+## Skill Version(s):
+
+1.5.1 (source: frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

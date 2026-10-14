@@ -13,13 +13,16 @@ import re
 import sqlite3
 import sys
 import traceback
+from collections.abc import Callable
 from datetime import datetime, timedelta
-from typing import Any, Callable, Optional
+from typing import Any
 
 logger = logging.getLogger("apple_photos_cleaner")
 
 # Core Data reference date (January 1, 2001 00:00:00 UTC)
 CORE_DATA_EPOCH = datetime(2001, 1, 1, 0, 0, 0)
+# Seconds between the Unix epoch and the Core Data epoch
+CORE_DATA_UNIX_OFFSET = 978307200
 
 
 def setup_logging(verbose: bool = False) -> None:
@@ -36,7 +39,7 @@ def setup_logging(verbose: bool = False) -> None:
     )
 
 
-def find_photos_db(custom_path: Optional[str] = None) -> str:
+def find_photos_db(custom_path: str | None = None) -> str:
     """
     Find the Photos.sqlite database.
 
@@ -104,7 +107,7 @@ def connect_db(db_path: str) -> sqlite3.Connection:
     return conn
 
 
-def coredata_to_datetime(timestamp: Optional[float]) -> Optional[datetime]:
+def coredata_to_datetime(timestamp: float | None) -> datetime | None:
     """
     Convert Core Data timestamp to Python datetime.
     Core Data timestamps are seconds since 2001-01-01 00:00:00 UTC.
@@ -118,6 +121,53 @@ def coredata_to_datetime(timestamp: Optional[float]) -> Optional[datetime]:
     if timestamp is None:
         return None
     return CORE_DATA_EPOCH + timedelta(seconds=timestamp)
+
+
+def coredata_to_local(timestamp: float | None, tz_offset: int | None) -> datetime | None:
+    """
+    Convert a Core Data timestamp to the naive local wall-clock time it was taken at.
+
+    Photos records each asset's UTC offset at capture time
+    (ZADDITIONALASSETATTRIBUTES.ZTIMEZONEOFFSET, in seconds). When it is known it wins,
+    so a photo taken at 23:30 in Chicago stays 23:30 even when analyzed in Tokyo.
+    When it is missing, fall back to the system time zone.
+
+    Use this for anything bucketed by hour, day, month or year. coredata_to_datetime()
+    stays UTC.
+    """
+    if timestamp is None:
+        return None
+    if tz_offset is not None:
+        return CORE_DATA_EPOCH + timedelta(seconds=timestamp + tz_offset)
+    return datetime.fromtimestamp(timestamp + CORE_DATA_UNIX_OFFSET)
+
+
+def has_timezone_offset(cursor: sqlite3.Cursor) -> bool:
+    """Whether this library's schema records a per-asset capture time zone offset."""
+    cursor.execute("PRAGMA table_info(ZADDITIONALASSETATTRIBUTES)")
+    return any(row[1] == "ZTIMEZONEOFFSET" for row in cursor.fetchall())
+
+
+def tz_offset_sql(tz_offset_available: bool, attrs: str = "aa") -> str:
+    """SELECT expression for the capture offset; NULL when the schema lacks the column."""
+    return f"{attrs}.ZTIMEZONEOFFSET" if tz_offset_available else "NULL"
+
+
+def local_datetime_sql(tz_offset_available: bool, asset: str = "a", attrs: str = "aa") -> str:
+    """
+    SQL expression for an asset's local capture time, the SQL twin of coredata_to_local().
+
+    Requires `LEFT JOIN ZADDITIONALASSETATTRIBUTES {attrs}` in the query when the
+    offset is available. Wrap it in strftime() to bucket by year, month, day or hour.
+    """
+    unix = f"{asset}.ZDATECREATED + {CORE_DATA_UNIX_OFFSET}"
+    if not tz_offset_available:
+        return f"datetime({unix}, 'unixepoch', 'localtime')"
+    return (
+        f"(CASE WHEN {attrs}.ZTIMEZONEOFFSET IS NOT NULL "
+        f"THEN datetime({unix} + {attrs}.ZTIMEZONEOFFSET, 'unixepoch') "
+        f"ELSE datetime({unix}, 'unixepoch', 'localtime') END)"
+    )
 
 
 def datetime_to_coredata(dt: datetime) -> float:
@@ -134,7 +184,7 @@ def datetime_to_coredata(dt: datetime) -> float:
     return delta.total_seconds()
 
 
-def format_size(bytes_size: Optional[int]) -> str:
+def format_size(bytes_size: int | None) -> str:
     """
     Format byte size to human-readable string.
 
@@ -160,7 +210,7 @@ def format_size(bytes_size: Optional[int]) -> str:
     return f"{size:.2f} {units[unit_index]}"
 
 
-def output_json(data: Any, output_file: Optional[str] = None, pretty: bool = True) -> None:
+def output_json(data: Any, output_file: str | None = None, pretty: bool = True) -> None:
     """
     Output data as JSON to file or stdout.
 
@@ -230,11 +280,10 @@ def is_hidden(row) -> bool:
 def is_trashed(row) -> bool:
     """Check if an asset is in the trash."""
     d = dict(row) if not isinstance(row, dict) else row
-    trashed_state = d.get("ZTRASHEDSTATE", 0)
-    return trashed_state == 1
+    return bool(d.get("ZTRASHEDSTATE", 0) == 1)
 
 
-def get_quality_score(row) -> Optional[float]:
+def get_quality_score(row) -> float | None:
     """
     Calculate a simple quality score from multiple quality attributes.
     Higher is better. Returns None if no quality data available.
@@ -253,7 +302,7 @@ def get_quality_score(row) -> Optional[float]:
     if not isinstance(row, dict):
         row = dict(row)
 
-    scores = []
+    scores: list[float] = []
 
     # Positive scores (higher is better)
     if row.get("ZPLEASANTCOMPOSITIONSCORE") is not None:
@@ -273,42 +322,42 @@ def get_quality_score(row) -> Optional[float]:
     return sum(scores) / len(scores)
 
 
-def format_date_range(start: Optional[datetime], end: Optional[datetime]) -> str:
+def format_date_range(start: datetime | None, end: datetime | None) -> str:
     """Format a date range as a human-readable string."""
-    if start is None and end is None:
-        return "Unknown"
-    if start is None:
-        return f"Until {end.strftime('%Y-%m-%d')}"
-    if end is None:
+    if start is not None and end is not None:
+        if start.date() == end.date():
+            return start.strftime("%Y-%m-%d")
+        return f"{start.strftime('%Y-%m-%d')} to {end.strftime('%Y-%m-%d')}"
+    if start is not None:
         return f"From {start.strftime('%Y-%m-%d')}"
-    if start.date() == end.date():
-        return start.strftime("%Y-%m-%d")
-    return f"{start.strftime('%Y-%m-%d')} to {end.strftime('%Y-%m-%d')}"
+    if end is not None:
+        return f"Until {end.strftime('%Y-%m-%d')}"
+    return "Unknown"
 
 
 def detect_face_schema(cursor: sqlite3.Cursor) -> dict[str, str]:
     """
     Detect which schema version Photos is using for ZDETECTEDFACE table.
-    
+
     Returns dict with 'person_fk' and 'asset_fk' keys pointing to correct column names.
-    
+
     Older macOS: ZPERSON, ZASSET
     Newer macOS (Sequoia+): ZPERSONFORFACE, ZASSETFORFACE
     """
     cursor.execute("PRAGMA table_info(ZDETECTEDFACE)")
     columns = {row[1] for row in cursor.fetchall()}
-    
-    if 'ZPERSONFORFACE' in columns and 'ZASSETFORFACE' in columns:
-        return {'person_fk': 'ZPERSONFORFACE', 'asset_fk': 'ZASSETFORFACE'}
+
+    if "ZPERSONFORFACE" in columns and "ZASSETFORFACE" in columns:
+        return {"person_fk": "ZPERSONFORFACE", "asset_fk": "ZASSETFORFACE"}
     else:
         # Fallback to old schema
-        return {'person_fk': 'ZPERSON', 'asset_fk': 'ZASSET'}
+        return {"person_fk": "ZPERSON", "asset_fk": "ZASSET"}
 
 
 class PhotosDB:
     """Context manager for Photos database connection."""
 
-    def __init__(self, db_path: Optional[str] = None, library_path: Optional[str] = None):
+    def __init__(self, db_path: str | None = None, library_path: str | None = None):
         """
         Initialize database connection.
 
@@ -323,7 +372,7 @@ class PhotosDB:
         else:
             self.db_path = find_photos_db()
 
-        self.conn: Optional[sqlite3.Connection] = None
+        self.conn: sqlite3.Connection | None = None
 
     def __enter__(self) -> sqlite3.Connection:
         """Open connection."""
@@ -339,11 +388,12 @@ class PhotosDB:
 
 # Query builders
 def build_asset_query(
-    where_clauses: Optional[list[str]] = None,
+    where_clauses: list[str] | None = None,
     join_additional: bool = False,
     join_computed: bool = False,
-    order_by: Optional[str] = None,
-    limit: Optional[int] = None,
+    order_by: str | None = None,
+    limit: int | None = None,
+    tz_offset_available: bool = False,
 ) -> str:
     """
     Build a query for ZASSET table with optional joins and filters.
@@ -354,6 +404,8 @@ def build_asset_query(
         join_computed: Join ZCOMPUTEDASSETATTRIBUTES
         order_by: ORDER BY clause
         limit: LIMIT value
+        tz_offset_available: Schema has ZTIMEZONEOFFSET (see has_timezone_offset);
+            with join_additional, selects it as `tz_offset` for coredata_to_local()
 
     Returns:
         SQL query string
@@ -362,10 +414,15 @@ def build_asset_query(
     query = "SELECT a.*"
 
     if join_additional:
-        query += """,
+        query += (
+            """,
             aa.ZORIGINALFILESIZE,
             aa.ZORIGINALHEIGHT,
-            aa.ZORIGINALWIDTH"""
+            aa.ZORIGINALWIDTH,
+            """
+            + tz_offset_sql(tz_offset_available)
+            + " AS tz_offset"
+        )
 
     if join_computed:
         query += """,
@@ -394,7 +451,7 @@ def build_asset_query(
         query += f"\nORDER BY {order_by}"
 
     if limit:
-        query += f"\nLIMIT {limit}"
+        query += f"\nLIMIT {int(limit)}"
 
     return query
 
@@ -402,7 +459,7 @@ def build_asset_query(
 # ── Security helpers ─────────────────────────────────────────────────────────
 
 
-def validate_year(year: Optional[str]) -> Optional[str]:
+def validate_year(year: str | None) -> str | None:
     """Validate that a year string is a 4-digit number.
 
     Args:
@@ -416,7 +473,7 @@ def validate_year(year: Optional[str]) -> Optional[str]:
     """
     if year is None:
         return None
-    if not re.match(r"^\d{4}$", year):
+    if not re.fullmatch(r"\d{4}", year):
         raise ValueError(f"Year must be a 4-digit number, got: {year!r}")
     return year
 
@@ -428,6 +485,64 @@ def escape_applescript(s: str) -> str:
     double-escaping.
     """
     return s.replace("\\", "\\\\").replace('"', '\\"')
+
+
+# Photos exposes an asset's AppleScript `id` as "<UUID>/L0/001" for library assets.
+LOCAL_IDENTIFIER_SUFFIX = "/L0/001"
+
+
+def require_uuid_support(cursor: sqlite3.Cursor, operation: str) -> None:
+    """Verify the ZASSET table exposes ZUUID.
+
+    Targeting assets by UUID is what keeps AppleScript operations bounded to the
+    assets the user actually reviewed. Filenames are not unique — the same
+    IMG_0042.HEIC can appear many times across devices and re-imports — so a
+    filename match can hit assets outside the previewed set. If the column is
+    missing we refuse to proceed rather than silently falling back.
+
+    Args:
+        cursor: Open cursor on the Photos database.
+        operation: Human-readable name of the caller, used in the error message.
+
+    Raises:
+        RuntimeError: If ZASSET has no ZUUID column.
+    """
+    cursor.execute("PRAGMA table_info(ZASSET)")
+    columns = {row[1] for row in cursor.fetchall()}
+    if "ZUUID" not in columns:
+        raise RuntimeError(
+            f"ZASSET.ZUUID not found in this Photos database. {operation} cannot safely "
+            "identify assets without it and will not run. Please open an issue with "
+            "your macOS version."
+        )
+
+
+def build_identifier_lists(items: list[dict]) -> tuple[str, str]:
+    """Build the AppleScript `id` and filename list literals for *items*.
+
+    Both lists are positional: index *i* of the id list and index *i* of the
+    name list describe the same asset, which lets the generated script confirm
+    that a resolved item is the one the database pointed at.
+
+    Args:
+        items: Dicts carrying a "uuid" and a "filename".
+
+    Returns:
+        A ``(id_list, name_list)`` pair of comma-separated AppleScript literals.
+
+    Raises:
+        ValueError: If any item is missing a UUID.
+    """
+    missing = [item.get("filename", "<unknown>") for item in items if not item.get("uuid")]
+    if missing:
+        raise ValueError(
+            f"Refusing to build an AppleScript: {len(missing)} item(s) have no UUID "
+            f"(e.g. {missing[0]!r}). Matching by filename alone is unsafe."
+        )
+
+    id_list = ", ".join(f'"{escape_applescript(item["uuid"] + LOCAL_IDENTIFIER_SUFFIX)}"' for item in items)
+    name_list = ", ".join(f'"{escape_applescript(item["filename"] or "")}"' for item in items)
+    return id_list, name_list
 
 
 def sanitize_folder_name(name: str) -> str:
@@ -470,8 +585,8 @@ def run_script(
     description: str,
     analyze_fn: Callable,
     format_fn: Callable[[dict], str],
-    extra_args_fn: Optional[Callable[[argparse.ArgumentParser], None]] = None,
-    epilog: Optional[str] = None,
+    extra_args_fn: Callable[[argparse.ArgumentParser], None] | None = None,
+    epilog: str | None = None,
 ) -> int:
     """
     Shared CLI entry-point used by every analysis script.

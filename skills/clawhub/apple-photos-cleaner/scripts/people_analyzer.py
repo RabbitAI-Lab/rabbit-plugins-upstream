@@ -6,13 +6,23 @@ Co-occurrence, trends over time, best photos per person, and more.
 
 import sys
 from collections import defaultdict
-from typing import Any, Optional
+from datetime import datetime
+from typing import Any
 
-from _common import PhotosDB, coredata_to_datetime, detect_face_schema, get_quality_score, run_script
+from _common import (
+    PhotosDB,
+    coredata_to_local,
+    detect_face_schema,
+    get_quality_score,
+    has_timezone_offset,
+    local_datetime_sql,
+    run_script,
+    tz_offset_sql,
+)
 
 
 def analyze_people(
-    db_path: Optional[str] = None,
+    db_path: str | None = None,
     min_photos: int = 5,
     top_n: int = 20,
 ) -> dict[str, Any]:
@@ -30,6 +40,8 @@ def analyze_people(
     with PhotosDB(db_path) as conn:
         cursor = conn.cursor()
         schema = detect_face_schema(cursor)
+        tz_available = has_timezone_offset(cursor)
+        local_dt = local_datetime_sql(tz_available)
 
         # Get all named people with face counts
         cursor.execute(
@@ -38,10 +50,10 @@ def analyze_people(
                 p.Z_PK as person_id,
                 p.ZFULLNAME as name,
                 p.ZFACECOUNT as face_count,
-                COUNT(DISTINCT df.{schema['asset_fk']}) as photo_count
+                COUNT(DISTINCT df.{schema["asset_fk"]}) as photo_count
             FROM ZPERSON p
-            JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema['person_fk']}
-            JOIN ZASSET a ON df.{schema['asset_fk']} = a.Z_PK
+            JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema["person_fk"]}
+            JOIN ZASSET a ON df.{schema["asset_fk"]} = a.Z_PK
             WHERE p.ZFULLNAME IS NOT NULL
             AND p.ZFULLNAME != ''
             AND a.ZTRASHEDSTATE != 1
@@ -65,10 +77,10 @@ def analyze_people(
 
         # Get unnamed face count
         cursor.execute(f"""
-            SELECT COUNT(DISTINCT df.{schema['asset_fk']}) as count
+            SELECT COUNT(DISTINCT df.{schema["asset_fk"]}) as count
             FROM ZDETECTEDFACE df
-            JOIN ZASSET a ON df.{schema['asset_fk']} = a.Z_PK
-            WHERE (df.{schema['person_fk']} IS NULL OR df.{schema['person_fk']} NOT IN (
+            JOIN ZASSET a ON df.{schema["asset_fk"]} = a.Z_PK
+            WHERE (df.{schema["person_fk"]} IS NULL OR df.{schema["person_fk"]} NOT IN (
                 SELECT Z_PK FROM ZPERSON WHERE ZFULLNAME IS NOT NULL AND ZFULLNAME != ''
             ))
             AND a.ZTRASHEDSTATE != 1
@@ -84,11 +96,12 @@ def analyze_people(
             cursor.execute(
                 f"""
                 SELECT
-                    strftime('%Y', datetime(a.ZDATECREATED + 978307200, 'unixepoch')) as year,
+                    strftime('%Y', {local_dt}) as year,
                     COUNT(*) as count
                 FROM ZASSET a
-                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema['asset_fk']}
-                WHERE df.{schema['person_fk']} = ?
+                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema["asset_fk"]}
+                LEFT JOIN ZADDITIONALASSETATTRIBUTES aa ON a.Z_PK = aa.ZASSET
+                WHERE df.{schema["person_fk"]} = ?
                 AND a.ZTRASHEDSTATE != 1
                 GROUP BY year
                 ORDER BY year
@@ -108,11 +121,13 @@ def analyze_people(
                     ca.ZFAILURESCORE,
                     ca.ZNOISESCORE,
                     ca.ZPLEASANTCOMPOSITIONSCORE,
-                    ca.ZPLEASANTLIGHTINGSCORE
+                    ca.ZPLEASANTLIGHTINGSCORE,
+                    {tz_offset_sql(tz_available)} AS tz_offset
                 FROM ZASSET a
-                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema['asset_fk']}
+                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema["asset_fk"]}
+                LEFT JOIN ZADDITIONALASSETATTRIBUTES aa ON a.Z_PK = aa.ZASSET
                 LEFT JOIN ZCOMPUTEDASSETATTRIBUTES ca ON a.Z_PK = ca.ZASSET
-                WHERE df.{schema['person_fk']} = ?
+                WHERE df.{schema["person_fk"]} = ?
                 AND a.ZTRASHEDSTATE != 1
                 AND a.ZKIND = 0
                 ORDER BY ca.ZPLEASANTCOMPOSITIONSCORE DESC NULLS LAST
@@ -124,7 +139,7 @@ def analyze_people(
             best_photos = []
             for row in cursor.fetchall():
                 quality = get_quality_score(row)
-                created = coredata_to_datetime(row["ZDATECREATED"])
+                created = coredata_to_local(row["ZDATECREATED"], row["tz_offset"])
                 best_photos.append(
                     {
                         "id": row["Z_PK"],
@@ -140,8 +155,8 @@ def analyze_people(
                 f"""
                 SELECT COUNT(*) as count
                 FROM ZASSET a
-                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema['asset_fk']}
-                WHERE df.{schema['person_fk']} = ?
+                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema["asset_fk"]}
+                WHERE df.{schema["person_fk"]} = ?
                 AND a.ZTRASHEDSTATE != 1
                 AND a.ZFAVORITE = 1
             """,
@@ -153,18 +168,19 @@ def analyze_people(
             cursor.execute(
                 f"""
                 SELECT
-                    MIN(a.ZDATECREATED) as first,
-                    MAX(a.ZDATECREATED) as last
+                    MIN({local_dt}) as first,
+                    MAX({local_dt}) as last
                 FROM ZASSET a
-                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema['asset_fk']}
-                WHERE df.{schema['person_fk']} = ?
+                JOIN ZDETECTEDFACE df ON a.Z_PK = df.{schema["asset_fk"]}
+                LEFT JOIN ZADDITIONALASSETATTRIBUTES aa ON a.Z_PK = aa.ZASSET
+                WHERE df.{schema["person_fk"]} = ?
                 AND a.ZTRASHEDSTATE != 1
             """,
                 (pid,),
             )
             dates_row = cursor.fetchone()
-            first_date = coredata_to_datetime(dates_row["first"])
-            last_date = coredata_to_datetime(dates_row["last"])
+            first_date = datetime.fromisoformat(dates_row["first"]) if dates_row["first"] else None
+            last_date = datetime.fromisoformat(dates_row["last"]) if dates_row["last"] else None
 
             detailed_people.append(
                 {
@@ -178,7 +194,7 @@ def analyze_people(
             )
 
         # Co-occurrence analysis: who appears together
-        co_occurrences = defaultdict(int)
+        co_occurrences: defaultdict[Any, int] = defaultdict(int)
         if people:
             person_ids = [p["person_id"] for p in people[:top_n]]
             placeholders = ",".join("?" * len(person_ids))
@@ -186,12 +202,12 @@ def analyze_people(
             # Find photos with multiple named people
             cursor.execute(
                 f"""
-                SELECT df.{schema['asset_fk']} as asset_id, df.{schema['person_fk']} as person_id
+                SELECT df.{schema["asset_fk"]} as asset_id, df.{schema["person_fk"]} as person_id
                 FROM ZDETECTEDFACE df
-                JOIN ZASSET a ON df.{schema['asset_fk']} = a.Z_PK
-                WHERE df.{schema['person_fk']} IN ({placeholders})
+                JOIN ZASSET a ON df.{schema["asset_fk"]} = a.Z_PK
+                WHERE df.{schema["person_fk"]} IN ({placeholders})
                 AND a.ZTRASHEDSTATE != 1
-                ORDER BY df.{schema['asset_fk']}
+                ORDER BY df.{schema["asset_fk"]}
             """,
                 person_ids,
             )

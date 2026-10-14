@@ -1,5 +1,7 @@
 # 信息不足输入报告回归样本
 
+> Language scope: Simplified Chinese reference material by design. Adapt conversational reports to the user's chosen language; the optional bundled HTML layout targets Chinese readers.
+
 用途：测试用户只给一句话、拒绝填表或临时懒得补信息时，Skill 能直接交付报告，避免继续追问长表。
 
 ## 输入

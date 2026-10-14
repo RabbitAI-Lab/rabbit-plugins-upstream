@@ -1,0 +1,297 @@
+{
+  "family": "prompt-injection",
+  "version": 2,
+  "rules": [
+    {
+      "id": "pi-00",
+      "re": "ignore\\s+(?:(?:all|any|the)\\s+)?(?:(?:previous|prior|above|earlier|foregoing|original)\\s+)?(?:instructions|rules|prompts|system|guidance|directions|constraints)",
+      "label": "要求忽略既有指令",
+      "sev": "P1",
+      "flags": "I",
+      "why": "要求 agent 忽略既有/系统指令是提示注入的标准开场（含「ignore all previous instructions」四词经典形式与两词变体）。"
+    },
+    {
+      "id": "pi-01",
+      "re": "bypass\\s+(?:the\\s+)?(?:safety|security|guardrail|protection|check|filter)",
+      "label": "要求绕过安全机制",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "pi-02",
+      "re": "disable\\s+(?:the\\s+)?(?:safety|guardrail|protection|filter|moderation|verification)",
+      "label": "要求禁用安全/过滤",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "pi-03",
+      "re": "(?:do\\s+not|don'?t|never|avoid)\\s+(?:mention|tell|reveal|show|report|inform)\\b",
+      "label": "要求向用户隐瞒行为",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "pi-04",
+      "re": "(?:without|never)\\s+(?:telling|informing|notifying)\\s+(?:the\\s+)?user",
+      "label": "要求不对用户说明",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "pi-05",
+      "re": "override\\s+(?:the\\s+)?(?:user|system|previous|original)\\s+(?:instruction|prompt|setting|preference)",
+      "label": "要求覆盖用户/系统指令",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-06",
+      "re": "\\bjailbreak\\b",
+      "label": "越狱指示",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-07",
+      "re": "you\\s+are\\s+now\\b|pretend\\s+(?:to\\s+be|you\\s+are)",
+      "label": "角色劫持/提示注入",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "pi-08",
+      "re": "system\\s+prompt",
+      "label": "提及/篡改系统提示",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "pi-09",
+      "re": "\\bsilently\\s+(?:run|execute|install|send|exfiltrat|perform|launch|do)|run\\s+silently|in\\s+the\\s+background\\s+(?:without|and\\s+do\\s+not)",
+      "label": "要求静默执行",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "pi-10",
+      "re": "before\\s+(?:finishing|completing|you\\s+(?:start|begin)|any\\s+task)",
+      "label": "前置越权指令(always/before/first)",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "pi-11",
+      "re": "忽略.{0,500}(?:指令|规则|提示|要求|上文)",
+      "label": "要求忽略既有指令",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-12",
+      "re": "绕过.{0,500}(?:安全|防护|限制|检查|过滤)",
+      "label": "要求绕过安全机制",
+      "sev": "P0"
+    },
+    {
+      "id": "pi-13",
+      "re": "禁用.{0,500}(?:安全|防护|过滤|校验|审查)",
+      "label": "要求禁用安全/过滤",
+      "sev": "P0"
+    },
+    {
+      "id": "pi-14",
+      "re": "(?:不要|别|请勿|禁止|切勿).{0,12}(?:告诉|告知|提及|透露|暴露|让用户知道).{0,12}(?:用户|我)",
+      "label": "要求向用户隐瞒行为",
+      "sev": "P0"
+    },
+    {
+      "id": "pi-15",
+      "re": "悄悄|暗中|背地里|在.{0,8}(?:不知情|没有察觉)",
+      "label": "要求隐蔽执行",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-16",
+      "re": "越狱",
+      "label": "越狱指示",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-17",
+      "re": "(?:覆盖|无视).{0,10}(?:用户|系统).{0,10}(?:指令|命令)",
+      "label": "要求覆盖用户/系统指令",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-18",
+      "re": "(?:set|put|lay|brush)\\s+aside\\s+(?:the\\s+)?(?:earlier|previous|prior|preceding|above|initial)\\s+(?:guidance|instructions?|directions?|rules?|context|prompt)",
+      "label": "同义改写注入：搁置先前的指导/指令",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-19",
+      "re": "(?:disregard|discount|dismiss|ignore|forget)\\s+(?:the\\s+)?(?:preceding|prior|earlier|above|foregoing|original)\\s+(?:guidance|instructions?|directions?|rules?|context|constraints?|prompt)",
+      "label": "同义改写注入：无视在前的指导/约束",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-20",
+      "re": "(?:treat|consider|regard|mark)\\s+[^.\\n]{0,60}?as\\s+(?:superseded|overridden|obsolete|void|deprecated|no\\s+longer\\s+(?:valid|applicable))",
+      "label": "同义改写注入：宣称先前指令已被取代/作废",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-21",
+      "re": "(?:skip|omit|drop|bypass|override)\\s+(?:the\\s+)?(?:prior|previous|earlier|above|preceding|existing|standing)\\s+(?:instructions?|guidance|rules?|directives?|constraints?|policy)",
+      "label": "同义改写注入：跳过/覆盖既有指令或策略",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-22",
+      "re": "(?:replace|overwrite|supersede|rewrite|swap)\\s+(?:the\\s+)?(?:prior|previous|earlier|original|initial|system)\\s+(?:instructions?|guidance|prompt|context|rules?)",
+      "label": "同义改写注入：替换原始/系统指令",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-23",
+      "re": "(?:搁置|放下|抛开|无视|不再遵循|无需理会|撇开).{0,12}(?:之前|先前|上述|以前|原来|初始).{0,10}(?:指令|指示|指导|说明|要求|规则|约束)",
+      "label": "同义改写注入（中文）：搁置/无视先前指令",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-24",
+      "re": "(?:紧急|安全|诊断|系统)\\s*(?:告警|提醒|通知|警报)?.{0,30}(?:请|立即|马上|务必).{0,10}(?:执行|运行|应用|修复).{0,20}(?:命令|脚本|补丁|修复)",
+      "label": "伪告警话术：借安全/诊断告警诱导执行命令（Ghostjacking 同类）",
+      "sev": "P0"
+    },
+    {
+      "id": "pi-25",
+      "re": "(?:urgent|critical|security|diagnostic|automated)\\s+(?:alert|notice|warning|message|report)[^\\n]{0,80}?(?:run|execute|apply|perform)\\s+(?:this|the\\s+following|the\\s+attached)",
+      "label": "伪告警话术：伪造紧急告警诱导执行（Ghostjacking 同类）",
+      "sev": "P0",
+      "flags": "I"
+    },
+    {
+      "id": "pi-26",
+      "re": "(?:绕过|无视|突破|解除|瓦解|越过)\\s{0,4}[\\w一-龥]{0,6}\\s{0,4}(?:安全|限制|约束|防护|检测|过滤|权限|认证|鉴权|审计|沙箱|审查|拦截|防火墙|杀毒|签名|校验|合规|加密|许可)|不受\\s*\\w{0,8}\\s*(?:任何\\s*)?(?:安全|限制|约束|防护|检测|过滤)",
+      "label": "要求绕过安全机制（中文）",
+      "sev": "P0"
+    },
+    {
+      "id": "pi-27",
+      "re": "无需\\s*(?:再\\s*)?(?:遵守|理会|受\\s*限于?|考虑|在意)\\s*(?:任何|一切|所有)?\\s*(?:安全|限制|约束|规则|检查|规定)",
+      "label": "要求忽略安全约束（中文）",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-28",
+      "re": "你\\s*(?:现在|已经|当前)?\\s*是\\s*(?:一个\\s*)?(?:开发者模式|开发者|管理员|root|超级用户|最高\\s*权限|全部\\s*权限|admin)",
+      "label": "角色劫持/提示注入（中文）",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-29",
+      "re": "(?:忽略|无视|丢弃|关闭|暂停|解除|移除|不再遵守)\\s*(?:所有|一切|全部|任何)?\\s*(?:安全|限制|约束|检查|校验|防护|过滤|审计|合规)",
+      "label": "要求忽略安全约束（中文变体）",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-30",
+      "re": "(?:do\\s+not|don'?t|never|skip)\\s+(?:analyze|analyse|scan|inspect|review|report|flag)\\s+(?:this|the\\s+following|the\\s+above|any|these)",
+      "label": "疑似面向分析模型的规避指令（反 AI 审计）",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "pi-31",
+      "re": "\\b(?:treat|mark|consider|classify|label)\\s+(?:this|it|the\\s+above|the\\s+file|the\\s+code)\\s+as\\s+(?:benign|safe|clean|harmless|a\\s+false\\s+positive|a\\s+test)",
+      "label": "要求分析器判定为无害或误报",
+      "sev": "P1",
+      "flags": "I"
+    },
+    {
+      "id": "pi-32",
+      "re": "(?:请勿|不要|禁止|不得|无需)\\s*(?:分析|检测|扫描|审计|审查|标记|上报|报警|拦截)\\s*(?:本|此|该|上述)?",
+      "label": "要求分析器跳过分析或不上报（中文）",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-33",
+      "re": "(?:本|该|此)\\s*(?:文件|脚本|技能|包|代码)\\s*(?:仅\\s*)?(?:用于|为)\\s*(?:安全研究|授权渗透|授权测试|教学演示|内部测试|红队演练)",
+      "label": "以安全研究或授权测试自述规避审查",
+      "sev": "P3"
+    },
+    {
+      "id": "pi-34",
+      "re": "系统(?:提示|指令|prompt).{0,10}(?:已?更新|已?变更|已?修改|已被替换|已失效)|system\\s+prompt\\s+(?:has\\s+been|is\\s+now|was)\\s+(?:updated|changed|replaced|overridden|invalidated)",
+      "label": "伪称系统提示已变更（间接注入）",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-35",
+      "re": "你现在的(?:新)?角色(?:是|变为)|你的新(?:身份|设定|角色)|your\\s+new\\s+(?:role|identity|persona)\\s+(?:is|now)|you\\s+are\\s+now\\s+(?:assigned|given|in)\\s+(?:the\\s+role|a\\s+new)",
+      "label": "重新指派角色/身份（间接注入）",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-36",
+      "re": "to\\s+help\\s+(?:me|us),?\\s+(?:please\\s+)?(?:run|execute|send|upload|exfiltrat|delete|fetch\\s+and\\s+run|perform)",
+      "label": "以利他话术包装危险动作（语义重构注入）",
+      "sev": "P2",
+      "flags": "I"
+    },
+    {
+      "id": "pi-37",
+      "re": "为了(?:更好|帮助|协助).{0,12}(?:执行|运行|发送|上传|删除|拉取).{0,12}(?:以下|命令|脚本|文件|数据)",
+      "label": "以利他话术包装危险动作（中文语义重构）",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-38",
+      "re": "从现在起，?\\s*你|from\\s+now\\s+on,?\\s*(?:you|i\\s+want\\s+you|ignore)",
+      "label": "强制重置后续行为（间接注入）",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-39",
+      "re": "重新定义.{0,12}(?:你的|agent的|助手).{0,12}(?:目标|身份|职责|优先级)|redefine\\s+(?:your|the\\s+agent'?s)\\s+(?:goal|identity|purpose|priority|objective)",
+      "label": "要求重定义目标/身份/优先级（目标劫持）",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-40",
+      "re": "忘记你之前(?:的所有|的)?(?:规则|指令|设定|约束)|forget\\s+(?:your|all)\\s+(?:previous|earlier|existing)\\s+(?:rules|instructions|settings|constraints)",
+      "label": "要求遗忘既有规则/指令（间接注入）",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-41",
+      "re": "以上?(?:内容|指令|要求).{0,10}(?:仅?作|视为|当作).{0,10}(?:参考|建议|可忽略)|treat\\s+(?:the\\s+above|everything\\s+above)\\s+as\\s+(?:optional|advisory|notes)",
+      "label": "将既有约束降级为可忽略（间接注入）",
+      "sev": "P2"
+    },
+    {
+      "id": "pi-42",
+      "sev": "P2",
+      "label": "利他话术包装敏感数据外传（间接注入）",
+      "re": "(?:为了(?:帮你|帮助|协助|更好|排查问题|您|你|服务)|为了好|出于好意|为帮你|为您好|to\\s+help\\s+(?:you|us)).{0,60}(?:密钥|凭据|凭证|token|密码|私钥|env|环境变量|secret|key).{0,30}(?:发送|邮件|上传|外传|回传|发给我|email|send|upload|exfil)|(?:发送|邮件|上传|外传|回传|发给我|email|send|upload|exfil).{0,20}(?:密钥|凭据|凭证|token|密码|私钥|env|环境变量|secret|key).{0,30}(?:为了(?:帮你|帮助|协助|更好|排查问题|您|你|服务)|为了好|出于好意|为帮你|为您好|to\\s+help\\s+(?:you|us))|(?:密钥|凭据|凭证|token|密码|私钥|env|环境变量|secret|key).{0,20}(?:发送|邮件|上传|外传|回传|发给我|email|send|upload|exfil).{0,40}(?:为了(?:帮你|帮助|协助|更好|排查问题|您|你|服务)|为了好|出于好意|为帮你|为您好|to\\s+help\\s+(?:you|us))"
+    },
+    {
+      "id": "pi-43",
+      "re": "(?:https?://|raw\\.githubusercontent|gist\\.github|pastebin|ghostbin)[^\\n]{0,80}(?:读取|获取|加载|下载|拉取|遵循|执行|并执行|follow|obey)|(?:读取|获取|加载|下载|拉取|遵循|执行)[^\\n]{0,30}(?:指令|说明|步骤|规则|脚本)[^\\n]{0,80}(?:https?://|raw\\.githubusercontent|pastebin)|(?:follow|obey|execute)\\s+(?:the\\s+)?instructions?\\s+(?:at|from)\\s+https?://",
+      "label": "外部指令引用（OWASP AST05：运行时从外部资源取指令）",
+      "sev": "P1"
+    },
+    {
+      "id": "pi-44",
+      "re": "(?:把|将)[^\\n]{0,24}(?:以下|这段|上面|下述)?[^\\n]{0,24}(?:内容|文本|文字|指令)[^\\n]{0,16}(?:当作|视为|作为|提升为|升级为)[^\\n]{0,12}(?:系统|最高优先|高优先级|system|developer)[^\\n]{0,12}(?:指令|提示|消息)|(?:treat|regard|consider)\\s+(?:this|the\\s+following|the\\s+above)[^\\n]{0,30}as\\s+(?:a\\s+)?(?:system|highest[-\\s]?priority|developer)\\s+(?:prompt|instruction|message)",
+      "label": "上下文特权提升话术（CPE：把低权内容提升为高权指令）",
+      "sev": "P1"
+    }
+  ]
+}

@@ -1,45 +1,59 @@
-## Description: <br>
-Provides Slack access for reading conversations, messages, threads, files, reactions, and users, and for confirmed write or destructive Slack actions through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects agents to Slack through an OOMOL account to read workspace information and manage messages, reactions, and files.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to inspect Slack data and, with confirmation, create, update, schedule, or delete Slack messages, reactions, and files through an OOMOL-connected Slack account. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read Slack data visible to the connected account. <br>
-Mitigation: Review Slack scopes during connection and install only when that account visibility is acceptable. <br>
-Risk: Write actions can post, reply, update, schedule, upload, or open conversations in Slack. <br>
-Mitigation: Confirm the exact payload and expected Slack effect with the user before executing write actions. <br>
-Risk: Destructive actions can delete Slack files or messages or remove reactions. <br>
-Mitigation: Require explicit approval for the specific target before running destructive actions. <br>
+## Use Case:
 
+People and teams with an OOMOL-connected Slack account use this skill to find workspace information, exchange messages, and manage files and reactions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/oomol/skills/oo-slack) <br>
-- [Slack homepage](https://slack.com) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL Slack connection](https://console.oomol.com/app-connections?provider=slack) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses an OOMOL-connected Slack account; write and destructive actions require explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence and skill metadata) <br>
+Risk: First-time setup suggests running a remotely downloaded installer directly in a shell without verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a verified package manager or signed release, or inspect the installer before running it.
+
+Risk: The connected account can expose Slack workspace data to OOMOL.
+
+Mitigation: Review OOMOL's access to the workspace before connecting the account.
+
+Risk: Write and delete actions can change or remove Slack content.
+
+Mitigation: Confirm each action's exact target and effect; obtain explicit approval before deletion.
+
+## Reference(s):
+
+- [ClawHub Slack skill listing](https://clawhub.ai/oomol/skills/oo-slack)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI installation guide](https://cli.oomol.com/install-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands]
+
+**Output Format:** [Text or Markdown with Slack action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the connected account's Slack access.]
+
+## Skill Version(s):
+
+1.0.11 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

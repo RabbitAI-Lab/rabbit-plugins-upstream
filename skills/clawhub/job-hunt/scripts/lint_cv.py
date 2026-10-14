@@ -1,0 +1,176 @@
+#!/usr/bin/env python3
+"""Gate: the mechanically decidable half of the CV quality pass.
+
+Nothing downstream scores voice — the ATS judge is a literal text matcher, the
+recruiter judge scores readability not phrasing — so a grammatical,
+keyword-complete, utterly templated CV passes all three judges and loses at the
+real human recruiter, outside every loop this skill can observe. What a program
+can decide goes here; dimensions 3 and 4 of the AI-uniformity check (voice,
+specificity) cannot be decided by a program and stay inline in SKILL.md.
+
+Exit 0 = clean. Exit 1 = findings. Exit 2 = no cv.md.
+"""
+from __future__ import annotations
+
+import argparse
+import pathlib
+import re
+import sys
+
+sys.path.insert(0, str(pathlib.Path(__file__).resolve().parent))
+import journal
+
+import prose_tells
+
+GATE = "lint_cv"
+
+# Multi-word clichés are unambiguous. "leveraged" is not: a finance CV
+# legitimately says "leveraged buyout", so that one collocation is carved out
+# rather than teaching the reader to ignore the whole CLICHE class.
+CLICHES = [
+    ("results-driven", re.compile(r"\bresults[- ]driven\b", re.I)),
+    ("proven track record", re.compile(r"\bproven track record\b", re.I)),
+    ("synergy", re.compile(r"\bsynerg(y|ies|istic)\b", re.I)),
+    ("leveraged", re.compile(r"\bleverag(e|ed|es|ing)\b(?!\s+buyout)", re.I)),
+    ("excellent communicator", re.compile(r"\bexcellent communicator\b", re.I)),
+    ("team player", re.compile(r"\bteam player\b", re.I)),
+    ("passionate about technology", re.compile(r"\bpassionate about technology\b", re.I)),
+    ("references available on request",
+     re.compile(r"\breferences available (up)?on request\b", re.I)),
+]
+# The weak-opener list in the languages this skill writes CVs in. English-only,
+# four bullets opening `负责…` ("responsible for") and three opening `Führte…`
+# produced NOTHING, while `Verantwortlich` ×3 did fire — because it happens to be
+# pure ASCII. The lint was enforcing a style rule on one alphabet.
+WEAK_OPENERS = ("responsible for", "worked on", "helped with", "assisted in",
+                "was involved in",
+                "verantwortlich für", "zuständig für", "mitgearbeitet an",
+                "verantwoordelijk voor", "meegewerkt aan", "betrokken bij",
+                "responsable de", "chargé de", "participé à",
+                "responsable de la", "encargado de", "colaboré en",
+                "responsabile di", "collaborato a",
+                "负责", "参与", "协助", "参加了", "配合",
+                "負責", "參與", "協助",
+                "担当", "携わった", "参加した",
+                "담당", "참여", "보조")
+# ~120 characters is one rendered line at CV widths; two is the stated ceiling.
+MAX_BULLET_CHARS = 240
+# Two bullets sharing an opening verb is variation; three is a template.
+REPEAT_VERB_THRESHOLD = 3
+
+_BULLET_RE = re.compile(r"^\s*[-*]\s+(?P<text>.+?)\s*$")
+# `[A-Za-z]` truncated at the first non-ASCII letter, so REPEATED_VERB compared
+# the string "F" for every bullet opening `Führte` — three identical openers
+# read as three different ones. `\w` is Unicode-aware; the `\d_` exclusion keeps
+# it to letters, and the CJK branch below stops a whole Chinese clause counting
+# as one enormous "word".
+_WORD_RE = re.compile(r"[^\W\d_][\w'-]*", re.UNICODE)
+# Two characters plus an optional aspect marker. A HEURISTIC, and the length is
+# the whole of it: most Chinese and Japanese verbs are two characters, and a
+# greedy {2,4} window swallowed the difference — `构建了训`, `优化了推`, `撰写了技`
+# read as three different openers when the verb repeated three times.
+_CJK_OPENER = re.compile(
+    r"^[\u3040-\u30ff\u3400-\u4dbf\u4e00-\u9fff\uac00-\ud7af]{2}[了過过着]?")
+
+
+# A heading, or the contact line. Neither is prose the candidate wrote about
+# themselves, and a company legitimately called "Robust Systems" should not be
+# reported as a cliche on the line that merely names it.
+_NOT_PROSE = re.compile(r"^\s*(#|\||!\[|\s*$)|@|https?://")
+
+
+def _lexical_findings(text: str, name: str) -> list:
+    """Cliches and the 2026 AI vocabulary, over the WHOLE document.
+
+    The bullet-only scan misses the summary, and the summary is the line a
+    recruiter reads first. Measured: "Results-driven professional with a proven
+    track record of leveraging synergy" produced ZERO findings as a summary and
+    one as a bullet -- the same three cliches, invisible in the more damaging
+    place.
+    """
+    out = []
+    for n, line in enumerate(text.split("\n"), 1):
+        if _NOT_PROSE.search(line) or _BULLET_RE.match(line):
+            continue          # bullets are covered below, with their own message
+        hits = [label for label, rx in CLICHES if rx.search(line)]
+        if hits:
+            out.append(f"CLICHE: {name}:{n} contains "
+                       f"{', '.join(repr(h) for h in hits)} — say the specific "
+                       f"thing instead")
+        out += prose_tells.vocabulary_findings(line, f"{name}:{n}")
+    return out
+
+
+def findings_for(text: str, name: str = "cv.md") -> list:
+    out, openers = _lexical_findings(text, name), {}
+    for n, line in enumerate(text.split("\n"), 1):
+        m = _BULLET_RE.match(line)
+        if not m:
+            continue
+        body = m.group("text")
+        hits = [label for label, rx in CLICHES if rx.search(body)]
+        if hits:
+            out.append(f"CLICHE: {name}:{n} contains {', '.join(repr(h) for h in hits)} "
+                       f"— say the specific thing instead")
+        # The 2026 set applies to a bullet as much as to the summary. Wiring it
+        # only into the whole-document pass, which SKIPS bullets to avoid
+        # double-reporting, left every bullet exempt from it.
+        out += prose_tells.vocabulary_findings(body, f"{name}:{n}")
+        low = body.lower()
+        for opener in WEAK_OPENERS:
+            if low.startswith(opener):
+                out.append(f"WEAK_OPENER: {name}:{n} opens with "
+                           f"{body[:len(opener)]!r} — open with an action verb and "
+                           f"the result")
+                break
+        if len(body) > MAX_BULLET_CHARS:
+            out.append(f"LONG_BULLET: {name}:{n} is {len(body)} characters "
+                       f"(limit {MAX_BULLET_CHARS} ≈ two rendered lines) — it is "
+                       f"either two bullets or it is padded")
+        # CJK first: a Chinese bullet has no spaces, so the Latin matcher would
+        # take the whole clause and never repeat. Two to four characters is the
+        # length of a verb phrase there, which is what REPEATED_VERB is about.
+        cjk_first = _CJK_OPENER.match(body)
+        if cjk_first:
+            openers.setdefault(cjk_first.group(0), []).append(n)
+            continue
+        first = _WORD_RE.match(body)
+        if first and len(first.group(0)) >= 4:
+            openers.setdefault(first.group(0).lower(), []).append(n)
+    for verb, lines in sorted(openers.items()):
+        if len(lines) >= REPEAT_VERB_THRESHOLD:
+            out.append(f"REPEATED_VERB: {verb!r} opens {len(lines)} bullets (lines "
+                       f"{', '.join(str(x) for x in lines)}) — vary the verb; "
+                       f"repetition is the first thing that reads as generated")
+    return out
+
+
+def main(argv=None) -> int:
+    ap = argparse.ArgumentParser()
+    ap.add_argument("--workspace", required=True)
+    ap.add_argument("--cv", default=None, help="default: <workspace>/cv.md")
+    args = ap.parse_args(argv)
+    ws = pathlib.Path(args.workspace)
+    if not ws.is_dir():
+        # journal.receipt() would mkdir it, and a gate that creates the
+        # workspace it is auditing has manufactured its own evidence.
+        print(f"cannot run {GATE}: workspace {ws} does not exist", file=sys.stderr)
+        return 2
+    path = pathlib.Path(args.cv) if args.cv else ws / "cv.md"
+    if not path.exists():
+        journal.receipt(ws, GATE, {}, "could_not_run", [f"MISSING_INPUT: {path}"])
+        print(f"cannot run {GATE}: {path} does not exist", file=sys.stderr)
+        return 2
+    findings = findings_for(path.read_text(encoding="utf-8"), path.name)
+    for f in findings:
+        print(f)
+    journal.receipt(ws, GATE, {path.name: journal.sha256_file(path)},
+                    "fail" if findings else "pass", findings)
+    return 1 if findings else 0
+
+
+if __name__ == "__main__":
+    from cli_io import configure_output
+
+    configure_output()
+    sys.exit(main())

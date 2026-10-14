@@ -1,4 +1,4 @@
-# statsoft-statistica.ps1 — Statistica CLI wrapper
+﻿# statsoft-statistica.ps1 — Statistica CLI wrapper
 # Usage:
 #   statsoft-statistica run <svb_file>
 #   statsoft-statistica version
@@ -20,6 +20,13 @@ function Write-Lang {
     else { Write-Host $EN -ForegroundColor $Color }
 }
 
+# Headless launcher (no GUI popup) — single enforcement point for the skill default.
+$__d = $PSScriptRoot
+while ($__d -and -not (Test-Path (Join-Path $__d "common/invoke_hidden.ps1"))) {
+    $__p = Split-Path $__d -Parent; if ($__p -eq $__d) { break }; $__d = $__p
+}
+. (Join-Path $__d "common/invoke_hidden.ps1")
+
 # ============================================================
 # Execution authorization gate (SDI-1 / mirrors SPSS & R runners)
 # Default: proceed only on an explicit user invocation. STATSOFT_AUTO_WRITE=1
@@ -40,7 +47,9 @@ function Test-UserAuthorizedToRun {
 }
 
 # Init
-$configPath = "$PSScriptRoot\..\config.json"
+$configPath = Join-Path $PSScriptRoot "config.json"
+if (-not (Test-Path $configPath)) { $configPath = Join-Path $PSScriptRoot "..\config.json" }
+if (-not (Test-Path $configPath)) { $configPath = Join-Path $PSScriptRoot "..\..\config.json" }
 $config = $null
 $statisticaExe = $null
 
@@ -75,11 +84,12 @@ switch ($Command) {
             exit 1
         }
         Write-Lang "运行 Statistica 脚本: $FilePath" "Running Statistica script: $FilePath" -Color Cyan
-        & $statisticaExe /run $FilePath
-        if ($LASTEXITCODE -eq 0) {
+        $result = Invoke-StatExe -FilePath $statisticaExe -ArgumentList "/run",$FilePath
+        if ($result.ExitCode -eq 0) {
             Write-Lang "Statistica 执行完成" "Statistica execution complete" -Color Green
         } else {
-            Write-Warning (if ($script:isZH){"Statistica 退出码: $LASTEXITCODE"}else{"Statistica exit code: $LASTEXITCODE"})
+            Write-Warning (if ($script:isZH){"Statistica 退出码: $($result.ExitCode)"}else{"Statistica exit code: $($result.ExitCode)"})
+            if ($result.StdErr) { Write-Host $result.StdErr -ForegroundColor Red }
         }
     }
     "version" {

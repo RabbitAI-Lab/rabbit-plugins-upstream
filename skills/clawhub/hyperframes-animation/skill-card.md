@@ -1,49 +1,55 @@
-## Description: <br>
-Provides HyperFrames animation authoring guidance, including atomic motion rules, multi-phase blueprints, scene transitions, runtime adapters, and choreography audit support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers design seek-safe HyperFrames animations using motion rules, scene blueprints, transitions, and runtime-specific examples.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and designers use this skill to select and compose deterministic HyperFrames motion patterns, scene blueprints, transitions, and runtime-specific animation code for web and video compositions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Example HTML loads JavaScript from public CDNs. <br>
-Mitigation: Review CDN sources and use pinned or locally hosted dependencies when running examples in controlled environments. <br>
-Risk: The animation-map helper can bootstrap HyperFrames packages when they are not bundled in the local environment. <br>
-Mitigation: Set HYPERFRAMES_SKILL_PKG_VERSION to an exact version before running the helper when deterministic dependency resolution is required. <br>
+## Use Case:
 
+Developers and motion designers use this skill to plan and implement deterministic animations in HyperFrames compositions, or audit existing choreography with an animation map.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes-animation) <br>
-- [Skill overview](artifact/SKILL.md) <br>
-- [Rules index](artifact/rules-index.md) <br>
-- [Blueprints index](artifact/blueprints-index.md) <br>
-- [Transitions overview](artifact/transitions/overview.md) <br>
-- [Motion techniques](artifact/techniques.md) <br>
-- [GSAP documentation](https://gsap.com/docs/v3/) <br>
-- [Anime.js documentation](https://animejs.com/documentation/) <br>
-- [Lottie-web project](https://github.com/airbnb/lottie-web) <br>
-- [MDN CSS animation reference](https://developer.mozilla.org/en-US/docs/Web/CSS/Reference/Properties/animation) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code snippets, shell commands, and configuration notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce deterministic HyperFrames animation recipes, runtime adapter guidance, and animation-map audit commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: The animation audit script inspects local composition directories.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only on composition directories you trust.
+
+Risk: Running outside a bundled installation may require temporary package downloads, and some examples load public CDN libraries.
+
+Mitigation: Pin the HyperFrames package version when bootstrapping dependencies and review external libraries before using the examples.
+
+## Reference(s):
+
+- [HyperFrames Animation on ClawHub](https://clawhub.ai/heygen-com/skills/hyperframes-animation)
+- [GSAP documentation](https://gsap.com/docs/v3/)
+- [Motion blur reference](artifact/references/motion-blur.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands]
+
+**Output Format:** [Markdown with animation examples and commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance favors seek-safe, deterministic timelines; the optional audit produces an animation-map JSON file.]
+
+## Skill Version(s):
+
+1.0.38 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

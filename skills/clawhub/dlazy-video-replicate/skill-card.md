@@ -1,43 +1,60 @@
-## Description: <br>
-Video replicate tool: extracts the first frame and audio from the source video, runs video understanding for a prompt, and returns a Seedance 2.0 replicate bundle (first frame + audio + video). <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use dLazy to analyze a source video and obtain a Seedance 2.0 replication bundle with a first frame, audio, and video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creators use this skill to invoke the dLazy video-replicate workflow from an agent, providing a source video and parameters to generate a Seedance 2.0 replicate bundle. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The dLazy CLI stores an API key locally, and that key may control paid credits or sensitive account access. <br>
-Mitigation: Prefer per-invocation DLAZY_API_KEY where practical, rotate or revoke keys when needed, and verify that the local CLI config file is restricted to the current OS user after login. <br>
-Risk: Local media paths supplied to the skill are uploaded to dLazy-hosted services for processing. <br>
-Mitigation: Only pass media files intended for dLazy processing and review files for sensitive content before invocation. <br>
+## Use Case:
 
+Creators and developers use this skill to prepare a video-replication workflow from source footage, including a first frame, audio, and a descriptive prompt for Seedance 2.0.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-video-replicate) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API calls, JSON] <br>
-**Output Format:** [Markdown with inline bash code blocks and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return generated media URLs or an asynchronous task identifier depending on CLI options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: frontmatter and server release evidence) <br>
+Risk: Source media submitted to the dLazy cloud service may contain sensitive content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only media files you intend to upload to dLazy.
+
+Risk: Authentication may leave an API key in the local CLI configuration.
+
+Mitigation: Use per-run DLAZY_API_KEY authentication when local key storage is unsuitable.
+
+Risk: Installing the CLI runs a third-party package.
+
+Mitigation: Review the pinned @dlazy/cli package and its listed source before installing.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-video-replicate)
+- [dLazy CLI repository (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [CLI results can include generated media URLs; asynchronous requests can return a task ID for polling.]
+
+## Skill Version(s):
+
+1.3.29 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

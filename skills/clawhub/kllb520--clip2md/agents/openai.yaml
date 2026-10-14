@@ -1,0 +1,7 @@
+interface:
+  display_name: "clip2md"
+  short_description: "Save web pages to Markdown and check quota"
+  default_prompt: "Use $clip2md to save this web page as a Markdown clipping and report the task status."
+
+policy:
+  allow_implicit_invocation: true

@@ -1,43 +1,55 @@
-## Description: <br>
-Dlazy Slideshow Video uses the pinned dLazy CLI to turn slides or documents into narrated slideshow-style videos with voiceover and transitions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps turn slides or documents into narrated slideshow videos with voiceover and transitions using the dLazy service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill to create explainer, report, courseware, or training videos from slides, PDFs, and other documents through dLazy's hosted file-to-video workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached files are sent to dLazy as a third-party service. <br>
-Mitigation: Use the skill only when organizational policy allows uploading that content to dLazy, and avoid attaching sensitive files unless approved. <br>
-Risk: The dLazy API key grants access to the user's dLazy organization. <br>
-Mitigation: Store the key through the dLazy CLI, and rotate or revoke it when access is no longer needed. <br>
+## Use Case:
 
+Creators, educators, and business users can ask an agent to turn presentations or documents into narrated explainers, training videos, or report summaries.
 
-## Reference(s): <br>
-- [Dlazy Slideshow Video on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-slideshow-video) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown guidance with inline bash commands and streamed CLI output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the pinned @dlazy/cli 1.2.3 package and may upload user-selected local files to dLazy for project-scoped video generation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and release evidence) <br>
+Risk: Prompts and attached files can be sent to the third-party dLazy service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit prompts and files that you are comfortable sharing with dLazy.
+
+Risk: The CLI may store an API key locally and a global install persists on the system.
+
+Mitigation: Protect and rotate the key as needed; use the pinned npx invocation if a persistent global install is undesirable.
+
+## Reference(s):
+
+- [dLazy CLI source (listed in skill metadata; release provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Text]
+
+**Output Format:** [Markdown with inline shell commands and service responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The dLazy service produces the slideshow video; attached files are uploaded to that service.]
+
+## Skill Version(s):
+
+1.0.26 (source: ClawHub release metadata; skill frontmatter says 1.0.2)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

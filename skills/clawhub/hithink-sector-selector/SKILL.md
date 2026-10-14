@@ -1,6 +1,6 @@
 ---
 name: hithink-sector-selector
-description: 通过行业估值、资金流向、涨跌幅、板块类型等多条件组合筛选市场板块。返回符合条件的相关板块数据。当用户询问板块筛选问题时，必须使用此技能。
+description: 不知道该买哪个板块？用行业估值、资金流向、涨跌幅、板块类型几句话框住，它把符合条件的板块直接列出来。当用户询问板块筛选问题时，必须使用此技能。
 license: Complete terms in LICENSE.txt
 ---
 

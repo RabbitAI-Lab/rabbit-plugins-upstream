@@ -1,47 +1,64 @@
-## Description: <br>
-海量标讯智搜助手-标800 helps agents search Biao800/Zhiliaobiaoxun tender data with complex keywords, exclusions, amount ranges, company analysis, and market analysis filters. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches tender and award notices with combined keywords, exclusions, amounts, and other filters, then summarizes relevant results.
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External users and business development analysts use this skill to retrieve and analyze Biao800/Zhiliaobiaoxun bid notices, company profiles, competitors, potential suppliers, market rankings, and price trends. It is useful when precise tender search requires multiple keywords, match modes, exclusion terms, amount filters, geographic filters, or follow-up market analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive Biao800/Zhiliaobiaoxun API key and consumes service quota. <br>
-Mitigation: Use a dedicated revocable API key, monitor quota usage, and rotate or revoke the key when access is no longer needed. <br>
-Risk: Search terms, company names, and analysis requests are sent to an external tender-intelligence API. <br>
-Mitigation: Avoid confidential searches unless external API sharing is approved for the user's organization. <br>
-Risk: Company-name matching and contact lookup can affect the scope and sensitivity of downstream analysis. <br>
-Mitigation: Ask the agent to confirm company matches before analysis or contact lookup when exact scope matters. <br>
+## Use Case:
 
+Procurement and business-development users search tender notices, compare suppliers and companies, and review market activity using the vendor's data service.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/massive-tender-smart-search-biao800) <br>
-- [Biao800 API key application](https://ai.zhiliaobiaoxun.com/?ch=s30) <br>
-- [Biao800 API base endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, API Calls, JSON, Guidance] <br>
-**Output Format:** [Markdown or text analysis based on JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the ZLBX_API_KEY credential and may consume Biao800/Zhiliaobiaoxun API quota.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Automatic trial registration sends a hashed device identifier to the vendor and saves an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ask for informed consent before registration; configure ZLBX_API_KEY beforehand to avoid automatic registration, and review ~/.zlbx/config.json for saved credentials.
+
+Risk: Authenticated requests expose queries and package/source identity to the vendor; version checks add account calls.
+
+Mitigation: Use the skill only if the vendor's receipt of authenticated requests and package metadata is acceptable; review requests and account activity.
+
+Risk: Paid queries may consume credits and tender or company records may be incomplete or outdated.
+
+Mitigation: Limit requests to the user's intended search, check credit usage, and verify consequential findings against original records.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/pkuycl/skills/massive-tender-smart-search-biao800)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Tender search API reference](references/api-search.md)
+- [Company API reference](references/api-company.md)
+- [Business registry API reference](references/api-registry.md)
+- [Market API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Automatic registration reference](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the vendor API and available account credits; contact numbers may be masked for trial accounts.]
+
+## Skill Version(s):
+
+1.0.9 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

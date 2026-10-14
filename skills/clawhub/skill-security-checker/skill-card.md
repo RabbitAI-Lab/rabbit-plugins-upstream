@@ -1,39 +1,62 @@
-## Description: <br>
-Skill Security Checker audits agent skill folders for static security patterns, dependency issues, permission risks, quality checks, and optional sandboxed runtime behavior, producing text, JSON, or HTML reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Scans agent skills for security, dependency, permission, and quality issues and produces findings with remediation guidance.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and skill publishers use this skill to check ClawHub, WorkBuddy, or SkillHub skills before release or in CI/CD, with findings, scores, and remediation guidance for security and quality issues. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The server security review flags the release as suspicious because optional dynamic scanning with allowed domains may provide broader Docker network access than the documentation implies. <br>
-Mitigation: Use static scanning or dynamic scanning without allowed domains by default; enable allowed domains only for reviewed targets and treat that mode as general network access for scanned code. <br>
+## Use Case:
 
+Developers and security reviewers use this skill to assess agent skills before installation or release and to review findings in CI workflows.
 
-## Reference(s): <br>
-- [ClawHub listing](https://clawhub.ai/fyniujin/skills/skill-security-checker) <br>
-- [Scan Patterns Reference](references/scan-patterns.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Terminal text, JSON, or HTML reports with findings, scores, and remediation suggestions.] <br>
-**Output Parameters:** [1D; target skill path plus optional format, output path, update-check, dynamic scan, allow-domain, and timeout flags.] <br>
-**Other Properties Related to Output:** [Runs locally; dynamic mode can execute scanned code in Docker or Windows Sandbox.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Dynamic scans with allowed domains may permit broader network access than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid dynamic scans with --allow-domain until network filtering is fixed.
+
+Risk: Scanning directories containing symlinks may read files outside the intended target.
+
+Mitigation: Scan directories without symlinks or validate symlink targets first.
+
+Risk: Generated HTML reports from untrusted skills may be unsafe to open.
+
+Mitigation: Prefer JSON or SARIF reports and treat HTML reports as untrusted.
+
+Risk: Networked update and vulnerability-data features introduce avoidable exposure in untrusted environments.
+
+Mitigation: Use networked update and OSV features only in trusted environments.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/fyniujin/skills/skill-security-checker)
+- [Scan patterns reference](artifact/references/scan-patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, HTML, SARIF, Guidance]
+
+**Output Format:** [Plain-text, JSON, HTML, or SARIF scan reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Quick verdicts highlight leading risks; full reports include findings and remediation suggestions.]
+
+## Skill Version(s):
+
+3.5.5 (source: release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

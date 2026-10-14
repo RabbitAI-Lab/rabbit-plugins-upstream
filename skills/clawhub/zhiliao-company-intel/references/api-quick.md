@@ -1,7 +1,16 @@
+<!-- request-identity:start -->
+**请求身份**：使用已配置的 API Key，并保留本包的 X-Client，携带下列完整身份头；不得沿用其它包的版本或来源。
+```text
+X-Client: company-intel/1.0.2
+X-Skill-Package: zhiliao-company-intel/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+<!-- request-identity:end -->
+
 # 工具速查（企业情报所用子集）
 
 > 与 zlbx-bidding SKILL 同一套 api_v2 接口，此处只收录本 SKILL 用到的 9 个工具的关键参数。
-> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`，Header 带 `X-API-Key` + `X-Client: company-intel/1.0.0`。
+> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/get_company_profile`），Header 带 `X-API-Key` + `X-Client: company-intel/1.0.2`。
 
 ## 通用概念
 
@@ -22,7 +31,7 @@
 - `keywords`（OR） AND `keyword_groups` 每组（组内 OR） AND NOT `exclude_keywords`
 - 例·公司×品类交集：`{"keywords": ["公司全称"], "match_modes": ["winner"], "keyword_groups": [{"keywords": ["视频监控"], "match_modes": ["sm","title"]}]}`
 
-**金额参数名差异**：search_bids 用 `min_amount/max_amount`；query_bids_advanced 与 aggregate 的 filters 用 `min_money/max_money`。单位都是元。
+**金额参数已统一**：所有筛项目金额的工具都用 `min_amount`/`max_amount`，单位一律**万元**（用户说「500 万以上」就传 `500`）。旧的 `min_money`/`max_money`（单位元）已移除，不再用于金额筛选；REST可能忽略未知字段，MCP可能报参数错误，不要继续使用旧参数。只有价格类工具例外：`get_top_brands`/`get_price_trends` 用 `min_price`/`max_price`，单位是**元**（产品单价，不是项目金额）。传错的后果是空结果**且照常扣积分**。
 
 **响应**：`{"success": true, "data": {...}, "meta": {"cost_units": 1}}`；分页 `page`/`page_size`（默认 20，最大 50；search_company 最大 20）。
 
@@ -48,16 +57,16 @@
 
 ### query_bids_advanced — ④ 中标履历明细
 `{"keywords": ["公司全称"], "match_modes": ["winner"], "bid_process": [7,8], "begin_date": "3年前", "sort_field": "money", "sort_order": "desc", "page_size": 20}`
-支持 `keyword_groups`/`exclude_keywords`；金额筛选参数为 `min_money/max_money`（元）。
+支持 `keyword_groups`/`exclude_keywords`；金额筛选参数为 `min_amount/max_amount`（万元）。
 → `total` + `items`: `bid_id`、`title`、`pub_time`、`money`/`money_wan`、`caller_name`、`winner_names`、`sm_names`、`url`（公告页，带 sk）。
 
 ### search_bids — ④ 备用常规搜索
-`keywords`(必填) + `match_modes` + `bid_type`(招标/中标/全部) + `bid_process` + `begin_date/end_date` + `provinces/cities` + `min_amount/max_amount`（元）。快速单条件查询时用；需要排序/排除词时用 query_bids_advanced。
+`keywords`(必填) + `match_modes` + `bid_type`(招标/中标/全部) + `bid_process` + `begin_date/end_date` + `provinces/cities` + `min_amount/max_amount`（**万元**）。快速单条件查询时用；需要排序/排除词时用 query_bids_advanced。
 
 ### aggregate_bids_advanced — ④ 聚合统计（中标实力的量化底座）
 `{"filters": {"keywords": ["公司全称"], "match_modes": ["winner"], "bid_type": 2, "begin_date": "3年前"}, "group_by": ["year"]}`
 - `group_by` 可选：`month`/`quarter`/`year`/`province`/`city`/`industry`/`brand`/`company_type`/`bid_method`；`compare_with`: `yoy`/`qoq`。
-- filters 的金额参数为 `min_money/max_money`；`bid_type`: 1=招标 2=中标。
+- filters 的金额参数为 `min_amount/max_amount`（万元）；`bid_type`: 1=招标 2=中标。
 → `total_count`、`total_amount`/`total_amount_wan` + `buckets`: 每桶 `key`、`count`、`sum_amount`/`sum_amount_wan`、`avg_amount`（带 compare 时含 `yoy_count`/`yoy_amount`）。
 
 ### find_competitors — ⑤ 竞争对手（投标重叠度）
@@ -69,3 +78,15 @@
 - `role`: 1=招标联系人 2=中标联系人 0=全部（默认）；limit 默认 5 最大 20；可加 begin_date/end_date、match_modes。
 → `contacts`: 每条 `phone`、`name`（部分脱敏，如"李*"）、`bid_count`、`last_pub_time`、`last_bid_url`；外层 `contact_privacy`: `"full"`（付费账户，电话完整）| `"masked"`（免费/试用账户，电话脱敏）。
 - ⚠️ **铁律 6**：电话按返回形态**原样展示**，不自行打码、不补全、不成批导出。`masked` 时附升级提示（充值后重新查询即得完整电话）。
+
+<!-- package-identity:start -->
+**安装包身份与升级检查**：所有发往知了标讯 API 的请求（包括账户查询）必须额外携带以下两个请求头：
+```text
+X-Skill-Package: zhiliao-company-intel/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+这些值是当前安装包的固定身份，复用已有API Key时也要携带；不要用X-Client产品版本替代包版本，不要将Key的注册渠道当作安装来源。
+请求鉴权：使用已配置的 API Key，并保留本包的 X-Client。每个会话首次使用本Skill时，在已有凭证可用后先调用免费账户接口 `GET https://mcp-server.zhiliaobiaoxun.com/api_v2/account/balance` 检查升级提醒；该查询不扣积分，不触发购买。
+**版本提醒转达**：响应出现 `skill_update_notice` 时，将其中 `message` 原样转达用户；兼容提示只说明检查版本，不能宣称已确认当前包过期。
+**展示后确认**：只有将提醒发送到用户可见对话之后，才使用同一凭证和请求头，按 `display_ack` 提交 POST 回执（MCP客户端可调用 `confirm_skill_update_display`）（`notice_id` 和 `displayed: true`）。只读取工具响应、在思考中提过、尚未转达时不得确认。不能在展示后调用接口则不确认，服务端继续保留待提醒状态。回执免费，不扣积分；失败不影响查询结果，不向用户展示技术回执。同一会话同一 `notice_id` 只展示一次。
+<!-- package-identity:end -->

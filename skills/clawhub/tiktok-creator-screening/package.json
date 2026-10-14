@@ -1,0 +1,27 @@
+{
+  "name": "tiktok-creator-screening",
+  "version": "1.0.0",
+  "description": "输入市场、产品、合作目标等，通过关键词、品牌目标或内容方向发现、筛选和复核适合合作的TikTok达人，深入分析候选账号的内容特点、真实互动数据等，评估内容能力、受众匹配与商业成本，输出有数据依据的合作候选名单。",
+  "keywords": [
+    "tiktok",
+    "search",
+    "keyword",
+    "content-analysis",
+    "competitor-analysis"
+  ],
+  "author": "um-why",
+  "license": "MIT",
+  "type": "commonjs",
+  "engines": {
+    "node": ">=16.14.0"
+  },
+  "scripts": {
+    "search": "node scripts/tiktok/search-cli.js",
+    "post": "node scripts/tiktok/post-cli.js",
+    "comment": "node scripts/tiktok/comment-cli.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/um-why/tiktok-skill.git"
+  }
+}

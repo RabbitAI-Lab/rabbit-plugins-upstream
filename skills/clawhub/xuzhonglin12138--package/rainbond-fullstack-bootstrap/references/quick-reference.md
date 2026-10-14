@@ -1,0 +1,105 @@
+# Quick Reference
+
+Use this file for low-frequency reminders. Do not treat it as the source of truth for execution logic.
+
+## Common Mistakes
+
+- creating duplicate components instead of checking existing ones first
+- trying to fully troubleshoot runtime issues inside bootstrap
+- forgetting inner port before adding a dependency
+- duplicating provider connection values on every consumer instead of using provider connection envs plus explicit dependencies
+- claiming Rainbond Tool cannot create explicit component dependencies even though `rainbond_manage_component_dependency` is available
+- treating Kubernetes/Rainbond DNS reachability, Nginx upstream config, or hard-coded service hostnames as a substitute for Rainbond console-visible dependency edges
+- adding speculative compatibility envs during creation
+- declaring success just because the app and components were created
+- omitting `### Structured Output` after explicit structured mode was selected
+- inventing top-level `created_components`, `reused_components`, `skipped_components`, or `deferred_dependencies` instead of using `deployment_plan.workflow.*`
+- echoing raw platform states such as `undeploy` instead of normalizing them into the canonical runtime vocabulary
+- re-triggering `rainbond_build_component` because `status = undeploy` was misread as "build never started" instead of treating `undeploy` as a runtime label and verifying the prior build `event_id` first
+- treating frontend runtime path issues as bootstrap problems
+- forgetting to require explicit frontend `access_mode` declaration
+- exceeding the stage retry budget instead of stopping with the current blocker
+- confusing source build parameters with runtime envs, connection envs, or `build_info`
+- skipping the Build Mode Selection priority chain (manifest → heuristic → ask) and either blindly defaulting to CNB or blindly setting `prefer_dockerfile_when_detected = true` based on file presence alone
+- treating the Dockerfile-intent-signal examples as a closed checklist instead of applying the underlying principle ("would the language buildpack produce equivalent runtime behavior?")
+- omitting the per-component build-mode decision from output (both the prose "Build mode for `<name>`: …" line AND the structured `deployment_plan.workflow.build_strategy_decisions` entry), leaving the user no way to verify or override the chosen mode
+- promising `dockerfile_path` support when the current Rainbond Tool surface only exposes `prefer_dockerfile_when_detected`
+- jumping straight to runtime logs for a source build failure without checking component events and build logs first
+- treating external artifact download failures as application source-code failures without naming the unreachable artifact
+- staging local packages in `/tmp` when the local upload helper can only read the current workspace
+- starting local Docker/OrbStack or pushing temporary images as an implicit fallback
+
+## Source Resolution Summary
+
+- Selected environment: explicit input > local default > `preview`
+- App identity: explicit input > `.rainbond/local.json` > baseline `project`
+- Component envs: explicit input > secret file > env-file overrides > baseline component envs
+- Component topology: explicit input > baseline manifest
+- Runtime component reuse hints: `.rainbond/local.json.runtime_components`, but trust current platform runtime facts if they disagree
+- Source mapping:
+  - v1 top-level `image` -> image execution
+  - v2 `source.kind = image` -> image execution
+  - v2 `source.kind = source` -> source execution
+  - v2 `source.kind = package` -> local package upload execution
+  - v2 `source.kind = template` -> skip in bootstrap and handle via `rainbond-template-installer`
+
+## Local Package Reminder
+
+- `source.local_path` is read only by `upload_local_package.py`; never send it to a Rainbond Tool
+- `source.local_path: "."` means package the current project directory
+- `source.archive_name` is optional and only matters when `local_path` is a directory
+- stage generated local packages under `.rainbond/staging/<component>/` inside the current workspace; never use `/tmp`
+- required order: local `prepare` -> Rainbond Tool initialize (`event_id` + `upload_request`) -> local HTTP `upload` with the exact request contract -> immediate local `cleanup` -> non-empty Rainbond Tool status -> create by `event_id`
+- init failure: local cleanup and stop
+- upload failure: local cleanup -> remote upload-event deletion -> stop
+- empty status: remote upload-event deletion -> stop
+- server-local package tools are compatibility-only, not RainSkills execution options
+
+## Preferred Creation Order
+
+1. app
+2. template-backed components are skipped and expected to be installed upstream
+3. database components
+4. service components
+5. frontend component
+6. inner ports
+7. provider port aliases and connection envs
+8. minimum consumer-local env
+9. deploy
+10. wait for source-backed build convergence
+11. complete remaining dependencies
+12. verify
+13. hand off if needed
+
+## Build Parameter Routing
+
+- build parameters -> `replace_build_envs` with `build_env_dict`
+- runtime envs -> normal component env operations
+- connection envs -> connection env tool
+- dependencies -> `rainbond_manage_component_dependency`
+- build source/ref/auth -> source-create inputs or `build_info`
+
+## Source Build Debug Order
+
+1. component summary
+2. component events
+3. build logs for the failing `event_id`
+4. runtime logs only if build evidence no longer explains the problem
+
+## Deployment Pattern Reminder
+
+- browser only accesses the `web` component
+- frontend requests `/api` as a relative path
+- nginx in the `web` container forwards `/api` to `api:8080`
+- the `api` component does **not** need public exposure by default
+
+## Preferred Stopping Rule
+
+- stop at the first deeper runtime problem once minimum topology is established
+- always require explicit frontend `access_mode` before declaring `setup complete`
+
+## Output Reminder
+
+- never print passwords, tokens, certificates, private keys, or other secrets in plaintext
+- only in explicit structured mode, end with `### Structured Output`
+- keep `next_handoff` aligned with the prose recommendation

@@ -42,7 +42,7 @@ FROM input1;
 
 按"添加好友日期 vs 注册日期"判断"新会员 / 老会员"：
 
-```sql
+```guandata
 CASE
   WHEN [是否会员] = '是会员' AND [添加距离注册] >= 0 THEN '新会员'
   WHEN [是否会员] = '是会员' AND [添加距离注册] <  0 THEN '老会员'
@@ -58,7 +58,7 @@ END
 
 ### 日维度（卡片表达式版）🅰️
 
-```sql
+```guandata
 CASE
   WHEN [MemberType] = 'New'        THEN '日新客'
   WHEN [MemberType] = 'NonMember'  THEN '非会员'
@@ -68,7 +68,7 @@ END
 
 ### 日维度（ETL 计算版，按"全历史第 1 单"）🅱️
 
-```sql
+```sql-fragment
 /* 新老客-日：仅全历史第 1 单为"日新客"，其余均为"日老客" */
 CASE
   WHEN ROW_NUMBER() OVER (
@@ -82,14 +82,16 @@ END AS `新老客-日`
 
 ### 月维度 🅰️🅱️
 
-```sql
+```guandata
 -- 卡片表达式版
 CASE
   WHEN [MemberType] = 'NonMember'       THEN '非会员'
   WHEN [首单日期] < [月开始日期]        THEN '月老客'
   ELSE '月新客'
 END
+```
 
+```sql-fragment
 -- ETL 版（按"首单所在月" = "当前订单所在月"判月新客）
 CASE
   WHEN date_trunc('month', to_timestamp(I.`下单时间`, 'yyyy-MM-dd HH:mm:ss'))
@@ -102,7 +104,7 @@ END AS `新老客-月`
 
 ### 周维度 🅰️
 
-```sql
+```guandata
 CASE
   WHEN [MemberType] = 'NonMember'           THEN '非会员'
   WHEN [首单日期] < [营运周开始日期]        THEN '周老客'
@@ -117,7 +119,7 @@ END
 
 把"非会员 / 月新 / 月老 / 召回"统一到一个字段，按优先级回填：
 
-```sql
+```guandata
 CASE
   WHEN [MemberType] = 'NonMember' THEN '非会员'
   ELSE ifnull([活跃类型], [月用户类型])
@@ -128,7 +130,7 @@ END
 
 把"日新客 / 召回 / 活跃"按近 30 天频次类型再拆细，用于精细化运营分群。
 
-```sql
+```guandata
 CASE
   WHEN [日用户类型] = '日新客'   THEN '日新客'
   WHEN [月活跃类型] = '召回'     THEN '召回'
@@ -144,7 +146,7 @@ END
 
 ### 消费频次 — 全表均值（卡片字段表达式）
 
-```sql
+```guandata
 COUNT(DISTINCT IF([顾客标识] IS NOT NULL AND TRIM([顾客标识]) <> '', [订单号], NULL))
 / COUNT(DISTINCT IF([顾客标识] IS NOT NULL AND TRIM([顾客标识]) <> '', [顾客标识], NULL))
 ```
@@ -194,11 +196,13 @@ GROUP BY `门店编号`, `是否会员`;
 
 ## 人均消费 🅰️🅱️
 
-```sql
+```guandata
 -- 卡片表达式版
 SUM(IF([顾客标识] IS NOT NULL AND [顾客标识] != '', [income_应收], NULL))
 / COUNT(DISTINCT IF([顾客标识] IS NOT NULL AND [顾客标识] != '', [顾客标识], NULL))
+```
 
+```sql
 -- ETL 门店×会员维度版 🅱️
 SELECT
   `门店编号`,
@@ -275,7 +279,7 @@ GROUP BY `门店编号`, `是否会员`;
 
 简化的"是否下单 / 是否复购"标记，用于卡片层的统计：
 
-```sql
+```guandata
 -- 下单人数（按 TC 字段判，至少 1 单）
 CASE WHEN [TC] >= 1 THEN 1 ELSE NULL END
 
@@ -292,12 +296,13 @@ SUM([复购人数]) / SUM([下单人数])
 ## 最后一单距今天数 🅱️
 
 ```sql
+WITH params AS (SELECT DATE '${as_of_date}' AS as_of_date)
 SELECT
   `顾客标识`,
   GREATEST(
     0,
     DATEDIFF(
-      date_sub(CURRENT_DATE, 1),    -- 锚定昨天
+      date_sub((SELECT params.as_of_date FROM params), 1),    -- 锚定昨天
       MAX(TO_DATE(`订单日期`))
     )
   ) AS `最后一单距离今天的天数`
@@ -308,9 +313,11 @@ GROUP BY `顾客标识`;
 
 **坑**：`GREATEST(0, ...)` 是为了防止脏数据里出现"未来订单日期"导致负数（餐饮连锁 B 真遇到过门店时间设错的情况）。
 
-## RFM 顾客分类（8 类）🅱️
+## RFM 顾客分类（8 类）🅱️ {#rfm-顾客分类8-类}
 
 经典的 RFM 三维拆分。**阈值（R=30 天 / F=2 次 / M=66 元）需要按你方业务调**。
+
+> ⚠️ **两套口径并存，先选再用**：本节是**高低二分 8 类**（每维一刀切两档，简单直接，适合快速起步和小体量）；本仓库样板间 ETL（`ETL/逻辑SQL/etl_dws_会员RFM分层`）是 **5 分制 9 类**（每维 1~5 分再映射标签，多出"中间客群"兜底档，适合精细运营和大体量）。两套都是有效做法，但阈值体系完全不同，**不要混用，也不要拿一套的结果对另一套的报表**。
 
 ```sql
 SELECT
@@ -361,8 +368,17 @@ SELECT
   CASE WHEN `消费频次`         >= 2  THEN '常客'     ELSE '频次低' END AS F,
   CASE WHEN `消费金额`         >= 66 THEN '消费高'   ELSE '花钱少' END AS M,
 
-  /* 顾客类型 8 类（同上 8 类映射，省略）*/
-  CASE WHEN ... THEN '重要价值客户' ... END AS `顾客类型`,
+  /* 顾客类型 8 类：沿用上节映射 */
+  CASE
+    WHEN `最后一单距今天数` <= 30 AND `消费频次` >= 2 AND `消费金额` >= 66 THEN '重要价值客户'
+    WHEN `最后一单距今天数` <= 30 AND `消费频次` >= 2 AND `消费金额` <  66 THEN '一般价值客户'
+    WHEN `最后一单距今天数` <= 30 AND `消费频次` <  2 AND `消费金额` >= 66 THEN '重要发展客户'
+    WHEN `最后一单距今天数` <= 30 AND `消费频次` <  2 AND `消费金额` <  66 THEN '一般发展客户'
+    WHEN `最后一单距今天数` >  30 AND `消费频次` >= 2 AND `消费金额` >= 66 THEN '重要保持客户'
+    WHEN `最后一单距今天数` >  30 AND `消费频次` >= 2 AND `消费金额` <  66 THEN '一般保持客户'
+    WHEN `最后一单距今天数` >  30 AND `消费频次` <  2 AND `消费金额` >= 66 THEN '重要挽留客户'
+    ELSE '一般挽留客户'
+  END AS `顾客类型`,
 
   /* 营销策略（参考动作） */
   CASE
@@ -407,7 +423,7 @@ doc 2 默认用 30 天单一阈值。**生产 ETL 中按业务场景至少有两
 
 #### 三档分级（用于活跃度运营，关注短期）
 
-```sql
+```sql-fragment
 CASE
   WHEN `R天数` < 21  THEN '活跃（21 天内有消费）'
   WHEN `R天数` < 46  THEN '低活（21~45 天内有消费）'
@@ -421,13 +437,16 @@ END AS `顾客状态`
 #### 四档分级（用于流失预警，关注衰减曲线）
 
 ```sql
+WITH params AS (SELECT DATE '${as_of_date}' AS as_of_date)
+SELECT
 CASE
-  WHEN DATEDIFF(CURRENT_DATE(), `最后消费日期`) >= 60 THEN '60 天未消费'
-  WHEN DATEDIFF(CURRENT_DATE(), `最后消费日期`) >= 30 THEN '30 天未消费'
-  WHEN DATEDIFF(CURRENT_DATE(), `最后消费日期`) >= 21 THEN '21 天未消费'
-  WHEN DATEDIFF(CURRENT_DATE(), `最后消费日期`) >= 14 THEN '14 天未消费'
+  WHEN DATEDIFF((SELECT params.as_of_date FROM params), `最后消费日期`) >= 60 THEN '60 天未消费'
+  WHEN DATEDIFF((SELECT params.as_of_date FROM params), `最后消费日期`) >= 30 THEN '30 天未消费'
+  WHEN DATEDIFF((SELECT params.as_of_date FROM params), `最后消费日期`) >= 21 THEN '21 天未消费'
+  WHEN DATEDIFF((SELECT params.as_of_date FROM params), `最后消费日期`) >= 14 THEN '14 天未消费'
   ELSE                                                     '14 天内有消费'
 END AS `流失状态`
+FROM input1;
 ```
 
 **适用**：营销分级触达。14/21/30/60 四档对应不同力度的优惠券推送策略。
@@ -448,6 +467,7 @@ END AS `流失状态`
 把"首购日 ≤ 今天-90 天"的所有顾客分到 6 + 1 个桶里，按"下一次下单距首购的天数"切分，看保留曲线：
 
 ```sql
+WITH params AS (SELECT DATE '${as_of_date}' AS as_of_date)
 /* —— 锚定日：今天往前 90 天及之前的所有首购日（动态计算）—— */
 SELECT
   R.`门店编号`,
@@ -491,7 +511,7 @@ FROM (
         AND I.`订单日期` IS NOT NULL
       GROUP BY I.`顾客标识`
     ) FB
-    WHERE FB.`first_date` <= date_sub(current_date(), 90)
+    WHERE FB.`first_date` <= date_sub((SELECT params.as_of_date FROM params), 90)
   ) C
   LEFT JOIN (
     /* 首购当日的一条订单，拿门店/分公司/是否会员做归属 */
@@ -655,17 +675,17 @@ ORDER BY dsd.store_id, dsd.is_member, dsd.record_date;
 
 ```sql
 -- 群成员留存：每日新增的"在群人数"按 PARTITION BY 门店×会员状态 ORDER BY 日期 做累加
-COUNT(DISTINCT CASE WHEN `状态` = '在群内' THEN `外部联系人id` ELSE NULL END) AS daily_new_group_members
+SELECT COUNT(DISTINCT CASE WHEN `状态` = '在群内' THEN `外部联系人id` ELSE NULL END) AS daily_new_group_members FROM input1;
 
 -- 好友留存：每日新增的"正常状态"好友
-COUNT(DISTINCT CASE WHEN `状态` = '正常' THEN `外部联系人id` ELSE NULL END) AS daily_new_friends_count
+SELECT COUNT(DISTINCT CASE WHEN `状态` = '正常' THEN `外部联系人id` ELSE NULL END) AS daily_new_friends_count FROM input1;
 ```
 
 完整模板见上面"累计会员总数"，把字段名替换即可。
 
 ## 好友流失率 🅱️
 
-```sql
+```guandata
 SUM([流失好友数]) / (SUM([流失好友数]) + MAX([留存好友总数]))
 ```
 
@@ -673,7 +693,7 @@ SUM([流失好友数]) / (SUM([流失好友数]) + MAX([留存好友总数]))
 
 ## 流失人数 / 留存人数（卡片字段表达式）🅰️
 
-```sql
+```guandata
 -- 流失人数（被动删除）
 COUNT(IF([流失状态] = '已流失' AND [流失方式] = '被动删除', [外部联系人id], 0))
 
@@ -693,8 +713,27 @@ COUNT([外部联系人id]) - COUNT(IF([流失状态] = '未流失', [外部联�
 
 简化版（不分桶，只判是否 ≥ 90 天）：
 
-```sql
+```guandata
 CASE WHEN [最后一单距今天数] >= 90 THEN 1 ELSE 0 END
 ```
 
 详细分桶见上文"[90 天复购分桶](#90-天复购分桶-)"。
+
+
+## 门店拉新：扫码、加好友、注册和首购分开算
+
+本节由门店运营资料脱敏整理，并补充去重与观察条件；属于编辑后的方法说明，未验证经营增量。原始企业数据和固定奖励标准不随公开项目分发。
+
+扫码表示发生入口行为，加好友表示建立联系，注册表示完成约定会员登记，首购表示第一次符合口径的有效消费。只有后一事件完成，才可以计入对应指标，不能逐级推定。
+
+**有效新增会员**：在约定去重范围内，首次完成有效注册且通过既定异常排除规则的人。品牌拉新按品牌统一身份去重；老会员首次在另一门店消费是该店新到店会员，不是品牌新增注册。无法跨渠道统一身份时，应明确当前可去重范围，不能声称品牌去重已完成。
+
+最低保留匿名统一身份、注册完成时间、来源门店、来源入口、注册状态和异常标记。门店归属规则事先选定并记录；首次来源、最后来源或消费门店不可混用。顾客无法归到具体员工时，不凭当前值班人员推定拉新归属。
+
+以注册为奖励条件时，重复注册、测试账号和已确认异常记录不参与；以首购为条件时，另需有效订单时间、状态及退款处理。取消或撤回注册是否排除，应由制度明确，不临时改分母。
+
+**首购转化率**：某批符合条件的新注册会员，在规定首购观察窗内完成有效首购的人数，除以该批已观察满窗口的新注册会员人数。未观察满的人单列。复购按本册跨天或非跨天定义继续计算，不把领取第二张券算第二次消费。
+
+例如（模拟）：某批完整窗口的 20 名首次注册会员，12 名有有效首购，首购转化率为 60%。另有 5 名注册尚未满观察期，单列待观察，不混入该分母。这个比例仅演示算法，不是门店基准。
+
+执行话术与入口承接见 [私域门店执行参考](https://github.com/maojiebc/majia-siyu-team/blob/main/knowledge/02-industry/catering/门店会员执行参考.md)。激励结算与费用评价见 [任务与触达回收](10-task-and-touch-recovery.md#门店激励的结算与评价)。

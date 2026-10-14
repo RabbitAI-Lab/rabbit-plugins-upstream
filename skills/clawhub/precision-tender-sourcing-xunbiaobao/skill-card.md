@@ -1,45 +1,65 @@
-## Description: <br>
-精准寻标与获客引擎-寻标宝，当用户需要通过招投标数据进行客户拓展、寻找潜在采购单位或分析企业上下游时调用，重点调用企业合作客户及供应商查询接口，输出清晰的获客目标列表。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+通过中国招投标与企业数据查找采购机会、潜在客户及企业合作伙伴，并整理可供跟进的目标列表。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Sales, procurement, and business-development users use this skill to search Chinese tender notices, identify likely buyers or suppliers, analyze company bid activity, and summarize market opportunities from Zhiliaobiaoxun/Xunbiaobao data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement queries, company names, bid URLs, and filters are sent to an external Zhiliaobiaoxun/Xunbiaobao API using the configured API key. <br>
-Mitigation: Use only an intended ZLBX_API_KEY, avoid confidential strategy or sensitive personal data in prompts, and confirm that sharing each query with the external service is acceptable. <br>
-Risk: Returned results can include business contact data and company matching may affect downstream analysis. <br>
-Mitigation: Use contact information only for lawful and appropriate business purposes, and confirm company matches before broad outreach or high-impact decisions. <br>
+## Use Case:
 
+Sales and business-development teams use this skill to search tender notices, identify prospective purchasers, examine company customers and suppliers, and prioritize outreach leads.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/precision-tender-sourcing-xunbiaobao) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [Xunbiaobao API key setup](https://ai.zhiliaobiaoxun.com/?ch=s29) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration guidance] <br>
-**Output Format:** [Markdown summaries with JSON request examples and structured result lists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends user queries to the Zhiliaobiaoxun/Xunbiaobao API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server-resolved release evidence) <br>
+Risk: The service receives an API key and package identity when queried, and the skill checks account and update status.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a personally configured ZLBX_API_KEY and review the provider's credential and usage terms before enabling requests.
+
+Risk: Optional trial registration sends hashed device characteristics to the provider.
+
+Mitigation: Configure an API key to skip registration, or require informed user consent before collecting device characteristics.
+
+Risk: Requested business contact results can contain full phone numbers for paid accounts.
+
+Mitigation: Limit access and sharing to the stated outreach purpose; preserve masked numbers and avoid bulk contact exports.
+
+Risk: Data queries can consume account credits and incomplete company records can lead to overconfident conclusions.
+
+Mitigation: Query only requested records and pages, check applicable charges, and distinguish returned facts from unknown or unqueried data.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/precision-tender-sourcing-xunbiaobao)
+- [Search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Company registry interpretation](references/api-registry.md)
+- [Optional trial registration and privacy](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries, linked result tables, and follow-up suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the provider's returned records and account access; contact numbers may be masked.]
+
+## Skill Version(s):
+
+2.0.6 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

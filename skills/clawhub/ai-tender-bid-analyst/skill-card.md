@@ -1,44 +1,64 @@
-## Description: <br>
-AI 招投标分析师用自然语言调度知了标讯招中标数据接口，生成商机研判、市场洞察、竞对画像和投标决策分析。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users analyze Chinese tender and award records, companies, competitors, purchasing trends, and potential bidding opportunities.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Business development, bidding, procurement sourcing, and market analysis users can use this skill to search tender and award data, analyze buyers and suppliers, profile companies, identify competitors, and produce structured opportunity reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can automatically register a device, send local device and user identifiers, and save an API key when no API key is already configured. <br>
-Mitigation: Prefer manually setting ZLBX_API_KEY; allow automatic registration only after explicit consent to identifier collection and local key storage. <br>
-Risk: The skill can generate login or recharge links when quota is exhausted. <br>
-Mitigation: Review links before opening them and use the publisher's normal account or billing flow when automatic login is not appropriate. <br>
+## Use Case:
 
+Procurement teams, suppliers, and market analysts use the skill to search Chinese procurement notices, review company bidding histories, identify potential suppliers and competitors, and summarize market opportunities.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-tender-bid-analyst) <br>
-- [Bid Search API Reference](references/api-search.md) <br>
-- [Company Analysis API Reference](references/api-company.md) <br>
-- [Market Analysis API Reference](references/api-market.md) <br>
-- [Automatic Registration Flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown analysis reports with structured summaries and JSON API request/response handling] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ZLBX_API_KEY or a locally stored API key to query external tender, company, and market-analysis APIs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Optional account registration collects device-derived identifiers and creates a vendor account.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Preconfigure ZLBX_API_KEY through a trusted secret mechanism, or require explicit consent before registration and device-feature collection.
+
+Risk: Automatic registration persists an API key in a home-directory configuration file.
+
+Mitigation: Prefer a managed secret for the API key and review local credential storage before enabling automatic registration.
+
+Risk: Account-related requests may occur in addition to the requested tender analysis.
+
+Mitigation: Review the account workflow and authorize only the requests needed for the task.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/ai-tender-bid-analyst)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Tender search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Business registry API reference](references/api-registry.md)
+- [Account API reference](references/api-account.md)
+- [Optional account registration workflow](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports query filters, record counts, and monetary units; available contact details depend on account access.]
+
+## Skill Version(s):
+
+1.0.8 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

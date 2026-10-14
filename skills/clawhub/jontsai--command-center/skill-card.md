@@ -1,46 +1,55 @@
-## Description: <br>
-Mission control dashboard for OpenClaw - real-time session monitoring, LLM usage tracking, cost intelligence, and system vitals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+OpenClaw Command Center provides a local dashboard for monitoring agent sessions, model usage, costs, scheduled jobs, and system health.
 
-## Publisher: <br>
-[jontsai](https://clawhub.ai/user/jontsai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jontsai](https://clawhub.ai/user/jontsai)
 
-## Use Case: <br>
-Developers and OpenClaw operators use this skill to run a local dashboard for monitoring AI agent sessions, LLM usage, costs, scheduled jobs, and system vitals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes administrative OpenClaw dashboard capabilities that go beyond passive monitoring. <br>
-Mitigation: Install it only for intended administrative use, keep the server bound to localhost or a private network, and enable a real authentication mode before remote access. <br>
-Risk: Examples or local defaults may use no authentication in development contexts. <br>
-Mitigation: Do not copy auth 'none' settings into shared, team, VPN, Cloudflare, or public deployments. <br>
-Risk: Transcript-derived identity tracking and local persistence may surface sensitive operational data. <br>
-Mitigation: Review privacy controls and disable or restrict identity/topic tracking where the workspace contains sensitive conversations. <br>
-Risk: Optional Linear sync, job-control actions, and system dependency installation can change local or external state. <br>
-Mitigation: Inspect and disable those behaviors unless they are required for the deployment. <br>
+## Use Case:
 
+OpenClaw operators and developers use the dashboard to monitor agents, review usage and costs, inspect system health, and manage scheduled jobs in their workspace.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/jontsai/skills/command-center) <br>
-- [README](artifact/README.md) <br>
-- [Architecture overview](artifact/docs/architecture/OVERVIEW.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Node.js application files with Markdown setup guidance, shell commands, HTML dashboard views, and JSON/SSE API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs a local OpenClaw dashboard server; requires Node.js >=18.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.1 (source: SKILL.md frontmatter and package.json) <br>
+Risk: Dashboard data and job controls may be exposed by default or proxy authentication settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Bind explicitly to loopback or a trusted interface; use token authentication for non-local access.
+
+Risk: Header-based Tailscale or Cloudflare authentication may be bypassed if the origin is reachable outside a trusted proxy.
+
+Mitigation: Use these modes only when the origin is isolated behind a correctly configured trusted proxy.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/jontsai/skills/command-center)
+- [Architecture overview](artifact/docs/architecture/OVERVIEW.md)
+- [Work graph contract](artifact/docs/work-graph.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs a local web dashboard for monitoring and job management.]
+
+## Skill Version(s):
+
+1.5.0 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

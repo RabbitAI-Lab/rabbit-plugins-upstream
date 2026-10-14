@@ -1,45 +1,61 @@
-## Description: <br>
-Use this skill to manage VMware storage tasks such as datastore browsing, deployable image scans, iSCSI target configuration, and vSAN health and capacity checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents inspect VMware datastores, iSCSI storage, vSAN health and capacity, and Fibre Channel paths, with gated iSCSI configuration changes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, infrastructure engineers, and VMware administrators use this skill to inspect datastores, find deployable images, configure iSCSI targets, and review vSAN health and capacity from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change VMware storage configuration, including iSCSI targets, which may affect host or datastore availability. <br>
-Mitigation: Restrict use to VMware administrators, use a dedicated least-privilege vSphere account, review policy gates, and run dry-run before iSCSI changes. <br>
-Risk: Credentials and local audit logs may contain sensitive operational data. <br>
-Mitigation: Keep ~/.vmware-storage/.env at 600 permissions or inject secrets from a manager, and treat ~/.vmware/audit.db as sensitive operational data. <br>
+## Use Case:
 
+Infrastructure administrators and engineers use this skill to inspect VMware storage, diagnose datastore and path issues, check vSAN health, and preview or carry out approved iSCSI changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-storage) <br>
-- [Project homepage](https://github.com/zw008/VMware-Storage) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [VMware Storage Capabilities](references/capabilities.md) <br>
-- [Operating vmware-storage with a local / small model](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and CLI/MCP workflow guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes local VMware storage administration guidance; write operations should use dry-run, policy gates, and audit logging.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: Access to vCenter or ESXi exposes sensitive storage inventory and permits storage configuration changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege VMware service accounts and limit deployment to environments where this access is authorized.
+
+Risk: iSCSI writes or rescans can affect production storage availability.
+
+Mitigation: Review the previewed impact and obtain human approval before executing iSCSI changes or rescans in production.
+
+Risk: Stored passwords or disabled certificate verification can expose infrastructure credentials.
+
+Mitigation: Prefer a secret manager over a persistent .env file and keep SSL verification enabled.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zw008/skills/vmware-storage)
+- [Project homepage (skill metadata)](https://github.com/vmware-skills/VMware-Storage)
+- [Setup guide](references/setup-guide.md)
+- [CLI reference](references/cli-reference.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Natural-language reports with optional commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports storage inventory and diagnostics; changes require user approval.]
+
+## Skill Version(s):
+
+2.0.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

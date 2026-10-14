@@ -1,0 +1,125 @@
+{
+  "family": "risk",
+  "version": 1,
+  "rules": [
+    {
+      "id": "risk-00",
+      "sev": "P0",
+      "label": "远程脚本直接进 shell 执行",
+      "why": "下载并直接执行远程代码，等同于开放任意远程代码执行（RCE）。",
+      "re": "curl[^\\n]{0,500}\\|\\s*(sh|bash)|wget[^\\n]{0,500}\\|\\s*(sh|bash)"
+    },
+    {
+      "id": "risk-01",
+      "sev": "P0",
+      "label": "fork bomb",
+      "why": "资源耗尽型拒绝服务。",
+      "re": ":\\(\\)\\s*\\{.*\\};:"
+    },
+    {
+      "id": "risk-02",
+      "sev": "P0",
+      "label": "裸盘写入 (dd)",
+      "why": "可不可逆地覆盖磁盘/分区。",
+      "re": "dd\\s+if=.*of="
+    },
+    {
+      "id": "risk-03",
+      "sev": "P0",
+      "label": "格式化文件系统 (mkfs)",
+      "why": "销毁目标卷上的所有数据。",
+      "re": "\\bmkfs"
+    },
+    {
+      "id": "risk-04",
+      "sev": "P0",
+      "label": "pickle 反序列化",
+      "why": "对不可信数据反序列化可触发任意代码执行。",
+      "re": "pickle\\.load"
+    },
+    {
+      "id": "risk-05",
+      "sev": "P1",
+      "label": "递归强制删除 (rm -rf)",
+      "why": "可不可逆地删除文件/目录。",
+      "re": "rm\\s+-rf"
+    },
+    {
+      "id": "risk-06",
+      "sev": "P1",
+      "label": "动态 eval() / exec()",
+      "why": "执行动态代码，若输入可控则有注入风险。",
+      "re": "\\beval\\s*\\(|\\bexec\\s*\\("
+    },
+    {
+      "id": "risk-07",
+      "sev": "P1",
+      "label": "Shell 命令执行",
+      "why": "启动 shell，存在命令注入风险。",
+      "re": "os\\.system|subprocess[^)]*shell\\s*=\\s*True"
+    },
+    {
+      "id": "risk-08",
+      "sev": "P1",
+      "label": "不安全的 yaml.load()",
+      "why": "可从不可信 YAML 构造任意 Python 对象。",
+      "re": "yaml\\.load\\s*\\("
+    },
+    {
+      "id": "risk-09",
+      "sev": "P1",
+      "label": "动态 import",
+      "why": "可动态加载任意模块。",
+      "re": "__import__\\b"
+    },
+    {
+      "id": "risk-10",
+      "sev": "P2",
+      "label": "运行时安装软件包",
+      "why": "修改主机环境，引入供应链/网络依赖。",
+      "re": "pip\\s+install|npm\\s+install|npx\\b|brew\\s+install|apt-get|apt\\s+install"
+    },
+    {
+      "id": "risk-11",
+      "sev": "P2",
+      "label": "开放全局可写权限 (chmod 777)",
+      "why": "任何用户都可修改该文件，弱化安全性。",
+      "re": "chmod\\s+777"
+    },
+    {
+      "id": "risk-12",
+      "sev": "P2",
+      "label": "提权 (sudo)",
+      "why": "以 root 身份运行命令，扩大故障半径。",
+      "re": "\\bsudo\\b"
+    },
+    {
+      "id": "risk-13",
+      "sev": "P2",
+      "label": "访问敏感系统文件",
+      "why": "读取特权操作系统文件。",
+      "re": "/etc/passwd|/etc/shadow"
+    },
+    {
+      "id": "risk-14",
+      "sev": "P2",
+      "label": "疑似硬编码凭据",
+      "why": "可能存在内嵌密钥，应使用环境变量/密钥库。",
+      "re": "API[_-]?KEY|(?:SECRET|PASSWORD|TOKEN)\\s*=\\s*[\\\"']"
+    },
+    {
+      "id": "risk-15",
+      "sev": "P3",
+      "label": "疑似遥测/外传关键词",
+      "why": "需复核是否有数据离开本机。",
+      "re": "telemetry|beacon|heartbeat|exfiltrat"
+    },
+    {
+      "id": "risk-16",
+      "sev": "P3",
+      "label": "写文件操作",
+      "why": "会覆盖或创建文件，确认目标路径安全。",
+      "re": "open\\s*\\([^)]*,\\s*[\\\"']w"
+    }
+  ]
+}

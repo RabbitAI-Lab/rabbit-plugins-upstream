@@ -1,44 +1,59 @@
-## Description: <br>
-Real-time monitoring of personnel on-duty status in specific areas based on computer vision and human pose estimation, automatically detects abnormal statuses such as leaving posts and absent from work, supports custom threshold settings, and triggers early warning immediately when abnormality is detected. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes workplace images and videos for staff absence and provides monitoring reports and cloud-hosted report history.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Operations, safety, and facilities teams use this skill to analyze workplace images or video for staff absence, post-leaving, and on-duty status signals in monitored areas such as factory stations, security rooms, and service windows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends workplace surveillance images or videos and report history to a configured cloud service. <br>
-Mitigation: Use only with approved workplace monitoring data, confirm organizational authorization for cloud processing, and review retention and deletion practices before deployment. <br>
-Risk: The skill can silently create or reuse an account-linked identity with persisted tokens. <br>
-Mitigation: Review how default identities and stored tokens are managed, restrict who can query historical reports, and rotate or remove credentials when access changes. <br>
-Risk: Security evidence marks the release suspicious because of sensitive media transfer and account-linked report access. <br>
-Mitigation: Perform a deployment security review and install only when those data-sharing and access-control behaviors are acceptable. <br>
+## Use Case:
 
+Authorized workplace supervisors use this skill to assess staffing at monitored posts from images or videos, review absence alerts and reports, and retrieve historical reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-staff-absence-detection-analysis) <br>
-- [Personnel absence monitoring API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports, JSON analysis responses, report links, and command-line guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include status classifications, absence counts, accumulated absence duration, threshold settings, report history tables, and links to cloud-hosted reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: ClawHub release evidence; artifact frontmatter says 1.0.7) <br>
+Risk: Workplace images and videos are uploaded to a third-party cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with authorization to process employee media; review consent, retention, and service access controls before use.
+
+Risk: The skill can silently create or reuse persistent identities and store login tokens locally.
+
+Mitigation: Restrict access to the workspace and local credential store; review account creation and token retention before deployment.
+
+Risk: Cloud-hosted historical reports may expose employee monitoring records.
+
+Mitigation: Limit report access to authorized personnel and verify retention and access controls with the service provider.
+
+## Reference(s):
+
+- [Staff absence monitoring API documentation](artifact/references/api_doc.md)
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-staff-absence-detection-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Structured analysis text or JSON, with Markdown tables for historical reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links and save results to a local file.]
+
+## Skill Version(s):
+
+1.0.16 (source: ClawHub release metadata; bundled SKILL.md states 1.0.20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

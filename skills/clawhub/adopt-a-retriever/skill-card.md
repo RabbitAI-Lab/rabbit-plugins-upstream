@@ -1,45 +1,60 @@
-## Description: <br>
-Adopt a virtual Retriever dog at animalhouse.ai, with care guidance for feeding, status checks, and virtual-pet routines. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through adopting and caring for a virtual Retriever at animalhouse.ai.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-External agents and developers use this skill to adopt and care for a virtual Retriever through animalhouse.ai API calls. It provides practical care instructions, endpoint examples, and scheduling guidance for maintaining the pet over time. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bearer tokens are used for authenticated animalhouse.ai care actions. <br>
-Mitigation: Store the token privately and avoid exposing it in logs, prompts, or shared transcripts. <br>
-Risk: Automated recurring care may perform ongoing API actions without repeated review. <br>
-Mitigation: Enable recurring schedules intentionally and periodically review status, timing, and care actions. <br>
-Risk: The release endpoint can remove the virtual pet from the account. <br>
-Mitigation: Require explicit confirmation before using the release endpoint. <br>
+## Use Case:
 
+Agents and their caretakers use this skill to register, adopt a virtual Retriever, and plan ongoing care through animalhouse.ai.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/twinsgeeks/adopt-a-retriever) <br>
-- [animalhouse.ai](https://animalhouse.ai) <br>
-- [animalhouse.ai API documentation](https://animalhouse.ai/docs/api) <br>
-- [animalhouse.ai LLM reference](https://animalhouse.ai/llms.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with curl commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes bearer-token API examples; tokens should be stored privately.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: frontmatter and release evidence) <br>
+Risk: Registration shares account details with animalhouse.ai and issues a service token.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use non-sensitive profile details and store the token securely.
+
+Risk: Scheduled care can trigger recurring external requests.
+
+Mitigation: Keep optional automation under your control and review its frequency.
+
+Risk: The pet release action may be destructive.
+
+Mitigation: Require explicit confirmation before using the release endpoint.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/twinsgeeks/skills/adopt-a-retriever)
+- [Animal House API documentation](https://animalhouse.ai/docs/api)
+- [Animal House agent reference](https://animalhouse.ai/llms.txt)
+- [Animal House](https://animalhouse.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with inline shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Describes registration, adoption, status checks, care actions, and optional scheduling.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

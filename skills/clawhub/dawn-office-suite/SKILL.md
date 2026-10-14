@@ -1,6 +1,6 @@
 ---
 name: dawn-office-suite
-description: "办公文档全栈 — Word、PowerPoint、Excel、PDF、Office综合处理。"
+description: "Word、PPT、Excel、PDF 来回切换、格式全乱？一个技能全包：文档生成、表格公式、PPT 设计、PDF 提取合并转换。触发词：写Word、做PPT、Excel表格、PDF处理、文档排版、Office自动化。"
 routes:
   docx: '#Word文档'
   pptx: '#PPT演示'

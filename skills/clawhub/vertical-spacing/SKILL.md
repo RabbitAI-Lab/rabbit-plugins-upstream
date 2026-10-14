@@ -1,6 +1,6 @@
 ---
 name: vertical-spacing
-description: Use when computing or fixing vertical spacing (margins, padding, Auto Layout gap) between text blocks or components against a grid base, accounting for vertical-trim state on any text layers involved.
+description: Use when computing or fixing vertical spacing (margins, padding, Auto Layout gap) between text blocks or components against a grid base, accounting for vertical-trim state on any text layers involved. Grouping follows the Gestalt principle of proximity — what is read together sits closer than what is read apart.
 triggers:
   use_when:
     - user asks to compute or fix margins/padding/gap
@@ -14,7 +14,7 @@ triggers:
 metadata:
   author: Monika Zapisek
   project: Design Engineering Playbook
-  version: 1.0
+  version: "1.2.0"
   status: accepted
 ---
 
@@ -36,7 +36,7 @@ Compute vertical spacing (margin, padding, Auto Layout `gap`) as clean multiples
 - `component-type`: card / page section / article / form.
 - `hierarchy-level`: compact / standard / spacious.
 - `base-line-height` (`LH`): the resolved `line-height` of the body text in the flow — required for Workflow step 5 (paragraph/list rhythm), since those gaps are defined as a fraction of it, not as fixed pixel values.
-- If available: Figma Auto Layout properties (see Figma Node Integration) and the `textLeadingTrim` state of any text layers inside the frame.
+- If available: Figma Auto Layout properties (see Figma Node Integration) and the `leadingTrim` state of any text layers inside the frame.
 
 ## Outputs
 
@@ -45,14 +45,42 @@ Compute vertical spacing (margin, padding, Auto Layout `gap`) as clean multiples
 - A note on any vertical-trim-driven adjustment (see Workflow step 3).
 - For paragraph/list flow: `paragraphSpacing`, list-to-paragraph gap, and list-item gap, each shown as both the `LH`-fraction formula and the resulting pixel value (see Workflow step 5).
 
+## Questions
+
+This skill is an audit, not an interview. Work in this order: read what the file or the input already says, report, then ask.
+
+- Ask only when a value can't be read and the answer would change the result. One question at a time.
+- Don't ask for anything the request already states or the file shows — say what you took and where it came from.
+- If the question can't be answered, state the assumption and carry on. Never stall the report on it.
+- Always ask before writing to a file or a Figma node.
+
+Questions this skill may need:
+
+- The grid base (4px or 8px), when the frame's existing values and spacing variables don't show one.
+
 ## Workflow
 
 1. **Snap every value to `grid-base`.** Reject or round any spacing value that isn't a clean multiple — flag existing off-grid values found in input CSS rather than silently leaving them.
 
 2. **Apply the proximity rule.** Spacing above a heading (separating it from the previous, unrelated block) should be noticeably larger — roughly 2–3× — than the spacing below it (to the body text it introduces). E.g. `margin-top: 48px` / `margin-bottom: 16px` on a heading, not symmetric values on both sides.
 
+2a. **Grouping check — internal ≤ external.** This is the Gestalt principle of proximity applied to spacing: elements placed close together are read as one group, elements spaced apart as separate ones, and proximity outweighs similarity of colour or shape. The working form of it: the space inside a group is never larger than the space around the group.
+
+   | Pair that is read together | Its gap must be smaller than |
+   |---|---|
+   | Title and its description | the gap to the next title–description pair, and the container's padding |
+   | Label and its field | the gap to the next label–field pair |
+   | Field and its helper or error text | the gap between label and field |
+   | Items of one list | the gap between the list and the surrounding blocks |
+   | Icon and its label | the gap to the next icon–label pair |
+   | Heading and the text it introduces | the gap between that heading and the text above it |
+
+   - Walk the frame from the inside out and compare each gap with the one a level up. Flag a pair whose inner gap is larger than the outer one — the grouping reads reversed. Flag equal gaps where two levels should differ — the grouping is ambiguous.
+   - Report which elements end up reading as one group at the current values, so the finding is about meaning, not numbers.
+   - The sources give the principle, not a ratio. The "2–3×" in step 2 is this skill's working value for headings; don't present it as a published rule.
+
 3. **Vertical-trim correction (critical when text is involved):**
-   - If the text layers in this spacing context have vertical-trim **off** (default), the visually perceived gap is *smaller* than the set `gap`/`margin` value, because the font's built-in leading eats into it — e.g. a set `gap: 16px` optically reads as ~11px. Either compensate by increasing the set value, or (preferred) recommend turning vertical-trim on for those text layers so the set value and the optical value match exactly.
+   - If the text layers in this spacing context have vertical-trim **off** (default), the visually perceived gap can be smaller than the set `gap`/`margin` value because the font's built-in leading sits inside the text box. Do not invent a universal pixel correction: the difference depends on the font metrics, line-height, and adjacent glyphs. Either measure the rendered distance or recommend turning vertical-trim on so the spacing value maps to the trimmed text bounds.
    - If vertical-trim is **on**, the set spacing value is the true optical distance from baseline/cap-height to the next element — no compensation needed; this is the state to prefer for new work.
    - Always state which assumption is in effect — don't emit a spacing recommendation without saying whether it assumes trim on or off, since the correct pixel value differs between the two.
 
@@ -72,7 +100,7 @@ Compute vertical spacing (margin, padding, Auto Layout `gap`) as clean multiples
    - This step depends on `text-typesetting`'s `line-height` output — if `base-line-height` isn't given, ask for it or compute it via that skill first rather than guessing a round number.
 
 6. **Figma margin-collapse guard (a real Figma-specific gotcha, not a CSS concept):** Figma's `TextNode.paragraphSpacing` only adds space *below* a paragraph, not above the next one — there's no browser-style margin-collapse behavior reconciling two adjacent blocks' spacing. If a heading node (H2, say) directly follows a paragraph node, the paragraph's `paragraphSpacing` alone is usually too small a gap above a heading (it was sized for paragraph-to-paragraph rhythm, not paragraph-to-heading), and the heading will visually "stick" to the text above it.
-   - Fix: don't rely on the paragraph's trailing `paragraphSpacing` for this transition. Explicitly override the space above the heading — either via the parent Auto Layout frame's `itemSpacing` for that specific gap (if using per-item spacing / `itemReverseZIndex` gap overrides), or by giving the heading node its own leading space, sized to:
+   - Fix: don't rely on the paragraph's trailing `paragraphSpacing` for this transition. An Auto Layout frame has one `itemSpacing` for all of its children — there is no per-item gap override — so give the heading its own space above it: wrap the heading together with the body it introduces in a nested Auto Layout frame and set the larger gap on the parent, or set `paddingTop` on a frame that wraps the heading. Size that space to:
      ```
      Margin_top_heading = 1.5 × LH_body
      ```
@@ -83,15 +111,17 @@ Compute vertical spacing (margin, padding, Auto Layout `gap`) as clean multiples
 When running with Figma access, work against the selected `FrameNode`:
 
 - **Read:** `layoutMode` (must be `VERTICAL` or `HORIZONTAL` — if `NONE`, this isn't an Auto Layout frame and gap/padding don't apply the same way; report that first), `itemSpacing` (= `gap`), `paddingTop`/`paddingBottom`/`paddingLeft`/`paddingRight`.
-- **Also read `textLeadingTrim`** on any child `TextNode`s — this is the input to Workflow step 3. Don't compute a spacing verdict for a frame containing text without checking it.
-- **Paragraph/list frames:** read `TextNode.paragraphSpacing` and `TextNode.paragraphIndent` directly when the node is a body-copy text node with multiple paragraphs — Figma exposes these as native text-node properties, not just Auto Layout `itemSpacing`, so check which one the content actually uses before recommending a fix.
+- **Also read `leadingTrim`** on any child `TextNode`s — this is the input to Workflow step 3. Don't compute a spacing verdict for a frame containing text without checking it.
+- **Paragraph/list frames:** read `TextNode.paragraphSpacing` and `TextNode.paragraphIndent` directly when the node is a body-copy text node with multiple paragraphs — Figma exposes these as native text-node properties, not just Auto Layout `itemSpacing`, so check which one the content actually uses before recommending a fix. For a native list inside one text node, the gap between items is `TextNode.listSpacing` (Workflow step 5, `List_Item_To_Item_Gap`), not `itemSpacing`.
 - **Verdict:** if `itemSpacing`/padding aren't multiples of the confirmed `grid-base`, flag each offending value with the nearest clean multiple.
-- **Alert pattern for missing trim:** "Wykryłem brak vertical trimu w warstwach tekstowych w tej ramce. Przy `gap: {itemSpacing}px` rzeczywisty odstęp optyczny to ok. {estimate}px. Rekomenduję włączenie Vertical Trim: Cap height dla precyzyjnej siatki {grid-base}px." — give this as the concrete alert text when trim is off and the frame is otherwise on-grid.
-- **Action back to Figma:** set `itemSpacing`/padding, or `paragraphSpacing`/`paragraphIndent` for text-node-native rhythm, or `textLeadingTrim` on child text nodes, only on explicit request — never silently.
+- **Bound values:** if `itemSpacing` or a padding is bound to a variable (`frameNode.boundVariables`), name the variable and the nearest on-grid variable in the report. Don't replace a binding with a raw number.
+- **Alert pattern for missing trim:** "Vertical trim is off for text in this frame. The configured `gap: {itemSpacing}px` includes the font's internal leading, so the optical gap may be smaller. I can't derive an exact correction without measuring the rendered font metrics. For a precise {grid-base}px grid, enable Vertical Trim: Cap height or measure the visible distance." — use this concrete alert when trim is off and the frame is otherwise on-grid.
+- **Action back to Figma:** set `itemSpacing`/padding, or `paragraphSpacing`/`paragraphIndent`/`listSpacing` for text-node-native rhythm, or `leadingTrim` (`"CAP_HEIGHT"` / `"NONE"`) on child text nodes, only on explicit request — never silently.
 
 ## Quality Checklist
 
 - [ ] Every emitted spacing value is a stated multiple of `grid-base`.
+- [ ] Grouping check done from the inside out: no inner gap larger than the gap around its group; reversed and ambiguous groupings named.
 - [ ] Proximity rule applied asymmetrically around headings (top ≫ bottom), not symmetric padding by default.
 - [ ] Vertical-trim state checked for any text-containing frame before giving a final gap value; assumption stated explicitly if unknown.
 - [ ] Off-grid values found in existing input are flagged, not silently left or silently "fixed" without saying so.
@@ -105,7 +135,10 @@ When running with Figma access, work against the selected `FrameNode`:
 
 - Latin, M. (2017). *Better Web Typography for a Better Web*. — mathematical treatment of vertical rhythm and grid-base spacing.
 - Butterick, M. *Practical Typography*. — critique of rigid baseline-grid enforcement in favor of flexible, grid-base-multiple padding/gap.
+- Harley, A. (2020). *Proximity Principle in Visual Design*. Nielsen Norman Group — items close together are perceived as a group; proximity can overpower similarity of colour or shape; a section's text sits closer to its own heading than the preceding section's text does.
+- Romasheva (2023). *The rule of internal and external* — "internal ≤ external" as a special case of the law of proximity. Practitioner source.
+- Butterick, M. *Practical Typography*, "Headings" and "Space between paragraphs" — the best way to emphasise a heading is space above and below; paragraph space of 50–100% of the body text size.
 - Wertheimer, M. (1923). Gestalt principle of proximity — elements spaced closer together are perceived as grouped/related; the basis for list items sitting tighter than paragraphs.
 - Bringhurst, R. (2012). *The Elements of Typographic Style* (4th ed.). Hartley & Marks — paragraph spacing and first-line indent as alternative (not combined) conventions, both derived from line-height rather than arbitrary pixel values.
-- Figma Plugin API Docs: `FrameNode.layoutMode`, `FrameNode.itemSpacing`, `FrameNode.paddingTop/Right/Bottom/Left`, `TextNode.textLeadingTrim`, `TextNode.paragraphSpacing`, `TextNode.paragraphIndent`.
+- Figma Plugin API Docs: `FrameNode.layoutMode`, `FrameNode.itemSpacing`, `FrameNode.paddingTop/Right/Bottom/Left`, `TextNode.leadingTrim`, `TextNode.paragraphSpacing`, `TextNode.paragraphIndent`, `TextNode.listSpacing`.
 - Related skills: [`text-typesetting`](../text-typesetting/README.md) (vertical-trim and line-height source of truth), [`line-length-optimizer`](../line-length-optimizer/README.md) (horizontal measure — different axis, same text blocks).

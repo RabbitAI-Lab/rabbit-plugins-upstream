@@ -1,7 +1,7 @@
 ---
 name: image-editor
 description: "Image Editor: Edit images: blur, crop, resize, rotate, invert colors. Use when an agent needs image editor, generating branded social media graphics by compositing logos onto product images, automating thumbnail creation by resizing and cropping uploaded images to standard dimensions, adding watermarks or copyright text overlays to protect visual content, creating placeholder images with custom colors and dimensions for ui mockups, blur, image base64, image url through AgentPMT-hosted remote."
-version: 1.0.0
+version: 1.0.1
 homepage: https://www.agentpmt.com/marketplace/image-editor
 compatibility: "Agent instructions for AgentPMT-hosted remote tool calls. Follow this skill body for supported account, wallet, and setup routes. No local command runtime is declared."
 metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/marketplace/image-editor"}}
@@ -9,7 +9,7 @@ metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/
 # Image Editor
 
 ## Freshness
-Last updated: `2026-06-23`.
+Last updated: `2026-10-10`.
 
 If the current date is more than 7 days after the last updated date, reinstall this skill from skills.sh or ClawHub before relying on endpoints, schemas, setup steps, or examples.
 
@@ -434,7 +434,7 @@ x402 availability: not enabled for this product.
 - `create` (action slug: `create`): Create a new blank image canvas with custom dimensions and background color. Price: `10` credits. Parameters: `filename`, `output_format`, `params`, `return_base64`, `store_file`.
 - `crop` (action slug: `crop`): Crop an image to a rectangular region defined by [left, top, right, bottom] coordinates. Price: `10` credits. Parameters: `file_id`, `filename`, `image_base64`, `image_url`, `output_format`, `params`, `return_base64`, `store_file`.
 - `draw` (action slug: `draw`): Draw shapes (line, rectangle, or ellipse) onto an image. Price: `10` credits. Parameters: `file_id`, `filename`, `image_base64`, `image_url`, `output_format`, `params`, `return_base64`, `store_file`.
-- `info` (action slug: `info`): Get image dimensions and mode without modifying the image. Price: `10` credits. Parameters: `file_id`, `image_base64`, `image_url`.
+- `info` (action slug: `info`): Get image dimensions and mode without modifying the image. Price: `3` credits. Parameters: `file_id`, `image_base64`, `image_url`.
 - `invert` (action slug: `invert`): Invert all colors in an image, producing a photographic negative effect. Each RGB pixel value is replaced with 255 minus its original value. Alpha transparency is preserved. Price: `10` credits. Parameters: `file_id`, `filename`, `image_base64`, `image_url`, `output_format`, `return_base64`, `store_file`.
 - `multi_step` (action slug: `multi-step`): Chain multiple image operations together in a single request. Each operation is applied sequentially to the image. Price: `10` credits. Parameters: `file_id`, `filename`, `image_base64`, `image_url`, `operations`, `output_format`, `return_base64`, `store_file`.
 - `resize` (action slug: `resize`): Resize an image to specific dimensions or by a scale factor. Price: `10` credits. Parameters: `file_id`, `filename`, `image_base64`, `image_url`, `output_format`, `params`, `return_base64`, `store_file`.

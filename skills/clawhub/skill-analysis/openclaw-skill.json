@@ -1,0 +1,24 @@
+{
+  "name": "skill-analysis",
+  "version": "3.3.7",
+  "description": "安全审计专家：本地静态 + 动态沙箱审计 Skill/供应链风险，零外联、零第三方依赖。\n\nEN: Run a security check before installing any Skill -- 100% local, zero network calls, zero third-party dependencies; your code never leaves your machine. (1) One-shot verdict: BLOCK / NEED_REVIEW / PASS with a 0-100 risk score, A-F grading and publishing advice. (2) Always-on guard: auto-scan at session start, silent health checks for newly installed Skills. (3) Deep adversarial detection: multi-layer de-obfuscation, taint data-flow, Unicode smuggled-instruction decoding, deserialization RCE, sandboxed dynamic forensics. (4) Intelligence-driven rules: ransomware, prompt injection, MCP tool poisoning, supply-chain poisoning, financial-fraud inducement, identity self-rewrite persistence. (5) Engineering: cross-platform batch scanning, CI gate, SARIF/SBOM/JSON export. (6) Self-verifiable trust: no auto-update, publisher signature anchor + SHA-256 + one-command signature verification + independent re-validation.",
+  "intents": [
+    "对指定的 Skill 目录做静态代码/文档/配置审计",
+    "对可疑 Skill 在隔离子进程中做动态沙箱行为取证（只读取证，阻断网络/删除/子进程逃逸）",
+    "基于规则包与已知恶意指纹库判定风险等级并生成报告",
+    "本机安装/更新本工具自身（需用户显式确认 + 哈希校验）"
+  ],
+  "permissions": {
+    "filesystem": {
+      "read": "仅读取被审 Skill 目录与工具自身安装目录",
+      "write": "仅写入本机备份/安装路径（更新流程）、隔离沙箱临时目录（执行后清理）",
+      "never": "不修改、不删除被审 Skill 以外的任何用户文件"
+    },
+    "network": "默认不联网；动态沙箱强制阻断一切出站/入站连接",
+    "subprocess": "仅以 -I 隔离模式启动沙箱子进程做行为取证，不执行被审 Skill 的任意命令",
+    "env": "仅读取本工具自身所需的环境变量（如 SKAUDIT_ROOT）做路径定位",
+    "data_exfil": "none（工具不向外传输任何用户数据；审计结果仅在本地输出）"
+  },
+  "trust_model": "纯本地、零外联、零第三方依赖；引擎以 base64 文本化分发，发布者 SHA-256 签名锚可核验。",
+  "self_integrity": "scripts/ 与 0_engine_b64.txt 的 SHA-256 记录于 rules/engine_hashes.json 与 publisher-signature.json，被篡改即判 P0/BLOCK。"
+}

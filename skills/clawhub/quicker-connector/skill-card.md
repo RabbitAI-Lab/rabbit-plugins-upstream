@@ -1,44 +1,62 @@
-## Description: <br>
-Connects an agent to the Windows Quicker automation tool so it can read, search, match, and execute Quicker actions from CSV or SQLite data sources. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an AI assistant to Quicker to find and run local actions, inspect CSV or database action lists, and manage exported Quicker settings.
 
-## Publisher: <br>
-[awamwang](https://clawhub.ai/user/awamwang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[awamwang](https://clawhub.ai/user/awamwang)
 
-## Use Case: <br>
-Developers and automation users use this skill to let an agent find, summarize, and invoke local Quicker workflows on Windows. It is intended for workflows where the user has configured Quicker action data sources and wants natural-language matching before execution. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can invoke local or remote Quicker actions from an agent workflow. <br>
-Mitigation: Require explicit user confirmation before action execution, especially when a match is ambiguous or below the configured confidence threshold. <br>
-Risk: Configuration may enable remote Quicker execution or expose sensitive local paths. <br>
-Mitigation: Avoid configuring push_user or push_code unless remote execution is intentionally required, and protect config.json as a sensitive local configuration file. <br>
-Risk: The skill can read configured action databases or CSV files and export action data. <br>
-Mitigation: Limit configured paths to the intended Quicker data sources and review export destinations before writing files. <br>
+## Use Case:
 
+Quicker users and developers use this skill to search and execute Windows automations, export action lists and icons, and inspect or edit backed-up Quicker configuration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/awamwang/quicker-connector) <br>
-- [Quicker website](https://getquicker.net/) <br>
-- [OpenClaw documentation](https://docs.openclaw.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and plain text with Python and shell command examples, plus JSON for exported action lists.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read configured CSV or SQLite action data, write config or exported JSON files, and invoke QuickerStarter.exe on Windows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: SKILL.md frontmatter, package.json, changelog, and server release metadata) <br>
+Risk: Local Quicker actions can execute commands or change the user's environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit confirmation before execution and review third-party actions before importing or running them.
+
+Risk: Maintenance features can modify backed-up Quicker settings and exports.
+
+Mitigation: Confirm intended changes and keep a backup before editing configuration.
+
+Risk: Icon retrieval may download images from remote URLs.
+
+Mitigation: Disable or restrict icon URL downloads on restricted networks.
+
+Risk: Stored Quicker push credentials may expose access if mishandled.
+
+Mitigation: Avoid storing push credentials unless needed.
+
+## Reference(s):
+
+- [Quicker documentation: basic tools settings](https://getquicker.net/KC/Manual/Doc/settings-BasicToolsSettingPage)
+- [OpenClaw documentation](https://docs.openclaw.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance, Files]
+
+**Output Format:** [Markdown guidance and commands; JSON, CSV, XLSX, or PNG exports when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Windows and a local Quicker installation for action execution.]
+
+## Skill Version(s):
+
+1.5.0 (source: frontmatter, release metadata, CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

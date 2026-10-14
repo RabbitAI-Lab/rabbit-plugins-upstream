@@ -1,40 +1,57 @@
-## Description: <br>
-12306-specific knowledge for booking train tickets via the Android app, including UC WebView virtual list behavior, a proven booking flow, and common automation pitfalls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through booking train tickets in the 12306 Android app using USB ADB and screen-reading workflows.
 
-## Publisher: <br>
-[openlittlebear](https://clawhub.ai/user/openlittlebear) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[openlittlebear](https://clawhub.ai/user/openlittlebear)
 
-## Use Case: <br>
-Developers and automation operators use this skill to guide Android-based 12306 train ticket booking through ADB or uiautomator2, including train search, booking-button selection, passenger selection, order submission, and manual handoff for payment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control a real Android phone and submit ticket orders. <br>
-Mitigation: Use a test or dedicated Android device and account where possible, and require the user to confirm every booking step before order submission. <br>
-Risk: Screenshot and OCR fallback can capture payment details, messages, one-time codes, or other private data. <br>
-Mitigation: Avoid sensitive screens when using screenshot or OCR fallback, and delete local /tmp screenshots and on-device temporary files after use. <br>
+## Use Case:
 
+Agents and their users can navigate the 12306 Android app to find trains, select passengers, and prepare or submit a ticket order after the user confirms the itinerary. The user logs in and completes payment on the phone.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/openlittlebear/12306-android-adb) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Android UI automation steps, ADB commands, uiautomator2 snippets, and manual payment handoff guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+Risk: Access to a logged-in 12306 session gives the agent control of the phone app.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only for an explicit booking request; keep login and device access under the user's control.
+
+Risk: The agent can submit an order with the wrong train, date, route, seat, price, or passenger.
+
+Mitigation: Show the complete itinerary and passenger to the user, and wait for confirmation before submitting; leave payment to the user.
+
+Risk: Screenshots, UI dumps, or clipboard contents may expose personal information or secrets.
+
+Mitigation: Do not paste secrets or store captures in shared locations; keep captures private and remove them when no longer needed.
+
+## Reference(s):
+
+- [12306 Android Adb on ClawHub](https://clawhub.ai/openlittlebear/skills/12306-android-adb)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with shell and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance for confirming an order before submission; payment remains manual.]
+
+## Skill Version(s):
+
+2.2.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

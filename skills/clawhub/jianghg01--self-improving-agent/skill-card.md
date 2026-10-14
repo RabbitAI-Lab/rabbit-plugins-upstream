@@ -1,42 +1,59 @@
-## Description: <br>
-Self-Improving Agent gives agents a three-layer memory framework for session context, task digests, long-term lessons, failure review, memory compression, and reusable sub-skill extraction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Self-Improving Agent gives agents a three-level memory framework for session context, task digests, long-term lessons, failure review, memory compression, and reusable sub-skill extraction.
 
-## Publisher: <br>
-[jianghg01](https://clawhub.ai/user/jianghg01) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jianghg01](https://clawhub.ai/user/jianghg01)
 
-## Use Case: <br>
-Developers and agent builders use this skill to add structured memory, failure review, historical lesson retrieval, and workflow-to-skill extraction behavior to a general-purpose agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent memory can store profile-like observations or sensitive lessons and re-inject them into future sessions. <br>
-Mitigation: Decide where memory files are stored, require explicit consent for L2 and L3 writes, and review what is injected into future sessions. <br>
-Risk: Skill-changing behavior can make durable changes to the agent's future behavior. <br>
-Mitigation: Avoid granting skill-management or broad file-write access unless durable behavior changes are intended and reviewed. <br>
+## Use Case:
 
+Developers and agent operators use this skill to add memory, failure-review workflows, and reusable skill extraction to general-purpose agents that support session context and optional persistent storage.
 
-## Reference(s): <br>
-- [Memory Schema](memory-schema.md) <br>
-- [Review Templates](review-templates.md) <br>
-- [Skill Extraction Protocol](skill-extraction.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Code] <br>
-**Output Format:** [Markdown instructions and templates with optional JSON memory exports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or create persistent memory entries and skill drafts when the host agent provides storage or skill-management tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: The skill can broadly store and reuse long-term user history without enough consent or scoping controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval for L2 and L3 writes, keep memories scoped to a user or project, and exclude secrets and sensitive personal data.
+
+Risk: Global automatic memory injection can reintroduce stale, irrelevant, or sensitive context into later tasks.
+
+Mitigation: Disable global automatic memory injection by default and review retrieved memories before applying them.
+
+Risk: Automatically generated or updated skills can preserve incorrect guidance or unsafe workflows.
+
+Mitigation: Review and scan generated or updated skills before registration or deployment.
+
+## Reference(s):
+
+- [Memory Schema](artifact/memory-schema.md)
+- [Review Templates](artifact/review-templates.md)
+- [Skill Extraction Protocol](artifact/skill-extraction.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with structured memory templates, optional JSON memory exports, and generated skill drafts.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May request persistent memory writes and skill registration when supported; memory contents should exclude secrets and sensitive personal data.]
+
+## Skill Version(s):
+
+1.0.0 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
