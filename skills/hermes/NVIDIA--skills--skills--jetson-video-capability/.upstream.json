@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-video-capability",
+  "identifier": "NVIDIA/skills/skills/jetson-video-capability",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-video-capability",
+  "branch": "main",
+  "pushedAt": "2026-10-14T01:22:12Z",
+  "contentHash": "8a75255f3781e1b0d2f7f1e77d90555b9bd9f4b68bd45a939b0dabfd903b90e8",
+  "fetchedAt": "2026-10-14T12:55:45.192Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-nv-tesseract-ad-diffusion",
+  "identifier": "NVIDIA/skills/skills/tao-finetune-nv-tesseract-ad-diffusion",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-finetune-nv-tesseract-ad-diffusion",
+  "branch": "main",
+  "pushedAt": "2026-10-14T01:22:12Z",
+  "contentHash": "2c8a1ec6b13f1757a7d56ff1096970f24effdc44121e1b70d0d1aa23847e2cc9",
+  "fetchedAt": "2026-10-14T12:55:45.543Z"
+}
