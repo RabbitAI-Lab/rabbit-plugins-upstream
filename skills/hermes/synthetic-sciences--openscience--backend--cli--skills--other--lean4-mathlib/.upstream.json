@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/lean4-mathlib",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/lean4-mathlib",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/lean4-mathlib",
+  "branch": "main",
+  "pushedAt": "2026-10-13T03:08:20Z",
+  "contentHash": "98d501078cad60bd3182f405e61277d378199bcffa482c061a596084198d498b",
+  "fetchedAt": "2026-10-14T12:55:46.903Z"
+}

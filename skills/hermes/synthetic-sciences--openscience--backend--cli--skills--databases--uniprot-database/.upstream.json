@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/uniprot-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/uniprot-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/uniprot-database",
+  "branch": "main",
+  "pushedAt": "2026-10-13T03:08:20Z",
+  "contentHash": "e3f69ff2f6d29852d97b9363d43befa12a81c9214ce254dbb80d3cc0b82b16c2",
+  "fetchedAt": "2026-10-14T12:55:47.032Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/amc-run-rtsp-calibration",
+  "identifier": "NVIDIA/skills/skills/amc-run-rtsp-calibration",
+  "repo": "NVIDIA/skills",
+  "path": "skills/amc-run-rtsp-calibration",
+  "branch": "main",
+  "pushedAt": "2026-10-14T01:22:12Z",
+  "contentHash": "9f9aee47fb0a90d2021318dfbf34e6edc513d15c89ffc44845ae2651472b96e1",
+  "fetchedAt": "2026-10-14T12:55:44.948Z"
+}
