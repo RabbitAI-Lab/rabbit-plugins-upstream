@@ -1,49 +1,68 @@
-## Description: <br>
-全网招中标分析助手 - 乙方宝。作为全网招中标分析助手，当用户需要查询招投标公告、分析中标结果或提炼企业画像时必须调用此技能。能够处理类似乙方宝平台的常见查询需求，重点输出结构化的标讯摘要和竞对关系分析，帮助用户简化投标前期的调研工作流。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps bidders search tender and award notices, assess competitors and suppliers, and summarize pricing and market trends.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and business development teams use this skill to search tender notices, analyze winning bids, build company profiles, and identify competitors, buyers, suppliers, partners, contacts, pricing patterns, and renewal opportunities from Zhiliaobiaoxun/Yifangbao data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a Zhiliaobiaoxun/Yifangbao API key. <br>
-Mitigation: Use a dedicated ZLBX_API_KEY with appropriate account scope and avoid sharing it in prompts, logs, or public files. <br>
-Risk: Queries may disclose procurement strategy, target company lists, or other sensitive business interests to the provider. <br>
-Mitigation: Submit only queries that are acceptable to share with the provider and avoid confidential strategy details when they are not required. <br>
-Risk: Returned contact names or phone data may be sensitive. <br>
-Mitigation: Use contact data only for legitimate authorized business purposes and handle it according to applicable internal and legal requirements. <br>
-Risk: Company-name matching can combine headquarters and subsidiaries, which may broaden the analysis scope. <br>
-Mitigation: Specify exact legal entities when scope matters and review matched company lists before relying on the analysis. <br>
+## Use Case:
 
+Bidders and procurement analysts use this skill to find Chinese tender opportunities, review company bidding records, compare competitors, and assess historical award prices.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/liu-jiapeng/bidding-yifangbao) <br>
-- [Zhiliaobiaoxun API Access](https://ai.zhiliaobiaoxun.com/?ch=s24) <br>
-- [Zhiliaobiaoxun API Endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown analysis with structured summaries and JSON API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and may include tender, company, contact, price, and market-analysis data returned by the provider.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence) <br>
+Risk: Bid queries, company and contact lookups, and account information are sent to the Zhiliaobiaoxun service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the information to be shared before querying, and avoid submitting sensitive data without authorization.
+
+Risk: Optional auto-registration can send a hashed device identifier and save an API key locally.
+
+Mitigation: Prefer a manually configured API key; use auto-registration only after informed consent and protect any stored key.
+
+Risk: Some credentialed request and acknowledgement directions are embedded in source comments.
+
+Mitigation: Review the skill before installation and confirm credentialed actions and user-visible notices before enabling them.
+
+Risk: Company registry lookups can consume paid credits.
+
+Mitigation: Query only requested records and pages, and check the applicable credit cost before paid lookups.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/liu-jiapeng/skills/bidding-yifangbao)
+- [Bid search API reference](references/api-search.md)
+- [Company analysis API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Company registry API reference](references/api-registry.md)
+- [Account API reference](references/api-account.md)
+- [Optional registration flow](references/auto-register.md)
+- [Skill setup documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown tables and concise narrative findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on available service records; trial-account contact numbers may be masked.]
+
+## Skill Version(s):
+
+2.0.6 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

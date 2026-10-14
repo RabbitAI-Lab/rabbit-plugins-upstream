@@ -10,16 +10,17 @@
 
 ## Security Notes
 
-- Start with read-only calls first (`wallets`, `wallet`, `balance`, `supported-tokens`), preferably on testnets.
-- Write actions (`create`, `import`, `transfer`, `swap`, `approve`, `polymarket-*`) are high-risk and should use explicit confirmation in the CLI (`--yes`).
-- `POST /api/agent/wallets/import` sends a private key to OpenclawCash for encrypted storage and managed execution.
-- Wallet import and wallet creation are disabled unless the API key has permission enabled in dashboard (`allowWalletImport`, `allowWalletCreation`).
-- API keys may also be scoped by chain (`all`/`evm`/`solana`) and by wallet (`all wallets` or a single wallet).
+- Start with read-only calls first (`wallets`, `wallet`, `policy`, `balance`, `supported-tokens`), preferably on testnets.
+- Write actions (`create`, `transfer`, `swap`, `approve`, `polymarket-*`) are high-risk and should use explicit confirmation in the CLI (`--yes`).
+- Wallet creation is disabled unless the API key has `allowWalletCreation` enabled in the dashboard. Importing an existing wallet is a dashboard-only, human action.
+- API keys may also be scoped by chain (`all`/`evm`/`solana`) and by wallet (`all` or a specific set of selected wallets).
+- `AGENTWALLETAPI_URL` may only be `https://openclawcash.com` or an `https://<subdomain>.openclawcash.com` host. The bundled CLI script validates this before attaching `X-Agent-Key` to any request and refuses to run otherwise, so the key cannot be redirected off-domain by an env var override.
 
 ## API Surfaces
 
 - **Agent API (`/api/agent/*`)**: authenticate with `X-Agent-Key`.
 - **Public install metadata API (`/api/public/agentwalletapi/skill/latest`)**: no auth required.
+- **Public token list API (`/api/public/tokenlist`)**: no auth required. Token Lists v1 document covering every supported chain.
 
 ## Skill Install Metadata (Public, No Auth)
 
@@ -31,24 +32,53 @@ Response:
 ```json
 {
   "skill": "agentwalletapi",
-  "version": "1.20.0",
+  "version": "latest",
   "publishedAssets": {
     "skillMdUrl": "https://openclawcash.com/agentwalletapi/SKILL.md",
-    "latestZipUrl": "https://openclawcash.com/agentwalletapi/agentwalletapi-skill.zip",
-    "versionedZipUrl": "https://openclawcash.com/agentwalletapi/agentwalletapi-skill-1.20.0.zip",
+    "githubRepoUrl": "https://github.com/openclawcash/agentwalletapi",
     "setupScriptUrl": "https://openclawcash.com/agentwalletapi/scripts/setup.sh",
     "cliScriptUrl": "https://openclawcash.com/agentwalletapi/scripts/agentwalletapi.sh"
   },
   "installInstructions": {
     "targetDirectory": "<your-workspace>/skills/agentwalletapi",
     "steps": [
-      "Download https://openclawcash.com/agentwalletapi/agentwalletapi-skill.zip",
-      "Unzip the archive into <your-workspace>/skills/",
-      "Verify the final folder is exactly <your-workspace>/skills/agentwalletapi",
-      "Read <your-workspace>/skills/agentwalletapi/SKILL.md before running commands"
+      "Preferred: run `npx -y @openclawcash/mcp-server@0.1.27` if this client supports MCP servers (requires AGENTWALLETAPI_KEY in the environment); skip the remaining steps if so",
+      "Fallback only, when MCP is unavailable: git clone https://github.com/openclawcash/agentwalletapi <your-workspace>/skills/agentwalletapi",
+      "Read <your-workspace>/skills/agentwalletapi/SKILL.md before running any command from the cloned skill"
     ],
-    "agentPrompt": "Download https://openclawcash.com/agentwalletapi/agentwalletapi-skill.zip, unzip it into <your-workspace>/skills/, verify <your-workspace>/skills/agentwalletapi, then read <your-workspace>/skills/agentwalletapi/SKILL.md."
+    "agentPrompt": "Prefer MCP: if this client supports MCP servers, run \"npx -y @openclawcash/mcp-server@0.1.27\" (requires AGENTWALLETAPI_KEY in the environment) and stop there. Only if MCP is unavailable, git clone https://github.com/openclawcash/agentwalletapi into <your-workspace>/skills/agentwalletapi, then read <your-workspace>/skills/agentwalletapi/SKILL.md before running anything inside it."
   }
+}
+```
+
+## Public Token List (Public, No Auth)
+
+```
+GET /api/public/tokenlist
+GET /api/public/tokenlist?chainId=8453
+GET /api/public/tokenlist?extended=false
+```
+
+Token Lists v1 document (https://uniswap.org/tokenlist.schema.json). Covers every chain OpenClawCash supports across EVM and Solana.
+
+- **Default `?extended=true`**: curated OpenClawCash tokens merged with Uniswap default list (EVM) and Jupiter verified list (Solana). Curated entries win on (chainId, address) dedupe so logos and names are consistent. ~5000+ tokens.
+- **`?extended=false`**: curated only (~67 tokens). Zero external dependencies, smaller payload, longer cache.
+- **`?chainId=<num>`**: scope to one chain. EVM uses EIP-155 (1=Mainnet, 137=Polygon, 8453=Base, 11155111=Sepolia). Solana uses Solana Labs convention (101=mainnet).
+
+CORS-allowed for browser consumers. `Cache-Control: public, max-age=60` (extended) or `300` (curated).
+
+Response shape:
+```json
+{
+  "name": "OpenClawCash Tokens (extended via Uniswap + Jupiter)",
+  "timestamp": "2026-05-03T12:00:00.000Z",
+  "version": { "major": 1, "minor": 0, "patch": 0 },
+  "keywords": ["openclawcash", "managed-wallets", "agent-wallet", "extended", "uniswap", "jupiter"],
+  "tokens": [
+    { "chainId": 1, "address": "0xA0b8...eB48", "name": "USD Coin", "symbol": "USDC", "decimals": 6, "logoURI": "https://..." },
+    { "chainId": 8453, "address": "0x8335...2913", "name": "USD Coin", "symbol": "USDC", "decimals": 6, "logoURI": "https://..." },
+    { "chainId": 101, "address": "EPjFWdd5...zybapC8G4wEGGkZwyTDt1v", "name": "USD Coin", "symbol": "USDC", "decimals": 6, "logoURI": "https://..." }
+  ]
 }
 ```
 
@@ -72,19 +102,19 @@ X-Agent-Key: occ_your_api_key
 Request:
 ```json
 {
-  "userTag": "studio-agent"
+  "userTag": "studio"
 }
 ```
 
 Response:
 ```json
 {
-  "userTag": "studio-agent"
+  "userTag": "studio"
 }
 ```
 
 Notes:
-- Tag format: lowercase letters/numbers with `.`, `_`, `-`, length 3-64.
+- Tag format: lowercase letters/numbers with `.`, `_`, `-`, length 3-8.
 - `PUT` returns `409 user_tag_locked` if already set.
 
 ## List Wallets
@@ -171,6 +201,55 @@ Response:
 
 Note: Use `GET /api/agent/policies` or `GET /api/agent/policy` to retrieve wallet policies.
 
+## Rename Wallet
+
+```
+PATCH /api/agent/wallet
+Content-Type: application/json
+X-Agent-Key: occ_your_api_key
+```
+
+Request (the API accepts exactly one of `walletId`, `walletLabel` (its current label), or `walletAddress`; agents select by `walletId`, because rename is a write action and labels are user-controlled text):
+```json
+{ "walletId": "W123ABC", "label": "Trading Bot v2" }
+```
+
+Response:
+```json
+{
+  "id": "W123ABC",
+  "label": "Trading Bot v2",
+  "address": "0x14ae8d93...",
+  "network": "sepolia",
+  "chain": "evm"
+}
+```
+
+Notes:
+- `label`: 1-32 characters using letters, numbers, spaces, and `. _ - ( ) #`, starting with a letter or number. No emoji or other non-ASCII, no digits-only labels, no embedded addresses. Repeated spaces are collapsed. Must not match (case-insensitive) another live wallet's label (`409 wallet_label_taken`) or any of your wallet IDs (`400 invalid_wallet_label`). The same rules apply to create, import, and venue provisioning.
+- Metadata only: no funds move and no extra API key permission is required. The wallet must be within the key's wallet and chain scope.
+- Rate limited per API key (10 renames per 10 minutes by default), separately from create/import. Exceeding it returns `429 wallet_write_rate_limited` with `Retry-After`.
+- Errors: `400 validation_error`, `400 invalid_wallet_label`, `401` (missing/invalid key), `404 wallet_not_found`, `409 wallet_label_taken`, `409 wallet_label_ambiguous`, `429 wallet_write_rate_limited`.
+
+### Duplicate labels on older accounts
+
+Some accounts created before label rules existed have wallets that share a label. Selecting one of them with `walletLabel` on any endpoint returns:
+
+```json
+{
+  "code": "wallet_label_ambiguous",
+  "message": "More than one wallet on this account uses this label, so no wallet was selected.",
+  "retryable": false,
+  "details": {
+    "matchingWalletIds": ["W123ABC", "W456DEF"],
+    "renameEndpoint": "PATCH /api/agent/wallet",
+    "renameMcpTool": "wallet_rename"
+  }
+}
+```
+
+Recover by retrying with `walletId`, then asking your human which wallet should get a new unique label and renaming it here. `details.matchingWalletIds` only lists wallets your API key is allowed to use.
+
 ## Create Wallet (Agent API)
 
 ```
@@ -208,39 +287,11 @@ Notes:
 - Create requires `exportPassphrase` (minimum 12 characters).
 - Create also requires `exportPassphraseStorageType` and `exportPassphraseStorageRef`.
 - Agent must persist passphrase first, then send the storage fields plus `confirmExportPassphraseSaved: true`.
+- Never write the passphrase value into chat, a tool argument, or a command line: let the shell expand the env var named in `exportPassphraseStorageRef` into the request body.
 
-## Import Wallet (Agent API)
+## Import Wallet
 
-```
-POST /api/agent/wallets/import
-Content-Type: application/json
-X-Agent-Key: occ_your_api_key
-```
-
-Request:
-```json
-{
-  "label": "Treasury Imported",
-  "network": "solana-mainnet",
-  "privateKey": "..."
-}
-```
-
-Response:
-```json
-{
-  "id": 13,
-  "label": "Treasury Imported",
-  "address": "GmjrX8...",
-  "network": "solana-mainnet",
-  "chain": "solana"
-}
-```
-
-Notes:
-- API key must have wallet import enabled (`allowWalletImport`).
-- Supported networks: `mainnet`, `polygon-mainnet`, `solana-mainnet`.
-- Endpoint is rate-limited per API key; on limit exceeded returns `429` + `Retry-After`.
+Importing an existing wallet by its private key is done by the human in the OpenClawCash dashboard ("Import Existing Wallet"), never by an agent: a private key in a conversation, tool argument or command reaches the model provider and the transcript. Neither the bundled CLI, the MCP server nor the Hermes plugin can import.
 
 ## Get Policies
 
@@ -268,7 +319,6 @@ Response:
         "type": "daily_spending_limit",
         "config": { "amount": "100" },
         "createdAt": "2026-01-15T10:00:00.000Z",
-        "enabled": true,
         "usage": {
           "spent": "45.00",
           "limit": "100.00",
@@ -284,8 +334,10 @@ Response:
 
 Notes:
 - Returns hydrated policy data including current usage for spending limit policies.
-- Supports `daily_spending_limit`, `weekly_spending_limit`, and `monthly_spending_limit` types.
+- `usage` is populated for `daily_spending_limit`, `weekly_spending_limit`, and `monthly_spending_limit` types; other policy types return without a `usage` field.
 - Usage data shows `spent`, `limit`, `symbol`, `decimals`, and `window` (24h/week/month).
+- Full policy `type` list: `whitelist`, `spending_limit`, `daily_spending_limit`, `weekly_spending_limit`, `monthly_spending_limit`, `disallow_live_transactions`, `wallet_purpose`, `checkout_access`, `venue_access`, `max_open_escrows`, `trusted_counterparty_tags`.
+- A blocked write returns `403 policy_violation` with a `policyType` field naming which policy blocked the request.
 
 ## Get Policy
 
@@ -318,7 +370,6 @@ Response:
       "type": "daily_spending_limit",
       "config": { "amount": "100" },
       "createdAt": "2026-01-15T10:00:00.000Z",
-      "enabled": true,
       "usage": {
         "spent": "45.00",
         "limit": "100.00",
@@ -333,7 +384,6 @@ Response:
 
 Notes:
 - Requires exactly one wallet selector: `walletId`, `walletLabel`, or `walletAddress`.
-- Optional chain guard: `?chain=evm` or `?chain=solana`.
 
 ## Wallet Transaction History
 
@@ -357,6 +407,17 @@ Optional:
 ```
 GET /api/agent/transactions?walletId=2&chain=evm
 ```
+
+EVM bucket model: scope to a single EVM chain or merge across every EVM chain in the wallet's bucket:
+```
+GET /api/agent/transactions?walletId=2&network=base-mainnet
+GET /api/agent/transactions?walletId=2&network=all
+```
+- `network=<id>`: returns activity on that specific EVM chain (mainnet, polygon-mainnet, base-mainnet, sepolia).
+- `network=all`: merges activity across every supported EVM chain into one history.
+- Omitted: returns activity on the wallet's default chain.
+- Each row's `data.network` indicates which chain it ran on.
+- Solana wallets are pinned to their cluster; the field is rejected if it doesn't match.
 
 Response:
 ```json
@@ -388,8 +449,8 @@ X-Agent-Key: occ_your_api_key
 
 | Field | Type | Required | Description |
 |---|---|---|---|
-| walletId | number \| string | One of walletId/walletLabel/walletAddress | Wallet numeric ID or public wallet ID from list wallets |
-| walletLabel | string | One of walletId/walletLabel/walletAddress | Wallet name from dashboard (or use walletAddress as alternative selector where supported) |
+| walletId | number \| string | Yes (agents) | Wallet numeric ID or public wallet ID from list wallets. Agents select the sending wallet by `walletId` only |
+| walletLabel | string | No | Accepted by the API instead of `walletId`, but labels are user-controlled text: agents must not pick a sending wallet by label. The MCP `transfer_send` tool rejects it |
 | chain | string | No | Optional guard: `"evm"` or `"solana"` |
 | to | string | Yes | Recipient address (0x... for EVM, base58 for Solana) |
 | token | string | No | Token symbol or token address/mint. Defaults to chain native token (ETH/SOL) |
@@ -408,7 +469,7 @@ Send 0.01 ETH:
 
 Send 100 USDC by symbol:
 ```json
-{ "walletLabel": "Trading Bot", "to": "0xRecipient...", "token": "USDC", "amountDisplay": "100" }
+{ "walletId": 2, "to": "0xRecipient...", "token": "USDC", "amountDisplay": "100" }
 ```
 
 Send USDC by contract address + base units:
@@ -586,6 +647,14 @@ Solana (Jupiter) request example:
 }
 ```
 
+Errors:
+- `400 invalid_quote_request` (`retryable: false`) — unknown token, invalid address, `tokenIn` equal to `tokenOut`, non-positive or malformed `amountIn`, or an amount under the router minimum. The request must change before retrying.
+- `503 no_route_or_liquidity` (`retryable: true`) — no DEX route or not enough pool liquidity for this pair/amount. Transient: retry the same request after a short delay, or adjust the amount. Do **not** treat this as a permanently unsupported pair.
+- `503 upstream_rpc_unavailable` (`retryable: true`) — upstream RPC/DEX timed out, refused the connection, or rate-limited. Retry with backoff.
+- `500 quote_failed` (`retryable: true`) — unclassified. Retry once, then vary pair/amount.
+
+Error responses include `details.reason` with a fixed value (`invalid_input`, `route_or_liquidity`, `upstream_unavailable`, `unclassified_quote_error`). Raw upstream router/RPC text is never returned.
+
 ## Execute Swap (DEX)
 
 ```
@@ -646,6 +715,11 @@ Solana (Jupiter) example:
 }
 ```
 
+Errors:
+- `400 insufficient_token_balance` — wallet lacks `tokenIn` (payload shown above).
+- `400 invalid_swap_request` (`retryable: false`) — the swap parameters themselves are unusable (unknown token, invalid address, same token in and out, bad amount).
+- `500 swap_failed` (`retryable: true`) — temporary DEX execution or routing issue, **including a pair that cannot currently be routed or lacks liquidity**. Request a fresh quote, then retry with a lower amount or higher slippage.
+
 ## Checkout & Escrow (Agent API)
 
 All checkout endpoints require:
@@ -684,7 +758,7 @@ The `metadata` field on checkout requests supports structured client data with v
 Schema constraints:
 - **Keys**: Max 64 characters, alphanumeric with `.`, `_`, `:`, `-`, `/`, spaces
 - **Values**: Max 280 characters (512 bytes), max 3 levels nesting, max 20 keys per object
-- **Sensitive keys** are automatically stripped: `apikey`, `internal`, `debug`, `server`, keys containing `secret` or `password`
+- Metadata is stored and returned as provided — no key is filtered or stripped. Do not put API keys, secrets, passwords, or other sensitive values in metadata.
 
 Values are normalized (trimmed, Unicode NFKC normalized) before storage.
 
@@ -759,7 +833,20 @@ PATCH /api/agent/checkout/webhooks/:id
 DELETE /api/agent/checkout/webhooks/:id
 ```
 
-Subscribe and manage escrow event deliveries (`escrow.funded`, `escrow.released`, etc.).
+Subscribe and manage event deliveries. `eventTypes` accepts:
+
+- Escrow events: `escrow.accepted`, `escrow.funded`, `escrow.proof_submitted`, `escrow.disputed`, `escrow.cancelled`, `escrow.released`, `escrow.refunded`, `escrow.expired`, `escrow.failed`.
+- Wallet events (must be named, `*` does not include them): `wallet.transaction.confirmed`, sent when a transaction is recorded on one of your wallets. Payload `data`: `walletId`, `walletAddress`, `network`, `transactionId`, `type`, `status`, `direction` (`incoming` or `outgoing`), `hash`, `from`, `to`, `value`, `fee`, `platformFee` (`value` and the fees are strings in base units; `from` is the sending address when it is known). There is no failed wallet event: a transfer that fails is refused before it is recorded, so these events report what landed.
+
+Each delivery is a JSON `POST` with the body `{ eventId, eventType, createdAt, data }` and these headers:
+
+- `webhook-id`: the event id (also the idempotency key; de-duplicate on it).
+- `webhook-timestamp`: unix seconds. Reject anything older than 5 minutes.
+- `webhook-signature`: `v1,<base64>`, several space-separated signatures during a secret rotation. The signature is HMAC-SHA256 over `{webhook-id}.{webhook-timestamp}.{raw body}` with the key `base64decode(secret without the whsec_ prefix)`.
+- `x-occ-event-id`, `x-occ-event-type` and the older `x-occ-signature: sha256=<hex HMAC of the body>` are still sent.
+
+Respond with any `2xx` within 10 seconds. Anything else is retried with growing delays (30s, 2m, 8m, 32m, about 2h, 8.5h, 12h, up to 8 attempts, roughly a day); a retry leaves as soon as a delivery pass runs, and publishing a new event starts one straight away. A `410 Gone` response disables the endpoint instead of retrying, and closes the deliveries already queued for it. Targets must be public `https` URLs (private addresses and redirects are refused). The `secret` is returned once, at creation.
+
 
 ## Polymarket Venue Setup
 
@@ -1162,20 +1249,22 @@ Notes:
 
 - **mainnet**: Ethereum Mainnet (real ETH, all tokens)
 - **polygon-mainnet**: Polygon PoS Mainnet (real POL + ERC-20 on Polygon)
+- **base-mainnet**: Base Mainnet, Coinbase L2 (real ETH + ERC-20 on Base; native USDC, WETH, DAI, cbETH, USDbC supported)
 - **sepolia**: Sepolia Testnet (test ETH, limited token selection: ETH, USDC, WETH, LINK)
 - **solana-mainnet**: Solana Mainnet (real SOL + SPL tokens)
 - **solana-devnet**: Solana Devnet (dev SOL + test SPL tokens)
+- **solana-testnet**: Solana Testnet (test SOL + test SPL tokens)
 
-Network is fixed at wallet creation and cannot be changed.
+EVM wallets are buckets: a wallet's `network` is its **default/home chain**, not a binding. The same wallet address is valid on every EVM chain. Pass an optional `network` field on `/api/agent/transfer`, `/api/agent/swap`, and `/api/agent/approve` to operate the wallet on a non-default EVM chain. Omit `network` to use the wallet's default. Solana wallets remain pinned to their cluster.
 
 ## Important Notes
 
-- EVM token transfers require ETH in the wallet for gas fees
+- EVM token transfers require native gas (ETH on mainnet/sepolia/base-mainnet; POL on polygon-mainnet) on the operating chain
 - Solana token transfers require SOL in the wallet for transaction fees
 - Native SOL transfers account for network fee and may return adjusted transfer values in response
-- Swap supports EVM (Uniswap) and Solana mainnet (Jupiter); Quote supports EVM and Solana mainnet; Approve is EVM-only
-- Polymarket endpoints require a configured `polygon-mainnet` EVM wallet
+- Swap supports EVM (Uniswap-v2-compatible router on mainnet/polygon/base/sepolia) and Solana mainnet (Jupiter); Quote supports EVM and Solana mainnet; Approve is EVM-only
+- Polymarket on-chain execution targets `polygon-mainnet` under the hood; any EVM-home wallet (mainnet, polygon-mainnet, base-mainnet) can be linked to Polymarket
 - All Polymarket order/read/redeem endpoints require exactly one wallet selector (`walletId` or `walletAddress`)
-- Platform fee is deducted from the token amount (not ETH), consistent with ETH transfers
+- Platform fee is deducted from the token amount (not native gas), consistent with native transfers
 - For transfer, use `amountDisplay` for simplicity (human-readable), use `valueBaseUnits` when you need precise base-unit control (legacy `amount`/`value` aliases are still accepted)
-- Optional `chain` guard is supported on agent endpoints; mismatches return `400` with `code: "chain_mismatch"`.
+- Optional `chain` guard is supported on agent endpoints; mismatches return `400` with `code: "chain_mismatch"`. Optional `network` override is supported on EVM write endpoints; unknown or non-EVM networks for an EVM wallet return `400` with `code: "network_mismatch"`.

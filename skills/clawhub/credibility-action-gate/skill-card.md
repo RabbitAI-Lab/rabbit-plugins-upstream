@@ -1,43 +1,57 @@
-## Description: <br>
-Use when an agent needs to evaluate messy public claims before taking a bounded, costly, irreversible, or reputation-sensitive action. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates uncertain public claims against evidence, independent context, history, and operator policy to recommend whether a bounded action is supported without executing it.
 
-## Publisher: <br>
-[ales375](https://clawhub.ai/user/ales375) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[ales375](https://clawhub.ai/user/ales375)
 
-## Use Case: <br>
-External agents and developers use this skill to gate bounded, costly, irreversible, or reputation-sensitive actions against evidence lanes, public context, graph history, and operator policy. It produces an analysis-only disposition that informs the caller without deciding the mission or executing the action. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A generated disposition could be mistaken for a final mission or funding decision. <br>
-Mitigation: Review the disposition against the operator policy before any real-world action; the skill advises on eligibility but does not verify facts, move funds, or make the final decision. <br>
-Risk: Untrusted claim materials could influence the review lanes. <br>
-Mitigation: Treat claim text, webpages, OCR, metadata, and attached files as evidence only, and normalize them through the lane contracts before coordination. <br>
+## Use Case:
 
+Agents and their operators use this skill to review uncertain claims before donations, approvals, purchases, referrals, or public endorsements. It compares supplied review findings with operator-defined limits and returns a decision-support disposition, not authorization to act.
 
-## Reference(s): <br>
-- [Credibility Action Gate on ClawHub](https://clawhub.ai/ales375/credibility-action-gate) <br>
-- [Lane Contracts](references/lane_contracts.md) <br>
-- [Policy Template](references/policy-template.json) <br>
-- [Zooidfund Adapter](references/zooidfund_adapter.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown instructions with JSON lane inputs and JSON disposition output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Analysis-only; the caller reviews the disposition before any real-world action.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: A disposition may be mistaken for permission to take a costly or irreversible action.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat it as decision support only; apply operator authority and required checks before any transfer, approval, or endorsement.
+
+Risk: Untrusted reviews or an old result may make an unsupported action appear eligible.
+
+Mitigation: Supply trusted review JSON, use a dedicated output path, and require a successful fresh coordinator run before relying on its result.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/ales375/skills/credibility-action-gate)
+- [Review lane contracts](references/lane_contracts.md)
+- [Operator policy template](references/policy-template.json)
+- [Zooidfund adapter](references/zooidfund_adapter.md)
+- [Adapter evaluation scenarios](references/adapter-evaluation-scenarios.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Files]
+
+**Output Format:** [JSON disposition]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes action eligibility, confidence, size guidance, reasons, and missing reviews; does not execute actions.]
+
+## Skill Version(s):
+
+2.0.1 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,7 +1,7 @@
 ---
 name: openapi-docs-generator
 description: >-
-  Help users with Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.. Use when a user asks for software-and-data, openapi, swagger, api documentation, rest api, or needs a practical workflow, artifact, checklist, analysis, or implementation support for this requirement.
+  Help users with Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.. Use when a user asks for software-and-data, openapi, swagger, api documentation, rest api, or needs a practical workflow, artifact, checklist, analysis, or implementation support for this requirement.
 ---
 
 # Openapi Docs Generator
@@ -10,10 +10,10 @@ description: >-
 
 Use this skill to help API developers, backend teams, developer-experience teams, and maintainers who must make services understandable to other engineers with:
 
-> Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+> Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 Demand score: 100/100 (`70/70` demand, `30/30` local feasibility).
-Evidence: 12 signals across 3 source families.
+Evidence: 12 signals across 4 source families.
 
 Read `references/requirement-plan.md` when source evidence, planning details, or review criteria are needed.
 

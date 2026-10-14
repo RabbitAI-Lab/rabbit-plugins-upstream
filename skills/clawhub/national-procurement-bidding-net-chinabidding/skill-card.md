@@ -1,48 +1,67 @@
-## Description: <br>
-全国采购与招标信息查询与分析助手，帮助用户检索招标、中标、采购意向和合同公告，并分析企业画像、竞争对手、采购单位、中标单位、品牌、价格趋势和市场机会。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向中国招投标与采购信息的检索、企业分析和市场趋势研判助手。
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement, sales, bidding, and market analysts use this skill to search nationwide Chinese procurement and bidding notices, review company participation, identify competitors or potential suppliers, and analyze pricing and market trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic registration can send local device and user identifiers to a remote service. <br>
-Mitigation: Prefer a manually supplied ZLBX_API_KEY; enable automatic registration only after explicit user consent and data-minimization review. <br>
-Risk: The skill may store an API key in ~/.zlbx/config.json. <br>
-Mitigation: Restrict local file access, avoid shared machines, and rotate or remove the key when it is no longer needed. <br>
-Risk: Quota exhaustion can produce login or recharge links tied to the service account. <br>
-Mitigation: Verify the zhiliaobiaoxun domain and user intent before following payment, recharge, or auto-login links. <br>
-Risk: Procurement contacts and company relationship data may include sensitive business or personal information. <br>
-Mitigation: Use retrieved data only for authorized procurement analysis and follow applicable privacy and data-handling obligations. <br>
+## Use Case:
 
+采购、销售和市场分析人员可检索中国招标、中标与合同公告，分析企业、竞争对手及采购趋势，辅助供应商寻源和商机评估。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zhiliaobiaoxun/skills/national-procurement-bidding-net-chinabidding) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [SKILL 自动注册详细流程](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON API request examples and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call zhiliaobiaoxun APIs, store an API key in ~/.zlbx/config.json, and generate login or recharge links when automatic registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Automatic registration sends device platform, CPU architecture and a MAC-address hash to the provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a manually configured API key; obtain explicit consent before automatic registration.
+
+Risk: Automatic registration stores the returned API key in a local configuration file.
+
+Mitigation: Review the local key storage and protect the configuration file from unauthorized access.
+
+Risk: Procurement queries and some account or update checks are sent to the provider's endpoints.
+
+Mitigation: Avoid submitting confidential search terms or personal data unless this disclosure is acceptable.
+
+Risk: Operational instructions embedded in Markdown comments can be easy to miss during review.
+
+Mitigation: Review the entire skill, including comments, before installing or approving requests.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/national-procurement-bidding-net-chinabidding)
+- [Search API reference](references/api-search.md)
+- [Company API reference](references/api-company.md)
+- [Market analysis API reference](references/api-market.md)
+- [Company registry API reference](references/api-registry.md)
+- [Account API reference](references/api-account.md)
+- [Automatic registration guide](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown summaries and tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the vendor's available data and the user's API access.]
+
+## Skill Version(s):
+
+1.0.8 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/api-gateway",
   "slug": "api-gateway",
   "ownerHandle": "seanford",
-  "version": "1.0.0",
-  "updatedAt": 1782286971080,
-  "contentHash": "35ee1385812dd2f5aa054461bb2ef87bf75ae52927378c05dde015078171c5bc",
-  "fetchedAt": "2026-07-26T18:04:53.949Z"
+  "version": "1.2.29",
+  "updatedAt": 1790971013620,
+  "contentHash": "dd9f3b58edb2ee0cff82d4f8fa2360f773d99fe7e08389a562e9a350099c43a6",
+  "fetchedAt": "2026-10-14T13:35:45.281Z"
 }

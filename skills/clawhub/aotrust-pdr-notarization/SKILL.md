@@ -1,17 +1,16 @@
-> ⚠️ Canonical version: https://github.com/GitSerge-crypto/aotrust-skills/blob/main/aotrust-notarize/SKILL.md
-
 ---
 name: aotrust-notarize
 description: >
   Issue a cryptographic proof (PDR) that a digital artifact existed at a specific time.
-  Pay $0.01 USDC on Base via x402. Anchored daily to NEAR blockchain. Publicly verifiable.
+  Pay $0.01 USDC on Base or Solana via x402 (MCP). Anchored daily to NEAR blockchain.
+  Publicly verifiable.
   ONLY invoke when the user explicitly requests notarization or proof-of-existence for a
   specific artifact. This skill performs a paid external API call ($0.01 USDC, irreversible).
   Do NOT invoke proactively or as part of unrelated workflows.
 license: MIT
 metadata:
   author: aotrust
-  version: "3.7.0"
+  version: "3.9.1"
   mcp-endpoint: https://api.aotrust.link/mcp
   http-endpoint: https://api.aotrust.link/notarize
   verification-endpoint: https://api.aotrust.link/v1/pdr/verify
@@ -53,7 +52,7 @@ Anchored daily to NEAR blockchain. $0.01 per proof. No account needed.
 
 | Interface | Best for | How |
 |-----------|----------|-----|
-| **MCP** (recommended for AI agents) | AI agents with MCP support | OAuth 2.1 → tools/list → notary_quote → HTTP /notarize (pay) → notary_verify |
+| **MCP** (recommended for AI agents) | AI agents with MCP support | tools/list → notary_notarize_paid (x402 in-band micropayment) |
 | **HTTP API** (for developers) | Direct integration, scripts, CI/CD | POST /notarize → 402 → pay → 200 |
 
 Both interfaces produce the same PDR. Pick one.
@@ -70,7 +69,13 @@ https://api.aotrust.link/mcp
 
 ### Authentication
 
-OAuth 2.1 with PKCE (S256). Discovery:
+**None required.** The MCP endpoint works without any token or OAuth flow —
+connect and call `tools/list` directly. Free-tier tools (`notary_free`,
+`notary_quote`, `notary_verify`) are keyless; paid notarization uses in-band
+x402 micropayments (no API key either).
+
+OAuth 2.1 endpoints exist as optional discovery stubs (used by the
+agents.near.ai integration path):
 
 - Resource: `https://api.aotrust.link/.well-known/oauth-protected-resource/mcp`
 - Authorization server: `https://api.aotrust.link/.well-known/oauth-authorization-server`
@@ -78,29 +83,45 @@ OAuth 2.1 with PKCE (S256). Discovery:
 - Authorize: `GET https://api.aotrust.link/oauth/authorize`
 - Token: `POST https://api.aotrust.link/oauth/token`
 
-### Available Tools (4)
+### Available Tools (5)
 
 | Tool | Purpose | Payment? |
 |------|---------|----------|
+| `notary_free` | Create instant free cryptographic proof (UNPAID PDR), rate limited (5/IP/day) | Free |
 | `notary_quote` | Get price + payment details for a work_hash | Free |
 | `notary_notarize` | NEAR_DIRECT payment (not available on mainnet) | — |
-| `notary_notarize_paid` | x402 USDC — discovery only, cannot be called via MCP (see flow below) | $0.01 USDC |
+| `notary_notarize_paid` | Notarize artifact, on-chain settlement — x402-over-MCP (in-band; Base or Solana USDC) or HTTP fallback (Base-only) | $0.01 USDC |
 | `notary_verify` | Verify a notarization by job_id | Free |
 
-### MCP Flow (x402 USDC — the only production path)
+### MCP Flow — Free Tier (no wallet, 1 step)
 
-x402 payment requires HTTP calls — MCP tool calls alone cannot complete the flow:
+For instant free proof without payment:
 
-1. **MCP:** Call `notary_quote` with `work_hash` (see "Step 1: Compute the Work Hash" below) → get price ($0.01 USDC) and quote details
-2. **HTTP:** POST to `https://api.aotrust.link/notarize` with `{"work_hash": "..."}` → get 402 payment requirements (see Step 2 below for format)
-3. **HTTP:** Sign EIP-3009 `transferWithAuthorization` with your Ethereum key, then POST to `https://api.aotrust.link/notarize` again with `x-payment` header → get 200 + PDR (see Step 3 below for format)
-4. **MCP:** Call `notary_verify` with the `job_id` from step 3 → confirm `anchored`
+1. **MCP:** Call `notary_free` with `work_hash` (64 hex) → get `shield_id`, `pdr_b64`, `verify_url`
+2. Done. No wallet, no payment. Rate limited: 5/IP/day, 1000/day global.
 
-> **Note:** `notary_notarize_paid` appears in `tools/list` for discovery but cannot be called via MCP — x402 payment headers are not supported in MCP tool calls. Use HTTP POST `/notarize` for the actual payment step.
+> For on-chain settlement proof (payment-bound PDR with tx_hash on Base), use the paid flow below.
+
+### MCP Flow (x402 USDC — paid, in-band settlement)
+
+Paid notarization works **natively over MCP** (x402-over-MCP transport):
+
+1. **MCP:** Call `notary_notarize_paid` with `work_hash` (see "Step 1: Compute the Work Hash" below)
+2. **MCP:** Server returns the 402 challenge: `isError: true` + `PaymentRequired` in `structuredContent` (and `content[0].text` as the same JSON)
+3. **MCP:** x402-capable agents sign the payment and retry the same call with the signed payload in `params._meta["x402/payment"]` → receive the PDR; the settlement receipt comes in `_meta["x402/payment-response"]`. Two rails are accepted (choose by the `network` field of the challenge entry your wallet supports):
+   - **Base (EVM):** EIP-3009 `transferWithAuthorization`, USDC on Base (`eip155:8453`)
+   - **Solana (SVM):** USDC-SPL transfer with PayAI as feePayer (`solana:5eykt4UsFv8P8NJdTREpY1vzqKqZKvdp`) — payload field is `{"transaction": "<base64 signed tx>"}`; x402 SVM client libraries handle this automatically
+4. **MCP:** Call `notary_verify` with the `job_id` from the PDR → confirm `anchored`
+
+x402-unaware MCP clients should read `content[1]` of the 402 result (human-readable fallback) — direct HTTP clients can still `POST https://api.aotrust.link/notarize` with the `x-payment` header (see Step 3 below for format).
+
+> **Note:** `notary_notarize_paid` is a full paid tool: call it without payment to receive the challenge, then retry with payment attached. No HTTP round-trip is required for x402-capable MCP clients.
 
 ---
 
 ## Interface 2: HTTP API (for Developers)
+
+> **Prices without a round-trip:** `GET https://api.aotrust.link/menu` returns the live tool list with costs and payment rails in one request (no 402 cycle needed).
 
 ### Step 1: Compute the Work Hash
 
@@ -128,6 +149,8 @@ Hash your artifact with SHA-256. This is what gets notarized — not the artifac
 - ✅ Hash exactly the bytes that constitute the artifact, nothing more, nothing less
 
 ### Step 2: Request Notarization (expect HTTP 402)
+
+> **Solana payments are MCP-only.** The HTTP endpoint (`/notarize`) accepts Base (EVM) payments only. Solana (SVM) wallets pay via the MCP flow above (`notary_notarize_paid`).
 
 ```bash
 curl -X POST https://api.aotrust.link/notarize \
@@ -328,7 +351,6 @@ The standard PDR workflow (v0x03) remains available and does not require client 
 |----------|---------|--------|
 | HTTP 402 | Expected — payment required | Proceed to Step 3 |
 | HTTP 400 | Invalid work_hash format | Must be 64-char lowercase hex |
-| HTTP 409 | Duplicate work_hash | Already notarized — use verify |
 | HTTP 429 | Rate limited | Wait 60 seconds, retry once |
 
 ---
@@ -338,6 +360,7 @@ The standard PDR workflow (v0x03) remains available and does not require client 
 - Price: **$0.01 USDC** flat per PDR. No tiers, no subscriptions.
 - PDRs are **immutable**. Once issued, they cannot be modified.
 - Payment is **non-refundable** after PDR issuance.
+- AOTrust supports continuous provenance: re-notarizing the same work_hash is valid and produces a new timestamped PDR. Responses include a `provenance` block (first_seen, total notarizations) linking the new receipt to the original observation.
 - Daily Merkle root anchored to NEAR by `notary-node.near`.
 - Rate limit: 60 requests/minute per IP.
 - PDR spec: https://github.com/GitSerge-crypto/aotrust-skills/blob/main/pdr-spec.md
@@ -347,6 +370,9 @@ The standard PDR workflow (v0x03) remains available and does not require client 
 
 ## Changelog
 
+- v3.9.1 — frontmatter version bump (3.8.0 → 3.9.0 missed in v3.9 commit); added /menu pointer to HTTP interface (live price list, one request, no 402 cycle).
+- v3.9.0 — Solana rail (X402_SOLANA, pat 0x0A): dual-402 MCP accepts Base (EIP-3009) and Solana (USDC-SPL, PayAI feePayer) payments; HTTP /notarize remains Base-only (documented). PDR verify: payment_anchor_type surfaced; on-chain reveal for Solana via recomputed payment_hash.
+- v3.8.0 — Added notary_free tool for instant free-tier notarization via MCP without wallet. Updated tools table (4→5), added Free Tier MCP Flow section.
 - v3.7.0 — ClawHub security audit fixes: explicit trigger boundaries in description, Security & Consent section (external transmission warnings, user confirmation rules, wallet safety), updated Proof of Authorship from "Planned" to implemented (Bilateral Signature v0x04).
 - v3.6.2 — Bilateral Signature (v0x04): agent_sig + agent_pubkey → binding hash PDR. Verify response: payload_hash + binding_hash fields.
 - v3.6.1 — Added "What to Hash" examples (Step 1), common mistakes section

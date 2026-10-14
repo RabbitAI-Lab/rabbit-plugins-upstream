@@ -1,0 +1,14 @@
+case: source-delivered-manual-validation
+presentation_mode: customer
+assert:
+  prose_contains:
+    - 部署成功，待浏览器访问确认
+    - demo-2048
+    - http://grc99e8f-8080-aw9qu6gd.dev.goodrain.com
+  prose_not_contains:
+    - AppAssistantResult
+    - Structured Output
+    - linked-and-needs-delivery-verification
+    - linked-and-needs-manual-url-validation
+    - Blocking Issue
+    - Actions Performed

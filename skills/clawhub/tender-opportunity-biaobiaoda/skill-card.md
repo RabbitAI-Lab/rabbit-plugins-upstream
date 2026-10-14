@@ -1,45 +1,63 @@
-## Description: <br>
-Monitors Chinese tender opportunities through the 标标达/知了标讯 API and helps agents search bid notices, analyze companies and competitors, estimate pricing, and surface expiring projects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户检索中国招投标公告、评估项目机会，并分析供应商、竞争对手和历史中标价格。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-Procurement, sales, and bid strategy teams use this skill to find relevant tender opportunities, inspect tender details, analyze suppliers and competitors, and review market pricing signals from 标标达/知了标讯 data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement research terms, company names, and contact-related queries are sent to an external tender-data provider. <br>
-Mitigation: Use the skill only when the 标标达/知了标讯 service is approved for the data being queried, and avoid submitting non-public bid strategy or private customer lists. <br>
-Risk: A shared or broadly scoped API key could expose tender research usage or quota to unintended users. <br>
-Mitigation: Configure a dedicated ZLBX_API_KEY for agent use and rotate or revoke it according to the organization's credential policy. <br>
-Risk: Ambiguous company shorthand can broaden analysis to unintended legal entities. <br>
-Mitigation: Ask the agent to show matched companies before broad analyses of shorthand or ambiguous company names. <br>
+## Use Case:
 
+采购和投标团队可用它寻找招标机会、核查企业与历史中标记录，并辅助评估投标竞争形势；结果应依据实际返回的数据判断。
 
-## Reference(s): <br>
-- [招投标商机监控雷达-标标达 on ClawHub](https://clawhub.ai/liu-jiapeng/tender-opportunity-biaobiaoda) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown or concise text summaries with structured tender, company, competitor, and pricing analysis.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends procurement, company, and contact-related queries to an external 标标达/知了标讯 service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: Queries use a third-party tender-data service and require an API key that may be stored locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service before use, protect the API key and local configuration, and supply a manually configured key if preferred.
+
+Risk: Automatic trial registration collects limited device features, including a hashed MAC address.
+
+Mitigation: Request explicit consent before registration; use a manually configured API key to avoid device-based registration.
+
+Risk: Tender and company records may be incomplete or outdated, and some data calls consume credits.
+
+Mitigation: Base conclusions on returned records, check data dates and source scope, and limit paid queries to what the user requested.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/tender-opportunity-biaobiaoda)
+- [Bid-search API reference](artifact/references/api-search.md)
+- [Company-analysis API reference](artifact/references/api-company.md)
+- [Market-analysis API reference](artifact/references/api-market.md)
+- [Company-registry interpretation guide](artifact/references/api-registry.md)
+- [Account API reference](artifact/references/api-account.md)
+- [Registration and API-key setup](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and tables of tender, company, and market results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the provider's available records; some queries consume account credits.]
+
+## Skill Version(s):
+
+2.0.6 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

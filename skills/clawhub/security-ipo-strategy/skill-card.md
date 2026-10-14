@@ -1,37 +1,53 @@
-## Description: <br>
-AI-powered China A-share IPO investment strategy analyst covering IPO calendars, subscription strategy, listing performance analysis, lock-up period management, and red-hot IPO identification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps analyze specific China A-share IPOs through issue scoring, subscription-capital planning, break-issue risk screening, and lock-up expiry assessment.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External retail investors, institutional investors, and IPO subscribers use this skill as decision support for China A-share IPO subscription planning, risk-return assessment, capital allocation, and lock-up period monitoring. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can influence real IPO investment decisions and may produce incorrect or outdated dates, prices, rules, issuer data, or regulatory updates. <br>
-Mitigation: Use the output as decision support only; independently verify financial data, market data, issuer disclosures, and current regulations, and do not treat the output as personalized financial advice. <br>
+## Use Case:
 
+Investors and analysts use this skill to assess a specific China A-share IPO or subscription batch, compare issue risks, plan subscription capital, and review post-listing lock-up expiry pressure. Its illustrative analysis does not place trades or retrieve live market data.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+China (A-share markets)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with analysis narratives, tables, and illustrative Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Decision-support output; users should verify financial, issuer, market, and regulatory data independently.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Stale or inaccurate IPO data or market rules can distort financial decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Independently confirm issuer information, current market rules, and risk assumptions before acting; do not treat projected returns as guarantees.
+
+Risk: Sharing unnecessary brokerage or identity details can expose sensitive information.
+
+Mitigation: Provide only the IPO details needed for analysis; omit account numbers, identity documents, and brokerage credentials.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/security-ipo-strategy)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown with analysis tables and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Illustrative scores and scenarios; no live data retrieval, file writes, or trade execution.]
+
+## Skill Version(s):
+
+3.0.3 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

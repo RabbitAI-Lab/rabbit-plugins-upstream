@@ -1,44 +1,59 @@
-## Description: <br>
-Connect OpenClaw and other agent clients to hosted or local Sendmux MCP servers for mailbox, sending, and management tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connect OpenClaw and other agent clients to hosted or local Sendmux MCP servers for mailbox, sending, and management tools.
 
-## Publisher: <br>
-[sendmux.ai](https://clawhub.ai/user/sendmux.ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sendmux.ai](https://clawhub.ai/user/sendmux.ai)
 
-## Use Case: <br>
-Developers and operators use this skill to configure OpenClaw and other agent clients for hosted OAuth, local stdio, or local HTTP bearer access to Sendmux mailbox, sending, and management MCP tools. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured agents can receive operational access to Sendmux mailbox, sending, and management surfaces. <br>
-Mitigation: Use scoped tokens for the selected surface and review write or send actions before execution. <br>
-Risk: API keys and bearer tokens may be exposed if pasted into chat or committed in MCP configuration files. <br>
-Mitigation: Store credentials in the user's secret store or environment variables and keep raw tokens out of checked-in configuration. <br>
-Risk: Local HTTP MCP endpoints may be reachable by unintended clients if exposed beyond a private local environment. <br>
-Mitigation: Use bearer protection for local HTTP servers and bind private setups to local or otherwise controlled network interfaces. <br>
+## Use Case:
 
+Developers and agent users configure Sendmux MCP access for mailbox, email sending, and account management in supported clients, using hosted OAuth or locally managed credentials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/sendmux.ai/skills/sendmux-mcp-setup) <br>
-- [Sendmux skills homepage](https://github.com/Sendmux/skills) <br>
-- [Sendmux hosted MCP endpoint](https://mcp.sendmux.ai/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with bash, JSON, and TOML examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes client-specific MCP setup patterns and credential handling guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.3.0) <br>
+Risk: Broad management credentials can grant unnecessary account-level access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth or scoped mailbox and sending credentials; use root keys only for required management tasks.
+
+Risk: Secrets can leak through chat, checked-in client configuration, or exposed local servers.
+
+Mitigation: Keep tokens in the client environment or secret store, never ask users to paste them into chat, and restrict bearer-protected HTTP servers to local or private access.
+
+Risk: Installing an unreviewed package version can change the available tools or behavior.
+
+Mitigation: Review or pin the sendmux-mcp package version in controlled environments.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/sendmux.ai/skills/sendmux-mcp-setup)
+- [Sendmux skills homepage (release metadata)](https://github.com/Sendmux/skills)
+- [Hosted Sendmux MCP endpoint](https://mcp.sendmux.ai/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration instructions, Shell commands, Guidance]
+
+**Output Format:** [Markdown with client-specific JSON, TOML, and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Client-specific setup and connection checks; does not produce email or attachments by itself.]
+
+## Skill Version(s):
+
+1.0.13 (source: ClawHub release; source frontmatter says 1.7.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

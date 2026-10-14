@@ -23,7 +23,7 @@ git push origin main
 
 ### Q3: Gitee push 需要密码但 PAT 仅限 API？
 
-这是已知限制：Gitee 的 PAT（Personal Access Token）通常仅限 API 操作，git push 需要登录密码或 SSH key。
+Gitee 的 PAT（Personal Access Token）通常仅限 API 操作，git push 需要登录密码或 SSH key。API 操作（如 Release 创建）使用 `config.json` 的 `gitee_token` 字段。
 
 解决方案：
 1. 使用 SSH 方式配置 Gitee remote（推荐）
@@ -46,7 +46,7 @@ git push origin main
 先删除临时文件再执行同步：
 
 ```bash
-rm -f ~/.workbuddy/skills/<skill-name>/*.html
+rm -f $SKILLS_DIR/<skill-name>/*.html
 ```
 
 或在 skill 目录下添加 `.gitignore` 规则排除 html。
@@ -57,7 +57,7 @@ rm -f ~/.workbuddy/skills/<skill-name>/*.html
 
 ```bash
 # 查看 ZIP 内容大小
-unzip -l ~/.workbuddy/skills/.dist/<skill-name>-v*.zip | sort -rn -k4 | head -20
+unzip -l $SKILLS_DIR/.dist/<skill-name>-v*.zip | sort -rn -k4 | head -20
 ```
 
 常见的大文件来源：
@@ -70,7 +70,7 @@ unzip -l ~/.workbuddy/skills/.dist/<skill-name>-v*.zip | sort -rn -k4 | head -20
 ```bash
 # 解压到临时目录检查
 mkdir /tmp/zip-check && cd /tmp/zip-check
-unzip ~/.workbuddy/skills/.dist/<skill-name>-v*.zip
+unzip $SKILLS_DIR/.dist/<skill-name>-v*.zip
 find . -type f | head -30
 ```
 
@@ -107,11 +107,11 @@ find . -type f | head -30
 
 正常情况下不应发生——README.md 由 `sync-readme` 全量生成，永远等于仓库实际内容。
 
-如果发现不一致，运行：
+如果发现不一致，运行（`<repo>` 为 `config.json` 注册表中配置的仓库名）：
 
 ```bash
-cd ~/.workbuddy/skills/git-sync/scripts
-python manifest.py sync-readme workbuddy-skills
+cd $SKILLS_DIR/git-sync/scripts
+python manifest.py sync-readme <repo>
 ```
 
 ---

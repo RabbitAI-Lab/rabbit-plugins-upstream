@@ -1,43 +1,57 @@
-## Description: <br>
-Shop helps individual shoppers find, compare, buy, gift, reorder, and track products across the Shop catalog and connected order history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users find products, manage carts and checkouts, and track Shop orders, with explicit buyer approval before purchases.
 
-## Publisher: <br>
-[shopify](https://clawhub.ai/user/shopify) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shopify](https://clawhub.ai/user/shopify)
 
-## Use Case: <br>
-External individual shoppers use this skill to have an agent search the Shop catalog, compare products, create checkouts, track orders, start returns, and reorder items. The skill is intended for personal shopping workflows with explicit user confirmation before purchases. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Shop homepage](https://shop.app) <br>
-- [ClawHub Shop skill listing](https://clawhub.ai/shopify/skills/shop) <br>
-- [Catalog MCP reference](references/catalog-mcp.md) <br>
-- [Direct API reference](references/direct-api.md) <br>
-- [Safety, security, and legal reference](references/safety.md) <br>
-- [Personal agents usage limits](https://help.shop.app/en/shop/shopping/personal-agents) <br>
-- [Shopify UCP agent profile](https://shopify.dev/ucp/agent-profiles/2026-04-08/valid-with-capabilities.json) <br>
+Shoppers and their assistants use this skill to compare products, prepare carts, review checkout details, and track orders. Connected users can also use saved Shop account details and approve purchases.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, API Calls, Guidance] <br>
-**Output Format:** [Markdown product messages with command and API guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include product images, product links, checkout links, order information, and safety prompts; purchase completion requires explicit user confirmation.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: A connected Shop account may expose saved addresses, payment method descriptors, budgets, and order history.
+
+Mitigation: Connect only with user consent and use account details only as needed for the shopping task.
+
+Risk: Checkout and browser purchases can spend the user's money.
+
+Mitigation: Require explicit approval of the merchant, items, quantities, current total, and payment instrument before completing a purchase; handle payment credentials securely.
+
+## Reference(s):
+
+- [Shop skill listing](https://clawhub.ai/shopify/skills/shop)
+- [Shop account](https://shop.com/)
+- [Catalog guidance](artifact/references/catalog.md)
+- [CLI workflows](artifact/references/cli.md)
+- [Transactions and account data](artifact/references/transactions.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown with product links and optional CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Purchase completion requires explicit approval of current terms and payment instrument.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/skill-classifier",
   "slug": "skill-classifier",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1778510762970,
-  "contentHash": "a0b96a2b1f063e59304e91be05d3f19d18633f3e2b8be6593e92b4fde3b2a324",
-  "fetchedAt": "2026-07-26T19:14:43.349Z"
+  "version": "1.2.6",
+  "updatedAt": 1791689738273,
+  "contentHash": "b17155b1d46bab5bc81b4b2fc75b064c5f26fafc7aa41d172dda00e9dcd599ae",
+  "fetchedAt": "2026-10-14T13:14:39.753Z"
 }

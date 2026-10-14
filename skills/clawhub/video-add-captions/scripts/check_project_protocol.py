@@ -1,7 +1,10 @@
 """Small regression checks for the caption project protocol."""
 
+import copy
+import hashlib
 import json
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
@@ -94,6 +97,569 @@ def check_canonical_caption_plan():
         ])
         assert json.loads(plan_path.read_text(encoding="utf-8"))["cues"]
         assert "First" in srt_path.read_text(encoding="utf-8")
+
+
+def check_expressive_caption_plan():
+    transcript = {
+        "duration": 5.0,
+        "language": "en",
+        "segments": [{
+            "id": 1,
+            "start": 0.2,
+            "end": 4.6,
+            "text": "Keep steady. Center three. Finish high.",
+            "words": [
+                {"start": 0.2, "end": 0.7, "word": " Keep"},
+                {"start": 0.7, "end": 1.4, "word": " steady."},
+                {"start": 1.6, "end": 2.2, "word": " Center"},
+                {"start": 2.2, "end": 3.0, "word": " three."},
+                {"start": 3.2, "end": 3.8, "word": " Finish"},
+                {"start": 3.8, "end": 4.6, "word": " high."},
+            ],
+        }],
+    }
+    timeline = {
+        "schema_version": 1,
+        "timeline_id": "expressive",
+        "source_asset_id": "source",
+        "fps": {"num": 30, "den": 1},
+        "source_duration_s": 5.0,
+        "program_duration_s": 5.0,
+        "clips": [{
+            "id": "clip-001",
+            "source_range": {"start_s": 0.0, "end_s": 5.0},
+            "program_range": {"start_s": 0.0, "end_s": 5.0},
+            "speed": 1.0,
+            "decision_ref": "source",
+        }],
+    }
+
+    standard = build_captions.build_plan(
+        transcript, timeline, source_transcript="understand/transcript.json",
+    )
+    assert "presentation" not in standard
+    assert all("id" not in cue for cue in standard["cues"])
+    assert all("semantic_role" not in word for cue in standard["cues"] for word in cue["words"])
+
+    shell = build_captions.build_plan(
+        transcript, timeline, source_transcript="understand/transcript.json",
+        presentation_mode="expressive",
+    )
+    assert shell["presentation"] == {
+        "schema_version": 1,
+        "mode": "expressive",
+        "planning_status": "draft",
+        "planner": {"actor": "agent", "scope": "full-program", "rationale": ""},
+        "layout_beats": [],
+    }
+    assert [cue["id"] for cue in shell["cues"]] == ["cue-001", "cue-002", "cue-003"]
+    assert all(
+        word["semantic_role"] == "normal"
+        for cue in shell["cues"] for word in cue["words"]
+    )
+    assert build_captions.validate_caption_plan(shell)["planning_status"] == "draft"
+
+    complete = copy.deepcopy(shell)
+    complete["presentation"]["planning_status"] = "complete"
+    complete["presentation"]["planner"]["rationale"] = (
+        "Keep the explanation stable at the bottom, center the numeric emphasis, "
+        "then return the closing statement to the baseline."
+    )
+    variants = ["bottom-standard", "center-emphasis", "bottom-standard"]
+    complete["presentation"]["layout_beats"] = []
+    for position, (cue, variant) in enumerate(zip(complete["cues"], variants), 1):
+        complete["presentation"]["layout_beats"].append({
+            "id": f"layout-beat-{position:03d}",
+            "variant": variant,
+            "cue_ids": [cue["id"]],
+            "program_range": {"start_s": cue["start"], "end_s": cue["end"]},
+            "rationale": f"Use {variant} for cue {cue['index']} based on its semantic role.",
+        })
+    del complete["cues"][0]["words"][0]["semantic_role"]
+    complete["cues"][1]["words"][1]["semantic_role"] = "number"
+    complete["cues"][2]["words"][0]["semantic_role"] = "keyword"
+    complete["cues"][0]["hero_line"] = {
+        "level": "hero",
+        "word_indexes": [1, 2],
+        "rationale": "The opening phrase is the primary conclusion.",
+    }
+    summary = build_captions.validate_caption_plan(complete, require_complete=True)
+    assert summary == {
+        "mode": "expressive",
+        "planning_status": "complete",
+        "cue_count": 3,
+        "layout_beat_count": 3,
+        "hero_line_count": 1,
+    }
+    assert build_captions.validate_caption_plan(standard["cues"], require_complete=True)["mode"] == "standard"
+    spatial_binding = {
+        "policy": "composite-aware",
+        "path": "captions/caption-spatial-context.json",
+        "sha256": "a" * 64,
+        "source_operation": "b-roll",
+        "source_revision": 4,
+    }
+    bound_standard = copy.deepcopy(standard)
+    bound_standard["spatial_context"] = copy.deepcopy(spatial_binding)
+    assert build_captions.validate_caption_plan(bound_standard, require_complete=True)["mode"] == "standard"
+    bound_complete = copy.deepcopy(complete)
+    bound_complete["spatial_context"] = copy.deepcopy(spatial_binding)
+    assert build_captions.validate_caption_plan(bound_complete, require_complete=True)["hero_line_count"] == 1
+
+    def assert_invalid(mutator, message):
+        candidate = copy.deepcopy(complete)
+        mutator(candidate)
+        try:
+            build_captions.validate_caption_plan(candidate, require_complete=True)
+        except ValueError as error:
+            assert message in str(error), str(error)
+        else:
+            raise AssertionError(f"invalid expressive plan must fail: {message}")
+
+    assert_invalid(lambda plan: plan["presentation"].update(mode="kinetic"), "mode")
+    assert_invalid(
+        lambda plan: plan["presentation"]["layout_beats"][0].update(variant="middle"),
+        "variant",
+    )
+    assert_invalid(
+        lambda plan: plan["presentation"]["layout_beats"][0].update(variant="top-statement"),
+        "the plan must be replanned as bottom-standard or center-emphasis",
+    )
+    assert_invalid(
+        lambda plan: plan["presentation"]["layout_beats"][0].update(cue_ids=["cue-999"]),
+        "unknown cue id/index",
+    )
+    assert_invalid(
+        lambda plan: plan["presentation"]["layout_beats"][1].update(cue_ids=["cue-001"]),
+        "more than one layout beat",
+    )
+
+    def overlap(plan):
+        cue = plan["cues"][1]
+        cue["start"] = plan["cues"][0]["end"] - 0.1
+        plan["presentation"]["layout_beats"][1]["program_range"]["start_s"] = cue["start"]
+
+    assert_invalid(overlap, "overlaps")
+    assert_invalid(lambda plan: plan["presentation"]["layout_beats"].pop(), "does not cover every cue")
+    assert_invalid(
+        lambda plan: plan["cues"][0]["words"][0].update(semantic_role="headline"),
+        "semantic_role",
+    )
+    assert_invalid(
+        lambda plan: plan["presentation"]["layout_beats"][0]["program_range"].update(
+            start_s=plan["cues"][0]["start"] + 0.1,
+        ),
+        "inside a cue",
+    )
+    assert_invalid(lambda plan: plan["presentation"]["layout_beats"].reverse(), "sorted by time")
+    assert_invalid(
+        lambda plan: plan["presentation"]["layout_beats"][1].update(id="layout-beat-001"),
+        "duplicate layout beat id",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0]["hero_line"].update(level="large"),
+        "hero_line level",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0]["hero_line"].update(word_indexes=[]),
+        "hero_line word_indexes",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0]["hero_line"].update(word_indexes=[1, 3]),
+        "hero_line word_indexes",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0]["hero_line"].update(word_indexes=[2, 2]),
+        "hero_line word_indexes",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0]["hero_line"].update(word_indexes=[0]),
+        "hero_line word_indexes",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0]["hero_line"].update(word_indexes=[3]),
+        "hero_line word_indexes",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0]["hero_line"].update(rationale="  "),
+        "hero_line rationale",
+    )
+    assert_invalid(
+        lambda plan: plan["cues"][0].update(hero_lines=[plan["cues"][0].pop("hero_line")]),
+        "hero_lines",
+    )
+    assert_invalid(
+        lambda plan: plan.update(spatial_context={**spatial_binding, "sha256": "ABC"}),
+        "spatial_context sha256",
+    )
+
+    standard_with_hero = copy.deepcopy(standard)
+    standard_with_hero["cues"][0]["hero_line"] = {
+        "level": "strong",
+        "word_indexes": [1],
+        "rationale": "Not allowed in Standard.",
+    }
+    try:
+        build_captions.validate_caption_plan(standard_with_hero, require_complete=True)
+    except ValueError as error:
+        assert "hero_line" in str(error), str(error)
+    else:
+        raise AssertionError("Standard plan carrying hero_line must fail")
+
+    legacy_with_hero = copy.deepcopy(standard["cues"])
+    legacy_with_hero[0]["hero_line"] = {
+        "level": "strong",
+        "word_indexes": [1],
+        "rationale": "Not allowed in a legacy cue array.",
+    }
+    try:
+        build_captions.validate_caption_plan(legacy_with_hero, require_complete=True)
+    except ValueError as error:
+        assert "hero_line" in str(error), str(error)
+    else:
+        raise AssertionError("legacy cue array carrying hero_line must fail")
+
+    with tempfile.TemporaryDirectory(prefix="caption-top-layout-python-") as temporary:
+        invalid_path = Path(temporary) / "top-statement.json"
+        invalid = copy.deepcopy(complete)
+        invalid["presentation"]["layout_beats"][0]["variant"] = "top-statement"
+        invalid_path.write_text(json.dumps(invalid), encoding="utf-8")
+        result = subprocess.run(
+            [sys.executable, str(Path(build_captions.__file__)), "--validate-plan", str(invalid_path)],
+            check=False, capture_output=True, encoding="utf-8", errors="replace",
+        )
+        assert result.returncode != 0
+        assert "the plan must be replanned as bottom-standard or center-emphasis" in (
+            result.stdout + result.stderr
+        )
+
+
+def check_presentation_renderer_modes():
+    script_dir = Path(__file__).resolve().parent
+    interaction = script_dir / "caption_interaction.mjs"
+    generator = script_dir / "generate_caption_project.mjs"
+    with tempfile.TemporaryDirectory(prefix="caption-renderer-modes-") as temporary:
+        root = Path(temporary)
+        source = root / "source.mp4"
+        subprocess.run([
+            "ffmpeg", "-hide_banner", "-loglevel", "error", "-y",
+            "-f", "lavfi", "-i", "color=c=0x243447:s=320x180:r=30:d=5",
+            "-an", "-c:v", "libx264", "-pix_fmt", "yuv420p", str(source),
+        ], check=True)
+        cues = [
+            {"id": "cue-001", "index": 1, "start": 0.4, "end": 1.4, "text": "Keep steady",
+             "words": [{"word": "Keep", "start": 0.4, "end": 0.8, "semantic_role": "normal"},
+                       {"word": "steady", "start": 0.8, "end": 1.4, "semantic_role": "normal"}]},
+            {"id": "cue-002", "index": 2, "start": 1.8, "end": 3.0, "text": "Two layouts",
+             "words": [{"word": "Three", "start": 1.8, "end": 2.3, "semantic_role": "number"},
+                       {"word": "layouts", "start": 2.3, "end": 3.0, "semantic_role": "keyword"}]},
+            {"id": "cue-003", "index": 3, "start": 3.4, "end": 4.5, "text": "Finish steady",
+             "words": [{"word": "Finish", "start": 3.4, "end": 3.9, "semantic_role": "contrast"},
+                       {"word": "high", "start": 3.9, "end": 4.5, "semantic_role": "normal"}]},
+        ]
+        standard_plan = root / "standard.json"
+        standard_plan.write_text(json.dumps({
+            "schema_version": 1,
+            "target": "overlay",
+            "timebase": "program",
+            "timeline_id": "main",
+            "program_duration_s": 5,
+            "cues": cues,
+        }), encoding="utf-8")
+        cues[2]["hero_line"] = {
+            "level": "strong",
+            "word_indexes": [1, 2],
+            "rationale": "The closing phrase is the fixture hero line.",
+        }
+        expressive_plan = root / "expressive.json"
+        expressive_plan.write_text(json.dumps({
+            "schema_version": 1,
+            "target": "overlay",
+            "timebase": "program",
+            "timeline_id": "main",
+            "program_duration_s": 5,
+            "cues": cues,
+            "presentation": {
+                "schema_version": 1,
+                "mode": "expressive",
+                "planning_status": "complete",
+                "planner": {
+                    "actor": "agent", "scope": "full-program",
+                    "rationale": "Keep ordinary narration low, center the number, and finish at the baseline.",
+                },
+                "layout_beats": [
+                    {"id": "beat-001", "variant": "bottom-standard", "cue_ids": ["cue-001"],
+                     "program_range": {"start_s": 0.4, "end_s": 1.4}, "rationale": "Stable opening."},
+                    {"id": "beat-002", "variant": "center-emphasis", "cue_ids": ["cue-002"],
+                     "program_range": {"start_s": 1.8, "end_s": 3.0}, "rationale": "Numeric thesis."},
+                    {"id": "beat-003", "variant": "bottom-standard", "cue_ids": ["cue-003"],
+                     "program_range": {"start_s": 3.4, "end_s": 4.5}, "rationale": "Stable close."},
+                ],
+            },
+        }), encoding="utf-8")
+
+        def generate(
+            name, plan_path, choice, karaoke=None, overrides=None,
+            mode="preview", expect_success=True, approved_karaoke=None,
+        ):
+            run_root = root / name
+            run_root.mkdir()
+            state = run_root / "interaction.json"
+            review = run_root / "style-review"
+            project = run_root / "project"
+            start_command = [
+                "node", str(interaction), "start", "--state", str(state),
+                "--source", str(source), "--captions", str(plan_path),
+            ]
+            if mode != "overlay":
+                start_command.extend(["--review-dir", str(review)])
+                start_command.extend([
+                    "--decision-mode", "agent",
+                    "--delegation-note", "Renderer mode protocol check.",
+                ])
+            start_command.extend(["--no-open", "true"])
+            subprocess.run(
+                start_command, check=True, capture_output=True, encoding="utf-8", errors="replace",
+            )
+            selection_command = ["node", str(interaction)]
+            if mode == "overlay":
+                selection_command.extend(["select", "--state", str(state), "--response", choice])
+            else:
+                selection_command.extend([
+                    "agent-select", "--state", str(state), "--choice", choice,
+                    "--rationale", "Use the maintained fixture style.",
+                ])
+            subprocess.run(
+                selection_command, check=True, capture_output=True, encoding="utf-8", errors="replace",
+            )
+            if mode == "overlay":
+                approved_preview = run_root / "approved-preview"
+                subprocess.run([
+                    "node", str(generator), "--video", str(source), "--captions", str(plan_path),
+                    "--out", str(approved_preview), "--interaction-state", str(state), "--mode", "preview",
+                ], check=True, capture_output=True, encoding="utf-8", errors="replace")
+                evidence_dir = run_root / "evidence"
+                evidence_dir.mkdir()
+                evidence = []
+                for index in range(4):
+                    evidence_path = evidence_dir / f"frame-{index + 1}.png"
+                    Image.new("RGBA", (320, 180), (0, 0, 0, 0)).save(evidence_path)
+                    evidence.append(str(evidence_path))
+                subprocess.run([
+                    "node", str(interaction), "preview-ready", "--state", str(state),
+                    "--project-meta", str(approved_preview / "project-meta.json"),
+                    "--evidence", ",".join(evidence),
+                ], check=True, capture_output=True, encoding="utf-8", errors="replace")
+                subprocess.run([
+                    "node", str(interaction), "confirm", "--state", str(state),
+                    "--response", "确认渲染",
+                ], check=True, capture_output=True, encoding="utf-8", errors="replace")
+                if plan_path == expressive_plan:
+                    assert isinstance(approved_karaoke, bool)
+                    comparison_bindings = []
+                    for comparison_mode in ("semantic-only", "semantic-plus-karaoke"):
+                        comparison_path = evidence_dir / f"{comparison_mode}.png"
+                        Image.new("RGBA", (320, 180), (0, 0, 0, 0)).save(comparison_path)
+                        comparison_bindings.append({
+                            "mode": comparison_mode,
+                            "path": str(comparison_path.resolve()),
+                            "sha256": hashlib.sha256(comparison_path.read_bytes()).hexdigest(),
+                        })
+                    comparison_signature = hashlib.sha256(json.dumps(
+                        comparison_bindings, separators=(",", ":"),
+                    ).encode("utf-8")).hexdigest()
+                    receipt = json.loads(state.read_text(encoding="utf-8"))
+                    receipt["preview"].update({
+                        "presentationMode": "expressive",
+                        "approvalEvidence": "expressive-layout-beats",
+                        "comparisonEvidence": comparison_bindings,
+                        "comparisonEvidenceSignature": comparison_signature,
+                    })
+                    receipt["approval"].update({
+                        "karaoke": approved_karaoke,
+                        "comparisonEvidenceSignature": comparison_signature,
+                    })
+                    state.write_text(json.dumps(receipt), encoding="utf-8")
+            command = [
+                "node", str(generator), "--video", str(source), "--captions", str(plan_path),
+                "--out", str(project), "--interaction-state", str(state), "--mode", mode,
+            ]
+            if karaoke is not None:
+                command.extend(["--karaoke", "true" if karaoke else "false"])
+            if overrides is not None:
+                overrides_path = run_root / "overrides.json"
+                overrides_path.write_text(json.dumps(overrides), encoding="utf-8")
+                command.extend(["--overrides", str(overrides_path)])
+            result = subprocess.run(
+                command, check=False, capture_output=True, encoding="utf-8", errors="replace",
+            )
+            if not expect_success:
+                return result
+            result.check_returncode()
+            return (
+                (project / "index.html").read_text(encoding="utf-8"),
+                json.loads((project / "project-meta.json").read_text(encoding="utf-8")),
+            )
+
+        standard_off_html, standard_off_meta = generate("standard-off", standard_plan, "clean", False)
+        standard_on_html, standard_on_meta = generate(
+            "standard-on", standard_plan, "social-bold-karaoke", True,
+        )
+        expressive_overrides = {
+            "font": {"color": "#F4F1E8"},
+            "wordHighlight": {
+                "mode": "background",
+                "activeColor": "#00E5FF",
+                "backgroundColor": "#FF2D95",
+                "backgroundOpacity": 0.46,
+                "activeScale": 1.3,
+            },
+        }
+        expressive_off_html, expressive_off_meta = generate(
+            "expressive-off", expressive_plan, "clean", False, expressive_overrides,
+        )
+        expressive_on_html, expressive_on_meta = generate(
+            "expressive-on", expressive_plan, "clean", True, expressive_overrides,
+        )
+        canonical_hero_plan = root / "expressive-canonical-hero.json"
+        canonical_hero_data = json.loads(expressive_plan.read_text(encoding="utf-8"))
+        canonical_hero_data["cues"][2]["hero_line"]["level"] = "hero"
+        canonical_hero_plan.write_text(json.dumps(canonical_hero_data), encoding="utf-8")
+        canonical_hero_html, canonical_hero_meta = generate(
+            "expressive-canonical-hero", canonical_hero_plan, "clean", False, expressive_overrides,
+        )
+        standard_overlay_off_html, standard_overlay_off_meta = generate(
+            "standard-overlay-off", standard_plan, "clean", mode="overlay",
+        )
+        standard_overlay_on_html, standard_overlay_on_meta = generate(
+            "standard-overlay-on", standard_plan, "social-bold-karaoke", mode="overlay",
+        )
+        expressive_approved_off_html, expressive_approved_off_meta = generate(
+            "expressive-approved-off", expressive_plan, "clean",
+            mode="overlay", approved_karaoke=False,
+        )
+        expressive_approved_on_html, expressive_approved_on_meta = generate(
+            "expressive-approved-on", expressive_plan, "clean",
+            mode="overlay", approved_karaoke=True,
+        )
+        for name, plan_path, mode in (
+            ("standard-preview-karaoke-mismatch", standard_plan, "preview"),
+            ("standard-overlay-karaoke-mismatch", standard_plan, "overlay"),
+        ):
+            rejected = generate(
+                name, plan_path, "clean", True, mode=mode, expect_success=False,
+            )
+            assert rejected.returncode != 0
+            output = rejected.stdout + rejected.stderr
+            assert "Requested karaoke does not match the user's recorded selection" in output, output
+        for name, approved_karaoke, requested_karaoke in (
+            ("expressive-approved-off-request-on", False, True),
+            ("expressive-approved-on-request-off", True, False),
+        ):
+            rejected = generate(
+                name, expressive_plan, "clean", requested_karaoke,
+                mode="overlay", expect_success=False, approved_karaoke=approved_karaoke,
+            )
+            assert rejected.returncode != 0
+            assert "karaoke" in (rejected.stdout + rejected.stderr).lower()
+        for html in (standard_off_html, standard_on_html):
+            assert "expressive-cue" not in html
+            assert "data-layout-beat-id" not in html
+            assert "semantic-keyword" not in html
+            assert "placement-" not in html
+            assert "spatialContext" not in html
+            assert 'class="caption-cue clip" data-start=' in html
+            assert 'class="caption-word">Keep</span>' in html
+        assert standard_off_meta["selection"]["karaoke"] is False
+        assert standard_on_meta["selection"]["karaoke"] is True
+        assert standard_overlay_off_meta["selection"]["karaoke"] is False
+        assert standard_overlay_on_meta["selection"]["karaoke"] is True
+        assert 'timeline.set("#caption-cue-1-word-1"' not in standard_off_html
+        assert 'timeline.set("#caption-cue-1-word-1"' in standard_on_html
+        assert 'timeline.set("#caption-cue-1-word-1"' not in standard_overlay_off_html
+        assert 'timeline.set("#caption-cue-1-word-1"' in standard_overlay_on_html
+        for variant in ("bottom-standard", "center-emphasis"):
+            assert f"layout-{variant}" in expressive_off_html
+            assert f"layout-{variant}" in expressive_on_html
+        assert "layout-top-statement" not in expressive_off_html
+        assert "layout-top-statement" not in expressive_on_html
+        assert "text-decoration" not in expressive_off_html
+        assert "text-decoration" not in expressive_on_html
+        for role in ("semantic-keyword", "semantic-number", "semantic-contrast"):
+            assert role in expressive_off_html
+            assert role in expressive_on_html
+        for role in ("keyword", "number", "contrast"):
+            assert f'class="caption-word semantic-{role}"' in expressive_off_html
+            assert "--semantic-scale:1.22" in expressive_off_html
+        assert expressive_off_html.count('class="caption-hero-line hero-level-strong"') == 1
+        assert expressive_on_html.count('class="caption-hero-line hero-level-strong"') == 1
+        assert canonical_hero_html.count('class="caption-hero-line hero-level-hero"') == 1
+        assert 'data-hero-level="strong"' in expressive_off_html
+        assert 'data-hero-level="hero"' in canonical_hero_html
+        assert "color: #F4C542;" in expressive_off_html
+        assert "font-size: 1.5em;" in expressive_off_html
+        assert ".hero-level-strong {" not in expressive_off_html
+        assert ".hero-level-hero {" not in expressive_off_html
+        assert "--semantic-scale:1;--semantic-color:#F4C542" in expressive_off_html
+        assert expressive_off_meta["selection"]["karaoke"] is False
+        assert expressive_on_meta["selection"]["karaoke"] is True
+        assert expressive_approved_off_meta["selection"]["karaoke"] is False
+        assert expressive_approved_on_meta["selection"]["karaoke"] is True
+        assert expressive_approved_off_meta["presentation"]["coexistenceMode"] == "semantic-only"
+        assert expressive_approved_on_meta["presentation"]["coexistenceMode"] == "semantic-plus-karaoke"
+        assert expressive_off_meta["presentation"]["coexistenceMode"] == "semantic-only"
+        assert expressive_on_meta["presentation"]["coexistenceMode"] == "semantic-plus-karaoke"
+        assert expressive_off_meta["presentation"]["layoutBeats"] == expressive_on_meta["presentation"]["layoutBeats"]
+        assert expressive_off_meta["presentation"]["heroLines"] == [{
+            "cueIndex": 3, "level": "strong", "wordIndexes": [1, 2],
+        }]
+        assert canonical_hero_meta["presentation"]["heroLines"] == [{
+            "cueIndex": 3, "level": "hero", "wordIndexes": [1, 2],
+        }]
+        assert expressive_off_meta["expressiveTreatments"]["value"]["heroLine"]["levels"]["hero"]["scale"] == 1.5
+        assert expressive_off_meta["expressiveTreatments"]["value"]["heroLine"]["canonicalLevel"] == "hero"
+        assert expressive_off_meta["resolvedStyle"] == expressive_on_meta["resolvedStyle"]
+        assert expressive_on_meta["presentation"]["combinedScaleRule"].startswith("effective scale = max")
+        generator_source = generator.read_text(encoding="utf-8")
+        assert "Math.max(scale, karaokeScale)" in generator_source
+        assert "effectiveScale / scale" in generator_source
+        assert "scale * karaokeScale" not in generator_source
+
+        active_semantic = next(
+            line for line in expressive_on_html.splitlines()
+            if 'timeline.set("#caption-cue-2-word-1"' in line and line.rstrip().endswith(", 1.800);")
+        )
+        active_normal = next(
+            line for line in expressive_on_html.splitlines()
+            if 'timeline.set("#caption-cue-1-word-1"' in line and line.rstrip().endswith(", 0.400);")
+        )
+        completed_normal = next(
+            line for line in expressive_on_html.splitlines()
+            if 'timeline.set("#caption-cue-1-word-1"' in line and line.rstrip().endswith(", 0.800);")
+        )
+        completed_semantic = next(
+            line for line in expressive_on_html.splitlines()
+            if 'timeline.set("#caption-cue-2-word-1"' in line and line.rstrip().endswith(", 2.300);")
+        )
+        assert '"color":"#00E5FF"' in active_semantic
+        assert '"color":"#00E5FF"' in active_normal
+        assert '"backgroundColor":"rgba(255, 45, 149, 0.46)"' in active_semantic
+        assert '"color":"#F4F1E8"' in completed_normal
+        assert '"color":"#00E5FF"' in completed_semantic
+
+        rejected_plan = root / "top-statement.json"
+        rejected = json.loads(expressive_plan.read_text(encoding="utf-8"))
+        rejected["presentation"]["layout_beats"][0]["variant"] = "top-statement"
+        rejected_plan.write_text(json.dumps(rejected), encoding="utf-8")
+        rejected_result = subprocess.run([
+            "node", str(generator), "--video", str(source), "--captions", str(rejected_plan),
+            "--out", str(root / "top-statement-project"),
+            "--interaction-state", str(root / "unused-interaction.json"), "--mode", "preview",
+        ], check=False, capture_output=True, encoding="utf-8", errors="replace")
+        assert rejected_result.returncode != 0
+        assert "the plan must be replanned as bottom-standard or center-emphasis" in (
+            rejected_result.stdout + rejected_result.stderr
+        )
 
 
 def check_orphan_merge_keeps_grouping_limits():
@@ -231,17 +797,19 @@ def check_delegated_caption_review():
         project_meta.write_text(
             json.dumps({
                 "interaction": {
-                    "statePath": str(state.resolve()),
+                    "statePath": str(state),
                     "selectionId": "clean",
                     "overridesSha256": None,
                 }
             }),
             encoding="utf-8",
         )
-        run(
+        preview_result = run(
             "preview-ready", "--state", state, "--project-meta", project_meta,
             "--evidence", ",".join(evidence),
+            check=False,
         )
+        assert preview_result.returncode == 0, preview_result.stderr
         rejected = run(
             "confirm", "--state", state, "--response", "确认渲染", check=False,
         )
@@ -386,11 +954,15 @@ def check_delegated_caption_review():
 
 def main():
     check_canonical_caption_plan()
+    check_expressive_caption_plan()
+    check_presentation_renderer_modes()
     check_orphan_merge_keeps_grouping_limits()
     check_hyphenated_tokens_do_not_gain_space()
     check_adjacent_cues_do_not_overlap()
     check_delegated_caption_review()
     print("[caption-protocol] canonical caption plan passed")
+    print("[caption-protocol] expressive plan shell and validation passed")
+    print("[caption-protocol] Standard and Expressive renderer modes passed")
     print("[caption-protocol] grouping limits passed")
     print("[caption-protocol] hyphenated token spacing passed")
     print("[caption-protocol] non-overlapping cue timing passed")

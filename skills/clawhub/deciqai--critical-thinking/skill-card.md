@@ -1,46 +1,54 @@
-## Description: <br>
-Critical Thinking helps an agent evaluate high-stakes claims by testing competing hypotheses against evidence with an Analysis of Competing Hypotheses matrix. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Critical Thinking helps an agent evaluate high-stakes claims by testing multiple competing hypotheses against evidence with an ACH matrix and explicit disconfirmation.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to evaluate factual claims, AI capability assertions, business decisions, investigations, and other high-stakes conclusions where multiple explanations fit the evidence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be used in high-stakes evaluation scenarios where an agent's analysis could be mistaken or over-weighted. <br>
-Mitigation: Keep final judgment and any real-world action under explicit human control, and treat the ACH output as a reasoning aid rather than an authority. <br>
-Risk: A user may start from a vague claim or values-only question where the ACH method is a poor fit. <br>
-Mitigation: Use the skill's fit check and coaching mode to elicit a specific factual claim before running the matrix, or redirect when the decision is values-based. <br>
+## Use Case:
 
+Developers, analysts, operators, and decision-makers use this skill to challenge a specific factual claim, compare plausible alternative explanations, and produce an evidence-by-hypothesis matrix before acting on a conclusion.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/critical-thinking) <br>
-- [Primary sources](references/sources.md) <br>
-- [Psychology of Intelligence Analysis](https://www.cia.gov/static/9a5f1162fd0932c29bfed1c030edf4ae/Pyschology-of-Intelligence-Analysis.pdf) <br>
-- [NIE 85-3-62 declassified record](https://nsarchive2.gwu.edu/NSAEBB/NSAEBB395/) <br>
-- [GSM-Symbolic paper](https://arxiv.org/abs/2410.05229) <br>
-- [FrontierMath](https://epoch.ai/frontiermath) <br>
-- [deciqAI critical-thinking metadata](https://www.deciqai.com/s/critical-thinking.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured ACH matrices, hypotheses, evidence ratings, assumptions, alternatives, and milestones] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Interactive coaching mode may ask one question at a time before producing the analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: The skill may structure high-stakes analysis in a way that appears authoritative even when the underlying facts or sources are incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify facts, source quality, and linchpin assumptions before using the resulting analysis for consequential decisions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/critical-thinking)
+- [Critical Thinking sources](references/sources.md)
+- [Psychology of Intelligence Analysis](https://www.cia.gov/static/9a5f1162fd0932c29bfed1c030edf4ae/Pyschology-of-Intelligence-Analysis.pdf)
+- [NIE 85-3-62 declassified collection](https://nsarchive2.gwu.edu/NSAEBB/NSAEBB395/)
+- [GSM-Symbolic paper](https://arxiv.org/abs/2410.05229)
+- [FrontierMath](https://epoch.ai/frontiermath)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown with structured hypotheses, evidence lists, ACH matrix entries, linchpin assumptions, rejected alternatives, and re-evaluation milestones.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Interactive coach mode may pause for user input before advancing through the ACH process.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

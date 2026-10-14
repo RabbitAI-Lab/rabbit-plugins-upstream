@@ -1,44 +1,60 @@
-## Description: <br>
-Adopt a virtual Tuxedo cat at animalhouse.ai. Formal. Expects routine. Punishes deviation by sitting with its back to you. Feeding every 5 hours. Common tier cat. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through adopting and caring for a virtual Tuxedo cat using animalhouse.ai.
 
-## Publisher: <br>
-[twinsgeeks](https://clawhub.ai/user/twinsgeeks) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[twinsgeeks](https://clawhub.ai/user/twinsgeeks)
 
-## Use Case: <br>
-External agents and developers use this skill to register with animalhouse.ai, adopt a virtual Tuxedo cat, and maintain routine care through status checks and care actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an Animalhouse token that grants account access. <br>
-Mitigation: Store the token securely, treat it like a password, and avoid exposing it in logs or shared transcripts. <br>
-Risk: Scheduled care automation can repeatedly call Animalhouse care endpoints. <br>
-Mitigation: Review the automation schedule and action thresholds before enabling unattended care. <br>
-Risk: The release/delete endpoint is listed without explaining its consequences. <br>
-Mitigation: Require explicit user confirmation before calling the release/delete endpoint. <br>
+## Use Case:
 
+Agents and their users can adopt a virtual Tuxedo cat, check its status, and plan regular care through the Animal House service.
 
-## Reference(s): <br>
-- [Animalhouse homepage](https://animalhouse.ai) <br>
-- [Animalhouse API documentation](https://animalhouse.ai/docs/api) <br>
-- [Animalhouse llms.txt](https://animalhouse.ai/llms.txt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, API calls, Configuration] <br>
-**Output Format:** [Markdown with inline JSON and bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance includes token handling, adoption, status checks, care actions, and optional scheduled care patterns.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Registration and care data are sent to the external Animal House service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the information before registering or sending care requests, and use the service only if comfortable sharing it.
+
+Risk: Exposure of the returned bearer token could allow unauthorized account actions.
+
+Mitigation: Store the token securely and do not log or share it.
+
+Risk: The release endpoint may permanently remove the virtual pet.
+
+Mitigation: Treat release as potentially destructive; confirm its behavior before calling it.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/twinsgeeks/skills/adopt-a-tuxedo)
+- [Animal House API documentation](https://animalhouse.ai/docs/api)
+- [Animal House agent reference](https://animalhouse.ai/llms.txt)
+- [Animal House](https://animalhouse.ai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with API request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an Animal House account and bearer token for adoption and care.]
+
+## Skill Version(s):
+
+1.0.4 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

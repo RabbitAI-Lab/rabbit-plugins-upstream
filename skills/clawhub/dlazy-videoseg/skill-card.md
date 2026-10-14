@@ -1,45 +1,54 @@
-## Description: <br>
-Video human segmentation tool that invokes Aliyun's async SegmentVideoBody to return a same-length black-and-white mask video for downstream compositing or matting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps segment people in video through dLazy's cloud service and obtain a black-and-white mask for compositing or matting.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creators use this skill to run cloud video human segmentation from an agent workflow and obtain mask video outputs for compositing or matting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected videos and request parameters are sent to the dLazy cloud service for processing. <br>
-Mitigation: Use the skill only with media appropriate for third-party cloud processing and confirm before uploading sensitive or restricted video content. <br>
-Risk: The skill requires a dLazy API key that may be stored in local CLI configuration or supplied through an environment variable. <br>
-Mitigation: Store credentials in protected user configuration or per-invocation environment variables, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: The security review notes documentation mistakes around command usage and output format. <br>
-Mitigation: Validate the actual `dlazy videoseg -h` output and returned media type before wiring this skill into automation. <br>
+## Use Case:
 
+Video editors, creators, and developers use this skill to request human segmentation masks for downstream video compositing and matting.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
-- [Dlazy Videoseg on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-videoseg) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [Shell commands and JSON responses containing generated media URLs or async task status.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx plus a dLazy API key; async mode returns a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release evidence and frontmatter) <br>
+Risk: Selected videos are sent to a cloud service, and authentication may store an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only videos approved for cloud processing; protect and rotate the dLazy API key as needed.
+
+Risk: The third-party CLI is installed or executed to process video, and the documented --prompt example does not match the listed --video option.
+
+Mitigation: Review the package before use, prefer the on-demand npx option if a global install is undesirable, and use --video for video input.
+
+## Reference(s):
+
+- [dLazy CLI source (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with bash commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The described command returns a mask result URL or, in asynchronous mode, a task ID; results can be saved locally.]
+
+## Skill Version(s):
+
+1.3.30 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

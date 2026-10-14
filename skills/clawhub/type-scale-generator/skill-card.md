@@ -1,39 +1,49 @@
-## Description: <br>
-Use when generating a full typographic scale (H1-H6, body, caption) from a base font size and a mathematical ratio or historical scale; outputs CSS custom properties or Tailwind config, rounded to avoid subpixel rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a typographic scale from a base size and ratio, including rounded font sizes, line-heights, and tracking, with optional CSS, Tailwind, or Figma output.
 
-## Publisher: <br>
-[monikazapisekstudio](https://clawhub.ai/user/monikazapisekstudio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[monikazapisek](https://clawhub.ai/user/monikazapisek)
 
-## Use Case: <br>
-Designers, design-system maintainers, and frontend developers use this skill to generate readable type-scale tokens from a base size and ratio, including CSS custom properties or Tailwind font-size configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Generated token maps or optional Figma text-style updates may alter a design system if applied without review. <br>
-Mitigation: Review the generated token map first and only allow Figma updates when you intend to change the design file. <br>
+## Use Case:
 
+Designers and developers use this skill to build a consistent, readable type scale for design systems and to produce code tokens or, with permission, Figma variables and text styles.
 
-## Reference(s): <br>
-- [Type Scale Generator on ClawHub](https://clawhub.ai/monikazapisekstudio/skills/type-scale-generator) <br>
-- [Publisher profile: monikazapisekstudio](https://clawhub.ai/user/monikazapisekstudio) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with CSS custom properties or Tailwind configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Shows raw computed values alongside rounded values and reports assumptions for fluid clamp() scales.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: Optional Figma writes can add variables, text styles, or a specimen frame to the current file.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed scale first and approve only the specific writes you want.
+
+## Reference(s):
+
+- [Type Scale Generator on ClawHub](https://clawhub.ai/monikazapisek/skills/type-scale-generator)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Configuration]
+
+**Output Format:** [Markdown scale table with optional CSS custom properties, Tailwind configuration, or Figma variables and text styles]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Shows raw and rounded sizes, line-height, and tracking before any requested write; optional responsive clamp() values and Figma specimen frame.]
+
+## Skill Version(s):
+
+0.1.2 (source: ClawHub release; bundled skill frontmatter says 1.2.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

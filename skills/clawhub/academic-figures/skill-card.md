@@ -1,44 +1,60 @@
-## Description: <br>
-Academic Figures generates publication-quality charts from JSON or CSV data, including 14 chart types, colorblind-safe themes, CJK support, hatching, multi-panel layouts, flow diagrams, and PNG, SVG, PDF, TIFF, or EPS output. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates publication-ready scientific charts from local data, with journal presets and multi-format figure export.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Developers, researchers, and agents use this skill to turn structured JSON or CSV datasets into journal-ready academic figures, diagrams, and statistical visualizations. It is suited for local figure generation workflows where the user controls the input data and output path. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The plotting workflow reads the user-selected input file and can write or overwrite the requested output file. <br>
-Mitigation: Use intentional input data and explicit output paths, and review the generated figure before sharing or submitting it. <br>
-Risk: Generic chart-generation requests may activate the skill in contexts where another visualization workflow would be more appropriate. <br>
-Mitigation: Confirm the desired output is a publication-style academic figure before running the local generator. <br>
+## Use Case:
 
+Researchers, authors, and developers use this skill to turn local JSON, CSV, or Excel data into publication-ready scientific figures, including clinical and statistical charts.
 
-## Reference(s): <br>
-- [Academic Figures Skill Page](https://clawhub.ai/docsor1212/academic-figures) <br>
-- [Data Format Reference](references/data-formats.md) <br>
-- [Academic Figures Pitfalls](references/pitfalls.md) <br>
-- [Reverse-Engineering Chart Colors from Reference Images](references/reverse-engineering-colors.md) <br>
-- [academic-figures v1.5.0 Upgrade Analysis](references/v1.5-upgrade-analysis.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration instructions, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command examples; generated figure files may be PNG, SVG, PDF, TIFF, or EPS.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local execution with user-selected input and output paths; generated figures use a white background for publication workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.5.1 (source: server release metadata; artifact frontmatter lists 1.5.0) <br>
+Risk: MCP mode writes figures to predictable shared temporary files, which could expose or overwrite data on shared machines.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use single-user local chart generation; avoid privileged or shared-machine MCP deployments until output uses private permissions and unpredictable filenames.
+
+Risk: Optional dependency installation can change the Python environment.
+
+Mitigation: Use a virtual environment for --fix or uvx installs and review dependencies before installation.
+
+Risk: A test run against modified, untrusted examples may execute unsafe content.
+
+Mitigation: Do not run the test suite against untrusted modified examples.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/docsor1212/skills/academic-figures)
+- [Quick start](artifact/references/quickstart.md)
+- [Data formats](artifact/references/data-formats.md)
+- [Limits and flag interactions](artifact/references/limits.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance, Figure files]
+
+**Output Format:** [Text guidance and commands; generated PNG, PDF, TIFF, or other figure files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional alt text and journal-oriented export presets; figures are rendered locally.]
+
+## Skill Version(s):
+
+4.10.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

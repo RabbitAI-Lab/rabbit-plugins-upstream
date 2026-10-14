@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/dapr-dotnet",
   "slug": "dapr-dotnet",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1778491872769,
-  "contentHash": "53189367e72c1450c44ec8189a76c35dbf88c4a5acd01b589be306c376c9d68b",
-  "fetchedAt": "2026-07-26T20:08:39.838Z"
+  "version": "1.0.2",
+  "updatedAt": 1791865481539,
+  "contentHash": "e412c08114eb517d9b72696b366db44a8cbf6d985f7eb529c4ef1f8fd8c4cfae",
+  "fetchedAt": "2026-10-14T13:06:16.745Z"
 }

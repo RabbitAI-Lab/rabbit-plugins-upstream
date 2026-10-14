@@ -1,49 +1,54 @@
-## Description: <br>
-persistent-sshfs helps agents guide users through installing and running a Bash SSHFS helper that retries initial key-based mounts and relies on sshfs reconnect plus scheduled re-runs for persistence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps bring up SSHFS mounts with retry-until-connected behavior and provides instructions for periodically rerunning the script to restore mounts that later drop.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and engineers use this skill when they need guidance for bringing up SSHFS mounts at boot or login, retrying initial key-based SSH authentication, and configuring cron or systemd timers for recurring remount attempts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The install flow downloads an executable script from GitHub. <br>
-Mitigation: Review the upstream script before installing or running it. <br>
-Risk: Configured SSHFS mounts expose remote filesystems locally and use the user's existing SSH keys. <br>
-Mitigation: Use only trusted remote hosts and protect SSH keys used for non-interactive authentication. <br>
-Risk: Failed key-based SSH authentication can retry indefinitely and cron or systemd settings can leave repeated long-running attempts. <br>
-Mitigation: Configure timers, intervals, and service timeouts deliberately, especially for unreliable hosts or networks. <br>
-Risk: The helper is not a resident watchdog after mounts succeed. <br>
-Mitigation: Use the documented cron or systemd timer pattern to re-run it when fully dropped mounts need recovery. <br>
-Risk: Unclean termination can leave SSHFS mounts dangling. <br>
-Mitigation: Check active fuse.sshfs mounts and unmount stale mount points manually with fusermount when cleanup did not run. <br>
+## Use Case:
 
+Developers and system administrators use this skill to set up SSHFS mounts with key-based authentication and arrange periodic reruns to recover mounts that fully disconnect.
 
-## Reference(s): <br>
-- [Setup](references/setup.md) <br>
-- [Upstream project homepage](https://github.com/psyb0t/persistent-sshfs) <br>
-- [Install script source](https://raw.githubusercontent.com/psyb0t/persistent-sshfs/master/persistent-sshfs) <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/persistent-sshfs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with shell commands and systemd or cron configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes mount-file syntax, install steps, runtime behavior, and safety notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Installing a mutable remote script with sudo could run unreviewed changes with elevated privileges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the downloaded script before installation and pin it to a known commit or verify its checksum.
+
+Risk: Recurring mount jobs keep connections and remote filesystems available across sessions.
+
+Mitigation: Enable cron or systemd reruns only for trusted SSH hosts and mount paths you intend to keep active.
+
+## Reference(s):
+
+- [Setup instructions](references/setup.md)
+- [Persistent Sshfs on ClawHub](https://clawhub.ai/psyb0t/skills/persistent-sshfs)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with shell commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Mounts need key-based SSH authentication; periodic reruns restore fully dropped mounts.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
