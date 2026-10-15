@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-cluster-creation",
+  "repo": "google/skills",
+  "skillId": "gke-cluster-creation",
+  "branch": "main",
+  "pushedAt": "2026-10-15T12:26:19Z",
+  "contentHash": "2b5ac1074cb1272685d6b469fee73b8549a679d1c4a2f404e9aa9a79b37d7775",
+  "fetchedAt": "2026-10-15T12:45:10.253Z"
+}

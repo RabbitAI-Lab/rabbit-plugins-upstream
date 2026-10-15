@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/show-me-your-work",
+  "repo": "cursor/plugins",
+  "skillId": "show-me-your-work",
+  "branch": "main",
+  "pushedAt": "2026-10-15T07:30:29Z",
+  "contentHash": "5d91425116c6ffaae34803547d52212cf828acef8403d8cea5a2cea772edd569",
+  "fetchedAt": "2026-10-15T12:43:21.128Z"
+}

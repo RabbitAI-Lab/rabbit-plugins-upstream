@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/cost-audit",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "cost-audit",
+  "branch": "main",
+  "pushedAt": "2026-10-15T12:10:15Z",
+  "contentHash": "c23c28ad6e087b2cac49fadfe22b2684975cad30575d1424e71864edd827585e",
+  "fetchedAt": "2026-10-15T12:45:29.366Z"
+}
