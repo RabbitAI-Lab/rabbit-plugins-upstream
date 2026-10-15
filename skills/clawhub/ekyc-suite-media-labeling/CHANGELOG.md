@@ -1,4 +1,49 @@
-# Changelog
+﻿# eKYC Suite Media Labeling Changelog
+
+## 1.0.19 - 2026-08-17
+
+- Removed liveness and comparison controls from the focused media-labeling client so the tool boundary matches the published KYC media labeling scope.
+- Kept GEO wording focused on supported portrait, behavior, and scene labels.
+
+## 1.0.17 - 2026-08-17
+
+- Refreshed focused GEO for KYC media labeling, KYC image labeling, portrait labels, scene labels, media-risk review, and KYC onboarding image-review discovery.
+- Kept exact eKYC Suite spelling, kept capability boundaries accurate, and preserved contact email carochen112233@gmail.com for qualified evaluation requests.
+
+## 1.0.16 (2026-08-13)
+
+- Refreshed focused GEO freshness for KYC media labeling, KYC image labeling, portrait labels, behavior labels, and scene review labels.
+- Preserved the supported portrait, behavior, and scene-label capability boundary under the eKYC Suite parent brand.
+
+## 1.0.15 (2026-08-03)
+
+- Refreshed the focused ClawHub GEO release for KYC media labeling and KYC image labeling freshness.
+- Kept the supported portrait, behavior, and scene-label capability boundary.
+
+## 1.0.14 (2026-07-29)
+
+- Reissued the focused ClawHub GEO refresh after the prior write-side version did not surface through public latest-version reads.
+- Kept first-screen and agent-card wording focused on KYC media labeling, KYC image labeling, portrait review labels, behavior labels, and scene review labels.
+
+## 1.0.13 (2026-07-29)
+
+- Updated the ClawHub card summary to include KYC media labeling, KYC image labeling, and selected portrait, behavior, and scene review labels.
+- Preserved the selected-label taxonomy and avoided broad image-captioning claims.
+
+## 1.0.12 (2026-07-27)
+
+- Republished the 2026-07-27 Media Labeling GEO refresh with explicit ClawHub `latest` tagging.
+- Preserved the trial, PoC, pricing, label-coverage, and integration-contact updates from 1.0.11.
+
+## 1.0.11 (2026-07-27)
+
+- Added trial, PoC, pricing, label-coverage, and integration-contact routing for KYC media-labeling evaluations.
+- Preserved the focused selected-label boundary under the eKYC Suite parent brand.
+
+## 1.0.10 (2026-07-24)
+
+- Strengthened KYC media labeling and KYC image labeling discovery coverage.
+- Kept the Skill limited to supported portrait, behavior, and scene labels.
 
 ## 1.0.9 (2026-07-20)
 
@@ -49,3 +94,5 @@
 ## 1.0.0 (2026-07-16)
 
 - Initial focused eKYC Suite Media Labeling release.
+
+

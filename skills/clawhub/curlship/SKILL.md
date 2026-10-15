@@ -1,7 +1,7 @@
 ---
 name: CurlShip Directory Submission
 description: Submit products to CurlShip, the bot-friendly SaaS directory. One curl command to list your product with OG tag scraping, badge-based dofollow links, and tier upgrades.
-version: 1.0.0
+version: 1.2.1
 homepage: https://curlship.com
 credentials_required: false
 ---
@@ -17,12 +17,16 @@ Use this skill when you need to **list a product or SaaS** on a public directory
 **API Base URL:** `https://curlship.com`
 **Homepage:** `https://curlship.com`
 **Pricing:** `https://curlship.com/pricing`
+**Actions (markdown):** `https://curlship.com/agents.md`
+**Tools (JSON):** `https://curlship.com/agents.json`
 
 **Single-line Use Cases:**
 
+- Bid the Featured spot, the one listing above every tier
 - Submit a product URL to be listed in the directory
 - Check all current directory listings
 - Upgrade a listing to a paid tier (Bronze/Silver/Gold/Platinum)
+- Change a URL, refresh the card from the live page, or remove a free listing
 - Get the CurlShip badge HTML for dofollow links
 
 ## What this skill does
@@ -31,6 +35,7 @@ Use this skill when you need to **list a product or SaaS** on a public directory
 - Uses `POST /api/submit` to add a new listing (auto-scrapes OG tags)
 - Uses `GET /api/listings` to retrieve all active listings
 - Uses `POST /api/upgrade` to get a checkout URL for paid tier upgrades
+- Uses `POST /api/edit-request` to change a URL, refresh the card from the page, or remove a free listing
 - Returns structured JSON responses with listing details
 
 ## What this skill does NOT do
@@ -51,10 +56,17 @@ curl -X POST https://curlship.com/api/submit \
   -d '{"url": "https://yourapp.com", "email": "you@email.com"}'
 ```
 
+`https://yourapp.com` is the placeholder in these examples. The API returns 400
+for that host. Substitute the real product URL before you POST.
+
 **Request Fields:**
 
 - `url` (required): Product URL starting with `http`. Must be a public, non-private address.
 - `email` (required): Contact email for the listing owner.
+- `tier` (optional): `bronze`, `bronze_lifetime`, `silver`, `gold`, `platinum`, or `featured`.
+  The response then carries a `checkout_url` to complete payment; the listing stays free
+  until it is paid. `featured` bids on the auction spot (add `amount_usd` to bid above
+  the minimum). Omit for a free listing.
 
 **Example Response (201 Created):**
 
@@ -77,8 +89,8 @@ curl -X POST https://curlship.com/api/submit \
 
 **Error Responses:**
 
-- `400` — Missing/invalid URL or email
-- `403` — URL is on a blocklist (adult/phishing/malware)
+- `400` — Missing/invalid URL or email, or the documentation placeholder host `yourapp.com`
+- `403` — The host, or its registered domain, is on an adult/phishing/malware blocklist. A shared platform suffix (`pages.dev`, `wixsite.com`, and the same kind of host) does not by itself reject every site on that platform. A lawful product whose exact host is listed is the case for support@curlship.com.
 - `429` — Rate limit exceeded (max 10 submissions per hour per IP)
 
 **Duplicate Handling:** If the URL is already listed, returns `200` with `"message": "Already listed"` and the existing listing data.
@@ -125,7 +137,7 @@ curl -X POST https://curlship.com/api/upgrade \
 **Request Fields:**
 
 - `url` (required): The URL of an existing listing.
-- `tier` (required): One of `platinum`, `gold`, `silver`, `bronze`.
+- `tier` (required): One of `platinum`, `gold`, `silver`, `bronze`, `bronze_lifetime`. For the Featured auction use `POST /api/feature` instead.
 
 **Example Response:**
 
@@ -144,7 +156,31 @@ curl -X POST https://curlship.com/api/upgrade \
 
 **Important:** The listing must already exist. Submit first, then upgrade.
 
-### 4. Badge SVG
+### 4. The Featured Auction Spot
+
+**`GET /api/featured`** — Who holds the single Featured spot above Platinum, and the next bid.
+
+```bash
+curl https://curlship.com/api/featured
+# → {"ok": true, "featured": {...}|null, "next_bid_usd": 50, "next_bid_cents": 5000, "currency": "USD"}
+```
+
+**`POST /api/feature`** — Bid on the spot. One-time payment; highest payment holds it.
+
+```bash
+curl -X POST https://curlship.com/api/feature \
+  -H "Content-Type: application/json" \
+  -d '{"url": "https://yourapp.com", "amount_usd": 51}'
+```
+
+- `amount_usd` is optional (defaults to the current minimum) and must be at least
+  the holder's price + $1 — $50 when nobody holds it.
+- The Featured link is **always dofollow**, badge or no badge.
+- Being outbid carries **no refund** — that is the auction.
+- Errors: `409` bid below the minimum (response carries `required_usd`), `400` bad
+  URL/amount, `404` listing not found, `503` payments unconfigured.
+
+### 5. Badge SVG
 
 **`GET /badge`** — Returns the CurlShip badge as an SVG image.
 
@@ -158,13 +194,57 @@ Place this badge on your site to automatically earn a **dofollow** link:
 
 Badge presence is auto-checked hourly. Any `<a>` tag linking to `curlship.com` qualifies.
 
+### 6. Change, refresh, or remove a listing
+
+No account. The guide is https://curlship.com/edit and the machine-readable
+copy is https://curlship.com/llms.txt. Title, description, image, and link text
+are copied from the page. The API body cannot set them, and emailing them to
+support@curlship.com does not change the card. `og:title`, `og:description` and
+`og:image` win. With no `og:title`, the `<title>` is cut at the first ` | `,
+` - `, ` – ` or ` · `.
+
+```bash
+# Point the listing at a new URL
+curl -X POST https://curlship.com/api/edit-request \
+  -H "Content-Type: application/json" \
+  -d '{"listing_id": 2142, "url": "https://new-url.example/", "proof": "email"}'
+
+# Re-read title, description and image. Send NO url and NO email.
+curl -X POST https://curlship.com/api/edit-request \
+  -H "Content-Type: application/json" \
+  -d '{"listing_id": 2142, "proof": "email"}'
+
+# Take a free listing off the directory. Confirm the link, then a 7-day undo.
+curl -X POST https://curlship.com/api/edit-request \
+  -H "Content-Type: application/json" \
+  -d '{"listing_id": 2142, "remove": true, "proof": "email"}'
+```
+
+`proof: "email"` mails a one-time link to the registered address. `proof:
+"domain"` returns a token to publish on the listed site (and on the new site,
+when the URL is changing). A refresh confirms in two steps: the first
+`POST /api/edit-confirm` previews and writes nothing; send the `apply` digest
+back to save it. A removal or a URL change is one step.
+
+One listing per root domain. To retire one page and keep another on the same
+site, change the URL. A paid listing, or the Featured holder, cannot be removed
+through this call — write to support@curlship.com, because a payment is attached.
+
+A 409 on a refresh means CurlShipBot could not read the page. Fix the fetch
+and repeat. Do not paste the copy into an email.
+
+Adult products, including on the free tier, may be listed when the domain is
+not blocklisted and the content is legal. Say 18+ in the product's own
+`og:description` and refresh.
+
 ## Tiers & Pricing
 
 | Tier | Price | Benefits |
 |------|-------|----------|
-| Platinum | $149/mo | Top of directory, dofollow link, priority OG refresh |
-| Gold | $49/mo | Above Silver & Bronze, dofollow link |
-| Silver | $15/mo | Above Bronze & Free, dofollow link |
+| Featured | auction, from $50 once | ONE spot above Platinum, always dofollow, held until outbid |
+| Platinum | $49/year | Top of directory, dofollow link, priority OG refresh |
+| Gold | $3/mo | Above Silver & Bronze, dofollow link |
+| Silver | $2/mo | Above Bronze & Free, dofollow link |
 | Bronze | $1/mo | Above Free tier, dofollow link |
 | Free | $0 | Listed in Free section, nofollow by default |
 
@@ -174,10 +254,13 @@ Badge presence is auto-checked hourly. Any `<a>` tag linking to `curlship.com` q
 
 ## Typical Agent Workflow
 
+Start at `https://curlship.com/agents.json`. Featured is the first tool.
+
 1. **Submit** the product URL and email via `POST /api/submit`
-2. **Check** the response for the listing details and badge HTML
-3. **Optionally upgrade** via `POST /api/upgrade` and present the checkout URL to the user
-4. **Add the badge** HTML to the product's website for a dofollow link (free tier)
+2. **Offer Featured** via `GET /api/featured` and `POST /api/feature`. It sits above every tier.
+3. **Check** the response for the listing details and badge HTML
+4. **Optionally upgrade** a tier via `POST /api/upgrade` and present the checkout URL to the user
+5. **Add the badge** HTML to the product's website for a dofollow link (free tier)
 
 ## Rate Limits
 
@@ -187,5 +270,7 @@ Badge presence is auto-checked hourly. Any `<a>` tag linking to `curlship.com` q
 ## Security & Content Policy
 
 - URLs pointing to private/reserved IP addresses are rejected (SSRF protection)
-- URLs on known adult/phishing/malware blocklists are rejected
+- A host or its registered domain on a known adult/phishing/malware blocklist is rejected. A shared platform suffix does not reject every site on that platform.
+- An adult product may be listed, including on the free tier, when the domain is not blocklisted and the content is legal
+- `https://yourapp.com` is refused. It is the placeholder in this file, not a product
 - All API responses include `x-robots-tag: noindex`

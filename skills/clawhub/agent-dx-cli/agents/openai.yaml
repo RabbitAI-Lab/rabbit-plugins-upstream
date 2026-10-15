@@ -1,0 +1,6 @@
+interface:
+  display_name: "Agent DX CLI"
+  short_description: "Predictable, safe, context-efficient CLI engineering"
+  default_prompt: "Use $agent-dx-cli to review this CLI and implement authorized improvements with executable evidence."
+policy:
+  allow_implicit_invocation: false

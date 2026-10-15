@@ -1,40 +1,56 @@
-## Description: <br>
-数学错误的持续分析与根因档案系统，仅在学生明确要求记录错题、分析弱项、生成数学报告或同意连续跟踪时激活。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes recurring math errors for Chinese-speaking middle and high school students, identifying specific causes and patterns to guide targeted practice.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to classify math mistakes, identify recurring weak areas, and generate consent-based error maps or monthly weak-area reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna) <br>
-- [数学错因维度表](references/math-error-dimension-table.md) <br>
-- [初中数学高频概念混淆对照表](references/concept-confusion-map.md) <br>
-- [数学读题失误训练方法手册](references/reading-habits.md) <br>
+Students and educators use this skill to examine recurring math mistakes, identify specific error subtypes and related weak areas, and request targeted practice or a monthly progress report. It works from handoffs by the general wrong-answer notebook rather than collecting or counting wrong answers itself.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Chinese-language tutoring analysis, structured markdown reports, consent prompts, and weak-area tracking guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; intended to operate with explicit student consent before creating long-term learning records.] <br>
+Global
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Student error profiles, cross-skill sharing, parent summaries, or reminders may expose sensitive learning information without appropriate consent.
+
+Mitigation: Confirm the relevant consent settings before storing profiles, sharing across skills, preparing parent summaries, or scheduling reminders.
+
+Risk: Crisis and help-channel guidance is oriented toward mainland China and may be inappropriate elsewhere.
+
+Mitigation: Localize emergency and referral guidance to the student's location before deploying outside mainland China.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna)
+- [Math error dimension table](references/math-error-dimension-table.md)
+- [Concept confusion map](references/concept-confusion-map.md)
+- [Reading habits guide](references/reading-habits.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Practice questions, Progress reports]
+
+**Output Format:** [Chinese-language text and Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can include coded error subtypes, confidence labels, and suggested next steps; historical counts depend on notebook data.]
+
+## Skill Version(s):
+
+2.11.1 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

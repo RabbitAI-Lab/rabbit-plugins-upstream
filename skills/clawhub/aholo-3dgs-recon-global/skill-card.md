@@ -1,45 +1,63 @@
-## Description: <br>
-Aholo OpenAPI v1 global 3D tasks (reconstruction/generation): upload, create (worldId), poll/status. Gateway api.aholo3d.com, /global/world/v1. Default one create per single intent; multiple creates allowed when user explicitly chooses separate 3DGS per video. Not for 2D. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create and track Aholo 3D reconstruction or generation tasks from user-provided media or prompts.
 
-## Publisher: <br>
-[xiaohao17501671450-lgtm](https://clawhub.ai/user/xiaohao17501671450-lgtm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaohao17501671450-lgtm](https://clawhub.ai/user/xiaohao17501671450-lgtm)
 
-## Use Case: <br>
-Developers and agents use this skill to upload selected media to Aholo and create, check, poll, or list 3D reconstruction and generation tasks that return worldId-based 3DGS results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated task requests use an under-disclosed beta API endpoint. <br>
-Mitigation: Confirm that api-beta.aholo3d.com is the intended endpoint before installing or using the skill. <br>
-Risk: Using the skill uploads selected media and uses an Aholo API key for tasks that may consume paid credits. <br>
-Mitigation: Run create actions only after the user confirms the intended 3D task, and avoid duplicate create requests for the same intent. <br>
-Risk: Disabling TLS verification weakens network protection. <br>
-Mitigation: Prefer a trusted CA bundle and do not set AHOLO_INSECURE_SKIP_VERIFY unless the user accepts the network risk. <br>
+## Use Case:
 
+Developers and other Aholo users can ask an agent to reconstruct 3D scenes or objects from images or video, generate 3D content from a prompt or image, and check task progress and results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/xiaohao17501671450-lgtm/skills/aholo-3dgs-recon-global) <br>
-- [Aholo API keys](https://labs.aholo3d.com/api-keys) <br>
-- [Aholo pricing](https://www.aholo3d.com/pricing) <br>
-- [Aholo 3DGS model viewer](https://studio.aholo3d.com/3dgs-model/{worldId}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API calls, Guidance] <br>
-**Output Format:** [Markdown status text with inline shell commands and links to generated 3D task results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include worldId, viewer URL, task status, poll metadata, and result file URLs such as PLY, SPZ, SOG, LOD metadata, or panorama output.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Selected media and task metadata are shared with Aholo under the user's API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only media the user authorizes and protect the API key; review accessible task metadata before using the list action.
+
+Risk: Creating tasks can consume credits, especially when generating separate tasks for multiple videos or retrying an uncertain request.
+
+Mitigation: Confirm separate-task choices and potential charges upfront; avoid duplicate creates and inspect existing tasks before retrying.
+
+Risk: Disabling TLS verification can expose media and credentials to interception.
+
+Mitigation: Keep TLS verification enabled and use a trusted CA bundle rather than AHOLO_INSECURE_SKIP_VERIFY.
+
+Risk: Unpinned Python dependencies can change between installations.
+
+Mitigation: Pin and audit dependencies before production use.
+
+## Reference(s):
+
+- [Aholo skill release on ClawHub](https://clawhub.ai/xiaohao17501671450-lgtm/skills/aholo-3dgs-recon-global)
+- [Aholo API keys](https://labs.aholo.ai/api-keys)
+- [Aholo pricing](https://www.aholo.ai/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with task IDs, status updates, viewer links, and optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Completed tasks may provide links to 3D asset files.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

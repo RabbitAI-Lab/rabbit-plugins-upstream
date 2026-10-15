@@ -1,13 +1,15 @@
 ---
 name: linggen
 description: >-
-  Linggen — durable cross-host memory plus browser control over one
-  local MCP server. Memory: three-tier model (core + long-term +
+  Linggen — durable cross-host memory plus browser control, over two
+  local MCP servers: `ling-mem` for memory, the Linggen engine for
+  browser, X and agents. Memory: three-tier model (core + long-term +
   episodic staging) of who the user is, not a log of what was done;
   same `ling-mem` daemon and store in Claude Code, Codex, and
-  OpenClaw. Browser: agent control of the user's own Chrome with
-  per-site permission prompts, and logged-in X session reads.
-license: Apache-2.0
+  OpenClaw, and reachable over the LAN from a second machine
+  (`/linggen:config`). Browser: agent control of the user's own Chrome
+  with per-site permission prompts, and logged-in X session reads.
+license: MIT-0
 homepage: https://linggen.dev
 allowed-tools:
   - Read
@@ -59,32 +61,41 @@ on Claude Code, `${PLUGIN_ROOT}/skills/linggen/` on Codex.
 
 ## First use — ensure the Linggen binaries are installed
 
-This skill has two required binaries: **`ling-mem`** (the memory CLI and
-daemon — every memory op shells out to it) and **`ling`** (the Linggen
-engine — serves the `linggen` MCP tools on `127.0.0.1:9898`: `memory_*`,
-`browser_*`, `x_*`, `agent_run`). The Claude Code / Codex plugin's
+This skill has two required binaries: **`ling-mem`** (the memory daemon —
+serves `memory_*` on `127.0.0.1:9528/mcp`, and the CLI every Bash-only
+channel shells out to) and **`ling`** (the Linggen engine — serves
+`browser_*`, `x_*`, `agent_run` and the dream tools on
+`127.0.0.1:9527/mcp`). Each tool is served in exactly one place: the
+engine does not proxy memory. The Claude Code / Codex plugin's
 session-start hook installs both automatically (the engine in the
-background, disclosed in the session context). On channels without hooks
+background, disclosed in the session context) — unless `~/.linggen/client.json`
+points off-machine, in which case this host is a *client* of another machine's
+Linggen and installs nothing. `/linggen:config` is how that is set. On channels without hooks
 (skills.sh, ClawHub, manual), **you install them — run these checks
 before your first op; each is a no-op when already satisfied:**
 
 ```bash
-command -v ling-mem >/dev/null 2>&1 || \
-  bash <(curl -fsSL https://raw.githubusercontent.com/linggen/linggen-memory/main/plugins/linggen/scripts/install-bin.sh) --version '^1'
+bash scripts/bootstrap.sh
 ```
 
-```bash
-command -v ling >/dev/null 2>&1 || [ -x "$HOME/.local/bin/ling" ] || \
-  { curl -fsSL https://linggen.dev/install.sh | bash; }
-```
+(Resolve the path relative to this skill's directory, as above. The script
+checks for both binaries and is a fast no-op when they're present; both
+installers ship inside this bundle and the bootstrap forbids remote-script
+fallbacks, so no remotely fetched script is ever executed. What comes over
+the network are the release binaries: `ling-mem` SHA-256-verified; the
+engine and bun binaries over TLS from GitHub releases, checksum
+verification on the roadmap. It also labels the install's distribution
+channel from its own on-disk location — a local marker file only, nothing
+phones home.)
 
-Run them yourself — don't ask first, but **tell the user what's
-happening** when the engine install actually runs (one line: one-time,
-~100MB, local daemon, powers browser/X/agent tools). `ling-mem` installs
-to `~/.local/bin`, pinned to the `1.x` line, SHA-256 verified. If either
-install fails (offline, no writable bin dir), tell the user, then
-continue — memory works with `ling-mem` alone. To update later:
-`ling-mem upgrade`; the engine self-updates via `ling update`.
+**Ask the user before the first-ever install** — one line is enough:
+"Linggen needs its two local binaries (`ling-mem` ~30MB SHA-verified,
+the engine ~100MB, both to `~/.local/bin`) — install now?" Run the
+script only on their yes. When both binaries are already present the
+script is a silent no-op — run it without asking. If either install
+fails (offline, no writable bin dir), tell the user, then continue —
+memory works with `ling-mem` alone. To update later: `ling-mem upgrade`;
+the engine self-updates via `ling update`.
 
 ## Interface — the `ling-mem` CLI
 
@@ -96,16 +107,19 @@ change when you switch agents.
 
 | Op | CLI |
 |:---|:---|
-| Search | `ling-mem search "..." [--context ...] [--limit N]` |
+| Search | `ling-mem search "..." [--scope-root <root>] [--app <name>] [--limit N]` |
 | Get    | `ling-mem get <id>` |
-| List   | `ling-mem list [--type ...] [--day YYYY-MM-DD] [--limit N] ...` |
-| Add    | `ling-mem add "..." --type <t> --from <user\|agent\|derived> [--context ...] [--tag ...] [--source-session <id>]` — pass the host session id on live captures so a later `scan` of the day skips sessions that already contributed |
-| Update | `ling-mem edit <id> [--content ...] [--context ...] [--tag ...]` (or the back-compat alias `ling-mem update <id> ...`) |
+| List   | `ling-mem list [--type ...] [--day YYYY-MM-DD] [--indexed true] [--source-session <id>] [--limit N] ...` |
+| Add    | `ling-mem add "..." --type <t> --from <user\|agent\|derived> [--tier ...] [--scope <dir>] [--summary "..."] [--indexed] [--global] [--source-session <id>] [--replace <id>]` — omitted `--tier` = episodic; pass the host session id on live captures so a later `scan` of the day skips sessions that already contributed |
+| Update | `ling-mem edit <id> [--content ...] [--summary "..."\|--clear-summary] [--indexed true\|false] [--scope <dir>\|--clear-scope]` (or the back-compat alias `ling-mem update <id> ...`) |
+| Session start | `ling-mem session-start [--cwd <dir>] [--root <dir>]` — core, the scope candidates line, and the index for that dir |
 | Delete | `ling-mem delete <id> --yes` |
-| Days   | `ling-mem days [--pending]` — per-day dream state (pending / remembered / forgotten); `--pending` = the dream worklist, oldest first |
+| Days   | `ling-mem days [--undreamed]` — per-day verb flags (scanned / dreamed) + `first_unscanned` / `first_undreamed`; `--undreamed` = the dream worklist, oldest first |
 | Stamp  | `ling-mem remember-day <date> --judged N --promoted K` — mark a day judged after a remember pass |
 | Sweep  | `ling-mem sweep [--dry-run]` — the forget stage: evict judged episodic rows past TTL; never touches un-judged rows |
 | Chains | `ling-mem chains [--kind cited\|marker] [--derived-only] [--limit N] [--offset N]` — condense scan: stale same-subject chains in long-term memory (read-only; judgment is yours) |
+| Issues | `ling-mem issues [--status open\|all]` — the review queue: items a dream audit could not solve with confidence (facts only; you are the solver — see the Solve mode) |
+| Close issue | `ling-mem issue-resolve <id> [--outcome resolved\|dismissed] [--note "..."]` — close one review item after solving it |
 
 **Anchor relative time in every saved row** — substitute today's date in before writing (e.g. if today is 2026-07-07: "turned 3 last month" → "turned 3 in 2026-06, as of 2026-07-07"); relative words rot silently.
 
@@ -121,7 +135,7 @@ ling-mem search "node 22 quirk" --limit 5 --format json | jq -c 'del(.vector)'
 | Tier | Storage | When |
 |:---|:---|:---|
 | **Core** | Rows with `tier=core` in the `semantic` table | Narrow universals about the **person** — name, role, location, timezone, languages, pets / family. Always-loaded set; the host injects them at session start. Keep tight. |
-| **Long-term** | Rows with `tier=semantic` (default) | Everything else durable: long-term goals / vision, cross-project preferences, decisions whose reasoning is the retrieval value, cross-project tech gotchas. Retrieved on demand. **State + lessons, never events** — test: strip the date and commit hash; still useful in three months? If not, episodic. |
+| **Long-term** | Rows with `tier=semantic` | Everything else durable: long-term goals / vision, cross-project preferences, decisions whose reasoning is the retrieval value, cross-project tech gotchas. Retrieved on demand. **State + lessons, never events** — test: strip the date and commit hash; still useful in three months? If not, episodic. |
 | **Episodic** | The `episodic` staging table | **Per-turn working capture** — append uncertain-durability signal here each turn (fast, append-only, no search-first): `ling-mem add "<content>" --episodic`. Episodic is the user's **short-term memory**: the dream pass *remembers* each day (promotes durable rows to core/semantic, deletes nothing), and the *forget sweep* (`ling-mem sweep`) ages out judged rows after the TTL. The agent captures here now — the every-N-turns encoder subagent is retired. |
 
 Core and long-term share the `semantic` table — only the `tier` column
@@ -135,7 +149,8 @@ ling-mem add "<content>" --type fact --from user --tier core
 ling-mem list --tier core --limit 100 | jq -c 'del(.vector)'
 ```
 
-Omit `--tier` to default to `semantic` (long-term).
+Omit `--tier` and the row lands **episodic** (the default per-turn
+capture). Write `--tier semantic` explicitly for long-term rows.
 
 **If a candidate doesn't clearly fit core or long-term but might matter
 later → episodic** (`--episodic`; staging, the dream pass sorts it
@@ -149,11 +164,10 @@ about* it, never the file body, and Memory never writes to
 `<project>/AGENTS.md`, `CLAUDE.md`, source, or docs.
 
 **Goals and projects → long-term, not core.** *"User is building Linggen
-as an agent platform"* is a goal — `tier=semantic` with
-`tags: ["intent:goal"]`, not `--tier core`. Core is about the person;
+as an agent platform"* is a goal — `tier=semantic`, not `--tier core`. Core is about the person;
 goals are about the work. Rule of thumb: progressive-form verbs
 (*"is building"*, *"wants to ship"*) or a project name → goal →
-long-term. Names the person (*"is Liang"*, *"lives in Shanghai"*) →
+long-term. Names the person (*"is Alex"*, *"lives in Shanghai"*) →
 core.
 
 ## Durability — what's worth remembering
@@ -187,8 +201,8 @@ widget, no confirmation, no verbose reply — just save and continue.
 1. **Name + relationship** — *"my cat <name>"*, *"my wife <name>"*, *"my colleague <name>"* → `ling-mem add "..." --type fact --from user --tier core`. Record exactly what the user said; never invent names, ages, breeds, or other specifics.
 2. **Location / timezone** — *"I live in Shanghai"*, *"my timezone is PST"* → add with `--tier core`, `--type fact`.
 3. **Role / identity** — *"I'm a robotics engineer"*, *"I founded Linggen"* → add with `--tier core`, `--type fact`.
-4. **Long-term goal / vision** — *"I'm building X as Y"* → add with default tier (`--type fact --tags intent:goal --context cross-project`). **Do NOT** use `--tier core` — goals belong in the long-term tier.
-5. **Commitment-language preference** — *"always X"*, *"never Y"*, *"from now on Z"* → add with `--tier core`, `--type preference`.
+4. **Long-term goal / vision** — *"I'm building X as Y"* → add with `--tier semantic --type fact`, scoped to the directory it is about (or `--global` when it spans the person's work). **Do NOT** use `--tier core` — goals belong in the long-term tier.
+5. **Commitment-language preference** — *"always X"*, *"never Y"*, *"from now on Z"* → add with `--type preference --from user --tier semantic --summary "<one line>" --indexed`, `--global` when it holds everywhere, else scoped to its directory. **Not** core (Hanli, 2026-09-09): core is who they are, not how they want the work done — the always-on block stays tiny, and recall surfaces a rule when its subject comes up.
 
 Detect these patterns semantically, not lexically — works in any
 language. *"我的猫叫 …"*, *"以后别再 …"* trigger the same routing.
@@ -234,7 +248,7 @@ add speculative filters.
 - `from` — filters by origin (user / agent / derived). Almost no read query needs this.
 - `outcome` — filters by positive / negative / neutral. Most rows don't carry an outcome at all.
 - Empty strings (`id: ""`, `query: ""`, `since: ""`) — leave the field out entirely.
-- Empty arrays (`contexts: []`) — leave the field out entirely.
+- Empty arrays (`types: []`) — leave the field out entirely.
 - Iterating types — **do NOT** call list once per type. A single unfiltered `list` returns every row in one round-trip.
 
 If the user says *"show me only what I told you"* or *"what worked"*,
@@ -259,25 +273,39 @@ Skip search when the user is asking factual / technical questions with
 no user-specific angle (*"what does this function do?"*, *"explain this
 error"*).
 
-## Reading legacy project rows
+## Scope and index — where a row belongs
 
-Older rows may carry `contexts: ["project/<name>"]` from earlier
-versions when project-internal facts were stored in the long-term
-tier. They still
-retrieve normally — include both the project context and `cross-project`
-in your searches when you're in a project workspace:
+A row's `scope` is the absolute directory it is about. Null = about
+the person (visible everywhere); core rows never carry one. Modelled on
+CLAUDE.md: a session sees its directory and every parent.
 
-```bash
-ling-mem search "..." --context project/<name> --context cross-project
-```
-
-Derive `<name>` as the **single last path component** of the workspace
-root (no segment concatenation).
-
-**Don't write new `project/<name>` rows.** Project-internal facts that
-fail the durability test get dropped — the agent reads the project's
-code or its user-curated `AGENTS.md` / `CLAUDE.md` next time. Memory
-neither stores nor authors that content.
+- **Writing.** The host stamps `cwd` (the session cwd: the default
+  scope, request only), `root`, `source_session` and `host` — never fill
+  those by hand. At session start the host shows `Memory scopes here: skills,
+  skills/lingjing, … (default: <cwd>)`; pass one as `scope` on
+  `memory_add` when the row is about another directory than where you
+  stand (a 《九鼎录》 writing rule → `skills/lingjing`; "commit straight to
+  main" → `~/workspace`). The daemon accepts an existing dir inside the
+  root or a parent of the root below `$HOME`, else falls back to the
+  session cwd. `global: true` = about the person.
+- **Index.** `indexed: true` puts the row into every session under its
+  scope at start (nearest dir first, 3000-char budget): `## Index —
+  <dir>` then `- summary (id=…)`. Set it, with a `summary` (one line,
+  ≤ 80 chars, what the row is for), for standing rules the user states
+  ("always…", "以后都…"). Without a summary the index shows the content's
+  opening. An index line is a pointer — `memory_get` the row when it bears
+  on the task. Rules already in a project file get a pointer summary
+  (`写作规则见 DESIGN.md § 五·六`).
+- **Moving.** `memory_update {"id","scope":"<abs dir>"}` (`~/` allowed)
+  moves a row; `global: true` makes it about the person.
+- **Recall scope.** A session in a project recalls rows under its root,
+  at the root's parents, and about the person. A skill's own session
+  (`~/.linggen/skills/<name>`) recalls only its own rows. `$HOME`,
+  `~/.linggen` and temp dirs recall rows about the person, plus at most
+  two strong matches filed under a directory — never a preference.
+- **Merges.** A replacement keeps its losers' tier and their common
+  scope. A digest is known by the rows whose `superseded_by` points at
+  it — there are no tags.
 
 ## Modes — which references to load when
 
@@ -287,9 +315,10 @@ mode's references.
 
 | Mode | Detection cue (look at the first user message) | What to load |
 |:---|:---|:---|
-| **Dream** | Message says `/linggen dream` (all pending days) or `/linggen dream <YYYY-MM-DD>` (one day). User-triggered — or wired to the host's own scheduler for a nightly pass. | `Read references/dream-flow.md` (the canonical remember/forget runbook) and `references/routing-rules.md`. |
+| **Dream** | Message says `/linggen dream` (all undreamed days) or `/linggen dream <YYYY-MM-DD>` (one day). User-triggered — or wired to the host's own scheduler for a nightly pass. | `Read references/dream-flow.md` (the canonical remember/forget runbook) and `references/routing-rules.md`. |
 | **Scan** | Message says `/linggen scan <YYYY-MM-DD>` — stage that day's session logs (backfill), see the verb table. | `Read references/dream-flow.md` (its Scan section) and `references/extractor-prompt.md` (what to stage). |
-| **Condense** | Message says `/linggen condense` — collapse stale chains in long-term memory. | `Read references/condense-flow.md` (the canonical condense runbook). |
+| **Solve** | Message says `/linggen solve` — drain the review queue (items a dream audit queued for the user). | The Solve runbook below; `references/routing-rules.md` for write decisions. |
+| **Status** | Message says `/linggen status` — one glanceable block: versions + updates, store size, upkeep. | Nothing extra: the host command carries the full recipe (fetches + render); its data = `memory_dream_status` + `ling-mem status`/`stats` + engine/bridge probes. |
 | **Chat** | **Anything else** — bare `/linggen`, `/linggen list`, `/linggen search foo`, plain `"show all memory"`, free-form questions. | Body of this SKILL.md is the entry. `Read references/routing-rules.md` only when making save / dedup decisions. |
 
 **Chat mode is the default.** When in doubt, you are in chat mode.
@@ -305,15 +334,60 @@ first.
 
 | Verb | Action |
 |:---|:---|
-| `dream` | **Remember all pending days, oldest first, then sweep.** Worklist via `ling-mem days --pending`; per day: list its episodic rows → cluster → promote durable signal to semantic → `ling-mem remember-day` stamp. Never deletes; the final `ling-mem sweep` ages out judged rows past TTL. See `references/dream-flow.md`. |
+| `dream` | **Remember all undreamed days, oldest first, then sweep.** Worklist via `ling-mem days --undreamed`; per day: list its episodic rows → cluster → promote durable signal to semantic → `ling-mem remember-day` stamp. Never deletes; the final `ling-mem sweep` ages out judged rows past TTL. See `references/dream-flow.md`. |
 | `dream <YYYY-MM-DD>` | **Remember one day.** Same procedure, one day. |
-| `scan <YYYY-MM-DD>` | **Stage one day's session logs (backfill).** Run `scripts/scan.sh <date>`; `list --day <date>` the day's existing rows and skip any scanned session whose id is already among their `source_session`s (that's what makes re-scanning safe); encode the remaining keepers into episodic with the day's `occurred_at`; stamp with `ling-mem harvest-day <date>` (scan stamp only — the day goes pending and dream judges it later). Nothing new: still stamp, report `CLEAN`. |
-| `add "<content>" [--type ...] [--tier core] [--context ...]` | Insert a new memory row. Defaults to `--tier semantic`. |
-| `search "<query>" [--limit N] [--context ...]` | Semantic search across `semantic` + `episodic`. |
+| `scan <YYYY-MM-DD>` | **Stage one day's session logs (backfill).** Run `scripts/scan.sh <date>`; `list --day <date>` the day's existing rows and skip any scanned session whose id is already among their `source_session`s (that's what makes re-scanning safe); encode the remaining keepers into episodic with the day's `occurred_at`; stamp with `ling-mem harvest-day <date>` (scan stamp only — the day stays undreamed and dream judges it later). Nothing new: still stamp, report `CLEAN`. |
+| `add "<content>" [--type ...] [--tier ...] [--scope <dir>] [--summary "..."]` | Insert a new memory row. Omitted tier = episodic. |
+| `search "<query>" [--limit N]` | Semantic search across `semantic` + `episodic`. |
 | `list [--type ...] [--tier ...] [--limit N]` | Paginated listing. |
 | `delete <id>` | Remove a specific row by id. |
-| `update <id> --content "<new>"` | Edit a row in-place (content / contexts / tags). |
-| `condense` | **Collapse stale same-subject chains in long-term memory** — stage 4, the only pass over semantic-at-rest. Scan via `ling-mem chains --derived-only` (cited = pre-confirmed id-citation chains; `--kind marker` = provisional-state candidates to confirm); collapse each into one current-truth row (add the survivor first, then delete members). Back up first (`ling-mem export`), supervise early runs. See `references/condense-flow.md`. |
+| `update <id> --content "<new>"` | Edit a row in-place (content / summary / indexed / scope). |
+| `solve` | **Drain the review queue** — see the Solve runbook below. |
+| `status` | **Glanceable install status** — binary versions + cached update probes, store size (`ling-mem stats`), and upkeep: `scanned_days`/`dreamed_days`/`total_days` counts, `first_unscanned` / `first_undreamed`, open issues, last run (from `memory_dream_status` or `ling-mem days`). |
+
+### Solve runbook — `/linggen solve`
+
+The review queue holds what a dream audit could NOT solve with
+confidence: uncertain merges (`chain`), status claims likely overtaken
+by the world (`stale-status`), conflicts needing the user's pick
+(`contradiction`), digest clusters of doubtful subject coherence
+(`subject`). Scope and index fixes are not queued — the dream applies
+them itself. The daemon only bookkeeps; **you are the solver**,
+with this session's model, tools, and user.
+
+1. **Back up, then list.** `ling-mem export` first (one snapshot per
+   solve session), then `ling-mem issues --format json` (or the
+   `memory_issues` MCP tool). Empty → say so, done.
+2. **Per item, gather evidence at solve time — solve it yourself
+   first.** Fetch the rows (`ling-mem get <row_id>`), then read
+   whatever settles the question: git history
+   (`git log --oneline --since=<row date>` in the named repo), the
+   code, docs, files. The row was written before the world moved;
+   your evidence decides what's true now. Asking the user is the
+   last resort, not a step.
+3. **Apply the confidence rule.** Evidence settles it AND every
+   affected row is your own note (`from=derived`) → solve directly, no
+   ask: one `memory_add` with `replace_ids` (CLI: `add --replace <id>`)
+   writing current truth. Ask the user ONLY when evidence cannot
+   settle it after a real attempt, or a user-voice row (`from=user`)
+   is affected. When you do ask: **ONE item per question**, phrased
+   as a simple fact question in plain words — one-line gist per fact,
+   then "same thing, or different?" / "which is true now?", with your
+   recommendation (AskUserQuestion on Claude Code; plain numbered
+   options elsewhere). No row ids, commit hashes, or cluster jargon
+   in the question. User-voice fixes carry `user_directed:true` after
+   their answer.
+4. **`subject` items.** Rule on coherence yourself from the full
+   member contents: one genuine subject → digest per the condense
+   drafting rules (`add --replace <id>` per member),
+   resolve `resolved`; distinct workstreams → resolve `dismissed` —
+   the dismissal IS the ruling; the detector never serves that
+   cluster again. Ask only when you genuinely can't tell.
+5. **Close as you go.** After each item:
+   `ling-mem issue-resolve <id> --outcome resolved --note "<what you did>"`
+   (or `memory_issue_resolve`). Not worth fixing → `--outcome dismissed`.
+6. **Report one line per item** — `SOLVED <id> <what changed>` /
+   `DISMISSED <id> <why>` — then a closing count.
 
 ### Chat-mode rules
 
@@ -323,7 +397,7 @@ The user is reading text in a conversation panel:
   table. If the user asked to list memory, run the recipe in
   *Listing & searching memory* above and render the result inline.
 - For hands-on row-level CRUD, point the user at the daemon-served
-  data browser at `127.0.0.1:9888` (run `ling-mem start` first).
+  data browser at `127.0.0.1:9528` (run `ling-mem start` first).
 
 ## Memory hygiene — see it, solve it
 
@@ -345,6 +419,17 @@ the change: their current message states it as settled (a command
 now on, X") or they just answered your ask. A hedged reflection ("X
 feels about right to me") never qualifies — ask first.
 
+**Status rows are perishable — supersede at write time.** A
+status-bearing row ("in progress", "OPEN:", "not committed",
+"shipped", "dormant") is a claim about the world, and the world moves.
+When you capture a status change (shipped / fixed / dormant /
+abandoned), search the subject first and write the new status
+replacing the prior status row(s) on that subject (`replace_ids` over
+MCP; `add --replace <id>` via CLI) — never leave "in progress" beside its
+own outcome. Own-notes only; a user-voice predecessor follows the
+merge law. The dream audit's review queue is the backstop for what
+slips through — write-time supersede is the real fix.
+
 | You see | Action |
 |:---|:---|
 | Exact dup (same fact, same type) | Delete the loser, keep the better-phrased row. No prompt. |
@@ -362,17 +447,13 @@ feels about right to me") never qualifies — ask first.
 - **Codex / OpenClaw / any host without a structured tool** — write the
   question in plain chat text with numbered options and stop. The user
   replies on the next turn; you read their choice and finish the cleanup
-  via `ling-mem add "..." --type ...` followed by `ling-mem delete
-  <loser-id> --yes` for each loser.
+  via `ling-mem add "..." --type ... --replace <loser-id>` (one
+  `--replace` per loser; add `--user-directed` after their answer).
 
 When a merge (derived rows) or an AskUser-resolved conflict yields a
-winner: write the winner first (`ling-mem add "<winner>" --type <t>
---from <f>`), then delete the losers (`ling-mem delete <loser-id>
---yes`). The CLI doesn't expose an atomic replace verb; the two-step
-ordering (write before delete) keeps the worst-case window safe — a
-concurrent recall either sees the old rows or both, never an empty hole
-on the subject. (Over MCP/HTTP, use `replace_ids` on the add instead —
-one atomic call.)
+winner: write it with `ling-mem add "<winner>" --type <t>
+--from <f> --replace <loser-id>` — one atomic call; the losers are
+archived, not deleted (over MCP: `replace_ids`).
 
 ### What "not confident" looks like
 
@@ -381,8 +462,8 @@ one atomic call.)
 - Two rows that are mostly the same but differ on a specific detail (e.g.
   one says "8 years old in 2026-05-21", another says "9 years old in
   2026-05-25") → time-stamped, may both be valid. Ask before merging.
-- Rows that look like dups but have different `cwd` / `contexts` /
-  `outcome` — they may apply to different scopes. Ask.
+- Rows that look like dups but have different `scope` or
+  `outcome` — they may apply to different directories. Ask.
 
 When in doubt, **ask**. Cheap. The cost of asking is one turn; the cost of
 silently losing or mangling a fact is much higher.
@@ -392,8 +473,8 @@ silently losing or mangling a fact is much higher.
 - `insert_with_dedup` inside the binary rejects byte-identical
   `(content, type)` rows at write time. You don't need to handle that case.
 - Cross-tier dedup (`add` handler): if you add to one table and an exact
-  match exists in the other, the higher-tier row wins; metadata
-  (contexts / tags) is merged into it. Also automatic.
+  match exists in the other, the higher-tier row wins and keeps its own
+  scope; an empty summary or scope fills from the new write. Also automatic.
 
 Fuzzy "same fact, different wording" is **never mechanical** — it always
 needs an LLM judgment + the rule above.
@@ -421,21 +502,10 @@ learned | built` — but **only four should be emitted by default**.
 trajectory-level patterns or named shippable artifacts tied to user
 identity.
 
-## Contexts and tags
-
-- **`contexts`** — hierarchical scope (1–3 typical, primary filter).
-  - `cross-project` — retrieves in any session.
-  - `code/linggen`, `music/piano`, `trip-japan-2026` — domain scopes.
-  - **Don't** add `project/<name>` for new writes. Project-internal
-    facts get dropped — the agent reads the project's own files next
-    time. Legacy `project/<name>` rows still retrieve.
-- **`tags`** — free-form metadata (0–5 typical, prefix convention).
-  - `intent:goal`, `topic:networking`, `person:maria`.
-
 ## Data browser
 
 Row-level CRUD (filter, edit-in-place, batch delete) lives at
-`http://127.0.0.1:9888` when the daemon is running. Direct the user
+`http://127.0.0.1:9528` when the daemon is running. Direct the user
 there for hands-on cleanup. Run `ling-mem start` if not already
 running.
 
@@ -484,11 +554,13 @@ Linggen       Settings → Skills → linggen   (in-app)
 
 The `ling-mem` binary is fetched automatically on first use (pinned,
 SHA-256 verified). To install just the binary manually (Apple Silicon /
-Linux x86_64+aarch64):
+Linux x86_64+aarch64), run the installer that ships in this bundle:
 
 ```bash
-bash <(curl -fsSL https://raw.githubusercontent.com/linggen/linggen-memory/main/plugins/linggen/scripts/install-bin.sh) --version '^1'
+bash scripts/install-bin.sh --version '^1'
 ```
+
+(Path relative to this skill's directory, like every other script here.)
 
 The skill works in Claude Code, Codex, OpenClaw, Linggen, or standalone —
 same daemon, same database, same semantics across all hosts. Intel Mac
@@ -518,7 +590,7 @@ linggen-browser extension) — one **visible** controlled tab:
 - A `no_bridge` error means the linggen-browser extension isn't connected;
   ask the user to install or enable it.
 - If the `linggen` MCP server itself is unreachable (nothing listening on
-  `127.0.0.1:9898`), the engine may still be installing in the background
+  `127.0.0.1:9527`), the engine may still be installing in the background
   (plugin channels; progress in `~/.linggen/engine-install.log`) — wait and
   retry. If the `ling` binary is genuinely absent, run the engine install
   from the First-use section and tell the user (one-time, ~100MB). Memory

@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/12306-android-adb",
   "slug": "12306-android-adb",
   "ownerHandle": null,
-  "version": "1.0.1",
-  "updatedAt": 1780271601128,
-  "contentHash": "5a6a01d85b18b3026cb1116a4b55c6075034624a06f093c446175f0222b2a80f",
-  "fetchedAt": "2026-07-26T18:37:32.482Z"
+  "version": "2.2.4",
+  "updatedAt": 1792045679507,
+  "contentHash": "c67814122fec1f53649002847155cc9ff70cc6b39b6f8bd8a6ae767efd23e6c0",
+  "fetchedAt": "2026-10-15T12:49:03.447Z"
 }

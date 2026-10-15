@@ -1,41 +1,53 @@
-## Description: <br>
-Pangolin-SafeYield is a defensive-offensive investment AI agent that runs a five-dimensional resonance scan across macro, fundamental, technical, capital-flow, and risk signals for stocks and ETFs, then produces buy, hold, or sell-oriented investment decision reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language checklist for personal ETF and stock research that combines five-factor scoring, risk red lines, and trade-review prompts into human-reviewed decision drafts.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill to structure public-market stock and ETF analysis, compare macro and market signals, and produce investment decision reports with position sizing, execution levels, and risk notes. Outputs require human review before any financial decision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can generate specific allocation and trade-plan suggestions for stocks and ETFs. <br>
-Mitigation: Treat reports as analytical guidance only and require human review before making financial decisions. <br>
-Risk: Broad trigger phrases can activate the workflow in general investment discussions. <br>
-Mitigation: Install it only where structured stock and ETF analysis is desired, and review generated outputs before use. <br>
+## Use Case:
 
+Individuals use the Chinese-language framework to review potential ETF or stock decisions, check risk red lines, and plan their own performance reviews. Outputs are decision drafts, not investment advice or trading instructions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/pangolin-safe-yield) <br>
-- [Skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown investment analysis report with scoring tables, posture labels, allocation guidance, execution levels, and risk notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only workflow; uses public web searches; no executable code, privileged system access, persistent storage, or credential handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.1 (source: frontmatter and server release evidence) <br>
+Risk: Suggested positions, prices, stop-losses, or targets could be mistaken for reliable trading instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review all outputs against current public data and make investment decisions independently; do not automate trades from the drafts.
+
+Risk: Investment conversations could expose sensitive account or personal financial information.
+
+Mitigation: Provide only the security name or ticker, time period, and relevant public data; do not enter brokerage credentials or personal financial identifiers.
+
+## Reference(s):
+
+- [Pangolin SafeYield on ClawHub](https://clawhub.ai/gechengling/skills/pangolin-safe-yield)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Chinese-language Markdown report with checklists and scoring tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Human-reviewed decision drafts; no orders or broker connectivity.]
+
+## Skill Version(s):
+
+3.3.1 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

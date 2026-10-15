@@ -1,6 +1,15 @@
+<!-- request-identity:start -->
+**请求身份**：使用已配置的 API Key，并保留本包的 X-Client，携带下列完整身份头；不得沿用其它包的版本或来源。
+```text
+X-Client: bid-decision/1.0.5
+X-Skill-Package: enterprise-bidding-decision-agent/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+<!-- request-identity:end -->
+
 # 投标决策分析 · 五步工作流执行手册
 
-> 所有请求带 Header：`X-API-Key` + `X-Client: bid-decision/1.0.0`。
+> 所有请求带 Header：`X-API-Key` + `X-Client: bid-decision/1.0.5`。
 > 工具参数速查见 `api-quick.md`。每步都有「降级策略」——数据缺失时照做，不要中断也不要编造。
 
 ## 模式选择
@@ -85,3 +94,15 @@
 - **不建议**：强在位者垄断（近 3 次同类全是同一家）/ 预算明显异常 / 资质硬门槛不满足
 
 每个结论必须给出 2-4 条数据支撑。存在数据缺口时在结论旁标注置信度（高/中/低）。
+
+<!-- package-identity:start -->
+**安装包身份与升级检查**：所有发往知了标讯 API 的请求（包括账户查询）必须额外携带以下两个请求头：
+```text
+X-Skill-Package: enterprise-bidding-decision-agent/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+这些值是当前安装包的固定身份，复用已有API Key时也要携带；不要用X-Client产品版本替代包版本，不要将Key的注册渠道当作安装来源。
+请求鉴权：使用已配置的 API Key，并保留本包的 X-Client。每个会话首次使用本Skill时，在已有凭证可用后先调用免费账户接口 `GET https://mcp-server.zhiliaobiaoxun.com/api_v2/account/balance` 检查升级提醒；该查询不扣积分，不触发购买。
+**版本提醒转达**：响应出现 `skill_update_notice` 时，将其中 `message` 原样转达用户；兼容提示只说明检查版本，不能宣称已确认当前包过期。
+**展示后确认**：只有将提醒发送到用户可见对话之后，才使用同一凭证和请求头，按 `display_ack` 提交 POST 回执（MCP客户端可调用 `confirm_skill_update_display`）（`notice_id` 和 `displayed: true`）。只读取工具响应、在思考中提过、尚未转达时不得确认。不能在展示后调用接口则不确认，服务端继续保留待提醒状态。回执免费，不扣积分；失败不影响查询结果，不向用户展示技术回执。同一会话同一 `notice_id` 只展示一次。
+<!-- package-identity:end -->

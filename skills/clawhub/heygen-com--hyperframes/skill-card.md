@@ -1,48 +1,56 @@
-## Description: <br>
-HyperFrames routes video, animation, and motion-graphics requests into the right workflow, resumes existing projects, and manages project inspection, validation, preview, rendering, publishing, and batch rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through creating, editing, reviewing, and rendering HTML-based videos and motion graphics with HyperFrames.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill as the entry point for creating, editing, validating, rendering, and publishing HyperFrames video projects from briefs, URLs, GitHub PRs, Figma inputs, existing footage, or music. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run npx-based HyperFrames commands and install or refresh related workflow skills. <br>
-Mitigation: Review command summaries, keep projects under version control, and run HyperFrames validation after upgrades or workflow changes. <br>
-Risk: Site capture, Figma or GitHub inputs, media generation, and publishing can use networked services when requested. <br>
-Mitigation: Confirm external inputs and publishing intent before use, and avoid sending sensitive material to networked services unless approved. <br>
-Risk: Project edits, renders, and publishing actions may create or update video project artifacts. <br>
-Mitigation: Inspect diffs, previews, and validation results before treating generated output as final or public. <br>
+## Use Case:
 
+Creators and developers use this skill to plan, build, edit, preview, and render HyperFrames video projects from briefs, websites, designs, footage, music, or existing compositions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes) <br>
-- [Publisher profile](https://clawhub.ai/user/heygen-com) <br>
-- [HyperFrames entry point](SKILL.md) <br>
-- [Intent interview](references/intent-interview.md) <br>
-- [Capability menu](references/capability-menu.md) <br>
-- [Skill lifecycle](references/skill-lifecycle.md) <br>
-- [Workflow route contracts](references/routes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code, configuration, and project artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow routing decisions, project file changes, validation summaries, preview or render commands, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.19 (source: server release metadata) <br>
+Risk: Standalone runs may fetch and execute newer CLI packages or refresh workflow skills without an explicit approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the plugin installation, which pins the CLI version and disables silent skill refreshes; otherwise review or approve update commands before execution.
+
+Risk: Automatic upgrades can change project dependencies and files during a video task.
+
+Mitigation: Use a backed-up or version-controlled project and review proposed upgrades before applying them to important work.
+
+## Reference(s):
+
+- [HyperFrames on ClawHub](https://clawhub.ai/heygen-com/skills/hyperframes)
+- [Plugin installation](references/plugin-installation.md)
+- [Production workflow](references/production-loop.md)
+- [Brief format](references/brief-format.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown, HTML, JSON, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create project briefs, storyboards, compositions, and rendered video assets.]
+
+## Skill Version(s):
+
+1.0.45 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -26,6 +26,7 @@ import re
 import socket
 from urllib.parse import urlparse, parse_qs
 from datetime import datetime, timedelta
+from typing import Dict, Optional, List, Any
 
 # 日志格式（必须在情感分析模块之前定义 logger）
 logging.basicConfig(
@@ -44,12 +45,108 @@ except ImportError:
     EMOTION_AVAILABLE = False
     logger.warning("情感分析模块不可用，将跳过情感分析")
 
+# 方言检测模块（v2.3 新增）
+try:
+    from dialect_detector import DialectDetector, Dialect
+    DIALECT_AVAILABLE = True
+    logger.info("方言检测模块已加载")
+except ImportError:
+    DIALECT_AVAILABLE = False
+    logger.warning("方言检测模块不可用，将跳过方言检测")
+
+# 工单管理模块（v2.3 新增）
+try:
+    from ticket_manager import TicketManager, TicketStatus, TicketPriority, TicketCategory
+    TICKET_AVAILABLE = True
+    logger.info("工单管理模块已加载")
+except ImportError:
+    TICKET_AVAILABLE = False
+    logger.warning("工单管理模块不可用，将跳过工单管理")
+
+# VAD 语音活动检测模块（v2.4 新增）
+try:
+    from vad_filter import VADFilter, VADEnum
+    VAD_AVAILABLE = True
+    logger.info("VAD 语音活动检测模块已加载")
+except ImportError:
+    VAD_AVAILABLE = False
+    logger.warning("VAD 模块不可用，将跳过语音活动检测")
+
+# 优先级请求队列模块（v2.4 新增）
+try:
+    from priority_queue import PriorityRequestQueue, Priority
+    QUEUE_AVAILABLE = True
+    logger.info("优先级请求队列模块已加载")
+except ImportError:
+    QUEUE_AVAILABLE = False
+    logger.warning("优先级队列模块不可用，将跳过多路排队")
+
+# 合规模块（v2.4 增强）
+try:
+    from compliance import ComplianceManager, MandatoryAnnouncement
+    COMPLIANCE_AVAILABLE = True
+    logger.info("合规模块已加载（含强制录音告知）")
+except ImportError:
+    COMPLIANCE_AVAILABLE = False
+    logger.warning("合规模块不可用")
+
+# 通话记录子系统（v2.5 新增）
+try:
+    from call_record_subsystem import CallRecordSubsystem
+    CALL_RECORD_AVAILABLE = True
+    logger.info("通话记录子系统已加载")
+except ImportError:
+    CALL_RECORD_AVAILABLE = False
+    logger.warning("通话记录子系统不可用")
+
+# 多渠道抽象层（v2.5 新增）
+try:
+    from voice_channel import VoiceChannelFactory, StandardMessage, ChannelType
+    CHANNEL_AVAILABLE = True
+    logger.info("多渠道抽象层已加载")
+except ImportError:
+    CHANNEL_AVAILABLE = False
+    logger.warning("多渠道抽象层不可用")
+
+# 语音留言摘要（v2.5 新增）
+try:
+    from voicemail_summary import VoicemailSummarizer
+    VOICEMAIL_AVAILABLE = True
+    logger.info("语音留言摘要系统已加载")
+except ImportError:
+    VOICEMAIL_AVAILABLE = False
+    logger.warning("语音留言摘要系统不可用")
+
 # 自选导入 urllib（兼容 Python 3.x）
 try:
     from urllib.request import urlopen, Request
     from urllib.error import URLError
 except ImportError:
     from urllib2 import urlopen, Request, URLError
+
+# 群聊语音合规模块（v2.9 新增）
+try:
+    from group_compliance import GroupCompliance, get_compliance
+    GROUP_COMPLIANCE_AVAILABLE = True
+except ImportError:
+    GROUP_COMPLIANCE_AVAILABLE = False
+    logger.warning("群合规模块不可用，群语音将默认不落盘")
+
+# 实体抽取增强（v2.9 群任务三元组）
+try:
+    from entity_extractor import EntityExtractor
+    ENTITY_EXTRACTOR_AVAILABLE = True
+except ImportError:
+    ENTITY_EXTRACTOR_AVAILABLE = False
+    logger.warning("实体抽取模块不可用，群任务三元组将降级")
+
+# 跟进待办闭环（v2.9 复用）
+try:
+    from todo_followup import TodoFollowupManager
+    TODO_AVAILABLE = True
+except ImportError:
+    TODO_AVAILABLE = False
+    logger.warning("待办闭环模块不可用，群任务分发将降级")
 
 # ==========================================
 # 配置
@@ -106,8 +203,297 @@ class EmotionManager:
         return {}
 
 
-# 全局情感管理器实例
+# ==========================================
+# 方言管理器（v2.3 新增）
+# ==========================================
+
+class DialectManager:
+    """方言管理器：检测方言并提供方言回复"""
+    
+    def __init__(self):
+        self.detector = None
+        if DIALECT_AVAILABLE:
+            self.detector = DialectDetector()
+            logger.info("方言管理器已初始化")
+    
+    def detect(self, text: str) -> dict:
+        """检测方言类型"""
+        if not self.detector:
+            return {"dialect": "mandarin", "confidence": 0.0}
+        return self.detector.detect(text)
+    
+    def get_reply(self, dialect: str, template_name: str) -> str:
+        """获取方言回复模板"""
+        if not self.detector:
+            return "您好！请问有什么可以帮您？"
+        try:
+            d = Dialect(dialect) if DIALECT_AVAILABLE else Dialect.MANDARIN
+            return self.detector.get_reply_template(d, template_name)
+        except (ValueError, AttributeError):
+            return "您好！请问有什么可以帮您？"
+
+
+# ==========================================
+# 工单管理器集成（v2.3 新增）
+# ==========================================
+
+class TicketManagerIntegration:
+    """工单管理器集成：自动创建工单、检测意图"""
+    
+    def __init__(self):
+        self.manager = None
+        if TICKET_AVAILABLE:
+            self.manager = TicketManager()
+            logger.info("工单管理器集成已初始化")
+    
+    def should_create_ticket(self, text: str, emotion: str = "neutral") -> bool:
+        """判断是否需要创建工单"""
+        if not self.manager:
+            return False
+        
+        # 紧急/投诉类内容自动建单
+        urgent_keywords = ["投诉", "差评", "欺骗", "骗子", "骗钱", "虚假宣传",
+                          "态度恶劣", "敷衍", "推诿", "不处理"]
+        for kw in urgent_keywords:
+            if kw in text:
+                return True
+        
+        # 愤怒情绪自动建单
+        if emotion == "angry":
+            return True
+        
+        # 退款/账户问题
+        refund_keywords = ["退款", "退费", "退货", "账号被封", "密码忘记", "无法登录"]
+        for kw in refund_keywords:
+            if kw in text:
+                return True
+        
+        return False
+    
+    def auto_create(self, text: str, userid: str = "system",
+                    emotion_tag: str = "neutral", dialect_tag: str = "mandarin") -> dict:
+        """自动创建工单"""
+        if not self.manager:
+            return {"success": False, "error": "工单管理器不可用"}
+        
+        return self.manager.auto_create_ticket(
+            text=text,
+            created_by=userid,
+            emotion_tag=emotion_tag,
+            dialect_tag=dialect_tag,
+            source="auto"
+        )
+
+
+# 全局管理器实例
 emotion_manager = EmotionManager()
+dialect_manager = DialectManager()
+ticket_integration = TicketManagerIntegration()
+vad_filter = VADFilter(sensitivity="medium") if VAD_AVAILABLE else None
+priority_queue = PriorityRequestQueue(max_size=200, rate_limit=20) if QUEUE_AVAILABLE else None
+# ==========================================
+# VAD 前置过滤器（v2.4 新增）
+# ==========================================
+
+class VADPreFilter:
+    """
+    VAD 前置过滤引擎
+    
+    在消息进入主处理流程前，过滤非人声消息（电视/音乐/噪音），
+    降低误触发率 80%+。
+    """
+    
+    def __init__(self):
+        self.vad = VADFilter(sensitivity="medium") if VAD_AVAILABLE else None
+        self._filtered_count = 0
+        self._total_count = 0
+    
+    def filter(self, msgtype: str, content: str = "", audio_path: str = "") -> Dict:
+        """
+        过滤消息
+        
+        Args:
+            msgtype: 消息类型 (voice/text/image/...)
+            content: 文本内容
+            audio_path: 音频文件路径（voice 消息）
+            
+        Returns:
+            dict: {
+                "pass": bool,           # 是否通过过滤
+                "reason": str,          # 过滤原因
+                "confidence": float     # 置信度
+            }
+        """
+        self._total_count += 1
+        
+        # 非语音消息直接通过
+        if msgtype != "voice":
+            return {"pass": True, "reason": "非语音消息", "confidence": 1.0}
+        
+        # VAD 不可用，降级放行
+        if not self.vad:
+            return {"pass": True, "reason": "VAD 不可用，降级放行", "confidence": 0.5}
+        
+        # 文本内容直接通过（已通过 ASR 转写）
+        if content and len(content) > 0:
+            return {"pass": True, "reason": "已有 ASR 文本", "confidence": 1.0}
+        
+        # 分析音频文件
+        if audio_path and os.path.exists(audio_path):
+            try:
+                result = self.vad.analyze(audio_path)
+                is_speech = result.get("is_speech", True)
+                
+                if not is_speech:
+                    self._filtered_count += 1
+                    logger.info(f"VAD 过滤: 非人声消息被过滤 (置信度: {result.get('confidence', 0)})")
+                    return {
+                        "pass": False,
+                        "reason": "非人声消息",
+                        "confidence": result.get("confidence", 0)
+                    }
+                
+                return {
+                    "pass": True,
+                    "reason": "人声消息",
+                    "confidence": result.get("confidence", 0.5)
+                }
+            except Exception as e:
+                logger.warning(f"VAD 分析失败 ({e})，降级放行")
+                return {"pass": True, "reason": "VAD 错误，降级放行", "confidence": 0.0}
+        
+        # 无音频文件，放行
+        return {"pass": True, "reason": "无音频文件", "confidence": 0.5}
+    
+    def get_stats(self) -> Dict:
+        """获取过滤统计"""
+        return {
+            "total": self._total_count,
+            "filtered": self._filtered_count,
+            "filter_rate": round(self._filtered_count / max(self._total_count, 1), 4)
+        }
+
+
+# ==========================================
+# 优先级路由器（v2.4 新增）
+# ==========================================
+
+class PriorityRouter:
+    """
+    请求优先级路由器
+    
+    根据用户类型和消息内容，分配优先级，
+    高价值客户优先响应。
+    """
+    
+    def __init__(self):
+        self.queue = PriorityRequestQueue(max_size=200, rate_limit=20) if QUEUE_AVAILABLE else None
+        # VIP 用户列表（可从配置文件加载）
+        self._vip_users: set = set()
+        self._high_value_users: set = set()
+    
+    def add_vip(self, userid: str):
+        """添加 VIP 用户"""
+        self._vip_users.add(userid)
+    
+    def add_high_value(self, userid: str):
+        """添加高价值用户"""
+        self._high_value_users.add(userid)
+    
+    def get_priority(self, userid: str, content: str = "") -> Priority:
+        """
+        获取请求优先级
+        
+        Args:
+            userid: 用户ID
+            content: 消息内容
+            
+        Returns:
+            Priority: 优先级
+        """
+        if not QUEUE_AVAILABLE:
+            return Priority.NORMAL
+        
+        if userid in self._vip_users:
+            return Priority.VIP
+        
+        if userid in self._high_value_users:
+            return Priority.HIGH_VALUE
+        
+        # 根据消息内容判断
+        urgent_keywords = ["紧急", "投诉", "退款", "报警"]
+        for kw in urgent_keywords:
+            if kw in content:
+                return Priority.HIGH_VALUE
+        
+        return Priority.NORMAL
+    
+    def enqueue_or_process(self, userid: str, content: str, 
+                          callback, **kwargs) -> Optional[Dict]:
+        """
+        入队或直接处理
+        
+        如果限流且非VIP，入队等待；否则直接处理。
+        
+        Args:
+            userid: 用户ID
+            content: 消息内容
+            callback: 处理回调函数
+            **kwargs: 其他参数
+            
+        Returns:
+            dict or None: 处理结果
+        """
+        priority = self.get_priority(userid, content)
+        
+        # 检查限流
+        rate_check = self.queue.check_rate_limit() if self.queue else {"allowed": True}
+        
+        if not rate_check.get("allowed", True) and priority == Priority.VIP:
+            # VIP 也限流，但允许插队
+            pass
+        
+        # 直接处理（限流允许或高优先级）
+        if rate_check.get("allowed", True) or priority <= Priority.HIGH_VALUE:
+            return callback()
+        
+        # 限流且低优先级，入队
+        if self.queue:
+            result = self.queue.enqueue_simple(
+                request_id=f"req_{int(time.time()*1000)}_{userid}",
+                userid=userid,
+                content=content,
+                priority=priority,
+                **kwargs
+            )
+            
+            if result.get("dropped"):
+                return {
+                    "msgtype": "text",
+                    "text": {
+                        "content": "当前咨询量较大，请稍后再试。您也可以留下联系方式，我们会尽快回复。"
+                    }
+                }
+            
+            return {
+                "msgtype": "text",
+                "text": {
+                    "content": f"您的请求已排队（位置: {result.get('position', '?')}），预计等待 {result.get('estimated_wait', 0):.0f} 秒。"
+                }
+            }
+        
+        return callback()
+
+
+# ==========================================
+# 全局实例
+# ==========================================
+
+vad_prefilter = VADPreFilter()
+priority_router = PriorityRouter()
+compliance_mgr = ComplianceManager() if COMPLIANCE_AVAILABLE else None
+call_record_subsystem = CallRecordSubsystem() if CALL_RECORD_AVAILABLE else None
+voicemail_summarizer = VoicemailSummarizer() if VOICEMAIL_AVAILABLE else None
 
 
 # ==========================================
@@ -455,10 +841,20 @@ class MessageHandler:
         self.weather = WeatherService()
         self.time_svc = TimeService()
         self.msgid_cache = set()
+        # v2.9 群聊相关依赖（缺失时降级，不阻断单聊）
+        self.entity_extractor = EntityExtractor() if ENTITY_EXTRACTOR_AVAILABLE else None
+        self.todo_mgr = TodoFollowupManager() if TODO_AVAILABLE else None
+        self.compliance = get_compliance() if GROUP_COMPLIANCE_AVAILABLE else None
+        # 群管理员列表（发言者角色判定），环境变量逗号分隔 userid
+        self.group_admins = set(
+            a.strip() for a in os.environ.get("WECOM_GROUP_ADMINS", "").split(",") if a.strip()
+        )
+        # 群聊上下文暂存（供 _dispatch 的处理器读取身份/群维度）
+        self._chat_ctx = {}
     
     def handle(self, callback):
         """
-        处理一条回调消息
+        处理一条回调消息（含 VAD 过滤 v2.4、优先级队列 v2.4、语音留言 v2.5）
         
         Args:
             callback: dict, 回调 JSON
@@ -468,6 +864,13 @@ class MessageHandler:
         msgid = callback.get("msgid", "")
         msgtype = callback.get("msgtype", "")
         userid = callback.get("from", {}).get("userid", "")
+        content = callback.get("voice", {}).get("content", "") or callback.get("text", {}).get("content", "")
+        
+        # VAD 前置过滤（v2.4 新增）
+        vad_result = vad_prefilter.filter(msgtype, content)
+        if not vad_result.get("pass", True):
+            logger.info(f"VAD 过滤消息: userid={userid}, reason={vad_result.get('reason')}")
+            return None
         
         # 去重
         if msgid in self.msgid_cache:
@@ -478,6 +881,16 @@ class MessageHandler:
             self.msgid_cache.clear()
         
         logger.info(f"收到 {msgtype} 消息, userid={userid}")
+
+        # v2.9 群聊路由：识别群消息，仅响应 @机器人 的指令（未被 @ 静默忽略，防刷屏）
+        chattype = callback.get("chattype") or callback.get("chat_type") or ""
+        chatid = callback.get("chatid") or callback.get("chat_id") or ""
+        if chattype == "group" or chatid:
+            return self._handle_group(callback, chattype=chattype, chat_id=chatid)
+
+        # 语音留言处理（v2.5 新增）
+        if msgtype == "voicemail":
+            return self._handle_voicemail(callback)
         
         # 分发
         if msgtype == "voice":
@@ -496,7 +909,7 @@ class MessageHandler:
             return self._text_resp("暂不支持此类消息格式 😅 请发送语音或文字。")
     
     def _handle_voice(self, callback):
-        """处理语音消息（含情感分析 v2.2）"""
+        """处理语音消息（含情感分析 v2.2、方言检测+工单 v2.3）"""
         content = callback.get("voice", {}).get("content", "").strip()
         userid = callback.get("from", {}).get("userid", "")
         
@@ -512,30 +925,172 @@ class MessageHandler:
                 "• 控制在 60 秒内"
             )
         
+        # 单聊路径：复用统一内容处理（v2.9 抽出，便于群聊复用单聊引擎）
+        return self._process_content(content, userid, chat_type="single")
+
+    def _try_handle_confirm(self, content: str, userid: str):
+        """
+        群任务确认回执闭环（v2.9）：被指派人在单聊或群 @机器人 回复时闭环
+
+        当消息内容是一句简短的确认/拒绝，且该用户存在 pending_confirm 的群任务时，
+        拦截并调用 confirm_todo 完成回执闭环，避免进入通用意图引擎造成误回复。
+        """
+        if not (self.todo_mgr and userid):
+            return None
+        c = (content or "").strip()
+        if not c:
+            return None
+        # 低误判：仅当内容简短且命中确认/拒绝关键词才拦截
+        stripped = re.sub(r'[\s，。、！？!?.,]+', '', c)
+        if len(stripped) > 12:
+            return None
+        is_reject = any(w in stripped for w in ("拒绝", "不接受", "不同意", "不要", "不行", "驳回"))
+        is_confirm = any(w in stripped for w in ("确认", "接受", "同意", "好的", "可以", "ok", "OK", "没问题"))
+        if not (is_reject or is_confirm):
+            return None
+        # 查找该用户待确认的群任务
+        try:
+            todos = self.todo_mgr.query_by_assignee(userid, keyword="")
+        except Exception:
+            return None
+        pending = [t for t in todos if t.get("confirm_status") == "pending_confirm"]
+        if not pending:
+            return None
+        # 取最近一条待确认任务闭环
+        pending.sort(key=lambda t: t.get("created_at", ""), reverse=True)
+        accept = not is_reject
+        receip = self.todo_mgr.confirm_todo(pending[0].get("todo_id"), accept=accept)
+        if receip.get("ok"):
+            return self._text_resp(receip.get("receipt", "已处理。"))
+        return None
+
+    def _process_content(self, content: str, userid: str, chat_type: str = "single",
+                         chat_id: str = "", speaker_role: str = "", speaker_userid: str = ""):
+        """
+        统一内容处理（v2.9 抽出）：情感分析→方言→工单→意图→策略→分发
+        单聊与群聊共用此引擎，仅 chat_type / 身份上下文不同。
+
+        Args:
+            content: 已清理的文本内容
+            userid: 用户ID（群聊时为发言者）
+            chat_type: single / group
+            chat_id: 群聊ID
+            speaker_role: 发言者角色（member/admin/unknown）
+            speaker_userid: 发言者 userid（群聊，用于身份注入）
+        """
+        # v2.9 群任务确认回执闭环：被指派人回复「确认/拒绝」优先拦截闭环
+        confirm_resp = self._try_handle_confirm(content, userid)
+        if confirm_resp is not None:
+            return confirm_resp
+
         # 情感分析（v2.2 新增）
         emotion_result = self._analyze_emotion(content, userid)
-        
+
         # 情感升级检测
         if emotion_result.get("should_escalate"):
             return self._text_resp(
                 "为了更好地解决您的问题，我现在为您转接专属人工客服，请稍等... 🙏\n\n"
                 "您也可以留下联系方式，我们会尽快回复。"
             )
-        
+
+        # 方言检测（v2.3 新增）
+        dialect_result = dialect_manager.detect(content)
+        dialect = dialect_result.get("dialect", "mandarin")
+        dialect_str = dialect.value if hasattr(dialect, 'value') else str(dialect)
+
+        # 自动工单创建（v2.3 新增）
+        ticket_id = None
+        emotion = emotion_result.get("emotion", "neutral")
+        if ticket_integration.should_create_ticket(content, emotion):
+            ticket_result = ticket_integration.auto_create(
+                text=content,
+                userid=userid,
+                emotion_tag=emotion,
+                dialect_tag=dialect_str
+            )
+            if ticket_result.get("success") or ticket_result.get("id"):
+                ticket_id = ticket_result.get("id")
+                logger.info(f"自动创建工单: {ticket_id}")
+
         # 意图分析
         intent, confidence, entities = self.parser.parse(content)
-        logger.info(f"意图: {intent}, 置信度: {confidence:.2f}, 情感: {emotion_result.get('emotion', 'unknown')}")
-        
+        logger.info(f"意图: {intent}, 置信度: {confidence:.2f}, 情感: {emotion}, 方言: {dialect_str}, 类型: {chat_type}")
+
         # 根据情感调整回复策略
-        emotion = emotion_result.get("emotion", "neutral")
         strategy = emotion_manager.get_strategy(emotion, emotion_result.get("confidence", 0.5))
-        
+
         # 置信度低时，用智能确认策略
         if confidence < 0.25:
-            return self._smart_clarify(content, emotion=emotion, strategy=strategy)
-        
-        return self._dispatch(intent, entities, content, emotion=emotion, strategy=strategy)
+            return self._smart_clarify(content, emotion=emotion, strategy=strategy,
+                                       dialect=dialect_str, ticket_id=ticket_id)
+
+        return self._dispatch(intent, entities, content, emotion=emotion, strategy=strategy,
+                              dialect=dialect_str, ticket_id=ticket_id,
+                              chat_type=chat_type, chat_id=chat_id, speaker_role=speaker_role,
+                              speaker_userid=speaker_userid or userid)
     
+    def _handle_voicemail(self, callback):
+        """
+        处理语音留言（v2.5 新增）
+        
+        当用户无法接听时，语音留言自动转录并生成摘要，
+        推送给被叫方。
+        """
+        content = callback.get("voicemail", {}).get("content", "").strip()
+        caller = callback.get("from", {}).get("userid", "")
+        callee = callback.get("to", {}).get("userid", "")
+        vm_id = callback.get("msgid", "")
+        
+        logger.info(f"语音留言: caller={caller}, callee={callee}, content={content[:50]}")
+        
+        if not content:
+            return self._text_resp(
+                "收到语音留言，但内容无法识别。\n"
+                "请确认留言时长在 60 秒以内，并用普通话清晰表达。"
+            )
+        
+        # 生成语音留言摘要（v2.5 新增）
+        if VOICEMAIL_AVAILABLE and voicemail_summarizer:
+            try:
+                summary_result = voicemail_summarizer.process_voicemail(
+                    vm_id=vm_id,
+                    caller=caller,
+                    content=content,
+                    source="voicemail"
+                )
+                rendered = voicemail_summarizer.render_summary(summary_result)
+                
+                # 记录到通话记录子系统（v2.5 新增）
+                if CALL_RECORD_AVAILABLE and call_record_subsystem:
+                    try:
+                        call_record_subsystem.create_record(
+                            call_id=vm_id,
+                            caller=caller,
+                            callee=callee,
+                            direction="voicemail"
+                        )
+                        call_record_subsystem.add_transcript(vm_id, content, summary_result.get("intent", "voicemail"))
+                    except Exception as e:
+                        logger.warning(f"语音留言记录失败: {e}")
+                
+                return self._text_resp(rendered)
+            except Exception as e:
+                logger.warning(f"语音留言摘要生成失败: {e}")
+                # 降级：直接返回原始内容
+                return self._text_resp(
+                    f"📮 收到语音留言\n\n"
+                    f"来电：{caller}\n"
+                    f"内容：{content[:200]}\n\n"
+                    f"摘要生成失败，请查看原始留言内容。"
+                )
+        
+        # 降级：无摘要能力
+        return self._text_resp(
+            f"📮 收到语音留言\n\n"
+            f"来电：{caller}\n"
+            f"内容：{content[:200]}"
+        )
+
     def _analyze_emotion(self, text: str, userid: str) -> dict:
         """
         分析文本情感并记录状态（v2.2）
@@ -571,7 +1126,7 @@ class MessageHandler:
             return {"emotion": "neutral", "confidence": 0.5, "should_escalate": False}
     
     def _handle_text(self, callback):
-        """处理文本消息（含情感分析 v2.2）"""
+        """处理文本消息（含情感分析 v2.2、方言检测+工单 v2.3）"""
         content = callback.get("text", {}).get("content", "").strip()
         userid = callback.get("from", {}).get("userid", "")
         
@@ -589,31 +1144,147 @@ class MessageHandler:
         if content in ["帮助", "能做什么", "怎么用", "?"]:
             return self._help_response()
         
-        # 情感分析（v2.2 新增）
-        emotion_result = self._analyze_emotion(content, userid)
-        
-        # 情感升级检测
-        if emotion_result.get("should_escalate"):
-            return self._text_resp(
-                "为了更好地解决您的问题，我现在为您转接专属人工客服，请稍等... 🙏\n\n"
-                "您也可以留下联系方式，我们会尽快回复。"
-            )
-        
-        # 其他文本→按语音流程处理
-        intent, confidence, entities = self.parser.parse(content)
-        logger.info(f"意图: {intent}, 置信度: {confidence:.2f}, 情感: {emotion_result.get('emotion', 'unknown')}")
-        
-        # 根据情感调整回复策略
-        emotion = emotion_result.get("emotion", "neutral")
-        strategy = emotion_manager.get_strategy(emotion, emotion_result.get("confidence", 0.5))
-        
-        if confidence >= 0.25:
-            return self._dispatch(intent, entities, content, emotion=emotion, strategy=strategy)
+        # 单聊路径：复用统一内容处理（v2.9 抽出）
+        return self._process_content(content, userid, chat_type="single")
+
+    # === 群聊处理（v2.9）===
+
+    def _handle_group(self, callback, chattype="group", chat_id=""):
+        """
+        群聊消息处理（v2.9）
+
+        仅响应 @机器人 的指令；未被 @ 静默忽略（防刷屏）。
+        复用单聊内容引擎（_process_content），并注入发言者身份上下文
+        （谁在说话 / 什么角色），使意图识别与应答能区分群内不同成员。
+
+        Args:
+            callback: 回调 JSON
+            chattype: 会话类型标识
+            chat_id: 群聊ID
+        """
+        msgtype = callback.get("msgtype", "")
+        userid = callback.get("from", {}).get("userid", "")
+        speaker_role = "admin" if userid in self.group_admins else "member"
+
+        # 群聊合规：默认不落盘（磁盘零语音文件），仅即时转写处理
+        if self.compliance and self.compliance.record_audio_disabled():
+            logger.info(f"群聊合规：语音不落盘，仅转写处理 chat_id={chat_id}")
+
+        # 未被 @机器人 则静默忽略（防刷屏，企微机制已保证群推送必 @）
+        if not self._is_mentioned(callback):
+            logger.info(f"群消息未 @机器人，静默忽略 userid={userid}")
+            return None
+
+        # 提取并清理内容（去掉 @机器人 前缀，便于意图解析）
+        if msgtype == "voice":
+            content = callback.get("voice", {}).get("content", "").strip()
         else:
-            return self._smart_clarify(content, emotion=emotion, strategy=strategy)
-    
-    def _dispatch(self, intent, entities, raw_text, emotion=None, strategy=None):
-        """分发到具体处理器（含情感策略 v2.2）"""
+            content = callback.get("text", {}).get("content", "").strip()
+        content = self._strip_mention(content)
+
+        # v2.9 群内 @机器人 确认回执闭环（被指派人确认/拒绝）
+        confirm_resp = self._try_handle_confirm(content, userid)
+        if confirm_resp is not None:
+            return confirm_resp
+
+        if not content:
+            return self._text_resp(
+                "您好！我已收到您的 @，请告诉我具体需求，例如「@我 周三前交方案」。"
+            )
+
+        # 设置群聊上下文（发言者身份 + 群维度），供处理器与群任务分发使用
+        self._chat_ctx = {
+            "chat_type": "group", "chat_id": chat_id,
+            "speaker_role": speaker_role, "speaker_userid": userid,
+        }
+
+        # 群任务指派优先：识别「@某人 期限 任务」三元组，独立于意图引擎
+        if self.entity_extractor and self.todo_mgr:
+            assign = self.entity_extractor.extract_assignment(content, userid)
+            if assign.get("is_assignment") and assign.get("assignee"):
+                return self._dispatch_group_assignment(assign, content)
+
+        # 否则复用单聊引擎，注入发言者身份（谁在说话 / 角色），零重构
+        return self._process_content(
+            content, userid,
+            chat_type="group", chat_id=chat_id,
+            speaker_role=speaker_role, speaker_userid=userid,
+        )
+
+    def _dispatch_group_assignment(self, assign: Dict[str, Any], content: str):
+        """
+        群任务指派分发（v2.9）：落库 + 指派确认回执
+
+        把群里的口头安排从「说了」变成「记了 + 认了」：
+        - 建群待办（assigner=发言者, assignee=被指派人）
+        - 向被指派人推送确认回执，待其确认/拒绝闭环
+        """
+        due_date = assign.get("due_date")
+        if not due_date:
+            due_date = (datetime.now() + timedelta(days=1)).date().isoformat()
+        todo = {
+            "call_id": self._chat_ctx.get("chat_id", ""),
+            "userid": assign.get("assigner", ""),
+            "content": content,
+            "due_date": due_date,
+        }
+        ok = self.todo_mgr.register_todo(
+            todo, assigner=assign["assigner"], assignee=assign["assignee"],
+            chat_id=self._chat_ctx.get("chat_id", ""), source_group=True,
+            auto_schedule=False,
+        )
+        if ok:
+            return self._text_resp(
+                f"📌 已在群里建立任务\n\n"
+                f"• 内容：{content}\n"
+                f"• 指派给：@{assign['assignee']}\n"
+                f"• 指派方：{assign.get('assigner', '')}\n"
+                f"• 截止：{due_date}\n\n"
+                f"@{assign['assignee']} 请确认是否接受（回复「确认」/「拒绝」）。"
+            )
+        return self._text_resp("任务登记失败，请稍后再试。")
+
+    def _is_mentioned(self, callback: dict) -> bool:
+        """
+        判断是否 @机器人（群聊防刷屏）
+
+        企微机制：群聊中仅 @机器人 的消息才会推送给机器人。
+        若回调显式给出 mention_list 则按列表判定；否则群语音信任企微推送，
+        群文本按内容是否含 @ 判定。
+        """
+        mention_list = (callback.get("text", {}).get("mention_list")
+                       or callback.get("mention_list") or [])
+        if mention_list:
+            bot_userid = os.environ.get("WECOM_BOT_USERID", "")
+            if bot_userid:
+                return ("@all" in mention_list) or (bot_userid in mention_list)
+            # 未配置机器人 userid：信任企微推送（必 @ 才到）
+            return True
+        # 无 mention_list：群语音信任企微推送；群文本需内容含 @
+        msgtype = callback.get("msgtype", "")
+        if msgtype == "voice":
+            return True
+        content = callback.get("text", {}).get("content", "")
+        return "@" in content
+
+    def _strip_mention(self, content: str) -> str:
+        """去掉开头的 @某人 前缀，便于意图解析"""
+        if not content:
+            return content
+        m = re.match(r'^@([A-Za-z0-9_\u4e00-\u9fff]{1,20})\s*', content)
+        if m:
+            return content[m.end():].strip()
+        return content
+
+    def _dispatch(self, intent, entities, raw_text, emotion=None, strategy=None,
+                  dialect=None, ticket_id=None, chat_type="single", chat_id="",
+                  speaker_role="", speaker_userid=""):
+        """分发到具体处理器（含情感策略 v2.2、方言+工单 v2.3）"""
+        # v2.9 暂存群聊上下文，供处理器（如群任务分发）读取身份/群维度
+        self._chat_ctx = {
+            "chat_type": chat_type, "chat_id": chat_id,
+            "speaker_role": speaker_role, "speaker_userid": speaker_userid,
+        }
         handlers = {
             "query_schedule": self._do_query_schedule,
             "create_todo": self._do_create_todo,
@@ -623,20 +1294,43 @@ class MessageHandler:
             "exit_voice": self._do_exit,
             "greeting": self._do_greeting,
             "time_query": self._do_time_query,
-            "custom": lambda e, t: self._smart_clarify(t, emotion=emotion, strategy=strategy)
+            "custom": lambda e, t: self._smart_clarify(t, emotion=emotion, strategy=strategy,
+                                                       dialect=dialect, ticket_id=ticket_id)
         }
-        handler = handlers.get(intent, lambda e, t: self._smart_clarify(t, emotion=emotion, strategy=strategy))
+        handler = handlers.get(intent, lambda e, t: self._smart_clarify(t, emotion=emotion, strategy=strategy,
+                                                                         dialect=dialect, ticket_id=ticket_id))
         
-        # 如果有情感策略，传递给处理器
-        if emotion and strategy:
-            # 在响应前添加情感策略前缀
-            result = handler(entities, raw_text)
-            if result and isinstance(result, str):
-                # 根据情感调整回复
-                return self._apply_emotion_strategy(result, emotion, strategy)
+        result = handler(entities, raw_text)
+        
+        # handler 返回 dict（_text_resp 格式）或 str
+        if not result:
             return result
         
-        return handler(entities, raw_text)
+        # 提取文本内容进行处理
+        if isinstance(result, dict):
+            text_content = result.get("text", {}).get("content", "")
+        elif isinstance(result, str):
+            text_content = result
+        else:
+            return result
+        
+        # 应用情感策略
+        if emotion and strategy:
+            text_content = self._apply_emotion_strategy(text_content, emotion, strategy)
+        
+        # 应用方言模板（v2.3 新增）
+        if dialect and dialect != "mandarin":
+            text_content = self._apply_dialect_template(text_content, dialect)
+        
+        # 添加工单信息（v2.3 新增）
+        if ticket_id:
+            text_content = self._append_ticket_info(text_content, ticket_id)
+        
+        # 返回格式化响应
+        if isinstance(result, dict):
+            result["text"]["content"] = text_content
+            return result
+        return text_content
     
     def _apply_emotion_strategy(self, response: str, emotion: str, strategy: dict) -> str:
         """应用情感策略到响应中
@@ -669,11 +1363,49 @@ class MessageHandler:
         
         return response
     
-    def _smart_clarify(self, text, emotion=None, strategy=None):
+    def _apply_dialect_template(self, response: str, dialect: str) -> str:
+        """应用方言模板到响应中（v2.3 新增）
+        
+        Args:
+            response: 原始响应文本
+            dialect: 方言类型字符串
+            
+        Returns:
+            str: 应用方言模板后的响应
+        """
+        if not DIALECT_AVAILABLE or dialect == "mandarin":
+            return response
+        
+        # 获取方言问候模板，替换标准问候
+        dialect_greeting = dialect_manager.get_reply(dialect, "greeting")
+        
+        # 检测回复中是否含有标准问候，如果有则替换
+        mandarin_greetings = ["您好！", "你好！", "您好，"]
+        for mg in mandarin_greetings:
+            if mg in response:
+                response = response.replace(mg, dialect_greeting + " ", 1)
+                break
+        
+        return response
+    
+    def _append_ticket_info(self, response: str, ticket_id: str) -> str:
+        """在响应末尾添加工单信息（v2.3 新增）
+        
+        Args:
+            response: 原始响应文本
+            ticket_id: 工单ID
+            
+        Returns:
+            str: 添加工单信息后的响应
+        """
+        ticket_suffix = f"\n\n📋 已为您创建工单：{ticket_id}\n我们将尽快为您处理。"
+        return response + ticket_suffix
+    
+    def _smart_clarify(self, text, emotion=None, strategy=None, dialect=None, ticket_id=None):
         """
         智能确认：尝试理解用户模糊意图并给出选项
         不再回复"需要配置API接入"
-        含情感策略调整（v2.2）
+        含情感策略调整（v2.2）、方言+工单支持（v2.3）
         """
         # 尝试从文本中提取关键信息进行智能匹配
         text_lower = text.lower()
@@ -694,6 +1426,15 @@ class MessageHandler:
             '"给张三发消息，明天开会"\n\n'
             "请用上面的例子对我说，我会尽力帮到您！"
         )
+        
+        # 应用方言模板（v2.3 新增）
+        if dialect and dialect != "mandarin":
+            guide = self._apply_dialect_template(guide, dialect)
+        
+        # 添加工单信息（v2.3 新增）
+        if ticket_id:
+            guide = self._append_ticket_info(guide, ticket_id)
+        
         return self._text_resp(guide)
     
     def _do_query_schedule(self, entities, raw_text):
@@ -726,10 +1467,10 @@ class MessageHandler:
         )
     
     def _do_create_todo(self, entities, raw_text):
-        """创建待办"""
+        """创建待办（v2.9 群聊支持任务指派分发）"""
         date = entities.get("date", "今天")
         tod = entities.get("time_of_day", "")
-        
+
         # 尝试提取待办内容
         todo_content = raw_text
         # 去掉"提醒" "记得" 等前缀
@@ -737,10 +1478,12 @@ class MessageHandler:
             if kw in todo_content:
                 todo_content = todo_content.replace(kw, "").strip()
                 break
-        
+
         if not todo_content:
             todo_content = "（待办内容未识别）"
-        
+
+        # 单聊：维持原提示（需管理员授权才能真正创建企业微信待办）
+        # 群任务指派由 _dispatch_group_assignment 优先处理，不在此分支
         return self._text_resp(
             f"✅ 待办提醒已收到！\n\n"
             f"📝 内容：{todo_content}\n"

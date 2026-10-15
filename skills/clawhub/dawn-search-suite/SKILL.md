@@ -1,6 +1,6 @@
 ---
 name: dawn-search-suite
-description: "综合搜索与信息抓取 — 实时搜索引擎、JS渲染页面抓取、内容采集研究、AI资讯热点。"
+description: "搜不到、页面抓不动、信息还要一家家核？实时搜索 + JS 渲染页面抓取 + 多引擎交叉验证 + AI 资讯，一次配齐。触发词：联网搜索、网页抓取、信息采集、研究调研、AI资讯、热点。"
 routes:
   anysearch: '#实时搜索'
   scrapling: '#页面抓取'

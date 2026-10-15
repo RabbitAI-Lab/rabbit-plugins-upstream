@@ -1,47 +1,64 @@
-## Description: <br>
-Ghost Publishing Pro helps agents write, audit, publish, and automate Ghost CMS operations through the Ghost Admin API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides Ghost publishing, newsletters, content migrations, and site audits through administrative workflows.
 
-## Publisher: <br>
-[highnoonoffice](https://clawhub.ai/user/highnoonoffice) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[highnoonoffice](https://clawhub.ai/user/highnoonoffice)
 
-## Use Case: <br>
-External developers and Ghost site operators use this skill to draft, publish, update, audit, migrate, and analyze Ghost CMS content from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish, email subscribers, delete or bulk-change content, and affect a live Ghost site. <br>
-Mitigation: Require explicit user approval for publishing, newsletter sends, deletion, migrations, and bulk operations, including scope and affected post count. <br>
-Risk: The skill requires a Ghost Admin API key stored in a local credentials file. <br>
-Mitigation: Use a dedicated revocable Ghost integration key, keep the credentials file private and out of version control, and avoid printing tokens or secrets. <br>
-Risk: The security summary flags site-wide code injection guidance and behavior beyond the advertised Admin-API-only boundary. <br>
-Mitigation: Require owner approval before touching code injection or site-wide settings, back up existing settings first, and stop when integration-token permission walls apply. <br>
-Risk: Webhook, cron, analytics, and member workflows can expose member data or trigger downstream automations. <br>
-Mitigation: Confirm the destination and data scope before forwarding member or analytics data to third parties or enabling scheduled automation. <br>
+## Use Case:
 
+Ghost publishers and content teams use this skill to draft and update posts, send newsletters, migrate content, and review site health and email performance.
 
-## Reference(s): <br>
-- [Ghost Admin API Reference](references/api.md) <br>
-- [Ghost Publishing Workflows](references/workflows.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/highnoonoffice/ghost-publishing-pro) <br>
-- [Project Homepage](https://github.com/highnoonoffice/hno-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, JavaScript snippets, Python snippets, and curl commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local Ghost Admin API credentials and may generate live publishing, newsletter, migration, audit, and automation instructions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.5.2 (source: server release metadata; artifact frontmatter lists 2.4.0) <br>
+Risk: Conflicting browser-based, site-wide code-injection guidance could change the live site unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not let an agent execute browser code-injection steps; review site-wide changes manually.
+
+Risk: Owner or staff credentials enable elevated administrative actions beyond routine publishing.
+
+Mitigation: Use a dedicated Ghost integration key where possible; avoid owner or staff tokens unless expressly needed.
+
+Risk: Newsletter sends, bulk updates, and deletions can affect many subscribers or posts and may be difficult to reverse.
+
+Mitigation: Require explicit confirmation of recipients, scope, and changes before execution.
+
+Risk: Cron automation or webhook flows may expose subscriber data.
+
+Mitigation: Review automation and data access before enabling these flows, and require explicit approval.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/highnoonoffice/skills/ghost-publishing-pro)
+- [Project homepage (listed in metadata; provenance unverified)](https://github.com/highnoonoffice/hno-skills)
+- [Ghost Admin API reference](artifact/references/api.md)
+- [Publishing workflows](artifact/references/workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with API request and script examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include publishing instructions, migration scripts, and audit summaries.]
+
+## Skill Version(s):
+
+2.6.0 (source: server release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,57 @@
-## Description: <br>
-AI-powered quantitative backtesting laboratory for China A-share strategy research, covering strategy design, historical tests, performance attribution, walk-forward analysis, and Monte Carlo simulation. <br>
+## Description:
 
-This skill is for research and development only. <br>
+Guides historical China A-share strategy backtesting with illustrative Python examples, cost modelling, walk-forward validation, performance attribution, and Monte Carlo simulation.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External developers, quantitative analysts, and algorithmic traders use this skill to draft and review China A-share backtests, strategy examples, performance metrics, walk-forward checks, and Monte Carlo risk simulations for research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The included sample backtesting engine has a reliability issue in its position ledger and should not be trusted for real trading or allocation decisions. <br>
-Mitigation: Use the skill only as an educational research helper until the ledger behavior is fixed and independently tested. <br>
-Risk: Backtesting results can be misleading and do not guarantee future market performance. <br>
-Mitigation: Treat outputs as research artifacts, validate assumptions against independent data, and avoid using them as investment advice. <br>
-Risk: Regulatory and market claims may become stale or may require official confirmation. <br>
-Mitigation: Verify any China A-share regulatory or market claims against current official sources before relying on them. <br>
+## Use Case:
 
+Quant analysts and developers use this skill to examine defined trading rules against their own historical China A-share data, including trading costs, out-of-sample performance, and simulation uncertainty. It does not supply market data or execute trades.
 
-## Reference(s): <br>
-- [Security Quant Backtest on ClawHub](https://clawhub.ai/gechengling/security-quant-backtest) <br>
+### Deployment Geography for Use:
 
+Global (China A-share market focus)
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with Python code blocks and structured analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include sample Python backtesting code, quantitative research guidance, and finance risk disclaimers.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.1 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Simplified sample code and simulated returns may misrepresent real trading outcomes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate results in an independently tested backtesting system with realistic costs, execution constraints, and out-of-sample checks before relying on them.
+
+Risk: Outdated market or regulatory assumptions may lead to misleading conclusions.
+
+Mitigation: Independently verify applicable rules, rates, and market data before using the analysis.
+
+Risk: Real account, client, position, or broker data may expose sensitive information.
+
+Mitigation: Use hypothetical amounts and omit real account data, client identities, broker credentials, and live positions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/gechengling/skills/security-quant-backtest)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Code]
+
+**Output Format:** [Markdown with illustrative Python code and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Educational examples; no built-in data access or trade execution.]
+
+## Skill Version(s):
+
+3.0.3 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

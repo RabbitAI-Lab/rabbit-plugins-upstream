@@ -7,10 +7,12 @@ Sets a coherent `line-height` and `letter-spacing` (tracking) for a given font s
 ## What it does
 
 - Base `line-height` by role and font family (serif needs more breathing room than sans at the same size).
+- Source status is explicit: body `1.2`–`1.45` is backed by Butterick; heading `1.1`–`1.3` and label/caption `1.2`–`1.4` are working ranges because no direct source was found for the exact endpoints.
 - Inverse tracking rule: large text (headings) → negative `letter-spacing`; small text (captions, all-caps labels) → positive.
-- **Vertical-trim guard**: checks CSS `leading-trim`/`text-box-trim` or Figma `TextNode.textLeadingTrim` before finalizing line-height — trimmed text reads visually tighter at the same numeric value, so the assumption is always stated explicitly, never silently picked.
+- **Vertical-trim guard**: checks CSS `leading-trim`/`text-box-trim` or Figma `TextNode.leadingTrim` before finalizing line-height — trimmed text reads visually tighter at the same numeric value, so the assumption is always stated explicitly, never silently picked.
 - OpenType feature recommendations (tabular numbers for aligned figures, small caps) only when content implies them.
 - With Figma access: reads the selected text node's properties directly and can write values back on explicit request.
+- Reads first and asks only when a missing value changes the result; x-height measurement and every write require permission.
 
 ## When to use
 
@@ -42,4 +44,4 @@ MIT — see `LICENSE`. Author: **[Monika Zapisek](https://monikazapisek.com)**. 
 
 ---
 
-*Part of the [Design Engineering Playbook](https://github.com/monikazapisekstudio/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*
+*Part of the [Design Engineering Playbook](https://github.com/monikazapisek/design-engineering-playbook) — AI-assisted workflow artefacts for product designers working in agile and lean environments.*

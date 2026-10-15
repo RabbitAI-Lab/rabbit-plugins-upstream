@@ -1,43 +1,59 @@
-## Description: <br>
-fal.ai sync-lipsync v3 generates a new video whose speaker lip movements match a supplied audio track, for dubbing, localization, and virtual presenter re-syncing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to synchronize a speaker's lip movements in a video to supplied audio using dLazy's hosted sync-lipsync v3 service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative production teams use this skill to invoke dLazy's hosted sync-lipsync-3 service from an agent workflow, supplying a video and audio track to generate lip-synced video output. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uploads user-provided video and audio files to dLazy's hosted service for processing. <br>
-Mitigation: Use only media that is approved for processing by dLazy, and avoid submitting sensitive content unless the user has accepted that transfer. <br>
-Risk: Authentication can persist a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable or npx path when less local persistence is preferred, and rotate or revoke the key from dLazy when needed. <br>
+## Use Case:
 
+Creators, localization teams, and developers use this skill to align a presenter's lip movements with a supplied audio track for dubbing or virtual-presenter videos.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-sync-lipsync-3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files] <br>
-**Output Format:** [Markdown instructions with bash commands and CLI JSON output containing generated media URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return an asynchronous task identifier when no-wait mode is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: The skill delegates execution to an external CLI package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the pinned @dlazy/cli package before installing it.
+
+Risk: Local video and audio files may be uploaded to dLazy's hosted service.
+
+Mitigation: Confirm upload permission and avoid sending sensitive media without authorization.
+
+Risk: Copy-paste errors in the documentation may lead to failed or confusing invocations.
+
+Mitigation: Use the documented video_url and audio_url parameters instead of the mistaken --prompt example, and check the returned media type.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-sync-lipsync-3)
+- [dLazy CLI source linked in skill metadata](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON result guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The hosted service returns a generated-video URL; the CLI can save the result locally.]
+
+## Skill Version(s):
+
+1.3.29 (source: ClawHub release metadata; bundled skill frontmatter lists 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

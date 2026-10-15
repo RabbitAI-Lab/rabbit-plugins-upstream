@@ -1,45 +1,58 @@
-## Description: <br>
-Uses fixed home-camera video to identify prolonged standing and frequent bending by a pregnant person, summarize posture and fatigue-risk signals, and produce rest reminders for health reference rather than medical diagnosis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes video of a pregnant person for prolonged standing and frequent bending, and provides fatigue-risk reminders and reports for health reference rather than diagnosis.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers can use this skill to analyze fixed-camera video from homes, prenatal schools, community health centers, or smart-home and pregnancy-management apps for posture, standing-duration, bending-frequency, and reminder generation. The output is intended for wellness reference and should not be used as medical diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive in-home pregnancy-related video or video URLs are sent to external Life Emergence services. <br>
-Mitigation: Use only with the pregnant person's explicit informed consent, verify the configured service endpoints, and avoid submitting footage unless the privacy and retention terms are acceptable. <br>
-Risk: Reports are tied to a persistent local or remote identity and auth tokens may be stored locally. <br>
-Mitigation: Use a dedicated workspace or account, review local token storage before deployment, and clear credentials and report history when no longer needed. <br>
-Risk: The analysis may be mistaken for clinical advice. <br>
-Mitigation: Present outputs as wellness reminders and posture statistics only, and direct users to qualified medical care for symptoms or pregnancy health concerns. <br>
+## Use Case:
 
+Expecting parents and care teams can analyze home-camera video for prolonged standing and frequent bending, review rest reminders, and retrieve past reports. Results are for health reference, not medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pregnant-posture-fatigue-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Pregnant posture fatigue API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON-style structured analysis with posture metrics, alert type, alert level, reminder text, recommended action, and optional report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write the analysis result to a user-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; SKILL.md frontmatter lists 1.0.6) <br>
+Risk: Sensitive pregnancy videos and reports are sent to configured cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain the pregnant person's clear consent and confirm the destination and handling of videos and reports before use.
+
+Risk: Shared or automatically created identities and cached tokens can expose reports across users.
+
+Mitigation: Use only in a single-user workspace until identity handling is fixed; protect local tokens and report access.
+
+Risk: Posture detection can misclassify bending or standing, and fatigue reminders are not medical assessments.
+
+Mitigation: Review results in context and seek clinical advice for health concerns rather than relying on alerts for diagnosis.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pregnant-posture-fatigue-detection-analysis)
+- [Skill API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [JSON analysis reports or Markdown history tables with report links and rest reminders]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on clear, full-body video and do not provide a medical diagnosis.]
+
+## Skill Version(s):
+
+1.0.11 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

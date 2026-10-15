@@ -1,44 +1,59 @@
-## Description: <br>
-ElevenLabs Instant Voice Cloning (IVC) uploads a clean voice sample to create a custom voice usable with ElevenLabs text-to-speech. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent clone a custom voice from a clean audio sample for use with ElevenLabs text-to-speech.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to invoke the pinned dLazy CLI for ElevenLabs voice cloning from an authorized clean voice sample. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-supplied audio may be uploaded to dLazy-hosted services for processing. <br>
-Mitigation: Use only audio that is appropriate to send to dLazy services and review the service terms before using sensitive material. <br>
-Risk: Voice cloning can misuse a person's voice if authorization is unclear. <br>
-Mitigation: Clone only voices the user is authorized to clone. <br>
-Risk: The skill depends on a third-party CLI package and hosted API. <br>
-Mitigation: Review the pinned @dlazy/cli package before installation in sensitive environments. <br>
+## Use Case:
 
+Creators and developers use this skill to submit a permitted voice sample for cloning and obtain a voice usable in text-to-speech workflows.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [Markdown instructions with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and the pinned @dlazy/cli 1.2.3 package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Cloning a voice without the speaker's permission can enable impersonation or misuse.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only voice samples you own or have explicit permission to clone.
+
+Risk: Uploaded voice samples and generated assets are processed by dLazy and its providers.
+
+Mitigation: Confirm consent and data-handling requirements before submitting sensitive audio to the hosted service.
+
+Risk: Examples and the documented output schema conflict with the voice-cloning options.
+
+Mitigation: Check the installed CLI help and validate returned fields before relying on examples or automating downstream use.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-elevenlabs-voice-clone)
+- [dLazy CLI repository](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The hosted service may return a generated voice asset or an asynchronous task ID; verify actual CLI help and response fields.]
+
+## Skill Version(s):
+
+1.3.28 (source: server-resolved ClawHub release; artifact frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

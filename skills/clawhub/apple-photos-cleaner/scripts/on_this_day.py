@@ -7,14 +7,49 @@ A richer version of Apple's Memories with people, scenes, and quality context.
 import sys
 from collections import defaultdict
 from datetime import date, datetime
-from typing import Any, Optional
+from typing import Any
 
-from _common import PhotosDB, coredata_to_datetime, detect_face_schema, format_size, get_quality_score, run_script
+from _common import (
+    QUALITY_SCORE_COLUMNS,
+    PhotosDB,
+    computed_scores_sql,
+    coredata_to_local,
+    detect_face_schema,
+    display_name,
+    format_size,
+    get_quality_score,
+    has_timezone_offset,
+    is_screenshot,
+    local_datetime_sql,
+    original_filename_sql,
+    run_script,
+    tz_offset_sql,
+)
+from _schema import FACES, FILE_SIZE, ORIGINAL_FILENAME, QUALITY_SCORES, SCENES, Degradation, get_schema
+
+# Schema contract (T1.4): see _schema. Missing required → exit 5; missing optional → `degraded`.
+REQUIRED_COLUMNS: tuple[str, ...] = (
+    "ZASSET.ZDATECREATED",
+    "ZASSET.ZFAVORITE",
+    "ZASSET.ZFILENAME",
+    "ZASSET.ZISDETECTEDSCREENSHOT",
+    "ZASSET.ZKIND",
+    "ZASSET.ZLATITUDE",
+    "ZASSET.ZLONGITUDE",
+    "ZASSET.ZTRASHEDSTATE",
+    *FILE_SIZE,
+)
+OPTIONAL_COLUMNS: dict[str, tuple[str, ...]] = {
+    "original_filenames": ORIGINAL_FILENAME,
+    "quality": QUALITY_SCORES,
+    "people": FACES,
+    "scenes": SCENES,
+}
 
 
 def on_this_day(
-    db_path: Optional[str] = None,
-    target_date: Optional[str] = None,
+    db_path: str | None = None,
+    target_date: str | None = None,
     window_days: int = 0,
 ) -> dict[str, Any]:
     """
@@ -36,9 +71,19 @@ def on_this_day(
     month = target.month
     day = target.day
 
-    with PhotosDB(db_path) as conn:
+    with PhotosDB(db_path, require=REQUIRED_COLUMNS, operation="On This Day") as conn:
+        name_col = original_filename_sql(get_schema(conn))
         cursor = conn.cursor()
         schema = detect_face_schema(cursor)
+        registry = get_schema(conn)
+        degraded = Degradation(registry)
+        degraded.check("original_filenames", *OPTIONAL_COLUMNS["original_filenames"])
+        degraded.check("quality", *OPTIONAL_COLUMNS["quality"])
+        has_faces = degraded.check("people", *OPTIONAL_COLUMNS["people"])
+        has_scenes = degraded.check("scenes", *OPTIONAL_COLUMNS["scenes"])
+        score_terms, score_join = computed_scores_sql(registry, *QUALITY_SCORE_COLUMNS)
+        tz_available = has_timezone_offset(cursor)
+        local_dt = local_datetime_sql(tz_available)
 
         # Build date matching condition
         if window_days > 0:
@@ -51,16 +96,16 @@ def on_this_day(
 
                     d = d + timedelta(days=offset)
                     date_conditions.append(
-                        f"(CAST(strftime('%m', datetime(a.ZDATECREATED + 978307200, 'unixepoch')) AS INTEGER) = {d.month} "
-                        f"AND CAST(strftime('%d', datetime(a.ZDATECREATED + 978307200, 'unixepoch')) AS INTEGER) = {d.day})"
+                        f"(CAST(strftime('%m', {local_dt}) AS INTEGER) = {d.month} "
+                        f"AND CAST(strftime('%d', {local_dt}) AS INTEGER) = {d.day})"
                     )
                 except ValueError:
                     continue
             date_filter = "(" + " OR ".join(date_conditions) + ")"
         else:
             date_filter = (
-                f"CAST(strftime('%m', datetime(a.ZDATECREATED + 978307200, 'unixepoch')) AS INTEGER) = {month} "
-                f"AND CAST(strftime('%d', datetime(a.ZDATECREATED + 978307200, 'unixepoch')) AS INTEGER) = {day}"
+                f"CAST(strftime('%m', {local_dt}) AS INTEGER) = {month} "
+                f"AND CAST(strftime('%d', {local_dt}) AS INTEGER) = {day}"
             )
 
         # Exclude current year's photos (we want memories, not today's photos)
@@ -70,6 +115,7 @@ def on_this_day(
             SELECT
                 a.Z_PK,
                 a.ZFILENAME,
+                {name_col},
                 a.ZDATECREATED,
                 a.ZKIND,
                 a.ZFAVORITE,
@@ -77,16 +123,14 @@ def on_this_day(
                 a.ZLONGITUDE,
                 a.ZISDETECTEDSCREENSHOT,
                 aa.ZORIGINALFILESIZE,
-                ca.ZFAILURESCORE,
-                ca.ZNOISESCORE,
-                ca.ZPLEASANTCOMPOSITIONSCORE,
-                ca.ZPLEASANTLIGHTINGSCORE
+                {", ".join(score_terms)},
+                {tz_offset_sql(tz_available)} AS tz_offset
             FROM ZASSET a
             LEFT JOIN ZADDITIONALASSETATTRIBUTES aa ON a.Z_PK = aa.ZASSET
-            LEFT JOIN ZCOMPUTEDASSETATTRIBUTES ca ON a.Z_PK = ca.ZASSET
+            {score_join}
             WHERE a.ZTRASHEDSTATE != 1
             AND {date_filter}
-            AND strftime('%Y', datetime(a.ZDATECREATED + 978307200, 'unixepoch')) != ?
+            AND strftime('%Y', {local_dt}) != ?
             ORDER BY a.ZDATECREATED DESC
         """
 
@@ -97,7 +141,7 @@ def on_this_day(
         total_photos = 0
 
         for row in cursor.fetchall():
-            created = coredata_to_datetime(row["ZDATECREATED"])
+            created = coredata_to_local(row["ZDATECREATED"], row["tz_offset"])
             if not created:
                 continue
 
@@ -109,12 +153,13 @@ def on_this_day(
             photo = {
                 "id": row["Z_PK"],
                 "filename": row["ZFILENAME"],
+                "original_filename": row["original_filename"],
                 "created": created.isoformat(),
                 "year": created.year,
                 "years_ago": years_ago,
                 "kind": "photo" if row["ZKIND"] == 0 else "video",
                 "is_favorite": bool(row["ZFAVORITE"]),
-                "is_screenshot": bool(row["ZISDETECTEDSCREENSHOT"]),
+                "is_screenshot": is_screenshot(row),
                 "quality_score": round(quality, 3) if quality else None,
                 "size": size,
                 "size_formatted": format_size(size),
@@ -132,16 +177,17 @@ def on_this_day(
             photo_ids = [p["id"] for p in photos]
             years_ago = current_year - int(year_str)
 
-            # Get people
-            people = []
-            if photo_ids:
-                placeholders = ",".join("?" * len(photo_ids))
+            placeholders = ",".join("?" * len(photo_ids))
+
+            # Get people (None when this library has no face data)
+            people: list[dict[str, Any]] | None = [] if has_faces else None
+            if photo_ids and has_faces:
                 cursor.execute(
                     f"""
-                    SELECT DISTINCT p.ZFULLNAME, COUNT(df.{schema['asset_fk']}) as count
+                    SELECT DISTINCT p.ZFULLNAME, COUNT(df.{schema["asset_fk"]}) as count
                     FROM ZPERSON p
-                    JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema['person_fk']}
-                    WHERE df.{schema['asset_fk']} IN ({placeholders})
+                    JOIN ZDETECTEDFACE df ON p.Z_PK = df.{schema["person_fk"]}
+                    WHERE df.{schema["asset_fk"]} IN ({placeholders})
                     AND p.ZFULLNAME IS NOT NULL AND p.ZFULLNAME != ''
                     GROUP BY p.Z_PK
                     ORDER BY count DESC
@@ -151,9 +197,9 @@ def on_this_day(
                 )
                 people = [{"name": row["ZFULLNAME"], "count": row["count"]} for row in cursor.fetchall()]
 
-            # Get scenes
-            scenes = []
-            if photo_ids:
+            # Get scenes (None when this library has no scene data)
+            scenes: list[dict[str, Any]] | None = [] if has_scenes else None
+            if photo_ids and has_scenes:
                 cursor.execute(
                     f"""
                     SELECT sc.ZSCENENAME, COUNT(*) as count
@@ -205,6 +251,7 @@ def on_this_day(
         year_summaries.sort(key=lambda x: x["years_ago"])
 
         return {
+            "degraded": degraded.entries,
             "target_date": target.isoformat(),
             "target_month_day": f"{target.strftime('%B')} {target.day}",
             "window_days": window_days,
@@ -254,7 +301,7 @@ def format_summary(data: dict[str, Any]) -> str:
         if year_data["best_photo"]:
             bp = year_data["best_photo"]
             q_str = f" Q:{bp['quality_score']:.2f}" if bp["quality_score"] else ""
-            lines.append(f"   📸 Best: {bp['filename']}{q_str}")
+            lines.append(f"   📸 Best: {display_name(bp)}{q_str}")
 
         lines.append("")
 

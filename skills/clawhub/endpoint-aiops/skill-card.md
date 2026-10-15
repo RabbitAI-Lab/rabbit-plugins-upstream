@@ -1,47 +1,57 @@
-## Description: <br>
-Endpoint Aiops helps agents triage and operate managed-endpoint fleets with health, inventory, login-storm, drift, patch, profile-assignment, reboot, audit, budget, and undo workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators assess managed-endpoint fleet health, investigate login delays and configuration drift, and perform guarded profile changes or reboots.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, IT operators, and endpoint administrators use this skill to inspect managed-endpoint fleet health, diagnose login storms and drift, rank endpoint risk, and perform guarded remediation such as profile assignment or reboot. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can change or reboot managed endpoints and has no enforced read-only or approval gate for agent-driven writes. <br>
-Mitigation: Install it with a tightly scoped management account, preferably read-only until writes are intentionally needed; use dry-run and confirmation paths before profile assignment or reboot. <br>
-Risk: Endpoint credentials and local audit or undo data may expose sensitive endpoint, user, profile, or management-server information. <br>
-Mitigation: Treat ENDPOINT_AIOPS_MASTER_PASSWORD as a secret, avoid long-lived shell exports where possible, and review local ~/.endpoint-aiops data handling for sensitive environments. <br>
-Risk: The REST paths and some dialect behavior are modelled and have not been exercised against a live endpoint-management server. <br>
-Mitigation: Run endpoint-aiops doctor and validate behavior against a non-production or read-only target before relying on results or enabling write operations. <br>
+## Use Case:
 
+Endpoint administrators and IT operations teams use this skill to inventory and assess managed devices, investigate login storms and patch drift, and carry out approved profile assignments or reboots.
 
-## Reference(s): <br>
-- [Endpoint Aiops ClawHub page](https://clawhub.ai/zw008/skills/endpoint-aiops) <br>
-- [Endpoint-AIops project homepage](https://github.com/AIops-tools/Endpoint-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, Analysis, JSON] <br>
-**Output Format:** [Markdown guidance with shell commands and structured tool results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Tool results may include capped list envelopes with returned, limit, and truncated fields; write workflows may record audit and undo state locally.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata and target metadata) <br>
+Risk: The agent can reconfigure or reboot managed endpoints without a built-in read-only mode or approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a read-only management account; require external approval before granting write access, and preview writes with dry-run. Treat audit logs as accountability, not authorization.
+
+Risk: A reboot cannot be undone, and live server behavior has not yet been verified.
+
+Mitigation: Verify connectivity and read-only workflows first; check the target device and schedule a recovery plan before rebooting.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zw008/skills/endpoint-aiops)
+- [Project homepage (listed in skill metadata)](https://github.com/AIops-tools/Endpoint-AIops)
+- [Capabilities](references/capabilities.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown and structured tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Fleet results may be capped; inspect truncation flags and full-fleet totals.]
+
+## Skill Version(s):
+
+0.12.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

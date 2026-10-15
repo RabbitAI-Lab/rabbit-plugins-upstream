@@ -13,19 +13,19 @@ Complete setup and security guide for `vmware-storage`.
 ### Via uv (recommended)
 
 ```bash
-uv tool install vmware-storage
+uv tool install vmware-storage==2.2.0
 ```
 
 ### Via pip
 
 ```bash
-pip install vmware-storage
+pip install vmware-storage==2.2.0
 ```
 
 ### From source
 
 ```bash
-git clone https://github.com/zw008/VMware-Storage.git
+git clone --branch v2.2.0 https://github.com/vmware-skills/VMware-Storage.git
 cd VMware-Storage
 pip install -e .
 ```
@@ -53,7 +53,7 @@ targets:
     username: administrator@vsphere.local
     type: vcenter              # "vcenter" or "esxi"
     port: 443
-    verify_ssl: false          # Set true if using valid certs
+    verify_ssl: true           # Default. Verifies the vCenter certificate
     environment: production    # Which environment this target is — see below
 
   - name: esxi-standalone
@@ -61,12 +61,17 @@ targets:
     username: root
     type: esxi
     port: 443
-    verify_ssl: false
+    verify_ssl: true
     environment: lab
 
 notify:
   webhook_url: ""              # Optional: webhook for notifications
 ```
+
+**Keep `verify_ssl: true`.** These accounts are privileged, and with verification off anyone on the
+network path can impersonate vCenter/ESXi and capture the password. If a host uses a self-signed
+certificate, add its CA to the system trust store rather than turning verification off. Setting
+`verify_ssl: false` on a target is supported only for an isolated lab host, never for production.
 
 The first target in the list is the default (used when `--target` is not specified).
 
@@ -136,7 +141,7 @@ Add to your MCP config (`~/.claude.json` or Claude Desktop settings):
 ```
 
 > v1.5.15+ recommends the single-command form `vmware-storage mcp`. Pre-1.5.15 used
-> `uvx --from vmware-storage vmware-storage-mcp`, which still works but re-resolves from
+> `uvx --from vmware-storage vmware-storage-mcp`, which still works but re-resolves from <!-- install-pin: historical -->
 > PyPI on each launch and breaks behind corporate TLS proxies. The legacy
 > `vmware-storage-mcp` entry point is also kept for backward compatibility.
 
@@ -184,6 +189,33 @@ whitespace are handled correctly).
 > at all — inject it from a secret manager (HashiCorp Vault, CyberArk, AWS
 > Secrets Manager, or a Kubernetes Secret) into the `*_PASSWORD` environment
 > variable at process start. The code reads the env var either way.
+
+## Limiting which tools are offered
+
+By default the MCP server offers every tool. To offer only read tools, start it with `--expose read`, or set
+`VMWARE_STORAGE_MCP_EXPOSE=read` in the MCP client's `env` block (useful when the client launches `vmware-storage mcp` itself). To offer
+chosen write tools as well, add `--allow-write` with a comma-separated list (or `VMWARE_STORAGE_MCP_ALLOW_WRITE`):
+
+```bash
+vmware-storage mcp --expose read --allow-write enable_iscsi
+```
+
+- A read tool is one annotated `readOnlyHint: true`; every other tool counts as a write.
+- An unknown setting, or a name that is not a write tool of this server, stops the server before it serves (exit
+  code 2), so it never offers more than you asked for. Pre-2.0 tool names are accepted.
+- With `--expose read`, the server prints one line to stderr saying what it exposes.
+- Flags and environment variables are not mixed: if either flag is given, both environment variables are
+  ignored, so a leftover `_ALLOW_WRITE` in the shell cannot widen `--expose read`. A blank flag value counts as
+  not given.
+- A tool that runs other steps (a plan, workflow or batch tool) carries every write it can execute, including
+  writes this setting hides. Expose such a tool only if you would expose those writes too.
+- A launcher that imports the server object can call
+  `vmware_policy.exposure.restrict_tools(mcp, skill="storage", expose="read", allow_write=[...])` before running it,
+  instead of editing the SDK's tool registry.
+- This limits what clients are offered. It is **not** authorization: whether a call may change anything is decided by
+  the account's permissions, and deny rules in `~/.vmware/rules.yaml` still apply to every exposed tool.
+- An agent that can run shell commands can also reach the platform without MCP (SSH, curl, govc, PowerCLI). So
+  the service account itself must be least-privilege: exposure and deny rules are guardrails, not the boundary.
 
 ## Security Details
 
@@ -277,7 +309,7 @@ This prevents malicious file names on datastores from injecting prompts or instr
 
 - The MCP server uses **stdio transport** (local only) -- no network listener is opened
 - vSphere connections use SSL/TLS on port 443 by default
-- SSL certificate verification can be enabled per-target via `verify_ssl: true` in config.yaml
+- SSL certificate verification is **on by default** (`verify_ssl: true`); turn it off per target only for an isolated lab host with a self-signed certificate
 
 ### What This Skill Cannot Do
 

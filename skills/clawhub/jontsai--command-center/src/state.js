@@ -1,3 +1,4 @@
+const { SESSION_LIST_COMMAND } = require("./openclaw");
 const fs = require("fs");
 const os = require("os");
 const path = require("path");
@@ -14,6 +15,7 @@ const { formatBytes, formatTimeAgo } = require("./utils");
  * @param {function} deps.getSystemVitals - function from vitals module
  * @param {function} deps.getCronJobs - function from cron module
  * @param {function} deps.loadOperators - function from operators module
+ * @param {function} deps.calculateOperatorStats - function from operators module
  * @param {function} deps.getLlmUsage - function from llm-usage module
  * @param {function} deps.getDailyTokenUsage - function from tokens module
  * @param {function} deps.getTokenStats - function from tokens module
@@ -22,15 +24,21 @@ const { formatBytes, formatTimeAgo } = require("./utils");
  * @param {function} deps.runOpenClaw - function from openclaw module
  * @param {function} deps.extractJSON - function from openclaw module
  * @param {function} deps.readTranscript - function from sessions module
+ * @param {function} deps.getIntelStats - function from intel module
+ * @param {function} deps.getPipelineStats - function from pipeline module
+ * @param {function} deps.getMonetizationStats - function from monetization module
  */
 function createStateModule(deps) {
+  const legacyExtensions = { schemaVersion: 1, mode: "legacy", items: [] };
   const {
     CONFIG,
     getOpenClawDir,
     getSessions,
     getSystemVitals,
     getCronJobs,
+    getCronStatus = () => "available",
     loadOperators,
+    calculateOperatorStats,
     getLlmUsage,
     getDailyTokenUsage,
     getTokenStats,
@@ -38,6 +46,10 @@ function createStateModule(deps) {
     runOpenClaw,
     extractJSON,
     readTranscript,
+    getIntelStats,
+    getPipelineStats,
+    getMonetizationStats,
+    getExtensions = () => legacyExtensions,
   } = deps;
 
   const PATHS = CONFIG.paths;
@@ -106,8 +118,34 @@ function createStateModule(deps) {
     return activities.reverse();
   }
 
+  function countActiveSessionsForCapacity(result, sessions) {
+    const fiveMinMs = 5 * 60 * 1000;
+
+    for (const s of sessions) {
+      // Only count sessions active in last 5 minutes.
+      // OpenClaw CLI sessions use ageMs/key; dashboard-mapped sessions use minutesAgo/sessionKey.
+      const ageMs = typeof s.ageMs === "number" ? s.ageMs : (s.minutesAgo || 0) * 60 * 1000;
+      if (ageMs > fiveMinMs) continue;
+
+      const key = s.key || s.sessionKey || "";
+      // Session key patterns:
+      //   agent:main:slack:... = main (human-initiated)
+      //   agent:main:telegram:... = main
+      //   agent:main:discord:... = main
+      //   agent:main:subagent:... = subagent (spawned task)
+      //   agent:main:cron:... = cron job (count as subagent)
+      if (key.includes(":subagent:") || key.includes(":cron:")) {
+        result.subagent.active++;
+      } else {
+        result.main.active++;
+      }
+    }
+
+    return result;
+  }
+
   // Get capacity info from gateway config and active sessions
-  function getCapacity() {
+  function getCapacity(preloadedSessions = null) {
     const result = {
       main: { active: 0, max: 12 },
       subagent: { active: 0, max: 24 },
@@ -132,33 +170,19 @@ function createStateModule(deps) {
       // Fall back to defaults
     }
 
+    // Reuse session data that getFullState already loaded so every dashboard state refresh
+    // does not invoke another `openclaw sessions --json` scan over large transcript dirs.
+    if (Array.isArray(preloadedSessions)) {
+      return countActiveSessionsForCapacity(result, preloadedSessions);
+    }
+
     // Try to get active counts from sessions (preferred - has full session keys)
     try {
-      const output = runOpenClaw("sessions --json 2>/dev/null");
+      const output = runOpenClaw(`${SESSION_LIST_COMMAND} --json`);
       const jsonStr = extractJSON(output);
       if (jsonStr) {
         const data = JSON.parse(jsonStr);
-        const sessions = data.sessions || [];
-        const fiveMinMs = 5 * 60 * 1000;
-
-        for (const s of sessions) {
-          // Only count sessions active in last 5 minutes
-          if (s.ageMs > fiveMinMs) continue;
-
-          const key = s.key || "";
-          // Session key patterns:
-          //   agent:main:slack:... = main (human-initiated)
-          //   agent:main:telegram:... = main
-          //   agent:main:discord:... = main
-          //   agent:main:subagent:... = subagent (spawned task)
-          //   agent:main:cron:... = cron job (count as subagent)
-          if (key.includes(":subagent:") || key.includes(":cron:")) {
-            result.subagent.active++;
-          } else {
-            result.main.active++;
-          }
-        }
-        return result;
+        return countActiveSessionsForCapacity(result, data.sessions || []);
       }
     } catch (e) {
       console.error("Failed to get capacity from sessions, falling back to filesystem:", e.message);
@@ -351,9 +375,15 @@ function createStateModule(deps) {
   // Unified state for dashboard (single source of truth)
   function getFullState() {
     const now = Date.now();
+    const extensions = getExtensions();
 
     // Return cached state if fresh
-    if (cachedState && now - lastStateUpdate < STATE_CACHE_TTL) {
+    if (
+      cachedState &&
+      cachedState.extensions.mode === extensions.mode &&
+      now - lastStateUpdate < STATE_CACHE_TTL
+    ) {
+      if (cachedState.extensions !== extensions) cachedState = { ...cachedState, extensions };
       return cachedState;
     }
 
@@ -369,6 +399,9 @@ function createStateModule(deps) {
     let memory = {};
     let cerebro = {};
     let subagents = [];
+    let intel = {};
+    let pipeline = {};
+    let monetization = {};
 
     // Get ALL sessions first for accurate statusCounts, then slice for display
     let allSessions = [];
@@ -386,9 +419,10 @@ function createStateModule(deps) {
     } catch (e) {
       console.error("[State] vitals:", e.message);
     }
-    // Use filesystem-based capacity (no CLI calls, won't block)
+    // Reuse the session list already loaded above; otherwise this refresh performs a second
+    // expensive OpenClaw sessions scan and can stall the dashboard on large installations.
     try {
-      capacity = getCapacity();
+      capacity = getCapacity(allSessions);
     } catch (e) {
       console.error("[State] capacity:", e.message);
     }
@@ -414,26 +448,8 @@ function createStateModule(deps) {
     }
     try {
       const operatorData = loadOperators();
-      // Add stats to each operator (same as /api/operators endpoint)
-      const operatorsWithStats = operatorData.operators.map((op) => {
-        const userSessions = allSessions.filter(
-          (s) => s.originator?.userId === op.id || s.originator?.userId === op.metadata?.slackId,
-        );
-        return {
-          ...op,
-          stats: {
-            activeSessions: userSessions.filter((s) => s.active).length,
-            totalSessions: userSessions.length,
-            lastSeen:
-              userSessions.length > 0
-                ? new Date(
-                    Date.now() - Math.min(...userSessions.map((s) => s.minutesAgo)) * 60000,
-                  ).toISOString()
-                : op.lastSeen,
-          },
-        };
-      });
-      operators = { ...operatorData, operators: operatorsWithStats };
+      // Use shared function for calculating operator stats (single source of truth)
+      operators = calculateOperatorStats(operatorData, allSessions);
     } catch (e) {
       console.error("[State] operators:", e.message);
     }
@@ -482,6 +498,23 @@ function createStateModule(deps) {
       console.error("[State] subagents:", e.message);
     }
 
+    if (extensions.mode === "legacy") {
+      try {
+        intel = getIntelStats();
+      } catch (e) {
+        console.error("[State] intel:", e.message);
+      }
+      try {
+        pipeline = getPipelineStats();
+      } catch (e) {
+        console.error("[State] pipeline:", e.message);
+      }
+      try {
+        monetization = getMonetizationStats();
+      } catch (e) {
+        console.error("[State] monetization:", e.message);
+      }
+    }
     cachedState = {
       vitals,
       sessions,
@@ -491,9 +524,12 @@ function createStateModule(deps) {
       operators,
       llmUsage,
       cron,
+      cronStatus: getCronStatus(),
       memory,
       cerebro,
       subagents,
+      ...(extensions.mode === "legacy" ? { intel, pipeline, monetization } : {}),
+      extensions,
       pagination: {
         page: 1,
         pageSize: 20,
@@ -544,7 +580,7 @@ function createStateModule(deps) {
   function getSubagentStatus() {
     const subagents = [];
     try {
-      const output = runOpenClaw("sessions --json 2>/dev/null");
+      const output = runOpenClaw(`${SESSION_LIST_COMMAND} --json`);
       const jsonStr = extractJSON(output);
       if (jsonStr) {
         const data = JSON.parse(jsonStr);

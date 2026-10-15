@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/chess-results",
+  "slug": "chess-results",
+  "ownerHandle": null,
+  "version": "0.2.0",
+  "updatedAt": 1791218256237,
+  "contentHash": "e814df7b0ef4c85b6c8de6c53aefe6d9cc4777f8e89d7ef34bbf9cb15c282949",
+  "fetchedAt": "2026-10-15T13:17:14.655Z"
+}

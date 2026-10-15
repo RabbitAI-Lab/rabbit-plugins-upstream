@@ -1,20 +1,36 @@
 [build-system]
-requires = ["setuptools>=64"]
+# Upper bounds are deliberate: an unbounded requirement lets a future major
+# release of the build backend or a dev tool change behaviour on an unrelated
+# `pip install`. Raise these consciously.
+requires = ["setuptools>=64,<81"]
 build-backend = "setuptools.build_meta"
 
 [project]
 name = "apple-photos-cleaner"
-version = "1.0.0"
+version = "1.2.0"
 description = "Analyze, audit, and clean up your Apple Photos library via its SQLite database"
-requires-python = ">=3.9"
+requires-python = ">=3.10"
 license = "MIT"
 
 [project.optional-dependencies]
 dev = [
-    "pytest>=7.0.0",
-    "pytest-cov>=4.0.0",
-    "ruff>=0.4.0",
+    "pytest>=7.0.0,<10",
+    "pytest-cov>=4.0.0,<8",
+    "ruff>=0.4.0,<1",
+    "mypy>=1.8.0,<3",
 ]
+
+# This project is consumed as a Claude skill — SKILL.md drives the scripts in
+# scripts/ by path, and tests import them via pytest's `pythonpath`. Nothing
+# imports an `apple_photos_cleaner` package, so there is nothing to package;
+# `pip install -e ".[dev]"` exists only to provision the dev toolchain.
+#
+# This must stay explicit: with no [tool.setuptools] section, auto-discovery
+# picked up references/ (a markdown docs directory) and installed it as a
+# top-level importable `references` namespace package, while shipping none of
+# the actual scripts.
+[tool.setuptools]
+py-modules = []
 
 [tool.pytest.ini_options]
 testpaths = ["tests"]
@@ -22,7 +38,7 @@ pythonpath = ["scripts"]
 addopts = "-v --tb=short"
 
 [tool.ruff]
-target-version = "py39"
+target-version = "py310"
 line-length = 120
 
 [tool.ruff.lint]
@@ -48,10 +64,16 @@ ignore = [
 "tests/*" = ["F811"]  # allow fixture redefinition
 
 [tool.ruff.lint.isort]
-known-first-party = ["_common"]
+known-first-party = ["_bootstrap", "_common", "_schema"]
+
+[tool.coverage.report]
+# Ratchet, not a target — the suite sits around 95%. Raise this when it climbs (T0.14).
+fail_under = 92
 
 [tool.mypy]
-python_version = "3.9"
+# No `python_version` pin: the type results are interpreter-independent, and
+# Ruff's `target-version` (with the UP rules enabled) is what actually guards
+# compatibility with the `requires-python` floor.
 warn_return_any = true
 warn_unused_configs = true
 disallow_untyped_defs = false

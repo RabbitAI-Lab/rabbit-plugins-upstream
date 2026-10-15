@@ -1,0 +1,14 @@
+{
+  "schema": "lgd-skill-manifest/v1",
+  "name": "context-engineering",
+  "slug": "context-engineering",
+  "version": "1.0.0",
+  "author": "诺声(Logos)@SynomosAI",
+  "copyright": "SynomosAI",
+  "license": "MIT",
+  "category": "AI工程方法",
+  "origin": "https://github.com/zhaoxinghua09-cell/agent-skills/tree/main/skills/context-engineering",
+  "homepage": "https://zhaoxinghua09-cell.github.io/lgd-hub/",
+  "agent_created": true,
+  "packaged_at": "2026-09-08"
+}

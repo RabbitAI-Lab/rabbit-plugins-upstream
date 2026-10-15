@@ -11,16 +11,16 @@
 ### Via uv (Recommended)
 
 ```bash
-uv tool install vmware-pilot
+uv tool install vmware-pilot==2.2.0
 ```
 
 ### Via pip
 
 ```bash
-uv tool install vmware-pilot
+uv tool install vmware-pilot==2.2.0
 
 # China mainland mirror
-pip install vmware-pilot -i https://pypi.tuna.tsinghua.edu.cn/simple
+pip install vmware-pilot==2.2.0 -i https://pypi.tuna.tsinghua.edu.cn/simple
 ```
 
 ### Verify Installation
@@ -84,7 +84,7 @@ The `uvx` form still works and needs no prior install:
   "mcpServers": {
     "vmware-pilot": {
       "command": "uvx",
-      "args": ["--from", "vmware-pilot", "vmware-pilot-mcp"]
+      "args": ["--from", "vmware-pilot==2.2.0", "vmware-pilot-mcp"]
     }
   }
 }
@@ -100,10 +100,37 @@ invalid peer certificate: UnknownIssuer
 
 `uv` ships its own certificate bundle and ignores the system trust store, which is what breaks.
 Either set `UV_NATIVE_TLS=true` so it honours your corporate CA, or install the tool once
-(`uv tool install vmware-pilot`) and launch `vmware-pilot mcp`, which touches the network
+(`uv tool install vmware-pilot==2.2.0`) and launch `vmware-pilot mcp`, which touches the network
 zero times.
 
 ---
+
+## Limiting which tools are offered
+
+By default the MCP server offers every tool. To offer only read tools, start it with `--expose read`, or set
+`VMWARE_PILOT_MCP_EXPOSE=read` in the MCP client's `env` block (useful when the client launches `vmware-pilot mcp` itself). To offer
+chosen write tools as well, add `--allow-write` with a comma-separated list (or `VMWARE_PILOT_MCP_ALLOW_WRITE`):
+
+```bash
+vmware-pilot mcp --expose read --allow-write cancel_workflow
+```
+
+- A read tool is one annotated `readOnlyHint: true`; every other tool counts as a write.
+- An unknown setting, or a name that is not a write tool of this server, stops the server before it serves (exit
+  code 2), so it never offers more than you asked for. Pre-2.0 tool names are accepted.
+- With `--expose read`, the server prints one line to stderr saying what it exposes.
+- With `--expose read`, the server's instructions still describe the workflow tools it hides (`create_workflow`,
+  `create_workflow_from_template`, `run_workflow`, `approve`, `rollback`); a call to a hidden tool is answered `Unknown tool`.
+- Flags and environment variables are not mixed: if either flag is given, both environment variables are
+  ignored, so a leftover `_ALLOW_WRITE` in the shell cannot widen `--expose read`. A blank flag value counts as
+  not given.
+- A tool that runs other steps (a plan, workflow or batch tool) carries every write it can execute, including
+  writes this setting hides. Expose such a tool only if you would expose those writes too.
+- A launcher that imports the server object can call
+  `vmware_policy.exposure.restrict_tools(mcp, skill="pilot", expose="read", allow_write=[...])` before running it,
+  instead of editing the SDK's tool registry.
+- This limits what clients are offered. It is **not** authorization. This server's write tools change workflow state on this machine; the steps it runs act through the other skills' accounts;
+  deny rules in `~/.vmware/rules.yaml` still apply to every exposed tool.
 
 ## Configuration
 
@@ -144,8 +171,9 @@ their own `config.yaml` — an optional label an environment-scoped `deny` rule
 in `~/.vmware/rules.yaml` can match on (for example, to freeze writes on
 `production`). A target with no label is simply not matched by such a rule.
 
-vmware-pilot has no targets and needs no such declaration: it reports a
-constant `local`. That is accurate rather than an exemption — pilot's own
+vmware-pilot has no targets and needs no such declaration: it registers no
+environment resolver, so its own calls are unlabeled and match no
+environment-scoped rule. That is accurate rather than an exemption — pilot's own
 writes land in `~/.vmware/workflows.db`, and its executor never calls VMware
 APIs. When a workflow reaches an executable step, the MCP server records it as
 `not_executed` and returns `dispatch_required`; the calling agent then performs
@@ -194,7 +222,7 @@ vmware-avi doctor
 
 ### Source Code
 
-[github.com/zw008/VMware-Pilot](https://github.com/zw008/VMware-Pilot) — MIT license.
+[github.com/vmware-skills/VMware-Pilot](https://github.com/vmware-skills/VMware-Pilot) — MIT license.
 
 ### Config File Contents
 
@@ -252,7 +280,7 @@ The workflow database uses WAL mode for concurrent access. If you see lock error
 Validate your template:
 
 ```bash
-python3 scripts/validate_workflow.py ~/.vmware/workflows/my_workflow.yaml
+"$(uv tool dir)/vmware-pilot/bin/python" scripts/validate_workflow.py ~/.vmware/workflows/my_workflow.yaml
 ```
 
-Common issues: incorrect indentation, missing required fields (action, skill, tool, params), invalid YAML syntax.
+Common issues: incorrect indentation, missing required fields (action, skill, tool, params), invalid YAML syntax, and a destructive step with no `require_approval` step before it (pilot refuses the file until one is added).

@@ -9,12 +9,21 @@
 - Authenticating with `tcb login` or switching environments with `tcb env use`
 - Querying CLI docs with `tcb docs` or checking command help with `--help`
 - Diagnosing CLI errors via exit codes
+- **First-session fallback:** CloudBase MCP tools are not in this conversation yet (not installed, or installed but session not restarted) — use `tcb login` + the matching domain command now while MCP is configured for next time (do **not** use `tcb deploy`; see guideline `tooling-fallback.md` if npm/npx is missing)
 
 ## Do NOT use for
 
-- CloudBase SDK development (use `cloudbase-skills` repo)
-- CloudBase MCP server operations (use MCP server docs)
+- CloudBase SDK development (use matching SDK skills)
+- CloudBase MCP server operations when MCP tools are already available (prefer MCP unless the user asked for CLI)
 - Tencent Cloud console-only operations (this reference is CLI-only)
+
+## First-session + MCP coexistence
+
+1. If MCP is missing: install/configure it (plugin / `mcp.json` / mcporter) so the **next** session gets tools.
+2. Immediately continue with CLI in **this** session: `tcb login` → confirm envId → `tcb env use <envId>` → domain command from the matching reference (`functions` / `hosting` / `cloudrun` / …). Do **not** use `tcb deploy`.
+3. Tell the user briefly that after restart/reload, MCP becomes the preferred path.
+4. Do not hard-code SecretId/SecretKey into MCP config as the default path.
+5. If `npm`/`npx`/`node` are missing, stop and follow guideline `tooling-fallback.md` (“No npm/npx”) before retrying installs.
 
 ---
 
@@ -23,16 +32,32 @@
 ### Quick Commands
 
 ```bash
-tcb login                      # Interactive login (device code, recommended)
+tcb login                      # Interactive login (device code, recommended; has Tencent Cloud account)
 tcb login --flow web           # Web authorization (same-machine only)
-tcb login --apiKeyId <Id> --apiKey <Key>            # CI / non-interactive
+tcb login --cloudbase-api-key <cloudbaseApiKey> -e <envId>  # Env API Key (no Tencent Cloud account)
+tcb login --apiKeyId <Id> --apiKey <Key>            # CI / Tencent Cloud SecretId+SecretKey
 tcb login --apiKeyId <Id> --apiKey <Key> --token <T> # Temp token (CI, more secure)
-tcb logout                     # Clear local credentials
+tcb logout                     # Clear account-level credentials (account-login mode only)
 ```
+
+> ⚠️ `tcb logout` clears **account-level** logins only. In **environment API Key** mode the CLI refuses it (`LOGOUT_NOT_ALLOWED`) — there is no account session to clear; remove the credential file instead (see *Where credentials are read from* below).
+
+### Choosing a login method
+
+| Situation | Method |
+|-----------|--------|
+| User has a Tencent Cloud account | Device code (`tcb login`) — default / recommended |
+| Same machine + local browser OK | Web flow (`tcb login --flow web`) |
+| No Tencent Cloud account; only an environment API Key | `--cloudbase-api-key` **with** `-e` / `--env-id` |
+| CI / automation with SecretId + SecretKey | `--apiKeyId` + `--apiKey` (+ optional `--token`) |
+
+> Do **not** confuse `--cloudbase-api-key` (CloudBase **environment** API Key) with `--apiKeyId` / `--apiKey` (Tencent Cloud **account** credentials).
 
 ### Login Methods
 
 **1. Device Code Authorization (default, recommended)**
+
+Use when the user **has a Tencent Cloud account**. Typical IDE path (e.g. CodeBuddy): start chatting and complete Device login when prompted — no pre-login required.
 
 ```bash
 tcb login
@@ -51,7 +76,28 @@ tcb login --flow web
 
 > ⚠️ Requires browser and CLI on the same machine. Falls back to key-based login if browser cannot open.
 
-**3. CI / Non-Interactive Login**
+**3. CloudBase Environment API Key (no Tencent Cloud account)**
+
+Use when the user **does not** have a Tencent Cloud account and only holds an environment-level API Key (e.g. issued by a partner/admin). Must specify the target envId via global `-e` / `--env-id`.
+
+```bash
+# Install CLI if needed
+npm i -g @cloudbase/cli
+
+# Environment API Key login (envId is required)
+tcb login --cloudbase-api-key <cloudbaseApiKey> -e <cloudbaseEnvId>
+# Equivalent long flag:
+# tcb login --cloudbase-api-key <cloudbaseApiKey> --env-id <cloudbaseEnvId>
+```
+
+> 💡 API Keys can be created in the [CloudBase console](https://tcb.cloud.tencent.com/dev) environment settings (when you have admin access).
+>
+> ⚠️ Environment API Keys grant env-scoped privileges. Never commit them to git or paste into screenshots.
+> ⚠️ **Never hardcode credentials.** Prefer env vars / secrets injection when scripting.
+>
+> If the user already has a Tencent Cloud account, prefer Device login instead — do **not** ask them to use `--cloudbase-api-key`.
+
+**4. CI / Non-Interactive Login (Tencent Cloud SecretId / SecretKey)**
 
 ```bash
 # Permanent credentials
@@ -63,6 +109,8 @@ tcb login --apiKeyId $TMP_SECRET_ID --apiKey $TMP_SECRET_KEY --token $SESSION_TO
 
 > ⚠️ **Never hardcode credentials.** Always inject via environment variables.
 > 不要把密钥硬编码在命令里，通过环境变量注入。
+>
+> This is **not** the same as `--cloudbase-api-key`. Use SecretId/SecretKey for CI with a Tencent Cloud account/sub-account.
 
 ### Checking Login Status
 
@@ -91,9 +139,39 @@ Sub-accounts need these CAM policies to use the CLI:
 |-------|----------|
 | `Not logged in` | Run `tcb login` |
 | Cannot open browser / browser loop | Use default device code flow (no `--flow` flag) |
+| No Tencent Cloud account; only env API Key | `tcb login --cloudbase-api-key <key> -e <envId>` |
+| `--cloudbase-api-key` without envId | Always pass `-e` / `--env-id` (required by CLI) |
 | Device code not working in CI | Use `--apiKeyId / --apiKey` credential login |
 | Sub-account web/device login fails | Grant `QcloudCamReadOnlyAccess`, or use key login |
 | Permission denied on resources | Check sub-account CAM policies for the specific TCB resource |
+| Logged in, but only one environment (or none) is visible | The project slot holds an environment credential — see *Where credentials are read from* below |
+| `tcb logout` rejected with `LOGOUT_NOT_ALLOWED` | API Key mode has no account session; remove the credential file instead |
+
+---
+
+### Where credentials are read from
+
+`tcb` does **not** hold a single global login. Before each call it picks one credential, in this order:
+
+```
+1. project slot   ~/.config/.cloudbase/projects/<escaped-project-root>/auth.json   — only if it holds a real credential
+2. global slot    ~/.config/.cloudbase/auth.json
+3. environment    CLOUDBASE_API_KEY + CLOUDBASE_ENV_ID, else TENCENTCLOUD_SECRETID / TENCENTCLOUD_SECRETKEY / TENCENTCLOUD_SESSIONTOKEN
+```
+
+1. **The slot belongs to the project root, not to the directory you happen to be in.** The root is found by walking up from `cwd` for `cloudbaserc.json` / `cloudbaserc.js` / `.cloudbaserc` / `.git`, stopping at `$HOME`; if none of them is found, `cwd` itself is the root. The slot name is that absolute path with every non-alphanumeric character replaced by `-` (over 200 chars: truncated + first 16 hex of sha256). ⇒ `cd`-ing into a subdirectory of the same repo does **not** give you a different slot.
+2. **The project slot only wins when it actually holds a credential.** An empty `{}` slot — what a first run leaves behind — does **not** shadow anything; the call falls through to the global slot (verified). A slot holding an **environment API Key** does win, and then the global login is never consulted.
+3. ⇒ *"I logged in with another account, but this directory still shows only one environment"* is this, **not** a missing CAM policy. Check `~/.config/.cloudbase/projects/<escaped-project-root>/auth.json` first. For a genuinely clean resolution use a directory **outside any project** (or clear that project's slot) — a new folder inside the same repo is still the same slot.
+
+To see who the current directory is actually authenticating as (works before any product call, so the identity has not been swapped yet):
+
+```bash
+# account-level login → CAMUser / federated-user/<id>
+# env API Key        → CAMUser / <uin>:TCB-CAPI-Configured-idaas-apikey
+tcb api sts GetCallerIdentity --api-version 2018-08-13 --json
+```
+
+The identity can change **within one session**: calling a CloudBase product API swaps the credential to the `TCB_QcsRole` service role, which reaches only the CloudBase-owned resources and **cannot touch CAM**. So when a task also needs CAM or CloudAudit, do that part **first**, from a directory holding an account-level login.
 
 ---
 
@@ -127,6 +205,15 @@ tcb env use <envId>                          # Set default env for all subsequen
 tcb env detail <envId>                       # View environment details
 tcb env rename <newAlias> --env-id <envId> --yes  # Rename alias
 tcb env create --alias <name> --package <packageId> --yes  # Create new env
+```
+
+To put a new environment's **cloud storage** on a shared COS bucket (one bucket for many environments, each under its own BasePath), pass all three `--external-storage-*` flags. They apply to cloud storage only; the static hosting bucket is chosen by the platform when hosting is enabled and has no CLI flag. Use them only when the user provides the bucket.
+
+```bash
+tcb env create --alias tenant-a --package baas_personal --yes \
+  --external-storage-bucket my-bucket-1250000000 \
+  --external-storage-region ap-shanghai \
+  --external-storage-base-path tenant-a
 ```
 
 > ⚠️ `tcb env list` may return incomplete results under sub-account permissions. Use only when user explicitly asks.
@@ -396,6 +483,17 @@ CloudBase CLI uses structured exit codes for CI/CD and agent error handling.
 | 4 | Resource not found | Wrong envId, missing function/collection | Verify with `tcb env list` / `tcb fn list` |
 | 5 | Cloud API error | Network timeout, SDK error | Retry with backoff |
 | 6 | Local file error | `cloudbaserc.json` missing/corrupt | Check config, `tcb init` |
+
+### Response-level errors (not exit codes)
+
+Exit codes classify the CLI's own outcome. The response body tells you **where** the call died:
+
+| Response shape | Meaning | Example |
+|----------------|---------|---------|
+| Structured body with `errorCode` + a real `RequestId` | Reached the service; the service refused it | `AuthFailure.UnauthorizedOperation` |
+| `invalid token`, an HTML fallback page, or `RequestId: "0"` | Rejected by an **edge layer** before reaching the service | credential from the wrong site, or an empty/stale slot |
+
+Do not read the second shape as a permission problem — no CAM policy fixes it. Check the credential itself (right site, right directory slot, not expired) instead.
 
 ### Agent Error Handling Strategy
 

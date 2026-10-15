@@ -1,15 +1,17 @@
 ---
 name: lance-format
-description: Reference for Lance v9 - the open columnar lakehouse format for multimodal AI - and its Rust crate workspace (`lance`, `lance-table`, `lance-file`, `lance-encoding`, `lance-index`, `lance-io`, `lance-namespace`, and more). Use when building directly on the Lance crates - creating or reading `.lance` datasets, manifests, fragments, deletion files, the 2.x file format and structural encodings, vector / scalar / full-text / FM-Index / geo indexes, MemWAL streaming writes, optimistic-concurrency commits and commit handlers, schema evolution, versioning, time-travel, tags, branches, stable row IDs, namespaces, or object-store config. Triggers on lance crate, .lance file, lance dataset, lance file format, structural encoding, IVF_PQ, IVF_HNSW, IVF_RQ, RaBitQ, FM-Index, lance FTS, zonemap, MemWAL, OCC retry, lance schema evolution, lance namespace, pylance. This is the Lance format and engine (the `lance-format/lance` repo), not LanceDB the database product - but also the right reference for what LanceDB builds on.
+description: Deep reference for Lance v14 columnar format, its Rust crates, and pylance - file encodings, table format, indexes, schema evolution, time travel. Use when building on the Lance crates or reading .lance datasets, not the LanceDB product.
 metadata:
-  version: "0.11.1"
-  upstream: "lance-format/lance@v9.1.0-beta.8"
+  version: "0.21.1"
+  categories: "development, integrations"
+  topics: "lance, columnar-format, vector-search, rust, lakehouse"
+  upstream: "lance-format/lance@v14.0.0-beta.14"
   openclaw:
     homepage: https://github.com/tenequm/skills/tree/main/skills/lance-format
     emoji: "🗄️"
 ---
 
-# Lance v9 reference
+# Lance v14 reference
 
 Lance is an open columnar format for multimodal AI - "a columnar data format that is 100x
 faster than Parquet for random access." It is not one format but a stack of interoperating
@@ -17,26 +19,33 @@ specs: a **file format**, a **table format**, **index formats**, **catalog specs
 **namespace client spec**. The Rust workspace at `lance-format/lance` implements all of them
 plus Python (`pylance`) and Java bindings.
 
-This skill tracks **`v9.1.0-beta.8`** (the `lance-format/lance` git tag), the current
-development frontier. Pin against tags, not `main` - Lance ships beta
-tags every few days and `next`-format encodings can change. v9.0.0 never got a final tag; the
-line reached **`v9.0.0-rc.2`** (2026-07-21) while `main` advanced to the `9.1.0-beta.*` dev
-series. **`v8.0.0` final shipped 2026-07-01** - if you need a stable pin rather than the v9
-dev betas, track `v8.0.0` (the last final), whose format and API are the frozen predecessor of
-what this reference describes.
+This skill tracks **`v14.0.0-beta.14`** (the `lance-format/lance` git tag), the current
+development frontier; **`v13.0.0`** is the stable pin, released 2026-10-07. Pin against tags, not
+`main` - Lance ships beta tags every few days and `next`-format encodings can change. Version
+landscape below.
 
 Three layers of reference, load what the task needs:
 
-- `references/lance-reference.md` - the distilled deep reference. Any concrete schema,
-  parameter, proto, or constraint.
-- `references/performance.md` - ALL official performance guidance combined, plus
-  field-verified remote-storage practices. Load for any performance, tuning, maintenance-cost,
-  or "why is this slow" question.
-- `references/docs/` - a **verbatim mirror of the official docs** (`docs/src` at the tracked
-  tag): every guide, quickstart, and format spec, unedited. Load when you need the full
-  official text. Complete file map below.
+- **The deep reference** - any concrete schema, parameter, proto, or constraint. Split by topic:
 
-This file is the orientation: read it first, then jump into what you need.
+  | File in `references/` | Covers | Sections |
+  |------|--------|----------|
+  | `format-file.md` | What Lance is, the 27 crates, file format, data types | 1-4 |
+  | `format-table.md` | Dataset layout, manifests, fragments, schema evolution, versioning/tags/branches, row IDs, transactions + OCC, MemWAL | 5-10 |
+  | `indexes.md` | Vector / scalar / FTS / geo indexes, distributed builds | 11-12 |
+  | `ops.md` | Object store, capability matrix, source map | 13, 15, 16 |
+  | `changelog-v7-v14.md` | The full v7 -> v14 delta | 14 |
+
+  Cross-references written as "section N" resolve through `references/lance-reference.md`.
+- `references/performance.md` - ALL performance guidance. Part A routes to the official text and
+  adds the source-derived changes upstream has not documented; Part B is field-verified
+  remote-storage practice. Load for any performance, tuning, maintenance-cost, or "why is this
+  slow" question.
+- `references/docs/` - a **verbatim mirror of the official docs** (`docs/src` at the tracked
+  tag): every guide, quickstart, and format spec, unedited. Load when you need the full official
+  text. Directory map below.
+
+`references/maintenance.md` covers refreshing this skill against a new upstream tag.
 
 ## Lance vs LanceDB
 
@@ -50,261 +59,309 @@ These are two different things and conflating them produces wrong answers.
   adds a query-builder API, an embedding registry, rerankers-as-API, multi-language SDK
   parity, and managed Cloud / Enterprise tiers. Not covered here.
 
-If you are linking the `lance` crate in `Cargo.toml`, you are using Lance directly - use this
-skill. If a question is about LanceDB internals, the storage layer underneath it is still
-Lance, so this skill remains the authority for the format itself.
+**The wider ecosystem** (separate repos, own version lines, none covered here): Flink streaming
+writes (`lance-flink`), PostgreSQL reads via `pglance`, a Cypher graph engine (`lance-graph`), a
+dataset browser (`lance-data-viewer`), agentic context management (`lance-context`), and
+namespace catalogs for Hive, Polaris, Gravitino, Unity Catalog, and AWS Glue.
+The canonical docs site is **`lance.org`**. Generated per-language SDK docs live at
+`lance-format.github.io/lance-python-doc` for Python and
+[javadoc.io](https://www.javadoc.io/doc/org.lance/lance-core/latest/index.html) for Java - the
+matching `lance-format.github.io/lance-java-doc` path 404s.
+
+Linking the `lance` crate in `Cargo.toml` means you are using Lance directly - use this skill.
+For LanceDB internals, the storage layer underneath is still Lance, so this skill remains the
+authority for the format itself.
+
+**The wrapper can hide format features.** LanceDB's `create_table` cannot enable stable row IDs;
+only pylance's `write_dataset(enable_stable_row_ids=True)` can. If a format-level capability
+matters to your design, check whether the wrapper exposes it before assuming the underlying
+format settles the question - and reach for `pylance` directly when it does not.
 
 ## The crate workspace
 
-26 crate directories under `rust/`. `lance` is the public entry point; the rest are layers
-beneath it. Full table with descriptions and citations in `references/lance-reference.md` section 2.
+27 crate directories under `rust/` at `v14.0.0-beta.14` - #9534 vendored the jsonb codec as
+**`lance-jsonb`** (26 at `v13.0.0`). **`lance` is the public entry point** - `Dataset`, scanner,
+indexes, commits; everything else (`lance-table`, `lance-file`, `lance-encoding`, `lance-index`,
+`lance-io`, `lance-core`, `lance-datafusion`, `lance-linalg`, `lance-namespace*`, ...) is a layer
+beneath it. Edition 2024, arrow 58, datafusion 54, pyo3 0.28; Python bindings need 3.10+. **MSRV
+is 1.94.0** in the v14 line (#8997), up from 1.91.0 through `v13.0.0`. Full table with roles,
+versions, and every workspace dep in `references/format-file.md` section 2.
 
-| Crate | Role |
-|-------|------|
-| `lance` | Public entry point - `Dataset`, scanner, indexes, commits |
-| `lance-table` | Table format - manifest, feature flags, commit handlers, row IDs |
-| `lance-file` | File format - file reader/writer |
-| `lance-encoding` | Structural encodings, compression (internal, not for external use) |
-| `lance-index` | Scalar / vector / FTS / system indexes |
-| `lance-index-core` | Shared index primitives extracted from `lance-index` (new in v9.1, PR #7713) |
-| `lance-io` | Object store, I/O schedulers |
-| `lance-core` | Shared `Error`/`Result`, cache, datatypes |
-| `lance-datafusion` | DataFusion glue (exec, expr, planner, UDFs) |
-| `lance-linalg` | SIMD L2 / dot / cosine / hamming kernels |
-| `lance-select` | Row-selection primitives - `RowAddrMask`, `RowIdMask`, `IndexExprResult` (extracted from `lance-core`/`lance-index` in v7.1.0-beta.2) |
-| `lance-tokenizer` | FTS tokenizer stack (simple, ngram, jieba, lindera, stemmers) |
-| `lance-derive` | `#[derive(DeepSizeOf)]` proc-macro for Arrow-aware memory accounting (new in v8, PR #6229; replaced the external `deepsize` crate) |
-| `lance-geo` | Geospatial UDFs (feature-gated `geo`) |
-| `lance-namespace` / `-impls` / `-datafusion` | Namespace trait, Directory/REST impls, DataFusion catalog bridge |
-| `lance-arrow`, `lance-tools`, `fsst`, `lance-bitpacking`, ... | Arrow extensions, CLI, compression sub-crates |
-
-All share `version = "9.1.0-beta.8"` except `lance-arrow-scalar`, which is pinned at
-`58.0.0` to track Arrow. Workspace: edition 2024, `rust-version = 1.91.0` (MSRV; the pinned
-build toolchain in `rust-toolchain.toml` moved to 1.97.0 in v9.1, PR #7712),
-`resolver = "3"`; notable deps arrow 58, datafusion 54 (bumped from 53 in v9.1, PR #7793),
-opendal 0.57, jieba-rs 0.10, `lance-namespace-reqwest-client` 0.8.6, itertools 0.14. Python
-bindings require **Python 3.10+** (3.9 dropped in v9, PR #7345; 3.14 support added in v9.1,
-PR #7728).
+**If you depend on anything below `lance`, expect moves.** v11 deleted `lance-encoding::version`
+with no re-export (`LanceFileVersion` and `ConcreteFileVersion` live in `lance-file::version`),
+removed `lance_io::encodings`, and gave each format its own `versions/v2_{0,1,2,3}` module
+(#8020-#8026). The transaction code moved to a `rust/lance-table/src/transaction/` module tree
+(#8053/#8054/#8056); a `lance::dataset::transaction` shim still re-exports `Operation`,
+`Transaction`, `TransactionBuilder`, `RewriteGroup` and `UpdateMap`, so the common surface is
+unbroken - but a symbol the shim omits, or a citation of the old path, needs retargeting.
+Section 2.1.
 
 ## File format versions
 
-The file format carries a single major.minor version. Selected per-dataset at creation via
-`data_storage_version` and **fixed once the dataset exists** (to change it, rewrite the
-dataset).
+The file format carries a single major.minor version. `data_storage_version` is set per dataset
+at creation - but since `v12.0.0` it is **no longer fixed once the dataset exists**. It is the
+*default* for writes that omit a target: "Create and overwrite establish this default; append,
+update, merge-insert, and compaction do not change it." An existing V2 dataset can take `"2.0"`,
+`"2.1"`, `"2.2"` or `"2.3"` per operation without rewriting its other files (#8582-#8585), so one
+dataset can hold data files at several exact V2 versions. **V1 and V2 still cannot be mixed.**
+Section 3.
 
 | Version | Status | Notes |
 |---------|--------|-------|
 | `0.1` (`legacy`) | read-only | Original format; no longer writable |
 | `2.0` | stable | Removed row groups; null support for lists/FSL/primitives |
-| `2.1` | **current default** (`stable`) | Adaptive structural encodings; better integer/string compression; nulls in struct fields; better nested random access. Default since Lance 5.0.0 |
-| `2.2` | unstable | Map type, Blob v2, `VariablePackedStruct`, larger mini-blocks. Required for Map and Blob v2; the real experimental frontier - encodings may still change |
-| `2.3` | unstable (`next`) | The current `next` alias target (`V2_3` in the enum). **No longer scaffolding** - as of v9.1 it ships **sparse structural pages** (`lance-encoding:structural-encoding=sparse`, PR #7889); `V2_3` references in `lance-encoding` jumped 6 -> 59. The docs version table now names it "sparse structural pages and other experimental encodings" |
+| `2.1` | previous default | Adaptive structural encodings; better integer/string compression; nulls in struct fields; better nested random access. Was the default from Lance 5.0.0 until `v12.0.0-beta.15` |
+| `2.2` | **current default** (`stable`) | Map type, Blob v2, `VariablePackedStruct`, larger mini-blocks. Required for Map and Blob v2 |
+| `2.3` | unstable (`next`) | Sparse structural pages (auto-selected by the 2.3 writer), the generic block v5 codecs (#8325-#8333, all landed by `v14.0.0-beta.9`), and compressed mini-block offsets (#8331). Stable readers refuse it |
 
-`stable` resolves to the default (2.1); `next` now resolves to **2.3** (not 2.2) in the
-running Lance release - pin an explicit number for deterministic behavior. In the version
-ladder 2.2 sits *below* `next`, so the code does not flag 2.2 as unstable. The docs version
-table (`docs/src/format/file/versioning.md`) lists **2.3** as the unstable row and no longer
-labels 2.2 unstable - and 2.3 now carries its own concrete experimental encoding (sparse
-pages), on top of the 2.2-era features (Map, Blob v2, `VariablePackedStruct`).
+**`stable` resolves to 2.2** (#8657), and `2.2` is the enum `#[default]`, so a dataset created
+without an explicit `data_storage_version` is written as 2.2 - Python's `write_dataset` inherits
+it. **The docs still do not say so** - `format/file/versioning.md` only calls `stable` an "alias
+for the default version" - so the code is the authority. `next` resolves to 2.3. Pin an explicit
+number for deterministic behavior across builds: anything relying on `WriteParams::default()`
+(tests, benches) silently changed format at the 2.2 switch.
 
-## What's new in v9
+On v12, a writer defaulting to 2.2 rejected legacy blob metadata outright. **Since `v13.0.0`**
+(#9459) legacy blob metadata written to 2.2+ is converted to Blob v2, and a 2.0/2.1 table can
+append Blob v2 without a rewrite. Blob v2 tiers by size: **64 KiB inline, 4 MiB dedicated**,
+packed `.blob` sidecars between (the pre-v14 docs said 16 KiB / 2 MiB; the code never did).
 
-### v9.0 -> v9.1 (the current frontier)
+The release *selectors* (`LanceFileVersion`) are a type distinct from the persisted identity
+(`ConcreteFileVersion`). Details in `references/format-file.md` sections 3.1 and 3.6.
 
-The 9.1 dev line branched off `main` when `v9.0.0-rc.1` was cut for stabilization - an
-automatic release-train bump, not a breaking change. Structural deltas from beta.18:
-**26 crates** (new `lance-index-core`, #7713), **16 transaction ops** (new `DataOverlay`,
-below), **datafusion 53 -> 54** (#7793), and the build toolchain moved to Rust 1.97.0 (#7712;
-MSRV `rust-version` unchanged at 1.91.0). `CommitConfig.num_retries` still **20**, file-format
-enum still `next => 2.3` / default 2.1.
+## Version landscape
 
-One breaking-labeled PR in the window: **FTS/inverted-index creation takes a `block_size`
-param** (compressed posting blocks; 128 or 256, default 128, 512 rejected, #7466). `block_size=256`
-and the new **code-analyzer tokenizer** (#7681) require FTS on-disk **format v3** (#7866) -
-readers must support v3 before such an index exists.
+The major is bumped by a bot, not a human: `ci/publish_beta.sh` re-roots at `MAJOR+1` whenever
+any PR since the release root carries the GitHub `breaking-change` label - the marker is the
+**label**, not a conventional-commit `!`. A major bump therefore means "some labeled breaking
+change landed", not a redesign. It has fired on **five consecutive lines**: none of `v9.1.0`,
+`v10.1.0`, `v11.1.0`, `v12.1.0` or `v13.1.0` was released. 13.1 got further than the rest -
+`v13.1.0-beta.1` and `beta.2` were tagged (fury `13.1.0b1`/`b2`) before #9518 re-rooted it to 14
+- so a 13.1 beta pin is a dead end, not an early 13.1.
 
-Net-new in 9.1:
-- **Data Overlay Files** - attach new values for a subset of `(row offset, field)` cells to a
-  fragment **without rewriting its base data files** (the upstream answer to cheap cell-level
-  updates). New `DataOverlay` transaction op, feature flag 64, spec
-  `references/docs/format/table/data_overlay_file.md`. Still **unstable**: env-gated by
-  `LANCE_ENABLE_UNSTABLE_DATA_OVERLAY_FILES`, and release builds refuse overlay datasets
-  (#7535, #7536).
-- **Sparse structural pages** - the first real 2.3 encoding; represent flat/nested Arrow
-  structure as slot-domain mappings instead of dense rep/def events (#7889).
-- **Exact `IS NULL`** from zonemap and bloom-filter indexes via a new `null_bitmap` (was
-  inexact / `AtMost`); **nested-field FTS** (index leaf fields like `data.text`, #7686);
-  FTS impact-skip / MAXSCORE top-k / bulk-conjunction paths (#7602, #7603, #7624).
-- **OpenTelemetry metrics** for Python (`instrument_lance_metrics`, `pylance[otel]`, #7537);
-  AWS creds via `AssumeRoleWithWebIdentity` to avoid role chaining (#7757); Python 3.14
-  support (#7728). Full delta in `references/lance-reference.md` section 14.
+Four recent lines **did** ship a final: `v10.0.0` (2026-08-08), `v11.0.0` (2026-08-30),
+`v12.0.0` (2026-09-17) and `v13.0.0` (2026-10-07). Each sits on a stabilization branch that is
+**not an ancestor of `main`** - normal for a Lance final. `v13.0.0` is the 14 release root plus
+two release commits, so **every v13-final change is also in every v14 beta**.
 
-### v8 -> v9
+| Major | Its breaking theme |
+|-------|--------------------|
+| **v14** (current, `v14.0.0-beta.14`) | `ScalarIndexPlugin::load_index` takes `index_version` (#9518, re-rooted the major); jsonb vendored as `lance-jsonb` (#9534); compressed 2.3 mini-block offsets (#8331). Unlabeled: inline transaction moved to manifest field 23 plus `Operation::Unknown` (#9482). Delta below |
+| **v13** (`v13.0.0`, 2026-10-07) | `WriteParams.file_writer_options` (#9192); lazy page-metadata init with a per-page metadata cache key (#7465); `json_extract`/`json_get` stop routing to JSON indices (#9101); BM25F (#7905); JSON accessor API (#9479); `merge_columns` field ids (#9547); duplicate-pair output (#9551); covering-fields spec split (#9159). Net-new: tagged FRI supported, fragment metadata tree spec, MinHash LSH. Delta below |
+| **v12** (`v12.0.0`, 2026-09-17) | `WrappingObjectStore::wrap_paginated` (no default); MemWAL `ShardManifestStore` narrowed; `lance-namespace` response objects; predecessor-conditioned external stores; namespace merge-insert key lists; caller-provided Writer / `open_part` removed (#9072). Unlabeled but bigger: `stable` -> 2.2 and the IVF_RQ 5-bit default. Net-new: mixed data-file versions |
+| **v11** (`v11.0.0`, 2026-08-30) | Fragment ids became a dataset-lifetime high-water mark; `lance-file` / `lance-encoding` reorganization; transaction code moved to `lance-table`. Net-new: covering indexes, `merge_insert` `write_mode`, row-address prefilter |
+| **v10** | Blob APIs preserve null selections; cache keys became opaque BLAKE3 digests; async `create_remapper`; MemWAL renamed generation -> SSTable |
+| **v9.1** (never released; renamed into v10) | FTS/inverted creation took a `block_size` param. Net-new: Data Overlay Files (unstable, env-gated), sparse structural pages, `lance-index-core` |
+| **v9** | Python 3.9 dropped; `alter_columns` fails fast when casting an indexed column; FM-Index proto rename; FTS defaults to on-disk format v2 |
+| **v8** | All index builds unified onto one segment-based lifecycle. Net-new: `lance-derive`, FM-Index, multi-bit IVF_RQ, `approx_mode`, TOS + GooseFS |
+| **v7** | MemWAL, branches, the geo/RTree index, the `lance-select` crate, ICU FTS |
 
-The v8 -> v9 boundary is a **light major bump**: structurally v9.0 was nearly identical to v8
-(same 25 crates, 15 transaction ops at that point, file-format enum with `next => 2.3` and
-default 2.1, `CommitConfig.num_retries` **20**, arrow 58 / datafusion 53 / opendal 0.57 /
-jieba 0.10). The major version was auto-triggered by Lance's `breaking-change`-label
-detector (`ci/check_breaking_changes.py`), fired by two PRs: **Python 3.9 was dropped**
-(minimum now 3.10, #7345) and **`alter_columns` now fails fast** when you cast a column that
-has an index attached - you must `drop_index()` first instead of relying on the old silent
-drop/invalidate (#7158). A third breaking change rode the already-bumped series: the FM-Index
-proto message was **renamed `FMIndexIndexDetails` -> `FMIndexDetails`** (#7397), which makes
-existing FM indexes unreadable. One public Rust-API removal: **`as_vector_index` is gone from
-the `Index` trait** (#7392) - downcast via `as_any()`. A fourth breaking change landed later
-in the v9 beta line: **FTS / inverted indexes now default to on-disk format v2** (#7512) -
-`LANCE_FTS_FORMAT_VERSION` no longer controls new indexes, pass `format_version=1` if older
-Lance readers must read them (existing v1 indexes stay queryable, section 11.3).
+**`v13.0.0` is the stable pin** and what GitHub Releases marks `Latest`. crates.io carries
+**finals only** (newest `lance 13.0.0`); PyPI `pylance` is likewise at `13.0.0`. A beta pin
+means a git dependency - beta wheels publish to fury.io (`https://pypi.fury.io/lance-format`),
+which carries `pylance-14.0.0b1` through `b14`.
 
-Net-new in v9: a **hamming clustering** utility for near-duplicate detection (SIMD union-find
-over 64-bit binary hashes, #7379); **COUNT(*) pushdown** now works on stable-row-id datasets
-(#7360); **per-column blob size thresholds** (`lance-encoding:blob-inline-size-threshold` /
-`...-dedicated-size-threshold`, #7269); **tunable 32k miniblock chunks** via
-`LANCE_MINIBLOCK_MAX_VALUES` (#7356, default still 4096); an **`icu/split` FTS tokenizer**
-variant (#7474); **distributed LabelList index builds** (#7223); the **ngram index now
-accelerates regex and infix LIKE** (#7139); and cleanup-explain plus fragment-reuse remap are
-now **exposed to Python and Java** (#7248, #7438). Full delta in
-`references/lance-reference.md` section 14.
+Full per-tag deltas with every PR citation: `references/changelog-v7-v14.md`.
 
-The **v7 -> v8** boundary (the predecessor line) unified all index builds onto one
-segment-based lifecycle: bitmap migrated to the segment workflow (#6869), the standalone
-`IndexSegmentBuilder` API was removed (#6997), distributed BTree moved to the segmented
-framework (#7013), file writers' `finish()` began returning `FileWriteSummary` (#7096), and
-`describe_indices()`/`list_indices()` were reworked (#6903, #7129). v8 also added the
-`lance-derive` crate (#6229), the **FM-Index** scalar index, **multi-bit IVF_RQ** (`num_bits`
-1..=9), the public vector-search **`approx_mode`** (`fast`/`normal`/`accurate`), and the
-**Volcengine TOS** (`tos://`) and feature-gated **GooseFS** (`goosefs://`) object stores.
-The v7 era - MemWAL, branches, the geo/RTree index, the `lance-select` crate, ICU FTS - all
-carries forward.
+## Manifest feature flags
 
-## Navigating the reference
+A reader or writer refuses a manifest that sets a bit it does not support. The supported set is
+`FLAG_UNKNOWN - 1` minus whatever the build masks out, so **the docs table is not the authority -
+`rust/lance-table/src/feature_flags.rs` is**. Bits 0-6 are long-standing (deletion files, stable
+row IDs, the deprecated v2 marker, table config, base paths, disabled transaction file, and the
+env-gated data overlay files). Everything from bit 7 up arrived in the last four majors, and
+`FLAG_UNKNOWN` moved `1 << 9` (v12.0.0) -> `1 << 14` (v13.0.0) -> `1 << 16` (v14 line):
 
-`references/lance-reference.md` is the full v9 reference, regrounded against the
-`v9.1.0-beta.8` source (127 commits from `v9.0.0-beta.18`, 1 breaking change - delta in its
-section 14). Load the section for your task:
+| Bit | Flag | Status at `v14.0.0-beta.14` |
+|-----|------|-----------------------------|
+| 7 | `FLAG_COVERED_INDEX_METADATA` | Supported since v11 final (#8535) |
+| 8 | `FLAG_MIXED_DATA_FILE_VERSIONS` | Supported since v12 final; sticky; a half-set manifest is a hard error |
+| 9 | `FLAG_FRAG_REUSE_WITH_STABLE_ROW_IDS` | **Debug builds only** - release builds refuse it. Docs say reader/writer `Yes` |
+| 10 | `FLAG_FRAGMENT_REUSE_INDEX` (tagged FRI) | Supported since `v13.0.0` (#9420); sticky |
+| 11 | `FLAG_UNSTABLE_SPILLED_ROW_LINEAGE` | Unstable: debug builds or `LANCE_ENABLE_UNSTABLE_SPILLED_ROW_LINEAGE` |
+| 12 | `FLAG_FRAGMENT_TREE` | Reserved; rejected until implemented, though the spec exists (#9060) |
+| 13 | `FLAG_INDEPENDENT_COVERING_FIELDS` | Reserved and **masked out**. Docs present it as normative |
+| 14 | `FLAG_MANAGED_BLOBS` | v14 only; sticky; opt-in via `lance.blob.managed=true` since beta.14 |
+| 15 | `FLAG_NON_REUSABLE_FIELD_IDS` | v14 only (#8658); writer-only, sticky |
 
-1. **What Lance is** - the lakehouse spec stack
-2. **Crate workspace** - all 26 crates, what each does, the public entry point
-3. **File format** - versions, container layout, structural encoding (mini-block / full-zip /
-   constant / blob page types), compression schemes, blob encoding
-4. **Data types** - Arrow type coverage, FixedSizeList for vectors, JSON (JSONB), blob, ML
-   extension arrays (bfloat16, image types)
-5. **Table format** - dataset directory layout, manifest contents, fragments, deletion
-   files, base paths
-6. **Schema evolution** - field IDs, zero-copy column add/drop/alter, why old rows read NULL
-7. **Versioning, tags, branches** - manifest versions, time travel, tag pinning, branches
-8. **Row IDs** - row address vs stable row ID, lineage, change-data-feed columns
-9. **Transactions and concurrency** - the 16 transaction ops, OCC retry/rebase, commit
-   handlers (conditional-put, DynamoDB), conflict resolution matrix
-10. **MemWAL** - shards, MemTable/WAL/flush, the appender/tailer/flusher model, fencing
-11. **Indexes** - vector (IVF/HNSW/PQ/SQ/RQ, multi-bit RQ), scalar (btree/bitmap/bloom/
-    labellist/ngram/zonemap/FM-Index), full-text (BM25, tokenizers), geo/RTree
-12. **Distributed write and indexing** - two-phase commits, segment-based index builds
-13. **Object store** - URI schemes, storage options, per-backend config
-14. **What changed** - the full v7 -> v8 -> v9 delta
-15. **Capability matrix** - what Lance can and cannot do
-16. **Source map** - where each spec and proto lives in the repo
+"Sticky" means the bit survives every later commit (`STICKY_PAIRED_FLAGS` / `STICKY_WRITER_FLAGS`),
+so setting it once permanently raises the reader floor of the table.
+
+**Two pin windows open a table they should refuse - or brick it for older readers.**
+
+- **Do not pin `v11.0.0-beta.4` through `beta.17`.** Those builds read bit 7 as a retired MemWAL
+  flag they support, so they *open* a covering-index dataset instead of refusing it - wrong
+  neighbours, no error.
+- **Do not pin `v14.0.0-beta.4` through `beta.13`.** Any ordinary Blob v2 write there sets
+  `FLAG_MANAGED_BLOBS`, which is sticky, so `v13.0.0` can never open the table again. #9891
+  (beta.14) made it explicit opt-in - "Ordinary Blob V2 writes currently activate
+  `FLAG_MANAGED_BLOBS` and require newer readers" - but **the beta.14 docs still describe
+  automatic activation**. Trust the code.
+
+**Covering indexes** (#8535) - `IndexMetadata.covering_fields` (proto field 11) names the
+columns an index *carries* values for, so a query projecting only those is answered without a
+base-table take. Under the contract every released build implements, **the carried columns are
+the trailing suffix of `fields`** in emission order, and a column the index is both keyed on and
+carries appears twice: "`fields = [1, 1]` with `covering_fields = [1]` is keyed on `1` and
+carries `1`." #9159 specified an independent contract behind bit 13 (`fields` holds only keys),
+but the build masks that bit, so it is spec only. Invalidation is wide either way: **any** index
+whose `fields` include the updated column. V3 IVF auxiliary files can physically carry columns
+("a reader discovers carried columns by exclusion, not by position"), bound by a
+`covering_field_ids` metadata key, and coverage is per-segment. Section 11.
+
+## The v13 final and v14 delta
+
+**161 commits** from `v13.0.0-beta.4` to the `v13.0.0` final, then **137** more on the v14 line
+to `beta.14`. **8 `breaking-change`-labeled PRs**: #7905, #9479, #9551, #9547, #9159 in v13
+final; #9518, #9534, #8331 in v14. Invariants: **27 crates** (v14), **17 transaction ops**
+(`Operation::Unknown`, v14), `CommitConfig.num_retries` still 20 (in v14 the retry clock starts
+after catch-up, #9631), arrow 58 / datafusion 54.
+
+**The label missed the format break again.** #9482 (v14.0.0-beta.2) moved the inline
+transaction from manifest field 21 to **field 23**, added `Operation::Unknown` so unknown
+operations decode instead of failing, and turned `From` conversions into `TryFrom` - labeled
+`format-change`, never `breaking-change`, so the bot did not count it. Exhaustive `match` on
+`Operation` fails to compile.
+
+- **`merge_columns` field ids come from the manifest** (#9547) - the Rust `max_field_id`
+  argument is gone. The bug it fixed made merged columns **silently read back as null**.
+- **BM25F cross-field search** (#7905) - `combined_fields` / `CombinedFieldsQuery` scores one
+  query across several FTS-indexed columns as a single field. Section 11.
+- **JSON API moved** (#9479, #9534) - one accessor (`JsonTextStream::try_new`), `jsonb_to_json`
+  removed, and jsonb vendored as `lance-jsonb` with its own spec (`format/table/jsonb.md`). The
+  v13 rule still stands: only `json_get_int` / `_float` / `_bool` / `_string` reach a JSON index
+  (#9101); `json_extract` / `json_get` silently full-scan.
+- **`ScalarIndexPlugin::load_index` takes `index_version`** (#9518) - every third-party scalar
+  index plugin fails to compile.
+- **Duplicate-pair enumeration** (#9493) changed output order and cosine values in #9551.
+- **Default IVF probing moved, unlabeled.** #9184 leaves probes unset so queries get adaptive
+  bounds, #9467 recalibrated dot-product profiles, and #9798 (beta.12) added `search_effort`
+  (0 to 1, resolved to 0.5; it overrides a fixed `nprobes`) and dropped the Python binding's
+  `DEFAULT_NPROBES = 1` minimum-probes floor. Latency and recall at default settings shift
+  across these upgrades - re-benchmark rather than carry numbers forward.
+
+**Net-new format surface:** tagged FRI is supported (bit 10, #9420), extending reuse to
+reclustering via `StablePartition`; the **fragment metadata tree** spec (#9060 -
+`fragment_metadata.proto`, `Manifest` field 22, a `_bt/` directory; bit 12 still rejected);
+**spilled row lineage** replacing the retired `DataFragment.external_*` fields (#9253, hidden
+columns at field ids -3/-4/-5, unstable); **non-reusable field ids** (#8658, bit 15,
+`max_allocated_field_id`); and an experimental **MinHash LSH** index (type 12, #9076/#9114).
+
+**Behavior changes without a label:** explicit cloud storage options now beat env vars (#9719);
+`fast_search` no longer adds `_rowid` (#9699); `main` is reserved as the default-branch alias
+(#7180); Restore conflicts with an UpdateConfig touching schema or field metadata (#9361); raw
+deep-Clone commits are rejected (#9555); the DataFusion memory pool is 150MB per *effective*
+partition - all cores when `target_partitions` is unset - with per-execution pools (#9183,
+#9408).
+
+**Fixes needing a rebuild, rewrite or repair, not just an upgrade:** rewrite data hit by #9018,
+#9239 (NULL written as 0) or #9394; rebuild scalar indexes hit by #9421 (segment merge produced an
+empty index), #9352 (LABEL_LIST) or #9203; repair or restore after #9218, #9219, #9573, #9447,
+#9176, #9595, #9085; v14: #9760, #9524, #9620, #7706, and #9857 (MemWAL, beta.9-12 only).
+Address-domain indexes - **ZoneMap, BloomFilter and FM-Index** - still lose coverage of
+compacted fragments rather than claim them (v14 recalculates instead when a fragment reuse index
+is present, #9514), and one damaged under v10 or earlier needs recreating. Conditions for each in `references/changelog-v7-v14.md`.
+
+**Still not landed:** the arrow 59 / DataFusion 55 / pyo3 0.29 upgrade. #8997 merged only as
+"prepare" ("Not in this PR: the dependency bumps and lockfiles"); the real bump is #9647, open and
+blocked on upstream releases. It also gates PyO3 RUSTSEC-2026-0176/0177, still outstanding.
+
+## Earlier majors in brief
+
+**v13 betas** - `WriteParams.file_writer_options` (#9192, struct literals fail to compile);
+**lazy page-metadata init** (#7465): `StructuralFieldScheduler::initialize` takes
+`requested_ranges`, and caching moved from per-column `FieldDataCacheKey` to per-page
+`PageDataCacheKey`, so **every warm or persisted metadata cache cold-misses** across the upgrade -
+the payoff is that "a cold point/range read's metadata IO is invariant to the column's total page
+count". The FRI got a versioned on-disk contract (#9136; stable row IDs and tagged FRI
+mutually exclusive outside debug builds). `inline_optimization_enabled` flipped `true` -> `false`
+(#9180). `hf://` object store (#9236).
+
+**v12** - mixed data-file versions shipped (#8581-#8585); `stable` -> 2.2 (#8657); **IVF_RQ
+defaults to 5 bits**, ~4.4x the 1-bit index size (#8936; set `num_bits=1` to opt out);
+`WrappingObjectStore` implementors must add `wrap_paginated` - "There is deliberately no default"
+- and paged listing via `read_dir_page` means walking until the token is `None`, never until a
+page comes back short; namespace merge-insert keys have **arity-dependent NULL semantics** (a
+composite key's NULL "matches nothing"); `lance-namespace` pins now differ by language (Rust
+0.13.0, Java 0.12.0 since #8979, Python `>=0.13.0,<0.14` in v14 - re-check rather than carry forward).
+
+**v11** - fragment ids are a dataset-lifetime high-water mark (#8206): overwrite no longer
+restarts at 0, and datasets with duplicate ids read but no longer commit. `LanceFileVersion` lost
+`Ord` (#8027/#8028). `Operation::Project` / `Merge` gained `preserves_nullability` (#8347). The
+external-manifest protocol made object storage authoritative (#8499) - a retained ETag makes
+readers reject a good manifest with `Manifest e_tag mismatch`. #8101 silently duplicated rows on
+nullable primary keys under repeat `merge_insert`; existing duplicates must be removed by hand.
+Rebuild HNSW indexes hit by #8834 (v11) or #9053 (v13 betas).
 
 ## Performance questions
 
-For anything performance-shaped - slow scans or searches, remote/object-storage cost,
-index maintenance cost, memory sizing, version bloat, benchmarking - load
-`references/performance.md` first. Part A collects every official performance
-recommendation in one place; Part B is field-verified practice from running Lance against
-S3-compatible storage, whose governing rule is: **leave the store knobs
-(`LANCE_IO_THREADS`, `LANCE_AIMD_*`, timeouts, compression metadata) at their defaults and
-optimize by minimizing remote calls** - fewer commits, fewer scans, fewer round trips.
+For anything performance-shaped - slow scans or searches, remote/object-storage cost, index
+maintenance cost, memory sizing, version bloat, benchmarking - load
+`references/performance.md` first. Part A routes to the official guidance plus the undocumented
+source-derived changes; Part B is field-verified practice against S3-compatible storage. The
+governing rule stays **minimize remote calls** - fewer commits, fewer scans, fewer round trips -
+because that is where the order-of-magnitude wins are. The official **"Tuning remote scans"**
+section gives a starting point for cross-region or public-internet access, where the cloud
+default of 64 concurrent requests is too aggressive: `LANCE_IO_THREADS=8`,
+`fragment_readahead=1`, `batch_readahead=2`, `io_buffer_size=64MB`. It is a legitimate second
+move once call volume is already minimized.
 
-## Official docs mirror - file map
+**AMX-FP16** (#8540) is the one performance change that alters *results*, not just speed: where
+it engages, IVF partition assignment becomes **exact instead of approximate**, so recall improves
+*and* assignments differ from an older build. It is shape-gated (`float16` + `dot`,
+`dimension >= 32`, `num_centroids >= 32`). `LANCE_DISABLE_AMX=1` disables it and reverts
+assignment to the approximate path too.
 
-`references/docs/` mirrors `docs/src` of `lance-format/lance` at the tracked tag, verbatim.
-Every file below is directly readable; pick by topic.
+Two cache facts to know before tuning anything remote: Lance has **no resident data cache** (a
+`Session` holds only index and metadata caches, never decoded values, so repeated point reads
+re-pay object-store IO), and one `Arc<Session>` shared via `DatasetBuilder::with_session` lets
+datasets share it. Cold first search is dominated by paging indexes in - `prewarm_index` is the
+remedy, and for FTS it loads the whole inverted index into RAM. #7465 changed the metadata cache
+key shape, so the first run after a v13 upgrade re-pays that paging even against a warm cache.
 
-### Guides (`references/docs/guide/`)
+**Layout debt is version-dependent.** Binary-copy compaction of small appends preserves tiny
+pages; a reader that pays per page (v12) turns that into tens of thousands of GETs per lookup.
+Re-encode append-heavy tables, and benchmark on a fresh copy of the real store - details and
+measurements in `references/performance.md` Part B.
 
-| File | Covers |
-|------|--------|
-| `read_and_write.md` | CRUD, `merge_insert` semantics, `cleanup_old_versions` + automatic cleanup |
-| `performance.md` | The official performance guide (also embedded in `references/performance.md`) |
-| `object_store.md` | URI schemes, credentials, `storage_options` per backend (S3/GCS/Azure/...) |
-| `distributed_write.md` | Two-phase distributed writes - fragments on workers, single commit |
-| `distributed_indexing.md` | Segment-based distributed index builds, merge, finalize |
-| `json.md` | JSON columns, `json_get_*` / `json_extract`, JSON scalar index |
-| `tokenizer.md` | FTS tokenizer configuration - language, stemming, jieba/lindera/icu |
-| `data_types.md` | Arrow type coverage, FixedSizeList vectors, JSON, blob |
-| `data_evolution.md` | Zero-copy add/drop/alter columns, backfills |
-| `blob.md` | Blob columns - storing and reading large binary |
-| `arrays.md` | ML extension arrays (bfloat16, image types) |
-| `tags_and_branches.md` | Managing tags and branches |
-| `migration.md` | Migration guides across Lance versions |
-| `observability.md` | Logging, trace events, object-store metrics |
+**Time travel is not an archive mechanism.** Versions look like free history, but the default
+cleanup reclaims anything older than 7 days and cleanup is part of routine optimize - so a design
+that treats old versions as the durable record loses it on the first maintenance pass. Keep an
+explicit archive if you need one. The reverse also holds: `delete` alone does not erase data -
+old versions, unrewritten fragments, and indexes (deletes do not conflict with index creation)
+all keep it until rewritten, cleaned up, and rebuilt.
 
-### Quickstarts (`references/docs/quickstart/`)
+## Official docs mirror
 
-| File | Covers |
-|------|--------|
-| `index.md` | First dataset - core table operations end to end |
-| `vector-search.md` | ANN index tutorial - build, tune, filtered search |
-| `full-text-search.md` | FTS tutorial incl. index maintenance + performance tips |
-| `versioning.md` | Time travel, restore, cleanup basics |
+`references/docs/` mirrors `docs/src` of `lance-format/lance` at the tracked tag, verbatim -
+49 markdown files plus 5 diagrams, all directly readable.
 
-### Format specs (`references/docs/format/`)
+| Directory | Files | Covers |
+|-----------|-------|--------|
+| `guide/` | 14 | CRUD, performance, object store, distributed write + indexing, JSON, tokenizers, data types, data evolution, blob, arrays, tags/branches, migration, observability |
+| `quickstart/` | 4 | First dataset, vector search, full-text search, versioning |
+| `format/` | 1 | Spec-stack overview |
+| `format/file/` | 3 | Container spec, structural encodings + compression, format versions |
+| `format/table/` | 11 + 1 svg | Layout, schema, transactions (**conflict-resolution matrix**), versioning, row-id lineage, branch/tag, MemWAL, data overlay files, fragment metadata tree, JSONB |
+| `format/index/` | 1 + 4 svg | Index lifecycle, fragment coverage, compaction interplay, covering contracts |
+| `format/index/scalar/` | 11 | fts, fmindex, ngram, btree, bitmap, bloom_filter, label_list (`array_has_any/all`), zonemap, rtree, json, minhash_lsh |
+| `format/index/vector/` | 1 | IVF / PQ / SQ / RQ / HNSW concepts and storage layout |
+| `format/index/system/` | 2 | Fragment reuse index, MemWAL system index |
+| `integrations/` | 1 | DataFusion SQL over Lance, incl. JSON functions |
 
-| File | Covers |
-|------|--------|
-| `index.md` | The spec-stack overview |
-| `file/index.md` | File-format container spec |
-| `file/encoding.md` | Structural encodings and compression strategy |
-| `file/versioning.md` | File-format versions (2.0 / 2.1 / 2.2 / 2.3) |
-| `table/index.md` | Table-format overview |
-| `table/data_overlay_file.md` | Data Overlay Files - cell-level `(offset, field)` updates without base-file rewrite (feature flag 64, unstable) |
-| `table/layout.md` | Dataset directory layout |
-| `table/schema.md` | Schema and field-metadata spec |
-| `table/transaction.md` | Commit protocol, transaction ops, **conflict-resolution matrix** |
-| `table/versioning.md` | Manifest versioning and feature flags |
-| `table/row_id_lineage.md` | Stable row IDs, lineage, change-data-feed columns |
-| `table/branch_tag.md` | Branch and tag spec |
-| `table/mem_wal.md` | MemWAL / streaming-write spec (experimental) |
+**Not mirrored:** `docs/src/images/` and the `format/*.png` assets, so image links in the
+mirrored pages do not resolve - the prose is self-contained, and the five `.svg` diagrams *are*
+mirrored. Also out by design: `community/`, `examples/`,
+`integrations/{index,pytorch,tensorflow}.md`; and the landing stubs and contributor files
+(`format/AGENTS.md`).
 
-### Index specs (`references/docs/format/index/`)
-
-| File | Covers |
-|------|--------|
-| `index.md` | Index lifecycle - creation, fragment coverage, compaction interplay (with diagrams) |
-| `vector/index.md` | Vector indices - IVF / PQ / SQ / RQ / HNSW concepts and storage layout |
-| `scalar/fts.md` | Inverted (FTS) index - tokenizers, posting lists, memory/disk costs |
-| `scalar/fmindex.md` | FM-Index - substring / regex search over raw bytes |
-| `scalar/ngram.md` | N-gram index - `contains()` and LIKE acceleration |
-| `scalar/btree.md` | BTree - range queries, sorted access |
-| `scalar/bitmap.md` | Bitmap - low-cardinality equality |
-| `scalar/bloom_filter.md` | Bloom filter index |
-| `scalar/label_list.md` | Label-list index for `array_has_any/all` |
-| `scalar/zonemap.md` | Zone maps - per-zone min/max/null-count stats |
-| `scalar/rtree.md` | R-Tree geospatial index |
-| `system/frag_reuse.md` | Fragment Reuse Index - compaction without index remap |
-| `system/mem_wal.md` | MemWAL system index entry |
-
-### Integrations (`references/docs/integrations/`)
-
-| File | Covers |
-|------|--------|
-| `datafusion.md` | SQL over Lance via DataFusion, incl. JSON functions |
-
-## Maintenance
-
-Citations in `references/lance-reference.md` are `path:line` relative to the `lance-format/lance` repo;
-build a permalink as `https://github.com/lance-format/lance/blob/v9.1.0-beta.8/<path>`.
-
-To refresh: `git -C ~/pjv/lance-format/lance fetch --tags`, check out the newest `v9*` tag
-(or the v8.0.0 rc/final line for a stable pin), then:
-
-1. Re-copy the docs mirror: the `.md` files of `docs/src/{guide,quickstart}`,
-   `docs/src/format` (plus the `format/index/*.svg` diagrams), and
-   `docs/src/integrations/datafusion.md` into `references/docs/`, preserving the tree.
-   Update this file's file map if docs were added or removed.
-2. Rebuild Part A of `references/performance.md` from the new `guide/performance.md` and
-   the other perf sections it cites. Part B (field-verified practices) is
-   experience-derived - only edit it with new *measured* results, never speculation.
-3. Re-verify the crate workspace and re-read the format spec for `references/lance-reference.md`,
-   then bump `metadata.upstream` plus every current-tag version reference. Line numbers in
-   citations drift between tags - treat them as approximate.
+**A whole tier of docs is not in this repo at all**, so it cannot be mirrored and cannot be
+enumerated from a clone. `docs/make-full-website.sh` assembles `format/catalog`,
+`format/namespace`, and the `integrations/{duckdb,huggingface,spark,ray,trino,context}` sections
+at build time from six sibling repos with their own version lines - the checked-in
+`integrations/index.md` links `spark/`, `duckdb` and `trino` as if they were local, but those
+paths do not exist in the tree. **Lance Context** and the **HuggingFace** integration docs are
+whole nav sections that exist only on the built site. For any of those, read `lance.org` rather
+than this mirror. Protobuf message bodies are likewise expanded at build time from `protos/` by
+`mkdocs_protobuf`, so the mirrored spec pages show `%%% proto.message.X %%%` placeholders where
+the site shows a rendered schema.

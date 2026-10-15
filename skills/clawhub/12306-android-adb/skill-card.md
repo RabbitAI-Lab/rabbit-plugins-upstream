@@ -1,40 +1,53 @@
-## Description: <br>
-12306-specific knowledge for booking train tickets via the Android app, including UC WebView virtual list behavior, a proven booking flow, and common automation pitfalls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through booking train tickets in the 12306 Android app using USB ADB and OCR-assisted navigation.
 
-## Publisher: <br>
-[openlittlebear](https://clawhub.ai/user/openlittlebear) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[openlittlebear](https://clawhub.ai/user/openlittlebear)
 
-## Use Case: <br>
-Developers and automation operators use this skill to guide Android-based 12306 train ticket booking through ADB or uiautomator2, including train search, booking-button selection, passenger selection, order submission, and manual handoff for payment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control a real Android phone and submit ticket orders. <br>
-Mitigation: Use a test or dedicated Android device and account where possible, and require the user to confirm every booking step before order submission. <br>
-Risk: Screenshot and OCR fallback can capture payment details, messages, one-time codes, or other private data. <br>
-Mitigation: Avoid sensitive screens when using screenshot or OCR fallback, and delete local /tmp screenshots and on-device temporary files after use. <br>
+## Use Case:
 
+Travelers and their authorized agents use this skill to navigate the 12306 Android app, select a train and passenger, and submit a ticket order after user confirmation. The traveler completes payment manually.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/openlittlebear/12306-android-adb) <br>
+### Deployment Geography for Use:
 
+Global (for train travel in China)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Android UI automation steps, ADB commands, uiautomator2 snippets, and manual payment handoff guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+Risk: ADB grants the agent control of a connected phone during a live ticket-booking flow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with the traveler's explicit request and confirm the train, route, date, seat, passenger, and price before submitting the order; keep payment manual.
+
+Risk: Clipboard-based Chinese input may expose copied contents to other apps.
+
+Mitigation: Do not put passwords, payment details, or other secrets on the clipboard.
+
+## Reference(s):
+
+- [12306 Android Adb on ClawHub](https://clawhub.ai/openlittlebear/skills/12306-android-adb)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with shell and Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires the separately installed appium-android-adb skill, a connected Android phone, and a logged-in 12306 app.]
+
+## Skill Version(s):
+
+2.2.4 (source: server-resolved release evidence and artifact/_meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

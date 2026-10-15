@@ -1,44 +1,61 @@
-## Description: <br>
-Manages VMware NSX networking resources, including segments, Tier-0 and Tier-1 gateways, NAT rules, routing, IP pools, health checks, and connectivity troubleshooting. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators inspect, troubleshoot, and explicitly manage VMware NSX segments, gateways, NAT, routing, IP pools, and network health.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to inspect, configure, and troubleshoot VMware NSX networking across segments, gateways, NAT, static routes, IP pools, fabric inventory, and health endpoints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can directly change live VMware NSX network infrastructure, and MCP write tools execute without the CLI double-confirmation safeguards. <br>
-Mitigation: Use least-privilege NSX service accounts, approve the exact operation and target before MCP writes, and prefer CLI dry-run plus confirmation for changes. <br>
-Risk: Local NSX credentials and generated MCP configuration can expose access to network infrastructure if mishandled. <br>
-Mitigation: Review MCP configuration before applying it, keep ~/.vmware-nsx/.env locked down, and use a secret manager for production credentials where possible. <br>
+## Use Case:
 
+Network operators and engineers use this skill to inspect NSX networking and health, troubleshoot connectivity, and carry out specifically requested NSX configuration changes.
 
-## Reference(s): <br>
-- [VMware NSX GitHub repository](https://github.com/zw008/VMware-NSX) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and structured tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run recommendations, target selection, and MCP tool-use guidance for NSX operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release metadata) <br>
+Risk: Network configuration changes can disrupt connectivity or delete resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege NSX credentials, require an explicit request for each change, and review dry runs and delete previews before confirmation.
+
+Risk: Exposed credentials or disabled TLS verification can compromise NSX access.
+
+Mitigation: Use a secret manager for production credentials, avoid entering passwords in shell history, and keep SSL verification enabled outside isolated labs.
+
+Risk: Write access through MCP can exceed the needs of monitoring tasks.
+
+Mitigation: Expose read-only MCP tools for monitoring and restrict write operations to approved service accounts.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/vmware-nsx)
+- [Project homepage (listed in skill metadata)](https://github.com/vmware-skills/VMware-NSX)
+- [Capabilities](references/capabilities.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can report NSX inventory and health results or propose user-requested changes.]
+
+## Skill Version(s):
+
+1.13.0 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

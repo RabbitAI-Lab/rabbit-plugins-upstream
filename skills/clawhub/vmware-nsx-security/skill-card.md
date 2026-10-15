@@ -1,48 +1,57 @@
-## Description: <br>
-Helps agents manage VMware NSX distributed firewall policies and rules, security groups, VM tags, Traceflow diagnostics, and IDS/IPS status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents inspect and manage VMware NSX distributed firewall policies, security groups, VM tags, traceflow diagnostics, and IDS/IPS status.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Infrastructure, network security, and platform engineers use this skill to administer NSX security controls, validate microsegmentation behavior, inspect firewall policy state, and run controlled diagnostics from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Agent use can administer sensitive NSX firewall and security objects. <br>
-Mitigation: Install only for intended NSX security administration, use a dedicated least-privilege NSX account, and require explicit approval for write operations. <br>
-Risk: NSX target credentials and local configuration may expose privileged access if handled loosely. <br>
-Mitigation: Prefer environment injection or a secret manager over a plaintext .env file for production, and keep config and .env files owner-only. <br>
-Risk: Firewall rule, security group, tag, or diagnostic write actions can change network enforcement or inject trace packets. <br>
-Mitigation: Use dry-run and review flows where available, rely on audit logging for state changes, and validate proposed changes before execution. <br>
+## Use Case:
 
+Infrastructure and security engineers use this skill to review NSX firewall coverage, diagnose traffic paths, and manage distributed firewall policies, groups, and tags with approval for changes.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-nsx-security) <br>
-- [Publisher Profile](https://clawhub.ai/user/zw008) <br>
-- [Project Homepage](https://github.com/zw008/VMware-NSX-Security) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or execute NSX security administration actions through CLI or MCP tools when configured; write actions require appropriate user approval and environment credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: evidence.release.version) <br>
+Risk: Firewall changes can unintentionally block access or weaken segmentation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege NSX credentials, review proposed changes and delete previews, and require normal change-control approval for production writes.
+
+Risk: Stored production credentials or an unreviewed external package may expose a sensitive NSX environment.
+
+Mitigation: Inject production secrets through a secret manager or keychain instead of persistent .env passwords when possible, and review the external package before deployment.
+
+## Reference(s):
+
+- [Project homepage (release metadata)](https://github.com/vmware-skills/VMware-NSX-Security)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+- [Capabilities reference](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions, Analysis]
+
+**Output Format:** [Text or Markdown, with commands and structured tool results where applicable]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may include NSX policy details, firewall rule statistics, and traceflow findings.]
+
+## Skill Version(s):
+
+1.15.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

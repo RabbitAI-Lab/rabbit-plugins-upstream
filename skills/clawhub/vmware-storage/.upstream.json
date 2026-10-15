@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-storage",
   "slug": "vmware-storage",
   "ownerHandle": null,
-  "version": "1.8.8",
-  "updatedAt": 1784668797816,
-  "contentHash": "558be41f5e1b59d6140ca0589c612bb9e13fb037449e27ea5f3517e96a5f0657",
-  "fetchedAt": "2026-07-26T18:08:51.860Z"
+  "version": "2.2.0",
+  "updatedAt": 1792061904488,
+  "contentHash": "745c811512d4971e645b7182aa71716ab7793f2c66afabc680c47c6d6753018c",
+  "fetchedAt": "2026-10-15T12:47:42.845Z"
 }

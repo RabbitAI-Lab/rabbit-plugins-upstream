@@ -1,47 +1,66 @@
-## Description: <br>
-招标商机发现助手，可根据行业、产品和地区扫描拟建项目、采购意向、临期续约和项目进展线索，并按价值排序输出商机清单。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds and ranks early tender opportunities across proposed projects, procurement intentions, and expiring contracts.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External sales, business development, and market teams use this skill to find early tender opportunities from a requested industry, product, region, or budget threshold. It produces ranked opportunity lists with next-step guidance for follow-up before or near procurement events. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts Zhiliaobiaoxun services and requires a ZLBX API account or user-approved trial registration. <br>
-Mitigation: Install only if this service dependency is acceptable, and prefer setting your own ZLBX_API_KEY before use. <br>
-Risk: Trial registration can collect a hashed device identifier and store an API key locally. <br>
-Mitigation: Use preconfigured credentials to skip registration, approve registration only when comfortable with the device-derived signal, and avoid shared machines when local credential storage is not acceptable. <br>
-Risk: Generated reports may contain signed direct-access links returned by the service. <br>
-Mitigation: Review generated reports before sharing and remove links or files that should not be distributed. <br>
+## Use Case:
 
+Sales and business-development teams use it to discover and prioritize prospective procurement opportunities by industry, product, and region before tenders are issued.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/tender-opportunity-finder) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Auto-registration flow](artifact/references/auto-register.md) <br>
-- [Zhiliaobiaoxun opportunity platform](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Files, Guidance] <br>
-**Output Format:** [Markdown opportunity list with optional HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved trial registration; reports may include signed direct-access links returned by the service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence) <br>
+Risk: Search terms and account requests are sent to the vendor service, and scans consume paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the vendor's data and pricing terms, avoid sensitive search terms, and confirm expected credit use before scanning.
+
+Risk: Automatic registration transmits a hashed MAC-derived device identifier and creates an account.
+
+Mitigation: Preconfigure ZLBX_API_KEY to skip registration, or obtain informed consent before collecting device features.
+
+Risk: An automatically obtained API credential may be stored in the user's home directory.
+
+Mitigation: Use a separately managed credential when possible and review local credential storage and access permissions.
+
+Risk: Requests include package identity, and account checks may trigger update-notice acknowledgment behavior that is not prominent to users.
+
+Mitigation: Review this request and acknowledgment behavior before enabling the skill; acknowledge a notice only after showing it to the user.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/tender-opportunity-finder)
+- [Vendor skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Workflow](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Automatic registration](references/auto-register.md)
+- [Report template](references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Ranked Markdown opportunity list; shareable HTML report in full-scan mode]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes source links, priority rationale, and suggested next actions.]
+
+## Skill Version(s):
+
+1.0.8 (source: release metadata and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,51 +1,65 @@
-## Description: <br>
-vmware-aiops helps agents manage VMware/vSphere/ESXi VMs, deployments, guest operations, clusters, alarms, and triage workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators investigate VMware infrastructure and manage virtual machines, clusters, alarms, and guest operations through VMware vSphere and ESXi.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-VMware operators and infrastructure engineers use this skill to automate VM lifecycle tasks, deployment workflows, guest operations, cluster administration, alarm handling, and investigation-driven remediation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can modify VMware infrastructure, including VM lifecycle, guest operation, cluster, alarm, and limited underlay-network actions. <br>
-Mitigation: Install it only for trusted VMware operators, use a dedicated least-privilege vCenter account, and require operator review before state-changing actions. <br>
-Risk: Production changes may affect live workloads or shared infrastructure. <br>
-Mitigation: Configure policy deny rules or maintenance windows for production targets and prefer dry-runs or plan review where supported. <br>
-Risk: Guest execution and file transfer can run commands inside managed VMs. <br>
-Mitigation: Avoid root guest credentials unless strictly necessary and review each guest exec or file transfer request carefully. <br>
-Risk: TLS verification bypass is available for isolated lab environments. <br>
-Mitigation: Keep TLS verification enabled in production and use CA-signed certificates for production vCenter or ESXi endpoints. <br>
-Risk: Read-only VMware questions do not require the write surface exposed by this skill. <br>
-Mitigation: Use vmware-monitor for inventory, health, events, and other read-only questions. <br>
+## Use Case:
 
+Infrastructure operators and engineers use this skill to diagnose vSphere issues and perform VM lifecycle, deployment, migration, guest, and cluster operations across vCenter and ESXi environments.
 
-## Reference(s): <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Investigation Protocol](references/investigation-protocol.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [VMware-AIops source homepage](https://github.com/zw008/VMware-AIops) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI and MCP tool names, shell command examples, operational plans, and risk notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include confirmations, dry-run recommendations, and follow-up checks before VMware state changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.10 (source: ClawHub release evidence) <br>
+Risk: Agent actions can change or delete VMware resources.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated least-privilege vCenter/ESXi account, prefer read-only tools, review changes before approval, and configure deny rules for production.
+
+Risk: Guest commands can run with privileges beyond the vCenter account.
+
+Mitigation: Use least-privilege guest credentials and avoid providing high-privilege guest accounts.
+
+Risk: Configured webhooks can expose infrastructure identifiers and event details.
+
+Mitigation: Keep webhooks disabled unless needed and restrict destinations to trusted endpoints.
+
+Risk: Local credential and audit files contain sensitive operational information.
+
+Mitigation: Protect local .env and audit files and restrict access to authorized operators.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/vmware-aiops)
+- [Project homepage (listed in skill metadata)](https://github.com/vmware-skills/VMware-AIops)
+- [Setup guide](references/setup-guide.md)
+- [Investigation protocol](references/investigation-protocol.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Conversational text and Markdown with CLI commands and operational guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce offline HTML investigation snapshots when requested.]
+
+## Skill Version(s):
+
+2.2.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
