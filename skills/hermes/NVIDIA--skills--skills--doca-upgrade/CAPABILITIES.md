@@ -17,11 +17,13 @@ reboot discipline this skill delegates to is owned by
 
 ## Pattern overview
 
-Every upgrade question this skill teaches resolves into the same
-shape: **detect what is installed → report the gap to the target →
-ASK for explicit confirmation → only then walk a guided upgrade.**
-The patterns are CLASSES — they apply across every DOCA release,
-every upgrade mode, and every host kind.
+Every planned-upgrade question resolves into **detect what is
+installed → report the gap to the target → ASK for explicit
+confirmation → only then walk a guided upgrade.** A failed/partial
+upgrade instead resolves into **capture the current state → classify
+the failure → apply one documented corrective action → re-verify or
+rollback/escalate**. The patterns are CLASSES — they apply across
+every DOCA release, every upgrade mode, and every host kind.
 
 | Upgrade pattern | Class shape | Where the substance lives |
 | --- | --- | --- |
@@ -107,6 +109,13 @@ this skill does not duplicate it.
   [DOCA Compatibility Policy](https://docs.nvidia.com/doca/sdk/doca-compatibility-policy/index.html)
   (cited once via
   [`doca-version ## Version compatibility`](../doca-version/CAPABILITIES.md#version-compatibility)).
+  If the target is outside that documented window, or the policy and
+  target release notes do not document the exact requested jump,
+  report it as unsupported and STOP; do not recommend or execute the
+  move or synthesize an intermediate-release ladder. Route the user
+  through `doca-public-knowledge-map` to the release-matched policy
+  and ask for a documented supported path, or keep the current
+  release in place.
 - **Host, BFB, firmware, and container tag are independent anchors.**
   An upgrade that moves one anchor must bring the others into a
   supported pairing; a move that leaves them skewed is a failed
@@ -131,7 +140,7 @@ those errors.
 | Some DOCA packages moved to the target release; others did not | **Partial upgrade** — the package set converged unevenly (a held package, a missing per-tool package, or an interrupted run) | Re-detect the four sources per [`doca-version ## debug`](../doca-version/TASKS.md#debug); converge the package set on one release before any other diagnosis |
 | `apt-cache policy doca-common` shows a Candidate from a different release than what is installed | **Apt-source drift** — the configured source channel disagrees with the installed release | Reconcile the apt source first per [`doca-version ## apt-source consistency`](../doca-version/TASKS.md#apt-source-consistency); do not upgrade until the source matches the intended target |
 | After the upgrade, `pkg-config`/`doca_caps` report the new release but `bfver` still reports the old BFB | **Host/BFB version skew post-upgrade** — the host moved but the BFB did not | The BFB reflash is the missing step; route it to [`doca-hardware-safety ## modify`](../doca-hardware-safety/TASKS.md#modify), and re-verify per [`doca-version ## test`](../doca-version/TASKS.md#test) |
-| `dpkg` reports an interrupted / half-configured transaction; further `apt` invocations refuse to proceed | **Aborted transaction / `dpkg` interrupted** — the upgrade run was interrupted mid-flight | Recover the package database per the documented `dpkg`/`apt` repair path before retrying; see [TASKS.md ## debug](TASKS.md#debug) for the recovery ladder |
+| `dpkg` reports an interrupted / half-configured transaction; further `apt` invocations refuse to proceed | **Aborted transaction / `dpkg` interrupted** — the upgrade run was interrupted mid-flight | Recover the package database (`sudo dpkg --configure -a`, then `sudo apt-get -f install`) before retrying; see [TASKS.md ## debug](TASKS.md#debug) for the recovery ladder |
 | Upgrade completed but the program now returns `DOCA_ERROR_NOT_SUPPORTED` / builds against a symbol the runtime lacks | **Build/runtime skew after upgrade** — the runtime `*.so` and the headers/`pkg-config` are now from different releases | Same partial-install diagnosis owned by [`doca-version ## debug`](../doca-version/TASKS.md#debug); reconverge, do not patch around in code |
 | Downgrade left the host on the older release but a co-tenant workload now fails | **Rollback blast radius** — the downgrade affected shared host state | Treat the rollback with the same discipline as the forward move; route any hardware-touching rollback step to [`doca-hardware-safety ## debug`](../doca-hardware-safety/TASKS.md#debug) |
 
@@ -182,7 +191,19 @@ The body lives there; this skill does not redefine it.
   tag) and that the prior version anchors are captured — the same
   documented-and-rehearsed rollback rule the hardware-safety
   meta-policy requires for any hardware-touching step.
-- **Maintenance window.** Any upgrade that touches a host carrying
-  real workload — and every BFB reflash or reboot-class step — runs
-  inside an explicit, time-boxed maintenance window with stakeholders
-  notified, per the hardware-safety maintenance-window rule.
+  Viability means the prior artifact is identified by an immutable
+  version/tag and is available through the release-matched documented
+  source: the package manager can resolve the prior host package set,
+  the prior BFB plus its published checksum is locally available or
+  retrievable and has an OOB restore path, or the prior container tag
+  resolves and the prior config is saved. Record the exact rollback
+  artifact and verification command. If any required artifact,
+  checksum, config snapshot, or recovery path is unavailable, STOP;
+  a conceptual rollback is not a rollback path.
+- **Maintenance window when disruptive.** An explicit, time-boxed
+  maintenance window with stakeholders notified is mandatory when
+  the target carries real workload, when the move disrupts a shared
+  service, and for every BFB reflash or reboot-class step. A
+  non-disruptive move on an idle, dedicated non-production target
+  does not require a fictional stakeholder window; record that the
+  target is isolated and why no window is needed.
