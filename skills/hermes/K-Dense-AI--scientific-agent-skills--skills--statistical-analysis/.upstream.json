@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/statistical-analysis",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/statistical-analysis",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/statistical-analysis",
+  "branch": "main",
+  "pushedAt": "2026-10-12T09:43:31Z",
+  "contentHash": "5cf0048af9691d8f9764fc54837a28e2f5850747902a36c444197017336e76ac",
+  "fetchedAt": "2026-10-15T12:43:11.443Z"
+}

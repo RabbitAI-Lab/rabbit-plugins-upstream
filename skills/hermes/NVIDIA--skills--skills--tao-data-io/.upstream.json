@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-data-io",
+  "identifier": "NVIDIA/skills/skills/tao-data-io",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-data-io",
+  "branch": "main",
+  "pushedAt": "2026-10-15T03:14:40Z",
+  "contentHash": "8e3769e5c8c3e5ffb2d28f9c7660dec49d51b125ac86992c961700ddae3d4604",
+  "fetchedAt": "2026-10-15T12:42:57.591Z"
+}

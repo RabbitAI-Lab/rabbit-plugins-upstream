@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/web-development/publish-site",
+  "identifier": "official/web-development/publish-site",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/web-development/publish-site",
+  "branch": "main",
+  "pushedAt": "2026-10-15T12:36:00Z",
+  "contentHash": "b79b3b83b902c34c47eb97fac0cc747b37ef692249aa7cf393372d6a61f11ac7",
+  "fetchedAt": "2026-10-15T12:43:16.430Z"
+}

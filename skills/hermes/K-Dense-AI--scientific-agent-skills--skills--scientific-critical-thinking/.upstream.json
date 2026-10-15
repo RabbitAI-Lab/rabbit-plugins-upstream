@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-critical-thinking",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scientific-critical-thinking",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scientific-critical-thinking",
+  "branch": "main",
+  "pushedAt": "2026-10-12T09:43:31Z",
+  "contentHash": "e41d7c161cd92a615a0231c7639cd0f480d305d82d776a48a9857112a6298d89",
+  "fetchedAt": "2026-10-15T12:43:11.435Z"
+}
