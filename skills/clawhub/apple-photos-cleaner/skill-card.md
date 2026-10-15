@@ -1,44 +1,55 @@
-## Description: <br>
-Analyze and safely identify junk, duplicates, storage usage, timeline recaps, and quality scores to help organize and clean Apple Photos libraries on macOS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps macOS users analyze and organize Apple Photos libraries by identifying clutter, duplicates, storage usage, and memorable photos, with separately confirmed cleanup and export actions.
 
-## Publisher: <br>
-[and3rn3t](https://clawhub.ai/user/and3rn3t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[and3rn3t](https://clawhub.ai/user/and3rn3t)
 
-## Use Case: <br>
-External users and developers use this skill to inspect Apple Photos libraries on macOS, identify cleanup or export candidates, and generate summaries before taking manual or confirmed cleanup actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill reads sensitive local Apple Photos metadata, including names, faces, places, filenames, dates, and favorites. <br>
-Mitigation: Install only when this local metadata access is acceptable, and review generated outputs before sharing them outside the device. <br>
-Risk: Cleanup actions can move selected items to Recently Deleted when the cleanup executor is run with --execute. <br>
-Mitigation: Run preview or plan-only modes first, inspect the exact candidates, and use --execute only after confirming the intended items. <br>
-Risk: Database schema differences, Photos.app state, or AppleScript behavior can make analysis or cleanup results incomplete or unexpected. <br>
-Mitigation: Check script output for warnings, keep Photos.app state in mind, and verify important cleanup or export plans in Photos.app before acting. <br>
+## Use Case:
 
+Mac users and their agents can review a Photos library for cleanup candidates, storage use, duplicates, and photo highlights before choosing whether to move items to Recently Deleted or export copies.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/and3rn3t/apple-photos-cleaner) <br>
-- [README](README.md) <br>
-- [Apple Photos database schema reference](references/database-schema.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON or human-readable script output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Scripts default to JSON output and can write JSON files when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+Risk: Reports may expose people's names, face-derived details, location history, dates, or shared-library contributor information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant Photos access only if appropriate; treat saved reports as private photo data and avoid sharing them unnecessarily.
+
+Risk: Cleanup moves selected photos to Recently Deleted, and export writes copies to a chosen location.
+
+Mitigation: Review the previewed items and output location, then confirm only the intended cleanup or export action.
+
+## Reference(s):
+
+- [Apple Photos Cleaner on ClawHub](https://clawhub.ai/and3rn3t/skills/apple-photos-cleaner)
+- [Workflows](references/workflows.md)
+- [Cleanup command guidance](references/commands/cleanup_executor.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands]
+
+**Output Format:** [Plain-language summaries and command guidance; optional JSON reports or exported photo copies]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports can include personal photo metadata; cleanup and export require preview and explicit confirmation.]
+
+## Skill Version(s):
+
+1.2.0 (source: ClawHub release, skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

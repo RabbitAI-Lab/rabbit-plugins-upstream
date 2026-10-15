@@ -1,7 +1,7 @@
 ---
 name: cn-llm-router
-description: 国产大模型统一路由。把 DeepSeek、通义千问、智谱 GLM、Kimi、腾讯混元、字节豆包、百度文心、讯飞星火、MiniMax、零一万物 Yi、百川、阶跃 Step 等 12 家国产大模型收敛成一个命令入口；按任务类型（代码/推理/长文/翻译/摘要/抽取）结合能力画像自动或手动选择最合适、最省钱的模型；支持流式输出、自动统计跨厂商 token 成本、硬件自适应限流（不拖累电脑）、本地语义缓存省 token、全链路离线 Mock 调试、技能更新提醒。当用户需要「调用国产大模型」「多模型比价/降本」「统一管理多个模型 Key」「本地跑大模型路由」「不想被某一家厂商绑定」时使用。
-version: 2.1.0
+description: 国产大模型统一路由。把 DeepSeek、通义千问、智谱 GLM、Kimi、腾讯混元、字节豆包、百度文心、讯飞星火、MiniMax、零一万物 Yi、百川、阶跃 Step 等 12 家国产大模型 + Qwen-VL/GLM-4V/豆包视觉 3 家视觉模型收敛成一个命令入口；支持文本 + 图片多模态任务路由；按任务类型（代码/推理/长文/翻译/摘要/抽取/图像识别）结合能力画像自动或手动选择最合适、最省钱的模型；支持流式输出、自动统计跨厂商 token 成本、硬件自适应限流（不拖累电脑）、本地语义缓存省 token、全链路离线 Mock 调试、技能更新提醒。当用户需要「调用国产大模型」「多模型比价/降本」「统一管理多个模型 Key」「本地跑大模型路由」「不想被某一家厂商绑定」「识别图片/音频内容」时使用。
+version: 2.7.0
 ---
 
 
@@ -78,9 +78,13 @@ cn-llm-router/
 │   ├── update_check.py       # 更新提醒（可离线，失败静默）
 │   ├── yaml_simple.py        # 自研零依赖 YAML 解析（不引入 PyYAML）
 │   ├── meta.py               # 版本常量
+│   ├── session_manager.py    # 多轮会话管理（SQLite 对话表 + 历史压缩）
+│   ├── text_splitter.py      # 长文切分（段落→句子→硬切 3 级回退）+ map-reduce
+│   ├── price_registry.py     # 价格档案本地化（v2.7.0 新增）
+│   ├── price_checker.py      # 降价检测（v2.7.0 新增）
 │   └── adapters/             # 各厂商适配器（统一接口）
-│       ├── base.py           # AdapterBase + 中文异常 + token 估算工具
-│       ├── openai_compat.py  # OpenAI 兼容端点（6 家通用，流式带兜底估算）
+│       ├── base.py           # AdapterBase + 中文异常 + token 估算工具 + embed/rerank 接口
+│       ├── openai_compat.py  # OpenAI 兼容端点（11 家通用，流式带兜底估算 + embed/rerank）
 │       ├── ernie.py          # 文心大模型（兼容 + 原生双通道，流式估算）
 │       └── spark.py          # 讯飞星火（WebSocket 签名，可选 websocket-client 做传输）
 └── tests/
@@ -94,9 +98,16 @@ cn-llm-router/
 | 功能 | 命令 | 说明 |
 |------|------|------|
 | 智能路由 | `route` | 按任务自动选模型；`--strategy auto/cheap/quality/manual`；无 Key 进「建议模式」只展示不调用 |
-| 统一调用 | `chat` | 单入口对话，自动统计成本；支持流式、系统提示词、JSON 输出 |
+| 统一调用 | `chat` | 单入口对话，自动统计成本；支持流式、系统提示词、JSON 输出、`--session` 多轮会话 |
+| Embedding | `embed` | 文本向量化统一接口；`--json` 输出；自动选支持 embedding 的厂商 |
+| Rerank | `rerank` | 文档重排序统一接口；`--json` 输出；按厂商差异封装 auth/request |
+| 多轮会话 | `session` | 会话管理（list/show/delete）；SQLite 持久化，支持上下文自动携带与模型切换 |
+| 长文/RAG | 内置 | 超长输入自动语义切分 + map-reduce 摘要合并，支持 100k 字符文档 |
+| 多模态描述 | `describe` | 图片/视频/文档统一路由；视频走 ffmpeg 关键帧 + vision 模型，文档走长文本模型 |
+| 价格档案 | `price-history` | v2.7.0 查看 12 厂商主力模型基准价 + 采集日期 |
+| 降价检测 | `price-check` | v2.7.0 轻量抓取厂商价目页做哈希比对，变化时提示疑似调价 |
 | 任务分类 | 内置 | 识别 code/reason/summarize/translate/extract 等，驱动路由 |
-| 成本统计 | `report` | 日/周/月报，跨厂商聚合花费、成功率、P95 延迟；可导出 HTML |
+| 成本统计 | `report` | 日/周/月报，跨厂商聚合花费、成功率、P95 延迟；measured/estimated 双列；v2.7.0 双轨计算（档案价估算 vs 实测回填） |
 | 预算保护 | `budget` | 月预算阈值告警，可选推企业微信 |
 | 硬件自适应 | `hardware` | 探测 CPU/内存，自动限制最大并发与单批大小，**不拖累电脑** |
 | 语义缓存 | `cache` | 相似问题命中本地缓存，跳过 API 调用，省 token 省钱（v1.1.0 加长度惩罚减少误命中） |
@@ -361,11 +372,11 @@ python scripts/router.py version
 **运行效果：**
 ```
 $ python scripts/router.py version
-cn-llm-router v2.1.0 | 作者: njskills@agent.qq.com
+cn-llm-router v2.2.0 | 作者: njskills@agent.qq.com
 主页: https://skillhub.cn/skill/cn-llm-router
 
 $ python scripts/router.py update-check
-✅ 已是最新版本 v2.1.0
+✅ 已是最新版本 v2.2.0
 ```
 
 > Windows 用户把 `python` 换成 `python.exe` 或 `py`；PowerShell 里环境变量用 `$env:XXX="..."`。
@@ -666,6 +677,11 @@ python scripts/router.py update-check
 
 ## 更新日志
 
+| v2.7.0 | 2026-10-09 | 增加：价格档案本地化——models.yaml 12 厂商主力模型基准价全部标注采集日期（priced_at + price_source）；增加：降价检测 price-check——轻量抓取厂商公开价目页做哈希比对，变化时输出疑似调价提示，人工确认后更新档案；优化：cheap 策略质量感知——按性价比排序（评分/价格）替代纯最便宜选；优化：报表双轨计算——cost 报表拆分「档案价估算」与「实测回填」两列，差异可视化 |
+| v2.6.0 | 2026-08-17 | 增加：embed/rerank 统一接口——CLI 新增 embed/rerank 子命令（--json 输出），AdapterBase 与 OpenAICompatAdapter 新增 embed/rerank 方法，按厂商差异封装 auth/request 格式；增加：RAG/长文路由——classifier 识别长任务时优先选 ≥128k 上下文模型，超长输入走 text_splitter 语义边界切分 + map-reduce 摘要合并，支持 100k 字符文档；增加：多轮会话管理——chat 新增 --session 参数，session_manager.py 维护 SQLite 对话表（session ID / 消息历史 / 模型），支持上下文自动携带与会话内模型切换（历史压缩摘要注入）；增加：describe 命令扩展视频/文档路由——视频走 ffmpeg 关键帧提取后调 vision 模型，文档走长文本模型，统一编排输出含模型 + token 计费；优化：流式 token 计数对齐——优先使用厂商 usage 回执字段，缺失时按 chunk 估算并标注 (est)，成本报表拆分 measured/estimated 两列 |
+| v2.5.0 | 2026-08-17 | 增加：共享内核模式——adapters/cost_tracker/cache/health_check/config/yaml_simple 公共代码抽为 llm-core/ 源码目录，build_core.py 构建脚本在发布时 vendor 注入双包（cn-llm-router + cn-model-gateway），生成 _core_lock.json 版本锁确保同源；增加：build_core.py 三个子命令（inject 注入 / check 版本一致性检查 / regression 双端回归门禁冒烟测试）；增加：能力实测校准器 calibrate.py——跑标准题集（分类/代码/长文各 5 题）实测回填 models.yaml 画像分数，每题 2 分，标注来源（实测+日期），支持全量/抽样预算配置；优化：ernie.py 适配器精简——更新 docstring 标注推荐走 OpenAI 兼容通道，原生签名路径保留作兜底；新增：yaml_simple.py 新增 dump/dump_file 写入功能，支持 Python 对象序列化为 YAML |
+| v2.4.0 | 2026-08-16 | 增加：多模态路由——classifier.py 新增 image/audio 任务识别，models.yaml 新增 Qwen-VL/GLM-4V/豆包视觉 3 家视觉模型厂商，路由层按 multimodal 能力标签过滤候选模型；优化：arena 子命令新增 --blind 开关，--blind 时隐藏模型名盲选投票（原行为），不加时显示模型名直接对比，消除两套重复并行调用代码；优化：流式 token 估算改为复用基类 _extract_usage() 统一取值，覆盖 prompt_tokens/input_tokens/completion_tokens/output_tokens 四种字段名，提升有 usage 返回厂商的计费精度
+| v2.2.0 | 2026-08-01 | 增加：模型竞技场 arena（并行调用 2-4 家模型，盲选最佳回答，长期追踪各模型胜率）；增加：健康检查 health-check（3 秒超时、60s 缓存、并行 ping）；增加：模型降级与故障转移（超时自动切备用模型，最多重试 2 次，成本报表标注降级事件）；增加：AdapterTimeoutError 子类（区分超时与鉴权失败）|
 | v2.1.0 | 2026-07-24 | 增加：MiniMax（abab 系列）、零一万物 Yi、百川智能、阶跃星辰 Step-2 四家厂商，覆盖扩展至 12 家 32 款模型；增加：DeepSeek V3 及全部模型的能力画像字段（推理/代码/长文得分）；优化：auto 策略改由能力画像驱动智能选型，新增厂商填画像即被自动纳入、无需改代码；增加：分类器 stream_friendly 流式适配判断（对话/翻译/代码适合流式，推理/抽取建议一次性）；修复：流式输出 token 计费恒为 0 的问题，改用估算兜底并标注（估） |
 | v2.0.0 | 2026-07-16 | 新增：全链路离线 Mock 模式（`--mock`），含 12 个预设场景（代码/推理/翻译/摘要/提取/分析/创意写作等）；新增：网络自动检测与厂商级熔断（所有厂商不可达时自动进入 mock 模式）；新增：延迟模拟（`--latency 2000`）用于测试超时降级；新增：交互式 Mock 数据编辑器（`mock --edit`）支持自定义 query→response 映射；新增：Mock 回归测试（`test --mock`，10 项 mock 专项测试）；定位：mock 数据完全本地（JSON + SQLite），不依赖外部 API，仅限开发调试，生产环境强制禁用 |
 | v1.1.0 | 2026-07-10 | 优化：缓存模糊匹配加入长度惩罚系数与最短查询限制，大幅减少「答非所问」式误命中；提升：流式输出 token 估算精度（无 usage 时按中英文混合规则兜底并标注「估」）；新增：SKILL.md 命令运行效果示例（每个命令均有真实输出样例）、反模式章节（8 条常见坑）、FAQ 扩充至 10 条、使用场景推荐与调优建议章节；修复：displayName 改为中文「国产大模型统一路由」，解决上传后显示英文名的问题 |
@@ -683,4 +699,4 @@ python scripts/router.py update-check
 
 ---
 
-*版本：v2.1.0 ｜ 许可：MIT ｜ 核心纯标准库（讯飞星火可选 websocket-client）、零密钥打包、可只读审计。*
+*版本：v2.7.0 ｜ 许可：MIT ｜ 核心纯标准库（讯飞星火可选 websocket-client）、零密钥打包、可只读审计。*

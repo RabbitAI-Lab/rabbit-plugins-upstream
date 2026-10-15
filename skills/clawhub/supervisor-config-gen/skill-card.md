@@ -1,44 +1,59 @@
-## Description: <br>
-Bash tool that generates a Supervisor (supervisord) `[program:*]` config file from zero CLI flags by deriving the program name, command path, working directory, user, log paths, and output filename from the current app directory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates a Supervisor program configuration for the current app directory using its run.sh entrypoint and the invoking user's paths.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and operators use this skill to generate a basic Supervisor program config for an app directory that already contains a `run.sh` entrypoint. It is suited for quick single-app Supervisor setup when the default generated settings are acceptable. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill silently overwrites `<dirname>-supervisor.conf` in the current directory. <br>
-Mitigation: Check for an existing generated config and preserve any manual edits before running the tool. <br>
-Risk: The generated Supervisor config controls what Supervisor runs and which user it runs as. <br>
-Mitigation: Review the generated config before moving or linking it into Supervisor's active configuration path. <br>
-Risk: The generated `command` references `run.sh` without validating that the file exists or is safe to execute. <br>
-Mitigation: Confirm the target app directory contains the intended `run.sh` entrypoint before enabling the config. <br>
+## Use Case:
 
+Developers and engineers use this skill to generate a Supervisor program config for an application directory containing an executable run.sh, then review the file before deploying it.
 
-## Reference(s): <br>
-- [supervisor-config-gen setup + full reference](artifact/references/setup.md) <br>
-- [supervisor-config-gen ClawHub page](https://clawhub.ai/psyb0t/skills/supervisor-config-gen) <br>
-- [supervisor-config-gen GitHub repository](https://github.com/psyb0t/supervisor-config-gen) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and generated Supervisor INI configuration] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generates a local `<dirname>-supervisor.conf` file in the current directory and may overwrite an existing file with that name.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Installation downloads a script from the mutable GitHub master branch.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the downloaded script or pin it to a trusted commit before installing; avoid a sudo installation unless all users need access.
+
+Risk: Regeneration silently replaces an existing configuration file.
+
+Mitigation: Back up any existing generated config before rerunning the tool.
+
+Risk: The generated config points Supervisor at run.sh without validating it.
+
+Mitigation: Inspect the application's run.sh and the generated configuration before handing it to Supervisor.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/psyb0t/skills/supervisor-config-gen)
+- [Setup and field reference](references/setup.md)
+- [Project homepage listed in skill metadata](https://github.com/psyb0t/supervisor-config-gen)
+
+## Skill Output:
+
+**Output Type(s):** [Configuration, Shell commands]
+
+**Output Format:** [Supervisor INI-style [program:*] configuration file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes <directory-name>-supervisor.conf in the current directory; replaces an existing file of that name without prompting.]
+
+## Skill Version(s):
+
+1.0.6 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

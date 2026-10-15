@@ -1,45 +1,57 @@
-## Description: <br>
-Submit products to CurlShip, the bot-friendly SaaS directory. One curl command to list your product with OG tag scraping, badge-based dofollow links, and tier upgrades. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through submitting and managing product listings in the CurlShip directory using curl commands.
 
-## Publisher: <br>
-[MarcinDudekDev](https://clawhub.ai/user/MarcinDudekDev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[marcindudekdev](https://clawhub.ai/user/marcindudekdev)
 
-## Use Case: <br>
-Developers, founders, and agents use this skill to submit a product or SaaS URL to the CurlShip directory, inspect active listings, request a paid tier checkout URL, and retrieve badge HTML for a dofollow link. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide an agent to submit a product URL and contact email to CurlShip for a public listing. <br>
-Mitigation: Confirm the exact URL and email with the user before submission. <br>
-Risk: The upgrade flow can return a checkout URL for a paid listing tier. <br>
-Mitigation: Confirm the requested tier with the user and leave payment completion to the user. <br>
-Risk: The skill may provide badge HTML intended for placement on the user's website. <br>
-Mitigation: Review badge HTML before making website changes. <br>
+## Use Case:
 
+Product owners and developers use this skill to submit public SaaS listings, review directory entries, and request listing updates or paid placement through CurlShip.
 
-## Reference(s): <br>
-- [CurlShip homepage](https://curlship.com) <br>
-- [CurlShip pricing](https://curlship.com/pricing) <br>
-- [CurlShip submit endpoint](https://curlship.com/api/submit) <br>
-- [CurlShip listings endpoint](https://curlship.com/api/listings) <br>
-- [ClawHub skill page](https://clawhub.ai/MarcinDudekDev/curlship) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, API calls, JSON, guidance] <br>
-**Output Format:** [Markdown guidance with curl commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces guidance for external HTTPS API calls; it does not require credentials or modify local files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Submitting a listing shares the product URL and listing-owner email with CurlShip and creates a public entry.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the product URL, contact email, and permission to publish before submitting.
+
+Risk: Paid tiers and Featured bids can lead to checkout or bidding flows; being outbid in the auction does not trigger a refund.
+
+Mitigation: Review current pricing and bid terms with the user before initiating an upgrade or bid; leave payment completion to the user.
+
+## Reference(s):
+
+- [CurlShip skill on ClawHub](https://clawhub.ai/marcindudekdev/skills/curlship)
+- [CurlShip homepage](https://curlship.com)
+- [CurlShip agent actions](https://curlship.com/agents.md)
+- [CurlShip agent tools](https://curlship.com/agents.json)
+- [CurlShip pricing](https://curlship.com/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with curl examples and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [API responses can include listing details, badge HTML, or checkout URLs.]
+
+## Skill Version(s):
+
+1.2.1 (source: frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

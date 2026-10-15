@@ -1,44 +1,57 @@
-## Description: <br>
-Monitoring Aiops helps agents operate SolarWinds Orion, Paessler PRTG, and Zabbix monitoring environments with NOC overviews, read-only queries, alert triage, health checks, maintenance actions, and audited guarded writes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps monitoring teams inspect and triage SolarWinds Orion, PRTG, and Zabbix systems and perform authorized alert and maintenance actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and NOC teams use this skill to inspect monitoring state, triage alerts, run SolarWinds SWQL checks, and coordinate controlled maintenance actions across SolarWinds Orion, PRTG, and Zabbix. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured credentials can make real production monitoring changes without a built-in read-only or approval gate. <br>
-Mitigation: Install with least-privilege monitoring accounts, preferably read-only by default, and grant write permissions only to operators who intentionally need suppression, maintenance, unmanage, remove, or delete-maintenance actions. <br>
-Risk: Audit annotations and risk-tier labels record activity but do not authorize or block actions. <br>
-Mitigation: Treat audit records as accountability evidence and enforce authorization through monitoring-platform permissions and agent operating policy. <br>
+## Use Case:
 
+NOC operators and infrastructure engineers use this skill to review monitoring health and alerts, investigate outages, and carry out approved acknowledgement or maintenance actions across SolarWinds Orion, PRTG, and Zabbix.
 
-## Reference(s): <br>
-- [Monitoring AIops homepage](https://github.com/AIops-tools/Monitoring-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, API calls, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured monitoring summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include monitoring observations, tool-call guidance, setup steps, and operational cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: ClawHub release evidence) <br>
+Risk: Monitoring write tools can change or delete monitoring state without an enforced approval or read-only gate for MCP calls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with read-only platform credentials and require explicit operator approval before acknowledging, muting, pausing, unmanaging, removing, or deleting maintenance state.
+
+Risk: SSL verification defaults off, exposing monitoring connections to interception.
+
+Mitigation: Enable SSL verification or configure a trusted CA for production connections.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/AIops-tools/Monitoring-AIops)
+- [Capabilities](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup and security guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands]
+
+**Output Format:** [Markdown with monitoring summaries and inline commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Monitoring results depend on configured targets, credentials, and available platform data.]
+
+## Skill Version(s):
+
+0.12.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,56 @@
-## Description: <br>
-Professional resume builder with PDF export, ATS optimization, and analysis capabilities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Resume Optimizer helps agents create, tailor, analyze, and export ATS-friendly resumes in chronological, functional, or combination formats.
 
-## Publisher: <br>
-[tomstools11](https://clawhub.ai/user/tomstools11) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[tomstools11](https://clawhub.ai/user/tomstools11)
 
-## Use Case: <br>
-External users and agents use this skill to create, tailor, analyze, and export ATS-friendly resumes for specific roles. It supports chronological, functional, and combination resume formats. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The PDF generator can automatically install an unpinned Python package into the host environment. <br>
-Mitigation: Run PDF export in a virtual environment or install ReportLab through a trusted dependency process before using the generator. <br>
-Risk: Resume content can contain personal information. <br>
-Mitigation: Handle generated resumes as sensitive files and remove exported files when they are no longer needed. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Resume Analysis Checklist](references/analysis-checklist.md) <br>
-- [ATS Optimization Guide](references/ats-optimization.md) <br>
-- [Resume Best Practices](references/best-practices.md) <br>
-- [Resume Templates](references/templates.md) <br>
+## Use Case:
 
+External users and agents use this skill to build new resumes, tailor existing resumes to job descriptions, review resumes for improvement opportunities, and generate ATS-friendly PDF outputs.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Files, Guidance] <br>
-**Output Format:** [Markdown guidance, JSON resume content, Python shell commands, and PDF files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated PDFs are intended to be ATS-friendly and downloadable by the user.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The PDF generation script can install an unpinned reportlab package into the active Python environment at runtime.
+
+Mitigation: Run PDF generation in a disposable virtual environment or container, or preinstall a pinned reportlab dependency and remove the runtime install path before deployment.
+
+Risk: Resume content and generated filenames can contain personal information.
+
+Mitigation: Ask users to include only necessary resume details, avoid unrelated sensitive data, and review output filenames before sharing generated PDFs.
+
+## Reference(s):
+
+- [Resume Optimizer release page](https://clawhub.ai/tomstools11/skills/resume-optimizer)
+- [Resume Best Practices](references/best-practices.md)
+- [ATS Optimization Guide](references/ats-optimization.md)
+- [Resume Templates](references/templates.md)
+- [Resume Analysis Checklist](references/analysis-checklist.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, files, guidance]
+
+**Output Format:** [Markdown guidance, structured resume content, Python-assisted PDF files, and shell commands for PDF generation.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated resumes may include personal information and are expected to be saved as downloadable PDF files when export is requested.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

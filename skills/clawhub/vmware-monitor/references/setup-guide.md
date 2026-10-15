@@ -2,17 +2,17 @@
 
 ## Install
 
-All install methods fetch from the same source: [github.com/zw008/VMware-Monitor](https://github.com/zw008/VMware-Monitor) (MIT licensed). We recommend reviewing the source code before installing.
+All install methods fetch from the same source: [github.com/vmware-skills/VMware-Monitor](https://github.com/vmware-skills/VMware-Monitor) (MIT licensed). We recommend reviewing the source code before installing.
 
 ```bash
 # Via PyPI (recommended for version pinning)
-uv tool install vmware-monitor
+uv tool install vmware-monitor==2.2.0
 
 # Via Skills.sh (fetches from GitHub)
-npx skills add zw008/VMware-Monitor
+npx skills add vmware-skills/VMware-Monitor#v2.2.0
 
 # Via ClawHub (fetches from ClawHub registry snapshot of GitHub)
-clawhub install vmware-monitor
+clawhub install @zw008/vmware-monitor --version 2.2.0
 ```
 
 ### Claude Code
@@ -33,13 +33,37 @@ claude mcp add vmware-monitor -- vmware-monitor mcp
 
 ## What Gets Installed
 
-The `vmware-monitor` package installs a read-only Python CLI binary and its dependencies (pyVmomi, Click, Rich, APScheduler, python-dotenv). No background services, daemons, or system-level changes are made during installation. The scheduled scanner (`daemon start`) only runs when explicitly started by the user.
+The `vmware-monitor` package installs a Python CLI binary — read-only toward vSphere — and its dependencies (pyVmomi, Click, Rich, APScheduler, python-dotenv). No background services, daemons, or system-level changes are made during installation. The scheduled scanner (`daemon start`) only runs when explicitly started by the user.
+
+### What "read-only" covers, and what it writes locally
+
+"Read-only" is a claim about vCenter/ESXi: no code path changes their state. On
+vCenter the skill opens only its own login session (SOAP, plus a REST session for
+the three vSphere 9.1 REST tools) and short-lived query handles — container views
+and a task-history collector — that it releases after use.
+
+It does write to the local machine — by default under your home directory:
+
+| Path | Written by | When |
+|---|---|---|
+| `~/.vmware-monitor/config.yaml`, `~/.vmware-monitor/.env` | `vmware-monitor init` | Once, when you run it (`.env` is set to 0600) |
+| `~/.vmware-monitor/.env` (rewritten in place) | Every run | Only if it holds a plaintext `*_PASSWORD`: the value is rewritten as `b64:` (see below) |
+| `~/.vmware/audit.db` (SQLite; `OPS_HOME` moves it) | vmware-policy | Every MCP tool call, and every CLI command that reaches vCenter |
+| `~/.vmware-monitor/audit.log` (JSON Lines) | CLI | Every CLI query command |
+| `~/vmware-health/*.html` | `summary` / `investigate` / `attention` | Only with `--html` (or `--html-path <file>`) |
+| `~/.vmware-monitor/daemon.pid`, `~/.vmware-monitor/scan.log` (`notify.log_file` moves the log) | Scanner daemon | Only after `daemon start` |
+| The file you name | `mcp-config generate --output <file>` | Only with `--output`; otherwise it prints |
+
+Outbound traffic beyond vCenter/ESXi: the daemon posts to your Slack/Discord
+webhook, only if you configured one and a scan finds an issue it sends — any
+critical issue, or an alarm/event warning (host-log warnings and `info` rows
+are never sent).
 
 ## Configuration
 
 ```bash
 # 1. Install
-uv tool install vmware-monitor
+uv tool install vmware-monitor==2.2.0
 
 # 2. Verify
 vmware-monitor --version
@@ -68,10 +92,30 @@ pointed at the same vCenter: an environment-scoped `deny` rule in
 `~/.vmware/rules.yaml` can match on the label to block their writes (e.g. freeze
 `production`). A target with no label is simply not matched by such a rule.
 
+### Choose the default target
+
+```yaml
+default_target: prod-vcenter   # optional; without it the first entry under targets: is used
+```
+
+A tool uses the default only when the request names no target. The MCP server
+lists every configured target (name, type, host) in its instructions and asks the
+agent to pick the one the question is about: a vCenter for the environment,
+clusters or several hosts; the managing vCenter for a named ESXi host, since
+vCenter holds that host's alarms, events and tasks; a standalone `esxi` target
+only when asked about that host directly. When the request does not say which and
+the answers would differ, the agent is told to ask. A result from a tool that takes
+`target` carries `target: {name, type}` naming the target that answered, so the
+answer can say where it came from; a request for a target name that is not
+configured returns an error listing the configured names instead. A
+`default_target` that names no configured target is an error, not a fallback —
+falling back to the first entry is how a standalone ESXi host once answered a
+question about vCenter.
+
 ## Development Install
 
 ```bash
-git clone https://github.com/zw008/VMware-Monitor.git
+git clone --branch v2.2.0 https://github.com/vmware-skills/VMware-Monitor.git
 cd VMware-Monitor
 uv venv && source .venv/bin/activate
 uv pip install -e .
@@ -113,22 +157,24 @@ For Claude Code / Cursor users who prefer structured tool calls, add to `~/.clau
 ```
 
 > v1.5.15+ recommends the single-command form `vmware-monitor mcp`. Pre-1.5.15 used
-> `uvx --from vmware-monitor vmware-monitor-mcp`, which still works but re-resolves from
+> `uvx --from vmware-monitor vmware-monitor-mcp`, which still works but re-resolves from <!-- install-pin: historical -->
 > PyPI on each launch and breaks behind corporate TLS proxies. The legacy
 > `vmware-monitor-mcp` entry point is also kept for backward compatibility.
 
-MCP exposes 27 read-only tools:
+MCP exposes 32 read-only tools:
 
 | Group | Tools |
 |---|---|
-| Inventory | `list_virtual_machines`, `list_esxi_hosts`, `list_all_datastores`, `list_all_clusters`, `list_all_networks`, `resource_pool_usage` |
-| Health & triage | `get_alarms`, `get_events`, `cluster_health_summary`, `cross_vcenter_attention` |
-| VM detail | `vm_info`, `vm_list_snapshots`, `vm_performance`, `snapshot_aging` |
-| Host detail | `host_performance`, `host_log_scan`, `get_host_sensors`, `get_host_services`, `ntp_status` |
-| Platform state | `certificate_status`, `license_status`, `active_sessions`, `active_tasks`, `datastore_capacity` |
-| Investigation bundles | `vm_investigation_bundle`, `host_investigation_bundle`, `datastore_investigation_bundle` |
+| Inventory | `list_virtual_machines`, `list_esxi_hosts`, `list_all_datastores`, `list_all_clusters`, `list_all_networks`, `get_resource_pool_usage` |
+| Health & triage | `get_alarms`, `get_events`, `get_cluster_health_summary`, `get_cross_vcenter_attention` |
+| VM detail | `get_vm_info`, `list_vm_snapshots`, `get_vm_performance`, `find_aging_snapshots` |
+| Host detail | `get_host_performance`, `scan_host_logs`, `get_host_sensors`, `get_host_services`, `get_ntp_status` |
+| Platform state | `get_certificate_status`, `get_license_status`, `list_active_sessions`, `list_active_tasks`, `get_datastore_capacity` |
+| Investigation bundles | `investigate_vm`, `investigate_host`, `investigate_datastore` |
+| Patching & vSphere 9 | `get_cluster_patch_compliance`, `get_cluster_last_apply_result`, `get_host_memory_tiering`, `get_vcenter_deployment_size` |
+| Backups | `get_vm_backup_snapshot_history` |
 
-All accept an optional `target` parameter except `cross_vcenter_attention`, which
+All accept an optional `target` parameter except `get_cross_vcenter_attention`, which
 sweeps every configured target by design.
 
 List-style tools take `limit` (default 50) to keep large inventories from flooding
@@ -154,16 +200,21 @@ whitespace are handled correctly).
 
 > **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom Inc.** "VMware" and "vSphere" are trademarks of Broadcom.
 
-- **Read-Only by Design**: This is an independent repository with zero destructive code paths. No power off, delete, create, reconfigure, or migrate functions exist in the codebase.
-- **Source Code**: Fully open source at [github.com/zw008/VMware-Monitor](https://github.com/zw008/VMware-Monitor) (MIT). The `uv` installer fetches the `vmware-monitor` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
-- **TLS Verification**: Enabled by default. The `disableSslCertValidation` option exists solely for ESXi hosts using self-signed certificates in isolated lab/home environments. In production, always use CA-signed certificates with full TLS verification.
+- **Read-Only toward vSphere**: This is an independent repository with zero destructive code paths. No power off, delete, create, reconfigure, or migrate functions exist in the codebase. Enforced by [`tests/eval/regression/test_read_only_enforcement.py`](https://github.com/vmware-skills/VMware-Monitor/blob/main/tests/eval/regression/test_read_only_enforcement.py) — in the source repository, not in this skill bundle — which allowlists every vSphere method the package calls against pyVmomi's own type metadata. It is a gate on source code, not a runtime block, and this repo has no CI — for defence that does not depend on it, use a least-privilege account (next item). Local files the skill writes are listed under [What "read-only" covers](#what-read-only-covers-and-what-it-writes-locally).
+- **Least Privilege**: Give the skill a dedicated vCenter service account holding the built-in **Read-Only** role (propagated from the inventory root), not an administrator. That role has no privilege to change anything, so the read-only claim no longer rests on this code. Two reads need more than it grants: `list_active_sessions` reads the session list, which vCenter gates on `Sessions.TerminateSession` (a privilege that also allows ending sessions — without it the tool returns a one-row explanation instead); and ESXi host-log reads (`scan_host_logs` and the daemon's host-log pass) call `BrowseDiagnosticLog`, gated on `Global.Diagnostics`. Grant those only if you need those reads.
+- **Source Code**: Fully open source at [github.com/vmware-skills/VMware-Monitor](https://github.com/vmware-skills/VMware-Monitor) (MIT). The `uv` installer fetches the `vmware-monitor` package from PyPI, which is built from this GitHub repository. We recommend reviewing the source code and commit history before deploying in production.
+- **TLS Verification**: Enabled by default. Setting `verify_ssl: false` is solely for ESXi hosts using self-signed certificates in isolated lab/home environments. In production, always use CA-signed certificates with full TLS verification.
 - **Credentials & Config**: This skill requires the following secrets, all stored in `~/.vmware-monitor/.env` (`chmod 600`, loaded via `python-dotenv`):
   - `VMWARE_<TARGET>_PASSWORD` — per-target password where `<TARGET>` is the uppercased target name from `config.yaml` (hyphens become underscores). Example: target named `vcenter-prod` uses `VMWARE_VCENTER_PROD_PASSWORD`.
   - (Optional) Webhook URLs for Slack/Discord notifications
 
   The config file `~/.vmware-monitor/config.yaml` stores only target hostnames, ports, and usernames — it does **not** contain passwords or tokens. The env var `VMWARE_MONITOR_CONFIG` points to this YAML file.
-- **Webhook Data Scope**: Webhook notifications are **disabled by default**. When enabled, they send monitoring summaries (alarm counts, event types, host status) to **user-configured URLs only** (Slack, Discord, or any HTTP endpoint you control). No data is sent to third-party services. Webhook payloads contain no credentials, IPs, or personally identifiable information — only aggregated alert metadata.
+- **Webhook Data Scope**: Webhook notifications are **disabled by default**. When enabled, the daemon posts to **user-configured URLs only** (Slack, Discord, or any HTTP endpoint you control); no data is sent to any other service. Each payload carries critical/warning counts plus every critical issue and every alarm/event warning from that scan — host-log warnings go to `scan.log` only, and `info` rows (unreadable or partly-read host logs) are never sent. Each issue carries the entity name and one of: the alarm name, vCenter event message (sanitized, ≤500 chars), ESXi log line matching critical/panic/corrupt (sanitized, ≤200 chars), or the error text for a target the daemon could not connect to. Event, log, and error text can contain host names, IP addresses, and user names — treat the webhook destination as receiving operational data. No credentials from the skill's config or `.env` are included.
 - **Prompt Injection Protection**: All vSphere-sourced content (event messages, host logs) is truncated, stripped of control characters, and wrapped in boundary markers (`[VSPHERE_EVENT]`/`[VSPHERE_HOST_LOG]`) before output to prevent prompt injection when consumed by LLM agents.
+
+**The account is the boundary.** This skill has no write tools, but an agent that can run shell commands can reach
+the platform without it (SSH, curl, govc, PowerCLI). Give the service account only the read privileges it needs;
+nothing in the skill can stop the same credentials being used another way.
 
 ## Supported AI Platforms
 
@@ -181,7 +232,7 @@ whitespace are handled correctly).
 
 ### MCP Server — Local Agent Compatibility
 
-The MCP server works with any MCP-compatible agent via stdio transport. All 27 tools are **read-only**. Config templates in `examples/mcp-configs/`:
+The MCP server works with any MCP-compatible agent via stdio transport. All 32 tools are **read-only** toward vSphere. Config templates in `examples/mcp-configs/`:
 
 | Agent | Local Models | Config Template |
 |-------|:----------:|-----------------|

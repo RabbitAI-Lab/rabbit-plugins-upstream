@@ -1,0 +1,148 @@
+
+# 得到大脑笔记
+
+通过官方 `getnote` CLI 完成真实操作。不要自己拼 OpenAPI 请求、ID 或笔记链接；机器调用优先使用 `-o json`，以退出码和下述结果契约判断结果。
+
+## 统一结果判定
+
+所有 API 命令的 JSON 结果先看下面这层结构，再读取每条命令规定的 `data` 字段：
+
+```json
+{
+  "success": true,
+  "data": {},
+  "request_id": "可选"
+}
+```
+
+失败结果为 `success=false` 或命令退出码非 0，读取 `error.code`、`error.message`、`error.reason`、`error.retryable` 和可选 `request_id`。HTTP 成功、上传完成、出现任务 ID 或拿到空笔记链接，都不能替代最终成功结果。
+
+## 意图路由
+
+| 意图 | 命令入口 |
+|---|---|
+| 保存文字、链接或本地图片 | `getnote save` |
+| 查询异步保存任务 | `getnote task` |
+| 查看最近笔记 | `getnote notes` |
+| 查看详情或字段 | `getnote note` |
+| 引用/链接/文字原文 | `getnote note original` |
+| 录音、会议或课堂转写 | `getnote note transcript` |
+| 图片、音频和文件附件 | `getnote note attachments` |
+| 录音或会议时间线 | `getnote note timeline` |
+| 总结中的章节时间线 | `getnote note chapters` |
+| 录音笔记标记（独立数据） | `getnote marks <note_id>` |
+| 按月列出发芽报告 | `getnote sprouts <YYYY-MM>` |
+| 读取发芽报告原文 | `getnote sprout <id>` |
+| 录音快捷笔记 | `gnote note quick`，旧版回退 `getnote note quick-note` |
+| 会议总结中的派生待办 | `getnote note todos` |
+| 修改笔记 | `getnote note update` |
+| 删除笔记 | `getnote note delete` |
+| 公开分享 | `getnote note share` |
+
+不确定参数时先运行目标命令 `--help`。
+
+## 来源筛选、轻量定位与原文
+
+列表接口只返回定位信息，再用详情接口读取完整笔记。`display_title` 是展示标题，不覆盖原始 `title`；引用笔记空标题很正常。`preview` 是带来源和截断标记的定位片段，不是全文。
+
+```bash
+getnote notes --source dedao --note-type ref --page-size 20 -o json
+getnote note '<note_id>' -o json
+getnote note original '<note_id>' -o json
+```
+
+| note_type | 原文字段 | content 的语义 |
+|---|---|---|
+| ref | ref_content | 用户评论，不是引用原文 |
+| plain_text | content | 用户正文 |
+| link | web_page.content | 通常是摘要 |
+| audio / local_audio | audio.original | 通常是摘要 |
+
+`original` 只按真实类型读取上述字段，并返回 `original_source`；原文缺失或类型不支持会报错，不能把评论或定位片段补成原文。列表中的 `content_state` 会标明正文被省略；详情接口返回完整正文和元数据。用 `metadata_state.reference/topics` 区分完整、部分、不可用的元数据；缺失的作者、书 ID、来源 URL 不猜测补写。
+
+文章或课程没有知识库时，已有候选可从详情或搜索结果读取真实 `reference` 后精确查找。只有课程名/文稿名或评论、尚无候选时，先执行搜索 Skill 的“课程、文稿与评论定位”：语义搜索无来源匹配后，按来源分页列定位信息再匹配元数据；不要要求用户提供内部 ID，也不要因 `topics=[]` 放弃。拿到候选后精确查找：
+
+```bash
+getnote notes --source dedao --note-type ref --reference-type course_article --reference-id '<reference.resource_id>' --all -o json
+# 缺少资源 ID，但有 reference.article.url 时，可改用精确文章 URL
+getnote notes --source dedao --note-type ref --article-url '<reference.article.url>' --all -o json
+```
+
+平台值取 `reference.source`；资源类型取 `reference.resource_type`，不要用标签或内部 ptype 猜枚举。`--reference-id` 必须同时传 `--source` 和 `--reference-type`。课程文稿的 `resource_id` 指向单篇文稿，不能据此取全整门课程；整门课程需按搜索参考的课程来源匹配遍历。引用的 `resource_id`、`original_note_id`、书 ID 与笔记 ID 都是不同身份；始终按返回的字符串使用。课程主页与文稿 URL 不通用；用户给的是课程主页时按搜索参考匹配 `reference.url`，不能传到 `--article-url`。URL 保留 query/fragment，不自行去参。同一文章可以有多个不同的 `original_note_id`，不可按文章 ID 合并成一条划线。
+
+创建、正文编辑、记录更新是三个独立时间轴。按需使用 `--created-from/to`、`--edited-from/to`、`--record-updated-from/to`，值必须为带时区 RFC3339；区间 from 包含、to 不包含。不得把 `updated_at` 当正文编辑时间。“今天/上周”按用户当前日期和时区换算边界；保存时间不是文章发布日期，不把“最近”擅自解释成固定一个月。用户同时限定课程/知识库时保留这些条件。
+
+新参数需要服务端对应 `meta.capabilities` 且 `applied_filters` 与请求一致；不支持时停止该查询并说明升级服务/客户端的需要，不自动移除筛选。全量按知识库参考中的分页规则验收；只拿一页或一次语义搜索，不能说“全部找到”。
+
+## 保存流程
+
+### 文字与长文
+
+1. 保留用户原意，不擅自扩写；未指定时不添加知识库、父笔记、标签或公开分享。
+2. 短文本可作为参数传入。长文本、Markdown、含复杂引号或换行的内容必须使用 `--content-file` 或 `--stdin`，避免截断和转义损坏。
+3. 重试同一次创建时复用同一个 `--idempotency-key`。
+4. 只有命令退出码为 0，且最终结构中存在非空字符串 `data.note.note_id`、`data.note.title`、`data.note.note_url`，才回复保存成功。
+
+### 链接
+
+1. 以 `http://` 或 `https://` 开头且用户表达保存意图时按链接保存，不当作普通文字。
+2. CLI 会轮询异步任务。处理中可以告诉用户“正在抓取并生成笔记”，但不能提前给出成功结论。
+3. 最终成功必须满足文字保存的三项字段，并且 `data.note` 已能读取；不要自行拼接链接。
+
+### 图片
+
+1. 使用本轮用户明确给出的本地图片路径，不把文件名保存成文字，也不带上历史图片。
+2. CLI 会校验真实文件格式、上传图片并轮询识别任务。
+3. 只有最终笔记详情返回有效 `note_id/title/note_url` 才算成功；“图片已上传”不是“笔记已生成”。
+
+### 异步超时与安全重试
+
+- `getnote save ... -o json` 正常会等待最终结果；若退出码非 0 且输出含 `task_id`、`status=pending|processing`，操作结果仍不确定。
+- 结果不确定时使用 `getnote task <task_id> -o json` 查询原任务。`done|success` 且有有效 `note_id` 后再读取笔记；`failed` 时展示 `error_msg` 或 `msg`。
+- 超时、断流或网络错误后禁止直接再次保存；先查询原任务或最近笔记。只有 CLI/API 明确 `retryable=true` 且已确认原操作没有成功时才重试。
+
+## 查询和深层读取
+
+1. “最近、列表、有哪些”使用 `getnote notes`；有明确书名或引用来源时按上面的来源/知识库路线查找，模糊主题才交给搜索 Skill。
+2. 用户给出 ID 时直接读取详情；雪花 ID 全程按字符串原样传递。“这条笔记”只复用当前会话中已经由 CLI 返回并验证过的字符串 ID。当前 CLI 若不能直接接收某种私有链接，就先请用户提供 ID，不能自行截取、猜测或转成数字。
+3. 用户只要列表时展示标题、字符串 ID 和真实 `note_url`。用户明确要某条或某来源的划线、原文、评论时，定位匹配候选后直接读详情完成请求，不额外等待用户选择；仅在候选仍有歧义、无法确认目标时请用户选择。
+4. 不确定笔记类型时先读 `getnote note <id> -o json`：
+   - 引用/链接/文字原文：`original`；
+   - 录音、会议、课堂逐字稿：`transcript`；
+   - 图片、音频、文件：`attachments`；
+   - 章节时间点与会议过程：`chapters`，读取 `chapter_timeline.items`，保留规则解析来源 `source`；录音 moments 使用 `timeline`，两者不是同一份数据；
+   - 用户现场快捷记录：`quick-note`；
+   - 会议待办：`todos`，必须保留 `source`，不得把规则解析结果说成上游原生待办。
+5. 不拿 `content` 中的 AI 摘要冒充原文。
+6. 标记从 `getnote marks` 的 `data.marks[]` 读取，不使用 Timeline 的条数或内容替代。发芽从 `getnote sprouts` 列出报告，再用 `getnote sprout` 读取正文；`has_sprout=false` 如实表示没有可读报告，不把标记或笔记总结当作发芽。
+
+## 修改、删除和分享
+
+1. 先读取目标笔记和当前版本，确认用户指向的对象。
+2. 追加或前置内容必须使用 CLI 当前帮助中对应的增量语义，不用覆盖模拟追加。
+3. 覆盖正文、替换全部标签、删除和公开分享必须先确认；确认后才使用 `--yes`。
+4. 分享录音类笔记时，确认话术必须说明公开链接是否包含音频；用户不希望公开音频时使用 CLI 帮助中的 `--exclude-audio`。不能替用户默认决定音频公开范围。
+5. 用户未要求公开时只返回私有 `note_url`，不自动生成分享链接。
+
+## 每条命令的结果与回复格式
+
+| 命令 | 成功结果必须包含 | 回复规则 |
+|---|---|---|
+| `getnote save … -o json` | `success=true`、`data.note.note_id/title/note_url` | 回复“已保存《标题》”和真实链接。链接/图片先只得到 `task_id` 时还未成功，继续查任务。 |
+| `getnote task <task_id> -o json` | `data.task_id/status/note_id?/msg?/error_msg?` | 仅 `done`/`success` 且有 `note_id` 为完成；`pending`/`processing` 是处理中；`failed` 说明真实原因。 |
+| `getnote notes -o json` | `data.notes[].note_id/title/note_url`；新筛选响应另有 `pagination` | 返回标题、字符串 ID 和真实链接。新筛选按 `pagination.has_more/next_cursor` 翻页；仅无 `pagination` 的旧响应按 `has_more/cursor`。旧 `total` 不能当作筛选后数量。 |
+| `getnote note <id> -o json` | `data.note.note_id/title/note_url/note_type`，按需读 `content` | 先给摘要和链接；私密全文只在用户明确要求时展开。 |
+| `getnote note original <id> -o json` | `data.note_id/title/original/original_source` | 只把 `original` 当原文；原文不可用会失败，不能拿评论或摘要补全。 |
+| `getnote note transcript <id> -o json` | `data.note_id/title/transcript` | 仅录音类笔记可用；不可用时如实说明。 |
+| `getnote note attachments <id> -o json` | `data.note_id/title/attachments[]` | 列出真实附件，不把笔记封面冒充附件。 |
+| `getnote note timeline <id> -o json` | `data.note_id/title/timeline` | 仅在存在录音/会议时间线时展示。 |
+| `getnote note chapters <id> -o json` | `data.note_id/title/chapter_timeline` | `items[].start_ms` 为毫秒；空数组表示无可解析章节，不拿标记补齐。 |
+| `gnote note quick <id> -o json` | `data.note_id/title/quick_note` | 返回现场快捷笔记；旧环境回退 `getnote note quick-note`。 |
+| `getnote note todos <id> -o json` | `data.note_id/title/meeting_todos[]` | 保留每项 `source`；这是从明确会议总结章节按规则解析，不说成上游原生待办。 |
+| `getnote note update <id> … -o json` | `success=true`、`data?` | 修改正文或全量标签前必须 `--yes`；需要展示最终内容时再读一次 `note`。 |
+| `getnote note delete <id> --yes -o json` | `success=true`、`data?` | 只能说“已移入回收站”，不是永久删除。 |
+| `getnote note share <id> --yes -o json` | `success=true`、`data.note_id/share_id/share_url` | 只返回真实 `share_url`，并明确其为公开链接。 |
+
+API 失败时回复失败步骤、`error.message/reason`、是否可重试和 `request_id`；不能把 HTTP 200 当业务成功。
+
+群聊或共享会话中只先展示必要标题和链接，不主动展开私密全文。

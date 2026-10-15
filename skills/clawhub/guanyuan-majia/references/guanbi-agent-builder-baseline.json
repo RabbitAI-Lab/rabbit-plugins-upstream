@@ -1,0 +1,10 @@
+{
+  "schemaVersion": 1,
+  "repository": "JeremyWXL/guanbi-agent-builder",
+  "reviewedCommit": "e57c55b7a092f31d0c49bd1ade6deac22bdbeec1",
+  "reviewedVersion": "4.8.5",
+  "reviewedAt": "2026-10-13",
+  "skillVersion": "3.5.0",
+  "implementationReferenceCommit": "7008a42d903558cb4522dbfc9fbfd8df9523fd0c",
+  "reviewSummary": "Reviewed workbench/onboarding changes without migration; scope/caliber provenance discipline absorbed with independently verified local extraction acceptance. Original implementation reference preserved."
+}

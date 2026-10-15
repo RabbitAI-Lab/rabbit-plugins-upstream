@@ -1,22 +1,27 @@
 ---
 name: newrelic-cli-skills
-version: 1.0.5
+version: 1.0.9
 description: >
   Monitor, query, and manage New Relic observability data via the newrelic CLI.
-  Covers NRQL queries, APM performance triage, deployment markers, alert policy and
-  condition management, notification channel setup, infrastructure monitoring, and
-  agent diagnostics. Use when user asks about application performance, error rates,
-  slow transactions, deployment tracking, alert configuration, or New Relic setup.
+  Covers NRQL queries, AI Monitoring telemetry, APM performance triage, deployment
+  markers, read-only alert and incident inspection,
+  infrastructure monitoring, agent diagnostics, and identity/access administration.
+  Use when user asks about LLM token usage or AI application telemetry, application
+  performance, error rates, slow transactions, deployment tracking, incident inspection,
+  New Relic setup, users, groups, roles, permissions, or access grants.
 metadata:
   openclaw:
     purpose: >
       New Relic observability skill for both read and targeted write workflows.
-      Reads APM metrics, NRQL query results, alert policies/conditions, incidents,
-      and infrastructure host data from the New Relic API. Write operations in this
-      repo include deployment marker creation plus alert policy, condition, and
-      notification channel creation; the alerts sub-skill also documents alert
-      condition deletion. Helper scripts execute newrelic CLI commands only and
-      should validate untrusted inputs before embedding them in NRQL.
+      Reads APM metrics, NRQL query results, AI Monitoring events (including potentially
+      sensitive prompt/response content and tool inputs), incidents, entity alert severity,
+      and infrastructure host data from the New Relic API. The documented New Relic CLI
+      has no alerts command tree, so alert and incident workflows in this repo are read-only.
+      Write operations include deployment marker creation. IAM workflows add user/group
+      CRUD, membership changes, and access-grant creation/revocation; require explicit
+      confirmation before IAM writes and verify each
+      write by reading the target back. Helper scripts execute newrelic CLI commands only
+      and should validate untrusted inputs before embedding them in NRQL.
     requires:
       env:
         - NEW_RELIC_API_KEY
@@ -28,6 +33,10 @@ metadata:
         NEW_RELIC_ACCOUNT_ID is the numeric account ID from the NR UI.
         See README.md for CLI installation instructions.
         Use an API key scoped to the minimum required accounts.
+        IAM writes also require organization-level authorization for the user associated
+        with the key: Authentication domain manager or Organization manager for
+        usermanagement, and Organization manager for accessmanagement grant writes.
+        Administrative user-management access requires a core or full platform user.
 tags:
   - newrelic
   - observability
@@ -35,6 +44,8 @@ tags:
   - monitoring
   - performance
   - nrql
+  - ai-monitoring
+  - iam
 ---
 
 # New Relic CLI Skills
@@ -43,10 +54,12 @@ tags:
 
 **Performance issue reported?** → [`apm/SKILL.md`](apm/SKILL.md)
 **Need to query data with NRQL?** → [`nrql/SKILL.md`](nrql/SKILL.md)
+**AI/LLM application, token, error, prompt, or response telemetry?** → [`aimonitoring/SKILL.md`](aimonitoring/SKILL.md)
 **Recording a deployment?** → [`deployments/SKILL.md`](deployments/SKILL.md)
-**Alert management?** → [`alerts/SKILL.md`](alerts/SKILL.md)
+**Inspecting alerts or incidents?** → [`alerts/SKILL.md`](alerts/SKILL.md)
 **Infrastructure/host issues?** → [`infrastructure/SKILL.md`](infrastructure/SKILL.md)
 **Agent not reporting?** → [`diagnostics/SKILL.md`](diagnostics/SKILL.md)
+**Users, groups, roles, permissions, or access grants?** → [`iam/SKILL.md`](iam/SKILL.md)
 
 ---
 
@@ -68,16 +81,23 @@ newrelic --version
 
 # Configure profile
 newrelic profile add \
-  --profile default \
+  --profile "default" \
   --apiKey $NEW_RELIC_API_KEY \
   --accountId $NEW_RELIC_ACCOUNT_ID \
   --region US   # US, EU, JP, GOV, or FEDRAMP (alias for GOV)
 
-newrelic profile default --profile default
+newrelic profile default --profile "default"
 
 # Verify
-newrelic profile list
+newrelic profile list --format JSON
 ```
+
+For structured profile discovery, pass `--format JSON` explicitly. The `isDefault`
+field identifies the persisted default profile, and profile names are emitted without
+terminal decoration. It does not necessarily identify the effective credentials: the
+global `--profile` flag can select another profile, while `NEW_RELIC_API_KEY`,
+`NEW_RELIC_ACCOUNT_ID`, `NEW_RELIC_REGION`, and `NEW_RELIC_LICENSE_KEY` override the
+corresponding stored profile fields.
 
 ---
 
@@ -99,6 +119,9 @@ newrelic apm deployment create \
 
 # Run diagnostics
 newrelic diagnose run
+
+# Find applications reporting AI Monitoring telemetry
+newrelic aimonitoring application search
 ```
 
 ---
@@ -111,8 +134,8 @@ Find entity GUIDs (needed for API calls and deployment markers):
 # List all APM apps
 newrelic entity search --name "" --type APPLICATION --domain APM
 
-# Get specific entity details
-newrelic entity get --guid <GUID>
+# Get APM application details
+newrelic apm application get --guid <GUID>
 
 # List all hosts
 newrelic entity search --name "" --type HOST
@@ -136,10 +159,12 @@ newrelic entity search --name "" --type HOST
 |---|---|
 | [`apm/`](apm/SKILL.md) | Performance triage, slow transactions, error analysis |
 | [`nrql/`](nrql/SKILL.md) | Custom queries, dashboards, ad-hoc data exploration |
+| [`aimonitoring/`](aimonitoring/SKILL.md) | AI/LLM applications, token usage, errors, prompts, responses, and telemetry |
 | [`deployments/`](deployments/SKILL.md) | Mark releases, correlate deploys with performance |
-| [`alerts/`](alerts/SKILL.md) | Alert policies, conditions, notification channels |
+| [`alerts/`](alerts/SKILL.md) | Read-only incident telemetry and entity alert severity |
 | [`infrastructure/`](infrastructure/SKILL.md) | Host metrics, CPU/memory, process monitoring |
 | [`diagnostics/`](diagnostics/SKILL.md) | Agent health, config validation, connectivity |
+| [`iam/`](iam/SKILL.md) | Users, groups, memberships, roles, permissions, and access grants |
 
 ## Scripts
 

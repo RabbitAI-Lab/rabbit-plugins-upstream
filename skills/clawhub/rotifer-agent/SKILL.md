@@ -1,11 +1,13 @@
 ---
 name: rotifer-agent
 description: >-
-  End-to-end guide for building AI Agents from Genes: intent decomposition, Gene selection,
-  Genome composition, Agent creation, and testing.
-  Use when the user mentions "build Agent", "compose Genes", "Agent composition", "agent create",
-  "agent run", "Genome", "assemble Agent", "Agent architecture", "composition strategy",
-  "Seq", "Par", "Cond", "Try", "TryPool", "synthesize Agent".
+  Build a Rotifer Agent from Genes — decompose intent into capability units, pick Genes by
+  Arena F(g), compose a Rotifer Genome, create the Agent and test it.
+  Use when the user is working with Rotifer specifically: "Rotifer Agent", "compose Genes",
+  "Rotifer Genome", "Gene composition", "rotifer agent create".
+  Do NOT use for general agent frameworks, or when the words Seq / Par / Cond / Try appear as
+  ordinary programming terms — in Rotifer those name Genome composition strategies, and this
+  Skill applies only when the user is composing Rotifer Genes.
 ---
 
 # Rotifer Agent — From Genes to Agents
@@ -18,7 +20,12 @@ This Skill requires the Rotifer CLI:
 
 ```bash
 npx @rotifer/playground --version
+rotifer doctor
 ```
+
+`rotifer doctor` checks the TypeScript→WASM toolchain. Composing an Agent from
+Native Genes means compiling them, and without esbuild and javy that step fails
+with an error that reads like a code problem.
 
 Or use the MCP Server for IDE integration:
 
@@ -64,17 +71,29 @@ Break the user's goal into independent capability units (each maps to a Gene).
 Match existing Genes to each capability unit.
 
 ```bash
-rotifer list
-rotifer arena list --domain <domain>
+rotifer list                                  # what is already in this workspace
+rotifer arena list --domain <domain>          # ranked by F(g) within one domain
+rotifer search <capability> --domain <domain> # the Cloud registry — everyone else's Genes
 ```
+
+The three answer different questions, and skipping the third is how a Genome
+ends up built only from what happened to be installed already.
 
 **Selection priority**:
 
 | Priority | Source | Command |
 |----------|--------|---------|
 | 1 | Local Gene with highest Arena rank | `rotifer arena list --domain <d>` |
-| 2 | Cloud Registry | `rotifer install <name>` |
+| 2 | Cloud Registry | `rotifer search <capability>` → `rotifer info <ref>` → `rotifer install <ref>` |
 | 3 | Doesn't exist, needs creation | Proceed to Phase 3 |
+
+Before committing a candidate to the Genome, run it on its own — a Gene that
+fails alone will fail inside a pipeline, where the error is much harder to
+locate:
+
+```bash
+rotifer run <gene-name> --input '{"...": "..."}'
+```
 
 Show the user candidate Genes' F(g) fitness and fidelity, let them confirm the selection.
 
@@ -86,8 +105,8 @@ If a capability unit has no existing Gene:
 
 | Approach | When to use | Action |
 |----------|------------|--------|
-| Create Wrapped Gene | External API / Skill available to wrap | Route to `gene-dev` Skill |
-| Create Native Gene | Pure computation, no external dependencies | Route to `gene-dev` Skill |
+| Create Wrapped Gene | External API / Skill available to wrap | Route to `gene` Skill (dev module) |
+| Create Native Gene | Pure computation, no external dependencies | Route to `gene` Skill (dev module) |
 | Adjust decomposition | Capability unit granularity is wrong | Return to Phase 1 |
 | Merge units | Two units are too coupled, splitting makes the interface awkward | Merge into one Gene |
 
@@ -177,8 +196,14 @@ After creation, verify the Agent configuration file `.rotifer/agents/<name>.json
 ## Phase 6: Test Run
 
 ```bash
+rotifer agent list
 rotifer agent run <name> --input '{"text": "Test input content"}'
 ```
+
+`rotifer agent list` shows every Agent in the workspace with its state and
+genome — use it to confirm the Agent was created with the Genes you intended
+before running it, and to recover the exact name when a run reports "agent not
+found".
 
 **Validation checklist**:
 
@@ -196,7 +221,8 @@ If results are unsatisfactory, proceed to Phase 7.
 
 | Problem | Optimization |
 |---------|-------------|
-| One Gene's output quality is poor | `rotifer arena list --domain <d>` to find alternatives |
+| One Gene's output quality is poor | `rotifer arena list --domain <d>` for ranked local alternatives, or `rotifer search <capability>` to look beyond what is installed |
+| Not sure which Gene in the pipeline is at fault | `rotifer run <gene-name> --input '{...}'` on each one in isolation |
 | Seq intermediate results missing fields | Check schema compatibility, consider inserting an adapter Gene |
 | Par merge results are messy | Switch `--par-merge` strategy |
 | Latency too high | Seq → Par (if Genes are independent) |
@@ -275,11 +301,30 @@ rotifer agent run search-digest --input '{"query": "Rotifer Protocol agent frame
 
 ---
 
+## What this Skill does on your machine
+
+It has no code of its own — it tells your assistant which `rotifer` commands to
+run. That is why its manifest declares process execution, filesystem read/write
+and outbound network access: every one of those is the CLI acting, not this
+Skill.
+
+| | |
+|---|---|
+| **Runs** | The `rotifer` CLI (`@rotifer/playground`), fetched from npm if not installed. |
+| **Reads** | Genes and Agent definitions in the current project workspace. |
+| **Writes** | Only what the commands below write — Genes into the project's `genes/`, Agent definitions into `.rotifer/agents/`. Nothing outside the project. |
+| **Sends** | Cloud registry and Arena queries, to the public Rotifer API. Your code is not uploaded unless you run `rotifer publish` yourself. |
+
+Commands that install, publish or overwrite are proposed for your approval
+first, never run silently.
+
+---
+
 ## Related Skills
 
 | Skill | Relationship | When to route |
 |-------|-------------|---------------|
-| `gene-dev` | Gene creation/development | Phase 3 gap filling |
+| `gene` (dev module) | Gene creation/development | Phase 3 gap filling |
 | `rotifer-arena` | Gene comparison & evaluation | Phase 7 when replacing underperforming Genes |
 | `genome` | Genome quality analysis | After Agent creation for overall assessment |
 

@@ -1,40 +1,68 @@
-## Description: <br>
-Interact with Google Workspace APIs (Gmail, Calendar, Drive, Sheets) using gsuite-sdk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents use the gsuite-sdk CLI and Python library to work with Gmail, Calendar, Drive, Sheets, Tasks, and Contacts.
 
-## Publisher: <br>
-[PabloAlaniz](https://clawhub.ai/user/PabloAlaniz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[pabloalaniz](https://clawhub.ai/user/pabloalaniz)
 
-## Use Case: <br>
-Developers and agents use this skill to authenticate with Google Workspace and read or modify Gmail, Calendar, Drive, and Sheets resources through gsuite-sdk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access and modify Google Workspace data after OAuth authorization. <br>
-Mitigation: Use the narrowest OAuth scopes possible and confirm recipients, attendees, file IDs, spreadsheet ranges, uploads, and edits before write actions. <br>
-Risk: OAuth tokens are stored locally after authentication. <br>
-Mitigation: Protect or delete tokens.db when finished and revoke Google account access if the authorization is no longer needed. <br>
+## Use Case:
 
+Developers and agents use this skill to read and manage Google Workspace mail, calendars, files, spreadsheets, tasks, and contacts through CLI commands or Python code.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/PabloAlaniz/gsuite-sdk) <br>
-- [Project homepage](https://github.com/PabloAlaniz/google-suite) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with Python and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Google OAuth credentials via GOOGLE_CREDENTIALS_FILE before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.3 (source: ClawHub release evidence) <br>
+Risk: Broad Google Workspace access can expose private mail, files, and contacts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant only necessary OAuth scopes and keep credential and token files private.
+
+Risk: Sending email, sharing files, editing calendars or spreadsheets, and deleting data can have unintended effects.
+
+Mitigation: Require user confirmation before consequential write or sharing actions.
+
+Risk: An exposed REST server or disabled API-key check could allow unauthorized access.
+
+Mitigation: Restrict server access and do not disable API-key checks without another strong access control.
+
+Risk: Unpinned dependencies can change behavior in managed deployments.
+
+Mitigation: Pin package versions in managed environments.
+
+## Reference(s):
+
+- [gsuite-sdk documentation](https://pabloalaniz.github.io/google-suite/)
+- [Gmail reference](references/gmail.md)
+- [Calendar reference](references/calendar.md)
+- [Drive reference](references/drive.md)
+- [Sheets reference](references/sheets.md)
+- [Tasks and Contacts reference](references/tasks-contacts.md)
+- [REST API and deployment reference](references/rest-api.md)
+- [MCP server reference](references/mcp.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Code, Configuration guidance]
+
+**Output Format:** [Markdown with CLI and Python examples; JSON when supported by the CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Some CLI commands do not support JSON output.]
+
+## Skill Version(s):
+
+0.5.2 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

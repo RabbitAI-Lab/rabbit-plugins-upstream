@@ -1,5 +1,5 @@
 <overview>
-Agent execution patterns for building robust agent loops. This covers how agents signal completion, track partial progress for resume, select appropriate model tiers, and handle context limits.
+Agent execution patterns for building reliable agent loops: how agents signal completion, track partial progress for resume, select appropriate model tiers, and handle context limits.
 </overview>
 
 <completion_signals>
@@ -22,57 +22,83 @@ These break in edge cases and create unpredictable behavior.
 
 Provide a `complete_task` tool that:
 - Takes a summary of what was accomplished
-- Returns a signal that stops the loop
+- Returns both a terminal status and a signal that stops the loop
 - Works identically across all agent types
 
+Preserve `success`, `partial`, and `blocked` through tool results, checkpoints, and the final response. Stopping the loop does not establish successful completion. Let the application define the complete criterion set and evaluate each criterion against observed state. Derive the aggregate outcome and remaining criterion IDs from those results; an agent's summary is not acceptance evidence.
+
 ```typescript
-tool("complete_task", {
-  summary: z.string().describe("Summary of what was accomplished"),
-  status: z.enum(["success", "partial", "blocked"]).optional(),
-}, async ({ summary, status = "success" }) => {
-  return {
-    text: summary,
-    shouldContinue: false,  // Key: signals loop should stop
-  };
-});
+type CriterionResult = { id: string; status: "passed" | "failed" | "unknown" };
+type AcceptanceCriterion = { id: string; check: () => Promise<boolean> };
+
+function registerCompletionTool(criteria: readonly AcceptanceCriterion[]) {
+  const checks = criteria.map(criterion => ({ ...criterion }));
+  if (checks.length === 0 || checks.some(c => c.id.trim() === "") ||
+      new Set(checks.map(c => c.id)).size !== checks.length) {
+    throw new Error("Acceptance criteria require nonempty, unique IDs");
+  }
+  tool("complete_task", {
+    summary: z.string().describe("Summary of outcomes and remaining work"),
+    status: z.enum(["success", "partial", "blocked"]),
+  }, async ({ summary, status }): Promise<ToolResult> => {
+    const acceptance = await Promise.all(checks.map(async (c): Promise<CriterionResult> => {
+      try {
+        return { id: c.id, status: await c.check() ? "passed" : "failed" };
+      } catch {
+        return { id: c.id, status: "unknown" };
+      }
+    }));
+    const remaining = acceptance.filter(c => c.status !== "passed").map(c => c.id);
+    if (status === "success" && remaining.length > 0) {
+      return {
+        success: false,
+        output: `Unmet criteria: ${remaining.join(", ")}. Continue or report partial/blocked.`,
+        shouldContinue: true,
+      };
+    }
+
+    return {
+      success: true,
+      output: summary,
+      shouldContinue: false,
+      terminalStatus: status,
+      acceptanceStatus: remaining.length === 0 ? "passed" : "unmet",
+      acceptance,
+      remaining,
+    };
+  });
+}
 ```
+
+Supply the checks from the application for the current request. Persist the computed `acceptanceStatus`, criterion results, and remaining IDs with the terminal report, including `partial` and `blocked`. Keep the requested stop status separate from the application-derived acceptance aggregate; a conservative `partial` or `blocked` cannot overwrite observed acceptance. Reject missing, duplicate, or invented criterion IDs if accepting reports across a process boundary. Treat `unknown` as unmet; never upgrade it to success from the agent's prose.
 
 ### The ToolResult Pattern
 
 Structure tool results to separate success from continuation:
 
-```swift
-struct ToolResult {
-    let success: Bool           // Did tool succeed?
-    let output: String          // What happened?
-    let shouldContinue: Bool    // Should agent loop continue?
-}
+```typescript
+type TerminalStatus = "success" | "partial" | "blocked" | "cancelled";
 
-// Three common cases:
-extension ToolResult {
-    static func success(_ output: String) -> ToolResult {
-        // Tool succeeded, keep going
-        ToolResult(success: true, output: output, shouldContinue: true)
-    }
-
-    static func error(_ message: String) -> ToolResult {
-        // Tool failed but recoverable, agent can try something else
-        ToolResult(success: false, output: message, shouldContinue: true)
-    }
-
-    static func complete(_ summary: String) -> ToolResult {
-        // Task done, stop the loop
-        ToolResult(success: true, output: summary, shouldContinue: false)
-    }
-}
+type ToolResult =
+  | { success: boolean; output: string; shouldContinue: true }
+  | {
+      success: true;
+      output: string;
+      shouldContinue: false;
+      terminalStatus: TerminalStatus;
+      acceptanceStatus: "passed" | "unmet";
+      acceptance: CriterionResult[];
+      remaining: string[];
+    };
 ```
 
 ### Key Insight
 
 **This is different from success/failure:**
 
-- A tool can **succeed** AND signal **stop** (task complete)
+- A tool can **succeed** AND signal **stop** (terminal outcome)
 - A tool can **fail** AND signal **continue** (recoverable error, try something else)
+- A completion tool can succeed at recording `partial` or `blocked` while the task remains unfinished
 
 ```typescript
 // Examples:
@@ -80,9 +106,8 @@ read_file("/missing.txt")
 // → { success: false, output: "File not found", shouldContinue: true }
 // Agent can try a different file or ask for clarification
 
-complete_task("Organized all downloads into folders")
-// → { success: true, output: "...", shouldContinue: false }
-// Agent is done
+complete_task({ summary: "Organized all downloads into folders", status: "success" })
+// → terminalStatus: "success", shouldContinue: false, application checks passed
 
 write_file("/output.md", content)
 // → { success: true, output: "Wrote file", shouldContinue: true }
@@ -98,14 +123,25 @@ Tell the agent when to complete:
 
 When you've accomplished the user's request:
 1. Verify your work (read back files you created, check results)
-2. Call `complete_task` with a summary of what you did
+2. Call `complete_task` with status "success" and a summary of outcomes
 3. Don't keep working after the goal is achieved
+
+If some requested work remains unfinished:
+- Call `complete_task` with status "partial" and identify the remaining work
 
 If you're blocked and can't proceed:
 - Call `complete_task` with status "blocked" and explain why
 - Don't loop forever trying the same thing
 ```
 </completion_signals>
+
+<cancellation>
+## Cooperative Cancellation and Cleanup
+
+Accept cancellation through a durable flag even while an action holds the run lock. Have the running loop observe the flag between actions; serialize state changes and compensation under the same run lock or lease. Persist `cancelling` before cleanup starts. Reconcile an in-flight action with an unknown outcome before deciding whether it needs compensation.
+
+Compensate only recorded side effects that actually occurred and are eligible for reversal. Preserve intended business results unless reversal is authorized. Persist a cleanup outcome of `not_required`, `verified`, `failed`, or `unavailable`, plus any outstanding effects. Finish cancellation as `cancelled`, never `success`; block normal completion while cancellation is pending. For ordinary completion, require verified removal of temporary effects, or `not_required` when none existed. Failed or unavailable cleanup prevents success and requires reconciliation before resume.
+</cancellation>
 
 <partial_completion>
 ## Partial Completion
@@ -114,35 +150,28 @@ For multi-step tasks, track progress at the task level for resume capability.
 
 ### Task State Tracking
 
-```swift
-enum TaskStatus {
-    case pending      // Not yet started
-    case inProgress   // Currently working on
-    case completed    // Finished successfully
-    case failed       // Couldn't complete (with reason)
-    case skipped      // Intentionally not done
+```typescript
+type TaskStatus = "pending" | "inProgress" | "completed" | "failed" | "skipped";
+type AgentTask = {
+  id: string;
+  description: string;
+  status: TaskStatus;
+  notes: string | null;
+};
+
+function taskProgress(tasks: readonly AgentTask[]): { completed: number; total: number } {
+  return {
+    completed: tasks.filter(task => task.status === "completed").length,
+    total: tasks.length,
+  };
 }
 
-struct AgentTask {
-    let id: String
-    let description: String
-    var status: TaskStatus
-    var notes: String?  // Why it failed, what was done
-}
-
-struct AgentSession {
-    var tasks: [AgentTask]
-
-    var isComplete: Bool {
-        tasks.allSatisfy { $0.status == .completed || $0.status == .skipped }
-    }
-
-    var progress: (completed: Int, total: Int) {
-        let done = tasks.filter { $0.status == .completed }.count
-        return (done, tasks.count)
-    }
+function tasksFinished(tasks: readonly AgentTask[]): boolean {
+  return tasks.every(task => task.status === "completed" || task.status === "skipped");
 }
 ```
+
+A skipped task needs an explicitly accepted scope reason; finishing the task list does not bypass application-owned acceptance checks.
 
 ### UI Progress Display
 
@@ -164,35 +193,57 @@ Progress: 3/5 tasks complete (60%)
 - Checkpoint saved with current state
 - Resume continues from where it left off, not from beginning
 
+**Delegated agents reach a limit:**
+Enforce a configured maximum delegation depth in the harness; withhold the spawn capability from children at that depth. Bound each child's turns and mark its output `partial` on exhaustion, retaining a checkpoint the parent can resume. Keep these limits in orchestration rather than relying on instructions to stop recursive spawning.
+
 **Agent fails on one task:**
-- Task marked `.failed` with error in notes
+- Task marked `failed` with error in notes
 - Other tasks may continue (agent decides)
 - Orchestrator doesn't automatically abort entire session
 
 **Network error mid-task:**
 - Current iteration throws
-- Session marked `.failed`
+- Session marked `failed`
 - Checkpoint preserves messages up to that point
 - Resume possible from checkpoint
 
 ### Checkpoint Structure
 
-```swift
-struct AgentCheckpoint: Codable {
-    let sessionId: String
-    let agentType: String
-    let messages: [Message]          // Full conversation history
-    let iterationCount: Int
-    let tasks: [AgentTask]           // Task state
-    let customState: [String: Any]   // Agent-specific state
-    let timestamp: Date
+```typescript
+type JSONValue = null | boolean | number | string | JSONValue[] |
+  { [key: string]: JSONValue };
 
-    var isValid: Bool {
-        // Checkpoints expire (default 1 hour)
-        Date().timeIntervalSince(timestamp) < 3600
-    }
+type AgentCheckpoint = {
+  version: 1;
+  sessionId: string;
+  agentType: string;
+  messages: JSONValue[];
+  iterationCount: number;
+  tasks: AgentTask[];
+  customState: { [key: string]: JSONValue };
+  waitingReason: string | null;
+  resumeState: "running" | "waitingForUser" | "partial" | "blocked";
+  terminalReport: {
+    status: TerminalStatus;
+    acceptanceStatus: "passed" | "unmet";
+    acceptance: CriterionResult[];
+    remaining: string[];
+  } | null;
+  attemptIds: string[];
+  timestamp: number;
+};
+
+function checkpointIsFresh(checkpoint: AgentCheckpoint, now = Date.now()): boolean {
+  const age = now - checkpoint.timestamp;
+  return checkpoint.version === 1 && age >= 0 && age < 3600_000;
+}
+
+function encodeCheckpoint(checkpoint: AgentCheckpoint): string {
+  return JSON.stringify(checkpoint);
 }
 ```
+
+Use the preceding `AgentTask` type. Accept only schema-validated JSON values at runtime; reject unsupported versions, non-finite numbers, cycles, and missing fields rather than coercing them into a valid-looking checkpoint. Persist encoded bytes by atomic replacement and propagate errors. A stale checkpoint is retained for reconciliation and explicit user disposition, not silently replayed or deleted. Reconcile every durable attempt before running remaining effects; follow [mobile-execution.md](./mobile-execution.md).
 
 ### Resume Flow
 
@@ -226,46 +277,35 @@ Different agents need different intelligence levels. Use the cheapest model that
 
 ### Implementation
 
-```swift
-enum ModelTier {
-    case fast      // claude-3-haiku: Quick, cheap, simple tasks
-    case balanced  // claude-sonnet: Good balance for most tasks
-    case powerful  // claude-opus: Complex reasoning, synthesis
+Configure the tier's provider ID at startup using the validated `configuredModel` function in [mobile-cost.md](./mobile-cost.md), including current input and output token rates.
 
-    var modelId: String {
-        switch self {
-        case .fast: return "claude-3-haiku-20240307"
-        case .balanced: return "claude-sonnet-4-20250514"
-        case .powerful: return "claude-opus-4-20250514"
-        }
-    }
-}
+```typescript
+type AgentConfig = {
+  name: string;
+  modelTier: "fast" | "balanced" | "powerful";
+  toolNames: readonly string[];
+  systemPrompt: string;
+  maxIterations: number;
+};
 
-struct AgentConfig {
-    let name: String
-    let modelTier: ModelTier
-    let tools: [AgentTool]
-    let systemPrompt: String
-    let maxIterations: Int
-}
+const researchConfig: AgentConfig = {
+  name: "research",
+  modelTier: "balanced",
+  toolNames: ["read_file", "write_file", "web_search", "web_fetch"],
+  systemPrompt: "Research the selected book and persist sourced findings.",
+  maxIterations: 20,
+};
 
-// Examples
-let researchConfig = AgentConfig(
-    name: "research",
-    modelTier: .balanced,
-    tools: researchTools,
-    systemPrompt: researchPrompt,
-    maxIterations: 20
-)
-
-let quickLookupConfig = AgentConfig(
-    name: "lookup",
-    modelTier: .fast,
-    tools: [readLibrary],
-    systemPrompt: "Answer quick questions about the user's library.",
-    maxIterations: 3
-)
+const quickLookupConfig: AgentConfig = {
+  name: "lookup",
+  modelTier: "fast",
+  toolNames: ["read_library"],
+  systemPrompt: "Answer quick questions using the authorized library.",
+  maxIterations: 3,
+};
 ```
+
+Resolve these names to the installed, authorized tool registry; reject missing entries. Model tiers express a quality/cost choice, not a fixed historical model family.
 
 ### Cost Optimization Strategies
 
@@ -336,22 +376,24 @@ Assume the orchestrator may truncate early messages. Important context should be
 
 ### Implementation Strategies
 
-```swift
-class AgentOrchestrator {
-    let maxContextTokens = 100_000
-    let targetContextTokens = 80_000  // Leave headroom
+Use application adapters for token estimation and summarization. Keep tool-call/result pairs together when partitioning history:
 
-    func shouldTruncate() -> Bool {
-        estimateTokens(messages) > targetContextTokens
-    }
-
-    func truncateIfNeeded() {
-        if shouldTruncate() {
-            // Keep system prompt + recent messages
-            // Summarize or drop older messages
-            messages = [systemMessage] + summarizeOldMessages() + recentMessages
-        }
-    }
+```typescript
+function compactContext<M>(
+  systemMessage: M,
+  olderMessages: readonly M[],
+  recentMessages: readonly M[],
+  estimateTokens: (messages: readonly M[]) => number,
+  summarize: (messages: readonly M[]) => M[],
+): M[] {
+  const targetContextTokens = 80_000;
+  const messages = [systemMessage, ...olderMessages, ...recentMessages];
+  if (estimateTokens(messages) <= targetContextTokens) return messages;
+  const compacted = [systemMessage, ...summarize(olderMessages), ...recentMessages];
+  if (estimateTokens(compacted) > targetContextTokens) {
+    throw new Error("Context still exceeds target; reduce data before generation");
+  }
+  return compacted;
 }
 ```
 
@@ -374,60 +416,86 @@ Don't try to hold everything in memory. Write it down.
 
 One execution engine, many agent types. All agents use the same orchestrator with different configurations.
 
-```swift
+```typescript
+interface Message {
+  role: "system" | "user" | "assistant" | "tool";
+  content: string;
+}
+
+interface ToolCall {
+  name: string;
+  input: unknown;
+}
+
+interface ModelResponse {
+  content: string;
+  toolCalls: ToolCall[];
+}
+
+interface AgentConfig {
+  systemPrompt: string;
+  maxIterations: number;
+}
+
+interface AgentResult {
+  status: TerminalStatus | "responded";
+  stopReason?: "turn_limit";
+  output: string;
+  iterations: number;
+}
+
 class AgentOrchestrator {
-    static let shared = AgentOrchestrator()
+  constructor(
+    private generateResponse: (
+      config: AgentConfig,
+      messages: Message[],
+    ) => Promise<ModelResponse>,
+    private executeToolCall: (call: ToolCall) => Promise<ToolResult>,
+  ) {}
 
-    func run(config: AgentConfig, userMessage: String) async -> AgentResult {
-        var messages: [Message] = [
-            .system(config.systemPrompt),
-            .user(userMessage)
-        ]
+  async run(config: AgentConfig, userMessage: string): Promise<AgentResult> {
+    const messages: Message[] = [
+      { role: "system", content: config.systemPrompt },
+      { role: "user", content: userMessage },
+    ];
 
-        var iteration = 0
+    for (let iteration = 0; iteration < config.maxIterations; iteration += 1) {
+      const response = await this.generateResponse(config, messages);
+      messages.push({ role: "assistant", content: response.content });
 
-        while iteration < config.maxIterations {
-            // Get agent response
-            let response = await claude.message(
-                model: config.modelTier.modelId,
-                messages: messages,
-                tools: config.tools
-            )
+      for (const toolCall of response.toolCalls) {
+        const result = await this.executeToolCall(toolCall);
+        messages.push({ role: "tool", content: JSON.stringify(result) });
 
-            messages.append(.assistant(response))
-
-            // Process tool calls
-            for toolCall in response.toolCalls {
-                let result = await executeToolCall(toolCall, config: config)
-                messages.append(.toolResult(result))
-
-                // Check for completion signal
-                if !result.shouldContinue {
-                    return AgentResult(
-                        status: .completed,
-                        output: result.output,
-                        iterations: iteration + 1
-                    )
-                }
-            }
-
-            // No tool calls = agent is responding, might be done
-            if response.toolCalls.isEmpty {
-                // Could be done, or waiting for user
-                break
-            }
-
-            iteration += 1
+        if (!result.shouldContinue) {
+          return {
+            status: result.terminalStatus,
+            output: result.output,
+            iterations: iteration + 1,
+          };
         }
+      }
 
-        return AgentResult(
-            status: iteration >= config.maxIterations ? .maxIterations : .responded,
-            output: messages.last?.content ?? "",
-            iterations: iteration
-        )
+      if (response.toolCalls.length === 0) {
+        return {
+          status: "responded",
+          output: response.content,
+          iterations: iteration + 1,
+        };
+      }
     }
+
+    return {
+      status: "partial",
+      stopReason: "turn_limit",
+      output: messages[messages.length - 1].content,
+      iterations: config.maxIterations,
+    };
+  }
 }
 ```
+
+Have the tool executor validate and persist runtime results before returning this type. Preserve the terminal status in persistence and UI labels. A reply without a completion signal remains `responded`. Save a checkpoint before returning `partial` with `turn_limit`; exhaustion remains unfinished. Wrap action boundaries with the cooperative cancellation and cleanup lifecycle above.
 
 ### Benefits
 
@@ -445,6 +513,10 @@ class AgentOrchestrator {
 - [ ] `complete_task` tool provided (explicit completion)
 - [ ] No heuristic completion detection
 - [ ] Tool results include `shouldContinue` flag
+- [ ] Terminal statuses survive orchestration and checkpoint restore
+- [ ] `success` requires application-observed acceptance evidence
+- [ ] Terminal reports cover exactly the application's criterion set and compute unmet IDs
+- [ ] Cancellation persists its lifecycle, cleanup outcome, and outstanding effects
 - [ ] System prompt guides when to complete
 
 ### Partial Completion
@@ -452,6 +524,7 @@ class AgentOrchestrator {
 - [ ] Checkpoints saved for resume
 - [ ] Progress visible to user
 - [ ] Resume continues from where left off
+- [ ] Delegation depth and per-agent turns are enforced by the harness
 
 ### Model Tiers
 - [ ] Tier selected based on task complexity

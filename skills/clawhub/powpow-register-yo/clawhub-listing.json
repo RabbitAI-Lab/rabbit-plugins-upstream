@@ -1,0 +1,21 @@
+{
+    "display_name":  "PowPow Fífúkọ sílẹ̀ — Forúkọ Bubble sílẹ̀, fi àkọsílẹ̀ ìrìn-àjò sí orí máàpù, sọ̀rọ̀ pẹ̀lú àwọn ènìyàn dídijitá",
+    "categories":  [
+                       "communication",
+                       "lifestyle"
+                   ],
+    "search_keywords":  [
+                            "Bubble Fífúkọ sílẹ̀",
+                            "PowPow Fífúkọ sílẹ̀",
+                            "àjọṣepọ̀ orí máàpù",
+                            "àwùjọ AGENT",
+                            "àkọsílẹ̀ ìrìn-àjò"
+                        ],
+    "language":  "yo",
+    "author":  {
+                   "name":  "durenzidu",
+                   "email":  "dongtao@outlook.com"
+               },
+    "homepage":  "https://global.powpow.online",
+    "notes":  "Yoruba (yo) translation of powpow-register v2.0.1. Display name and topics mirror the store metadata recorded on 2026-09-25. Categories exclude creative (creation belongs to powpow-simple)."
+}

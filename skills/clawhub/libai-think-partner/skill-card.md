@@ -1,41 +1,53 @@
-## Description: <br>
-A Chinese-language Li Bai-inspired thinking partner that helps users reframe creativity, timing, emotion, aesthetics, and perseverance through literary prompts and reflective guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Li Bai-inspired thinking partner for creative ideas, expressive writing, and reflective decisions grounded in practical constraints.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Users seeking creative coaching or reflective writing support use this skill to approach problems through Li Bai-inspired models for imagination, opportunity timing, emotional transformation, independent aesthetics, and belief under difficulty. It is suitable for general creative and motivational guidance, not high-stakes professional advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad creative coaching persona may activate for emotional or motivational prompts and be mistaken for mental health, legal, financial, medical, or other high-stakes advice. <br>
-Mitigation: Use it for general creative reflection only, and route high-stakes or clinical decisions to qualified professionals or authoritative sources. <br>
-Risk: Literary persona framing can produce persuasive motivational language that overstates confidence or downplays practical constraints. <br>
-Mitigation: Ask the agent to separate inspiration from actionable steps and review recommendations against the user's real-world constraints before acting. <br>
+## Use Case:
 
+Individuals and creators use this skill to explore ideas, improve expression, and reflect on timing, emotions, aesthetics, and perseverance through Li Bai's poetry and life. It offers creative guidance, not professional advice or mental health care.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/libai-think-partner) <br>
-- [Publisher Profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style conversational guidance with quoted prompts, model selection, and reflective recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Primarily Chinese-language output with selected English terms where useful.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence) <br>
+Risk: Creative reflection about distress or major life decisions may be mistaken for professional support.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat responses as creative guidance; consult qualified professionals for persistent distress and consequential medical, legal, career, or financial decisions.
+
+Risk: Automatic routing could invoke Li Bai-style reflection for ordinary distress or life-advice prompts without user intent.
+
+Mitigation: Require explicit opt-in when automatically routing prompts to this skill.
+
+## Reference(s):
+
+- [Libai Think Partner on ClawHub](https://clawhub.ai/gechengling/skills/libai-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown or plain text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Primarily Chinese; responds in English to English questions with translated explanations of quoted poetry.]
+
+## Skill Version(s):
+
+2.0.3 (source: server release and skill text)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,20 @@
+# skill-analysis CI 模板（GitLab CI）
+# 适配本审计器的 --dir / --json / --sarif / --exit-on 接口与退出码（命中 ≥ 严重度时退出码 2）。
+# 用法：把本文件内容并入仓库 .gitlab-ci.yml，将 SKILLS_DIR 指向含 Skill 的目录。
+
+stages:
+  - security
+
+skill-audit:
+  stage: security
+  image: python:3.11
+  variables:
+    SKILLS_DIR: "./skills"   # 含多个 Skill 的目录（每个子目录含 SKILL.md）
+  script:
+    - python skills/skill-analysis/scripts/analyze_skill.py
+      "$SKILLS_DIR" --dir --json --sarif skill-audit.sarif --exit-on P1
+  artifacts:
+    when: always
+    paths:
+      - skill-audit.sarif
+  allow_failure: false   # 命中 ≥ P1 时流水线失败（退出码 2）
