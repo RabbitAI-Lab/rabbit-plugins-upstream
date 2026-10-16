@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/gh-fix-ci",
+  "repo": "openai/skills",
+  "skillId": "gh-fix-ci",
+  "branch": "main",
+  "pushedAt": "2026-09-08T20:35:26Z",
+  "contentHash": "cfd48b5727ca3e6fd4906fa5c472739a73301c99f5b4dc30b1589cfdc6cd1a0e",
+  "fetchedAt": "2026-10-16T12:32:54.411Z"
+}

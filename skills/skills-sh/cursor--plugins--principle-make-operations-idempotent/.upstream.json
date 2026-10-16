@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/principle-make-operations-idempotent",
+  "repo": "cursor/plugins",
+  "skillId": "principle-make-operations-idempotent",
+  "branch": "main",
+  "pushedAt": "2026-10-16T05:40:24Z",
+  "contentHash": "47c79e3166f30c4d3bf26125c8ea529b127fc468ecf94809ab5aba1ebe79aed0",
+  "fetchedAt": "2026-10-16T12:30:48.905Z"
+}
