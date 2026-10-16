@@ -1,46 +1,54 @@
-## Description: <br>
-End-to-end guide for building AI Agents from Genes: intent decomposition, Gene selection, Genome composition, Agent creation, and testing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through selecting Rotifer Genes, composing a Genome, creating an Agent, and testing its pipeline.
 
-## Publisher: <br>
-[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev)
 
-## Use Case: <br>
-Developers and engineers use this skill to decompose a desired Rotifer agent into capability units, select Genes, choose a Genome composition strategy, create the agent, and validate its run behavior. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording may cause the skill to be used for general agent-building requests. <br>
-Mitigation: Use explicit Rotifer-specific requests and review the skill guidance before relying on generated plans. <br>
-Risk: Seq compositions can fail at runtime when adjacent Gene schemas are incompatible. <br>
-Mitigation: Manually compare adjacent Gene inputSchema and outputSchema fields before creating or running a Seq agent. <br>
+## Use Case:
 
+Developers use this skill to build Rotifer-specific Agents by decomposing a task into Genes, selecting and composing them, and validating the resulting Agent.
 
-## Reference(s): <br>
-- [Rotifer Protocol](https://rotifer.dev) <br>
-- [Rotifer Documentation](https://rotifer.dev/docs) <br>
-- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec) <br>
-- [Rotifer Playground Repository](https://github.com/rotifer-protocol/rotifer-playground) <br>
-- [Rotifer Guide Skill](https://clawhub.ai/skills/rotifer-guide) <br>
-- [Rotifer Arena Skill](https://clawhub.ai/skills/rotifer-arena) <br>
-- [Rotifer Self-Evolving Agent Skill](https://clawhub.ai/skills/rotifer-self-evolving-agent) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with tables, checklists, JSON snippets, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Rotifer CLI commands, MCP configuration snippets, and agent composition plans for user review before execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata and clawhub.json) <br>
+Risk: Unpinned npm commands may fetch packages whose contents change between runs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a pinned npm version or project-local dependency and review installation commands before approving them.
+
+Risk: CLI actions can read and write project files, contact registry services, or run an Agent.
+
+Mitigation: Review the command and its effects before approving installs, publishing, overwrites, or Agent runs.
+
+## Reference(s):
+
+- [Rotifer documentation](https://rotifer.dev/docs)
+- [Rotifer protocol specification](https://github.com/rotifer-protocol/rotifer-spec)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with tables and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide creation of project-local Genes and Agent configuration files.]
+
+## Skill Version(s):
+
+1.2.3 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

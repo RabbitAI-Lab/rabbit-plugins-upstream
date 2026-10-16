@@ -1,42 +1,56 @@
-## Description: <br>
-Aggregates tender and award data to support market sizing, trend analysis, rankings, company research, brand share, and price-trend questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes tender and award data to summarize market trends, buyer and supplier rankings, and historical pricing.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External analysts, business-development teams, procurement researchers, and coding agents use this skill to query and summarize tender notices, company profiles, supplier relationships, market rankings, brand share, and bid-price trends. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports that first use can automatically register a device with the third-party service, send host-linked identifiers, and store an API key locally. <br>
-Mitigation: Prefer setting ZLBX_API_KEY manually before use, review the generated ~/.zlbx/config.json file, and treat API keys, contacts, login links, and SIDs as sensitive. <br>
+## Use Case:
 
+Analysts and procurement teams use this skill to search tender records, compare buyers and suppliers, and assess market size, trends, and historical bid prices.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/tender-bid-union-zhongzhaolianhe) <br>
-- [Search API reference](artifact/references/api-search.md) <br>
-- [Company API reference](artifact/references/api-company.md) <br>
-- [Market API reference](artifact/references/api-market.md) <br>
-- [Automatic registration reference](artifact/references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown or text summaries with JSON API request examples and returned bid-data analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include company names, contacts, bid links, login links, SIDs, and API-key configuration guidance that should be treated as sensitive.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: release evidence) <br>
+Risk: Broad activation may trigger vendor data queries and credentialed account checks without sufficiently clear user control.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the user's intended query before sending it to the vendor; limit account, contact, and update-related actions to what the task requires.
+
+Risk: Automatic registration collects device characteristics and stores a new API key locally.
+
+Mitigation: Request explicit consent before registration, explain the device data and local key storage, and offer the manual registration path if consent is declined.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/tender-bid-union-zhongzhaolianhe)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Market analysis API reference](references/api-market.md)
+- [Automatic registration and privacy details](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summaries may include source links, search filters, rankings, and monetary units.]
+
+## Skill Version(s):
+
+1.0.9 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

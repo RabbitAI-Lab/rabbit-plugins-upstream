@@ -1,45 +1,58 @@
-## Description: <br>
-Tender Search helps agents search and analyze tender notices, award results, company procurement activity, competitor overlap, supplier opportunities, market rankings, and price trends using the ZhiLiao BiaoXun tender data APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Chinese tender and award notices and helps analyze procurement opportunities, companies, competitors, suppliers, and market trends using ZLBX data.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and business analysts use this skill to find tender and award notices, analyze buyers and suppliers, research competitors, identify expiring projects, and summarize market or pricing trends for procurement and bidding decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First use may send device and user-environment identifiers to the vendor for automatic account creation. <br>
-Mitigation: Set ZLBX_API_KEY manually before use or review the auto-registration behavior with the user before allowing network calls. <br>
-Risk: The skill can persist an API key under ~/.zlbx/config.json. <br>
-Mitigation: Review the local config file after use and delete or rotate the stored key when persistent credentials are not desired. <br>
+## Use Case:
 
+Procurement and business-development teams use this skill to find Chinese tender opportunities, review award history, and assess suppliers, competitors, and purchasing trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/tender-search) <br>
-- [Search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Auto-registration reference](references/auto-register.md) <br>
-- [ZhiLiao BiaoXun API base URL](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool_name}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Analysis, Markdown, Configuration instructions, Shell commands] <br>
-**Output Format:** [Markdown summaries with JSON request examples and API-derived analysis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read an API key from ZLBX_API_KEY or ~/.zlbx/config.json; if neither exists, the artifact describes automatic registration and local API-key persistence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.2 (source: server release evidence) <br>
+Risk: Tender and company queries are sent to the ZLBX service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive queries unless sharing them with the service is acceptable.
+
+Risk: Automatic trial registration shares a hashed device identifier and persists a service API key locally.
+
+Mitigation: Prefer manually configuring ZLBX_API_KEY; use automatic registration only with consent and protect the stored credential.
+
+## Reference(s):
+
+- [ClawHub tender-search release](https://clawhub.ai/liu-jiapeng/skills/tender-search)
+- [ZLBX skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Tender search API reference](artifact/references/api-search.md)
+- [Company analysis API reference](artifact/references/api-company.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Registration and account setup](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include tender filters, company comparisons, and procurement statistics.]
+
+## Skill Version(s):
+
+2.1.9 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

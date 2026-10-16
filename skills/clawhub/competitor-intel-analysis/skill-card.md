@@ -1,50 +1,64 @@
-## Description: <br>
-Generates bidding-competition intelligence reports for a named company, including business focus, winning strength, key customers, competitor overlap, public-risk notes, and optional side-by-side company comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+根据招投标记录生成企业竞对情报报告，分析中标实力、客户关系、竞争格局及公开风险，并支持双公司对比。
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users, bidding teams, and analysts use this skill to research a competitor or supplier from public bidding data and produce a traceable Markdown report plus a shareable HTML report. It supports single-company due diligence, two-company comparisons, and lightweight follow-up monitoring prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register a vendor account using device features and persist an API key under the user's home directory. <br>
-Mitigation: Prefer manually setting ZLBX_API_KEY; if no key is configured, proceed with auto-registration only after explicit user consent. <br>
-Risk: The workflow uses paid API calls and optional contact lookups can add cost. <br>
-Mitigation: Tell the user the expected credit budget before analysis and pause for approval before exceeding the documented budget. <br>
-Risk: Generated reports may include signed platform links or contact data that provide access to vendor-hosted information. <br>
-Mitigation: Review generated reports before forwarding them and share only when signed links and any contact data are appropriate for the audience. <br>
-Risk: Competitive intelligence about real companies can be misleading if unsupported or phrased as a definitive allegation. <br>
-Mitigation: Use traceable source data, state data gaps, keep public-risk notes factual, and avoid unsupported or defamatory conclusions. <br>
+## Use Case:
 
+投标与商务团队可用公司名称生成单家企业背调或两家公司对比，了解公开招投标业绩、合作客户、竞争对手及有来源的公开风险信息。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/competitor-intel-analysis) <br>
-- [Workflow guide](references/workflow.md) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
-- [ZhiLiao bidding intelligence platform](https://agent.zhiliaobiaoxun.com) <br>
-- [Manual registration and billing portal](https://ai.zhiliaobiaoxun.com/?ch=s118) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Files, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown report with optional self-contained HTML report file and absolute file path] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses ZLBX_API_KEY or a local ~/.zlbx/config.json credential; paid API calls are budgeted before analysis; contact data and signed platform links may appear in reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill sends company queries and an API key to zhiliaobiaoxun.com and checks account status.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the requested network access and account checks before installation; use a key you are comfortable sharing with this service.
+
+Risk: Trial registration derives a hashed device identifier and may store an API key locally.
+
+Mitigation: Require explicit consent before registration; supply an existing API key to avoid device registration, and protect the local credential file.
+
+Risk: Saved HTML reports may contain signed access links that grant access to underlying records.
+
+Mitigation: Treat generated reports as sensitive and remove or restrict signed links before sharing.
+
+Risk: Competitive conclusions and public-risk summaries may be incomplete or misinterpreted.
+
+Mitigation: Check cited records, reporting periods and data gaps; distinguish sourced facts from inferences before acting.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/competitor-intel-analysis)
+- [知了标讯 Skill 文档](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [企业情报工作流](artifact/references/workflow.md)
+- [报告模板](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, HTML reports]
+
+**Output Format:** [Markdown conversation report and shareable HTML file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes supporting citations, reporting period and explicit data gaps; optional weekly change summary.]
+
+## Skill Version(s):
+
+1.0.6 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

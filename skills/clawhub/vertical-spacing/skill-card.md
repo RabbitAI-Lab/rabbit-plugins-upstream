@@ -1,42 +1,49 @@
-## Description: <br>
-Use when computing or fixing vertical spacing (margins, padding, Auto Layout gap) between text blocks or components against a grid base, accounting for vertical-trim state on any text layers involved. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps designers and developers audit and adjust vertical spacing against a grid while accounting for visual grouping and text trimming.
 
-## Publisher: <br>
-[monikazapisekstudio](https://clawhub.ai/user/monikazapisekstudio) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[monikazapisek](https://clawhub.ai/user/monikazapisek)
 
-## Use Case: <br>
-Product designers and design engineers use this skill to review, compute, and correct vertical spacing for cards, sections, articles, forms, and Figma Auto Layout frames against a grid base. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Figma write actions can change spacing, padding, paragraph spacing, or vertical-trim settings in selected frames. <br>
-Mitigation: Review proposed values and authorize writes only when the selected frame and changes are intended. <br>
-Risk: One missing-trim alert template is hard-coded in Polish. <br>
-Mitigation: Adapt the alert wording to the user's locale before presenting it in non-Polish contexts. <br>
+## Use Case:
 
+Product designers and developers use this skill to review margins, padding, and Auto Layout gaps, identify misleading grouping or off-grid values, and propose spacing that accounts for text trimming. It can apply requested changes to a Figma frame when connected and authorized.
 
-## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/monikazapisekstudio/design-engineering-playbook/tree/main/skills/typesetting-engine-skillset/vertical-spacing) <br>
-- [ClawHub skill page](https://clawhub.ai/monikazapisekstudio/skills/vertical-spacing) <br>
-- [Publisher profile](https://clawhub.ai/user/monikazapisekstudio) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Guidance] <br>
-**Output Format:** [Markdown with spacing values, CSS or Tailwind snippets, formulas, and review notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Figma read/write guidance; Figma writes require explicit user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: A proposed spacing or text-trim change could alter an existing layout unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed values and affected frame before applying; authorize Figma or file edits explicitly.
+
+## Reference(s):
+
+- [Vertical Spacing on ClawHub](https://clawhub.ai/monikazapisek/skills/vertical-spacing)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Code]
+
+**Output Format:** [Markdown with spacing values and optional CSS examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Explains grid and text-trim assumptions; may update Figma spacing only on explicit request.]
+
+## Skill Version(s):
+
+0.1.1 (source: ClawHub release; bundled skill metadata: 1.2.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

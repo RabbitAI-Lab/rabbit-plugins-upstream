@@ -4,7 +4,7 @@ The **daily-usage agent skill** for openInvest. View portfolio / run the committ
 positions / "btw" correlation analysis.
 
 > **First-time installation** goes through the other skill: [`../invest-setup/`](../invest-setup/) —
-> when `doctor` returns `needs_setup`, the agent automatically loads it and runs the 5-question
+> when `doctor` returns `needs_setup`, the agent automatically loads it and runs the 3-question
 > onboarding; only after that does this skill take over.
 
 ## Directory layout
@@ -13,13 +13,13 @@ positions / "btw" correlation analysis.
 skills/invest/
 ├── SKILL.md          ← agent trigger guide (decision tree / subcommands / Web API endpoints)
 ├── scripts/
-│   └── run.sh        ← subcommand dispatcher (internally pulls the backend from PyPI via `uvx openinvest`; update = `run.sh update`)
+│   └── run.sh        ← subcommand dispatcher (internally pulls the backend from PyPI via `uvx`, version pinned in this file)
 ├── references/
 │   ├── committee-protocol.md     ← detailed Coordinator-path stages
 │   ├── two-paths.md              ← Coordinator vs Direct differences
 │   ├── adding-assets.md          ← adding a new tracked symbol
 │   ├── troubleshooting.md        ← read when doctor is all green but things still fail
-│   └── onboarding.md             ← detailed 5-question flow (also referenced by the invest-setup skill)
+│   └── onboarding.md             ← detailed onboarding flow (also referenced by the invest-setup skill)
 └── README.md         ← you are here
 ```
 
@@ -35,7 +35,7 @@ bash skills/install.sh        # installs both invest + invest-setup
 `install.sh` installs into `~/.claude/skills/invest/` and `~/.claude/skills/invest-setup/`,
 whose contents are symlinks pointing back at the source directory — updates to `SKILL.md` /
 `scripts/` take effect immediately, no reinstall needed. The backend itself is distributed via
-PyPI; update it with `run.sh update`.
+PyPI at the version pinned in `run.sh`; `git pull` in the clone moves that pin.
 
 ## Workflow when changing the protocol
 
@@ -44,7 +44,7 @@ cd $INVEST_HOME
 # 1. Edit SKILL.md / scripts/run.sh / references/*.md
 vim skills/invest/SKILL.md
 # 2. Test (the symlink is already live; no reinstall needed)
-~/.claude/skills/invest/scripts/run.sh status
+<skill-dir>/scripts/run.sh status
 # 3. commit + push
 git add skills/invest/ && git commit -m "..." && git push
 # 4. Other devices pick it up immediately after git pull (symlinks unchanged)
@@ -73,9 +73,7 @@ Usually unnecessary — Claude Code reads skills from `~/.claude/skills/<name>/`
 
 ## Uninstall
 
-```bash
-rm -rf ~/.claude/skills/invest ~/.claude/skills/invest-setup
-```
+Delete the two folders `~/.claude/skills/invest` and `~/.claude/skills/invest-setup`.
 
 The repository itself is unaffected.
 

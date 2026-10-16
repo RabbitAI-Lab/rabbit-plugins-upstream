@@ -66,7 +66,20 @@ Footer should include the useful operational details Daniel wants, such as:
 
 Avoid leading the message with internal notes such as task type, snippets, routing, or retrieval status unless Daniel explicitly asks for debug/audit output.
 
-### 5. Receipts without noise
+### 5. Shared-skill source of truth
+
+For a shared Daniel fleet skill, ClawHub is the sole canonical source. Do not call a local Workshop or workspace edit “canonical” while it differs from the published release.
+
+When changing shared skill behavior:
+
+1. Finish and validate the revised skill.
+2. Publish a new ClawHub version.
+3. Verify the registry resolves that exact version.
+4. Install and apply that exact version on each in-scope agent; verify its effective source and version.
+
+Keep host-specific paths, remotes, names, credentials, and delivery IDs in manifests/configuration—not in a fork of the shared skill. Local skill copies are installed artifacts, not policy authorities.
+
+### 6. Receipts without noise
 
 When reporting completed work, include enough evidence to trust the result without dumping logs.
 
@@ -86,7 +99,7 @@ Bad receipts:
 
 If blocked, say `NOT EXECUTED: <reason>` and stop or ask for the smallest next input.
 
-### 6. One-step troubleshooting
+### 7. One-step troubleshooting
 
 When Daniel is manually running commands, give one step at a time.
 

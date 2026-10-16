@@ -1,0 +1,13 @@
+case: delivered-stop-without-promotion
+presentation_mode: customer
+assert:
+  prose_contains:
+    - 部署成功
+    - payments-app
+    - https://demo-team-cn.rainbond.me/payments-app
+  prose_not_contains:
+    - AppAssistantResult
+    - Structured Output
+    - linked-and-delivered
+    - Blocking Issue
+    - Actions Performed

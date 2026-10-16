@@ -1,47 +1,63 @@
-## Description: <br>
-docker-mailbox lets agents and scripts read, search, send, mark seen, and delete messages across one or more configured IMAP/SMTP mailboxes through a REST API and streamable HTTP MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables an agent to read, search, send, mark seen, and delete email across configured inboxes through docker-mailbox REST or MCP.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and operators use this skill to connect an agent to a running mailboxd service so it can inspect, search, send, and manage mail across configured accounts. It is suited to real mailbox workflows where the user can configure authentication and confirm destructive actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate real mailboxes, including reading and sending messages. <br>
-Mitigation: Install only for mailboxes the user intends an agent or script to control, and point MAILBOX_URL only at a trusted mailboxd instance. <br>
-Risk: If auth.tokens is empty, reachable HTTP and MCP endpoints have full mailbox access without authentication. <br>
-Mitigation: Configure long random bearer tokens, keep the service bound locally or behind an authenticating proxy, and avoid public exposure unless remote access is required. <br>
-Risk: Message deletion is permanent because deleted messages are expunged immediately. <br>
-Mitigation: Require explicit user confirmation of the exact mailbox and UID before deletion, and avoid bulk deletion directly from broad search results. <br>
-Risk: The configuration file and tunnel credentials contain sensitive mailbox passwords, bearer tokens, and remote access credentials. <br>
-Mitigation: Protect config.yaml and tunnel credential files, keep them out of version control and chats, use restrictive permissions, and mount configuration read-only where possible. <br>
+## Use Case:
 
+Developers and agents use this skill to manage email in configured mailboxes through a running, bearer-authenticated docker-mailbox service, including searching, composing, and confirming specific messages before deletion.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/docker-mailbox) <br>
-- [Publisher profile](https://clawhub.ai/user/psyb0t) <br>
-- [Setup reference](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/docker-mailbox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands, REST examples, MCP configuration snippets, and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include mailbox search, read, send, mark-seen, and delete instructions that require a running mailboxd service and configured credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence) <br>
+Risk: Email contents and account access could be exposed through an untrusted or publicly reachable service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Connect only to a trusted mailboxd instance, bind it to localhost by default, and use HTTPS when deliberately exposing it.
+
+Risk: Leaked bearer tokens or mailbox configuration could grant access to every configured inbox.
+
+Mitigation: Use long bearer tokens, protect config.yaml and tunnel credentials as passwords, and use separate instances where mailbox access must be isolated.
+
+Risk: Deleting the wrong email is permanent and cannot be undone.
+
+Mitigation: Show the mailbox and exact message UIDs to the user, then require explicit confirmation before deleting those messages.
+
+Risk: Unpinned Docker images can change between deployments.
+
+Mitigation: Prefer pinned image versions or digests instead of ':latest'.
+
+## Reference(s):
+
+- [docker-mailbox setup guide](references/setup.md)
+- [Project homepage (release metadata)](https://github.com/psyb0t/docker-mailbox)
+- [ClawHub skill release](https://clawhub.ai/psyb0t/skills/docker-mailbox)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance and shell examples; structured mailbox results when connected to the service]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a running mailboxd service and a configured bearer token.]
+
+## Skill Version(s):
+
+1.2.5 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

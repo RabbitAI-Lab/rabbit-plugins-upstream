@@ -1,0 +1,501 @@
+#!/usr/bin/env bash
+# Tests for git-repo-doctor.sh — Comprehensive Git repository and hook diagnostics.
+#
+# Tests both Tier 1 (Base checks) and Tier 2 (Conditional checks) against fixture repositories.
+#
+# Run:  bash skills/git-repo/tests/test-git-repo-doctor.sh
+# Exit: 0 = all pass, 1 = any fail.
+
+set -u
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+SCRIPT="$SCRIPT_DIR/../scripts/git-repo-doctor.sh"
+[[ -f "$SCRIPT" ]] || { echo "script not found: $SCRIPT" >&2; exit 1; }
+
+FAIL=0
+
+check() {
+  local name="$1"
+  local want_exit="$2"
+  local got_exit="$3"
+  local out="${4:-}"
+  if [[ "$got_exit" -eq "$want_exit" ]]; then
+    echo "PASS  $name (exit=$got_exit)"
+  else
+    echo "FAIL  $name (exit=$got_exit want=$want_exit)"
+    [[ -n "$out" ]] && echo "OUTPUT: $out"
+    FAIL=1
+  fi
+}
+
+REPO_ROOT="$(cd "$SCRIPT_DIR/../../.." && pwd)"
+FIXTURE_BASE="$REPO_ROOT/.tmp/doctor_test_$$"
+mkdir -p "$FIXTURE_BASE"
+trap 'rm -rf "$FIXTURE_BASE"' EXIT
+
+git_in() {
+  local r="$1"; shift
+  (cd "$r" && env -u GIT_DIR -u GIT_WORK_TREE git "$@")
+}
+
+make_temp_repo() {
+  local repo="$FIXTURE_BASE/repo_${RANDOM}_$RANDOM"
+  mkdir -p "$repo"
+  git_in "$repo" init --quiet
+  printf '%s' "$repo"
+}
+
+# -----------------------------------------------------------------------------
+# Test 1: Base - Unwired .githooks directory (core.hooksPath not set)
+# -----------------------------------------------------------------------------
+REPO_1="$(make_temp_repo)"
+mkdir -p "$REPO_1/.githooks"
+cat > "$REPO_1/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+exit 0
+EOF
+chmod +x "$REPO_1/.githooks/pre-commit"
+# core.hooksPath not configured, so .githooks/ is ignored by default
+out_1=$(bash "$SCRIPT" "$REPO_1" 2>&1)
+exit_1=$?
+check "Base: unwired .githooks directory detected" 1 "$exit_1"
+rm -rf "$REPO_1"
+
+# -----------------------------------------------------------------------------
+# Test 2: Base - Missing pre-push zero-SHA deletion early exit
+# -----------------------------------------------------------------------------
+REPO_2="$(make_temp_repo)"
+mkdir -p "$REPO_2/.githooks"
+git -C "$REPO_2" config core.hooksPath .githooks
+cat > "$REPO_2/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+# Has local guard but NO zero-SHA early exit!
+while read line; do
+  set -- $line
+  if [ "$1" = "refs/heads/local" ]; then exit 1; fi
+done
+pytest tests
+EOF
+chmod +x "$REPO_2/.githooks/pre-push"
+out_2=$(bash "$SCRIPT" "$REPO_2" 2>&1)
+exit_2=$?
+check "Base: pre-push missing zero-SHA early exit" 1 "$exit_2"
+rm -rf "$REPO_2"
+
+# -----------------------------------------------------------------------------
+# Test 3: Base - Missing pre-push 'local' branch guard
+# -----------------------------------------------------------------------------
+REPO_3="$(make_temp_repo)"
+mkdir -p "$REPO_3/.githooks"
+git -C "$REPO_3" config core.hooksPath .githooks
+cat > "$REPO_3/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+# Has zero-SHA early exit but NO local branch guard
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+done
+EOF
+chmod +x "$REPO_3/.githooks/pre-push"
+out_3=$(bash "$SCRIPT" "$REPO_3" 2>&1)
+exit_3=$?
+check "Base: pre-push missing local branch guard" 1 "$exit_3"
+rm -rf "$REPO_3"
+
+# -----------------------------------------------------------------------------
+# Test 4: Conditional - Markdown present without markdown lint hook
+# -----------------------------------------------------------------------------
+REPO_4="$(make_temp_repo)"
+mkdir -p "$REPO_4/.githooks"
+git_in "$REPO_4" config core.hooksPath .githooks
+echo "# Title" > "$REPO_4/README.md"
+git_in "$REPO_4" add README.md
+git_in "$REPO_4" -c user.name="Test" -c user.email="test@test.com" commit -m "docs: add readme" --quiet
+cat > "$REPO_4/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+# Only IP check, no markdown lint / text validation
+grep -E '192\.168' .
+EOF
+cat > "$REPO_4/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+  if [ "$lref" = "refs/heads/local" ]; then exit 1; fi
+done
+EOF
+chmod +x "$REPO_4/.githooks/pre-commit" "$REPO_4/.githooks/pre-push"
+out_4=$(bash "$SCRIPT" "$REPO_4" 2>&1)
+exit_4=$?
+check "Conditional: markdown present without md lint hook" 1 "$exit_4"
+rm -rf "$REPO_4"
+
+# -----------------------------------------------------------------------------
+# Test 5: Conditional - Skills present without skill frontmatter lint hook
+# -----------------------------------------------------------------------------
+REPO_5="$(make_temp_repo)"
+mkdir -p "$REPO_5/.githooks" "$REPO_5/skills/test-skill"
+git_in "$REPO_5" config core.hooksPath .githooks
+cat > "$REPO_5/skills/test-skill/SKILL.md" << 'EOF'
+---
+name: test-skill
+description: Test skill description
+---
+# Test Skill
+EOF
+git_in "$REPO_5" add skills/test-skill/SKILL.md
+git_in "$REPO_5" -c user.name="Test" -c user.email="test@test.com" commit -m "feat: add test skill" --quiet
+cat > "$REPO_5/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+# Generic md check
+check-hangul.py
+EOF
+cat > "$REPO_5/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+  if [ "$lref" = "refs/heads/local" ]; then exit 1; fi
+done
+EOF
+chmod +x "$REPO_5/.githooks/pre-commit" "$REPO_5/.githooks/pre-push"
+out_5=$(bash "$SCRIPT" "$REPO_5" 2>&1)
+exit_5=$?
+check "Conditional: skills present without skill lint hook" 1 "$exit_5" "$out_5"
+rm -rf "$REPO_5"
+
+# -----------------------------------------------------------------------------
+# Test 6: Fully Compliant Skills Repository (All Base & Conditional checks pass)
+# -----------------------------------------------------------------------------
+REPO_6="$(make_temp_repo)"
+mkdir -p "$REPO_6/.githooks" "$REPO_6/skills/sample-skill"
+git_in "$REPO_6" config core.hooksPath .githooks
+cat > "$REPO_6/skills/sample-skill/SKILL.md" << 'EOF'
+---
+name: sample-skill
+description: Sample skill
+---
+# Sample
+EOF
+git_in "$REPO_6" add skills/sample-skill/SKILL.md
+git_in "$REPO_6" -c user.name="Test" -c user.email="test@test.com" commit -m "feat: add sample skill" --quiet
+
+cat > "$REPO_6/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+# Check markdown / hangul
+check-hangul.py
+# Check IP / secrets
+grep -E '192\.168\.' .
+EOF
+
+cat > "$REPO_6/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  # Zero SHA early exit
+  if [ "$lsha" = "0000000000000000000000000000000000000000" ] || [ "$lsha" = "(delete)" ]; then
+    exit 0
+  fi
+  # Local branch push guard
+  if [ "$lref" = "refs/heads/local" ]; then
+    exit 1
+  fi
+  # Push commit count limit guard
+  MAX_COMMITS="${PUSH_MAX_COMMITS:-5}"
+  COUNT=$(git rev-list --count origin/main.."$lsha" 2>/dev/null || echo 0)
+  if [ "$COUNT" -gt "$MAX_COMMITS" ] && [ "${PUSH_COMMIT_LIMIT_OVERRIDE:-0}" != "1" ]; then
+    exit 1
+  fi
+
+  # Conflict marker guard
+  CONFLICT_COMMITS=$(git rev-list origin/main.."$lsha" 2>/dev/null | while read -r sha; do
+    git log -1 --format='%B' "$sha" | grep -qE '^#?[[:space:]]*Conflicts:' && echo "$sha"
+  done)
+  if [ -n "$CONFLICT_COMMITS" ] && [ "${PUSH_CONFLICT_MSG_OVERRIDE:-0}" != "1" ]; then
+    exit 1
+  fi
+
+done
+# Skill frontmatter & language lint
+bash scripts/lint-frontmatter.sh
+EOF
+
+chmod +x "$REPO_6/.githooks/pre-commit" "$REPO_6/.githooks/pre-push"
+out_6=$(bash "$SCRIPT" "$REPO_6" 2>&1)
+exit_6=$?
+check "Fully compliant repository passes all checks" 0 "$exit_6"
+rm -rf "$REPO_6"
+
+# -----------------------------------------------------------------------------
+# Test 7: Base - Missing pre-push commit count limit guard (BASE-6)
+# -----------------------------------------------------------------------------
+REPO_7="$(make_temp_repo)"
+mkdir -p "$REPO_7/.githooks"
+git_in "$REPO_7" config core.hooksPath .githooks
+cat > "$REPO_7/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+  if [ "$lref" = "refs/heads/local" ]; then exit 1; fi
+done
+EOF
+chmod +x "$REPO_7/.githooks/pre-push"
+out_7=$(bash "$SCRIPT" "$REPO_7" 2>&1)
+exit_7=$?
+check "Base: pre-push missing commit count limit guard (BASE-6)" 1 "$exit_7"
+rm -rf "$REPO_7"
+
+# -----------------------------------------------------------------------------
+# Test 8: Base - Missing pre-push conflict marker guard (BASE-7)
+# -----------------------------------------------------------------------------
+REPO_8="$(make_temp_repo)"
+mkdir -p "$REPO_8/.githooks"
+git_in "$REPO_8" config core.hooksPath .githooks
+cat > "$REPO_8/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+  if [ "$lref" = "refs/heads/local" ]; then exit 1; fi
+  MAX_COMMITS="${PUSH_MAX_COMMITS:-5}"
+  COUNT=$(git rev-list --count origin/main.."$lsha" 2>/dev/null || echo 0)
+  if [ "$COUNT" -gt "$MAX_COMMITS" ] && [ "${PUSH_COMMIT_LIMIT_OVERRIDE:-0}" != "1" ]; then exit 1; fi
+done
+EOF
+chmod +x "$REPO_8/.githooks/pre-push"
+out_8=$(bash "$SCRIPT" "$REPO_8" 2>&1)
+exit_8=$?
+check "Base: pre-push missing conflict marker guard (BASE-7)" 1 "$exit_8"
+rm -rf "$REPO_8"
+
+# -----------------------------------------------------------------------------
+# Test 9: Conditional - COND-MD-STYLE WARN when no lint manifest exists at all
+# -----------------------------------------------------------------------------
+REPO_9="$(make_temp_repo)"
+mkdir -p "$REPO_9/.githooks"
+git_in "$REPO_9" config core.hooksPath .githooks
+echo "# Title" > "$REPO_9/README.md"
+git_in "$REPO_9" add README.md
+git_in "$REPO_9" -c user.name="Test" -c user.email="test@test.com" commit -m "docs: add readme" --quiet
+cat > "$REPO_9/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+check-hangul.py
+EOF
+cat > "$REPO_9/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+  if [ "$lref" = "refs/heads/local" ]; then exit 1; fi
+  MAX_COMMITS="${PUSH_MAX_COMMITS:-5}"
+  COUNT=$(git rev-list --count origin/main.."$lsha" 2>/dev/null || echo 0)
+  [ "$COUNT" -gt "$MAX_COMMITS" ] && [ "${PUSH_COMMIT_LIMIT_OVERRIDE:-0}" != "1" ] && exit 1
+  CONFLICT_COMMITS=$(git rev-list origin/main.."$lsha" 2>/dev/null | while read -r sha; do
+    git log -1 --format='%B' "$sha" | grep -qE '^#?[[:space:]]*Conflicts:' && echo "$sha"
+  done)
+  [ -n "$CONFLICT_COMMITS" ] && [ "${PUSH_CONFLICT_MSG_OVERRIDE:-0}" != "1" ] && exit 1
+done
+EOF
+chmod +x "$REPO_9/.githooks/pre-commit" "$REPO_9/.githooks/pre-push"
+# No Makefile, no package.json, no scripts/ — COND-MD-STYLE has nothing to probe.
+out_9=$(bash "$SCRIPT" "$REPO_9" 2>&1)
+exit_9=$?
+check "Conditional: COND-MD-STYLE WARN (no manifest, exit stays 0)" 0 "$exit_9" "$out_9"
+if ! echo "$out_9" | grep -q "COND-MD-STYLE.*No Makefile, package.json, or scripts/"; then
+  echo "FAIL  COND-MD-STYLE no-manifest message missing"
+  FAIL=1
+fi
+rm -rf "$REPO_9"
+
+# -----------------------------------------------------------------------------
+# Test 10: Conditional - COND-MD-STYLE FAIL when tool declared but not wired
+# -----------------------------------------------------------------------------
+REPO_10="$(make_temp_repo)"
+mkdir -p "$REPO_10/.githooks"
+git_in "$REPO_10" config core.hooksPath .githooks
+echo "# Title" > "$REPO_10/README.md"
+cat > "$REPO_10/Makefile" << 'EOF'
+lint:
+	npx markdownlint-cli2 "**/*.md"
+EOF
+git_in "$REPO_10" add README.md Makefile
+git_in "$REPO_10" -c user.name="Test" -c user.email="test@test.com" commit -m "docs: add readme" --quiet
+cat > "$REPO_10/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+check-hangul.py
+EOF
+cat > "$REPO_10/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+  if [ "$lref" = "refs/heads/local" ]; then exit 1; fi
+  MAX_COMMITS="${PUSH_MAX_COMMITS:-5}"
+  COUNT=$(git rev-list --count origin/main.."$lsha" 2>/dev/null || echo 0)
+  [ "$COUNT" -gt "$MAX_COMMITS" ] && [ "${PUSH_COMMIT_LIMIT_OVERRIDE:-0}" != "1" ] && exit 1
+  CONFLICT_COMMITS=$(git rev-list origin/main.."$lsha" 2>/dev/null | while read -r sha; do
+    git log -1 --format='%B' "$sha" | grep -qE '^#?[[:space:]]*Conflicts:' && echo "$sha"
+  done)
+  [ -n "$CONFLICT_COMMITS" ] && [ "${PUSH_CONFLICT_MSG_OVERRIDE:-0}" != "1" ] && exit 1
+done
+EOF
+chmod +x "$REPO_10/.githooks/pre-commit" "$REPO_10/.githooks/pre-push"
+# Makefile declares markdownlint-cli2, but no hook or CI actually invokes it.
+out_10=$(bash "$SCRIPT" "$REPO_10" 2>&1)
+exit_10=$?
+check "Conditional: COND-MD-STYLE FAIL (declared but not wired)" 1 "$exit_10" "$out_10"
+rm -rf "$REPO_10"
+
+# -----------------------------------------------------------------------------
+# Test 11: Conditional - COND-MD-STYLE PASS when tool declared and wired
+# -----------------------------------------------------------------------------
+REPO_11="$(make_temp_repo)"
+mkdir -p "$REPO_11/.githooks"
+git_in "$REPO_11" config core.hooksPath .githooks
+echo "# Title" > "$REPO_11/README.md"
+cat > "$REPO_11/Makefile" << 'EOF'
+lint:
+	npx markdownlint-cli2 "**/*.md"
+EOF
+git_in "$REPO_11" add README.md Makefile
+git_in "$REPO_11" -c user.name="Test" -c user.email="test@test.com" commit -m "docs: add readme" --quiet
+cat > "$REPO_11/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+check-hangul.py
+make lint
+EOF
+cat > "$REPO_11/.githooks/pre-push" << 'EOF'
+#!/bin/sh
+while read lref lsha rref rsha; do
+  [ "$lsha" = "0000000000000000000000000000000000000000" ] && exit 0
+  if [ "$lref" = "refs/heads/local" ]; then exit 1; fi
+  MAX_COMMITS="${PUSH_MAX_COMMITS:-5}"
+  COUNT=$(git rev-list --count origin/main.."$lsha" 2>/dev/null || echo 0)
+  [ "$COUNT" -gt "$MAX_COMMITS" ] && [ "${PUSH_COMMIT_LIMIT_OVERRIDE:-0}" != "1" ] && exit 1
+  CONFLICT_COMMITS=$(git rev-list origin/main.."$lsha" 2>/dev/null | while read -r sha; do
+    git log -1 --format='%B' "$sha" | grep -qE '^#?[[:space:]]*Conflicts:' && echo "$sha"
+  done)
+  [ -n "$CONFLICT_COMMITS" ] && [ "${PUSH_CONFLICT_MSG_OVERRIDE:-0}" != "1" ] && exit 1
+done
+EOF
+chmod +x "$REPO_11/.githooks/pre-commit" "$REPO_11/.githooks/pre-push"
+# Makefile declares markdownlint-cli2 AND pre-commit invokes `make lint`.
+out_11=$(bash "$SCRIPT" "$REPO_11" 2>&1)
+exit_11=$?
+check "Conditional: COND-MD-STYLE PASS (declared and wired)" 0 "$exit_11" "$out_11"
+rm -rf "$REPO_11"
+
+# -----------------------------------------------------------------------------
+# Test 12: Tier 2 gating must not depend on winning a SIGPIPE race
+#
+# Regression: the HAS_MD / HAS_SKILLS probes used `git ls-files | grep -q`. grep -q
+# exits at its FIRST match, git is then killed writing into the closed pipe (exit
+# 141 = 128+SIGPIPE), and `set -o pipefail` propagates that as the pipeline status —
+# so the flag stayed 0 and EVERY Tier 2 row silently vanished from the report.
+#
+# On a real repo the outcome is a race (observed flipping run-to-run on a 524-file,
+# 18KB listing), so a plain large fixture cannot test it reliably. Instead shim
+# `git` so ls-files emits a match immediately and then keeps writing far past the
+# pipe buffer: the original pipeline loses deterministically, the fixed one — which
+# captures the listing before matching — is unaffected.
+# -----------------------------------------------------------------------------
+REPO_12="$(make_temp_repo)"
+mkdir -p "$REPO_12/.githooks"
+cat > "$REPO_12/.githooks/pre-commit" << 'EOF'
+#!/bin/sh
+lint-frontmatter.sh
+EOF
+chmod +x "$REPO_12/.githooks/pre-commit"
+git_in "$REPO_12" config core.hooksPath .githooks
+
+REAL_GIT="$(command -v git)"
+SHIM_12="$FIXTURE_BASE/shim_12"
+mkdir -p "$SHIM_12"
+cat > "$SHIM_12/git" << EOF
+#!/bin/sh
+for a in "\$@"; do
+  if [ "\$a" = "ls-files" ]; then
+    # Match on the first two lines so grep -q exits immediately, then write ~1.2MB
+    # (>> the 64KB pipe buffer) so the writer is guaranteed to still be going.
+    printf 'aaa.md\n'
+    printf 'skills/alpha/SKILL.md\n'
+    seq 1 40000 | awk '{print "filler/" \$1 "/deep/path/file.txt"}'
+    exit 0
+  fi
+done
+exec "$REAL_GIT" "\$@"
+EOF
+chmod +x "$SHIM_12/git"
+
+out_12=$(PATH="$SHIM_12:$PATH" bash "$SCRIPT" "$REPO_12" 2>&1)
+if grep -q 'COND-MD' <<< "$out_12" && grep -q 'COND-SKILL' <<< "$out_12"; then
+  echo "PASS  Conditional: Tier 2 rows survive a SIGPIPE-forcing ls-files"
+else
+  echo "FAIL  Conditional: Tier 2 rows dropped under SIGPIPE (pipefail regression)"
+  echo "OUTPUT: $out_12"
+  FAIL=1
+fi
+rm -rf "$REPO_12" "$SHIM_12"
+
+# -----------------------------------------------------------------------------
+# Test 13: Conditional - COND-HOOK-REG FAIL when hooks.json has no verifier wiring
+# -----------------------------------------------------------------------------
+REPO_13="$(make_temp_repo)"
+mkdir -p "$REPO_13/hooks" "$REPO_13/.githooks"
+git_in "$REPO_13" config core.hooksPath .githooks
+cat > "$REPO_13/hooks/hooks.json" << 'EOF'
+{"hooks": {}}
+EOF
+git_in "$REPO_13" add hooks/hooks.json
+out_13=$(bash "$SCRIPT" "$REPO_13" 2>&1)
+exit_13=$?
+check "Conditional: COND-HOOK-REG FAIL (no verifier wiring)" 1 "$exit_13" "$out_13"
+if ! echo "$out_13" | grep -q "COND-HOOK-REG.*no hook registration integrity guard"; then
+  echo "FAIL  COND-HOOK-REG missing verifier message missing"
+  FAIL=1
+fi
+rm -rf "$REPO_13"
+
+# -----------------------------------------------------------------------------
+# Test 14: Conditional - COND-HOOK-REG PASS when verifier is wired in pre-commit and CI
+# -----------------------------------------------------------------------------
+REPO_14="$(make_temp_repo)"
+mkdir -p "$REPO_14/hooks" "$REPO_14/scripts" "$REPO_14/.github/workflows" "$REPO_14/.githooks"
+git_in "$REPO_14" config core.hooksPath .githooks
+cat > "$REPO_14/hooks/hooks.json" << 'EOF'
+{"hooks": {}}
+EOF
+cat > "$REPO_14/scripts/verify-hooks-json.py" << 'EOF'
+#!/usr/bin/env python3
+print("ok")
+EOF
+cat > "$REPO_14/.pre-commit-config.yaml" << 'EOF'
+repos:
+  - repo: local
+    hooks:
+      - id: verify-hooks-json
+        entry: python3 scripts/verify-hooks-json.py
+        language: system
+        pass_filenames: false
+EOF
+cat > "$REPO_14/.github/workflows/test.yml" << 'EOF'
+name: Test
+on: [push]
+jobs:
+  hooks-json-lint:
+    runs-on: ubuntu-latest
+    steps:
+      - run: python3 scripts/verify-hooks-json.py
+EOF
+git_in "$REPO_14" add hooks/hooks.json scripts/verify-hooks-json.py .pre-commit-config.yaml .github/workflows/test.yml
+out_14=$(bash "$SCRIPT" "$REPO_14" 2>&1)
+exit_14=$?
+check "Conditional: COND-HOOK-REG PASS (pre-commit and CI wired)" 0 "$exit_14" "$out_14"
+if ! echo "$out_14" | grep -q "COND-HOOK-REG.*PASS"; then
+  echo "FAIL  COND-HOOK-REG pass row missing"
+  echo "OUTPUT: $out_14"
+  FAIL=1
+fi
+rm -rf "$REPO_14"
+
+echo ""
+if [[ "$FAIL" -eq 0 ]]; then
+  echo "ALL TESTS PASSED"
+else
+  echo "SOME TESTS FAILED"
+fi
+
+exit "$FAIL"

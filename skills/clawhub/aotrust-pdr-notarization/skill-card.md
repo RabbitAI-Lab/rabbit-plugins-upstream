@@ -1,44 +1,55 @@
-## Description: <br>
-Issues a paid cryptographic proof (PDR) that a specific digital artifact existed at a particular time without uploading the artifact content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates and verifies cryptographic proof-of-existence receipts for digital artifacts when a user explicitly requests notarization.
 
-## Publisher: <br>
-[gitserge-crypto](https://clawhub.ai/user/gitserge-crypto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gitserge-crypto](https://clawhub.ai/user/gitserge-crypto)
 
-## Use Case: <br>
-Developers and agent operators use this skill to create paid proof-of-existence records for specific artifacts after explicit user consent. It is intended for notarizing hashes of documents, code, AI outputs, datasets, logs, or other digital artifacts through AOTrust. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A document-derived hash and payment or authentication metadata are sent to AOTrust and payment settlement is irreversible. <br>
-Mitigation: Confirm the exact artifact hash, destination, and $0.01 USDC cost with the user before signing, and use a dedicated low-balance wallet. <br>
-Risk: Public hashes can create linkage risk for sensitive or guessable content even when the artifact itself is not uploaded. <br>
-Mitigation: Avoid notarizing sensitive or easily guessable content unless the user understands that the hash will be public in the PDR. <br>
-Risk: Hashing the wrong bytes would notarize the wrong artifact. <br>
-Mitigation: Hash the artifact content directly in a reproducible format and show the hash to the user before requesting notarization. <br>
+## Use Case:
 
+People and developers use this skill to request a timestamped proof for a specific artifact hash and later verify the resulting receipt. Paid notarization requires explicit user consent and a wallet-approved payment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gitserge-crypto/skills/aotrust-pdr-notarization) <br>
-- [AOTrust verification endpoint](https://api.aotrust.link/v1/pdr/verify) <br>
-- [PDR binary specification](https://github.com/GitSerge-crypto/aotrust-skills/blob/main/pdr-spec.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with JSON examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user consent, reproducible artifact hashing, and manual approval of the $0.01 USDC payment before notarization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.7.0 (source: server release metadata and artifact metadata/changelog) <br>
+Risk: The artifact hash is sent to AOTrust and may be publicly visible in the proof.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit the hash when the user explicitly requests proof for that specific artifact; do not upload the artifact itself.
+
+Risk: Paid notarization incurs an irreversible $0.01 USDC charge.
+
+Mitigation: Before each payment, confirm the exact hash, destination, chain and charge with the user; require manual wallet approval and never authorize unattended signing.
+
+## Reference(s):
+
+- [AOTrust MCP endpoint](https://api.aotrust.link/mcp)
+- [AOTrust HTTP notarization endpoint](https://api.aotrust.link/notarize)
+- [AOTrust PDR verification endpoint](https://api.aotrust.link/v1/pdr/verify)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [Text summary with a proof receipt and verification result]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Receipt includes a public artifact hash; paid proofs cost $0.01 USDC.]
+
+## Skill Version(s):
+
+3.9.1 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

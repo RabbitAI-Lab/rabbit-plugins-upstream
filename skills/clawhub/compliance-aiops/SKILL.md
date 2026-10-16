@@ -2,7 +2,7 @@
 name: compliance-aiops
 slug: compliance-aiops
 displayName: "Compliance AIops"
-summary: "Compliance evidence from AIops audit trails: HIPAA/PCI/SOC2/GDPR, hash-chain-sealed, 18 tools."
+summary: "Compliance evidence from AIops audit trails: HIPAA/PCI/SOC2/GDPR, OSCAL export, 19 tools."
 license: MIT
 homepage: https://github.com/AIops-tools/Compliance-AIops
 tags: [aiops, mcp, governance, compliance]
@@ -17,7 +17,7 @@ installer:
 argument-hint: "[framework (hipaa|pci_dss|soc2|gdpr|iso27001|djcp_l3) or describe your evidence task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["COMPLIANCE_AIOPS_CONFIG"],"bins":["compliance-aiops"],"config":["~/.compliance-aiops/config.yaml"]},"optional":{"env":["COMPLIANCE_AIOPS_MASTER_PASSWORD"],"config":["~/.compliance-aiops/secrets.enc"]},"primaryEnv":"COMPLIANCE_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Compliance-AIops","emoji":"📋","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["compliance-aiops","uvx"]},"optional":{"env":["COMPLIANCE_AIOPS_CONFIG","COMPLIANCE_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Compliance-AIops","emoji":"📋","os":["macos","linux"]}}
 compatibility: >
   Standalone compliance-evidence tooling. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   Data source: the LOCAL audit databases the other governed AIops tools already write, discovered by glob at ~/.*-aiops/audit.db (one shared audit_log schema). These are read READ-ONLY. There is NO external API, NO network, and NO platform credentials.
@@ -33,7 +33,7 @@ compatibility: >
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by any framework body or GRC vendor.** HIPAA, PCI-DSS, SOC 2, GDPR and OSCAL are referenced descriptively; trademarks belong to their owners. Source at [github.com/AIops-tools/Compliance-AIops](https://github.com/AIops-tools/Compliance-AIops) under the MIT license.
 
-Governed **compliance-evidence** tooling — **18 MCP tools**. It **reads the audit
+Governed **compliance-evidence** tooling — **19 MCP tools**. It **reads the audit
 trails your governed AIops agents already write** (`~/.<tool>-aiops/audit.db`, one
 shared `audit_log` schema, discovered via `~/.*-aiops/audit.db`) **read-only**,
 and turns that activity into **framework-mapped, hash-chain-sealed compliance
@@ -51,7 +51,7 @@ platform.
 | **Audit reads** | `list_audit_sources`, `query_audit_events`, `activity_timeline` | 3 | read |
 | **Framework mapping** | `list_frameworks`, `coverage_summary`, `control_evidence`, `gap_analysis` | 4 | read |
 | **Assurance reports** | `approval_report`, `exceptions_report` | 2 | read |
-| **Integrity** | `verify_source_chain`, `verify_bundle`, `list_bundles`, `bundle_schedule_hint` | 4 | read |
+| **Integrity** | `verify_source_chain`, `verify_bundle`, `list_bundles`, `bundle_schedule_hint`, `oscal_assessment_results` | 5 | read |
 | **Artifacts** | `generate_evidence_bundle` (low), `export_bundle` (low), `sign_bundle` (medium) | 3 | write (no external mutation) |
 | **Undo** | `undo_list`, `undo_apply` | 2 | undo |
 
@@ -77,6 +77,15 @@ uv tool install compliance-aiops
 compliance-aiops init       # discover sibling ~/.*-aiops/audit.db, set org name, optional signing key
 compliance-aiops doctor     # which sibling audit DBs are present/readable
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/compliance-aiops
+openclaw skills info compliance-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

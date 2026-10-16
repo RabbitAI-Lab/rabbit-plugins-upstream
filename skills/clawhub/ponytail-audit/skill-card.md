@@ -1,41 +1,50 @@
-## Description: <br>
-Audits an entire repository for over-engineering and returns a ranked list of what to delete, simplify, or replace with standard library or native features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews a repository for bugs, security issues, scaling risks, missing tests, performance problems, and unnecessary code, prioritizing actionable findings.
 
-## Publisher: <br>
-[dietrichgebert](https://clawhub.ai/user/dietrichgebert) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dietrichgebert](https://clawhub.ai/user/dietrichgebert)
 
-## Use Case: <br>
-Developers and engineers use this skill to inspect a repository for unnecessary abstraction, dead flexibility, hand-rolled standard library behavior, and other simplification opportunities. It reports ranked findings only and does not apply changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill needs broad read access to inspect a repository for simplification opportunities. <br>
-Mitigation: Use it only in workspaces where repository-wide read access is appropriate, and review the reported findings before acting on them. <br>
-Risk: The skill explicitly excludes correctness, security, and performance review from its scope. <br>
-Mitigation: Route correctness bugs, security issues, and performance concerns to a normal review pass instead of relying on this audit. <br>
+## Use Case:
 
+Developers and engineers use this skill to review a repository or selected code for concrete defects, security and scaling risks, missing tests, slow paths, and opportunities to simplify code.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/DietrichGebert/ponytail) <br>
-- [ClawHub skill page](https://clawhub.ai/dietrichgebert/skills/ponytail-audit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown text with one ranked finding per line and a final net reduction summary] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports simplification findings only; it does not edit files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.4 (source: server release metadata) <br>
+Risk: A whole-repository audit may summarize secrets or private material in its report.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit the audit scope to code you are comfortable sharing, and review the report before distributing it.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dietrichgebert/skills/ponytail-audit)
+- [Project homepage listed in skill metadata](https://github.com/DietrichGebert/ponytail)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown audit report with prioritized findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Up to 20 numbered findings, each with a concrete case, suggested fix, and consequence of inaction; reports assumed load and areas not checked. Does not modify code.]
+
+## Skill Version(s):
+
+5.3.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

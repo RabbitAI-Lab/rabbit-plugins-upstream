@@ -204,6 +204,7 @@ mcp__code-mode__call_tool_chain({
 ### 2. Interaction Testing
 - Click buttons, links, and other elements
 - Fill forms and submit data
+- **Auto-save drafts after filling a form (HARD STOP)** — after completing a form fill, immediately trigger the form's own draft/temporary-save action (when one exists) so the input is not lost. Only the final submit is the user's call; filling a form and leaving it unsaved risks losing the entered data on navigation/timeout.
 - Navigate between pages
 - Wait for dynamic content
 
@@ -321,6 +322,48 @@ Issues found: None
 4. Report page state
 ```
 
+### Custom dropdown widgets (react-select and similar) — ref-based click/type unreliable
+
+Multi-instance custom-select components (react-select is the most common; the same applies to any JS-rendered listbox that isn't a native `<select>`) frequently break ref-based automation in a specific way: **the accessibility tree exposes only one "active" combobox node at a time, and its ref gets reused/reassigned across the page's multiple visually-distinct dropdown instances** as focus moves. Clicking a snapshot ref that visually pointed at dropdown #3 can silently reopen dropdown #2's menu instead, and `type`/`fill` on the ref's underlying input can appear to succeed (`OK` returned) while the value never actually changes (the framework's controlled-input state resets the DOM value on next render because no real keyboard event reached its event handler).
+
+**Symptoms that indicate this is happening**:
+- A `click` on a ref opens the wrong dropdown's option list (visually confirm via screenshot, not just the tool's return code)
+- `fill`/`type` returns `OK`, but `get value` on the same selector reads back empty or unchanged
+- The same ref number, reused across snapshots, corresponds to different screen positions each time
+
+| # | Don't (forbidden) | Do (correct alternative) |
+|---|-------------------|--------------------------|
+| 1 | Trust a `click`/`fill` tool call's `OK` return as proof the intended element was affected | Take a screenshot (or `get value`) immediately after and visually/programmatically confirm the actual UI state changed as expected |
+| 2 | Keep retrying the same ref-based `click`/`type` when the visible result doesn't match | Switch to direct DOM query + synthetic event dispatch via `eval` (see pattern below) |
+| 3 | Assume a filterable dropdown always needs a typed search string | Some dropdowns show a single relevant option immediately on open with no typing needed (e.g. a picker scoped to one existing resource) — screenshot after opening before assuming you must type |
+
+**Fallback pattern — locate by bounding box, then dispatch real mouse events**:
+
+```javascript
+// 1. Enumerate all instances of the control class + their screen position
+// (use whatever class the framework renders — e.g. '.react-select__control')
+const els = Array.from(document.querySelectorAll('.react-select__control'));
+els.map(el => { const r = el.getBoundingClientRect(); return {x: r.x, y: r.y, text: el.textContent}; });
+
+// 2. Pick the instance by its rendered position/text (NOT by DOM order alone —
+//    verify against a screenshot's visible layout first), then open it with a
+//    full mousedown/mouseup/click sequence (a plain .click() does not open
+//    react-select's menu, since it listens for mousedown)
+const target = els.find(el => el.textContent === 'Select...');
+const r = target.getBoundingClientRect();
+['mousedown', 'mouseup', 'click'].forEach(type =>
+  target.dispatchEvent(new MouseEvent(type, {bubbles: true, cancelable: true, clientX: r.x + 5, clientY: r.y + 5}))
+);
+
+// 3. Select an option the same way — options often render as plain <div>
+// with no distinguishing class; match by trimmed text content instead
+const opt = Array.from(document.querySelectorAll('.react-select__menu-list *'))
+  .find(el => el.children.length === 0 && el.textContent.trim() === 'desired option text');
+['mousedown', 'mouseup', 'click'].forEach(type => opt.dispatchEvent(new MouseEvent(type, {bubbles: true, cancelable: true})));
+```
+
+Typing into the underlying input (for filterable dropdowns) has the same "looks like it worked but didn't" trap when done via the ref-based `fill`/`type`. If typing is genuinely required, focus the actual `<input>` first (`el.querySelector('input')`), then use the backend's `type` command against a fresh CSS id selector obtained from that specific input (`input.id`) — re-derive the id after every open, since these frameworks commonly remount the input (new generated id) on each render.
+
 ## Large Page Handling
 
 If the snapshot result is too large:
@@ -346,6 +389,35 @@ mcp__code-mode__call_tool_chain({
   `
 })
 ```
+
+## Virtualized Table Bulk Row Operations
+
+Virtualized tables (React-window/virtual-scroll UIs like Notion databases, large grids) only render rows near the current viewport into the DOM. This breaks the naive snapshot→ref→click loop in specific ways:
+
+### Symptom pattern
+- `browser_snapshot` frequently exceeds the token limit (50-70KB) and gets auto-saved to a file
+- Element refs go stale after 1-2 interactions because scrolling/re-render unmounts and remounts rows with new refs
+- `document.querySelectorAll` via `browser_evaluate` unreliably finds custom-rendered controls (checkboxes that aren't real `<input type="checkbox">`, or don't consistently match `[role="checkbox"]`)
+- Accessible-name-based locators collide when many elements share the same (often empty) label — `getByLabel('', {exact:true}).nth(N)` resolves ambiguously as the DOM shifts between calls
+
+### Procedure
+
+1. **Never assume one snapshot covers the whole dataset.** Scroll to top/middle/bottom (`el.scrollTop = ...` on the scrollable container) and snapshot at each position to cover the full row set — don't infer total row count from a single snapshot's visible rows.
+2. **When a snapshot exceeds the token limit and is saved to a file**, immediately grep/parse the saved file (`uv run python3 -c "import re; ..."` or `grep -n`) to extract element refs paired with their row content, rather than retrying the snapshot call hoping for a smaller result.
+3. **Extract a ref and click it immediately** — don't batch multiple snapshot→ref-extraction cycles before acting. A ref from an older snapshot is often stale by the time you get to it if the page re-rendered in between (scroll, a prior click, a dialog open/close).
+4. **After each click, verify the actual target was hit** — a successful tool call is not proof the intended row was selected. Query the live DOM state (e.g. elements with `aria-checked="true"` plus their closest row's text) and confirm it matches the intended row's content signature.
+5. **For bulk multi-select + destructive action** (e.g. select N rows → delete): click each target individually via a fresh ref each time, verify the running selection-count indicator after each batch (the UI's own "N selected" label, in whatever language it renders), then do a final content-level verification of every selected row **before** executing the action.
+6. **When distinguishing "old" vs "new" duplicate rows by content** (e.g. after a data merge produced duplicates), verify the first pair by comparing actual field content against a known-old-value signature, then confirm any assumed ordering pattern (e.g. "old always sorts first") holds before relying on it for the remaining pairs.
+
+### Don't / Do
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Assume one snapshot at the current scroll position shows the entire table | Scroll to top/middle/bottom and snapshot at each position to cover all rows |
+| 2 | Reuse a ref from a snapshot taken several actions ago | Extract ref → click immediately. If a click fails with "ref not found", re-snapshot and re-extract rather than retrying the same ref |
+| 3 | Trust "click tool returned success" as proof the intended row was selected | Query `aria-checked="true"` (or equivalent) plus closest row text after every click/batch, compare against expected content |
+| 4 | Execute a bulk delete/action right after reaching the target selection count | Verify selection count AND spot-check row content for every selected item before the destructive action |
+| 5 | Use `document.querySelectorAll(...)` text-match on custom UI controls and assume zero results means "not found" | Custom-rendered controls may not match simple DOM queries reliably — cross-check with the accessibility snapshot (which traverses non-standard DOM/shadow structures) before concluding an element doesn't exist |
 
 ## Error Handling
 

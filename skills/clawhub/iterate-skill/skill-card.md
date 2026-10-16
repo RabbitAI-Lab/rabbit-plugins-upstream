@@ -1,42 +1,57 @@
-## Description: <br>
-Iterate automates multi-round code review and iteration by running configurable parallel review dimensions, applying atomic fixes, routing architectural fixes for approval, validating, merging, and pushing until no findings remain or a configured round limit is reached. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates multi-round code review and fixes with configurable review dimensions, project onboarding, and a defensive programming mode.
 
-## Publisher: <br>
-[jingzhao-l](https://clawhub.ai/user/jingzhao-l) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jingzhao-l](https://clawhub.ai/user/jingzhao-l)
 
-## Use Case: <br>
-Developers and engineering teams use Iterate before release, during refactoring, or at iteration wrap-up to systematically review code across correctness, security, performance, architecture, tests, and related dimensions, then apply validated fixes under its workflow controls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform high-impact code changes and git operations, including commits, merges, and pushes. <br>
-Mitigation: Install only for explicitly invoked automation, verify the target branch, consider setting git.push_per_round to false, and review generated commits plus the decision log before allowing remote updates. <br>
-Risk: Project-configured validation commands may run during the iteration workflow. <br>
-Mitigation: Review validation.commands and command whitelists before use so only trusted project commands are executed. <br>
+## Use Case:
 
+Developers use this skill to review and improve code in iterative rounds, onboard project context, and apply defensive checks to coding tasks.
 
-## Reference(s): <br>
-- [Server-resolved GitHub provenance](https://github.com/jingzhao-l/iterate-skill) <br>
-- [ClawHub release page](https://clawhub.ai/jingzhao-l/skills/iterate-skill) <br>
-- [Agent Skills](https://agentskills.io/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and structured text with code edits, shell commands, configuration guidance, and decision-log entries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces an iterative workflow for review findings, fixes, validation results, commits, merges, pushes, and summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata) <br>
+Risk: Repository-configured validation and invariant commands may execute shell commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use trusted repositories and approve configured commands outside the repository before running checks.
+
+Risk: Automated edits and git actions can affect more code than intended or publish changes.
+
+Mitigation: Start with dry-run or review-only mode, inspect changes, and keep automatic merge and per-round push disabled.
+
+Risk: Remote installation can run unreviewed scripts.
+
+Mitigation: Avoid curl-to-bash installation paths.
+
+## Reference(s):
+
+- [Iterate on ClawHub](https://clawhub.ai/jingzhao-l/skills/iterate-skill)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Code changes, Markdown review summaries, and project configuration files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce project knowledge and iteration reports.]
+
+## Skill Version(s):
+
+3.5.1 (source: frontmatter, pyproject.toml, ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

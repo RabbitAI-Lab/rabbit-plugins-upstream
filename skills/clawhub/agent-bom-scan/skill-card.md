@@ -1,50 +1,56 @@
-## Description: <br>
-Open security scanner for agentic infrastructure, including agents, MCP, packages, blast radius, runtime, trust for package CVEs, container images, provenance, filesystems, and SBOMs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks vulnerabilities in a specified package, repository, container image, or SBOM, and can inspect a named CVE.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers and security engineers use this skill to check packages, scan containers or filesystems, verify provenance, generate SBOMs, and prioritize remediation for agentic infrastructure risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review flags this as suspicious because broad or vague scan prompts may inventory local AI-agent and service configuration files in the user's home directory. <br>
-Mitigation: Prefer explicit scan targets such as a named package, container image, SBOM, or directory, and use narrow or no-discovery modes when broad local configuration discovery is not intended. <br>
-Risk: The scanner may read local agent configuration paths and user-provided SBOM files as part of its inventory workflow. <br>
-Mitigation: Review the intended scope before installation or execution, and ask before scanning paths outside the user's home directory. <br>
-Risk: Package names and CVE IDs may be sent to vulnerability databases for lookup and enrichment. <br>
-Mitigation: Use the skill only when those public identifiers can be shared with OSV, NVD, EPSS, or GitHub Advisories, and avoid submitting secrets or private configuration contents. <br>
+## Use Case:
 
+Developers and security teams use this skill to assess vulnerabilities in explicitly specified packages, projects, images, and SBOMs, inspect advisories, and plan remediation. Local MCP-client discovery is available only when specifically requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-scan) <br>
-- [agent-bom source](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom) <br>
-- [Credential redaction source](https://github.com/msaad00/agent-bom/blob/main/src/agent_bom/security.py) <br>
-- [OSV vulnerability database](https://api.osv.dev/v1) <br>
-- [NVD CVE API](https://services.nvd.nist.gov/rest/json/cves/2.0) <br>
-- [EPSS API](https://api.first.org/data/v1/epss) <br>
-- [GitHub Security Advisories API](https://api.github.com/advisories) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Concise recommendations and scan guidance, with JSON, SARIF, HTML, CycloneDX, SPDX, or Markdown outputs when requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill can guide local scans of package, image, filesystem, provenance, SBOM, and agent configuration evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Online vulnerability lookups may disclose package names, versions, advisory IDs, and requested scan targets to external services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm permission before querying private targets; use offline mode for restricted identifiers and disclose its coverage gaps.
+
+Risk: MCP-client discovery can read local agent configuration files.
+
+Mitigation: Use explicit targets with discovery disabled for ordinary scans; discover local clients only on explicit request.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-scan)
+- [Project homepage](https://github.com/msaad00/agent-bom)
+- [Python package](https://pypi.org/project/agent-bom/)
+- [OpenSSF Scorecard](https://securityscorecards.dev/viewer/?uri=github.com/msaad00/agent-bom)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance and commands; requested scan reports may be JSON, SARIF, HTML, Markdown, CycloneDX, or SPDX]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Report unknown severity and offline advisory-coverage gaps rather than treating them as clean results.]
+
+## Skill Version(s):
+
+0.109.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

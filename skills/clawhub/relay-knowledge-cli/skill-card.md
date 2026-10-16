@@ -1,43 +1,57 @@
-## Description: <br>
-Relay Knowledge CLI guides agents in using the local relay-knowledge CLI for repository indexing, knowledge graph queries, GraphRAG retrieval, code graph navigation, impact analysis, diagnostics, and upgrade checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through local CLI workflows for repository knowledge maps, code and business graph queries, and commit-driven indexing and impact analysis.
 
-## Publisher: <br>
-[stevetdp](https://clawhub.ai/user/stevetdp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[stevetdp](https://clawhub.ai/user/stevetdp)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to index local repositories, query code and software graphs, inspect feature flags, run diagnostics, and manage knowledge-map workflows through the relay-knowledge CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents to index and query local repositories and maintain local runtime state. <br>
-Mitigation: Use scoped repository paths or a temporary RELAY_KNOWLEDGE_HOME for tests, and review install, service, write, and knowledge-map mutation commands before execution. <br>
-Risk: Large repository indexing and service workflows can run as durable background tasks. <br>
-Mitigation: Inspect status before retrying, let managed services drain active tasks when present, and use bounded worker attempts for queued or retrying tasks. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to index repositories, navigate versioned knowledge maps, query code and business relationships, and refresh impact and context after commits.
 
-## Reference(s): <br>
-- [Relay Knowledge homepage](https://github.com/coolplayagent/relay-knowledge) <br>
-- [ClawHub skill page](https://clawhub.ai/stevetdp/relay-knowledge-cli) <br>
-- [CLI workflows](references/cli-workflows.md) <br>
-- [Knowledge map workflows](references/knowledge-map-workflows.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON-oriented CLI workflows] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prefers machine-readable JSON command output, scoped repository paths, and temporary RELAY_KNOWLEDGE_HOME for isolated tests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: server release metadata and skill metadata) <br>
+Risk: Repository indexing and optional service or watcher operation can persist local repository information and run background work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm repository scope and storage location before indexing; enable a service or watcher only when intended.
+
+Risk: Opt-in feedback publication can expose private source snippets, logs, credentials, or repository details.
+
+Mitigation: Keep sensitive details out of public narratives and enable feedback auto-submit only with explicit authorization.
+
+## Reference(s):
+
+- [Relay Knowledge project homepage (skill metadata)](https://github.com/coolplayagent/relay-knowledge)
+- [ClawHub skill release](https://clawhub.ai/stevetdp/skills/relay-knowledge-cli)
+- [CLI workflows](references/cli-workflows.md)
+- [Knowledge Map workflows](references/knowledge-map-workflows.md)
+- [Feedback workflows](references/feedback-workflows.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance with CLI commands and JSON/YAML examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Repository answers should be tied to an indexed, pinned snapshot.]
+
+## Skill Version(s):
+
+1.1.21 (source: server release metadata, skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

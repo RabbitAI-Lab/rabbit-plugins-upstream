@@ -1,49 +1,56 @@
-## Description: <br>
-Governed Nutanix Prism Central v4 operations for estate health, inventory, VM lifecycle, storage, networking, data protection, alerts, LCM upgrades, capacity forecasting, and RCA through a 51-tool MCP and CLI surface. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents inspect and operate Nutanix Prism Central v4 estates, including clusters, virtual machines, storage, disaster recovery, alerts, upgrades, and capacity diagnostics.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure operators use this skill to inspect, diagnose, and operate Nutanix Prism Central v4 estates from an agent workflow. It is intended for Nutanix environments only and includes both read-only diagnostics and write-capable maintenance workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes powerful Prism Central write actions without an in-skill approval or read-only policy gate. <br>
-Mitigation: Install it with a deliberately scoped Prism Central account; start with a read-only Viewer role and use write-capable credentials only for controlled maintenance contexts. <br>
-Risk: High-risk operations can delete, migrate, restore, fail over, or update infrastructure resources. <br>
-Mitigation: Use the documented dry-run previews, CLI double confirmation, ETag handling, and audit annotations before running destructive or state-changing actions. <br>
-Risk: Secrets and local audit or undo databases may contain sensitive operational information. <br>
-Mitigation: Protect NUTANIX_AIOPS_MASTER_PASSWORD as a secret, avoid the legacy plaintext password fallback, and review handling of audit.db and undo.db under the Nutanix AIops home directory. <br>
-Risk: Some behavior is validated against mocked v4 REST responses and still needs live verification for production confidence. <br>
-Mitigation: Run nutanix-aiops doctor and perform live validation in a Nutanix Community Edition or controlled Prism Central environment before relying on LCM update, PD failover, or ESXi VM listing paths. <br>
+## Use Case:
 
+Infrastructure operators and developers use this skill to investigate Nutanix estate health and alerts, manage virtual machines and storage, and carry out Prism Central maintenance and disaster recovery tasks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/nutanix-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Nutanix-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and MCP tool outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operational observations, RCA summaries, dry-run previews, task references, and configuration guidance for Prism Central workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release metadata) <br>
+Risk: Destructive actions can affect production infrastructure without an in-skill approval gate or read-only mode.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Start with a read-only Prism account, separate test and production targets, and require human approval before granting credentials for delete, restore, failover, migration, or updates.
+
+Risk: A master password used for non-interactive access could be exposed through logs or CI output.
+
+Mitigation: Keep NUTANIX_AIOPS_MASTER_PASSWORD out of logs and CI output.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zw008/skills/nutanix-aiops)
+- [Project homepage (skill metadata; import provenance unavailable)](https://github.com/AIops-tools/Nutanix-AIops)
+- [Capabilities and tool reference](artifact/references/capabilities.md)
+- [Setup and security guide](artifact/references/setup-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Text or Markdown with command examples and structured tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes estate findings, operational guidance, and action summaries.]
+
+## Skill Version(s):
+
+0.13.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

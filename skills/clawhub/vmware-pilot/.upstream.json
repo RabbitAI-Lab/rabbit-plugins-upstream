@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/vmware-pilot",
   "slug": "vmware-pilot",
   "ownerHandle": null,
-  "version": "1.8.7",
-  "updatedAt": 1784638610491,
-  "contentHash": "c54f01a36c6f3f771cd1d015e9ea3ca3c1f8c20de4d7a97a261caabe67693fdf",
-  "fetchedAt": "2026-07-26T18:09:00.259Z"
+  "version": "2.3.0",
+  "updatedAt": 1792144633763,
+  "contentHash": "655f18bdf98cda88ba77c5a9d8e57110efae5bc107b74579480c0b828c35220d",
+  "fetchedAt": "2026-10-16T12:37:04.709Z"
 }

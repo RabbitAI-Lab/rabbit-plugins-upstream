@@ -1,46 +1,61 @@
-## Description: <br>
-一站式覆盖招标文件智能解读、投标应答撰写、成品投标文件生成和废标风险与合规审查。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps prepare Chinese tender bids by interpreting solicitation documents, generating bid documents, reviewing compliance, and comparing submissions for similarity.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Bid and proposal teams use this skill to analyze tender documents, draft editable bid documents, and review bid files for compliance risks before submission. It is intended for users who can provide local tender or bid files and an App Key for the 招采猫 service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid files may contain business or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com for processing. <br>
-Mitigation: Use the skill only after the user understands and accepts the upload, and avoid submitting files that the user is not authorized to share with that service. <br>
-Risk: The App Key controls account access and can consume the account's points. <br>
-Mitigation: Keep the App Key out of chat, store it locally as documented, and confirm point balance before generating full bid documents. <br>
-Risk: Changing the service base URL could send files or credentials to an unexpected endpoint. <br>
-Mitigation: Verify any ZCM_BASE override before use and keep the default service host unless there is a trusted reason to change it. <br>
+## Use Case:
 
+Bid teams and procurement professionals use the skill to analyze tender requirements, draft bid documents, identify compliance risks, and compare two or three submissions for similarity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/biaoshu-writer-edu) <br>
-- [招采猫平台](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [Skill instructions](artifact/SKILL.md) <br>
-- [API contract reference](artifact/references/api.md) <br>
-- [Execution usage reference](artifact/references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, document files, reports] <br>
-**Output Format:** [Markdown summaries and progress, HTML or Word reports, and editable .docx bid documents] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reads user-selected local tender or bid files, writes outputs under the configured local output directory, and uses the user's App Key account for service access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Automatic trial provisioning may send device characteristics to the vendor, and account setup may involve phone verification.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the trial and account flow first; use a manually obtained API key if you do not want automatic trial provisioning.
+
+Risk: Tender, bid, personal or regulated documents are uploaded to and retained in the vendor cloud.
+
+Mitigation: Upload documents only when authorized to send them to the vendor; remove sensitive material when possible.
+
+Risk: The skill can download documents from supplied URLs and stores an API key in a local configuration file.
+
+Mitigation: Use trusted document URLs, check where the configuration file is saved, and remove credentials on logout or uninstall when needed.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dragonzu/skills/biaoshu-writer-edu)
+- [Usage guide](references/usage.md)
+- [API reference](references/api.md)
+- [Compliance review API](references/api-compliance.md)
+- [Bid similarity API](references/api-duplicate.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Conversational findings and downloadable or locally saved HTML, Word and DOCX documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generation, review and similarity checks consume account word credits; bid download links expire.]
+
+## Skill Version(s):
+
+1.0.5 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

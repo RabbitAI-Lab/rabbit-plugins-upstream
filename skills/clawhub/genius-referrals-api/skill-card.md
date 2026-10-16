@@ -1,42 +1,59 @@
-## Description: <br>
-Inspect and manage Genius Referrals accounts, advocates, campaigns, bonuses, redemption requests, and reports through the public Genius Referrals API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents inspect and manage Genius Referrals accounts, advocates, referrals, bonuses, redemptions, and reports through the API.
 
-## Publisher: <br>
-[alainhl](https://clawhub.ai/user/alainhl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[alainhl](https://clawhub.ai/user/alainhl)
 
-## Use Case: <br>
-Developers and growth operations teams use this skill to inspect Genius Referrals program data, test API authentication, and perform user-approved account, advocate, referral, bonus, redemption, payout, and reporting actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform mutating Genius Referrals API calls that affect advocates, bonuses, redemption requests, payouts, and deletes. <br>
-Mitigation: Default to read-only work, prepare a dry-run summary for writes, and require explicit approval for production writes, payouts, redemption changes, forced bonuses, and deletes. <br>
-Risk: API tokens grant access to Genius Referrals account data and actions. <br>
-Mitigation: Use GR_API_TOKEN or another user-approved credential source, never place tokens in URLs, prefer scoped tokens where possible, and confirm base URL and account slug before writes. <br>
+## Use Case:
 
+Developers and business operators use this skill to inspect referral activity, produce reports, and manage advocates, referrals, bonuses, and redemption requests in Genius Referrals accounts.
 
-## Reference(s): <br>
-- [Genius Referrals API Documentation](https://api.geniusreferrals.com/doc) <br>
-- [Endpoint Catalog](references/endpoint-catalog.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/alainhl/skills/genius-referrals-api) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with inline API paths, JSON payload notes, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call the Genius Referrals API through a local Python helper when the user provides credentials and approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: An API token may permit account changes, payouts, redemption updates, forced bonuses, or deletions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege token and verify the publisher before granting access.
+
+Risk: The request helper does not enforce the skill's promised confirmations before non-GET calls.
+
+Mitigation: Require a human-reviewed dry run and explicit approval before any non-GET request.
+
+Risk: Changing the API base URL could send credentials to an unintended host.
+
+Mitigation: Keep the base URL on the official Genius Referrals API host.
+
+## Reference(s):
+
+- [Genius Referrals API documentation](https://api.geniusreferrals.com/doc)
+- [Endpoint catalog](references/endpoint-catalog.md)
+- [ClawHub skill release](https://clawhub.ai/alainhl/skills/genius-referrals-api)
+
+## Skill Output:
+
+**Output Type(s):** [Text, API calls, JSON]
+
+**Output Format:** [Text summaries and structured API responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May report request status, endpoint, resource identifiers, and next action.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,11 +1,20 @@
-"""Call RageHealth open API: POST /face/skin-pro.
+"""Call the RageHealth skin-pro open API.
 
-Generates the platform Signature (AES-CBC + PKCS7, base64) and posts the request
-as multipart/form-data. Equivalent to the official JS sample using CryptoJS.
+Single endpoint under the configured base URL
+(default: `gateway.ragehealth.cn/openapi-prod`):
+    POST /face/skin-pro
+
+Auth identical to tcm-face-tongue: AES-CBC + PKCS7 + base64, key=SK, iv=AK,
+content = ak|uuid|now_ms; sent as headers AccessKey / Signature; body is
+multipart/form-data.
 
 Usage:
-    python call_skin_pro.py --access-key AK --secret-key SK \
-        --image-url https://example.com/face.jpg [--analyse-strategy 1]
+    python call_skin_pro.py \\
+        --image-url https://example.com/face.jpg \\
+        [--analyse-strategy 1] [--face-id-detect --user-group demo]
+
+Credentials are read from env vars SKIN_PRO_AK / SKIN_PRO_SK and never accepted
+as CLI arguments.
 """
 from __future__ import annotations
 
@@ -22,16 +31,21 @@ import requests
 from Crypto.Cipher import AES
 from Crypto.Util.Padding import pad
 
-DEFAULT_ENDPOINT = "https://facepro.ragehealth.cn/openapi-test/face/skin-pro"
+DEFAULT_BASE_URL = "https://gateway.ragehealth.cn/openapi-prod"
+ENDPOINT = "/face/skin-pro"
+
+# Detection objects whose polygon / landmark-index arrays dwarf the summary.
+_POLYGON_PARENTS = ("acne", "acne_mark", "brown_spot", "mole", "wrinkle_details")
+_LARGE_KEYS = ("display_landmarks", "raw_landmarks", "landmarks")
 
 
 def generate_signature(access_key: str, secret_key: str) -> str:
     """Generate Signature equivalent to the platform's CryptoJS sample.
 
-    content   = ak + "|" + uuid + "|" + now_ms
-    key/iv    = utf-8 bytes of sk / ak (sk must be 16/24/32 bytes, ak must be 16 bytes)
-    cipher    = AES-CBC + PKCS7
-    output    = base64(ciphertext)
+    content = ak + "|" + uuid + "|" + now_ms
+    key/iv  = utf-8 bytes of sk / ak (sk must be 16/24/32 bytes, ak 16 bytes)
+    cipher  = AES-CBC + PKCS7
+    output  = base64(ciphertext)
     """
     ak_bytes = access_key.encode("utf-8")
     sk_bytes = secret_key.encode("utf-8")
@@ -50,104 +64,98 @@ def generate_signature(access_key: str, secret_key: str) -> str:
     return base64.b64encode(encrypted).decode("utf-8")
 
 
-def call_skin_pro(
+def _post(
     access_key: str,
     secret_key: str,
-    image_url: Optional[str] = None,
-    image_file: Optional[str] = None,
-    face_id_detect: bool = False,
-    user_group: Optional[str] = None,
-    analyse_strategy: int = 1,
-    endpoint: str = DEFAULT_ENDPOINT,
-    timeout: int = 60,
+    data: dict,
+    files: Optional[dict] = None,
+    base_url: str = DEFAULT_BASE_URL,
+    timeout: int = 120,
 ) -> dict:
-    if not image_url and not image_file:
-        raise ValueError("Either image_url or image_file is required.")
-    if face_id_detect and not user_group:
-        raise ValueError("user_group is required when face_id_detect=True.")
+    url = base_url.rstrip("/") + ENDPOINT
+    headers = {
+        "AccessKey": access_key,
+        "Signature": generate_signature(access_key, secret_key),
+    }
+    resp = requests.post(
+        url, headers=headers, data=data, files=files, timeout=timeout
+    )
+    resp.raise_for_status()
+    return resp.json()
 
-    signature = generate_signature(access_key, secret_key)
-    headers = {"AccessKey": access_key, "Signature": signature}
 
-    data = {"analyseStrategy": str(analyse_strategy)}
-    if face_id_detect:
+def _build_optional_fields(args: argparse.Namespace) -> dict:
+    data: dict = {}
+    if args.analyse_strategy is not None:
+        data["analyseStrategy"] = str(args.analyse_strategy)
+    if args.display_res is not None:
+        data["displayRes"] = str(args.display_res)
+    if args.alpha_channel is not None:
+        data["alphaChannel"] = str(args.alpha_channel)
+    if args.face_id_detect:
+        if not args.user_group:
+            raise SystemExit("--user-group is required when --face-id-detect is set.")
         data["faceIdDetect"] = "true"
-        data["userGroup"] = user_group
-    if image_url and not image_file:
-        data["imageUrl"] = image_url
+        data["userGroup"] = args.user_group
+    return data
 
+
+def call_skin_pro(args: argparse.Namespace, ak: str, sk: str) -> dict:
+    """imageFile > imageBase64 > imageUrl, matching the server."""
+    if not args.image_url and not args.image_file and not args.image_base64:
+        raise SystemExit(
+            "--image-url, --image-file, or --image-base64 is required."
+        )
+    data = _build_optional_fields(args)
     files = None
     fp = None
     try:
-        if image_file:
-            fp = open(image_file, "rb")
-            files = {"imageFile": (os.path.basename(image_file), fp)}
-        resp = requests.post(
-            endpoint, headers=headers, data=data, files=files, timeout=timeout
+        if args.image_file:
+            fp = open(args.image_file, "rb")
+            files = {"imageFile": (os.path.basename(args.image_file), fp)}
+        elif args.image_base64:
+            data["imageBase64"] = args.image_base64
+        else:
+            data["imageUrl"] = args.image_url
+        return _post(
+            ak, sk, data, files, base_url=args.base_url, timeout=args.timeout
         )
     finally:
         if fp is not None:
             fp.close()
 
-    resp.raise_for_status()
-    return resp.json()
 
+def _slim_for_stdout(result: dict) -> dict:
+    """Strip large arrays that pollute terminal output (kept in --output file).
 
-def _format_summary(result: dict) -> str:
-    """Compact, LLM-friendly digest of the skin-pro response.
-
-    Includes only the fields needed to render a user-facing report:
-    image_quality gate, comprehensive scores, skin_type/tone, analyse_result
-    list, key counts, and display_img. Drops polygons / landmarks / face_maps.
+    Removed keys:
+      - data.display_landmarks / data.raw_landmarks / data.landmarks
+      - polygon and pos_indexes under acne / acne_mark / brown_spot / mole /
+        wrinkle_details
     """
-    if not result.get("success"):
-        return json.dumps(result, ensure_ascii=False, indent=2)
-    d = result.get("data", {}) or {}
-    iq = d.get("image_quality", {}) or {}
-    digest = {
-        "requestId": result.get("requestId"),
-        "image_quality": {
-            "brightness_grade": (iq.get("brightness") or {}).get("grade"),
-            "blur": iq.get("blur"),
-            "face_ratio": iq.get("face_ratio"),
-            "hair_occlusion": iq.get("hair_occlusion"),
-            "face_orientation": iq.get("face_orientation"),
-        },
-        "overall": {
-            "skin_score": d.get("skin_score"),
-            "skin_age": d.get("skin_age"),
-            "skin_rank": d.get("skin_rank"),
-            "aging_index": d.get("aging_index"),
-            "skd": d.get("skd"),
-        },
-        "skin_type": (d.get("skin_type") or {}).get("skin_type"),
-        "skin_tone": (d.get("skin_tone") or {}).get("value"),
-        "analyse_result": [
-            {
-                "type": x.get("type"),
-                "score": x.get("score"),
-                "label": x.get("label"),
-                "leftScore": x.get("leftScore"),
-                "rightScore": x.get("rightScore"),
-            }
-            for x in (d.get("analyse_result") or [])
-        ],
-        "counts": {
-            "blackhead_count": d.get("blackhead_count"),
-            "enlarged_pore_count": d.get("enlarged_pore_count"),
-            "wrinkle_count": d.get("wrinkle_count"),
-        },
-        "display_img": d.get("display_img"),
-    }
-    return json.dumps(digest, ensure_ascii=False, indent=2)
+    import copy
+
+    slim = copy.deepcopy(result)
+    data = slim.get("data") or {}
+    if not isinstance(data, dict):
+        return slim
+
+    for key in _LARGE_KEYS:
+        data.pop(key, None)
+
+    for parent in _POLYGON_PARENTS:
+        obj = data.get(parent)
+        if isinstance(obj, dict):
+            obj.pop("polygon", None)
+            obj.pop("pos_indexes", None)
+    return slim
 
 
 def _load_credentials() -> tuple[str, str]:
     """Resolve AK/SK from environment only.
 
-    Following MCP / Coze / ModelScope convention, credentials are NEVER passed
-    as tool arguments by the LLM. The host (shell, MCP client, plugin runtime)
-    is responsible for injecting them via environment variables.
+    Credentials are NEVER passed as tool arguments by the LLM. The host is
+    responsible for injecting them via environment variables.
 
     Optional: auto-load a sibling `.env` file if `python-dotenv` is available.
     """
@@ -169,48 +177,56 @@ def _load_credentials() -> tuple[str, str]:
     return ak, sk
 
 
-def main() -> int:
+def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
         description=(
-            "Call skin-pro open API. Credentials (AK/SK) are read from env vars "
-            "SKIN_PRO_AK / SKIN_PRO_SK and are intentionally not exposed as CLI flags."
+            "Call the RageHealth skin-pro API. Credentials (AK/SK) are read from "
+            "env vars SKIN_PRO_AK / SKIN_PRO_SK and are intentionally not exposed "
+            "as CLI flags."
         )
     )
+    parser.add_argument("--base-url", default=DEFAULT_BASE_URL)
     parser.add_argument("--image-url")
     parser.add_argument("--image-file")
+    parser.add_argument("--image-base64")
+    parser.add_argument("--analyse-strategy", type=int, choices=[1, 2])
+    parser.add_argument("--display-res", type=int, choices=[0, 1])
+    parser.add_argument("--alpha-channel", type=int, choices=[0, 1])
     parser.add_argument("--face-id-detect", action="store_true")
     parser.add_argument("--user-group")
-    parser.add_argument("--analyse-strategy", type=int, default=1, choices=[1, 2])
-    parser.add_argument("--endpoint", default=DEFAULT_ENDPOINT)
-    parser.add_argument("--output", help="Optional path to write JSON response.")
     parser.add_argument(
-        "--summary",
+        "--timeout",
+        type=int,
+        default=120,
+        help="HTTP timeout in seconds. The server waits for the detector.",
+    )
+    parser.add_argument("--output", help="Optional path to write full JSON response.")
+    parser.add_argument(
+        "--full-stdout",
         action="store_true",
-        help="Print compact key-indicator summary instead of full JSON.",
+        help="Print the full response to stdout. By default landmark arrays and "
+             "detection polygons are stripped from stdout. The --output file always "
+             "contains the full response.",
     )
+    return parser
+
+
+def main() -> int:
+    parser = build_parser()
     args = parser.parse_args()
+    ak, sk = _load_credentials()
+    result = call_skin_pro(args, ak, sk)
 
-    access_key, secret_key = _load_credentials()
-
-    result = call_skin_pro(
-        access_key=access_key,
-        secret_key=secret_key,
-        image_url=args.image_url,
-        image_file=args.image_file,
-        face_id_detect=args.face_id_detect,
-        user_group=args.user_group,
-        analyse_strategy=args.analyse_strategy,
-        endpoint=args.endpoint,
-    )
-
-    text = json.dumps(result, ensure_ascii=False, indent=2)
+    full_text = json.dumps(result, ensure_ascii=False, indent=2)
     if args.output:
         with open(args.output, "w", encoding="utf-8") as f:
-            f.write(text)
-    if args.summary:
-        print(_format_summary(result))
+            f.write(full_text)
+
+    if args.full_stdout:
+        print(full_text)
     else:
-        print(text)
+        slim = _slim_for_stdout(result)
+        print(json.dumps(slim, ensure_ascii=False, indent=2))
     return 0 if result.get("success") else 1
 
 
