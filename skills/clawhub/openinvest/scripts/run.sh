@@ -5,11 +5,11 @@
 # git clone / uv sync / 自愈更新——那 180 行 bash 全部退役：
 #   - 后端代码：uvx 按需拉 openinvest 包（缓存于 uv cache，首跑需网络）
 #   - 数据目录：$INVEST_HOME（默认 ~/openInvest），只放 memory/ db/ .env static/
-#   - 更新：`run.sh update`（= uvx --refresh，显式更新，不再启动时静默 git pull）
+#   - 更新：后端版本固定在下方 SPEC，随插件发版更新；`run.sh update`（= uvx --refresh）只重下这个固定版本，用于修坏掉的缓存
 #   - GUI dist 拉取 / 远端模式提示等业务逻辑收进 openinvest-web（Python）
 #
 # 老用户（~/openInvest 是 git clone）零迁移：clone 目录直接当数据目录用。
-# 想 pin 版本：export OPENINVEST_SPEC='openinvest==0.16.0'
+# 后端版本默认固定为下方 SPEC（随发版由 release-please 更新）；换版本：export OPENINVEST_SPEC='openinvest==X.Y.Z'
 
 set -euo pipefail
 
@@ -19,15 +19,34 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
 REPO_ROOT="$(cd "$SCRIPT_DIR/../../../.." && pwd)"
 SRC_ROOT="$REPO_ROOT/src"
 export INVEST_HOME="${INVEST_HOME:-$HOME/openInvest}"
-SPEC="${OPENINVEST_SPEC:-openinvest}"
+SPEC="${OPENINVEST_SPEC:-openinvest==0.44.0}"  # x-release-please-version
 DEV_MODE="${OPENINVEST_DEV_MODE:-0}"
 
 if ! command -v uvx >/dev/null 2>&1; then
-    echo "❌ uv 未安装。装一下：curl -LsSf https://astral.sh/uv/install.sh | sh" >&2
+    echo "❌ uv 未安装。安装方法：https://docs.astral.sh/uv/getting-started/installation/" >&2
     # mcp 模式 stdout 是 JSON-RPC 通道，错误 JSON 只在非 mcp 时输出
-    [ "${1:-}" != "mcp" ] && echo '{"status":"error","error":"uv 未安装","hint":"运行 `curl -LsSf https://astral.sh/uv/install.sh | sh` 后重试"}'
+    [ "${1:-}" != "mcp" ] && echo '{"status":"error","error":"uv 未安装","hint":"按 https://docs.astral.sh/uv/getting-started/installation/ 安装 uv 后重试"}'
     exit 1
 fi
+
+# 跑后端；只有它一个字都没往 stdout 打就失败时才补一条结构化提示。
+# CLI 的业务错误（参数缺失、币种不符……）自己会打印 JSON 说清原因，再追加"检查网络 / uv sync"
+# 会把 agent 带去重装依赖、查网络（2026-10 #363 实测）。没输出 = 拉包失败或后端起不来。
+# tee 不影响 stdin（init --from-stdin 照常读）；pipefail 下 rc 取后端的退出码。
+run_with_hint() {
+    local hint="$1"; shift
+    local out rc=0
+    out="$(mktemp)"
+    # 被 Ctrl-C / SIGTERM 打断也清掉。路径在这里就展开：EXIT 时 local 变量已出作用域，
+    # set -u 下引用它会让 trap 报错、把退出码改成 1
+    trap "rm -f '$out'" EXIT
+    "$@" | tee "$out" || rc=$?
+    if [ "$rc" -ne 0 ] && [ ! -s "$out" ]; then
+        echo "{\"status\":\"error\",\"error\":\"openinvest 执行失败 (exit $rc)\",\"hint\":\"$hint\"}"
+    fi
+    rm -f "$out"
+    return "$rc"
+}
 
 mkdir -p "$INVEST_HOME"
 DATA_DIR="$INVEST_HOME"
@@ -86,21 +105,12 @@ EOF
     if [ "$DEV_MODE" = "1" ]; then
       cd "$REPO_ROOT"
       export PYTHONPATH="$SRC_ROOT${PYTHONPATH:+:$PYTHONPATH}"
-      rc=0
-      uv run python -m openinvest.cli "$@" || rc=$?
-      if [ "$rc" -ne 0 ]; then
-          echo "{\"status\":\"error\",\"error\":\"openinvest（本地源码模式）执行失败 (exit $rc)\",\"hint\":\"当前使用 OPENINVEST_DEV_MODE=1；先运行 uv sync，再重试。\"}"
-          exit "$rc"
-      fi
-      exit 0
+      run_with_hint "本地源码模式（OPENINVEST_DEV_MODE=1）没输出任何结果就退出了，原因见 stderr 的报错。常见：依赖没装（先运行 uv sync）。" \
+          uv run python -m openinvest.cli "$@"
+      exit $?
     fi
-    # 不 exec：uvx 拉包失败（首跑断网 / PyPI 故障）时给 agent 结构化错误
-    # （|| 形式对 set -e 安全；CLI 子命令自身的业务错误 JSON 由 Python 层输出）
-    rc=0
-    uvx --from "$SPEC" openinvest "$@" || rc=$?
-    if [ "$rc" -ne 0 ]; then
-        echo "{\"status\":\"error\",\"error\":\"openinvest 执行失败 (exit $rc)\",\"hint\":\"首次运行需网络从 PyPI 拉包；检查网络后重试，或跑 uvx openinvest doctor 看完整输出\"}"
-        exit "$rc"
-    fi
+    run_with_hint "后端没输出任何结果就退出了，原因见 stderr 的报错。常见：首次运行从 PyPI 拉包失败（检查网络后重试）。" \
+        uvx --from "$SPEC" openinvest "$@"
+    exit $?
     ;;
 esac

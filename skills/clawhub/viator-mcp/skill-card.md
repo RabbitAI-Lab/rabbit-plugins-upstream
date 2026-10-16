@@ -1,44 +1,55 @@
-## Description: <br>
-Search Viator tours, activities, attractions, availability, pricing, and exchange-rate information through an MCP server using the Viator Partner API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search Viator tours, attractions, prices, and availability and share product links without making bookings.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to search Viator travel products, compare activities or attractions, check details, pricing, availability, and exchange rates, and obtain Viator booking links without making bookings through the skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel search queries may be sent to a third-party commercial travel API. <br>
-Mitigation: Use the skill only when Viator-backed travel search is desired, and avoid sending sensitive personal information in queries. <br>
-Risk: Returned booking links preserve affiliate attribution and may not represent provider-neutral travel planning. <br>
-Mitigation: Confirm the user wants Viator results and review returned product links before relying on them for recommendations or booking decisions. <br>
-Risk: The skill requires a Viator Partner API key. <br>
-Mitigation: Store the API key in the MCP server environment and do not expose it in prompts, shared files, or generated output. <br>
+## Use Case:
 
+Travelers and travel-planning agents can find tours and activities, compare product details and availability, and obtain links for completing purchases on Viator.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/viator-mcp) <br>
-- [npm package @chrischall/viator-mcp](https://www.npmjs.com/package/@chrischall/viator-mcp) <br>
-- [Viator Partner Resources](https://partnerresources.viator.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON configuration and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Viator Partner API queries; returned booking and attraction links may preserve affiliate attribution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Setup requires trusting an external package and providing a Viator Partner API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package before installation and protect the key in MCP configuration.
+
+Risk: Search and availability information does not complete a booking; availability prices may use supplier currency.
+
+Mitigation: Check product links, current availability, and displayed currency before purchasing directly on Viator.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/viator-mcp)
+- [Viator MCP package](https://www.npmjs.com/package/@chrischall/viator-mcp)
+- [Viator Partner resources](https://partnerresources.viator.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Returns product details, prices, availability, and links for booking on Viator; does not book tours.]
+
+## Skill Version(s):
+
+2.1.9 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

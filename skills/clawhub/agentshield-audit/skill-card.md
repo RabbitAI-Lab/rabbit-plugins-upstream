@@ -1,47 +1,58 @@
-## Description: <br>
-Agentshield Audit runs local security checks for AI agents, creates Ed25519-based certificates, and supports peer verification and trust handshakes across OpenClaw, Hermes Agent, n8n, LangChain, and custom platforms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Runs local security checks for AI agents and supports certificate-based identity, peer verification, and trust handshakes.
 
-## Publisher: <br>
-[bartelmost](https://clawhub.ai/user/bartelmost) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bartelmost](https://clawhub.ai/user/bartelmost)
 
-## Use Case: <br>
-Developers and agent operators use this skill to audit AI agents, obtain local security test results, request certificates, and verify or handshake with peer agents before agent-to-agent communication. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The remote AgentShield registry may receive agent identity metadata, public keys, challenge signatures, and summarized test results. <br>
-Mitigation: Use the skill only when that remote submission is acceptable; prefer manual mode and inspect the payload and code path before submitting. <br>
-Risk: Automation flags such as --auto or --yes can reduce user review before file reads or submissions. <br>
-Mitigation: Run manual mode for sensitive agents and reserve --yes for pre-reviewed, sandboxed, or CI environments where the submitted data is understood. <br>
-Risk: Peer-verification results should not be treated as cryptographic proof until signature verification is implemented. <br>
-Mitigation: Use peer verification as a registry signal, and require independent cryptographic validation before relying on it for high-trust decisions. <br>
-Risk: Handshake session keys may be exposed through shared terminals or logs. <br>
-Mitigation: Run handshakes in controlled terminals, avoid logging sensitive output, and restrict access to generated local files. <br>
+## Use Case:
 
+Developers and agent operators use AgentShield to check local agent configurations, request audit certificates, and verify peer agents before collaboration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/bartelmost/agentshield-audit) <br>
-- [AgentShield documentation](https://agentshield.live/docs) <br>
-- [AgentShield website](https://agentshield.live) <br>
-- [Agent skills open standard](https://agentskills.io) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-style certificate, verification, and handshake output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create local key and certificate files and submit summarized audit results to a remote API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.36 (source: server release metadata, SKILL.md frontmatter, and CHANGELOG.md, released 2026-06-18) <br>
+Risk: Dry-run contacts the service and sends agent identity metadata and a signed challenge despite a no-submission claim.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review network and data handling before installation; do not treat --dry-run as an offline privacy check.
+
+Risk: Automated consent bypass or an untrusted API endpoint could expose agent information.
+
+Mitigation: Avoid --yes for production or sensitive agents and point AGENTSHIELD_API only to a trusted endpoint.
+
+Risk: Peer verification relies on server-backed trust rather than fully local cryptographic verification.
+
+Mitigation: Treat verification results as service-backed signals, not independent cryptographic proof.
+
+## Reference(s):
+
+- [AgentShield on ClawHub](https://clawhub.ai/bartelmost/skills/agentshield-audit)
+- [AgentShield documentation](https://agentshield.live/docs)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Console text and JSON certificates]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Audit scores, certificate details, and peer-verification results.]
+
+## Skill Version(s):
+
+1.5.13 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,58 @@
-## Description: <br>
-Proxy Aiops helps agents inspect, analyze, and safely operate Traefik, Caddy, and HAProxy reverse proxies, including routes, upstream health, certificates, 5xx RCA, audited writes, and undo workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators inspect Traefik, Caddy, and HAProxy routing, upstream health, certificates, and errors, and perform supported proxy changes.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and SRE teams use this skill to observe reverse-proxy state, troubleshoot 502/503/504 errors, investigate backend health and certificate expiry, and make governed Caddy or HAProxy changes with audit and undo support. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make outage-causing reverse-proxy changes while relying on external account permissions and agent judgment rather than an internal read-only control. <br>
-Mitigation: Start with read-only or tightly scoped proxy credentials where possible, keep admin APIs private, and require explicit workflow approval for Caddy config loads/deletes and HAProxy drain or weight changes. <br>
-Risk: Plaintext legacy proxy secret environment variables may expose credentials. <br>
-Mitigation: Use the encrypted secrets store and avoid plaintext PROXY_<TARGET>_SECRET variables. <br>
+## Use Case:
 
+Infrastructure operators and engineers use this skill to diagnose reverse-proxy routing, backend, certificate, and 5xx issues and to make supported Caddy or HAProxy changes.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/AIops-tools/Proxy-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration, API Calls] <br>
-**Output Format:** [Markdown with inline shell commands and structured operational findings] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose or execute read and governed write workflows through proxy-aiops tools, depending on the connected agent and operator permissions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release evidence) <br>
+Risk: Write-capable sessions can change live routing or backend availability without an enforced approval boundary.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only or narrowly scoped proxy credentials first, and require external human review before production writes.
+
+Risk: Stored proxy credentials or a master password exposed in shared configuration can grant unintended access.
+
+Mitigation: Protect ~/.proxy-aiops and avoid storing the master password in plaintext MCP configuration on shared machines.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/proxy-aiops)
+- [Project homepage (listed in skill metadata)](https://github.com/AIops-tools/Proxy-AIops)
+- [Capabilities and platform support](artifact/references/capabilities.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Setup guide](artifact/references/setup-guide.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include diagnostic findings, change previews, and rollback guidance.]
+
+## Skill Version(s):
+
+0.12.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

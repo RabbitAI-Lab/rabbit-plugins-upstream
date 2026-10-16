@@ -17,11 +17,47 @@ from pathlib import Path
 from typing import Any, Dict, Optional
 from urllib.parse import urljoin
 
+# 不生成 __pycache__（死规则 13）
+sys.dont_write_bytecode = True
+
+# 依赖检查须早于第三方 import，避免用户只看到裸 ModuleNotFoundError
+try:
+    from version_util import require_dependencies
+except ImportError:
+    from .version_util import require_dependencies
+
+require_dependencies(("aiohttp", "yaml"))
+
 import aiohttp
 import yaml
 
-# 启动时随机生成 SearXNG 密钥（不硬编码，每次启动重新生成）
-SEARXNG_SECRET = secrets.token_hex(16)
+# SearXNG 密钥：首次启动时生成并持久化到本地，后续启动复用。
+# 原因：每次随机生成会导致旧实例配置失效，用户需重新配置端口、引擎等。
+_SECRET_PATH = os.path.expanduser("~/.workbuddy/output/.searxng_secret")
+
+
+def _load_or_create_secret() -> str:
+    """加载已有 Secret，不存在则生成并持久化"""
+    try:
+        if os.path.exists(_SECRET_PATH):
+            with open(_SECRET_PATH, "r", encoding="utf-8") as f:
+                val = f.read().strip()
+                if len(val) >= 16:
+                    return val
+    except Exception:
+        pass
+    # 不存在或无效，重新生成
+    val = secrets.token_hex(16)
+    try:
+        os.makedirs(os.path.dirname(_SECRET_PATH), exist_ok=True)
+        with open(_SECRET_PATH, "w", encoding="utf-8", newline="") as f:
+            f.write(val)
+    except Exception:
+        pass
+    return val
+
+
+SEARXNG_SECRET = _load_or_create_secret()
 
 # ============================================================
 # 配置管理
@@ -29,6 +65,7 @@ SEARXNG_SECRET = secrets.token_hex(16)
 
 DEFAULT_CONFIG = {
     "searxng": {
+        "enabled": True,
         "host": "127.0.0.1",
         "port": 8888,
         "install_method": "docker",
@@ -333,6 +370,8 @@ class SearXNGManager:
         self.docker_manager = DockerManager(config)
         self.pip_manager = PipManager(config)
         self.method = config["searxng"].get("install_method", "docker")
+        # V1.2: 与 search.py 共享同一开关语义（P0-4）
+        self.enabled = bool(config["searxng"].get("enabled", True))
 
     def install(self) -> bool:
         """安装 SearXNG"""
@@ -358,9 +397,11 @@ class SearXNGManager:
     def status(self) -> Dict[str, Any]:
         """获取状态"""
         if self.method == "docker":
-            return self.docker_manager.status()
+            info = self.docker_manager.status()
         else:
-            return self.pip_manager.status()
+            info = self.pip_manager.status()
+        # enabled 置于首位，便于排查「搜索时 searxng 被跳过」的原因
+        return {"enabled": self.enabled, "method": self.method, **info}
 
 
 # ============================================================
@@ -380,6 +421,17 @@ def main():
 
     # 加载配置
     config = load_config(args.config)
+
+    # V1.2: searxng.enabled 开关真正生效（P0-4）
+    # 关闭时拒绝执行 install/start，避免与 search.py 的引擎筛选行为不一致
+    if not bool(config["searxng"].get("enabled", True)) and args.action in ("install", "start"):
+        msg = "SearXNG 已在配置中禁用（searxng.enabled: false），请先改为 true 再执行此操作"
+        if args.json:
+            print(json.dumps({"ok": False, "enabled": False, "message": msg},
+                             ensure_ascii=False, indent=2))
+        else:
+            print(f"⚠️  {msg}")
+        sys.exit(2)
 
     # 覆盖安装方式
     if args.method:

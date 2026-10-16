@@ -1,41 +1,53 @@
-## Description: <br>
-Convert unstructured documents into LLM-ready structured data, supporting PDF, Word, PPT, and images while extracting paragraphs, formulas, tables, charts, and other elements into reading-order Markdown. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts PDF, Word, presentation, and image files to reading-order Markdown for document analysis and retrieval.
 
-## Publisher: <br>
-[paodingai](https://clawhub.ai/user/paodingai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[paodingai](https://clawhub.ai/user/paodingai)
 
-## Use Case: <br>
-Developers, analysts, and document-processing agents use this skill to convert local PDFs, Office documents, and images into Markdown before extracting fields, tables, summaries, or validation inputs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected PDFs, Office files, or images are uploaded to PaodingAI/PDRouter for conversion. <br>
-Mitigation: Use only documents approved for external processing, and avoid confidential or regulated documents unless that processing is authorized. <br>
-Risk: The API key is required for remote conversion and should be treated as a secret. <br>
-Mitigation: Provide PAODINGAI_API_KEY through the execution environment and avoid placing it in prompts, source files, or generated Markdown. <br>
+## Use Case:
 
+Developers and other document-processing users convert local files to Markdown for content retrieval, table extraction, summarization, and validation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/paodingai/skills/pdflux-pdf2markdown) <br>
-- [PaodingAI Platform](https://platform.paodingai.com/platform/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, JSON, Files, Shell commands, Guidance] <br>
-**Output Format:** [Markdown text, or JSON when the API response does not contain Markdown; optionally written to a user-specified file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires node and PAODINGAI_API_KEY; PAODINGAI_API_BASE_URL, PD_ROUTER_SERVICE_CODE, and PDFLUX_INCLUDE_IMAGES are optional settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.3 (source: server release metadata) <br>
+Risk: Selected document contents are uploaded to PaodingAI/PDRouter for processing, which may expose sensitive information to an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with approved documents and service access; avoid confidential, regulated, or proprietary files without organizational approval.
+
+Risk: An unverified package source may not match the reviewed release.
+
+Mitigation: Prefer a pinned or otherwise verified package source when installing.
+
+## Reference(s):
+
+- [PDFlux SaaS Markdown on ClawHub](https://clawhub.ai/paodingai/skills/pdflux-pdf2markdown)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, JSON]
+
+**Output Format:** [Markdown text when available; otherwise JSON or plain text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prints the result and can also save it to a local file; image data is excluded by default.]
+
+## Skill Version(s):
+
+1.4.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

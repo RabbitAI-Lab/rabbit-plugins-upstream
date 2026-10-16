@@ -1,44 +1,54 @@
-## Description: <br>
-Use when someone wants an original AI song with vocals: sung lyrics, a style prompt track, or source audio for a music video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through generating original vocal songs from lyrics and style prompts using MiniMax Music 2.5 through Replicate.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External developers and agents use this skill to prepare Replicate requests for MiniMax music-2.5, collecting lyrics, style prompts, audio format settings, and follow-on workflow guidance for original AI songs with vocals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lyrics and style prompts are sent to Replicate/MiniMax for generation. <br>
-Mitigation: Confirm the user is comfortable sharing those inputs with the third-party model provider before making API calls. <br>
-Risk: The Replicate API token could be exposed if pasted into prompts, code, or generated files. <br>
-Mitigation: Use REPLICATE_API_TOKEN from the environment and avoid echoing or writing the secret value. <br>
-Risk: The workflow depends on referenced Pruna helper skills and may require ffmpeg or ffprobe for music-video slicing and assembly. <br>
-Mitigation: Install or load the prerequisite skills and confirm required local tools are available before generation or downstream video work. <br>
+## Use Case:
 
+Creators and developers use this skill to turn structured lyrics and optional style direction into original vocal music for songs or music-video soundtracks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/music-2-5) <br>
-- [Replicate MiniMax music-2.5 predictions endpoint](https://api.replicate.com/v1/models/minimax/music-2.5/predictions) <br>
-- [MiniMax privacy policy](https://www.minimax.io/platform/protocol/privacy-policy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API requests] <br>
-**Output Format:** [Markdown with inline bash and JSON request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides the agent to confirm REPLICATE_API_TOKEN, collect lyrics and optional music settings, call Replicate, poll for completion, and download generated audio.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence and skill frontmatter metadata) <br>
+Risk: Suggested remote skill installs are unpinned and may change over time.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the referenced skills and pin trusted versions before installing.
+
+Risk: Lyrics and prompts are processed by Replicate and MiniMax, and the API token may be exposed in shared logs.
+
+Mitigation: Avoid sending sensitive or unreleased content unless third-party processing is acceptable, and keep the API token out of shared logs and transcripts.
+
+## Reference(s):
+
+- [music-2.5 skill release](https://clawhub.ai/pruna-ai/skills/music-2-5)
+- [MiniMax Music 2.5 prediction endpoint](https://api.replicate.com/v1/models/minimax/music-2.5/predictions)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Audio]
+
+**Output Format:** [Markdown with bash and JSON examples; downloadable audio from the model]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires structured lyrics and a Replicate API token; supports MP3, WAV, and PCM output.]
+
+## Skill Version(s):
+
+1.0.15 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

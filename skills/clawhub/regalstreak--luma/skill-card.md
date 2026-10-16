@@ -1,40 +1,51 @@
-## Description: <br>
-Fetches upcoming events from Luma for cities worldwide, including tech events, startup meetups, networking events, and conferences. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetch upcoming events from Luma (lu.ma) for any city when the user asks about tech events, startup meetups, networking events, conferences, or local happenings.
 
-## Publisher: <br>
-[regalstreak](https://clawhub.ai/user/regalstreak) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[regalstreak](https://clawhub.ai/user/regalstreak)
 
-## Use Case: <br>
-Agent users and event planners can use this skill to find, compare, and summarize public Luma events for one or more cities. It is useful for answering questions about upcoming tech events, meetups, conferences, and local event availability. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill fetches public event data from lu.ma and depends on Luma's page structure remaining compatible with the bundled parser. <br>
-Mitigation: Use the skill for public event discovery only, retry or inspect the latest page structure when parsing fails, and avoid excessive repeated fetching. <br>
-Risk: Fetched event searches and possible planning context may be retained in ~/clawd/memory/luma-events.json. <br>
-Mitigation: Review or delete the local event cache when past searches, cities, or plans should not be retained. <br>
+## Use Case:
 
+External users and agents use this skill to find upcoming public Luma events for selected cities, including technology meetups, startup events, conferences, and networking opportunities. The skill can return human-readable event summaries or JSON for follow-up filtering and comparison.
 
-## Reference(s): <br>
-- [Luma](https://lu.ma) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Human-readable event summaries or JSON from the bundled Python script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include event names, venues, dates, hosts, guest counts, ticket status, direct lu.ma links, and local event-cache entries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: target metadata, SKILL.md frontmatter, package.json, release evidence) <br>
+Risk: The skill fetches public event data but also instructs agents to automatically save event searches and inferred interests in local memory without a clear opt-out.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only for explicit event-discovery requests, review local retention expectations with the user, and clear or disable ~/clawd/memory/luma-events.json when persistence is not desired.
+
+## Reference(s):
+
+- [ClawHub Luma Events skill page](https://clawhub.ai/regalstreak/skills/luma)
+- [regalstreak publisher profile](https://clawhub.ai/user/regalstreak)
+- [Luma public event pages](https://lu.ma)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, shell commands, guidance]
+
+**Output Format:** [Human-readable event summaries or JSON emitted by the Python fetch script.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Inputs are city slugs with optional day-range and result-limit filters. The artifact instructs agents to retain fetched event summaries in a local memory file.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release evidence, SKILL.md frontmatter, package.json, README.md)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

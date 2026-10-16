@@ -1,9 +1,9 @@
 ---
 name: galdr
-description: OpenClaw skill for using galdr's ARC workflow to turn YouTube URLs or local audio files into grounded, time-ordered listening-experience prompts backed by listener-state traces: pattern, attention, pulse, heard pressure, surface balance/evidence, harmony, melody, overtones, and silence/re-entry structure. Use when asked to analyze a song, explain what makes a track work structurally, generate a listening experience, or extract video frames from a music video.
-version: "0.6.0"
+description: OpenClaw skill for using galdr's ARC workflow to turn YouTube URLs or local audio files into grounded, time-ordered listening-experience prompts backed by timed audio-derived proxies for pattern, attention, heard pressure, surface balance/evidence, harmony, melody, overtones, and silence/re-entry structure, plus report-level pulse evidence. These are interpretation cues, not measured listener responses. Use when asked to analyze a song, explain what makes a track work structurally, generate a listening experience, or extract video frames from a music video.
+version: "0.7.3"
 author: Sellemain
-license: MIT
+license: MIT-0
 platforms: [linux, macos]
 ---
 # galdr
@@ -23,6 +23,8 @@ openclaw skills install galdr
 ClawHub may display an owner-qualified command such as `openclaw skills install @sellemain/galdr`. As of OpenClaw `2026.6.8`, the released CLI expects the bare skill slug `galdr`.
 
 Installing this skill teaches OpenClaw how to use galdr. It does **not** install the `galdr` command itself.
+
+This skill packaging revision is 0.7.3 and works with the separately installed galdr CLI 0.7.2. The skill is licensed MIT-0; the CLI remains MIT-licensed.
 
 The PyPI wheel contains the runtime CLI/library and bundled prompt templates. The OpenClaw skill is distributed separately through ClawHub so agent instructions can stay a clean skill artifact instead of being installed as Python package data.
 
@@ -77,6 +79,8 @@ Default sequence:
 5. Write the listening experience yourself or pass the prompt to the requested model.
 
 The stream is evidence. Walk the track through time before summarizing. Do not invent emotional claims that the structure does not support.
+
+When a user wants to configure another agent or project to use Galdr, point them to `docs/AGENT-ONBOARDING.md` and `examples/agent/AGENTS.md`. Those files contain the public, copy-pasteable agent instruction path.
 
 Use the ARC prompt family when the user asks for a specific reading mode:
 
@@ -174,7 +178,7 @@ Minimal recipe:
 
 ```bash
 galdr listen track.wav --name my-track
-jq '.[0:12]' analysis/my-track/my-track_stream.json
+jq '.stream[0:12]' analysis/my-track/my-track_stream.json
 jq '.summary' analysis/my-track/my-track_perception.json
 galdr assemble my-track --mode blind > prompt.txt
 ```
@@ -225,11 +229,16 @@ ARC is the default output path. The metrics exist to keep that prose grounded: u
 See [references/metrics.md](references/metrics.md) for full metric reference.
 
 **Quick read:**
-- `pattern` near 1.0 → listener is locked; near 0 → constant disruption
-- `surface_balance` negative → harmonic dominant (warm, tonal); positive → percussive dominant
-- `pressure_state` and pressure summary percentages → heard-pressure shape across the track
-- Clustered `pattern_breaks` at the end → planned release; distributed → varied structure
-- `silence` depth below -60dB with re-lock above 0.93 attention → structured withdrawal/return
+- `pattern` near 1.0 → little detected disruption; lower values → more beat/spectral/energy disruption, not proof of a listener’s state
+- `surface_balance` negative → harmonic-side energy dominant; positive → percussive-side energy dominant. HPSS balance does not identify voice or instruments; confirm heard sources by listening.
+- This signed rule applies to stream/ARC and `surface_balance_signed`; legacy report/catalog `surface_balance` is an unsigned percussive fraction.
+- `chroma_motion_semantics: absolute_cosine_distance_v1` marks absolute adjacent-frame motion; untagged older values were track-relative and must not be compared directly.
+- `pitch_grid` is 12-class chroma concentration, not tuning accuracy; `overtone_fit` combines matched-slot coverage and closeness, not purity.
+- `harmonic_pull` is normalized to each track’s own peak; read local movement, not absolute dissonance or cross-track tension.
+- Pressure summary shares count active `pressure_state` labels, excluding silence states/flags and unknown; ARC spans use a coarser classifier.
+- Top-level stream `pressure_state` and active-frame summary percentages → pressure-motion labels; nested `surface_evidence.pressure_state` describes thin/held/pressurized surface texture instead
+- `pattern_breaks` is a typed event list (`time`/`type`); clustered candidate breaks or silences near the end may support a release reading after audio confirmation
+- `silences` carry `start`/`end`/`duration`/relative `depth_db`; `silence_reentries` separately carry `post_attention`/`recovered`. These are algorithmic candidates, not proof of listener re-lock
 
 ## Writing ARC experience prose yourself
 

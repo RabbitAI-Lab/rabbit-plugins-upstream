@@ -1,42 +1,59 @@
-## Description: <br>
-CN Model Gateway is a local Python gateway that exposes MCP and agent-framework adapters for sending text prompts to configured Chinese model providers such as DeepSeek, Tongyi, Zhipu GLM, Kimi, Hunyuan, Doubao, MiniMax, LingYi, Baichuan, and StepFun. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects MCP-compatible agents to ten Chinese model providers for text and multimodal requests, with health checks and usage reporting.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Developers and agent operators use this skill to connect MCP-compatible tools and other agent frameworks to multiple Chinese text model APIs through one local gateway. It supports asking one model, comparing multiple providers, listing available providers, checking health, reading configuration and usage summaries, and using prompt templates for code review and translation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and generated content are sent to the configured third-party model providers. <br>
-Mitigation: Use only providers approved for the data being processed, and avoid compare_models for sensitive prompts unless every selected provider is acceptable. <br>
-Risk: Provider API keys can be exposed if configuration files are shared or committed. <br>
-Mitigation: Keep config.json private, do not commit API keys, and limit access to the local configuration directory. <br>
-Risk: Model calls may consume paid provider quota. <br>
-Mitigation: Monitor usage with the built-in stats functionality and configure provider-side quota or billing alerts. <br>
+## Use Case:
 
+Developers connect MCP-compatible agents to Chinese model providers for chat, image and video understanding, transcription, embeddings, reranking, and batch requests. They can also compare providers and generate health and usage reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fyniujin/skills/cn-model-gateway) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [MCP JSON-RPC responses, command-line text, framework adapter outputs, and markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May send user prompts to configured third-party model providers and may record local usage statistics in SQLite.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server evidence and frontmatter) <br>
+Risk: Prompts and selected media or text inputs are sent to configured model providers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only providers approved for the data you submit.
+
+Risk: API keys and locally stored prompts or results may be exposed if configuration or local data is accessible to others.
+
+Mitigation: Prefer environment variables for API keys and protect local ~/.cn-model-gateway databases.
+
+Risk: Optional report webhooks can send reports to an unintended destination.
+
+Mitigation: Configure only trusted webhook URLs and review reports before enabling delivery.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/fyniujin/skills/cn-model-gateway)
+- [Provider error mapping](references/error_map.yaml)
+- [DeepSeek platform](https://platform.deepseek.com/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, JSON tool responses, HTML reports]
+
+**Output Format:** [Text or JSON responses, with optional local HTML health reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provider-dependent answers; batch tasks can retain prompts and results locally.]
+
+## Skill Version(s):
+
+1.9.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,59 @@
-## Description: <br>
-Reviews contract text for legal risk levels, missing or unfair clauses, legal basis, suggested edits, and alternative clauses across common contract types. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Reviews contract text for legal risk indicators, clause gaps, unfair terms, risk level, legal basis, revision suggestions, and alternative clauses.
 
-## Publisher: <br>
-[g620710](https://clawhub.ai/user/g620710) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[g620710](https://clawhub.ai/user/g620710)
 
-## Use Case: <br>
-External users, legal operations teams, founders, and individuals use this skill to submit contract text for preliminary risk screening before human legal review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive contract text and user keys may be sent to the publisher's remote service over an under-disclosed plain-HTTP backend. <br>
-Mitigation: Use only with non-sensitive or redacted contracts unless the publisher provides HTTPS, accurate backend disclosure, and clear data-handling terms. <br>
-Risk: AI contract review can miss issues or produce incorrect legal guidance. <br>
-Mitigation: Treat results as preliminary screening and have important contracts reviewed by a qualified legal professional. <br>
+## Use Case:
 
+External users, legal teams, procurement teams, founders, and individuals use this skill to perform preliminary contract risk screening before human legal review. It is aimed primarily at Chinese contract text across sales, service, lease, labor, cooperation, NDA, and other civil or commercial agreement types.
 
-## Reference(s): <br>
-- [Contract Risk Review on ClawHub](https://clawhub.ai/g620710/skills/contract-risk-review) <br>
-- [Documented DeepSeek API endpoint](https://api.deepseek.com/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Contract risk review report with risk level, score, contract type, key concerns, risk items, legal basis, suggestions, alternative clauses, and summary.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return text, Markdown, or JSON depending on the selected output format.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.2 (source: server release evidence) <br>
+Risk: Sensitive contract text and an API key may be sent to an external provider.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with contracts and credentials that may be shared with this provider; redact confidential information when appropriate.
+
+Risk: Release evidence reports a hard-coded default HTTP endpoint and unclear data handling terms.
+
+Mitigation: Avoid the default endpoint unless it is replaced with a verified HTTPS service and clear provider terms.
+
+Risk: Release evidence warns that the included script appears syntactically broken and inconsistent with documented usage.
+
+Mitigation: Test the skill in an isolated environment and verify the documented commands, dependencies, and environment variables before operational use.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/g620710/skills/contract-risk-review)
+- [ClawHub Publisher Profile](https://clawhub.ai/user/g620710)
+- [DeepSeek API Base URL Mentioned in Skill Documentation](https://api.deepseek.com/v1)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Plain text, Markdown, or JSON contract risk review reports with setup and command-line usage guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires python3 and CONTRACT_API_USER_KEY for normal use; review output is advisory and should be checked by a qualified professional.]
+
+## Skill Version(s):
+
+1.1.2 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

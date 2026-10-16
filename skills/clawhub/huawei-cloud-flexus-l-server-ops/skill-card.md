@@ -1,44 +1,56 @@
-## Description: <br>
-Supports Huawei Cloud Flexus L instance and traffic queries, plus confirmed start, stop, reboot, password reset, and server metadata update operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps manage Huawei Cloud Flexus L instances by querying servers and traffic packages, controlling instance lifecycle, resetting passwords, and updating server information.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Cloud operators and developers use this skill to inspect Huawei Cloud Flexus L instances, monitor traffic package usage, and carry out operational changes such as lifecycle actions, password resets, and metadata updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can use Huawei Cloud credentials to change server state, including lifecycle actions, password resets, and metadata updates. <br>
-Mitigation: Use temporary least-privilege credentials, verify exact ECS, BSS, Config, and IAM permissions, confirm target instance IDs and regions, and require explicit confirmation before every state-changing operation. <br>
-Risk: Credential handling mistakes could expose AK, SK, or security token values. <br>
-Mitigation: Pass credentials through environment variables, do not paste secrets into chat, avoid commands that print secrets, and rotate or revoke credentials after use when appropriate. <br>
-Risk: The security scan marked the release suspicious because credential and permission guidance is incomplete or unsafe. <br>
-Mitigation: Review the skill before installation, restrict use to environments where Huawei Cloud Flexus L operations are intended, and validate commands against the documented IAM policy before execution. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to inspect Flexus L instances and traffic packages, start or stop servers, reboot instances, reset passwords, and update server details.
 
-## Reference(s): <br>
-- [IAM Policies](references/iam-policies.md) <br>
-- [Verification Method](references/verification-method.md) <br>
-- [Huawei Cloud Flexus Application Server L Instance Documentation](https://support.huaweicloud.com/intl/zh-cn/flexusl_faq/faq_01_0003.html) <br>
+### Deployment Geography for Use:
 
+Global, where Huawei Cloud Flexus L is available
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and command output summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Huawei Cloud credentials and explicit user confirmation before lifecycle, password, or metadata changes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Stop, reboot, update, and password-reset actions can change live servers; some safeguards are documented but not enforced by the scripts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the target is the intended Flexus L instance and require explicit confirmation before each change; check and report the resulting status.
+
+Risk: Cloud credentials or passwords may be exposed if printed or pasted into chat or logs.
+
+Mitigation: Use least-privilege, preferably temporary Huawei Cloud credentials; do not print environment variables or paste secrets into chat or logs.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-flexus-l-server-ops)
+- [IAM policies](references/iam-policies.md)
+- [Verification method](references/verification-method.md)
+- [Huawei Cloud Flexus L instance documentation](https://support.huaweicloud.com/intl/zh-cn/flexusl_faq/faq_01_0003.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell commands and operation results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports queried instance details, traffic usage, or operation status as applicable.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

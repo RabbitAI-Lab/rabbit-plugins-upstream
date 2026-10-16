@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/gitlab-cli-skills",
   "slug": "gitlab-cli-skills",
   "ownerHandle": null,
-  "version": "1.13.18",
-  "updatedAt": 1784901349649,
-  "contentHash": "96a0685f7b41ca8b839f72a6bf965dfdbca53bf0fe46b61633b957dee80969e3",
-  "fetchedAt": "2026-07-26T18:05:08.531Z"
+  "version": "1.13.32",
+  "updatedAt": 1791905552443,
+  "contentHash": "e3d6f830a5d84492367f751c970d44ea2c99be156cee83b78a3c2b6c297f2b91",
+  "fetchedAt": "2026-10-16T12:54:26.619Z"
 }

@@ -1,49 +1,57 @@
-## Description: <br>
-Analyzes a specific tender opportunity using Zhiliaobiaoxun bid-history data to produce a bid/no-bid decision report with pricing guidance, competitor prediction, buyer signals, risk notes, and an optional shareable HTML report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于招中标历史数据，分析具体项目的投标价值、潜在竞争者、报价参考和投标风险，并生成决策报告。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and business development teams use this skill to decide whether to pursue a specific tender, estimate pricing, identify likely competitors, and summarize public bid-history signals. The skill is intended for concrete bid opportunities supplied as an announcement link, project title, or tender file. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts the Zhiliaobiaoxun service and spends API credits while producing a full decision report. <br>
-Mitigation: Confirm expected credit usage before analysis and pause for approval before exceeding the documented call budget. <br>
-Risk: Automatic trial registration can collect a hashed device identifier and store an API key in the user's home directory. <br>
-Mitigation: Use a preconfigured ZLBX_API_KEY to skip registration, or obtain explicit user consent before collecting the documented device fields. <br>
-Risk: Generated reports can include signed sk links that may be shared or logged. <br>
-Mitigation: Review reports before sharing and avoid distributing signed links beyond the intended audience. <br>
-Risk: Bid recommendations may affect commercial decisions and may involve real companies or public agencies. <br>
-Mitigation: Treat the report as decision support, keep facts and inferences separate, and retain the disclaimer and data-gap notes. <br>
+## Use Case:
 
+投标团队和企业用户可针对具体招标项目评估是否参与、竞争格局、报价区间及废标风险，并获取带依据的决策报告。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/tender-bid-decision-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/liu-jiapeng) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Analysis workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Automatic registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown decision report and optional self-contained HTML report] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports include cited bid or company records when available, a decision recommendation, pricing range, risk list, and disclaimer.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: The skill contacts the Zhiliaobiaoxun service and may create and store a local API key during registration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if comfortable with service access and local credential storage; review registration and safeguard the API key.
+
+Risk: Shareable reports can contain signed detail-page links that allow recipients to access vendor pages without logging in.
+
+Mitigation: Share reports only with trusted recipients, or remove signed links before wider distribution.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/tender-bid-decision-analysis)
+- [API quick reference](references/api-quick.md)
+- [Registration guide](references/auto-register.md)
+- [Analysis workflow](references/workflow.md)
+- [Report template](references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, HTML files]
+
+**Output Format:** [Structured Markdown decision report and shareable HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a recommendation, supporting data, pricing range, risks, and linked citations; a full report also produces an HTML file.]
+
+## Skill Version(s):
+
+1.0.7 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

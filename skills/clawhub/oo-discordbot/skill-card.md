@@ -1,44 +1,56 @@
-## Description: <br>
-Discord Bot lets an agent read, create, update, and delete Discord Bot data through OOMOL's discordbot connector and oo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents read and manage Discord bot resources through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent manage Discord Bot workflows, including reading Discord resources and performing confirmed write or destructive operations through OOMOL. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Some state-changing Discord actions may be untagged even though the skill treats untagged actions as safe to run directly. <br>
-Mitigation: Require explicit user confirmation for any action that posts, pins, crossposts, unbans, prunes members, changes roles or channels, or deletes data. <br>
-Risk: The skill can operate a connected Discord Bot through OOMOL and may affect guilds, channels, messages, roles, members, threads, invites, stickers, emojis, and application commands. <br>
-Mitigation: Review the bot's Discord permissions and OOMOL connection before installation and before running sensitive actions. <br>
+## Use Case:
 
+Developers and community managers can inspect Discord bot resources and, with approval, manage messages, channels, roles, members, and moderation settings.
 
-## Reference(s): <br>
-- [ClawHub Discord Bot skill page](https://clawhub.ai/oomol/skills/oo-discordbot) <br>
-- [OOMOL publisher profile](https://clawhub.ai/user/oomol) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [OOMOL CLI install guide](https://cli.oomol.com/install-guide.md) <br>
-- [Discord Developer Applications](https://discord.com/developers/applications) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Connector action responses are JSON objects with data and meta.executionId when commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata and skill frontmatter) <br>
+Risk: Broad write and destructive actions can alter or remove Discord content and settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the exact target and payload; require explicit approval before writes or deletions.
+
+Risk: The setup instructions include remote installer commands that run downloaded scripts.
+
+Mitigation: Use a verified oo CLI installation path rather than running the listed pipe-to-shell commands blindly.
+
+## Reference(s):
+
+- [Discord Bot skill release](https://clawhub.ai/oomol/skills/oo-discordbot)
+- [oo CLI](https://github.com/oomol-lab/oo-cli)
+- [oo CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [Discord developer portal](https://discord.com/developers/applications)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with command examples and Discord action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Actions require an OOMOL-connected Discord bot account and applicable Discord permissions.]
+
+## Skill Version(s):
+
+1.0.6 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

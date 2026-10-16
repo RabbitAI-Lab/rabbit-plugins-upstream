@@ -31,7 +31,7 @@ Complete guide to authenticating with the IdentyClaw API server to obtain JWT to
 | Runtime | How to get a JWT |
 | --- | --- |
 | **OpenClaw** | Plugin tools (`identyclaw_ensure_session`, …) — do **not** curl login in chat. Plugin **v1.6.0+**. |
-| **Hermes / IronClaw / NanoClaw / Cursor / shell** | Host login below (or [`identyclaw-login.mjs`](../scripts/identyclaw-login.mjs)) — this is the correct path, not a fallback. |
+| **Hermes / IronClaw / NanoClaw / Cursor / shell** | Host login below (or [`identyclaw-login.mjs`](../../scripts/identyclaw-login.mjs)) — this is the correct path, not a fallback. |
 
 Multi-API / federation: [`skills.md`](skills.md#multi-api-sessions-and-federation) · [Federated login](#federated-login-same-family-different-api-url) · `@rodit/rodit-auth-be` ≥9.13.
 
@@ -125,7 +125,7 @@ For inter-agent HOLA lines and tooling, see [HOLA Protocol](hola-agent-authentic
 
 Think of your **IdentyClaw Passport as your passport** and your **NEAR account as your wallet**:
 
-- **Your Passport (Passport ID)**: Your unique 12-letter identity (e.g., `bkbvehbdcrgm`) that proves who you are. This is what you show to others. IdentyClaw Passports are implemented as on-chain credentials on the NEAR blockchain.
+- **Your Passport (Passport ID)**: Your universally unique 12-letter identity (e.g., `bkbvehbdcrgm`) that proves who you are. This is what you show to others. IdentyClaw Passports are implemented as on-chain credentials on the NEAR blockchain.
 - **Your Wallet (NEAR Account)**: The account that owns and controls your passport (e.g., `alice.near`). This is what holds your private keys and signs on your behalf.
 
 When you authenticate, you're using your wallet's private key to prove you own your passport.
@@ -304,6 +304,8 @@ curl https://api.identyclaw.com/api/login/timestamp
 
 ## Step 2: Sign the Message
 
+⚠️ **Secret handling:** Read `private_key` only from a local credentials file on the signing host. Never paste keys into chat, prompts, tickets, CI logs, or shell history. Prefer the OpenClaw plugin (`identyclaw_ensure_session`) so the model never sees the key or JWT.
+
 **Message to sign** (UTF-8 bytes):
 ```
 accountid + timestamp_iso
@@ -387,7 +389,7 @@ For **roditid** login (12-letter Passport ID), use `roditid` and `roditid_base64
 **Success Response Pattern**:
 ```json
 {
-  "jwt_token": "eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9...",
+  "jwt_token": "<jwt_token>",
   "requestId": "01HQXYZ..."
 }
 ```
@@ -459,9 +461,9 @@ Signing (Step 2) is local Ed25519 over `accountid + timestamp_iso`; see [Step 2]
 Include JWT in `Authorization` header for protected endpoints:
 
 ```bash
-# Use YOUR freshly obtained JWT token
+# Use YOUR freshly obtained JWT token (never paste real tokens into docs/chat/logs)
 curl https://api.identyclaw.com/api/me/identity \
-  -H "Authorization: Bearer eyJhbGciOiJFZERTQSIsInR5cCI6IkpXVCJ9..."
+  -H "Authorization: Bearer <jwt_token>"
 ```
 
 **Common Protected Endpoints**:

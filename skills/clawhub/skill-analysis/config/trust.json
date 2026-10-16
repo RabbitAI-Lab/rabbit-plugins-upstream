@@ -1,0 +1,7 @@
+{
+  "pack_version": "2.5.3",
+  "description": "信任注册表：按 Skill 名称设置白名单/黑名单/策略覆盖。名称不区分大小写，支持字符串或 {name, path} 对象。",
+  "allowlist": [],
+  "denylist": [],
+  "overrides": {}
+}

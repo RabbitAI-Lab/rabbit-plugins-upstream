@@ -1,51 +1,60 @@
-## Description: <br>
-openInvest helps agents monitor multi-asset investment portfolios, review live prices and strategy history, adjust positions, and run a four-role LLM investment committee for asset verdicts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users review multi-asset portfolios, analyze investments with an AI committee, and record position changes.
 
-## Publisher: <br>
-[longsizhuo](https://clawhub.ai/user/longsizhuo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[longsizhuo](https://clawhub.ai/user/longsizhuo)
 
-## Use Case: <br>
-External users and agents use openInvest for daily portfolio monitoring, market-price checks, strategy and decision-history review, asset tracking, trade logging, and investment committee analysis before making investment decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access private portfolio records, wealth context, local investment history, and committee transcripts. <br>
-Mitigation: Install only when that data access is acceptable, use a dedicated INVEST_HOME data directory, and review stored data under INVEST_HOME and memory/.committee. <br>
-Risk: The skill can mutate portfolio records, trade-status records, configuration, and remote-hub state. <br>
-Mitigation: Require explicit user confirmation before buy, sell, deposit, withdraw, record-execution, config, or remote-hub write operations. <br>
-Risk: The skill may collect or rely on LLM, email, or remote-hub credentials. <br>
-Mitigation: Avoid pasting secrets into chat and store credentials only in the intended local or hub configuration locations. <br>
+## Use Case:
 
+Individual investors and their agents use this skill to monitor holdings and prices, review AI-generated investment verdicts, and record portfolio changes.
 
-## Reference(s): <br>
-- [openInvest ClawHub Skill Page](https://clawhub.ai/longsizhuo/skills/openinvest) <br>
-- [Full Skill Protocol](SKILL.md) <br>
-- [Project Architecture Wiki](https://github.com/longsizhuo/openInvest/tree/main/docs/wiki) <br>
-- [Committee Protocol](references/committee-protocol.md) <br>
-- [Committee Protocol - Hermes and Delegating Agents](references/committee-protocol-hermes.md) <br>
-- [Dual Execution Paths](references/two-paths.md) <br>
-- [Tool Catalog](references/tools.md) <br>
-- [Adding a New Asset](references/adding-assets.md) <br>
-- [Onboarding](references/onboarding.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON or Markdown backend outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read private portfolio state and may guide CLI or MCP operations that mutate local or remote investment records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.20.1 (source: server release metadata, SKILL.md frontmatter, CHANGELOG.md released 2026-07-17) <br>
+Risk: The Coordinator/Hermes committee workflow can execute shell code derived from untrusted news-influenced model output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid the Coordinator/Hermes path until transcript persistence is fixed; use the Direct committee path instead.
+
+Risk: Development mode in an untrusted directory and exposed API keys can compromise local investment data or credentials.
+
+Mitigation: Do not enable OPENINVEST_DEV_MODE in untrusted directories; keep .env secrets local.
+
+Risk: Portfolio ledger changes can record unintended transactions.
+
+Mitigation: Confirm each ledger-changing action with the user before recording it.
+
+## Reference(s):
+
+- [openInvest on ClawHub](https://clawhub.ai/longsizhuo/skills/openinvest)
+- [Committee workflows](artifact/references/two-paths.md)
+- [Tool reference](artifact/references/tools.md)
+- [Project architecture wiki (documentation, not verified release provenance)](https://github.com/longsizhuo/openInvest/tree/main/docs/wiki)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown responses and reports; structured JSON verdicts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can record portfolio transactions and committee decisions when requested.]
+
+## Skill Version(s):
+
+0.25.0 (source: release metadata, skill frontmatter and CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

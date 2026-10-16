@@ -1,0 +1,40 @@
+{
+  "name": "rainskills",
+  "version": "0.1.43",
+  "description": "Install the complete Rainskills AI deployment skill suite as one product.",
+  "author": {
+    "name": "Goodrain",
+    "url": "https://www.rainbond.com"
+  },
+  "homepage": "https://github.com/goodrain/rainskills#readme",
+  "repository": "https://github.com/goodrain/rainskills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "rainbond",
+    "codex",
+    "claude-code",
+    "deepseek-harness",
+    "workbuddy",
+    "hermes-agent",
+    "skills",
+    "installer"
+  ],
+  "skills": "./skills/",
+  "interface": {
+    "displayName": "Rainskills",
+    "shortDescription": "Install the complete Rainskills AI deployment skill suite",
+    "longDescription": "Install every independent Rainskills capability. Application runtime selection and connection happen later, only when the user requests an action that needs them.",
+    "developerName": "Goodrain",
+    "category": "Engineering",
+    "capabilities": [
+      "Interactive",
+      "Write"
+    ],
+    "websiteURL": "https://www.rainbond.com",
+    "defaultPrompt": [
+      "Install Rainskills for me."
+    ],
+    "brandColor": "#2563EB",
+    "screenshots": []
+  }
+}

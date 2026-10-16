@@ -1,41 +1,56 @@
-## Description: <br>
-Lux3D generates 3D models from images or text and performs material repaint through asynchronous Lux3D API workflows for international users. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents create and edit 3D models and images through Lux3D, including material transfer, retopology, rigging, animation, export, and task tracking.
 
-## Publisher: <br>
-[violalulu](https://clawhub.ai/user/violalulu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[violalulu](https://clawhub.ai/user/violalulu)
 
-## Use Case: <br>
-Developers and creative technical users use this skill to submit image-to-3D, text-to-3D, and material repaint jobs to Lux3D, poll for completion, and download generated 3D model files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: API keys and submitted content can be sent to an unintended endpoint if LUX3D_BASE_URL or --base-url points to an untrusted server. <br>
-Mitigation: Use the documented Lux3D endpoint unless an approved trusted endpoint is required, and verify any base URL override before running the skill. <br>
-Risk: Prompts, images, model URLs, and API keys are sent to the Lux3D service during generation workflows. <br>
-Mitigation: Do not submit confidential or restricted assets unless your organization approves sending that data to Lux3D. <br>
+## Use Case:
 
+Developers and artists use this skill to guide Lux3D image and 3D generation, edit existing GLB assets, animate models, export formats, and check task results.
 
-## Reference(s): <br>
-- [Lux3D Website](https://lux3d.aholo3d.com/) <br>
-- [Lux3D API Key Application](https://labs.aholo3d.com/api-keys) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell snippets; generated assets download as ZIP, GLB, USDZ, OBJ ZIP, or FBX ZIP files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires LUX3D_API_KEY; v3.0-standard is the default Lux3D version; generated download links are valid for 2 hours.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: server release metadata) <br>
+Risk: Prompts, models, images, and asset URLs submitted to Lux3D may contain confidential information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only material approved for the hosted service; avoid confidential assets and private URLs unless their disclosure is acceptable.
+
+Risk: Exposing the Lux3D API key in logs or shared transcripts may allow unauthorized use.
+
+Mitigation: Keep LUX3D_API_KEY in the environment and out of logs and shared transcripts.
+
+## Reference(s):
+
+- [Lux3D skill release](https://clawhub.ai/violalulu/skills/lux3d)
+- [Lux3D API key](https://labs.aholo.ai/api-keys?from=lux3d)
+- [Lux3D asset upload API documentation](https://labs.aholo.ai/api-docs/en/api-reference#tag/asset)
+- [Lux3D pricing](https://lux3d.aholo.ai/lux3d/home?view=pricing&lang=en_US)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with command examples and links to generated assets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated assets and task results depend on the hosted Lux3D service.]
+
+## Skill Version(s):
+
+4.3.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

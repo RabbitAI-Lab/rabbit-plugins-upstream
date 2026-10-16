@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/container-host-aiops",
   "slug": "container-host-aiops",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635095246,
-  "contentHash": "55eb653c100b4842dbe09aa0c472bf5829aeecddee06a8a56ec20be32cae2ead",
-  "fetchedAt": "2026-07-26T18:09:08.012Z"
+  "version": "0.13.0",
+  "updatedAt": 1792057414553,
+  "contentHash": "c9733f6ce79b333427d0212ac0bbeff1992dfd4184f27d95967ac650af07d895",
+  "fetchedAt": "2026-10-16T12:47:37.114Z"
 }

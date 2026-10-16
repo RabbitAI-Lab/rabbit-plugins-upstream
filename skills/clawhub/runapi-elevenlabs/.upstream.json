@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/runapi-elevenlabs",
   "slug": "runapi-elevenlabs",
   "ownerHandle": null,
-  "version": "0.2.4",
-  "updatedAt": 1779441229995,
-  "contentHash": "9483c514ae91f6d5fea98dec6ce67d051fdae67a60f6970825fc419f09b22223",
-  "fetchedAt": "2026-07-26T18:41:20.892Z"
+  "version": "0.3.0",
+  "updatedAt": 1792033834406,
+  "contentHash": "a8fd6afc80bb4ba340f96c646350107bb781b211866ce2d94e3e683c43d9db44",
+  "fetchedAt": "2026-10-16T12:49:29.947Z"
 }

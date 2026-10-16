@@ -33,9 +33,11 @@ def load_config(path):
 
 
 def esc_md(text):
-    """Escape special chars for Feishu markdown."""
+    """Escape special chars for Feishu markdown.
+    | would break markdown tables (terminology table), so escape it too."""
     if not text: return ''
-    return text.replace('\\', '\\\\').replace('*', '\\*').replace('_', '\\_').replace('[', '\\[')
+    return (text.replace('\\', '\\\\').replace('*', '\\*').replace('_', '\\_')
+                .replace('[', '\\[').replace('|', '\\|'))
 
 
 def md_links_to_feishu(text):
@@ -45,10 +47,11 @@ def md_links_to_feishu(text):
 
 def decode_data_uri(data_uri):
     """Extract (bytes, ext) from a data:image/...;base64,... URI."""
-    m = re.match(r'data:image/(\w+);base64,(.+)', data_uri or '', re.S)
+    m = re.match(r'data:image/([\w.+-]+);base64,(.+)', data_uri or '', re.S)
     if not m:
         return None, None
     ext = m.group(1)
+    if ext.endswith('+xml'): ext = 'svg'
     if ext == 'jpeg': ext = 'jpg'
     try:
         return base64.b64decode(m.group(2)), ext
@@ -85,6 +88,8 @@ def upload_image(token, image_path):
     with open(image_path, 'rb') as f:
         image_data = f.read()
 
+    img_ext = os.path.splitext(image_path)[1].lstrip('.').lower() or 'png'
+    img_mime = 'image/png' if img_ext == 'png' else ('image/jpeg' if img_ext in ('jpg','jpeg') else 'image/%s' % img_ext)
     boundary = '----feishuapi' + str(hash(image_data) % 100000)
     body = b''
     body += ('--%s\r\n' % boundary).encode()
@@ -92,7 +97,7 @@ def upload_image(token, image_path):
     body += b'message\r\n'
     body += ('--%s\r\n' % boundary).encode()
     body += ('Content-Disposition: form-data; name="image"; filename="%s"\r\n' % os.path.basename(image_path)).encode()
-    body += b'Content-Type: image/png\r\n\r\n'
+    body += ('Content-Type: %s\r\n\r\n' % img_mime).encode()
     body += image_data
     body += ('\r\n--%s--\r\n' % boundary).encode()
 
@@ -120,8 +125,11 @@ def upload_file(token, file_path):
     with open(file_path, 'rb') as f:
         file_data = f.read()
 
-    ext = os.path.splitext(file_path)[1].lstrip('.')
-    file_type = 'pdf' if ext == 'pdf' else 'stream'
+    ext = os.path.splitext(file_path)[1].lstrip('.').lower()
+    file_type = {'pdf': 'pdf', 'doc': 'doc', 'docx': 'doc',
+                 'xls': 'xls', 'xlsx': 'xls',
+                 'ppt': 'ppt', 'pptx': 'ppt',
+                 'mp4': 'mp4', 'opus': 'opus'}.get(ext, 'stream')
 
     boundary = '----feishuapi' + str(hash(file_data) % 100000)
     body = b''
@@ -133,7 +141,7 @@ def upload_file(token, file_path):
     body += f'{os.path.basename(file_path)}\r\n'.encode()
     body += ('--%s\r\n' % boundary).encode()
     body += ('Content-Disposition: form-data; name="file"; filename="%s"\r\n' % os.path.basename(file_path)).encode()
-    body += f'Content-Type: application/{ext}\r\n\r\n'.encode()
+    body += f'Content-Type: application/{ {"doc":"msword","docx":"msword","xls":"vnd.ms-excel","xlsx":"vnd.ms-excel","ppt":"vnd.ms-powerpoint","pptx":"vnd.ms-powerpoint","pdf":"pdf"}.get(ext, "octet-stream") }\r\n\r\n'.encode()
     body += file_data
     body += ('\r\n--%s--\r\n' % boundary).encode()
 
@@ -224,7 +232,7 @@ def build_card_content(payload, zh, language='en'):
             parts.append(f"**{title}**\n{esc_md(t)}")
         if en_text and bilingual:
             t = md_links_to_feishu(en_text) if md else en_text
-            parts.append(f"*{t}*")
+            parts.append(f"*{esc_md(t)}*")
         if parts:
             elements.append({"tag": "markdown", "content": '\n\n'.join(parts)})
             elements.append({"tag": "hr"})
@@ -249,17 +257,24 @@ def build_card_content(payload, zh, language='en'):
     if img:
         img_bytes, ext = decode_data_uri(img)
         if img_bytes:
-            # Write to temp file, upload via API
+            # 写临时文件（NamedTemporaryFile，无 mktemp 竞态），卡发成功后由 main 上传并清理
             import tempfile
-            tmp_img = tempfile.mktemp(suffix=f'.{ext}')
-            with open(tmp_img, 'wb') as f:
-                f.write(img_bytes)
-            # Will be handled by caller with token
-            elements.append({"tag": "markdown", "content": "[配图见下方图片消息]"})
-            # Store temp path for later
+            fd, tmp_img = tempfile.mkstemp(suffix='.' + (ext or 'png'))
+            try:
+                with os.fdopen(fd, 'wb') as f:
+                    f.write(img_bytes)
+            except Exception:
+                try: os.close(fd)
+                except OSError: pass
             payload['_temp_image'] = tmp_img
+            elements.append({"tag": "markdown", "content": "[配图见下方图片消息]"})
+        elif img.lower().startswith(('http://', 'https://')):
+            # URL 型配图：main 拿到 token 后下载并经 Open API 上传拿 image_key（卡片 img 只认 img_key）
+            payload['_remote_image'] = img
+            elements.append({"tag": "markdown", "content": "[配图见下方图片消息]"})
         else:
-            elements.append({"tag": "img", "url": img, "alt": {"tag": "plain_text", "content": "配图"}})
+            # 既非 data URI 也非 http(s) URL：无法上传，走文案回退
+            elements.append({"tag": "markdown", "content": "[配图] %s" % esc_md(img)})
         elements.append({"tag": "hr"})
 
     rl = payload.get('relatedLinks', [])
@@ -284,13 +299,12 @@ def build_card_content(payload, zh, language='en'):
 
     card = {
         "header": {
-            "title": {"tag": "plain_text", "content": f"{esc_md(book_title)} · {esc_md(topic)}"},
+            "title": {"tag": "plain_text", "content": "%s · %s" % (book_title, topic)},
             "template": "blue"
         },
         "elements": elements
     }
-    return {"type": "template", "data": {"template_id": "", "template_variable": {}, "type": "template"},
-            "card": card}
+    return card
 
 
 def main():
@@ -355,17 +369,17 @@ def main():
 
     payload = json.load(open(args.payload, encoding='utf-8'))
     zh = json.load(open(args.zh, encoding='utf-8')) if args.zh else None
-    language = args.language or payload.get('language', 'en')
+    language = args.language if '--language' in sys.argv else payload.get('language', 'en')
     zh, payload = normalize_all(zh, payload, language)
 
     # Build and send card
-    card_content = build_card_content(payload, zh, language)
+    card = build_card_content(payload, zh, language)
     # Send as interactive message
     url = f'{FEISHU_BASE}/im/v1/messages?receive_id_type=chat_id'
     body = json.dumps({
         'receive_id': chat_id,
         'msg_type': 'interactive',
-        'content': json.dumps(card_content['card'], ensure_ascii=False)
+        'content': json.dumps(card, ensure_ascii=False)
     }, ensure_ascii=False).encode('utf-8')
 
     req = urllib.request.Request(url, data=body, headers={
@@ -381,13 +395,41 @@ def main():
             print(json.dumps({'sent': True, 'ok': True, 'msg_type': 'interactive',
                               'message_id': msg_id}, ensure_ascii=False))
 
-            # If payload has image, send it as a separate image message
+            # If payload has image, send it as a separate image message（finally 保证清理）
             temp_img = payload.get('_temp_image')
-            if temp_img and os.path.exists(temp_img):
-                image_key = upload_image(token, temp_img)
-                if image_key:
-                    send_message(token, chat_id, 'image', {'image_key': image_key})
-                os.remove(temp_img)
+            remote_img = payload.get('_remote_image')
+            dl_path = None
+            try:
+                if temp_img and os.path.exists(temp_img):
+                    image_key = upload_image(token, temp_img)
+                    if image_key:
+                        send_message(token, chat_id, 'image', {'image_key': image_key})
+                elif remote_img:
+                    # 下载远程图 → 上传 → 发图片消息；下载失败只提示不中断
+                    import tempfile as _tf
+                    try:
+                        r = urllib.request.Request(remote_img, headers={'User-Agent': 'Mozilla/5.0'})
+                        with urllib.request.urlopen(r, timeout=30) as _resp:
+                            _data = _resp.read()
+                        ext = 'png'
+                        if _data[:3] == b'\xff\xd8\xff': ext = 'jpg'
+                        elif _data[:4] == b'\x89PNG': ext = 'png'
+                        elif _data[:4] == b'GIF8': ext = 'gif'
+                        fd, dl_path = _tf.mkstemp(suffix='.' + ext)
+                        with os.fdopen(fd, 'wb') as _f:
+                            _f.write(_data)
+                        image_key = upload_image(token, dl_path)
+                        if image_key:
+                            send_message(token, chat_id, 'image', {'image_key': image_key})
+                        else:
+                            print('[warn] 配图上传失败，仅发出卡片', file=sys.stderr)
+                    except Exception as _e:
+                        print('[warn] 配图下载/上传失败：%s（不影响卡片）' % _e, file=sys.stderr)
+            finally:
+                for _p in (temp_img, dl_path):
+                    if _p and os.path.exists(_p):
+                        try: os.remove(_p)
+                        except OSError: pass
 
             sys.exit(0)
         else:
