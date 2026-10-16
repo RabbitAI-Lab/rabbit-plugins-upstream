@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-kermt-finetune",
+  "identifier": "NVIDIA/skills/skills/bionemo-kermt-finetune",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-kermt-finetune",
+  "branch": "main",
+  "pushedAt": "2026-10-15T20:49:44Z",
+  "contentHash": "1c8a47190269573f5a8bca7a72d2b5d4bdafcb67fc0b6a7ed7c71f65d0b3517e",
+  "fetchedAt": "2026-10-16T12:30:44.197Z"
+}

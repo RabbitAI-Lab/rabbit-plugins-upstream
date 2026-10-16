@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/scientific-slides",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/scientific-slides",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/scientific-slides",
+  "branch": "main",
+  "pushedAt": "2026-10-16T04:17:25Z",
+  "contentHash": "b20163579eb7fe9c204f8ae6a08b5fc00bd22f6bd982f3e39d719933a4f14415",
+  "fetchedAt": "2026-10-16T12:30:45.874Z"
+}

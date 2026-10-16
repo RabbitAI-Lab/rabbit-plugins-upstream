@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/draw-your-font",
+  "identifier": "official/creative/draw-your-font",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/draw-your-font",
+  "branch": "main",
+  "pushedAt": "2026-10-16T12:15:09Z",
+  "contentHash": "00a061b56eddf2301a2e697f4a9d3e969f6a2ff99b20dca92a061dbdc4928272",
+  "fetchedAt": "2026-10-16T12:30:53.084Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-video-setup",
+  "identifier": "NVIDIA/skills/skills/jetson-video-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-video-setup",
+  "branch": "main",
+  "pushedAt": "2026-10-15T20:49:44Z",
+  "contentHash": "bb16b42b24316efbd50b0e3b7383523af147396b10b5edbfc5face2baf19c3cb",
+  "fetchedAt": "2026-10-16T12:30:44.191Z"
+}

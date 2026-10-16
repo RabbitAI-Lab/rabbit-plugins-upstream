@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/paidf-orchestration-write-dag",
+  "identifier": "NVIDIA/skills/skills/paidf-orchestration-write-dag",
+  "repo": "NVIDIA/skills",
+  "path": "skills/paidf-orchestration-write-dag",
+  "branch": "main",
+  "pushedAt": "2026-10-15T20:49:44Z",
+  "contentHash": "8d31381955d03664d78b18715630e2282caef51c39a3796acc13e5219096de7d",
+  "fetchedAt": "2026-10-16T12:30:44.340Z"
+}

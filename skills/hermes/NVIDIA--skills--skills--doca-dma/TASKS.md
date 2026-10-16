@@ -21,6 +21,26 @@ copy-paste recipe. The agent's job is to walk the user through
 the steps in order, verifying preconditions before recommending
 the next call.
 
+## DOCA 3.5 field notes
+
+Observed on DOCA 3.5 (developer review); check them before debugging
+further:
+
+- **Size limit.** Query `doca_dma_cap_task_memcpy_get_max_buf_size()`
+  before submitting. The DMA Copy reference app caps files at 2 MiB
+  (2097152 bytes) on the tested BlueField-3; the host only reports
+  `Failure was detected in dma copy`, while the real reason is in the
+  BlueField log.
+- **Validate before submitting.** In the review, `doca_task_try_submit()`
+  rejected a too-large copy cleanly (`buffer byte size=... must be <=
+  maximum_byte size=2097152`), whereas `doca_task_submit()` failed in
+  hardware and stopped the DMA context.
+- **Local copy runs on the host too.** The local-copy sample refuses
+  to run on the host (`Local DMA copy can run only on the DPU`), but
+  the library supports host-local copies in your own program.
+- **Run the BlueField side as root.** Without it, DMA Copy fails with
+  the misleading `do not run on Host` representor message.
+
 ## configure
 
 Goal: bring up a DOCA DMA context on a host or BlueField and
@@ -41,12 +61,18 @@ Steps the agent should walk the user through:
 2. **Discover the device capability surface for DMA.** Run
    `doca_caps --list-devs` (per
    [`doca-caps`](../../tools/doca-caps/SKILL.md)) to see which
-   devices are present, then run the per-`doca_devinfo`
-   `doca_dma_cap_task_memcpy_*` queries against the candidate
-   device:
+   devices are present. If no DMA-capable device is visible, stop
+   configuration and route to
+   [`doca-setup`](../../doca-setup/SKILL.md) for device discovery;
+   do not create a DMA context. Run the per-`doca_devinfo`
+   `doca_dma_cap_task_memcpy_*` queries against every visible
+   candidate device:
    `_is_supported`, `_get_max_buf_size`, `_get_max_buf_list_len`.
-   Quote the queried values back to the user; do not assume from
-   prior installs. The capability matrix to compare against
+   When more than one device supports DMA, select and record the
+   user-intended PCI BDF and its topology from the supported set;
+   do not silently choose the first device. Quote the per-device
+   queried values and selected BDF back to the user; do not assume
+   from prior installs. The capability matrix to compare against
    lives in
    [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes).
 3. **Confirm DMA is the right library for this copy.** Walk the
@@ -75,7 +101,10 @@ Steps the agent should walk the user through:
    the destination, what length they intend to memcpy, and
    whether that length is within
    `doca_dma_cap_task_memcpy_get_max_buf_size`. If any of those
-   are unclear, stop and ask — do not invent.
+   are unclear, stop and report the missing inputs explicitly
+   (source mmap owner, destination mmap owner, intended memcpy
+   length, or the queried maximum buffer size) so the caller can
+   supply them before re-invocation — do not invent values.
 
 If any step fails with a `DOCA_ERROR_*`, route through the error
 taxonomy in
@@ -126,12 +155,13 @@ before recommending any code-level edit:
 | 5. Build manifest | Keep the sample's existing `meson.build` (which already wires `pkg-config doca-dma`)? | Yes. Do not switch to a hand-rolled Makefile for *"simplicity"* — it removes the version-check rail |
 
 The agent emits an *intent description + the filled slots*; the
-*actual* unified diff against the sample source is produced by
-the modify-from-sample renderer (deferred to a future round, per
-[`doca-programming-guide TASKS.md ## modify`](../../doca-programming-guide/TASKS.md#modify)).
-Until the renderer ships, the agent must walk the user through
-the diff line-by-line against the sample source they read on
-disk, and have the user paste back the result for validation.
+authoritative path is a manual, line-by-line diff against the shipped
+sample source read from the installed tree. Keep the diff minimal,
+preserve sample logic outside the stated intent, and leave the
+sample's build manifest unchanged. Before accepting the modification,
+require a successful build, re-run the DMA capability queries against
+the selected device, and verify the mmap permissions and device
+topology still match the intended local or cross-peer path.
 
 ## run
 
@@ -146,8 +176,9 @@ Steps the agent should walk the user through:
    produces a memcpy completion is most often opening the wrong
    device. Re-quote the output of `doca_caps --list-devs`
    ([`doca-caps`](../../tools/doca-caps/SKILL.md)) and confirm
-   the device the binary opens is the same one the cap-query
-   ran against.
+   the binary opens the same recorded PCI BDF selected during
+   `## configure`, and that the cap-query ran against that exact
+   device.
 2. **For cross-peer copies, run the side that exports first.**
    The exporting peer must have its `doca_mmap_export_*` complete
    before the importing peer can use the export blob as a source
@@ -171,9 +202,10 @@ correctly between the source and destination mmaps on the user's
 hardware, and that the permission and capability set was sized
 right for the user's intended workload.
 
-This is **a loop, not a one-shot pass.** Each iteration narrows
-either the capability set, the permission set, the buffer size,
-or the buffer-list length. The loop terminates when either (a)
+This is **a bounded iterative sweep:** run it once, then make at
+most one evidence-based correction and re-run it. Each sweep
+narrows either the capability set, the permission set, the buffer
+size, or the buffer-list length. The process terminates when either (a)
 the user's intended copy length flows end-to-end with the
 expected per-task completions, or (b) the agent has narrowed the
 failure cause to a layer outside DMA itself (driver / firmware /
@@ -197,10 +229,12 @@ Iteration shape:
    first task submission, not at configure time.
 3. **Small-buffer smoke.** Always start with a single small
    memcpy (a few KiB) before bulk. If the small smoke works, the
-   permission set and the lifecycle are correct; any subsequent
-   oversize-buffer failure narrows cleanly to the cap-query /
-   size axis. Skipping this step is the most common reason
-   *"bulk DMA fails and we don't know why"*.
+   permission set and lifecycle for that tested path are correct.
+   For a cross-peer copy, the smoke must exercise the exported and
+   imported mmap path before its permissions are considered valid.
+   Any subsequent oversize-buffer failure then narrows cleanly to
+   the cap-query / size axis. Skipping this step is the most common
+   reason *"bulk DMA fails and we don't know why"*.
 4. **Completion drain.** Confirm a per-task completion event
    arrives on the PE for every submitted memcpy. *Submitted but
    no completion* is the most expensive class of bug to discover
@@ -222,9 +256,10 @@ Eval-loop overlay — why this is a loop, not a one-shot pass:
 | Cross-peer submit returns `NOT_PERMITTED` after smoke worked locally | The local smoke used a local source mmap; the cross-peer case requires the source to be exported via `doca_mmap_export_*` | Re-walk the cross-peer rule in [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy) |
 | `DOCA_ERROR_AGAIN` on bulk submit | First N submissions succeed, then `AGAIN` | The task queue is full. Drain completions on the PE before re-submitting; or raise `max-num-tasks` at configure time |
 
-Loop termination: stop iterating once two consecutive iterations
-of the same kind don't change anything — that means the cause is
-below DMA. Escalate to
+Loop termination: run one initial sweep. If it is not green, make at
+most one correction justified by the captured evidence and re-run the
+same sweep once. If that rerun is not green, stop changing the system
+and escalate to
 [`doca-debug ## debug`](../../doca-debug/TASKS.md#debug) with the
 captured layer-1-through-5 evidence.
 

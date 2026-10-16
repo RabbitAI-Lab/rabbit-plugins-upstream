@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/clinvar-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/clinvar-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/clinvar-database",
+  "branch": "main",
+  "pushedAt": "2026-10-16T04:17:25Z",
+  "contentHash": "63038194dd3d061c8cd995782158070ba99879e12847dabe73ed4e9c9c9714cb",
+  "fetchedAt": "2026-10-16T12:30:45.687Z"
+}
