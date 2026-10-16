@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/mblode/agent-skills/autoship",
+  "repo": "mblode/agent-skills",
+  "skillId": "autoship",
+  "branch": "main",
+  "pushedAt": "2026-10-10T22:50:38Z",
+  "contentHash": "08a60e4d9c69eebf9d4be206f912f6c50716f383bd5d1d7619bd34489e3139dd",
+  "fetchedAt": "2026-10-16T12:33:12.149Z"
+}
