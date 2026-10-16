@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/portfolio-optimization",
+  "identifier": "NVIDIA/skills/skills/portfolio-optimization",
+  "repo": "NVIDIA/skills",
+  "path": "skills/portfolio-optimization",
+  "branch": "main",
+  "pushedAt": "2026-10-15T20:49:44Z",
+  "contentHash": "acea30f45245424e5a28ad9e133cb5ac813f680ca81045bf7a3fe9817670485d",
+  "fetchedAt": "2026-10-16T12:30:44.355Z"
+}

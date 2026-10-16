@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/datalad",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/datalad",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/datalad",
+  "branch": "main",
+  "pushedAt": "2026-10-15T23:57:39Z",
+  "contentHash": "aa28aea51dfec39929b9177881c62f2a5c6bea5a6864c9547554319158b2dce3",
+  "fetchedAt": "2026-10-16T12:31:00.723Z"
+}

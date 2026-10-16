@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/miles",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/miles",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/miles",
+  "branch": "main",
+  "pushedAt": "2026-10-16T04:17:25Z",
+  "contentHash": "6a35dac0a13aa3488e02c29d1cf14c8a406a912532447ccc239534dfd48b92b2",
+  "fetchedAt": "2026-10-16T12:30:45.790Z"
+}

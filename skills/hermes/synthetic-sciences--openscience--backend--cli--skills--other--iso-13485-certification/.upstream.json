@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/iso-13485-certification",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/iso-13485-certification",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/iso-13485-certification",
+  "branch": "main",
+  "pushedAt": "2026-10-16T04:17:25Z",
+  "contentHash": "62006c20b8a40020b8ee1717cb3858ec36ae1d087e75e0c750dd610a549c6b46",
+  "fetchedAt": "2026-10-16T12:30:45.765Z"
+}

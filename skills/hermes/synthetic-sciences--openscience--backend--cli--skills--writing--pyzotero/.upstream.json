@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/pyzotero",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/pyzotero",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/pyzotero",
+  "branch": "main",
+  "pushedAt": "2026-10-16T04:17:25Z",
+  "contentHash": "044619b329dfab62956b724f1c3f7dc1ece154f216520f64f2dddb137f67e260",
+  "fetchedAt": "2026-10-16T12:30:45.862Z"
+}
