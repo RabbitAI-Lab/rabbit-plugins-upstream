@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/statistical-power",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/statistical-power",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/statistical-power",
+  "branch": "main",
+  "pushedAt": "2026-10-15T23:57:39Z",
+  "contentHash": "1df05ad2b0f2ac405f230b9622f0d42d3486ddf6f9af4b3a0fe0571031a996e3",
+  "fetchedAt": "2026-10-17T11:40:57.893Z"
+}

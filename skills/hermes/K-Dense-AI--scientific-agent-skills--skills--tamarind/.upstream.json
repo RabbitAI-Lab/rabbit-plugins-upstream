@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/tamarind",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/tamarind",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/tamarind",
+  "branch": "main",
+  "pushedAt": "2026-10-15T23:57:39Z",
+  "contentHash": "d9953bab8874026b679082d6cefe71303bc38da6a75060632e563f3cec9bd0d6",
+  "fetchedAt": "2026-10-17T11:40:57.895Z"
+}
