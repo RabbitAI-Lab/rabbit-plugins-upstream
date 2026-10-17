@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/huaweicloud/huaweicloud-skills/huawei-cloud-terraform-installer",
+  "repo": "huaweicloud/huaweicloud-skills",
+  "skillId": "huawei-cloud-terraform-installer",
+  "branch": "master",
+  "pushedAt": "2026-10-16T09:13:12Z",
+  "contentHash": "5ec583f132c7d1afb11f2aeba0f4e4eeb7ca09a3a9a5ae6e290e1ca35ce9a261",
+  "fetchedAt": "2026-10-17T11:41:52.325Z"
+}
