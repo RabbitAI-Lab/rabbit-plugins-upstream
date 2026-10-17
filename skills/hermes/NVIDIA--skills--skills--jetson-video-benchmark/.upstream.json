@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/jetson-video-benchmark",
+  "identifier": "NVIDIA/skills/skills/jetson-video-benchmark",
+  "repo": "NVIDIA/skills",
+  "path": "skills/jetson-video-benchmark",
+  "branch": "main",
+  "pushedAt": "2026-10-17T11:11:44Z",
+  "contentHash": "509e244f421f70767533aabbdb21129db8277a57b0f36e5d31c8f2e09e29abde",
+  "fetchedAt": "2026-10-17T11:40:42.953Z"
+}

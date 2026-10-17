@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scanpy",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scanpy",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scanpy",
+  "branch": "main",
+  "pushedAt": "2026-10-15T23:57:39Z",
+  "contentHash": "081d4ff76c754382806261c04a7eb8e17e05d4ef78720006f5e35fc709ffbffb",
+  "fetchedAt": "2026-10-17T11:40:57.873Z"
+}

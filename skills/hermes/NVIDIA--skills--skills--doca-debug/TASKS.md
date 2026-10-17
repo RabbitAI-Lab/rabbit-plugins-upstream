@@ -109,7 +109,7 @@ Steps the agent should walk the user through:
 3. **Capture the full triple at the moment of failure.** When the symptom reproduces, capture all three of:
    - **Program output** — `stdout` and `stderr` of the failing program, including the `--sdk-log-level 70` trace.
    - **System view** — `dmesg | tail -200`, `journalctl --since "5 min ago"`, the matching service's log directory if relevant.
-   - **DOCA view** — `doca_caps --list-devs` (capability snapshot at the time of failure), `pkg-config --modversion doca-<library>` (re-confirms the version).
+   - **DOCA view** — `doca_caps --list-devs` (capability snapshot at the time of failure), `pkg-config --modversion doca-<library>` (re-confirms the version). If `doca_caps` is absent, use a per-library C capability probe only when the exact probe already exists in an installed shipped sample or the user's program; never generate one. With no existing probe, record the capability view as unavailable and route to [`doca-setup ## configure`](../doca-setup/TASKS.md#configure) to install the documented tools/samples component or repair the install.
 
    These three views together are *the artifact* the debug session is operating on. If any one of the three is missing, the picture is incomplete and the next debug step is to capture the missing view, not to form a hypothesis from the partial picture.
 
@@ -122,6 +122,22 @@ The anti-pattern to refuse: declaring a fix without first reproducing the sympto
 ## debug
 
 The canonical layered debug ladder for **any DOCA symptom**. Every per-library `## debug` redirects to this ladder for cross-cutting steps and then layers its library-specific overlay on top.
+
+**Build/link entry gate — capture environment before editing code.** For
+`undefined reference`, identify layer 4 (Link), then request
+`pkg-config --modversion doca-common`, the selected library's version, and
+`pkg-config --libs doca-<library>` from the same host/container and shell that
+ran the failing build. Also request the actual failing link invocation and
+complete error output; pkg-config flags are not that invocation. For Flow,
+use `pkg-config --modversion doca-flow` and `pkg-config --libs doca-flow`.
+If the outputs have not been supplied or observed, pause at the capture
+request. Do not follow it with guessed flags, paths or a replacement compiler
+command: merely naming the checks does not establish their results. If DOCA is
+missing or versions disagree, follow [doca-setup](../doca-setup/TASKS.md#debug)
+and [doca-version](../doca-version/TASKS.md#configure) before changing build
+files. Only after those checks are clean, use the environment-then-program
+order in [doca-programming-guide](../doca-programming-guide/TASKS.md#debug),
+change one thing, and rerun the original build to compare the exact error.
 
 **The ladder is an iterative loop, not a one-shot walk.** The agent
 walks the 7 layers bottom-up, captures the picture at each layer, and
@@ -148,12 +164,25 @@ The loop shape:
    '----- (single-trip walks are the failure mode this loop replaces)
 ```
 
+Termination invariant: every unchanged result advances to the next
+plausible layer toward 7, and every shape-changed restart requires a
+materially different re-captured triple. Never revisit the same
+`(symptom, layer, triple)` state; if a shape-change sequence returns
+to a prior state, escalate with the cycle's captures instead of
+looping again.
+
 The agent's rule: walk the layers in order, top to bottom (which is bottom-of-stack first). Skipping a layer because *"it can't be that"* is the most common debugging mistake. *Most* of the time, *most* of the symptoms in the bundle's audience are install / version / build / link problems wearing the costume of a runtime error.
 
 **Layer 1 — Install.** Before any other debug step, confirm DOCA is actually installed and the install is complete.
 
 - `dpkg -l | grep -i doca` (Debian/Ubuntu) or `rpm -qa | grep -i doca` (RHEL/Rocky). The expected packages depend on the install profile; refer to [`doca-setup CAPABILITIES.md ## Capabilities and modes`](../doca-setup/CAPABILITIES.md#capabilities-and-modes).
-- `ls /opt/mellanox/doca/` — the install root. If empty or missing, this is layer 1; route to [`doca-setup ## debug`](../doca-setup/TASKS.md#debug) layers 1–2 and stop here.
+- `ls /opt/mellanox/doca/` — the install root. If empty or missing,
+  this is layer 1; delegate remediation to
+  [`doca-setup ## debug`](../doca-setup/TASKS.md#debug) layers 1–2.
+  "Stop here" means do not diagnose a higher layer while remediation
+  is pending. After the install is repaired, re-enter this ladder at
+  layer 1, re-capture the triple, and continue only if layer 1 is
+  green.
 
 **Layer 2 — Version coherence.** Once install is present, confirm all four version strings agree.
 
@@ -162,7 +191,12 @@ The agent's rule: walk the layers in order, top to bottom (which is bottom-of-st
 - `doca_caps --version` (runtime view) — see [`doca-caps`](../tools/doca-caps/SKILL.md) for when this is available.
 - BFB version on the BlueField, if applicable, via the BFB's own version file.
 
-If any disagree, the install is partial / mixed — route to [`doca-setup ## debug`](../doca-setup/TASKS.md#debug) layer 3 and stop here. Cross-version `*.so` loading is not supported; symptoms above this layer will be misleading.
+If any disagree, the install is partial / mixed — delegate
+remediation to [`doca-setup ## debug`](../doca-setup/TASKS.md#debug)
+layer 3. "Stop here" means hold higher-layer diagnosis until that
+remediation completes; then re-enter this ladder at layer 1 and
+re-capture before advancing. Cross-version `*.so` loading is not
+supported; symptoms above this layer will be misleading.
 
 **Layer 3 — Build.** Once version is coherent, confirm the build can find DOCA.
 
@@ -172,9 +206,11 @@ If any disagree, the install is partial / mixed — route to [`doca-setup ## deb
 
 **Layer 4 — Link.** Once the build compiles, confirm it links.
 
-- The exact `undefined reference to ...` error, if any. The most common case for first-app developers is **DOCA Flow split into 5 separate `*.so`s on recent versions** (`-ldoca_flow -ldoca_flow_ct -ldoca_flow_info_comp -ldoca_flow_tune_server -ldoca_flow_definitions`). Use `pkg-config --libs doca-<library>` to get the full link line; do not try to construct it by hand.
-- `ldd /path/to/built/binary` — confirms which `*.so` files actually got linked at runtime. A binary that links cleanly but `ldd` shows missing or wrong-version `*.so` entries is a runtime path problem (`LD_LIBRARY_PATH`) not a link problem.
-- For link failures, the fix is almost always *"use the `pkg-config --libs` output verbatim"*. Inventing the link line by hand is the failure mode this skill exists to prevent.
+- Capture the exact error and actual failing linker invocation. A missing symbol does not by itself identify the cause: version skew, an omitted dependency or link ordering require different evidence-backed corrections.
+- Compare that invocation with the complete observed `pkg-config --libs doca-<library>` output. DOCA Flow can use multiple shared objects depending on the release; do not prescribe a fixed library count or flag list. If required flags are absent, correct dependency wiring in the existing build system rather than replacing the shipped sample's build with a guessed compiler command.
+- `ldd /path/to/built/binary` applies only when a relevant binary was produced and its identity is known. It cannot inspect a failed link that produced no binary, and an older binary is not evidence for the failed invocation. Header declarations likewise do not establish shared-object symbol exports.
+- **Companion modules are discovered dependencies, not guessed linker flags.** Add a module only when the installed sample/build configuration and pkg-config evidence identify it; preserve the complete returned flags and their required ordering. Do not append a plausible `-l` flag or substitute an assumed library directory even after mentioning pkg-config.
+- After one justified change, rerun the original build and compare the exact error and exit status. A successful link establishes the link result only, not hardware/runtime correctness. For documentation, follow the knowledge map's verified public links; a local skill filename does not define an SDK URL.
 
 **Layer 5 — Runtime.** Once the binary runs, you reach DOCA's own runtime surface.
 
@@ -227,7 +263,7 @@ library skill; this appendix lists only the cross-cutting ones.
 | Link | `pkg-config --libs doca-<library>` | [`## debug`](#debug) layer 4 | Returns the canonical `-l` list. Hand-typed `-l` lines are the anti-pattern. |
 | Link | `ldd /path/to/binary` | [`## debug`](#debug) layer 4 | All `*.so` entries resolved; no "not found" lines. |
 | Runtime | `--sdk-log-level 70` on first run | [`## configure`](#configure) step 2 / [`## run`](#run) overlay | TRACE output appears in stderr; failure path produces named lifecycle calls. |
-| Runtime | `doca_caps --list-devs` | [`## debug`](#debug) layer 5 + [doca-caps](../tools/doca-caps/SKILL.md) | Lists every device DOCA can see; capabilities present per device. |
+| Runtime | `doca_caps --list-devs`; if absent, only an exact capability probe already present in an installed shipped sample or the user's program | [`## debug`](#debug) layer 5 + [doca-caps](../tools/doca-caps/SKILL.md) | Lists every device DOCA can see; if neither the CLI nor an existing probe is available, record capability evidence unavailable and route to `doca-setup ## configure` — never generate probe code. |
 | Runtime | `doca_error_get_descr(<rc>)` (called from program) | [`## debug`](#debug) layer 5 | Returns the canonical description; quote it verbatim, do not paraphrase. |
 | Capture | `dmesg \| tail -200` | [`## test`](#test) step 3 | Kernel-side device events; `mlx5_core` messages around the failure window. |
 | Capture | `journalctl --since "5 min ago"` | [`## test`](#test) step 3 | Service-level logs for the failure window. |
@@ -241,7 +277,10 @@ Three cross-cutting rules for the appendix:
   classifier ([`## debug`](#debug) layer 5) needs.
 - **Never invent a `-l` link line.** `pkg-config --libs doca-<library>`
   is the source of truth, especially for libraries (DOCA Flow on recent
-  versions) that ship as multiple `*.so` files.
+  versions) that ship as multiple `*.so` files. Any `-l` token shown
+  above is illustrative of what `pkg-config` *returns* — it is not a
+  template to retype with substitutions, and shortening one to a
+  guessed stem such as `-ldoca` invents a library that does not exist.
 - **Cross-link instead of duplicate.** Most rows above are also in the
   [`doca-setup`](../doca-setup/SKILL.md) or
   [`doca-programming-guide`](../doca-programming-guide/SKILL.md)

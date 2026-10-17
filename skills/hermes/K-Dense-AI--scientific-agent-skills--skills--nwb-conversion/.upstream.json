@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/nwb-conversion",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/nwb-conversion",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/nwb-conversion",
+  "branch": "main",
+  "pushedAt": "2026-10-15T23:57:39Z",
+  "contentHash": "28608dd2830d67c27d36bb2fbcc742d9b0298ddb9d33ba315a30e6b0f7d437a7",
+  "fetchedAt": "2026-10-17T11:40:57.816Z"
+}

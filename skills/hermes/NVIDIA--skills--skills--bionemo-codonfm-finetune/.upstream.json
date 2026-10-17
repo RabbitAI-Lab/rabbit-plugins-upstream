@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-codonfm-finetune",
+  "identifier": "NVIDIA/skills/skills/bionemo-codonfm-finetune",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-codonfm-finetune",
+  "branch": "main",
+  "pushedAt": "2026-10-17T11:11:44Z",
+  "contentHash": "f265bc336bc6a97d8e4915f8b5e8c47c98efa69a8095aee0403ea5d365d6c1bf",
+  "fetchedAt": "2026-10-17T11:40:42.755Z"
+}
