@@ -1,40 +1,53 @@
-## Description: <br>
-Dawn Memory System provides an agent memory workflow with layered storage, long- and short-term memory management, proactive context handling, vector search, conversation compression, session handoff, summarization, and self-improvement notes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent retain and retrieve local memory across conversations, summarize sessions, and update structured user preferences and lessons.
 
-## Publisher: <br>
-[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chen6896qqwee](https://clawhub.ai/user/chen6896qqwee)
 
-## Use Case: <br>
-Developers and agent users can use this skill to maintain project memory, summarize and compress context, track session changes, and retrieve prior knowledge through structured files and local vector search. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may automatically read, scan, index, or persist project information without enough user control. <br>
-Mitigation: Require explicit confirmation before boot sync, fund-flow scans, vector indexing, documentation updates, and memory writes, and limit the skill to known folders and data sources. <br>
-Risk: Persistent memory and self-improvement notes could capture sensitive or incorrect project information. <br>
-Mitigation: Review memory, changelog, and documentation changes before relying on them, and exclude sensitive projects or data from indexing and persistence. <br>
+## Use Case:
 
+People using an AI assistant can retain preferences, lessons, and session summaries locally so the assistant can recall relevant context in later conversations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chen6896qqwee/skills/dawn-memory-system) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with file, command, and configuration updates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May update memory files, changelogs, active documentation, summaries, and local search indexes when the user permits those actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and artifact/clawhub.json) <br>
+Risk: Automatic memory updates may retain sensitive user information without clear consent or retention controls.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set explicit rules for when memory may be read or written, and require review before saving session summaries.
+
+Risk: Persisted memories may remain available across sessions longer than the user expects.
+
+Mitigation: Provide a way to inspect, edit, and delete stored memories and define a retention policy before use.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chen6896qqwee/skills/dawn-memory-system)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Configuration instructions]
+
+**Output Format:** [Markdown responses and local structured memory files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May update local memory records and session summaries for later recall.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release and clawhub.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

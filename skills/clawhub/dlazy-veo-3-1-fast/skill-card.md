@@ -1,43 +1,59 @@
-## Description: <br>
-Fast response and generation of short videos with Google Veo 3.1 Fast. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to generate short text-to-video or image-to-video clips with Google Veo 3.1 Fast through dLazy's service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call the dLazy CLI for text-to-video, image-to-video, and video extension workflows with Google Veo 3.1 Fast. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, generation parameters, and local media paths passed to the CLI may be sent or uploaded to dLazy services. <br>
-Mitigation: Invoke the skill explicitly for intended dLazy video generation tasks and confirm local file paths before running it. <br>
-Risk: The CLI can store a persistent API key in the user's local configuration. <br>
-Mitigation: Use DLAZY_API_KEY per invocation when persistent credential storage is not appropriate, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Creators and developers use this skill to prompt short video generation from text or images, or extend an existing video, using a dLazy account.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-veo-3-1-fast) <br>
-- [dLazy CLI](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned as hosted file URLs; asynchronous runs may return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: Prompts and supplied media may be uploaded to dLazy's cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting confidential prompts or media unless the service's terms and handling meet your requirements.
+
+Risk: Video generation may consume account credits.
+
+Mitigation: Check the cost estimate with the CLI's dry-run option before generating.
+
+Risk: The CLI can store an API key locally and a global install persists the package.
+
+Mitigation: Protect the key and consider the pinned on-demand npm invocation instead of a global install.
+
+## Reference(s):
+
+- [dLazy CLI source (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON results]
+
+**Output Format:** [Markdown with shell commands and JSON examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated media is accessed via returned URLs or optional local download; asynchronous jobs can return a task ID.]
+
+## Skill Version(s):
+
+1.3.29 (source: ClawHub release metadata; skill frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

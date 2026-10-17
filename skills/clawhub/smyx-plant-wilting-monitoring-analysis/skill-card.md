@@ -1,44 +1,55 @@
-## Description: <br>
-Early monitoring of plant wilting based on hyperspectral imaging and computer vision, capturing early wilting signs before visible symptoms and providing early warning for precision irrigation and disease control. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes plant images or videos for signs of wilting and provides monitoring reports and early-warning guidance through a cloud service.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers and agents use this skill to analyze plant image or video inputs, distinguish environmental wilting from pathological wilt, quantify wilting severity, and return early-warning reports with recommendations. It can also retrieve cloud-hosted historical plant wilting monitoring reports associated with the internally resolved identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Plant image or video inputs may be sent to lifeemergence.com services for analysis. <br>
-Mitigation: Use only with plant media approved for external service processing, and avoid sensitive local files or shared workspaces unless that data flow is acceptable. <br>
-Risk: The skill silently creates or reuses an internal identity and ties cloud report history to that identity. <br>
-Mitigation: Review the identity behavior before installation and run it only where automatic identity association and cloud history retrieval are acceptable. <br>
-Risk: Token-like credentials and user records may be stored locally in a workspace SQLite database. <br>
-Mitigation: Avoid environments where local token storage is unacceptable, and isolate or clean the workspace data directory when testing or uninstalling the skill. <br>
+## Use Case:
 
+Growers and plant-care teams use the skill to assess wilting in plant photos or videos, receive early-warning reports, and review previous monitoring results.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-wilting-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis text, with optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include plant wilting analysis, severity and cause indicators, recommendations, report links, and cloud report-history listings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Plant images, videos, or media URLs are sent to the Life Emergence cloud service for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media approved for cloud processing; seek clearer consent and retention controls before sending sensitive material.
+
+Risk: The skill can silently create or reuse a local identity, register or log in, and persist service tokens in a workspace database.
+
+Mitigation: Review account association and token deletion controls before installation, and restrict access to the workspace containing stored tokens.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-wilting-monitoring-analysis)
+- [Skill demo](https://lifeemergence.com/sample.html)
+- [API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis text or JSON; historical reports as a Markdown table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes monitoring findings, suggestions, and report links; results can be saved to a file.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,7 +1,7 @@
 name: mailbox-bot
 displayName: mailbox.bot
-description: MCP server lets AI agents send physical mail. Postal mail API for AI agents with 30 MCP tools for outbound physical mail, source-document retrieval, existing-address inbound context, linked postal threads, facility messaging, webhooks, sandbox lifecycle simulation, and mailbox.bot-issued managed receiving-address reservations for approved issuance beginning August 31, 2026.
-version: 5.1.6
+description: "Postal mail API and MCP server for AI agents: 45 MCP tools for outbound letters, certified mail, postcards and batch mail, agent mailboxes (street address + PMB, live now, $15/mo), forwarded document context, postal threads, webhooks and sandbox lifecycle simulation."
+version: 5.3.1
 type: remote
 url: https://mailbox.bot/api/mcp
 transport: streamable-http
@@ -11,7 +11,7 @@ auth:
   type: bearer
   instructions: "Sign up at https://mailbox.bot/signup, create an agent API key in the dashboard, and use sk_agent_test_ keys for sandbox (no charges)."
 
-tools: 30
+tools: 45
 
 categories:
   - communication

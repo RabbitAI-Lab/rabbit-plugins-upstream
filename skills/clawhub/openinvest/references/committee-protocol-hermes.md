@@ -74,7 +74,7 @@ complete before returning; separate calls actually lose the parallelism:
 ```
 delegate_task(tasks=[
   {
-    "goal": "<paste prompts.macro_strategist verbatim>\n\n# Current macro data:\n<paste macro_data verbatim>\n\nYour entire final reply must be, and be nothing but, the structured format the committee requires (SIGNAL/STRENGTH/etc. fields — see the format notes in the prompt above). Do not output a 'what I did / which tools I used' style summary — that is not what this task wants; hand over the structured result as-is."
+    "goal": "<paste prompts.macro_strategist verbatim>\n\n# Current macro data:\n<paste macro_data verbatim>\n\n## Current event context (sorted by time, latest first; may include supersedes markers):\n<paste event_brief verbatim — omit this section if it is an empty string>\n\nYour entire final reply must be, and be nothing but, the structured format the committee requires (SIGNAL/STRENGTH/etc. fields — see the format notes in the prompt above). Do not output a 'what I did / which tools I used' style summary — that is not what this task wants; hand over the structured result as-is."
   },
   {
     "goal": "<paste prompts.quant_round1 verbatim>\n\n# Market Regime (deterministically computed, must be followed):\n<paste regime_brief verbatim>\n\n# Market data:\n<paste market_data verbatim>\n\n(Same as above: the entire reply must be the structured format only; do not summarize what you did.)"
@@ -134,7 +134,7 @@ synthesize directly.
 
 After reading Macro + Quant R1/R2 + Risk R1/R2 + `portfolio_summary`, write the full
 CIO memo in the `prompts.cio` format, including the required fields (`VERDICT`/`CONFIDENCE`/
-`DOMINANT_VIEW`/`SUGGESTED_ALLOC_CNY`/`EXECUTION_PLAN`/`RISK_PLAN`/
+`DOMINANT_VIEW`/`SUGGESTED_ALLOC_<BASE>`/`EXECUTION_PLAN`/`RISK_PLAN`/
 `PERSONAL_NOTE`) + the sanity self-check (full rules in committee-protocol.md Stage 5 —
 this step is identical across the two paths: confidence ≥ 0.95 lowered to 0.85,
 alloc > 100k clamped, crash regime forces HOLD/TRIM, and if workers seriously diverge

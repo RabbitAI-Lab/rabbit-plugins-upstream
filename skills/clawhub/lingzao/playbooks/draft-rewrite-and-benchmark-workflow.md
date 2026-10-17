@@ -295,7 +295,7 @@ Possible fixed tracking:
 - 每周输出 7 天选题 + 标题 + 封面文案
 - 每周复盘用户自己的已发布笔记
 
-Credit reminder:
+Scope reminder:
 
 If recurring tracking requires searches, say that Lingzao will confirm the scope before searching. Basic search can look at titles, covers, metrics and links; deep search reads full body, comments, subtitles or transcripts.
 

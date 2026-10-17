@@ -1,45 +1,64 @@
-## Description: <br>
-全国招标采购信息一站式查询与分析助手，帮助用户搜索招标、中标和采购公告，分析企业招投标活动、竞争对手、市场趋势、价格记录和潜在商机。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users search Chinese procurement and bidding notices, research companies and suppliers, and analyze purchasing trends through the Zhiliaobiaoxun service.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users, procurement teams, sales teams, market analysts, and developers use this skill to query Chinese bidding and procurement data, inspect company bidding history, identify buyers and suppliers, compare competitors, and summarize market or price signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can auto-register a device-linked account by sending local device identifiers to zhiliaobiaoxun.com and storing an API key in ~/.zlbx/config.json. <br>
-Mitigation: Prefer manually configuring a dedicated ZLBX_API_KEY; use auto-registration only after reviewing the account, device, and credential-storage implications. <br>
-Risk: The skill may generate an auto-login recharge link when an automatically registered key has no remaining quota. <br>
-Mitigation: Review payment and account-binding implications before following recharge links; use manually managed keys where account control is required. <br>
+## Use Case:
 
+Procurement teams, sales teams, and analysts use this skill to find Chinese tender opportunities, review company bidding history, identify suppliers and competitors, and summarize market activity.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/zhiliaobiaoxun/skills/china-national-bidding-zhongguozhaobiao) <br>
-- [API overview](SKILL.md) <br>
-- [Bidding search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Automatic registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global (focused on Chinese procurement data)
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with JSON request examples and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call zhiliaobiaoxun.com APIs and may persist an API key in ~/.zlbx/config.json when auto-registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Procurement searches, company names, and account-linked requests are sent to Zhiliaobiaoxun.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the data you submit and configure your own ZLBX_API_KEY intentionally before use.
+
+Risk: First-time setup can collect a device hash and save a generated API key locally.
+
+Mitigation: Review the registration flow and consent before proceeding; choose manual key setup if preferred.
+
+Risk: The skill can make a free account balance and update check using configured credentials.
+
+Mitigation: Review this behavior before installation and monitor account-linked API use.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zhiliaobiaoxun/skills/china-national-bidding-zhongguozhaobiao)
+- [Zhiliaobiaoxun skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Procurement search API](references/api-search.md)
+- [Company analysis API](references/api-company.md)
+- [Company registry API](references/api-registry.md)
+- [Market analysis API](references/api-market.md)
+- [Account API](references/api-account.md)
+- [Automatic registration process](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown summaries and tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search filters and amounts are labeled in results; available account information may be summarized on request.]
+
+## Skill Version(s):
+
+1.0.9 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

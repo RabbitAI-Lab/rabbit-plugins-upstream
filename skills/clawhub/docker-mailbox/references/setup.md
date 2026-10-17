@@ -12,18 +12,18 @@
 git clone https://github.com/psyb0t/docker-mailbox
 cd docker-mailbox
 cp config.example.yaml config.yaml
-# Edit config.yaml — add your mailboxes and (optionally) auth.tokens
+# Edit config.yaml: add your mailboxes and a fresh bearer token from openssl rand -hex 32.
 ```
 
 Then either:
 
 ```bash
 # Plain docker run
-docker run --rm -p 8000:8000 \
+docker run --rm -p 127.0.0.1:8000:8000 \
   -v "$PWD/config.yaml:/etc/mailboxd/config.yaml:ro" \
   psyb0t/mailbox:latest
 
-# Or docker compose (recommended)
+# Or edit Compose ports to 127.0.0.1:${PORT:-8000}:8000 first:
 docker compose up -d
 ```
 
@@ -43,7 +43,7 @@ One YAML file. Lives at `MAILBOXD_CONFIG`, or `--config`, or `/etc/mailboxd/conf
 ```yaml
 log_level: INFO
 
-# Bearer-token gate. Guards the HTTP API AND /mcp. Empty / missing = no auth.
+# Bearer-token gate. Guards the HTTP API AND /mcp. Empty / missing denies access.
 # Multi-token list = rotate without downtime: add a new one, swap clients
 # over, retire the old one.
 auth:
@@ -104,11 +104,15 @@ Confirm with the provider's docs — these change occasionally.
 | ---- | ---------------------------------------------------------------------------------------- |
 | 8000 | HTTP API (`/health`, `/mailboxes`, `/inbox`, `/mailboxes/<name>/...`) AND MCP at `/mcp`  |
 
-That's it. One port, one process, two surfaces sharing the same bearer-auth gate. Override the host port with `-p HOST:8000` on `docker run` (or set `ports:` in compose).
+The image listens on `0.0.0.0:8000` inside the container. Keep that internal address for Docker port forwarding and shared-network clients. The standalone CLI defaults to loopback, but the image's normal startup command explicitly overrides it.
+
+Publish host-local access with `-p 127.0.0.1:8000:8000`, or `-p 127.0.0.1:9000:8000` for another local port. The checked-in Compose file currently publishes `${PORT:-8000}:8000` on all host interfaces; replace that entry with `127.0.0.1:${PORT:-8000}:8000` for local access. All-interface publishing is for deliberate remote access, with bearer auth and HTTPS where appropriate.
+
+If replacing the image command with `mailboxd http`, pass `--host 0.0.0.0`; otherwise published ports cannot reach the container's loopback listener. A proxy on the same Docker network can instead use `http://mailboxd:8000` without a host-published port.
 
 ## Auth
 
-When `auth.tokens` is configured, every request except `GET /health` must carry:
+Every request except `GET /health` must carry a token from `auth.tokens`:
 
 ```
 Authorization: Bearer <one of auth.tokens>
@@ -119,7 +123,7 @@ Authorization: Bearer <one of auth.tokens>
 - The same gate covers `/mcp` — there's no second auth system to learn.
 - Multiple tokens in the list let you rotate without downtime: add the new one, switch clients over, remove the old one.
 
-When `auth.tokens` is empty / omitted, all endpoints are open. Fine for "this is bound to `127.0.0.1` and there's a reverse proxy in front." Catastrophic otherwise.
+When `auth.tokens` is empty or omitted, protected requests return `401`; only `/health` remains available. Add a token and restart to use the API or MCP. Every configured token accesses every mailbox. Use separate instances and credentials when different users need isolated mailbox access.
 
 ## Management
 
@@ -137,10 +141,10 @@ make dev-image               # build the sandboxed dev container
 make shell                   # drop into it
 make run                     # boot the server locally (mounts CONFIG=path/to/config.yaml)
 make test                    # full suite (unit + docker-in-docker integration)
-make test-unit               # in-process only — fast feedback
+make test-unit               # in-process only, fast feedback
 make lint                    # flake8 + mypy
+make sec                     # semgrep + bandit + pip-audit -> sec.sarif (reports, never fails)
 make format                  # isort + black
-make check                   # lint + tests
 ```
 
 ## Logs

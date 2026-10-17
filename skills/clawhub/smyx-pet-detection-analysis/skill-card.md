@@ -1,45 +1,58 @@
-## Description: <br>
-Detects cats, dogs, and birds in home monitoring images or video streams and returns structured pet detection results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects cats, dogs, and birds in images and video for home pet monitoring, and retrieves cloud-stored detection reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agent developers use this skill to detect cats, dogs, and birds in uploaded or URL-based home monitoring media, produce structured reports, and retrieve prior detection reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet or home monitoring images and videos may be sent to lifeemergence.com or open.lifeemergence.com services for analysis. <br>
-Mitigation: Review the provider's data-handling practices before installation and avoid submitting sensitive household footage unless that transfer is acceptable. <br>
-Risk: The skill automatically associates requests with a local or upstream identity and may persist account tokens locally. <br>
-Mitigation: Run the skill only in environments where that identity behavior is acceptable, protect local token storage, and rotate or remove stored credentials when access should end. <br>
-Risk: Historical report queries access prior cloud reports tied to the resolved identity. <br>
-Mitigation: Use history-listing features only for the intended account and confirm that cloud report access aligns with the user's consent and privacy expectations. <br>
+## Use Case:
 
+Home pet owners and developers use the skill to detect cats, dogs, and birds in uploaded images or video, review detection reports, and retrieve past reports from the cloud service.
 
-## Reference(s): <br>
-- [API interface reference](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-pet-detection-analysis) <br>
-- [Publisher profile](https://clawhub.ai/user/18072937735) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration] <br>
-**Output Format:** [Markdown or JSON pet detection reports, with optional saved text output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports basic, standard, and json detail levels; can list cloud-stored historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: frontmatter, release evidence) <br>
+Risk: Pet images, videos, or media URLs are sent to the lifeemergence cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit sensitive home footage unless you have verified the service's retention and deletion controls.
+
+Risk: The skill automatically creates or reuses an account and persists access tokens in the workspace data directory.
+
+Mitigation: Review account creation and deletion practices, restrict access to the workspace data directory, and confirm how tokens are cleaned up.
+
+Risk: Historical reports are retrieved from the cloud service.
+
+Mitigation: Confirm that cloud report access and retention meet your privacy requirements before using report history.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Text or Markdown detection report and history table; optional JSON detail or saved result file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include cloud report links and pet counts.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved ClawHub release; bundled SKILL.md says 1.0.20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

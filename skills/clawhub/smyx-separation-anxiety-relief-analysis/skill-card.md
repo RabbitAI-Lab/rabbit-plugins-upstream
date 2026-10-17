@@ -1,44 +1,58 @@
-## Description: <br>
-Analyzes pet-alone video to identify separation-anxiety behaviors, estimate anxiety level, and return behavior observations with comfort recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes videos of pets left alone for separation-anxiety behaviors and provides reports and comfort recommendations.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users, pet owners, boarding centers, and developers use this skill to analyze pet camera footage from owner-away periods, detect likely separation-anxiety behaviors, and produce structured monitoring results and intervention guidance. The output is for behavior observation only, not medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet and home media may be sent to the publisher's cloud service. <br>
-Mitigation: Use only pet-focused media that avoids people, sensitive rooms, private camera URLs, and audio unless the publisher's service and retention practices are acceptable. <br>
-Risk: The skill may create or reuse a persistent local identity and store tokens locally. <br>
-Mitigation: Review identity and token storage before deployment, avoid shared machines for sensitive use, and remove or rotate stored credentials when access should end. <br>
-Risk: Behavior analysis can be mistaken for professional veterinary or behavioral diagnosis. <br>
-Mitigation: Treat outputs as observation and triage guidance, and refer severe or persistent anxiety cases to a veterinarian or qualified behavior professional. <br>
+## Use Case:
 
+Pet owners and boarding staff use the skill to review pet-alone footage, identify possible anxiety behaviors, and receive suggested comfort strategies or access past reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-separation-anxiety-relief-analysis) <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report with optional JSON detail and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save analysis output to a file and can query cloud-hosted historical reports for the current identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: Pet-camera footage or video URLs may be sent to a third-party cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only footage approved for cloud processing and review its privacy implications before submitting it.
+
+Risk: The skill may silently create or reuse an account identity and store tokens locally.
+
+Mitigation: Review account and local credential-storage behavior before installation, and restrict access to the workspace.
+
+Risk: History requests may retrieve cloud reports associated with the reused account identity.
+
+Mitigation: Confirm the account context before requesting or sharing history reports.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-separation-anxiety-relief-analysis)
+- [API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown, JSON]
+
+**Output Format:** [Markdown report or JSON analysis result]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links and a history table; results can be saved to a file.]
+
+## Skill Version(s):
+
+1.0.12 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

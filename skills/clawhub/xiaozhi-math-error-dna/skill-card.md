@@ -1,40 +1,57 @@
-## Description: <br>
-数学错误的持续分析与根因档案系统，仅在学生明确要求记录错题、分析弱项、生成数学报告或同意连续跟踪时激活。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+分析初高中数学错题的根因和反复出现的薄弱点，并在学生请求时生成弱项月报。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students, tutors, and learning agents use this skill to classify math mistakes, identify recurring weak areas, and generate consent-based error maps or monthly weak-area reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna) <br>
-- [数学错因维度表](references/math-error-dimension-table.md) <br>
-- [初中数学高频概念混淆对照表](references/concept-confusion-map.md) <br>
-- [数学读题失误训练方法手册](references/reading-habits.md) <br>
+面向初高中学生及其辅导者，根据错题本交接的记录细分数学错误类型、识别重复弱项，并按学生请求生成分析与月报；未经同意不建立长期档案或跨技能共享。
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Chinese-language tutoring analysis, structured markdown reports, consent prompts, and weak-area tracking guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; intended to operate with explicit student consent before creating long-term learning records.] <br>
+面向中文 K12 数学学习场景；用于其他地区前须本地化课程、同意规则及危机求助渠道。
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: 未成年人错题与情绪数据可能在档案、跨技能交接或家长摘要中被过度共享。
+
+Mitigation: 启用长期记忆、提醒和共享前核对学生或监护人同意设置；家长摘要须另行确认共享许可。
+
+Risk: 非目标地区的课程、同意要求或危机求助信息可能不适用。
+
+Mitigation: 仅在预期的中文 K12 场景直接使用；其他地区先本地化课程、同意规则与危机求助渠道。
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-math-error-dna)
+- [数学错误子类型表](artifact/references/math-error-dimension-table.md)
+- [概念混淆图谱](artifact/references/concept-confusion-map.md)
+- [读题习惯](artifact/references/reading-habits.md)
+- [危机识别与转介协议](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [中文文本和 Markdown 分析、弱项图谱与月报]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [历史统计依赖错题本交接；档案、提醒及家长摘要受相应同意设置约束。]
+
+## Skill Version(s):
+
+2.11.2 (source: ClawHub release and SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

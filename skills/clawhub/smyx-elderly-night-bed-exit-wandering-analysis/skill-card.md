@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes night-vision bedroom or hallway media to detect elderly bed-exit duration, wandering behavior, and threshold-based alert information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes nighttime bedroom or hallway footage for older adults' bed exits and wandering, then provides activity summaries and alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Caregiving teams, nursing-home operators, and smart-home integrators use this skill to analyze authorized night-bedroom or hallway media for prolonged bed exits and wandering alerts. The skill outputs behavioral statistics and alerts, not medical diagnoses or care instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive night-bedroom video or URLs may be processed by the configured remote service. <br>
-Mitigation: Use only authorized media with informed consent from monitored people or guardians, and confirm the remote service is appropriate for the deployment. <br>
-Risk: The skill may silently create or reuse an account identity and store access tokens in the workspace. <br>
-Mitigation: Run it only in controlled workspaces, restrict access to generated tokens and reports, and rotate or remove stored credentials when access is no longer needed. <br>
-Risk: Outputs are behavioral alerts and may be incorrect or incomplete for urgent safety events. <br>
-Mitigation: Require caregiver review and immediate human verification for suspected falls, wandering away, or other emergencies. <br>
+## Use Case:
 
+Caregivers and developers in home or residential elder care use the skill to analyze nighttime video for prolonged bed exits or wandering and review alerts and historical reports. Alerts support, but do not replace, human assessment.
 
-## Reference(s): <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json] <br>
-**Output Format:** [Markdown report text with JSON analysis content and optional report link] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save the report text to a caller-specified output file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release metadata; artifact frontmatter lists 1.0.4) <br>
+Risk: Private bedroom footage and report queries are processed by a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain informed consent from the monitored person or legal caregiver; confirm the service's access, location, and retention policies before use.
+
+Risk: The skill silently creates or reuses local identities and tokens for cloud access.
+
+Mitigation: Review who controls the service account, where tokens are stored, and whether stricter confirmation or on-premise processing is needed.
+
+Risk: Automated alerts may be inadequate for urgent care decisions.
+
+Mitigation: Have caregivers verify suspected falls or missing persons promptly and follow established emergency procedures.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-elderly-night-bed-exit-wandering-analysis)
+- [Analysis API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Text analysis summaries and alerts; Markdown tables for historical reports, with optional saved report files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include bed-exit duration, wandering indicators, alert levels, and report links.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

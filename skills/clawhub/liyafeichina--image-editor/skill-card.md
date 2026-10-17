@@ -1,42 +1,55 @@
-## Description: <br>
-Image Editor helps agents make local PIL-based image edits such as text replacement, element removal, and watermarking while preserving original resolution and verifying outputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Image Editor guides agents through PIL-based image edits such as text replacement, element removal, and drawing while preserving original resolution and verifying results with a vision model.
 
-## Publisher: <br>
-[liyafeichina](https://clawhub.ai/user/liyafeichina) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liyafeichina](https://clawhub.ai/user/liyafeichina)
 
-## Use Case: <br>
-Developers and other users use this skill when an agent needs to modify local images, including replacing text, adding watermarks, removing visible elements, or covering sensitive details while keeping the original dimensions intact. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Image edits may introduce incorrect text, visible artifacts, or unintended changes. <br>
-Mitigation: Compare each edited image against the original with vision verification and review the result before relying on or publishing it. <br>
-Risk: Text editing may fail or look inconsistent when the expected font path or font is unavailable. <br>
-Mitigation: Select an appropriate local font for the target system and adjust the font path before rendering replacement text. <br>
-Risk: Saving with the wrong format or quality settings can reduce output quality. <br>
-Mitigation: Preserve the source dimensions, choose an output format and quality appropriate to the input, and verify the saved file before delivery. <br>
+## Use Case:
 
+External users and developers use this skill to guide local image edits with Python and PIL, including replacing text, adding watermarks, removing visible content, and checking that edited images keep their original dimensions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liyafeichina/image-editor) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Files, Code, Shell commands, Guidance] <br>
-**Output Format:** [Edited image files with Markdown guidance and inline Python or shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Preserves original image dimensions, uses local python3 with PIL/Pillow, and verifies edited output with a vision model before delivery.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Unsafe literal substitution into python3 -c snippets could let a malicious image path run local code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pass image paths through argv or another structured channel, and validate that paths point to expected local image files before execution.
+
+Risk: Image edits can introduce artifacts, incorrect replacements, or unintended dimension changes.
+
+Mitigation: Compare the edited image with the original using a vision model and confirm that resolution is preserved before delivery.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/liyafeichina/skills/image-editor)
+- [Skill definition](artifact/SKILL.md)
+- [Evaluation prompts](artifact/evals/evals.json)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Code, Shell commands, Guidance]
+
+**Output Format:** [Markdown with inline Python and shell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance emphasizes preserving original image resolution and verifying edited output before delivery.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

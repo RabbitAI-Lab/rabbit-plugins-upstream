@@ -1,45 +1,60 @@
-## Description: <br>
-OpenClaw skill for using galdr's ARC workflow to turn YouTube URLs or local audio files into grounded, time-ordered listening-experience prompts backed by listener-state traces: pattern, attention, pulse, heard pressure, surface balance/evidence, harmony, melody, overtones, and silence/re-entry structure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in analyzing YouTube or local music audio and creating time-ordered listening-experience prompts grounded in audio-derived structural cues.
 
-## Publisher: <br>
-[sellemain](https://clawhub.ai/user/sellemain) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sellemain](https://clawhub.ai/user/sellemain)
 
-## Use Case: <br>
-Developers and external users use Galdr to analyze music from YouTube URLs or local audio files, assemble grounded ARC listening-experience prompts, and extract structural evidence such as listener-state traces or video frames. It is best suited for song analysis, structural listening prose, and evidence packets for downstream model writing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: YouTube URLs, downloaded context, lyrics, frame descriptions, and assembled prompts can include information that may be shared with third-party services when fetch workflows or model CLI piping are used. <br>
-Mitigation: Review assembled prompts before sending them to external model endpoints, and prefer local files or blind/metrics-only modes when less contextual data should be included. <br>
-Risk: The skill depends on the separate galdr CLI and media tooling, so installation and execution inherit the trust and runtime risks of that CLI and its dependencies. <br>
-Mitigation: Install galdr only from trusted sources, verify PyPI metadata or the listed project repository when provenance matters, and run diagnostic commands before use. <br>
-Risk: Downloading copyrighted audio can create rights or policy issues when the operator lacks appropriate authorization. <br>
-Mitigation: Use local files or fetch only content where the operator has appropriate rights or context, and avoid using the skill for unauthorized downloading. <br>
+## Use Case:
 
+Agents and their operators use this skill to examine music structure, assemble grounded listening-experience prompts, and optionally describe a track or extract music-video frames.
 
-## Reference(s): <br>
-- [Galdr Metric Reference](references/metrics.md) <br>
-- [Galdr PyPI Project](https://pypi.org/project/galdr/) <br>
-- [Galdr Project Repository Listed By Skill](https://github.com/sellemain/galdr) <br>
-- [ClawHub Skill Page](https://clawhub.ai/sellemain/skills/galdr) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell and Python code blocks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces prompts and guidance for running the separate galdr CLI; generated prompts may include metrics, lyrics, background context, or frame descriptions depending on mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.1 (source: server release metadata) <br>
+Risk: The separately installed Galdr CLI may come from an untrusted source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install it only from trusted PyPI or GitHub sources.
+
+Risk: Full-mode prompts can expose lyrics, background information, and frames to an external model.
+
+Mitigation: Review assembled prompts before sharing them externally; use blind mode for metrics-only output.
+
+Risk: Audio-derived cues can be mistaken for measured listener reactions.
+
+Mitigation: Treat metrics as interpretation cues and confirm structural readings by listening.
+
+## Reference(s):
+
+- [galdr on ClawHub](https://clawhub.ai/sellemain/skills/galdr)
+- [galdr metric reference](references/metrics.md)
+- [galdr CLI on PyPI](https://pypi.org/project/galdr/)
+- [galdr CLI source and documentation](https://github.com/sellemain/galdr)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Text or Markdown with optional shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompts may include timed structural cues and, in full mode, lyrics, background, and video frames.]
+
+## Skill Version(s):
+
+0.7.3 (source: skill frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

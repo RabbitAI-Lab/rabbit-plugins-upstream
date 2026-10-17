@@ -1,48 +1,61 @@
-## Description: <br>
-Analyzes a specific bidding opportunity before submission, using bid-history data to produce a pre-bid due-diligence report with buyer profile, competitive landscape, price benchmarks, risk flags, and bid/no-bid guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于招中标历史数据，协助分析招标项目、采购方、潜在竞争者、报价参考和投标风险，并生成投标决策报告。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External users and business-development teams use this skill to evaluate whether and how to bid on a concrete procurement project. It produces a decision-oriented pre-bid analysis from public bidding records, user-provided project details, and vendor API results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Consent-based trial registration can send a hashed MAC-derived device identifier for trial de-duplication. <br>
-Mitigation: Use a preconfigured ZLBX_API_KEY to bypass registration, or decline auto-registration unless the user accepts the vendor workflow. <br>
-Risk: The skill can persist an API key in a local configuration file. <br>
-Mitigation: Protect ~/.zlbx/config.json on shared machines and rotate or revoke the key if local access may have been exposed. <br>
-Risk: Generated HTML reports and copied source links may contain signed access parameters. <br>
-Mitigation: Treat reports and links as sensitive, share them only with the intended audience, and redact signed URLs before broader distribution. <br>
-Risk: Reports are written to the user's home directory. <br>
-Mitigation: Review the saved report path and contents before sharing, and remove generated files when they are no longer needed. <br>
+## Use Case:
 
+投标团队和采购分析人员可用此技能调查具体招标项目，评估采购方历史、竞争格局、历史成交价格与资格风险，并形成有依据的投标建议。
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/dragonzu/skills/pre-bid-analysis-assistant) <br>
-- [Workflow guide](references/workflow.md) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration workflow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, configuration, guidance] <br>
-**Output Format:** [Markdown decision report plus optional self-contained HTML report file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based trial registration; full reports typically use 12-25 vendor API queries and may include signed source links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: The skill can read or store a vendor API key and create a trial account tied to a hashed device identifier.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a preconfigured key to skip registration, or obtain explicit consent before account creation; safeguard stored credentials.
+
+Risk: Reports can contain signed auto-login links that grant access when shared.
+
+Mitigation: Review and remove sensitive links before sharing reports or screenshots; share only with intended recipients.
+
+Risk: Procurement analysis uses a vendor API and can consume account credits.
+
+Mitigation: Confirm the expected query cost before running a full analysis and verify consequential recommendations against source records.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/pre-bid-analysis-assistant)
+- [API quick reference](artifact/references/api-quick.md)
+- [Analysis workflow](artifact/references/workflow.md)
+- [Report template](artifact/references/report-template.md)
+- [Account registration guide](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, HTML report, Guidance]
+
+**Output Format:** [Markdown decision report; shareable HTML file for full analyses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes supporting citations, confidence and data gaps; report links may grant signed access.]
+
+## Skill Version(s):
+
+1.0.9 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

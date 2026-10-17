@@ -1,45 +1,59 @@
-## Description: <br>
-查询场外指数基金和 ETF 联接基金的基础信息、规模费率、风险等级、基金经理、持仓、分红、区间收益、跟踪误差，并支持关键词筛选和批量比较。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询并比较场外指数基金和 ETF 联接基金的基本信息、费率、持仓、收益及分红。
 
-## Publisher: <br>
-[e-fintech](https://clawhub.ai/user/e-fintech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[e-fintech](https://clawhub.ai/user/e-fintech)
 
-## Use Case: <br>
-External users and agents use this skill to answer Chinese natural-language questions about off-exchange index funds and ETF feeder funds with factual fund data, comparisons, and risk context. It is intended for information lookup and comparison, not investment advice or account operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer can save the API key persistently in plaintext shell profile and local configuration files. <br>
-Mitigation: Use a low-privilege key where possible, review or edit the installer before use, and remove saved ETF_API_KEY and fallback-key entries when they are no longer needed. <br>
-Risk: The installer replaces the installed open-fund-query skill directory. <br>
-Mitigation: Back up any existing open-fund-query installation or install to a separate skills directory before running the installer. <br>
-Risk: Fund information and comparisons could be mistaken for investment advice if the answer omits boundaries. <br>
-Mitigation: Keep outputs factual, include data dates or report periods, avoid buy or sell recommendations, and preserve the required user-facing disclaimer. <br>
+## Use Case:
 
+个人投资者和使用智能体的用户可查询中国场外指数基金与 ETF 联接基金的数据，并按规模、费率、历史表现等客观指标比较产品；不用于投资建议或交易操作。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/e-fintech/skills/open-fund-query) <br>
-- [场外指数基金信息查询 — 接口字段权威参考](references/catalog-oef.md) <br>
-- [Index Hub API service](https://www.etf.com.cn/api/etf-api-service) <br>
-- [AI Skills access documentation](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/readme.pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Chinese Markdown answer with concise conclusions, data tables or lists, data dates, and risk disclosure] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires API authorization; final answers should omit credentials, raw responses, and internal implementation details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: The API key is stored locally and used to access the fund data service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if you trust the service; protect the credential file at ~/.config/index-hub/api_key and do not share the key.
+
+Risk: Installation can replace an existing open-fund-query folder and may contact the service to verify the key.
+
+Mitigation: Review installer options and back up existing skill files; use --skip-api-verify when remote verification is inappropriate.
+
+Risk: Fund data or automated comparisons could be mistaken for current prices or personalized investment advice.
+
+Mitigation: Check each fund's data date, distinguish NAV from intraday ETF prices, and avoid treating the output as a trading recommendation.
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/e-fintech/skills/open-fund-query)
+- [指数直通车使用说明](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/help.pdf)
+- [场外基金查询字段与接口参考](references/catalog-oef.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with comparison tables and dated fund data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes data dates and a non-investment-advice notice.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

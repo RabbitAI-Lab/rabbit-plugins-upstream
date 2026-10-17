@@ -1,44 +1,58 @@
-## Description: <br>
-Winskill is a Windows Server operations toolbox that helps agents diagnose disk usage, IIS, services, Windows Update, performance, security logs, registry startup items, storage, networking, certificates, firewall rules, Docker, Kubernetes, and guided repair workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Windows server operations toolbox for disk diagnostics, system monitoring, security audits, maintenance, and remote administration.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Windows administrators, operations engineers, and support agents use this skill to generate PowerShell-based diagnostic and maintenance guidance for Windows Server environments. It is intended for local server triage, audit, cleanup, and confirmed repair workflows rather than unattended changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Repair and cleanup flows can stop services, reset networking, clear caches, or delete temporary files. <br>
-Mitigation: Run diagnosis-only steps first, review the proposed command list and impact, require explicit user confirmation, and schedule changes during a maintenance window. <br>
-Risk: Some procedures require administrator privileges on Windows servers and may affect availability. <br>
-Mitigation: Limit execution to authorized administrators, confirm backups or restore points where applicable, and avoid production execution without change approval. <br>
-Risk: The release makes read-only and offline safety claims that do not cover every repair behavior. <br>
-Mitigation: Treat the skill as a repair-capable administrative toolbox and review each generated command before running it. <br>
+## Use Case:
 
+Windows administrators and IT teams use this skill to inspect server health, diagnose incidents, prepare maintenance actions, and monitor multiple machines.
 
-## Reference(s): <br>
-- [Winskill ClawHub skill page](https://clawhub.ai/fyniujin/skills/winskill) <br>
-- [Docker Engine on Windows Server documentation](https://docs.docker.com/engine/install/windows-server/) <br>
-- [Install kubectl on Windows documentation](https://kubernetes.io/docs/tasks/tools/install-kubectl-windows/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with PowerShell command blocks, tables, and Chinese-language operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes read-only diagnostic flows plus confirmed administrator repair and cleanup procedures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Remote administration can execute arbitrary commands on selected servers despite read-only claims.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict access to trusted administrators and review commands and targets before using module 30.
+
+Risk: Monitoring features can install long-lived, high-privilege scheduled tasks.
+
+Mitigation: Before enabling modules 28 or 31, review task paths, run-as identity, permissions, duration, and cleanup.
+
+## Reference(s):
+
+- [Winskill ClawHub release](https://clawhub.ai/fyniujin/skills/winskill)
+- [Disk health check](artifact/references/modules/module-34-磁盘体检.md)
+- [Remote multi-server administration](artifact/references/modules/module-30-远程多服务器管理.md)
+- [Scheduled monitoring](artifact/references/modules/module-31-轻量常驻监控.md)
+- [Performance baselines and trends](artifact/references/modules/module-28-性能基线-&-趋势分析.md)
+- [Monitoring thresholds](artifact/references/thresholds.yaml)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, PowerShell commands, Configuration guidance]
+
+**Output Format:** [Markdown with PowerShell code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can guide generation of local diagnostic reports, including HTML disk reports.]
+
+## Skill Version(s):
+
+3.4.0 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

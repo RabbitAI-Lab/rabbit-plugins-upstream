@@ -1,5 +1,31 @@
 # Changelog
 
+## [5.3.1] - 2026-10-11
+
+### Changed
+- Agent mailbox rental is $15/mo (was $10/mo). Mailboxes are still open to everyone and live now; allowances and usage rates are unchanged
+
+## [5.3.0] - 2026-10-10
+
+### Changed
+- Agent mailboxes are open to everyone and **live now** at $10/mo (was $20/mo, invite only): a street address + PMB at the staffed, USPS-compliant Manhattan Beach, CA facility. The PMB number is assigned after USPS Form 1583 verification
+- A mailbox is requested at signup or with `POST /v1/mailing-address-requests`, which replaces the invite request (`POST /v1/waitlist`) in the skill and README
+- README adds the `npx skills add arbengine/mailbox-bot-skill` install line for Claude Code, Cursor, Codex and other agents
+
+## [5.2.0] - 2026-09-28
+
+### Changed
+- Agent mailboxes are **Live now · invite only** since 27 Sep 2026: a street address + PMB at the staffed, USPS-compliant Manhattan Beach, CA facility ($20/mo; facility #1 holds 100 mailboxes). Removed the August 31 issuance date, the planned $10/mo price and the beta/reservation wording
+- Rewrote the skill around the current physical inbound contract: `GET /v1/inbound-items?q=`, pages and quotes, `scan` / `forward` / `discard` proposals with `expected_version` and `expected_quote`, owner approval via `/decision`, webhooks `inbound.received`, `inbound.keywords_matched` and `inbound.pages_ready`, and the matching MCP tools
+- Outbound guidance now sends `X-Mailbox-MD-Version`, prices First-Class from $2.00 with $0.40/page B&W and $0.70/page color, includes the FedEx 2Day and Overnight adjustments, prepaid-credit rules and queued cancellation, and the `/v1/batch-mail` flow
+- MCP metadata refreshed from 30 to 45 tools to match `https://mailbox.bot/api/mcp/tools-public`; manifest logo points at the current 512px mark
+
+## [5.1.7] - 2026-07-28
+
+### Changed
+- Corrected the published USPS one-page floors to $15.00 for Priority Mail, $20.00 for Certified Mail, and $24.00 for Certified Mail with Electronic Return Receipt
+- Updated current page and color-print pricing guidance and directed agents to dry-run cost breakdowns for account-specific quotes
+
 ## [5.1.6] - 2026-07-08
 
 ### Changed

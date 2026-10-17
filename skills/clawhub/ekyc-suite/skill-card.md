@@ -1,48 +1,55 @@
-## Description: <br>
-eKYC Suite is a ClawHub KYC identity verification skill for AI agents that supports consent-based media checks for remote onboarding, document OCR, face comparison, liveness detection, deepfake screening, and human-reviewed risk workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+eKYC Suite helps agents conduct consent-based face comparison, liveness checks, identity-document OCR, deepfake screening, and media risk review through a configured cloud service.
 
-## Publisher: <br>
-[carochen112233-commits](https://clawhub.ai/user/carochen112233-commits) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[carochen112233-commits](https://clawhub.ai/user/carochen112233-commits)
 
-## Use Case: <br>
-AI agent builders, fintech onboarding teams, compliance engineers, and KYC workflow developers use this skill to add identity-document OCR, selfie-to-document face comparison, liveness and deepfake screening, and media risk review to human-reviewed KYC workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends sensitive identity documents, bank-card images, face images, and videos to a configured cloud endpoint for KYC processing. <br>
-Mitigation: Install only with a trusted eKYC backend, operator-confirmed user consent, a retention policy, access controls, and confirmation of where submitted media and OCR results are stored or processed. <br>
-Risk: Verification outputs may influence high-impact identity, legal, financial, or onboarding decisions. <br>
-Mitigation: Treat outputs as advisory review signals and require human review and appropriate business controls before making consequential decisions. <br>
-Risk: Typed names, ID numbers, phone numbers, or other personal text in chat may create unnecessary privacy exposure. <br>
-Mitigation: Do not accept or transmit personal text through chat; request authorized image or video inputs through the supported media flow instead. <br>
+## Use Case:
 
+Fintech onboarding teams, risk and compliance engineers, and agent developers use this skill to obtain advisory identity and media-review signals for authorized, human-reviewed KYC workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite) <br>
-- [Related npm MCP package](https://www.npmjs.com/package/@wefi-ai/ekyc-suite-mcp) <br>
-- [Related repository](https://github.com/wefi-ai/ekyc-suite-mcp) <br>
-- [eKYC Suite Face Compare](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-face-compare) <br>
-- [eKYC Suite AI Guardian](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-ai-guardian) <br>
-- [eKYC Suite Document OCR](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-document-ocr) <br>
-- [eKYC Suite Media Labeling](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite-media-labeling) <br>
+### Deployment Geography for Use:
 
+Global, subject to local privacy and identity-verification requirements and service availability.
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON API responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires EKYC_CLOUD_ENDPOINT and EKYC_CLOUD_API_KEY; processes only user-supplied media paths, public HTTPS URLs, or base64 media strings required by the selected command.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.18 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Identity documents, bank cards, selfies, and videos contain highly sensitive personal data and are sent to the configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only an operator-trusted HTTPS endpoint after confirming user authorization, with defined retention and access-control rules.
+
+Risk: Verification and risk signals may be insufficient for consequential identity, financial, or eligibility decisions.
+
+Mitigation: Keep appropriate business controls and human review; never use these results as the sole basis for significant automated decisions.
+
+## Reference(s):
+
+- [eKYC Suite ClawHub release](https://clawhub.ai/carochen112233-commits/skills/ekyc-suite)
+- [Related GitHub repository (metadata link; release provenance unavailable)](https://github.com/wefi-ai/ekyc-suite-mcp)
+- [Related npm package](https://www.npmjs.com/package/@wefi-ai/ekyc-suite-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries of structured verification results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Explain scores and OCR fields, mask sensitive details where possible, and treat results as advisory rather than final decisions.]
+
+## Skill Version(s):
+
+1.1.28 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/postgres-slow-query-tuner",
+  "slug": "postgres-slow-query-tuner",
+  "ownerHandle": null,
+  "version": "1.0.0",
+  "updatedAt": 1792167542835,
+  "contentHash": "0e93062d7712a94ea032c3596872a024f47b92cb7a040abe9cb4b8312f13e103",
+  "fetchedAt": "2026-10-17T11:46:51.025Z"
+}

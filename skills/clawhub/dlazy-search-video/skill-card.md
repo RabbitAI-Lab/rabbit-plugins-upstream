@@ -1,43 +1,59 @@
-## Description: <br>
-Video search tool: queries Pixabay video API by keywords and returns stock video URLs and metadata for footage sourcing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches for stock video footage by keyword and returns video URLs and metadata through dLazy's hosted service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, creators, and agents use this skill to search for stock video footage by keyword and retrieve video URLs and metadata for media sourcing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search queries are sent to dLazy and a dLazy API key may be stored locally by the CLI. <br>
-Mitigation: Use DLAZY_API_KEY for per-invocation credentials when local key storage is not desired, and rotate or revoke keys from dLazy if needed. <br>
-Risk: The --save option writes returned assets to a caller-provided local path. <br>
-Mitigation: Use explicit trusted output paths and review downloaded files before reuse. <br>
+## Use Case:
 
+Creators and developers use this skill to find stock video footage by keyword and review matching URLs and metadata for their projects.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-video) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Files, Guidance] <br>
-**Output Format:** [JSON result envelope with video result metadata and URLs; optional local asset file when --save is used.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async mode can return a generateId and status for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: The skill describes a narrow Pixabay search but also describes broader hosted inference and file uploads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm what data the CLI sends to dLazy, and do not pass local file paths unless upload is intended.
+
+Risk: The documented search option and example disagree on whether the command takes --query or --prompt.
+
+Mitigation: Check the installed command's help before running searches.
+
+Risk: Using the hosted CLI requires an API key and may download files to the local machine.
+
+Mitigation: Protect the locally stored key and use --save only when a download is intended.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-search-video)
+- [dLazy CLI homepage (listed in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown summary of video URLs and metadata from JSON search results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results require a dLazy API key; optional downloads can save assets locally.]
+
+## Skill Version(s):
+
+1.3.31 (source: ClawHub release metadata; skill frontmatter lists 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,57 @@
-## Description: <br>
-Use when someone wants one polished host-on-camera beat: a speaking person with intake and approval gates before generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides the creation of one speaking-avatar video, with intake and approval gates before generation.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to plan and gate a single speaking avatar clip, including intake, approval, still generation, avatar generation, and a local generation manifest. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reference media, scripts, prompts, URLs, and prediction identifiers can include private or sensitive identity material. <br>
-Mitigation: Use only materials intended for avatar generation, obtain approval before upload, and avoid private identity data unless needed for the approved use case. <br>
-Risk: The workflow can involve paid external generation services. <br>
-Mitigation: Require explicit plan and still approvals before paid video generation, as described by the skill's approval gates. <br>
+## Use Case:
 
+Creators and marketing teams use this skill to plan and produce one host-on-camera video from an approved portrait and spoken script.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/avatar-single-scene) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with command examples and workflow checkpoints] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes approval gates and manifest fields; does not itself generate media without user approval.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence release.version and artifact metadata.version) <br>
+Risk: Uploaded or generated portraits, audio, and scripts are sent to Pruna APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the media and script for sensitive content and obtain permission before uploading.
+
+Risk: Paid avatar generation can incur charges or produce an unwanted clip.
+
+Mitigation: Require explicit approval of the full script and plan, then the still, before starting one video job.
+
+Risk: Installing prerequisite skills through the skills CLI introduces third-party dependencies.
+
+Mitigation: Review the PrunaAI skill package source and use pinned, trusted CLI and skill versions.
+
+## Reference(s):
+
+- [avatar-single-scene on ClawHub](https://clawhub.ai/pruna-ai/skills/avatar-single-scene)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance with a script, production plan, approval checkpoints, and generation instructions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [After approval, the workflow provides a generated video URL and a manifest of inputs and outputs.]
+
+## Skill Version(s):
+
+1.0.15 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

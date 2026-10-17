@@ -1,45 +1,58 @@
-## Description: <br>
-Automatically triggers soothing mechanisms when pet anxiety, howling, or prolonged loneliness is detected, and produces structured pet behavior analysis reports from video or URL inputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet monitoring media through a cloud service and returns behavior reports and report links, but does not activate soothing devices.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze pet monitoring videos or media URLs for anxiety-related behavior, generate structured reports, and query prior cloud-hosted analysis reports. It is intended as an intelligent pet-care trigger and reporting assistant, not as a guaranteed animal-care or smart-device control system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet camera media and submitted URLs are processed by the LifeEmergence cloud service. <br>
-Mitigation: Use only media that is appropriate for cloud processing, avoid sensitive household footage, and review service handling before installation. <br>
-Risk: Report history is associated with a hidden local identity and backend tokens may be stored in the workspace. <br>
-Mitigation: Review local workspace storage before and after use, protect generated identity and token files, and clear them when the skill is no longer needed. <br>
-Risk: The release is packaged as an automatic soothing trigger, but evidence does not show reviewed code that directly controls speakers, toys, or smart-home devices. <br>
-Mitigation: Treat device activation as requiring separate reviewed integration code and human validation before connecting any physical pet-care devices. <br>
+## Use Case:
 
+Pet owners and caregivers can submit pet monitoring media for cloud-based behavior analysis and retrieve structured reports or past report links. The skill does not control soothing devices.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-calming-trigger-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [Pet Calming Trigger API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional report links and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video files or media URLs, historical report listing, optional detail level, and optional output file path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
+Risk: Pet media or media URLs are sent to a remote service and may contain sensitive household footage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review cloud-processing terms and avoid submitting sensitive household footage without consent.
+
+Risk: The skill may automatically create or reuse an identity and persist authentication tokens locally.
+
+Mitigation: Review identity association and local credential storage before installation, and protect the machine running the skill.
+
+Risk: The advertised automatic soothing-device trigger is not implemented.
+
+Mitigation: Treat the results as analysis only; use a separately verified integration for device control.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-pet-calming-trigger-analysis)
+- [API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files]
+
+**Output Format:** [Structured text or Markdown with report links; optionally saved to a file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can list historical cloud reports; does not actuate soothing devices.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved ClawHub release; bundled frontmatter says 1.0.22)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
