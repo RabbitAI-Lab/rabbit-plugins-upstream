@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/maintain-verification-skill",
+  "repo": "cursor/plugins",
+  "skillId": "maintain-verification-skill",
+  "branch": "main",
+  "pushedAt": "2026-10-17T08:10:27Z",
+  "contentHash": "11cf460ea255afb7a61852dfc82c974540f2fe4664b5c1aa949d5b4590eb42f6",
+  "fetchedAt": "2026-10-17T11:40:40.257Z"
+}

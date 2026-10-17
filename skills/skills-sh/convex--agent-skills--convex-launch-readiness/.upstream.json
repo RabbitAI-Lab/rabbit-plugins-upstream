@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-launch-readiness",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-launch-readiness",
+  "branch": "main",
+  "pushedAt": "2026-10-13T21:11:27Z",
+  "contentHash": "d5b114888012c798a6707281953778fe8f6d7f9360d4eeeac5718fcc74cfce80",
+  "fetchedAt": "2026-10-17T11:40:34.329Z"
+}

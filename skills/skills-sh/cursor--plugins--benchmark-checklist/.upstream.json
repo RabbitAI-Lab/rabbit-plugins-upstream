@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/benchmark-checklist",
+  "repo": "cursor/plugins",
+  "skillId": "benchmark-checklist",
+  "branch": "main",
+  "pushedAt": "2026-10-17T08:10:27Z",
+  "contentHash": "77f6adce1b8785c7e26d762992365b466d3e7d09d61edbd670f2bceccf649146",
+  "fetchedAt": "2026-10-17T11:40:40.423Z"
+}
