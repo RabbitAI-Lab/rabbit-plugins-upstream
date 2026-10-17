@@ -1,47 +1,60 @@
-## Description: <br>
-Alibaba Bailian qwen3-tts voice cloning: upload a clean voice sample to create a custom voice for later text-to-speech use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users clone a custom voice from a clean audio sample for later text-to-speech use through dLazy's hosted Qwen service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke the dLazy CLI for Alibaba Bailian qwen3-tts voice cloning from a clean audio sample. The resulting custom voice can be reused in later text-to-speech workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Voice samples may contain sensitive biometric data and are uploaded to a third-party cloud service. <br>
-Mitigation: Use only recordings the user owns or has explicit permission to clone, and review dLazy retention and deletion terms before upload. <br>
-Risk: The dLazy API key is stored in local CLI configuration when using the login or auth setup flow. <br>
-Mitigation: Protect the local config file, prefer per-invocation environment variables when appropriate, and rotate or revoke organization keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: The examples include a stale prompt-style invocation that does not match the listed qwen-audio-clone options. <br>
-Mitigation: Use `dlazy qwen-audio-clone -h` or tool description output as the source of truth before running the command. <br>
-Risk: A persistent global CLI install increases local supply-chain and maintenance exposure. <br>
-Mitigation: Prefer `npx @dlazy/cli@1.2.3` when a temporary pinned invocation is sufficient. <br>
+## Use Case:
 
+Creators and developers use the skill to submit an authorized voice sample and obtain a custom voice for subsequent text-to-speech requests.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-qwen-audio-clone) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, JSON, guidance] <br>
-**Output Format:** [CLI command guidance and JSON responses with generated output or task status URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires npm or npx, a dLazy API key, and access to dLazy API and file-hosting endpoints.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Voice samples are uploaded to a hosted service and can contain sensitive biometric data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only samples you have rights and consent to clone; review service data-handling terms before uploading.
+
+Risk: The CLI stores or uses a dLazy API key.
+
+Mitigation: Protect the key, avoid sharing it in prompts or logs, and rotate or revoke it if exposed.
+
+Risk: The published examples contain image-output and --prompt documentation errors.
+
+Mitigation: Check the installed CLI's help and actual response before relying on the examples.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-qwen-audio-clone)
+- [dLazy CLI repository (listed in skill metadata; release provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance for providing a voice sample and obtaining a custom voice for later TTS calls; CLI responses may include asynchronous task identifiers.]
+
+## Skill Version(s):
+
+1.3.29 (source: server-resolved ClawHub release; embedded frontmatter says 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

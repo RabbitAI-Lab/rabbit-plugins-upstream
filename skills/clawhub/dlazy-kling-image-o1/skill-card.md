@@ -1,43 +1,56 @@
-## Description: <br>
-Generate exquisite images with the Kling o1 model, supporting text-to-image and image-to-image workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates images from text prompts or reference images using Kling Image O1 through the dLazy service.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to invoke the dLazy CLI for Kling o1 image generation from prompts and optional reference images. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced local image files are sent to dLazy services for image generation. <br>
-Mitigation: Install and invoke the skill only when this data transfer is intended; use dry-run when available to review payload and cost before calling the API. <br>
-Risk: The skill stores a dLazy API key locally, and scanner evidence notes that inspected CLI code may not enforce the restricted file permissions claimed by the skill. <br>
-Mitigation: Prefer per-invocation DLAZY_API_KEY in sensitive environments, or check and restrict permissions on ~/.dlazy/config.json after login or auth set. <br>
+## Use Case:
 
+Creators and developers use this skill to generate or edit images from text prompts and optional reference images.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-image-o1) <br>
-- [dLazy publisher profile](https://clawhub.ai/user/dlazyai) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses the dLazy CLI to return hosted image output URLs or asynchronous task status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and selected local media may be uploaded to dLazy, and generated images are hosted remotely.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit sensitive prompts or images unless you trust the provider's terms and account controls.
+
+Risk: The CLI can store an API key locally.
+
+Mitigation: Use DLAZY_API_KEY for per-invocation credentials and npx to avoid a persistent global CLI installation when preferred.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-kling-image-o1)
+- [dLazy CLI repository (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Images, JSON]
+
+**Output Format:** [JSON response with hosted image URLs; optional downloaded image file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Asynchronous requests may return a task ID before the image is available.]
+
+## Skill Version(s):
+
+1.3.29 (source: server-resolved ClawHub release; artifact frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

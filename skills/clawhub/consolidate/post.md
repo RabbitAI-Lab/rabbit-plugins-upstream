@@ -27,9 +27,10 @@ If `--interactive` is off, proceed directly to medium decision + POST (determini
 
 ```markdown
 ## AI Review Summary — [receiving-code-review](https://skills.sh/obra/superpowers/receiving-code-review)
+<!-- consolidate:verified -->
 ```
 
-Plain `## AI Review Summary` is forbidden. The link form above is required.
+Plain `## AI Review Summary` is forbidden. The link form above is required. The `<!-- consolidate:verified -->` HTML comment on the second line is an invisible machine-readable provenance marker: it renders as nothing on GitHub but lets the `block-noncompliant-review-comment` guard (client hook + server Action) confirm the comment came through consolidate even if the `receiving-code-review` link text is ever reworded.
 
 **Caller retitle does NOT touch this Summary title (HARD STOP)**: a caller "rename the review → X" instruction scopes to the **Code Review comment** (Step 3.5.3 / `internal.md` "Caller-supplied custom title contract") — NEVER this Summary. The Summary heading stays `## AI Review Summary — [receiving-code-review](...)`. The two comments must not share the "Summary" token: the Code Review comment's heading must contain **no** "Summary" (e.g. `## Code Review — [requesting-code-review](...)`), this Summary comment owns "Summary" exclusively.
 
@@ -42,15 +43,33 @@ When consolidating a promotion PR (e.g., `next-fix` or `next-feat` -> `main`), i
 
 ### Pre-Summary gate — Code Review comment MUST already exist (HARD STOP — visible even if internal.md was skipped)
 
-**Before posting this Summary, a Code Review comment (Step 3.5.3, `requesting-code-review` link — under whatever title, default `## Internal Code Review` or a caller custom title like `## Code Review`) MUST already exist on the PR.** This gate is restated here in post.md (not only in internal.md) so that skipping the internal.md topic does not also skip the 2-comment invariant.
+**When Step 3.5's trigger was satisfied, a Code Review comment (Step 3.5.3 — under whatever title, default `## Internal Code Review` or a caller custom title like `## Code Review`) MUST already exist on the PR before posting this Summary.** This gate is restated here in post.md (not only in internal.md) so that skipping the internal.md topic does not also skip the 2-comment invariant.
+
+**The gate is conditional on the trigger, and it does not create one (HARD STOP)**: `internal.md`'s post-count table has a row reading "External AI only without Internal Review → 1 post → Summary only". That row is not an oversight this gate overrides — it is the case where none of Step 3.5's three triggers fired (CodeRabbit walkthrough-only / reviewer failure / Copilot unavailable) because the external bot layer produced a complete review on its own. Reading this gate as unconditional turns it into a trigger generator: it manufactures a mandatory Internal Review for a PR whose own routing says one post suffices, and the fallback machinery (engine selection, the escalation ladder) gets spun up for a fallback that was never triggered.
+
+Determine which case you are in **before** applying the gate:
+
+| Step 3.5 trigger state | Code Review comment | This gate |
+|---|---|---|
+| One or more triggers fired | Required — post it first, Summary second | Applies in full |
+| No trigger fired (external bot review complete) | Not required | Does not apply — `internal.md`'s 1-post row governs; post the Summary alone |
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Read "MUST already exist" as unconditional and require a Code Review on every PR | Check the trigger state first. No trigger = `internal.md`'s 1-post row governs |
+| 2 | Treat this gate as outranking `internal.md`'s 1-post row because it is phrased as a HARD STOP | They describe different cases, so they never actually conflict. Wording strength is not a tie-breaker (see `internal.md` "Two rules pointing opposite ways") |
+| 3 | Manufacture an Internal Review to satisfy the gate when no trigger fired | That inverts the dependency — the gate presupposes a trigger, it does not create one |
 
 ```bash
 gh api repos/{owner}/{repo}/issues/{N}/comments \
   --jq '[.[] | select(.body | test("requesting-code-review"))] | length'
 ```
 
-- Result `0` → **STOP. Do not post the Summary.** Return to Step 3.5 (internal.md) and post the Code Review comment first. Posting the Summary alone (or merging both into one comment) is the documented 6-recurrence violation ("Review comment ≠ AI Review Summary").
+- Result `0` **and a Step 3.5 trigger fired** → **STOP. Do not post the Summary.** Return to Step 3.5 (internal.md) and post the Code Review comment first. Posting the Summary alone (or merging both into one comment) is the documented 6-recurrence violation ("Review comment ≠ AI Review Summary").
+- Result `0` **and no trigger fired** → this is `internal.md`'s 1-post case. Post the Summary alone and state in its reviewer matrix why no Internal Review was run, so a reader can tell "not triggered" from "skipped".
 - Result `≥1` → the paired Code Review comment exists; proceed with the Summary post (chronologically after it).
+
+> The grep above matches the `requesting-code-review` link. A Code Review whose body carries bot-layer content drops that link by design (`internal.md`, "Bot-layer content in the body drops the suffix") and instead names its engines in the heading — so a `0` here does not by itself mean no Code Review exists. Confirm against the heading before concluding it is absent: `gh api repos/{owner}/{repo}/issues/{N}/comments --jq '.[] | select(.body | test("consolidate:verified")) | .body | split("\n")[0]'` (and the same over `pulls/{N}/reviews`, since the review medium is where inline-bearing Code Reviews land).
 
 ### Step 3.5.3 review comment ↔ Step 7 Summary paired pattern
 
@@ -102,7 +121,28 @@ Self-check (before posting a new Step 7 Summary comment):
 2. If yes, does an Internal Code Review also already exist? — same query for `## Internal Code Review`
 3. If both exist and the Summary's `created_at` precedes the Internal Review's `created_at` → **order is reversed**. Apply the PATCH-swap damage control. Do not create a third comment
 
+> **Presence check must query both mediums (HARD STOP)**: item 1's query above only checks issue comments. When the unified-POST medium (below) applies, the Summary is published as a **Formal Review body**, not an issue comment — a comments-only check false-negatives. Also query `gh api repos/<owner>/<repo>/pulls/<N>/reviews` and check for a review `body` matching the same Summary-header prefixes.
+
+### Mechanical Verification Gate (HARD STOP — verify_consolidate.py)
+
+**After posting or updating consolidation comments (or before marking consolidation complete), running `python3 skills/consolidate/scripts/verify_consolidate.py --pr <NUMBER>` is MANDATORY.**
+
+This script deterministically verifies:
+1. **Chronological order**: Internal Code Review comment created_at precedes AI Review Summary.
+2. **Reviewer count accuracy**: Every active reviewer in `pulls/<N>/comments` (Copilot, CodeRabbit) has exact matching comment counts in the Reviewer Matrix.
+3. **Table row completeness (1:1)**: Total table rows in `Consolidated Findings` equals sum of external inline comments + superpowers internal findings (no dropped or compressed rows).
+4. **Superpowers inclusion**: Internal Code Review findings are physically included in the Consolidated Findings table.
+5. **SHA validation**: Every commit SHA referenced is verified with `git cat-file -e <sha>` (zero SHA hallucinations).
+6. **Role isolation**: Internal Code Review contains zero echoes/reviews of external tools.
+7. **Merge format**: Recommendation specifies `/github-flow merge <N>` (never raw `gh pr merge`).
+
+```bash
+python3 skills/consolidate/scripts/verify_consolidate.py --pr <NUMBER>
+```
+If the script exits with non-zero, the consolidation is **INVALID and INCOMPLETE**. All errors must be corrected via PATCH before proceeding.
+
 ### Medium selection — Mergeable + Formal Review action → unified POST (HARD STOP — 2026-05-22 reinforcement)
+
 
 The Summary body and the Formal Review body carry the **same verdict information** for Mergeable PRs. Posting them as separate media (issue comment + Formal Review) duplicates content. **When all of the following hold, Summary is posted as the Formal Review body (single POST). Issue comment Summary is forbidden:**
 
@@ -212,6 +252,22 @@ Full conditions:
 
 **Resolving deployment-required verification items**: If the Test Plan has "post-deployment verification" items, pre-verify on a legacy/staging environment using the feature branch image. Since this is verifiable without master merge, do not record "post-deployment verification required" as a merge-blocking reason.
 
+### Fact-verification before POST — no fabricated SHA / inflated reviewer count (HARD STOP)
+
+Every verifiable specific written into a Summary or Internal Code Review is an audit-trail claim a merge is read against. Confirm each against a primary source before POST — never invent precise-looking detail:
+
+1. **Cited commit SHAs must exist.** For every `commit <sha>` in the body, run `git cat-file -e <sha>^{commit}` (in a checkout of the target repo) or `gh api repos/<owner>/<repo>/commits/<sha>`. Remove or correct any that 404.
+2. **External-reviewer finding counts must reconcile with the source.** A "Copilot: N findings" claim must equal `gh api repos/<owner>/<repo>/pulls/<PR>/comments --jq '[.[] | select(.user.login | test("copilot"; "i"))] | length'` (a case-insensitive contains-match is robust across the inline-comment surface login `Copilot` and the review-author `copilot-pull-request-reviewer[bot]`). Never label an internal-reviewer finding as `copilot`; internal output is sourced `Internal Code Review`.
+3. **Line numbers and test counts come from real output, not memory.** If a count is unconfirmable, write a verifiable level ("CI green") instead of a fabricated number.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Cite `commit <sha>` from memory or a plausible guess | Resolve each SHA (`git cat-file -e` / `gh api commits`) before writing it; drop any that 404 |
+| 2 | Label a finding `copilot` when Copilot did not raise it, or claim more Copilot findings than exist | Reconcile the count against `pulls/<PR>/comments`; source internal-only findings as `Internal Code Review` |
+| 3 | Invent line numbers or "N/N tests" precision | Copy line numbers and test counts from the actual review/run output; otherwise write "CI green" |
+
+The `block-summary-fabricated-claims` guard (PreToolUse hook) enforces 1 and 2 mechanically: a consolidate-provenance POST citing a nonexistent SHA, or claiming more Copilot findings than the PR actually has, is denied at source. It fails open on any ambiguity (no `gh` / offline / unreadable body / a SHA on an unfetched branch — use `ALLOW_SUMMARY_FABRICATED_CLAIMS=1` per-command in the last case), so the discipline above is the primary defense and the hook is the backstop.
+
 When unmet, write `Actionable Items PENDING fix.` in the Summary + state the unmet conditions. **Do not ask "shall we merge?"**
 
 If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --commits`) **AND the PR's stated intent (description/body, checklist referenced)** to recommend a merge strategy:
@@ -246,12 +302,12 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
 ```markdown
 ## AI Review Summary — [receiving-code-review](https://skills.sh/obra/superpowers/receiving-code-review)
 
-| # | Source | Severity | Finding | Status |
-|---|--------|----------|---------|--------|
-| 1 | `copilot` | 🟡 Minor | 🛠️ Missing error handling — handled in existing middleware | ⚪ Rejected |
-| 2 | `coderabbitai` | 🟠 Important | ⚠️ N+1 query vulnerability — verified via grep | 🟢 Fixed (commit abc123) |
-| 3 | Internal Code Review | 🟡 Minor | 📝 Unused import | 🟡 Minor |
-| 4 | @reviewer-login | 🟠 Important | 🛠️ DB findUnique lacks try/catch — diverges from sibling route | 🔴 Pending |
+| # | Source / Classification | Location | Finding | Status |
+|---|-------------------------|----------|---------|--------|
+| 1 | `copilot`<br>🛠️ Refactor<br>🟡 Minor | `src/middleware.ts:12` | Missing error handling — handled in existing middleware | ⚪ Rejected |
+| 2 | `coderabbitai`<br>⚠️ Potential issue<br>🟠 Important | `src/query.ts:45` | N+1 query vulnerability — verified via grep | 🟢 Fixed (commit abc123) |
+| 3 | Internal Code Review<br>📝 Nitpick<br>🟡 Minor | `src/index.ts:3` | Unused import | 🟡 Minor |
+| 4 | @reviewer-login<br>🛠️ Refactor<br>🟠 Important | `src/api.ts:88` | DB findUnique lacks try/catch — diverges from sibling route | 🔴 Pending |
 
 [✅ All AI reviews passed. Ready to merge.
 
@@ -277,6 +333,8 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
 
 > [!IMPORTANT]
 > **Prohibit Using Verified Status (HARD STOP)**: Never use `Verified` as a status for valid findings. Valid findings must be marked as `🔴 Pending` from the beginning if they are inside the diff (awaiting fix), or `🟡 Deferred (author follow-up)` if they are outside the diff (postponed).
+>
+> Enforced mechanically by `resources/block-summary-status-vocab.py` (PreToolUse:Bash, blocks the POST) and by `scripts/verify_consolidate.py` check 11 (blocks completion). Prose alone did not hold — this rule was violated four times while it already existed.
 
 **The fix_plan tracking tags are for Step 7.6 deferred registration only (when writing entries inside fix_plan.md's Hold section)**. Carrying the same tag into the Summary body Status column leaves the GitHub reader with no meaning (zero readability).
 
@@ -287,6 +345,8 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
 | 3 | "Same tag is convenient since it's registered in fix_plan anyway" reasoning | fix_plan deferred entry (Step 7.6) ≠ Summary Status (Step 7). Different medium → separate notation |
 | 4 | Mirroring the same tag in both Summary and fix_plan as a cross-link attempt | Cross-link by citing the fix_plan section URL / entry from the Summary body (when needed). Do not mirror the tag |
 | 5 | Realizing only after the user points out the readability issue that a fix_plan tag like "[REVIEW_FEEDBACK]" appeared in the response | Run the self-check below every time before drafting the Summary |
+| 6 | Promoting `classify.md` Step 4-0's **validity verdict** (`✅ VALID` / `⚪ REJECTED`) — or the `receiving-code-review` accept/reject frame it comes from — into this Status column | They are separate axes. Validity asks *is this finding correct*; Status encodes *does it block merge*. A finding can be perfectly valid and still be `🔴 Pending`. Keep the validity judgement in an evidence/verification column, never in Status |
+| 7 | Renaming the column itself (`Verdict`, `Verdict + verification`, `Assessment`, …) so a non-contract value "fits" | The column name is fixed to `Status`. Renaming it is how the judgement frame leaks in — and because the merge recommendation is derived FROM this column, a renamed column silently zeroes the `🔴 Pending` count and flips the conclusion to "no merge blocker" |
 
 **Self-check (every time before POSTing the Summary)**:
 
@@ -296,6 +356,9 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
    - `[BLOCKED]` → `🔴 Pending — <blocker reason>` or `🟡 Deferred — <reason>`
    - `[DEFERRED]` → `🟢 Deferred (no action)` or `🟡 Deferred (author follow-up)`
 3. Re-grep after replacement — confirm zero matches before POST
+4. Confirm the column is literally named `Status` — not `Verdict` or any variant
+5. Confirm every Status cell matches one of the five allowed values above. Words carried over from the validity axis (`VALID`, `Accept`, `Verified`, `Unverified`, `Out of scope`) are the recurring failure — this class has shipped four times
+6. Cross-check the conclusion against the column: any `🔴 Pending` present ⇒ the recommendation must be Hold. If you wrote "no merge blocker" while Pending rows exist, one of the two is wrong
 
 ### Conclusion line emoji rule (HARD STOP)
 
@@ -326,9 +389,15 @@ If all conditions met, evaluate the PR's commit history (`gh pr view NUMBER --co
 
 Only include reviewers that actually posted reviews on this PR, and only include non-trivial findings (skip 'No actionable comments' rows if there are other findings, or state 'No actionable findings' in the table if all reviewers are clean).
 
-### Source attribution column is MANDATORY (HARD STOP)
+### Source attribution and classification column is MANDATORY (HARD STOP)
 
-**The findings table MUST include a `Source` (or `Reviewer`) column attributing every row to the exact reviewer login it came from** — coderabbitai, copilot, @human-login (e.g., @reviewer-login), Internal Code Review, etc. Composing a findings table with only `# | Severity | Type | Location | Summary` columns strips the audit trail and conflates findings from multiple reviewers into an anonymous pool.
+**The findings table MUST include a `Source / Classification` (or `Source`) column attributing every row to the exact reviewer login it came from, combined with its orthogonal Type and Severity**. To conserve horizontal table width and leave ample room for `Location` and `Finding` descriptions without triggering horizontal scrollbars, `Source`, `Type`, and `Severity` are unified into a single 3-line cell formatted with `<br>`:
+```
+<source><br><type><br><severity>
+```
+Example: `copilot<br>⚠️ Potential issue<br>🟠 Important` or `Internal Code Review<br>🛠️ Refactor<br>🟡 Minor`.
+
+Composing a findings table with separate horizontal columns (`# | Source | Type | Severity | Location | Finding | Status`) unnecessarily stretches the table across 7 columns. Conversely, omitting the source strips the audit trail. The unified 3-line column preserves the full audit trail and dual-label classifications in a compact 5-column layout (`# | Source / Classification | Location | Finding | Status`).
 
 **Source cell formatting**: write @mentions, SHAs, and URLs **bare** — never wrap them in backticks. GitHub renders bare `@username` as an autolinked mention (notification fires), and a backticked `` `@username` `` becomes inline code with no autolink. The same applies to commit SHAs and **real** PR/issue references in any Summary field, not just the Source column. This rule lives in the global rules file `git.md` under the autolink HARD STOP section; consolidate-posted bodies must comply.
 
@@ -336,7 +405,7 @@ Only include reviewers that actually posted reviews on this PR, and only include
 
 | # | Don't | Do |
 |---|-------|-----|
-| 1 | Findings table columns: `# | Severity | Type | Location | Summary` (no source) | Add a `Source` column: `# | Source | Severity | Type | Location | Summary`. Every row's `Source` cell names the exact reviewer login (or `Internal Code Review`) the finding originated from |
+| 1 | Spreading `Source`, `Type`, `Severity` across 3 separate wide columns (`# | Source | Type | Severity | ...`) or omitting source | Consolidate into a single 3-line cell under `Source / Classification`: `<source><br><type><br><severity>` to keep the table compact at 5 columns |
 | 2 | Collapse multiple distinct human MEMBER reviewers into a single "Internal Code Review" entry | Each human reviewer login is a separate `Source` value. Internal Code Review is the subagent-generated review only; human collaborator reviews carry the reviewer's GitHub login |
 | 3 | Omit the header reviewer matrix line when one of the sources is a non-bot MEMBER review | The opening `> Reviewer matrix:` line enumerates every source enumerated in `collect.md` Step 3 — bots + human MEMBER/OWNER reviews. Missing any source there = missing it in the table too |
 | 4 | Merge two findings from different sources into one row "to deduplicate" | Keep one row per (source × finding). If two reviewers raised the same finding, write two rows with the same `Location` + `Summary` but distinct `Source`. Deduplication belongs in the chat narrative, not in the table |
@@ -384,7 +453,7 @@ gh pr comment NUMBER -R owner/repo --body-file /tmp/pr-review-summary.md
 
 | # | Don't | Do |
 |---|-------|-----|
-| 1 | After a major fix, add a new "Update" comment via `gh pr comment` | Find existing Summary comment ID and `gh api .../comments/{id} -X PATCH -f body=@file` |
+| 1 | After a major fix, add a new "Update" comment via `gh pr comment` | Find existing Summary comment ID and `gh api .../comments/{id} -X PATCH --input <(jq -n --rawfile body <file> '{body: $body}')` — **never `-f body=@file`**: `-f` posts the literal string, only `-F` reads `@path`, and even `-F` is riskier than `--input` for multi-line markdown |
 | 2 | Accumulate new comments by just adding "Update N" prefix | Adding "Update 2" prefix in the body is OK, but **update the same comment via PATCH**. Creating new IDs is forbidden |
 | 3 | Leave prior Summary as-is and post a new comment | (a) For a single comment, PATCH (b) For multiple stale Summaries, delete prior or `minimizeComment(OUTDATED)` |
 | 4 | Think "edit history disappears so new comment is safer" | GitHub preserves edit history permanently (queryable via `?old_index=N`). Accumulating new comments = noise |
@@ -464,6 +533,7 @@ fi
 2. N=0 → new comment (`gh pr comment`)
 3. N≥1 → **PATCH** (`gh api .../comments/{id} -X PATCH`). Adding a new comment is forbidden
 4. N≥2 (stale accumulation) → PATCH the most recent one + delete/minimize the rest
+5. **After every PATCH, read back** (`gh api .../comments/{id} --jq '.body'`) and diff against the intended content — a 200 response / returned URL only confirms the HTTP call succeeded, not that the body landed correctly (`-f body=@file` silently posts the literal string instead of file contents; this step is what catches it)
 
 **Formal Review medium** (PATCH-impossible):
 1. `gh api .../pulls/{N}/reviews | jq '[.[] | select(.user.login == "<self>") | select(.body | contains("AI Review Summary"))] | length'` → M items
@@ -745,12 +815,19 @@ Among all actionable items from Step 4 classification:
 
 | Environment detection (based on CWD or workspace) | Medium | Format |
 |--------------------------------------|------|------|
-| `{workspace}/.ralph/fix_plan.md` exists | `.ralph/fix_plan.md` "On Hold" section (inserted **above** the trailing `## Completed`/`## REPEAT` — never at EOF) | `- [BLOCKED] [REVIEW_FEEDBACK] {reviewer}: {summary} — {action direction, location, PR #N}` |
-| `{workspace}/checklist.md` exists (Ralph not used) | `checklist.md` | `- [BLOCKED] [REVIEW_FEEDBACK] {reviewer}: {summary} — {action, PR #N}` |
+| `{workspace}/.ralph/fix_plan.md` exists | `.ralph/fix_plan.md` "On Hold" section (inserted **above** the trailing `## Completed`/`## REPEAT` — never at EOF) | `- [BLOCKED] [REVIEW_FEEDBACK] {reviewer}: {summary} — {action direction, location, [PR #N](URL)}` |
+| `{workspace}/checklist.md` exists (Ralph not used) | `checklist.md` | `- [BLOCKED] [REVIEW_FEEDBACK] {reviewer}: {summary} — {action, [PR #N](URL)}` |
 | Neither exists + GitHub Issue collaboration | New GitHub Issue | `gh issue create` — title `deferred from PR #N: {summary}`, finding details in body |
 | Neither exists + no collaboration medium | AskUserQuestion | "Where to register?" options (new `.ralph/fix_plan.md` / new `checklist.md` / Issue / skip registration) |
 
 **Environment detection is workspace (CWD) based** — Do not confuse the project-subdirectory `.ralph/` with the workspace `.ralph/`.
+
+**Workspace ≠ the reviewed PR's own repo (HARD STOP)**: the tracking medium is always the **session's own workspace** file — the workspace consolidate is currently running in, not a directory inside the repo that owns the PR under review. When the PR belongs to a different repo than the current session's workspace (a common case for cross-repo consolidate runs), do NOT look for `checklist.md`/`fix_plan.md` inside a checkout of that repo — check the session workspace's own root first, even if it requires a separate `cd`/path lookup outside the PR's repo tree.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | PR under review lives in repo A; look for `checklist.md`/`fix_plan.md` inside a local checkout of repo A, find none, and conclude "no tracking medium exists" | Check the session's own workspace root (e.g. `~/.agents/checklist.md` if that's where the session is running from) first — it applies regardless of which repo's PR is being reviewed |
+| 2 | Ask the user "GitHub Issue vs no tracking vs hold" as if no medium existed, when the session workspace already has a `checklist.md`/`fix_plan.md` | Register directly to the session workspace's existing medium — no ask needed once one exists |
 
 ### Registration procedure
 
@@ -761,6 +838,7 @@ Among all actionable items from Step 4 classification:
 3. Add N deferred items in batch (Edit)
 4. Report the N registered items' medium file path in chat (user-verifiable)
 5. **Verify placement**: after the Edit, confirm the nearest preceding `##` heading of the registered items is an active-work section — NOT `## REPEAT` or `## Completed`. If it is one of those, the block landed in the wrong section — move it above the trailing sections
+6. **Recurrence Prevention (Harness Check)**: For any Critical or Important findings that represent recurring risks or common mistakes, evaluate whether they should be codified into a persistent guardrail (e.g., custom linter/AST rules, Git pre-commit/pre-push hooks, or test harness validations). If a finding is a candidate for automation, append `[HARNESS_CANDIDATE]` to the checklist entry to flag it for codification in a follow-up task.
 
 ### Don't / Do table
 

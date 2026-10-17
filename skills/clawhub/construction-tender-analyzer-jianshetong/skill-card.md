@@ -1,46 +1,56 @@
-## Description: <br>
-工程建设招投标分析-建设通，当搜索词包含工程、施工、建筑、市政、监理、设计等建筑业专属词汇时触发，聚焦工程项目金额、中标单位资质背景，重点提取建筑类项目核心字段并进行业绩汇总。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助分析工程建设招投标信息，提取项目金额、企业资质背景和关键字段，并汇总相关业绩。
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External users and agents use this skill to query Jianshetong/ZLBX tender APIs for construction procurement search, bid detail retrieval, company tender history, competitor analysis, and market intelligence. It is most useful when an agent needs structured summaries of project amounts, purchasing entities, winning bidders, qualifications, and related business opportunities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a sensitive ZLBX_API_KEY for third-party API access. <br>
-Mitigation: Use a dedicated limited API key, store it only in the agent environment, and rotate or revoke it if exposed. <br>
-Risk: The API scope is broader than construction tender summaries and can query company contacts, market intelligence, and lead-generation data. <br>
-Mitigation: Enable the skill only for workflows that need this broader procurement intelligence and require confirmation before contact lookups, company matching, or lead-generation queries. <br>
-Risk: Submitting confidential strategy, deal terms, or sensitive business context to the third-party service may expose private information. <br>
-Mitigation: Limit prompts and API parameters to the minimum tender, company, region, date, and product filters needed for the task. <br>
+## Use Case:
 
+建筑行业从业者及分析人员可查询工程招投标项目，比较项目金额与中标企业背景，并汇总项目业绩。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/construction-tender-analyzer-jianshetong) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [ZLBX API key application page](https://ai.zhiliaobiaoxun.com/?ch=s33) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API calls, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON request examples and structured API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and calls third-party HTTP APIs; responses may include company, contact, tender, bid, and market intelligence data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill contacts zhiliaobiaoxun services and may create an account using a hashed device identifier.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the account flow and obtain informed consent before collecting device attributes or registering; use a manually supplied API key where possible.
+
+Risk: An automatically obtained service API key is stored locally and could be exposed if the file is accessible to others.
+
+Mitigation: Prefer a trusted secret mechanism for ZLBX_API_KEY and protect access to ~/.zlbx/config.json.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/pkuycl/skills/construction-tender-analyzer-jianshetong)
+- [API search reference](references/api-search.md)
+- [Company registry reference](references/api-registry.md)
+- [Account registration reference](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown text with project details and performance summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on access to the service and its available records.]
+
+## Skill Version(s):
+
+1.0.10 (source: skill frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

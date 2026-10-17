@@ -1,0 +1,34 @@
+---
+name: rfc-summarizer
+description: >
+  Summarize IETF RFC text into problem, approach, and impact bullets. Use
+  when the user pastes RFC sections or a link they already fetched.
+---
+
+# RFC Summarizer
+
+## Purpose / Overview
+Condenses RFC prose for engineers who need a quick briefing.
+
+## When to Use
+Onboarding to a protocol or reviewing a standards change.
+
+## Usage / Instructions
+1. Prefer user-pasted text over fetching.
+2. Emit: Problem, Mechanism, Security considerations (if present), Caveats.
+3. Quote normative keywords (MUST/SHOULD) sparingly when critical.
+
+## Examples
+User pastes RFC 9110 excerpt → short structured summary.
+
+## Requirements / Dependencies
+None for pasted text.
+
+## Limitations / Caveats
+Does not replace reading the RFC for implementation work.
+
+## Security / Permissions
+Text-only unless the user explicitly asks to fetch a URL they provide.
+
+## Attribution / License
+MIT-0

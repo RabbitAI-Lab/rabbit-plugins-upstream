@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rainbond 平台安装"
+  short_description: "在本地、服务器或已有 Kubernetes 集群中安装 Rainbond"
+  default_prompt: "Use $rainbond-platform-installer to select, install, and verify a supported private Rainbond target."

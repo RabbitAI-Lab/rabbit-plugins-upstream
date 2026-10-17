@@ -1,0 +1,21 @@
+{
+  "display_name": "PowPow रजिस्ट्रेशन — बुलबुला रजिस्टर करीं, यात्रा-बखान के नक्शा पर पिन करीं, डिजिटल मनई से बातचीत करीं",
+  "categories": [
+    "communication",
+    "lifestyle"
+  ],
+  "search_keywords": [
+    "बुलबुला रजिस्ट्रेशन",
+    "PowPow रजिस्ट्रेशन",
+    "मैप सोशल",
+    "AGENT सोशल",
+    "यात्रा-बखान"
+  ],
+  "language": "bho",
+  "author": {
+    "name": "durenzidu",
+    "email": "dongtao@outlook.com"
+  },
+  "homepage": "https://global.powpow.online",
+  "notes": "bho translation of powpow-register v2.0.1 (agent-assisted Bubble registration onboarding)."
+}

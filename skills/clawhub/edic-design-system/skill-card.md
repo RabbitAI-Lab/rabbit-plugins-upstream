@@ -1,41 +1,64 @@
-## Description: <br>
-Generates accessible, token-driven HTML/CSS, UI components, pages, documents, emails, and assets that follow the EDIC editorial olive design system. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents to create accessible, token-driven EDIC interfaces, pages, documents, and emails in an editorial olive-green style.
 
-## Publisher: <br>
-[cgartlab](https://clawhub.ai/user/cgartlab) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cgartlab](https://clawhub.ai/user/cgartlab)
 
-## Use Case: <br>
-Developers, designers, and content teams use this skill to create or refactor EDIC-branded interface and document artifacts with consistent OKLch tokens, CJK-aware typography, dark-mode support, and accessibility patterns. Treat the output as design guidance to review before applying broad repository changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cgartlab/skills/edic-design-system) <br>
-- [EDIC website](https://edic.cgartlab.com/) <br>
-- [EDIC usage docs](https://edic.cgartlab.com/docs.html) <br>
-- [EDIC structured tokens](https://edic.cgartlab.com/tokens.json) <br>
-- [EDIC GitHub repository](https://github.com/cgartlab/edic-design-system) <br>
+Designers and developers use this skill to generate or refactor EDIC-styled web components, full pages, documents, and emails with consistent typography, colors, accessibility, and dark-mode support.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with HTML, CSS, and design-token guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should be reviewed before execution or broad application; evidence.security reports no malware, hidden execution, data theft, or destructive behavior.] <br>
+Global
 
-## Skill Version(s): <br>
-1.9.1 (source: SKILL.md frontmatter, README.md, tokens.json, and server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Installing the skill globally can apply EDIC styling to unrelated work.
+
+Mitigation: Install it in a project-scoped skill directory unless broad styling guidance is intentional.
+
+Risk: The example toast code inserts message text through innerHTML, which is unsafe for untrusted input.
+
+Mitigation: Use textContent or DOM node construction for user-controlled toast messages.
+
+Risk: Chinese placeholder text in examples may not match the product language.
+
+Mitigation: Localize example text before using it in a product.
+
+## Reference(s):
+
+- [EDIC website](https://edic.cgartlab.com/)
+- [EDIC usage documentation](https://edic.cgartlab.com/docs.html)
+- [EDIC structured tokens](https://edic.cgartlab.com/tokens.json)
+- [Scene recipes](references/RECIPES.md)
+- [Page-level patterns](references/PATTERNS.md)
+- [Component examples](references/EXAMPLES.md)
+- [Design tokens](references/TOKENS.md)
+- [Anti-patterns and replacements](references/ANTI-PATTERNS.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Guidance]
+
+**Output Format:** [Markdown with HTML, CSS, and occasional JavaScript snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Token-driven web styles with dark-mode and accessibility guidance; email examples use compatible static styles.]
+
+## Skill Version(s):
+
+2.8.2 (source: ClawHub release, skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

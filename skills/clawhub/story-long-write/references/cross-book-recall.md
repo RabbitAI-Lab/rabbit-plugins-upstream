@@ -6,13 +6,13 @@ description: 多对标跨书召回
 # 跨书召回
 
 ## 触发
-项目根 `拆文库/` 或项目 `对标/` ≥2 本启用。主对标书取 `设定/题材定位.md`「主对标书」字段（在「对标登记」或导入生成的「对标书清单」段内，字段名一致），缺失则用字典序第一本（对 `对标/` 目录取字典序；无 `对标/` 则对 `拆文库/`）并在 `gaps.main_benchmark_unspecified: true` / 导入报告中提示用户补。
+先按当前项目目录名、`.active-book` 与本书设定识别当前作品，排除同名或来源指向当前正文的 `拆文库/{当前书}/` 与历史误建的 `对标/{当前书}/`；它们是本书导入分析，不是跨书样本。排除后，项目根 `拆文库/` 或项目 `对标/` ≥2 本才启用。主对标书取 `设定/题材定位.md`「主对标书」字段，缺失则从排除后的候选中取字典序第一本（优先 `对标/`，否则 `拆文库/`），并在 `gaps.main_benchmark_unspecified: true` 中提示用户补。
 
 > **数量规则**：主对标书最多 1 本，用于文风和最终正文输入；副对标 / 参考对标**不限制登记数量**。执行时按题材相关性、引用强度和阶段预算逐本召回；超过预算时裁剪条目，不删除书目。
 
 ## 三道防线
 1. 副对标 `文风.md` 不读，避免多本文风互相污染
-2. 角色/剧情/设定模块可从所有副对标召回，但必须按「同题材 > 弱相关 > 参考」排序，并受每本/总量预算约束
+2. 角色/剧情/设定模块可从所有副对标召回，但必须先按相关性、再按引用强度排序（细则见下文），并受每本/总量预算约束
 3. narrative-writer 正文 prompt 只吃主对标文风/原文锚点 + 预算筛选后的 `副对标召回摘要`；不读取、不传入副对标 `文风.md` 或副书原文
 
 ## 跨题材判断
@@ -54,9 +54,35 @@ description: 多对标跨书召回
 
 | 拆文字段 | 含义 | 写作参考 |
 |---------|------|---------|
-| `beats` | 结构段（开端/发展/高潮/结局） | 当前 skill 的题材结构文件；短篇优先 genre-styles 题材包 / `genre-writing-formulas.md` |
-| `hooks` | 钩子数 | `hooks-chapter.md` / `hooks-suspense.md`；短篇开头密度补 short-craft |
-| `setup_clues` | 反转铺垫线索 | `reversal-toolkit.md` |
-| `character_archetypes` | 反差人物 | 当前 skill 的人物/题材风格文件；短篇优先 genre-styles 题材包 / genre-writing-techniques |
-| `reusable_structures` | 可复用手法 | `genre-writing-formulas.md`；短篇可补 short-craft |
-| `reversal_type` | 反转类型（7 枚举） | `reversal-toolkit.md` 对应骨架 |
+| `beats` | 结构段（开端/发展/高潮/结局） | `outline-methods.md` + 当前 `genre-prose-cards/` 题材卡 |
+| `hooks` | 钩子数 | `long-chapter-hooks.md` / `long-suspense.md` |
+| `setup_clues` | 反转铺垫线索 | `long-reversal.md` |
+| `character_archetypes` | 反差人物 | `character-basics.md` / `character-design-methods.md` + 当前题材卡 |
+| `reusable_structures` | 可复用手法 | `outline-methods.md` / `plot-core-methods.md`，按结构功能选择 |
+| `reversal_type` | 反转类型（7 枚举） | `long-reversal.md` 对应骨架 |
+
+## 公共灵感标签召回
+
+**本节独立于上文「≥2 本才启用」的多对标触发条件：只要工作区存在 `灵感库/` 即可用，单对标或无对标项目亦然。**
+
+`灵感库/` 与副对标召回是两条独立通道：灵感库只提供**去专名的跨书机制抽象**（带标签的 active CBA 卡），副对标提供本书级结构化摘要。灵感库不存在时本节整体跳过，只记 `gaps.inspiration_library_missing`，不阻塞。
+
+每次设定、卷纲或细纲任务先生成需求标签（逐章正文写前召回不走本通道，灵感经细纲进入正文）。轴以 `灵感库/灵感索引.csv` 的标签轴契约为准；**值必须取自 `灵感库/标签词表.md` 的受控值**——按下表定位本书语境后，映射到词表中最贴近的值再组查询，不自造、不改写同义词（query 靠精确匹配，自造词等于查不到）；词表文件缺失时以 query 返回的 `axis_inventory` 现存值为准：
+
+| 轴 | 取值来源 |
+|---|---|
+| 题材 | `设定/题材定位.md` |
+| 读者需求 | 本书读者契约与当前期待债 |
+| 情绪 | 本阶段/本章目标情绪 |
+| 关系动作 | 当前角色关系要发生的动作，可空 |
+| 剧情功能 | 开篇立约、升级兑现、关系翻转、信息揭示、高潮结算等 |
+| 节奏位置 | 黄金三章、前期、中段、卷末、高潮前/后，可空 |
+| 适用阶段 | 设定、卷纲或细纲 |
+| 风险 | 当前要避开的同质化、失衡、铺垫不足、角色降智、兑现拖延等 |
+
+消费规则：
+
+1. 只筛 `layer=跨书灵感聚合` 且 `status=active`，按标签打分取 Top 3（设定/卷纲阶段最多 8）。
+2. 只读命中的 CBA 全卡——卡自包含机制链、可变参数、成立条件、反例与风险；**不沿来源 ID 回查 EM/NM**，来源仅供审计溯源。
+3. 输出 `selected_inspiration_aggregates`：CBA ID、命中标签、机制链、可变参数、成立条件、风险、来源数量。它只影响设计选择，不覆盖细纲事实、项目设定或自定义文风；CBA 不作文风样本，也不触发任何原文读取。
+4. 零命中先看 query 返回的 `unmatched_tags` 与 `axis_inventory`，纠词重查一次；仍零命中才记 `gaps.inspiration_tag_no_match`，不阻塞。同一 CBA 在一本书内最多派生 2 个候选变化。

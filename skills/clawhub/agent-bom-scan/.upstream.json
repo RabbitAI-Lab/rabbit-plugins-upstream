@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-scan",
   "slug": "agent-bom-scan",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946321374,
-  "contentHash": "6b481f34299fbf047ac14253bafb976c2a54b2637b88db48b392a77fbc015ff5",
-  "fetchedAt": "2026-07-26T18:04:21.069Z"
+  "version": "0.109.0",
+  "updatedAt": 1792129069857,
+  "contentHash": "7fc8226ffe1da773af086fd581b12529e264da772218681d587d28d172a09ed9",
+  "fetchedAt": "2026-10-17T11:48:52.433Z"
 }

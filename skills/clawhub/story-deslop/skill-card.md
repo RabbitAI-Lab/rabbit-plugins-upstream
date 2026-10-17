@@ -1,44 +1,54 @@
-## Description: <br>
-Detects and edits Chinese web-fiction prose to reduce AI-flavored, formulaic writing while preserving plot, character details, and author intent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese web-fiction authors diagnose and revise AI-sounding prose, narrative emphasis, and story logic while preserving their style and established plot.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and editors use Story Deslop to scan Chinese web-fiction drafts for formulaic AI-style prose and receive targeted rewrite guidance, reports, or file edits that make the text read more naturally. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: File mode can rewrite provided manuscript files and normalize punctuation after editing. <br>
-Mitigation: Keep backups and request detection-only behavior when review is needed before any edits are applied. <br>
-Risk: Aggressive style cleanup can remove useful plot, character, or pacing detail if applied too broadly. <br>
-Mitigation: Review the change report, preserve story intent, and use the skill's review markers for uncertain edits. <br>
+## Use Case:
 
+Chinese web-fiction authors and editors use this skill to identify unnatural expression, misplaced narrative emphasis, and gaps in story causality, then revise only the manuscript sections they authorize.
 
-## Reference(s): <br>
-- [Story Deslop on ClawHub](https://clawhub.ai/worldwonderer/skills/story-deslop) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Anti-AI Writing Guide](references/anti-ai-writing.md) <br>
-- [Banned Words and Patterns](references/banned-words.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance, Files] <br>
-**Output Format:** [Markdown reports with edited prose, inline shell commands, and optional file edits] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [File mode can update user-supplied manuscript files and return short representative excerpts for long inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.11 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: Authorized rewriting or whole-file punctuation normalization may change manuscript text outside the author's intended scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review requested file paths and edit boundaries before permitting changes; use whole-file punctuation normalization only when the author explicitly authorizes it.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/worldwonderer/skills/story-deslop)
+- [Project link in skill metadata (provenance unverified)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Style resolution](artifact/references/style-resolution.md)
+- [Expression review](artifact/references/expression.md)
+- [Narrative focus](artifact/references/narrative-focus.md)
+- [Story logic](artifact/references/story-logic.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Files]
+
+**Output Format:** [Chinese-language editorial diagnosis or revised manuscript text with a concise change report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Diagnosis-only requests do not change the manuscript; edits are limited to authorized sections.]
+
+## Skill Version(s):
+
+1.1.34 (source: ClawHub release metadata; skill frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

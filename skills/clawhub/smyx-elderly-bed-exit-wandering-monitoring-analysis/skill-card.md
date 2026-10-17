@@ -1,45 +1,63 @@
-## Description: <br>
-Identifies abnormal behaviors such as getting out of bed at night, prolonged wandering, and remaining motionless for extended periods, for night-time safety monitoring in nursing homes and for elderly people living alone. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes nighttime eldercare footage for bed exits, prolonged wandering, and extended immobility, and provides reports for caregivers.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Care teams, family caregivers, and developers use this skill to analyze night-time elderly monitoring video for bed-exit, wandering, prolonged immobility, risk indicators, recommendations, and cloud report history. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends elderly monitoring videos, URLs, identity-linked requests, and report history to an external cloud service. <br>
-Mitigation: Use only with appropriate consent and data handling approval, avoid unnecessary identifying content, and review the configured service endpoints before deployment. <br>
-Risk: The skill can silently create local user records and store authentication tokens in the workspace data area. <br>
-Mitigation: Run it in an isolated workspace, restrict access to the workspace data directory, and remove local identity or token state when it is no longer needed. <br>
-Risk: Monitoring results are safety-support information and may be incorrect or incomplete. <br>
-Mitigation: Require caregiver review and on-site confirmation before acting on abnormal-behavior alerts or health-related conclusions. <br>
+## Use Case:
 
+Caregivers and eldercare operators use this skill to review nighttime video for possible bed exits, wandering, or prolonged immobility and to retrieve historical monitoring reports. Alerts and analyses support, but do not replace, in-person checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-elderly-bed-exit-wandering-monitoring-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Elderly monitoring API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON report content, analysis status, report links, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local mp4, avi, or mov files up to 10 MB, or public video URLs that are processed by the cloud analysis service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata; artifact frontmatter lists 1.0.7) <br>
+Risk: Sensitive eldercare images, videos, and historical reports are processed by configured cloud services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm consent from monitored people and avoid uploading sensitive footage unless necessary.
+
+Risk: Untrusted video URLs may expose sensitive content or lead to unintended remote downloads.
+
+Mitigation: Use only trusted video URLs and review them before analysis.
+
+Risk: Local workspace data may contain identity and token data.
+
+Mitigation: Restrict access to the local workspace data directory and handle it as sensitive data.
+
+Risk: Automated behavior detection may miss or misclassify urgent events.
+
+Mitigation: Have caregivers verify alerts in person; do not treat results as a substitute for human checks.
+
+## Reference(s):
+
+- [Eldercare analysis API documentation](references/api_doc.md)
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-elderly-bed-exit-wandering-monitoring-analysis)
+- [Skill introduction](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Reports]
+
+**Output Format:** [Structured text or Markdown; JSON when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include risk alerts, recommendations, historical-report tables, and report links.]
+
+## Skill Version(s):
+
+1.0.20 (source: server-resolved ClawHub release; artifact frontmatter lists 1.0.13)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

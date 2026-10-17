@@ -1,50 +1,61 @@
-## Description: <br>
-Quark Drive Skill helps agents authenticate with Quark Drive and upload, download, share, transfer, search, organize media, and use file summary or Q&A features. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent search, transfer, share, organize, and summarize files in a user's Quark Drive account.
 
-## Publisher: <br>
-[quarkdrive](https://clawhub.ai/user/quarkdrive) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[quarkdrive](https://clawhub.ai/user/quarkdrive)
 
-## Use Case: <br>
-External users and agents use this skill to operate a Quark Drive account from conversation: manage cloud files, save shared links, find files, organize personal media, and ask summary or Q&A questions over stored files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer may change the local Node.js installation and download updated skill code or instructions from a remote service. <br>
-Mitigation: Run it only in an environment where package changes and remote self-updates are acceptable, and review the publisher and release before installation. <br>
-Risk: Commands may send original user prompts for service-quality tracking. <br>
-Mitigation: Avoid using the skill with sensitive prompts unless sharing that text with the service is acceptable. <br>
-Risk: Reading cloud files may persist copies on local storage. <br>
-Mitigation: Use the skill in a workspace where local file copies are expected and clean up downloaded files when they are no longer needed. <br>
+## Use Case:
 
+Quark Drive users can authorize an agent to find, upload, download, share, rename, organize, and summarize their cloud files.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/quarkdrive/skills/quarkclouddrive) <br>
-- [Publisher profile](https://clawhub.ai/user/quarkdrive) <br>
-- [Quark Drive](https://pan.quark.cn) <br>
-- [Authorization and account management](references/auth.md) <br>
-- [File search](references/file-search.md) <br>
-- [File upload](references/file-upload.md) <br>
-- [File sharing](references/file-share.md) <br>
-- [Album organization](references/file-organize.md) <br>
-- [Assistant capabilities](references/assistant.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands; CLI command results may include NDJSON, links, and local file paths.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and a Quark Drive authorization flow before account-specific operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release evidence and skill frontmatter) <br>
+Risk: Installation can download and execute unverified remote code or update the local runtime.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only from a trusted publisher and review installation and update actions before running them.
+
+Risk: CLI calls forward raw user prompts, which may contain sensitive information.
+
+Mitigation: Avoid sensitive prompts unless forwarding their complete text is acceptable.
+
+Risk: Account operations and uninstall actions can change authorization, local tooling, or cloud-file organization.
+
+Mitigation: Review requested changes and uninstall actions, and confirm file scope before bulk operations.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/quarkdrive/skills/quarkclouddrive)
+- [ClawHub publisher](https://clawhub.ai/user/quarkdrive)
+- [Quark Drive](https://pan.quark.cn)
+- [Authorization guide](references/auth.md)
+- [File operations guide](references/file-ops.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Text and Markdown with CLI commands and cloud-file results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include file links, summaries, and operation results; account operations require authorization.]
+
+## Skill Version(s):
+
+1.0.23 (source: release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

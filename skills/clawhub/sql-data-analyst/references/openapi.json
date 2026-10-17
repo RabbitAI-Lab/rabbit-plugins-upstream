@@ -1,0 +1,113 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "AI Skills SQL Data Analyst Local Authorization API",
+    "version": "1.0.0",
+    "description": "只为本地 Runner 计费并签发短期执行票据；不接收文件、问题、schema、SQL、结果或报告内容。"
+  },
+  "servers": [
+    {"url": "https://ai-skills.open-idea.net/api/v1"}
+  ],
+  "security": [
+    {"bearerAuth": []}
+  ],
+  "paths": {
+    "/sql-data-analyst/executions/authorize": {
+      "post": {
+        "operationId": "authorizeLocalExecution",
+        "summary": "计费并签发本地执行票据",
+        "parameters": [
+          {
+            "name": "Idempotency-Key",
+            "in": "header",
+            "required": true,
+            "schema": {"type": "string", "minLength": 1, "maxLength": 191}
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["operation", "runner_version", "installation_id", "input_fingerprint"],
+                "properties": {
+                  "operation": {
+                    "type": "string",
+                    "enum": ["dataset.ingest", "dataset.inspect", "analysis.run", "query.execute", "report.create", "dataset.delete"]
+                  },
+                  "runner_version": {"type": "string", "pattern": "^(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)\\.(0|[1-9][0-9]*)$"},
+                  "installation_id": {"type": "string", "format": "uuid"},
+                  "input_fingerprint": {"type": "string", "pattern": "^[a-f0-9]{64}$"}
+                },
+                "additionalProperties": false
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "授权成功",
+            "headers": {
+              "X-AI-Skills-Billing-Currency": {"description": "计费遥测；不是票据验证机制。", "schema": {"type": "string", "const": "CNY"}},
+              "X-AI-Skills-Billing-Charged": {"description": "计费遥测；不是票据验证机制。", "schema": {"type": "string", "pattern": "^[0-9]+\\.[0-9]{6}$"}},
+              "X-AI-Skills-Billing-Balance": {"description": "计费遥测；不是票据验证机制。", "schema": {"type": "string", "pattern": "^-?[0-9]+\\.[0-9]{6}$"}}
+            },
+            "content": {
+              "application/json": {
+                "schema": {"$ref": "#/components/schemas/Authorization"}
+              }
+            }
+          },
+          "402": {"$ref": "#/components/responses/Error"},
+          "409": {"$ref": "#/components/responses/Error"},
+          "422": {"$ref": "#/components/responses/Error"}
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "bearerAuth": {"type": "http", "scheme": "bearer", "bearerFormat": "AI Skills API Key"}
+    },
+    "schemas": {
+      "Authorization": {
+        "type": "object",
+        "required": ["execution_id", "status", "operation", "ticket"],
+        "additionalProperties": false,
+        "properties": {
+          "execution_id": {"type": "string", "format": "uuid"},
+          "status": {"type": "string", "const": "succeeded"},
+          "operation": {"type": "string"},
+          "ticket": {
+            "type": "object",
+            "description": "仅供 Runner 内部自动验签和执行授权使用；不是公开 CLI 字段。",
+            "required": ["key_id", "signed_payload", "signature"],
+            "additionalProperties": false,
+            "properties": {
+              "key_id": {"type": "string"},
+              "signed_payload": {"type": "string"},
+              "signature": {"type": "string", "contentEncoding": "base64"}
+            }
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "properties": {
+          "status": {"type": "string"},
+          "operation": {"type": ["string", "null"]},
+          "errors": {"type": "object", "additionalProperties": true},
+          "error": {"type": "object", "additionalProperties": true},
+          "request_id": {"type": "string"}
+        }
+      }
+    },
+    "responses": {
+      "Error": {
+        "description": "稳定授权错误",
+        "content": {"application/json": {"schema": {"$ref": "#/components/schemas/Error"}}}
+      }
+    }
+  }
+}

@@ -1,51 +1,60 @@
-## Description: <br>
-Cross-platform statistical software CLI integration for AI agents, covering 34+ packages including R, Stata, SAS, SPSS, Python, Bayesian, and machine learning tools, with bilingual guidance for activating historical code assets in AI workflow automation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects AI agents to locally installed statistical software to detect tools, configure integrations, and run existing analysis scripts across supported platforms.
 
-## Publisher: <br>
-[medstatstar](https://clawhub.ai/user/medstatstar) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[medstatstar](https://clawhub.ai/user/medstatstar)
 
-## Use Case: <br>
-Developers, analysts, and statisticians use this skill to detect, configure, and run local statistical software from an agent workflow. It helps reuse existing R scripts, SPSS syntax, SAS macros, Stata do-files, and related project assets as workflow steps. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Setup and detection flows can execute local statistical programs or third-party binaries. <br>
-Mitigation: Review generated commands before execution, prefer a sandbox or disposable environment, and keep STATSOFT_VERIFY unset unless intentional verification is needed. <br>
-Risk: Configuration changes can persist local software paths to config.json. <br>
-Mitigation: Keep STATSOFT_AUTO_WRITE and STATSOFT_CONFIRM unset unless persistence is intended; rely on the documented backup and explicit authorization flow before writing. <br>
-Risk: Running user scripts through R, Stata, SPSS, SAS, CmdStan, or similar tools can execute untrusted code. <br>
-Mitigation: Inspect user scripts first, avoid sensitive projects, and keep STATSOFT_CMDSTAN_RUN unset unless compiling and running a supplied Stan model is intended. <br>
-Risk: Scan and setup output can disclose local installation paths and version details. <br>
-Mitigation: Keep STATSOFT_REVEAL unset unless path and version disclosure is necessary for the task. <br>
+## Use Case:
 
+Developers and analysts use this skill to discover local statistical tools, connect existing projects to agent workflows, and run supported statistical scripts or data conversions with user approval.
 
-## Reference(s): <br>
-- [Statsoft Cli on ClawHub](https://clawhub.ai/medstatstar/skills/statsoft-cli) <br>
-- [Additional Statistical Software Support](ADDITIONAL_SOFTWARE.md) <br>
-- [Command Examples](references/command-examples.md) <br>
-- [Configuration Templates](references/config-templates.md) <br>
-- [Platform Support](references/platform-support.md) <br>
-- [Version Specifics](references/version-specifics.md) <br>
-- [Trust and Safety](references/trust-and-safety.md) <br>
-- [Workflow Gating Detail](references/workflow.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, code, markdown] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose local scan, setup, verification, and execution commands for third-party statistical software; persistence and disclosure controls are opt-in.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.7.1 (source: frontmatter, changelog, release evidence) <br>
+Risk: Crafted filenames in untrusted directories may cause the Windows launcher to execute unintended shell commands.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review or patch the Windows launcher before running execution wrappers, especially batch conversion; inspect input filenames and prefer structured process arguments over cmd.exe command strings.
+
+Risk: Broadly enabling automatic writes or confirmation can authorize scans or configuration changes beyond the intended task.
+
+Mitigation: Keep STATSOFT_AUTO_WRITE and STATSOFT_CONFIRM unset by default; inspect planned commands and grant approval for the specific operation.
+
+Risk: Running local statistical software or user scripts may execute untrusted code or alter project files.
+
+Mitigation: Review scripts and generated commands before execution and use trusted inputs and software installations.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/medstatstar/skills/statsoft-cli)
+- [Project homepage and documentation](https://github.com/medstatstar/statsoft-cli)
+- [Platform support](references/platform-support.md)
+- [Trust and safety](references/trust-and-safety.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with command examples and setup summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May report detected software and paths when authorized; configuration changes require opt-in.]
+
+## Skill Version(s):
+
+2.8.4 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

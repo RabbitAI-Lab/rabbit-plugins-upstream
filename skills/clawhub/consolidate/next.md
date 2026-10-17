@@ -37,6 +37,44 @@ Immediately after the Status line output, **ask the user for the PR handling dir
 4. Is the merge question leading (Q1)? → If findings exist, invert: finding-handling leads
 5. Is this a post-hoc review PR? → finding options must NOT include "defer all" (deferring contradicts the PR's purpose). Offer scope choices only (which findings), applied immediately
 
+### Finding-handling options must reuse the posted Status column (HARD STOP)
+
+**When Step 7's AI Review Summary already classified each finding's Status (`🔴 Pending` / `🟡 Deferred` / `⚪ Rejected` / `🟢 Fixed`), the Step 8 finding-handling ask must be built FROM those values — never re-derive the decision from scratch.** Status is the classification output of `classify.md`/`post.md`; Step 8 reuses it as input. Composing a fresh item-picker (a multiSelect over all findings, a file/domain grouping, a severity-only grouping) that ignores the already-published Status column repeats a decision the user already saw answered in the Summary table.
+
+- **Only `🔴 Pending` findings need a fix-now-vs-defer decision** — those are the ones still awaiting disposition. `🟡 Deferred`, `⚪ Rejected`, and `🟢 Fixed` findings are already resolved states; reference them as such (Rejected routes through the "Reject finding option mandate" override path above) rather than re-listing them as open choices.
+- **Each option description must quote the finding's current Status value** from the Summary table — this is the mechanical proof the ask is derived from, not independent of, the published classification.
+- **One axis per Pending finding** (per the axis-merged-ask HARD STOP): a `questions` array entry per finding, not a single multiSelect item-picker across all of them.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Build the Step 8 ask as a fresh multiSelect item-picker over all findings, ignoring the Summary's Status column | Filter to `🔴 Pending` findings only; each becomes its own question in the array |
+| 2 | Present a file/domain grouping ("fix file A only" / "fix file A + B" / "fix all") as the primary axis | Status is the primary axis (Pending needs a decision; Deferred/Rejected/Fixed don't). File/domain grouping is at most a secondary commit-unit inside the Pending set |
+| 3 | Treat "code changes always need explicit approval" as license to ignore the already-published Status and re-ask from zero | That principle governs whether the *code fix* runs without approval, not whether the *ask's options* may ignore prior classification. Reuse Status; still ask before touching code |
+| 4 | Omit the Status value from the option description | Quote the exact Status cell text (e.g. "🔴 Pending") in each option's description |
+
+**Self-check (before composing Step 8 finding-handling options, every time)**:
+1. Did you Read the just-posted (or about-to-post) Summary's Status column values?
+2. Does each Pending finding get its own question in the array, with its Status value quoted in the option description?
+3. Are Deferred/Rejected/Fixed findings excluded from the fix-now-vs-defer axis (referenced as already-resolved instead)?
+4. Are you about to invent a grouping axis (file/domain/severity-only) that doesn't derive from Status? → STOP, recompose using Status as the primary input.
+
+### Refresh the Summary before the merge ask when findings were fixed this session (HARD STOP)
+
+**When the finding-handling answer applies fixes this session (a fix commit lands + CI re-passes), the AI Review Summary posted at Step 7 is now stale — it still lists the fixed findings as open/Valid.** Before composing the merge ask, **PATCH the existing Summary comment to reflect resolution** (each fixed finding marked Resolved with the fixing commit SHA), per `post.md` "Single Summary preservation guard" PATCH procedure. A merge recommendation sitting on a Summary that still shows the findings as open is self-contradictory: the reader sees unresolved findings while the option says merge, and the merge-attestation URL points at a pre-fix record.
+
+This closes the gap between the finding-first fix and the merge decision: "fix → reflected in branch" (Finding-first ordering above) is not complete until the review record the merge attestation points at also reflects the fix.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Apply the fix, reply only in the bot's inline thread, then compose the merge ask with the Step-7 Summary untouched | PATCH the Summary comment to mark the applied findings Resolved (+ fixing SHA) BEFORE the merge ask. An inline-thread reply is not a substitute — the Summary is the consolidated review record |
+| 2 | Treat "the fix is documented somewhere on the PR (commit / thread reply)" as "the review record reflects resolution" | The AI Review Summary is the canonical record the merge attestation URL points at. It must state the current finding state, not the pre-fix state |
+| 3 | PATCH the Summary only after merging | Refresh precedes the merge ask — the user decides merge against the current review state, not a stale one |
+
+**Self-check (after a finding-handling answer that applied fixes, before the merge ask)**:
+1. Did this session land a fix commit for 1+ findings the Summary lists as open?
+2. If yes, did I PATCH the Summary (per `post.md` procedure) to mark those findings Resolved (+ SHA) BEFORE composing the merge ask?
+3. Does the merge option's Summary-URL attestation point at a Summary that now reflects the applied fixes (not the pre-fix state)?
+
 ### Routing: next vs wip
 
 | Situation | Skill to use | Reason |
@@ -56,14 +94,14 @@ Immediately after the Status line output, **ask the user for the PR handling dir
 AUTHOR=$(gh pr view <N> -R <owner>/<repo> --json author --jq '.author.login')
 
 # The comparison target is the API identity of the gh account being used for THIS repo
-# (per ~/.agents/rules/git.md account mapping: es6kr → DrumRobot, daegunsoftDev → daegunjhy).
+# (per ~/.agents/rules/git.md account mapping: es6kr → DrumRobot, an internal workspace org → its mapped account).
 # Do NOT use `gh auth status` "active" account — when multiple accounts are logged in,
 # the active one can differ from the account whose token is actually being used for the repo.
 # Do NOT use `git config user.email` — commit identity ≠ GitHub API identity.
 ACCOUNT_FOR_REPO=$(  # the gh user matching the repo owner per git.md mapping
   case "<owner>" in
     es6kr) echo DrumRobot ;;
-    daegunsoftDev|daegunjhy) echo daegunjhy ;;
+    <other-internal-org>) echo <mapped-account> ;;
     *) gh auth status 2>&1 | awk '/Logged in/{print $7; exit}' ;;
   esac
 )
@@ -88,9 +126,26 @@ ME=$(GH_TOKEN="$(gh auth token --user "$ACCOUNT_FOR_REPO")" gh api /user --jq '.
 
 To pass the `block-merge-without-review.sh` guard, **the merge option description must explicitly include "AI Review Summary posted (URL)"**.
 
+**Merge-method precheck before labeling any option "Squash merge" (HARD STOP)**: before composing a "Squash merge" option label, run `github-flow/merge.md`'s condition-6 "Merge-method policy pre-check" (release-please/changesets marker detection) — do not defer this check to the later `/github-flow merge` invocation. A "Squash merge" label composed here reaches the user as a recommendation before that later gate runs; if the repo turns out to require merge-commit (release-please parses individual Conventional Commits), the recommendation itself was already wrong.
+
+```bash
+gh api graphql -f query='{repository(owner:"<owner>",name:"<repo>"){viewerDefaultMergeMethod mergeCommitAllowed squashMergeAllowed}}'
+# Signal: .release-please-manifest.json / release-please-config.json / .changeset/ at repo root
+```
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Compose a "Squash merge" option label first, run the merge-method check only inside the later `/github-flow merge` invocation | Run the release-please/changesets marker check in this step, before the option label is written — label "Merge commit" instead when the marker is present |
+| 2 | Treat "the 6-condition self-check in merge.md will catch it later" as sufficient | That check is a pre-merge gate on the already-approved recommendation, not a substitute for composing the correct recommendation in the first place |
+| 3 | Recommend "Squash merge" from the release-marker branch alone when the queried `squashMergeAllowed` is `false` (repo setting disables it) | Branch on the queried capabilities (`mergeCommitAllowed`/`squashMergeAllowed`, and `rebaseMergeAllowed` if rebase is a supported fallback) **before** the release-marker branch — recommend only a method the repo actually allows |
+
+**Capability branch precedes the marker branch**: the GraphQL query above returns the repo's actual allowed methods. If the release-marker branch would recommend a method the repo disables (e.g. `squashMergeAllowed: false` with no release-please/changesets marker), fall back to whichever of `mergeCommitAllowed`/`rebaseMergeAllowed` is `true` instead — matching the capability policy in `skills/github-flow/merge.md`'s condition-6 pre-check.
+
 | Merge 4-condition satisfaction | Recommended options (Recommended at top) |
 |-------------------------------|------------------------------------------|
-| 4/4 satisfied | (1) Squash merge — AI Review Summary posted (URL) (2) Apply Minor then merge (3) Defer |
+| 4/4 satisfied, no release-please/changesets marker, `squashMergeAllowed: true` | (1) Squash merge — AI Review Summary posted (URL) (2) Apply Minor then merge (3) Defer |
+| 4/4 satisfied, no release-please/changesets marker, `squashMergeAllowed: false` | (1) Merge commit (or Rebase merge, whichever the repo allows) — AI Review Summary posted (URL) (2) Apply Minor then merge (3) Defer |
+| 4/4 satisfied, release-please/changesets marker present | (1) Merge commit — AI Review Summary posted (URL) (2) Apply Minor then merge (3) Defer |
 | 1+ Test Plan unchecked | (1) Verify unchecked items (web-browser/curl) (2) File separate issue then merge (3) Defer |
 | 1+ CI failures | (1) Investigate CI cause (2) If failure unrelated to PR, file separate issue (3) Defer |
 | Formal Review unapproved | (1) Self-approve (2) Request reviewer (3) Defer |
@@ -108,6 +163,8 @@ When pushing a merge while not immediately applying actionable items (Critical, 
 | `{workspace}/checklist.md` exists (Ralph not in use) | checklist.md | `- [ ] [BLOCKED] {summary}` |
 | GitHub Issue collaboration workflow | Separate Issue | `gh issue create` — specify "deferred from PR #N" in title/body |
 | Handled by additional commit in the same PR | Separate commit | Do not use "subject to separate PR" — push to this PR |
+
+**`{workspace}` = the current consolidate session's own workspace, not the reviewed PR's repo (HARD STOP)**: when the PR under review lives in a different repo than the session's workspace, check the session workspace root for `checklist.md`/`fix_plan.md` — not a checkout of the PR's repo. See `post.md` Step 7.6 "Workspace ≠ the reviewed PR's own repo" for the Don't/Do detail.
 
 **Option description requirements**:
 

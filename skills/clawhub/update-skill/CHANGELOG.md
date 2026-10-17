@@ -7,6 +7,35 @@ and this skill adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.h
 
 ## [Unreleased]
 
+## [0.8.5] - 2026-10-13
+
+### Fixed
+- Subagents ran toolchain probes (`swift build --help`) in the main checkout and left a `.build/` behind. Every toolchain command now runs in a named scratch directory outside all checkouts.
+- Phase 6 gains a checkout-hygiene hard blocker: both checkouts are compared against a Phase 1 `git status` snapshot, and leftovers are shown and removed before GATE 2.
+
+### Security
+- New rule: no backticks in shell arguments. A backtick in a double-quoted `rg` pattern ran as command substitution and printed the environment into a transcript.
+
+## [0.8.4] - 2026-09-09
+
+### Removed
+- Removed `disable-model-invocation`, so the skill can be invoked by the model as well as by `/name`.
+
+## [0.8.3] - 2026-09-09
+
+### Changed
+- Description condensed to fit the repo's 250-character limit.
+
+## [0.8.2] - 2026-08-21
+
+### Changed
+
+- Declared ClawHub browse categories (`agents, automation`) and topics in `metadata`, so the release pipeline publishes them instead of leaving the skill in the `other` category.
+
+### Removed
+
+- `skill-card.md`. The ClawHub CLI strips a root `skill-card.md` from every publish and the registry generates its own card, so the authored file never reached ClawHub.
+
 ## [0.8.1] - 2026-07-22
 
 ### Added

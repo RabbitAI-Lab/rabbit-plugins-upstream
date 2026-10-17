@@ -1,48 +1,58 @@
-## Description: <br>
-Consolidate and respond to external PR and issue feedback by gathering AI reviews, classifying findings, posting review summaries, and registering deferred items. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Consolidates external PR and issue feedback into classified findings, review summaries, and next-step guidance.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and maintainers use this skill to consolidate external pull request or issue feedback, classify findings by validity and severity, decide review posture, post summaries, and carry forward deferred follow-up work. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can make persistent GitHub review and repository tracking changes. <br>
-Mitigation: Use interactive review for drafted posts and run only with accounts and repositories where review-state mutation authority is intended. <br>
-Risk: Headless execution may post REQUEST_CHANGES, comments, or tracking updates without sufficient user review. <br>
-Mitigation: Avoid headless runs on repositories where automatic review or tracking-file edits would be inappropriate. <br>
+## Use Case:
 
+Developers and reviewers use this skill to gather PR feedback, assess findings, publish review summaries, and track deferred follow-up work.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/drumrobot/skills/consolidate) <br>
-- [README](README.md) <br>
-- [Skill Definition](SKILL.md) <br>
-- [PR Workflow](pr.md) <br>
-- [Collect AI Reviews](collect.md) <br>
-- [Analyze and Classify](classify.md) <br>
-- [Decide Review Response](decide.md) <br>
-- [Post Summary and Review](post.md) <br>
-- [Next Action Ask](next.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown review summaries, GitHub review or comment bodies, status text, shell commands, and tracking guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may lead to persistent GitHub review state changes and deferred-item tracking updates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.0 (source: frontmatter, release evidence, and changelog released 2026-07-23) <br>
+Risk: The skill can publish GitHub reviews and comments on behalf of the user.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable interactive review of drafts and confirm the account, target PR, and message before posting.
+
+Risk: Reviewing untrusted PR code can expose agents to unsafe content while creating local worktrees.
+
+Mitigation: Use a sandbox for untrusted fork PRs and inspect the checkout before granting agent execution.
+
+Risk: Plugin and hook installation can introduce persistent local changes.
+
+Mitigation: Review requested plugins and hooks before installing or enabling them.
+
+## Reference(s):
+
+- [Consolidate on ClawHub](https://clawhub.ai/drumrobot/skills/consolidate)
+- [Superpowers code-review plugin](https://github.com/obra/superpowers)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Files]
+
+**Output Format:** [Markdown review summaries, findings, and follow-up plans]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May publish GitHub comments or formal reviews and record deferred findings locally.]
+
+## Skill Version(s):
+
+0.8.1 (source: frontmatter, CHANGELOG, server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

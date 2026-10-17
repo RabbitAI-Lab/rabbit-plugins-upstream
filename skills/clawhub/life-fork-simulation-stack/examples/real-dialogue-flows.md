@@ -1,5 +1,7 @@
 # 真实对话流 demo
 
+> Language scope: Simplified Chinese reference material by design. Adapt conversational reports to the user's chosen language; the optional bundled HTML layout targets Chinese readers.
+
 用途：测试 Skill 在真实用户对话里的分支，避免只测试理想报告结构。
 
 所有 demo 的用户输入都要混乱、不完整、有情绪，且经常表达“不想填太多”。Skill 要先按已有信息生成报告，必要时只问 1-3 个高信息问题。

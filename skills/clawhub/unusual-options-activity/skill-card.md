@@ -1,44 +1,59 @@
-## Description: <br>
-Unusual options activity radar for US stocks and ETFs: end-of-day IV rank, implied volatility, options sentiment, put/call percentile, 25-delta skew, open-interest walls, and max pain, each ranked against the ticker's own trailing history. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides read-only options activity and volatility analysis for US stocks and ETFs, comparing current readings with each ticker's history.
 
-## Publisher: <br>
-[thesentitrader](https://clawhub.ai/user/thesentitrader) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thesentitrader](https://clawhub.ai/user/thesentitrader)
 
-## Use Case: <br>
-External users and developers use this skill to query read-only SentiSense options-market analytics for US stocks and ETFs, then explain unusual activity, IV rank, put/call percentiles, skew, open-interest walls, and max pain in educational terms. It is not for order entry, portfolio management, greeks-based hedging, or personalized investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated requests to SentiSense may consume service quota or hit rate limits. <br>
-Mitigation: Keep the API key in an environment variable, stop or back off when quota and rate-limit responses are returned, and disclose preview or quota-limited results. <br>
-Risk: Options analytics can be mistaken for personalized trading advice or real-time order-flow data. <br>
-Mitigation: Frame outputs as educational, end-of-day market context and avoid buy, sell, forecast, sweep, or account-management recommendations. <br>
-Risk: API credentials could be exposed if copied into prompts, URLs, or user-facing answers. <br>
-Mitigation: Use the X-SentiSense-API-Key header from the SENTISENSE_API_KEY environment variable and do not print or embed the key in generated output. <br>
+## Use Case:
 
+Investors, researchers, and agents use this skill to examine options positioning, unusual activity, implied volatility, and historical trends for US stocks and ETFs. Its findings are informational, not personalized investment advice.
 
-## Reference(s): <br>
-- [SentiSense](https://sentisense.ai) <br>
-- [SentiSense API Key](https://app.sentisense.ai/get-api-key) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/thesentitrader/skills/unusual-options-activity) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance] <br>
-**Output Format:** [Markdown with concise explanations, sourced API-derived values, and optional shell or Python snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only SentiSense API responses are summarized as educational market context, not trading advice.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: server release evidence) <br>
+Risk: A SentiSense API key and stock or ETF queries are sent to the service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated key, keep it out of shared outputs, and enable the skill only when that data transfer is acceptable.
+
+Risk: Market data may be delayed, incomplete, or mistaken for investment advice.
+
+Mitigation: Show the reported session or intraday timestamp and delay, identify unavailable readings, and present findings as informational rather than trade recommendations.
+
+Risk: Requests may consume free-tier quotas or require a paid plan for full results.
+
+Mitigation: Check the account tier and available quota before repeated queries, and distinguish previews from complete results.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/thesentitrader/skills/unusual-options-activity)
+- [SentiSense](https://sentisense.ai)
+- [SentiSense API key](https://app.sentisense.ai/get-api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Text or Markdown with options metrics and source-session timestamps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only; end-of-day snapshots and delayed intraday data; no orders or account changes.]
+
+## Skill Version(s):
+
+1.6.0 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

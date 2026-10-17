@@ -1,47 +1,55 @@
-## Description: <br>
-Read-only financial market data API. Stock prices, sentiment, insider trading, institutional flows, politician trades, AI insights. No trading, no purchases, no write operations, no wallet access. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in retrieving read-only US stock market data, including prices, sentiment, ratings, institutional activity, options, and earnings, through the SentiSense API.
 
-## Publisher: <br>
-[thesentitrader](https://clawhub.ai/user/thesentitrader) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thesentitrader](https://clawhub.ai/user/thesentitrader)
 
-## Use Case: <br>
-Developers and analysts use this skill to let an agent retrieve SentiSense financial market data, sentiment, insider and politician trading disclosures, institutional flows, AI insights, market summaries, calendars, and related research signals through a read-only API. The skill is for informational research workflows and does not provide investment advice or enable trading. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The agent needs access to SENTISENSE_API_KEY to make API requests. <br>
-Mitigation: Provide only the SentiSense API key required for this service, avoid exposing unrelated credentials, and rotate the key if it is shared outside the intended agent environment. <br>
-Risk: Market data, AI insights, and sentiment outputs may be mistaken for investment advice. <br>
-Mitigation: Use outputs as informational research only and require human review before making financial decisions. <br>
-Risk: Quota-gated, rate-limited, or paid-tier endpoints can consume API allowance or require a PRO subscription. <br>
-Mitigation: Check endpoint tier labels and monitor request volume before running broad data collection workflows. <br>
+## Use Case:
 
+Developers and research agents use this skill to query SentiSense for US equities market data and summarize sentiment, ratings, filings, options activity, and earnings. Its results are informational, not investment advice.
 
-## Reference(s): <br>
-- [SentiSense API documentation](https://sentisense.ai/docs/api/) <br>
-- [SentiSense website](https://sentisense.ai) <br>
-- [SentiSense live skill file](https://sentisense.ai/skill.md) <br>
-- [SentiSense methodology](https://sentisense.ai/methodology#institution-rankings) <br>
-- [ClawHub skill page](https://clawhub.ai/thesentitrader/skills/sentisense) <br>
-- [Publisher profile](https://clawhub.ai/user/thesentitrader) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Shell commands, Code, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with REST endpoint descriptions, curl commands, code snippets, and JSON response shapes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SENTISENSE_API_KEY for authenticated read-only requests; some endpoints are rate-limited, quota-gated, preview-limited, or PRO-only.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.7.2 (source: server release evidence) <br>
+Risk: API requests send the user's key and requested tickers or screen filters to SentiSense; explicitly requested account-specific queries may disclose watchlist or portfolio context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the key only for intended SentiSense requests and share account-specific context only when the user explicitly requests it.
+
+Risk: Financial data or generated insights could be mistaken for investment advice.
+
+Mitigation: Present results as informational data and leave investment decisions to the user.
+
+## Reference(s):
+
+- [SentiSense API documentation](https://sentisense.ai/docs/api/)
+- [SentiSense rating methodology](https://sentisense.ai/methodology/#sentisense-rating)
+- [SentiSense ClawHub skill release](https://clawhub.ai/thesentitrader/skills/sentisense)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Analysis]
+
+**Output Format:** [Markdown with API request examples and data summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only data access; requires SENTISENSE_API_KEY for API requests.]
+
+## Skill Version(s):
+
+2.22.0 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

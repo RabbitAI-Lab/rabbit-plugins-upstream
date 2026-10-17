@@ -1,46 +1,61 @@
-## Description: <br>
-Helps agents query Garmin Connect health and activity data, analyze metrics such as sleep, Body Battery, HRV, heart rate, workouts, routes, and generate dashboards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps people explore Garmin Connect health, activity, and calendar data through natural-language questions, route analysis, and interactive dashboards.
 
-## Publisher: <br>
-[bolinches](https://clawhub.ai/user/bolinches) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[bolinches](https://clawhub.ai/user/bolinches)
 
-## Use Case: <br>
-ClawHub users and agents use this skill to answer natural language questions about Garmin health and workout history, retrieve Garmin Connect data, and produce summaries or charts for personal fitness review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Garmin credentials, session tokens, and health or route data are sensitive personal information. <br>
-Mitigation: Use the Clawdbot UI, environment variables, or protected local config instead of exposing credentials in prompts, and remove ~/.clawdbot/garmin/ to revoke saved local session tokens. <br>
-Risk: Passing a Garmin password on the command line can expose it through local shell history or process inspection. <br>
-Mitigation: Prefer UI, environment, or config-file setup and avoid the documented command-line password option unless the local environment is controlled. <br>
-Risk: Health and recovery interpretations can be incomplete or misleading if treated as medical advice. <br>
-Mitigation: Present analyses as informational personal fitness summaries and encourage users to seek professional medical guidance for health decisions. <br>
+## Use Case:
 
+Garmin Connect users can ask an agent to summarize sleep, recovery, workouts, and calendar entries, inspect activity routes, and create health dashboards. Trip changes can also be previewed and explicitly confirmed.
 
-## Reference(s): <br>
-- [Server-resolved source repository](https://github.com/bolinches/garmin-health-analysis) <br>
-- [ClawHub skill page](https://clawhub.ai/bolinches/skills/garmin-health-analysis-2) <br>
-- [MCP setup guide](references/mcp_setup.md) <br>
-- [python-garminconnect library](https://github.com/cyberjunky/python-garminconnect) <br>
-- [Garmin Connect](https://connect.garmin.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON, HTML files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON data summaries, and optional HTML chart files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Garmin Connect credentials and Python dependencies; may create local session tokens and dashboard files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release metadata; artifact frontmatter states 1.3.0) <br>
+Risk: Garmin account access exposes sensitive health, activity, location, travel, and profile data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only if that access is acceptable; avoid sharing outputs containing personal data.
+
+Risk: Garmin credentials and saved sessions can be disclosed from shared configuration or local files.
+
+Mitigation: Keep credentials out of shared files; delete ~/.openclaw/garmin to revoke the saved session.
+
+Risk: Confirming a trip update or deletion can change Garmin calendar data.
+
+Mitigation: Review the preview before explicitly confirming trip updates or deletions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/bolinches/skills/garmin-health-analysis-2)
+- [Garmin Connect API reference](artifact/references/api.md)
+- [Health analysis guide](artifact/references/health_analysis.md)
+- [Extended capabilities](artifact/references/extended_capabilities.md)
+- [garminconnect Python library](https://github.com/cyberjunky/python-garminconnect)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, HTML dashboards, Activity files]
+
+**Output Format:** [Natural-language responses, command examples, HTML charts, and downloadable FIT/GPX files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Personal Garmin health and location data may be included in responses or files.]
+
+## Skill Version(s):
+
+1.6.0 (source: frontmatter, ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
