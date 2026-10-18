@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/teach",
+  "repo": "cursor/plugins",
+  "skillId": "teach",
+  "branch": "main",
+  "pushedAt": "2026-10-18T07:31:08Z",
+  "contentHash": "0c88d1cff4bbb3141b52878ccb7bef24c2a254a453634d1c1af20d45ee5993df",
+  "fetchedAt": "2026-10-18T12:06:47.804Z"
+}

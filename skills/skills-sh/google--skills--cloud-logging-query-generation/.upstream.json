@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-logging-query-generation",
+  "repo": "google/skills",
+  "skillId": "cloud-logging-query-generation",
+  "branch": "main",
+  "pushedAt": "2026-10-16T20:05:04Z",
+  "contentHash": "844448a7aa548297503c9b28dc9c4b3d072aac0b07b87096933fcf0ae39c9e85",
+  "fetchedAt": "2026-10-18T12:08:08.469Z"
+}

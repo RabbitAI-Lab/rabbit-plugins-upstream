@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/skill-development",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "skill-development",
+  "branch": "main",
+  "pushedAt": "2026-10-18T07:34:19Z",
+  "contentHash": "40958162ead267b19bb431754c653d37fdda869c2835f2457a3663a954ca4646",
+  "fetchedAt": "2026-10-18T12:08:10.705Z"
+}
