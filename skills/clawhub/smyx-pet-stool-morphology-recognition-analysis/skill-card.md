@@ -1,43 +1,57 @@
-## Description: <br>
-Analyzes dog-toilet or outdoor dog-walking image or video inputs with cloud APIs to identify pet stool color, shape, and visible blood or mucus, returning structured observations and report links without diagnosing disease. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet stool in images or videos from dog toilets or walking paths, reporting visible color, consistency, blood, or mucus without diagnosing disease.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and pet-health workflow developers use this skill to route dog stool images, videos, or URLs to a hosted analysis service for standardized morphology observations, abnormal-feature prompts, report links, and historical report lookup. Results are intended for monitoring support and do not provide disease diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends pet images, videos, or URLs to Life Emergence services for analysis. <br>
-Mitigation: Use it only with media you are permitted to upload, and ask the publisher for retention, deletion, and downstream-use documentation before handling sensitive footage. <br>
-Risk: The skill may create or reuse a persistent local identity, store token-like values, and retrieve historical reports. <br>
-Mitigation: Run it in an isolated workspace, review local data storage before and after use, and confirm how account linkage and report history can be deleted or reset. <br>
-Risk: The output can be mistaken for medical advice even though the skill only describes stool appearance. <br>
-Mitigation: Present results as non-diagnostic observations and route health concerns to a veterinarian or qualified professional. <br>
+## Use Case:
 
+Pet owners and caregivers use this skill to review images or videos of pet stool for observable changes and to retrieve past analysis reports. Results are health observations, not veterinary diagnoses.
 
-## Reference(s): <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON analysis reports, with optional saved text output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include structured stool-feature observations, abnormal-feature prompts, report links, and historical report tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter says 1.0.5) <br>
+Risk: Pet and household images or videos are sent to lifeemergence.com services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the media and destination before using the skill; submit only content you are comfortable sharing.
+
+Risk: The skill can silently create or reuse a cloud identity and store authentication tokens in a workspace database.
+
+Mitigation: Review the skill before installation and clear the local database and tokens when you stop using it.
+
+Risk: The skill can automatically retrieve cloud report history.
+
+Mitigation: Use it only if you are comfortable with cloud history access and review stored reports as needed.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report or report-history list; JSON output is available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include observed stool characteristics, alerts, suggestions, and report links; does not diagnose disease.]
+
+## Skill Version(s):
+
+1.0.8 (source: server release; bundled SKILL.md lists 1.0.19)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

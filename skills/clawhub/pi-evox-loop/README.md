@@ -1,0 +1,233 @@
+# Pi × EvoX Lab — 给编码智能体装上「经验继承」闭环
+
+![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg) ![Node](https://img.shields.io/badge/node-%E2%89%A5%2022-brightgreen) ![Pi 0.74.2 / Evolver 2.0.30](https://img.shields.io/badge/tested-pi%200.74.2%20%C2%B7%20evolver%202.0.30-blue) ![Upstream issues](https://img.shields.io/badge/upstream%20issues%20filed-5-orange)
+
+> Turn one agent's failures into the next run's head start — measured, not vibes.
+>
+> 一个把 **Pi（极简编码智能体）的任务执行轨迹**接入 **Evolver（GEP 自进化引擎）**、并通过受控实验量化「经验继承收益」的完整 Harness 与实证报告。
+
+**一句话结论**：在确定性陷阱任务上，把「已验证修法」注入下一轮 system prompt，可复现地带来 **token -55.3%（扣除重复执行基线后净收益约 -30pp）**、**陷阱特异错误 11→4**；该结论跨陷阱类别（编码/数据格式）与跨模型（agnes-2.5-flash / deepseek-v4-flash）复现。
+
+---
+
+## 为什么值得看
+
+Agent 自进化（self-evolving agents）领域概念多、实证少。本项目不做概念堆叠，而是用**受控实验**回答三个问题：
+
+1. **继承真的有效吗？** —— 有效，但前提苛刻（见结论 3）。
+2. **瓶颈在哪？** —— 不在链路，在两处隐蔽缺口（见结论 1、2）。
+3. **怎么把它变成机制保证而非运气？** —— 守卫 + LLM 重写（见结论 5）。
+
+## 五条实证方法论结论（摘要）
+
+1. **注入通道可能只传标签不传修法**——自建策略注入层是闭环生效的前提；
+2. **可靠陷阱必须是「环境必然失败」**（而非「模型可能犯错」）；
+3. **注入内容质量是决定变量**——只注入标签比不注入更差（+36pp）；
+4. **token 指标必须配对解读**（重复执行基线 ≈ -22%）；
+5. **守卫把继承从「运气」变「机制」**。
+
+> 完整论证、数据与逐条出处见 [`SKILL.md`](SKILL.md) 与 [`docs/experiment-report.md`](docs/experiment-report.md)（避免两处维护重复内容）。
+
+## 诚实边界（先说清楚，避免误读）
+
+- **供给密度低是真实约束**：在生产真实会话里，能被**自动**抽取成"干净修法对"的样本密度很低（实测 `distillablePairs=0`）。当前基因库主要来自**人工 / 引导式沉淀** —— 因此本工具的价值**随沉淀累积**，而不是"装上就自动白捡经验"。正因如此，0.14.4 新增**引导式沉淀**（`light-cli draft --error`：贴原始报错 → 只补 FIX），把沉淀门槛降到最低。
+- **注入是软提示**：修法注入到 system prompt，遵从度**与模型相关**；守卫只保证噪声不入库 / 不出库，**不承诺 100% 避坑**。
+- **指标必须配对读**：单跑 token 方差可达 ±30%，且重复执行本身带有 ≈ -22% 的学习效应 —— **绝对降幅 ≠ 继承收益**。
+- **对靶能力依赖宿主**：各宿主会话存储格式不一，结构化标志（`isError` / `exit_code`）最可靠；只靠文本标记时召回率随宿主而异。
+
+## 关键实验数据
+
+同一 GBK 陷阱（无效 UTF-8 字节）、同一模型（agnes-2.5-flash）、同任务，注入通道为唯一变量：
+
+| 注入通道 | N | 陷阱错误 R1→R2 | token Δ 均值 |
+|---|---|---|---|
+| 只注入标签（官方默认行为） | 5 | 4→6（无收益） | +13.8% |
+| **策略注入（本项目）** | 5 | **11→4** | **-55.3%** |
+| 策略注入（Pi 原生扩展钩子） | 3 | 受蒸馏质量方差影响 | 守卫后与 CLI 等价 |
+
+跨陷阱与跨模型复现见报告 §17/§18：非法 JSON 陷阱 14→3（3/3 避坑）、deepseek-v4-flash 9→5（3/3 方向性避坑）。
+
+## 仓库结构
+
+```
+├── SKILL.md                     # Agent Skill 封装（一句话跑闭环实验）
+├── code/
+│   ├── pi_evolve.mjs            # 一站式闭环编排器（R1 陷阱 → 适配 → 蒸馏 → 审核 → 注入 → R2 对比）
+│   ├── evolver-recall.mjs       # 召回 + 命中登记（唯一实现：审核门控 + 修法/叙述守卫 + 对靶 top-N）
+│   ├── light-cli.mjs            # 内置零依赖后端 CLI：distill / approve / quarantine / list / info（含内容去重）
+│   ├── evolver-bridge.ts        # 宿主原生扩展样例：启动钩子动态注入已审核修法（含质量守卫）
+│   ├── pi_session_adapter.js    # 会话轨迹 → generic-chat transcript 适配器（含 is_error 契约修复）
+│   ├── engine/                  # 内置引擎（light）：distill / ledger / store（基因与台账的零依赖实现）
+│   ├── metrics_collect.mjs      # 运维度量：基因数 / 已审核 / 隔离 / 命中 / recall 调用数
+│   ├── distill_sessions.mjs     # 生产会话蒸馏：直读宿主会话存储 → 参数差异抽取 → 两级门落库
+│   ├── evox-weekly.sh           # 周常包装（度量 + 蒸馏提交 + 候选报告）
+│   ├── setup.sh                 # 一键初始化（库目录 / 首个修法 / 自检）
+│   └── sum_tokens.js            # 跨轮 token / 工具调用 / 错误数聚合
+├── traps/                       # 确定性陷阱生成器（含一个「失败陷阱」样本作反面教材）
+├── examples/                    # 任务文本样例
+├── exp/                         # 陷阱模板与回归用 fixture
+└── docs/
+    ├── experiment-report.md     # 完整实测报告（含每一步的失败与排查）
+    ├── adapter-design.md        # ⚠️ 历史草案（已被现实实现取代，仅存档勿按此集成）
+    ├── other-agents.md          # 其他 Agent 宿主接入指南
+    ├── providers.md             # Provider 配置
+    └── security-and-license.md  # 安全与许可全文
+```
+
+> **运维与度量**：本仓库在 `code/` 下附带 3 个零依赖运维脚本（`metrics_collect.mjs` / `distill_sessions.mjs` / `evox-weekly.sh`）与周常 cron 接线，用于观测「经验继承」是否真正生效。详见 [`docs/advanced.md` 的「运维与度量」小节](docs/advanced.md#运维与度量ops)。
+
+## 快速开始
+
+依赖：**Node ≥ 22**（召回/沉淀零 npm 依赖）；流程 C 实验另需一个 OpenAI 兼容 LLM key、Pi CLI（随 `npm install` 可选安装）与 Python 3（陷阱生成器）。
+
+```bash
+# 0.（可选）安装上游依赖——仅流程 C 实验（Pi CLI）或启用 evolver 集成时需要；A/B 流程可跳过
+npm install   # 即 @earendil-works/pi-coding-agent@0.74.2 + @evomap/evolver@2.0.30
+
+# 1. 生成确定性陷阱 fixture（无效 UTF-8 字节）
+python traps/make_encoding_trap.py
+
+# 2. 一条命令跑完整闭环（R1 踩坑 → 内置引擎蒸馏 → 审核 → 修法注入 → R2 避坑 → 跨轮对比）
+export AGNES_CN_API_KEY="<your-key>"   # 你的 OpenAI 兼容 key
+# （可选）LLM 精修端点——未配置时 --llm-refine 自动禁用（外发必须显式授权）
+export EVOLVER_REFINE_URL="https://<你的端点>/v1/chat/completions" EVOLVER_REFINE_MODEL="<model>"
+node code/pi_evolve.mjs <含陷阱data的模板目录> <任务文本文件> \
+    --provider agnes-cn --model agnes-2.5-flash \
+    --api-key "$AGNES_CN_API_KEY" --rounds 2 --fresh --auto-approve --llm-refine
+```
+
+关键开关：`--fresh`（备份并清空资产库，保证单变量）、`--auto-approve`（跳过人工审核门，默认**保留人工审核**）、`--llm-refine`（蒸馏摘录无修法信号时自动 LLM 重写）、`--ext-inject`（改用 Pi 原生扩展钩子注入）。
+
+
+## 采用与反馈（Adoption）
+
+> **EN**: New here? Run the [5-minute quickstart](examples/quickstart.md) (Node >= 22, zero deps). Feedback: `light-cli feedback "<text>"` or GitHub Discussions. Running it for real? Report your instance (we need 2 external instances for 1.0): adoption-report template - registry in ADOPTERS.md.
+
+- **5 分钟体验**：[`examples/quickstart.md`](examples/quickstart.md)（Node ≥22，零依赖，全程本地）；
+- **一页纸**：[`docs/one-pager.md`](docs/one-pager.md)（问题/方案/信任要素/局限）；
+- **反馈**：`node code/light-cli.mjs feedback "<想说的话>"` 或 [GitHub Discussions](https://github.com/stwhwing/pi-evox-lab/discussions)；
+- **实例登记**：用起来了？[提交 adoption-report](.github/ISSUE_TEMPLATE/adoption-report.yml) 或 PR [ADOPTERS.md](ADOPTERS.md)——**1.0 判据需要 ≥2 个外部实例**（作者自己的不算）。
+
+## FAQ
+
+常见问题（空库、`$ENV` 插值、`--fresh` 恢复、国内镜像、Node 版本）见 [`docs/faq.md`](docs/faq.md)（SKILL.md 另有高频速览）。
+## 引用与文档
+
+- 其他 Agent 宿主接入指南：[docs/other-agents.md](docs/other-agents.md)（Claude Code / IDE / 自建智能体的注入模式）
+
+- 完整实验过程（包括踩过的坑：注入缺口、BOM 陷阱失效、蒸馏质量方差、官方 cycle 路线 fail-closed）：[`docs/experiment-report.md`](docs/experiment-report.md)
+- Pi Extensions API 预研与适配器设计：[`docs/adapter-design.md`](docs/adapter-design.md)
+
+## 致谢（Acknowledgements）
+
+本项目**不是**任何上游项目的一部分，也不代表它们各自的官方观点——它是一个独立的研究 Harness，站在一批优秀开源项目与公开方法论的肩膀上。
+
+### 一、上游引擎与宿主
+
+| 上游项目 | 在本研究中的角色 |
+|---|---|
+| **[pi-coding-agent](https://www.npmjs.com/package/@earendil-works/pi-coding-agent)**（0.74.2 起） | 被测的极简编码智能体。任务执行、session 格式、`before_agent_start` 扩展钩子均来自它；其包内 `docs/extensions.md` 是本机权威资料。 |
+| **[@evomap/evolver](https://www.npmjs.com/package/@evomap/evolver)**（2.0.30） | GEP（Genome Evolution Protocol）自进化引擎：Gene/Capsule/EvolutionEvent 资产模型、`ingest --distill → review → inject` 链路、fail-closed 审核治理。感谢其严格的治理设计，使"发现缺口"成为可能。 |
+
+**本研究回馈给上游的缺口清单**（均已提交为官方 issue，详见报告对应章节）：
+1. `evolver inject session-start` 只输出基因 summary 标签，不携带可执行的 `strategy` 字段——修法无法抵达下一轮（§16.1）→ [EvoMap/evolver#624](https://github.com/EvoMap/evolver/issues/624)
+2. auto-distill 的 strategy 摘录偏向 session 末尾成功叙述，且在关键信息处截断，质量随错误密度波动（§20.3）→ [EvoMap/evolver#625](https://github.com/EvoMap/evolver/issues/625)
+3. `evolver cycle` 的 execute/verify 对全部 runtime fail-closed（设计内），Pi 不在 runner 白名单（§19）→ [EvoMap/evolver#627](https://github.com/EvoMap/evolver/issues/627)
+4. 适配器契约缺口：generic-chat transcript 需显式 `is_error` 标志才能产生 strong 信号（§13，已在本仓库 adapter 中修复）→ [EvoMap/evolver#626](https://github.com/EvoMap/evolver/issues/626)
+5. pi 侧编排 DX 两则：models.json `$ENV` 插值不生效（401 字面量）+ `./package.json` 未导出 → [earendil-works/pi#9258](https://github.com/earendil-works/pi/issues/9258)
+
+### 二、方法论与评测参考
+
+| 参考 | 借鉴之处 |
+|---|---|
+| **[Palantir Ontology](https://www.palantir.com/docs/foundry/ontology/overview)** | 概念层的参照系："语义层让你*读*业务，运营本体让你*运营*它"。其「**动作门控写 · 审计每次尝试 · 回写权威源**」三件套与本项目的「审核门控注入 · 召回/命中埋点 · 经验库单一真源」逐条对应；正是这个对照让我们把「**回写（write-back）缺失**」识别为结构性缺口。 |
+| **[gura105/operational-ontology](https://github.com/gura105/operational-ontology)**（MIT） | 上述理念的**最小可运行参考实现**。研读其 `src/core.ts` 与示例（`defineObject`/`defineLink`/`defineAction` + `preconditions` + `reject(code)` + `writeback`），作为「规则内置于动作、拒绝可被机器读取」的对照样本。 |
+| **[fstech-digital/operational-ontology-framework](https://github.com/fstech-digital/operational-ontology-framework)** | 公开治理模型：**Data → Logic → Action → Evidence → Write-back** 纵向链条、Pin/Spec/Handoff/Facts 四类状态物，以及一份**反模式清单**（我们将其当自检表用）。 |
+| **[Leading-AI-IO/palantir-ontology-strategy](https://github.com/Leading-AI-IO/palantir-ontology-strategy)** | 开源专著：把本体论讲成「名词（对象）与动词（动作）的统合 + 分支与评审的治理」；"从只能看的数据，转向直接驱动业务的数据"与本研究"从记录经验，转向驱动下一轮行为"同源。 |
+| **[ayghri/i-have-adhd](https://github.com/ayghri/i-have-adhd)** | 多平台智能体行为约束项目。借鉴两点：**工程组织方式**（同一规则面向多宿主做薄适配层，与本项目「一个实现 + 多个薄钩子」同构）与 **`evals/` 盲评评测体系**（多维度 rubric + 多次试验 + 加权）；其**发布门设计教训**（绝对化规则会让门永不可通过）也被用来复查自家守卫是否过严。 |
+| **论文 *From Procedural Skills to Strategy Genes***（arXiv:2604.15097，EvoMap） | 提供「紧凑 Gene 优于冗长 Skill」「失败经验的最佳形态是极度蒸馏后的独立 **AVOID** 警告」两条结论的量化依据（4,590 次受控实验）。本项目独立实测与之同向，据此保留了对**注入内容质量**的高优先关注。 |
+| **[numbat](https://github.com/perplexityai/numbat)**（Perplexity AI，Apache-2.0） | agent 行为审计器（Go 单二进制）——本版 0.18 的 **timeline（四账本取证重建）与 harvest（错误候选→沉淀建议）** 两个命令的方法论直接受其启发：「把账本变成监控录像」「先证明 agent 到底干了什么」。numbat 原生解析 OpenClaw/Claude/Codex 会话日志，可在自有设备上作为 PiEvoX 效果度量的**独立取证后端**（P2 路线）。 |
+| **[FlyLoRA](https://arxiv.org/abs/2510.08396)**（NeurIPS 2025，清华大学；[代码](https://github.com/gfyddha/FlyLoRA)） | 权重空间的隐式秩专家（implicit rank-wise MoE）PEFT —— 与本项目（**提示空间**的推理期经验继承）**不在同一层**，因此不是可直接插入的组件；但有两条原理被**显式迁移**：① **负载均衡偏置** —— 本版 0.14.4 的召回打分加入 `-u·sign(c_i − c̄)`（`c_i` = 该基因历史命中数），缓解"高信号重叠的热门基因长期霸榜"；② **免训练合并不干扰** —— 落到提示层即本版的**注入冲突守卫**（选中集合内 `anti_patterns` 互斥者剔除低分项）。其"正交组件合并互不干扰"的判断，与本项目把负经验正交化为 `anti_patterns` 的做法同构。另：其 **FlyHash 式免参数路由**是我们路线图上 **P2（鲁棒召回）** 的参考方向，**当前尚未实现**（诚实标注）。 |
+| **[Switch Transformer](https://arxiv.org/abs/2101.03961)**（Fedus et al., 2021） | 上述"**负载均衡偏置**"的思想源头之一 —— MoE 负载均衡以每专家计数 `c_i` 与均值的偏离为据。本项目 P1④ 的加性偏置沿用同一形式（温和封顶，规模未到时恒为 0）。 |
+
+> 以上均为**研读与对照**：本项目与它们均无隶属关系，也不代表其观点；本仓库实现均为原创，默认后端是 MIT 的内置引擎。
+
+如果本研究对你的工作有帮助，也请给上面这些项目点 star——它们是真正的主角。
+
+## 项目状态（2026-10-04）
+
+| 项 | 状态 |
+|---|---|
+| 当前版本 | 0.22.0（版本轨迹：0.3.0 首发 → 0.22.0） |
+| 引擎 | 默认内置 light 引擎（零 npm 依赖，MIT）；evolver 为可选集成 |
+| 让经验真正生效 | 0.16.0 针对「沉淀了却不生效」的四个静默失效：① `info` 显示**闭环健康度**（召回次数/命中/待审 + 下一步命令）② 自己沉淀的基因**默认自动通过**（`config --auto-approve off` 可改回）③ `install-hooks` 自动接线（**默认演练，加 `--yes` 才写入**）④ `starter` 一键装载 10 条通用起步基因 |
+| 召回（最后一公里） | 0.15.0 修掉「基因已入库却召回不到」四个断点：① **任务文本清洗**（剥宿主信封前缀/纯URL/心跳样板）② **CJK bigram 分词**（原整段成单 token ⇒ 中文任务与中文基因永不相交）③ **无任务意图不注入**（不再"取最近N条"凑数）④ **注入即登记 + `--negate` 回填**（闭合"注入→有效"漏斗）。私有节点实测有效召回率 **10%** ⇒ 目标 >60% |
+| 共享基因库 | 跨实例/跨用户：`distill --shareable` 标记可共享 → `gene submit` 过脱敏闸门入自建池 → 其他实例 `gene import` 幂等拉取（默认 community 待审 / `--tier official` 自建池自动通过）。闸门 fail-closed：私有IP/绝对路径/密钥命中即拦截不出网；项目私有词由本地 `redline.local.json` 补充（不发布） |
+| 召回 | 唯一实现 `evolver-recall.mjs`：审核门控（台账 **last-write-wins**）+ 修法/叙述双守卫 + **对靶 top-N** + **负载均衡偏置**（本版新增）+ **注入冲突守卫** |
+| 沉淀 | **引导式 `light-cli draft --error`**（本版新增：自动抽信号 + 预填 AVOID + 写 `anti_patterns`，人只补 FIX）+ 手写式 `distill`；内容去重 |
+| 生产蒸馏 | `distill_sessions.mjs` 直读宿主会话存储，**只信权威错误标志**（`isError` / 非零 `exit_code`，不再扫正文关键词）；两级门 + 候选报告 |
+| 自动召回 | 宿主原生钩子接入已落地（bootstrap 类与 `pre_llm_call` 类各一），并**按宿主记录注入埋点**（`agent` / `targeted` / `injected`） |
+| 供给现状（诚实） | 真实生产会话可自动抽取的干净修法对密度低（实测 `distillablePairs=0`）⇒ 基因库主要来自**人工 / 引导式沉淀** |
+| ClawHub | moderation **CLEAN**；static-analysis / skillspector 剩余 findings 均为功能固有（已被 moderate=clean 裁决覆盖，已文档化） |
+| skillhub | 评测均值 ≈4.54（15 维，0.14.7 版本）；errorHandling / stability / docQuality 均 4.5、usability 4.8；科恩实验室 **benign**；云鼎 suspicious 为 LLM 工具普遍特征（中立声明见下） |
+| 上游 | 4+1 项缺口已提交官方 issue（evolver #624-#627、pi #9258）；核心运行时不依赖其回应 |
+
+**0.14.4 本版要点**：① 新增**引导式沉淀** `light-cli draft --error`（自动抽 signals + 预填 AVOID + 写入 `anti_patterns`，未补 FIX 的占位符草稿被守卫拒绝落库）② `anti_patterns` 改为**单 token 字面量**（方案A 词汇对齐），使**注入冲突守卫**真正可触发 ③ 召回新增**负载均衡偏置**（借鉴 FlyLoRA / Switch Transformer 形式，冷门基因不再被热门长期霸榜）④ 新增**按宿主的注入观测**（`recall_calls.jsonl` 记录 `agent` / `targeted` / `injected` / `query`）⑤ **审核语义 last-write-wins 补齐**（`pi_evolve` / `light/store` / `metrics_collect` 三处此前遗漏的读取侧——此前被 quarantine 的基因在部分路径仍会被注入）⑥ 生产蒸馏只信**权威错误标志**（消除 9 例把成功命令误判为失败的噪声）。
+
+**0.14.3 本版要点**：① 召回侧修复「**隔离（quarantine）无法撤销已批准**」——台账改为按 assetId 的**最后一条状态**判定（last-write-wins）② 新增**叙述守卫**，把会话旁白/推理流水式文本挡在注入之外 ③ `distill_sessions.mjs` 由「诊断脚本」升级为**真实蒸馏适配器**（失败/重试的**参数差异**抽取 + 两级门 + 候选报告）④ `light-cli distill` 增加**内容去重**（重复沉淀不再堆积，也不会把已批准资产的审核状态打回）⑤ 召回新增**对靶 top-N**（与任务无关即不注入）。
+
+**0.14.5 / 0.14.6 / 0.14.7 / 0.14.8 本版要点**：
+- **0.14.5**：拉升 progressive / antiPatternFaq / boundary 等分项的评测分。
+  **EN**: Evaluation-score lift pass (progressive / antiPatternFaq / boundary).
+- **0.14.6（内容/UX 版）**：新增 `light-cli doctor` 首次运行自检 + SKILL.md「3 步就绪」；坏行警告补「如何修正」；实验 preflight（Node≥22 / pi≥0.85.1）；新增「何时该沉淀」决策框。
+  **EN**: Content/UX release: `light-cli doctor` first-run self-check + SKILL.md 3-step onboarding; bad-line warnings with how-to-fix; experiment preflight (Node>=22 / pi>=0.85.1); deposition decision box.
+- **0.14.7（质量版）**：① 统一错误输出（`[pi-evox]` 前缀 + 「→ 修正：」指引 + 一致退出码 0/1/2）；② 坏行警告补**行内容预览**；③ 子进程调用加**可配超时**（`EVOX_CLI_TIMEOUT_MS`，默认 600000）；④ trap 生成器启动前校验 **Python≥3.8**；⑤ 新增 `examples/walkthrough-gbk.md` 端到端走查。
+  **EN**: Quality release: unified error output (`[pi-evox]` prefix + fix hints + consistent exit codes 0/1/2); bad-line content preview; configurable subprocess timeout (`EVOX_CLI_TIMEOUT_MS`); trap generator Python>=3.8 check; GBK end-to-end walkthrough.
+- **0.14.8（反馈驱动 + 护栏版）**：依据 skillhub 对 0.14.7 的评测（均值 ≈4.54；errorHandling / stability / docQuality 各 4.5、usability 4.8）定向补强——① **召回位置参数护栏**：query 裸传位置参数不再被静默忽略并回落成「注入入库尾部」，现提升为 query 并提示 `--query` 规范写法（消除静默 footgun）；② 反模式速查表新增「**为什么会错**（机制）」列，FAQ 补全可执行命令示例（针对 antiPatternFaq）；③ 新增「**目录与文档导航**」表并厘清 `exp/` 各子目录职责（针对 structure / docQuality）；④ 新增 `examples/walkthrough-json.md` 端到端走查（**数据格式类**陷阱，与 GBK 编码类互补）。
+  **EN**: Feedback-driven + guardrails: positional-query guard (no more silent fallback into tail injection); anti-pattern table gains a mechanism column; FAQ executable examples; doc navigation table; JSON walkthrough.
+
+- **0.22.0（外部实例版）**：
+  **EN**: Adoption & promotion release (the last 1.0 criterion - >=2 external instances): ① **`light-cli feedback`** command (local留痕 + Discussions guidance, no telemetry); ② **`examples/quickstart.md`** 5-minute minimal loop (doctor -> starter -> targeted recall -> deposit -> info/timeline); ③ **`docs/one-pager.md`** pitch page (problem/solution/trust/limits/credits); ④ **`ADOPTERS.md`** instance registry + **GitHub issue templates** (adoption-report + feedback) making external instances reportable; ⑤ README adoption section. All materials bilingual. ⑥ **Gate hardening (2026-10-18 review)**: depositionGate now REJECTS AVOID-only half-products (no FIX) - REPAIR_SIGNAL_RE contained the word `avoid` so pit-without-fix strategies passed (3 truncated deposits were all this shape); ⑦ **Pool rebuild now applies safetyGate** (exported) before export - 3 genes with private-identity words were caught by the redline scan at pooling time; shareable marking must pass the gate first (redline word list is stricter than safetyGate).
+- **0.21.0（签名与稳定版）**：
+  **EN**: Provenance + stability release: ① **Ed25519 gene signing chain** (1.0 criterion) - deposits auto-signed with the machine identity (`~/.evomap/identity/`, private key 0600); pool imports verify signatures (tampered content REJECTED; unsigned legacy accepted); `identity` / `verify` commands. ② **Bounded IO retry with hard deadline** (stability feedback, two rounds) - transient errors only (EBUSY/EPERM/EACCES/ETIMEDOUT), max 3 attempts, 3s deadline, fail-open boundary preserved. ③ **SKILL.md 238 → 224 lines** (progressive feedback): four-gate details moved to advanced, acknowledgements trimmed, new-user reading path added, research.md marked "most users never need to open".
+- **0.20.3（审核取证版）**：
+  **EN**: Review-with-evidence release (user proposal 2026-10-15): new `light-cli evidence <gene_id>` searches the four local ledgers (tool errors / recalls / injections / back-fills) for events matching the gene's claimed failure and fix - approve only after consistency check; overturned conclusions stay quarantined with an audit note; genes without local evidence (pool/other-machine/starter) are reviewed on content with the source noted. Designed as evidence-FIRST, not an absolute gate.
+- **0.20.2（双语完整版）**：
+  **EN**: Bilingual-completeness release per the publish skill's clause (ALL docs / FAQ / changelog history, not just summaries): ① SKILL.md every rewritten section now carries an EN block (1 -> 10; still 236 lines); ② `docs/faq.md` 14 items each with an EN brief; ③ `docs/common-mistakes.md` 14 items each with an EN brief; ④ EN blocks restored in `docs/advanced.md` for the moved sections (4 recovered); ⑤ EN intros for research / config-errors / forensics / flow-C walkthrough / other-agents / providers / security / adapter-design / experiment-report / GBK+JSON walkthroughs; ⑥ **README changelog: all 15 history entries now carry an EN line** (7 added).
+- **0.20.1（0.20.0 补丁：三轮审查修复）**：
+  **EN**: Post-release three-round review (self-review / cross-reference / live re-run) of the 0.20.0 split found and fixed 6 issues the shallow check missed: ① **snippet text still used the pre-0.18 positional `--register-hit <N>`** (code fix - install-snippet users were getting the concurrency-drift form); ②-⑥ five broken cross-references after the split (README ops anchor + FAQ link, adapter-design, forensics-numbat, walkthrough-json). install-snippet idempotency re-verified (2 writes -> 1 copy).
+- **0.20.0（文档分层版）**：
+  **EN**: Documentation layering release responding to three rounds of evaluator feedback: ① **SKILL.md split 636 → 227 lines** - daily usage (flows A/B + trigger points + security gates + anti-pattern quick list) stays in the main file; 0.18-0.19 features (addressing/timeline/harvest/concurrency lock/pool/host integration/ops) moved to `docs/advanced.md`; research content (flow C + trap discipline) to `docs/research.md`; ② **`docs/common-mistakes.md`** - 14-item common-mistakes catalog with mechanism explanations (all [A] verified); ③ **AVOID/FIX template applicability boundaries** in the deposition section; ④ **bilingual trigger-word table + gene-conflict trigger rules**; ⑤ **`docs/config-errors.md`** - common configuration errors; ⑥ **`docs/faq.md`** - full 14-item FAQ; ⑦ **`examples/walkthrough-process-c.md`** - flow C end-to-end.
+- **0.19.1（0.19.0 补丁：双语补齐 + 上游检查入档）**：
+  **EN**: Bilingual completion for the three 0.19 SKILL.md sections (concurrency lock / harvest triage / numbat forensics - EN summaries added after the 0.19.0 release skipped the skill's own bilingual step); upstream dependency check recorded (evolver 2.0.42, unchanged since 0.17.0 evaluation - deferred conclusion stands).
+- **0.19.0（稳定与取证版）**：
+  **EN**: Stability + forensics release. ① **Concurrency lock** (O_EXCL `.evox.lock`, stale-break, timeout fail-open) on all four ledger writes (genes/review/hits/pending) and pool staging - after the 7th proven race (shareable flags reverted mid-window); concurrent dedup test 2×50→1 row. ② **harvest --done/--dismiss <N>** moves processed candidates to `error_candidates.done.jsonl` (audit trail kept) so the candidate list only shrinks. ③ **numbat forensic PoC on the private node** (Perplexity's agent auditor, native OpenClaw log parsing) - runbook + findings in `docs/forensics-numbat.md`; timeline cross-checking of injected genes is the next evidence source beyond self-reported register-hit.
+- **0.18.1（0.18.0 补丁：池语义 + 审核幂等）**：
+  **EN**: Two fixes that missed the 0.18.0 artifact (built from a stale base): ① **approved-only pool semantics** — `submit` exports shareable AND review-approved genes; pending ones stay in the local workbench with an explicit report (the pool is a curated approved-only collection); ② **ledger approve idempotency now LWW** — the old `.some()` check let "previously approved -> later quarantined" genes become permanently un-re-approvable (silent no-op, proven with 5 genes). Also: submit/export counter messages fixed.
+- **0.18.0（回填寻址 + 时间线 + 收获版）**：
+  **EN**: register-hit/negate now address genes by **asset_id/gene_id** (`--gene <id>`; positional N kept for compat but unreliable under concurrent sessions - proven drift), `light-cli timeline` merges the four ledgers (recall/inject/feedback/error-candidates) into a Markdown forensic report, `light-cli harvest` turns captured error candidates into copy-paste deposition drafts, doctor detects scattered instrumentation, and docs get the alignment pass (Node>=22 / GPL front-and-center, FAQ centralized, adapter-design deprecated, walkthrough anchors). Pool semantics released: approved-only.
+- **0.17.0（沉淀质检版）**：
+  **EN**: Deposition-quality release - closes the 0.16.0 autoApprove gap (retry-log noise and unfilled-placeholder genes were deposited-and-injected; all three recall guards pass). Adds depositionGate (fail-closed reject: placeholder / retry-log / narration / no-signal), non-interactive deposits default to quarantined (explicit --auto-approve overrides), a 4th recall guard against stored noise, three-way loop health (pending vs quarantined vs approved), cwd-independent HITS_DIR, `install-snippet` (write the T1-T5 procedure into project AGENTS.md/CLAUDE.md - the deposit-side last mile), injection scan AVOID-context extension to high-risk action patterns, and state-aware distill messages.堵 0.16.0 autoApprove 的实测洞（retry-log 噪音与未填占位符基因**沉淀即注入**，三道召回守卫全放行——隔离库复现）。① **沉淀质检 depositionGate**（fail-closed）：占位符未填 / retry-log 复述 / 旁白开场 / 缺信号词 → **拒绝入库**并给出修正指引；② **非交互沉淀默认隔离**：无 TTY（脚本/cron/管道）默认 quarantined，显式 `--auto-approve` 才通过——交互式人工沉淀便利不变；③ **召回侧第四道守卫**（retry-log，与沉淀同口径）——历史已入库的噪音也不再注入；④ **loopHealth 三分类**：待审(未决定)/已隔离/已批准分开计数，隔离不再被误报为待审并错误引导 approve；⑤ **HITS_DIR 默认脱离 cwd**（技能根/experiments，修「在别的目录跑 info 误报从未召回」）；⑥ **`install-snippet`**：把五触发点规程写进项目 AGENTS.md/CLAUDE.md（演练→--yes，幂等）——**自动沉淀的绑定点**（T4 进上下文）；⑦ 注入扫描 **AVOID 语境扩展到高危动作类**（修 0.16.0 实测的 exfiltrate 误杀 AVOID 警告）；⑧ distill 提示语随审核状态输出。评测驱动清理：trigger/errorHandling 4.3→4.8（0.16.0 修复生效）。
+- **0.16.0（评测驱动 + 生效性版）**：
+  **EN**: Evaluation-driven + effectiveness release - loop health in `info`, auto-approve for own deposits (default on, switchable), `install-hooks` (dry-run default), `starter` pack (10 curated genes, first-query hit), five trigger points with new `--error` recall, malicious-gene injection scan, copy-paste hook templates, and targeted fixes for the two low-scored dimensions (trigger/errorHandling both 4.3 -> 4.8).**新增让经验真正生效的四项**（针对「沉淀了却不召回」这个最根本的产品风险）：① **`info` 闭环健康度**——显示召回次数/命中/待审，并把「从未召回」「有基因待审」两类**静默失效**变成可见诊断 + 可执行命令；② **自己沉淀的基因默认自动通过**（`config --auto-approve off` 可改回人工把关；仅作用于本地沉淀，共享池 import 仍按 tier 判定）；③ **`install-hooks`**——探测 OpenClaw/Hermes 并准备钩子，**默认只演练不落盘**，加 `--yes` 才写入且写入前自动备份，权力完全在用户手上；④ **`starter`**——一键装载 10 条策展的通用起步基因（编码/JSON/权限/文件/语法/类型/网络），让新用户**第一次查询就能命中**，解决冷启动。**新增安全能力**：`injection_scan.mjs` 恶意基因注入扫描（区分 AVOID/FIX 语境，实测 11/11 恶意全拦、7/7 正常零误杀；三处生效：召回/导入/导出）。**新增** `examples/hooks/` 可直接复制的钩子模板（OpenClaw + Hermes + 接入 README）。另按评测补强低分项。
+- **0.16.0（评测驱动优化版）**：依据 skillhub 对 0.15.0 的评测定向补强低分项（多数维度已达 4.8，两个低分：**trigger 4.3 / errorHandling 4.3**）。① **trigger**：宿主接入契约从「表格」改为**分步逐步说明 + 可直接复制的真实命令与输出示例**，并简化共享基因库三步流程（先给最小可用路径）。② **errorHandling**：统一错误提示语言——本 CLI 自身消息已是中文，但 Node/系统抛出的错误是英文，现于顶层捕获并映射为**中文原因 + 可执行修正**（保留英文原文于末行备查），确保**任何失败都有一句中文说明**，而非只丢英文堆栈。
+  **EN**: Trigger-point release: five trigger points bound to concrete action nodes; own deposits auto-approve; four silent-failure counters; starter pack (10 curated genes); four security gates with AVOID/FIX context distinction (11/11 malicious caught, 7/7 legit zero false-kill).
+- **0.15.0（最后一公里修复版）**：依据私有节点埋点实测（153 次 recall 调用、**真正有效仅 10%**）定位并修复「基因已入库却仍犯错」的四个断点——① **任务文本清洗**：剥掉宿主注入前缀（企业IM群/私聊前缀、心跳样板）、纯 URL、心跳探针，只留用户真实诉求（实测 63% 的召回因 query 噪声落空）；② **CJK bigram 分词**：原实现把整段中文当**一个 token**，导致中文任务与中文基因永不相交、signals 里的中文词也命中不了——这是「已入库却召回不到」的直接死因，现改二元切分（零依赖、无需分词器），冲突守卫 `tokenSet` 同步同口径；③ **无任务意图一律不注入**：删掉「取最近 N 条」回落（原路径在私有节点产生 30 次与任务无关的注入，而本项目实验已证不对靶注入净开销为正 +36pp）；④ **注入即登记 + `--negate` 回填**：每次注入落 `pending_injections.jsonl`，任务结束按实际结果登记命中/未采用，使「注入→有效」转化率可算、失效修法可及时发现。新增 SKILL.md「宿主接入契约」章节（喂干净意图 + 回填效果，缺一则经验继承不成立）。
+  **EN**: Host integration contract: hosts must feed task intent (T1 --query with the user message body) and report outcomes (T5 --register-hit/--negate); runnable hook templates in examples/hooks/.
+
+- **0.14.9（共享基因库版）**：新增跨实例/跨用户基因共享——`distill/draft --shareable` 标记可共享（默认不外发）→ `gene submit` 过**脱敏闸门**写入自建共享池（幂等）→ 其他实例 `gene import` 拉取合并。**闸门 fail-closed**：基因离开本机前扫全部文本字段，命中私有IP/绝对本地路径/密钥即拦截不出网；项目私有词由使用者本地 `redline.local.json` 补充（不随包发布）。**审核门控不被绕过**：导入默认 community→待审，仅对自建策展池显式 `--tier official` 才自动通过（tier 由操作者指定的池决定，不信基因自称）。新增 `code/gene_share.mjs`；底座路径改为按模块自身位置解析（跨平台）。
+  **EN**: Shared gene pool (opt-in `--shareable` + `gene submit/import`, redaction gate fail-closed, idempotent merge by asset_id).
+
+### 关于第三方静态 / 动态扫描结果的说明（中立声明）
+
+- 本工具是**LLM 调用型 CLI**：它把模型返回的文本（含工具输出、终端回显）原样呈现给使用者。因此「**密钥形态字符串出现在运行输出**」是这一类工具的**普遍特征**，而非本项目的密钥泄露路径 —— 本项目**不读取、不缓存、不外发**用户密钥；密钥仅经 `argv` / 环境变量传入；所有 CLI 调用为 **argv 直调（无 shell、无字符串拼接）**；全局输出已做脱敏（已注册敏感值整体掩码 + `sk-***` / `Bearer ***` 形态掩码）。
+- 同理，扫描器中与「文件读写 / 子进程 / 网络」相关的 finding 多为**功能固有**（本工具的存在意义就是执行命令与读写文件）。我们只修复**可消除项**（消除 shell 拼接、外发改为显式 opt-in、全局脱敏），不对「工具本身具备执行能力」做伪装 —— **更希望被按事实评估**。
+- 逐条对照（含 ClawHub / skillhub / 云鼎 三平台历史判定与修复记录）：[`docs/security-and-license.md`](docs/security-and-license.md)。
+
+## 许可提示
+
+**本包为 MIT 全栈**（默认后端是内置 light 引擎，零外部依赖）。[@evomap/evolver](https://www.npmjs.com/package/@evomap/evolver)（GPL-3.0-or-later）为**可选集成**，仅在你主动安装并使用 `--engine evolver` 时涉及。[pi-coding-agent](https://github.com/earendil-works/pi) 为 MIT，仅流程 C 实验需要。
+
+## License
+
+MIT — 见 [LICENSE](LICENSE)。实验基于 pi-coding-agent 与 @evomap/evolver，其各自许可适用于对应组件；本仓库代码与文档仅覆盖本研究原创部分。

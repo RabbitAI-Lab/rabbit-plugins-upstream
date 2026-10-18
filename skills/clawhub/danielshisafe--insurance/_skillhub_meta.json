@@ -1,0 +1,12 @@
+{
+  "name": "保险计划书分析大师",
+  "installedAt": 1787718182798,
+  "source": "local",
+  "version": "1.3.1",
+  "skillId": "skill_9454457620131194221",
+  "description_zh": "面向消费者/投保人的保险产品分析器：单品深析与多品横向对比，内置红利/万能计算规则、IRR/回本/总利益测算与避坑清单。",
+  "description_en": "Consumer-facing insurance product analyzer: single-product deep dive and multi-product comparison with dividend/universal calculation, IRR/break-even/total-benefit, and pitfall checklist.",
+  "iconSource": "",
+  "iconLocalPath": "C:\\Users\\admin\\.workbuddypro\\skills\\保险计划书分析大师\\_icon.png",
+  "iconDownloadedFrom": ""
+}

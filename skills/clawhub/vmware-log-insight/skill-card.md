@@ -1,46 +1,65 @@
-## Description: <br>
-Read-only log search and aggregation for VMware Aria Operations for Logs (vRealize Log Insight), enabling agents to investigate centralized ESXi, vCenter, and VM logs without write actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents investigate VMware centralized logs through read-only event search, aggregation and spike detection, field discovery, and alert queries.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, SREs, and VMware administrators use this skill to query centralized Log Insight data, inspect raw log lines behind incidents, detect log-volume spikes, and retrieve read-only alert history for troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Queried appliance logs may contain sensitive production data. <br>
-Mitigation: Use a read-only Log Insight service account, scope queries to the incident window, and avoid exposing raw log output beyond the authorized troubleshooting context. <br>
-Risk: Local credential files can expose appliance credentials if filesystem permissions or secret handling are weak. <br>
-Mitigation: Keep ~/.vmware-log-insight/.env chmod 600 or inject credentials from a secret manager at process start. <br>
-Risk: Disabling TLS verification can expose credentials or log data outside controlled lab environments. <br>
-Mitigation: Leave TLS verification enabled by default and disable it only for explicitly controlled self-signed lab appliances. <br>
+## Use Case:
 
+Infrastructure operators and incident responders use this skill to search VMware ESXi, vCenter, and VM logs, identify log-volume spikes, and inspect existing alerts without changing the log appliance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-log-insight) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured tool-result summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Log Insight queries may return truncated result envelopes and completion flags that agents should surface to users.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: The configured account can access sensitive operational logs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a least-privilege, read-only Log Insight account and limit disclosure of returned log content.
+
+Risk: Passwords stored in a local .env file are only obfuscated, not encrypted.
+
+Mitigation: Inject passwords from a secret manager rather than storing them in .env.
+
+Risk: Remote MCP serving could expose log access to unauthorized clients.
+
+Mitigation: Enable remote access only when needed, with bearer tokens, TLS, host and origin restrictions, and role limits.
+
+Risk: Log messages may contain untrusted instructions presented as operational data.
+
+Mitigation: Treat retrieved log text as data, not instructions, and narrow large searches before using the results.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/vmware-log-insight)
+- [Capabilities](references/capabilities.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup guide](references/setup-guide.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown responses with log-query results and command examples; tools return structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only results; searches are capped at 200 events and can be truncated]
+
+## Skill Version(s):
+
+2.4.1 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

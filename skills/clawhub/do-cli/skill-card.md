@@ -1,40 +1,59 @@
-## Description: <br>
-Do Cli helps agents and terminal users install and operate the `do` command-line client for todo and life-tracking workflows through the do REST API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using the do CLI to manage tasks, habits, plans, and other personal life-tracking information.
 
-## Publisher: <br>
-[robbeverhelst](https://clawhub.ai/user/robbeverhelst) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbeverhelst](https://clawhub.ai/user/robbeverhelst)
 
-## Use Case: <br>
-Developers, agents, and users of the do personal productivity app use this skill to configure scoped API-key access and run daily task and habit workflows from a terminal or automation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill presents the CLI as agent-safe while the commands can capture tasks, mark tasks done, snooze tasks, and log habits in a real personal account. <br>
-Mitigation: Install only for the intended do account, use a narrowly scoped API key, and require explicit user intent before commands that change task or habit data. <br>
-Risk: Saved configuration can expose broad account access to later agent runs if a key has more scope than the workflow needs. <br>
-Mitigation: Prefer environment variables for agent and CI runs, avoid persisting unnecessary credentials, and grant only the scopes required for the requested workflow. <br>
+## Use Case:
 
+Individuals and their agents use this skill to capture and review tasks, track habits, propose plans, and manage personal information through the do CLI.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/robbeverhelst/do-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples and JSON-oriented CLI output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The described commands may read or change personal task and habit data depending on the scoped API key and command invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence) <br>
+Risk: The CLI can change personal data and post messages, despite a narrower description of its capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user confirmation before posting, accepting plans, canceling tasks, retiring habits, or changing areas.
+
+Risk: An overly broad or stored API key may expose account data or permit unwanted changes.
+
+Mitigation: Grant only necessary API-key scopes, prefer environment variables to saved credentials for agents, and confirm before reading sensitive notes or contacts.
+
+Risk: A pipe-to-shell installer executes downloaded code without prior review.
+
+Mitigation: Avoid the pipe-to-shell installer; use a reviewed installation method instead.
+
+## Reference(s):
+
+- [do skill on ClawHub](https://clawhub.ai/robbeverhelst/skills/do-cli)
+- [do CLI documentation and source](https://github.com/robbeverhelst/do)
+- [do CLI releases](https://github.com/robbeverhelst/do/releases)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown guidance and CLI commands; CLI responses may be JSON or readable text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a scoped API key; command results depend on the user's account and permissions.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

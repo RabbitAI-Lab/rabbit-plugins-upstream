@@ -1,44 +1,58 @@
-## Description: <br>
-Conducts open-ended visual question answering on image content using computer vision and large language models to produce natural-language responses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Answers open-ended questions about image content and provides cloud-based analysis reports and report history.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agents use this skill to answer natural-language questions about local or URL-based images and to retrieve prior visual question-answering reports from the associated cloud service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Media, URLs, questions, report history, and an automatically managed identity are handled by the lifeemergence cloud service. <br>
-Mitigation: Use the skill only when the publisher and service are trusted; avoid private images, internal URLs, and sensitive documents until retention, deletion, and token storage practices are confirmed. <br>
-Risk: The skill can reuse local identity and token state while retrieving cloud history or running analyses. <br>
-Mitigation: Run it in a controlled environment, review stored token and identity state before shared use, and clear credentials between users or tenants. <br>
-Risk: The model-generated visual answers may be incomplete or incorrect for important decisions. <br>
-Mitigation: Treat outputs as advisory and verify important facts or extracted details against the original image or another trusted source. <br>
+## Use Case:
 
+People analyzing images can ask natural-language questions about visual content, view generated answers and reports, and retrieve previous reports from the cloud.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-visual-qa-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown or JSON analysis responses, including report links or history tables when returned by the service.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can process local image paths or public image URLs with a required user question; history-list output is fetched from the cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter lists 1.0.7) <br>
+Risk: Images or videos, URLs, and questions are sent to the LifeEmergence cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain user consent before sending content and avoid sensitive media unless the service's handling is acceptable.
+
+Risk: The skill can silently create or reuse a local identity and store tokens in a workspace database.
+
+Mitigation: Disclose account creation and token storage before use; protect and periodically review the local workspace.
+
+Risk: The skill can fetch cloud report history beyond a single image question.
+
+Mitigation: Make history access explicit and review retrieved records and report links before sharing them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-visual-qa-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Natural-language answers and reports, JSON analysis results, and Markdown history tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include links to cloud reports; verify important model-generated answers independently.]
+
+## Skill Version(s):
+
+1.0.18 (source: ClawHub release metadata; packaged frontmatter says 1.0.20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

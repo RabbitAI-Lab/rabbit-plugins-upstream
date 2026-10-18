@@ -1,7 +1,16 @@
+<!-- request-identity:start -->
+**请求身份**：使用已配置的 API Key，并保留本包的 X-Client，携带下列完整身份头；不得沿用其它包的版本或来源。
+```text
+X-Client: opportunity-radar/1.0.3
+X-Skill-Package: zhiliao-opportunity-radar/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+<!-- request-identity:end -->
+
 # 工具速查（商机雷达所用子集）
 
 > 与 zlbx-bidding SKILL 同一套 api_v2 接口，此处只收录本 SKILL 用到的 5 个工具的关键参数。
-> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`，Header 带 `X-API-Key` + `X-Client: opportunity-radar/1.0.0`。
+> `POST https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/search_proposed_projects`），Header 带 `X-API-Key` + `X-Client: opportunity-radar/1.0.3`。
 
 ## 通用概念
 
@@ -13,11 +22,11 @@
 |---|---|---|
 | search_proposed_projects | min_amount / max_amount | **万元** |
 | search_expiring_projects | min_amount | **万元** |
-| search_bids | min_amount / max_amount | **元** |
+| search_bids | min_amount / max_amount | **万元** |
 
-返回值统一：`money` 为元；拟建路给 `money_format`（可读字符串），意向/临期路给 `money_wan`（万元数值）。
+返回值统一：`money` 为元，三路都另给 `money_wan`（万元数值）；拟建路还额外给 `money_format`（可读字符串）。
 
-**链接**：意向/临期条目的 `url` 带 `sk` 免登录参数，原样输出可直接点击；拟建条目的 `url` 为 `builddetail/{id}?from=mcp`（无 sk），点击需登录主站——输出时按 SKILL.md 的规范统一标注。
+**链接**：三路条目（拟建/意向/临期）的 `url` 均带 `sk` 免登录参数，原样输出可直接点击。
 
 ## 工具清单
 
@@ -29,15 +38,15 @@
 ```
 - `approval_status_code`：1=未审批 2=审批中 3=办结（通过）4=审批未通过 5=撤销 6=其他；0/不传=全部。**办结的最接近落地**。
 - `match_type`：0=标题智能匹配（默认，匹配 project_name+caller_name），3=全文匹配（连带返回正文 content）。
-- 返回关键字段：`project_name`、`project_code`（发改委项目代码）、`caller_name`（立项单位）、`money`/`money_format`、`approval_status`、`pub_time`、`url`（无 sk）。
+- 返回关键字段：`project_name`、`project_code`（发改委项目代码）、`caller_name`（立项单位）、`money`/`money_format`、`approval_status`、`pub_time`、`url`（带 sk）。
 
 ### search_bids（bid_process=[1]）— ② 采购意向（发标前 1-3 个月）
 ```json
 {"keywords": ["信息化"], "bid_process": [1], "provinces": ["广东"],
- "min_amount": 1000000, "begin_date": "2026-04-15", "page_size": 20}
+ "min_amount": 100, "begin_date": "2026-04-15", "page_size": 20}
 ```
 - `bid_process` 固定传 `[1]`（采购意向）。其他阶段值：2=预招标 4=招标 7=中标结果 8=合同——本 SKILL 只在 timeline 解读时用到含义，不主动查。
-- `min_amount` 单位是**元**（与另两路不同）。
+- `min_amount` 单位是**万元**（与另两路一致；服务端会 ×10000 转成元再过滤）。
 - 返回关键字段：`title`、`caller_name`、`money`/`money_wan`、`sm_names`（标的物）、`pub_time`、`url`（带 sk）。
 
 ### search_expiring_projects — ③ 临期续约（合同到期前 0-180 天）
@@ -65,3 +74,15 @@
 {"bid_id": 598749088, "bid_type": 1}
 ```
 或传 `bid_url`。用户想看某条意向/临期商机的完整原文时用；返回 `fulltext`。
+
+<!-- package-identity:start -->
+**安装包身份与升级检查**：所有发往知了标讯 API 的请求（包括账户查询）必须额外携带以下两个请求头：
+```text
+X-Skill-Package: zhiliao-opportunity-radar/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+这些值是当前安装包的固定身份，复用已有API Key时也要携带；不要用X-Client产品版本替代包版本，不要将Key的注册渠道当作安装来源。
+请求鉴权：使用已配置的 API Key，并保留本包的 X-Client。每个会话首次使用本Skill时，在已有凭证可用后先调用免费账户接口 `GET https://mcp-server.zhiliaobiaoxun.com/api_v2/account/balance` 检查升级提醒；该查询不扣积分，不触发购买。
+**版本提醒转达**：响应出现 `skill_update_notice` 时，将其中 `message` 原样转达用户；兼容提示只说明检查版本，不能宣称已确认当前包过期。
+**展示后确认**：只有将提醒发送到用户可见对话之后，才使用同一凭证和请求头，按 `display_ack` 提交 POST 回执（MCP客户端可调用 `confirm_skill_update_display`）（`notice_id` 和 `displayed: true`）。只读取工具响应、在思考中提过、尚未转达时不得确认。不能在展示后调用接口则不确认，服务端继续保留待提醒状态。回执免费，不扣积分；失败不影响查询结果，不向用户展示技术回执。同一会话同一 `notice_id` 只展示一次。
+<!-- package-identity:end -->

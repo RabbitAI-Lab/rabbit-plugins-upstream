@@ -46,6 +46,21 @@ Set the target's `org_id` to the site's short name (e.g. `default`) —
 device-scoped calls (device get, switch ports, restart) use it as the
 `/api/s/{site}/` scope.
 
+**Cisco ACI (`platform: aci`)** — use an APIC local or remote user whose role is
+**read-only** (every ACI read is a GET; only the login is a POST) and whose
+security domains cover the tenants you want to trace. An object outside them
+may come back as an empty answer — reported as "does not exist, or not visible
+to this account" because APIC answers both the same way — or as a 403, reported
+as a privilege problem, not an expired session. After a refused login the tool
+waits 60 s before sending the password again, so a changed password cannot turn
+into one login attempt per read. Store
+the secret as a single `username:password` string. fabric-aiops logs in via
+`POST /api/aaaLogin.json`, carries the session cookie APIC returns, extends the
+session via `/api/aaaRefresh.json` at half its `refreshTimeoutSeconds`, and logs
+in again once if APIC answers 401/403. A `base_url` is required
+(`https://<apic-host>`); `org_id` is not used. ACI answers the Meraki-shaped
+tools with a teaching error — use `fabric-aiops aci trace | segment | faults`.
+
 ## 3. Onboard
 
 ```bash

@@ -1,47 +1,57 @@
-## Description: <br>
-Postgres Aiops helps agents operate and troubleshoot PostgreSQL clusters with health checks, query and lock analysis, bloat and vacuum recommendations, replication checks, and guarded maintenance commands. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents diagnose PostgreSQL health, slow queries, bloat, and blocking locks, and perform database maintenance when authorized.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Database administrators, developers, and operations engineers use this skill to inspect PostgreSQL health, diagnose slow queries, analyze bloat and blocking, and prepare guarded maintenance actions with audit and undo support where available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can connect to PostgreSQL databases and expose powerful read and write operations. <br>
-Mitigation: Install it only for databases you are authorized to administer, start with a read-only or least-privilege PostgreSQL role, and enable write-capable credentials only for deliberate maintenance. <br>
-Risk: Maintenance actions can affect database availability or state. <br>
-Mitigation: Use dry-run first, rely on the documented audit trail and undo support where available, and treat irreversible actions such as cancel, terminate, vacuum, reindex, and reset stats as operational changes requiring extra review. <br>
-Risk: The master password unlocks stored database credentials. <br>
-Mitigation: Treat the master password as a high-value secret and provide it only through secure runtime secret handling. <br>
+## Use Case:
 
+Database administrators and developers use this skill to inspect PostgreSQL clusters, investigate performance and replication issues, and plan or perform authorized maintenance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/postgres-aiops) <br>
-- [Project Homepage](https://github.com/AIops-tools/Postgres-AIops) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup and Security Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include PostgreSQL observations, cited analysis findings, dry-run previews, and operational recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: Database write tools can make production-impacting changes without an enforced approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a read-only PostgreSQL role by default; restrict write credentials to a narrow target during an approved maintenance window, with a separate approval process for agent writes.
+
+Risk: Local credentials, audit records, and undo records may expose sensitive operational metadata.
+
+Mitigation: Protect POSTGRES_AIOPS_HOME, the master password, audit.db, and undo.db from unauthorized access.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/postgres-aiops)
+- [Project homepage](https://github.com/AIops-tools/Postgres-AIops)
+- [Capabilities](artifact/references/capabilities.md)
+- [Setup and security guide](artifact/references/setup-guide.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands]
+
+**Output Format:** [Markdown with command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May report diagnostic findings and suggested maintenance actions.]
+
+## Skill Version(s):
+
+0.12.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

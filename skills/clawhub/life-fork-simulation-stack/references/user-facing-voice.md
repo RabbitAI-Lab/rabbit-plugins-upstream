@@ -1,5 +1,7 @@
 # User-Facing Voice / 用户可见表达
 
+> Language scope: Simplified Chinese reference material by design. Adapt conversational reports to the user's chosen language; the optional bundled HTML layout targets Chinese readers.
+
 用途：把内部判断转成真实用户愿意读、愿意保存、愿意继续补充的信息。生成首轮回复、报告正文、HTML 前台内容前读取。
 
 ## 核心原则

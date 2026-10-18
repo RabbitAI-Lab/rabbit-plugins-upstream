@@ -1,0 +1,46 @@
+{
+  "name": "yuanlin-suanliang",
+  "slug": "yuanlin-suanliang",
+  "displayName": "园林算量 · 苗木统计与铺装面积",
+  "version": "0.4.14",
+  "author": "lis",
+  "license": "CC-BY-NC-SA-4.0",
+  "entrypoint": "SKILL.md",
+  "scripts": {
+    "main": "scripts/yuanlin_qty.py",
+    "tests": [
+      "scripts/tests/test_yuanlin_qty.py"
+    ]
+  },
+  "rules": [
+    "rules/rules.json",
+    "rules/plant_library_西北温带荒漠区.json",
+    "rules/plant_library_常用园林植物.json",
+    "rules/plant_library_园林景观CAD图块素材.json",
+    "rules/plant_library_分区苗木选型.json"
+  ],
+  "templates": [
+    "templates/项目专属规则示例.json"
+  ],
+  "depends": {
+    "skills": [
+      "cad-file-reader>=0.28.1"
+    ],
+    "python_packages": [
+      "openpyxl(optional, xlsx)",
+      "ezdxf(optional, DXF 块引用坐标与 HATCH/ARC/Bulge 铺装回退；cad-file-reader vendor 已随底座提供)"
+    ]
+  },
+  "outputs": [
+    "Yuanlin概算物资计划台账.xlsx",
+    "园林苗木统计.csv",
+    "园林铺装面积.csv",
+    "缺项核对.csv",
+    "汇总.csv",
+    "依据.csv",
+    "园林概算报告.md"
+  ],
+  "boundary": "只出概算底稿与物资计划草稿；苗木表数量不等于逐株点数；无坐标块引用只作P2候选；图层缺失时不硬出铺装面积；块内铺装和全几何强算只作P3复核线索；植物名称参考库只提供中文名→大类映射、不含规格/密度/单价，不用于自动推断规格或报价；不替代设计复核、放线、点树、竣工计量、对量、结算与正式报价。",
+  "final_quantity_default": false,
+  "schema": "yuanlin-suanliang/v0"
+}

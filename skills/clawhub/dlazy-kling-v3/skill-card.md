@@ -1,45 +1,59 @@
-## Description: <br>
-Powerful video generation with Kling v3 for high-quality text-to-video and image-to-video through the dLazy CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate Kling V3 videos from text prompts or reference images through dLazy.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to generate videos from text prompts or image inputs via the dLazy-hosted Kling v3 service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and local media paths are sent to the dLazy hosted API and media storage. <br>
-Mitigation: Use the skill only for media that may be processed by dLazy, and review inputs before invoking the CLI. <br>
-Risk: The dLazy API key may be stored in the local user configuration file. <br>
-Mitigation: Protect the local config file and rotate or revoke the key from the dLazy dashboard if exposure is suspected. <br>
-Risk: Video generation consumes dLazy credits. <br>
-Mitigation: Monitor credit usage and use dry-run or explicit parameters when cost awareness is needed. <br>
+## Use Case:
 
+Creators and developers use this skill to guide an agent in generating videos from text prompts or images with Kling V3 via dLazy.
 
-## Reference(s): <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Guidance] <br>
-**Output Format:** [Markdown guidance with bash commands and JSON command responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned as hosted output URLs; asynchronous runs may return a task ID for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release and skill frontmatter) <br>
+Risk: Prompts and referenced local media may be uploaded to dLazy, and generated files are hosted there.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only content suitable for the hosted service and review dLazy's terms before uploading sensitive media.
+
+Risk: The CLI may store a revocable API key locally.
+
+Mitigation: Protect local credentials and rotate or revoke the key if compromised.
+
+Risk: Installing the CLI globally persists a third-party executable.
+
+Mitigation: Prefer the pinned npx command or review the pinned CLI package and source before global installation.
+
+## Reference(s):
+
+- [dLazy CLI source (linked in skill metadata)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown guidance and CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI returns JSON with generated media URLs; results can optionally be saved locally.]
+
+## Skill Version(s):
+
+1.3.30 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

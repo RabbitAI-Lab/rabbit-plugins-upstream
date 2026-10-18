@@ -1,48 +1,60 @@
-## Description: <br>
-Use when someone wants the same person hosting several clips - multi-segment UGC, comparison reels, or mixed speaking and animated scenes with continuity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides production of coherent multi-scene videos featuring a recurring on-camera host, including speaking clips and animated comparison scenes.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-External creators, marketers, and agent operators use this skill to plan and produce coherent multi-scene avatar or motion-transfer reels with a recurring host or character. It guides intake, continuity planning, staged approvals, Pruna image/video generation, and ffmpeg assembly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can install related Pruna skills and use a Pruna API key. <br>
-Mitigation: Review the required skills and confirm the API key scope before allowing generation. <br>
-Risk: The workflow can upload user-provided media and spend generation credits. <br>
-Mitigation: Confirm media rights and require the documented approval gates before any paid generation. <br>
-Risk: Poorly matched motion templates and reference images can produce visible artifacts in animate rows. <br>
-Mitigation: Use the documented alignment checks, repose with p-image-edit when needed, and review stills before video generation. <br>
-Risk: The workflow can run local ffmpeg commands for sliders and assembly. <br>
-Mitigation: Review generated shell commands and file paths before execution. <br>
+## Use Case:
 
+Creators and marketing teams use this skill to plan and produce multi-segment videos with a consistent host, speaking scenes, motion-transfer comparisons, and an assembled reel.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/avatar-multi-scene) <br>
-- [Prompt templates](prompt-templates.md) <br>
-- [Animate beats](animate-beats.md) <br>
-- [Examples](examples.md) <br>
-- [Batch template](templates/batch.template.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration, shell commands] <br>
-**Output Format:** [Markdown guidance with JSON manifest patterns and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses staged approval gates before paid generation, PRUNA_API_KEY for Pruna calls, and local ffmpeg commands for comparison clips and final assembly.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Unpinned install commands may fetch changed or unreviewed companion skills.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the installation path, use a pinned or verified installer, and install only the needed companion skills.
+
+Risk: Reference media uploaded to Pruna services may expose private content or lack usage rights.
+
+Mitigation: Upload only approved, rights-cleared media and confirm that external processing is acceptable.
+
+Risk: An exposed API key can allow unauthorized use of paid services.
+
+Mitigation: Keep PRUNA_API_KEY private and do not include it in shared outputs.
+
+## Reference(s):
+
+- [Avatar Multi Scene release](https://clawhub.ai/pruna-ai/skills/avatar-multi-scene)
+- [Scene and prompt templates](artifact/prompt-templates.md)
+- [Animation workflow](artifact/animate-beats.md)
+- [Batch template](artifact/templates/batch.template.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, JSON, Shell commands, Video]
+
+**Output Format:** [Scene plans and prompts in Markdown, batch manifests in JSON, assembly commands, and generated MP4 clips]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires approval before paid generation; preserves character and voice continuity across scenes.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

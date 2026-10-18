@@ -1,45 +1,64 @@
-## Description: <br>
-Riffkit helps an agent turn one source video, TikTok link, or analyzed template into a post-ready short-form or UGC-style ad video by reusing the source's emotion formula with optional character, product, language, and creative-direction settings. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users turn a TikTok video, uploaded clip, analyzed template, or original idea into a short-form AI video or product ad.
 
-## Publisher: <br>
-[riffkit](https://clawhub.ai/user/riffkit) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[riffkit](https://clawhub.ai/user/riffkit)
 
-## Use Case: <br>
-External creators, marketers, and agent users use Riffkit to plan, submit, monitor, and retrieve AI-generated riff videos based on a TikTok link, uploaded source video, or existing analyzed template. The skill guides source selection, optional product or character setup, user confirmation before paid submission, progress polling, and delivery of download links, captions, hashtags, and strategy recap. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The heartbeat can replace the installed SKILL.md from the vendor site without a signed or reviewed update channel. <br>
-Mitigation: Disable or remove the heartbeat, or route updates through a reviewed install process before allowing the skill to overwrite local instructions. <br>
-Risk: The skill can initiate paid video-generation requests through the Riffkit API. <br>
-Mitigation: Require the documented pre-submit confirmation before calling generation endpoints and do not retry failed or insufficient-balance requests automatically. <br>
-Risk: Generated videos may depend on third-party source URLs, uploaded media, product data, and account credentials. <br>
-Mitigation: Use only trusted source links and uploads, keep session tokens out of task or content fields, and review generated output before publishing it outside the agent workflow. <br>
+## Use Case:
 
+Creators, marketers, and other users use the skill to plan and request short-form AI videos and UGC-style ads from a source clip, template, or original idea, then review the result before posting.
 
-## Reference(s): <br>
-- [Riffkit homepage](https://riffkit.ai) <br>
-- [Riffkit skill source](https://riffkit.ai/SKILL.md) <br>
-- [Riffkit ClawHub skill page](https://clawhub.ai/riffkit/skills/riffkit) <br>
-- [Riffkit publisher profile](https://clawhub.ai/user/riffkit) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Shell commands, Markdown, Configuration] <br>
-**Output Format:** [Markdown guidance with API request instructions, shell commands, and user-facing status or delivery text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces plans, confirmation prompts, progress updates, video download links, captions, hashtags, strategy recaps, and heartbeat update guidance; paid generation requires explicit user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Unattended remote updates can replace local skill instructions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the heartbeat and update setup before installation; disable unattended updates unless future changes from riffkit.ai are trusted.
+
+Risk: A local Riffkit session grants access to the user's account.
+
+Mitigation: Treat ~/.riffkit/session as a live credential; never share it or include it in prompts or uploads.
+
+Risk: Uploading a local file may disclose content the user did not intend to share.
+
+Mitigation: Confirm the file and its purpose before uploading it to Riffkit.
+
+Risk: Video generation and retries may incur credit charges.
+
+Mitigation: Confirm quoted credit costs before submitting and request approval before retrying failed tasks.
+
+## Reference(s):
+
+- [Riffkit skill release](https://clawhub.ai/riffkit/skills/riffkit)
+- [Riffkit homepage](https://riffkit.ai)
+- [Riffkit API reference](https://riffkit.ai/skill/api.md)
+- [Riffkit installation guide](https://riffkit.ai/skill/install.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with a video link and post text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include creative plans, price quotes, and approval prompts before a paid request.]
+
+## Skill Version(s):
+
+1.10.3 (source: SKILL.md frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

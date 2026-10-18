@@ -1,42 +1,62 @@
-## Description: <br>
-Expands the disease identification library to cover economic-crop-specific diseases such as corn northern and southern leaf blight, potato late blight, peanut leaf spot, and tomato viral disease for precise leaf-disease recognition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes crop leaf images and videos for diseases specific to corn, potatoes, peanuts, and tomatoes, and retrieves past analysis reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and agricultural developers use this skill to analyze crop leaf images, videos, or URLs for economic-crop-specific disease identification and structured report retrieval. It focuses on visual recognition and report output, not treatment or prevention recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Leaf images, videos, URLs, and report requests are sent to a remote Life Emergence service. <br>
-Mitigation: Review the service and data handling expectations before installation, and avoid submitting sensitive or unrelated media. <br>
-Risk: The skill can silently create or reuse a local identity and persist session tokens in a workspace SQLite database. <br>
-Mitigation: Install only in trusted workspaces, review local persistence before use, and remove stored identity or token data when the skill is no longer needed. <br>
+## Use Case:
 
+Growers and agricultural advisers can submit crop leaf images or videos for preliminary disease identification and review their analysis history. Results should be checked against field observations and expert advice before making treatment decisions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-crop-specific-disease-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-style structured analysis reports with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include disease type, confidence, symptom description, report links, and Markdown tables for historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.3) <br>
+Risk: Crop images, videos, and report history are processed by an external service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if you trust the publisher and lifeemergence.com with submitted media and report data.
+
+Risk: The skill silently manages account identity and persists account-linked tokens.
+
+Mitigation: Review or disable identity and token persistence before use in sensitive environments; run in a protected workspace.
+
+Risk: A risky Python import setup can load code from shared writable locations.
+
+Mitigation: Avoid shared writable install paths and review the installation before executing it.
+
+Risk: Image-based disease identification may be incorrect or incomplete.
+
+Mitigation: Treat results as preliminary and confirm diagnoses with field observations and an agricultural expert.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-crop-specific-disease-analysis)
+- [Crop disease analysis API reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Text or JSON analysis reports; Markdown tables for report history]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes disease labels, confidence scores, symptom descriptions, and report links when available.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release; bundled frontmatter says 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

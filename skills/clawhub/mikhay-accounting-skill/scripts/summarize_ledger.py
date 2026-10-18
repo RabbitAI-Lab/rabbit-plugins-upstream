@@ -1,0 +1,118 @@
+#!/usr/bin/env python3
+"""Summarize Chinese personal ledger CSV/JSON files.
+
+花销 is spending after refunds. 内部转账 counts each transfer pair once and is
+not part of 花销. Totals always come from scanning every file passed in.
+"""
+
+from __future__ import annotations
+
+import argparse
+from decimal import Decimal
+from pathlib import Path
+from typing import Any
+
+from ledgerlib import (
+    accumulate,
+    apply_buckets,
+    category_net,
+    fmt,
+    fmt_pct,
+    index_shard_files,
+    iter_ledger_files,
+    load_buckets,
+    load_file,
+)
+
+
+def collect_records(paths: list[Path]) -> tuple[list[dict[str, Any]], list[Path]]:
+    records: list[dict[str, Any]] = []
+    files: list[Path] = []
+    for path in paths:
+        candidates = iter_ledger_files(path) if path.is_dir() else [path]
+        for candidate in candidates:
+            book, errors = load_file(candidate)
+            if not book.get("is_ledger", True):
+                continue
+            if errors:
+                raise SystemExit(f"{candidate}: {errors[0]}")
+            files.append(candidate)
+            records.extend(row for row in book["records"] if isinstance(row, dict))
+    return records, files
+
+
+def main() -> int:
+    parser = argparse.ArgumentParser(description="Summarize Chinese personal ledger CSV/JSON files.")
+    parser.add_argument("paths", nargs="+", type=Path, help="Ledger files or directories. Directories are scanned fully.")
+    parser.add_argument("--month", help="Filter by YYYY-MM after the full scan.")
+    parser.add_argument("--shard", choices=["day", "month"], help="Index scanned files by day or month basename.")
+    parser.add_argument("--buckets", type=Path, help="Optional bucket map. Omit to skip bucket totals.")
+    args = parser.parse_args()
+
+    records, files = collect_records(args.paths)
+    if not files:
+        raise SystemExit("no ledger files found")
+    if args.month:
+        records = [row for row in records if str(row.get("时间", "")).startswith(args.month)]
+    totals = accumulate(records)
+    nets = category_net(totals)
+    net_whole = sum(nets.values(), Decimal("0"))
+
+    label = files[0].name if len(files) == 1 else f"{len(files)} files"
+    print(f"# 记账统计: {label}")
+    print(f"扫描文件: {len(files)}")
+    shard_mode = args.shard or "month"
+    grouped = index_shard_files(files, shard_mode)
+    keys = [key for key in sorted(grouped) if key != "unkeyed"]
+    print(f"分片({shard_mode}): {', '.join(keys) if keys else '无'}")
+    if args.month:
+        print(f"月份: {args.month}")
+    print()
+    print(f"- 记录数: {len(records)}")
+    print(f"- 收入: {fmt(totals.income)}")
+    print(f"- 支出: {fmt(totals.expense_gross)}")
+    print(f"- 花销毛额: {fmt(totals.expense_gross)}")
+    print(f"- 退款: {fmt(totals.refunds)}")
+    print(f"- 花销净额: {fmt(totals.expense_net)}")
+    print(f"- 还款: {fmt(totals.repayment)}")
+    print(f"- 转账: {fmt(totals.transfer_legs)}")
+    print(f"- 内部转账: {fmt(totals.internal_transfer)}")
+    print(f"- 结余(不含还款): {fmt(totals.income - totals.expense_net)}")
+    print(f"- 现金流结余: {fmt(totals.income - totals.expense_net - totals.repayment)}")
+    print("\n## 双口径")
+    print(f"- 花销口径: 毛额 {fmt(totals.expense_gross)}, 退款 {fmt(totals.refunds)}, 净额 {fmt(totals.expense_net)}")
+    print(f"- 内部转账口径: {fmt(totals.internal_transfer)}")
+
+    if nets:
+        print("\n## 花销按类别")
+        ordered = sorted(nets.items(), key=lambda item: (item[1], item[0]), reverse=True)
+        for name, value in ordered:
+            print(f"- {name}: {fmt(value)} ({fmt_pct(value, net_whole)})")
+
+    subcategory_net = {
+        name: totals.by_subcategory[name] - totals.by_subcategory_refund[name]
+        for name in set(totals.by_subcategory) | set(totals.by_subcategory_refund)
+    }
+    if subcategory_net:
+        print("\n## 支出Top子类")
+        ranked = sorted(subcategory_net.items(), key=lambda item: item[1], reverse=True)[:10]
+        for name, value in ranked:
+            print(f"- {name}: {fmt(value)}")
+
+    if totals.repayment_by_account:
+        print("\n## 还款按账户")
+        for name, value in sorted(totals.repayment_by_account.items(), key=lambda item: item[1], reverse=True):
+            print(f"- {name}: {fmt(value)}")
+
+    if args.buckets:
+        buckets = load_buckets(args.buckets)
+        print("\n## 分桶")
+        rolled = apply_buckets(nets, buckets)
+        whole = sum((value for _, value in rolled), Decimal("0"))
+        for name, value in rolled:
+            print(f"- {name}: {fmt(value)} ({fmt_pct(value, whole)})")
+    return 0
+
+
+if __name__ == "__main__":
+    raise SystemExit(main())

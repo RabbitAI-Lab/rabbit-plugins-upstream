@@ -1,41 +1,60 @@
-## Description: <br>
-Generates accessible, token-driven HTML/CSS, UI components, pages, documents, emails, and assets that follow the EDIC editorial olive design system. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates accessible, CJK-friendly UI components, pages, documents, and emails using the EDIC editorial-olive design system.
 
-## Publisher: <br>
-[cgartlab](https://clawhub.ai/user/cgartlab) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cgartlab](https://clawhub.ai/user/cgartlab)
 
-## Use Case: <br>
-Developers, designers, and content teams use this skill to create or refactor EDIC-branded interface and document artifacts with consistent OKLch tokens, CJK-aware typography, dark-mode support, and accessibility patterns. Treat the output as design guidance to review before applying broad repository changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/cgartlab/skills/edic-design-system) <br>
-- [EDIC website](https://edic.cgartlab.com/) <br>
-- [EDIC usage docs](https://edic.cgartlab.com/docs.html) <br>
-- [EDIC structured tokens](https://edic.cgartlab.com/tokens.json) <br>
-- [EDIC GitHub repository](https://github.com/cgartlab/edic-design-system) <br>
+Developers and designers use this skill to build or refactor EDIC-styled web interfaces, content pages, and email templates with reusable design tokens and CJK-aware typography.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, configuration, guidance] <br>
-**Output Format:** [Markdown with HTML, CSS, and design-token guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should be reviewed before execution or broad application; evidence.security reports no malware, hidden execution, data theft, or destructive behavior.] <br>
+Global
 
-## Skill Version(s): <br>
-1.9.1 (source: SKILL.md frontmatter, README.md, tokens.json, and server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Broad installation can apply EDIC styling outside the intended project.
+
+Mitigation: Prefer project-level installation and activate the skill only for EDIC work.
+
+Risk: Live external styles, scripts, or fonts may be unsuitable for sensitive or production deployments.
+
+Mitigation: Use local or version-pinned copies of external assets.
+
+Risk: Chinese examples and labels may not fit other audiences.
+
+Mitigation: Localize example text and labels for the intended audience.
+
+## Reference(s):
+
+- [EDIC usage documentation](https://edic.cgartlab.com/docs.html)
+- [EDIC structured design tokens](https://edic.cgartlab.com/tokens.json)
+- [EDIC component examples](artifact/references/EXAMPLES.md)
+- [ClawHub skill listing](https://clawhub.ai/cgartlab/skills/edic-design-system)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Markdown, Design guidance]
+
+**Output Format:** [HTML/CSS snippets or pages, with Markdown guidance as needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Token-driven web styles with dark-mode support; compatible static styles for email.]
+
+## Skill Version(s):
+
+2.9.0 (source: frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

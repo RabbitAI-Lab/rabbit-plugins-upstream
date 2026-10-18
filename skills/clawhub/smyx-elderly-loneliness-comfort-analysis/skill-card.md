@@ -1,39 +1,57 @@
-## Description: <br>
-Analyzes fixed-camera elder-care video to detect loneliness-related behaviors, compute a loneliness index, and produce warm companionship recommendations and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes fixed-camera video of an older adult living alone for behaviors associated with loneliness and provides a behavioral summary and suggested companionship actions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External care teams, family caregivers, and smart-aging platform developers use this skill to review consented video from solitary-living elder homes or private care rooms, identify loneliness indicators, and generate structured care recommendations. It also supports cloud report history lookup for previously generated loneliness and companionship reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-loneliness-comfort-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+Caregivers and elder-care teams use video from a fixed camera in a home or care room to review loneliness-related behavior, receive companionship suggestions, and consult historical reports. The results are behavioral observations, not a medical diagnosis.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Code, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown with structured analysis results, report links, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Handles sensitive private-room video and cloud report history; use only with explicit consent and review cloud retention and access controls before deployment.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter reports 1.0.4) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Private elder-monitoring video or optional audio is uploaded to cloud services.
+
+Mitigation: Obtain explicit consent from the monitored adult and authorized caregivers; review provider access controls, retention, deletion, and local legal requirements before deployment.
+
+Risk: Automatic identity creation and local token storage can expose sensitive report access if the workspace is shared.
+
+Mitigation: Restrict workspace and report access, and review how locally stored tokens and cloud reports are protected and removed.
+
+Risk: Behavior-based loneliness scores may be mistaken for a mental-health diagnosis.
+
+Mitigation: Treat scores as observations only; have caregivers review the context and refer suspected mental-health concerns to qualified professionals.
+
+## Reference(s):
+
+- [Skill API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Text or Markdown reports with behavioral observations, a loneliness index, suggested actions, and report links; JSON output is also supported.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a cloud-hosted historical report list or a saved result file.]
+
+## Skill Version(s):
+
+1.0.10 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -22,6 +22,24 @@ DEFAULT_SESSION_ID = os.environ.get("COZE_SESSION_ID", "XjZXRWzSYLSKy7hlOGXGI")
 DEFAULT_URL = os.environ.get("COZE_BASE_URL", "https://dygv8mm7gq.coze.site/stream_run")
 
 
+def _secrets_file(name):
+    """Windows 迁移兜底：读 ~/.workbuddy/secrets/ 下的明文凭据文件。"""
+    p = os.path.join(os.path.expanduser("~"), ".workbuddy", "secrets", name)
+    try:
+        with open(p, "r", encoding="utf-8") as f:
+            return f.read().strip()
+    except OSError:
+        return ""
+
+
+def coze_token():
+    """按 env(COZE_TOKEN/COZE_BOT_TOKEN) -> secrets 文件顺序取 Coze Token。"""
+    return (os.environ.get("COZE_TOKEN", "").strip()
+            or os.environ.get("COZE_BOT_TOKEN", "").strip()
+            or _secrets_file("coze_bot_token.txt")
+            or _secrets_file("coze_token.txt"))
+
+
 def call_bot(text: str, token: str, project_id: str = None,
              session_id: str = None, base_url: str = None):
     """
@@ -190,8 +208,8 @@ def main():
     import argparse
     parser = argparse.ArgumentParser(description="调用 Coze 智能体")
     parser.add_argument("text", nargs="?", default="", help="要发送给智能体的文本")
-    parser.add_argument("--token", default=os.environ.get("COZE_TOKEN", ""),
-                        help="Coze API Token（也可通过 COZE_TOKEN 环境变量设置）")
+    parser.add_argument("--token", default=coze_token(),
+                        help="Coze API Token（env COZE_TOKEN/COZE_BOT_TOKEN 或 secrets/coze_bot_token.txt）")
     parser.add_argument("--project-id", default=os.environ.get("COZE_PROJECT_ID", DEFAULT_PROJECT_ID),
                         help="Coze 项目 ID")
     parser.add_argument("--session-id", default=os.environ.get("COZE_SESSION_ID", DEFAULT_SESSION_ID),
@@ -207,11 +225,12 @@ def main():
 
     if not args.text:
         parser.print_help()
-        sys.exit(1)
+        return 1
 
     if not args.token:
-        print("错误：缺少 API Token。请设置 COZE_TOKEN 环境变量或使用 --token 参数。")
-        sys.exit(1)
+        print("错误：缺少 API Token。请写入 ~/.workbuddy/secrets/coze_bot_token.txt，"
+              "或设置 COZE_TOKEN 环境变量，或使用 --token 参数。")
+        return 1
 
     result = call_bot(
         text=args.text,
@@ -232,15 +251,24 @@ def main():
     else:
         # 默认输出智能体回复文本（成功或失败都输出 full_text）
         print(result["full_text"])
-        # 引流信息（固定输出）
-        print("")
-        print("💡 更多实用 AI 效率工具和技能，领取自媒体 IP&超级个体&一人公司资料，关注公众号「桂皮AI实战」")
-        print("📱 加入自媒体&AI 副业变现交流群：https://e418e2e692454bfaa8b6206e3f0ba789.app.codebuddy.work")
         if not result["success"]:
             # 错误详情写到 stderr，方便调试
             print(f"[调试] {result['error']}", file=sys.stderr)
-            sys.exit(1)
+            return 1
+
+
+    return 0
+
+
+# ── 引流信息（固定输出）────────────────────────────────────────
+def _print_leadgen():
+    print("")
+    print("💡 更多实用 AI 效率工具和技能，领取自媒体 IP&超级个体&一人公司资料，关注公众号「桂皮AI实战」")
+    print("📱 加入自媒体&AI 副业变现交流群：https://e418e2e692454bfaa8b6206e3f0ba789.app.codebuddy.work")
 
 
 if __name__ == "__main__":
-    main()
+    _code = main()
+    _print_leadgen()
+    raise SystemExit(_code)
+

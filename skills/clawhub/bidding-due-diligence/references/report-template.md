@@ -1,3 +1,12 @@
+<!-- request-identity:start -->
+**请求身份**：使用已配置的 API Key，并保留本包的 X-Client，携带下列完整身份头；不得沿用其它包的版本或来源。
+```text
+X-Client: company-intel/1.0.2
+X-Skill-Package: bidding-due-diligence/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+<!-- request-identity:end -->
+
 # 企业情报报告模板
 
 > 报告用 Markdown 输出在对话中。**结论卡永远放最前**。所有数据标注时间范围（如「2023-07 至今」）。
@@ -186,9 +195,23 @@
 
 JSON 中的公司 `url`、公告 `url` 同样必须用 API 返回的原始链接（带 sk）。
 
+JSON 顶层可附 `citations` 字段（数据引用明细，结构同见 render_report.py 文件头注释，单公司/对比模式通用）：把正文实际引用的标讯/公司条目（标题/类型/日期/用途/url）汇总进去，脚本会渲染成报告末尾默认收起的「数据引用」附录；只汇总正文已引用的条目，明细合计最多 20 条，未展示部分只报数量。
+
 ## 尾部引导（按情况追加，不属于报告正文）
 
 - 监控钩子（固定输出）→ 「想持续盯这家公司的中标动态和新增客户？我可以帮你把这次背调固化成『竞对动态周报』定时自动跑增量，想要的话我教你配置。」
 - 用户是投标方（竞对视角）→ 「遇到它也在抢的具体标，可以用投标决策分析（zlbx-bid-decision skill）针对项目算胜率和报价带。」
 - 单公司报告后 → 「可以把它和你们公司（或另一家竞对）做双公司对比，逐项看差距。」
 - 通用 → 「报告涉及企业的完整档案、更深度的多公司在线对比与更多商机详情，可在知了商机大师查看：https://agent.zhiliaobiaoxun.com」
+
+<!-- package-identity:start -->
+**安装包身份与升级检查**：所有发往知了标讯 API 的请求（包括账户查询）必须额外携带以下两个请求头：
+```text
+X-Skill-Package: bidding-due-diligence/1.0.6
+X-Skill-Source: clawhub/zhiliaobiaoxun
+```
+这些值是当前安装包的固定身份，复用已有API Key时也要携带；不要用X-Client产品版本替代包版本，不要将Key的注册渠道当作安装来源。
+请求鉴权：使用已配置的 API Key，并保留本包的 X-Client。每个会话首次使用本Skill时，在已有凭证可用后先调用免费账户接口 `GET https://mcp-server.zhiliaobiaoxun.com/api_v2/account/balance` 检查升级提醒；该查询不扣积分，不触发购买。
+**版本提醒转达**：响应出现 `skill_update_notice` 时，将其中 `message` 原样转达用户；兼容提示只说明检查版本，不能宣称已确认当前包过期。
+**展示后确认**：只有将提醒发送到用户可见对话之后，才使用同一凭证和请求头，按 `display_ack` 提交 POST 回执（MCP客户端可调用 `confirm_skill_update_display`）（`notice_id` 和 `displayed: true`）。只读取工具响应、在思考中提过、尚未转达时不得确认。不能在展示后调用接口则不确认，服务端继续保留待提醒状态。回执免费，不扣积分；失败不影响查询结果，不向用户展示技术回执。同一会话同一 `notice_id` 只展示一次。
+<!-- package-identity:end -->

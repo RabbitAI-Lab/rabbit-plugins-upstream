@@ -1,50 +1,63 @@
-## Description: <br>
-Build, deploy, and manage Cargo Hosting apps and workers with the Cargo CLI - Vite SPAs served on *.cargo.app and serverless edge HTTP handlers, plus the deployments that ship and promote them. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through hosting Cargo web apps and edge workers, deploying and promoting builds, managing worker secrets, and configuring public sites.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and engineers use this skill to scaffold, create, deploy, promote, inspect, and remove Cargo-hosted Vite apps, edge workers, and their deployments from an agent session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Promote or remove commands can change the live deployment or delete Cargo-hosted resources. <br>
-Mitigation: Before running these commands, verify the Cargo account, workspace, resource UUID, and currently promoted deployment. <br>
-Risk: Generated .env.local output can contain workspace and Cargo app configuration. <br>
-Mitigation: Write environment output only to the intended local project and keep generated .env.local files out of source control. <br>
-Risk: Deployment creation uploads the selected local source directory to Cargo's build service. <br>
-Mitigation: Review the source path and ignore list before upload, and pass the package root rather than a built dist directory. <br>
-Risk: A deployment build is asynchronous and is not live until a successful deployment is promoted. <br>
-Mitigation: Poll the deployment until it reaches a terminal status, promote only a successful deployment, and verify the promoted deployment afterward. <br>
+## Use Case:
 
+Developers and engineers use this skill to scaffold, deploy, and manage Cargo-hosted web apps and HTTP workers, including build promotion, environment configuration, and troubleshooting.
 
-## Reference(s): <br>
-- [Cargo Hosting skill page](https://clawhub.ai/cargo-ai/skills/cargo-hosting) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [App examples](references/examples/apps.md) <br>
-- [Worker examples](references/examples/workers.md) <br>
-- [Deployment examples](references/examples/deployments.md) <br>
-- [Hosting response shapes](references/response-shapes.md) <br>
-- [Hosting troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands, JSON response examples, and configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May guide commands that scaffold local projects, upload source for hosted builds, promote deployments, remove resources, or print .env.local configuration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and release evidence) <br>
+Risk: Deploying an unintended local directory can expose source files or sensitive configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the source directory and exclude sensitive files before deployment.
+
+Risk: API tokens or app environment values may be exposed if handled as public configuration.
+
+Mitigation: Protect API tokens and local env files; use worker-scoped secrets rather than public app variables or workspace-wide tokens where possible.
+
+Risk: Promoting or removing the wrong resource changes live hosting, and removal can delete its deployments.
+
+Mitigation: Confirm the active workspace and verify resource and deployment UUIDs before promotion or removal.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/cargo-ai/skills/cargo-hosting)
+- [Project homepage (listed in skill metadata)](https://github.com/getcargohq/cargo-skills)
+- [App examples](references/examples/apps.md)
+- [Worker examples](references/examples/workers.md)
+- [Deployment examples](references/examples/deployments.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Code, Configuration instructions, Guidance]
+
+**Output Format:** [Markdown with inline shell and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides deployment and promotion steps; live resources change only after promotion.]
+
+## Skill Version(s):
+
+1.2.0 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

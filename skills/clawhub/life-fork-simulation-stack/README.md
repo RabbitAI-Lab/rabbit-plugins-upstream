@@ -15,6 +15,12 @@
 
 ![人生岔路复盘报告预览](assets/demo-preview.svg)
 
+## 使用范围与隐私
+
+请主动描述需要复盘的个人选择；代码 bug、小说假设和商业方案压力测试按原任务处理。中文文档与 HTML 布局面向中文读者，对话报告可按你的语言生成。
+
+只提供相关处境即可，可用化名、年龄段和金额范围，任何问题都可跳过。避免发送证件、账号密码、精确地址、完整病历或他人私人记录。默认报告留在当前对话；聊天留存由你使用的宿主服务控制。请求文件导出后，仅生成当前授权报告，不扫描旧报告、不联网、不主动上传或保存长期记忆。
+
 ## 你能得到什么
 
 默认会生成一份用户能看懂的复盘报告，通常包含：
@@ -118,7 +124,7 @@ Skill 会先按已知信息跑一版。信息不够时，会把假设说清楚�
 
 ## 文件里有什么
 
-普通使用时只需要读 `SKILL.md`。下面文件用于增强报告质量、生成 HTML、提供样例和维护校验。
+普通使用时只需要读 `SKILL.md`。下面文件用于增强报告质量、按需生成 HTML 和提供示例。发布与维护工具位于安装包之外。
 
 <details>
 <summary>查看完整文件结构</summary>
@@ -164,13 +170,6 @@ life-fork-simulation-stack/
     quality-scorecard.md
   scripts/
     render_html_report.py
-    package_skill.py
-    validate_dialogue_event_agent_flow.py
-    validate_html_first_skill.py
-    validate_magic_score.py
-    validate_report_specificity.py
-    validate_report_structure.py
-    validate_skill_package.py
   examples/
     city-choice-beijing.md
     html-render-fixture.md

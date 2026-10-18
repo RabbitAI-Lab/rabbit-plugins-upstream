@@ -1,0 +1,54 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="960" height="560" viewBox="0 0 960 560" font-family="-apple-system,Segoe UI,Microsoft YaHei,sans-serif">
+<rect width="960" height="560" fill="#ffffff"/>
+<text x="480.0" y="26" text-anchor="middle" font-size="16" font-weight="700" fill="#111827">理财类产品 · 总利益与 IRR 走势（横坐标=持有年度）</text>
+<line x1="78" y1="504.0" x2="882" y2="504.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="70" y="508.0" text-anchor="end" font-size="11" fill="#374151">0</text>
+<line x1="78" y1="416.0" x2="882" y2="416.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="70" y="420.0" text-anchor="end" font-size="11" fill="#374151">10万</text>
+<line x1="78" y1="328.0" x2="882" y2="328.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="70" y="332.0" text-anchor="end" font-size="11" fill="#374151">20万</text>
+<line x1="78" y1="240.0" x2="882" y2="240.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="70" y="244.0" text-anchor="end" font-size="11" fill="#374151">30万</text>
+<line x1="78" y1="152.0" x2="882" y2="152.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="70" y="156.0" text-anchor="end" font-size="11" fill="#374151">40万</text>
+<line x1="78" y1="64.0" x2="882" y2="64.0" stroke="#e5e7eb" stroke-width="1"/>
+<text x="70" y="68.0" text-anchor="end" font-size="11" fill="#374151">49万</text>
+<text x="890" y="508.0" text-anchor="start" font-size="11" fill="#6b7280">-3.6%</text>
+<text x="890" y="420.0" text-anchor="start" font-size="11" fill="#6b7280">-1.0%</text>
+<text x="890" y="332.0" text-anchor="start" font-size="11" fill="#6b7280">1.6%</text>
+<text x="890" y="244.0" text-anchor="start" font-size="11" fill="#6b7280">4.2%</text>
+<text x="890" y="156.0" text-anchor="start" font-size="11" fill="#6b7280">6.8%</text>
+<text x="890" y="68.0" text-anchor="start" font-size="11" fill="#6b7280">9.4%</text>
+<line x1="78.0" y1="504" x2="78.0" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="78.0" y="522" text-anchor="middle" font-size="11" fill="#374151">1年</text>
+<line x1="188.9" y1="504" x2="188.9" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="188.9" y="522" text-anchor="middle" font-size="11" fill="#374151">5年</text>
+<line x1="299.8" y1="504" x2="299.8" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="299.8" y="522" text-anchor="middle" font-size="11" fill="#374151">9年</text>
+<line x1="410.7" y1="504" x2="410.7" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="410.7" y="522" text-anchor="middle" font-size="11" fill="#374151">13年</text>
+<line x1="521.6" y1="504" x2="521.6" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="521.6" y="522" text-anchor="middle" font-size="11" fill="#374151">17年</text>
+<line x1="632.5" y1="504" x2="632.5" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="632.5" y="522" text-anchor="middle" font-size="11" fill="#374151">21年</text>
+<line x1="743.4" y1="504" x2="743.4" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="743.4" y="522" text-anchor="middle" font-size="11" fill="#374151">25年</text>
+<line x1="882.0" y1="504" x2="882.0" y2="64" stroke="#f3f4f6" stroke-width="1"/>
+<text x="882.0" y="522" text-anchor="middle" font-size="11" fill="#374151">30年</text>
+<line x1="78" y1="64" x2="78" y2="504" stroke="#9ca3af" stroke-width="1.5"/>
+<line x1="882" y1="64" x2="882" y2="504" stroke="#9ca3af" stroke-width="1.5"/>
+<line x1="78" y1="504" x2="882" y2="504" stroke="#9ca3af" stroke-width="1.5"/>
+<text x="20" y="50" font-size="11" fill="#374151">总利益(元)</text>
+<text x="890" y="50" font-size="11" fill="#6b7280">IRR(%)</text>
+<line x1="78" y1="382.1" x2="882" y2="382.1" stroke="#fca5a5" stroke-width="1" stroke-dasharray="3 3"/>
+<polyline points="78.0,494.8 105.7,485.7 133.4,476.5 161.2,467.3 188.9,455.9 216.6,444.4 244.3,432.9 272.1,421.4 299.8,409.9 327.5,398.5 355.2,393.6 383.0,388.6 410.7,383.6 438.4,378.5 466.1,373.3 493.9,368.0 521.6,362.7 549.3,357.3 577.0,351.8 604.8,346.2 632.5,340.5 660.2,334.7 687.9,328.8 715.7,322.8 743.4,316.7 771.1,310.5 798.8,304.2 826.6,297.8 854.3,291.2 882.0,284.6" fill="none" stroke="#2563eb" stroke-width="2.5"/>
+<polyline points="299.8,341.1 327.5,278.1 355.2,270.3 383.0,265.1 410.7,261.6 438.4,259.2 466.1,257.6 493.9,256.6 521.6,256.0 549.3,255.7 577.0,255.6 604.8,255.7 632.5,255.9 660.2,256.3 687.9,256.7 715.7,257.2 743.4,257.7 771.1,258.2 798.8,258.8 826.6,259.4 854.3,260.0 882.0,260.6" fill="none" stroke="#2563eb" stroke-width="2" stroke-dasharray="6 4"/>
+<polyline points="78.0,469.4 105.7,470.5 133.4,471.6 161.2,472.6 188.9,463.0 216.6,453.2 244.3,443.1 272.1,432.7 299.8,422.0 327.5,411.1 355.2,399.3 383.0,387.3 410.7,374.8 438.4,362.1 466.1,349.0 493.9,335.5 521.6,321.6 549.3,307.3 577.0,292.6 604.8,277.5 632.5,261.9 660.2,245.8 687.9,229.2 715.7,212.0 743.4,194.3 771.1,176.0 798.8,157.2 826.6,137.6 854.3,117.5 882.0,96.6" fill="none" stroke="#dc2626" stroke-width="2.5"/>
+<polyline points="299.8,456.0 327.5,351.3 355.2,280.9 383.0,232.8 410.7,198.4 438.4,173.2 466.1,154.2 493.9,139.7 521.6,128.6 549.3,120.0 577.0,113.4 604.8,108.2 632.5,104.2 660.2,101.1 687.9,98.8 715.7,97.1 743.4,95.9 771.1,95.1 798.8,94.6 826.6,94.3 854.3,94.3 882.0,94.5" fill="none" stroke="#dc2626" stroke-width="2" stroke-dasharray="6 4"/>
+<rect x="84" y="59" width="14" height="4" fill="#2563eb"/>
+<line x1="84" y1="61" x2="98" y2="61" stroke="#2563eb" stroke-width="2"/>
+<text x="104" y="65" font-size="11" fill="#111827">增额寿分红 (实线=总利益 虚线=IRR)</text>
+<rect x="189" y="59" width="14" height="4" fill="#dc2626"/>
+<line x1="189" y1="61" x2="203" y2="61" stroke="#dc2626" stroke-width="2"/>
+<text x="209" y="65" font-size="11" fill="#111827">年金附万能 (实线=总利益 虚线=IRR)</text>
+</svg>

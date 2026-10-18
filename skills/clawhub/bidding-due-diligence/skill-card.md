@@ -1,47 +1,62 @@
-## Description: <br>
-该技能帮助用户在投资、合作、并购或签约前，基于公开招投标数据生成企业经营实态尽调报告，覆盖中标流水、订单趋势、客户结构、履约能力、竞对和公开风险。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Produces single-company or side-by-side due-diligence reports using procurement awards, customer relationships, competitor activity, and sourced public-risk information.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External users, investors, procurement teams, and business development teams use this skill to evaluate a company's operating reality before investment, partnership, acquisition, supplier selection, or contract signing. It produces single-company due diligence reports and two-company comparison reports using tender and bidding records, public risk checks, and clearly stated data boundaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The vendor may receive company queries and, during auto-registration, a hashed device identifier. <br>
-Mitigation: Install only if you trust the publisher; prefer setting ZLBX_API_KEY manually and use auto-registration only after explicit consent. <br>
-Risk: Persistent credentials and signed login-bypass links are sensitive. <br>
-Mitigation: Protect local credential files, avoid sharing generated sk or auto-login links, and rotate credentials if exposed. <br>
-Risk: Reports and optional HTML files can contain business-sensitive due diligence findings, contact data, and signed links. <br>
-Mitigation: Review reports before forwarding, request contact data only for a legitimate business reason, and keep shared files within the intended audience. <br>
+## Use Case:
 
+Investors, procurement teams, and potential business partners use this skill to assess a company's operating activity and customer concentration through public bidding records, or compare two companies before a transaction.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/bidding-due-diligence) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Enterprise intelligence workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports in chat, with optional local HTML report files generated from structured report data.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based account setup; may use vendor APIs, WebSearch, local credential storage, and local report files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Automatic account creation collects a hashed device identifier.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use your own ZLBX_API_KEY to skip registration, or review the requested device data and consent before creating an account.
+
+Risk: Persistent API credentials and contact phone data may be exposed if shared inappropriately.
+
+Mitigation: Protect local credentials, do not include API keys in reports, and limit access to contact information.
+
+Risk: Shareable HTML reports may contain signed access links to source records.
+
+Mitigation: Review embedded links and recipients before distributing a report.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/bidding-due-diligence)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Due-diligence workflow](artifact/references/workflow.md)
+- [API quick reference](artifact/references/api-quick.md)
+- [Report templates](artifact/references/report-template.md)
+- [Account registration guidance](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, HTML report]
+
+**Output Format:** [Markdown report and optional shareable HTML file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single-company or two-company comparison; findings cite source records and identify data gaps.]
+
+## Skill Version(s):
+
+1.0.6 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

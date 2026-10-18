@@ -1,42 +1,53 @@
-## Description: <br>
-A Chinese-language thinking partner that uses Zhu Yuanzhang's state-building history as a lens for early organization building, institutional design, scarce-resource decisions, and pragmatic survival strategy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A historical thinking partner that uses Zhu Yuanzhang's approaches to survival, institution-building, and leadership to help frame organizational tradeoffs.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and teams use this skill to frame organization-building, governance, leadership, and survival questions through historical strategy patterns from Zhu Yuanzhang. It is intended for reflective analysis and critique, not literal instruction in coercive or abusive control. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Historical examples include iron-fist rule, punishment, betrayal, and power consolidation. <br>
-Mitigation: Use the skill for reflective analysis and critique; do not treat harsh-governance examples as instructions for violence, intimidation, retaliation, or abusive workplace control. <br>
-Risk: The skill provides advisory strategy framing rather than executable procedures or verified management policy. <br>
-Mitigation: Review outputs against current law, organizational policy, and human-centered leadership standards before applying any recommendation. <br>
+## Use Case:
 
+People reflecting on starting or managing an organization use this skill to examine scarce resources, institutional rules, leadership tradeoffs, and frontline feedback through a historical lens. Its guidance supports discussion, not decisions affecting individuals or professional advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/zhuyuanzhang-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
-- [Packaged skill source](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown prose with structured analysis steps and historical framing] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Chinese-first responses with occasional English terminology when useful] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server-resolved release metadata) <br>
+Risk: Historical 'iron-hand' framing could be misused to justify retaliation or personnel actions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only to frame questions and tradeoffs; route personnel decisions through formal organizational processes and qualified HR and legal professionals.
+
+Risk: Reflective guidance could be mistaken for legal, safety, financial, medical, or mental-health advice.
+
+Mitigation: Do not use it as professional advice or a decision authority; consult appropriate qualified professionals.
+
+## Reference(s):
+
+- [Zhuyuanzhang Think Partner on ClawHub](https://clawhub.ai/gechengling/skills/zhuyuanzhang-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Markdown text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Primarily Chinese, with English responses supported; structured questions, tradeoffs, and suggested next steps.]
+
+## Skill Version(s):
+
+2.0.3 (source: ClawHub release metadata and skill text)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

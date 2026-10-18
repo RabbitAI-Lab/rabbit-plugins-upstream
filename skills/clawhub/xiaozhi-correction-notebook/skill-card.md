@@ -1,43 +1,61 @@
-## Description: <br>
-AI驱动的智能错题归档与分析系统，用于在学生提交错题、描述做错过程或请求错因分析时记录错题、定位根因、触发弱项预警并生成复习材料。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助学生归档各科错题、定位常见错因，并跟踪反复出现的薄弱知识点。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning assistants use this skill to turn wrong answers from photos, manual input, or spoken descriptions into structured records, four-dimensional cause analysis, weak-point alerts, targeted practice, and term-level reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is designed to retain and reuse student wrong-answer history, weak-point labels, reports, reminders, and anxiety-related learning context across related skills. <br>
-Mitigation: Use it only where this learning-data retention and cross-skill sharing are acceptable, and review what context is stored or passed to related learning skills. <br>
-Risk: Photo or OCR-based problem intake may be unavailable or may misread the problem, and incomplete information can make root-cause analysis unreliable. <br>
-Mitigation: Fall back to manual or spoken input, confirm unclear problem text and the student's solution process before analysis, and label uncertain conclusions before assigning practice. <br>
-Risk: Subject-specific math and physics handoffs may duplicate analysis or share more learning context than needed if the boundaries are not followed. <br>
-Mitigation: Use the documented handoff boundaries: keep this skill to the common record and four-dimensional classification layer, and pass only the required summaries to the subject-specific skills. <br>
+## Use Case:
 
+面向中国大陆中文 K12 学生：记录具体错题、分析错误原因、安排针对性练习，并生成薄弱点与学期复习报告。小学学段应有家长或老师陪同。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-correction-notebook) <br>
-- [各科常见错误类型详细分类表](references/error-analysis-framework.md) <br>
+### Deployment Geography for Use:
 
+中国大陆；在其他地区使用前须本地化课程、监护人同意要求和危机求助渠道。
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown-formatted tutoring guidance, structured wrong-answer records, JSON-style handoff payloads, and report outlines.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on retained wrong-answer history, weak-point labels, reminders, and related subject-specific skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Students' wrong-answer histories and parent-visible summaries may disclose sensitive learning information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review consent for long-term profiles, cross-skill sharing, reminders, and parent-visible summaries before enabling them; honor pause, correction, export, and deletion requests.
+
+Risk: Mainland China curriculum, consent assumptions, and emergency contacts may be inappropriate elsewhere.
+
+Mitigation: Limit use to the intended Chinese K12 context or localize the curriculum, legal consent assumptions, language, and crisis-support channels first.
+
+Risk: Incomplete problem information can produce unreliable error diagnoses or practice questions.
+
+Mitigation: Confirm the original question and student reasoning, mark uncertain diagnoses as insufficiently supported, and check generated questions before use.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-correction-notebook)
+- [Error analysis framework](references/error-analysis-framework.md)
+- [Shared vocabulary and counting rules](shared/vocab.md)
+- [Platform and regional conventions](shared/platform-conventions.md)
+- [Crisis exception guidance](shared/crisis-exception.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Conversational feedback, practice questions, Markdown reports, and structured handoffs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Long-term entries and sharing require consent; reports depend on confirmed records.]
+
+## Skill Version(s):
+
+2.11.2 (source: skill frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

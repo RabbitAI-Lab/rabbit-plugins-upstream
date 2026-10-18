@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/stock-sentiment",
   "slug": "stock-sentiment",
   "ownerHandle": null,
-  "version": "0.1.4",
-  "updatedAt": 1784878002103,
-  "contentHash": "0a110962437b6657494106b4cf9ea18d897def9da48e650a2c6298c6f4ebab11",
-  "fetchedAt": "2026-07-26T18:05:32.872Z"
+  "version": "0.6.1",
+  "updatedAt": 1792294300102,
+  "contentHash": "35f913f75a215463f0d5b69508f94f3eeb148cd57aac6e0a9c182ed539259fed",
+  "fetchedAt": "2026-10-18T12:10:05.599Z"
 }

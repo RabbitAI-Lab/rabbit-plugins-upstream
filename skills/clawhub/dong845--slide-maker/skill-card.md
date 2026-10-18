@@ -1,47 +1,55 @@
-## Description: <br>
-Builds, redesigns, and critiques presentation-grade slide decks from user-provided material or researched context, using interview checkpoints, deck-building scripts, and an independent actor-critic review loop. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds, redesigns, and critiques presentation slide decks for a range of audiences and languages.
 
-## Publisher: <br>
-[dong845](https://clawhub.ai/user/dong845) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dong845](https://clawhub.ai/user/dong845)
 
-## Use Case: <br>
-Employees, external users, and developers can use this skill to create, redesign, or review slide decks for research, teaching, meetings, stakeholder readouts, conference talks, and related presentation workflows. It is most useful when the user needs a structured content plan, visual design direction, generated or prepared assets, a .pptx build, and critique before handoff. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local materials, write deck assets, perform web research, and generate images. <br>
-Mitigation: Use it only in approved workspaces with appropriate input data, and disable or avoid web and image-generation paths when sensitive material should not leave the environment. <br>
-Risk: The security guidance flags README execution paths and generated HTML previews as areas requiring care with untrusted inputs. <br>
-Mitigation: Avoid README execution paths for untrusted repositories, and open generated HTML previews only when the direction data and source workspace are trusted. <br>
-Risk: Cross-deck preference history may reveal sensitive presentation or style preferences. <br>
-Mitigation: Review, disable, or clear taste.md persistence when user preference history should not be retained. <br>
+## Use Case:
 
+Presenters and teams use this skill to create or improve editable slide decks from their materials or a brief, with design planning, review, and hand-off guidance.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dong845/skills/slide-maker) <br>
-- [Skill Definition](artifact/SKILL.md) <br>
-- [Design Principles](artifact/references/design-principles.md) <br>
-- [Content Plan Specification](artifact/references/content-plan-spec.md) <br>
-- [Review Rubrics](artifact/references/review-rubrics.md) <br>
-- [File Inventory](artifact/references/file-inventory.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance and checkpoint tables, Python and shell commands, generated assets, rendered slide images, and PowerPoint .pptx files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce local deck folders, slide renders, image assets, HTML previews, notes exports, and optional final deliverables depending on user approval and available tooling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.0 (source: ClawHub release metadata) <br>
+Risk: Deck validation can execute Python files adjacent to a presentation supplied by someone else.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Move untrusted PPTX files into a clean folder before validation, or inspect and trust any adjacent surface_*.py or style.py files first.
+
+Risk: Deck building may install dependencies, use network-backed assets or version checks, and write a preference registry.
+
+Mitigation: Review and authorize those operations before installation or use in a sensitive environment.
+
+## Reference(s):
+
+- [Slide Maker on ClawHub](https://clawhub.ai/dong845/skills/slide-maker)
+- [Design principles](references/design-principles.md)
+- [Security and capabilities](references/security-and-capabilities.md)
+
+## Skill Output:
+
+**Output Type(s):** [Presentation files, Code, Guidance]
+
+**Output Format:** [Editable PPTX and rendered slide images, with an optional PDF and browser preview plus a concise hand-off note]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [PDF and browser preview are offered after the deck is finalized.]
+
+## Skill Version(s):
+
+5.9.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

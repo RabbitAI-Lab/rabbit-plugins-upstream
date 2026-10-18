@@ -1,46 +1,53 @@
-## Description: <br>
-Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants to edit an existing photo — change outfits or backgrounds, compose from reference images, or apply prompt-driven edits.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and content teams use this skill to guide photo edits with Pruna's p-image-edit model, including reference upload, prompt drafting, aspect-ratio selection, and async prediction calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected reference images and prompts are sent to Pruna's API for editing. <br>
-Mitigation: Use the skill only when external API processing is acceptable, and avoid submitting images or prompts that should not leave the runtime environment. <br>
-Risk: The skill depends on a PRUNA_API_KEY from the environment. <br>
-Mitigation: Store the key in runtime secrets or environment variables and do not paste the raw key into chat or generated files. <br>
-Risk: The skill suggests installing related Pruna skills with npx, including an optional full-suite install. <br>
-Mitigation: Review the related skill packages and requested install command before allowing installation. <br>
-Risk: The skill exposes disable_safety_checker as an optional request field. <br>
-Mitigation: Require explicit user intent and content-policy review before using safety-checker bypass options. <br>
+## Use Case:
 
+Creators and developers use this skill to edit existing photos with text instructions and reference images while preserving requested details.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/p-image-edit) <br>
-- [Pruna file upload API](https://api.pruna.ai/v1/files) <br>
-- [Pruna predictions API](https://api.pruna.ai/v1/predictions) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with inline bash and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides prompt construction, reference-image upload, and Pruna prediction requests; required inputs are a prompt and one to five image URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: evidence.release.version and SKILL.md metadata.version) <br>
+Risk: Photos and edit prompts are sent to a third-party image API.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review Pruna's data-handling expectations before submitting private photos or confidential prompts.
+
+Risk: Unpinned companion-skill installations expand trust to mutable external content.
+
+Mitigation: Use pinned or otherwise verified versions of companion skills and review them before installation.
+
+## Reference(s):
+
+- [p-image-edit on ClawHub](https://clawhub.ai/pruna-ai/skills/p-image-edit)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Guidance, Image links]
+
+**Output Format:** [Markdown with edit prompts, API request examples, and links to edited images]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires a source image and edit prompt; supports up to five reference-image URLs.]
+
+## Skill Version(s):
+
+1.0.15 (source: release metadata and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

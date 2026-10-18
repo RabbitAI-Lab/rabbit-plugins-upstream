@@ -192,13 +192,13 @@ def _phone_view(item: Dict[str, Any]) -> Dict[str, Any]:
     result["ai_control_supported"] = supported
     if supported:
         result["ai_control_status"] = "supported"
-        result["ai_control_message"] = "支持 AI HTTP 控制"
+        result["ai_control_message"] = "AI HTTP control is supported"
     elif result.get("http_status") in (0, "0"):
         result["ai_control_status"] = "unsupported"
-        result["ai_control_message"] = "该云机不支持 AI HTTP 控制"
+        result["ai_control_message"] = "This cloud phone does not support AI HTTP control"
     else:
         result["ai_control_status"] = "unknown"
-        result["ai_control_message"] = "未确认该云机是否支持 AI HTTP 控制"
+        result["ai_control_message"] = "AI HTTP control support has not been confirmed for this cloud phone"
     return result
 
 
@@ -260,26 +260,28 @@ def _normalize_region(value: Any) -> Optional[str]:
         return code + (compact_direct.group(2) or "")
 
     aliases = (
-        (("hongkong", "hong kong", "香港"), "hk"),
-        (("singapore", "新加坡"), "sg"),
-        (("unitedstates", "united states", "美国"), "us"),
-        (("japan", "日本"), "jp"),
-        (("southkorea", "south korea", "韩国"), "kr"),
-        (("taiwan", "台湾"), "tw"),
-        (("unitedkingdom", "united kingdom", "英国"), "gb"),
-        (("germany", "德国"), "de"),
-        (("france", "法国"), "fr"),
-        (("netherlands", "荷兰"), "nl"),
-        (("canada", "加拿大"), "ca"),
-        (("australia", "澳大利亚"), "au"),
-        (("malaysia", "马来西亚"), "my"),
-        (("thailand", "泰国"), "th"),
-        (("vietnam", "越南"), "vn"),
-        (("indonesia", "印度尼西亚"), "id"),
-        (("philippines", "菲律宾"), "ph"),
-        (("india", "印度"), "in"),
+        (("hongkong", "hong kong", "\u9999\u6e2f"), "hk"),
+        (("singapore", "\u65b0\u52a0\u5761"), "sg"),
+        (("unitedstates", "united states", "\u7f8e\u56fd"), "us"),
+        (("japan", "\u65e5\u672c"), "jp"),
+        (("southkorea", "south korea", "\u97e9\u56fd"), "kr"),
+        (("taiwan", "\u53f0\u6e7e"), "tw"),
+        (("unitedkingdom", "united kingdom", "\u82f1\u56fd"), "gb"),
+        (("germany", "\u5fb7\u56fd"), "de"),
+        (("france", "\u6cd5\u56fd"), "fr"),
+        (("netherlands", "\u8377\u5170"), "nl"),
+        (("canada", "\u52a0\u62ff\u5927"), "ca"),
+        (("australia", "\u6fb3\u5927\u5229\u4e9a"), "au"),
+        (("malaysia", "\u9a6c\u6765\u897f\u4e9a"), "my"),
+        (("thailand", "\u6cf0\u56fd"), "th"),
+        (("vietnam", "\u8d8a\u5357"), "vn"),
+        (("indonesia", "\u5370\u5ea6\u5c3c\u897f\u4e9a"), "id"),
+        (("philippines", "\u83f2\u5f8b\u5bbe"), "ph"),
+        (("india", "\u5370\u5ea6"), "in"),
     )
-    chinese_numbers = {"一": "1", "二": "2", "三": "3", "四": "4", "五": "5"}
+    chinese_numbers = {
+        "\u4e00": "1", "\u4e8c": "2", "\u4e09": "3", "\u56db": "4", "\u4e94": "5"
+    }
     suffix_match = re.search(r"(\d+)", raw)
     suffix = suffix_match.group(1) if suffix_match else ""
     if not suffix:
@@ -490,7 +492,7 @@ class DuoPlusClient:
                 for item in support["unsupported"]
             ]
             raise DuoPlusError(
-                "该云机不支持 AI 操作云机 (AI HTTP control is not supported)",
+                "This cloud phone does not support AI cloud-phone automation",
                 details={
                     "unsupported_phones": unsupported,
                     "hint": (
@@ -522,6 +524,34 @@ class DuoPlusClient:
 
     def info(self, image_id: str) -> Dict[str, Any]:
         return self.control("/api/v1/cloudPhone/info", {"image_id": image_id})
+
+    def platform_shell(self, image_id: str, command: str) -> Dict[str, Any]:
+        normalized = command.strip()
+        if not normalized:
+            raise DuoPlusError("platform shell command must not be empty")
+        if normalized.lower().startswith("adb shell "):
+            raise DuoPlusError(
+                "platform shell command must not include the 'adb shell' prefix"
+            )
+        response = self.control(
+            "/api/v1/cloudPhone/command",
+            {"image_id": image_id, "command": normalized},
+        )
+        data = response.get("data")
+        if not isinstance(data, dict):
+            raise DuoPlusError(
+                "platform shell response is missing data",
+                response={"body": _redact(response)},
+            )
+        if data.get("success") is not True:
+            message = data.get("message") or "platform shell command failed"
+            raise DuoPlusError(
+                str(message),
+                response={"body": _redact(response)},
+            )
+        result = dict(response)
+        result["execution_route"] = "platform_openapi_fallback"
+        return result
 
     def lifecycle(self, operation: str, image_ids: List[str]) -> Dict[str, Any]:
         paths = {
@@ -649,7 +679,7 @@ class DuoPlusClient:
         phone_view = _phone_view(phone)
         if not phone_view["ai_control_supported"]:
             raise DuoPlusError(
-                "该云机不支持 AI 操作云机 (AI HTTP control is not supported)",
+                "This cloud phone does not support AI cloud-phone automation",
                 details={
                     "image_id": image_id,
                     "http_status": phone.get("http_status"),
@@ -936,6 +966,13 @@ def _build_parser() -> argparse.ArgumentParser:
     action.add_argument("--screenshot-out")
     action.add_argument("--deadline-seconds", type=float)
 
+    platform_shell = sub.add_parser(
+        "platform-shell",
+        help="fallback shell execution through the official control API",
+    )
+    platform_shell.add_argument("image_id")
+    platform_shell.add_argument("--command", dest="shell_command", required=True)
+
     query = sub.add_parser("query")
     query.add_argument("image_id")
     query.add_argument("command_id")
@@ -1129,6 +1166,10 @@ def main() -> int:
             body["deadline_at"] = int((time.time() + args.deadline_seconds) * 1000)
         response = client.gateway(args.image_id, body, timeout=310, retries=0)
         _emit(_summarize_gateway_result(response, args.screenshot_out))
+        return 0
+
+    if args.command == "platform-shell":
+        _emit(client.platform_shell(args.image_id, args.shell_command))
         return 0
 
     if args.command == "query":

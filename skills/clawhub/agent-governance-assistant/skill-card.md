@@ -1,41 +1,53 @@
-## Description: <br>
-Helps IT risk managers, compliance officers, and enterprise AI leaders audit AI agent behavior, define governance policies, detect shadow AI, and produce compliance-oriented governance reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps enterprise risk and compliance teams draft AI agent inventories, risk classifications, governance policies, shadow AI assessments, and audit reports.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Enterprise IT, risk, and compliance teams use this skill to structure AI agent inventories, risk classifications, policy gap analysis, shadow AI findings, and governance reports for regulated environments such as financial institutions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may share sensitive enterprise governance details such as agent inventories, data access levels, endpoints, and compliance gaps while using the skill. <br>
-Mitigation: Limit shared inputs to the minimum necessary information, remove secrets and sensitive identifiers where possible, and handle generated reports under the organization's normal data classification rules. <br>
-Risk: Generated regulatory or policy guidance may become inaccurate as governance requirements change. <br>
-Mitigation: Verify regulatory claims against official sources and qualified counsel before relying on outputs for legal, regulatory, or external filing purposes. <br>
+## Use Case:
 
+IT risk managers, compliance officers, and enterprise AI leaders use this skill to plan AI agent inventories, assess governance gaps, and draft internal audit and remediation reports, particularly for financial institutions. It provides templates and guidance, not live scanning, policy enforcement, or legal determinations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/skills/agent-governance-assistant) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Configuration] <br>
-**Output Format:** [Markdown reports, policy tables, compliance checklists, and recommended governance controls] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only guidance; no executable behavior or hidden data access was identified in security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.0 (source: artifact frontmatter and server release metadata) <br>
+Risk: Regulatory guidance or draft compliance conclusions may be outdated or mistaken.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current requirements against official sources and obtain internal legal review before formal decisions or external filings.
+
+Risk: Draft inventories and shadow AI findings may be mistaken for verified detection results.
+
+Mitigation: Validate findings using approved organizational tools and data, and state the assessment's coverage limits.
+
+## Reference(s):
+
+- [ClawHub release: Agent Governance Assistant](https://clawhub.ai/gechengling/skills/agent-governance-assistant)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration instructions]
+
+**Output Format:** [Markdown reports, tables, checklists, and policy drafts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-only outputs based on user-provided information; does not scan systems or enforce policies.]
+
+## Skill Version(s):
+
+5.0.2 (source: frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

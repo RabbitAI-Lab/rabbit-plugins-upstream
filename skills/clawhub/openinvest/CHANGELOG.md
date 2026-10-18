@@ -1,5 +1,158 @@
 # Changelog
 
+## [0.28.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.27.0...invest-skill-v0.28.0) (2026-10-18)
+
+
+### Features
+
+* **sentinel:** per-symbol alert lines (price / daily move / drawdown from cost) ([#469](https://github.com/longsizhuo/openInvest/issues/469)) ([c460c47](https://github.com/longsizhuo/openInvest/commit/c460c4779f02c3d48b994973b2af1e62373ade8d))
+
+
+### Bug Fixes
+
+* **ops:** 运维加固 D3 超时+心跳 / D6 部署守卫 / D7 锁·jsonl·bak·scheduler unit ([#459](https://github.com/longsizhuo/openInvest/issues/459)) ([3149869](https://github.com/longsizhuo/openInvest/commit/3149869c89193f7afe334872faeeef2bf26723df))
+* **portfolio:** gold booked per gram in CNY, MCP doctor + optional checks, target_pct writable ([#443](https://github.com/longsizhuo/openInvest/issues/443) [#444](https://github.com/longsizhuo/openInvest/issues/444) [#449](https://github.com/longsizhuo/openInvest/issues/449)) ([#457](https://github.com/longsizhuo/openInvest/issues/457)) ([30f120d](https://github.com/longsizhuo/openInvest/commit/30f120d2f582c2d90a4a4f7237b39b12a5075ea4))
+
+
+### Refactor
+
+* 去重 + 删死代码 + 文档漂移修正（[#236](https://github.com/longsizhuo/openInvest/issues/236) / 评审 D8） ([#458](https://github.com/longsizhuo/openInvest/issues/458)) ([a84632e](https://github.com/longsizhuo/openInvest/commit/a84632e1d103c58b51fbb63105a83fcd41f23159))
+
+
+### Docs
+
+* **skill:** point screeners / options / earnings calls / SEC filings at hosted MCPs ([46e0c55](https://github.com/longsizhuo/openInvest/commit/46e0c559f9ff2166f306c96d59f9012063cd8e1b))
+
+## [0.27.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.26.0...invest-skill-v0.27.0) (2026-10-18)
+
+
+### Features
+
+* **portfolio:** real-account TWR/XIRR/drawdown/benchmark in status and daily report ([#433](https://github.com/longsizhuo/openInvest/issues/433)) ([74dac7b](https://github.com/longsizhuo/openInvest/commit/74dac7b1a1e50cbab66ae4e263180746eaa33480))
+* **portfolio:** rebalance_plan turns strategy targets into a buy/sell list ([#447](https://github.com/longsizhuo/openInvest/issues/447)) ([3425844](https://github.com/longsizhuo/openInvest/commit/3425844a19e2242600b00df760722e9af2e1757e))
+
+
+### Bug Fixes
+
+* **committee:** Sprint 1 端到端跟进——成交匹配起点、单次上限措辞与守卫、缓存路径、performance 提示 ([#445](https://github.com/longsizhuo/openInvest/issues/445)) ([f02b3b2](https://github.com/longsizhuo/openInvest/commit/f02b3b29f39c6aa39825a60c87a8efbcfdab54b6))
+
+## [0.26.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.25.0...invest-skill-v0.26.0) (2026-10-16)
+
+
+### Features
+
+* **committee:** base currency for committee amounts, thresholds and portfolio summary ([#426](https://github.com/longsizhuo/openInvest/issues/426)) ([7b1519a](https://github.com/longsizhuo/openInvest/commit/7b1519a894e53aab4fa2a3cbba8789482a0917da))
+
+## [0.25.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.24.3...invest-skill-v0.25.0) (2026-10-15)
+
+
+### Features
+
+* **cli:** add explain_decision subcommand for MCP parity ([#414](https://github.com/longsizhuo/openInvest/issues/414)) ([fea2c64](https://github.com/longsizhuo/openInvest/commit/fea2c64ad53ddc1270cfbd3f65d940a4185b66d2))
+
+
+### Bug Fixes
+
+* **committee:** load event brief in Coordinator prepare_committee_brief ([#404](https://github.com/longsizhuo/openInvest/issues/404)) ([e745ab5](https://github.com/longsizhuo/openInvest/commit/e745ab584f0a36a3dc7d10169f4d73f2fe713d13))
+* run.sh hints only on silent failures; JSON error for an uninitialized data dir ([#413](https://github.com/longsizhuo/openInvest/issues/413)) ([eb71140](https://github.com/longsizhuo/openInvest/commit/eb71140d0a2655f44d613dacd1fa75c6d446dd73))
+
+## [0.24.3](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.24.2...invest-skill-v0.24.3) (2026-10-13)
+
+
+### Bug Fixes
+
+* **skill:** keys never go through the chat; skill-relative run.sh paths ([accc7d9](https://github.com/longsizhuo/openInvest/commit/accc7d9155388debce51be810a0e581455dfa28c))
+* **skill:** onboarding asks 3 questions; drop answers nothing reads ([a0a03dc](https://github.com/longsizhuo/openInvest/commit/a0a03dc4d62a59c99a5c57c47ba3bc494f5c8e7b))
+
+## [0.24.2](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.24.1...invest-skill-v0.24.2) (2026-10-13)
+
+
+### Bug Fixes
+
+* **plugin:** Hermes installs from plugin/, backend version pinned in run.sh; Codex/Hermes install docs ([#369](https://github.com/longsizhuo/openInvest/issues/369)) ([6153827](https://github.com/longsizhuo/openInvest/commit/61538273971a8b682761a8124e201aa2aaefc786))
+
+## [0.24.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.24.0...invest-skill-v0.24.1) (2026-10-11)
+
+
+### Docs
+
+* **skill:** tell the user when an imported fund could not be converted to units ([6c148f0](https://github.com/longsizhuo/openInvest/commit/6c148f043caddc1a88e102d0b8c3c73a55ddee71))
+
+## [0.24.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.23.1...invest-skill-v0.24.0) (2026-10-10)
+
+
+### Features
+
+* **committee:** run the committee on Chinese off-exchange funds (FUND:&lt;code&gt;) ([#349](https://github.com/longsizhuo/openInvest/issues/349)) ([a8b85d1](https://github.com/longsizhuo/openInvest/commit/a8b85d18d35ccb40c49710a0afc149a011c03d2a))
+
+## [0.23.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.23.0...invest-skill-v0.23.1) (2026-10-10)
+
+
+### Bug Fixes
+
+* **onboarding:** init --force updates name and risk tolerance in user.md ([#338](https://github.com/longsizhuo/openInvest/issues/338)) ([81a5bdf](https://github.com/longsizhuo/openInvest/commit/81a5bdfb1aa4d6ac9c97e6890d5c936ddf470158))
+
+## [0.23.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.22.1...invest-skill-v0.23.0) (2026-10-10)
+
+
+### Features
+
+* **onboarding:** new installs record the cash they enter; record_existing_position for pre-held positions ([#320](https://github.com/longsizhuo/openInvest/issues/320)) ([a5e54ba](https://github.com/longsizhuo/openInvest/commit/a5e54ba9d26aa4b208b715e9614bacf79d7de954))
+
+
+### Bug Fixes
+
+* **mcp:** disable ingest_event in advisory mode ([#339](https://github.com/longsizhuo/openInvest/issues/339)) ([0d52d1e](https://github.com/longsizhuo/openInvest/commit/0d52d1e762b436bdbe4c96772eb5d490e7c97da4))
+* **status:** only fetch and show ndq/gold/AUD sections when the user holds them ([#335](https://github.com/longsizhuo/openInvest/issues/335)) ([1b98c17](https://github.com/longsizhuo/openInvest/commit/1b98c17897a82fd017ddc51aecb84e4ff6e8b186))
+
+
+### Docs
+
+* **mcp:** stop hard-coding the MCP tool count; list every tool in the invest skill ([#336](https://github.com/longsizhuo/openInvest/issues/336)) ([3017df5](https://github.com/longsizhuo/openInvest/commit/3017df5c136e97cb1dc077b65546d3ae9817630a))
+
+## [0.22.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.22.0...invest-skill-v0.22.1) (2026-10-09)
+
+
+### Docs
+
+* **skill:** use FUND:&lt;code&gt; for Chinese off-exchange mutual funds ([1770975](https://github.com/longsizhuo/openInvest/commit/1770975054089f0a6a0a488d464e5dba11492c06))
+
+## [0.22.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.21.2...invest-skill-v0.22.0) (2026-10-08)
+
+
+### Features
+
+* **mcp:** run_committee 上报辩论进度、decisions 支持过滤与截断（[#133](https://github.com/longsizhuo/openInvest/issues/133)） ([#309](https://github.com/longsizhuo/openInvest/issues/309)) ([447ab58](https://github.com/longsizhuo/openInvest/commit/447ab58a7d5875346f4bc92d45fde4640c630d92))
+
+## [0.21.2](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.21.1...invest-skill-v0.21.2) (2026-10-08)
+
+
+### Docs
+
+* **skill:** quote confidence_lookup next to verdicts, keep self-reported confidence as raw ([#295](https://github.com/longsizhuo/openInvest/issues/295)) ([5864ac3](https://github.com/longsizhuo/openInvest/commit/5864ac3a4403137fcc5e4b3c99f160e5d0219c72))
+
+## [0.21.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.21.0...invest-skill-v0.21.1) (2026-10-08)
+
+
+### Docs
+
+* **skill:** explain weekend_dup_excluded in the verdict_review summary ([#292](https://github.com/longsizhuo/openInvest/issues/292)) ([368aa91](https://github.com/longsizhuo/openInvest/commit/368aa916d510601d5a480935c4aa6305b4752328))
+
+## [0.21.0](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.20.2...invest-skill-v0.21.0) (2026-10-08)
+
+
+### Features
+
+* **verdict-review:** live-only daily review, DB-only prices, summary split by source ([#279](https://github.com/longsizhuo/openInvest/issues/279)) ([4382f7e](https://github.com/longsizhuo/openInvest/commit/4382f7e0b1045e2fea2285d84c4c7982879685e8))
+
+## [0.20.2](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.20.1...invest-skill-v0.20.2) (2026-10-08)
+
+
+### Bug Fixes
+
+* **events:** 触发闸提成共享 service——Hermes 投喂的事件接上委员会触发，两门共享冷却/日上限 ([#261](https://github.com/longsizhuo/openInvest/issues/261)) ([b633cf2](https://github.com/longsizhuo/openInvest/commit/b633cf20f88e3969117013719586fdd6bd5b0eb5))
+* **news:** RSS 抓取加整次总时限与地址校验，add_news_source 只收公网源且不阻塞 MCP ([#262](https://github.com/longsizhuo/openInvest/issues/262)) ([566538f](https://github.com/longsizhuo/openInvest/commit/566538fd1973ab3f19e032ff55452f2fa676f7e2))
+
 ## [0.20.1](https://github.com/longsizhuo/openInvest/compare/invest-skill-v0.20.0...invest-skill-v0.20.1) (2026-07-17)
 
 

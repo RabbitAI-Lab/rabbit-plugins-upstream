@@ -1,44 +1,62 @@
-## Description: <br>
-Using a fixed bedroom camera with infrared night vision and microphone input, this skill analyzes elderly nighttime sleep media to detect sudden sitting-up, short screams, arm-thrashing, and related abnormal sleep events, then records event timing, frequency, and duration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes nighttime bedroom video and audio to report startle-like movements and sounds, event timing, and frequency for elderly sleep monitoring.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, caregivers, and care-platform developers use this skill to turn bedroom sleep video or video URLs into structured abnormal-event reports for elderly nighttime monitoring. The output is intended as behavioral reference material for care review and medical consultation, not as a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive bedroom video, audio, or media URLs may be sent to external Life Emergence/Open API services. <br>
-Mitigation: Use only with explicit consent from the recorded person and confirm the provider's data handling, retention, and deletion practices before deployment. <br>
-Risk: The skill may silently create or reuse an internal user identity, associate reports with that identity, and store access tokens in a local SQLite database. <br>
-Mitigation: Review identity handling and local credential storage before installation; restrict filesystem access and rotate or remove tokens when access is no longer needed. <br>
-Risk: Sleep event labels and risk signals could be mistaken for medical diagnosis or treatment guidance. <br>
-Mitigation: Present outputs as behavioral observations only and route frequent or concerning patterns to qualified neurology or sleep-medicine professionals for clinical evaluation. <br>
+## Use Case:
 
+Family caregivers and care teams use the skill to review possible nighttime sleep disturbances and share event summaries with a clinician; it does not provide a medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-elderly-nightmare-startle-detect-analysis) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-formatted analysis reports, with optional saved output files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include event timelines, frequency summaries, sleep-continuity scores, risk signal labels, family-facing summaries, recommendations, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Bedroom video and audio can expose highly sensitive personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain the monitored person's informed consent and restrict access to recordings and reports.
+
+Risk: Analysis is sent to configured cloud services, which may retain sensitive material.
+
+Mitigation: Confirm the cloud provider and retention policy before use; limit retained footage to necessary short event clips.
+
+Risk: The skill can access historical reports and silently create or reuse an internal account with locally stored tokens.
+
+Mitigation: Require platform-controlled account identity and protect stored tokens and report access before installation.
+
+Risk: Behavior alerts could be mistaken for a diagnosis or treatment advice.
+
+Mitigation: Treat reports as observational data and refer concerning patterns to a sleep specialist; do not change medication based on the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-elderly-nightmare-startle-detect-analysis)
+- [Skill API documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [JSON analysis results or a Markdown event summary with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Event counts, timelines, and follow-up suggestions; not a medical diagnosis.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

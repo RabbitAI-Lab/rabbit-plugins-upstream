@@ -1,48 +1,67 @@
-## Description: <br>
-应答与排版一体的生成器。输入招标文件，它解析评分点、生成投标应答、自动编排目录与格式，产出可直接提交的投标标书(.docx)，并附带废标风险与合规审查。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+协助采购与投标人员解读招标文件、生成投标文件，并审查合规性与文件相似风险。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External bid teams and procurement-support agents use this skill to interpret tender documents, draft formatted bid documents, and review bid submissions for rejection and compliance risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid documents may contain commercial, pricing, or personal information and are uploaded to biaoshu.zhiliaobiaoxun.com for processing. <br>
-Mitigation: Confirm user consent before upload and install only when the organization accepts processing by the disclosed third-party service. <br>
-Risk: The App Key can consume account credits and access account-scoped data. <br>
-Mitigation: Store the key in the local credential file or approved environment variable, avoid pasting it into chat, and rotate it if exposed. <br>
-Risk: Changing the API base URL can redirect sensitive documents and credentials to a different endpoint. <br>
-Mitigation: Avoid custom ZCM_BASE values unless the endpoint is explicitly trusted. <br>
-Risk: Generated files and task results may remain available on the service for about 7 days. <br>
-Mitigation: Treat generated outputs as retained service data during that period and manage historical data through the service account when needed. <br>
+## Use Case:
 
+采购和投标人员用它分析招标要求、制作投标书，并检查废标风险、合规问题及多份投标文件的相似性。文件交由第三方云服务处理，生成、审查和查重可能消耗账户可用字数。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/biaoshu-writer-city) <br>
-- [Publisher profile](https://clawhub.ai/user/dragonzu) <br>
-- [招采猫开放 API 契约参考](references/api.md) <br>
-- [执行细节（操作手册）](references/usage.md) <br>
-- [招采猫平台](https://biaoshu.zhiliaobiaoxun.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown/plain text guidance plus generated .docx bid files and HTML or Word reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses an App Key account, uploads user-selected tender and bid documents to the disclosed third-party API, and writes generated artifacts to local files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Confidential tender and bid files are processed by the vendor cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the vendor's cloud processing and data-retention terms meet procurement confidentiality requirements before uploading sensitive files.
+
+Risk: Automatic trial setup sends device-identifying fields.
+
+Mitigation: Use an existing API key instead of automatic trial registration if device identification is not acceptable.
+
+Risk: The API key is stored locally in the skill directory.
+
+Mitigation: Protect the local credential file and avoid sharing the key in output or URLs.
+
+Risk: Remote file inputs can include internal-only URLs.
+
+Mitigation: Provide only trusted, publicly intended file URLs or upload approved local files instead.
+
+Risk: Generation, review, and similarity checks may consume account credits.
+
+Mitigation: Check the account's available balance and expected consumption before submitting paid work.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/biaoshu-writer-city)
+- [API reference](references/api.md)
+- [Usage guide](references/usage.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Files, Guidance]
+
+**Output Format:** [Text or Markdown summaries; HTML or Word reports and DOCX bid documents]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Bid documents may be delivered through expiring download links or saved locally on request.]
+
+## Skill Version(s):
+
+1.0.5 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
