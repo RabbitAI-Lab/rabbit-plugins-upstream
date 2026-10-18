@@ -1,42 +1,51 @@
-## Description: <br>
-Creates pending HiJavis to-do cards from brainstorm-worthy voice or keyboard units, carrying a ready-to-paste prompt that hands captured transcript context to Claude's content-brainstorming flow. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns brainstorm-worthy voice or keyboard transcripts into pending to-do cards with prompts for a guided brainstorming session in Claude.
 
-## Publisher: <br>
-[samuel-wei](https://clawhub.ai/user/samuel-wei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samuel-wei](https://clawhub.ai/user/samuel-wei)
 
-## Use Case: <br>
-External HiJavis users use this skill to turn voice notes or keyboard input into pending brainstorm cards that preserve the source session and provide a prompt for a Claude brainstorming session. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can examine every completed HiJavis voice or keyboard unit when enabled, so sensitive conversations may be processed while it decides whether a card is warranted. <br>
-Mitigation: Enable it only for users comfortable with broad transcript review, and review generated pending cards and chat digests before confirming or acting on them. <br>
-Risk: The skill can create pending calendar cards and chat summaries without a pre-run confirmation. <br>
-Mitigation: Use the Calendar tab Confirm/Discard gate to discard unwanted cards and avoid treating generated prompts as final output without review. <br>
+## Use Case:
 
+HiJavis users can turn recent voice notes or keyboard input into a pending calendar card and a ready-to-paste prompt for brainstorming in Claude. The skill can run automatically after each completed input or on request, using the last 24 hours of transcripts by default for manual requests.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samuel-wei/skills/javis-brainstorming) <br>
-- [HiJavis iPhone App](https://apps.apple.com/us/app/hijavis/id6745134765) <br>
-- [to-do card contract](references/todo-card-contract.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [JSON payloads and Markdown digest text with Node.js shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates at most one pending to-do card per brainstorm-worthy unit; no card is emitted when no discernible goal is found.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata and package.json) <br>
+Risk: Automatic processing can examine sensitive voice and keyboard transcripts before a user confirms a card; manual use reads the last 24 hours by default.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable only if transcript processing is acceptable; review pending cards and prompts before confirming or using them, and disable the skill if automatic transcript-derived cards or chat digests are unwanted.
+
+## Reference(s):
+
+- [Brainstorming release on ClawHub](https://clawhub.ai/samuel-wei/skills/javis-brainstorming)
+- [To-do card contract](references/todo-card-contract.md)
+- [HiJavis iPhone app](https://apps.apple.com/us/app/hijavis/id6745134765)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Pending to-do card with a ready-to-paste prompt and a Markdown chat digest]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Cards require confirmation or discard; the skill does not perform the brainstorming itself.]
+
+## Skill Version(s):
+
+0.6.4 (source: server-resolved release, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

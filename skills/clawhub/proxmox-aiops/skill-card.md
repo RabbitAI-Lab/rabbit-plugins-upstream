@@ -1,47 +1,58 @@
-## Description: <br>
-Proxmox Aiops helps agents manage and diagnose Proxmox VE VMs, containers, clusters, storage, backups, snapshots, and related operations through governed CLI and MCP workflows with audit, budget, undo, and risk-tier controls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators inspect, diagnose, and manage Proxmox VE virtual machines, containers, storage, and clusters through CLI and MCP tools.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure operators use this skill to inspect, administer, and troubleshoot Proxmox VE environments, including VM/container lifecycle actions, snapshots, backups, storage, HA, firewall inspection, and read-only RCA for node or guest pressure. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform destructive Proxmox administration actions such as stopping, deleting, rolling back, restoring, or migrating guests. <br>
-Mitigation: Install only for intended Proxmox administration workflows, use least-privilege Proxmox API tokens, prefer read-only roles unless writes are required, and use the documented dry-run and confirmation paths before write actions. <br>
-Risk: Credentials and audit or undo state are stored under ~/.proxmox-aiops/ and could expose sensitive operational data if file permissions are weak. <br>
-Mitigation: Protect ~/.proxmox-aiops/ with restrictive permissions, keep secrets in the per-target .env file, avoid password authentication where possible, and review local audit and undo storage practices before enabling MCP write workflows. <br>
-Risk: Agent mistakes could repeat operations or act on the wrong Proxmox object if tool results are ignored or inferred. <br>
-Mitigation: Require agents to call the actual tool, report real errors, treat null or truncated data explicitly, poll asynchronous task UPIDs instead of reissuing writes, and cite returned IDs and measured values when diagnosing. <br>
+## Use Case:
 
+Infrastructure operators and developers use this skill to inspect Proxmox VE health and carry out VM, container, backup, and storage operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/proxmox-aiops) <br>
-- [Project Homepage](https://github.com/AIops-tools/Proxmox-AIops) <br>
-- [Capabilities Reference](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent to call proxmox-aiops CLI or MCP tools and to report task UPIDs, audit details, diagnostics, and tool results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.8.0 (source: server release metadata) <br>
+Risk: Write-capable tools can change or delete Proxmox workloads without an internal approval gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require external approval before enabling writes against important workloads; use read-only permissions unless writes are necessary.
+
+Risk: Broad credentials or exposed local configuration could permit unintended infrastructure changes.
+
+Mitigation: Use a dedicated least-privilege Proxmox API token, avoid broad root@pam credentials, and protect ~/.proxmox-aiops/.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/proxmox-aiops)
+- [Project homepage (skill metadata)](https://github.com/AIops-tools/Proxmox-AIops)
+- [Setup guide](artifact/references/setup-guide.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Capabilities](artifact/references/capabilities.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Analysis, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline commands and tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read operations report cluster and guest status; write operations may return asynchronous task identifiers.]
+
+## Skill Version(s):
+
+0.15.0 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

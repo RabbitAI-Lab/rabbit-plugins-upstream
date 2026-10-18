@@ -1,49 +1,60 @@
-## Description: <br>
-Accounting assistant for invoice OCR, authenticity verification, reimbursement form filling, and approval-system handoff with enterprise-controlled configuration and local data processing by default. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps accounting teams extract invoice data, check authenticity, prepare reimbursement forms, and connect to approval workflows.
 
-## Publisher: <br>
-[fyniujin](https://clawhub.ai/user/fyniujin) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fyniujin](https://clawhub.ai/user/fyniujin)
 
-## Use Case: <br>
-Finance, accounting, and operations users use this skill to extract invoice data, check invoice authenticity, populate reimbursement templates, and prepare approval submissions. Developers and administrators configure OCR, verification, template, and approval integrations for their enterprise environment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Configured verification or approval features can send sensitive invoice or reimbursement data to external services. <br>
-Mitigation: Keep approval.platform set to none unless an approval provider is intentionally enabled, verify all custom endpoints, and require human confirmation before external verification or approval submission. <br>
-Risk: Installer and setup commands may require elevated privileges or change local OCR dependencies. <br>
-Mitigation: Inspect installer commands before running them and avoid elevated privileges unless the enterprise administrator has approved the change. <br>
-Risk: OCR and invoice checks can produce incorrect or incomplete financial data. <br>
-Mitigation: Require human review of low-confidence OCR fields, invoice numbers, amounts, and reimbursement content before recordkeeping or approval submission. <br>
+## Use Case:
 
+Finance and accounting staff use this skill to process Chinese invoices, review duplicate or anomalous claims, prepare reimbursement records, and route submissions through configured approval systems. A finance professional should review results before acting on them.
 
-## Reference(s): <br>
-- [ClawHub Receipt Compliance Skill Page](https://clawhub.ai/fyniujin/skills/receipt-compliance) <br>
-- [Enterprise Setup Guide](artifact/references/setup-guide.md) <br>
-- [API Endpoint Notes](artifact/references/api-endpoints.md) <br>
-- [Risk Declaration](artifact/references/risk-declaration.md) <br>
-- [Tax Rules](artifact/references/tax-rules.md) <br>
-- [China Tax Invoice Verification](https://inv-veri.chinatax.gov.cn/) <br>
-- [China Electronic Tax Service](https://etax.chinatax.gov.cn/) <br>
-- [DingTalk Open Platform](https://open-dev.dingtalk.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline commands and configuration examples; agent workflows may produce JSON receipt data, Excel reimbursement files, and verification or approval results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Processes invoice images, PDFs, OFD/XML invoice data, templates, and enterprise configuration; external verification or approval submission should require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.7.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Financial documents and generated records may contain sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review configuration, access controls, and local retention before processing documents.
+
+Risk: Verification links and configured approval platforms can involve external services despite local processing of invoice files.
+
+Mitigation: Confirm the destination and authorize external verification or approval connections before using them.
+
+Risk: Approval credentials and scheduled reminders can create ongoing access or local background activity.
+
+Mitigation: Keep API keys in environment variables and enable scheduled reminders only when a persistent local task is intended.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/fyniujin/skills/receipt-compliance)
+- [Tax rules](artifact/references/tax-rules.md)
+- [Setup guide](artifact/references/setup-guide.md)
+- [Verification and approval integrations](artifact/references/api-endpoints.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, JSON, Files]
+
+**Output Format:** [Markdown guidance, structured JSON, and generated reimbursement or review files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional Excel reports, vouchers, and HTML review pages depend on the requested workflow.]
+
+## Skill Version(s):
+
+4.5.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

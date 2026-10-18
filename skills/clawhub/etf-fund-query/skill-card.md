@@ -1,45 +1,55 @@
-## Description: <br>
-Queries factual ETF information from 易方达指数直通车, including ETF basics, fees, holdings, historical dividends, returns, fund flows, leaderboards, and stock-to-ETF lookups; it does not provide investment advice or real-time market quotes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户查询和比较场内 ETF 的基本信息、持仓、历史表现及市场行情。
 
-## Publisher: <br>
-[e-fintech](https://clawhub.ai/user/e-fintech) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[e-fintech](https://clawhub.ai/user/e-fintech)
 
-## Use Case: <br>
-External users and agent developers use this skill to answer ETF information queries, compare ETF facts on a consistent data basis, inspect holdings and historical distributions, and explain available ETF metrics without giving investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The installer persistently stores the ETF API key in plaintext in the shell profile and local configuration file. <br>
-Mitigation: Use a limited-scope API key, avoid sharing the installed directory or shell profile, and remove persisted key entries when uninstalling. <br>
-Risk: The evidence reports an inconsistent boundary around real-time market-data support. <br>
-Mitigation: Treat real-time market data as limited or unavailable unless the installed skill and current API response clearly support the requested field, and keep user-facing answers to sourced facts. <br>
-Risk: ETF facts, comparisons, fund flows, heat lists, and short-term performance can be mistaken for investment advice. <br>
-Mitigation: Use the bundled final-answer guardrail and include the required disclaimer that outputs are AI-generated information only and not investment advice, forecasts, or trading decisions. <br>
+## Use Case:
 
+普通投资者和研究人员可按名称、代码或主题查找场内 ETF，并比较规模、费率、持仓、收益和行情；结果仅供信息参考，不构成投资建议。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/e-fintech/skills/etf-fund-query) <br>
-- [ETF query catalog](references/catalog-etf.md) <br>
-- [易方达指数直通车 API service](https://www.etf.com.cn/api/etf-api-service) <br>
-- [API key setup guide](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/readme.pdf) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, API Calls, Guidance] <br>
-**Output Format:** [Markdown text with tables or lists for ETF facts and comparisons] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Final answers must include data dates or reporting periods, avoid investment advice, and pass the bundled answer guardrail before being shown to users.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Using the ETF service requires an API key and network access.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only if comfortable granting access; keep the API key in the protected local credential file and use the default skills directory unless needed.
+
+Risk: Delayed or incomplete market data could be mistaken for current prices or investment guidance.
+
+Mitigation: Show the data date and quote time, disclose missing data, and present comparisons without personalized investment advice.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/e-fintech/skills/etf-fund-query)
+- [Index Hub help guide](https://cdn.efunds.com.cn/eda/h5/itcenter/pd/ai-skills-doc/help.pdf)
+- [ETF data and field reference](references/catalog-etf.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Concise Chinese prose with tables or lists when useful]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes data dates or quote times, relevant caveats and a non-advice disclaimer.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

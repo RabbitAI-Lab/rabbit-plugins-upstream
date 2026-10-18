@@ -1,44 +1,54 @@
-## Description: <br>
-Analyzes fixed-camera child behavior videos to report repetitive stereotyped behaviors such as spinning, hand flapping, and body rocking; it does not provide autism diagnosis, scale scoring, or rehabilitation prescriptions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes children's behavior videos for repetitive movements such as spinning and hand-flapping, and provides behavior summaries and reports.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Therapists, caregivers, special-education teams, and developers use this skill to submit child behavior videos or URLs to a cloud analysis service and receive objective behavior-event counts, durations, trend summaries, and report links for professional review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child behavior videos, report queries, and account-linked identifiers may be sent to the configured cloud service. <br>
-Mitigation: Use only where guardian consent, data-retention expectations, and access controls are already established before uploading footage. <br>
-Risk: The skill may create a local shared SQLite database and store service tokens in the workspace data directory. <br>
-Mitigation: Run it in a controlled workspace, restrict access to local data, and remove or protect generated identity and token files after use. <br>
-Risk: Computer-vision results may misclassify ordinary movements or be degraded by occlusion, multiple children, poor framing, low frame rate, or unstable lighting. <br>
-Mitigation: Treat outputs as descriptive behavior statistics for review by qualified therapists or caregivers, not as diagnosis, scale scoring, or treatment prescription. <br>
+## Use Case:
 
+Therapists and guardians use the skill to review children's behavior videos, track repetitive movement events and trends, and retrieve prior reports. Its observations support review by professionals rather than diagnosis.
 
-## Reference(s): <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and JSON or Markdown analysis reports from the API] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write report output files when --output is supplied; historical report listings are rendered as Markdown tables.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter says 1.0.4) <br>
+Risk: Sensitive videos or video URLs involving children are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain guardian consent first and confirm the provider's retention, deletion, and access-control practices before submitting media.
+
+Risk: Silent account creation and token persistence tie reports to an account with limited user control.
+
+Mitigation: Disclose cloud account and report storage to users; avoid history lookup unless access to prior cloud reports is expected.
+
+## Reference(s):
+
+- [Skill release on ClawHub](https://clawhub.ai/18072937735/skills/smyx-autism-stereotyped-behavior-detect-analysis)
+- [API interface documentation](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured behavior report or Markdown table of historical reports, with report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Behavior counts, durations, and optional trend summaries; not a diagnosis]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved ClawHub release; bundled SKILL.md lists 1.0.17)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

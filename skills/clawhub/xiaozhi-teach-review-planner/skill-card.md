@@ -1,44 +1,61 @@
-## Description: <br>
-帮助老师将复习课从重复讲解升级为基于学情数据、知识图谱、间隔复习和提取练习的结构化复习规划。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助中国大陆中小学教师梳理知识图谱、识别重难点并制定间隔回看与交叉练习的复习排期。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers use this skill to plan unit, midterm, final, and exam-prep review sessions. It helps structure knowledge maps, identify priority topics from class performance, sequence review stages, design review activities, and prepare study-strategy-focused pre-exam messaging. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review planning can involve student-analysis and exam-design context that may include sensitive student performance information. <br>
-Mitigation: Use aggregated or de-identified class data, avoid individual rankings and sensitive student records, and keep write-back data focused on aggregate weakness patterns. <br>
-Risk: Generated review guidance could be misread as a promise of score, ranking, admission, or mental-health outcomes. <br>
-Mitigation: Keep outputs limited to study strategy, review pacing, and objective evidence from available data; do not promise outcomes or provide psychological diagnosis or treatment advice. <br>
+## Use Case:
 
+面向中国大陆中小学教师，根据教学进度与班级共性薄弱知识点制定单元、期中、期末或考前复习计划；具体作业和试卷交由其他技能处理。
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-review-planner) <br>
-- [复习策略与考前规划模板](references/review-strategy.md) <br>
-- [知识图谱可视化范例](references/knowledge-map-example.md) <br>
-- [重难点清单模板](references/key-points-checklist-template.md) <br>
-- [复习活动设计样例库](references/review-activity-library.md) <br>
+### Deployment Geography for Use:
 
+中国大陆；其他地区使用前需本地化课程、未成年人数据要求及危机求助渠道
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance with structured plans, tables, templates, and classroom-ready review activity suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may reference upstream student-analyzer, lesson-planner, and exam-designer context; users should review plans before classroom use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: 课程口径、同意要求或危机求助资源不适用于部署地区。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 用于中国大陆中文 K12 教师场景；在其他地区使用前核对课程、同意要求并替换当地危机求助资源。
+
+Risk: 复习计划可能暴露学生个人信息或未经教师同意保存。
+
+Mitigation: 仅读取制定排期所需的班级字段；写入前征得教师确认，使用化名并排除个人分数和排名。
+
+Risk: 将严重心理危机当作一般考前紧张处理。
+
+Mitigation: 出现危机信号时停止复习规划，按当地转介流程联系可信赖的成年人及专业资源。
+
+## Reference(s):
+
+- [ClawHub 技能发布页](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-review-planner)
+- [复习策略与排期](references/review-strategy.md)
+- [知识图谱范例](references/knowledge-map-example.md)
+- [重难点清单模板](references/key-points-checklist-template.md)
+- [复习活动样例库](references/review-activity-library.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown 复习排期表、知识图谱与重难点清单]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [仅制定复习计划；保存计划须经教师确认，不包含学生真实姓名、个人分数或排名。]
+
+## Skill Version(s):
+
+2.11.2 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

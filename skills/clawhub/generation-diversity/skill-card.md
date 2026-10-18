@@ -1,43 +1,63 @@
-## Description: <br>
-Guides agents writing generative prompts through a ritual seed, explicit prompt structure, scenario-axis diversity, and quality gates before paid API calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in drafting varied, explicit image, video, and audio prompts and reviewing outputs before paid generation steps.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers, creators, and agent operators use this skill to draft diverse prompts, rotate scenario axes, and run quality and approval gates for image, video, and audio generation before paid API calls. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Related Pruna workflow skills and paid API calls may be used before the operator is comfortable with the workflow. <br>
-Mitigation: Review related workflow skills first and follow the skill's approval gates before advancing to paid generation steps. <br>
+## Use Case:
 
+Creators and developers use this guide to vary generative media prompts, clarify requirements, and review assets before advancing through paid image, video, or audio workflows.
 
-## Reference(s): <br>
-- [Generation diversity](references/generation-diversity.md) <br>
-- [Still-image prompt flow](references/still-image-prompt-flow.md) <br>
-- [Generation quality checklist hub](references/generation-quality-checklists.md) <br>
-- [Workflow feedback gates](references/workflow-feedback-gates.md) <br>
-- [String Seed of Thought](https://pub.sakana.ai/ssot/) <br>
-- [ClawHub skill page](https://clawhub.ai/pruna-ai/skills/generation-diversity) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with prompt templates, checklists, and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance-only skill with no executable code; emphasizes review before paid generation steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: ClawHub release metadata and SKILL.md metadata) <br>
+Risk: Example install commands may fetch unreviewed or changing packages.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the publisher and prefer pinned or reviewed versions before running install commands.
+
+Risk: Following a media workflow could spend credits or upload files without the user's approval.
+
+Mitigation: Treat prompts and checklists as guidance; confirm cost, uploads, and each paid step with the user.
+
+Risk: Cast or voice prompts could infer sensitive traits from appearance.
+
+Mitigation: Ask for explicit creative choices about gender, ethnicity, and voice instead of inferring them.
+
+## Reference(s):
+
+- [Generation Diversity on ClawHub](https://clawhub.ai/pruna-ai/skills/generation-diversity)
+- [Clarification intake](references/clarification-intake.md)
+- [Generation diversity guide](references/generation-diversity.md)
+- [Generation quality checklists](references/generation-quality-checklists.md)
+- [Still-image prompt flow](references/still-image-prompt-flow.md)
+- [Workflow feedback gates](references/workflow-feedback-gates.md)
+- [String Seed of Thought](https://pub.sakana.ai/ssot/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured prompt drafts and review checklists in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Keeps user requirements fixed, varies free prompt axes, and pauses for review before paid steps.]
+
+## Skill Version(s):
+
+1.0.15 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

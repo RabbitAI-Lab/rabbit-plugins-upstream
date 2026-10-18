@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes post-feeding aquarium or aquaculture video through a cloud API to estimate fish gathering, feeding intensity, remaining feed, and a 0-100 feeding activity score with alerts and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes post-feeding aquarium videos to report fish-feeding activity scores, leftover feed, and appetite alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Aquarium owners, aquaculture operators, and developers use this skill to submit post-feeding fish videos or video URLs for visual feeding-activity reports, abnormal appetite alerts, and historical report queries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Aquarium or aquaculture media, video URLs, platform identity values, and generated account identifiers may be sent to publisher cloud services. <br>
-Mitigation: Install only after reviewing publisher trust and user/operator consent; use non-sensitive test media when evaluating. <br>
-Risk: The skill can create or reuse local user identities and store tokens for future history queries. <br>
-Mitigation: Evaluate in an isolated workspace or account and review local identity/token records before reuse or removal. <br>
-Risk: Feeding activity results may be mistaken for disease diagnosis or authorization to control aquarium equipment. <br>
-Mitigation: Treat results as visual activity guidance, require human review for fish-health decisions, and do not allow feeding, medication, or water-change actions without explicit authorization. <br>
+## Use Case:
 
+Aquarium keepers and aquaculture operators use this skill to assess feeding behavior from camera footage and review historical feeding reports. It provides activity scores, alerts, and suggested follow-up observations rather than disease diagnoses.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-fish-feeding-activity-analysis) <br>
-- [API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON analysis fields and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save results to a local output file and can return historical report lists from the publisher cloud API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: server release evidence; artifact frontmatter reports 1.0.5) <br>
+Risk: Aquarium footage and identity-linked report history are sent to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the service and its data-retention practices are acceptable before sharing footage or querying reports.
+
+Risk: The skill may create or reuse a local user record, read workspace identity files or environment variables, and store authentication tokens in local SQLite.
+
+Mitigation: Review identity access and local credential storage before installation; run only in an environment where these behaviors are authorized.
+
+## Reference(s):
+
+- [Skill API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-fish-feeding-activity-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis report or Markdown history table with report links; optional saved JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scores range from 0 to 100; results are not disease diagnoses.]
+
+## Skill Version(s):
+
+1.0.17 (source: server release; bundled SKILL.md lists 1.0.15)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,0 +1,22 @@
+{
+  "name": "rainskills",
+  "version": "0.1.43",
+  "description": "Install the complete Rainskills AI deployment skill suite as one product.",
+  "author": {
+    "name": "Goodrain",
+    "url": "https://www.rainbond.com"
+  },
+  "homepage": "https://github.com/goodrain/rainskills#readme",
+  "repository": "https://github.com/goodrain/rainskills",
+  "license": "Apache-2.0",
+  "keywords": [
+    "rainbond",
+    "codex",
+    "claude-code",
+    "deepseek-harness",
+    "workbuddy",
+    "hermes-agent",
+    "skills",
+    "installer"
+  ]
+}

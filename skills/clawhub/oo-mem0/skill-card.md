@@ -1,42 +1,56 @@
-## Description: <br>
-Mem0 connector skill for reading, creating, updating, and deleting Mem0 data through an OOMOL-connected account. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage and search Mem0 memories through an OOMOL-connected account.
 
-## Publisher: <br>
-[oomol](https://clawhub.ai/user/oomol) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[oomol](https://clawhub.ai/user/oomol)
 
-## Use Case: <br>
-Developers and operators use this skill to let an agent operate an OOMOL-connected Mem0 account, including memory creation, retrieval, search, updates, deletion, history inspection, event listing, and user listing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an OOMOL-connected Mem0 account and can access account-backed memory, event, and user data. <br>
-Mitigation: Install only for the intended Mem0 account and confirm the active OOMOL/Mem0 connection before use. <br>
-Risk: Write and destructive actions can change or delete stored Mem0 memory data. <br>
-Mitigation: Review exact action payloads before approving writes, and require explicit confirmation before running delete_memory. <br>
+## Use Case:
 
+People and agents with a connected Mem0 account use this skill to add, find, inspect, update, and delete memories, and to view related events and users.
 
-## Reference(s): <br>
-- [Mem0 homepage](https://mem0.ai) <br>
-- [oo CLI](https://github.com/oomol-lab/oo-cli) <br>
-- [ClawHub Mem0 skill page](https://clawhub.ai/oomol/oo-mem0) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [shell commands, configuration, guidance, text] <br>
-**Output Format:** [Markdown with inline shell commands and JSON payload guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses live oo connector schemas before action execution and returns JSON responses from the connector.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: The first-time setup path can execute an unverified remote installer script.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted package or verified download; run a remote installer only after explicit approval and source review.
+
+Risk: Write and delete actions can change or remove stored memories.
+
+Mitigation: Confirm the exact memory ID, payload, and intended effect before executing changes.
+
+## Reference(s):
+
+- [Mem0 homepage](https://mem0.ai)
+- [OOMOL oo CLI](https://github.com/oomol-lab/oo-cli)
+- [OOMOL CLI installation guide](https://cli.oomol.com/install-guide.md)
+- [ClawHub Mem0 skill](https://clawhub.ai/oomol/skills/oo-mem0)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Text and structured JSON action results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the selected Mem0 action and connected account.]
+
+## Skill Version(s):
+
+1.0.4 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

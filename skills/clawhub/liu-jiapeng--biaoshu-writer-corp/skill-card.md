@@ -1,48 +1,64 @@
-## Description: <br>
-凭 App Key 调用招采猫开放 API，完成招标文件智能解读、分包抽取、成品投标文件生成和可选合规审查；招标/投标文件会上传到招采猫云端 API 处理，标书生成会消耗账户积分。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps prepare and review Chinese-language tender and bid documents through cloud-based interpretation, document generation, compliance checks, and similarity analysis.
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and business teams use this skill to call the 招采猫 cloud API for bid-document workflows: interpreting tender files, selecting packages, generating editable .docx bid documents, and reviewing generated bids for compliance risks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tender and bid files may contain sensitive commercial, pricing, or personal information and are uploaded to 招采猫 servers for processing. <br>
-Mitigation: Confirm user consent before upload and avoid using the skill for files that should not leave the user's environment. <br>
-Risk: The App Key may be saved locally or exposed if pasted into chat. <br>
-Mitigation: Use the documented local config-file option when chat exposure is unacceptable, keep the credential file permission-restricted, and reset the App Key on the service if it may have been exposed. <br>
-Risk: Bid generation consumes credits from the App Key owner's account. <br>
-Mitigation: Check account balance before generation and confirm the user intends to spend credits for the requested output. <br>
-Risk: A configured API base URL controls where files and credentials are sent. <br>
-Mitigation: Verify any configured API base URL is trusted before running the skill. <br>
+## Use Case:
 
+Bid teams and procurement professionals use the skill to interpret tender requirements, draft bid documents, identify compliance issues, and compare bids for similarity before submission.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/skills/biaoshu-writer-corp) <br>
-- [Publisher profile](https://clawhub.ai/user/liu-jiapeng) <br>
-- [招采猫 service](https://biaoshu.zhiliaobiaoxun.com/) <br>
-- [API contract reference](artifact/references/api.md) <br>
-- [Usage guide](artifact/references/usage.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with background shell-command execution and generated local files, including HTML reports and .docx bid documents] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include absolute local file paths for generated reports and bid documents; cloud task results may remain available in the service account for about 7 days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.5 (source: ClawHub release metadata and scripts/zcm.py) <br>
+Risk: Tender and bid documents are sent to the cloud service for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm permission to share each document and avoid uploading confidential material without approval.
+
+Risk: Trial onboarding collects device characteristics and account setup may be less visible than expected.
+
+Mitigation: Request explicit confirmation of the exact device fields sent before starting the trial.
+
+Risk: An API key may be saved locally or exposed if pasted into a conversation.
+
+Mitigation: Use a safer local secret mechanism where available, restrict access to stored credentials, and never repeat the key in responses.
+
+Risk: Remote document URLs can lead to retrieval of untrusted content.
+
+Mitigation: Use trusted document sources and review remote URLs before processing.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/biaoshu-writer-corp)
+- [Publisher profile](https://clawhub.ai/user/liu-jiapeng)
+- [Usage guide](references/usage.md)
+- [API overview](references/api.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Files]
+
+**Output Format:** [Text summaries, HTML or Word reports, DOCX bid documents, and JSON similarity results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated bids may contain fields for the user to complete; document downloads can be time-limited.]
+
+## Skill Version(s):
+
+2.0.6 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

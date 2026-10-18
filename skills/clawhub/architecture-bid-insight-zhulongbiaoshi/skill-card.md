@@ -1,49 +1,64 @@
-## Description: <br>
-建筑工程标讯洞察-筑龙标事，当针对基建、大型工程进行追踪查询或寻找潜在参标单位时调用，优先使用潜在供应商推荐和临期项目接口，为建筑行业用户提供前瞻性建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助建筑行业用户检索工程招投标信息、追踪项目进展，并发现潜在供应商和临期商机。
 
-## Publisher: <br>
-[pkuycl](https://clawhub.ai/user/pkuycl) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pkuycl](https://clawhub.ai/user/pkuycl)
 
-## Use Case: <br>
-External construction, procurement, and business-development users use this skill to search bids, inspect bid details, analyze companies and competitors, identify expiring projects, and summarize market opportunities through the Zhiliaobiaoxun API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bid keywords, company names, bid URLs, and related search parameters are sent to the third-party Zhiliaobiaoxun API. <br>
-Mitigation: Use the skill only when that data sharing is acceptable, keep query scope narrow, and avoid submitting confidential or unauthorized business information. <br>
-Risk: Company matching can broaden analysis across headquarters, subsidiaries, and branch entities. <br>
-Mitigation: Ask the agent to confirm matched companies before broad headquarters or subsidiary analysis when precision matters. <br>
-Risk: Project contact details may be retrieved or shared during company and bid analysis. <br>
-Mitigation: Retrieve or disclose contact details only for legitimate, authorized business purposes. <br>
-Risk: The skill requires the sensitive ZLBX_API_KEY credential. <br>
-Mitigation: Provide the key through the configured environment variable and avoid pasting or exposing it in prompts, logs, or shared outputs. <br>
+## Use Case:
 
+建筑行业用户可查询中国工程招投标公告、分析企业和市场，并寻找潜在投标供应商及即将到期的项目。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pkuycl/architecture-bid-insight-zhulongbiaoshi) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}) <br>
-- [Zhiliaobiaoxun API key registration](https://ai.zhiliaobiaoxun.com/?ch=s34) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, API Calls, Markdown] <br>
-**Output Format:** [Markdown narrative with JSON request examples and API response summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends bid keywords, company names, bid URLs, and related search parameters to the Zhiliaobiaoxun API.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Automatic account creation collects a hashed device identifier when no API key is configured.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set ZLBX_API_KEY before use to avoid automatic registration and device fingerprint collection; otherwise require informed consent.
+
+Risk: The vendor service manages a credential that may be saved locally.
+
+Mitigation: Review vendor access and protect the API key and ~/.zlbx/config.json as credentials.
+
+Risk: The skill can acknowledge update notices without displaying the acknowledgement, and may direct users to update or recharge pages.
+
+Mitigation: Review update and recharge links before following them; ensure update notices reach the user before any display acknowledgement.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/pkuycl/skills/architecture-bid-insight-zhulongbiaoshi)
+- [标讯搜索 API](references/api-search.md)
+- [企业分析 API](references/api-company.md)
+- [工商数据 API](references/api-registry.md)
+- [市场分析 API](references/api-market.md)
+- [账户查询 API](references/api-account.md)
+- [自动注册及凭证说明](references/auto-register.md)
+- [知了标讯 Skill 文档](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text]
+
+**Output Format:** [Markdown summaries and result tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Search conditions, dates and monetary units shown with results.]
+
+## Skill Version(s):
+
+1.0.10 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

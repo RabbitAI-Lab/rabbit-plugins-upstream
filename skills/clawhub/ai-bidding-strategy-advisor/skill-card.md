@@ -1,45 +1,61 @@
-## Description: <br>
-Helps teams evaluate a specific tender, develop bidding and pricing strategy, assess competitors and buyer patterns, and generate a data-backed decision report from historical tender data. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a specific tender using historical procurement data to advise whether to bid, suggest a price range, assess competitors, and identify risks and next steps.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Bid, procurement, and sales teams use this skill to decide whether to pursue a tender, estimate competitive pricing bands, understand likely competitors, and produce a strategy report grounded in historical bidding records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends tender and company search terms to the vendor API and stores a local API key. <br>
-Mitigation: Use it only for queries you are comfortable sending to the vendor, keep the API key secured, and rely on preconfigured credentials when automatic registration is not desired. <br>
-Risk: Generated HTML reports may include signed links that bypass login and expose referenced tender data if shared broadly. <br>
-Mitigation: Treat generated reports as sensitive, remove or review signed links before redistribution, and share reports only with intended recipients. <br>
+## Use Case:
 
+External bidding and procurement teams use this skill to assess a tender's buyer, competitors, historical prices, bid suitability, and actionable risks before deciding how to bid.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-strategy-advisor) <br>
-- [API quick reference](references/api-quick.md) <br>
-- [Analysis workflow](references/workflow.md) <br>
-- [Report template](references/report-template.md) <br>
-- [Automatic registration workflow](references/auto-register.md) <br>
-- [Zhiliaobiaoxun API endpoint](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown decision report with optional generated HTML report file path] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-approved automatic registration; full reports typically consume 12-25 API credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Automatic account setup collects device features and stores an API key locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the consent request and use your own ZLBX_API_KEY to skip automatic registration; protect the stored key.
+
+Risk: HTML reports and signed or auto-login URLs may grant access when shared.
+
+Mitigation: Share reports and access links only with intended recipients; review included links before distribution.
+
+Risk: Bid-data queries spend account credits and incomplete historical data can affect recommendations.
+
+Mitigation: Check estimated credit use and independently verify source data, pricing assumptions, and the final bid decision.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zhiliaobiaoxun/skills/ai-bidding-strategy-advisor)
+- [Analysis workflow](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report template](references/report-template.md)
+- [Account registration guidance](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown report, HTML report, Guidance]
+
+**Output Format:** [Markdown in conversation; optional shareable HTML file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes bid recommendation, pricing range, competitor analysis, source citations, and risk and action lists; full analysis uses paid API credits.]
+
+## Skill Version(s):
+
+1.0.9 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

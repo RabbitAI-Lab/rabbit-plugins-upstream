@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/iaiops-clinical",
   "slug": "iaiops-clinical",
   "ownerHandle": null,
-  "version": "0.19.0",
-  "updatedAt": 1784668131394,
-  "contentHash": "90e13fe77bf772fe8ec95c20051eef87d6b7c396b62a58a5fb29958cec313779",
-  "fetchedAt": "2026-07-26T18:08:55.317Z"
+  "version": "0.31.0",
+  "updatedAt": 1792314276790,
+  "contentHash": "0353acc90cba3b17d57f36e509691fc937370769416fa81a1cb0653032fe455a",
+  "fetchedAt": "2026-10-18T12:09:15.828Z"
 }

@@ -1,47 +1,63 @@
-## Description: <br>
-predictalot helps agents use a trusted self-hosted forecasting service for zero-shot time-series forecasts, ensembles, and supervised tabular predictions through REST, MCP, curl examples, and setup guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents forecast time series and train or query tabular prediction models through a user-configured, self-hosted predictalot service.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and external users use this skill to connect an agent to a trusted predictalot instance, forecast numeric time series with supported foundation models, build ensembles, and train or query supervised tabular prediction models. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Forecast, training, feature, and model identifier data are sent to the configured PREDICTALOT_URL. <br>
-Mitigation: Point the skill only at a predictalot server you run or explicitly trust, prefer HTTPS for remote access, and treat submitted time series and features as sensitive. <br>
-Risk: A reachable unauthenticated or weakly protected service can accept forecast, training, MCP, and model-management calls. <br>
-Mitigation: Bind the service to loopback by default, set strong bearer tokens before any shared exposure, and place remote deployments behind a reverse proxy or VPN. <br>
-Risk: Deleting a tabular model permanently removes the stored model. <br>
-Mitigation: Confirm the target modelId with the user before deletion and use identifiers discovered from a recent model listing or train response. <br>
-Risk: The moirai-2 model is documented as non-commercial and may be unsuitable for commercial workflows. <br>
-Mitigation: Avoid moirai-2 in commercial use, or set its ensemble weight to zero and use the documented Apache-licensed alternatives where appropriate. <br>
+## Use Case:
 
+Developers and analysts use this skill to request forecasts, uncertainty bands, and sample paths from a trusted predictalot endpoint, or to train and query tabular prediction models on their own features.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/psyb0t/skills/predictalot) <br>
-- [Publisher profile](https://clawhub.ai/user/psyb0t) <br>
-- [predictalot setup](references/setup.md) <br>
-- [Project homepage](https://github.com/psyb0t/docker-predictalot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands, HTTP request examples, and JSON payloads] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs are proposals and examples for a configured predictalot server; forecast responses depend on the remote service and selected model.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.4 (source: server release evidence) <br>
+Risk: Forecasting and training data are sent to the configured service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only an endpoint you control and trust; do not send proprietary data to an untrusted URL.
+
+Risk: A publicly reachable service can expose forecasting and model-management operations.
+
+Mitigation: Keep the service bound to localhost unless protected by TLS, a strong bearer token, and network access controls.
+
+Risk: An unpinned Docker image can change between deployments.
+
+Mitigation: Pin the image to a reviewed version or digest before production use.
+
+Risk: Deleting a stored tabular model is irreversible.
+
+Mitigation: Verify the model ID and obtain explicit confirmation before deletion.
+
+## Reference(s):
+
+- [predictalot on ClawHub](https://clawhub.ai/psyb0t/skills/predictalot)
+- [Setup and security guidance](references/setup.md)
+- [Model Context Protocol documentation](https://modelcontextprotocol.io)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown guidance, shell commands, and JSON forecast responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Forecasts may include quantile bands or sample paths; tabular predictions depend on the selected mode.]
+
+## Skill Version(s):
+
+1.2.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

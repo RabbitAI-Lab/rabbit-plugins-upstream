@@ -10,13 +10,17 @@ guardrails below are adapted, with thanks, from the working configuration
 [@juanpf-ha](https://github.com/juanpf-ha) developed while running
 vmware-monitor and vmware-aria against a production vSphere estate with Llama
 3.3 70B FP8 on an on-prem H100
-([VMware-AIops#31](https://github.com/zw008/VMware-AIops/issues/31)). The
+([VMware-AIops#31](https://github.com/vmware-skills/VMware-AIops/issues/31)). The
 cross-skill rules are identical across this family; the parts below marked
 vmware-vks are specific to this skill.
 
-vmware-vks exposes 20 MCP tools. Two things make it distinctive for a small
+vmware-vks exposes 24 MCP tools. Two things make it distinctive for a small
 model: deleting a namespace or a Tanzu Kubernetes cluster destroys running
-workloads, and two of its tools hand back live credentials.
+workloads, and two of its tools hand back live credentials — a kubeconfig
+whose bearer token acts as the configured vCenter account for hours.
+`issue_supervisor_kubeconfig` and `issue_tkc_kubeconfig` are credential access, not
+reads: both are annotated `readOnlyHint: false`, so an MCP client that honours
+the annotation asks before running them.
 
 > **Disclaimer**: This is a community-maintained open-source project and is
 > **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom
@@ -32,11 +36,12 @@ These are structural, so it cannot.
 
 | Guardrail you would otherwise prompt for | Now enforced by |
 |---|---|
-| "Preview a namespace or cluster creation before applying it" | **`dry_run` defaults to true.** `create_namespace` and `create_tkc_cluster` return a YAML plan for review unless you explicitly pass `dry_run=False`. Preview is the default path, not a habit the model must maintain. |
-| "Confirm before deleting anything" | **`confirmed=True` is required.** `delete_namespace` additionally refuses while TKC clusters still exist inside it, and `delete_tkc_cluster` refuses while workloads are running unless `force=True`. |
+| "Preview a namespace or cluster creation before applying it" | **`confirm` defaults to false.** `create_namespace` and `create_tkc_cluster` return `blast_radius` (spec / YAML plan) and change nothing unless `confirm=True`. Preview is the default path, not a habit the model must maintain. |
+| "Confirm before deleting anything" | **A bare delete only previews.** `delete_namespace` and `delete_tkc_cluster` return what they would destroy; `confirm=True` is refused while TKC clusters exist inside the namespace, while workloads run (unless `force=True`), or when any part of the blast radius could not be read. |
 | "Use explicit limits for queries that may return large amounts of data" | **The list envelope.** `list_namespaces`, `list_supervisor_storage_policies` and `list_vm_classes` return `{items, returned, limit, total, truncated, hint}`, so the model reads truncation instead of guessing at it. These three read their collection in one un-paged call, so `total` is the real count and `truncated` is always `false`. |
 | "If a listing came back empty, say so rather than claiming the call failed" | Same envelope. Empty `items` with `truncated: false` means checked-and-none — a stated result, not a silence the model has to interpret. |
 | "Log every state change you make" | **The `@vmware_tool` decorator.** Every write is recorded to `~/.vmware/audit.db` before the model sees the result, and policy rules are evaluated ahead of execution. |
+| "Don't leave a token lying around in a readable file" | **Owner-only export.** A kubeconfig written with `output_path` / `-o` is created 0600 — also when it replaces an existing file — and a symlink target is refused. The audit row records the retrieval but redacts the returned kubeconfig. |
 
 ---
 
@@ -94,12 +99,16 @@ your agent's instruction block.
 
 ## Credentials and writes in vmware-vks
 
+- issue_supervisor_kubeconfig and issue_tkc_kubeconfig return credentials. Call
+  them only when the user explicitly asks for a kubeconfig — never as a step
+  you decided on yourself, and never to "check access".
 - Never print a kubeconfig, session token or bearer token into the conversation.
-  Write it to a file with the -o path argument and report the path only.
+  Always pass output_path (MCP) or -o (CLI) and report the path only.
 - Storage policies are selected by Policy ID, not display name. Call
   list_supervisor_storage_policies and use the ID column.
-- Leave dry_run at its default for create_namespace and create_tkc_cluster, show
-  the returned YAML plan to the user, and only then pass dry_run=False.
+- Call create_namespace, create_tkc_cluster, delete_namespace and
+  delete_tkc_cluster without confirm first, show the returned blast_radius to
+  the user, and pass confirm=True only after they decide on what they saw.
 - Scale and upgrade operations are rejected unless the cluster is in Running
   phase. Check the phase before proposing one.
 ```
@@ -129,4 +138,4 @@ Local-model compatibility is an explicit design constraint for this family, and
 the evidence base is small. If you evaluate a model against this skill —
 Qwen, Mistral, Granite, or anything else — a report of what worked and what did
 not is genuinely useful:
-[github.com/zw008/VMware-VKS/issues](https://github.com/zw008/VMware-VKS/issues).
+[github.com/vmware-skills/VMware-VKS/issues](https://github.com/vmware-skills/VMware-VKS/issues).

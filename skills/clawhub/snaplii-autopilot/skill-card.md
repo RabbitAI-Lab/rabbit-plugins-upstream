@@ -1,43 +1,58 @@
-## Description: <br>
-Snaplii Autopilot helps an agent buy a Snaplii gift card, redeem it through a browser session, and complete a merchant or delivery order after required user confirmations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through buying a Snaplii gift card, redeeming it in a merchant browser session, and placing an order with user confirmation.
 
-## Publisher: <br>
-[snapliiai](https://clawhub.ai/user/snapliiai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[snapliiai](https://clawhub.ai/user/snapliiai)
 
-## Use Case: <br>
-External users use this skill when they want an agent to complete a Snaplii-funded purchase or food delivery order end to end. The agent checks Snaplii Cash balance, quotes and purchases a gift card, redeems it in a browser session, and stops for confirmation before purchase and final order placement. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can complete purchases using the user's Snaplii balance and browser session. <br>
-Mitigation: Install only when this behavior is intended, and require explicit user confirmation before the gift-card purchase and again before the final merchant order. <br>
-Risk: Order details such as merchant, amount, delivery address, tip, and final total may be wrong if not reviewed. <br>
-Mitigation: Show the full order summary and have the user review each detail before clicking the final order or pay button. <br>
-Risk: Gift-card redemption codes and PINs are sensitive payment credentials. <br>
-Mitigation: Enter redemption details only into the merchant site and avoid posting them in chat unless the user asks. <br>
+## Use Case:
 
+Shoppers use this skill to purchase a Snaplii gift card with cashback, redeem it on a merchant or delivery site, and complete an order through browser automation.
 
-## Reference(s): <br>
-- [Snaplii Autopilot on ClawHub](https://clawhub.ai/snapliiai/snaplii-autopilot) <br>
-- [snapliiai publisher profile](https://clawhub.ai/user/snapliiai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with tool and browser-action steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Snaplii CLI or Snaplii MCP tools plus an available browser-automation tool.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.0 (source: server release evidence) <br>
+Risk: Authentication instructions hidden in a Markdown comment can initiate account connection and access payment capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the hidden Auth section before connecting and use a Snaplii API key with minimal permissions and an appropriate spending limit.
+
+Risk: Buying a gift card charges the user's prepaid balance before the merchant order is placed.
+
+Mitigation: Check the brand, quoted amount, available balance, and user's approval before purchase; never repeat a purchase with an unclear outcome without checking card history.
+
+Risk: Browser ordering can expose redemption credentials or place an order with the wrong delivery details.
+
+Mitigation: Keep redemption codes private, verify the delivery address and full order summary, and require explicit confirmation before the final pay button.
+
+## Reference(s):
+
+- [Snaplii Autopilot on ClawHub](https://clawhub.ai/snapliiai/skills/snaplii-autopilot)
+- [Publisher profile](https://clawhub.ai/user/snapliiai)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Shell commands]
+
+**Output Format:** [Markdown with order summaries and confirmation prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May report a redemption code to the user only when requested or when browser ordering cannot continue.]
+
+## Skill Version(s):
+
+1.6.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

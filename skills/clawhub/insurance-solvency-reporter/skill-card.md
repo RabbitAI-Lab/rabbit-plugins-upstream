@@ -1,41 +1,57 @@
-## Description: <br>
-Generates China C-ROSS Phase II solvency reports, capital adequacy calculations, stress tests, and SARM/IRR risk rating documentation for insurance finance, actuarial, and compliance teams. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese insurance teams draft C-ROSS Phase II solvency reports, capital adequacy analyses, stress tests, and risk-rating documentation for review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Insurance CFOs, actuaries, and compliance teams use this skill to draft quarterly and annual China C-ROSS solvency reports, calculate capital adequacy, prepare stress testing analysis, and document risk ratings. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, for China insurance solvency reporting contexts. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may require confidential company financial, capital, risk, or regulatory inputs. <br>
-Mitigation: Redact unnecessary details, avoid personal data and secrets, and confirm authorization before sharing internal reporting materials. <br>
-Risk: Generated solvency reports or regulatory interpretations may become outdated or require professional review. <br>
-Mitigation: Verify outputs against current official NFRA requirements and have qualified finance, actuarial, and compliance reviewers approve materials before filing or disclosure. <br>
+## Use Case:
 
+Insurance company finance, actuarial, and compliance teams in mainland China use this skill to prepare reviewable quarterly and annual solvency report drafts, capital calculations, stress-test analyses, and SARM risk-rating narratives.
 
-## Reference(s): <br>
-- [C-ROSS Rules II Summary](references/cross_rules_ii_summary.md) <br>
-- [Solvency Capital Calculation Template](references/solvency_calculation.md) <br>
+### Deployment Geography for Use:
 
+Mainland China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown reports, tables, checklists, and calculation snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include capital adequacy calculations, stress-test scenarios, regulatory report outlines, and compliance review guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.1 (source: frontmatter and server release evidence) <br>
+Risk: Outdated or inaccurate regulatory requirements could affect report content.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check current requirements against official regulatory sources before approval or filing.
+
+Risk: Unreviewed calculations or actuarial assumptions could misstate solvency results.
+
+Mitigation: Have actuarial and finance owners verify input data, assumptions, and drafts before use.
+
+Risk: Detailed policyholder or counterparty data may be unnecessarily exposed in prompts.
+
+Mitigation: Use aggregated data where possible and omit unnecessary identifying details.
+
+## Reference(s):
+
+- [Insurance Solvency Reporter on ClawHub](https://clawhub.ai/gechengling/skills/insurance-solvency-reporter)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown report drafts, tables, calculations, and stress-test narratives]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Drafts require human review before internal approval or regulatory filing.]
+
+## Skill Version(s):
+
+4.1.3 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,57 @@
-## Description: <br>
-Analyzes China Sports Lottery Da Le Tou (DLT) history with frequency, omission, trend, span, and Monte Carlo methods to generate entertainment-only number-selection guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides China Sports Lottery Da Le Tou (DLT) number-selection guidance using historical statistics, combination filters, and Monte Carlo examples without claiming to predict winning numbers.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users use this skill to analyze DLT lottery draw history, generate candidate number sets, and receive rational betting reminders. Developers and agent operators can also use the bundled Python examples and templates to support lottery-analysis workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lottery-analysis output may be treated as gambling advice or a prediction guarantee. <br>
-Mitigation: Present recommendations as entertainment-only statistical references, state that lottery outcomes are random, and avoid any win guarantee or investment framing. <br>
-Risk: Users may overspend, chase losses, or rely on generated number sets beyond their means. <br>
-Mitigation: Include strict budget reminders, encourage rational play, and tell users not to chase losses. <br>
-Risk: Broad lottery-related triggers may activate the skill on general lottery questions. <br>
-Mitigation: Use the skill for explicit DLT lottery-analysis requests and keep responses scoped to analysis, education, and responsible-use guidance. <br>
+## Use Case:
 
+Lottery players can explore DLT draw statistics, compare number-selection methods, and generate example combinations for entertainment and mathematical reference.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/skills/chance-dlt-predictor) <br>
-- [DLT Algorithm Python Reference](references/dlt_algorithm_python.md) <br>
-- [DLT Data Templates](references/dlt_data_templates.md) <br>
-- [DLT Strategy Guide](references/dlt_strategy_guide.md) <br>
-- [China Sports Lottery History API](https://webapi.sporttery.cn/gateway/lottery/getHistoryPageListV1.qry) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports with tables, candidate number sets, Python code snippets, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should retain entertainment-only disclaimers, budget reminders, and no-guarantee language.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.1.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: Historical patterns or generated combinations may be mistaken for improved winning odds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present results as entertainment or mathematical reference, without winning guarantees or investment claims.
+
+Risk: Lottery rules and prize amounts can change.
+
+Mitigation: Verify current rules, draw results, and prizes with official lottery sources before relying on them.
+
+Risk: Broad English lottery terms may invoke this DLT-specific skill for other lotteries.
+
+Mitigation: Confirm the user means Da Le Tou before applying its rules or suggesting combinations.
+
+## Reference(s):
+
+- [Chance Dlt Predictor on ClawHub](https://clawhub.ai/gechengling/skills/chance-dlt-predictor)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Guidance]
+
+**Output Format:** [Markdown with number combinations, analysis, and optional Python examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Primarily Simplified Chinese; English on request. Example code requires user execution and user-supplied historical data.]
+
+## Skill Version(s):
+
+4.1.2 (source: frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
