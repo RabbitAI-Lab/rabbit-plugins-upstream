@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-eval-flywheel",
+  "repo": "google/skills",
+  "skillId": "agent-platform-eval-flywheel",
+  "branch": "main",
+  "pushedAt": "2026-10-16T20:05:04Z",
+  "contentHash": "d0c77a5e339e1bf88bc77f4ba338ce3b9d8a52d5e004e971a3e12d88577eeee1",
+  "fetchedAt": "2026-10-18T12:08:08.291Z"
+}

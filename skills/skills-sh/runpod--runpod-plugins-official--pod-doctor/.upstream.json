@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/pod-doctor",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "pod-doctor",
+  "branch": "main",
+  "pushedAt": "2026-10-17T05:26:02Z",
+  "contentHash": "99b70367fbad85fcf4fcfc036827434a1b306de6a86c66f3695f4e76c1fa1109",
+  "fetchedAt": "2026-10-18T12:08:18.625Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-scc-remediation",
+  "repo": "google/skills",
+  "skillId": "google-cloud-scc-remediation",
+  "branch": "main",
+  "pushedAt": "2026-10-16T20:05:04Z",
+  "contentHash": "6a2d79c32c60d28b15a0cf64198a35fcce43c28757ac077fbf83001be89f7503",
+  "fetchedAt": "2026-10-18T12:08:08.895Z"
+}
