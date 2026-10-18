@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/admet-reasoning",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/admet-reasoning",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/admet-reasoning",
+  "branch": "main",
+  "pushedAt": "2026-10-18T11:25:02Z",
+  "contentHash": "2bdc02ddbadb738f139e2b87225db8ae16d753fa7121405a5e48c274bbb1576a",
+  "fetchedAt": "2026-10-18T12:06:56.398Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/matlab",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/matlab",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/matlab",
+  "branch": "main",
+  "pushedAt": "2026-10-15T23:57:39Z",
+  "contentHash": "7dab9d52d4e1f4931feaa76f7a8da5390615fca89490a4fbb004c38945f284e4",
+  "fetchedAt": "2026-10-18T12:07:10.139Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/statsmodels",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/statsmodels",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/statsmodels",
+  "branch": "main",
+  "pushedAt": "2026-10-18T11:25:02Z",
+  "contentHash": "a07c7a83011bf403117648ea1d3d4137f0def4805096dce3f9e414af1bf63f98",
+  "fetchedAt": "2026-10-18T12:06:56.625Z"
+}
