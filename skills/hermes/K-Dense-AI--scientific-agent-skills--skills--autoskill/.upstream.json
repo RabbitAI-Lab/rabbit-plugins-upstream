@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/autoskill",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/autoskill",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/autoskill",
+  "branch": "main",
+  "pushedAt": "2026-10-15T23:57:39Z",
+  "contentHash": "b38ac805a7ca65821d04d2fa207a212a7808f32aa348293c60c89102d9b599e7",
+  "fetchedAt": "2026-10-18T12:07:10.064Z"
+}

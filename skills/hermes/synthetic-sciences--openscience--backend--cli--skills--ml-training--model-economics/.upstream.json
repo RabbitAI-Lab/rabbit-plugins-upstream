@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/model-economics",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/model-economics",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/model-economics",
+  "branch": "main",
+  "pushedAt": "2026-10-18T11:25:02Z",
+  "contentHash": "3dcbd4c83a2076a2233795f92d9f050cb1fc7845dcbf52bf14b75b47543af783",
+  "fetchedAt": "2026-10-18T12:06:56.536Z"
+}

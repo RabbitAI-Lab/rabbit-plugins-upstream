@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-validate",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-validate",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-validate",
+  "branch": "main",
+  "pushedAt": "2026-10-17T15:10:49Z",
+  "contentHash": "e47df9cd33ef43d24c9b88f51256636e50bb3309bc3610cdc8fd5eac9d985972",
+  "fetchedAt": "2026-10-18T12:06:54.995Z"
+}

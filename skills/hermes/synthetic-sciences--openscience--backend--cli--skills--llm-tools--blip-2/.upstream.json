@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/blip-2",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/blip-2",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/blip-2",
+  "branch": "main",
+  "pushedAt": "2026-10-18T11:25:02Z",
+  "contentHash": "99ac424e77b4e9cda85faca55aca548d5b577713cfb60b1a6b21191d228f4e0f",
+  "fetchedAt": "2026-10-18T12:06:56.422Z"
+}

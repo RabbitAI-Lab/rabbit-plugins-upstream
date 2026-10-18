@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nv-reason-ct",
+  "identifier": "NVIDIA/skills/skills/nv-reason-ct",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nv-reason-ct",
+  "branch": "main",
+  "pushedAt": "2026-10-17T15:10:49Z",
+  "contentHash": "20063b90d2fed00a76b7cc98599d0d5d68cb8ba63a1feba2c22a83c37be09d66",
+  "fetchedAt": "2026-10-18T12:06:55.074Z"
+}

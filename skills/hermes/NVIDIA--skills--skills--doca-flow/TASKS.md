@@ -1,7 +1,25 @@
 # DOCA Flow workflows
 
-**Where to start:** The verbs run `configure → build → modify → run →
-test → debug`; skip ahead only when the user is already past a verb.
+**First docker / first-app request (MUST):** follow the local
+doca-skills bundle (`doca-setup`, `doca-programming-guide`,
+`doca-flow`, `doca-public-knowledge-map`). Open with Stage 1 (NGC
+container, compile only) vs Stage 2 (real BlueField / ConnectX)
+before any command. Do not start with host `pkg-config`. Path 0:
+copy a tag from
+https://catalog.ngc.nvidia.com/orgs/nvidia/teams/doca/containers/doca/tags
+(*How to pick an NGC tag without guessing*; never invent), then
+`docker pull nvcr.io/nvidia/doca/doca:<tag>` and
+`docker run -it --rm -v $HOME/dev:/work nvcr.io/nvidia/doca/doca:<tag> bash`.
+After `docker run`, MUST say: paste back the output of
+`pkg-config --modversion doca-flow` and
+`ls /opt/mellanox/doca/samples/doca_flow/`. Then: I resume from
+`doca-programming-guide` ## modify step 1 with the real install in
+hand. Copy a listed directory. Never emit `main.c` / `Makefile` /
+`Dockerfile` or hand-typed `-l` / `-L` (paste
+`pkg-config --libs doca-flow`). Then `configure → build → modify`.
+
+**Where to start:** The verbs run `configure → build → modify → test →
+run → debug`; skip ahead only when the user is already past a verb.
 `## test` is an iterative loop (validate → cross-check → counter wiring →
 negative test → loop back if the spec changed), not a one-shot pass.
 
@@ -75,14 +93,12 @@ the environment is ready for pipe construction.
    present.
 5. **Runtime prerequisites — hugepages + HWS devargs, before any Flow
    program runs.** A DOCA Flow program needs hugepages allocated and
-   mounted first, and hardware steering (HWS) must be requested through
-   DPDK devargs:
-
-```bash
-echo '1024' | sudo tee -a /sys/kernel/mm/hugepages/hugepages-2048kB/nr_hugepages
-sudo mkdir -p /mnt/huge
-sudo mount -t hugetlbfs -o pagesize=2M nodev /mnt/huge
-```
+   mounted first. Hugepage reservation and any hugetlbfs mount are
+   env-class: follow [`doca-setup`](../../doca-setup/SKILL.md). Record
+   the current `nr_hugepages` first. Do not pipe a value into `tee`.
+   Do not default to a fixed page count. Do not mix `doca-hugepages`
+   with raw sysfs writes. Hardware steering (HWS) must be requested
+   through DPDK devargs:
 
    - **HWS** is enabled via DPDK devarg `dv_flow_en=2` AND a `mode_args`
      value containing `hws` (e.g. `"vnf,hws"` or `"switch,hws"`). Without
@@ -115,7 +131,9 @@ sudo mount -t hugetlbfs -o pagesize=2M nodev /mnt/huge
      2. Open each `doca_dev` from argv (one per requested device).
      3. Call `doca_dpdk_port_probe(dev, "dv_flow_en=2")` for **every**
         opened device — this is the call that creates the DPDK port from
-        the `doca_dev` (`samples/doca_flow/flow_common.c`).
+        the `doca_dev` (`samples/doca_flow/flow_common.c`). If any probe
+        fails, log that device's BDF and exact error and exit non-zero;
+        never continue with a partially probed device set.
      4. Only **after** every device has been probed, call
         `rte_eth_dev_count_avail()` and verify it returns ≥ the expected
         port count (`samples/doca_flow/flow_common.c` precedes
@@ -132,7 +150,11 @@ sudo mount -t hugetlbfs -o pagesize=2M nodev /mnt/huge
      6. Then call `doca_dpdk_get_first_port_id(dev, &port_id)` /
         `RTE_ETH_FOREACH_DEV` + `doca_dpdk_port_as_dev` to derive the
         numeric port id, and proceed to `rte_eth_dev_configure` /
-        `rte_eth_dev_start`.
+        `rte_eth_dev_start`. In switch mode, enumerate each actual
+        DOCA-probed DPDK port, including representors, and copy the
+        installed shipped sample's `doca_dev`↔DPDK-port mapping. Never
+        derive a representor id from a PF ordinal, BDF suffix, or assumed
+        `0/1` numbering.
    - **Hardware-neutral `port_id` *and* BDFs — never hard-code `0`/`1` or a
      PCI address.** The DOCA-probed NIC can land at `port_id 2/3` when the
      PCI auto-scan grabs other devices first, and its BDF differs per host —
@@ -158,13 +180,18 @@ sudo mount -t hugetlbfs -o pagesize=2M nodev /mnt/huge
      `tx_explicit=1`) are the alternative when you need hardware hairpin
      semantics.
 
-   Then the per-port Flow bring-up — **two setters are MANDATORY, both
-   enforced in `engine_port.c`**: `doca_flow_port_cfg_set_port_id()` (else
-   `doca_flow_port_start()` fails *"port ID is mandatory"*, `engine_port.c`)
-   **and** `doca_flow_port_cfg_set_dev()` with the matching probed `doca_dev`
-   (else *"either doca_dev or doca_dev_rep must be provided"*,
-   `engine_port.c`; a `dev_rep` is rejected in VNF mode,
-   `engine_port.c`). Required per-port sequence:
+   Then choose the mode-specific per-port Flow bring-up path:
+   - **VNF mode** (`flow_port_fwd/`): both
+     `doca_flow_port_cfg_set_port_id()` and
+     `doca_flow_port_cfg_set_dev()` with the matching probed `doca_dev`
+     are mandatory. A `doca_dev_rep` is rejected in this mode.
+   - **Switch mode** (`flow_switch_single/`): `port_id` is still
+     mandatory, but representor ports use the installed sample's
+     `doca_dev_rep` configuration path rather than forcing
+     `doca_flow_port_cfg_set_dev()`. Copy that path from the installed
+     sample and verify its setter against the installed header.
+
+   The required VNF-mode sequence is:
 
 ```c
 struct doca_flow_port_cfg *port_cfg;
@@ -185,10 +212,11 @@ doca_flow_port_cfg_destroy(port_cfg);
    mandatory"*. Only `doca_flow_port_cfg_set_port_id()` binds the port
    (`flow_common.c`), and it is a *different* "devargs" from the
    EAL probe devarg `dv_flow_en=2` in step 5 — three unrelated uses of
-   the word. Pair it with the *matching* probed `doca_dev` via
-   `set_dev()` — **mandatory, not HWS-only**: a missing dev aborts with
-   *"either doca_dev or doca_dev_rep must be provided"*
-   (`engine_port.c`, sometimes surfaced as a bare *"Unknown
+   the word. In VNF mode, pair it with the *matching* probed `doca_dev`
+   via `set_dev()` — **mandatory, not HWS-only**. In switch mode, use the
+   installed sample's matching `doca_dev_rep` path instead. Omitting both
+   device sources aborts with *"either doca_dev or doca_dev_rep must be
+   provided"* (`engine_port.c`, sometimes surfaced as a bare *"Unknown
    error"*). The `port_id` MUST be the DOCA-probed id from above (per
    the hardware-neutral rule earlier in this step); a hard-coded `0`
    surfaces as `doca_dpdk_port_as_dev(0): Requested Resource Not
@@ -197,7 +225,8 @@ doca_flow_port_cfg_destroy(port_cfg);
    Do this for **every** DPDK port the app uses, in the order the DPDK port
    IDs come out (`rte_eth_dev_count_avail()` / `RTE_ETH_FOREACH_DEV()`; IDs
    are 0..N-1 in `-a <BDF>` attach order). The lifecycle is *cfg created →
-   `port_id` set → dev set → port started → cfg destroyed*; do not create
+   `port_id` set → mode-appropriate device source set → port started → cfg
+   destroyed*; do not create
    pipes before the port reports started, and any `DOCA_FLOW_FWD_PORT`
    destination port must be started before a pipe forwards to it.
 7. **Sanity check before any pipe work.** Confirm with the user: ingress
@@ -220,9 +249,12 @@ without committing to hardware yet.
    [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes).
    If the device does not support a kind, stop and offer alternatives; do
    not generate a spec that will fail at validate.
-3. Allocate the pipe spec via the Flow pipe-create API with explicit
-   match-mask and action-mask declarations. Implicit-anything is the
-   leading cause of misprogrammed steering.
+3. Prepare the `doca_flow_pipe_cfg` and its explicit match-mask and
+   action-mask declarations, but do not call
+   `doca_flow_pipe_create()` in this phase. The constructor is the
+   validation boundary owned by [`## test`](#test); calling it here
+   would collapse build and test. Implicit-anything is the leading
+   cause of misprogrammed steering.
 4. Attach a counter to every entry the user wants to *observe* in
    production; `## debug` assumes counters exist. Per
    [`CAPABILITIES.md ## Observability`](CAPABILITIES.md#observability)
@@ -358,7 +390,7 @@ fwd_miss.target = kernel_target;          /* unmatched traffic ALSO continues to
   source rep whose own per-entry `fwd` is `DOCA_FLOW_FWD_PORT` to the
   destination representor's `port_id`, each carrying
   `monitor.counter_type = DOCA_FLOW_RESOURCE_TYPE_NON_SHARED` for the
-  per-VF counter. "Drop any other VF" is the pipe's `fwd_miss`
+  per-VF counter. Dropping every other VF is the pipe's `fwd_miss`
   (`DOCA_FLOW_FWD_DROP`), not an extra pipe — leaving the entry match
   empty steers nothing (the classic switch-app bug). Insert the entries
   as a batch (`DOCA_FLOW_ENTRY_FLAGS_WAIT_FOR_BATCH`, last one
@@ -368,15 +400,16 @@ fwd_miss.target = kernel_target;          /* unmatched traffic ALSO continues to
   [`## test`](#test); swap only the literals (port ids, pipe name via
   `doca_flow_pipe_cfg_set_name()`).
 - **Build — link more than `doca-flow`.** `pkg-config --libs doca-flow`
-  omits the companion modules, so linking it alone fails with `undefined
-  reference` (e.g. `doca_error_get_descr`, `doca_dpdk_port_as_dev`) +
-  `DSO missing from command line`. Mirror the shipped sample's dependency
-  set: `doca-common` + `doca-argp` + the library (`samples/meson.build`),
-  plus `doca-dpdk-bridge` (provides `doca_dpdk_port_*`) + `libdpdk` for any
-  DPDK-backed app. Outside the meson tree, build a manifest *in the user's
-  project* with a `dependency()` per module called (meson canonical;
-  cmake/autotools work the same; discover names via `pkg-config --list-all
-  | grep doca`) — don't copy a template out of this skill. Compile with
+  alone often fails with `undefined reference` (e.g. `doca_error_get_descr`,
+  `doca_dpdk_port_as_dev`) + `DSO missing from command line` because
+  companion **modules** live in other `.pc` files. Mirror the shipped
+  sample's `dependency()` set (`doca-common`, `doca-argp`, `doca-flow`,
+  plus `doca-dpdk-bridge` and `libdpdk` for DPDK-backed apps) by putting
+  those names on the `pkg-config --libs` command and pasting its output.
+  They are pkg-config arguments, never linker tokens — do not type a
+  `-l` or `-L` flag by hand. Outside the meson tree, discover
+  names with `pkg-config --list-all | grep doca` — don't copy a template
+  out of this skill. Compile with
   `-D DOCA_ALLOW_EXPERIMENTAL_API` by default: most of `doca_flow.h` is
   experimental-tagged, so omitting it is a common first-build failure; it's
   a compile-time switch, not runtime code.
@@ -446,9 +479,11 @@ traffic does what it should.
 
 1. Confirm [`## test`](#test) has passed; do not enter `run` from an
    un-validated spec.
-2. Start the pipe via the Flow pipe-start API. Lifecycle is *created →
-   validated → started → entries added*; out-of-order calls produce
-   `DOCA_ERROR_BAD_STATE`.
+2. Confirm the port was started via
+   `doca_flow_port_start(port_cfg, &port)` during `## configure` and the
+   pipe was created (validated) during `## test`. Pipes have no separate
+   start operation. Lifecycle is *port started → pipe created (validated)
+   → entries added*; out-of-order calls produce `DOCA_ERROR_BAD_STATE`.
 3. Add entries in the order the user's intent implies (most specific match
    first when declared priority is not honored; otherwise the priority
    field). After adding, call `doca_flow_entries_process()` to push them to
@@ -480,12 +515,19 @@ traffic does what it should.
    `while (!force_quit) { doca_flow_entries_process(...); sleep(1); }`
    with `SIGINT` / `SIGTERM` handlers), and confirm the loop is reachable
    from `main()`'s actual call graph before the ordered teardown.
+   Before entering it, drive `doca_flow_entries_process()` only until
+   every expected status callback fires or the finite deadline copied
+   from the installed shipped sample/application expires. Missing or
+   failed callbacks at that deadline are a hard abort. This bounded
+   callback-drain is not the keep-alive loop and is never retried after
+   its deadline.
 
    **Keeping `main()` alive is NOT success.** The keep-alive loop is the
    *last* gate, not a substitute for the probe-before-count gate in
    [`## configure`](#configure) step 6 — that gate (probe every device
-   before counting, `rte_eth_dev_count_avail()` ≥ expected, both mandatory
-   port setters) must already have passed, and the binary must exit
+   before counting, `rte_eth_dev_count_avail()` ≥ expected, mandatory
+   `port_id` plus the mode-appropriate device source) must already have
+   passed, and the binary must exit
    non-zero rather than loop over a bridge that cannot forward. Two
    run-time preconditions the loop additionally requires:
    - when two PFs are bridged, the `doca_flow_port_pair` calls in BOTH
@@ -495,20 +537,28 @@ traffic does what it should.
      per-entry counter from [`## test`](#test) starts incrementing under
      controlled traffic (`doca_flow_resource_query_entry`, `doca_flow.h`).
    A binary that reaches the loop with the gate unmet — count 0, a missing
-   `set_port_id` / `set_dev`, a failed `doca_flow_port_pair`, or no
-   entry-status confirmation — is forwarding nothing while *appearing* to
+   `set_port_id` / mode-appropriate device source, a failed
+   `doca_flow_port_pair`, or no entry-status confirmation — is forwarding
+   nothing while *appearing* to
    run, exactly the shape that lets a watchdog mark a broken binary
    "alive". It is a hard error; the program must abort.
+   If only one `doca_flow_port_pair` direction succeeds, treat the pair
+   as failed: do not add entries or enter the keep-alive loop, perform
+   ordered teardown, and report both directional return values.
 
 ## test
 
 Goal: validate a pipe spec — and the system context around it — before
 hardware programming.
 
-**`## test` is an iterative loop, not a one-shot pass.** Run the 4 steps
-in order and *loop back to step 1 whenever a cross-check or counter-wiring
-finding mutates the spec* — every mutation re-opens validate. Skipping the
-re-validate after a mutation is exactly the failure mode
+**`## test` is a bounded validation loop, not a one-shot pass.** Run the
+4 steps in order and, when a cross-check or counter-wiring finding mutates
+the spec, loop back to step 1 once — every mutation re-opens validate.
+If that second pass finds another required mutation, stop and surface the
+unresolved spec/capability mismatch using the loader's `REFUSED` shape:
+name the conflicting capability, the fields changed on each pass, and
+the closest legal spec. Do not iterate again. Skipping the
+re-validate after the first mutation is exactly the failure mode
 [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy)
 validate-before-commit exists to prevent.
 
@@ -528,10 +578,10 @@ validate-before-commit exists to prevent.
 3. **Counter wiring check.** Walk the spec and confirm every entry the
    user wants to observe has a counter attached (`## debug` assumes they
    exist). Adding one loops back to step 1.
-4. **Negative test.** Construct one deliberately failing entry (wrong
-   match kind, unsupported action) and confirm validation rejects it —
-   the cheapest way to detect a wrong-version Flow library before going
-   live. If it does *not* reject, escalate to `## debug`.
+4. **Negative test.** Construct one deliberately failing pipe spec (wrong
+   match kind, unsupported action) and confirm `doca_flow_pipe_create`
+   rejects it — the cheapest way to detect a wrong-version Flow library
+   before going live. If it does *not* reject, escalate to `## debug`.
 
 ## debug
 
@@ -607,14 +657,24 @@ Walk in this order — do not skip steps:
 
 ## flow-ct
 
-The DOCA-Flow-CT-specific overlay on the parent verbs. Use AFTER
-the parent's [`## configure`](#configure) → [`## debug`](#debug)
-sequence has been walked for the stateless doca-flow port; this
-section adds only what CT changes on top. For the capability
-surface, layering rule, the single `doca_flow_ct_cap_is_dev_supported`
-device-support query, CT-specific error overlay, and safety
-policy, see
+The DOCA-Flow-CT-specific overlay on the parent verbs. Read this section
+**before the port-start step** in [`## configure`](#configure), even when
+the requested change is described as adding CT to existing stateless pipes.
+For device support, sizing, and safety, read
 [`CAPABILITIES.md ## flow-ct`](CAPABILITIES.md#flow-ct).
+
+**Lifecycle to explain before applying the change:** `doca_flow_init` →
+`doca_flow_ct_cfg_create` and the verified `doca_flow_ct_cfg_set_*` setters →
+`doca_flow_ct_init(cfg)` once per process → port start → CT-aware pipes →
+entries. CT is not a per-port `doca_ctx`; do not call `doca_ctx_start` for CT.
+If ports are already running, this is not an in-place attachment: capture
+pipe definitions and counter baselines, obtain approval for the traffic
+interruption, stop the affected ports, initialize CT before restarting,
+and recreate the intended stateless/CT-aware configuration from the
+snapshot and shipped sample. Do not assume old pipe handles survive.
+On shutdown, stop ports before `doca_flow_ct_destroy`, then
+`doca_flow_destroy`. Verify matching and unrelated traffic after restart;
+if the smoke fails, follow this section's rollback overlay.
 
 **configure overlay.**
 
@@ -643,8 +703,10 @@ policy, see
 5. **Configure NAT direction / actions** through
    `doca_flow_ct_cfg_set_direction` and the CT actions. There is
    no per-variant cap query, so confirm SNAT / DNAT / combined
-   behavior empirically; an unsupported request surfaces as
-   `_NOT_SUPPORTED` at entry add.
+   behavior only on a dedicated test representor/VF or isolated ports
+   carrying no production traffic. Snapshot counters first and stage
+   one entry; an unsupported request surfaces as `_NOT_SUPPORTED` at
+   entry add. Never probe a NAT variant on a live production port.
 6. **Start the ports, then attach CT-aware pipes.** With the
    global CT module initialized, start the doca-flow ports and
    wrap existing doca-flow pipes with their CT-aware versions.
@@ -656,7 +718,7 @@ policy, see
 
 | Slot | Value |
 | --- | --- |
-| pkg-config modules | `doca-flow` only — CT ships inside the doca-flow library, so there is NO separate `doca-flow-ct` module. Build and link CT against `doca-flow` |
+| pkg-config modules | CT adds no separate module: keep every companion module required by the parent Flow/DPDK build and include `doca-flow`; there is no `doca-flow-ct` module |
 | Version anchor | `pkg-config --modversion doca-flow` MUST equal `doca_caps --version`. Mismatch → escalate to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug) layer 2 BEFORE diagnosing the CT layer itself |
 | Header includes | Add `doca_flow_ct.h` to the doca-flow headers the parent [`## build`](#build) prescribes; it ships in the same `doca-sdk-flow` devel package |
 | `.pc` discovery | `pkg-config --list-all | grep doca-flow` confirms `doca-flow.pc` is visible to the build; there is no `doca-flow-ct.pc` to look for |
@@ -694,25 +756,24 @@ existing doca-flow setup:
 2. **Multi-flow smoke** ONLY after single-flow is green: a small
    set of distinct 5-tuples (e.g. 16), one entry per flow,
    confirm per-CT-entry counters increment in lockstep with the
-   matching traffic.
-3. **Aging smoke** with a deliberately short aging timer
-   (within the cap-advertised range): add a CT entry, send one
+   matching traffic. All CT smokes below use the isolated test path
+   selected in configure step 5, never production traffic.
+3. **Aging smoke** with a deliberately short aging timer accepted by
+   the installed CT configuration setter/sample: add a CT entry, send one
    matching packet, stop traffic, wait at least the aging
    period plus granularity, confirm the entry is evicted via
    the per-CT-entry counter query.
-4. **NAT-aware smoke** (per supported NAT variant — separate
-   tests for SNAT, DNAT, combined): add an entry whose action
-   rewrites the variant the cap-query reported as supported,
+4. **NAT-aware smoke** (one requested variant at a time): add an entry
+   whose SNAT, DNAT, or combined action is accepted by the installed
+   sample/API,
    confirm the outbound traffic carries the rewritten 5-tuple,
    confirm reverse traffic is matched on the original tuple.
-5. **Negative tests** the agent should propose explicitly:
-   add an entry with an out-of-range aging timer (expect
-   `_INVALID_VALUE` — confirms the cap-range is the runtime
-   authority); add entries past the cap-advertised max
-   concurrent flows (expect `_FULL` — confirms table sizing
-   was honest); attempt a NAT variant the cap-query reported
-   as unsupported (expect `_NOT_SUPPORTED` — confirms the
-   cap-query is the right gate).
+5. **Negative tests** the agent should propose explicitly: pass one
+   value documented as invalid by the installed CT header/sample and
+   expect `_INVALID_VALUE`; request one action shape rejected by that
+   installed API and expect `_NOT_SUPPORTED`. Exercise `_FULL` only in
+   an isolated test sized to the configured table, never by guessing a
+   device maximum or filling a live table.
 6. **Sustained-run loop** ONLY after all four smokes are green:
    stream traffic that exercises CT entry add / aging eviction
    in a continuous loop while watching per-CT-entry counters,
@@ -735,9 +796,10 @@ ladder:
 - `DOCA_ERROR_FULL` on entry add is *always* a table-sizing /
   aging-pressure mismatch with the workload. Read the per-CT-
   entry counters to identify stale entries; either wait for
-  aging eviction, evict explicitly, or — if the workload truly
-  needs more flows than the device supports — surface the
-  device-fit gap honestly.
+  one aging interval, then evict one confirmed-stale entry if policy
+  permits. Retry the failed add once. If it is still full, stop and
+  surface the configured-table/device-fit gap; do not continue an
+  eviction/retry loop.
 - Traffic not matching a freshly-added CT entry is *almost
   always* a 5-tuple-shape disagreement between the entry add
   and the traffic on the wire. Read both sides verbatim — the
@@ -750,11 +812,11 @@ ladder:
   [`CAPABILITIES.md ## flow-ct`](CAPABILITIES.md#flow-ct), do
   NOT invent a translation to resolve the conflict — surface
   the policy conflict to the user.
-- Aging timer outside the cap-range surfaces as
-  `DOCA_ERROR_INVALID_VALUE` at context configure (NOT at
-  entry add). Re-quote the cap-advertised range AND
-  granularity; the cap query is the runtime authority over any
-  prose recall of supported ranges.
+- An aging value rejected by the installed CT configuration setter
+  surfaces as `DOCA_ERROR_INVALID_VALUE` at context configure (NOT at
+  entry add). Quote the accepted constraints from the installed
+  header/sample and the setter return; there is no separate numeric
+  cap-range query.
 
 **rollback overlay.** A CT add is a pipeline-edit-class mutation (it extends
 an already-up stateless port; it does not touch firmware or eswitch mode), so
@@ -872,7 +934,9 @@ rollback target.
    The contract's smoke probe is constructor-time validation
    ([`## test`](#test) step 1) plus a counter read under traffic
    ([`## run`](#run) step 5). If it does not return green (counter
-   increment + clean `doca_flow_pipe_create` reconstruction) within the
+   increment equal to the controlled generator's successfully
+   transmitted packet count on the isolated lossless path + clean
+   `doca_flow_pipe_create` reconstruction) within the
    bounded debug-loop iteration, walk the rollback — on the second
    non-green iteration, rollback is mandatory.
 3. **After rollback, re-verify the restored pipe** — constructor-time
@@ -937,5 +1001,6 @@ does not invent guidance:
 - **rollback.** Coordinated steering-plane rollback across multiple
   DPUs and host nodes — out of scope for Phase 1 and reserved for a
   future platform skill. For single-DPU spec rollback within a session,
-  the right verb in this skill is `## modify` with a delta that
-  removes the offending entries; do not invent a "rollback" workflow.
+  use the snapshot-first [`## rollback`](#rollback) workflow. Its
+  reverse edit may be a `## modify` delta, but only against the
+  captured baseline and with the bounded re-verification defined there.

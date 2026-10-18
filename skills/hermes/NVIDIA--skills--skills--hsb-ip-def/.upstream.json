@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/hsb-ip-def",
+  "identifier": "NVIDIA/skills/skills/hsb-ip-def",
+  "repo": "NVIDIA/skills",
+  "path": "skills/hsb-ip-def",
+  "branch": "main",
+  "pushedAt": "2026-10-17T15:10:49Z",
+  "contentHash": "e656e381800f15eee30f94338f25b6f0ad80b3a43bd1c8c703a679a186a74add",
+  "fetchedAt": "2026-10-18T12:06:54.983Z"
+}

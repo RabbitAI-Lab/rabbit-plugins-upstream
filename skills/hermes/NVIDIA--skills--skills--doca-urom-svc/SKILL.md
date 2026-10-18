@@ -2,42 +2,63 @@
 license: Apache-2.0
 name: doca-urom-svc
 description: >
-  SECURITY: the DOCA UROM Service binary has NO standalone access
-  control (no authz list / `allowed_host` / `allowed_users` /
-  `auth_token`) — access is governed ENTIRELY by DOCA Comch pairing +
-  RDMA permissions, so any host able to establish a Comch pairing can
-  drive remote memory ops; isolate accordingly. Use when operating the
-  DOCA UROM Service container on a BlueField Arm to run remote memory
-  ops (puts, gets, atomics, collectives) that paired hosts enqueue via
-  the host-side `doca-urom` library — pulling the NGC container,
-  choosing UCX-component surface, sizing the enqueue queue, wiring
-  Comch endpoint pairing with `doca-urom`, or pinning host-library +
-  service versions per the DOCA Compatibility Policy. Trigger even
-  without 'DOCA UROM' — e.g. 'UCX collectives slow on host CPU, want
-  BlueField offload', 'enqueue returns NOT_PERMITTED though doca_dev
-  access is fine', 'ops enqueue but completions never fire'. Refuse
-  for host-side app code, MPI/UCX integration, or installing DOCA.
+  Operate the DOCA UROM Service container on BlueField Arm for remote
+  memory operations (puts, gets, atomics, collectives) enqueued by a
+  paired host using `doca-urom`: pull the NGC image, choose the UCX
+  component, size queues, configure Comch pairing, and align host and
+  service versions. SECURITY: the service has no standalone access
+  control; Comch pairing and RDMA permissions are the boundary. Pair
+  only intended hosts, expose least-privilege memory regions, and verify
+  both views before start. Trigger for slow UCX collectives, unexpected
+  NOT_PERMITTED, or missing completions. Do not use for host application
+  code, MPI/UCX integration design, or DOCA install.
 metadata:
+  author: NVIDIA <doca@nvidia.com>
   kind: service
+  tags:
+    - doca
+    - urom
+    - service
 compatibility: >
-  BlueField-Arm-only DOCA service container; pulled from NVIDIA
-  NGC and started under the BlueField OS container runtime.
-  Host-side install is irrelevant — the host's relationship to
-  this service is via the paired `doca-urom` library over a
-  `doca-rdma` substrate.
+  BlueField-Arm-only DOCA service container; pulled from NVIDIA NGC and
+  started under the BlueField OS container runtime. Host-side install is
+  irrelevant — the host's relationship to this service is via the paired
+  `doca-urom` library over a `doca-rdma` substrate. The validation steps
+  require a live DOCA install.
 ---
 
 # DOCA UROM Service
+
+**Scope first.** This skill operates the DPU-side service container.
+Writing the host-side application code that submits offloaded
+operations (from an MPI or UCX job, for example) is not this skill:
+route it to [`doca-urom`](../../libs/doca-urom/SKILL.md), the host
+library, and come back here only for the service it pairs with.
+
+## Examples
+
+- **"Slow UCX collectives on a BlueField pair."** — this is
+  in scope for the DPU-side service container; host app code
+  belongs to the `doca-urom` library skill.
+- **"Unexpected NOT_PERMITTED after start."** — verify Comch
+  pairing and least-privilege memory regions before widening
+  exposure.
+
+## Instructions
+
+Follow Loading order below. Open the tasks companion for configure /
+pair / debug. Open the capabilities companion for queues and
+UCX components. Do not open every companion file.
 
 **Where to start:** This skill is for *operating the DOCA UROM
 Service container* on the BlueField Arm side. It is *not* for
 *linking against* a library, and it is *not* the host-side
 enqueue surface. If the user wants to *deploy* or *run* the
-service container, open [`TASKS.md`](TASKS.md) and start at
-[`## configure`](TASKS.md#configure). If the question is *what
+service container, open the tasks companion and start at
+`## configure`. If the question is *what
 shape of service is DOCA UROM Service, what does it execute, and
 how does it pair with the host-side library*, start at
-[`CAPABILITIES.md`](CAPABILITIES.md). If DOCA is not installed
+the capabilities companion. If DOCA is not installed
 on the BlueField yet, route to
 [`doca-setup`](../../doca-setup/SKILL.md) first. If the user's
 real question is about *writing host-side code that enqueues
@@ -45,6 +66,13 @@ remote memory operations through the paired API*, the right
 skill is [`doca-urom`](../../libs/doca-urom/SKILL.md) — the
 host-side library; this service is the DPU-side executor that
 library offloads to.
+
+**How to use this skill.** Read this file, then search the companion file
+for the `## <name>` heading the question needs and read that whole section.
+Answer completely from it, quoting only its symbols and commands. Do not
+browse docs; use the entry points in `doca-public-knowledge-map`. Give
+environment checks as commands for the user's DOCA host. For out-of-scope
+requests, name the skill that owns them and stop.
 
 ## Example questions this skill answers well
 
@@ -58,19 +86,19 @@ load-bearing piece; the worked example is one instance.
   `doca-urom`; what runs on the BlueField side and why must it
   also be there?"*. Answered by the publisher / executor
   paired-contract model in
-  [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes)
+  the capabilities companion
   + the deploy-this-when path-selection rule in
-  [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy)
+  the capabilities companion
   + the env-prep checklist in
-  [`TASKS.md ## configure`](TASKS.md#configure).
+  the tasks companion.
 - **"Which library / service version pair am I supposed to
   run together?"** — worked example: *"the host fleet upgraded
   to a newer `doca-urom`; do I have to upgrade the service
   containers on every BlueField, or is the pairing flexible?"*.
   Answered by the version-contract overlay in
-  [`CAPABILITIES.md ## Version compatibility`](CAPABILITIES.md#version-compatibility)
+  the capabilities companion
   + the paired-version step in
-  [`TASKS.md ## configure`](TASKS.md#configure) +
+  the tasks companion +
   [`doca-version`](../../doca-version/SKILL.md) as the canonical
   body.
 - **"What does the service configure — UCX components,
@@ -79,17 +107,17 @@ load-bearing piece; the worked example is one instance.
   collectives; how do I tell the service to expose that
   collective family and how does the host pair to it over DOCA
   Comch?"*. Answered by the configuration-axes table in
-  [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes)
+  the capabilities companion
   + the config-authoring step in
-  [`TASKS.md ## configure`](TASKS.md#configure).
+  the tasks companion.
 - **"Host's `doca-urom` calls fail with `NOT_PERMITTED` even
   though `doca_dev` access is fine — is this the service?"** —
   worked example: *"first enqueue from host returns
   `DOCA_ERROR_NOT_PERMITTED` after a clean `doca_ctx_start()`"*.
   Answered by the Comch-pairing / RDMA-permissions layer in
-  [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
+  the capabilities companion
   + the layered ladder in
-  [`TASKS.md ## debug`](TASKS.md#debug), which surfaces *"is
+  the tasks companion, which surfaces *"is
   the DOCA Comch endpoint pair correctly established and is the
   underlying RDMA permission stack happy"* BEFORE blaming a
   service-side authz layer (no such layer exists in the shipped
@@ -99,9 +127,9 @@ load-bearing piece; the worked example is one instance.
   substrate?"** — worked example: *"host enqueue succeeds, the
   progress engine never sees the completion, what layer is
   hung"*. Answered by the service-vs-substrate split in
-  [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
+  the capabilities companion
   + the layered ladder in
-  [`TASKS.md ## debug`](TASKS.md#debug), which separates
+  the tasks companion, which separates
   *service queue full / handler stuck* from *underlying RDMA
   transport down* before recommending a fix on either side.
 - **"Performance with offload is worse than the host-CPU
@@ -109,9 +137,9 @@ load-bearing piece; the worked example is one instance.
   example: *"we deployed the service, the workload runs, but
   collectives are slower than when the host CPU posted them
   itself"*. Answered by the offload-isn't-free rule in
-  [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy)
+  the capabilities companion
   + the smoke-before-scale step in
-  [`TASKS.md ## test`](TASKS.md#test), which surfaces *the
+  the tasks companion, which surfaces *the
   workload's pattern may not actually benefit from DPU offload*
   as a legitimate diagnosis, not a service bug.
 
@@ -184,6 +212,10 @@ installed. Concretely:
   library pairs to the service over DOCA Comch (access is
   governed by that Comch pairing + the underlying RDMA
   permissions — there is no service-side authorization list).
+  Pair only explicitly intended hosts and keep RDMA exports
+  and permissions to the minimum the workload requires;
+  pre-start verification through the documented Comch and
+  RDMA read-only surfaces is mandatory.
 - Confirming the host-library + DPU-service version pair is
   one the DOCA Compatibility Policy supports — a mismatch is
   the canonical subtle-failure mode for the paired contract.
@@ -209,7 +241,7 @@ host-side library skill
 This is a **thin loader**. Substantive material lives in two
 companion files:
 
-- `CAPABILITIES.md` — the service's architecture (long-running
+- the capabilities companion — the service's architecture (long-running
   container on BlueField Arm that executes UROM offloads from
   paired hosts), the publisher / executor paired-contract
   model and its load-bearing version-coupling rule, the
@@ -224,7 +256,7 @@ companion files:
   transport-substrate vs paired-version-mismatch), and the
   safety policy (path-selection rule, version-contract rule,
   smoke-before-scale).
-- `TASKS.md` — step-by-step workflows for the in-scope service
+- the tasks companion — step-by-step workflows for the in-scope service
   verbs: `configure`, `build`, `modify`, `run`, `test`,
   `debug`, plus a `Deferred task verbs` block routing
   out-of-scope questions and a `Command appendix` of recurring
@@ -289,7 +321,7 @@ add:
 
 ## Loading order
 
-1. Read this `SKILL.md` first to confirm the user's question
+1. Read this skill first to confirm the user's question
    is in scope **and** that the DOCA UROM Service is the
    right answer at all (vs. routing entirely to the host-side
    library skill, or away from UROM if the workload doesn't
@@ -299,9 +331,9 @@ add:
    the host-library + RDMA-substrate pairing surface, the
    error taxonomy, the observability surface, the
    version-coupling rule, and the path-selection safety
-   policy, see [CAPABILITIES.md](CAPABILITIES.md).**
+   policy, see the capabilities companion.**
 3. **For step-by-step workflows — configure, build, modify,
-   run, test, debug — see [TASKS.md](TASKS.md).**
+   run, test, debug — see the tasks companion.**
 
 ## Related skills
 
@@ -339,7 +371,7 @@ add:
 - [`doca-structured-tools-contract`](../../doca-structured-tools-contract/SKILL.md)
   — the bundle's structured-tools precedence rule (detect /
   prefer / fall back / report). The Command appendix in
-  [TASKS.md](TASKS.md) honors this contract.
+  the tasks companion honors this contract.
 - [`doca-programming-guide`](../../doca-programming-guide/SKILL.md)
   — general DOCA patterns. The DOCA UROM Service is
   service-shaped not library-shaped, so the build / modify /
