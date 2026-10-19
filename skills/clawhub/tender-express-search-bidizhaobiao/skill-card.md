@@ -1,46 +1,60 @@
-## Description: <br>
-地方标讯极速检索-比地招标，当用户指定省份、城市或特定地域进行下沉标讯搜索时调用，必须严格应用地域过滤器参数，快速返回按时间倒序排列的地方采购公告及预算金额。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+按省市检索中国地方招投标公告及预算金额，并按需查询企业与市场数据。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External procurement analysts, sales teams, and agent users use this skill to search Chinese tender notices by keyword, geography, amount, and date, then retrieve details or summarize local opportunities. It also supports company, competitor, contact, and market-intelligence lookups when those broader procurement-analysis workflows are requested. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security summary flags that this skill exposes broader company, contact, competitor, and market-intelligence features than the local tender-search description suggests. <br>
-Mitigation: Use it only when the full procurement-intelligence scope is acceptable, and require explicit user intent before company expansion, contact lookup, competitor analysis, or market aggregation. <br>
-Risk: The skill requires a sensitive API key and can consume account quota. <br>
-Mitigation: Use a dedicated ZLBX_API_KEY, store it in the agent environment or approved secret store, monitor quota, and avoid exposing the key in prompts or logs. <br>
-Risk: Search terms, company names, and contact lookups may reveal sensitive business interests to an external procurement API. <br>
-Mitigation: Avoid confidential search terms, apply region filters when needed, and review results before sharing them outside the intended workflow. <br>
+## Use Case:
 
+采购、销售及商机研究人员可按地域、时间和关键词查找中国招投标公告、预算及项目进展；按需查询企业参与情况、联系人和市场趋势。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/liu-jiapeng/tender-express-search-bidizhaobiao) <br>
-- [Bidizhaobiao API key setup](https://ai.zhiliaobiaoxun.com/?ch=s27) <br>
-- [Tender Search API Reference](references/api-search.md) <br>
-- [Company Analysis API Reference](references/api-company.md) <br>
-- [Market Analysis API Reference](references/api-market.md) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API request examples and retrieved procurement data] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and may consume API quota for each request.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata) <br>
+Risk: The skill also enables broad company, contact and market-intelligence queries beyond local tender search.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the requested scope and grant access only to an API account permitted to run those queries.
+
+Risk: First-use registration can collect device characteristics, including a hashed MAC address, and save an API key locally.
+
+Mitigation: Configure ZLBX_API_KEY before first use to avoid device-based registration; if registration is needed, obtain explicit consent and protect ~/.zlbx/config.json.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/tender-express-search-bidizhaobiao)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Tender search API reference](artifact/references/api-search.md)
+- [Company intelligence API reference](artifact/references/api-company.md)
+- [Company registry API reference](artifact/references/api-registry.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Account API reference](artifact/references/api-account.md)
+- [Account registration and credential setup](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and linked result tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Shows applied filters, source links, publication dates and amounts in ten-thousand-yuan units when available; contact details depend on account access.]
+
+## Skill Version(s):
+
+2.0.7 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,50 +1,60 @@
-## Description: <br>
-帮助数学老师把讲概念和练题升级为系统化数学教学，生成概念建构、例题示范、变式训练、课堂小结和错例档案的 lesson-planning guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps Chinese-language middle and high school math teachers draft lesson plans with concept-building activities, worked examples, varied practice, summaries, and error-review notes.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers and education teams use this skill to design math lessons that build concepts through context, abstraction, examples, variation practice, summaries, and error review. It is intended to support teacher planning and student-thinking analysis without replacing teacher judgment or providing unauthorized question-bank content. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Lesson planning may involve student records or data passed to related analysis and resource-library skills. <br>
-Mitigation: Use pseudonyms for student records and confirm linked skills follow applicable school data-sharing rules before installation or use. <br>
-Risk: Math problem content can include copyrighted textbook or tutoring-bank material. <br>
-Mitigation: Require copyrightStatus labels and avoid copying unauthorized question-bank content. <br>
-Risk: Generated lesson guidance could be mistaken for teacher replacement or final authoritative instruction. <br>
-Mitigation: Use the skill as a lesson framework and concept-construction aid; teachers should review and adapt outputs before classroom use. <br>
+## Use Case:
 
+Middle and high school math teachers use this skill to draft classroom-ready lesson structures for concept instruction, worked examples, varied practice, review lessons, and error analysis. Teachers review the drafts before classroom use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-lesson-planner) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [concept-build-template.md](references/concept-build-template.md) <br>
-- [concept-build-sample.md](references/concept-build-sample.md) <br>
-- [example-demo-sample.md](references/example-demo-sample.md) <br>
-- [variation-design.md](references/variation-design.md) <br>
-- [variation-training-sample.md](references/variation-training-sample.md) <br>
-- [error-pattern-rubric.md](references/error-pattern-rubric.md) <br>
-- [error-case-file-sample.md](references/error-case-file-sample.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown lesson-planning templates, structured teaching guidance, and field-level planning notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference pseudonymized student records, copyrightStatus labels for math problems, and downstream skill handoff fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student work or classroom records may contain personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aliases and privacy controls; store photos of student work only when de-identified and permitted by school policy and consent.
+
+Risk: Unreleased exam material could be disclosed during lesson planning.
+
+Mitigation: Do not enter unreleased exam questions, answer keys, or other confidential assessment content.
+
+Risk: AI-generated math exercises or lesson guidance may be inaccurate.
+
+Mitigation: Teachers should check calculations and review lesson drafts before using them with students.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-lesson-planner)
+- [Concept-building template](references/concept-build-template.md)
+- [Variation design template](references/variation-design.md)
+- [High school math curriculum map](references/math-hs-curriculum-map.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown lesson-plan drafts and teaching guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes concept-building steps, worked examples, varied exercises, and teacher-review notes.]
+
+## Skill Version(s):
+
+2.11.2 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

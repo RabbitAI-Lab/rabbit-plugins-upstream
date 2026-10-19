@@ -1,49 +1,63 @@
-## Description: <br>
-Skin Pro calls the RageHealth /face/skin-pro API to analyze face photos for more than 28 skin indicators, including oil and water balance, pores, spots, sensitivity, wrinkles, blackheads, acne, dark circles, eye bags, skin type, skin age, and overall score. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes a consented frontal face photo through RageHealth to summarize skin scores, skin type, visible concerns, and illustrative images using one of two scoring strategies.
 
-## Publisher: <br>
-[qianchen94](https://clawhub.ai/user/qianchen94) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaoguaishou-sc](https://clawhub.ai/user/xiaoguaishou-sc)
 
-## Use Case: <br>
-Agents assisting external users use this skill when a consenting person provides a front-facing face photo and asks for skin analysis, skin-age estimation, skin scoring, or issue-specific checks for pores, acne, spots, wrinkles, sensitivity, blackheads, dark circles, or eye bags. The skill returns quality-gated, non-diagnostic skin-analysis results and care guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends sensitive face photos to RageHealth for automated skin analysis. <br>
-Mitigation: Use it only when the photographed person has explicitly consented, and do not analyze other people's faces without permission. <br>
-Risk: Face ID detection can increase identity and tracking sensitivity. <br>
-Mitigation: Keep face ID detection disabled unless there is a clear need and explicit consent for that use. <br>
-Risk: Credentials are required to call the API. <br>
-Mitigation: Keep SKIN_PRO_AK and SKIN_PRO_SK private, inject them through environment variables, and never include them in prompts, command arguments, logs, or user-facing responses. <br>
-Risk: The script accepts a custom endpoint, which could redirect face photos and credentials to an unintended destination. <br>
-Mitigation: Use the default RageHealth endpoint unless the alternative endpoint is fully trusted. <br>
-Risk: Skin-analysis output can be mistaken for medical or dermatology diagnosis. <br>
-Mitigation: State that results are for reference only and recommend in-person professional care for serious skin concerns. <br>
+## Use Case:
 
+Users and their assistants use this skill to review skin appearance in a frontal face photo, including pores, acne, wrinkles, pigmentation, and an overall score. Results are informational and not a medical diagnosis.
 
-## Reference(s): <br>
-- [Skin Pro response schema](references/response_schema.md) <br>
-- [RageHealth skin-pro API endpoint](https://facepro.ragehealth.cn/openapi-test/face/skin-pro) <br>
-- [RageHealth credential portal](https://chayan-test.ragehealth.cn/client) <br>
-- [ClawHub release page](https://clawhub.ai/qianchen94/skin-pro) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [JSON API responses and Markdown skin-analysis reports with optional shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write JSON output to a requested file; compact summaries omit polygons, landmarks, and face maps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release metadata) <br>
+Risk: Face photos and skin-analysis data are sent to RageHealth.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain the user's consent before upload and use the service only when comfortable sharing this sensitive data.
+
+Risk: Face ID detection can create a persistent facial identifier within a user group.
+
+Mitigation: Enable face ID only on the user's explicit request; otherwise leave it disabled.
+
+Risk: Skin scores can be mistaken for a clinical diagnosis.
+
+Mitigation: Present results as informational, flag poor photo quality, and recommend an in-person clinician for concerning symptoms.
+
+Risk: Exposed credentials or changing dependency versions can compromise access or reproducibility.
+
+Mitigation: Keep dedicated SKIN_PRO_AK/SKIN_PRO_SK credentials out of chat and pin dependency versions for reproducible installs.
+
+## Reference(s):
+
+- [skin-pro ClawHub release](https://clawhub.ai/xiaoguaishou-sc/skills/skin-pro)
+- [Skin analysis response schema](references/response_schema.md)
+- [RageHealth client portal](https://ragehealth.cn/client)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Plain-language Markdown summary; optional JSON analysis response]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes skin scores, severity labels, photo-quality caveats, and links to illustrative images where available.]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

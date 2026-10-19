@@ -38,7 +38,20 @@ vmware-harden scan --target prod-vc --baseline dengbao-2.0-level3-vmware
 
 # Custom DB path (e.g. CI artifact)
 vmware-harden scan --target lab-vc01 --db /tmp/ci-twin.duckdb
+
+# Known vulnerabilities: ESXi + vCenter builds against the offline VMSA catalog
+vmware-harden scan --target prod-vc --baseline vmsa-advisories
 ```
+
+`vmsa-advisories` is generated from the catalog shipped in the package
+(`vmware_harden/advisories/catalog.yaml`), not from a YAML file; the id is
+reserved, so a user baseline of that name is not consulted. Each rule is one
+advisory. A component is **affected** (violation, with the fixing release),
+**fixed**, or **unknown** (listed per node with the reason — unreadable build,
+line not listed or past end of support, branch the sources disagree on, product
+not catalogued). Builds are compared only within one `major.minor` line. The
+catalog date is printed in every rule: a clean result means no open advisory
+known as of that date.
 
 The scan prints one line per collector with the count of entities
 gathered, then the total violation count. Drift events versus the prior
@@ -52,7 +65,7 @@ Show the most recent snapshot's violations.
 ### Synopsis
 
 ```bash
-vmware-harden report [--db <path>] [--format text|json]
+vmware-harden report [--db <path>] [--format text|json|csv]
 ```
 
 ### Options
@@ -60,7 +73,7 @@ vmware-harden report [--db <path>] [--format text|json]
 | Flag | Description | Default |
 |------|-------------|---------|
 | `--db` | Twin DuckDB path. | `~/.vmware-harden/twin.duckdb` |
-| `--format` | Output format — `text` or `json`. | `text` |
+| `--format` | Output format — `text`, `json` or `csv`. Any other value exits 2. | `text` |
 
 > HTML rendering is **not** a CLI flag; use `vmware-harden web` for the
 > rendered dashboard.
@@ -70,6 +83,7 @@ vmware-harden report [--db <path>] [--format text|json]
 ```bash
 vmware-harden report
 vmware-harden report --format json > violations.json
+vmware-harden report --format csv > violations.csv   # one row per violation; advisory columns: status, version, build, fixed_in, kev, cves, catalog_as_of, reason
 ```
 
 If no scans have run yet, the command prints a hint to run
@@ -257,19 +271,20 @@ Source of truth: `vmware_harden/doctor.py::run_diagnostics`.
 
 ### Example output
 
+<!-- install-pin: program-output -->
 ```
   ✓ Python version                  Python 3.12.7
   ✓ Twin DB                         /Users/me/.vmware-harden/twin.duckdb
   ✓ Built-in baselines              6 loaded
   ✓ vmware-aiops                    vmware_aiops available
-  ⚠ vmware-storage                  install: `uv tool install vmware-storage` (datastore collector)
-  ⚠ vmware-nsx-security             install: `uv tool install vmware-nsx-security` (DFW collector)
+  ⚠ vmware-storage                  not importable — run: uv tool install "vmware-harden[collectors]" (datastore collector). Installing it as a tool of its own puts it in a separate environment vmware-harden cannot import from.
+  ⚠ vmware-nsx-security             not importable — run: uv tool install "vmware-harden[collectors]" (DFW collector). Installing it as a tool of its own puts it in a separate environment vmware-harden cannot import from.
   ✓ vmware-policy                   vmware_policy available
   ⚠ ANTHROPIC_API_KEY               unset — Advisor will use MockProvider
-  i vmware-pilot                    optional — `vmware-harden apply --pilot real` requires it
+  i vmware-pilot                    optional — `vmware-harden apply --pilot real` needs it: uv tool install "vmware-harden[remediation]"
   ✓ Audit DB dir                    /Users/me/.vmware
 
-  All checks passed (3 warning(s))
+  No errors. 3 warning(s) above — each names something harden cannot do until it is resolved.
 ```
 
 ### Exit codes

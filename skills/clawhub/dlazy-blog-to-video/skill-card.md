@@ -1,45 +1,60 @@
-## Description: <br>
-Dlazy Blog To Video helps agents invoke the dLazy file-to-video SaaS workflow to turn blog posts or other documents into narrated videos with storyboard, voiceover, and build steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides creators in turning blog posts and other documents into narrated videos using dLazy.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and agents can use this skill to start or continue dLazy file-to-video projects for converting blog posts, articles, and documents into narrated videos for social, YouTube, training, courseware, or report-broadcast use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill advertises blog-to-video but routes agents through a broader file/document-to-video SaaS workflow. <br>
-Mitigation: Treat it as a general file-to-video wrapper and confirm the intended document or file scope before use. <br>
-Risk: Prompts and explicitly attached files may be sent to dLazy API and file storage endpoints. <br>
-Mitigation: Avoid submitting confidential documents unless the dLazy account, data handling terms, and storage behavior are acceptable. <br>
-Risk: The workflow requires a dLazy API key that may be stored in local CLI configuration. <br>
-Mitigation: Use account-scoped keys, keep the local config protected, and rotate or revoke the key when access changes. <br>
+## Use Case:
 
+Creators and marketing teams can ask an agent to turn a blog post or document into a narrated video. The supplied English instructions instead describe image generation, so the intended workflow needs confirmation before use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-blog-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to run pinned dLazy CLI commands, attach files, or continue an existing dLazy project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached local files may be sent to dLazy services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only content approved for this third-party service; avoid private or regulated documents unless that sharing is acceptable.
+
+Risk: The listing says blog-to-video, the Chinese instructions use a broader file-to-video workflow, and the English instructions describe image generation.
+
+Mitigation: Confirm the intended command and output with the publisher before running the skill or relying on its results.
+
+Risk: Using the skill requires a locally stored API key and installation or execution of a third-party CLI.
+
+Mitigation: Review the pinned CLI before installing it and protect or rotate the API key as appropriate.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-blog-to-video)
+- [dLazy CLI repository (listed in skill metadata; not verified skill provenance)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy website](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown and CLI text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return links to generated media; requires a dLazy API key.]
+
+## Skill Version(s):
+
+1.0.30 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

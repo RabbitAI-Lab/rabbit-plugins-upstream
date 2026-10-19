@@ -1,49 +1,60 @@
-## Description: <br>
-Access global customs trade data from 220+ countries to search import-export records by company, HS code, or product and identify buyers, suppliers, and competitor trade activity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search global customs trade records and company profiles to identify buyers, suppliers, and cross-border trading patterns.
 
-## Publisher: <br>
-[upkuajing](https://clawhub.ai/user/upkuajing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[upkuajing](https://clawhub.ai/user/upkuajing)
 
-## Use Case: <br>
-External trade, sales, and sourcing teams use this skill to find international buyers or suppliers, inspect customs shipment history, enrich company records, and monitor competitor cross-border activity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an UpKuaJing API key that may be stored locally. <br>
-Mitigation: Protect ~/.upkuajing/.env as a secret file and avoid sharing API-key values in prompts, logs, or support requests. <br>
-Risk: Search and enrichment operations can incur paid API charges. <br>
-Mitigation: Review fee prompts, expected call counts, pricing information, and account balance before approving searches or enrichment calls. <br>
-Risk: Company contact-data retrieval may raise privacy, outreach, or compliance obligations. <br>
-Mitigation: Use retrieved emails, phone numbers, social profiles, and websites under applicable privacy, anti-spam, and business-outreach rules. <br>
+## Use Case:
 
+Trade teams and export businesses use this skill to find prospective international buyers and suppliers, examine shipment histories, and monitor competitors' trade activity.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/upkuajing/skills/upkuajing-customs-trade-company-search) <br>
-- [UpKuaJing Homepage](https://www.upkuajing.com) <br>
-- [UpKuaJing Open Platform](https://developer.upkuajing.com/) <br>
-- [Detailed Price Description](https://www.upkuajing.com/web/openapi/price.html) <br>
-- [Company Detail API Reference](references/company-detail-api.md) <br>
-- [Company List API Reference](references/company-list-api.md) <br>
-- [Contact Fetch API Reference](references/contact-fetch-api.md) <br>
-- [Trade List API Reference](references/trade-list-api.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON or JSONL API results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Search tasks may write JSONL result files and return task IDs, fee information, balances, and file paths.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: evidence.release.version and SKILL.md metadata.version) <br>
+Risk: A plaintext API key can be exposed from local storage or printed to output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep the key file accessible only to the account owner and do not print or share its contents.
+
+Risk: Searches, enrichment, contact lookup, and top-up can incur charges without code-enforced confirmation.
+
+Mitigation: Check current pricing and obtain fresh, explicit user confirmation before each paid action.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/upkuajing/skills/upkuajing-customs-trade-company-search)
+- [UpKuaJing website](https://www.upkuajing.com)
+- [UpKuaJing Open Platform](https://developer.upkuajing.com/)
+- [UpKuaJing API pricing](https://www.upkuajing.com/web/openapi/price.html)
+- [Trade list API reference](references/trade-list-api.md)
+- [Company list API reference](references/company-list-api.md)
+- [Company details API reference](references/company-detail-api.md)
+- [Contact lookup API reference](references/contact-fetch-api.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Natural-language summaries of trade records and company or contact information]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Large searches may return a downloadable results file.]
+
+## Skill Version(s):
+
+1.0.11 (source: server release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

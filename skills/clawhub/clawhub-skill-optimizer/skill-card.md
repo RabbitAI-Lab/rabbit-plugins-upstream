@@ -1,43 +1,57 @@
-## Description: <br>
-AI-powered ClawHub skill optimizer that analyzes reviews, tracks trending topics, and rewrites metadata to improve discoverability, downloads, and GitHub-style stars. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides ClawHub skill creators with review analysis, metadata rewrite suggestions, trend-informed promotion ideas, and draft marketing materials for manual review.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers and skill publishers use this agent to analyze ClawHub skill feedback, identify relevant search trends, and draft metadata, tag, review-analysis, social-promotion, and video-preview improvements for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Example Python trend-tracking snippets may contact external services and send query terms, IP address, timing, or related request metadata if copied and run. <br>
-Mitigation: Review outbound services, transmitted data, request frequency, credentials, and platform rules before running any example code. <br>
-Risk: Generated metadata edits or social posts could be inaccurate, misleading, or misaligned with the publisher's release goals. <br>
-Mitigation: Keep all metadata edits and social publishing under manual approval, and verify claims before applying them to a public skill. <br>
+## Use Case:
 
+ClawHub skill creators and developers use this advisory skill to assess user feedback, draft clearer titles and descriptions, and plan promotional content. Users review and apply any suggested changes themselves.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/gechengling/clawhub-skill-optimizer) <br>
-- [Review Analysis Templates](references/review_analysis_templates.md) <br>
-- [SEO Optimization Guide](references/seo_optimization_guide.md) <br>
-- [Trending Topic Tracker](references/trending_topic_tracker.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, code, configuration] <br>
-**Output Format:** [Markdown guidance with example code snippets, metadata suggestions, report templates, and prompt text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory output only; metadata changes, social posts, and any copied example code require manual approval before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.1 (source: server release evidence) <br>
+Risk: Running illustrative code may send queries or other data to third-party services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review example code and privacy implications before running it; use only approved services and data.
+
+Risk: Suggested metadata and promotional claims may be inaccurate or overstate expected growth.
+
+Mitigation: Verify claims and preview all proposed edits or posts before making or publishing them manually.
+
+Risk: Copying example installation commands without checking package versions may introduce dependency risk.
+
+Mitigation: Review dependencies and pin trusted package versions before running any examples.
+
+## Reference(s):
+
+- [Clawhub Skill Optimizer on ClawHub](https://clawhub.ai/gechengling/skills/clawhub-skill-optimizer)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown reports, suggested metadata and tags, thumbnail prompts, video scripts, and promotional copy]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory only; no automatic edits, publishing, or external requests.]
+
+## Skill Version(s):
+
+2.1.3 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

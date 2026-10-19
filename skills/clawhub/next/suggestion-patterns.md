@@ -1,5 +1,9 @@
 # Suggestion Patterns
 
+## Cross-cutting rule — PR/issue references in options require the full URL (HARD STOP)
+
+**When any option disposes of a PR or issue, expose the clickable full URL (`https://github.com/<owner>/<repo>/pull/<N>`) in the question text or that option's description.** A bare "PR #N" — even with the repo name attached — is insufficient: the ask is a self-contained decision UI, and the user must be able to open and inspect the PR before deciding, without hunting through scroll-back. Applies to every "After PR" pattern below. Enforced by the `block-tasklist-id-in-conversation.sh` PR-URL gate (a PR reference with no PR URL anywhere in the questions payload is denied). Recurrence history: see failed-attempts.md (grep "bare PR").
+
 ## Cross-cutting rule — Minor-or-below severity bundling across PRs (HARD STOP)
 
 **When composing next-action options after a PR is consolidated / merged, do NOT recommend addressing that PR's Minor/Nitpick deferred findings as a standalone follow-up (single-PR batch).** Minor-or-below severity findings should be bundled across related PRs, not surfaced per-PR.
@@ -61,6 +65,21 @@
 
 - `github-flow/pr.md` lines 13-14, 276-279 (Draft-default HARD STOP at execution time) — this skill mirrors that rule into option-description time.
 - Triggering keyword in option description (any locale): `create PR`, `PR creation`, `register PR`, `worktree+PR`, `cherry-pick + PR`, `gh pr create`, and equivalent localized forms. Any of these without a "draft" qualifier = violation.
+
+## Cross-cutting rule — Antigravity unapproved PR clawo delegation in next-action options (HARD STOP)
+
+**In the Antigravity (Gemini) environment, whenever composing next-action options, proposing unapproved/unmerged PR review, consolidation, or remediation as a direct task for the main Antigravity session is strictly forbidden (`HARD STOP`).**
+
+If an unapproved PR is surfaced as a candidate from open PR discovery (`gh pr list`), it MUST be explicitly framed as delegating to `clawo` (e.g. `[clawo] PR #<N> delegate consolidate review (/clawo consolidate PR #<N>)`), never as direct in-session review. **When dispatching the clawo session, the prompt passed to clawo MUST explicitly execute `/consolidate pr <PR_URL>` (or `/consolidate pr #<N>`) as its entry point.**
+
+### Don't / Do
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Propose "[repo] PR #<N> review & process" as a direct option in Antigravity | Frame explicitly as "[clawo] PR #<N> delegate consolidate (/clawo consolidate PR #<N>)" |
+| 2 | Start direct code review or consolidate inside the main Antigravity turn | Dispatch the PR workflow to an isolated `clawo` session (`Skill("clawo", "launch")`) |
+| 3 | Surface open PRs without checking if the current environment is Antigravity | When in Antigravity, all unapproved PR candidates must carry the `[clawo]` prefix and delegation command |
+| 4 | Send unstructured instructions ("verify and merge...") in the clawo prompt | Explicitly pass `/consolidate pr <PR_URL>` so the worker runs the standard consolidate workflow |
 
 ## Deferred-status overrides severity + pending-task precedence (HARD STOP)
 
@@ -130,6 +149,26 @@ cosmetic / style-only · already worked around · an external outage you cannot 
 2. SCOPE met (shared/production surface) AND ≥1 escalation test true? → If yes, it is Recommended #1 (or handled before the ask), not a diversity slot
 3. Before proposing a fix, did I confirm the cause is self-fixable vs external via primary evidence? → external → track, don't ship a speculative fix
 4. Excluded class (cosmetic / local-test / external outage / user-deferred)? → normal option, do not force first
+
+## After analysis / review producing multiple findings (HARD STOP)
+
+**Precondition**: The just-completed work (code review, issue-comment analysis, audit, verification) produced **N ≥ 2 discrete findings** whose handling the user must decide — include in a comment, apply, correct, drop, or defer.
+
+**One question per finding — never bundle findings into one option.** Each finding is an independent decision axis. Packing N findings into a single option description ("post the review comment with all 4 findings") strips the user's per-finding authority: they can only take all-or-nothing. Automated ask-guards may not catch description-level bundling (descriptions are excluded from axis detection to avoid false positives), so this composition rule is the first line of defense.
+
+**Pattern (two-stage ask)**:
+
+1. **Per-finding call**: one question per finding via the `questions` array (max 4 questions per call; when N > 4, chunk into sequential calls of ≤4 — never drop the tail). Options per finding: `Include / Apply` · `Exclude / Drop` · `Defer` (+ auto "Other").
+2. **Disposition call**: after the per-finding answers arrive, ask the overall action (post the comment / record locally only / hold), composed from what the user selected. Phrase it without re-enumerating finding counts (a "N findings" token in a single question is itself a bundling signal).
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | One option labeled "post comment with all N findings" | One question per finding first, disposition ask second |
+| 2 | `questions.length == 1` with the findings enumerated inside an option description | Split into the `questions` array — description-level bundling evades keyword/path axis detection |
+| 3 | Pre-deciding which findings are "obviously worth including" and bundling the rest | Obviousness is not a substitute for the user's per-finding decision |
+| 4 | Handling N > 4 by silently dropping low-priority findings | Chunk into sequential ≤4-question calls; every finding gets its own question |
+
+**Self-check (before any ask that disposes of analysis/review results)**: Did the completed work produce ≥2 discrete findings? → per-finding questions first, disposition second.
 
 ## After code writing/modification
 
@@ -302,6 +341,10 @@ gh api 'orgs/<org>/copilot/billing' --jq '{
 
 **Availability gate (HARD STOP)**: If query 3 returns `active: 0` or `management: "disabled"` or fails with "Not Found", **Copilot reviewer registration is NOT possible for this PR**. The "Request Copilot review" option in the "Copilot absent" branch becomes inactive — skip the option set and self-decide on `consolidate (CodeRabbit only)` instead. Do not present an ask whose Recommended option is impossible to execute.
 
+**CodeRabbit tier × visibility gate (HARD STOP — before composing any "wait for CodeRabbit" option)**: CodeRabbit's plan matrix blocks line-by-line reviews on **PRIVATE + Free-plan** repos — only a walkthrough is ever posted there. Before composing any option that waits on / polls for / registers a task for a CodeRabbit review arrival, verify with primary sources: (1) repo visibility (`gh repo view --json isPrivate`), (2) plan tier (project-memory fact or the walkthrough's plan line), (3) current review state (`gh pr checks <N>` — a CodeRabbit line reading `Review completed` means nothing more is coming). PRIVATE + Free, or `Review completed` already present → a wait/poll option is **invalid**: route to the internal-review fallback (generic code-reviewer agent / inline diff analysis) instead. "The PR just went ready, so the review must be pending" is exactly the assumption this gate forbids — run the queries, don't infer. Recurrence source: a "register task and wait for CodeRabbit" Recommended option composed on a Free+PRIVATE repo whose walkthrough had already completed.
+
+**CI-gate-only base branch gate (HARD STOP — check BEFORE the reviewer-matrix queries)**: some long-lived branches exist purely to accumulate CI-passing commits ahead of a later, separately-reviewed promotion PR (e.g. a two-tier staging model). What matters is the base branch's *role*, not its literal name — verify via `gh pr checks <N>`: a CodeRabbit line reading `Review skipped: reviews are disabled for this base branch` means this base is CI-gate-only, and no walkthrough will ever arrive (not "pending", not "rate limited"). When this signal is present, skip the reviewer-matrix branches entirely — self-decide "CI green + Test Plan + Mergeable is the full gate for this base" and route straight to `github-flow/merge.md`'s CI-gate-only exception, not any of the four branches below.
+
 Then map to a branch:
 
 | CodeRabbit walkthrough | Copilot requested | Copilot reviewed | Branch (option set) |
@@ -417,10 +460,18 @@ options: [
 
 ### Context-usage gate (HARD STOP — before offering ANY wrap-up/cleanup option, in any ask)
 
+**Dependency precondition (HARD STOP)**: this entire gate applies ONLY when a session-cleanup skill is available in the current environment. If none is available, skip the context-usage gate and never offer a cleanup / wrap-up / retrospective option — see next SKILL.md "Dependency-gated behaviors". Evaluate the conditions below only after this precondition passes.
+
 A session-cleanup / retrospective / wrap-up option — including as a diversity slot inside a regular next-action ask — may be offered only when at least one of these holds:
 
 1. The user explicitly signaled wrap-up intent (wrap-up keyword, or 2+ consecutive declines of other follow-ups), or
-2. The injected context-usage signal (a `Context usage: ... (NN%)` line in hook additionalContext, when the environment provides one) reports **≥ 45%** — **read from the LATEST injection in the transcript at ask-composition time**. The signal only refreshes on user-prompt events, and a compact/summarization boundary shrinks context, so any reading taken before the most recent injection (or before an intervening compact) is stale and **overstates** usage. A stale reading NEVER satisfies the gate: if the freshest injection is below the threshold — or no post-compact reading exists yet — treat condition 2 as NOT met.
+2. The injected context-usage signal (a `Context usage: ... (NN%)` line in hook additionalContext, when the environment provides one) reports at/above the **session model's live threshold** (Fable/Mythos 55%, Opus 50%, others 45% — 45% is also the generic fallback when the model is unknown; the injection script publishes the live per-model value and emits an explicit `CLEANUP-GATE` directive line when the reading is over it) — **read from the LATEST injection in the transcript at ask-composition time**. **Active trigger**: when this condition holds on a FRESH reading, the cleanup/retrospective option is not merely permitted — it is REQUIRED as the Recommended #1 option of the turn-final ask (or a standalone cleanup ask when no other ask is happening this turn), citing the live percentage. The signal only refreshes on user-prompt events, and a compact/summarization boundary shrinks context, so any reading taken before the most recent injection (or before an intervening compact) is stale and **overstates** usage. A stale reading NEVER satisfies the gate: if the freshest injection is below the threshold — or no post-compact reading exists yet — treat condition 2 as NOT met.
+
+**Post-compact floor (HARD STOP)**: immediately after a compact/summarization boundary — an explicit compact command, an `isCompactSummary` entry, or a session that opened with a "continued from a previous conversation that ran out of context" summary — assume usage is **under 20% until re-measured**, and never quote a percentage that appears in the pre-compact conversation or its summary. The measurement mechanism reads the last assistant-message usage field, which still describes the pre-compact session until a new assistant turn has been generated; a figure read at that moment can overstate reality by tens of percentage points. This is the operator-facing counterpart of the injection script's own first-post-compact suppression — the script suppresses its own output, but nothing stops a composer from quoting a number it read elsewhere.
+
+   **Post-compact floor heuristic (HARD STOP)**: immediately after a `/compact` or summarization boundary, the injected reading reflects the **pre-compact** window (the old summary + re-injected always-on context, not yet compressed into the new window) and is stale-**high**. Until a live re-check (Live-check fallback below) confirms otherwise, treat context as **< 20%**. Do not trust the injected number for a threshold decision on the first turn(s) after a compact — the fresh-looking percentage can be 3×+ the real usage (observed: injected 60.1% vs live 22.6% one turn after `/compact`).
+
+   **Scope — not limited to the cleanup gate (HARD STOP)**: this staleness discipline governs **any** decision keyed on a context-usage percentage, not just whether to offer cleanup. That includes **loop / budget completion checks** — e.g. a ralph-loop `--completion-promise` of the form "context > N%", a token-budget cap, or a "context is high enough to stop" judgment. Never satisfy such an **upper**-threshold from an injected reading taken at or around a compact boundary: run the Live-check first and decide on the live number. A stale-high reading falsely satisfying a "context > N%" completion promise ends a loop that should still be running — the mirror of the cleanup gate's stale-high over-offer.
 
 When neither holds, omit the cleanup/wrap-up option entirely — fill the slot with another discovery-source candidate or present fewer options. Cleanup value scales with session fullness; offering it early pressures a premature session boundary the user did not ask for.
 
@@ -430,7 +481,7 @@ When neither holds, omit the cleanup/wrap-up option entirely — fill the slot w
 echo '{"transcript_path": "<current transcript path>"}' | bash <path-to-context-usage-injection-script>
 ```
 
-This invokes the injection script directly — it parses the transcript's last assistant-message usage field on demand and does not depend on a fresh `UserPromptSubmit` firing. Use this live number, not the stale injected line, before citing any percentage as gate justification. (Claude Code's script lives at `~/.claude/hooks/context-usage-inject.sh`; other environments provide their own equivalent or none at all — absence of a direct-invocation path means fall back to omitting the option per the paragraph above.)
+This invokes the injection script directly — it parses the transcript's last assistant-message usage field on demand and does not depend on a fresh `UserPromptSubmit` firing. Use this live number, not the stale injected line, before citing any percentage as gate justification. (**Resolve the script's path, do not assume it.** It ships with the hook-kit skill as `resources/context-usage-inject.sh`, so locate it with e.g. `ls ~/.claude/plugins/marketplaces/*/skills/*/resources/context-usage-inject.sh` rather than hardcoding an install location — note that a plain `find ~/.claude/plugins/marketplaces -name context-usage-inject.sh` returns **nothing** when the marketplace entry is a symlink into a checkout, so it needs `find -L` if you prefer find — `~/.claude/hooks/context-usage-inject.sh` was documented here previously and does **not** exist on at least one install, which turns this whole fallback into a dead end exactly when it is needed. Other environments provide their own equivalent or none at all — absence of a direct-invocation path means fall back to omitting the option per the paragraph above.)
 
 | # | Don't | Do |
 |---|-------|-----|
@@ -439,6 +490,15 @@ This invokes the injection script directly — it parses the transcript's last a
 | 3 | Treat the absence of the signal as permission to offer cleanup | No signal + no user intent = no cleanup option (conservative fallback on environments without the injection hook) |
 | 4 | Reuse a context-usage % cached from an earlier prompt ("the gate passed at /wip entry") across a long multi-ask turn chain, or across a compact boundary | Re-check the **latest** injected `Context usage:` line each time a wrap-up option is composed; a compact boundary invalidates every earlier reading. Enforcement hook: `block-cleanup-option-below-context-gate.sh` (PreToolUse:AskUserQuestion) denies wrap-up options when the transcript-latest % is below the threshold |
 | 5 | Cite an old injected % as current-state justification when a long tool-call chain (Stop-hook continuation, no new `UserPromptSubmit`) separates that reading from ask-composition time | Get a live reading via direct invocation of the context-usage injection script (feed `{"transcript_path": "<path>"}` on stdin) before citing any percentage — see "Live-check fallback" above |
+| 6 | Carry a percentage across a compact boundary — quoting a figure that appears in the pre-compact conversation or its summary, and calling it "live" | Post-compact, assume **under 20%** until re-measured (see "Post-compact floor"). Writing the word "live" in front of a number you did not measure this turn is the tell: if no measurement ran, the gate is not met |
+| 7 | Follow the "get a live reading" instruction by running a hardcoded script path, then treat `No such file or directory` as inconclusive and fall back to the stale figure | Resolve the script by search, not by assumed path. A failed resolution means the gate is NOT met — it never licenses reusing the stale number |
+| 8 | Treat a reading that was accurate when the ask was composed as still valid when the user's answer arrives, and act on a gate-justified selection without re-measuring | The gate is a point-in-time check with no validity duration. Re-measure before **executing** a selection whose justification was the percentage — see "Round-trip invalidation" below |
+
+**Round-trip invalidation — the reading can die between ask and answer (HARD STOP)**: every rule above guards the *backward* direction (a figure carried forward across a boundary that already happened). The opposite case is not covered by any of them and is the more common one on a full session: the figure is honestly measured and correct at ask-composition time, then **automatic context compression fires while the ask is open**, and the user answers against a premise that no longer exists. Verified instance: a cleanup ask composed at a genuine 84.0% (transcript peak 840,443 confirmed) was answered after an auto-compaction had already dropped the session to 33.5% — the recommendation was accurate when written and obsolete when acted on.
+
+Auto-compaction is precisely the event that invalidates the gate, and it is **not detectable after the fact**: unlike a manual compact it writes no `isCompactSummary` / `compact_boundary` entry, so neither the composer nor a `PreToolUse` hook can distinguish "the number is stale" from "the number is fine". The only reliable defence is a re-measure at execution time.
+
+Therefore: when a selection is about to be executed **and the percentage was part of that option's justification**, re-run the live measurement first. If the new reading no longer clears the threshold, say so and re-offer rather than proceeding on the dead premise — the user chose against a stated condition, so a silently-changed condition invalidates the consent, not merely the reasoning. This applies to the cleanup/wrap-up option specifically; selections justified on grounds other than context usage are unaffected.
 
 **Step 0.5 required — Read TaskList directly to identify pending entries**:
 
@@ -446,9 +506,36 @@ This invokes the injection script directly — it parses the transcript's last a
 TaskList   # use pending/in_progress entries as the source
 ```
 
+### fix_plan.md candidate prioritization rules
+
+1. **Workspace-local prioritization**: Candidates from the local project's `fix_plan.md` are prioritized over generic options or templates.
+2. **Priority Sorting**: Candidates must be sorted strictly in the order of `P0` -> `P1` -> `P2` -> `[REPEAT]`.
+3. **Session Relevance**: Highlight and recommend tasks first that touch files or folders modified in the current session — session-irrelevant `fix_plan.md` items (even high-priority ones) must not be `Recommended` by default.
+4. **Cross-workspace target labeling (HARD STOP)**: `fix_plan.md` can legitimately index items whose actual work target is a different git org/repo than the current workspace's own (a cross-project dependency tracker entry). Being textually present in the local tracker does not make an item "this session's own work." Before surfacing such an item as an option, compare its target repo/org against the current session's workspace root — if they differ, the option description must name both sides explicitly (e.g. `(cross-workspace: <other-org>/<other-repo>)`), and it must not be `Recommended` unless the user's current work thread is actually about that target repo. See `ask-gates.md` Step 0.6 item 6a for the full procedure.
+
+### Session context synthesis in AskUserQuestion text (HARD STOP)
+
+When composing the question text for `AskUserQuestion` at the end of a session, do NOT use generic phrasings like "All modification requests are complete" or its Korean translation equivalent indicating general completion.
+Instead, you MUST dynamically synthesize the main technical themes, objectives, or features worked on in the current session (e.g. "backchannel logout finalization", "CI stability", "relocation of plans to llm-wiki/generated", "block-manual-delegation hook FP mitigation", "branch-policy contradiction fix").
+This helps the user clearly associate the recommended next steps with the active development context.
+
+**Strict Length Limit (HARD STOP)**: The synthesized context summary in the question text MUST be kept extremely concise.
+- **Maximum limit**: 1-2 high-level themes, under 15 words total.
+- **Forbidden**: Do NOT list 3+ distinct commits, subtasks, bug fixes, or minor achievements in a single question text. Keep details inside `walkthrough.md`, not in the choice prompt.
+
+#### Don't / Do
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Use generic phrasings ("All tasks are done", "Everything is complete") | Summarize the key achievements of this session in the question text |
+| 2 | Enumerate every tiny commit or tool error (e.g., listing 5+ distinct bug fixes and updates in a long sentence) | Focus on the high-level technical goals under 15 words (e.g. "relocated plan files to llm-wiki/generated and resolved branch-policy contradiction") |
 ### Recommended priority — actionable follow-up over "End session" (HARD STOP)
 
 **"End session" must never be the default Recommended option.** It carries no actionable value beyond what the user already implies by stopping responding; suggesting it autonomously is an autonomous proposal of a work-progression decision (branching / session termination / skipping), which is forbidden. If the user wants to end the session, they will say so or simply stop — `next` does not need to nominate it.
+
+**Scope + class test (HARD STOP)**: this rule is NOT confined to this wrap-up section — it applies to **every** ask composed anywhere in this skill's flow (including mid-flow disposition/remainder asks and Step 0.66 minimal confirmations), and "End session" is judged by **effect, not label**: any option whose selection ends the session's work ("stop here", "delegate the remainder and finish", hand-off-and-close variants) belongs to this class and must not carry `(Recommended)`.
+
+**Hold/defer options follow the same discipline (HARD STOP)**: a "Hold" / "defer" option on a lightweight, immediately-doable follow-up of an already-approved flow must NOT carry `(Recommended)` while live context usage is below the model's cleanup threshold and the user has not signaled wrap-up intent — recommending deferral there is the pacing variant of recommending "End session" (recurrence class: premature-wrapup-recommend, 3rd occurrence: user overrode a "Hold (Recommended)" with "context is ample, proceed"). Default-recommend the proceed option instead — and per ask-gates "Continuation-over-re-ask", such a follow-up usually warrants no ask at all. A deferral may be Recommended only when an external signal genuinely warrants it: tracker guidance naming a dedicated session, a blocking dependency, or an explicit user deferral earlier in the session.
 
 Instead, the **Recommended** option is always **the most actionable follow-up** available. In priority order:
 

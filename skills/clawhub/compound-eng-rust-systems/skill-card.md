@@ -1,48 +1,58 @@
-## Description: <br>
-Rust patterns for CLI tools, backend services, and general application code covering Cargo workspaces, axum/tokio services, clap CLIs, async concurrency, and Rust tooling configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Rust patterns for CLI tools, backend services, Cargo workspaces, async concurrency, and application code.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill for Rust application work, including CLIs, axum/tokio services, Cargo workspaces, async concurrency, testing, observability, performance tuning, and CI configuration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Production web-service examples may be copied with broad CORS behavior or client-facing error detail that is inappropriate for a deployment. <br>
-Mitigation: Review CORS allowlists, client error messages, authentication, and secret redaction before using the examples in production. <br>
-Risk: Cargo, CI, and build-profile snippets can change build behavior, dependency checks, or release artifacts when applied. <br>
-Mitigation: Apply snippets in a reviewed branch and run the repository's format, lint, test, and dependency checks before release. <br>
+## Use Case:
 
+Rust developers use this skill to design and review CLI tools, Tokio/axum services, libraries, Cargo configuration, and tests.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/iliaal/skills/compound-eng-rust-systems) <br>
-- [SPEC.md](SPEC.md) <br>
-- [Axum HTTP Services](references/axum-service.md) <br>
-- [Build Profiles](references/build-profiles.md) <br>
-- [Rust CI Pipeline](references/ci-pipeline.md) <br>
-- [Rust CLI Tools](references/cli-tools.md) <br>
-- [Observability for Rust Services](references/observability.md) <br>
-- [Hot-Path Performance](references/performance.md) <br>
-- [Production Resilience](references/production-resilience.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Rust, TOML, YAML, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No automatic execution; outputs are recommendations and snippets for agent-assisted Rust development.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Generic CORS settings in web-service examples may be unsafe for authenticated APIs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict allowed origins and methods to the application's needs before production use.
+
+Risk: Copying example middleware order may produce unintended access or timeout behavior.
+
+Mitigation: Review and test tower middleware ordering in the target service.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-rust-systems)
+- [Toolchain and interfaces](artifact/references/toolchain-and-interfaces.md)
+- [Ownership and execution](artifact/references/ownership-and-execution.md)
+- [Applications and testing](artifact/references/applications-and-testing.md)
+- [Axum HTTP services](artifact/references/axum-service.md)
+- [Production resilience](artifact/references/production-resilience.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with Rust and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations and examples require adaptation and testing for the target project.]
+
+## Skill Version(s):
+
+5.1.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

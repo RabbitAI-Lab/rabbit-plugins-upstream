@@ -1,49 +1,55 @@
-## Description: <br>
-人生岔路模拟栈 helps Chinese-language users turn “如果当年……” life-choice retrospection questions into structured Markdown or HTML reports with fork diagrams, three outcome cards, event-impact cards, and 30-day validation experiments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps people reflect on past life choices and compare personal options through conditional scenarios, trade-offs, and low-risk experiments.
 
-## Publisher: <br>
-[killsnake01](https://clawhub.ai/user/killsnake01) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[killsnake01](https://clawhub.ai/user/killsnake01)
 
-## Use Case: <br>
-External users use this skill to structure Chinese-language retrospectives on past or current life choices, compare actual, hypothetical, and recoverable outcomes, and produce Markdown or optional HTML reports with low-risk 30-day experiments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks for personal life, work, finance, family, health, location, school, or relationship context that may be sensitive. <br>
-Mitigation: Share only the context needed for the report, keep identifying details high-level, and review generated Markdown or HTML before saving or sharing. <br>
-Risk: Reflective reports about life choices can be mistaken for deterministic predictions or professional advice. <br>
-Mitigation: Use the output as conditional retrospection and personal reflection only; do not rely on it for medical, legal, financial, immigration, employment, or other major decisions. <br>
-Risk: Generated local reports may preserve private details in reusable Markdown or HTML files. <br>
-Mitigation: Inspect report content before distribution and remove or generalize private details before sharing outside the intended context. <br>
+## Use Case:
 
+People reflecting on personal decisions use this skill to distinguish known facts from hypothetical outcomes, explore trade-offs, and plan small steps to test what still matters. It does not replace professional advice or make major decisions for the user.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/killsnake01/skills/life-fork-simulation-stack) <br>
-- [README](README.md) <br>
-- [Life Fork Grammar](references/life-fork-grammar.md) <br>
-- [Agent Simulation Stack](references/agent-simulation-stack.md) <br>
-- [Event Impact Framework](references/event-impact-framework.md) <br>
-- [Event Shock Engine](references/event-shock-engine.md) <br>
-- [Safety Boundaries](references/safety-boundaries.md) <br>
-- [HTML Report Delivery](references/html-report-delivery.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports, optional HTML report files, and occasional shell commands or configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include local report generation when the agent environment supports file output and script execution.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release evidence) <br>
+Risk: Personal-life details in prompts or exported reports may be sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only necessary details, avoid identifiers and third-party private records, and export or share HTML only when intended.
+
+Risk: Hypothetical outcomes could be mistaken for predictions or professional advice.
+
+Mitigation: Present scenarios as conditional, keep unknowns explicit, and seek qualified advice for medical, legal, or financial decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/killsnake01/skills/life-fork-simulation-stack)
+- [Safety boundaries](artifact/references/safety-boundaries.md)
+- [Report style guide](artifact/references/report-style-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, HTML file]
+
+**Output Format:** [Conversational Markdown report; optional HTML report on request]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports separate facts from conditional scenarios and suggest low-risk validation steps. Bundled HTML layout uses Chinese headings.]
+
+## Skill Version(s):
+
+1.0.4 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
