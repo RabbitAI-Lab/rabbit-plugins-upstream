@@ -1,43 +1,57 @@
-## Description: <br>
-Node.js backend patterns: layered architecture, TypeScript, validation, error handling, security, observability, logging, metrics, deployment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers building Node.js backend services with TypeScript, API design, security, resilience, observability, and deployment patterns.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineers use this skill when building Node.js and server-side TypeScript backends, including REST APIs, middleware, Express/Fastify/Hono/NestJS/Koa servers, tRPC procedures, and Bun servers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated backend changes may affect authentication, credentials, database writes, dependency choices, or deployment settings. <br>
-Mitigation: Review generated code and dependency selections before use, especially where credentials, auth, migrations, production configuration, or deployment behavior are involved. <br>
-Risk: Framework-specific APIs can change over time, and stale guidance can lead to incorrect Express, Fastify, Hono, NestJS, Koa, Bun, or Node.js usage. <br>
-Mitigation: Verify current framework and Node.js documentation before implementing version-sensitive APIs. <br>
+## Use Case:
 
+Developers use this skill to design, implement, review, and maintain Node.js and server-side TypeScript APIs across common backend frameworks.
 
-## Reference(s): <br>
-- [TypeScript Configuration & Patterns](references/typescript-config.md) <br>
-- [Authentication & Security](references/security.md) <br>
-- [API Design Patterns](references/api-design.md) <br>
-- [Database & Production](references/database-production.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown guidance with inline code and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces implementation guidance for backend code, validation, security, observability, testing, and deployment decisions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.3.1 (source: server release evidence) <br>
+Risk: Suggested commands or dependencies may not suit the target project.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before execution; prefer lockfile-based installs and project-local tools.
+
+Risk: Framework-specific examples may not match the versions in use.
+
+Mitigation: Check advice against official documentation for the project's exact versions before applying it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-nodejs-backend)
+- [Node.js API documentation](https://nodejs.org/api/)
+- [API boundaries](artifact/references/api-boundaries.md)
+- [Security](artifact/references/security.md)
+- [Async operations and production](artifact/references/async-and-production.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Markdown with TypeScript and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapt examples to the target project and framework version.]
+
+## Skill Version(s):
+
+5.1.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -78,7 +78,7 @@ Each integration in the list is a full integration object (same shape as `integr
       "subCategories": [],
       "documentationPath": "...",
       "connector": { "config": { "jsonSchema": { ... } } },
-      "actions": { "enrichCompanyFromDomain": { ... } },
+      "actions": { "enrichCompany": { ... } },
       "extractors": {},
       "dynamicSchemas": {}
     }
@@ -88,7 +88,7 @@ Each integration in the list is a full integration object (same shape as `integr
 
 **Key fields:** `slug` (used when creating connectors and filtering), `name`, `category`, `actions`, `extractors`.
 
-Supports `--category`, `--slug`, `--search`, `--has-actions`, `--has-extractors` to filter results.
+Supports `--category`, `--slugs`, `--search`, `--has-actions`, `--has-extractors` to filter results.
 
 **Integration categories:** `engagement`, `marketing`, `sales`, `finance`, `analytics`, `freeform`, `success`, `support`, `enrichment`, `storage`, `custom`.
 
@@ -114,8 +114,8 @@ Returns the full integration object, including all actions and extractors with t
       }
     },
     "actions": {
-      "enrichCompanyFromDomain": {
-        "name": "Enrich Company From Domain",
+      "enrichCompany": {
+        "name": "Enrich Company",
         "description": "Enrich a company by domain",
         "category": "enrichment",
         "icon": "https://...",
@@ -192,10 +192,10 @@ Returns the full integration object, including all actions and extractors with t
 {
   "nativeIntegration": {
     "actions": {
-      "send_email": {
+      "sendEmail": {
         "name": "Send Email",
         "description": "Send an email via the native Cargo email action",
-        "category": "enrichment",
+        "category": "email",
         "icon": "https://...",
         "isSerialized": false,
         "config": {
@@ -236,7 +236,7 @@ Returns the full integration object, including all actions and extractors with t
 | ----- | ----------- |
 | `name` | Display name |
 | `description` | What the action does |
-| `category` | One of: `invisible`, `logic`, `storage`, `ai`, `sales`, `code` |
+| `category` | One of: `invisible`, `logic`, `storage`, `ai`, `sales`, `code`, `email`, `object` |
 | `icon` | Icon URL |
 | `config.jsonSchema` | JSON Schema describing the action's input parameters |
 | `config.uiSchema` | UI hints for each field — check for `IntegrationAutocompleteWidget` to detect autocomplete fields |

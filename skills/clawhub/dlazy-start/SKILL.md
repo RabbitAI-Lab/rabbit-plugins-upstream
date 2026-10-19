@@ -1,13 +1,13 @@
 ---
 name: dlazy-start
 version: 2.0.6
-description: Quickstart for AI orchestrators (Claude Code / Cursor / Codex / Copilot) driving @dlazy/cli. Covers install, auth, capability discovery, invoking cloud + local tools, polling async tasks, and recovering from common failures. AI 编排器（Claude Code / Cursor / Codex / Copilot）驱动 @dlazy/cli 的快速上手手册。覆盖安装、鉴权、能力探测、调用云端/本地工具、轮询异步任务,以及常见故障恢复。
+description: "Quickstart for AI orchestrators (Claude Code / Cursor / Codex / Copilot) driving @dlazy/cli. Covers install, auth, capability discovery, invoking cloud + local tools, polling async tasks, and recovering from common failures. AI 编排器（Claude Code / Cursor / Codex / Copilot）驱动 @dlazy/cli 的快速上手手册。覆盖安装、鉴权、能力探测、调用云端/本地工具、轮询异步任务,以及常见故障恢复。"
 triggers:
   - dLazy CLI Quickstart for AI Agents
-metadata: {"clawdbot":{"emoji":"🎬","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli","installAlternative":"npx @dlazy/cli","homepage":"https://dlazy.com","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"AGPL-3.0-or-later","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"You are operating @dlazy/cli for the user. Discovery first: run `dlazy tools list` to see available tools and `dlazy tools describe <name>` to inspect a tool's input/output schema and cost shape. Invoke with `dlazy <tool-name> --input @file.json` (or `--format json` for machine-readable envelopes). Poll long-running cloud tasks with `dlazy status <generateId>`. Install optional local runtimes with `dlazy doctor remotion --install` or `dlazy doctor yt-dlp --install`. Never claim a tool exists without verifying via `dlazy tools list`."}}
+metadata: {"clawdbot":{"emoji":"🎬","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli","installAlternative":"npx @dlazy/cli","homepage":"https://dlazy.com","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"AGPL-3.0-or-later","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"You are operating @dlazy/cli for the user. Discovery first: run `dlazy tools list` to see available tools and `dlazy tools describe <name>` to inspect a tool's input/output schema and cost shape. Invoke with `dlazy <tool-name> --input @file.json` (or `--format json` for machine-readable envelopes). Poll long-running cloud tasks with `dlazy status <generateId>`. Install optional local runtimes with `dlazy doctor remotion --install` or `dlazy doctor yt-dlp --install`. Never claim a tool exists without verifying via `dlazy tools list`."}}
 ---
 
-# dlazy-start — Quickstart for AI Agents
+# 智能体上手手册 Start
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
 

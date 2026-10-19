@@ -1,42 +1,58 @@
-## Description: <br>
-WordPress site health audit, performance optimization, database cleanup, autoload tuning, slow query detection, wp-config management, image size control, frontend speed fixes, and server diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides WordPress site health audits and performance troubleshooting with WP-CLI diagnostics and, with approval, database cleanup and configuration changes.
 
-## Publisher: <br>
-[marcindudekdev](https://clawhub.ai/user/marcindudekdev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[marcindudekdev](https://clawhub.ai/user/marcindudekdev)
 
-## Use Case: <br>
-Developers, site owners, and WordPress operators use this skill to inspect site health, diagnose performance bottlenecks, and apply WP-CLI based optimization or cleanup actions with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WP-CLI commands can inspect or change a live WordPress site. <br>
-Mitigation: Use the skill only on sites where the operator is authorized to run WP-CLI, and review proposed commands before execution. <br>
-Risk: Cleanup, configuration edits, frontend toggles, or plugin activation can modify data or site behavior. <br>
-Mitigation: Require explicit user confirmation for write operations and take a database backup before destructive cleanup commands. <br>
+## Use Case:
 
+WordPress site operators and developers use this skill to assess site health, investigate slow queries and database bloat, and review proposed performance fixes. Basic diagnostics work without the paid plugin; plugin-specific monitoring requires it.
 
-## Reference(s): <br>
-- [WP Multitool Homepage](https://wpmultitool.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool) <br>
-- [Publisher Profile](https://clawhub.ai/user/marcindudekdev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with WP-CLI command blocks and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostics can be proposed directly; write operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release metadata) <br>
+Risk: Cleanup commands can permanently delete WordPress data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval for each write operation and take a database backup before cleanup.
+
+Risk: Database optimization and configuration changes can disrupt a live site.
+
+Mitigation: Review the proposed commands and site impact before approving table optimization or wp-config.php edits.
+
+Risk: Activating the plugin changes site behavior but is not included among the declared write operations.
+
+Mitigation: Require explicit user approval before running plugin activation commands.
+
+## Reference(s):
+
+- [WP Multitool skill on ClawHub](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool)
+- [WP Multitool website and documentation](https://wpmultitool.com)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with WP-CLI commands and site health findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Plugin commands may return JSON; proposed write operations require user confirmation.]
+
+## Skill Version(s):
+
+1.9.14 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,54 @@
-## Description: <br>
-用于快手数据助手、快手内容研究、作品研究、作品详情、评论分析、评论回复分析、达人数据和达人作品。覆盖 Kuaishou / Kwai short-video research，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents research Kuaishou trends, videos, comments, and creators using SocialDataX data.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and developers use this skill to research Kuaishou/Kwai content, works, comments, replies, creators, and creator work lists through SocialDataX. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The SocialDataX API key is exposed to the SocialDataX npm tool at runtime. <br>
-Mitigation: Install and run the skill only in environments where sharing SOCIALDATAX_API_KEY with the SocialDataX CLI is acceptable. <br>
-Risk: Examples use npx with @latest, so the executed package version can change over time. <br>
-Mitigation: Pin or review the socialdatax-skills package version before use in stricter environments. <br>
+## Use Case:
 
+Researchers and content teams use this skill to find Kuaishou trends and videos, inspect creator profiles and posts, and analyze video comments and replies.
 
-## Reference(s): <br>
-- [SocialDataX AI access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with shell command examples and CLI/MCP tool references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and examples call the SocialDataX npm CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release metadata) <br>
+Risk: The unpinned npm package may change after review while using the user's SocialDataX API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin and review the package version, or use a locked internal install before use in sensitive environments.
+
+Risk: Interrupted pagination may leave comment or reply research incomplete.
+
+Mitigation: Preserve partial results, label them incomplete, and resume with the corresponding returned pagination token.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill listing](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown summaries of Kuaishou data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include source links, engagement counts, and notices of incomplete paginated results.]
+
+## Skill Version(s):
+
+0.1.19 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

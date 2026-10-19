@@ -1,39 +1,58 @@
-## Description: <br>
-Clinical-facility edition of iaiops for hospital building systems, medical-gas monitoring, OPC-UA plant SCADA, and patient-safety-oriented checks for isolation rooms, operating rooms, and medical gas. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports hospital facilities teams with cross-protocol monitoring, diagnostics, and advisory safety checks for isolation rooms, medical gases, and operating-room conditions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Hospital facilities engineers, clinical operations teams, and automation specialists use this skill to inspect BACnet, Modbus, and OPC-UA signals, prioritize patient-safety checks, and triage facility alarms or downtime. It supports read-first workflows for isolation-room pressure, operating-room environment, medical-gas source pressure, and related building-control diagnostics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill is mostly documentation-only, but it claims read-only behavior while also documenting high-impact BACnet write capability for hospital building controls. <br>
-Mitigation: Treat the skill as potentially write-capable; use it only where BACnet write access is intentionally allowed, external approval controls are enforced, and high-impact actions remain dry-run or explicitly approved. <br>
-Risk: Hospital and clinical OT environments can affect patient safety, and the evidence says Modbus capabilities should be clarified before deployment. <br>
-Mitigation: Review the skill carefully before installing in a hospital or clinical OT environment, verify Modbus behavior with the publisher, and rely on onsite clinical, facilities, and NFPA 99 controls for safety-critical decisions. <br>
+## Use Case:
 
+Hospital facilities engineers and operators use the skill to inspect BACnet, Modbus, and OPC-UA readings, prioritize potential isolation-room and medical-gas issues, and investigate equipment alarms. Clinical safety checks are advisory; local alarms and facility procedures remain authoritative.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline commands and structured operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include clinical-facility safety checks, protocol-specific tool recommendations, and approval-oriented guidance for write-capable BACnet actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+Risk: The read-first description may obscure a BACnet write capability affecting clinical infrastructure.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require site change control and named approval, keep dry-run enabled by default, and never issue unauthorized commands to life-safety systems.
+
+Risk: Publishing and exporting operational data can disclose facility information or write outside intended locations if configured broadly.
+
+Mitigation: Govern publishing and exports under site policy and restrict configured read and write directories to approved paths.
+
+Risk: Incorrect sensor data or advisory checks could mislead patient-safety decisions.
+
+Mitigation: Verify readings against local facility alarms and follow clinical and facilities procedures for safety decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/iaiops-clinical)
+- [Publisher profile](https://clawhub.ai/user/zw008)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, Guidance]
+
+**Output Format:** [Text and structured analysis, with optional reports and exports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Findings reference measurements and prioritize severe deviations; some workflows can publish data or write files.]
+
+## Skill Version(s):
+
+0.31.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

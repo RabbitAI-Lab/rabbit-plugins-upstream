@@ -1,0 +1,4 @@
+interface:
+  display_name: "Rainskills"
+  short_description: "Install the complete Rainskills AI deployment skill suite"
+  default_prompt: "Use $rainskills to install the complete Rainskills skill suite."

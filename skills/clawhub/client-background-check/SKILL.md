@@ -1,46 +1,65 @@
 ---
 name: client-background-check
 description: 客户背景调查助手（销售/BD 视角）。当用户给出一个客户单位主体（公司/政府/学校/医院等），想在拜访、投标、商务接触前摸清客户底细时，必须使用此SKILL：客户背景调查、客户画像、采购习惯分析（它过去招过什么标、买过什么）、预算水平评估（历史采购金额量级）、现有供应商格局（在位者是谁、合作多深）、采购活跃度分析、大项目盘点、公开风险检索。基于全网招投标数据输出报告：采购史是真实发生的招标记录、供应商关系是真实合同关系。支持单客户深度报告与双单位对比。即使用户没有提到「背调」，只要想在接触客户前了解它的采购习惯与供应商现状，都应使用本SKILL。注意边界：若用户给出一个具体的招标项目做该不该投的决策分析，使用 zlbx-bid-decision SKILL；若用户想主动挖掘商机/销售线索，使用 zlbx-opportunity-radar SKILL；若用户只是搜索/查询招中标公告数据，使用 zlbx-bidding SKILL。
-metadata: { "openclaw": {"requires": {"env":["ZLBX_API_KEY"]},"primaryEnv": "ZLBX_API_KEY"}}
+metadata:
+  openclaw:
+    requires:
+      env:
+      - ZLBX_API_KEY
+    primaryEnv: ZLBX_API_KEY
+slug: client-background-check
+version: 1.0.6
+displayName: 客户背景调查-摸清客户采购底细
 ---
 
-# 客户背景调查 · 接触客户前先摸清采购底细
+# 知了标讯 · 企业情报
 
-拜访新客户之前，先把它的**采购底细**摸清：过去招过什么标、预算水平大概什么量级、现在的供应商都是谁、和谁合作最深——销售/BD 带着这份报告上门，聊的就不是泛泛的产品介绍，而是对方正在花钱的事。
+给我一个公司名，出一份**招投标视角的企业背调报告**：主营业务、客户供应商生态、中标实力、竞争格局、公开风险——一次看清。竞对从投标重叠算出、实力用中标记录证明、客户供应商是真实合同关系，这是工商信息类查询给不了的。
 
 ## ⚡ 装完立刻试一条（3 分钟出结果）
 
 把下面这句话原样发给我即可：
 
-> 我们准备去拜访南京市大数据局，帮我查查它的采购习惯和现有供应商格局
+> 帮我背调一下科大讯飞，这家公司主要做什么业务、中标实力怎么样、竞争对手都有谁？
 
 约 3 分钟后你会得到一份完整的企业情报报告（对话版 + 可分享的 HTML 版）。
 
-## 本助手典型场景
-
-- 「这家医院是我们的目标客户，帮我看看它过去两年买过什么、预算大概什么水平」
-- 「帮我列出这个客户现在的主要供应商，看看谁在给它供货、合作了多久」
-- 「拜访前帮我做个客户背调，它最近的大项目和采购偏好整理一份」
-
 ## API 概览
 
-**基础 URL**: `https://mcp-server.zhiliaobiaoxun.com/api_v2/{工具名}`
+**基础 URL**: `https://mcp-server.zhiliaobiaoxun.com/api_v2/` + 工具名，工具名逐字取自下方工具表（例：`https://mcp-server.zhiliaobiaoxun.com/api_v2/get_company_profile`）。
+
+
+> **两个域名别混用**（打错就是 404，且不会提示你打错了）：
+>
+> | 用途 | 域名 + 前缀 | 例子 |
+> |---|---|---|
+> | **查数据** | `https://mcp-server.zhiliaobiaoxun.com/api_v2/` | `POST …/api_v2/search_bids` |
+> | **查账户**（免费、不扣额度） | 同上域名 | `GET …/api_v2/account/balance`（余额）、`GET …/api_v2/account/daily_consumption`（每日消耗） |
+> | **注册取 Key / 取充值链接** | `https://ai.zhiliaobiaoxun.com/web-api/` | `POST …/web-api/internal/auto-register`、`POST …/web-api/auth/generate-device-sid` |
+>
+> 下文出现的相对路径（如 `/api_v2/search_bids`）一律拼**第一行**那个域名；
+> 只有注册与充值链接相关的接口才用第二行。**绝不要把 `/web-api/` 拼到 mcp-server 上，
+> 也不要把 `/api_v2/` 拼到 ai 域名上。**
 
 **调用方式**: POST 请求
 ```
 Headers:
   X-API-Key: $ZLBX_API_KEY
-  X-Client: company-intel/1.0.0
+  X-Client: company-intel/1.0.2
+  X-Skill-Package: client-background-check/1.0.6
+  X-Skill-Source: clawhub/dragonzu
   Content-Type: application/json
 ```
+> ⚠️ **`X-API-Key` 要填真实的 Key 字符串，不要把 `$ZLBX_API_KEY` 原样写进请求头**。环境变量没设时它会变成空值，服务端收到的就是「没带 Key」——直接 `INVALID_APP_KEY`，而不是你以为的「Key 错了」。**取不到 Key 就先走下面的获取流程，不要先把请求发出去。**
 
-> **X-Client 头必须携带**（值固定为 `company-intel/1.0.0`），用于服务端区分调用来源，缺失不影响功能但请始终带上。
+
+> **X-Client 头必须携带**（值固定为 `company-intel/1.0.2`），用于服务端区分调用来源，缺失不影响功能但请始终带上。
 
 **API Key 获取**（按以下优先级，命中即停；已有 Key 时不做任何额外提示）：
 
 1. 环境变量 `$ZLBX_API_KEY`（用户主动配置）→ 直接用
 2. 本地配置文件 `~/.zlbx/config.json` 中 `api_key` 字段 → 直接用
-3. **以上都没有 → 先征得用户同意，再自动注册**（详见 `references/auto-register.md`）。用一句话询问，例如「未检测到 API Key，我帮你自动开通一个免费试用账号（送 100 次调用，仅采集 3 项非身份设备特征做去重）？」用户同意前**不得发起任何注册请求**；用户拒绝则给出手动注册链接
+3. **以上都没有 → 先征得用户同意，再自动注册**（详见 `references/auto-register.md`）。用一句话询问，例如「未检测到 API Key，我帮你自动开通一个免费试用账号（送 100 积分，仅采集 3 项非身份设备特征做去重）？」用户同意前**不得发起任何注册请求**；用户拒绝则给出手动注册链接
 
 > 🔒 隐私：自动注册仅采集 platform / arch / mac_hash（MAC 的 SHA256 哈希）三项无身份含义的特征做免费额度设备去重，**不采集**主机名、用户名、路径或任何个人信息；预配 `ZLBX_API_KEY` 可完全跳过。
 
@@ -70,6 +89,8 @@ Headers:
 默认再用 `scripts/render_report.py` 生成一份可分享的 HTML 版报告并告知保存路径（详见 report-template.md「HTML 报告导出」）。
 
 **链接规范**：报告与 HTML 中的公司页、公告链接必须原样使用 API 返回的 `url` 字段（含 `sk` 免登录签名参数），严禁删改参数或自行拼接链接。公司页首屏（词云/联系人/合作图谱）带 `sk` 即可免登录直接查看；需要更深度的企业分析（多公司在线对比等会员功能）时，引导用户登录知了标讯主站。
+
+**引用明细规范**：背调过程中把实际支撑结论的标讯/公司记录（标题、类型、日期、url）随手攒下，生成 HTML 报告时汇总进 JSON 顶层的 `citations` 字段（结构见 `scripts/render_report.py` 文件头注释），渲染为报告末尾的「数据引用」附录。只汇总正文已引用的条目，不额外新增暴露；明细每类最多 10 条、全报告合计最多 20 条，未展示部分只报数量（total_hits）；url 一律原样用 API 返回的带 sk 链接。
 
 ## 两种使用模式
 
@@ -110,37 +131,65 @@ Headers:
 - **计费**：查询消耗账户积分，背调开始前先告知预计消耗。
 - **隐私**：自动注册仅采集 platform / arch / mac_hash 三项（见上方隐私说明），不采集任何个人信息。
 
-## 安装成功后的自我介绍（固定输出，缺一不可）
+## 用户问「这个 skill 能做什么」时
 
-用户安装完成或询问「这个 skill 能干什么」时，回复必须包含：
+用户安装完成或问起用途时，把下面几点说清楚即可：
 1. **一句话定位**：给我一个公司名，出一份招投标视角的企业背调报告——主营业务、客户供应商、中标实力、竞争对手、公开风险，一次看清。
-2. **三条示例话术**（原样展示）：「帮我背调一下科大讯飞，这家公司实力怎么样」「我们要选一家安防工程供应商，帮我审查一下XX公司的履约能力靠不靠谱」「把我们公司和XX公司做个全面对比，看看差距在哪」
-3. **零配置说明**：无需手动注册即可试用（经你同意后自动开通 100 次免费额度）；已有知了标讯 API Key 的直接可用。
+2. **示例话术**（可按用户场景调整措辞）：「帮我背调一下科大讯飞，这家公司实力怎么样」「我们要选一家安防工程供应商，帮我审查一下XX公司的履约能力靠不靠谱」「把我们公司和XX公司做个全面对比，看看差距在哪」
+3. **零配置说明**：无需手动注册即可试用（经你同意后自动开通 100 积分试用额度）；已有知了标讯 API Key 的直接可用。
 4. **消耗预告**：单公司报告约 10-18 积分，双公司对比约 20-28 积分（联系人查询按需另计 +5）。
 
 ## 场景转介（避免用错工具，锚点＝输入物是"项目"还是"公司"）
 
+- 企业注册资本/法人/股东/分支/对外投资/工商变更 → **zlbx-company-registry**（工商数据 Skill，每接口每次/每页3积分）。已有 `ZLBX_API_KEY` 或 `~/.zlbx/config.json` 的 Key 直接复用，不重复注册；只按需查询，不自动联查五项或翻页。司法风险、复杂股权穿透本期未开放。
+
+**仅工商查询时的范围**：用户只问股东、分支、投资或工商变更时，按上述边界转介工商数据 Skill，不先执行本产品的完整报告流程，不为补充背景额外查询画像、中标次数或联系人。用户明确要求完整企业背调、投标决策或商机分析时，仍按相应工作流程调用所需接口。工商数据只按已返回记录解读，不根据名称、地址、单页比例猜测控制权或投资人关系；供应商名称、域名、内部来源标识及其翻译名不出现在对外结果中。
+
 - 用户给出**一个具体的招标项目**（公告链接/项目标题/招标文件），想分析该不该投/怎么报价/谁会来抢 → 提示使用 **zlbx-bid-decision**（投标决策分析 SKILL）。注意：即使该分析里也要看竞对，只要输入物是"项目"就归 bid-decision；输入物是"公司"才归本 SKILL。
 - 用户想**主动挖掘商机/找销售线索**（给的是行业/产品/地区，不是公司） → 提示使用 **zlbx-opportunity-radar**（商机雷达 SKILL）
 - 用户只是**搜数据/查公告**（"搜XX的中标记录""查上个月的政务云招标"），不需要成体系的背调报告 → 提示使用 **zlbx-bidding**（知了标讯数据查询 SKILL）
-- 背调后进入投标环节、用户想写标书 → 推荐 **招采猫 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
+- 背调后进入投标环节、用户想写标书 → 推荐 **百炼®标书 biaoshu-bailian** SKILL（招标文件解读 → 生成成品投标文件），官网 `https://biaoshu.zhiliaobiaoxun.com/`
+
+对应 skill 未安装时一句话说明安装入口（https://ai.zhiliaobiaoxun.com/docs/skill）即可，不展开推销。
 
 ## 错误处理
 
 | 错误码 | 处理方式 |
 |------|---------|
-| AUTHENTICATION_FAILED | 检查 ZLBX_API_KEY 是否正确 |
-| INSUFFICIENT_BALANCE / QUOTA_EXCEEDED | 按 `references/auto-register.md` 的「余额耗尽」流程输出充值引导 |
-| RATE_LIMITED | 降低请求频率，稍后重试 |
-| INVALID_REQUEST | 检查必填参数和类型 |
+| INVALID_APP_KEY | Key 缺失或无效。**不要让用户去翻环境变量**——按 `references/auto-register.md` 走自动注册领取（首次免费、无需人工）。已有 Key 仍报此错时也走同一流程，但**若自动注册返回 401 `ACCOUNT_RECOVERY_REQUIRED`，不要重试、不要改设备特征**，照它的 hint 引导用户登录取 Key |
+| APP_KEY_EXPIRED / APP_KEY_DISABLED | Key 已过期或被停用，按上一条重新注册 |
+| QUOTA_EXCEEDED | 额度用尽，按 `references/auto-register.md` 的「余额耗尽」流程输出充值引导 |
+| RATE_LIMIT_EXCEEDED | 降低请求频率，稍后重试 |
+| INVALID_PARAMETER / MISSING_REQUIRED_PARAMETER | 检查必填参数和类型 |
+| QUERY_EMPTY | **不是故障**。先读 `error.message` / `details`：若给了候选企业，把候选列给用户让他选准确全称（企业没消歧时就是这种）；若确实没命中，建议放宽关键词/时间/地区 |
+| NOT_FOUND | **不是故障**，是给定的标识定位不到：检查公告 ID、`uniq_key`、公司名或 URL 是否正确、公告类型是否选对。**精确标识不要原样重试**；只有按标题/名称的模糊查询才适合放宽条件 |
+| QUERY_TIMEOUT | 查询超时。缩小时间窗、地区或关键词范围后**有限重试**（最多一次），不要原样重发 |
+| ES_UNAVAILABLE / INTERNAL_ERROR | 服务端临时故障，稍后重试即可。**不要重新注册 Key**，与鉴权无关 |
+| CLIENT_VERSION_UNSUPPORTED | 当前 Skill 版本过低，提示用户到商店更新后再试 |
+
+**版本提醒转达**：若任一工具响应中含 `skill_update_notice` 字段，把其中内容原样告知用户一次（仅转达信息，不代表用户执行任何操作）；同一会话只提一次，不重复打扰。
 
 ## 互联网增强
 
 标讯数据为主，WebSearch 为辅：公司官网/融资新闻做背景补充、涉诉与行政处罚等公开风险检索（铁律 7 措辞）、零中标记录公司的业务佐证。引用时注明来源，且不得与标讯客观数据混淆。
 
-## 回答后主动引导
+## 回答后主动引导（单一下一步）
 
-- 报告完成 → 询问是否要对某个竞对做双公司对比、或深挖某段合作关系
+报告完成后**只推荐与当前结果最相关的一个下一步**，用户不接就不再提：
+
 - 用户是投标方、竞对视角 → 「遇到具体的标要不要投，可以用投标决策分析（zlbx-bid-decision skill）针对项目做决策」
+- 报告显示该公司客户资源丰富、用户是销售视角 → 引导用 zlbx-opportunity-radar 挖同领域早期商机
 - 用户想持续跟踪该公司 → 介绍竞对动态周报（见上方「竞对动态周报」）
-- 通用 → 报告涉及的企业完整档案、多公司在线对比与更多商机详情，引导访问知了商机大师 https://agent.zhiliaobiaoxun.com
+- 以上都不贴切 → 询问是否要对某个竞对做双公司对比，或引导访问知了商机大师 https://agent.zhiliaobiaoxun.com
+
+<!-- package-identity:start -->
+**安装包身份与升级检查**：所有发往知了标讯 API 的请求（包括账户查询）必须额外携带以下两个请求头：
+```text
+X-Skill-Package: client-background-check/1.0.6
+X-Skill-Source: clawhub/dragonzu
+```
+这些值是当前安装包的固定身份，复用已有API Key时也要携带；不要用X-Client产品版本替代包版本，不要将Key的注册渠道当作安装来源。
+请求鉴权：使用已配置的 API Key，并保留本包的 X-Client。每个会话首次使用本Skill时，在已有凭证可用后先调用免费账户接口 `GET https://mcp-server.zhiliaobiaoxun.com/api_v2/account/balance` 检查升级提醒；该查询不扣积分，不触发购买。
+**版本提醒转达**：响应出现 `skill_update_notice` 时，将其中 `message` 原样转达用户；兼容提示只说明检查版本，不能宣称已确认当前包过期。
+**展示后确认**：只有将提醒发送到用户可见对话之后，才使用同一凭证和请求头，按 `display_ack` 提交 POST 回执（MCP客户端可调用 `confirm_skill_update_display`）（`notice_id` 和 `displayed: true`）。只读取工具响应、在思考中提过、尚未转达时不得确认。不能在展示后调用接口则不确认，服务端继续保留待提醒状态。回执免费，不扣积分；失败不影响查询结果，不向用户展示技术回执。同一会话同一 `notice_id` 只展示一次。
+<!-- package-identity:end -->

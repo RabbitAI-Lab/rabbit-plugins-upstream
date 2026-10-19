@@ -1,7 +1,7 @@
 ---
 name: automate-it
-version: 0.4.0
-description: Create content tasks and automations in Automate It, do the content work yourself or leave it to the built-in worker, poll task status through the human review gate, and fetch links to published posts. To support that it also reads and writes the surrounding workspace — skills (brand voice and house style), workspace files and folders, connected publishing integrations, link shortening — all bounded by the API key's scopes and the caller's workspace role. Deleting tasks, content items, automations, or folders is possible but requires explicit confirmation on each command. Use when asked to draft, schedule, or publish social content via Automate It, or to check the status or published results of a submitted task.
+version: 0.5.1
+description: Create content tasks and automations in Automate It, do the content work yourself or leave it to the built-in worker, poll task status through the human review gate, and fetch links to published posts. To support that it also reads and writes the surrounding workspace — skills (brand voice and house style, which it can also create/update/delete), workspace files and folders, connected publishing integrations, link shortening — all bounded by the API key's scopes and the caller's workspace role. Deleting tasks, content items, automations, folders, or skills is possible but requires explicit confirmation on each command. Use when asked to draft, schedule, or publish social content via Automate It, or to check the status or published results of a submitted task.
 homepage: https://automate.it.com/agents
 metadata:
   openclaw:
@@ -22,7 +22,7 @@ metadata:
         description: Default workspace id; auto-resolved when the key sees exactly one workspace.
       - name: AUTOMATE_IT_API_URL
         required: false
-        description: API base URL; defaults to https://api.automate.it.com.
+        description: API base URL; defaults to https://api.automate.it.com. Must be https:// (plain http:// only for localhost/127.0.0.1/[::1]).
 ---
 
 # Automate It
@@ -34,7 +34,7 @@ You can participate two ways:
 - **Delegate mode** — you submit a task describing the content; Automate It's built-in worker generates it. You poll for the outcome.
 - **Worker mode (bring your own agent)** — you generate the content yourself: create the task with `--claim`, attach your content, complete it into the human review queue. Automate It provides the review checkpoint and the credentialed publishing; you provide the brains.
 
-All commands use the bundled CLI: `./ait.mjs` (Node 18+ or Bun; also runs as `node ait.mjs …`). It speaks the same MCP server that human-driven clients (Claude Code, etc.) use. Errors print `{"error": "..."}` to stderr and exit 1.
+All commands use the bundled CLI: `./ait.mjs` (Node 18+ or Bun; also runs as `node ait.mjs …`). It speaks the same MCP server that human-driven clients (Claude Code, etc.) use. Errors print `{"error": "..."}` to stderr and exit 1. Pass `--json` to print only the JSON value (no status-line preamble) so the result pipes to `jq`.
 
 **`./ait.mjs help` is the complete list of what this skill can do.** There is no generic tool passthrough: every command is documented here, and anything not listed isn't reachable. Two limits apply throughout:
 
@@ -47,12 +47,45 @@ Required environment:
 
 - `AUTOMATE_IT_API_KEY` — an Automate It API key (starts with `ak_`). The human operator creates this in Automate It under **Profile → API keys**.
 - `AUTOMATE_IT_WORKSPACE` (optional) — default workspace id. If unset and the key has exactly one workspace, it is auto-resolved. Every command also accepts `--workspace <id>`.
-- `AUTOMATE_IT_API_URL` (optional) — defaults to `https://api.automate.it.com`.
+- `AUTOMATE_IT_API_URL` (optional) — defaults to `https://api.automate.it.com`. Must be `https://` — plain `http://` is only accepted for `localhost`, `127.0.0.1`, or `[::1]` (local dev), since the CLI sends the API key as a bearer token to this URL.
+
+### Storing the key
+
+The key is a bearer credential for a workspace that can publish. Store it as a secret, not as configuration text.
+
+**On OpenClaw**, this skill declares `primaryEnv: AUTOMATE_IT_API_KEY`, so `skills.entries.automate-it.apiKey` accepts a secret reference and the runtime injects the value at invocation time. Keep the value in the shared secret store, where nothing secret is written to `openclaw.json` or to any file you have to protect yourself:
+
+```sh
+openclaw secrets store set AUTOMATE_IT_API_KEY --kind secret
+openclaw config set skills.entries.automate-it.apiKey \
+  --ref-provider default --ref-source store --ref-id AUTOMATE_IT_API_KEY
+openclaw secrets reload
+```
+
+`store set` reads the value from stdin or a no-echo prompt and refuses `--value`, because command-line arguments leak through shell history and process listings. Stored secrets are write-only — `store get` will not read one back.
+
+To keep credentials in the Gateway environment instead, reference the env var and put the value in the Gateway env file at mode `600` — `~/.openclaw/.env`, or `~/.openclaw/gateway.systemd.env` on a Linux systemd install:
+
+```sh
+openclaw config set skills.entries.automate-it.apiKey \
+  --ref-provider default --ref-source env --ref-id AUTOMATE_IT_API_KEY
+openclaw gateway restart
+```
+
+Either way the credential is inert until the runtime picks it up: `secrets reload` for a store ref, a Gateway restart for an env ref (those resolve from the Gateway's own process environment). Skip it and the run starts with no key at all — every command fails on the missing variable.
+
+Do **not** put the key in `skills.entries.automate-it.env`. That map holds literal strings, rejects secret references, and leaves the key readable in config to any agent or tool that can read files — `openclaw doctor` reports it as `openclaw.json contains plaintext secret-bearing config fields`.
+
+**A sandboxed agent needs the key passed in separately.** `skills.entries.*.apiKey` and `.env` apply to host runs only; inside a sandbox they have no effect and every command here fails on a missing key. Give the sandbox its own copy through `agents.defaults.sandbox.docker.env`. Shared-store values don't cross that boundary either, and neither do they reach ACP children such as Claude Code.
+
+**Elsewhere**, load the key from a mode-`600` environment file read by your process manager. Avoid `export AUTOMATE_IT_API_KEY=…` in an interactive shell; it lands in shell history.
+
+**Never paste this key into a chat message.** Agent runtimes routinely persist conversations to a memory store, and those stores are often committed by backup jobs — a key pasted into chat can reach a Git remote without anyone deciding to put it there. If an agent asks you for the key, don't answer in the conversation. On OpenClaw, have it ask through the `secrets` tool: you type the value into a masked prompt and the Gateway writes it straight to the store, so it never enters the transcript or the model's context. Otherwise add it to the environment file yourself and restart. Rotate the key in **Profile → API keys** if it has ever appeared in a chat, ticket, log, or committed file.
 
 Verify access before doing real work:
 
 ```sh
-./ait.mjs workspaces     # workspaces the key can reach
+./ait.mjs workspaces     # workspaces the key can reach, each with its memory entries
 ./ait.mjs whoami         # the user you act as
 ```
 
@@ -65,30 +98,34 @@ Use this when you (or your runtime) already produce the content and Automate It'
 1. **Create the task already claimed.** `--claim` creates it in `working` status, so the built-in worker never touches it — there is no race to lose.
 
    ```sh
-   ./ait.mjs task create --claim \
+   ./ait.mjs task create --claim --json \
      --title "Post about the v2.0 launch" \
      --instructions "Context for reviewers: announcing Acme v2.0" \
      --output-types x
    ```
 
-   The response includes the task JSON — save the `id`.
+   Save the `id` (`jq -r '.id'`). `--json` strips any status-line preamble so a successful create still pipes.
 
    Claiming assigns the task to you: the built-in worker never touches it, the platform's dead-task recovery leaves it alone (that sweep is for the built-in worker's own crashed runs), and a later rejection routes back to you. Take as long as the content needs — but don't abandon a claimed task: nothing times it out, so it sits in `working` until you complete it or a human deletes it.
 
-2. **Attach your content.** One call per content item; use `sortOrder` for threads (0 = first post).
+2. **Attach your content in ONE call.** Put every post in `--items` (each entry takes the single-post fields: `body`, `contentType`, `title`, `media`, `sortOrder`); the whole batch is validated before anything is written. `sortOrder` orders a thread (0 = first post) and defaults to each post's position among its type. The single-post flags are still fine for one item.
 
    ```sh
-   ./ait.mjs task add-content <taskId> --type x \
-     --body "Acme v2.0 is live — new API, faster everything. https://acme.dev/blog/v2"
+   ./ait.mjs task add-content <taskId> --items '[
+     {"contentType":"x","body":"Acme v2.0 is live — new API, faster everything. https://acme.dev/blog/v2"},
+     {"contentType":"linkedin","body":"Today we shipped Acme v2.0 …"}
+   ]'
    ```
 
-   For images/video: get a presigned URL, PUT the file, then reference it:
+   For images/video: get an upload URL, PUT the file, then attach it by its
+   `fileId`. Media must be hosted in the workspace — to attach something from
+   elsewhere, download it yourself and upload it the same way.
 
    ```sh
    ./ait.mjs upload-url --filename hero.png --mime-type image/png
-   # PUT your file to the returned uploadUrl, then:
+   # PUT your file to the returned uploadUrl, then use the returned fileId:
    ./ait.mjs task add-content <taskId> --type x --body "..." \
-     --media '[{"type":"image","url":"<permanentUrl>"}]'
+     --media '[{"type":"image","fileId":"<fileId>"}]'
    ```
 
 3. **Complete it into review.**
@@ -103,7 +140,7 @@ If your content is already finished, skip the three-step loop entirely with the 
 
 ```sh
 ./ait.mjs task submit --title "Post about the v2.0 launch" --type x \
-  --body "Acme v2.0 is live — new API, faster everything. https://acme.dev/blog/v2"
+  --body "Acme v2.0 is live — new API, faster everything. https://acme.dev/blog/v2" --json
 ```
 
 If a human rejects your content, the task drops back to `todo` and `revisionCount` goes up. It is still assigned to you (claiming assigned it), so the built-in worker can't touch it. **Reclaim it** — `task complete` only accepts a task in `working` — then revise.
@@ -115,10 +152,15 @@ Revise in place. `task add-content` *appends* another post — use it again and 
 ./ait.mjs task get <taskId>        # newest `comments` entry says why it was rejected
                                    # each contentItems[] entry has the id you need
 ./ait.mjs task update-content <taskId> <contentItemId> --body "<revised copy>"
+# swap or attach media (same --media shape as add-content); --media '[]' clears it
+./ait.mjs task update-content <taskId> <contentItemId> \
+  --media '[{"type":"image","fileId":"<fileId>"}]'
 ./ait.mjs task complete <taskId>
 ```
 
-To rewrite a multi-post thread from scratch, `./ait.mjs task clear-content <taskId> --yes` first, then add each post again. `task delete-content <taskId> <contentItemId> --yes` drops a single one. Both destroy drafted work — prefer `update-content`, which revises in place and destroys nothing.
+To rewrite a multi-post thread from scratch, `./ait.mjs task clear-content <taskId> --yes` first, then add each post again. `task delete-content <taskId> <contentItemId> --yes` drops a single one. Both destroy drafted work — prefer `update-content`, which revises in place and destroys nothing. Omit `--media` to leave attachments unchanged.
+
+A populated `--media` replaces the item's whole set, and media already on a task can carry a `url` with no `fileId`. Such an item stays attached while you omit `--media`, but it can't be passed back — so before swapping one attachment on an item that has others, upload each one you're keeping through `upload-url` and pass its `fileId`, or it is dropped.
 
 Explain yourself if the reviewer's note was ambiguous, or if you deliberately didn't follow it:
 
@@ -131,7 +173,7 @@ Explain yourself if the reviewer's note was ambiguous, or if you deliberately di
 1. **Create the task without `--claim`.** Describe the content in `--instructions` the way you would brief a copywriter: topic, angle, tone, audience, links to include.
 
    ```sh
-   ./ait.mjs task create \
+   ./ait.mjs task create --json \
      --title "Post about the v2.0 launch" \
      --instructions "Write an upbeat announcement of Acme v2.0 for developers. Mention the new API and link to https://acme.dev/blog/v2." \
      --output-types x,linkedin
@@ -149,6 +191,7 @@ Explain yourself if the reviewer's note was ambiguous, or if you deliberately di
    | `working` | content is being generated | wait (in worker mode this means *you* owe content) |
    | `review` | waiting on a human reviewer | wait (slow — human in the loop) |
    | `approved` | human approved, not yet published | wait (or report approval) |
+   | `publishing` | approved and going out now | wait — it is mid-publish |
    | `published` | live on the destination platforms | fetch links, report success |
    | `failed` | generation or publish failed | report failure to the operator |
    | `deleted` | task was deleted by a human | stop tracking it, report |
@@ -171,7 +214,7 @@ Explain yourself if the reviewer's note was ambiguous, or if you deliberately di
 
 ### Output types
 
-Valid `--output-types` / `--type` values: `x`, `linkedin`, `instagram`, `facebook`, `threads`, `discord`, `bluesky`, `article`, `email`, `carousel`, `podcast`, `rss`, `spreadsheet`, `document`.
+Valid `--output-types` / `--type` values: `x`, `linkedin`, `instagram`, `facebook`, `threads`, `discord`, `bluesky`, `youtube`, `tiktok`, `google_business`, `article`, `email`, `carousel`, `podcast`, `rss`, `spreadsheet`, `document`.
 
 Only platforms the workspace has actually connected will publish. Don't guess and don't ask — check:
 
@@ -190,6 +233,7 @@ Every post is validated against its platform's limit when you add it — and aga
 | `threads` | 500 | Characters, but **emoji count as their UTF-8 byte length** (4 for most) |
 | `discord` | 2,000 | Characters |
 | `instagram` | 2,200 | Characters |
+| `tiktok` | 2,200 (caption) | Characters |
 | `linkedin` | 3,000 | Characters |
 | `youtube` | 5,000 (description; title 100) | Characters |
 | `facebook` | 63,206 | Characters |
@@ -210,16 +254,55 @@ If a post won't fit, split it across more posts with an increasing `sortOrder` r
 
 `./ait.mjs shorten <url> --title "v2 launch"` shortens a link, which also makes it trackable. It won't save you characters on X — every URL counts 23 there regardless — but it does on platforms that count raw length.
 
-### Linking a social post to the article it announces
+### Linking one destination to another
 
-When a task publishes to `rss` **and** to social platforms, put the token `{articleUrl}` in the social post body. At publish time it's replaced with the article's real URL — which doesn't exist until the feed item is created, so you can't write it yourself.
+When a task publishes to more than one platform, put a token in the post body where the other destination's URL should appear. At publish time it's replaced with the real URL — which doesn't exist until that destination publishes, so you can't write it yourself.
 
 ```sh
+# Feed article → social
 ./ait.mjs task add-content <taskId> --type article --title "Acme v2.0" --body "<the article>"
 ./ait.mjs task add-content <taskId> --type x --body "Acme v2.0 is live. Read more: {articleUrl}"
+
+# YouTube video → Discord (or any social / article body)
+./ait.mjs task add-content <taskId> --type youtube --title "Weekly AI News" --body "<description>" --media '[...]'
+./ait.mjs task add-content <taskId> --type discord --body "New episode: {youtubeUrl}"
 ```
 
-If the task has no `rss` output (or the feed publish fails), the token and the space before it are stripped, so the post still reads correctly. The token only resolves for `rss` — a `podcast` output does not populate it.
+- `{articleUrl}` resolves only for an `rss` output. A `podcast` output does not populate it.
+- `{youtubeUrl}` resolves only for a `youtube` output. YouTube publishes first so the watch URL exists before anything that links to it goes live.
+
+If the source destination is missing or its publish fails, the token and the space before it are stripped, so the post still reads correctly.
+
+## YouTube custom thumbnails
+
+A `youtube` item takes the video plus, optionally, **one image**. That image publishes as the video's custom thumbnail instead of a frame YouTube picks for itself.
+
+```sh
+./ait.mjs task add-content <taskId> --type youtube \
+  --title "Weekly AI News" --body "<description>" \
+  --media '[{"type":"video","fileId":"<videoFileId>"},{"type":"image","fileId":"<thumbnailFileId>"}]'
+```
+
+- Match the video's shape: **16:9** (1280×720 is ideal) for a normal upload, **9:16** for a vertical Short. Shorts do take custom thumbnails. Another shape still publishes — YouTube pads it — and the task records a note saying so.
+- Any image format works. YouTube itself only accepts JPEG and PNG under 2 MB, so anything else is converted for you, and transparency is kept by converting to PNG.
+- The thumbnail never costs you the upload. If it cannot be converted, or the channel is not verified at youtube.com/verify, the **video still publishes** with YouTube's own frame and the reason appears under Recent Activity → Warnings.
+- A second video or a second image is rejected — one of each is the limit.
+
+## Post links and Google Business buttons
+
+Any item can carry a **link** — where the post sends readers — separate from its body text. Google Business Profile publishes it as the post's call-to-action button, so set it on every `google_business` post about something with its own page: the blog article it summarizes, a product page, a booking or signup page.
+
+```sh
+./ait.mjs task add-content <taskId> --type google_business \
+  --body "<post text>" \
+  --link-url https://example.com/blog/the-article \
+  --link-action learn_more
+```
+
+- `--link-action` names the button: `learn_more` ("Learn more", the default), `book` ("Book"), `order` ("Order online"), `buy` ("Buy"), or `sign_up` ("Sign up"). Pick the one that matches where the link goes.
+- Keep URLs out of the post text — Google shows the link as the button instead.
+- Without a link, a `google_business` post has no button. To point it at the task's Feed article or YouTube video, use `--link-url '{articleUrl}'` or `--link-url '{youtubeUrl}'`; the URL is filled in at publish.
+- Change it later with `task update-content <taskId> <contentItemId> --link-url <url> --link-action <action>`, or remove it with `--clear-link`. In `--items`, the fields are `linkUrl` and `linkAction`.
 
 ## Skills: how this workspace wants its content written
 
@@ -227,16 +310,26 @@ A skill is reusable instruction — brand voice, formatting rules, house style �
 
 ```sh
 ./ait.mjs skills list                      # id, name, description
-./ait.mjs skills get <skillId>             # full instructions + bundled file ids
+./ait.mjs skills get <skillId>             # full instructions, memory entries, bundled file ids
 ```
+
+You can also author skills, for when the operator asks you to set up house style rather than just follow it:
+
+```sh
+./ait.mjs skills create --name "Brand voice" --instructions "Write plainly. No emoji."
+./ait.mjs skills update <skillId> --instructions "Write plainly. No emoji. Short sentences."
+./ait.mjs skills delete <skillId> --yes
+```
+
+`create`/`update` take `--description`, `--file-ids`, and `--folder-ids` (comma-separated workspace file/folder ids) too; `update` only changes the flags you pass. Instructions are capped at 24,000 characters. `delete` is destructive — see below.
 
 Attach them by name (or id) when creating a task:
 
 ```sh
-./ait.mjs task create --title "Launch post" --skills "brand voice,changelog style" --claim
+./ait.mjs task create --title "Launch post" --skills "brand voice,changelog style" --claim --json
 ```
 
-**This is the part agents get wrong.** Attaching a skill only does something when the *built-in worker* runs the task — it injects the instructions and files for you. In worker mode (`--claim`) the worker never runs, so **nothing is injected**. Read the instructions yourself with `skills get` and apply them. Attaching is still worth doing: it records which skills the content was written against.
+**This is the part agents get wrong.** Attaching a skill only does something when the *built-in worker* runs the task — it injects the instructions and files for you. In worker mode (`--claim`) the worker never runs, so **nothing is injected**. Read the instructions and memory entries yourself with `skills get` and apply both. Attaching is still worth doing: it records which skills the content was written against.
 
 Bundled files are workspace files. Fetch one by getting a URL and downloading it yourself:
 
@@ -245,12 +338,29 @@ Bundled files are workspace files. Fetch one by getting a URL and downloading it
 curl -o brand.pdf "<downloadUrl>"
 ```
 
+## Memory: what earlier runs learned
+
+Memory is a list of short entries per scope — each one a durable learning (a preference, a reviewer correction, a topic already covered). The built-in worker applies them on every run. In worker mode nothing is injected, so read them yourself and follow them like instructions.
+
+The task itself carries everything you need: `./ait.mjs task get <taskId>` and `./ait.mjs task claim-next` return a `memory` block with three lists:
+
+- `memory.workspace` — entries that apply to every task in the workspace (brand voice, house style).
+- `memory.automation` — entries for the task's automation, when it has one.
+- `memory.skills[<skillId>]` — entries for each attached skill.
+
+The same entries also appear on `./ait.mjs workspaces`, `./ait.mjs skills get <skillId>`, and `./ait.mjs automation get <automationId>` as a `memory` array.
+
+API keys can read memory but not write it; the built-in worker and people in the app maintain it.
+
 ## Checking on existing work
 
 ```sh
 ./ait.mjs task list --status review        # everything waiting on a human
 ./ait.mjs task list --limit 10             # recent tasks
 ./ait.mjs task get <taskId>                # full detail for one task
+./ait.mjs task update <taskId> --title "Renamed"   # patch title / instructions / destinations (admin)
+./ait.mjs task update <taskId> --review            # turn the review gate back on
+./ait.mjs task update <taskId> --clear-publish-at  # drop a scheduled time (task need not be approved)
 ./ait.mjs files list --search brand        # workspace file browser
 ```
 
@@ -282,7 +392,19 @@ You can also assign at creation: `task create --assign <userId|me>`, or `task su
 
 ## Reviewing (only when the operator's key allows it)
 
-If your key belongs to a reviewer/admin and the operator has asked you to help triage, these exist: `task next-review`, `task approve <id>`, `task reject <id> --comment "..."`, `task publish <id>`, `task schedule <id> --at <ISO date>` (or `--auto` for the next open slot per the workspace's posting targets, or `--clear` to return it to manual hold). `--auto` is the right choice for clearing a backlog of held posts — the tool result names the stamped time. **Do not approve or publish content you produced yourself** — the whole point of the review gate is that a different human (or their delegate) signs off.
+If your key belongs to a reviewer/admin and the operator has asked you to help triage, these exist: `task next-review`, `task approve <id>`, `task reject <id> --comment "..."`, `task unapprove <id> --comment "..."`, `task publish <id>`, `task schedule <id> --at <ISO date>` (or `--auto` for the next open slot per the workspace's posting targets, or `--clear` to return it to manual hold). `--auto` is the right choice for clearing a backlog of held posts — the tool result names the stamped time. **Do not approve or publish content you produced yourself** — the whole point of the review gate is that a different human (or their delegate) signs off.
+
+**Approving a TikTok task takes the operator's explicit choices.** A task whose output types include `tiktok` will not approve without the Post to TikTok settings, and picking them is not your call — the visibility of someone's video is theirs to decide. Ask for the choices, then fill every field in with what the operator said — the shape below is a template, not a default:
+
+```sh
+./ait.mjs task approve <taskId> --tiktok '{"privacyLevel":"<the level the operator named>","allowComment":<bool>,"allowDuet":<bool>,"allowStitch":<bool>,"commercialDisclosure":<bool>,"yourBrand":<bool>,"brandedContent":<bool>}'
+```
+
+`privacyLevel` is one of `PUBLIC_TO_EVERYONE`, `MUTUAL_FOLLOW_FRIENDS`, `FOLLOWER_OF_CREATOR`, `SELF_ONLY`, and the connected account may not offer all four. `commercialDisclosure` requires `yourBrand`, `brandedContent`, or both; branded content cannot be `SELF_ONLY`. Approving without the block fails with `Set TikTok visibility before approving this task` — report that and ask, rather than filling in a level yourself.
+
+**Undoing an approval.** `task unapprove <id>` puts an approved task back in the review queue with its content untouched — for an approval that should not have happened, including your own. If you approved something the operator wanted to see first, this is how you hand it back, and it is the right move the moment you realise it: only `approved` tasks can be reversed, so once the task publishes the option is gone.
+
+Do not confuse it with `task reject`, which throws the work away to be redone (`todo`, `revisionCount` +1). Unapprove keeps the draft exactly as written and asks a human to decide again. Pass `--comment` to say why — the reviewer sees it on the task.
 
 ## Automations (recurring content)
 
@@ -293,7 +415,7 @@ A task is one-off; an automation is a standing brief that spawns tasks on a sche
   --instructions "Summarize this week's merged changes as a friendly post." \
   --output-types x --schedule '{"type":"cron","value":"0 9 * * 1"}'
 ./ait.mjs automation list
-./ait.mjs automation get <automationId>
+./ait.mjs automation get <automationId>    # includes memory entries: learnings from earlier runs
 ./ait.mjs automation update <automationId> --name "Renamed"
 ./ait.mjs automation run <automationId>    # trigger now; returns the spawned task to poll
 ```
@@ -326,17 +448,18 @@ Reorganizing someone's files is a real change to their workspace, not a cleanup 
 
 ## Destructive operations
 
-Five commands permanently remove data and refuse to run without `--yes`:
+Six commands permanently remove data and refuse to run without `--yes`:
 
 | Command | Destroys |
 |---|---|
 | `task delete <taskId> --yes` | the task and everything attached to it |
 | `task delete-content <taskId> <contentItemId> --yes` | one content item |
 | `task clear-content <taskId> --yes` | every content item on the task |
-| `automation delete <automationId> --yes` | the automation **and every task it ever spawned**, including published ones |
+| `automation delete <automationId> --yes` | the automation **and its unfinished tasks** (to do, in progress, in review); approved and published tasks are kept |
 | `folders delete <folderId> --yes` | the folder **and every file and folder inside it** |
+| `skills delete <skillId> --yes` | the skill (refuses if an automation or active task still references it) |
 
-`automation delete` is the widest of these by far: it hard-deletes the automation's whole task history, not just the schedule. If the operator wants the automation to stop running, they almost certainly want it *paused or updated*, not deleted — ask before reaching for this.
+`automation delete` throws away every draft the automation has in flight, not just the schedule. If the operator wants the automation to stop running, they almost certainly want it *paused or updated*, not deleted — ask before reaching for this.
 
 None of this is undoable and there is no trash can. Rules:
 
@@ -350,11 +473,12 @@ None of this is undoable and there is no trash can. Rules:
 The API key's scopes bound what you can do (enforced server-side):
 
 - `tasks:read` — `task list / get / links / next-review`
-- `tasks:write` — `task create / claim / claim-next / complete / comment / approve / reject / publish / delete`
+- `tasks:write` — `task create / claim / claim-next / complete / comment / approve / reject / unapprove / publish / update / delete`
 - `content:write` — `task add-content / update-content / delete-content / clear-content`, and `task submit` (which attaches content, so it needs `tasks:write` **and** `content:write`)
 - `files:read` — `files list / download-url`, `folders list`
 - `files:write` — `upload-url`, `files move / copy`, `folders create / rename / delete`
 - `skills:read` — `skills list / get`
+- `skills:write` — `skills create / update / delete`
 - `automations:read` / `automations:write` — automation commands, including `automation run`
 
 Workspace roles apply on top. Any member — including a viewer — can create and work tasks, but a viewer's tasks always require review (`--no-review` is ignored for them). Creating or deleting automations requires an admin; approving and publishing require a reviewer or admin. A `403`/`missing required scope` error names what's missing — report it to the operator; do not retry.

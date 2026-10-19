@@ -1,46 +1,65 @@
-## Description: <br>
-Generate and edit video with Kling through RunAPI, using the RunAPI CLI for one-off generation and SDKs for application or backend integration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents generate and edit video with Kling through RunAPI, using the CLI for one-off requests and SDKs for application integration.
 
-## Publisher: <br>
-[runapi-ai](https://clawhub.ai/user/runapi-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[runapi-ai](https://clawhub.ai/user/runapi-ai)
 
-## Use Case: <br>
-Developers and agent operators use this skill to create, edit, transform, and test Kling video-generation workflows through RunAPI. It supports one-off CLI tasks and guides production integrations toward official RunAPI SDKs rather than shelling out from application code. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and referenced media are sent to the RunAPI/Kling service, and optional RUNAPI_API_KEY or saved CLI login credentials may be used. <br>
-Mitigation: Confirm the user is comfortable with RunAPI/Kling service use before execution and manage API keys or saved CLI login state carefully. <br>
-Risk: Generated file URLs are temporary and may expire. <br>
-Mitigation: Download and store generated videos or other outputs in durable storage within 7 days when they need to be retained. <br>
-Risk: Using the CLI as a production runtime integration layer can create brittle application behavior. <br>
-Mitigation: Use the language-specific RunAPI SDK integration path for app, backend, worker, or production workflow integrations. <br>
+## Use Case:
 
+Creators and developers use this skill to generate or edit Kling videos through RunAPI, or integrate Kling video generation into applications.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/runapi-ai/skills/runapi-kling) <br>
-- [RunAPI Kling model page](https://runapi.ai/models/kling) <br>
-- [RunAPI Kling documentation](https://runapi.ai/models/kling.md) <br>
-- [RunAPI Kuaishou provider page](https://runapi.ai/providers/kuaishou.md) <br>
-- [RunAPI model catalog](https://runapi.ai/models.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, code, configuration] <br>
-**Output Format:** [Markdown guidance with CLI commands, SDK package names, request-field notes, and configuration details] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference temporary generated media URLs that should be downloaded to durable storage within 7 days.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.13 (source: server release evidence) <br>
+Risk: API credentials could be exposed in project files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep RunAPI keys in environment variables or approved CLI authentication, not project files.
+
+Risk: Generation requests may incur charges and upload user-provided media.
+
+Mitigation: Review request contents and pricing before submitting a paid task or uploading media.
+
+Risk: Generated video downloads could be incomplete or have an unexpected file type.
+
+Mitigation: Verify each requested download is non-empty and matches its expected MIME type before reporting completion.
+
+Risk: Installing an unreviewed CLI may introduce third-party software risk.
+
+Mitigation: Review the RunAPI CLI install source before installation.
+
+## Reference(s):
+
+- [RunAPI Kling model overview](https://runapi.ai/models/kling.md)
+- [RunAPI Kling homepage](https://runapi.ai/models/kling)
+- [Kuaishou provider overview](https://runapi.ai/providers/kuaishou.md)
+- [RunAPI model catalog](https://runapi.ai/models.md)
+- [Kling SDK integration](https://github.com/runapi-ai/kling-sdk)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code, Video files]
+
+**Output Format:** [Markdown guidance, JSON task results, and downloaded video files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Checks requested video deliverables for non-empty content and expected MIME type.]
+
+## Skill Version(s):
+
+0.4.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

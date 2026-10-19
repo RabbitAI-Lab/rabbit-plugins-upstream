@@ -1,40 +1,54 @@
-## Description: <br>
-SocialDataX Douyin helps agents perform read-only Douyin hot-search, content, comment, reply, creator profile, creator post, and short-drama series lookups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps research Douyin trends, posts, comments, creators, and short-drama series using SocialDataX data.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Developers and agents use this skill for read-only Douyin content and creator research, including hot-search lookup, work discovery, detail lookup, comment analysis, reply lookup, creator profile lookup, creator work lists, and creator short-drama series lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a SocialDataX API key to query Douyin data. <br>
-Mitigation: Provide SOCIALDATAX_API_KEY through the environment, use the official SocialDataX access page, and avoid placing keys in skill files or prompts. <br>
-Risk: Running the SocialDataX npm CLI, especially bulk options such as --all, may consume account credits or issue larger API requests. <br>
-Mitigation: Review npm package provenance and SocialDataX billing or credit behavior before use, and start with scoped queries before bulk collection. <br>
+## Use Case:
 
+Content researchers, marketers, and developers use this skill to investigate Douyin trends, find posts and creators, and analyze post details, comments, replies, and creator series.
 
-## Reference(s): <br>
-- [SocialDataX AI access](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples and CLI or MCP tool names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY plus node and npm; CLI calls return read-only Douyin data through SocialDataX.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.15 (source: server release metadata) <br>
+Risk: Running an unpinned npm package with the SocialDataX API key available can expose the key to changed package code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package before installing, pin it to a reviewed version, or run it in a restricted environment with only the required API key exposed.
+
+Risk: Interrupted pagination or partial reply retrieval can produce incomplete analysis.
+
+Mitigation: Retain partial results, report incompleteness, and resume with the appropriate parent or reply page token within the remaining page and item limits.
+
+## Reference(s):
+
+- [SocialDataX Douyin skill on ClawHub](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin)
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown responses with Douyin data summaries and optional CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only data lookups; paginated results may be incomplete and require continuation.]
+
+## Skill Version(s):
+
+0.1.20 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

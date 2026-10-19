@@ -1,45 +1,62 @@
-## Description: <br>
-Render Markdown as a shareable browser page by uploading selected .md files to a user-configured S3-compatible bucket where Docsify serves the public page. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publishes Markdown files to a user-configured S3-compatible bucket and returns shareable public web page links.
 
-## Publisher: <br>
-[rockbenben](https://clawhub.ai/user/rockbenben) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[rockbenben](https://clawhub.ai/user/rockbenben)
 
-## Use Case: <br>
-External users, developers, and documentation authors use this skill when they want an agent to publish selected Markdown as a public, shareable web page instead of returning long Markdown directly in chat. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded Markdown is publicly accessible at the returned URL. <br>
-Mitigation: Use the skill only for content intended for public sharing, and avoid secrets, credentials, PII, confidential material, or untrusted Markdown. <br>
-Risk: S3-compatible storage credentials are stored in plaintext in ~/.md-web/config.json. <br>
-Mitigation: Protect the config file, avoid committing or sharing it, and restrict the storage token to the dedicated bucket where possible. <br>
-Risk: Setting expire_days to 0 can clear the bucket lifecycle configuration. <br>
-Mitigation: Use a dedicated bucket for this skill and review lifecycle settings before disabling automatic expiration. <br>
+## Use Case:
 
+People who need to share Markdown documents as web pages can publish them to their own public S3-compatible bucket and receive a link.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/rockbenben/md-web) <br>
-- [Skill homepage](https://github.com/rockbenben/aishort-skills/tree/main/skills/md-web) <br>
-- [README.md](README.md) <br>
-- [Docsify server README](docsify-server/README.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown response with a filename and clickable URL, plus setup guidance or shell commands when configuration or upload execution is needed.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Publishes selected Markdown to a public S3-compatible bucket and returns a Docsify-rendered URL; falls back to direct chat text if upload fails.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.0 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: Published documents are publicly accessible and may expose sensitive information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Publish only with the user's explicit approval; exclude secrets and personal information.
+
+Risk: Stored bucket credentials may be exposed if the configuration file is shared.
+
+Mitigation: Prefer environment variables for credentials and protect any local configuration file.
+
+Risk: Bucket administration permissions can affect content beyond the published documents.
+
+Mitigation: Use a dedicated public-documents bucket and Object Read & Write credentials; grant Admin Read & Write only when intentionally enabling expiry.
+
+Risk: Content on the published domain is public and untrusted.
+
+Mitigation: Treat the published domain as untrusted and avoid relying on it for private content.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/rockbenben/skills/md-web)
+- [Skill homepage (declared in metadata)](https://github.com/rockbenben/aishort-skills/tree/main/skills/md-web)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Configuration guidance]
+
+**Output Format:** [Markdown document and public web page URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Published documents are publicly accessible; the agent returns a link after upload.]
+
+## Skill Version(s):
+
+1.2.2 (source: SKILL.md frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

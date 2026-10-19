@@ -136,7 +136,7 @@ Do not start with a long form. Ask for the smallest useful input:
 
 你可以先发 3-10 条你最近收藏、喜欢、想模仿的小红书链接；如果暂时没有链接，也可以发一个关键词，比如“女性成长图文”“35岁职场”“AI工具”“本地生活探店”。我先帮你做第一版内容资产表。
 
-If a search is needed, use `search-credit-notice.md` before searching.
+If a search is needed, use `research-scope-guard.md` before searching.
 
 ### If User Says They Have Many Saved Items
 
@@ -144,13 +144,13 @@ Do not ask them to paste hundreds of links. Start with a sample:
 
 先不用一下子整理全部收藏。你先给我 10 条最想学、最常回看的链接，我会先做一个样板知识库。等结构对了，再按同一模板继续补。
 
-## Search And Credit Scope
+## Search And Research Scope
 
 Before any Lingzao lookup, choose the scope:
 
 Before a creator distillation, explain the sampling logic in plain language.
 Users should know why a set of references was selected; otherwise they may
-think Lingzao randomly picked posts or spent credits on an opaque search.
+think Lingzao randomly picked posts or expanded an opaque search.
 
 Do not say "I will simply collect everything" or "I will only take the top 50
 likes." Likes are useful, but old viral posts and accidental hot-topic posts can
@@ -174,7 +174,7 @@ reference library rather than a full creator profile distillation.
 
 #### Quick Distillation
 
-Use for first-pass learning or when credits should be controlled.
+Use for first-pass learning or when scope should be controlled.
 
 Target sample:
 
@@ -317,7 +317,7 @@ E. 商业/引流内容：适合看变现和承接。
 F. 封面和标题参考：适合做图文、标题、视觉模板。
 
 If the user chooses a filter, continue with that filter and summarize the new
-scope before spending more credits.
+scope before expanding the research.
 
 ### Light Knowledge Base
 
@@ -332,7 +332,7 @@ Output:
 - what the user can learn
 - one adaptation idea
 
-Credit stance:
+Scope stance:
 
 - controlled basic lookups first
 - do not open every detail/comment/transcript unless user confirms
@@ -352,7 +352,7 @@ Output:
 - rewrite directions
 - export-ready table / document
 
-Credit stance:
+Scope stance:
 
 - confirm scope before expanding
 - separate basic search objects from deep content objects
