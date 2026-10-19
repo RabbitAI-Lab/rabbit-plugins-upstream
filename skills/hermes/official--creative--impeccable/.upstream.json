@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/impeccable",
+  "identifier": "official/creative/impeccable",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/impeccable",
+  "branch": "main",
+  "pushedAt": "2026-10-19T14:39:29Z",
+  "contentHash": "92821f9afe17db08c399665ce081439a843b1a625cd772e0d9831e02a06521c9",
+  "fetchedAt": "2026-10-19T14:45:19.223Z"
+}

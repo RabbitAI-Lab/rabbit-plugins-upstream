@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-mine-od-images",
+  "identifier": "NVIDIA/skills/skills/tao-mine-od-images",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-mine-od-images",
+  "branch": "main",
+  "pushedAt": "2026-10-19T13:57:48Z",
+  "contentHash": "a15703452fd882de24d8091325ddc410f6cd75b9af44f4672376da6aed48e033",
+  "fetchedAt": "2026-10-19T14:45:05.597Z"
+}

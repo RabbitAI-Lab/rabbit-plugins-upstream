@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/nmr-compound-inference",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/nmr-compound-inference",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/nmr-compound-inference",
+  "branch": "main",
+  "pushedAt": "2026-10-18T11:25:02Z",
+  "contentHash": "91023af6089156c764f39ce900d0a655ca2eec74952c5709ee0df4a3b20755ae",
+  "fetchedAt": "2026-10-19T14:45:06.831Z"
+}

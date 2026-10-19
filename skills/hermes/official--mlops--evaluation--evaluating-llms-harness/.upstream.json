@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/evaluation/evaluating-llms-harness",
+  "identifier": "official/mlops/evaluation/evaluating-llms-harness",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/evaluation/evaluating-llms-harness",
+  "branch": "main",
+  "pushedAt": "2026-10-19T14:39:29Z",
+  "contentHash": "71ba05fcbc5b1ed6db01e19fcbbb5f9282b932469fde826cf93b17a2f28809c3",
+  "fetchedAt": "2026-10-19T14:45:19.204Z"
+}

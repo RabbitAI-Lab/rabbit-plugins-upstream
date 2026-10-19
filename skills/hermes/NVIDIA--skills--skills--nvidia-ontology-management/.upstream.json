@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvidia-ontology-management",
+  "identifier": "NVIDIA/skills/skills/nvidia-ontology-management",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvidia-ontology-management",
+  "branch": "main",
+  "pushedAt": "2026-10-19T13:57:48Z",
+  "contentHash": "ada3ab7a55c60a4dbc3a661147d95c85a8c65c24bd6ff121848d14f574480aa7",
+  "fetchedAt": "2026-10-19T14:45:05.518Z"
+}

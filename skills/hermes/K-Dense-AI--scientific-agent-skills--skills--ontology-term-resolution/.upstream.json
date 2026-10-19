@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/ontology-term-resolution",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/ontology-term-resolution",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/ontology-term-resolution",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "1cd0420b276a3a1daa80ff988ac43534ff486c2b9b734d6035331c3811dd898a",
+  "fetchedAt": "2026-10-19T14:45:22.631Z"
+}

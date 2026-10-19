@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/discernment-nudge",
+  "identifier": "anthropics/skills/skills/discernment-nudge",
+  "repo": "anthropics/skills",
+  "path": "skills/discernment-nudge",
+  "branch": "main",
+  "pushedAt": "2026-10-09T18:45:52Z",
+  "contentHash": "6fbd10303ba9de60e09d2087fef5cbd8de621cec530264928103c1989e48a0bd",
+  "fetchedAt": "2026-10-19T14:45:03.435Z"
+}

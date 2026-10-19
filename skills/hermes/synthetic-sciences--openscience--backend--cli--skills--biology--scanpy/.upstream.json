@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/scanpy",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/scanpy",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/scanpy",
+  "branch": "main",
+  "pushedAt": "2026-10-18T11:25:02Z",
+  "contentHash": "02cf73f1157aa4b8b1d91f2ccdd40e58ffc4500792d53078df8dcb33d0bae402",
+  "fetchedAt": "2026-10-19T14:45:06.866Z"
+}

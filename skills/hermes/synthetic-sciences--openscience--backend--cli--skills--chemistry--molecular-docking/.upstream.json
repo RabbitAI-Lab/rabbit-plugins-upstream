@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/molecular-docking",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/molecular-docking",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/molecular-docking",
+  "branch": "main",
+  "pushedAt": "2026-10-18T11:25:02Z",
+  "contentHash": "75ed7909c6b2fd3c5ee89c2f68cd94c1fdfa9b69414efd43729fb04a49c4563e",
+  "fetchedAt": "2026-10-19T14:45:06.825Z"
+}
