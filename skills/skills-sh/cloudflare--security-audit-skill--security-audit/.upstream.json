@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cloudflare/security-audit-skill/security-audit",
+  "repo": "cloudflare/security-audit-skill",
+  "skillId": "security-audit",
+  "branch": "main",
+  "pushedAt": "2026-09-14T19:29:02Z",
+  "contentHash": "c7970d862af9b8bfd7601f31db6d3ea638c6e833f2f8bcf81293bcdb36f3f6f4",
+  "fetchedAt": "2026-10-19T14:45:12.293Z"
+}

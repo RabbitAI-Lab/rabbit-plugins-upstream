@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/interrogate",
+  "repo": "cursor/plugins",
+  "skillId": "interrogate",
+  "branch": "main",
+  "pushedAt": "2026-10-19T05:35:28Z",
+  "contentHash": "68ad418ae57c26374498dd42c1ded4b850a17bb241f715aeeedf758253bba05a",
+  "fetchedAt": "2026-10-19T14:45:14.347Z"
+}

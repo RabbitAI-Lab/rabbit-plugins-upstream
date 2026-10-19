@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/callstack/agent-device/android-emulator",
+  "repo": "callstack/agent-device",
+  "skillId": "android-emulator",
+  "branch": "main",
+  "pushedAt": "2026-10-19T14:32:43Z",
+  "contentHash": "be5deb0b5410fcabc32afdd1a7b931df75685e2c7ea7f23bfc0768b7bd592495",
+  "fetchedAt": "2026-10-19T14:46:55.665Z"
+}

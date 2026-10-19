@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/iam-helper-for-policy-simulator",
+  "repo": "google/skills",
+  "skillId": "iam-helper-for-policy-simulator",
+  "branch": "main",
+  "pushedAt": "2026-10-19T13:47:16Z",
+  "contentHash": "49464bc04dd8a737306d8b0925023a7c576872bdf01cf4332b14cdb0c3f5c191",
+  "fetchedAt": "2026-10-19T14:47:06.245Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-trace-querying",
+  "repo": "google/skills",
+  "skillId": "cloud-trace-querying",
+  "branch": "main",
+  "pushedAt": "2026-10-19T13:47:16Z",
+  "contentHash": "f681f3f5fc2539f0c4d8e9d2e80cef20f53e535695f5173928b1c02a04099a82",
+  "fetchedAt": "2026-10-19T14:47:06.578Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/serverless-deploy",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "serverless-deploy",
+  "branch": "main",
+  "pushedAt": "2026-10-17T05:26:02Z",
+  "contentHash": "f7a9fa172d041195882d5fe54b50acb21c0a80b64451b3db18ee2cd3a6fbbae0",
+  "fetchedAt": "2026-10-19T14:47:21.481Z"
+}

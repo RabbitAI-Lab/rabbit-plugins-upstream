@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/typescript-best-practices",
+  "repo": "cursor/plugins",
+  "skillId": "typescript-best-practices",
+  "branch": "main",
+  "pushedAt": "2026-10-19T05:35:28Z",
+  "contentHash": "650c4d7e3289cb72a3a9e49e2af0d28b0e04d3167eb8b782086fcdf10483b9fc",
+  "fetchedAt": "2026-10-19T14:45:14.257Z"
+}
