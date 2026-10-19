@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-verify",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-verify",
+  "branch": "main",
+  "pushedAt": "2026-10-13T21:11:27Z",
+  "contentHash": "c2eb7c0679d0f257d1e68231d6ba7bb443880b27f5c1cf6e67c3062de55f9cec",
+  "fetchedAt": "2026-10-19T14:45:06.998Z"
+}

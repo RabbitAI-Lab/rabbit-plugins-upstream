@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-node-notready",
+  "repo": "google/skills",
+  "skillId": "gke-node-notready",
+  "branch": "main",
+  "pushedAt": "2026-10-19T13:47:16Z",
+  "contentHash": "005da04d1c1629890bbbc7341696247c7d4559ab2ace6d3d15c674b061decc04",
+  "fetchedAt": "2026-10-19T14:47:06.357Z"
+}

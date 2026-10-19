@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/terraform-policy",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "terraform-policy",
+  "branch": "main",
+  "pushedAt": "2026-10-05T01:21:52Z",
+  "contentHash": "089b8cd5a73c43e611d4378beb7c8e56f14bf7e80fd8ca19a4cb57d50493d53f",
+  "fetchedAt": "2026-10-19T14:47:23.907Z"
+}

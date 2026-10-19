@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-multitenancy",
+  "repo": "google/skills",
+  "skillId": "gke-multitenancy",
+  "branch": "main",
+  "pushedAt": "2026-10-19T13:47:16Z",
+  "contentHash": "834d126aac3325319844c7d5ffc46abc550d6ff7f922b75b75a135621b4de027",
+  "fetchedAt": "2026-10-19T14:47:05.845Z"
+}

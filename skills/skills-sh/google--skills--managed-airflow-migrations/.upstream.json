@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/managed-airflow-migrations",
+  "repo": "google/skills",
+  "skillId": "managed-airflow-migrations",
+  "branch": "main",
+  "pushedAt": "2026-10-19T13:47:16Z",
+  "contentHash": "447b35fdc7c85fba2522e528c13b11b5565e3b353b42d3cc512c1f931a24051b",
+  "fetchedAt": "2026-10-19T14:47:06.173Z"
+}
