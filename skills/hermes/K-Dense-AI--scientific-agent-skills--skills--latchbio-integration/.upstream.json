@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/latchbio-integration",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/latchbio-integration",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/latchbio-integration",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "2edfdfe97a329cdbb6f33baa635cfd5bcb1b0e43cb51f7249fc75d113024880e",
+  "fetchedAt": "2026-10-19T14:45:22.615Z"
+}

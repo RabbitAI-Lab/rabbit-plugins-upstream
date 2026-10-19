@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/alphagenome",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/alphagenome",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/alphagenome",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "00255ab514b6816393fedd97a4c90c8d54eda8853f1b7687021e4c966c6282dd",
+  "fetchedAt": "2026-10-19T14:45:22.574Z"
+}
