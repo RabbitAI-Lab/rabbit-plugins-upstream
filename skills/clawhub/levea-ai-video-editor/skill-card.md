@@ -1,45 +1,54 @@
-## Description: <br>
-Agentic AI video editor: send a prompt, the autonomous editor plans, uses internal tools, exports, and returns the result. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Plans, executes, and verifies timeline video edits through the autonomous_edit tool.
 
-## Publisher: <br>
-[brajendrak00068](https://clawhub.ai/user/brajendrak00068) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[brajendrak00068](https://clawhub.ai/user/brajendrak00068)
 
-## Use Case: <br>
-External creators, marketers, editors, and developers use this skill to ask an agent for natural-language video edits, captioning, privacy redaction, brand/project/asset workflows, and MP4 or ZIP exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can send API keys and user media or project data to Levea's cloud service. <br>
-Mitigation: Install only when that cloud processing is acceptable, keep API keys secret, and avoid sending sensitive media without authorization. <br>
-Risk: Mutating edits may automatically render outputs and create artifact URLs. <br>
-Mitigation: Use requirePlanApproval for important, sensitive, or destructive workflows and review generated outputs before publishing or sharing. <br>
-Risk: Beta editing outputs can be incorrect or incomplete. <br>
-Mitigation: Preview final media, check captions and redactions, and rerun or repair edits before relying on the result. <br>
+## Use Case:
 
+Video creators and editors use this skill to trim and reframe footage, add captions and overlays, adjust color and audio, and export edited scenes.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/brajendrak00068/levea-ai-video-editor) <br>
-- [Levea MCP server package](https://www.npmjs.com/package/levea-mcp-server) <br>
-- [ClawHub plugin listing](https://clawhub.ai/plugins/openclaw-ai-video-editor) <br>
-- [Levea Studio for API keys](https://studio.livecore.ai/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with JSON examples, shell commands, and API response fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return video URLs, ZIP URLs, job IDs, scene state, and status messages from the Levea cloud service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.23 (source: ClawHub release evidence) <br>
+Risk: Video URLs, prompts, and project details may be processed by an external editing service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid submitting sensitive media unless you trust the configured service's handling of the content.
+
+Risk: Automated edits or exports could change an important project unexpectedly.
+
+Mitigation: Request plan approval and review the proposed changes before applying edits to important projects.
+
+## Reference(s):
+
+- [Levea Video Editor on ClawHub](https://clawhub.ai/brajendrak00068/skills/levea-ai-video-editor)
+- [Publisher profile](https://clawhub.ai/user/brajendrak00068)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, API Calls, Text]
+
+**Output Format:** [Editing instructions and structured tool responses with an optional MP4 download URL]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Responses may include project revisions, approval status, and asynchronous render job IDs.]
+
+## Skill Version(s):
+
+1.0.28 (source: server-resolved release; skill frontmatter lists 1.1.7)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

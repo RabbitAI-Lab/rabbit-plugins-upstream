@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/appium-android-adb",
   "slug": "appium-android-adb",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1780271738866,
-  "contentHash": "cfd95b21781eef212df1c75ddca87e685be7a01720525becd5f6b7c5c9de526e",
-  "fetchedAt": "2026-07-26T18:37:32.663Z"
+  "version": "1.5.0",
+  "updatedAt": 1792081672528,
+  "contentHash": "d3f093b67d146ca6d03824170e58e7f5980c60969c84bca8ca6a06005a784d3e",
+  "fetchedAt": "2026-10-20T13:17:01.165Z"
 }

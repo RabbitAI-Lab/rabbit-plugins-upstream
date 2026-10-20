@@ -17,7 +17,7 @@ installer:
 argument-hint: "[a project path, pipeline/runner id, or describe your CI/CD task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["CICD_AIOPS_CONFIG"],"bins":["cicd-aiops"],"config":["~/.cicd-aiops/config.yaml","~/.cicd-aiops/secrets.enc"]},"optional":{"env":["CICD_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"CICD_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/CICD-AIops","emoji":"🔁","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["cicd-aiops","uvx"]},"optional":{"env":["CICD_AIOPS_CONFIG","CICD_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/CICD-AIops","emoji":"🔁","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed CI/CD operations across self-managed GitLab (REST API v4 /api/v4/..., access token via PRIVATE-TOKEN header) and self-hosted Gitea (API v1 /api/v1/..., access token via "Authorization: token"). Each target in the config names its own platform, and a name-keyed platform registry selects the API shape, so the same tools work on both and one config can span a mixed estate; surfaces one platform lacks (e.g. runner administration on Gitea) raise a teaching error listing what is available. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.cicd-aiops/ (relocatable via CICD_AIOPS_HOME).
@@ -78,6 +78,15 @@ uv tool install cicd-aiops
 cicd-aiops init       # wizard: pick platform (gitlab/gitea) + base URL + encrypted token
 cicd-aiops doctor     # version endpoint + token-scope probe per target
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/cicd-aiops
+openclaw skills info cicd-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

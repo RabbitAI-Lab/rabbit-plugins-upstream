@@ -1,43 +1,53 @@
-## Description: <br>
-Aggregates AI, technology, and finance news into source-aware summaries, ranking frameworks, translations, and risk-monitoring guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an advisory framework for aggregating, checking, and summarizing public AI, technology, and financial news into daily, weekly, or topic-focused reports.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-Developers and analysts use this skill as a reference workflow for collecting AI, technology, and finance news, summarizing important items, translating selected English-language stories, and flagging items that need source verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Market-impact summaries, sentiment labels, and risk ratings may be incomplete, stale, or misleading if sources are not checked. <br>
-Mitigation: Verify original sources before acting and treat all market-impact and risk sections as informational rather than financial, legal, or insurance advice. <br>
-Risk: Separate user-deployed Python scripts may contact RSS feeds or third-party APIs and expose query terms, IP address, timestamps, or similar request metadata. <br>
-Mitigation: Review any separate script before deployment, confirm third-party terms and robots.txt expectations, and limit data sent to external feeds or APIs. <br>
-Risk: The release is documentation-only and describes aggregation frameworks and code examples without included executable code. <br>
-Mitigation: Treat commands and configuration as examples that require local review, testing, and security scanning before operational use. <br>
+## Use Case:
 
+News researchers and content editors use this reference to organize public AI, technology, and finance coverage, check sources, and draft attributed summaries and reports for human review. It provides guidance and example commands rather than running a news collector itself.
 
-## Reference(s): <br>
-- [ClawHub package page](https://clawhub.ai/gechengling/finance-news-aggregator) <br>
-- [OpenAI Blog RSS feed](https://openai.com/blog/rss.xml) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with example shell commands, configuration snippets, scoring tables, and summary templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; any separate scripts or external feed access are user-deployed and should be reviewed before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.0.3 (source: server-resolved release metadata) <br>
+Risk: User-deployed example workflows may contact third-party public sources and create local cache, log, backup, or JSON files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only public news and review network destinations and local file outputs before deploying examples.
+
+Risk: Unverified financial news or summaries could be mistaken for reliable reporting or investment advice.
+
+Mitigation: Verify claims against original sources, require human review, and do not use summaries as investment advice.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/gechengling/skills/finance-news-aggregator)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration examples]
+
+**Output Format:** [Markdown prose and report templates with example shell commands and JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory only; review source attribution, figures, and translations before publication.]
+
+## Skill Version(s):
+
+5.0.5 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

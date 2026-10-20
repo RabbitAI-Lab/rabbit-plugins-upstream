@@ -1,73 +1,53 @@
-# Composition and Device Rules
+# 整套设计语言与多端排版
 
-## Listing images across devices
+## 整套设计语言
 
-Amazon Listing images are generally one shared uploaded image set rendered on desktop and mobile. Design square Listing images mobile-first:
+逐图策划前确定共同的视觉基础。用户已有要求时保留明确选择, 空缺部分按产品特征、受众和素材补全; 小任务可用一段话, 不要求填满所有字段。
 
-- Keep the primary product and essential message inside the central safe region.
-- Use one dominant focal point.
-- Keep text concise and readable at phone size.
-- Avoid dense tables, small footnotes, and more than four competing callouts.
-- Prefer one headline and up to three short supporting points.
-- Test conceptually at thumbnail size: category, product, and message should remain obvious.
-
-## Common Listing compositions
-
-| Composition | Use |
+| 内容 | 需要明确的决定 |
 |---|---|
-| Centered hero | MAIN or clear product recognition |
-| Image/text split | One feature with concise evidence |
-| Top image/bottom copy | Mobile-friendly feature or scene |
-| Center with radial callouts | Three to five structural points |
-| Detail inset | One to three confirmed details |
-| Controlled comparison | Two to four states with identical viewpoint and scale |
-| Dimension diagram | Confirmed measurements only |
-| Lifestyle scene | Realistic use with product remaining the hero |
+| 设计依据与受众 | 对谁表达、主要购买问题、希望形成的印象 |
+| 配色 | 底色、辅助色、强调色和文字色的用途; 必要时提供色值 |
+| 场景与背景 | 使用环境、背景材料和空间层次 |
+| 光线 | 方向、软硬、阴影与表面效果 |
+| 字体与层级 | 标题和正文的风格、字号关系及信息优先级 |
+| 版式节奏 | 常用网格、留白、主体比例和视觉锚点 |
+| 细节与装饰 | 放大图、标注、形状和装饰的使用方式 |
+| 允许变化 | 哪些元素固定、哪些随版位和设备变化 |
+| 避免事项 | 本套容易造成身份偏差、阅读困难或风格失控的内容 |
 
-## A+ desktop/mobile pairing
+色值比例、安全边距和字体选择是设计决定, 不冒充平台统一标准。风格一致不要求所有版位使用相同构图、相同背景或相同文字位置。
 
-Treat a desktop/mobile pair as one semantic slot with two independent compositions.
+素材有限时采用易保持的中性背景、单一光线和简洁字体; 商品近似还原时在设计记录中说明偏差。不要为了补齐设计字段虚构品牌历史或真实工艺。
 
-### Lock across both devices
+## 副图与缩略图
 
-- Narrative role and customer question.
-- Product variant, quantity, appearance, and operating state.
-- Feature key and measurable claims.
-- Scene type and intended mood.
-- Brand identity and overall story order.
-- Included accessories and physical facts.
+Listing 图片通常在桌面和手机共用同一套上传文件, 按实际站点展示方式核对。以较小显示尺寸也能看清商品与主要信息为目标:
 
-### Recompose independently
+- 每张图优先一个焦点和一个主要结论。
+- 标题简短, 支持说明按需要减少, 不强制固定字数或要点数。
+- 保留主体和关键文字的可读空间, 避免密集小字与无必要的引线。
+- 使用分栏、上下结构、场景、特写、对比或尺寸示意时, 让形式服务于本图问题。
 
-- Canvas orientation and crop.
-- Product position and scale.
-- Text line breaks and hierarchy.
-- Background extension and negative space.
-- Callout arrangement and decorative density.
-- Left/right versus top/bottom reading flow.
+信息减法同时适用于画面和交付界面。先用更准确的标题、图像和布局说明用途; 不能指出具体理解缺口的副标题、解释、重复卖点、装饰性数字和提示默认删除。确有购买决策价值的尺寸、数量、适用条件和限制按需要保留, 不因追求简洁一起删掉。
 
-### Prohibit
+没有实际缩略图检查能力时可做布局推演, 将真实显示效果留待复核。不要将概念上的可读性判断写成已测量结果。
 
-- Cropping or squeezing a desktop banner into mobile.
-- Changing the feature or claim between paired slots.
-- Showing a different product state without explicit reason.
-- Referring only to another slot instead of repeating the full product brief.
-- Allowing desktop text to become unreadable on mobile.
+## A+ 双端配对
 
-## Device-specific tendencies
+双端共享故事、主要事实或明确采用的假设、目标变体和商品状态。可精简手机文案, 核心含义保持对应。配对图具有稳定关联, 调整排列顺序后仍按标识对应, 不仅依靠“第几张”。
 
-| Desktop A+ | Mobile A+ |
+| PC 倾向 | 手机倾向 |
 |---|---|
-| Supports horizontal storytelling | Supports vertical scrolling |
-| Can use wider environmental context | Requires larger product and simpler context |
-| Can support left/right layouts | Prefer top/bottom layouts |
-| Can carry more secondary information | Reduce secondary information |
-| Uses controlled negative space across width | Keep key content near the visual center |
+| 横向空间和环境叙事 | 放大商品与关键元素 |
+| 左右分栏或多区域展开 | 优先上下编排与顺序阅读 |
+| 容纳更多解释信息 | 保留主要结论, 减少次要说明 |
+| 较宽留白和背景铺陈 | 适当收紧留白, 增强文字可读性 |
 
-## Text safety
+同一主题分别安排产品位置、文字区、行数、背景延展和标注。独立重排是目标; 工具暂时只能裁切、缩放或交付一端时, 可以作为临时预览, 记录双端适配未完成及下一步。不将临时处理直接当作独立排版已验收。
 
-- Use native A+ text fields when the selected module provides them and the design does not require baked-in text.
-- When text must appear inside an image, keep it short, high contrast, and away from crop-prone edges.
-- Do not invent exact font-size compliance. Judge readability at the intended rendered size when visual inspection is available.
-- Copy may be shortened between desktop and mobile only when meaning and claims remain equivalent.
+## 文案与品牌
 
+有原生文字字段且适合该模块时优先使用, 以便本地化和阅读。需要把字写进图片时, 在执行前给出本次确切文案。用户未提供文案时, 可以按商品依据和当前交付阶段拟写; 推定声明在说明中保留来源分级。
+
+文字生成不稳定时可先交无字底图、文字位置和排版说明, 有条件再用设计工具叠字。用户要求探索性品牌或口号时可提供候选, 记录为创意设定。Skill 作者署名与发布链接保留在规范和来源说明中, 不默认叠到商品图片上。

@@ -1,0 +1,22 @@
+{
+  "name": "simaguang-perspective",
+  "version": "0.4.3",
+  "description": "司马光综合思维：以历史校准为底座、融合跨域知识、高生产力输出和内嵌蒸馏强化的综合判断系统。",
+  "author": "lis",
+  "license": "CC-BY-NC-SA-4.0",
+  "entry": "SKILL.md",
+  "scripts": [
+    "scripts/build_traceability_panel.py",
+    "scripts/check_distillation_quality.py",
+    "scripts/check_integration.py",
+    "scripts/generate_work_product.py",
+    "scripts/prepare_input.py",
+    "scripts/run_high_productivity_checks.py",
+    "scripts/archive_work_product_feedback.py",
+    "scripts/review_learning_log.py",
+    "scripts/self-learn-next.sh",
+    "scripts/verify_traceability.py"
+  ],
+  "test": "python3 scripts/check_integration.py",
+  "privacy": "No original books, private logs, or personal data are bundled."
+}

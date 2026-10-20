@@ -1,41 +1,53 @@
-## Description: <br>
-Guides an agent through using Pruna's p-video-animate API to animate a reference image with motion from a source video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when someone wants a photo to move like another video — motion transfer, dance remixes, or performance variations from a template clip.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers and creative operators use this skill to prepare prompts, upload source media, and call Pruna's API for motion-transfer video generation from one image and one motion-template video. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill sends selected images and videos to Pruna's API with the user's PRUNA_API_KEY. <br>
-Mitigation: Use only media the user is allowed to upload and confirm credentials before making API calls. <br>
-Risk: Generated prompts or optional fields can change outputs or trigger paid API calls. <br>
-Mitigation: Review generated prompts and key parameters before submission, especially when the instruction prompt is not already locked. <br>
-Risk: The artifact exposes an optional disable_safety_checker field. <br>
-Mitigation: Be cautious with safety-check settings and keep default protections enabled unless the user has a justified need. <br>
+## Use Case:
 
+Creators and developers use this skill to animate a still subject using motion from a source video, including dance remixes and performance variations.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline curl examples and parameter notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a PRUNA_API_KEY and user-provided image and video URLs or uploaded Pruna file URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and artifact metadata) <br>
+Risk: Selected image and video are sent to Pruna for processing, potentially exposing confidential or unauthorized media.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are authorized to share and avoid confidential inputs.
+
+Risk: Installing companion skills with npx may introduce unreviewed or changing dependencies.
+
+Mitigation: Review or pin companion skills before installation, especially in shared or production environments.
+
+## Reference(s):
+
+- [p-video-animate on ClawHub](https://clawhub.ai/pruna-ai/skills/p-video-animate)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with bash code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guides image and video upload, prediction requests, and retrieval of the resulting video.]
+
+## Skill Version(s):
+
+1.0.15 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

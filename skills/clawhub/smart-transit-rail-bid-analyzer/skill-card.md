@@ -1,46 +1,62 @@
-## Description: <br>
-Analyzes smart-transit, rail, highway, ETC, signal-system, and traffic electromechanical procurement notices, awards, companies, brands, prices, and market trends. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户检索智慧交通与轨道交通招投标信息，并分析基建项目、企业、品牌、价格和市场商机。
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-External procurement, business development, and market analysis users use this skill to query transportation infrastructure bid and award data, analyze suppliers and purchasers, compare brands and prices, and identify potential opportunities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can contact zhiliaobiaoxun.com services and send device or user identifiers during automatic registration. <br>
-Mitigation: Prefer a manually provisioned ZLBX_API_KEY and approve any automatic registration path before installation or use. <br>
-Risk: The skill can write a local API credential to ~/.zlbx/config.json. <br>
-Mitigation: Review local credential files after first use and restrict file access to trusted users. <br>
-Risk: Procurement contact data may appear in query results. <br>
-Mitigation: Share outputs only with authorized users and apply the organization's data handling rules before redistribution. <br>
+## Use Case:
 
+采购、销售及市场分析人员可检索交通基建招投标与拟建项目，识别潜在客户和竞争对手，并分析采购趋势、中标品牌及历史价格。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/smart-transit-rail-bid-analyzer) <br>
-- [Bid search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Auto-registration flow reference](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, shell commands, guidance] <br>
-**Output Format:** [Markdown analysis with JSON request examples and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or reuse an API key in ~/.zlbx/config.json when no credential is configured.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The skill contacts 知了标讯 services using an API key and may save a newly issued key on the local device.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service and credential-storage behavior before use; set ZLBX_API_KEY manually to avoid automatic local credential creation.
+
+Risk: Trial registration sends platform and architecture details plus a hashed MAC-derived device identifier for de-duplication.
+
+Mitigation: Require informed user consent before registration; use manual registration if device-data collection is not acceptable.
+
+Risk: Account and update checks, referral links and quota-related login prompts may be unsuitable for sensitive environments.
+
+Mitigation: Review these interactions and links before installation; do not use the skill where such calls or promotions violate policy.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/smart-transit-rail-bid-analyzer)
+- [知了标讯 Skill 文档](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [招投标搜索接口说明](artifact/references/api-search.md)
+- [企业分析接口说明](artifact/references/api-company.md)
+- [市场分析接口说明](artifact/references/api-market.md)
+- [自动注册与隐私说明](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Markdown summaries, linked result tables and analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the provider's data and available account credits.]
+
+## Skill Version(s):
+
+1.0.9 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,54 @@
-## Description: <br>
-用于微博数据分析、微博热搜、微博内容研究、关键词观察、内容调研、竞品分析和趋势研究。覆盖 Weibo hot-search and post research，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于微博数据分析、微博热搜、微博内容研究、关键词观察、内容调研、竞品分析和趋势研究。覆盖 Weibo hot-search and post research，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Content researchers, analysts, and social media teams use this skill to retrieve Weibo hot-search rankings and keyword-based post results for trend scanning, competitor analysis, and content research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends Weibo research queries and the SocialDataX API key to SocialDataX's hosted service. <br>
-Mitigation: Install only when this data sharing is intended, keep SOCIALDATAX_API_KEY in the runtime environment, and avoid pasting API keys into chat, logs, or screenshots. <br>
-Risk: The documented direct CLI uses the external npm package at @latest, so future package updates may change runtime behavior. <br>
-Mitigation: Use a pinned package version or controlled installer when reproducibility matters, and review updates before deployment. <br>
+## Use Case:
 
+Researchers and content teams use the skill to review Weibo hot-search topics and search posts by keyword for content, competitor, and trend research.
 
-## Reference(s): <br>
-- [SocialDataX AI access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-search) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance] <br>
-**Output Format:** [Markdown summaries with command examples and selected JSON fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Weibo ranking signals, post IDs, URLs, author facts, interaction counts, publish times, and pagination markers for traceability.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: Search queries and usage attribution are sent to SocialDataX using the configured API key and may consume credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep searches within the intended scope and budget, protect the API key, and use a reviewed, pinned package version with only necessary credentials and local access.
+
+Risk: The artifact content describes TikTok rather than the Weibo release identified by server evidence, so its examples may target the wrong platform.
+
+Mitigation: Confirm the artifact and its commands match the intended Weibo release before execution.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo-search)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Shell commands]
+
+**Output Format:** [JSON research results and concise Markdown summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only research outputs; queries and usage attribution may be sent to SocialDataX and consume credits.]
+
+## Skill Version(s):
+
+0.1.20
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

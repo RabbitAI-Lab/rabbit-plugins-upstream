@@ -1,48 +1,61 @@
-## Description: <br>
-Plans Amazon product image sets, writes slot-by-slot generation briefs, and helps generate or review MAIN, Listing, Standard/Premium A+, and PC/Mobile paired images when the active agent has the needed image capabilities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助卖家规划、制作并审核亚马逊商品主图、副图及桌面端和移动端 A+ 素材，并按现有资料和工具能力交付方案、预览或成品。
 
-## Publisher: <br>
-[ssesweb](https://clawhub.ai/user/ssesweb) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[ssesweb](https://clawhub.ai/user/ssesweb)
 
-## Use Case: <br>
-External sellers, marketplace operators, and creative teams use this skill to plan Amazon-compliant product image sets, separate verified product facts from assumptions, write executable generation briefs, and review draft or final images for factual, slot, and device-pairing quality. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may structure work that uses image-generation capabilities supplied by the active agent. <br>
-Mitigation: Verify marketplace rules, product facts, brand permissions, and rights to customer or reference images before generation or publication. <br>
-Risk: Missing or unverified product facts can lead to misleading dimensions, materials, accessories, functions, certifications, quantities, or performance claims. <br>
-Mitigation: Use the fact-lock workflow and mark unsupported or unresolved checks as BLOCKED rather than treating them as ready. <br>
+## Use Case:
 
+卖家、设计人员和内容团队使用此技能规划商品套图、编写逐图制作说明、复核商品信息与版位要求，并在素材或工具不足时明确交付限制。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ssesweb/skills/generate-amazon-image-set) <br>
-- [Publisher profile](https://clawhub.ai/user/ssesweb) <br>
-- [Public mini straw hat example](https://www.quietphoenix.top/archives/generate-amazon-image-set) <br>
-- [Composition and Device Rules](references/composition-and-devices.md) <br>
-- [Product Input and Fact Lock](references/input-and-facts.md) <br>
-- [Generation Brief Contract](references/prompt-contract.md) <br>
-- [Quality Review Protocol](references/quality-review.md) <br>
-- [Slot and Dimension Contract](references/slots-and-dimensions.md) <br>
-- [Validated mini straw hat example](references/example-mini-straw-hat.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured tables and status labels] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include generation briefs, product fact locks, slot manifests, PC/Mobile pairing matrices, plan QA, final-image QA, and overall status labels.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: release evidence and SKILL.md version note) <br>
+Risk: Unverified product claims or borrowed imagery could mislead buyers or infringe rights.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check claims against product evidence and confirm rights to reference and product materials before public use.
+
+Risk: Draft assets may not meet the current Amazon listing or A+ requirements.
+
+Mitigation: Review the applicable platform rules and target module before upload; treat publication as a separate user-authorized step.
+
+Risk: The first response may include an author attribution link.
+
+Mitigation: Expect a one-time publisher credit and review outward-facing copy before sharing.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/ssesweb/skills/generate-amazon-image-set)
+- [Amazon A+ content design guide](https://sell.amazon.com/blog/a-plus-content-design-guide)
+- [Amazon product photo guidance](https://sell.amazon.com/blog/product-photos)
+- [Product evidence and references](references/input-and-facts.md)
+- [Quality review and delivery checklist](references/quality-review.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Image assets, Guidance]
+
+**Output Format:** [Chinese-first image-set plans, per-image instructions, review results and optional image files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Records assumptions, delivery stage, missing assets and checks needed before upload.]
+
+## Skill Version(s):
+
+1.4.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

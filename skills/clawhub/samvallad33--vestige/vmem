@@ -1,0 +1,65 @@
+#!/bin/bash
+# Vestige helper for Vestige 4.2.0 - vmem
+# Usage: vmem [recall|save|walk|receipt|selftest] [args]
+
+VESTIGE_MCP=$(command -v vestige-mcp 2>/dev/null || true)
+
+# MCP requires initialization before tool calls
+mcp_call() {
+  local TOOL="$1"
+  local ARGS="$2"
+  if [ -z "$VESTIGE_MCP" ]; then
+    echo "vestige-mcp not on PATH. Install with: npm install -g vestige-mcp-server@4.2.0" >&2
+    echo "Then re-open this shell so command -v vestige-mcp resolves." >&2
+    exit 1
+  fi
+  (
+    echo '{"jsonrpc":"2.0","id":0,"method":"initialize","params":{"protocolVersion":"2024-11-05","capabilities":{},"clientInfo":{"name":"vmem","version":"4.2.0"}}}'
+    sleep 0.3
+    echo "{\"jsonrpc\":\"2.0\",\"id\":1,\"method\":\"tools/call\",\"params\":{\"name\":\"$TOOL\",\"arguments\":$ARGS}}"
+  ) | "$VESTIGE_MCP" 2>/dev/null | jq -r 'select(.id == 1) | .result.content[0].text // .error.message // "No response"'
+}
+
+if [ $# -lt 1 ]; then
+  ACTION=""
+else
+  ACTION=$1
+  shift
+fi
+
+case $ACTION in
+  recall|r)
+    # Exact handle only: a full memory id or an exact, case-sensitive tag.
+    mcp_call "recall" "$(jq -nc --arg h "$1" '{handle:$h}')"
+    ;;
+  save|add)
+    CONTENT="$1"; TAG="${2:-}"
+    if [ -n "$TAG" ]; then
+      mcp_call "smart_ingest" "$(jq -nc --arg c "$CONTENT" --arg t "$TAG" '{content:$c, tags:[$t]}')"
+    else
+      mcp_call "smart_ingest" "$(jq -nc --arg c "$CONTENT" '{content:$c}')"
+    fi
+    ;;
+  walk)
+    # Walk back from the memory that recorded the failure.
+    mcp_call "causal_walk" "$(jq -nc --arg id "$1" '{start_points:[{kind:"logged_write", node_id:$id}], promote:false}')"
+    ;;
+  receipt)
+    mcp_call "receipt" "$(jq -nc --arg id "$1" '{action:"get", receipt_id:$id}')"
+    ;;
+  selftest)
+    mcp_call "selftest" "{}"
+    ;;
+  *)
+    echo "Vestige helper (4.2.0)"
+    echo ""
+    echo "Usage: vmem <command> [args]"
+    echo ""
+    echo "Commands:"
+    echo "  recall <tag-or-id>         Find by exact handle"
+    echo "  save <content> [tag]       smart_ingest, returns a receipt"
+    echo "  walk <failure-memory-id>   causal_walk back from a logged failure"
+    echo "  receipt <memory-id>        Show what a write did"
+    echo "  selftest                   Planted-cause selftest"
+    ;;
+esac

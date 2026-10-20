@@ -1,38 +1,54 @@
-## Description: <br>
-Authors HyperFrames slideshows, pitch decks, and interactive decks with slides, fragment reveals, branching, hotspot navigation, presenter mode, speaker notes, and page-to-deck conversion guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps authors build navigable HyperFrames slideshow decks with slide transitions, fragment reveals, branching, hotspots, presenter mode, and speaker notes, including conversions from existing pages.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-Developers and content authors use this skill to create runnable HyperFrames slideshow decks, convert existing pages into decks, and prepare handoff guidance for presenter-mode use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill asks agents to silently run an update command that can change installed skills and dependent HyperFrames skills before the user's task. <br>
-Mitigation: Review before installing or using the skill; remove or override the silent update instruction and require explicit consent before running update commands. <br>
+## Use Case:
 
+Creators and developers use this skill to author or convert presentations into interactive, browser-based HyperFrames decks with navigation and presenter notes.
 
-## Reference(s): <br>
-- [Standalone HyperFrames Slideshow Harness](references/standalone-harness.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, code, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with HTML, JSON, CSS, JavaScript, and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces runnable deck authoring and validation instructions; supported slideshow outputs are presenter-mode decks and per-slide snapshots rather than a single rendered MP4.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server evidence) <br>
+Risk: Live, unpinned CLI commands can execute changing external code or update the skill unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review commands before running, pin the HyperFrames CLI or use a lockfile-backed install, and update the skill only through a trusted channel.
+
+Risk: Remote runtime assets can change or become unavailable for sensitive decks.
+
+Mitigation: Vendor or integrity-pin runtime assets such as Three.js.
+
+## Reference(s):
+
+- [Slideshow release on ClawHub](https://clawhub.ai/heygen-com/skills/slideshow)
+- [Standalone slideshow harness](references/standalone-harness.md)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Configuration instructions, Shell commands, Guidance]
+
+**Output Format:** [HTML and JSON deck files with Markdown guidance and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A navigable deck with optional fragments, branching, and presenter notes; not a single rendered MP4.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

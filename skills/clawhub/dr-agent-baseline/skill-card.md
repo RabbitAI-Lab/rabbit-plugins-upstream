@@ -1,38 +1,53 @@
-## Description: <br>
-Daniel's core operating standard for agents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Defines Daniel's default operating rules for agent execution, communication, reporting, and shared-skill rollout.
 
-## Publisher: <br>
-[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[daniel-refahi-ikara](https://clawhub.ai/user/daniel-refahi-ikara)
 
-## Use Case: <br>
-Developers and agent operators use this skill to apply Daniel-specific behavior standards when setting up, auditing, or correcting agent defaults. It guides direct execution, concise communication, evidence-backed receipts, and one-step troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Applying a Daniel-specific operating baseline globally may change agent behavior in contexts where direct command execution or terse reporting is not desired. <br>
-Mitigation: Review whether this baseline should be referenced globally or only in Daniel-owned workspaces before deployment. <br>
+## Use Case:
 
+Daniel and administrators of Daniel-owned agents use this baseline to configure and audit persistent agent behavior across sessions, including direct execution, concise reporting, and verified shared-skill updates.
 
-## Reference(s): <br>
-- [DR Agent Baseline on ClawHub](https://clawhub.ai/daniel-refahi-ikara/skills/dr-agent-baseline) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Configuration instructions] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Plain-text behavioral baseline; no executable code is included.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Direct-execution defaults may not match an agent's approval requirements.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the execution rules before rollout and retain human approval for sensitive or irreversible actions.
+
+Risk: Persistent baseline rules can affect every session on an agent that loads them.
+
+Mitigation: Apply only to intended Daniel-owned agents and test expected behavior after installation.
+
+## Reference(s):
+
+- [DR. Agent Baseline on ClawHub](https://clawhub.ai/daniel-refahi-ikara/skills/dr-agent-baseline)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Shell commands]
+
+**Output Format:** [Markdown or plain text, with commands when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Concise completion receipts and one-step manual troubleshooting]
+
+## Skill Version(s):
+
+1.0.1 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -11,8 +11,15 @@
 > **会勇禾口王的AI笔记** 出品 · `@huiyonghkw`
 > _不聊 AI 会不会取代你，只聊先用 AI 的人怎么取代你。_
 
-CLAUDE.md 体检器 —— 检查任意项目的 `CLAUDE.md` 是否符合"把它当**运行时配置**、
-不是项目说明书"的最佳实践，给出评分卡 + 修复建议。
+CLAUDE.md / AGENTS.md 体检器 —— 检查任意项目的运行时配置是否符合"**路由器、不是图书馆**"，
+给出评分卡 + 修复建议。
+
+## 30 秒验收
+
+```bash
+python3 check.py .                    # 体检当前项目（零依赖）
+bash scripts/run-all-doctors.sh .     # 三件套：md + skill + env
+```
 
 <p align="center">
   <img src="examples/demo.gif" width="720" alt="hekouwang-claude-md-doctor-skill 体检演示">
@@ -109,7 +116,12 @@ Claude Code 自带一个 `/doctor` 命令，名字也带 "doctor"，但**体检�
   即私有 Skill `hekouwang-content-factory`，**GitHub 上为 PRIVATE 仓库，非授权无法 clone / 获取**），
   **不随本仓库分发**。需要出图版报告，请联系 **@huiyonghkw** 获取。
 
-> 一句话：**跑检查免费，出「好看的报告图」找我。**
+> 一句话：**跑检查免费，出「好看的报告图」找我。**  
+> 联系：**GitHub / ClawHub [@huiyonghkw](https://github.com/huiyonghkw)** · 可视化报告卡私信获取
+
+## 体检器三件套
+
+与 [`skill-doctor`](https://github.com/huiyonghkw/hekouwang-claude-skill-doctor-skill)、[`env-doctor`](https://github.com/huiyonghkw/hekouwang-env-doctor-skill) 组成 **hekouwang-doctor-suite**。一键：`bash scripts/run-all-doctors.sh <项目根>`（见 `references/doctor-suite.md`）。
 
 ## 设计
 

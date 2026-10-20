@@ -1,44 +1,60 @@
-## Description: <br>
-招投标快捷检索引擎-标找找，当用户需要快速查询特定关键词的招标或中标公告时调用，优先调用基础搜索工具提取项目名称、金额和链接，输出精简直接的列表。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户检索招标和中标公告，并简要汇总项目名称、金额及链接。
 
-## Publisher: <br>
-[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[liu-jiapeng](https://clawhub.ai/user/liu-jiapeng)
 
-## Use Case: <br>
-External users and procurement teams use this skill to search tender and award notices, retrieve bid details, analyze companies, compare suppliers, and summarize procurement market signals from the Biaozhaozhao API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release is described as a quick tender search tool while enabling broader procurement intelligence, contact lookup, and web-enhanced research. <br>
-Mitigation: Install only when those broader procurement-intelligence capabilities are expected, and scope use to legitimate business research. <br>
-Risk: Search terms, company names, and related queries may be sent to the Biaozhaozhao API and sometimes to web search during analysis features. <br>
-Mitigation: Avoid entering confidential strategy, regulated personal data, or sensitive customer information unless disclosure to those services is approved. <br>
-Risk: Returned contact details can include sensitive business or personal data. <br>
-Mitigation: Use contact information only for authorized procurement workflows; avoid bulk harvesting, unsolicited outreach, or retention beyond business need. <br>
+## Use Case:
 
+采购和销售团队可按关键词、企业、地区和时间查找招投标公告，查看项目详情并汇总市场与企业信息。
 
-## Reference(s): <br>
-- [Biaozhaozhao API documentation](https://ai.zhiliaobiaoxun.com/docs/api/) <br>
-- [Biaozhaozhao API access portal](https://ai.zhiliaobiaoxun.com) <br>
-- [ClawHub skill release page](https://clawhub.ai/liu-jiapeng/tender-search-biaozhaozhao) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, guidance] <br>
-**Output Format:** [Markdown summaries with structured lists and API request examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY for authenticated Biaozhaozhao API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The security review flags broader-than-advertised behavior, including account creation and device fingerprinting.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing; configure your own ZLBX_API_KEY and approve auto-registration only if you accept device fingerprinting and third-party account creation.
+
+Risk: The skill may store API credentials locally and access account balances or tender contact data.
+
+Mitigation: Protect the API key and local configuration; authorize account and contact-data queries only when needed.
+
+Risk: Data queries can consume quota or lead to recharge flows.
+
+Mitigation: Check quota and expected query costs before expanded searches or recharge, and approve only intended calls.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/liu-jiapeng/skills/tender-search-biaozhaozhao)
+- [知了标讯 Skill 文档](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Search API reference](artifact/references/api-search.md)
+- [Automatic registration reference](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Concise Markdown lists or tables with source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes stated search filters and available project amounts; missing fields remain blank.]
+
+## Skill Version(s):
+
+1.0.9 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

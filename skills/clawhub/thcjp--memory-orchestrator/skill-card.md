@@ -1,43 +1,53 @@
-## Description: <br>
-Memory Orchestrator helps AI agents organize durable memory with four memory tiers, keyword, semantic, and hybrid retrieval, summaries, health checks, conflict handling, cleanup, and optional vector database configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+记忆编排器 helps AI agents manage four memory layers, retrieve context with keyword, semantic, or hybrid search, generate summaries, monitor memory health, and handle concurrent memory writes.
 
-## Publisher: <br>
-[thcjp](https://clawhub.ai/user/thcjp) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thcjp](https://clawhub.ai/user/thcjp)
 
-## Use Case: <br>
-Developers and external agent users use this skill to manage long-running conversational memory, multi-agent shared memory, chatbot context, and customer-support assistant context. It supports adding, searching, summarizing, persisting, checking, and cleaning memory records. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Stored memories may contain sensitive personal or operational context. <br>
-Mitigation: Avoid storing credentials, financial data, health data, government identifiers, or other sensitive personal data unless there is a clear need and retention policy. <br>
-Risk: Callback URLs or optional external vector providers may expose memory content outside the agent environment. <br>
-Mitigation: Use callback URLs and retrieval providers only when they are trusted, expected, and appropriate for the data being processed. <br>
-Risk: Automatic cleanup, deletion, archival, and conflict resolution can remove or alter useful context. <br>
-Mitigation: Keep backups or review logs, and require human review for important memory edits or unresolved same-field conflicts. <br>
+## Use Case:
 
+External developers and agent builders use this skill to manage an AI agent's working, short-term, long-term, and important memories, retrieve relevant context, generate summaries, and monitor memory health across longer workflows.
 
-## Reference(s): <br>
-- [ClawHub Skill Listing](https://clawhub.ai/thcjp/skills/memory-orchestrator) <br>
-- [SkillHub Homepage](https://skillhub.cn) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline TypeScript examples, JSON-like status reports, and file persistence guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce memory IDs, search results, summaries, health reports, cleanup logs, configuration confirmations, and persistent memory files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill may ask an agent to execute shell commands or write persistent memory files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only in environments where local command execution and retained memory files are acceptable, and require explicit confirmation before shell command execution.
+
+Risk: Persistent memory can retain personal, work, or secret data longer than intended.
+
+Mitigation: Avoid storing secrets, review retained memory content, and require explicit confirmation for cleanup, deletion, and archival actions.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/thcjp/skills/memory-orchestrator)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON and TypeScript examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce persisted memory files, retrieval results, structured summaries, health reports, cleanup logs, and configuration confirmations.]
+
+## Skill Version(s):
+
+1.0.3 (source: evidence.release.version; artifact frontmatter reports 1.0.1)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

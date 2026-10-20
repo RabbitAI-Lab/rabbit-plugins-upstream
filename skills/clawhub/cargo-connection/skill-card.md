@@ -1,46 +1,62 @@
-## Description: <br>
-Manage Cargo connectors and integrations from the Cargo CLI, including listing, creating, updating, removing, and inspecting connector actions for workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents connect Cargo to external services, manage authenticated connectors, discover integrations and actions, and find identifiers needed for workflows.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and operators use this skill to manage authenticated Cargo connectors and discover integration actions needed to configure workflow nodes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connector configuration values, API keys, OAuth tokens, and command output may contain secrets. <br>
-Mitigation: Treat connector configs and CLI output as sensitive; avoid putting production keys in shell history or shared logs. <br>
-Risk: Connector create, update, and remove commands can mutate authenticated Cargo connector instances. <br>
-Mitigation: Verify the active Cargo session, connector UUIDs, and connector usage counts before changing or removing connectors. <br>
+## Use Case:
 
+Developers and teams use this skill to find supported Cargo integrations, authenticate and manage connectors, and identify connector and action IDs for workflows.
 
-## Reference(s): <br>
-- [Cargo Skill Page](https://clawhub.ai/cargo-ai/skills/cargo-connection) <br>
-- [Cargo Skills Homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Cargo CLI - Connections](SKILL.md) <br>
-- [Connector examples](references/examples/connectors.md) <br>
-- [Integration examples](references/examples/integrations.md) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Cargo CLI command examples and JSON response shapes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires @cargo-ai/cli and a Cargo account authenticated by browser sign-in or API token.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: SKILL.md frontmatter, skill-metadata.json, release metadata) <br>
+Risk: An unpinned CLI installation may introduce unreviewed changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin and vet the @cargo-ai/cli version before installing in a production workspace.
+
+Risk: API tokens entered as command-line arguments may be exposed.
+
+Mitigation: Prefer hosted or OAuth sign-in, or use a safer secret input method.
+
+Risk: Connector updates or removals may affect the wrong workspace or disrupt dependent workflows, tools, and models.
+
+Mitigation: Verify the active workspace and connector identity, then check dependencies before changing or removing a connector.
+
+## Reference(s):
+
+- [Cargo Connection on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-connection)
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+- [Connector examples](references/examples/connectors.md)
+- [Integration examples](references/examples/integrations.md)
+- [Response shapes](references/response-shapes.md)
+- [Troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration guidance, Text]
+
+**Output Format:** [Markdown with CLI examples and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Connector and action identifiers can be used in Cargo workflows.]
+
+## Skill Version(s):
+
+1.6.0 (source: skill frontmatter and ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

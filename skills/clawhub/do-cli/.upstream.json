@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/do-cli",
   "slug": "do-cli",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1782139586486,
-  "contentHash": "9b7a9bc94d48465bd5f217fea9282c38509d6fd0f5b2c3475cd454334f671311",
-  "fetchedAt": "2026-07-26T18:25:29.291Z"
+  "version": "1.0.13",
+  "updatedAt": 1792489653777,
+  "contentHash": "006485b7f67244afe77abe12ac4610762ff88e4b18fcf130f6616751fd020d11",
+  "fetchedAt": "2026-10-20T12:52:35.343Z"
 }

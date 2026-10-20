@@ -1,0 +1,15 @@
+case: delivered-with-proxy-and-local-binding
+presentation_mode: customer
+assert:
+  prose_contains:
+    - 部署成功
+    - spring-postgres-dev
+    - http://gr0c90d0-8080-kz5igqh4.203.0.113.10.nip.io
+  prose_not_contains:
+    - AppAssistantResult
+    - Structured Output
+    - linked-and-delivered
+    - Actions Performed
+    - rainbond-project-init
+    - rainbond-fullstack-bootstrap
+    - rainbond-fullstack-troubleshooter
