@@ -17,11 +17,13 @@
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const { hfBrowser } = require("./hf-cli.cjs");
 
 // Locate hyperframes' bundled puppeteer. render-and-composite.sh exports
 // HYPERFRAMES_ROOT; standalone we also try the in-repo path + ~/Downloads, and
 // accept ANY puppeteer@* the bun store holds (not a pinned version).
 const HF_ROOTS = [
+  process.argv[2] && path.resolve(process.argv[2]), // project-owned helper dependencies
   process.env.HYPERFRAMES_ROOT,
   path.resolve(__dirname, "../../.."), // skills/embedded-captions/scripts → repo root if in-repo
   path.join(os.homedir(), "Downloads", "hyperframes"),
@@ -54,7 +56,7 @@ for (const root of HF_ROOTS) {
 }
 if (!puppeteer) {
   console.error(
-    "[measure] could not locate puppeteer — set HYPERFRAMES_ROOT to a built hyperframes checkout",
+    "[measure] could not locate puppeteer — install project dependencies per embedded-captions SKILL.md Runtime prerequisites",
   );
   process.exit(3);
 }
@@ -125,10 +127,6 @@ async function main() {
   }
 
   // Match render-and-composite's Chrome detection
-  const exe =
-    process.platform === "darwin"
-      ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-      : "/usr/bin/google-chrome";
 
   const W = plan?.width || 720;
   const H = plan?.height || 1290;
@@ -136,7 +134,7 @@ async function main() {
 
   const browser = await puppeteer.launch({
     headless: "new",
-    executablePath: fs.existsSync(exe) ? exe : undefined,
+    executablePath: hfBrowser(),
     args: [
       "--disable-web-security",
       "--allow-file-access-from-files",

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-custom-golden-image-discovery",
+  "repo": "google/skills",
+  "skillId": "gke-custom-golden-image-discovery",
+  "branch": "main",
+  "pushedAt": "2026-10-19T18:44:23Z",
+  "contentHash": "758682c64e0298b71eb9ab36ebf04fe2081fccd875c93b2d9f1a6508edb10f15",
+  "fetchedAt": "2026-10-20T12:48:42.389Z"
+}
