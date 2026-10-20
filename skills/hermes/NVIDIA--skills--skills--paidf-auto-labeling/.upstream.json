@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/paidf-auto-labeling",
+  "identifier": "NVIDIA/skills/skills/paidf-auto-labeling",
+  "repo": "NVIDIA/skills",
+  "path": "skills/paidf-auto-labeling",
+  "branch": "main",
+  "pushedAt": "2026-10-19T22:36:16Z",
+  "contentHash": "9b83996d462bba1043020bf140d253590f93e620f4b0cffa7a4a1542f659522c",
+  "fetchedAt": "2026-10-20T12:47:14.482Z"
+}

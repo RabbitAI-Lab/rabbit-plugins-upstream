@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-generate-anomalies",
+  "identifier": "NVIDIA/skills/skills/tao-generate-anomalies",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-generate-anomalies",
+  "branch": "main",
+  "pushedAt": "2026-10-19T22:36:16Z",
+  "contentHash": "e53edb739293c344ca1c9149cfaa5907fabe0e510d5e0f104a3307012d2f1bcb",
+  "fetchedAt": "2026-10-20T12:47:14.522Z"
+}

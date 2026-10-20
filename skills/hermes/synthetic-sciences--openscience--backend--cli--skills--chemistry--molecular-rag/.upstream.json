@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/molecular-rag",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/molecular-rag",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/molecular-rag",
+  "branch": "main",
+  "pushedAt": "2026-10-20T09:26:21Z",
+  "contentHash": "d57ef4d0f73a19fde067fa33f2bd3d30aa1fe02475efd4cf60fb760731203e0d",
+  "fetchedAt": "2026-10-20T12:47:15.320Z"
+}

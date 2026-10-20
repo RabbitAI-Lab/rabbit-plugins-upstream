@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/langchain",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/langchain",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/langchain",
+  "branch": "main",
+  "pushedAt": "2026-10-20T09:26:21Z",
+  "contentHash": "0bbd512c459fcaf01d6e66f41deed33caca14495f6ae2d4416c9a6fa6c6cbb8d",
+  "fetchedAt": "2026-10-20T12:47:15.307Z"
+}

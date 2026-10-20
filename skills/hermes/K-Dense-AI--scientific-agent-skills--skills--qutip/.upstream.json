@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/qutip",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/qutip",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/qutip",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "38c36bf1ec02cba628586854672965279edaa868fb238f23f251d08718b646e9",
+  "fetchedAt": "2026-10-20T12:47:31.998Z"
+}

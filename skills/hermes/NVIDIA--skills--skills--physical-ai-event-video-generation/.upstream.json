@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physical-ai-event-video-generation",
+  "identifier": "NVIDIA/skills/skills/physical-ai-event-video-generation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physical-ai-event-video-generation",
+  "branch": "main",
+  "pushedAt": "2026-10-19T22:36:16Z",
+  "contentHash": "9750ff4a89a82139417f84be9adb8072dd0ef7c55f6d35162de276a91ab1716d",
+  "fetchedAt": "2026-10-20T12:47:14.489Z"
+}
