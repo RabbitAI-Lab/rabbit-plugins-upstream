@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/caffeinelabs/skills/connector-tmdb",
+  "repo": "caffeinelabs/skills",
+  "skillId": "connector-tmdb",
+  "branch": "main",
+  "pushedAt": "2026-10-19T08:39:29Z",
+  "contentHash": "ee7da149fbcccf709c1044c4c6344dc4a0800e713a2f3ac416114587fcc55fb6",
+  "fetchedAt": "2026-10-20T12:47:17.929Z"
+}

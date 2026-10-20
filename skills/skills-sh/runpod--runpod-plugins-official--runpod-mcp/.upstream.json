@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/runpod-mcp",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "runpod-mcp",
+  "branch": "main",
+  "pushedAt": "2026-10-20T03:37:36Z",
+  "contentHash": "46b6916e7b8e97212ff8954a1452922c928a2509735d3716dd21477f9e9e5d2c",
+  "fetchedAt": "2026-10-20T12:48:54.145Z"
+}
