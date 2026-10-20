@@ -1,46 +1,57 @@
-## Description: <br>
-能源电力采招分析仪-电力招标网，当查询词包含电网、电力、新能源、光伏、储能、风电时触发，需重点针对国网/南网等大型央企采购项目进行聚合，分析特定能源设备或工程的中标集中度。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+检索中国能源电力行业招投标信息，汇总国网、南网等采购项目并分析设备及工程的中标集中度。
 
-## Publisher: <br>
-[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thuanlynham-stack](https://clawhub.ai/user/thuanlynham-stack)
 
-## Use Case: <br>
-Procurement, sales, and market-analysis users can query bid notices, company participation, supplier concentration, brand pricing, and expiring projects for energy and power-sector opportunities. The skill helps an agent call a third-party procurement API and summarize returned bid, company, contact, and market data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends procurement, company, product, market, and contact queries to a third-party API using ZLBX_API_KEY. <br>
-Mitigation: Install only where that data sharing is acceptable, protect the API key as a sensitive credential, and avoid submitting confidential query terms unless approved. <br>
-Risk: The documented tools include broader procurement and company analysis than the energy-power description suggests. <br>
-Mitigation: Constrain use to intended energy and power-sector searches and review query scope before relying on results. <br>
-Risk: Returned project contact data may be sensitive business information. <br>
-Mitigation: Handle contact details under applicable privacy, outreach, and data-retention rules, and avoid unsolicited profiling or outreach. <br>
+## Use Case:
 
+采购、销售与市场分析人员可检索中国电力及新能源项目，追踪招中标动态，并比较供应商与品牌的中标情况。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/thuanlynham-stack/energy-power-bid-analyzer-dianlizhaobiaowang) <br>
-- [标讯搜索类工具 API 详情](references/api-search.md) <br>
-- [企业分析类工具 API 详情](references/api-company.md) <br>
-- [市场分析类工具 API 详情](references/api-market.md) <br>
-- [ZhiLiaoBiaoXun API key portal](https://ai.zhiliaobiaoxun.com/?ch=s38) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API Calls, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with JSON API request and response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY and sends procurement, company, product, and market queries to a third-party service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Account setup may create a local API key and register a trial account using a hashed device identifier.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Supply your own ZLBX_API_KEY to avoid automatic registration; otherwise review the requested device data and consent before registration.
+
+Risk: The API key stored in ~/.zlbx/config.json grants access to an account and could be exposed if the file is shared.
+
+Mitigation: Keep the key and local configuration private; avoid including credentials in reports or shared files.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/thuanlynham-stack/skills/energy-power-bid-analyzer-dianlizhaobiaowang)
+- [Search API reference](artifact/references/api-search.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Account setup and registration reference](artifact/references/auto-register.md)
+- [Skill setup documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with summaries, tables and source links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on available bid data, selected filters and account access.]
+
+## Skill Version(s):
+
+1.0.10 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

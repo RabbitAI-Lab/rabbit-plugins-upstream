@@ -1,50 +1,62 @@
-## Description: <br>
-Generates company intelligence reports from tendering and bidding evidence, including business focus, award strength, customers, suppliers, competitors, public-risk notes, and optional two-company comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Produces company intelligence reports and two-company comparisons using Chinese tender and award records, supplier relationships, competitor overlap, and sourced public information.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External users and business analysts use this skill to investigate a company from a tendering perspective, producing single-company due diligence reports or two-company comparisons based on public procurement and vendor API data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill calls vendor APIs and sends company search terms or report parameters outside the local environment. <br>
-Mitigation: Use it only when vendor API use is acceptable, and avoid entering confidential company or project information unless approved. <br>
-Risk: The skill stores API credentials locally and can provision a trial account after collecting device-fingerprint signals. <br>
-Mitigation: Prefer a preconfigured ZLBX_API_KEY where possible, review the local credential file, and require explicit user consent before auto-registration. <br>
-Risk: Generated HTML reports and platform links may include signed access URLs suitable for sharing. <br>
-Mitigation: Treat generated report files and signed links as sensitive and share them only with intended recipients. <br>
-Risk: Optional contact lookup may expose contact data returned by the vendor service. <br>
-Mitigation: Request contact lookup only when needed, preserve vendor-provided masking, and avoid bulk exporting contact lists. <br>
+## Use Case:
 
+Business researchers, procurement teams, and sales teams use the skill to assess a Chinese company's tendering history, customers, suppliers, competitors, and sourced public risk signals, or to compare two companies.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/company-profile-aiqicha) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Auto-registration flow](artifact/references/auto-register.md) <br>
-- [Zhiliaobiaoxun API endpoint pattern](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool_name}) <br>
-- [Zhiliaobiaoxun user portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown reports with optional generated HTML files and concise user guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses vendor API calls, may write local report files, and requires or can provision a ZLBX_API_KEY after user consent.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Company queries and limited device-registration data may be sent to the ZLBX service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review its data practices before use; require explicit consent before optional auto-registration or supply an existing API key to avoid registration.
+
+Risk: An API key is stored locally and lookups consume paid quota or credits.
+
+Mitigation: Protect the local key, check the projected credit cost before running reports, and approve any additional lookups.
+
+Risk: Contact lookups may disclose phone numbers, and public-risk findings can be misleading without context.
+
+Mitigation: Avoid bulk contact harvesting or unsolicited outreach; cite public sources, distinguish facts from inference, and verify consequential claims.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dragonzu/skills/company-profile-aiqicha)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Company intelligence workflow](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report templates](references/report-template.md)
+- [Account registration and privacy](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, HTML reports]
+
+**Output Format:** [Markdown report in chat with an optional shareable HTML file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single-company and two-company reports; figures and public-risk claims should include time ranges and source links.]
+
+## Skill Version(s):
+
+1.0.6 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

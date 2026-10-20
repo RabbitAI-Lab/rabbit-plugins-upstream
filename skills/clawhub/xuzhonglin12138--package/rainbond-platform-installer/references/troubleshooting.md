@@ -1,0 +1,24 @@
+# 安装问题处理
+
+- **资源不足**：低于预检最低门槛（2 核 / 4 GB / 10 GB）时停止安装，否则继续。最终以 Rainbond 实际部署验证结果为准。
+- **端口占用**：停止安装，提示用户处理占用 `80`、`443`、`7070` 的服务，不主动停止服务。
+- **已有 Rainbond**：停止新安装，建议返回 Rainskills 选择“已经有，填写平台地址”。
+- **权限不足**：Linux 需要 root 或已经可用的 `sudo -n`，不得在聊天中索取密码。
+- **远程连接失败**：确认控制端有 `ssh`、`scp` 和 `ssh-keygen`。安装器只接受可由 `BatchMode=yes` 验证的免密连接；远程单机失败时原样执行版本锁定的 `ssh prepare`，主机集群失败时一次查看全部未就绪节点并执行唯一的 `ssh prepare-cluster --cluster-config`。指纹确认和一次服务器密码只在用户自己的系统终端中由 OpenSSH 读取；命令不会安装 Rainbond。全部节点完成后只回到原 AI 任务统一回复一次“已完成”，让同一 `onboarding-id` 继续。不要在外部终端执行完整平台安装，也不要把密码发到聊天。如果提示主机密钥发生变化，先通过可信渠道核对服务器指纹并修复 `known_hosts`，安装器不会绕过该校验。
+- **Windows 版本**：本地预览要求 Windows 10 build 19041+ 或 Windows 11 x64 工作站；旧版本和 Windows Server 停止安装。
+- **Windows 虚拟化**：在任务管理器或 BIOS/UEFI 中确认 CPU 虚拟化已启用。安装器不会代替用户修改固件设置。
+- **Windows UAC / 管理员权限**：当前用户必须属于 Administrators 且 UAC 开启。普通预检不需要以管理员身份启动终端；确认安装后固定 helper 才会请求 UAC。拒绝 UAC 后保留断点，重新执行原命令即可。
+- **Windows 管理员步骤失败**：主终端会显示失败的固定 action 和管理员子进程返回的具体原因，不再只显示退出码。升级 Rainskills 后可使用原 `onboarding-id` 继续；安装器只会替换身份一致且旧摘要校验通过的机器恢复包。
+- **Windows 恢复包访问被拒绝**：继续原 `onboarding-id` 时，安装器会先确认 `%ProgramData%\RainSkills\<installation-id>` 是固定的非 reparse 目录，再逐项恢复目录和文件的有效 ACL；这也覆盖关闭继承且 ACE 为空的旧租约。旧的只读租约会在类型检查后由管理员进程重新创建。不要手工删除该目录或放宽权限。PowerShell 持久化 JSON 始终按 UTF-8 读取，中文系统错误应保持可解析。
+- **WSL 网络模式**：只支持默认 NAT。检测到 mirrored 或其他模式时停止，不自动修改 `.wslconfig`。
+- **Windows 端口冲突**：`80`、`443`、`7070` 任一端口被现有进程或 portproxy 占用都会停止；先确认占用者，不自动结束进程。
+- **Windows 管理对象冲突**：存在未知 `Rainbond` WSL 发行版、`RainSkills-*` 计划任务或 `%ProgramData%\RainSkills` 内容时停止，避免覆盖用户数据。
+- **Windows 计划任务 / 重启恢复**：登录后未自动继续时，执行安装器打印的原始 `npx rainskills ... --target local-windows` 命令。不要手工改写任务参数。
+- **Windows 下载或镜像仓库失败**：检查代理是否允许策略文件列出的 HTTPS 来源，包括 Rainbond 官方安装使用的 `registry.cn-hangzhou.aliyuncs.com`。Ubuntu rootfs 不再固定文件大小、摘要或文件头；安装器只限制 HTTPS 来源、512 MB 下载上限和非空普通文件。网络请求失败时切换下一个镜像；下载完成后的格式和实际可用性由 `wsl --import` 验证。
+- **Windows Console 不可达**：先区分 WSL 内健康检查和 Windows `http://127.0.0.1:7070`。检查固定 NAT、portproxy 和 Windows 防火墙，不要改成暴露到所有网卡。
+- **macOS 环境**：官方脚本需要 OrbStack。安装确认后可由官方脚本下载 OrbStack，但 macOS 权限弹窗仍需用户操作。
+- **官方脚本检查失败**：确认下载地址仍为 `https://get.rainbond.com/`，并检查代理是否返回了登录页、拦截页或超大响应。非 Bash 内容、Bash 语法错误和跨域跳转都会停止执行。
+- **启动失败**：保留 `~/.rainbond/platform-installer/<operation-id>/install.log`，不要自动删除容器或数据后重试。
+- **Console 健康检查失败**：区分 Rainbond 运行状态和控制端访问地址。安装器会尝试 SSH 实际主机、Rainbond 上报 EIP 和远端主网卡地址；全部失败时提供公网 IP 或域名，不要包含 `http://`、端口或路径。已有 Rainbond 只重新验证，不重新安装。
+- **授权失败**：Rainbond 已部署成功时保留 Console 地址，稍后执行输出中的 `npx rainskills resume` 命令继续，不重新部署平台。
+- **生命周期诊断**：平台安装和授权的固定阶段事件保存在 `~/.rainbond/rainskills/telemetry/events.jsonl`，并尽力发送到 `log.rainbond.com`。日志服务不可用不会阻塞业务；事件不包含 Token、密码、完整地址或原始命令输出。应用部署统计继续由 Rainbond Console 负责。

@@ -1,45 +1,54 @@
-## Description: <br>
-A shopping-deals skill that searches coupons and compares prices across Chinese e-commerce platforms, queries deal benefits, and routes Meituan/local-life requests to a companion skill through Coze Bot APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes shopping and everyday savings requests to price comparisons, coupon listings, and relevant deal searches across Chinese platforms.
 
-## Publisher: <br>
-[guipi888](https://clawhub.ai/user/guipi888) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[guipi888](https://clawhub.ai/user/guipi888)
 
-## Use Case: <br>
-External users use this skill to find coupons, compare prices, and query shopping or local-life deals across supported platforms. Agent operators use it when they are comfortable routing deal searches and configured tokens to Coze API endpoints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Product searches and deal requests are sent to external Coze API endpoints. <br>
-Mitigation: Install only when external Coze processing is acceptable for the intended queries, and avoid sending sensitive shopping or personal information. <br>
-Risk: Bearer tokens are used with configurable Coze endpoint URLs. <br>
-Mitigation: Treat Coze tokens as secrets, restrict who can edit COZE_BASE_URL or coze_api_url values, and avoid untrusted endpoint configuration. <br>
-Risk: Normal and error responses can include promotional or contact text. <br>
-Mitigation: Review response formatting before deployment and decide whether the appended promotional/contact text is acceptable for the agent environment. <br>
+## Use Case:
 
+Consumers and agents use this skill to compare product prices, find food-delivery coupons, and look up offers for travel, memberships, and other everyday purchases. Alibaba affiliate product search and link conversion are not yet available.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/guipi888/skills/wool-hunter) <br>
-- [Project homepage](https://github.com/guipi888/wool-hunter) <br>
-- [README](README.md) <br>
-- [Skill definition](SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown tables and plain text with shell command and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses may include externally generated Coze results and fixed promotional/contact text appended by the artifact scripts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: Search terms for products, health, finance, or public benefits may be sent to the publisher's remote service over an unencrypted connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not submit private account details or sensitive purchase, medical, or financial information; prefer HTTPS or local-only options where available.
+
+Risk: Responses may include unrelated promotional community links.
+
+Mitigation: Review links before following or sharing results, and distinguish promotional links from actual offers.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/guipi888/skills/wool-hunter)
+- [Skill usage and setup](artifact/README.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with price comparisons, offer details, and links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May append the publisher's promotional community links to responses.]
+
+## Skill Version(s):
+
+2.5.0 (source: ClawHub release and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

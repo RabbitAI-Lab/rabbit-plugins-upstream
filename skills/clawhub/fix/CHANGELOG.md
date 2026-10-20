@@ -1,5 +1,133 @@
 # Changelog
 
+## [0.8.0](https://github.com/es6kr/skills/compare/fix-v0.7.1...fix-v0.8.0) (2026-10-17)
+
+
+### Features
+
+* **todowrite,wip:** add session-scoped agent-task CLI and OpenClaw adapter ([#629](https://github.com/es6kr/skills/issues/629)) ([eb4c4d4](https://github.com/es6kr/skills/commit/eb4c4d4ab6a7f7ba9f719b052d8f3761840012c9))
+
+## [0.7.1](https://github.com/es6kr/skills/compare/fix-v0.7.0...fix-v0.7.1) (2026-10-04)
+
+
+### Bug Fixes
+
+* **fix:** suppress additionalContext injection in headless/Ralph runs ([ca84cf5](https://github.com/es6kr/skills/commit/ca84cf5124901654c5618e28ee3116e3c008f92d))
+
+## [0.7.0](https://github.com/es6kr/skills/compare/fix-v0.6.2...fix-v0.7.0) (2026-09-30)
+
+
+### Features
+
+* **cleanup, fa:** enhance session cleanup pipeline, automated FA rotation, and streaming search ([9b3f366](https://github.com/es6kr/skills/commit/9b3f36609c3ebb1f227bcef549cffb3a8e85d0a5))
+
+## [0.6.2](https://github.com/es6kr/skills/compare/fix-v0.6.1...fix-v0.6.2) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+
+## [0.6.1](https://github.com/es6kr/skills/compare/fix-v0.6.0...fix-v0.6.1) (2026-09-08)
+
+
+### Bug Fixes
+
+* **fix:** mention the claude-task fallback + no-scratchpad rule in the summary table ([0ab146a](https://github.com/es6kr/skills/commit/0ab146a3f745a82b0564e806c2131c81f46fec64))
+* **tdd:** scope the Red-only commit ban to shared branches ([fc2e6ec](https://github.com/es6kr/skills/commit/fc2e6ecdd1906c41d47955226e247aeb03a6f367))
+
+## [0.6.0](https://github.com/es6kr/skills/compare/fix-v0.5.0...fix-v0.6.0) (2026-09-06)
+
+
+### Features
+
+* **cc-plugin:** implement post-commit dev-reflect and cache drift guard ([3f78c05](https://github.com/es6kr/skills/commit/3f78c054e7c00e7c33730d3378c5aff6575566e4))
+
+## [0.5.0](https://github.com/es6kr/skills/compare/fix-v0.4.2...fix-v0.5.0) (2026-09-05)
+
+
+### Features
+
+* **fa:** move FA lifecycle ownership (retrospect, fa-prune, scripts) from cleanup to fa ([fd7f18e](https://github.com/es6kr/skills/commit/fd7f18ef9e85b8e3170b41ed6a52bce524d81bc7))
+* promote next-feat (fa lifecycle ownership) ([90c90bb](https://github.com/es6kr/skills/commit/90c90bb4796087ff6eaa5491b3c4524f7ed829a7))
+
+
+### Bug Fixes
+
+* **cleanup:** hand retrospect and fa-prune ownership to the fa skill ([5821410](https://github.com/es6kr/skills/commit/58214106c334fbce36559a1495d5131513152524))
+* **fix:** honour FA_DATA_DIR in the Stage 1 recurrence pre-check ([df2eb5b](https://github.com/es6kr/skills/commit/df2eb5b41d7a4133a2b5700a31e4f074174947dd))
+
+## [0.4.2](https://github.com/es6kr/skills/compare/fix-v0.4.1...fix-v0.4.2) (2026-08-29)
+
+
+### Bug Fixes
+
+* **fix:** add current-workspace tracker grep to recurrence pre-check ([1b5ef18](https://github.com/es6kr/skills/commit/1b5ef18c0c52fafbb856de2bd534733f0664002c))
+* promote next-fix batch (task plugin split, claudify matcher, pr recheck, omz chezmoi fix) ([3e90fd5](https://github.com/es6kr/skills/commit/3e90fd56ade0522d6773eb03f38760a317dd5180))
+
+## [0.4.1](https://github.com/es6kr/skills/compare/fix-v0.4.0...fix-v0.4.1) (2026-08-26)
+
+
+### Bug Fixes
+
+* accumulate 16 patch-level bug fixes and guard enhancements across skills ([d214e5d](https://github.com/es6kr/skills/commit/d214e5dcc7fac1bc07baf3b6cec62999aea732f0))
+* apply PR [#363](https://github.com/es6kr/skills/issues/363) Copilot Minor review findings ([731745c](https://github.com/es6kr/skills/commit/731745c6d67c329c8c6dde666107672282a3894a))
+* **core:** align workflow steps, next suggestion patterns, and browser topics ([c68d489](https://github.com/es6kr/skills/commit/c68d489d01a79862b8933b4a0542168cf676cd3a))
+* promote next-fix batch (consolidate fabrication guard, session rewind, config-driven PR base) ([7ca0ccb](https://github.com/es6kr/skills/commit/7ca0ccbf13cefafedc33a16a7361756c95f8b8f6))
+* resolve PR [#363](https://github.com/es6kr/skills/issues/363) audit Pending findings (plane_bulk_update profile, hook checker schema, regex, dedup) ([19ffc83](https://github.com/es6kr/skills/commit/19ffc83f296ad5568b82a85b104fcf419580c102))
+
+## [0.4.0](https://github.com/es6kr/skills/compare/fix-v0.3.12...fix-v0.4.0) (2026-08-20)
+
+
+### Features
+
+* **fa:** add lightweight FA-record entry point ([8860a0c](https://github.com/es6kr/skills/commit/8860a0c98de74b909d04ee0d756d77234ab6a496))
+* promote next-feat batch (hook registry schema, self-reference path anchoring) ([0c33ffa](https://github.com/es6kr/skills/commit/0c33ffac99a9237f4530566470dabeaea128c209))
+* promote next-feat staging (lifecycle guards, triage automation, and workflow safety procedures) ([77d58ac](https://github.com/es6kr/skills/commit/77d58ac3a771a4897043c9eea8b149ea1e8ba2ff))
+
+
+### Bug Fixes
+
+* **fix:** correct escalation-matrix stage numbering + point to /fa ([fde51ea](https://github.com/es6kr/skills/commit/fde51eaf488d83a5e05aad31d31c713e87b57c48))
+* **hook-kit:** repair hook paths broken by the within-marketplace relocation ([#340](https://github.com/es6kr/skills/issues/340)) ([0d9b701](https://github.com/es6kr/skills/commit/0d9b70181015e4822c7cf5cd2fe122d5af708d26))
+* promote next-fix batch (hook path repair, topic-dispatch scoping, conflict diagnosis) ([eb7ecb6](https://github.com/es6kr/skills/commit/eb7ecb61dda9701d78f12dc810781dc7cb687caa))
+
+## [0.3.12](https://github.com/es6kr/skills/compare/fix-v0.3.11...fix-v0.3.12) (2026-08-17)
+
+
+### Bug Fixes
+
+* **hook-kit:** stop claudify-skip hook from false-positiving on claudify's own description ([3b83567](https://github.com/es6kr/skills/commit/3b835677726181d51bef66c89736e63303a04696))
+* promote next-fix staging (30 fixes across 14 skills) ([ee467c0](https://github.com/es6kr/skills/commit/ee467c045d779d7b80d30f160763ec3534a9742b))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.3.11](https://github.com/es6kr/skills/compare/fix-v0.3.10...fix-v0.3.11) (2026-08-09)
+
+
+### Bug Fixes
+
+* declare undeclared skill-to-skill dependencies (7 skills) ([#271](https://github.com/es6kr/skills/issues/271)) ([36a9f9d](https://github.com/es6kr/skills/commit/36a9f9d7c1fac9bb1c4c96b325a067ab92ad0da7))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.3.10](https://github.com/es6kr/skills/compare/fix-v0.3.9...fix-v0.3.10) (2026-08-05)
+
+
+### Bug Fixes
+
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([951c1e6](https://github.com/es6kr/skills/commit/951c1e6871e78e226757c6a7ae5ae53efeb7bfb0))
+
+## [0.3.9](https://github.com/es6kr/skills/compare/fix-v0.3.8...fix-v0.3.9) (2026-07-28)
+
+
+### Bug Fixes
+
+* **fix:** add mechanical per-file language gate before Step 2 skill edits ([c457a42](https://github.com/es6kr/skills/commit/c457a428969cff01de0df2e72c06e37387f987a9))
+* **next-fix:** promote staged fixes across hook-kit, next, cleanup, fix-plan ([34f1c67](https://github.com/es6kr/skills/commit/34f1c67beee3a8279e0e80de4ab3a87ba2223d5c))
+* **next,fix,wip:** reduce meta-task over-registration + enforce skill-invocation resume ([beec453](https://github.com/es6kr/skills/commit/beec453da85d70c79ec9403c83259e7a4a28d303))
+* **next,fix:** close the chained-turn next-call gap (12th recurrence) ([dd7c582](https://github.com/es6kr/skills/commit/dd7c58286a355a2451cb9e0a6f08ef1865dbe018))
+* resolve PR [#197](https://github.com/es6kr/skills/issues/197) review findings (CodeRabbit + Copilot + Internal Review) ([b54236a](https://github.com/es6kr/skills/commit/b54236a4fa4b3fef23645dfc3b184916980b7f65))
+* staging bundle — meta-task registration, next-call-gap, bash-guard consolidation, hook-kit FP fixes ([dc1b790](https://github.com/es6kr/skills/commit/dc1b790688808df7649ef390a22caa5f66a8aa40))
+
 ## [0.3.8](https://github.com/es6kr/skills/compare/fix-v0.3.7...fix-v0.3.8) (2026-07-23)
 
 

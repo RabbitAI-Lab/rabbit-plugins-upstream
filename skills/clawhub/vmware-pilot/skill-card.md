@@ -1,53 +1,61 @@
-## Description: <br>
-Designs, tracks, and gates multi-step VMware workflows across companion skills with human approvals, audited state, and rollback support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Designs and coordinates multi-step VMware workflows with human approval checkpoints and explicit, best-effort rollback.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure engineers use this skill to plan and manage VMware incident response, maintenance, deployment, compliance, and change workflows that span companion VMware skills. It is intended for multi-step work that needs review checkpoints, workflow state, and recovery planning rather than single one-off VMware operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: High-impact infrastructure workflows may make changes through companion VMware skills. <br>
-Mitigation: Require explicit human review before running custom templates or continuing through approval gates, and use companion-skill RBAC and policy controls for read/write authorization. <br>
-Risk: Rollback is best-effort and may not restore every failed or partially completed operation. <br>
-Mitigation: Treat rollback as recovery assistance, verify each plan before execution, and validate post-change infrastructure state with monitoring checks. <br>
-Risk: Workflow, audit, and baseline files under ~/.vmware may contain operationally sensitive infrastructure details. <br>
-Mitigation: Restrict filesystem access to ~/.vmware files and protect audit, workflow, and baseline data as sensitive operational records. <br>
-Risk: Kubeconfig or guest credentials surfaced by companion workflows can be secrets even when associated operations are described as read-only. <br>
-Mitigation: Handle kubeconfig and guest credential material as secrets and avoid exposing them in shared prompts, logs, or reports. <br>
+## Use Case:
 
+VMware operators and infrastructure engineers use this skill to plan, approve, run, and review multi-step workflows spanning virtual machines, networking, storage, and Kubernetes. It supports checkpointed changes, incident response, and explicit rollback rather than single-step operations.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-pilot) <br>
-- [Publisher Profile](https://clawhub.ai/user/zw008) <br>
-- [Homepage](https://github.com/zw008/VMware-Pilot) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Built-in Templates Reference](references/templates.md) <br>
-- [Cross-Skill Integration Patterns](references/integration-patterns.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Workflow Design Guide](references/workflow-design.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Capabilities](references/capabilities.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured MCP workflow instructions with inline shell commands and YAML configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce workflow plans, approval prompts, rollback guidance, audit queries, and custom workflow template snippets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.7 (source: server release metadata) <br>
+Risk: Workflows can make high-impact production changes or request credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit use to authorized operators; use least-privilege companion accounts and read-only tools unless changes are required, and require explicit approval before sensitive steps.
+
+Risk: Rollback is not automatic and may not reverse every completed change.
+
+Mitigation: Review the rollback preview, verify affected systems, and invoke rollback explicitly when appropriate.
+
+Risk: Local workflow, audit, baseline, and kubeconfig files can contain sensitive operational data.
+
+Mitigation: Keep files under ~/.vmware owner-only and restrict access to the operator account.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/vmware-pilot)
+- [Project homepage (listed in skill metadata)](https://github.com/vmware-skills/VMware-Pilot)
+- [Setup guide](references/setup-guide.md)
+- [Workflow design](references/workflow-design.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Workflow plans, Shell commands, Configuration]
+
+**Output Format:** [Markdown guidance and structured workflow steps, including YAML or JSON when needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes approval checkpoints, workflow status, and explicit best-effort rollback guidance.]
+
+## Skill Version(s):
+
+2.4.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,41 +1,53 @@
-## Description: <br>
-A Chinese-first thinking partner that applies Zhuge Liang-inspired strategy, systems thinking, psychological game analysis, resource leverage, and priority-setting frameworks to planning questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Zhuge Liang-inspired frameworks for strategic planning, system design, negotiation, resource collaboration, and prioritization.
 
-## Publisher: <br>
-[gechengling](https://clawhub.ai/user/gechengling) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gechengling](https://clawhub.ai/user/gechengling)
 
-## Use Case: <br>
-External users and agents use this skill when they want a strategy-advice lens for project planning, complex stakeholder situations, resource allocation, long-term forecasting, system design, or prioritization. It is best suited for human-facing planning guidance rather than factual historical research or automated decision enforcement. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill's broad strategy and planning triggers may influence generic planning conversations more than expected. <br>
-Mitigation: Enable it only for users who want a Chinese-first, Zhuge Liang-themed strategy lens, and review recommendations before treating them as plans of record. <br>
-Risk: Advice is framed through historical and strategic analogies, which may be persuasive without being fact-checked for a specific modern context. <br>
-Mitigation: Use the output as advisory framing and require human review, current evidence, and domain-specific validation before acting on high-impact decisions. <br>
+## Use Case:
 
+Individuals and teams use this skill to structure strategic choices, improve organizational processes, plan transparent collaborations, and prioritize limited resources. It offers thinking prompts rather than professional advice or a substitute for formal decision-making.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gechengling/zhugeliang-think-partner) <br>
-- [Publisher profile](https://clawhub.ai/user/gechengling) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text strategic analysis and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only advisory output; no code execution, data access, persistence, or hidden install behavior is indicated by the server security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: server release evidence) <br>
+Risk: Negotiation or resource-leverage advice could be used to mislead or pressure others.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only for transparent, lawful collaboration; verify claims, respect consent and stakeholder interests, and avoid deceptive tactics.
+
+Risk: Strategic suggestions could be mistaken for authoritative guidance in high-stakes decisions.
+
+Mitigation: Check current facts and organizational procedures, and seek qualified professional review for financial, legal, medical, safety, or other high-stakes matters.
+
+## Reference(s):
+
+- [Zhugeliang Think Partner on ClawHub](https://clawhub.ai/gechengling/skills/zhugeliang-think-partner)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structured analysis and action plans; Chinese-first, with English responses supported.]
+
+## Skill Version(s):
+
+2.0.3 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,6 +1,10 @@
 ---
 name: credibility-action-gate
 description: Use when an agent needs to evaluate messy public claims before taking a bounded, costly, irreversible, or reputation-sensitive action. Produces an analysis-only action disposition from evidence, public context, history, and operator policy without deciding the agent's mission or executing the action.
+license: MIT-0
+metadata:
+  version: "2.0.1"
+  source: "https://github.com/Ales375/credibility-action-gate"
 ---
 
 # Credibility Action Gate
@@ -15,7 +19,7 @@ This skill does not decide what the agent values. It decides whether the current
 
 1. Define the contemplated action and operator policy.
    - Use `references/policy-template.json` as the starting shape.
-   - The policy owns mission priorities, authority limits, repeat-action rules, and hard blockers.
+   - The policy owns mission priorities, authority limits, repeat-action rules, and hard blockers. Material uncertainty waits by default; only explicit `disposition_preferences.uncertainty_action: "small_test"` permits a bounded uncertain action within existing size limits. This never waives required checks or contradictions.
    - Do not place persona, voice, or domain-specific preferences in the core coordinator.
 
 2. Gather independent review lanes as JSON records.
@@ -50,7 +54,7 @@ node scripts/credibility-coordinator.mjs \
 - Search results are not corroboration by themselves. Look for source independence and claim relevance.
 - Context evidence does not prove linkage or use of funds. Keep "the event or need is plausible" separate from "this claimant is connected to it" and "this action will help."
 - For irreversible transfers, consider recipient custody and history when available. Prior receipt followed by unexplained loss of accountability can reduce eligibility, but dust balances or urgent cash-out behavior are not adverse by themselves without other pattern evidence.
-- Missing required lanes fail closed for any action size. `missing`, `error`, and `not_applicable` required lanes mean the current record is not strong enough for full eligibility.
+- Missing required lanes fail closed for any action size. `missing`, `error`, and `not_applicable` required lanes give a zero recommended amount. Omitted status is missing; malformed completed reviews cause a CLI error and confer no eligibility. Do not reuse stale output after a failed run.
 - The core skill is analysis-only. Execution belongs to the calling agent and its operator policy.
 
 ## Hermes-Compatible Defaults

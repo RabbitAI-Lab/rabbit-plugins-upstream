@@ -1,5 +1,7 @@
 # HTML 渲染回归样本
 
+> Language scope: Simplified Chinese reference material by design. Adapt conversational reports to the user's chosen language; the optional bundled HTML layout targets Chinese readers.
+
 判词：2023 年的 AI 在你心里，像一扇打开过却没走进去的门。你真正难受的点，是把作品窗口和真实用户反馈，换成了收藏、试用和旁观。
 
 看清：看清你真正错过的地方，也看清市场和内容经验今天还能怎样被重新封装成可试用作品。

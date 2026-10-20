@@ -1,45 +1,53 @@
-## Description: <br>
-This skill helps agents browse, quote, purchase, and manage Snaplii gift cards and bill payments using a pre-funded Snaplii Cash balance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents browse and purchase prepaid gift cards, check Snaplii Cash balances, pay bills, and send money to other Snaplii users.
 
-## Publisher: <br>
-[snapliiai](https://clawhub.ai/user/snapliiai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[snapliiai](https://clawhub.ai/user/snapliiai)
 
-## Use Case: <br>
-External users and agents use this skill to browse eligible Snaplii gift cards and bill payees, preview cashback or voucher savings, and complete explicitly confirmed purchases or bill payments from a pre-funded Snaplii Cash balance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Canada and United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill exposes gateway or base-url switching inside a financial workflow. <br>
-Mitigation: Use gateway switching only when deliberately connecting to a trusted Snaplii environment. <br>
-Risk: Purchases and bill payments can spend a user's pre-funded Snaplii Cash balance. <br>
-Mitigation: Before execution, verify the amount, biller or brand, region, and that payment is coming only from Snaplii Cash. <br>
-Risk: The workflow handles sensitive API keys and gift card redemption details. <br>
-Mitigation: Enter API keys only through hidden CLI prompts and show redemption details only when the user explicitly requests them. <br>
+## Use Case:
 
+Snaplii users can ask an agent to explore gift cards, check their prepaid balance, purchase cards, pay bills, or transfer funds to another user's phone number.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/snapliiai/snaplii-a2m-payment) <br>
-- [Snaplii CLI on PyPI](https://pypi.org/project/snaplii-cli/) <br>
-- [Snaplii app for iOS](https://apps.apple.com/app/snaplii/id1596924498) <br>
-- [Snaplii app for Android](https://play.google.com/store/apps/details?id=com.snaplii.app) <br>
+### Deployment Geography for Use:
 
+United States and Canada
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, markdown] <br>
-**Output Format:** [Markdown guidance with inline shell commands and concise transaction summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes user-confirmed payment flows and defers sensitive redemption details until explicitly requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.11.0 (source: server release metadata) <br>
+Risk: Gift-card purchases, bill payments, and transfers can spend real prepaid funds.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrowly scoped API keys with a low daily spending limit, and review quotes, payees, recipients, and transfer details before proceeding.
+
+Risk: Exposing an API key could allow unauthorized payments within its permissions and limits.
+
+Mitigation: Enter the key only through the secure credential dialog, never in chat.
+
+## Reference(s):
+
+- [Snaplii AI Agent Cashback Payment on ClawHub](https://clawhub.ai/snapliiai/skills/snaplii-a2m-payment)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with transaction summaries and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include gift-card redemption details when requested.]
+
+## Skill Version(s):
+
+1.14.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

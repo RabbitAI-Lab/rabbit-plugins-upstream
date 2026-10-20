@@ -1,40 +1,51 @@
-## Description: <br>
-Do Cli helps agents and terminal users install and operate the `do` command-line client for todo and life-tracking workflows through the do REST API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in using the do CLI to capture and review personal tasks, habits, notes, and contacts, and to make related changes through an authorized account.
 
-## Publisher: <br>
-[robbeverhelst](https://clawhub.ai/user/robbeverhelst) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[robbeverhelst](https://clawhub.ai/user/robbeverhelst)
 
-## Use Case: <br>
-Developers, agents, and users of the do personal productivity app use this skill to configure scoped API-key access and run daily task and habit workflows from a terminal or automation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill presents the CLI as agent-safe while the commands can capture tasks, mark tasks done, snooze tasks, and log habits in a real personal account. <br>
-Mitigation: Install only for the intended do account, use a narrowly scoped API key, and require explicit user intent before commands that change task or habit data. <br>
-Risk: Saved configuration can expose broad account access to later agent runs if a key has more scope than the workflow needs. <br>
-Mitigation: Prefer environment variables for agent and CI runs, avoid persisting unnecessary credentials, and grant only the scopes required for the requested workflow. <br>
+## Use Case:
 
+External users and their authorized agents use the CLI to manage personal tasks and habits by capturing tasks, reviewing what is actionable, logging check-ins, and reading related records. Use a scoped API key and confirm before storing sensitive personal details or making broad changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/robbeverhelst/do-cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with command examples and JSON-oriented CLI output expectations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The described commands may read or change personal task and habit data depending on the scoped API key and command invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release evidence) <br>
+Risk: The skill may store sensitive personal disclosures about people and change records, including habits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get explicit approval before saving personal disclosures or making broad changes; use only the API permissions needed, and check the service destination and retention behavior.
+
+## Reference(s):
+
+- [do source and documentation](https://github.com/robbeverhelst/do)
+- [do releases](https://github.com/robbeverhelst/do/releases)
+- [Hosted do API](https://do.robbe.work/api)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, Text]
+
+**Output Format:** [Markdown instructions and shell command examples; CLI responses may be JSON or readable text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands may read or change personal task, habit, and contact records through the configured account.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,48 +1,58 @@
-## Description: <br>
-Use when assembling or polishing already-rendered clips with ffmpeg: concat, crossfades, burned captions and subtitles, text/logo overlays, before/after sliders, background music beds, platform export, or multi-layer HTML combination videos with Hyperframes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through assembling and polishing already-rendered clips with ffmpeg or composing multi-layer videos with optional Hyperframes, rather than generating video with AI.
 
-## Publisher: <br>
-[pruna-ai](https://clawhub.ai/user/pruna-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pruna-ai](https://clawhub.ai/user/pruna-ai)
 
-## Use Case: <br>
-Developers, creators, and media teams use this skill to assemble and polish finished local media into social, promo, or product videos using ffmpeg-oriented workflows. It helps with clip stitching, transitions, captions, overlays, music beds, comparison layouts, Hyperframes handoff, and export presets without claiming AI video generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Optional installs can add third-party tooling or related skills beyond the local ffmpeg workflow. <br>
-Mitigation: Review optional install commands before execution and install only the components needed for the current editing task. <br>
-Risk: Caption alignment and generated music workflows may upload media or prompts to external paid services through separate skills. <br>
-Mitigation: Use those optional steps only for media the user is comfortable uploading, and prefer local or already-approved assets when privacy or cost is a concern. <br>
+## Use Case:
 
+Creators and developers use this skill to assemble finished clips, add captions, overlays and music, compose narrated showcases, and prepare exports for different platforms.
 
-## Reference(s): <br>
-- [Assembly and concat](references/assembly-concat.md) <br>
-- [Transitions (xfade)](references/transitions.md) <br>
-- [Captions and subtitles](references/captions.md) <br>
-- [Overlays (text and logo)](references/overlays.md) <br>
-- [Comparison sliders](references/comparison-sliders.md) <br>
-- [Background music (bed mix)](references/background-music.md) <br>
-- [Combination videos (Hyperframes)](references/combination-hyperframes.md) <br>
-- [Export presets](references/export-presets.md) <br>
-- [Hyperframes](https://github.com/heygen-com/hyperframes) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands, ffmpeg filter examples, and small configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill produces instructions and command proposals for local post-production; generated media files are produced only when an agent follows those commands in the user's environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata and skill frontmatter) <br>
+Risk: Example ffmpeg commands using -y may overwrite existing output files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check output filenames before running the commands.
+
+Risk: Broad or unpinned installs may bring in more packages than the editing task requires.
+
+Mitigation: Prefer pinned or reviewed versions and avoid full-suite or --full-depth installs unless needed.
+
+## Reference(s):
+
+- [ClawHub video-editing release](https://clawhub.ai/pruna-ai/skills/video-editing)
+- [Assembly and concat](artifact/references/assembly-concat.md)
+- [Captions and subtitles](artifact/references/captions.md)
+- [Combination videos (Hyperframes)](artifact/references/combination-hyperframes.md)
+- [Export presets](artifact/references/export-presets.md)
+- [Hyperframes project](https://github.com/heygen-com/hyperframes)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Code]
+
+**Output Format:** [Markdown with ffmpeg commands and optional HTML composition examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires pre-rendered media and local video-processing tools; does not generate video with AI.]
+
+## Skill Version(s):
+
+1.0.15 (source: ClawHub release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

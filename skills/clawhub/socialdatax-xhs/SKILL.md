@@ -15,7 +15,7 @@ Use this skill when the user needs a Xiaohongshu / 小红书 / XHS / RedNote dat
 ## API Key
 
 Use `SOCIALDATAX_API_KEY` for data calls. The only official website for requesting or managing API access is <https://socialdatax.com/ai?from=clawhub>. If a user asks where to get a key, provide only this URL; do not infer alternate domains.
-获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名；do not infer alternate domains。
+获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名。
 
 ## Preferred Direct CLI
 
@@ -81,6 +81,10 @@ npx -y socialdatax-skills@latest xhs user-posts \
   --profile-url "<profile_url_or_share_text>" --pretty \
   --source-client socialdatax-skills --source-platform clawhub \
   --source-skill socialdatax-xhs
+
+npx -y socialdatax-skills@latest xhs search-suggestions \
+  --keyword "<keyword>" --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill socialdatax-xhs
 ```
 
 Required arguments:
@@ -93,6 +97,7 @@ Optional arguments:
 - `--source-client socialdatax-skills --source-platform clawhub --source-skill socialdatax-xhs`: usage attribution for this Agent Skill; keep these values unchanged when running examples from this Skill.
 
 Use hot-search for 小红书搜索热榜, search for 小红书数据分析 and note discovery, detail for one note, comments for comment analysis and replies, user-info for 博主信息, and user-posts for 博主笔记.
+For XHS keyword completion, use `xhs_search_suggestions`; use `xhs search` or `xhs_search_notes` when the user needs note results instead of suggestions.
 
 ## Safety Boundary
 
@@ -113,14 +118,20 @@ MCP tools matching the direct CLI commands above:
 - `xhs_get_user_info_by_profile_url`
 - `xhs_get_user_posted_notes_by_user_id`
 - `xhs_get_user_posted_notes_by_profile_url`
+- `xhs_search_suggestions`
+
+XHS search parameter naming reminder: direct CLI uses `--sort-type`, `--publish-time-range`, and `--note-type`; the `xhs_search_notes` MCP tool uses `sort_type`, `publish_time_range`, and `note_type`. Do not pass `sortType`, `publishTimeRange`, or `noteType`.
 
 ## Output Guidance
 
 For XHS search or detail results, in every use of a returned `note_url`, such as final answers, display, references, storage, output, or forwarding, preserve it exactly as the full URL, including `xsec_token` query parameters. Do not modify, truncate, redact, mask, normalize, rebuild, or synthesize the URL from `note_id`; if detail `note_url` is null, show the `note_id` or say that no directly openable full link is available.
-For XHS `note_id`, copy the complete 24-character lowercase hexadecimal ID exactly; do not pass or display only a prefix.
+For XHS `note_id`, copy the entire returned `note_id` exactly; do not pass or display only a prefix.
 
 ## Troubleshooting
 
+- If an SDK/dependency, npm network, Node.js/npm/npx availability, permission, or missing runtime error appears, treat it as a local runtime, dependency installation, network, or agent authorization issue, not a SocialDataX API key or business data error. If the current environment has permission, install or restore automatically. When network or execution authorization is needed, ask the user to approve or finish authorization, then continue the same command; do not use public web search as a substitute for SocialDataX data.
+- If the CLI exits with status 1 and prints `partial: true`, preserve `data.items` and the error, and report incomplete results. This recovery rule overrides advice to rerun the original command. After resolving the error (including insufficient balance), resume only with a non-empty `data.next_page_token` and the same query parameters. Keep the original page and item limits: subtract cumulative `page_count` and `item_count` from the respective `--pages` and `--max-items` limits, if set. Stop parent-list pagination when either limit is reached. An empty token does not mean completion. Do not restart from the first page; investigate repeated-token errors before continuing.
+- With `--include-replies`, `replies_partial` marks incomplete replies and `replies_pending` marks comments not yet expanded. Finish those comments with the platform reply command, its required comment identifiers and any non-empty `replies_next_page_token`. For pending comments or a failed first reply request, resolve the error before starting that comment from its first reply page; investigate repeated-token errors first. Then use the outer `data.next_page_token` only if the parent-comment budget remains; finishing replies under retained comments does not add parent-comment pages. Never interchange parent and reply tokens or treat reply previews as complete.
 - For non-balance network or API errors, preserve the error message, check `SOCIALDATAX_API_KEY`, parameters, and link or ID format, then retry once when appropriate.
 - If the response returns `insufficient_balance` or says the balance/credits are insufficient, do not retry repeatedly. Show the recharge URL from the error exactly as returned, then continue the same command after the user recharges.
 - If the user has recharged but still sees insufficient balance, confirm `SOCIALDATAX_API_KEY` belongs to the same account that was recharged; if needed, copy a fresh API Key from the official dashboard.

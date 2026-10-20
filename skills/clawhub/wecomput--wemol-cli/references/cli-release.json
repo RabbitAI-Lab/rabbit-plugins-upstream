@@ -1,0 +1,41 @@
+{
+  "version": "1.2.0",
+  "platforms": {
+    "macos-arm64": {
+      "url": "https://github.com/wecomput/wemol-cli/releases/download/v1.2.0/wemol-cli-v1.2.0-macos-arm64.zip",
+      "archive_sha256": "ced0135d9f383070fe2698fd77caa36e5638e6c413ef605bd08649c8d97e3685",
+      "archive_size": 6545589,
+      "format": "zip",
+      "executable": "wemol-cli",
+      "binary_sha256": "9aaff751231169c4449c71a810b14cf259f59ed59031dbdaf6c3c7c81ee39f53",
+      "binary_size": 14728112
+    },
+    "macos-x86_64": {
+      "url": "https://github.com/wecomput/wemol-cli/releases/download/v1.2.0/wemol-cli-v1.2.0-macos-x86_64.zip",
+      "archive_sha256": "6ee495b827b3b8d6e8e906c077f06d343e049cb920150c64d8473ba29b75df10",
+      "archive_size": 6953317,
+      "format": "zip",
+      "executable": "wemol-cli",
+      "binary_sha256": "a66fb56e6537a70ea3e0cd5b580b978e95cb580914ec8b2b1d9733499d05cb05",
+      "binary_size": 15675588
+    },
+    "linux-x86_64": {
+      "url": "https://github.com/wecomput/wemol-cli/releases/download/v1.2.0/wemol-cli-v1.2.0-linux-x86_64-musl.tar.gz",
+      "archive_sha256": "aa8dcd9bd5c805603d9e36f24e7d428f42df2cec4b36a99090a765cdf98e9056",
+      "archive_size": 7060926,
+      "format": "tar.gz",
+      "executable": "wemol-cli",
+      "binary_sha256": "a43f6237e806643b0b6fff86879583ff85faf8ab76f75597f724355c4df0a71d",
+      "binary_size": 16212432
+    },
+    "windows-x86_64": {
+      "url": "https://github.com/wecomput/wemol-cli/releases/download/v1.2.0/wemol-cli-v1.2.0-windows-x86_64.zip",
+      "archive_sha256": "4982844c9f30bf949e1b193ac130d38c1ed2690c9fc93de9593d8386ccbf4ae1",
+      "archive_size": 7360704,
+      "format": "zip",
+      "executable": "wemol-cli.exe",
+      "binary_sha256": "c3751999ea1632c328b0ebc7197ca0791982cc9eb54f343b3cfc81b6322807c3",
+      "binary_size": 16982528
+    }
+  }
+}

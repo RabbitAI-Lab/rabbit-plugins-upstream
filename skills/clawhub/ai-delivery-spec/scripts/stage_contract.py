@@ -15,10 +15,12 @@ from typing import Any
 try:
     import yaml
 except ModuleNotFoundError as exc:  # pragma: no cover - clean-machine path
-    print(
-        "缺少运行依赖 PyYAML。请执行：python -m pip install -r scripts/requirements.txt",
-        file=sys.stderr,
+    message = (
+        "Missing runtime dependency PyYAML. Run: python -m pip install -r scripts/requirements.txt"
+        if any(value == "en-US" for value in sys.argv) else
+        "缺少运行依赖 PyYAML。请执行：python -m pip install -r scripts/requirements.txt"
     )
+    print(message, file=sys.stderr)
     raise SystemExit(4) from exc
 
 if hasattr(sys.stdout, "reconfigure"):
@@ -33,8 +35,15 @@ STAGE_INDEX = {name: index for index, name in enumerate(STAGES)}
 GOVERNED_ORDER = ("frame", "explore", "intake", "clarify", "specify", "review", "baseline", "implementation", "change", "acceptance", "closed")
 GOVERNED_INDEX = {name: index for index, name in enumerate(GOVERNED_ORDER)}
 MAX_ARTIFACT_BYTES = 8 * 1024 * 1024
+TEXT_ARTIFACT_SUFFIXES = {".md", ".markdown", ".yaml", ".yml", ".json"}
+FRONTMATTER_REQUIRED_MESSAGE = (
+    "输入不含 YAML frontmatter，无法执行门禁校验。本产物未经任何自动校验，"
+    "导出为 docx/PDF 将永久失去机器可校验性。请在 markdown + frontmatter 形态下完成基线，再导出分发格式。"
+)
+FRONTMATTER_REQUIRED_FIX = "使用对应 5.4 模板在 markdown + frontmatter 形态下完成基线；docx/PDF 仅在基线后导出为分发副本。"
 EN_GUIDANCE = {
     "GATE-NOT-FILE": ("The artifact cannot be read.", "Check the path, UTF-8 encoding, binary content and size."),
+    "STAGE-NO-FRONTMATTER": ("The artifact is not Markdown with YAML front matter; machine checkability is lost.", "Baseline in Markdown + front matter first; export docx/PDF only as distribution copies."),
     "GATE-MISSING-INPUT": ("The selected profile has no artifact.", "Provide the main artifact for this stage."),
     "STAGE-ARTIFACT-TYPE": ("The artifact type does not match this stage.", "Start from the corresponding v5.4 template and keep artifact/stage metadata."),
     "STAGE-ANCHOR-MISSING": ("A required ADS semantic anchor is missing.", "Add the named ADS anchor and real content; headings may stay in the document language."),
@@ -206,8 +215,20 @@ def require_anchors(artifact: Artifact, names: tuple[str, ...], findings: list[d
             ))
 
 
+_PLACEHOLDER_BUSINESS_PHRASES = ("资料待补充", "数据待补充", "待补充完整")
+
+
 def has_placeholder(text: str) -> bool:
-    return bool(re.search(r"\{[^{}]+\}|待补充|TBD|TODO|待确认内容", text, re.I))
+    if re.search(
+        r"\{[^{}]+\}|(?<![A-Za-z0-9-])(?:TBD|TODO)(?![A-Za-z0-9-])|待确认内容",
+        text,
+        re.I,
+    ):
+        return True
+    scrubbed = text
+    for phrase in _PLACEHOLDER_BUSINESS_PHRASES:
+        scrubbed = scrubbed.replace(phrase, "")
+    return bool(re.search(r"待补充\s*[:：]|待补充[ \t]*$", scrubbed, re.M))
 
 
 def anchor_body(text: str, name: str) -> str:
@@ -230,23 +251,47 @@ def body_has_content(body: str) -> bool:
     return bool(payload)  # Placeholder text counts as draft content and is reported separately as GAP.
 
 
+def _plain_cell(value: str) -> str:
+    value = value.strip()
+    while (match := re.fullmatch(r"(\*\*|__|`+|\*)(.+)\1", value, re.S)):
+        value = match[2].strip()
+    return value
+
+
 def table_cells(line: str) -> list[str]:
-    return [cell.strip().strip("`") for cell in line.strip().strip("|").split("|")]
+    return [_plain_cell(cell) for cell in line.strip().strip("|").split("|")]
 
 
-def unknown_rows(text: str) -> list[dict[str, str]]:
+def contract_token(value: object) -> str:
+    """Accept the templates' translated labels with an explicit machine token."""
+    raw = _plain_cell(str(value or "")).casefold()
+    match = re.fullmatch(r"[^()（）]*[（(]\s*`?([a-z_]+)`?\s*[）)]", raw)
+    token = match[1] if match else raw.strip("`")
+    return {"待关闭": "open", "待确认": "open", "未关闭": "open", "待处理": "open",
+            "partial": "open", "in_progress": "open", "部分关闭": "open", "部分解决": "open",
+            "已搁置": "open", "搁置": "open", "deferred": "open",
+            "已关闭": "closed", "已解决": "resolved", "已取代": "superseded"}.get(token, token)
+
+
+OPEN_UNKNOWN = {"open", "pending", "blocked"}
+CLOSED_UNKNOWN = {"closed", "resolved", "superseded"}
+
+
+def unknown_rows(text: str) -> list[dict[str, Any]]:
     aliases = {
-        "id": {"id", "编号"}, "priority": {"优先级", "priority"},
-        "owner": {"责任人", "owner"}, "blocks_stage": {"blocks_stage", "阻断阶段"},
+        "id": {"id", "编号", "unk/rev id", "unk id"}, "priority": {"优先级", "priority"},
+        "owner": {"责任人", "负责人", "owner"}, "blocks_stage": {"blocks_stage", "阻断阶段"},
+        "affected_refs": {"affected_refs", "scope_refs", "影响范围", "受影响引用"},
         "reversal": {"回退路径", "回退/缩范围路径", "回退/缩范围", "reversal path", "fallback"},
-        "status": {"状态", "status"},
+        "status": {"状态", "status", "unk 状态", "unk状态"},
+        "resolution_ref": {"resolution_ref", "关闭依据", "解决依据", "决策/证据", "决议/来源", "证据", "resolution", "关闭条件/结论"},
     }
     lines = text.splitlines()
-    results: list[dict[str, str]] = []
+    results: list[dict[str, Any]] = []
     for index in range(len(lines) - 2):
         if not lines[index].lstrip().startswith("|") or not re.match(r"^\s*\|?\s*:?-{3,}", lines[index + 1]):
             continue
-        headers = [cell.casefold() for cell in table_cells(lines[index])]
+        headers = [re.sub(r"\s*/\s*", "/", contract_token(cell)) for cell in table_cells(lines[index])]
         positions = {
             key: next((pos for pos, header in enumerate(headers) if header in names), -1)
             for key, names in aliases.items()
@@ -254,11 +299,40 @@ def unknown_rows(text: str) -> list[dict[str, str]]:
         cursor = index + 2
         while cursor < len(lines) and lines[cursor].lstrip().startswith("|"):
             cells = table_cells(lines[cursor])
-            row_id = next((cell.upper() for cell in cells if re.fullmatch(r"UNK-[A-Z0-9-]+", cell, re.I)), "")
+            id_position = positions["id"] if positions["id"] >= 0 else 0
+            id_cell = cells[id_position] if id_position < len(cells) else ""
+            row_id = id_cell.upper() if re.fullmatch(r"UNK-[A-Z0-9-]+", id_cell, re.I) else ""
             if row_id:
-                row = {"id": row_id}
+                row = {"id": row_id, "line": str(cursor + 1), "_origin": f"body table row {cursor + 1}",
+                       "_fields": [key for key, pos in positions.items() if pos >= 0]}
                 for key, pos in positions.items():
-                    row[key] = cells[pos] if 0 <= pos < len(cells) else ""
+                    if key != "id" and 0 <= pos < len(cells):
+                        row[key] = cells[pos]
+                if "affected_refs" in row:
+                    # Explicit references only; never infer scope from the issue text.
+                    value = str(row["affected_refs"]).strip().strip("`")
+                    row["affected_refs"] = [part.strip(" \t`\"'") for part in
+                                            re.split(r"[,，;；\s]+", value.strip("[]"))
+                                            if part.strip(" \t`\"'") not in {"", "-", "无", "N/A"}]
+                # “类型” may mean category, not status. Use it only when the
+                # cell actually contains a known unknown-lifecycle token.
+                mixed = {"类型", "结论/状态", "状态/结论", "结论·状态", "状态·结论"}
+                alternatives = [(pos, contract_token(cells[pos])) for pos, h in enumerate(headers)
+                                if h in mixed and pos < len(cells)]
+                recognized = [(pos, token) for pos, token in alternatives if token in OPEN_UNKNOWN | CLOSED_UNKNOWN]
+                if "status" not in row and recognized:
+                    row["status"] = recognized[0][1]
+                    row["_fields"].append("status")
+                if "resolution_ref" not in row:
+                    for pos, token in alternatives:
+                        if headers[pos] != "类型" and token not in OPEN_UNKNOWN | CLOSED_UNKNOWN and cells[pos].strip():
+                            row["resolution_ref"] = cells[pos]
+                            row["_fields"].append("resolution_ref")
+                            break
+                row["_status_unlocated"] = "status" not in row
+                for key in ("status", "blocks_stage"):
+                    if key in row:
+                        row[key] = contract_token(row[key])
                 results.append(row)
             cursor += 1
     if results:
@@ -276,13 +350,23 @@ def unknown_rows(text: str) -> list[dict[str, str]]:
 
 
 def is_open(status: str) -> bool:
-    return status.strip().casefold() in {"open", "pending", "待确认", "未关闭", "待处理"}
+    return contract_token(status) in OPEN_UNKNOWN
 
 
 def validate_unknowns(artifact: Artifact, current_stage: str) -> list[dict[str, Any]]:
     findings: list[dict[str, Any]] = []
     for row in unknown_rows(artifact.text):
+        status = contract_token(row.get("status", ""))
+        if row.get("_status_unlocated"):
+            findings.append(finding("GAP", "CLARIFY-UNKNOWN-STATUS-UNLOCATED", artifact.path,
+                                    f"{row['id']}: cannot locate status in {row.get('_origin')}", "人工确认该未知项状态；解析不确定不能视为关闭。"))
+            continue
+        if status not in OPEN_UNKNOWN | CLOSED_UNKNOWN:
+            findings.append(finding("BLOCK", "CLARIFY-UNKNOWN-STATUS", artifact.path, f"{row['id']} 未声明有效的未知项状态：{status}", "使用 open/pending/blocked 或 closed/resolved/superseded；未知状态不能视为关闭。"))
+            continue
         if not is_open(row.get("status", "")):
+            if not row.get("resolution_ref", "").strip() or row["resolution_ref"].strip() in {"-", "无", "待补", "N/A"}:
+                findings.append(finding("BLOCK", "CLARIFY-UNKNOWN-CLOSURE", artifact.path, f"{row['id']} 关闭但没有解决依据", "引用已解决该问题的决定或证据；填写 closed 不等于已经解决。"))
             continue
         missing = [key for key in ("owner", "blocks_stage", "reversal") if not row.get(key, "").strip()]
         if missing:
@@ -291,7 +375,7 @@ def validate_unknowns(artifact: Artifact, current_stage: str) -> list[dict[str, 
                 f"{row['id']} 缺少 {', '.join(missing)}", "补齐责任人、blocks_stage、回退/缩范围路径和状态。",
             ))
             continue
-        blocks_stage = row["blocks_stage"].strip().casefold()
+        blocks_stage = contract_token(row["blocks_stage"])
         if blocks_stage not in GOVERNED_INDEX:
             findings.append(finding("BLOCK", "CLARIFY-UNKNOWN-STAGE", artifact.path, f"{row['id']} 的 blocks_stage 无效：{blocks_stage}", f"使用：{', '.join(GOVERNED_ORDER)}。"))
             continue
@@ -300,6 +384,8 @@ def validate_unknowns(artifact: Artifact, current_stage: str) -> list[dict[str, 
             findings.append(finding("P0_UNKNOWN", "CLARIFY-P0-UNKNOWN", artifact.path, f"{row['id']} 已阻断 {current_stage}", "由责任人关闭，或记录安全缩范围/回退路径。"))
         elif priority == "P0":
             findings.append(finding("GAP", "CLARIFY-P0-NOT-YET-BLOCKING", artifact.path, f"{row['id']} 必须在 {blocks_stage} 前关闭", "保留责任人和回退路径，并在 blocks_stage 前关闭。"))
+        elif GOVERNED_INDEX[current_stage] >= GOVERNED_INDEX[blocks_stage]:
+            findings.append(finding("BLOCK", "CLARIFY-UNKNOWN-BLOCKING", artifact.path, f"{row['id']} 已到达阻断阶段 {blocks_stage}", "解决依赖决定或明确缩小交付范围；优先级不能覆盖阻断阶段。"))
         else:
             findings.append(finding("GAP", "CLARIFY-UNKNOWN-OPEN", artifact.path, f"{row['id']} 仍未关闭", "按责任人与 blocks_stage 跟踪关闭，不得静默推断。"))
     return findings
@@ -505,28 +591,50 @@ def result(profile: str, findings: list[dict[str, Any]], artifacts: list[Artifac
     return code, {
         "status": statuses[code],
         "profile": profile,
+        "output_language": "en-US" if english else "zh-CN",
         "summary": {"blockers": blocks, "p0_unknowns": p0, "gaps": gaps, "findings": len(findings)},
         "coverage": ("Deterministic stage structure, ADS anchors and checkpoint hashes; not business correctness or approval" if english else "确定性阶段产物结构、稳定锚点和断点哈希；不判断业务正确性，不替代责任人评审"),
         "not_proven": (["customer/domain correctness", "solution value", "implementation/runtime behavior", "real acceptance"] if english else ["客户/领域正确性", "方案价值", "实现与运行时行为", "真实验收"]),
-        "retry_command": "python scripts/ai_delivery_spec_cli.py gate --profile " + profile + " " + " ".join(f"--artifact {item.path}" for item in artifacts),
+        "retry_command": "python scripts/ai_delivery_spec_cli.py gate --profile " + profile + " --language " + ("en-US" if english else "zh-CN") + " " + " ".join(f"--artifact {item.path}" for item in artifacts),
         "metrics": {"artifact_count": len(artifacts), "artifact_kinds": [item.kind for item in artifacts]},
         "findings": findings,
     }
+
+
+def diagnostic_roots(findings: list[dict[str, Any]], limit: int) -> tuple[list[tuple[dict[str, Any], int]], int]:
+    """Compact repeated findings by stable root-cause code, preserving first-seen order."""
+    first: dict[str, dict[str, Any]] = {}
+    counts: dict[str, int] = {}
+    order: list[str] = []
+    for item in findings:
+        code = str(item["code"])
+        if code not in first:
+            first[code] = item
+            order.append(code)
+        counts[code] = counts.get(code, 0) + 1
+    selected = order[:max(limit, 0)]
+    return [(first[code], counts[code]) for code in selected], len(order)
 
 
 def run_gate(args: argparse.Namespace) -> int:
     findings: list[dict[str, Any]] = []
     artifacts: list[Artifact] = []
     for path in args.artifact:
+        if path.is_file() and path.suffix.casefold() not in TEXT_ARTIFACT_SUFFIXES:
+            findings.append(finding("BLOCK", "STAGE-NO-FRONTMATTER", path, FRONTMATTER_REQUIRED_MESSAGE, FRONTMATTER_REQUIRED_FIX))
+            continue
         try:
             artifacts.append(load_artifact(path))
         except (OSError, UnicodeError, ValueError) as exc:
             findings.append(finding("BLOCK", "GATE-NOT-FILE", path, f"无法读取产物：{exc}", "检查路径、UTF-8 编码、二进制内容和文件大小。"))
     if not artifacts:
-        findings.append(finding("BLOCK", "GATE-MISSING-INPUT", Path("<artifact>"), f"profile={args.profile} 至少需要一个 --artifact", "提供该阶段的主产物。"))
+        if not findings:
+            findings.append(finding("BLOCK", "GATE-MISSING-INPUT", Path("<artifact>"), f"profile={args.profile} 至少需要一个 --artifact", "提供该阶段的主产物。"))
     else:
         primary = next((item for item in artifacts if item.stage == args.profile), artifacts[0])
-        if args.profile == "frame":
+        if primary.path.suffix.casefold() in {".md", ".markdown"} and not primary.metadata:
+            findings.append(finding("BLOCK", "STAGE-NO-FRONTMATTER", primary.path, FRONTMATTER_REQUIRED_MESSAGE, FRONTMATTER_REQUIRED_FIX))
+        elif args.profile == "frame":
             findings.extend(gate_frame(primary))
         elif args.profile == "explore":
             findings.extend(gate_explore(primary))
@@ -544,7 +652,9 @@ def run_gate(args: argparse.Namespace) -> int:
                 or (args.profile == "clarify" and item.kind == "decision_record")
             ):
                 findings.extend(validate_resume(item))
-    language = str(primary.metadata.get("document_language", "zh-CN")) if artifacts else "zh-CN"
+    language = args.language
+    if language == "auto":
+        language = str(primary.metadata.get("document_language", "zh-CN")) if artifacts else "zh-CN"
     code, payload = result(args.profile, findings, artifacts, language)
     english = language.casefold().startswith("en")
     if args.format == "json":
@@ -553,10 +663,22 @@ def run_gate(args: argparse.Namespace) -> int:
         summary = payload["summary"]
         print(f"{payload['status']} profile={args.profile} blockers={summary['blockers']} p0_unknowns={summary['p0_unknowns']} gaps={summary['gaps']}")
         print("NOT_PROVEN: " + ("; " if english else "；").join(payload["not_proven"]))
-        limit = 1 if args.diagnostics == "first" else 12 if args.diagnostics == "summary" else args.max_findings
         fix_label = "Fix" if english else "修复"
-        for item in findings[:max(limit, 0)]:
-            print(f"{item['severity']} {item['code']}: {item['message']}\n  {fix_label}: {item['how_to_fix']}")
+        if args.diagnostics == "roots":
+            roots, unique_count = diagnostic_roots(findings, args.max_findings)
+            for item, count in roots:
+                print(f"{item['severity']} {item['code']} x{count}: {item['message']}\n  {fix_label}: {item['how_to_fix']}")
+            print(
+                f"ROOT_GROUPS shown={len(roots)} unique={unique_count} "
+                f"repeated_findings_compacted={len(findings) - len(roots)}"
+            )
+            hidden_groups = unique_count - len(roots)
+            if hidden_groups > 0:
+                print(f"... {hidden_groups} additional root groups; rerun with --format json")
+        else:
+            limit = 1 if args.diagnostics == "first" else 12 if args.diagnostics == "summary" else args.max_findings
+            for item in findings[:max(limit, 0)]:
+                print(f"{item['severity']} {item['code']}: {item['message']}\n  {fix_label}: {item['how_to_fix']}")
         if findings:
             print("RETRY: " + payload["retry_command"])
     return code
@@ -637,7 +759,8 @@ def main() -> int:
     gate.add_argument("--profile", choices=EARLY_PROFILES, required=True)
     gate.add_argument("--artifact", type=Path, action="append", default=[])
     gate.add_argument("--format", choices=("concise", "json"), default="concise")
-    gate.add_argument("--diagnostics", choices=("first", "summary", "full"), default="first")
+    gate.add_argument("--language", choices=("auto", "zh-CN", "en-US"), default="auto")
+    gate.add_argument("--diagnostics", choices=("first", "roots", "summary", "full"), default="roots")
     gate.add_argument("--max-findings", type=int, default=20)
     gate.set_defaults(func=run_gate)
     route = sub.add_parser("route")

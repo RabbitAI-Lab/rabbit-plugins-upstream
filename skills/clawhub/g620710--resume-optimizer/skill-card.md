@@ -1,42 +1,54 @@
-## Description: <br>
-Resume Optimizer helps users analyze and improve Chinese resumes for target roles using a paid remote AI service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Optimizes Chinese-language resumes by scoring content, diagnosing issues, rewriting experience statements, and aligning a resume with a target role or job description.
 
-## Publisher: <br>
-[g620710](https://clawhub.ai/user/g620710) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[g620710](https://clawhub.ai/user/g620710)
 
-## Use Case: <br>
-External job seekers, career changers, students, and resume-service providers use this skill to score, diagnose, rewrite, and tailor Chinese plain-text resumes for target roles or job descriptions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Resume content and the user key may be sent to the publisher's remote service, including a hard-coded plain-HTTP default endpoint. <br>
-Mitigation: Install only if comfortable with that data transfer; redact personal, contact, and confidential employer information, and avoid the default endpoint until HTTPS transport, privacy terms, retention, and backend details are documented. <br>
-Risk: The security guidance says the shipped script may need fixes before it runs. <br>
-Mitigation: Review and test the script in a controlled environment before using it with real resume data. <br>
+## Use Case:
 
+External job seekers and career-service users use this skill to improve Chinese resumes for a target role, identify gaps, and generate more outcome-oriented wording. The skill is also positioned for resume review services and HR-related commercial workflows.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/g620710/skills/resume-optimizer) <br>
-- [Publisher profile](https://clawhub.ai/user/g620710) <br>
-- [DeepSeek API base URL](https://api.deepseek.com/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Command-line output containing resume scores, diagnostics, sentence rewrites, revised resume text, and role-match suggestions.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3 and RESUME_API_USER_KEY; sends resume content to a remote service.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.3 (source: evidence.release.version) <br>
+Risk: The security evidence says the documentation misstates how credentials and resume data are handled while the script sends them to an undocumented plaintext API endpoint.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review carefully before installing; do not provide a real DeepSeek key or sensitive resume content unless the publisher uses a verified HTTPS endpoint, clearly identifies the data recipient, and obtains consent before upload.
+
+Risk: A real third-party API key may have been exposed if the skill was already used.
+
+Mitigation: Rotate any API key that was used with this skill.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/g620710/skills/resume-optimizer)
+- [Publisher profile](https://clawhub.ai/user/g620710)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Plain text or Markdown resume optimization report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include resume scoring, issue diagnosis, sentence-level rewrites, a rewritten resume, and job-match suggestions.]
+
+## Skill Version(s):
+
+1.1.3 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

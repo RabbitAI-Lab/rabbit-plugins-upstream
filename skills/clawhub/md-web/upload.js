@@ -9,6 +9,52 @@ var os = require("node:os");
 
 var SCRIPT_DIR = __dirname;
 
+// Two modes, deliberately separate. Publishing one document only ever writes
+// that one object; provisioning the viewer writes the site's root files and may
+// touch the bucket's lifecycle, so it is an explicit command of its own rather
+// than something an upload does on the side.
+//
+// Argument checks stay at the top for two reasons: loading the config exits when it is
+// missing, so a check below it is unreachable for anyone who has not configured yet; and a
+// run's first act in setup mode is deploying the server files, so validating late meant a
+// typo in the local path cost a full round of uploads before failing with an ENOENT about
+// the file alone.
+var args = process.argv.slice(2);
+var SCRIPT_NAME = path.basename(process.argv[1]);
+var SETUP_FLAG = "--setup";
+var usage = [
+  "Usage:",
+  "  node " + SCRIPT_NAME + " <local-file> <remote-key>   publish one markdown document",
+  "  node " + SCRIPT_NAME + " " + SETUP_FLAG + "                 provision the viewer (first run, and after an upgrade)",
+].join("\n");
+
+var isSetup = args[0] === SETUP_FLAG;
+if (isSetup && args.length > 1) {
+  console.log(usage);
+  console.error('UPLOAD_FAILED: ' + SETUP_FLAG + ' takes no other arguments, got: ' + args.slice(1).join(" "));
+  process.exit(1);
+}
+if (!isSetup) {
+  if (args.length < 2) {
+    console.log(usage);
+    process.exit(1);
+  }
+  if (args[0].charAt(0) === "-") {
+    console.log(usage);
+    console.error('UPLOAD_FAILED: "' + args[0] + '" looks like an option; this script takes two positional arguments, plus the single flag ' + SETUP_FLAG + '.');
+    process.exit(1);
+  }
+}
+var localPath = isSetup ? null : args[0];
+if (!isSetup) {
+  var localStat = null;
+  try { localStat = fs.statSync(localPath); } catch (e) { /* reported below */ }
+  if (!localStat || !localStat.isFile()) {
+    console.error("UPLOAD_FAILED: not a readable file: " + localPath);
+    process.exit(1);
+  }
+}
+
 // ── User data dir: upgrade-safe location in home dir ──
 var USER_CONFIG_DIR = path.join(os.homedir(), ".md-web");
 var USER_CONFIG_PATH = path.join(USER_CONFIG_DIR, "config.json");
@@ -50,6 +96,18 @@ try {
 }
 
 var REQUIRED = ["access_key", "secret_key", "endpoint", "bucket", "public_url"];
+// Credentials may come from the environment instead of the config file, so a user
+// who does not want a long-lived secret at rest never has to write one there.
+// The file wins when both are set, so an existing setup keeps working unchanged.
+if (!CONFIG.access_key && process.env.MD_WEB_ACCESS_KEY) CONFIG.access_key = process.env.MD_WEB_ACCESS_KEY;
+if (!CONFIG.secret_key && process.env.MD_WEB_SECRET_KEY) CONFIG.secret_key = process.env.MD_WEB_SECRET_KEY;
+// config.json holds the bucket secret. Written with the default umask it lands at
+// 0644, i.e. readable by every account on the machine; 0600 is the difference
+// between "only me" and "everyone", and it costs one call. Windows ACLs are not
+// chmod, so this is POSIX-only — the env vars above are the portable answer.
+if (process.platform !== "win32") {
+  try { fs.chmodSync(CONFIG_PATH, 0o600); } catch (_) {}
+}
 var missing = REQUIRED.filter(function (k) { return !CONFIG[k]; });
 if (missing.length) {
   console.error("Missing config fields: " + missing.join(", "));
@@ -186,9 +244,13 @@ function s3Fetch(method, resourcePath, query, payload, extraHeaders) {
         headers: reqHeaders,
       },
       function (res) {
-        var body = "";
-        res.on("data", function (c) { body += c; });
+        // Collect the chunks and decode once. Appending a Buffer to a string decodes each
+        // chunk separately, so a multibyte character straddling a chunk boundary turns into
+        // mojibake — and R2 echoes the key back in its error XML, where keys are not ASCII.
+        var chunks = [];
+        res.on("data", function (c) { chunks.push(c); });
         res.on("end", function () {
+          var body = Buffer.concat(chunks).toString("utf-8");
           if (res.statusCode >= 200 && res.statusCode < 300) resolve({ status: res.statusCode, body: body });
           else reject(new Error("HTTP " + res.statusCode + " — " + parseR2Error(body)));
         });
@@ -253,54 +315,124 @@ function serverDirHash() {
   return hash.digest("hex").slice(0, 12);
 }
 
+// Lifecycle administration is opt-in. It is a bucket-level request and needs an
+// Admin token, while publishing one document only ever needs object writes — so an
+// absent expire_days means this tool never sends one at all, and an object-scoped
+// token is enough. null ("do not touch the bucket") is not the same as
+// expire_days: 0 ("remove this skill's rule, leave every other rule alone").
 function expireDays() {
   var d = CONFIG.expire_days;
-  return (d != null && d >= 0) ? d : 30;
+  if (d == null || d === "") return null;
+  d = Number(d);
+  if (!isFinite(d) || d < 0) {
+    console.error('  Warning: expire_days "' + CONFIG.expire_days + '" is not a number of days; leaving the bucket lifecycle alone.');
+    return null;
+  }
+  return Math.floor(d);
 }
 
+// Fingerprints the viewer, not the retention setting: whether the site files in the
+// bucket are the ones in this skill. Leaving expire_days out means editing the
+// expiry does not make a current deployment look unprovisioned.
 function deployFingerprint() {
-  return CONFIG.endpoint + "/" + CONFIG.bucket + "@" + serverDirHash() + "@" + expireDays();
+  return CONFIG.endpoint + "/" + CONFIG.bucket + "@" + serverDirHash();
 }
 
 // ── S3 Lifecycle Rule ──
-function setLifecycleRule() {
-  var days = expireDays();
+var LIFECYCLE_RULE_ID = "md-web-auto-expire";
 
-  if (days === 0) {
-    return s3Fetch("DELETE", "/" + CONFIG.bucket, "lifecycle")
-      .then(function () { console.log("  Lifecycle: no expiry"); })
-      .catch(function () {});
+// S3 has no per-rule lifecycle API: PUT ?lifecycle replaces the whole
+// configuration. Every write below is therefore a read-modify-write — read what the
+// bucket has, keep the rules that are not ours, then write. Blanking the config and
+// PUTting one rule erased the user's own retention rules, and expire_days: 0 used to
+// DELETE the entire configuration outright; both destroyed policy this skill never
+// owned.
+function readLifecycle() {
+  return s3Fetch("GET", "/" + CONFIG.bucket, "lifecycle")
+    .then(function (r) { return r.body; })
+    .catch(function (e) {
+      // NoSuchLifecycleConfiguration is the only "there is nothing there" answer.
+      // AccessDenied and transport failures must abort instead: writing back a
+      // config we failed to read would delete rules we never saw.
+      if (/NoSuchLifecycle/i.test(e.message || "")) return "";
+      throw e;
+    });
+}
+
+// Rule elements cannot nest, so a non-greedy match is exact rather than a guess.
+function rulesFrom(xml) {
+  var out = [];
+  var re = /<Rule(?:\s[^>]*)?>[\s\S]*?<\/Rule>/g;
+  var m;
+  while ((m = re.exec(xml))) {
+    if (m[0].indexOf("<ID>" + LIFECYCLE_RULE_ID + "</ID>") === -1) out.push(m[0]);
   }
+  return out;
+}
 
-  // Scope expiry to md-web's own uploads (the "md-web/" key prefix) only — never
-  // the Docsify server files at the bucket root, nor any unrelated objects that
-  // happen to share the bucket.
-  var xml = '<LifecycleConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">' +
-    '<Rule><ID>md-web-auto-expire</ID>' +
-    '<Filter><Prefix>md-web/</Prefix></Filter>' +
+// Scoped to md-web's own uploads (the "md-web/" key prefix) — never the viewer
+// files at the bucket root, nor any unrelated object sharing the bucket.
+function expiryRule(days) {
+  return '<Rule><ID>' + LIFECYCLE_RULE_ID + '</ID>' +
+    '<Filter><Prefix>' + UPLOAD_PREFIX + '</Prefix></Filter>' +
     '<Status>Enabled</Status>' +
     '<Expiration><Days>' + days + '</Days></Expiration>' +
-    '</Rule></LifecycleConfiguration>';
+    '</Rule>';
+}
 
+function putLifecycle(rules) {
+  var xml = '<LifecycleConfiguration xmlns="http://s3.amazonaws.com/doc/2006-03-01/">' +
+    rules.join("") + '</LifecycleConfiguration>';
   var payload = Buffer.from(xml, "utf-8");
   var md5 = crypto.createHash("md5").update(payload).digest("base64");
-
   return s3Fetch("PUT", "/" + CONFIG.bucket, "lifecycle", payload, {
     "Content-Type": "application/xml",
     "Content-MD5": md5,
-  })
-    .then(function () { console.log("  Lifecycle: " + days + " days"); })
+  });
+}
+
+function setLifecycleRule() {
+  var days = expireDays();
+  if (days === null) {
+    console.log("  Lifecycle: untouched (set expire_days to let this skill manage it)");
+    return Promise.resolve();
+  }
+
+  return readLifecycle()
+    .then(function (existing) {
+      var others = rulesFrom(existing);
+      var wanted = days > 0 ? [expiryRule(days)] : [];
+
+      if (!wanted.length && !others.length) {
+        // Ours is gone and there is nothing of anyone else's left, so the honest end
+        // state is an empty configuration — and getting there needs DELETE. Safe
+        // precisely because the read above proved there is nothing left to lose.
+        if (!/<Rule[\s>]/.test(existing)) {
+          console.log("  Lifecycle: nothing to remove");
+          return null;
+        }
+        return s3Fetch("DELETE", "/" + CONFIG.bucket, "lifecycle")
+          .then(function () { console.log("  Lifecycle: no expiry"); });
+      }
+
+      return putLifecycle(wanted.concat(others)).then(function () {
+        console.log("  Lifecycle: " + (days > 0 ? days + " days (md-web/ only)" : "no expiry (only the md-web rule was removed)"));
+      });
+    })
+    // Report the failure either way: swallowing it meant a token without lifecycle
+    // permission produced no output at all, so the bucket kept whatever rule it had
+    // while the config said otherwise.
     .catch(function (e) {
       var msg = e.message || "";
       console.error("  Warning: lifecycle — " + msg +
         (msg.indexOf("AccessDenied") !== -1
-          ? " (token needs Admin Read & Write, or set in Cloudflare Dashboard)"
+          ? " (token needs Admin Read & Write, or set the rule in the Cloudflare Dashboard)"
           : ""));
     });
 }
 
 function serverDeployed() {
-  // Local flag matches current config + server hash + expire_days → skip deploy
+  // Local flag matches this bucket + the bundled viewer files → skip setup
   try {
     if (fs.readFileSync(DEPLOYED_FLAG, "utf-8") === deployFingerprint()) {
       return Promise.resolve(true);
@@ -310,7 +442,6 @@ function serverDeployed() {
 }
 
 function deployServer() {
-  console.log("Deploying Docsify server...");
   var serverDir = path.join(SCRIPT_DIR, "docsify-server");
   var files = [];
   var indexFile = null;
@@ -371,33 +502,48 @@ function timestamp() {
 // rule (and any future cleanup) only ever touches md-web's own files.
 var UPLOAD_PREFIX = "md-web/";
 
+var DOC_EXTS = [".md", ".markdown", ".txt"];
+
 function addTimestamp(key) {
   var ext = path.extname(key);
   var base = key.slice(0, key.length - ext.length);
-  if (ext.toLowerCase() !== ".md") { ext = ".md"; }
-  return timestamp() + "-" + base + ext;
+  // Strip only an extension we recognise. path.extname() calls everything after the last
+  // dot an extension, so "v1.2-release-notes" reported ".2-release-notes" and dropping it
+  // shipped the document as "v1.md" — silently truncated, with a 200 on the URL to hide it.
+  if (DOC_EXTS.indexOf(ext.toLowerCase()) === -1) base = key;
+  return timestamp() + "-" + base + ".md";
 }
 
 // ── Main ──
-var args = process.argv.slice(2);
-if (args.length < 2) {
-  console.log("Usage: node " + path.basename(process.argv[1]) + " <local-file> <remote-key>");
-  process.exit(1);
+// Provisioning and publishing are separate commands on purpose. Publishing used to
+// deploy the whole viewer whenever the fingerprint did not match, so an ordinary
+// publish could rewrite index.html and every asset at the bucket root — shared state
+// every published document depends on — as a side effect of publishing one document.
+// It now refuses and names the one command that provisions it.
+function setup() {
+  console.log("Provisioning viewer: index.html + assets at the bucket root, then the lifecycle rule.");
+  return deployServer().then(function () {
+    console.log("Viewer ready: " + CONFIG.public_url + "/index.html");
+  });
 }
 
-var localPath = args[0];
-var remoteKey = UPLOAD_PREFIX + addTimestamp(args[1]);
+function publish() {
+  return serverDeployed().then(function (deployed) {
+    if (!deployed) {
+      throw new Error("the viewer is not provisioned for this bucket yet. Run once: node " + SCRIPT_NAME + " " + SETUP_FLAG);
+    }
+    var key = UPLOAD_PREFIX + addTimestamp(args[1]);
+    return uploadFile(localPath, key).then(function () {
+      var name = key.replace(/\.md$/i, "");
+      // The key is percent-encoded on the way in (uriEncodePath in s3Fetch), so it has to be
+      // encoded on the way out too: a raw space ends the link the moment anything parses it.
+      console.log("\n" + CONFIG.public_url + "/index.html#/" + name.split("/").map(encodeURIComponent).join("/"));
+    });
+  });
+}
 
-serverDeployed()
-  .then(function (deployed) {
-    if (!deployed) return deployServer();
-  })
+(isSetup ? setup() : publish())
   .then(function () {
-    return uploadFile(localPath, remoteKey);
-  })
-  .then(function () {
-    var name = remoteKey.replace(/\.md$/i, "");
-    console.log("\n" + CONFIG.public_url + "/index.html#/" + name);
     agent.destroy();
   })
   .catch(function (e) {

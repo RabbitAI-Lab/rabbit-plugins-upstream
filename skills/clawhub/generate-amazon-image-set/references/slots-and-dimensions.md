@@ -1,85 +1,73 @@
-# Slot and Dimension Contract
+# 版位、尺寸与平台适配
 
-## General rules
+## 图数与模块
 
-- Treat platform and category requirements as higher priority than these defaults.
-- Treat exact A+ image dimensions as module-specific; there is no universal A+ canvas.
-- Distinguish `delivery_size` from `generation_size`.
-- Record width before height using `WIDTHxHEIGHT`.
-- Never stretch an image to reach delivery size. Recompose or crop only when the slot permits it.
+图数取决于用户需求、模板、商品信息量和实际能力。未指定时可从 1 张 MAIN 和按需选择的副图开始, 副图通常在 7 张以内; 这只是工作默认值。多个主图候选不表示多个文件都应作为最终 MAIN, 场景候选也不因分组名而自动符合 MAIN 用途。
 
-## Default production matrix
+普通 A+ 与高级 A+ 的模块上限用于最终选定的上传组合, 候选图片可以多于模块数。一个模块的双端素材、轮播页或多张组件图片按其实际模块关系计数, 不机械按文件数计数。品牌故事为独立内容区域, 按其实际规则处理。[Amazon 官方设计指南](https://sell.amazon.com/blog/a-plus-content-design-guide) 列出普通 A+ 最多 5 个模块、高级 A+ 最多 7 个模块。
 
-| Group | Default slot | Production default | Notes |
-|---|---|---:|---|
-| MAIN | `MAIN` | `2000x2000` | Shared across desktop and mobile Listing surfaces |
-| Listing | `L1-L7` | `2000x2000` | Use only the number of defensible roles needed |
-| Video | `V1` | `1920x1080` | Cover or storyboard frame, not a substitute for Listing images |
-| Standard A+ | `A1-An` | Exact selected module size | Verify the module specification before final delivery |
-| Premium A+ desktop | `A1-An` | Common full-width preset `1464x600` | Use only for a matching Premium module |
-| A+ mobile | `M1-Mn` | Exact selected mobile module size | Common presets vary; never assume one universal size |
+无法核实账户可用类型或当前模块时, 可以按候选类型规划和出预览稿, 标明适配待确认。不要仅凭旧权限说明推断当前账户能否使用高级 A+。
 
-Common A+ planning presets such as `970x300`, `970x600`, `1464x600`, `600x450`, and `1200x900` are not interchangeable. Attach each size to a named module or an explicitly supplied template.
+## 尺寸参考
 
-## MAIN contract
+统一使用宽 x 高的像素表示, 区分最低要求、选定交付尺寸、模型请求尺寸和实际输出尺寸。
 
-Primary objective: immediate product recognition.
-
-- Use a pure white background when required by the marketplace/category.
-- Show the exact item and quantity being sold.
-- Keep the product complete and uncropped.
-- Target roughly 80%–90% effective frame occupancy unless category rules require otherwise.
-- Exclude added text, decorative badges, watermarks, borders, and confusing props.
-- Do not show accessories that are not included.
-
-## Listing secondary role library
-
-Select distinct roles according to product evidence:
-
-| Role | Customer question | Typical composition |
+| 用途 | 工作参考 | 使用说明 |
 |---|---|---|
-| Lifestyle hero | What does it look like in use? | Product-led realistic scene |
-| Core benefits | Why should I buy it? | Product plus 2–4 concise evidence-backed callouts |
-| Feature operation | How does the feature work? | One function or controlled state comparison |
-| Material detail | Is the build credible? | Macro/detail views tied to the real product |
-| Dimensions | Will it fit? | Complete product with confirmed measurement lines |
-| Usage or installation | How is it used or installed? | Clear steps or a natural interaction |
-| Package contents | What will I receive? | Confirmed items only, clearly separated |
-| Comparison or trust | Why this option? | Factual, defensible comparison without attacking competitors |
+| MAIN 与副图 | `2000x2000` | 默认制作尺寸, 依目标模板和类目调整 |
+| 普通 A+ 常见横幅 | `970x300` | 仅对应具体横幅模块, 不代表全部普通 A+ |
+| 普通 A+ 其他布局 | 以具名模块为准 | `970x600` 等预设需核对所选模块 |
+| 高级 A+ 完整图片, PC | 最低 `1464x600` | 原 v1.3.0 中用户提供的编辑器截图记录 |
+| 高级 A+ 完整图片, 手机 | 最低 `600x450` | 同一历史截图显示独立手机图与替代文本字段 |
+| 其他 A+ 模块 | 以当前模块为准 | 不套用完整图片模块尺寸 |
+| 视频封面或分镜 | `1920x1080` | 仅在任务需要时使用, 不替代 Listing 图片 |
 
-Do not fill all roles automatically. Replace unsupported roles, merge weak roles, or reduce the set.
+上表完整图片尺寸继承自 2026-09-08 的历史证据, 不表示本版本已重新检查所有站点的当前编辑器。实际编辑器、用户提供的当前模板和具名模块规则优先。[A+ 比较指南](https://sellercentral.amazon.com/help/hub/reference/external/G202102930) 可作为进一步核对入口。
 
-## A+ narrative roles
+## 尺寸转换与降级
 
-A+ should extend the decision journey rather than repeat Listing images at another aspect ratio. Common roles include:
+记录 `minimum_size`、`delivery_size`、`generation_size` 和 `actual_size`, 不把请求尺寸当成实际结果。模型支持的邻近尺寸可以先制作, 交付时采用重排、补背景、裁切或等比缩放, 并检查主体、文字和构图。
 
-1. Brand or product promise.
-2. Core differentiator.
-3. Feature explanation.
-4. Lifestyle or use context.
-5. Material, construction, or detail.
-6. Size, installation, or compatibility.
-7. Brand trust, range comparison, or closing story.
+重采样、放大或近似尺寸也可用于预览, 说明实际像素与后处理方式。不能完成目标尺寸时交付原始可用稿和后处理说明, 对应尺寸检查保留待核验或需修改, 不阻断其他结果。双端构图是否成立与像素是否匹配分别判断。
 
-Choose module count and type from the actual Standard or Premium A+ template available to the seller.
+替代文本按目标语言描述实际画面, 避免无关关键词。需要双端字段的模块分别提供, 替代文本作为元数据交付。模块未明确时可先写候选文本, 不凭空宣称当前编辑器一定具有独立手机上传字段。
 
-## Slot manifest fields
+## MAIN 用途检查
 
-Every planned slot must contain:
+面向真实上架的 MAIN 检查目标商品、销售表达、背景、完整轮廓及额外文字或装饰。白底与类目例外依据目标规则核对。不要将产品本身印刷的标识一概当作额外水印。
 
-| Field | Requirement |
+主体比例参考 [Amazon 摄影指南](https://sell.amazon.com/blog/product-photos) 的画面占比 85% 或以上指导, 同时保留完整商品和具体类目要求。该建议不等于已实施图像分割测量或平台审核通过。
+
+主体比例近似、背景非白或存在探索性装饰时, 仍可交付构图候选与预览稿, 标明最终 MAIN 适配需调整的内容。无 MAIN 需求时保持副图或概念用途。
+
+## 内容分工
+
+副图候选包括商品识别、核心利益、操作状态、真实场景、外观效果、尺寸适配、细节材质、使用步骤、包装与选型。按商品依据和用户目标选择, 不把分类菜单当作每套必备清单。
+
+A+ 围绕理解和说服展开: 产品承诺、差异解释、使用故事、选择比较、细节质感、操作疑虑、品牌或设计收束。同一事实可以支持不同问题, 无需为避免重复而强造新卖点。证据较少时采用可见细节、中性陈列或有说明的概念表达。
+
+## A+ 发布适配检查
+
+除事实来源外, 还需检查内容能否用于目标版位。A+ 的保修保证、站外跳转、联系方式、物流或促销信息等按当前 [A+ 内容指南](https://sellercentral.amazon.com/gp/help/external/help.html?itemID=GW8U76SSNTRTBX7&language=en_US) 核对; 已确认属实不自动表示该版位允许使用。
+
+包含逼真 AI 生成人物时, 按 [Amazon 官方人物标记公告](https://sellercentral.amazon.com/seller-forums/discussions/t/0e162209-1955-4708-9043-6a1530ab8f6e) 核对 `contains-synthetic-performer` 元数据及上传入口的相关标记。未写入标记也可以先交预览素材, 将发布准备项保留为待补; 不把所有 AI 图片一律当成需要相同人物标记。
+
+不适配平台的内容可以作为创意或预览交付, 同时列出上架前的修改项。资料不全或本次不联网时, 使用已知规则和历史来源继续工作, 记录核验范围, 不默认启动超出任务的政策审计。
+
+## 版位记录
+
+复杂任务按需使用下列字段, 展示表头中文优先:
+
+| 字段 | 含义 |
 |---|---|
-| `slot_id` | Unique identifier |
-| `group` | MAIN, LISTING, APLUS_DESKTOP, APLUS_MOBILE, or VIDEO |
-| `narrative_role` | One primary purpose |
-| `customer_question` | Decision question answered by the slot |
-| `delivery_size` | Final required size |
-| `generation_size` | Model request size, if different |
-| `text_policy` | FORBIDDEN, OPTIONAL, REQUIRED, or NATIVE_MODULE_TEXT |
-| `product_state` | Exact state shown |
-| `fact_keys` | Facts used by this slot |
-| `reference_roles` | Required reference images |
-| `paired_slot` | Device counterpart or NONE |
-| `missing_evidence` | Explicit list |
-| `status` | READY, NEEDS_REVIEW, or BLOCKED |
+| `slot_id`, `group` | 稳定版位标识及主图、副图、A+ PC、A+ 手机或视频分组 |
+| `narrative_role`, `customer_question` | 内容角色和本图主要回答的问题 |
+| `story_key`, `paired_slot` | 语义标识及双端对应, 无配对时留空 |
+| `aplus_tier`, `module_id`, `module_name` | A+ 类型、实际模块实例及编辑器名称; 未知则明示 |
+| `minimum_size`, `delivery_size`, `generation_size`, `actual_size` | 最低、交付、请求与实际像素 |
+| `dimension_source`, `alt_text` | 尺寸来源与替代文本 |
+| `product_state`, `fact_keys` | 当前商品状态和所用商品依据 |
+| `references`, `text_policy` | 实际素材映射和文字安排 |
+| `delivery_stage`, `degradation` | 本次阶段及采用的降级 |
 
+内容角色不等于 Amazon 上传模块, `module_id` 也不等于图片编号。简短任务可用自然语言表达上述关系。

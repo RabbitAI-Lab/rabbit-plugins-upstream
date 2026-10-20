@@ -1,43 +1,55 @@
-## Description: <br>
-Creates code-driven motion graphics such as kinetic typography, animated text videos, animated infographics, explainers, logos, and transitions using Remotion code through the dLazy hosted sandbox agent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates code-driven motion graphics, kinetic typography, animated infographics, and explainer animations with Remotion through the dLazy hosted agent.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and content teams use this skill to start or continue dLazy motion-graphics projects that produce code-driven animated graphics rather than AI-generated footage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, options, and attached files are sent to dLazy hosted services. <br>
-Mitigation: Use the skill only with content that is appropriate for dLazy's hosted service, and avoid attaching sensitive local files unless that transfer is acceptable. <br>
-Risk: The dLazy API key may be stored locally in the user configuration file. <br>
-Mitigation: Prefer the per-invocation DLAZY_API_KEY environment variable when persistent credentials are not desired, check permissions on ~/.dlazy/config.json after login or auth set, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
+## Use Case:
 
+Creators, designers, and developers use this skill to build and refine code-driven motion graphics videos, including animated text, shapes, data, logos, and transitions.
 
-## Reference(s): <br>
-- [Dlazy Motion Graphics on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-motion-graphics) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and code-oriented guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires dLazy API authentication; attached local files are uploaded to dLazy storage before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and frontmatter) <br>
+Risk: Prompts and attached files may be sent to the dLazy hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only prompts and attachments approved for upload to dLazy.
+
+Risk: Authentication stores a dLazy API key in the local user configuration.
+
+Mitigation: Protect the user configuration and rotate or revoke the key if exposed; use the pinned npx command to avoid a persistent global CLI install.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-motion-graphics)
+- [dLazy CLI homepage (listed in skill metadata; import provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Code, Guidance]
+
+**Output Format:** [Streaming text and Remotion-based project output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped conversations; video generation and export use the hosted dLazy service.]
+
+## Skill Version(s):
+
+1.3.32 (source: ClawHub release metadata; supplied skill frontmatter says 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
