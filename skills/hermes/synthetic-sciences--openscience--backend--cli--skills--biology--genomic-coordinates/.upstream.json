@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/genomic-coordinates",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/genomic-coordinates",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/genomic-coordinates",
+  "branch": "main",
+  "pushedAt": "2026-10-20T09:26:21Z",
+  "contentHash": "6604c67ba205803b125f1657d6acf83359e77148f9e21de7c61060c52e9fa271",
+  "fetchedAt": "2026-10-20T12:47:15.286Z"
+}

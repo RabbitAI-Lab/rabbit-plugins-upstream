@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/infographics",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/infographics",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/infographics",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "419b24ae36a83b68a2414b98aa2505e200def515a97e1237baddcba7f87f0a21",
+  "fetchedAt": "2026-10-20T12:47:31.946Z"
+}

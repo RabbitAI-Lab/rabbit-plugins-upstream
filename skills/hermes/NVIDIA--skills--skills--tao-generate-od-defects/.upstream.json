@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-generate-od-defects",
+  "identifier": "NVIDIA/skills/skills/tao-generate-od-defects",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-generate-od-defects",
+  "branch": "main",
+  "pushedAt": "2026-10-19T22:36:16Z",
+  "contentHash": "841f0f3ed33f54095a85951b905e52d4bece6bafbf3c2e9967c6f5fc4827f94b",
+  "fetchedAt": "2026-10-20T12:47:14.524Z"
+}

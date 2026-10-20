@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/mamba",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/mamba",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/mamba",
+  "branch": "main",
+  "pushedAt": "2026-10-20T09:26:21Z",
+  "contentHash": "00527c928b23af70fc2c8ac7da1ffe65589a0d4d461dd83cb1c159a1661b022d",
+  "fetchedAt": "2026-10-20T12:47:15.311Z"
+}
