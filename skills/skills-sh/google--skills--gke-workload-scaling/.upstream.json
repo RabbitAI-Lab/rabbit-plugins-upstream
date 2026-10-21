@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-workload-scaling",
+  "repo": "google/skills",
+  "skillId": "gke-workload-scaling",
+  "branch": "main",
+  "pushedAt": "2026-10-21T12:37:38Z",
+  "contentHash": "082ce4fcada8641e6373feced65010414a7425866ef70c00adf5bc2b99f21668",
+  "fetchedAt": "2026-10-21T13:01:12.483Z"
+}

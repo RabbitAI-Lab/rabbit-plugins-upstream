@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-performance-degradation",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-performance-degradation",
+  "branch": "main",
+  "pushedAt": "2026-10-21T12:37:38Z",
+  "contentHash": "d5030a92f5e7f79603774420c867ec9ea124f2ef068bce50f710dc290339f10c",
+  "fetchedAt": "2026-10-21T13:01:12.903Z"
+}
