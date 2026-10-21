@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-molmim-nim",
+  "identifier": "NVIDIA/skills/skills/bionemo-molmim-nim",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-molmim-nim",
+  "branch": "main",
+  "pushedAt": "2026-10-21T07:18:59Z",
+  "contentHash": "38915f6e31c6ad78520daa7c26524a1f8ecad6f7cf7ad17c0dcc30ac537be8a6",
+  "fetchedAt": "2026-10-21T12:59:58.021Z"
+}

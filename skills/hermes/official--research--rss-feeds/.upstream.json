@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/research/rss-feeds",
+  "identifier": "official/research/rss-feeds",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/research/rss-feeds",
+  "branch": "main",
+  "pushedAt": "2026-10-21T12:59:27Z",
+  "contentHash": "8ee8108a214e9d0d81e1df1d02c8195f3a8c9096a269420b7e6d77267fdb55e8",
+  "fetchedAt": "2026-10-21T13:00:15.097Z"
+}

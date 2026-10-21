@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-collect-performance-data",
+  "identifier": "NVIDIA/skills/skills/nvshmem-collect-performance-data",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-collect-performance-data",
+  "branch": "main",
+  "pushedAt": "2026-10-21T07:18:59Z",
+  "contentHash": "fffd7d981d18b105c3ebde2eaeb6e1336e6c8ffc35fc354a735f57cdb45b1198",
+  "fetchedAt": "2026-10-21T12:59:58.100Z"
+}

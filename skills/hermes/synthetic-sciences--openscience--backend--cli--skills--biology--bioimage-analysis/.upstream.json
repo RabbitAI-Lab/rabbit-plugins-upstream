@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/bioimage-analysis",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/bioimage-analysis",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/bioimage-analysis",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "e5878cfc1cb71730365ef86513ba1886c33c4e409d78bbe0a62a9ceb8de92c0e",
+  "fetchedAt": "2026-10-21T12:59:59.297Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-codonfm-embed",
+  "identifier": "NVIDIA/skills/skills/bionemo-codonfm-embed",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-codonfm-embed",
+  "branch": "main",
+  "pushedAt": "2026-10-21T07:18:59Z",
+  "contentHash": "f60a36cf9877656a49bbbc9130294af0a3341e7fca39295ebb74e09a31e29e9f",
+  "fetchedAt": "2026-10-21T12:59:57.821Z"
+}

@@ -2,16 +2,15 @@
   "source": "hermes",
   "url": "https://hermes-agent.nousresearch.com/docs/api/skills-index.json",
   "version": 1,
-  "generated_at": "2026-07-20T18:55:15.264264+00:00",
-  "skill_count": 90605,
+  "generated_at": "2026-10-21T07:44:17.671041+00:00",
+  "skill_count": 101460,
   "bySource": {
-    "browse-sh": 440,
-    "claude-marketplace": 1,
-    "clawhub": 69150,
-    "github": 438,
+    "browse-sh": 479,
+    "clawhub": 80818,
+    "github": 1089,
     "lobehub": 505,
-    "official": 104,
-    "skills.sh": 19967
+    "official": 153,
+    "skills.sh": 18416
   },
-  "fetchedAt": "2026-07-26T17:03:49.612Z"
+  "fetchedAt": "2026-10-21T12:59:53.834Z"
 }
