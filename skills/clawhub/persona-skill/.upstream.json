@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/persona-skill",
   "slug": "persona-skill",
   "ownerHandle": null,
-  "version": "1.2.2",
-  "updatedAt": 1782566582146,
-  "contentHash": "42a4199b62097c2ce681f1b38f357433694f621e809599c870c693b6722f6a76",
-  "fetchedAt": "2026-07-26T18:23:02.023Z"
+  "version": "1.2.3",
+  "updatedAt": 1792379688846,
+  "contentHash": "c978787f04719cad21dd37143fe326e0ff598c5cdd2ea803ea7cbfe55474819e",
+  "fetchedAt": "2026-10-21T13:17:50.274Z"
 }

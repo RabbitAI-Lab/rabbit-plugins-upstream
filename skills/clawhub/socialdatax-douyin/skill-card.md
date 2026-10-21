@@ -1,40 +1,54 @@
-## Description: <br>
-SocialDataX Douyin helps agents perform read-only Douyin hot-search, content, comment, reply, creator profile, creator post, and short-drama series lookups. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents research Douyin hot searches, posts, comments, creators, and short-drama collections through SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Developers and agents use this skill for read-only Douyin content and creator research, including hot-search lookup, work discovery, detail lookup, comment analysis, reply lookup, creator profile lookup, creator work lists, and creator short-drama series lookup. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a SocialDataX API key to query Douyin data. <br>
-Mitigation: Provide SOCIALDATAX_API_KEY through the environment, use the official SocialDataX access page, and avoid placing keys in skill files or prompts. <br>
-Risk: Running the SocialDataX npm CLI, especially bulk options such as --all, may consume account credits or issue larger API requests. <br>
-Mitigation: Review npm package provenance and SocialDataX billing or credit behavior before use, and start with scoped queries before bulk collection. <br>
+## Use Case:
 
+External users and developers can use the skill to retrieve and analyze Douyin trends, content, comments, and creator information through SocialDataX.
 
-## Reference(s): <br>
-- [SocialDataX AI access](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with bash command examples and CLI or MCP tool names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY plus node and npm; CLI calls return read-only Douyin data through SocialDataX.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.15 (source: server release metadata) <br>
+Risk: Lookup inputs are sent to SocialDataX and consume the user's API credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive share text and use sensible retrieval limits.
+
+Risk: The external CLI and hosted backend are not included for inspection, and an unpinned latest CLI can change over time.
+
+Mitigation: Prefer a reviewed, fixed CLI version and confirm the selected API calls before use.
+
+## Reference(s):
+
+- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/socialdatax-douyin)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Text]
+
+**Output Format:** [Pretty-printed JSON lookup results and concise research guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Douyin research; results depend on SocialDataX service availability and API access.]
+
+## Skill Version(s):
+
+0.1.21 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

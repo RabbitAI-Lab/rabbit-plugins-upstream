@@ -1,43 +1,60 @@
-## Description: <br>
-Generates weekly learning review reports from authorized learning activity, including progress evidence, weak points, next-week priorities, and optional family-facing summaries. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+将学生一周的学习记录整理成有依据的周报，并引导学生确定下一周的一个重点。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-support agents use this skill to turn weekly learning records into evidence-based review reports, concrete next-week priorities, and optional family-sharing summaries. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Weekly reviews may summarize learning activity, emotional state, stress, or crisis-related observations that are sensitive if shared too broadly. <br>
-Mitigation: Use the skill only for an explicit review request, collect only the minimum necessary fields, and review family-facing reports before sharing. <br>
-Risk: Crisis signals such as self-harm thoughts, bullying, serious harm, or sustained despair could be softened if treated like normal learning feedback. <br>
-Mitigation: Do not reframe crisis signals as positive progress; alert guardians plainly and seek professional or emergency help when immediate danger is present. <br>
-Risk: Sparse or incomplete weekly data can make conclusions sound more certain than the evidence supports. <br>
-Mitigation: State when data is limited, identify which days or records support the review, and avoid firm judgments when evidence is incomplete. <br>
+## Use Case:
 
+面向中国大陆中文 K12 学生及陪同使用的家长或教师，整理每周学习进展、薄弱点和下一步行动，并在学生同意后提供家庭分享版。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review) <br>
-- [Weekly review report template](references/review-report-template.md) <br>
+### Deployment Geography for Use:
 
+中国大陆；在其他地区使用前须本地化课程、同意规则及危机求助资源。
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown learning review reports with structured sections and concise action recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce separate student-facing and family-facing report variants when appropriate.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Minors' longitudinal study records and parent-visible reports may reveal sensitive learning or emotional information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm student and guardian consent settings before long-term storage, cross-skill sharing, reminders, or a family report; honor the student's sharing choices.
+
+Risk: Mainland China curriculum assumptions and emergency contacts may misdirect students elsewhere.
+
+Mitigation: Localize the curriculum, consent rules, and crisis resources before use outside mainland China.
+
+Risk: Broad weekly-review phrases could trigger the skill outside an education context.
+
+Mitigation: Constrain invocation to the intended student learning-review context.
+
+## Reference(s):
+
+- [ClawHub release: 每周学习复盘](https://clawhub.ai/qizhitang/skills/xiaozhi-weekly-review)
+- [Weekly review report templates](references/review-report-template.md)
+- [Grade-band guidance](shared/grade-bands.md)
+- [Crisis referral protocol](shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown weekly review or short three-question review; optional consent-gated family report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [With student consent, may hand off a growth-summary update or weekly reminder request.]
+
+## Skill Version(s):
+
+2.11.2 (source: frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

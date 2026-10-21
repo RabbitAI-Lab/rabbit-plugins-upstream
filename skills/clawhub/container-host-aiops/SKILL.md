@@ -17,7 +17,7 @@ installer:
 argument-hint: "[container/image/volume id or describe your container-host task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["CONTAINER_HOST_AIOPS_CONFIG"],"bins":["container-host-aiops"],"config":["~/.container-host-aiops/config.yaml"]},"optional":{"env":["CONTAINER_HOST_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"CONTAINER_HOST_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Container-Host-AIops","emoji":"🐳","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["container-host-aiops","uvx"]},"optional":{"env":["CONTAINER_HOST_AIOPS_CONFIG","CONTAINER_HOST_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Container-Host-AIops","emoji":"🐳","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Docker + Portainer + Podman container-host operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Multi-platform by construction (a platform registry); a per-target 'platform' field (docker / portainer / podman) selects the API shape.
   All write operations are audited to a local SQLite DB under ~/.container-host-aiops/ (relocatable via CONTAINER_HOST_AIOPS_HOME).
@@ -63,6 +63,15 @@ uv tool install container-host-aiops
 container-host-aiops init       # interactive wizard: Docker/Podman socket or Portainer target
 container-host-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/container-host-aiops
+openclaw skills info container-host-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -121,7 +130,10 @@ container-host-aiops doctor
 4. `container-host-aiops manage prune-images --dry-run` → exactly what would be removed;
    re-run without `--dry-run` (double-confirm, high risk).
 5. `container-host-aiops manage prune-volumes --dry-run` → **read this one carefully**;
-   volume pruning destroys data and records no undo. Only then re-run for real.
+   volume pruning destroys data and records no undo. Note that Docker's default
+   prune removes only ANONYMOUS unused volumes — the preview reports the named
+   unused ones it will not touch as `alsoUnusedNamed*`; add `--all` to include
+   them. Only then re-run for real.
 6. `container-host-aiops system df` again → confirm the space came back.
 7. **Failure branch**: pruning is not reversible. If you removed a volume you needed,
    the undo store cannot help — restore from your backup. The dry-run in steps 4–5 is

@@ -14,18 +14,18 @@ Evidence coverage: 12 signals across 3 source families.
 
 ## Evidence
 
-- csdn-search: [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search: [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues: [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues: [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search: [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search: [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search: [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search: [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search: [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search: [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search: [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues: [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- hacker-news-search: [Launch HN: Consus (YC F24) – LLM gateway for companies handling sensitive data](https://news.ycombinator.com/item?id=50073471)
+- csdn-search: [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=d21af8df96ef4cffa0cbc91e2647ea0c&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^pc_search_result_base3&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues: [Audit the complete app baseline and R13 readiness after recent deliveries](https://github.com/sergeyfarin/rekenraam/issues/260)
+- github-issues: [[DX] Generate Comprehensive OpenAPI / Swagger Specifications for Provider Endpoints](https://github.com/dev-kiki0/kikis-app/issues/126)
+- github-issues: [Frontend feature: poll round status from the backend and fall back to RPC](https://github.com/theblockcade/stellarcade/issues/1454)
+- github-issues: [Publish a versioned developer API and webhook framework](https://github.com/Soumen1080/stellar-star/issues/339)
+- github-issues: [feat(api): clinic response times](https://github.com/Godgift-care/sci-healthcare-backend/issues/165)
+- github-issues: [OpenAPI documentation fails to render due to import.meta may only appear in a module](https://github.com/microcks/microcks/issues/2372)
+- github-issues: [feat(api): sparse fieldsets on list routes](https://github.com/Godgift-care/sci-healthcare-backend/issues/166)
+- hacker-news-search: [Ask HN: Who wants to be hired? (October 2026)](https://news.ycombinator.com/item?id=50092778)
+- hacker-news-search: [Tessaract: lightweight layer for unified LLM inference](https://news.ycombinator.com/item?id=50087630)
+- hacker-news-search: [Gemini 4 Argon](https://news.ycombinator.com/item?id=50082382)
 
 ## How This Skill Meets The Requirement
 

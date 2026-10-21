@@ -1,39 +1,57 @@
-## Description: <br>
-Iaiops routes industrial and OT troubleshooting tasks to the appropriate edition skill and MCP profile for read-first diagnostics, analytics, and gated writes across PLC, SCADA, machine tool, IIoT, building, and fab protocols. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Routes industrial and operational technology tasks to appropriate protocol-specific workflows for governed monitoring, troubleshooting, and analytics.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-External developers and OT engineers use Iaiops to select the right industrial protocol profile, inspect configured endpoints, run diagnostics, and prepare governed dry-run write actions for authorized control systems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can route users toward high-impact write-capable OT operations. <br>
-Mitigation: Use it only with authorized OT systems, keep credentials narrowly scoped, and require dry-run plus approval controls before any production write. <br>
-Risk: A broad MCP profile can expose more protocol tools than needed for a site. <br>
-Mitigation: Select the narrowest MCP profile that covers the target equipment or protocol before starting diagnostic work. <br>
+## Use Case:
 
+Industrial operators and engineers use this skill to select appropriate workflows for monitoring PLCs, equipment, and industrial data, diagnosing faults, and analyzing downtime. It directs users to the relevant edition and requires authorization and approval for production-impacting writes.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Shell commands, Configuration instructions] <br>
-**Output Format:** [Markdown with inline shell commands and configuration values] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Routes users toward narrower MCP profiles and emphasizes read-first, dry-run, and approval-controlled operation for write-capable OT actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: Write-capable workflows can change production control systems.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Restrict use to authorized operators and retain dry-run and named, double-confirmed approval gates before writes.
+
+Risk: Misreading Chinese routing or safety instructions can lead to unsafe operation.
+
+Mitigation: Install only where operators understand those instructions and are authorized to work with the connected OT systems.
+
+Risk: Substation or utility SCADA workflows are outside this server's scope.
+
+Mitigation: Use the separate energy package rather than routing those tasks through this server.
+
+## Reference(s):
+
+- [iaiops on ClawHub](https://clawhub.ai/zw008/skills/iaiops)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with inline commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Routes to edition-specific workflows; does not itself define tools.]
+
+## Skill Version(s):
+
+0.32.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

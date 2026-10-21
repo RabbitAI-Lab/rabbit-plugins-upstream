@@ -1,46 +1,67 @@
-## Description: <br>
-An enterprise procurement assistant that helps agents search tender, procurement, bid-award, company, supplier, competitor, market, brand, and pricing data through the Zhiliao Biaoxun/Bilianwang APIs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Chinese procurement and tender notices, supplier histories, company records, and market trends to support sourcing decisions.
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Procurement, sales, and business-development teams use this skill to find tenders and awards, assess suppliers, identify potential bidders, analyze company relationships, and review procurement market trends. Agents may also use it to produce procurement research summaries backed by API results. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review says the skill can silently register a device account and transmit device and user metadata to the provider when no API key is configured. <br>
-Mitigation: Install only when this provider data sharing is acceptable; prefer setting ZLBX_API_KEY manually to avoid the automatic registration path. <br>
-Risk: The security review says the skill can persist an API key under ~/.zlbx. <br>
-Mitigation: Review local ~/.zlbx/config.json handling, protect the file as a credential, and remove it when the account should no longer be used. <br>
-Risk: The security guidance highlights contact-data and recharge-link workflows that may affect privacy or account billing. <br>
-Mitigation: Review contact-data responses and any recharge or auto-login links before acting on them or sharing them with users. <br>
+## Use Case:
 
+Procurement, sales, and supplier-sourcing teams use this skill to find Chinese tender opportunities, examine company and supplier activity, and summarize purchasing trends.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/enterprise-tender-search-bilianwang) <br>
-- [Tender search API reference](references/api-search.md) <br>
-- [Company analysis API reference](references/api-company.md) <br>
-- [Market analysis API reference](references/api-market.md) <br>
-- [Automatic registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global; procurement data focuses on China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API request and response details when useful] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May read ZLBX_API_KEY or ~/.zlbx/config.json, call provider APIs, and persist an API key under ~/.zlbx when auto-registration is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Broad request routing may send procurement queries, company names, and source metadata to the third-party service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review which requests invoke the skill and avoid sending confidential procurement or company information without approval.
+
+Risk: API keys can be stored locally and credentialed account checks can expose account details on shared devices.
+
+Mitigation: Prefer your own ZLBX_API_KEY and review access to ~/.zlbx/config.json on shared machines.
+
+Risk: Automatic registration sends a hashed device identifier to the vendor.
+
+Mitigation: Obtain informed consent before registration; use the manual account option if device identification is unacceptable.
+
+Risk: Operational callbacks may acknowledge an upgrade notice before the user has seen it.
+
+Mitigation: Show any upgrade notice to the user before submitting a display acknowledgment.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/zhiliaobiaoxun/skills/enterprise-tender-search-bilianwang)
+- [Tender search API reference](artifact/references/api-search.md)
+- [Company analysis API reference](artifact/references/api-company.md)
+- [Market analysis API reference](artifact/references/api-market.md)
+- [Account API reference](artifact/references/api-account.md)
+- [Company registry data reference](artifact/references/api-registry.md)
+- [Account registration reference](artifact/references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and result tables with source links when available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires an API key; some data queries consume account credits.]
+
+## Skill Version(s):
+
+1.0.9 (source: skill frontmatter and ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

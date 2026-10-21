@@ -1,45 +1,60 @@
-## Description: <br>
-Image matting tool that separates foreground from background and returns a transparent-background image URL for product image processing, character cutout, and composition. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Separates an image's foreground from its background and returns a transparent-background image URL.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to call the dLazy image segmentation CLI for background removal and receive hosted transparent PNG output URLs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Selected local media may be uploaded to dLazy's hosted service for processing. <br>
-Mitigation: Use the skill only with media that is approved for remote processing, and avoid passing private files unless that upload is intended. <br>
-Risk: The dLazy API key may be stored in the local CLI configuration. <br>
-Mitigation: Prefer DLAZY_API_KEY for temporary use when appropriate, and rotate or revoke the key if it may have been exposed. <br>
-Risk: The skill depends on the external dLazy CLI and hosted API availability. <br>
-Mitigation: Review the pinned CLI package before installation and use dry-run or async polling options where they fit the workflow. <br>
+## Use Case:
 
+Creators, developers, and product teams use this skill to remove image backgrounds for product photos, character cutouts, and compositions.
 
-## Reference(s): <br>
-- [Dlazy Imageseg on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-imageseg) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The CLI returns hosted image URLs, and async mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: Selected local media may be uploaded to dLazy cloud storage for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review which files you submit and the dLazy service terms before processing sensitive media.
+
+Risk: Signing in or saving an API key persists credentials in local CLI configuration.
+
+Mitigation: Decide whether to store the key locally or pass it per command using DLAZY_API_KEY; rotate or revoke keys if needed.
+
+Risk: Installing the third-party CLI runs external package code.
+
+Mitigation: Review the linked CLI source and package before installing the pinned version.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-imageseg)
+- [dLazy CLI source (linked in skill metadata; not verified skill provenance)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Guidance]
+
+**Output Format:** [Markdown with shell commands and JSON response examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The service returns a transparent-background image URL; an optional command saves the image locally.]
+
+## Skill Version(s):
+
+1.3.32 (source: server-resolved ClawHub release metadata; skill frontmatter lists 1.3.5)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

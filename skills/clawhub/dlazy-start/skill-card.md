@@ -1,43 +1,59 @@
-## Description: <br>
-Dlazy Start helps AI orchestrators drive @dlazy/cli for installation, authentication, capability discovery, cloud and local tool invocation, async task polling, and common failure recovery. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides AI agents through installing and authenticating the dLazy CLI, discovering available tools, running media workflows, polling jobs, and recovering from common errors.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-AGPL-3.0-or-later <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and AI orchestrator users use this skill to operate @dlazy/cli consistently, including discovering available tools, preparing JSON inputs, running cloud or local media commands, polling asynchronous jobs, and recovering from common CLI failures. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can lead an agent to use browser session cookies for downloads when handling anti-bot challenges. <br>
-Mitigation: Allow cookies_from_browser only after explicit user approval for that specific download, and avoid logging or reusing cookie-derived inputs. <br>
-Risk: The CLI uses an API key, cloud media services, local media tools, and optional runtime installers. <br>
-Mitigation: Install and invoke it only when the user accepts those access requirements, keep credentials out of logs, and review commands before running paid or local-install operations. <br>
+## Use Case:
 
+Developers and AI-agent operators use this quickstart to set up the dLazy CLI, discover cloud and local media tools, invoke them, and troubleshoot results.
 
-## Reference(s): <br>
-- [Dlazy Start on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-start) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [@dlazy/cli source reference](https://github.com/dlazyai/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON input conventions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agents to discover the live CLI tool surface before invoking commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.6 (source: frontmatter and server release metadata) <br>
+Risk: Browser-cookie access and persistent API credentials may expose sensitive account data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get explicit approval before using browser cookies or API keys, and protect stored credentials.
+
+Risk: Cloud media calls can incur provider charges.
+
+Mitigation: Confirm provider, model, and estimated cost before paid calls; use dry-run validation when available.
+
+Risk: CLI and optional runtime installs or asset downloads can change the local environment.
+
+Mitigation: Install trusted, preferably pinned packages and obtain approval for runtime installs and download paths.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-start)
+- [dLazy website](https://dlazy.com)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include tool-discovery steps, JSON input examples, and job-status guidance.]
+
+## Skill Version(s):
+
+2.0.33 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

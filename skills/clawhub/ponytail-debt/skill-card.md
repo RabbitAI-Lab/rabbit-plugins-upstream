@@ -1,43 +1,58 @@
-## Description: <br>
-Harvest every ponytail: shortcut comment into one debt ledger, so deferrals get tracked instead of forgotten. One-shot report. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collects marked shortcut comments into a one-shot debt ledger so deferred work stays visible.
 
-## Publisher: <br>
-[dietrichgebert](https://clawhub.ai/user/dietrichgebert) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dietrichgebert](https://clawhub.ai/user/dietrichgebert)
 
-## Use Case: <br>
-Developers and engineers use this skill to scan a repository for deliberate `ponytail:` shortcut comments and turn them into a grouped debt ledger. It helps teams track ceilings, upgrade triggers, and missing trigger information without changing source files. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The ledger may omit debt markers if a repository uses comment prefixes beyond the documented grep pattern. <br>
-Mitigation: Extend the search pattern for the repository's languages before treating the ledger as complete. <br>
-Risk: Rows without an upgrade trigger can silently become stale process debt. <br>
-Mitigation: Review entries tagged no-trigger and add a concrete revisit trigger before relying on the ledger for planning. <br>
-Risk: Persisting the ledger writes a new repository file when explicitly requested. <br>
-Mitigation: Review the requested output path and generated markdown before committing it. <br>
+## Use Case:
 
+Developers and engineers use this skill to find marked shortcuts in a repository and review their stated limits and upgrade triggers in a grouped debt ledger.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dietrichgebert/skills/ponytail-debt) <br>
-- [Homepage](https://github.com/DietrichGebert/ponytail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, shell commands, files] <br>
-**Output Format:** [Markdown ledger with repository file and line references; optionally a persisted markdown file when requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports marker totals and tags entries with missing upgrade triggers as no-trigger.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.8.4 (source: server release metadata) <br>
+Risk: The skill scans repository comments, which may include material the user does not want reviewed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Run it only on repositories whose text the user is comfortable having scanned.
+
+Risk: Saving a ledger changes the repository.
+
+Mitigation: Keep the report read-only unless the user explicitly asks to save it.
+
+Risk: Shortcut markers without upgrade triggers can linger unresolved.
+
+Mitigation: Tag those entries as no-trigger and review them for a concrete revisit condition.
+
+## Reference(s):
+
+- [Project homepage (ClawHub metadata)](https://github.com/DietrichGebert/ponytail)
+- [ClawHub skill listing](https://clawhub.ai/dietrichgebert/skills/ponytail-debt)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown]
+
+**Output Format:** [Markdown ledger grouped by file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [One row per marker with file, line, simplification, ceiling, and upgrade trigger; tags missing triggers and ends with totals or a clean-ledger message. Writes a file only when asked.]
+
+## Skill Version(s):
+
+5.3.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

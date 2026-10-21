@@ -33,18 +33,18 @@ Scoring rationale:
 
 ## Evidence
 
-- github-issues (2026-07-24T03:40:51+00:00): [spec: trustworthy centred Mumble experience, performance, and platform parity](https://github.com/mongre25-droid/mumble/issues/12)
-- github-issues (2026-07-25T14:17:05+00:00): [WAL replay caches a query plan per batch with no eviction — unbounded memory growth on large rebuilds](https://github.com/verveguy/liminis-context-graph/issues/238)
-- github-issues (2026-07-24T05:31:22+00:00): [[Contract] — Multi-Outcome (Categorical) Markets](https://github.com/Arena1X/InsightArena/issues/1329)
-- github-issues (2026-07-23T18:58:18+00:00): [[devkit/integration] Add integration test CI job](https://github.com/StellarCommons/stellar-fee-tracker/issues/499)
-- github-issues (2026-07-26T10:21:07+00:00): [Table UI Definition: derive the "Cell components" list from the SELECT query, not from the whole schema](https://github.com/kitamura-tetsuo/outliner/issues/4238)
-- github-issues (2026-07-23T13:19:56+00:00): [Reject empty payment batch payloads](https://github.com/mux-labs/mux-backend/issues/597)
-- github-issues (2026-07-23T13:19:57+00:00): [Document Docker Compose local setup](https://github.com/mux-labs/mux-backend/issues/598)
-- hacker-news-search (2026-07-26T09:20:47+00:00): [Clinical failure rates over the decades: yikes](https://news.ycombinator.com/item?id=49056211)
-- hacker-news-search (2026-07-26T01:40:01+00:00): [LLM Usage in Debian: Three Proposals](https://news.ycombinator.com/item?id=49053737)
-- hacker-news-search (2026-07-26T00:58:31+00:00): [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49053524)
-- hacker-news-search (2026-07-25T19:42:51+00:00): [Engineering management after the cost of code collapsed](https://news.ycombinator.com/item?id=49050839)
-- hacker-news-search (2026-07-25T09:21:07+00:00): [Buz – A fork of Bun using modern Zig, with sub-1s incremental builds](https://news.ycombinator.com/item?id=49045975)
+- github-issues (2026-10-19T11:21:10+00:00): [Implement compensation eligibility rules](https://github.com/MDTechLabs/BridgeWise/issues/1351)
+- github-issues (2026-10-14T16:50:17+00:00): [Add health check endpoint for WalletAPI](https://github.com/ApexChainx/ApexChainx-Backend/issues/698)
+- github-issues (2026-10-19T20:42:46+00:00): [Admin-defined provider, models and debate rounds for analyses; only permitted users override them per analysis](https://github.com/ramazangirgin/trading-analysis-platform/issues/198)
+- github-issues (2026-10-20T13:15:49+00:00): [T-jc45: The integration level's CI bound is 20 minutes, a stopgap until #439](https://github.com/pharzam/layup/issues/442)
+- github-issues (2026-10-19T17:50:02+00:00): [[Feature] Run-level wall clock: enter closing after 45 min of work and finalize after 10 min of closing](https://github.com/SourceWeft/SourceWeft/issues/329)
+- github-issues (2026-10-20T10:44:11+00:00): [Card connect-87: the pre-connection script runs, asked for and remembered (F-2108)](https://github.com/remote-oss/remote/issues/1216)
+- hacker-news-search (2026-10-20T09:36:54+00:00): [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50163508)
+- hacker-news-search (2026-10-20T09:32:10+00:00): [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50163478)
+- hacker-news-search (2026-10-20T08:47:31+00:00): [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50163102)
+- hacker-news-search (2026-10-20T07:31:52+00:00): [Agentic Monitoring](https://news.ycombinator.com/item?id=50162534)
+- hacker-news-search (2026-10-20T02:40:32+00:00): [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50160729)
+- github-issues (2026-10-20T13:29:59+00:00): [planner: property model does not cover owner/assignees sync](https://github.com/hal-c2/hal-c2/issues/423)
 
 ## How The Skill Meets The Requirement
 

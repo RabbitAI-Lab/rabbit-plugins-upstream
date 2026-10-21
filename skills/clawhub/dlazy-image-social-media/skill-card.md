@@ -1,45 +1,59 @@
-## Description: <br>
-A structured skill for multi-platform social-media content creation across Instagram, TikTok, YouTube, LinkedIn, Xiaohongshu, and related channels. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps creators plan and generate platform-tailored social media visuals, in-image copy, and captions using the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators, marketers, and agent users use this skill to plan and produce platform-specific social-media image concepts, in-image text, captions, and dLazy CLI generation commands. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and selected media files may be sent to dLazy cloud endpoints during generation. <br>
-Mitigation: Use the skill only with content approved for dLazy's cloud services and avoid submitting sensitive media unless that transfer is acceptable. <br>
-Risk: The dLazy CLI requires an API key that can be stored in the local user configuration. <br>
-Mitigation: Prefer the DLAZY_API_KEY environment variable for per-session credentials, and rotate or revoke keys from the dLazy dashboard when needed. <br>
-Risk: Global installation of the pinned npm CLI changes the local agent environment. <br>
-Mitigation: Review the pinned @dlazy/cli package source before installation or use the documented npx invocation to avoid a long-lived global install. <br>
+## Use Case:
 
+Creators and marketing teams use this skill to plan and generate platform-specific social media images, carousel layouts, headlines, and captions for Instagram, TikTok, YouTube, LinkedIn, and Xiaohongshu.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-image-social-media) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with structured planning, platform checks, caption copy, inline shell commands, and generated image URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires user confirmation before each image generation command and uses a pinned dLazy CLI package.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.7 (source: frontmatter and server release evidence) <br>
+Risk: The third-party CLI sends prompts and parameters to dLazy and may upload local media supplied for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the CLI package before installation and avoid sharing sensitive prompts or media without authorization.
+
+Risk: A dLazy API key can be stored in local CLI configuration.
+
+Mitigation: Use DLAZY_API_KEY per run if persistent credentials are undesirable; restrict access to stored credentials.
+
+Risk: The skill documentation contains mismatched version claims for the skill and CLI.
+
+Mitigation: Check the actual release and CLI package versions before relying on installation instructions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-image-social-media)
+- [dLazy CLI source referenced by skill](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Shell commands, Image URLs]
+
+**Output Format:** [Markdown with design plans, captions, commands, and image links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes platform format and safe-area checks, separate in-image text and captions, and iteration suggestions.]
+
+## Skill Version(s):
+
+1.3.33 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

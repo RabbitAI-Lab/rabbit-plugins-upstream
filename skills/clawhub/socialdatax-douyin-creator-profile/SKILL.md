@@ -19,7 +19,7 @@ Current platform support:
 ## API Key
 
 Use `SOCIALDATAX_API_KEY` for data calls. The only official website for requesting or managing API access is <https://socialdatax.com/ai?from=clawhub>. If a user asks where to get a key, provide only this URL; do not infer alternate domains.
-获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名；do not infer alternate domains。
+获取或管理 API Key：访问 <https://socialdatax.com/ai?from=clawhub>，按官网的 API Key 申请/管理入口操作。环境变量名固定使用 `SOCIALDATAX_API_KEY`；不要引导用户使用其他域名。
 
 ## Preferred Direct CLI
 
@@ -34,6 +34,10 @@ npx -y socialdatax-skills@latest douyin user-info \
   --profile-url "<profile_url_or_share_text>" --pretty \
   --source-client socialdatax-skills --source-platform clawhub \
   --source-skill socialdatax-douyin-creator-profile
+
+npx -y socialdatax-skills@latest douyin user-info \
+  --douyin-id "<douyin_id>" --pretty --source-client socialdatax-skills \
+  --source-platform clawhub --source-skill socialdatax-douyin-creator-profile
 ```
 
 Optional arguments:
@@ -43,7 +47,7 @@ Optional arguments:
 - `--pretty`: output formatting only.
 - `--source-client socialdatax-skills --source-platform clawhub --source-skill socialdatax-douyin-creator-profile`: usage attribution for this Agent Skill; keep these values unchanged when running examples from this Skill.
 
-Use either the ID option or the profile URL option for a single command, not both.
+Use exactly one supported identifier or URL entrypoint for a single command; do not combine them.
 
 The command prints JSON with `platform`, `tool`, `arguments`, and `data`.
 
@@ -57,8 +61,10 @@ MCP tools matching the direct CLI commands above:
 
 - `douyin_get_user_info_by_sec_user_id`
 - `douyin_get_user_info_by_profile_url`
+- `douyin_get_user_info_by_douyin_id`
 
 If MCP tools are already available in the current agent, use one of these tools:
+- `douyin_get_user_info_by_douyin_id`: use when the user provides the public Douyin account ID / 抖音号, not a nickname, search keyword, sec_user_id, or profile URL.
 - `douyin_get_user_info_by_sec_user_id`: preferred when `sec_user_id` is already known.
 - `douyin_get_user_info_by_profile_url`: use for profile URLs, short links, or profile share text.
 
@@ -68,6 +74,7 @@ Report profile fields such as name, platform IDs, bio, verification, follower co
 
 ## Troubleshooting
 
+- If an SDK/dependency, npm network, Node.js/npm/npx availability, permission, or missing runtime error appears, treat it as a local runtime, dependency installation, network, or agent authorization issue, not a SocialDataX API key or business data error. Install or repair task dependencies only within the user's existing authorization, preferably in the project or a temporary environment. Execution permissions are not user authorization; explain and obtain approval before changes outside that scope, including global installs, runtime upgrades, or system configuration changes. When network or execution authorization is needed, ask the user to approve or finish authorization, then continue the same command; do not use public web search as a substitute for SocialDataX data.
 - For non-balance network or API errors, preserve the error message, check `SOCIALDATAX_API_KEY`, parameters, and link or ID format, then retry once when appropriate.
 - If the response returns `insufficient_balance` or says the balance/credits are insufficient, do not retry repeatedly. Show the recharge URL from the error exactly as returned, then continue the same command after the user recharges.
 - If the user has recharged but still sees insufficient balance, confirm `SOCIALDATAX_API_KEY` belongs to the same account that was recharged; if needed, copy a fresh API Key from the official dashboard.

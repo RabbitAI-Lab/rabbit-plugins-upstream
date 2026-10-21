@@ -12,7 +12,7 @@ Conventional Commit conventions, PUBLIC repo English enforcement, Git operation-
 ## Conventional Commit base (HARD STOP)
 
 - Tags: `feat`, `fix`, `docs`, `style`, `refactor`, `test`, `chore`, `ci`, `perf` — **no other tags allowed**. Forbid invented tags like `infra:`, `build:`, `wip:`
-- Repo-visibility language: **PUBLIC = English enforced, PRIVATE = native-language default** (see opensource.md visibility table). Per-medium separation — commit / PR / issue / comment all follow the same visibility rule
+- Repo-visibility & project language: **Project-primary / native language enforced for regional repositories & docs** (match the primary language of the target repository/documentation). **PUBLIC international open-source = English enforced, PRIVATE/regional = project-primary language default** (see opensource.md visibility table). Per-medium separation — commit / PR / issue / comment all follow the same visibility rule
 - Open-source contributions: see `opensource.md`
 - Wrong commits → fix with a new commit. `--amend` + force-push is allowed only when the user explicitly instructs it
 
@@ -49,10 +49,11 @@ Conventional Commit conventions, PUBLIC repo English enforcement, Git operation-
 | # | Don't | Do |
 |---|-------|-----|
 | 1 | `git commit -m "feat(scope): subject"` — stop at the subject line | `git commit -m "feat(scope): subject" -m "<body>"` or HEREDOC (`git commit -F -`) for multi-line body |
-| 2 | Body restricted to a per-file enumeration | Body can be free-form (prose / bullets / sections / mixed). Per-file enumeration is one option, not the only one |
-| 3 | "Diff is small, so subject is enough" autonomous skip | Author a body whenever a body would help future readers — most commits qualify. Subject-only is the exception, not the default |
-| 4 | Use the footer for prose that belongs in the body (e.g., motivation, trade-offs) | Footer = machine-readable references (`Closes`, `BREAKING CHANGE:`, `Co-Authored-By:`). Prose goes in the body |
-| 5 | Skip the blank line between subject ↔ body ↔ footer | Maintain blank-line separators — Git tooling (`git log --oneline`, GitHub squash) relies on them |
+| 2 | Put long inline details/parentheses into subject (e.g. `feat(zsh): add script (autocorrect X to Y)`) | Keep subject concise (`feat(zsh): add script`). Move implementation details (`- Autocorrect X to Y`), rationale, and bullet points into the detail body `-m "<body>"` |
+| 3 | Body restricted to a per-file enumeration | Body can be free-form (prose / bullets / sections / mixed). Per-file enumeration is one option, not the only one |
+| 4 | "Diff is small, so subject is enough" autonomous skip | Author a body whenever a body would help future readers — most commits qualify. Subject-only is the exception, not the default |
+| 5 | Use the footer for prose that belongs in the body (e.g., motivation, trade-offs) | Footer = machine-readable references (`Closes`, `BREAKING CHANGE:`, `Co-Authored-By:`). Prose goes in the body |
+| 6 | Skip the blank line between subject ↔ body ↔ footer | Maintain blank-line separators — Git tooling (`git log --oneline`, GitHub squash) relies on them |
 
 ### Bash invocation forms
 
@@ -241,6 +242,12 @@ Why: these files are **runtime instructions consumed by AI agents**. Adding / ed
 2. If yes, does the commit-message verb match the "documentation verbs" row?
 3. If a match → re-verify the diff: is it actually new behavior / HARD STOP / Don't-Do / self-check addition?
 4. Behavior change → pick a verb from the "behavior-change verbs" row. If the type prefix was `docs:`, change it to `feat:`
+
+**"Drafting" means every medium the message text first appears in, not only an executed `git commit` call (HARD STOP — recurrence source, 7th occurrence of this class)**: an `AskUserQuestion` option's `preview` field, a chat-visible proposed command, or a PR-body draft are all "drafting a commit message" under this self-check — run steps 1-4 above the moment that text is written, before it is ever shown to the user for approval. A guard hook that intercepts the real `git commit` Bash call (e.g. `check-commit-tag-for-prompt-md.js`) is a backstop for the execution point only; it structurally cannot see text that exists solely inside a tool-call payload like an ask preview, so self-check discipline at the drafting point is the only defense there.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 5 | Treat "I haven't run `git commit` yet" as license to skip the self-check while writing the message text into an `AskUserQuestion` preview or chat draft | Apply steps 1-4 the moment the message text is composed, regardless of which medium it first appears in |
 
 ### Exceptions
 

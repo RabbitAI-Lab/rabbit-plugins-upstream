@@ -1,51 +1,65 @@
-## Description: <br>
-客户背景调查助手，帮助销售和 business development users use public bidding data to investigate a target organization's procurement history, supplier landscape, budget level, procurement activity, major projects, public risk signals, and optional side-by-side company comparisons. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+基于公开招投标记录生成客户或竞对的采购、合作关系、中标表现与公开风险调查报告。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Sales and business development users use this skill before client visits, bids, and commercial outreach to understand a company's procurement behavior, historical spend signals, incumbent suppliers, competitive landscape, and public risk signals. The skill can produce a single-company intelligence report or a two-company comparison based on bidding-data queries and public web research. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts external Zhiliaobiaoxun services and sends query terms such as company names, regions, and procurement keywords. <br>
-Mitigation: Use it only for queries appropriate for that service, and review the external-service dependency and data handling expectations before installation. <br>
-Risk: The skill can create or store credentials locally in ~/.zlbx/config.json and can auto-register a trial account after user consent. <br>
-Mitigation: Require explicit user opt-in before registration, prefer a preconfigured ZLBX_API_KEY where possible, and review or remove locally stored credentials when no longer needed. <br>
-Risk: Generated reports are written to disk and may include business-sensitive analysis, contact data, and signed platform links. <br>
-Mitigation: Store reports in an appropriate location, avoid sharing report files or access-bearing links broadly, and delete exported reports when they are no longer needed. <br>
-Risk: Contact results and public-risk sections can affect real organizations or individuals if over-interpreted. <br>
-Mitigation: Keep contacts masked unless the backend returns them otherwise, do not attempt to reconstruct masked contact details, cite sources for public-risk statements, and treat conclusions as data-supported signals rather than definitive judgments. <br>
+## Use Case:
 
+销售和商务拓展人员在拜访或合作前，利用招投标记录了解客户的采购习惯、供应商格局及预算量级；也可比较两家企业。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/client-background-check) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Auto-registration guide](artifact/references/auto-register.md) <br>
-- [Zhiliaobiaoxun API base](https://mcp-server.zhiliaobiaoxun.com/api_v2/{tool}) <br>
-- [Zhiliaobiaoxun registration and recharge](https://ai.zhiliaobiaoxun.com/?ch=s127) <br>
-- [Zhiliaobiaoxun business intelligence portal](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown report in conversation, optional self-contained HTML report file, and operational guidance for API-backed company research workflows.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based registration; may write reports to ~/zlbx-company-intel-files/ and credentials to ~/.zlbx/config.json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: evidence.release.version) <br>
+Risk: Automatic trial registration sends a MAC-derived device hash for account deduplication.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit consent before registration, or preconfigure ZLBX_API_KEY to bypass it.
+
+Risk: The API key persists in a local configuration file.
+
+Mitigation: Protect ~/.zlbx/config.json and avoid exposing the key in reports or conversations.
+
+Risk: Report links can contain signed access tokens and remain accessible when shared.
+
+Mitigation: Review report recipients and signed links before sharing or publishing reports.
+
+Risk: Research calls consume account credits and conclusions may be misleading when coverage is incomplete.
+
+Mitigation: Disclose expected credit use, cite supporting records, and label missing data and coverage limits.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/client-background-check)
+- [API quick reference](references/api-quick.md)
+- [Investigation workflow](references/workflow.md)
+- [Report templates](references/report-template.md)
+- [Account registration and privacy](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, HTML report]
+
+**Output Format:** [Markdown investigation report and shareable HTML file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Single-company analysis or two-company comparison, with citations and data gaps.]
+
+## Skill Version(s):
+
+1.0.6 (source: release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

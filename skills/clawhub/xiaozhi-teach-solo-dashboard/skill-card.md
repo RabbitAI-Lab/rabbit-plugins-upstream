@@ -1,45 +1,53 @@
-## Description: <br>
-Helps independent teachers turn schedules, student records, homework, parent communication, and lesson-package status into a seven-section daily dashboard with risk flags and top priorities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+为独立教师只读汇总课表、学员跟进、家长沟通和课时包记录，生成按优先级排列的每日工作台。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Independent teachers use this skill to review daily classes, preparation tasks, homework follow-up, parent communication, lesson-package renewal points, and the three most important actions for the day. It is intended as a planning and triage dashboard, not as an automatic messaging or record-writing system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation phrases may route generic planning requests into a dashboard that reads student workspace data. <br>
-Mitigation: Narrow activation to explicit independent-teacher workspace requests or ask a clarification question before reading student, parent, course-package, or schedule data. <br>
-Risk: The dashboard may expose sensitive student or family information if raw workspace fields are copied directly. <br>
-Mitigation: Use aliases, summarize parent and lesson notes within the stated 500-character limits, and omit real names, contact details, family conflict, medical details, and payment information. <br>
-Risk: Suggested follow-up could be mistaken for an authorized external action or record update. <br>
-Mitigation: Keep messages, lesson-unit consumption, parent communication, renewal suggestions, and cross-skill sharing as teacher-confirmed actions only. <br>
+## Use Case:
 
+独立教师在获准查阅学员记录的中文 K12 辅导场景中，用它汇总当天课程和待办、识别有数据依据的跟进事项，并确定今日三件要事。
 
-## Reference(s): <br>
-- [Dashboard template](references/dashboard-template.md) <br>
-- [Daily dashboard block templates](references/daily-dashboard-block-templates.md) <br>
-- [Daily dashboard full sample](references/daily-dashboard-full-sample.md) <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard) <br>
+### Deployment Geography for Use:
 
+中国大陆；其他地区须先本地化危机求助信息
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown-style daily dashboard with structured text sections and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses student aliases, concise summaries, risk labels with field-based rationale, and teacher-confirmed follow-up actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release metadata) <br>
+Risk: 按请求导出工作空间记录可能泄露大量学员资料。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 仅供获准查阅记录的教师使用；只导出所需学员或记录范围，保留化名，不将导出内容粘贴到无关工具或聊天。
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-solo-dashboard)
+- [日工作台模板](artifact/references/dashboard-template.md)
+- [七区块模板](artifact/references/daily-dashboard-block-templates.md)
+- [日工作台示例](artifact/references/daily-dashboard-full-sample.md)
+- [独立教师工作空间数据结构](artifact/shared/solo-teacher-workspace.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [七区块中文 Markdown 工作台或按需提供文本记录导出]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [只读汇总；风险提示附记录依据，学员以化名呈现。]
+
+## Skill Version(s):
+
+2.11.2 (source: skill frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

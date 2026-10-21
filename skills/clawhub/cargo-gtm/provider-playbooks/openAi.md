@@ -6,28 +6,31 @@ last-reviewed: 2026-07-09
 
 # openAi (OpenAI)
 
-GPT models through a single `instruct` action — **the cheapest bulk-LLM tier in the catalog**: the nano models run at **0.006 credits per 1,000-token package**, 33× cheaper than anthropic's cheapest tier (0.2). Default provider for pure-volume transforms (extraction, classification, short personalization) once the prompt is proven. Routing: `anthropic` Sonnet for judgment, openAi nano for cheapest bulk, `gemini` Flash for cheap high-throughput, `perplexity` for web-grounded answers.
+GPT models through a single `instruct` action — **the cheapest bulk-LLM tier in the catalog**: `gpt-6-luna` runs at **0.003** and the nano models at **0.006 credits per 1,000-token package**, against 0.05 for anthropic's cheapest tier (`claude-3-5-haiku-latest`). Default provider for pure-volume transforms (extraction, classification, short personalization) once the prompt is proven. Routing: `anthropic` Sonnet for judgment, openAi nano for cheapest bulk, `gemini` Flash for cheap high-throughput, `perplexity` for web-grounded answers.
 
 ## Credits-based actions
 
 | Action | Cost | Inputs | Use for |
 |---|---|---|---|
-| `instruct` | 0.006–0.5 / 1,000-token package (per-model tiers below) | `model` + `prompt` (required); `advancedSettings.{systemPrompt, maxTokens, temperature, withWebSearch}`; `output.{responseFormat, jsonSchema}` | Bulk LLM steps with native structured output. |
+| `instruct` | 0.003–0.5 / 1,000-token package (per-model tiers below) | `model` + `prompt` (required); `advancedSettings.{systemPrompt, maxTokens, temperature, withWebSearch}`; `output.{responseFormat, jsonSchema}` | Bulk LLM steps with native structured output. |
 
 ### Per-model cost tiers
 
 | Tier | Model ids | Credits / 1,000 tokens |
 |---|---|---|
-| Nano | `gpt-5-nano`, `gpt-5.5-nano`, `gpt-5.4-nano`, `gpt-5.3-nano` | 0.006 |
+| GPT 6 Luna | `gpt-6-luna` | 0.003 |
+| Nano | `gpt-5-nano`, `gpt-5.6-luna`, `gpt-5.4-nano`, `gpt-5.3-nano` | 0.006 |
 | 4.1 Nano | `gpt-4.1-nano` | 0.01 |
 | 4o Mini | `gpt-4o-mini` | 0.02 |
-| Mini | `gpt-5-mini` (schema default), `gpt-5.5-mini`, `gpt-5.4-mini`, `gpt-5.3-mini` | 0.03 |
+| Mini | `gpt-5-mini` (schema default), `gpt-5.6-terra`, `gpt-5.4-mini`, `gpt-5.3-mini` | 0.03 |
 | 4.1 Mini | `gpt-4.1-mini` | 0.05 |
-| Full GPT-5 | `gpt-5`, `gpt-5.5`, `gpt-5.4`, `gpt-5.3`, `gpt-5.2`, `gpt-5.1` | 0.2 |
+| GPT 6 Sol | `gpt-6-sol` | 0.1 |
+| Full GPT-5 | `gpt-5`, `gpt-5.6-sol`, `gpt-5.5`, `gpt-5.4`, `gpt-5.3`, `gpt-5.2`, `gpt-5.1` | 0.2 |
 | GPT-4.1 | `gpt-4.1` | 0.3 |
+| GPT 6 Astra | `gpt-6-astra` | 0.5 |
 | Legacy | `gpt-4o`, `gpt-3.5-turbo` | 0.5 |
 
-`advancedSettings.withWebSearch: true` adds a **fixed 0.4 credits per call**. Rate limit: 10,000 calls/min per model — the highest of the four LLM providers.
+`advancedSettings.withWebSearch: true` adds a **fixed 0.4 credits per call**. Rate limit: 10,000 calls/min per model (gemini's Flash models allow 15,000).
 
 ## What it's for
 
@@ -41,12 +44,12 @@ GPT models through a single `instruct` action — **the cheapest bulk-LLM tier i
 
 ```bash
 cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"openAi","actionSlug":"instruct","config":{"model":"gpt-5-nano","advancedSettings":{"temperature":0},"output":{"responseFormat":"json_schema","jsonSchema":{"type":"object","properties":{"industry":{"type":"string"},"confidence":{"type":"string"}}}}}}' \
-  --records '[{"prompt":"<substituted extraction prompt row 1>"},{"prompt":"<row 2>"}, ...]' \
+  --action '{"kind":"connector","integrationSlug":"openAi","actionSlug":"instruct"}' \
+  --records '[{"model":"gpt-5-nano","prompt":"<substituted extraction prompt row 1>","advancedSettings":{"temperature":0},"output":{"responseFormat":"json_schema","jsonSchema":{"type":"object","properties":{"industry":{"type":"string"},"confidence":{"type":"string"}}}}},{"model":"gpt-5-nano","prompt":"<row 2>"}, ...]' \
   --wait-until-finished
 ```
 
-`prompt` goes in each record; `model`, `advancedSettings`, and `output` in `config`. `responseFormat` enum: `text` (default) | `json_object` | `json_schema` (the last requires the sibling `jsonSchema` object).
+**`model`, `prompt`, `advancedSettings`, and `output` are all *inputs*** — they go in each record, never in the action's `config`, which a top-level action does not carry at all. Settings placed there are rejected on older backends and **silently dropped** on newer ones, so a dropped `output` turns schema-validated JSON back into free text. `responseFormat` enum: `text` (default) | `json_object` | `json_schema` (the last requires the sibling `jsonSchema` object).
 
 ## Input quirks
 
@@ -65,9 +68,16 @@ cargo-ai orchestration action execute-batch \
 
 - **The bulk rung** of [`../references/stage-action-map.md`](../references/stage-action-map.md) LLM section: pilot the prompt on `anthropic` Sonnet (~10 rows), then demote the batch to `gpt-5-nano`/`gpt-5-mini` per [`../references/cost-discipline.md`](../references/cost-discipline.md).
 
+## Recurring use
+
+No scheduled fit — `instruct` is an offline transform; the recurring shape is **a scoring/personalization/extraction node inside a play**, never a timed re-pull.
+
+- **In-play gate:** run only where the node's output column (score, extracted field, personalization line) is still empty — with `temperature: 0`, re-prompting an unchanged row returns the same answer and just re-bills. Trigger on newly-arrived or newly-enriched rows entering the segment.
+- **Cadence compounds cost:** per-row token spend × new rows × every cycle, forever — keep the play on the nano/mini tiers per the batch math above, and never leave `withWebSearch` on in a recurring node (fixed +0.4 × rows, every run). Cadence defaults: [`../recipes/save-as-play.md`](../recipes/save-as-play.md).
+
 ## Action shape
 
-`{"kind":"connector","integrationSlug":"openAi","actionSlug":"instruct","config":{"model":"…","output":{…}}}`. **No `connectorUuid` in `config`.** Costs above are the Cargo-credits rules; a workspace can instead attach its own OpenAI key (connector config takes a single required `apiKey`) and bill the provider directly.
+`{"kind":"connector","integrationSlug":"openAi","actionSlug":"instruct"}`, with `model`, `prompt`, `advancedSettings`, and `output` per record in `--records` / `--data`. **No `connectorUuid` in `config`** — and no model settings there either; inside a workflow **node** those same fields are the node's `config`. Costs above are the Cargo-credits rules; a workspace can instead attach its own OpenAI key (connector config takes a single required `apiKey`) and bill the provider directly.
 
 ## Pairs with
 

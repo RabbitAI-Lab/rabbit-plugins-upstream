@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/check",
   "slug": "check",
   "ownerHandle": "escoffier-labs",
-  "version": "1.0.0",
-  "updatedAt": 1779077724839,
-  "contentHash": "d5d86cbeca91fd873aa8a44e44d03b5cc49ed811b073345abd83b9ad9bd01b2c",
-  "fetchedAt": "2026-07-26T18:26:46.174Z"
+  "version": "1.0.2",
+  "updatedAt": 1792514944306,
+  "contentHash": "fcff65664d0ccffbfdb657935b897c3808d05ed26383d27279db70c51097a38b",
+  "fetchedAt": "2026-10-21T13:09:06.533Z"
 }
