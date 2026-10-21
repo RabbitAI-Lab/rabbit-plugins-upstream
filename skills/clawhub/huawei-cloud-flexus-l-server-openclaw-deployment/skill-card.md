@@ -1,45 +1,63 @@
-## Description: <br>
-Creates a Huawei Cloud Flexus L Instance, deploys the OpenClaw application platform, and supports model and messaging-channel configuration for deployed OpenClaw instances. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create Huawei Cloud Flexus L Instance (Lightweight Server), deploy OpenClaw application platform on it, and support installation and configuration of models and channels for deployed OpenClaw instances.
 
-## Publisher: <br>
-[huaweiclouddev](https://clawhub.ai/user/huaweiclouddev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[huaweicloudskill](https://clawhub.ai/user/huaweicloudskill)
 
-## Use Case: <br>
-Developers and cloud operations engineers use this skill to provision Huawei Cloud Flexus L instances for OpenClaw and then configure models and messaging channels such as WeCom, Feishu, DingTalk, and QQ. It is intended for OpenClaw deployment and post-deployment setup workflows that can create billable cloud resources. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global, subject to Huawei Cloud service availability and the skill's documented supported regions. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can create billable Huawei Cloud resources with prepaid monthly charging and auto-renew behavior. <br>
-Mitigation: Review resource settings before execution, use a controlled test account or project, and confirm billing and renewal settings in Huawei Cloud after deployment. <br>
-Risk: Model and channel setup can run remote COC scripts on the target instance. <br>
-Mitigation: Run setup only after reviewing the script behavior and accepting remote execution on the instance; use temporary credentials with only the documented minimum permissions. <br>
-Risk: Huawei Cloud AK/SK, security tokens, model API keys, and channel secrets may be exposed if passed on command lines or logged. <br>
-Mitigation: Prefer environment variables or secure interactive entry, avoid command history exposure, and rotate credentials after testing or any suspected exposure. <br>
+## Use Case:
 
+Developers and cloud operators use this skill to deploy OpenClaw on Huawei Cloud Flexus L instances, then configure language models and messaging channels.
 
-## Reference(s): <br>
-- [IAM Permission Policy Reference](references/iam-policies.md) <br>
-- [Skill Verification Method](references/verification-method.md) <br>
-- [Huawei Cloud Python Package Index Mirror](https://repo.huaweicloud.com/repository/pypi/simple) <br>
-- [Huawei Cloud Flexus L Instance Console](https://console.huaweicloud.com/smb/?/resource/list) <br>
+### Deployment Geography for Use:
 
+China (documented region examples are in China; verify current service availability).
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, API Calls, Guidance] <br>
-**Output Format:** [Markdown guidance with command-line invocations and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs include deployment status, resource identifiers, COC execution results, and manual Web UI access steps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence, skill metadata, pyproject.toml) <br>
+Risk: Cloud and model credentials may be exposed in output or logs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use narrowly scoped temporary credentials, avoid production credentials during review, remove secret-bearing COC scripts after use, and rotate any credentials already exposed in logs.
+
+Risk: Instance deployment may incur recurring charges.
+
+Mitigation: Review and explicitly confirm payment and renewal terms before creating an instance.
+
+Risk: Unverified downloads may run with administrator privileges.
+
+Mitigation: Verify installer sources and integrity before execution, and do not run unverified downloads with administrator privileges.
+
+Risk: An exposed OpenClaw Web UI may be reachable over an unsafe connection.
+
+Mitigation: Access the Web UI through a private connection or a restricted HTTPS endpoint.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/huaweicloudskill/skills/huawei-cloud-flexus-l-server-openclaw-deployment)
+- [Huawei Cloud Flexus console](https://console.huaweicloud.com/smb/?/resource/list)
+- [Huawei Cloud Python package index](https://repo.huaweicloud.com/repository/pypi/simple)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, shell commands, JSON configuration]
+
+**Output Format:** [Markdown instructions with shell-command examples and JSON configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Deployment requires Huawei Cloud credentials and permissions; Web UI access must be enabled separately in the Huawei Cloud console.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -18,8 +18,10 @@
 const path = require("path");
 const fs = require("fs");
 const os = require("os");
+const { hfBrowser } = require("./hf-cli.cjs");
 
 const HF_ROOTS = [
+  process.argv[2] && path.resolve(process.argv[2]), // project-owned helper dependencies
   process.env.HYPERFRAMES_ROOT,
   path.resolve(__dirname, "../../.."),
   path.join(os.homedir(), "Downloads", "hyperframes"),
@@ -154,17 +156,16 @@ async function main() {
   const railPath = path.join(project, "rail.html");
   if (!fs.existsSync(railPath) || !fs.existsSync(indexPath))
     ok("[rail-climax] no rail.html+index.html — not Standard, skipping");
-  if (!puppeteer) ok("[rail-climax] puppeteer unavailable — skipping (set HYPERFRAMES_ROOT)");
+  if (!puppeteer)
+    ok(
+      "[rail-climax] puppeteer unavailable — skipping (install project dependencies per embedded-captions SKILL.md Runtime prerequisites)",
+    );
 
-  const exe =
-    process.platform === "darwin"
-      ? "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome"
-      : "/usr/bin/google-chrome";
   let browser;
   try {
     browser = await puppeteer.launch({
       headless: "new",
-      executablePath: fs.existsSync(exe) ? exe : undefined,
+      executablePath: hfBrowser(),
       args: ["--disable-web-security", "--allow-file-access-from-files", "--disable-dev-shm-usage"],
     });
   } catch (e) {

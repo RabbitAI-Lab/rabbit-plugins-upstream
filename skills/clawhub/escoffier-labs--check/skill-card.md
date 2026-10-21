@@ -1,38 +1,50 @@
-## Description: <br>
-Prompts agents to verify claims of completion, fixes, test passes, or subagent success with fresh evidence before reporting them. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use before claiming work is successful or complete, or relaying a tool or subagent success report, to require fresh verification evidence.
 
-## Publisher: <br>
-[escoffier-labs](https://clawhub.ai/user/escoffier-labs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[escoffier-labs](https://clawhub.ai/user/escoffier-labs)
 
-## Use Case: <br>
-Developers and agent operators use this skill to make agents inspect current verification evidence before making success or completion claims. It is useful when an agent needs to report test, build, script, git status, or subagent outcomes accurately. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Verification commands may have side effects or reveal sensitive local output if selected or quoted carelessly. <br>
-Mitigation: Review commands before execution and include only relevant, non-sensitive output in user-facing reports. <br>
+## Use Case:
 
+Developers and AI agents use this skill before reporting work as successful or complete. It requires running a fresh, whole proving command, inspecting its output and exit status, and reporting only what the evidence supports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/escoffier-labs/check) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Text] <br>
-**Output Format:** [Markdown or plain text guidance with command and output excerpts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include relevant command output when verifying a claim.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: Verification capture or conditional ledger export may retain or expose command output.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review installed tools' destination and retention settings, and check quoted output for sensitive information before sharing.
+
+## Reference(s):
+
+- [Check on ClawHub](https://clawhub.ai/escoffier-labs/skills/check)
+- [Publisher profile: escoffier-labs](https://clawhub.ai/user/escoffier-labs)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Text]
+
+**Output Format:** [Markdown with inline shell commands and quoted verification output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires fresh verification after the last change and reports the actual command output and exit status.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -37,7 +37,10 @@ def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 def resolve_reply_to(peck_id):
     """Look up a stashed inbound envelope in ~/.space-duck/inbox/ and return
@@ -241,9 +244,40 @@ def _request_grant(api, beak_key, recipient_sd, capability, scope, reason):
     except Exception as e:
         return {'_exception': str(e)}
 
+def _eo_connection_state(api, bk, sdid, target_id):
+    """[EYES-OFF-P3] Return this bond's encryption state ('on'/'proposed'/
+    'off'/'' on any failure). Fail-open to '' — a plaintext send on an
+    eyes-off connection is still rejected server-side (409), so a failed
+    probe can never silently downgrade an encrypted bond."""
+    try:
+        req = urllib.request.Request(
+            f'{api}/beak/connection/encryption',
+            data=json.dumps({'action': 'status', 'spaceduck_id': sdid,
+                             'target_id': target_id}).encode(),
+            headers={'Content-Type': 'application/json', 'X-Beak-Key': bk},
+            method='POST')
+        with urllib.request.urlopen(req, timeout=10) as r:
+            return str((json.loads(r.read()).get('encryption') or {})
+                       .get('state', '')).lower()
+    except Exception:
+        return ''
+
+
+def _eo_fetch_pubkey(api, target_id):
+    """[EYES-OFF-P3] Fetch the recipient's registered encryption public key
+    (PEM SPKI) via the public discovery endpoint. Raises on absence."""
+    req = urllib.request.Request(
+        f'{api}/beak/duck/{target_id}/public-key', method='GET')
+    with urllib.request.urlopen(req, timeout=10) as r:
+        pem = (json.loads(r.read()).get('enc_pubkey_pem') or '').strip()
+    if not pem.startswith('-----BEGIN PUBLIC KEY-----'):
+        raise RuntimeError(f'{target_id} has no registered encryption key')
+    return pem
+
+
 def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
               skip_preflight=False, tool_use=None, peck_meta=None,
-              no_auto_grant=False):
+              no_auto_grant=False, encrypted=False):
     api  = cfg.get('api_base', 'https://beak.spaceduckling.com')
     sdid = cfg.get('spaceduck_id', '')
     bk   = cfg.get('beak_key', '')
@@ -258,6 +292,53 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
         if not proceed:
             print(f'❌ Pre-flight blocked: {summary}')
             sys.exit(3)
+        # 0.9.1 [PERMS-B item 1] — grant-expiry advisory. Best-effort read of
+        # the active send_peck grant's expiry; warns at <7d left so a
+        # cross-owner grant doesn't silently lapse. FAIL-OPEN: this can only
+        # print — it never sets `proceed`, never blocks, and any error is
+        # swallowed. No-op today until the server surfaces expires_at on
+        # /beak/grants/check (see _grant_meta.py discovery note).
+        try:
+            from _grant_meta import preflight_expiry_warning
+            _exp_warn = preflight_expiry_warning(cfg, target_id)
+            if _exp_warn:
+                print(f'   {_exp_warn}')
+        except Exception:
+            pass
+
+    # ── [EYES-OFF-P3] seal the body when this bond has Eyes Off ON, or the
+    # caller forced --encrypted (docs/spec/PECK-E2EE-EYES-OFF.md §3.3).
+    # Sealing happens HERE, before hashing/signing, so message_hash and the
+    # v2/v3 envelope signatures are computed over the ciphertext (spec §2.1
+    # rule) and the platform only ever stores bytes it cannot read.
+    # FAIL-CLOSED: if sealing is required but impossible, exit — NEVER fall
+    # back to sending plaintext on an encrypted bond.
+    _eo_sealed = False
+    _eo_scheme = ''
+    _eo_want = bool(encrypted)
+    if not _eo_want:
+        _eo_want = (_eo_connection_state(api, bk, sdid, target_id) == 'on')
+    if _eo_want:
+        try:
+            import _eyesoff
+            _eo_ok, _eo_why = _eyesoff.available()
+            if not _eo_ok:
+                print(f'❌ Eyes Off required on this connection but crypto is '
+                      f'unavailable on this box: {_eo_why}')
+                print('   NOT sending plaintext. Install the dependency, or '
+                      'disable encryption via POST /beak/connection/encryption.')
+                sys.exit(4)
+            _eo_pub = _eo_fetch_pubkey(api, target_id)
+            message = _eyesoff.seal(message, _eo_pub)
+            _eo_sealed = True
+            _eo_scheme = _eyesoff.ENC_SCHEME
+            print('   🙈 Eyes Off: body sealed end-to-end — platform stores '
+                  'ciphertext only')
+        except SystemExit:
+            raise
+        except Exception as _eo_err:
+            print(f'❌ Eyes Off seal failed — NOT sending plaintext: {_eo_err}')
+            sys.exit(4)
 
     peck_id      = 'peck_' + secrets.token_urlsafe(12)
     timestamp    = int(time.time())
@@ -287,14 +368,17 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
     }
     signature = _v2_sign(env_v2, bk)
 
-    # ── [BEAK-V3-P2] envelope v3 (Ed25519 asymmetric) — opt-in, graceful ──
-    # Try v3 only when ALL of (local sign_key.hex, `envelope_v3: true` in
-    # config, `cryptography` importable) hold. Any exception here degrades to
-    # v2 — the sender must never break on v3, even if the server or the local
-    # key file drift out of sync. Server accepts v2 and v3 in parallel through
-    # the sunset (see docs/spec/BEAK-V3-ASYMMETRIC-IDENTITY.md §7).
+    # ── [BEAK-V3-P3] envelope v3 (Ed25519 asymmetric) — v3-preferred default ──
+    # Sign v3 whenever a local sign key loads (Phase 3 flip; spec §7). The
+    # platform is the verifier and dual-accepts v2/v3, and v3 recipients treat
+    # unknown/extra envelope fields tolerantly, so a v3 sender is always safe
+    # to default when it has a key. `envelope_v3: false` in config is the
+    # explicit opt-OUT (absent / true / any truthy value keeps v3 on).
+    # Any exception in the v3 attempt degrades byte-identically to v2 — the
+    # sender must never break, even if the server or the local key file drift
+    # out of sync. See docs/spec/BEAK-V3-ASYMMETRIC-IDENTITY.md §7 Phase 3.
     _v3_payload = None
-    if cfg.get('envelope_v3'):
+    if cfg.get('envelope_v3', True):
         try:
             from _envelope import load_sign_key as _load_sign_key, \
                 canonical_v3 as _v3_canonical, sign_v3 as _v3_sign, \
@@ -364,6 +448,27 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
     # Phase 5 — tool_use[] is signature-neutral (not in v2 HMAC scope).
     if tool_use:
         _payload_dict['tool_use'] = tool_use
+    # ── [DELIVERY-A 2026-10-19] required_capability ──────────────────────
+    # docs/spec/OPENHARNESS-ADOPTION.md §5.5. Declares what the recipient's
+    # LISTENER must be able to do for this peck to be actionable, so the
+    # platform can gate at dispatch instead of pushing into a live listener
+    # that has no handler for the kind (the silent-drop class). Optional and
+    # signature-neutral — the platform treats an absent field as
+    # `receive_peck`, which is today's implicit contract, so an older server
+    # ignores it and an older sender loses nothing.
+    #
+    # Rule, per spec: a chain (max_rounds > 1) expects a responder on the
+    # far side, so it needs `auto_respond_peck`; a peck carrying tool_use is
+    # `receive_peck` (the tool call is the payload, not a conversation);
+    # everything else is `receive_peck`.
+    _req_cap = 'receive_peck'
+    if not tool_use:
+        try:
+            if int((peck_meta or {}).get('max_rounds') or 0) > 1:
+                _req_cap = 'auto_respond_peck'
+        except (TypeError, ValueError):
+            pass
+    _payload_dict['required_capability'] = _req_cap
     # 0.4.0 Phase 1 — peck protocol v2 metadata. Signature-neutral (not in
     # v2 HMAC scope). Receiver parses defensively via peck_responder
     # _parse_peck_meta(); absent or malformed falls back to v1 semantics.
@@ -384,6 +489,14 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
             _v = peck_meta.get(_meta_k)
             if _v not in (None, ''):
                 _payload_dict[_env_k] = _v
+    # [EYES-OFF-P3] sealed-body wire fields (signature-neutral: not in the
+    # v2 HMAC canonical set; v3 covers the ciphertext via message_hash).
+    # enc_ephemeral_pubkey stays '' — a libsodium sealed box embeds its
+    # ephemeral public key inside the ciphertext itself.
+    if _eo_sealed:
+        _payload_dict['body_encrypted'] = True
+        _payload_dict['enc_scheme'] = _eo_scheme
+        _payload_dict['enc_ephemeral_pubkey'] = ''
     payload = json.dumps(_payload_dict).encode()
 
     req = urllib.request.Request(
@@ -416,6 +529,43 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
             print('   Push: no binding — recipient will see it via inbox poll/Quack')
         elif _bp == 'failed':
             print("   Push: FAILED — recipient's listener errored; message is in their inbox")
+        # ── [DELIVERY-A 2026-10-19] the honest state ─────────────────────
+        # spec §5.4 rule 3. Everything above this block is a GUESS from
+        # channel names: `channels` always contains 'quack' because the
+        # platform's own write is counted as a channel, so "did anything
+        # live receive this" was never answerable from it. delivery_state
+        # answers it. Absent field = older server; print nothing and leave
+        # the legacy guess above as the only output (pure addition).
+        _dstate = resp.get('delivery_state')
+        if _dstate:
+            print(f'   Delivery: {_dstate}')
+            _dreason = resp.get('delivery_reason')
+            if _dstate.startswith('held:'):
+                _held = _dstate[len('held:'):]
+                if _held.startswith('recipient_unable:'):
+                    print(f'   ⚠ Recipient listener does not advertise '
+                          f'"{_held[len("recipient_unable:"):]}" — the peck is '
+                          'HELD in their inbox, not lost.')
+                elif _held == 'no_listener':
+                    print('   ⚠ Recipient has no live listener (no pulse in '
+                          '15 min) — the peck is HELD in their inbox.')
+                elif _held == 'binding_revoked':
+                    print('   ⚠ Recipient push binding is revoked — the peck '
+                          'is HELD for their next poll.')
+                elif _held == 'awaiting_approval':
+                    print('   ⏳ Waiting on the recipient owner to approve.')
+                elif _held == 'awaiting_poll':
+                    print('   Stored; recipient collects it on their next poll.')
+                elif _dreason:
+                    print(f'   ⚠ {_dreason}')
+            elif _dstate.startswith('pushed_unconfirmed:unhandled_kind'):
+                print("   ⚠ Recipient runtime answered that it has NO handler "
+                      'for this kind — it will age into failed:unhandled_kind.')
+            elif _dstate.startswith('pushed_unconfirmed:'):
+                print('   Pushed, awaiting a runtime acknowledgement. Check: '
+                      f'python3 check_pecks.py --status {peck_id}')
+            if resp.get('recipient_owner_notified'):
+                print("   ℹ Recipient's owner has been notified.")
         if not chans or set(chans) <= {'quack'}:
             print('   Note: not fanned out to any bound human/agent surface — '
                   'target may not be peck\'d to you yet, or has no Telegram/'
@@ -447,6 +597,13 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
             err_obj = json.loads(body)
         except Exception:
             err_obj = {}
+        # [EYES-OFF-P3] the server refused plaintext on an eyes-off bond.
+        # (Reachable when the pre-send state probe failed but the bond is ON.)
+        if e.code == 409 and err_obj.get('error') == 'encryption_required':
+            print('❌ This connection has Eyes Off (end-to-end encryption) ON.')
+            print('   Plaintext pecks are rejected by the platform. Re-run with')
+            print('   --encrypted, or disable encryption from Mission Control.')
+            sys.exit(4)
         if e.code == 400 and err_obj.get('error') == 'wrong_id_type':
             print('ERROR: wrong identifier type.')
             print(f'  You passed:        {err_obj.get("supplied", target_id)}  (Duckling ID)')
@@ -503,11 +660,36 @@ def send_peck(cfg, target_id, message, purpose='connect', peck_type='notify',
                 sys.exit(8)
             if gr.get('status') == 'pending' and gr.get('request_id'):
                 print(f'🔔 Grant requested: {gr["request_id"]} — owner approval pending in Mission Control.')
+                # 0.9.1 [PERMS-B item 3] — grant-class vocabulary. On approval
+                # the owner picks how long the grant lasts: Once (single use),
+                # 7 days (default), or Standing (renews on use — CERTIFIED peers
+                # only). A Standing grant ends the weekly re-approval loop.
+                print('   At approval the owner chooses: Once · 7 days · Standing '
+                      '(Standing = no weekly re-approval; CERTIFIED peers only).')
                 chans = gr.get('notification_channels') or []
                 if chans:
                     print(f'   Owner notified via: {", ".join(chans)}')
+                # 0.9.0 [F4-CLIENT] — persist the unsent peck so the approval
+                # resends it automatically (peck_listener consumes the platform
+                # grant-approved notice, or the poll fallback). Keyed by the
+                # grant REQUEST id — the only join key that exists now and the
+                # one _notify_grant_approved echoes back. Best-effort; a failure
+                # here just falls back to the old "re-run manually" behavior.
+                try:
+                    import _pending_sends
+                    _pending_sends.enqueue(
+                        gr['request_id'],
+                        target_spaceduck_id=target_id,
+                        message=message, purpose=purpose, peck_type=peck_type,
+                        capability=cap, scope=scope,
+                        peck_meta=peck_meta, tool_use=tool_use,
+                    )
+                    print('   💾 Queued for auto-resend on approval '
+                          '(pending_sends.json).')
+                except Exception as _pq_e:
+                    print(f'   (auto-resend queue unavailable: {_pq_e})')
                 print(f'   Poll status:  check_pecks.py --grant-status {target_id} {cap}')
-                print('   Re-run send_peck once the grant is approved.')
+                print('   Re-run send_peck once the grant is approved (or wait for auto-resend).')
                 sys.exit(2)
             print(f'  ⚠ Grant request did not succeed: {gr}')
             print(f'  Web fallback: https://spaceduckling.com/explore.html?duck={target_id}')
@@ -550,6 +732,12 @@ if __name__ == '__main__':
                         choices=['notify', 'query', 'data_request', 'task_delegation'])
     parser.add_argument('--skip-preflight', action='store_true',
                         help='Bypass /beak/connection/permissions pre-flight check.')
+    parser.add_argument('--encrypted', action='store_true',
+                        help=('[EYES-OFF-P3] Force end-to-end sealing of the '
+                              'message body to the recipient\'s registered '
+                              'encryption key, even when the connection has '
+                              'not turned Eyes Off on. Automatic when the '
+                              'bond\'s encryption state is "on".'))
     parser.add_argument('--no-auto-grant', dest='no_auto_grant', action='store_true',
                         help=('Do NOT auto-request a capability grant on a '
                               '403 grant_required. For scripted callers that '
@@ -664,4 +852,5 @@ if __name__ == '__main__':
 
     send_peck(cfg, target_sdid, args.message, args.purpose, args.peck_type,
               skip_preflight=args.skip_preflight, tool_use=_tool_use_list,
-              peck_meta=_peck_meta, no_auto_grant=args.no_auto_grant)
+              peck_meta=_peck_meta, no_auto_grant=args.no_auto_grant,
+              encrypted=args.encrypted)

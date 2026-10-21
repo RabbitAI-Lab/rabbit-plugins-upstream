@@ -1,47 +1,62 @@
-## Description: <br>
-Firewall Aiops helps agents inspect and operate OPNsense and pfSense firewalls, including health checks, rules, NAT, aliases, VPN, DHCP, firewall logs, RCA workflows, and governed write operations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators inspect, troubleshoot, and manage OPNsense and pfSense firewalls through CLI and MCP tools.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, operators, and agents use this skill to query OPNsense or pfSense firewall state, investigate gateway, rule, and blocked-traffic issues, and perform audited firewall changes during planned operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: High-impact firewall writes, apply operations, reconfiguration, and reboot can run when the connected API account has permission, and the skill does not provide an in-tool approval or read-only gate. <br>
-Mitigation: Use a read-only OPNsense or pfSense API account by default, grant write scope only during planned change windows, and require explicit operator confirmation before write, apply, reconfigure, or reboot actions. <br>
-Risk: Firewall credentials and local configuration can expose administrative access if stored or handled incorrectly. <br>
-Mitigation: Keep ~/.firewall-aiops protected, use the encrypted secrets store, avoid the legacy plaintext secret environment variable, and rotate or migrate secrets when needed. <br>
-Risk: Production firewall access can be weakened by insecure transport settings or unverified API behavior. <br>
-Mitigation: Enable SSL verification for production targets and validate connectivity and platform behavior with firewall-aiops doctor before relying on operational results. <br>
+## Use Case:
 
+Network operators and administrators use this skill to assess firewall health, investigate rules and blocked traffic, and make controlled changes to OPNsense or pfSense appliances.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/firewall-aiops) <br>
-- [Project homepage](https://github.com/AIops-tools/Firewall-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and structured tool guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include firewall observations, RCA findings, dry-run previews, audit-oriented change guidance, and rollback guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: MCP write tools can change live firewall behavior or interrupt service without a built-in approval or read-only gate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a read-only firewall API account by default; grant write access only during controlled maintenance and require explicit approval before disruptive operations.
+
+Risk: Applying rules, restarting services, killing states, or rebooting can cause outages or management lockout.
+
+Mitigation: Preview changes, confirm the intended target and management access, and arrange a recovery path before committing or rebooting.
+
+Risk: Exposed firewall credentials or master passwords can enable unauthorized administration.
+
+Mitigation: Protect the local secrets directory, avoid long-lived master passwords in shared environments, and migrate legacy plaintext secret variables.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/firewall-aiops)
+- [Project homepage (listed in skill metadata; import provenance unavailable)](https://github.com/AIops-tools/Firewall-AIops)
+- [Capabilities](references/capabilities.md)
+- [Setup and security guide](references/setup-guide.md)
+- [CLI reference](references/cli-reference.md)
+- [Agent guardrails](references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Text or Markdown with command examples and structured firewall findings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include live firewall diagnostics and proposed or executed changes; verify target and impact before acting.]
+
+## Skill Version(s):
+
+0.15.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

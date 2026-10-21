@@ -1,47 +1,59 @@
-## Description: <br>
-Image search tool: queries Pixabay image API by keywords and returns image URLs and metadata for references, backgrounds, and design assets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches for image assets by keyword and returns image URLs and metadata for visual references and design work.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and agents use this skill to search for image URLs and metadata by keyword for reference images, backgrounds, and design assets through the dLazy CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires a dLazy API key and sends search terms or referenced inputs to dLazy cloud services. <br>
-Mitigation: Use it only with an approved dLazy account, avoid entering secrets as search input, and rotate or revoke the API key from the dLazy dashboard when needed. <br>
-Risk: Local files or piped inputs may be uploaded if passed through supported media or stdin references. <br>
-Mitigation: Do not pass local files, stdin payloads, or sensitive paths unless the upload is intended and approved. <br>
-Risk: The documentation does not consistently match the advertised Pixabay image-search purpose. <br>
-Mitigation: Run `dlazy search_image -h` and confirm the correct options, especially the search query argument, before automating the command. <br>
-Risk: The skill depends on installing or invoking a third-party CLI package. <br>
-Mitigation: Prefer the pinned `npx @dlazy/cli@1.2.3` invocation for temporary use or review the package source before global installation. <br>
+## Use Case:
 
+Designers, developers, and other users can search for image URLs and metadata to find references, backgrounds, and design assets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-image) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, Text, Shell commands, Guidance] <br>
-**Output Format:** [JSON response containing image result URLs and metadata, with command-line usage guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Async use can return task metadata instead of immediate outputs; saved assets and returned URLs may be hosted by dLazy services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: evidence release and SKILL.md frontmatter) <br>
+Risk: Image searches use a third-party service and require a dLazy API key stored locally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only if the dLazy service boundary is acceptable; protect and rotate the API key as needed.
+
+Risk: Providing local media paths may upload files to dLazy infrastructure.
+
+Mitigation: Do not provide local media paths unless upload is intended.
+
+Risk: The image-search description conflicts with parts of the documentation about generation and uploads.
+
+Mitigation: Review the CLI package and command behavior before installing or running it.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-search-image)
+- [dLazy CLI source listed in skill metadata](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package listed in skill metadata](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON]
+
+**Output Format:** [JSON with image URLs and metadata]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May return an asynchronous task identifier instead of immediate results.]
+
+## Skill Version(s):
+
+1.3.33 (source: ClawHub release evidence; artifact frontmatter says 1.3.6)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

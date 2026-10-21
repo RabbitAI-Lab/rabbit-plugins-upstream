@@ -1,45 +1,56 @@
-## Description: <br>
-医疗设备商机雷达 helps agents find early hospital and public-health procurement opportunities by scanning proposed projects, purchase intentions, and expiring service contracts, then ranking leads by budget, urgency, and fit. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+按产品和地区搜索医院拟建项目、采购意向与临期续约机会，按价值排序并给出跟进建议。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Sales and business development users use this skill to identify and prioritize early medical equipment, consumables, reagent, maintenance, and hospital IT opportunities. It is intended for China-focused hospital and health-system procurement lead discovery from public bidding and project data. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China-focused; usable globally by users monitoring Chinese hospital procurement data. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill persists account credentials and generated reports may contain signed links that bypass login for anyone who receives the report. <br>
-Mitigation: Use a manually configured API key when possible, store credentials securely, and remove signed links before sharing reports unless recipients are intended to have access. <br>
-Risk: Scans consume vendor credits, and consent-based auto-registration sends platform, CPU architecture, and a hashed MAC-derived identifier to the vendor. <br>
-Mitigation: Review the estimated query cost before running scans and use a preconfigured API key to skip auto-registration when device-derived registration is not acceptable. <br>
+## Use Case:
 
+Medical equipment sales and procurement teams use this skill to identify early hospital purchasing opportunities in China and prioritize outreach based on project stage, budget, and contract timing.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dragonzu/skills/medical-equipment-opportunity-radar) <br>
-- [API Quick Reference](references/api-quick.md) <br>
-- [Workflow Guide](references/workflow.md) <br>
-- [Report Template](references/report-template.md) <br>
-- [Auto-Registration Flow](references/auto-register.md) <br>
-- [知了商机大师](https://agent.zhiliaobiaoxun.com) <br>
+### Deployment Geography for Use:
 
+China
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, files, configuration, guidance] <br>
-**Output Format:** [Markdown opportunity lists with optional self-contained HTML report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or consent-based auto-registration; scans consume vendor credits and generated reports may include signed links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Search terms are sent to a third-party service; optional registration transmits device-derived identifiers.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only necessary search criteria, supply an existing API key when possible, and consent to auto-registration only if comfortable with device-derived data collection.
+
+Risk: API credentials may persist locally, and shared report links may grant access to underlying announcements.
+
+Mitigation: Provide the API key through a trusted secret mechanism, review stored credentials in ~/.zlbx/config.json, and restrict sharing of reports or chat logs containing signed links.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/medical-equipment-opportunity-radar)
+- [Skill documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Search workflow](artifact/references/workflow.md)
+- [Report template](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, HTML report, Guidance]
+
+**Output Format:** [Ranked Markdown opportunity list with an optional shareable HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes source announcement links and recommended follow-up actions; full scans can also save a local HTML report.]
+
+## Skill Version(s):
+
+1.0.8 (source: SKILL.md frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

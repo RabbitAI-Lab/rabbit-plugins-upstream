@@ -16,10 +16,21 @@
 # shown at issuance time; listing commands (--active-grants) always mask tokens
 # to a short prefix.
 """
-AuthGuardian Permission Checker
+AuthGuardian Permission Checker (advisory, local-only)
 
-Evaluates permission requests for accessing sensitive resources
-(DATABASE, PAYMENTS, EMAIL, FILE_EXPORT).
+The permission-gating component of the Network-AI skill. Blackboard
+coordination, token budgets, and project context live in the sibling scripts
+(blackboard.py, swarm_guard.py, context_manager.py); this script only scores
+requests, records advisory grants, and summarizes the audit log.
+
+Scores permission requests against abstract local resource labels
+(DATABASE, PAYMENTS, EMAIL, FILE_EXPORT) using a weighted model
+(justification 40%, trust 30%, risk 30%) and records advisory grant tokens in
+local files. It holds no credentials and never touches a real database,
+payment system, mailbox, or export target: the output is a scoring decision for
+the caller to enforce, not an authorization. The caller-supplied --agent
+identity is not verified. PAYMENTS, DATABASE, and FILE_EXPORT additionally
+require --confirm-high-risk.
 
 Usage:
     python check_permission.py --agent AGENT_ID --resource RESOURCE_TYPE \
@@ -55,6 +66,7 @@ GRANT_TOKEN_TTL_MINUTES = 5
 def _resolve_data_dir(env: str = "") -> "Path":
     """Return the active data directory, scoped to <env> when set."""
     import re as _re
+    # NETWORK_AI_ENV only selects which data/<env>/ folder holds the local state files.
     _env = env or os.environ.get("NETWORK_AI_ENV", "")
     base = Path(__file__).parent.parent / "data"
     if _env:
@@ -75,7 +87,7 @@ AUDIT_LOG = _DATA_DIR / "audit_log.jsonl"
 # of identity, and SHOULD require a separate authenticated session or human
 # approval before honouring access to sensitive resources.
 #
-# For PAYMENTS, DATABASE (write), and FILE_EXPORT the caller must also pass
+# For PAYMENTS, DATABASE (any scope), and FILE_EXPORT the caller must also pass
 # --confirm-high-risk to acknowledge the advisory-only nature of the grant.
 
 # Default trust levels for known agents
@@ -546,7 +558,8 @@ def evaluate_permission(
 
 def list_active_grants(agent_filter: Optional[str] = None, as_json: bool = False) -> int:
     """
-    Show which agents currently hold access to which APIs with expiry times.
+    Show which agents currently hold advisory grants for which abstract resource
+    labels (DATABASE, PAYMENTS, EMAIL, FILE_EXPORT), with expiry times.
 
     Reads data/active_grants.json, filters out expired grants,
     and displays remaining grants with TTL.
@@ -782,7 +795,10 @@ def audit_summary(last_n: int = 20, as_json: bool = False) -> int:
 
 def main():
     parser = argparse.ArgumentParser(
-        description="AuthGuardian Permission Checker",
+        description=(
+            "AuthGuardian Permission Checker — advisory local scoring over abstract "
+            "resource labels. Issues advisory tokens only; holds no credentials."
+        ),
         formatter_class=argparse.RawDescriptionHelpFormatter,
         epilog="""
 Examples:
@@ -846,7 +862,8 @@ Examples:
         action="store_true",
         dest="confirm_high_risk",
         help=(
-            "Required for PAYMENTS and DATABASE resources. Acknowledges that the issued "
+            "Required for PAYMENTS, DATABASE, and FILE_EXPORT resources (any scope). "
+            "Acknowledges that the issued "
             "token is advisory only and that the caller-supplied agent identity was not "
             "cryptographically verified."
         ),

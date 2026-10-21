@@ -1,6 +1,6 @@
 ---
 name: deyo
-description: Use only when the current user explicitly asks to use Deyo to transcribe one provided URL or one exact local audio/video file path, or explicitly asks for Deyo install, status, or troubleshooting. Do not trigger from a mere Deyo mention, ambient context, an implicit attachment, directory browsing, a glob, stdin, a batch request, or inferred permission to log in, install software, or read files.
+description: Use only when the current user explicitly asks to use Deyo to transcribe explicitly provided URLs or exact local audio/video file paths, or explicitly asks for Deyo install, status, or troubleshooting. Do not trigger from a mere Deyo mention, ambient context, an implicit attachment, directory browsing, a glob, stdin, or inferred permission to log in, install software, or read files.
 user-invocable: true
 disable-model-invocation: true
 metadata:
@@ -17,11 +17,15 @@ Use the installed `deyo` CLI for Deyo transcription tasks instead of the web UI.
 
 ## Explicit Authorization Boundary
 
-- Act only on the current user's explicit request to transcribe exactly one URL written in the request or exactly one local file path the user identified, or on an explicit Deyo install, status, or troubleshooting request.
+- Act only on the current user's explicit request to transcribe one or more explicit URLs written in the request or exact local file paths the user identified, or on an explicit Deyo install, status, or troubleshooting request.
 - Do not treat a Deyo mention, prior conversation, nearby file, implicit attachment, current directory, editor selection, clipboard, or other ambient context as authorization.
-- Never browse or scan a directory to choose an input. Reject directories, globs, stdin, multiple inputs, batch queues, and inferred attachments.
-- Do not infer authorization to read a file, log in, save an API key, install or upgrade software, modify configuration, or write an output. Require the current request to authorize each action needed; otherwise ask first.
+- Never browse or scan a directory to choose an input. Reject directories, globs, stdin, server-side batch queues, and inferred attachments. Multiple explicit inputs use the sequential workflow below.
+- Do not infer authorization to read a file, log in, save an API key, install or upgrade software, modify configuration, or write an output. Require authorization for each action needed; otherwise ask first. Authorization already given for the active list persists, without per-item reconfirmation.
 - Keep `deyo skill status` read-only and offline. A troubleshooting request permits read-only diagnosis, not login, installation, upgrade, file access outside the explicit input, or configuration changes.
+
+## Multiple Inputs And Summaries
+
+For an explicit multi-input request, read [references/batch.md](references/batch.md) before executing. It defines sequential single-input CLI calls, local recovery, complete transcripts, per-item summaries and source-cited cross-content conclusions. Confirm the input list, existing-minute authorization and output directory once. CLI stays single-input; no server queue or automatic retry. For a single input retain the delivery modes below. Summary-only requests for a previously saved batch use the saved full transcript and never create another transcription.
 
 ## OpenClaw Invocation Update Check
 
@@ -51,13 +55,14 @@ deyo skill _openclaw-check --scope global
 
 - Prefer the installed `deyo` command. Check with `command -v deyo`, then inspect `deyo --help` and `deyo --version`.
 - Require CLI `0.2.2` or newer for the consent-gated OpenClaw update manager and automatic language detection when `--language` is omitted. Also verify that help lists `--stream-transcript`, `--progress-format`, `--file`, `--mime-type`, and `verbose_json`.
-- If the command or required capability is missing, install or upgrade the published CLI:
+- If the command is missing, the version is too old, or a required capability (including streaming) is missing, first explain the detected problem and show this exact global install/upgrade command:
 
 ```bash
-npm install -g @casatwy/deyo@^0.2.0
+npm install -g @casatwy/deyo@latest
 ```
 
-- For Claude Code, prefer the current plugin/marketplace path from the Deyo install page. Use legacy `~/.claude/skills/deyo` installation only as a fallback when the user explicitly asks for it or the plugin path is unavailable.
+- Execute the command only when the current request explicitly authorizes this installation or upgrade, or the user subsequently explicitly agrees. A normal transcription request does not authorize installation or upgrade. If authorization is missing, ask before executing; if already explicitly authorized, do not ask again. If the user declines, do not install or upgrade; explain the blocked capability and stop the affected workflow.
+- For Claude Code, prefer the current plugin/marketplace path from the Deyo install page. Use legacy `~/.claude/skills/deyo` installation only as a fallback when the user explicitly asks for it or the plugin path is unavailable. Plugin and fallback installation follow the same authorization rule above; an unavailable plugin path is not installation consent.
 - Do not modify global git config, SSH keys, npm registry, or plugin manifests to work around installation failures. Preserve the raw error and stop unless the user explicitly authorizes a change.
 
 ## Auth And Base URL
@@ -71,10 +76,12 @@ npm install -g @casatwy/deyo@^0.2.0
 
 ## Inputs
 
-- Support `xiaoyuzhou`, `ximalaya`, `bilibili`, `douyin`, `xiaohongshu`, `youtube`, `apple-podcasts`, and `twitter` links.
+- Support `xiaoyuzhou`, `ximalaya`, `bilibili`, `douyin`, `xiaohongshu`, `youtube`, `apple-podcasts`, `twitter`, `tiktok`, `instagram`, `kankanews`, and `wechat_channels` links.
+- Treat an HTTPS URL as `kankanews` only when its lowercase hostname is exactly `kankanews.com` or ends with `.kankanews.com`. Keep known-platform checks ahead of this rule and keep `kankanews` ahead of generic direct-media handling. Use the canonical page URL returned by Deyo; never expose or preserve a media/CDN URL.
+- Transcribable inputs remain concrete episodes, videos, or single posts. Apple Podcasts show pages, Xiaoyuzhou podcast pages, and supported Bilibili Bangumi / UGC collection pages are recognized only to reject whole-show or whole-collection transcription and guide the user to a concrete episode or video.
 - Support one ordinary local audio/video file as source `upload`. Accept `deyo ./audio.mp3`, `deyo --file ./audio.mp3`, or `deyo -- ./audio.mp3`.
 - Add `--mime-type audio/*` or `--mime-type video/*` only when automatic detection is missing or wrong.
-- Do not pass directories, globs, stdin, special files, multiple files, batch queues, or resumable-upload expectations.
+- Do not pass directories, globs, stdin, special files, multiple inputs in one CLI invocation, batch queues, or resumable-upload expectations.
 
 ## Language Selection
 
@@ -215,17 +222,31 @@ Progress/status remains on stderr. Upload JSON is redacted by the CLI/server so 
 
 ## Progress And Source Boundaries
 
-- Upload events include `upload.hashing`, `upload.started`, `upload.progress`, `upload.completed`, `upload.checking`, `upload.ready`, `upload.failed`, and `upload.aborted`.
+- Upload events include `upload.started`, `upload.progress`, `upload.completed`, `upload.checking`, `upload.ready`, `upload.failed`, and `upload.aborted`. File selection proceeds directly to `upload.started`; the CLI does not calculate or send a local file hash.
 - Task events include `task.created`, `task.status_changed`, `task.progress`, transcript events, `task.completed`, `task.failed`, `task.cancelled`, `task.result_written`, and `task.notice`.
 - Surface upload progress, media inspection, task creation, consumed/remaining minutes when present, status changes, key percentages, fallback notices, completion, cancellation, and the final path.
 - If `task.created` reports `mode: "subtitles"` or `resultReady: true`, explain that usable subtitles were found and no long paid transcription is needed.
 - YouTube subtitle-direct tasks do not consume minutes. Full link/upload transcription consumes minutes after job creation or reuse.
 - Douyin image/text posts, Xiaohongshu image notes, Twitter/X text/image tweets, and Ximalaya albums do not proceed to transcription. Ask for a supported video, tweet, or episode as appropriate.
-- Apple Podcasts requires a `podcasts.apple.com` episode link with `?i=`.
+- Kankanews requires an HTTPS page whose lowercase hostname is exactly `kankanews.com` or a true dot-boundary subdomain ending in `.kankanews.com`; the page must resolve to a transcribable video. Do not ask for, display, or retain any internal MP4/CDN URL.
+- Apple Podcasts show pages without a valid episode `?i=` return HTTP 422. Ask for a concrete `podcasts.apple.com` episode link with a valid `?i=`; do not retry the show page as a paid task.
+- Xiaoyuzhou `/podcast/:id` pages return HTTP 422. Ask for a concrete `/episode/:id` link.
+- Bilibili Bangumi `ss` / `md` and supported UGC season / series collection pages return HTTP 422. Ask for a concrete BV, part, player, app-video, or Bangumi `ep` link. Do not enumerate or present the collection's video list.
+- A Bilibili trial video is a special concrete video with only a shorter official media segment available. The CLI must show the full duration, transcribable duration, expected minute deduction, and the warning `这是B站专属视频，Deyo 只能转写试看部分`, then obtain the current user's explicit interactive `y` confirmation. Never answer the prompt on the user's behalf. Refusal and non-TTY execution must stop without creating a task or deducting minutes. Billing uses only the transcribable duration.
+- A paid or charge-exclusive Bilibili video with no usable trial media still returns HTTP 422. Do not retry it as a forced transcription.
+- These three 422 branches happen before task reuse, balance checks, and minute deduction. They do not consume minutes or create transcription jobs; preserve the server's unsupported response instead of treating it as a transient failure.
 
 ## Interruptions And Failures
 
 - Keep SIGINT semantics unchanged: stop local waiting; do not claim the server-side task was cancelled. Upload may be aborted only if interruption occurs before upload completion.
-- If streaming is unavailable on an older CLI, upgrade first. Do not silently pretend post-completion text is live streaming.
+- If streaming is unavailable, follow Install And Discovery above: explain the missing capability, show the exact upgrade command, and execute only with explicit installation/upgrade authorization. Do not silently pretend post-completion text is live streaming.
 - If the model is unavailable, still complete the CLI task, clearly state that cleanup fell back to Whisper raw text, and write the raw text to the safe final `.txt` path.
 - Preserve raw CLI/service errors for authentication, balance, upload, media, unsupported-source, and network failures. Do not invent a successful transcript.
+
+## 来源与合集
+
+支持 Bilibili、抖音、小红书、小宇宙、喜马拉雅、YouTube、Apple Podcasts、Twitter/X、TikTok、Instagram、微信视频号、微信公众号、红果、研直播、超星、快手、腾讯视频、看看新闻 共 18 个命名平台，以及 HTTP/HTTPS 通用媒体链接、单文件上传，共 20 类来源。视频号遵循独立功能开关。网页上传公开可见，`/upload` 保持 noindex，不进入 sitemap。
+
+红果整剧、抖店多课时与网页多媒体候选须先选一项，不默认选择，不批量转写。红果选集失败可返回目录重新选择；候选过期须重新解析。YouTube 播放列表、B站合集、小宇宙节目、Apple Podcasts 节目、喜马拉雅专辑和网页 playlist 只展示真实摘要并引导具体单集；抖音与小红书作者页展示作者摘要并引导具体作品。带 list 的 YouTube 具体视频仍按单视频处理。付费或受限内容先分类，所有摘要、未选目录和不可转写内容均不得复用、扣分钟或创建任务。封面缺失或加载失败隐藏；未知集数与零条区分。
+
+CLI 摘要型合集返回 HTTP 422、`UNSUPPORTED_CONTENT` 和 `mode`；旧 `COLLECTION_UNSUPPORTED` 仅保留读取兼容。多媒体候选返回 `MULTIPLE_MEDIA_SELECTION_REQUIRED`；红果目录返回 `HONGGUO_EPISODE_REQUIRED`，附归属当前用户的 `parseToken`，引导网页选集或提交精确单集 URL。token 不允许跨用户使用。

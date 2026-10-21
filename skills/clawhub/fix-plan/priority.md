@@ -55,6 +55,22 @@ The reason distinguishes true blockers from items that look blocked but are actu
 | 3 | Omit the reason on `:external` | Always include the reason on new `[BLOCKED]` items. Reasonless items can't be triaged |
 | 4 | Treat `:selfable` as a permanent classification | Reclassify on every triage — once the item is in flight, it's no longer BLOCKED |
 
+## Workaround linkage (`↳ workaround-for:`)
+
+When an item exists as a workaround for another (usually `[BLOCKED:P*:external]`) item, append a suffix line under the workaround item so the dependency lives at tracker level, not only in plan prose:
+
+```markdown
+- [BLOCKED:P2:selfable] <workaround action>
+  - ↳ workaround-for: <anchor/keyword of the original blocked item>
+```
+
+Triage MUST surface the original blocker alongside the workaround when filtering `selfable` items — a selfable workaround whose reason-to-exist is an invisible external blocker misrepresents the queue: the workaround shows up, the reason it exists does not.
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Encode the workaround↔blocker dependency only in the plan document's prose | Add the `↳ workaround-for:` suffix line at tracker level so `selfable`-only filters cannot hide the original blocker |
+| 2 | List a linked workaround in sorted output without its original blocker | Print the blocker (with its own tag) indented under the workaround entry in the triage report |
+
 ## Triage workflow
 
 When the user asks "extract priority from BLOCKED" or "pick what to do next":
@@ -95,12 +111,28 @@ When the user asks "extract priority from BLOCKED" or "pick what to do next":
 2. Did sync produce any auto-resolutions (`[x]`) this run? — If yes, those entries leave the BLOCKED list (do not include them in sorted output)
 3. Are any items in the sorted output > 7 days old without sync verification? — Mark them with the date of last sync; consider them suspect until re-synced
 4. Did the report surface "N entries auto-resolved" before listing live BLOCKERs? — Without that line, the user cannot tell whether triage actually checked external state
+5. Does any `selfable` entry in the sorted output carry a `↳ workaround-for:` suffix? — If yes, print its original blocker (with tag) alongside it (see "Workaround linkage" above)
 
 ## Compatibility
 
 The plain `[BLOCKED]` form remains valid (no priority, no reason) — readers/parsers must treat it as `:P2:external` by default. New items should adopt the suffixed form; back-fill of existing entries is at the user's discretion.
 
 Ralph's autonomous loop continues to skip `[BLOCKED]` regardless of suffix — the suffix is for human triage, not loop control.
+
+### Unranked `- [ ]` entries
+
+`[BLOCKED]` has a documented default; plain `- [ ]` did not, so triage had no defined way to sort the unranked majority of a mature tracker. Resolve each unranked `- [ ]` by its structural position, in this order:
+
+| Position | Treatment | Why |
+|----------|-----------|-----|
+| Nested under a parent entry (sub-checkbox) | **Inherits the parent's rank and reason** — do not assign its own | The sub-item exists to decompose the parent, so ranking it separately double-counts the same work and lets a child drift above its own parent |
+| A bare grouping header carrying no executable content (e.g. `- [ ]` whose text is a section label) | **Excluded from ranking entirely** — not an item | Ranking a label inflates counts with work that does not exist. Prefer converting it to a plain bullet so it stops parsing as an item |
+| Carries a tracker key (`[PROJ-N]`) but no rank | **Rank is authoritative in the tracker, not here** — read it there rather than back-filling locally | These are index entries; a locally invented rank silently competes with the tracker's own field |
+| Standalone executable item, no rank, no tracker key | **Default `P2:selfable`** | `- [ ]` asserts the item is *not* blocked, so the reason is `selfable`; absent a stated rank, the neutral middle (`P2`) is the only non-arbitrary choice. Mirrors the bare-`[BLOCKED]` → `:P2:external` default above |
+
+The default is a **read convention, not a licence to write markers** — do not mass-back-fill `P2:selfable` into the file. Back-fill only when a specific item's real rank is known, exactly as with bare `[BLOCKED]`.
+
+Report unranked standalone items as their own line in the triage output (e.g. "N unranked → read as P2:selfable"). Folding them silently into the P2 bucket hides how much of the tracker has never actually been triaged.
 
 ### Plan Drafts (`## Plan Drafts` section)
 

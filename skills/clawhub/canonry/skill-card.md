@@ -1,49 +1,68 @@
-## Description: <br>
-Set up and operate Canonry AEO projects: inspect mention and citation coverage, diagnose regressions, run technical audits, and act through the Canonry CLI or MCP tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Navigate Canonry through connected MCP tools or the `cnry` CLI to inspect evidence, diagnose changes, plan measurement, review integrations, and report results. Use this optional host-native skill for CLI workflows and detailed references; connected MCP users can operate through canonry_help without installing a local runtime or skill.
 
-## Publisher: <br>
-[arberx](https://clawhub.ai/user/arberx) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arberx](https://clawhub.ai/user/arberx)
 
-## Use Case: <br>
-Developers, marketers, and AEO operators use this skill to run Canonry projects, inspect AI mention and citation coverage, diagnose visibility regressions, and apply approved fixes through Canonry CLI or MCP workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Canonry can operate on connected AEO projects and services, including write-capable integrations when credentials allow it. <br>
-Mitigation: Use the narrowest API key or read-only scope that fits the task and require explicit approval for every mutation or quota-consuming run. <br>
-Risk: Canonry configuration can contain secret-bearing API keys and service credentials. <br>
-Mitigation: Protect ~/.canonry/config.yaml, do not print or paste credentials, and run interactive initialization outside the agent transcript. <br>
-Risk: Client domains, transcripts, and project memory can contain sensitive business material. <br>
-Mitigation: Avoid exposing real client data in public channels and clear Aero transcripts or memory when handling sensitive material. <br>
+## Use Case:
 
+Developers and operators use Canonry-connected agents to inspect stored website and AI-visibility evidence, diagnose issues, plan measurements, review integrations, and report results. The guide helps them choose MCP or `cnry` CLI workflows while keeping approval boundaries explicit.
 
-## Reference(s): <br>
-- [Canonry](https://canonry.ai) <br>
-- [AINYC AEO Methodology](https://ainyc.ai/aeo-methodology) <br>
-- [AEO Analysis](references/aeo-analysis.md) <br>
-- [Canonry CLI Reference](references/canonry-cli.md) <br>
-- [Indexing Workflows for AEO](references/indexing.md) <br>
-- [Server-side traffic](references/server-side-traffic.md) <br>
-- [Google Business Profile Integration](references/google-business-profile.md) <br>
-- [WordPress Integration](references/wordpress-integration.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, code] <br>
-**Output Format:** [Markdown guidance with inline shell commands, configuration snippets, JSON outputs, and implementation instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Canonry runtime and explicit approval for mutations or quota-consuming sweeps.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.134.0+46e3bd6 (source: ClawHub release metadata) <br>
+Risk: Analysis may be incomplete or misleading if project scope, time window, provider, or sample details are missing or incomparable.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use project-scoped read-only access and stored-only mode; preserve the scope and time details of evidence and state when evidence is missing.
+
+Risk: Production changes, advertising budgets, recurring schedules, or feedback can have consequential or paid effects.
+
+Mitigation: Review exact proposed changes and bounds, and obtain authorized approval before execution.
+
+Risk: Traffic collection can transmit sensitive URL and visitor details to a configured receiver.
+
+Mitigation: Confirm the receiver and its handling of URL and visitor data before enabling collection.
+
+Risk: Cloudflare credentials may remain in local storage after use.
+
+Mitigation: Use dedicated Cloudflare tokens, revoke them, and remove retained local credentials during teardown.
+
+## Reference(s):
+
+- [Canonry ClawHub release](https://clawhub.ai/arberx/skills/canonry)
+- [AEO Analysis: Interpreting Canonry Results](references/aeo-analysis.md)
+- [Canonry CLI](references/canonry-cli.md)
+- [Google Business Profile](references/google-business-profile.md)
+- [Google Ads and Google Tag Manager](references/google-marketing.md)
+- [Indexing Workflows for AEO](references/indexing.md)
+- [Server-side traffic](references/server-side-traffic.md)
+- [WordPress Integration](references/wordpress-integration.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, Markdown, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown guidance and reports, with shell commands and configuration examples where relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations and external actions remain subject to the documented approval boundaries.]
+
+## Skill Version(s):
+
+7.50.1+a36190c (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

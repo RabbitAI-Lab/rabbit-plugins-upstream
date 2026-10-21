@@ -1,45 +1,55 @@
-## Description: <br>
-Image generation skill that selects an appropriate dLazy CLI image model based on the prompt. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Selects a dLazy image model for a prompt and guides image generation or editing through the dLazy CLI.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creators use this skill to generate, edit, upscale, vectorize, or segment images through the dLazy CLI and hosted image-generation APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media inputs may be sent to dLazy API and file-hosting endpoints. <br>
-Mitigation: Use only approved content, avoid sensitive inputs unless dLazy is approved for that data, and review dLazy service terms before use. <br>
-Risk: The dLazy CLI can store an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-command authentication when persistence is not desired, and rotate or revoke keys from the dLazy dashboard if exposure is suspected. <br>
-Risk: Image-generation requests may consume dLazy credits. <br>
-Mitigation: Confirm account authorization and available credits before running large or repeated generation jobs. <br>
+## Use Case:
 
+Creators and developers use this skill to select a dLazy model and generate or edit images from prompts and optional reference media.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-image-generate) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy service](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, JSON, Files] <br>
-**Output Format:** [Markdown guidance with dlazy CLI commands and JSON command output URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce hosted media URLs on files.dlazy.com and may upload local media files when supplied as inputs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: server release metadata and skill frontmatter) <br>
+Risk: Prompts, parameters, and submitted local media may be sent to dLazy, and generated media is hosted by dLazy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the service only for content you are comfortable sharing with dLazy; review media before submitting it.
+
+Risk: The dLazy CLI saves an API key locally and a global installation persists on the system.
+
+Mitigation: Prefer the documented npx invocation to avoid a global install, and rotate or revoke the key when no longer needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-image-generate)
+- [dLazy CLI package](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Shell commands, Guidance]
+
+**Output Format:** [Markdown with CLI commands and generated media links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The CLI returns JSON containing URLs for generated media hosted by dLazy.]
+
+## Skill Version(s):
+
+1.3.33 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
