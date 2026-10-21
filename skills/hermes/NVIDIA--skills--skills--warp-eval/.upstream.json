@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/warp-eval",
+  "identifier": "NVIDIA/skills/skills/warp-eval",
+  "repo": "NVIDIA/skills",
+  "path": "skills/warp-eval",
+  "branch": "main",
+  "pushedAt": "2026-10-21T07:18:59Z",
+  "contentHash": "20241638d537e3774e58156efad1ffbd79ba7aa39356b5839ffcb6e41cb38db7",
+  "fetchedAt": "2026-10-21T12:59:58.420Z"
+}

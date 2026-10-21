@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/visualization/protein-diagram",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/visualization/protein-diagram",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/visualization/protein-diagram",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "7f98d38ead77d6cd03f7397c0da0e25d500cefaad2d14fa51fc39997059166e1",
+  "fetchedAt": "2026-10-21T12:59:59.456Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/astropy",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/astropy",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/astropy",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "9129dcea33150c6647af18a6b7e15af4780cf820babd11c8686630512db7d5de",
+  "fetchedAt": "2026-10-21T12:59:59.284Z"
+}

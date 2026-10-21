@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/gptq",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/gptq",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/gptq",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "ba150a86522f2ece43e3effe433d13fe0612877713aa187979b4909082d42a56",
+  "fetchedAt": "2026-10-21T12:59:59.363Z"
+}

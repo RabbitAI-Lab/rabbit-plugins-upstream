@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/ambient-healthcare-agent-with-nemotron-voice-agent",
+  "identifier": "NVIDIA/skills/skills/ambient-healthcare-agent-with-nemotron-voice-agent",
+  "repo": "NVIDIA/skills",
+  "path": "skills/ambient-healthcare-agent-with-nemotron-voice-agent",
+  "branch": "main",
+  "pushedAt": "2026-10-21T07:18:59Z",
+  "contentHash": "5c61fa672215115e8541a0065e4a8ef48d3e46863f010752ebe216d5fed15976",
+  "fetchedAt": "2026-10-21T12:59:57.794Z"
+}

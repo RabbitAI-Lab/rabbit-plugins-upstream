@@ -426,6 +426,13 @@ verified empirically, not through more cap queries:
 | NAT variants (SNAT / DNAT / combined) | Requested through `doca_flow_ct_cfg_set_direction` and the CT actions; an unsupported request surfaces as `_NOT_SUPPORTED` at entry add — there is no per-variant cap query |
 | Overlay encapsulations for CT | Confirmed against the shipped CT sample and runtime behavior, not a per-overlay cap symbol |
 
+**Empirical CT checks are isolation-only.** Confirm NAT variants,
+overlay handling, sizing, and aging on a dedicated test
+representor/VF or isolated ports that carry no production traffic.
+Snapshot counters, stage one entry, and widen only after the isolated
+smoke is green. Never use a live production port to discover whether a
+CT action is supported.
+
 **Version pairing — CT ships inside doca-flow.** There is no separate
 `doca-flow-ct` pkg-config module; `pkg-config --modversion doca-flow` MUST
 equal `doca_caps --version`. A skew between the doca-flow library and the
@@ -441,17 +448,20 @@ in [`## Error taxonomy`](#error-taxonomy):
 | --- | --- |
 | `DOCA_ERROR_BAD_STATE` | Layering / lifecycle violation: `doca_flow_ct_init` called after a port was already started (it must run before port start), OR a CT entry add before the ports and wrapped pipes are up, OR calling `doca_flow_ct_destroy` out of order relative to `doca_flow_destroy` |
 | `DOCA_ERROR_NOT_SUPPORTED` | NAT variant / overlay / aging range / CT feature is unsupported on this device + firmware combo. Re-run `doca_flow_ct_cap_is_dev_supported(devinfo)` to confirm the device supports CT at all; surface which DOCA version is installed. Do not retry the same spec on the same device |
-| `DOCA_ERROR_FULL` (or `_NO_MEMORY`) | CT entry table at capacity. Read the per-CT-entry counters to identify idle / stale entries; either wait for aging to evict them, evict explicitly, or — if the workload genuinely needs more concurrent flows than the device supports — re-run the cap query for the max-concurrent-flows axis and consider whether the workload fits this device at all |
-| `DOCA_ERROR_INVALID_VALUE` | Malformed 5-tuple (zero protocol, mismatched IP versions on src / dst), NAT translation that conflicts with an existing entry (two entries cannot map the same translated 5-tuple to two different connections), unsupported overlay configuration, or aging timer outside the cap-advertised range |
+| `DOCA_ERROR_FULL` (or `_NO_MEMORY`) | CT entry table at capacity. Read the per-CT-entry counters to identify idle / stale entries; either wait for aging to evict them or evict explicitly. The documented surface has no separate max-concurrent-flows cap getter: do not invent one. Use the configured table sizing accepted by the installed CT sample/API plus observed add failures, then surface a device-fit gap if the required peak cannot be admitted |
+| `DOCA_ERROR_INVALID_VALUE` | Malformed 5-tuple (zero protocol, mismatched IP versions on src / dst), NAT translation that conflicts with an existing entry (two entries cannot map the same translated 5-tuple to two different connections), unsupported overlay configuration, or an aging value rejected by the installed CT configuration API. Confirm accepted values from the installed header/sample and setter return; do not claim a numeric cap-advertised range |
 | `DOCA_ERROR_IN_USE` | CT entry remove while the entry is still being referenced by in-flight traffic. Quiesce the affected 5-tuple (or wait for the aging timer to evict the entry naturally), then retry. Do NOT force-remove — doing so can corrupt the per-connection state on the wire |
 
 **Safety overlay.** Inherits [`## Safety policy`](#safety-policy) plus three
 CT rules:
 
-1. **Aging-table sizing.** Cap-advertised max concurrent flows is the
-   ceiling; size to the expected *peak* (not average). If the estimate
-   exceeds the ceiling, surface the device-fit gap — do NOT over-commit. The
-   aging timer must fit both the cap-advertised range and the granularity.
+1. **Aging-table sizing.** The public CT capability surface provides the
+   device-level `doca_flow_ct_cap_is_dev_supported(devinfo)` gate, not
+   separate numeric max-flow or aging-range getters. Size to the expected
+   *peak* (not average), use only values accepted by the installed
+   header/sample and CT configuration setters, and treat `_FULL`,
+   `_NO_MEMORY`, or rejected configuration as the measured device-fit
+   boundary. Do not invent a numeric ceiling or aging range.
 2. **Do not invent NAT translations to resolve a conflict.**
    `DOCA_ERROR_INVALID_VALUE` on a NAT entry add is almost always a policy
    bug (two NAT rules that should not coexist) — surface it; the policy layer
@@ -498,7 +508,7 @@ next move:
 | Capability error | `DOCA_ERROR_NOT_SUPPORTED` on pipe creation or entry add | Match kind, action kind, or steering mode is unsupported on this device/firmware | Re-run capability discovery (TASKS.md `## configure`); compare requested capability to the device's actual capability set. Do not retry the same spec on the same device. |
 | Resource error | `DOCA_ERROR_NO_MEMORY`, `DOCA_ERROR_FULL` on entry add | Pipe entry budget exhausted or actions-memory pool depleted | Inspect counters and pipe statistics (`## Observability` below); enlarge the pool or evict entries before retrying. |
 | Lifecycle error | `DOCA_ERROR_BAD_STATE` on start/stop | Object operated on outside its allowed lifecycle window | Re-read the object's lifecycle in TASKS.md; ensure operations happen in the documented order (port started before pipe created, pipe created before entries added, etc.). |
-| Port-config-incomplete error (compiles, dies at start — the #1 first-run failure) | `doca_flow_port_start` aborts with `failed creating port - port ID is mandatory` (`engine_port.c`), `... either doca_dev or doca_dev_rep must be provided` (`engine_port.c`), or `... port representor cannot be created in VNF mode` (`engine_port.c`); or the binary exits earlier with `rte_eth_dev_count_avail`=0 / "need N ports" (`dpdk_utils.c`) | A mandatory `doca_flow_port_cfg` setter is missing, or the DPDK ports were never probed (collecting BDFs from argv ≠ probing them — the probe is what creates the DPDK port from the `doca_dev`, `samples/doca_flow/flow_common.c`) | Set **both** `doca_flow_port_cfg_set_port_id()` and `doca_flow_port_cfg_set_dev()` (a real `doca_dev` in VNF, not `dev_rep`) before `doca_flow_port_start`, and call `doca_dpdk_port_probe(dev, "dv_flow_en=2")` for **every** opened device *before* `rte_eth_dev_count_avail()`. **On count == 0, or count < expected, return non-zero from `main()` immediately — do NOT enter the keep-alive loop on an un-armed bridge** (a long-running `main()` over zero hardware ports stays alive but never forwards a packet, and the watchdog cannot distinguish it from a healthy program). See [`SKILL.md ## Port bring-up`](SKILL.md#port-bring-up-the-gate-lives-in-tasksmd) + [`TASKS.md ## configure`](TASKS.md#configure) step 6 + [`TASKS.md ## run`](TASKS.md#run) step 6. |
+| Port-config-incomplete error (compiles, dies at start — the #1 first-run failure) | `doca_flow_port_start` aborts with `failed creating port - port ID is mandatory` (`engine_port.c`), `... either doca_dev or doca_dev_rep must be provided` (`engine_port.c`), or `... port representor cannot be created in VNF mode` (`engine_port.c`); or the binary exits earlier with `rte_eth_dev_count_avail`=0 / "need N ports" (`dpdk_utils.c`) | A mandatory `doca_flow_port_cfg` setter is missing, or the DPDK ports were never probed (collecting BDFs from argv ≠ probing them — the probe is what creates the DPDK port from the `doca_dev`, `samples/doca_flow/flow_common.c`) | Set **both** `doca_flow_port_cfg_set_port_id()` and `doca_flow_port_cfg_set_dev()` (a real `doca_dev` in VNF, not `dev_rep`) before `doca_flow_port_start`, and call `doca_dpdk_port_probe(dev, "dv_flow_en=2")` for **every** opened device *before* `rte_eth_dev_count_avail()`. **On count == 0, or count < expected, return non-zero from `main()` immediately — do NOT enter the keep-alive loop on an un-armed bridge** (a long-running `main()` over zero hardware ports stays alive but never forwards a packet, and the watchdog cannot distinguish it from a healthy program). See [`TASKS.md ## configure`](TASKS.md#configure) step 6 + [`TASKS.md ## run`](TASKS.md#run) step 6. |
 | Placement / steering-plane-unavailable error | Port refuses to start — `doca_flow_port_start` (or the first switch-port `doca_flow_pipe_create`) returns `DOCA_ERROR_DRIVER` / a failed start, and the SDK log shows `Failed to query WQE based flow table capabilities` → `Failed to get hws cap` (devx `op_mod=0x37`, `BAD_PARAM_ERR`), or `failed to create dest action ROOT, flag 64, err -121` | The opened function has no usable hardware-steering plane — almost always running **host-side against a BlueField in `SEPARATED_HOST` / NIC mode**, where the steering plane belongs to the DPU Arm. Identical on every card on such a host, in BOTH `vnf` and `switch` modes. | **Do not touch the pipe spec or steering-mode string.** This is the device-placement signature: check `INTERNAL_CPU_MODEL` per [`## Capabilities and modes`](#capabilities-and-modes) device-placement bullet + [`TASKS.md ## configure`](TASKS.md#configure) step 1. Run DOCA Flow on the DPU Arm side, or change the card's mode via [`doca-hardware-safety`](../../doca-hardware-safety/SKILL.md). |
 | Hardware/firmware error | `DOCA_ERROR_DRIVER` and similar | The kernel driver, firmware, or PCIe path is in a state Flow cannot recover from | Stop. This is not a Flow-spec problem. Capture device state via the platform's diagnostic CLIs and escalate. |
 
@@ -586,7 +596,8 @@ unintended traffic. Three policies follow:
    successful `doca_flow_pipe_create` (optionally backed by the
    staged-entry / dry-run sample pattern) as the validation step
    **before** the entry-add call hits the hardware. The lifecycle is
-   *build (create = validate) → start → add entries → read counters*.
+   *start port → create pipe (validate) → add entries → read counters*;
+   a pipe has no separate start operation.
    Skipping it is the most common cause of "my pipe takes the link down".
 2. **Hairpin pipes must be staged.** A hairpin pipe (RX-to-TX without the
    host CPU) effectively rewires the steering plane, so its ordering is

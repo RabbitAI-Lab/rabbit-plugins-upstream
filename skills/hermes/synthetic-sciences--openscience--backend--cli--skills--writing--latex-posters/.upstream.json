@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/latex-posters",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/latex-posters",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/latex-posters",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "20ee6b3aae026bbdba5e93f9cc2a7dfe1e69173f70e6905becb55b4d06f966e4",
+  "fetchedAt": "2026-10-21T12:59:59.391Z"
+}

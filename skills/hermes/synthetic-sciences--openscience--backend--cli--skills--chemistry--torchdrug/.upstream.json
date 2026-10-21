@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/torchdrug",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/torchdrug",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/torchdrug",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "4e76186bd7ea15c752100fd2543595002c5bc48fa6759795619ae0c26db8d5aa",
+  "fetchedAt": "2026-10-21T12:59:59.510Z"
+}

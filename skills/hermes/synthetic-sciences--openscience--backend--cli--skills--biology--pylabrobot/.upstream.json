@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pylabrobot",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pylabrobot",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pylabrobot",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "eb7ffe5f5c970108660f3e26841096807b31b4f877a8ba4cf077505e6b5e8d47",
+  "fetchedAt": "2026-10-21T12:59:59.462Z"
+}

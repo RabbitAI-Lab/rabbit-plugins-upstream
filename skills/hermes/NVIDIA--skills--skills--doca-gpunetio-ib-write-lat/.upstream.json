@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/doca-gpunetio-ib-write-lat",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "1562f6eafbddfcc5af4fa6476d929d6cc7911e562c8dedf060b4ce294fff487e",
-  "fetchedAt": "2026-07-26T17:03:52.283Z"
+  "pushedAt": "2026-10-21T07:18:59Z",
+  "contentHash": "eda5c73930b736ccf51c9443b2af7755e819097b48407afc950bcbca32dbbe34",
+  "fetchedAt": "2026-10-21T12:59:57.919Z"
 }
