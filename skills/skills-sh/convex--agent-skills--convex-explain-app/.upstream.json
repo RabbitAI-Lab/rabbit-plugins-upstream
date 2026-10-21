@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-explain-app",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-explain-app",
+  "branch": "main",
+  "pushedAt": "2026-10-13T21:11:27Z",
+  "contentHash": "74a916ed0e0898104744dee4964211bacd9eeb4f1a9797ef3fe70e24261e8249",
+  "fetchedAt": "2026-10-21T12:59:42.119Z"
+}
