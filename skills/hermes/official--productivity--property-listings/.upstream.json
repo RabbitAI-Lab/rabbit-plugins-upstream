@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/property-listings",
+  "identifier": "official/productivity/property-listings",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/property-listings",
+  "branch": "main",
+  "pushedAt": "2026-10-22T12:26:14Z",
+  "contentHash": "18ed8f61eb9186d71035afa3d45acc14051ec5b2b22b639cd198b9a206c9fdb6",
+  "fetchedAt": "2026-10-22T13:02:41.467Z"
+}

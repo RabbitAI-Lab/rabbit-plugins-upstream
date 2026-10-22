@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pacsomatic",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pacsomatic",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pacsomatic",
+  "branch": "main",
+  "pushedAt": "2026-10-20T16:51:30Z",
+  "contentHash": "d2424ab3bd12b343842db48cf01eff8d716affdb1719a761be4773c7d18000f7",
+  "fetchedAt": "2026-10-22T13:02:11.186Z"
+}

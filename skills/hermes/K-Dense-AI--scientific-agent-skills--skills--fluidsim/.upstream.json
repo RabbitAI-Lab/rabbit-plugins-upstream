@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/fluidsim",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/fluidsim",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/fluidsim",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "0722e7b700533e4c8f56a5e23e937e91ae97197c981eac8d8817ae33c60ec873",
+  "fetchedAt": "2026-10-22T13:02:25.559Z"
+}

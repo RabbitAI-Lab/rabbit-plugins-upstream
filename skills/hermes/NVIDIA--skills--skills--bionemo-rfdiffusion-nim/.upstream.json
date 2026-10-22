@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-rfdiffusion-nim",
+  "identifier": "NVIDIA/skills/skills/bionemo-rfdiffusion-nim",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-rfdiffusion-nim",
+  "branch": "main",
+  "pushedAt": "2026-10-22T12:19:38Z",
+  "contentHash": "eafbe2555ccc22f636c58d8d6f0c95af624a942ee8a59ce9b1bbefbc4de1abd8",
+  "fetchedAt": "2026-10-22T13:02:09.579Z"
+}

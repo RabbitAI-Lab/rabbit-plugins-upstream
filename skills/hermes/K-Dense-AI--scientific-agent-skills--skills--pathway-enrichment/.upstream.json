@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pathway-enrichment",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pathway-enrichment",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pathway-enrichment",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "f40ba9706777b1a483f48d99f619185be6b0fef828c4dfa3b3f7779ae87cba74",
+  "fetchedAt": "2026-10-22T13:02:25.609Z"
+}
