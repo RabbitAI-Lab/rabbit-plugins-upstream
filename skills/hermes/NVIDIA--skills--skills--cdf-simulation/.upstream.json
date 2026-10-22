@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-simulation",
+  "identifier": "NVIDIA/skills/skills/cdf-simulation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-simulation",
+  "branch": "main",
+  "pushedAt": "2026-10-22T12:19:38Z",
+  "contentHash": "5b404f5e3c885756cf4044cf0ab6ae494eeabc3086037b91cae51d300fdc4bdd",
+  "fetchedAt": "2026-10-22T13:02:08.921Z"
+}

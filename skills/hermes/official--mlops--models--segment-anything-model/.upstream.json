@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/models/segment-anything-model",
+  "identifier": "official/mlops/models/segment-anything-model",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/models/segment-anything-model",
+  "branch": "main",
+  "pushedAt": "2026-10-22T12:26:14Z",
+  "contentHash": "d458cd75ce34a17ce54c7064ef1c2f8f7a9e830042ef1777e0171ea3ff38cf50",
+  "fetchedAt": "2026-10-22T13:02:41.482Z"
+}

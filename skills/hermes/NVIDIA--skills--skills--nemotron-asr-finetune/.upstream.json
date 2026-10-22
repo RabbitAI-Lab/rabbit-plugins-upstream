@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/nemotron-asr-finetune",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "c06e54c66817b13c3ed9f380db706e8b1c70f07c9e2df31d788a31a1f4a9e213",
-  "fetchedAt": "2026-07-26T17:03:52.346Z"
+  "pushedAt": "2026-10-22T12:19:38Z",
+  "contentHash": "2cdea8f835a9a746a82064a7cda290afc6df5bc2946f6b53527c08f3fde9a348",
+  "fetchedAt": "2026-10-22T13:02:09.404Z"
 }

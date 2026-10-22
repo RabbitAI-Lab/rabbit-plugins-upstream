@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-install",
+  "identifier": "NVIDIA/skills/skills/nvshmem-install",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-install",
+  "branch": "main",
+  "pushedAt": "2026-10-22T12:19:38Z",
+  "contentHash": "6abfee7b8f0ceeb92be83f24ea583804f44afe49f967928cb3bb0da7ea48a505",
+  "fetchedAt": "2026-10-22T13:02:09.452Z"
+}

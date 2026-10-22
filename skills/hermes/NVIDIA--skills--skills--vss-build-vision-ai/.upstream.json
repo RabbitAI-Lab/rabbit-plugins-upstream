@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/vss-build-vision-ai",
+  "identifier": "NVIDIA/skills/skills/vss-build-vision-ai",
+  "repo": "NVIDIA/skills",
+  "path": "skills/vss-build-vision-ai",
+  "branch": "main",
+  "pushedAt": "2026-10-22T12:19:38Z",
+  "contentHash": "5733e3be53f63d358627f5880721890cf0a05622632b19650fc71bde514332fc",
+  "fetchedAt": "2026-10-22T13:02:10.116Z"
+}

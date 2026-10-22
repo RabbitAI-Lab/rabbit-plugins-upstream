@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-brainstorming",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scientific-brainstorming",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scientific-brainstorming",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "757209c30d24af1e76dfe67b2328096f1493334724321899239ee352f6981563",
+  "fetchedAt": "2026-10-22T13:02:25.642Z"
+}
