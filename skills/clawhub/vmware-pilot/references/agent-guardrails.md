@@ -10,7 +10,7 @@ guardrails below are adapted, with thanks, from the working configuration
 [@juanpf-ha](https://github.com/juanpf-ha) developed while running
 vmware-monitor and vmware-aria against a production vSphere estate with Llama
 3.3 70B FP8 on an on-prem H100
-([VMware-AIops#31](https://github.com/zw008/VMware-AIops/issues/31)). The
+([VMware-AIops#31](https://github.com/vmware-skills/VMware-AIops/issues/31)). The
 cross-skill rules are identical across this family; the parts below marked
 vmware-pilot are specific to this skill.
 
@@ -18,7 +18,9 @@ vmware-pilot is the odd one out. It manages no infrastructure of its own — it
 designs multi-step workflows, tracks their state, and gates them on human
 approval. Two consequences follow, and both matter more on a small model than
 on a large one: **authoring a workflow is itself the write operation**, and
-**pilot does not execute anything** — the calling agent does.
+**by default pilot executes nothing** — the calling agent does. (Started with
+`--dispatch`, pilot runs each step itself in that skill's own MCP server; the
+result then has no `pending_dispatch`, and you do not perform the steps.)
 
 > **Disclaimer**: This is a community-maintained open-source project and is
 > **not affiliated with, endorsed by, or sponsored by VMware, Inc. or Broadcom
@@ -34,8 +36,9 @@ These are structural, so it cannot.
 
 | Guardrail you would otherwise prompt for | Now enforced by |
 |---|---|
-| "Do not execute steps yourself — hand them back for a human to run" | **The dispatch contract.** Pilot never calls a companion skill's MCP tools; it returns a step description and the calling agent invokes the tool. This is architecture, not etiquette. |
+| "Do not execute steps yourself — hand them back for a human to run" | **The dispatch contract.** Without `--dispatch`, pilot never calls a companion skill's MCP tools; it returns a step description and the calling agent invokes the tool. With `--dispatch`, pilot runs the steps and stops at each approval gate, so nothing after a gate runs before `approve`. |
 | "Check the plan makes sense before running it" | **`review_workflow`** performs a structural sanity check and returns `approved` or `needs_revision`. It is a read tool that inspects a definition without executing it. |
+| "Put an approval gate before anything destructive" | **Custom-workflow rejection.** In a custom workflow (YAML, `create_workflow`, or a draft), a destructive or unclassifiable step — or any step passing `confirm: True` — with no `require_approval` before it makes `create_workflow` / `confirm_draft` / `create_workflow_from_template` refuse to save it and `run_workflow` refuse to run it — `force=True` does not override that. The refusal names the step and the gate to insert. |
 | "Log every state change you make" | **The `@vmware_tool` decorator.** Every workflow transition is recorded to `~/.vmware/audit.db`, and `get_workflow_status` returns the state plus its audit log. |
 
 The one guardrail this skill does not hand you: pilot's list tools return bare
@@ -65,8 +68,8 @@ your agent's instruction block.
 
 - vmware-pilot: multi-step workflows — design, plan, run, approve, roll back,
   cancel, and inspect state.
-- vmware-aiops: VM lifecycle. Pilot never calls it; you do, when pilot hands
-  you a step.
+- vmware-aiops: VM lifecycle. Without `--dispatch` pilot never calls it; you
+  do, when pilot hands you a step.
 - vmware-monitor: read-only vCenter inventory, hosts, alarms, events.
 - vmware-nsx / vmware-nsx-security: networking and firewall.
 - vmware-storage, vmware-vks, vmware-aria, vmware-avi: their own domains.
@@ -74,8 +77,9 @@ your agent's instruction block.
 
 ## The dispatch contract
 
-- Pilot is a dispatcher, not an executor. When run_workflow returns a step, YOU
-  invoke that skill's MCP tool and report the result back. Pilot will not do it.
+- Read the result: a `pending_dispatch` list means pilot runs without
+  `--dispatch` and YOU invoke each listed tool. No `pending_dispatch` means pilot
+  ran the steps itself — do not run them again.
 - Never claim a step ran because pilot advanced its state. State advanced
   because you told pilot it did.
 - If you cannot invoke the tool a step names — it is not installed or is
@@ -93,6 +97,13 @@ your agent's instruction block.
   put the approval gate before the first irreversible step, not after it.
 - Give every reversible step a rollback_tool and rollback_params. A step with
   no rollback cannot be undone by the rollback tool.
+- Nothing is ever rolled back automatically. After a failure, ask the user
+  before undoing anything. On the MCP server the rollback tool cannot see the
+  steps you performed (they stay not_executed), so undo them yourself: call each
+  one's rollback_tool with its rollback_params, last step first.
+- issue_tkc_kubeconfig and issue_supervisor_kubeconfig return a live credential.
+  Only fetch one when the user asks, write it to a file, and never print the
+  token.
 - Run review_workflow before executing. Treat needs_revision as a stop.
 
 ## Data fidelity
@@ -127,7 +138,7 @@ checklist when evaluating any local model against these skills:
 | Long tool responses: omits items, or reports "no data returned" when data was present | Ask for explicit limits so responses stay small. Pilot's lists have no truncation envelope, so verify long results rather than trusting the summary. |
 | Adds generic recommendations unsupported by results | The "analysis discipline" rules. |
 | Drops requested fields or reorders results | State the required fields and ordering in the request itself. In a workflow, reordering the steps changes what the plan does. |
-| Multi-tool workflows take 30–50s end to end | Start from a built-in template with `plan_workflow` rather than designing from scratch; `get_workflow_status` returns state and audit log together. |
+| Multi-tool workflows take 30–50s end to end | Start from a built-in template with `create_workflow_from_template` rather than designing from scratch; `get_workflow_status` returns state and audit log together. |
 
 ### Workflow design failures — the pattern to watch here
 
@@ -138,7 +149,7 @@ the most damage. These are specific to this skill:
 |---|---|
 | Writes a step naming a tool that does not exist — a plausible name assembled from the skill's naming pattern rather than its actual surface | The "never invent a tool name" rule. `get_skill_catalog` lists a curated subset, so absence from the catalog is not proof a tool is missing — and presence of a *plausible* name in the model's head is no proof it exists. Confirm against the target skill's SKILL.md. Nothing catches this until run time. |
 | Orders steps by narrative rather than dependency: changes state before gathering it, or verifies before acting | The "order by dependency" rule, then `review_workflow`. |
-| Places the approval gate after the irreversible step it was meant to guard | Same. State explicitly which step the gate protects. |
+| Places the approval gate after the irreversible step it was meant to guard | Refused structurally for destructive and unclassifiable steps (see the table above); for medium-risk writes, the "order by dependency" rule. State explicitly which step the gate protects. |
 | Omits `rollback_tool` on reversible steps, leaving nothing for `rollback` to undo | The rollback rule above. Add it while writing the step, not afterwards. |
 | Treats pilot's state machine as evidence the infrastructure changed | The dispatch contract. Pilot records what you told it; verify with the owning skill. |
 | Reports a step as done without having invoked the companion tool | Same. This is the dispatch contract's characteristic failure. |
@@ -150,4 +161,4 @@ Local-model compatibility is an explicit design constraint for this family, and
 the evidence base is small. If you evaluate a model against this skill —
 Qwen, Mistral, Granite, or anything else — a report of what worked and what did
 not is genuinely useful:
-[github.com/zw008/VMware-Pilot/issues](https://github.com/zw008/VMware-Pilot/issues).
+[github.com/vmware-skills/VMware-Pilot/issues](https://github.com/vmware-skills/VMware-Pilot/issues).

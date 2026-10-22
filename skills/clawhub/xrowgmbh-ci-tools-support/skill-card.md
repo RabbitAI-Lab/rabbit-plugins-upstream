@@ -1,42 +1,52 @@
-## Description: <br>
-Triage and answer support requests for the xrow-public/ci-tools GitLab components catalog. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Triage and answer support requests for the xrow-public/ci-tools GitLab components catalog.
 
-## Publisher: <br>
-[xrowgmbh](https://clawhub.ai/user/xrowgmbh) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[xrowgmbh](https://clawhub.ai/user/xrowgmbh)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and support maintainers use the skill to triage eligible CI Tools GitLab support issues and draft answers grounded in public project information. It directs out-of-scope, unsafe, or sensitive requests to a human maintainer.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: A reply or label change can expose customer details, private URLs, private logs, or internal project names in a shared issue.
+
+Mitigation: Confirm requester eligibility and confidentiality before replying; keep sensitive issues confidential and do not quote private logs publicly.
+
+Risk: Support guidance may affect shared GitLab issues or projects beyond the intended scope.
+
+Mitigation: Limit GitLab access to the intended support projects and hand off requests that are out of scope or cannot be supported from available public information.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and support maintainers use this skill to triage eligible CI Tools support issues and discussion threads, answer from public documentation or provided context, and hand off unsafe or out-of-scope requests. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, Markdown, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Support may be provided to an unintended requester if SUPPORT_TRUSTED_DOMAINS is stale or too broad. <br>
-Mitigation: Keep SUPPORT_TRUSTED_DOMAINS current and verify the requester domain before answering. <br>
-Risk: Private customer details, private URLs, private logs, or internal project names could be exposed in public support replies. <br>
-Mitigation: Mark issues confidential when they include sensitive details and do not quote private logs into public places. <br>
-Risk: Incorrect CI Tools guidance could be given if component behavior or inputs are assumed. <br>
-Mitigation: Inspect the relevant public component template, documentation, issue, merge request, or pipeline log before answering. <br>
+**Output Format:** [Markdown support replies or concise handoff guidance]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ci-tools-support Support on ClawHub](https://clawhub.ai/xrowgmbh/skills/xrowgmbh-ci-tools-support) <br>
+**Other Properties Related to Output:** [May include citations to public documentation, repository paths, issues, merge requests, or pipeline logs.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown support replies with citations or concise handoff guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Responses are constrained to eligible CI Tools support requests and public or explicitly provided information.] <br>
+4.222.2 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-4.165.2 (source: server-resolved release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

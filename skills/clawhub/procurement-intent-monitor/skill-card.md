@@ -1,48 +1,61 @@
-## Description: <br>
-Monitors Chinese procurement intent notices, proposed projects, and expiring contracts to help users find early procurement opportunities before formal bidding. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+扫描公开采购意向、拟建项目和临期续约信息，按价值排序并给出跟进建议。
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-External business development, sales, and procurement teams use this skill to scan Chinese public procurement signals, rank opportunities, track progress, and generate shareable opportunity reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-China <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procurement search terms are sent to a third-party vendor API. <br>
-Mitigation: Review queries before use and avoid sending confidential opportunity names, customer lists, or internal strategy terms. <br>
-Risk: API credentials may be stored in ~/.zlbx/config.json. <br>
-Mitigation: Prefer a preconfigured environment variable when possible, restrict local file access, and rotate the key if the configuration file is exposed. <br>
-Risk: Trial auto-registration may collect a stable hashed MAC-derived device identifier after consent. <br>
-Mitigation: Require explicit user consent before registration, or preconfigure ZLBX_API_KEY to bypass auto-registration. <br>
-Risk: Generated chat output or HTML reports may include login-bypass links. <br>
-Mitigation: Share generated reports only with intended recipients and remove access links when reports need broader distribution. <br>
+## Use Case:
 
+Sales and business development teams use this skill to find and prioritize early-stage procurement opportunities in China, track tender progress, and plan outreach before bidding begins.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/procurement-intent-monitor) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Auto-registration guide](artifact/references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, HTML, guidance] <br>
-**Output Format:** [Markdown opportunity lists in chat, with optional self-contained HTML reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ZLBX_API_KEY or user-consented auto-registration; may write reports under ~/zlbx-opportunity-radar-files/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: A third-party procurement service receives search terms and uses an API key stored locally or supplied through the environment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the service before use; prefer a manually configured API key and keep credentials out of reports and chat.
+
+Risk: Free-trial registration sends a hashed device identifier to the service.
+
+Mitigation: Obtain user consent before registration, or use an existing manually configured API key to skip registration.
+
+Risk: Signed access links can appear in chat and shareable HTML reports; the HTML renderer needs URL-safety fixes.
+
+Mitigation: Avoid sharing reports containing signed links, and review or fix URL handling before distributing generated HTML.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dragonzu/skills/procurement-intent-monitor)
+- [Skill workflow](references/workflow.md)
+- [API quick reference](references/api-quick.md)
+- [Report format](references/report-template.md)
+- [Credential setup and registration](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, HTML report]
+
+**Output Format:** [Prioritized Markdown opportunity list; shareable HTML file in full-scan mode]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes data dates, source links, ranking rationale, and suggested next actions.]
+
+## Skill Version(s):
+
+1.0.8 (source: skill frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

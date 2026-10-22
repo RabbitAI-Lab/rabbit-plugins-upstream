@@ -1,45 +1,62 @@
-## Description: <br>
-Vmware Vks helps agents manage vSphere Kubernetes Service environments, including Supervisor clusters, vSphere Namespaces, TKC lifecycle operations, kubeconfig retrieval, Harbor checks, and storage usage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents manage vSphere Kubernetes Service supervisors, namespaces, and Tanzu Kubernetes clusters through guided checks and administrative operations.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to inspect VKS readiness and operate vSphere Namespaces and Tanzu Kubernetes clusters through guided CLI or MCP workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can retrieve kubeconfigs that contain live short-lived vCenter session tokens. <br>
-Mitigation: Require explicit approval before kubeconfig retrieval, write kubeconfigs to files instead of conversation output, and keep exported files permission-restricted with cleanup expectations. <br>
-Risk: Credential setup may place vCenter passwords in local environment files. <br>
-Mitigation: Use least-privilege vCenter accounts and prefer secret-manager or runtime environment injection over storing passwords in .env files. <br>
-Risk: TLS verification can be disabled for self-signed vCenter certificates. <br>
-Mitigation: Set verify_ssl to true with trusted certificates wherever possible and review exceptions before production use. <br>
-Risk: Write operations can change or delete VKS namespaces and TKC clusters. <br>
-Mitigation: Review dry-run plans, keep destructive actions behind confirmation, and rely on audit logging and workload guards before applying changes. <br>
+## Use Case:
 
+Developers and infrastructure operators use this skill to check VKS compatibility, administer vSphere namespaces and TKC clusters, and obtain cluster access when explicitly requested.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-vks) <br>
-- [VMware VKS homepage](https://github.com/zw008/VMware-VKS) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured CLI or MCP results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run plans, operational checks, and file paths for kubeconfig exports; agents should avoid printing live tokens.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release evidence) <br>
+Risk: Administrative operations can modify or delete namespaces, clusters, and workloads.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use least-privilege access, prefer read-only operations, review the proposed impact, and require explicit confirmation before changes.
+
+Risk: Exported kubeconfigs contain live temporary credentials.
+
+Mitigation: Export only on explicit request to an owner-only file, never paste tokens into responses, and delete the file when finished.
+
+Risk: Disabling TLS verification can expose vCenter connections to interception.
+
+Mitigation: Keep TLS verification enabled.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/vmware-vks)
+- [Project homepage listed in skill metadata](https://github.com/vmware-skills/VMware-VKS)
+- [Capabilities](artifact/references/capabilities.md)
+- [Setup guide](artifact/references/setup-guide.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+- [CLI reference](artifact/references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline shell commands and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May provide dry-run plans and paths to exported kubeconfig files; do not expose credential contents.]
+
+## Skill Version(s):
+
+3.4.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

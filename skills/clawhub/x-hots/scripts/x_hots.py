@@ -3,10 +3,11 @@
 X (Twitter) Hot Topics Fetcher
 
 Fetches recent hot tweets for given search queries using Tweepy API v2.
-Requires the X API Bearer Token configured as an environment variable.
 
-search_recent_tweets supports app-only (Bearer token) auth, which is all
-this script needs; no OAuth 1.0a user credentials are required.
+FALLBACK SOURCE ONLY: per SKILL.md the primary source is the logged-in
+browser on x.com; this script runs only when the browser source fails.
+X_BEARER_TOKEN is therefore OPTIONAL (needed only for this fallback);
+no OAuth 1.0a user credentials are required.
 """
 
 import os
@@ -22,7 +23,9 @@ def create_client():
     if not bearer_token:
         print(json.dumps({
             "success": False,
-            "error": "Missing environment variable: X_BEARER_TOKEN"
+            "error": "X_BEARER_TOKEN not set (optional fallback credential). "
+                     "Prefer the browser source per SKILL.md; set X_BEARER_TOKEN "
+                     "only if API fallback is desired."
         }))
         sys.exit(1)
 

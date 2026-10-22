@@ -1,45 +1,59 @@
-## Description: <br>
-Detects the appearance of strangers near minors and actively issues safety reminder alerts to protect minor safety, suitable for homes, schools, childcare centers, and other scenarios. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes images and videos for possible strangers near minors and returns safety-oriented findings and report links.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and operators use this skill to analyze monitoring images, videos, local files, or URLs for stranger proximity near minors, receive structured safety reports, and query cloud-hosted historical alert reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Monitoring images or videos and identifiers are sent to cloud services for processing. <br>
-Mitigation: Use only where cloud processing is approved, consent and retention requirements are understood, and the documented service endpoints are acceptable. <br>
-Risk: The skill can silently create or reuse an account-linked identity and store identity or auth material locally. <br>
-Mitigation: Review identity handling before installation and prefer a version that asks for explicit consent before uploads, account creation, or credential storage. <br>
-Risk: Safety-analysis outputs are advisory and may be incomplete or incorrect. <br>
-Mitigation: Treat reports as safety reference material, keep human review in the workflow, and do not replace professional security or emergency procedures. <br>
+## Use Case:
 
+Guardians and staff at homes, schools, and childcare facilities can submit authorized images or video for a stranger-proximity analysis report and review past reports. Findings are advisory and do not replace professional security measures.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-stranger-approach-warning-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown reports, JSON details, and shell command invocations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can save results to a local output file and can list cloud-hosted historical reports.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; SKILL.md frontmatter says 1.0.10) <br>
+Risk: Surveillance images or video involving children, bystanders, locations, or school and home footage may be uploaded to an external cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only media you are legally allowed to share; confirm privacy, retention, and deletion controls before use.
+
+Risk: Account tokens may be created or stored without a clear explanation to the user, and access to historical reports is not clearly scoped.
+
+Mitigation: Review local token storage and report access controls with the publisher before connecting sensitive accounts or querying reports.
+
+Risk: The documented real-time alerting path is unclear, so an analysis result may not provide timely protection.
+
+Mitigation: Do not rely on the skill as a complete child-protection or emergency alert system; verify alert delivery independently and maintain human oversight.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-stranger-approach-warning-analysis)
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Guidance]
+
+**Output Format:** [Structured analysis text or JSON; historical reports as a Markdown table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include risk assessments, recommendations, and report links; results can be saved to a file.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,68 @@
-## Description: <br>
-Searches tender and procurement information across announcements using keywords, geography, amount, time, industry, advanced logic, bid details, company analysis, and market analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助用户按关键词、地区、金额和时间检索招标采购公告，查看项目详情并跟踪潜在商机。
 
-## Publisher: <br>
-[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zhiliaobiaoxun](https://clawhub.ai/user/zhiliaobiaoxun)
 
-## Use Case: <br>
-Developers and business users use this skill to retrieve tender notices, procurement details, expiring recurring projects, company intelligence, and market summaries from Zhiliaobiaoxun APIs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: First use without a configured ZLBX_API_KEY can automatically register the device, send local device and user metadata to a remote service, and store an API key under ~/.zlbx/config.json. <br>
-Mitigation: Configure a user-managed ZLBX_API_KEY before use when automatic registration or local credential persistence is not acceptable. <br>
-Risk: Company-intelligence and contact features can return business relationship and project contact information that may be sensitive in some environments. <br>
-Mitigation: Review whether contact lookup and company-intelligence workflows are appropriate for the deployment environment before enabling the skill. <br>
-Risk: The authoritative security verdict marks the release as suspicious because of automatic registration, remote identifier transmission, and credential storage. <br>
-Mitigation: Review the skill before installing, and limit deployment to environments where those behaviors are understood and approved. <br>
+## Use Case:
 
+采购团队、供应商及市场分析人员可检索招标和中标公告、查看项目及企业信息，并分析采购趋势与潜在商机。查询需使用知了标讯 API 凭证。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zhiliaobiaoxun/skills/smart-tender-procurement-search) <br>
-- [Publisher profile](https://clawhub.ai/user/zhiliaobiaoxun) <br>
-- [Tender search API details](references/api-search.md) <br>
-- [Company analysis API details](references/api-company.md) <br>
-- [Market analysis API details](references/api-market.md) <br>
-- [Auto-registration flow](references/auto-register.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, API calls, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with JSON API request and response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or read a local API key configuration and call remote Zhiliaobiaoxun services.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill accesses an API key from the environment or local configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated key, restrict access to its storage, and do not include it in shared outputs.
+
+Risk: Optional automatic registration transmits a MAC-derived device hash and saves the returned API key locally.
+
+Mitigation: Review the consent prompt and registration terms before approving automatic registration.
+
+Risk: Contact results and account usage data may contain sensitive business information.
+
+Mitigation: Share results only with authorized recipients and avoid exporting contact data in bulk.
+
+Risk: First-use account/version checks and acknowledgement callbacks may contact the provider.
+
+Mitigation: Review these provider interactions before installing or using the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zhiliaobiaoxun/skills/smart-tender-procurement-search)
+- [Skill installation documentation](https://ai.zhiliaobiaoxun.com/docs/skill)
+- [Search API reference](references/api-search.md)
+- [Company API reference](references/api-company.md)
+- [Registry data interpretation](references/api-registry.md)
+- [Market analysis API reference](references/api-market.md)
+- [Account API reference](references/api-account.md)
+- [Automatic registration reference](references/auto-register.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown summaries and tables with links to source announcements]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on API access and available account credits; contact details may be masked.]
+
+## Skill Version(s):
+
+1.0.8 (source: skill frontmatter and ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

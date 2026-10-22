@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-desktop-ffi",
   "slug": "agent-desktop-ffi",
   "ownerHandle": null,
-  "version": "1.0.6",
-  "updatedAt": 1784533544694,
-  "contentHash": "d72eee66e7774c583be9fb97aa994d8c28c06cde285f8060315535118381c34a",
-  "fetchedAt": "2026-07-26T18:10:15.472Z"
+  "version": "1.0.8",
+  "updatedAt": 1792312975670,
+  "contentHash": "6fc2cca14b6d4e39550167bd29cc578c1e51b25db5ea61baeab5a520b06823ff",
+  "fetchedAt": "2026-10-22T13:24:20.828Z"
 }

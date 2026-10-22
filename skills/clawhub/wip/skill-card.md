@@ -1,46 +1,61 @@
-## Description: <br>
-Tracks in-session work progress by registering multi-step tasks, updating task status, recovering work after context compaction, and guiding cleanup or resume flows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Tracks multi-step work, records progress, and helps resume unfinished tasks across supported agent environments.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and coding agents use this skill to keep multi-step work visible during a session, resume remaining tasks after interruptions or compaction, and maintain task records across Claude Code and Antigravity environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The workflow can steer an agent to delete task records or mutate checklist files. <br>
-Mitigation: Review task cleanup decisions before installation and require explicit confirmation before deleting pending tasks or changing persistent checklist files. <br>
-Risk: The workflow can steer an agent to run GitHub, remote, deploy, ssh, or curl checks. <br>
-Mitigation: Require explicit user approval before external checks and restrict execution to repositories and endpoints the user has authorized. <br>
-Risk: The workflow may manage home-directory state such as a Claude cache file. <br>
-Mitigation: Install only if home-directory writes and removals are acceptable, and review any home-directory operation before allowing it. <br>
+## Use Case:
 
+Developers and agent users track multi-step work, review remaining tasks, and preserve progress for later sessions in Claude Code, Antigravity, or OpenClaw.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/wip) <br>
-- [WIP skill entry](SKILL.md) <br>
-- [Resume workflow](resume.md) <br>
-- [Claude Code WIP guide](claude.md) <br>
-- [Antigravity WIP tracking](antigravity.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with task-record examples, inline code blocks, and a shell hook script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to create, update, or delete task records and to run external verification checks when the workflow requires primary-source status.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata and changelog, released 2026-07-23) <br>
+Risk: Edit-blocking hooks may interrupt ordinary work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review hook registration and enable enforcement only where it fits your workflow.
+
+Risk: Transcript inspection and persistent task-state changes may expose or retain sensitive work context.
+
+Mitigation: Check what the hooks read and where task state is stored before use.
+
+Risk: Automatic external checks or global cache behavior may proceed without the confirmation you expect.
+
+Mitigation: Disable those behaviors when explicit user approval is required.
+
+## Reference(s):
+
+- [WIP skill on ClawHub](https://clawhub.ai/drumrobot/skills/wip)
+- [Claude Code task tracking guide](claude.md)
+- [Antigravity task tracking guide](antigravity.md)
+- [OpenClaw task tracking guide](openclaw.md)
+- [Task resume workflow](resume.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance, Shell commands]
+
+**Output Format:** [Markdown checklists and progress summaries with optional commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can update session task state or persistent checklists.]
+
+## Skill Version(s):
+
+0.8.0 (source: ClawHub release metadata and CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

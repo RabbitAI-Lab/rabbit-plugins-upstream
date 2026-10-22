@@ -1,0 +1,381 @@
+{
+  "meta": {
+    "main_event": "__FILL__",
+    "report_stage": "__FILL__",
+    "main_time_range": "__FILL__  ~ __FILL__ ",
+    "yoy_time_range": "__FILL__  ~ __FILL__ ",
+    "slot1_time_range": "__FILL__  ~ __FILL__ ",
+    "slot2_time_range": "__FILL__  ~ __FILL__ ",
+    "generated_at": "__FILL__ __FILL__"
+  },
+  "P2": {
+    "total_volume": "__FILL__K",
+    "total_interaction": "__FILL__M",
+    "heat_index": "__FILL__M",
+    "yoy_volume_change": "+__FILL__%",
+    "yoy_interaction_change": "+__FILL__%",
+    "time_range_label": "数据时间覆盖：__FILL__",
+    "summary": "__FILL_50-80字_基于Call1+Call2数据生成__",
+    "vol_data": [
+      "__FILL_按日期顺序的声量数组_长度与date_labels一致__"
+    ],
+    "inter_data": [
+      "__FILL_按日期顺序的互动数组_长度与date_labels一致__"
+    ],
+    "date_labels": [
+      "__FILL_格式YYYY.M.D__"
+    ],
+    "peak_events": [
+      {
+        "event_id": "evt_001",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字_禁用模糊表述__"
+      },
+      {
+        "event_id": "evt_002",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字_禁用模糊表述__"
+      },
+      {
+        "event_id": "evt_003",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字_禁用模糊表述__"
+      },
+      {
+        "event_id": "evt_004",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字_禁用模糊表述__"
+      },
+      {
+        "event_id": "evt_005",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字_禁用模糊表述__"
+      },
+      {
+        "event_id": "evt_006",
+        "idx": 0,
+        "date_label": "M月D日",
+        "text": "18-25字事件描述"
+      }
+    ],
+    "yoy_volume": "整数K或整数M",
+    "yoy_interaction": "整数K或整数M",
+    "yoy_heat_index": "整数K或整数M"
+  },
+  "P3": {
+    "yoy_volume_change": "__FILL_必须与P2一致__",
+    "yoy_interaction_change": "__FILL_必须与P2一致__",
+    "yoy_heat_change": "+__FILL__%",
+    "summary": "__FILL_50-100字_基于Call1+Call3a数据生成__",
+    "platform_dist": {
+      "volume": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "interaction": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "heat": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      }
+    },
+    "platform_dist_yoy": {
+      "volume": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "interaction": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "heat": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      }
+    }
+  },
+  "P4": {
+    "summary": "__FILL_50-100字_基于Call3a+Call3b数据生成__",
+    "channel_growth": [
+      {
+        "channel": "微博",
+        "growth_rate": "__FILL_number__"
+      },
+      {
+        "channel": "抖音",
+        "growth_rate": "__FILL_number__"
+      },
+      {
+        "channel": "B站",
+        "growth_rate": "__FILL_number__"
+      },
+      {
+        "channel": "小红书",
+        "growth_rate": "__FILL_number__"
+      }
+    ],
+    "channel_heat": [
+      {
+        "channel": "微博",
+        "heat_now": "__FILL_number__",
+        "heat_yoy": "__FILL_number__"
+      },
+      {
+        "channel": "抖音",
+        "heat_now": "__FILL_number__",
+        "heat_yoy": "__FILL_number__"
+      },
+      {
+        "channel": "B站",
+        "heat_now": "__FILL_number__",
+        "heat_yoy": "__FILL_number__"
+      },
+      {
+        "channel": "小红书",
+        "heat_now": "__FILL_number__",
+        "heat_yoy": "__FILL_number__"
+      }
+    ]
+  },
+  "P5": {
+    "dy_total_volume": "__FILL__K",
+    "dy_total_interaction": "__FILL__M",
+    "dy_heat_index": "__FILL__M",
+    "dy_yoy_volume": "__FILL__K",
+    "dy_yoy_interaction": "__FILL__M",
+    "dy_yoy_heat_index": "__FILL__M",
+    "summary": "__FILL_50-100字_基于Call4a+Call4b数据生成__",
+    "dy_vol_data": [
+      "__FILL_按日期顺序的抖音声量数组__"
+    ],
+    "dy_inter_data": [
+      "__FILL_按日期顺序的抖音互动数组__"
+    ],
+    "dy_date_labels": [
+      "__FILL_格式YYYY.M.D_长度与dy_vol_data一致__"
+    ],
+    "dy_peak_events": [
+      {
+        "event_id": "evt_p5_001",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      },
+      {
+        "event_id": "evt_p5_002",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      },
+      {
+        "event_id": "evt_p5_003",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      },
+      {
+        "event_id": "evt_p5_004",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      },
+      {
+        "event_id": "evt_p5_005",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      },
+      {
+        "event_id": "evt_p5_006",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      }
+    ]
+  },
+  "P6": {
+    "slot": "compare_slot_1",
+    "slot_event_name": "__FILL_按主赛事查slot映射表__",
+    "summary": "__FILL_50-100字_基于Call5+主赛事数据对比生成__",
+    "main_summary": {
+      "volume": "__FILL__K",
+      "interaction": "__FILL__M",
+      "heat_index": "__FILL__M"
+    },
+    "slot1_summary": {
+      "volume": "__FILL__K",
+      "interaction": "__FILL__M",
+      "heat_index": "__FILL__M"
+    },
+    "slot1_platform_dist": {
+      "volume": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "interaction": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "heat": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      }
+    },
+    "main_heat_data": [
+      "__FILL_"
+    ],
+    "slot1_heat_data": [
+      "__FILL_slot1赛事声量数组__"
+    ],
+    "date_labels": [
+      "__FILL_必须与P7的date_labels一致__"
+    ],
+    "main_peaks": [
+      {
+        "event_id": "__FILL_从evt_001-005中选3个__",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_复用P2对应事件__"
+      },
+      {
+        "event_id": "__FILL__",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL__"
+      },
+      {
+        "event_id": "__FILL__",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL__"
+      }
+    ],
+    "slot1_peaks": [
+      {
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字_slot1真实事件__"
+      },
+      {
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      },
+      {
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      }
+    ]
+  },
+  "P7": {
+    "slot": "compare_slot_2",
+    "slot_event_name": "__FILL_按主赛事查slot映射表__",
+    "summary": "__FILL_50-100字_基于Call7+主赛事数据对比生成__",
+    "main_summary": "__FILL_必须与P6的main_summary完全一致__",
+    "slot2_summary": {
+      "volume": "__FILL__K",
+      "interaction": "__FILL__M",
+      "heat_index": "__FILL__M"
+    },
+    "slot2_platform_dist": {
+      "volume": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "interaction": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      },
+      "heat": {
+        "微博": 0,
+        "抖音": 0,
+        "B站": 0,
+        "小红书": 0,
+        "其他": 0
+      }
+    },
+    "main_heat_data": "__FILL__",
+    "slot2_heat_data": [
+      "__FILL_slot2赛事声量数组__"
+    ],
+    "date_labels": "__FILL_必须与P6的date_labels完全一致__",
+    "main_peaks": [
+      {
+        "event_id": "__FILL_P2剩余2个+1个与P6重复__",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_复用P2对应事件__"
+      },
+      {
+        "event_id": "__FILL__",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL__"
+      },
+      {
+        "event_id": "__FILL__",
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL__"
+      }
+    ],
+    "slot2_peaks": [
+      {
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字_slot2真实事件__"
+      },
+      {
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      },
+      {
+        "idx": "__FILL_int__",
+        "date_label": "__月__日",
+        "text": "__FILL_8-30字__"
+      }
+    ]
+  }
+}

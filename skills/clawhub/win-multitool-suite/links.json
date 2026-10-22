@@ -1,0 +1,32 @@
+{
+  "_comment": "Every URL and path this skill points at. No placeholders: a null value means the resource is not released yet, and the skill says so in plain words instead of linking to an empty page.",
+  "product_name": "Windows Multi-Tool Suite",
+  "suite_version": "1.0.2",
+  "publisher": "rapidworker1",
+  "publisher_home": "https://github.com/rapidworker1",
+  "license": "MIT-0",
+  "support_page": "https://github.com/rapidworker1",
+  "support_hours": "US business hours (ET)",
+  "catalog": {
+    "ai-creative-studio": "https://clawhub.ai/rapidworker1/ai-creative-studio",
+    "ai-trading": "https://clawhub.ai/rapidworker1/ai-trading",
+    "b2b-lead-research-agent": "https://clawhub.ai/rapidworker1/b2b-lead-research-agent"
+  },
+  "local_docs": {
+    "product": "PRODUCT.md",
+    "install": "references/install-and-verify.md",
+    "faq": "references/faq.md",
+    "feature_matrix": "templates/feature-matrix.md",
+    "config_example": "config.example.json"
+  },
+  "desktop_app": {
+    "status": "not_released",
+    "download_page": null,
+    "checksums_url": null,
+    "note": "The standalone Windows app is announced but not shipped. There is no installer to download yet, so this skill does not link to one. When it ships, the release page and a SHA256SUMS.txt go here and setup.ps1 starts verifying them."
+  },
+  "install_commands": {
+    "clawhub_install": "clawhub install @rapidworker1/ai-creative-studio",
+    "manual": "Copy the skill folder into your OpenClaw skills directory, then run scripts/verify_install.py."
+  }
+}

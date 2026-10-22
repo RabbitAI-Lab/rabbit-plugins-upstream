@@ -1,47 +1,56 @@
-## Description: <br>
-Creates a complete picture book from a theme by drafting a paged story, generating style-consistent illustrations and background music with dLazy services, and assembling a portable HTML book. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates a complete picture book from a theme by writing a paged story, generating consistent illustrations and matching background music, and assembling a portable HTML book.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to have an agent create children's picture books or bedtime storybooks with coordinated story text, generated illustrations, background music, and an offline HTML reading experience. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and reference images may be sent to dLazy services during generation. <br>
-Mitigation: Avoid sensitive images or private story details unless the user is comfortable uploading them to the service. <br>
-Risk: Generated media is downloaded and written into the local project folder. <br>
-Mitigation: Use a dedicated output directory and review generated files before sharing the finished book. <br>
-Risk: Authentication may store a dLazy API key in the local CLI configuration. <br>
-Mitigation: Use the documented dLazy authentication flow, keep the config file private, and rotate or revoke the key from the dLazy dashboard when needed. <br>
-Risk: Media generation can consume paid credits or fail when credits are insufficient. <br>
-Mitigation: Use the skill's low-quality image setting for draft books and confirm credit availability before generating many pages. <br>
+## Use Case:
 
+External creators use this skill to turn a theme into a children's picture book, with paginated story text, consistent illustrations, and matching background music. The result is assembled as a portable HTML book.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-picture-book) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, code, shell commands, configuration, guidance, files] <br>
-**Output Format:** [Markdown guidance with shell commands, JSON book manifest, generated media files, and self-contained HTML] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs typically include book.json, index.html, generated image files, and a background music file with relative paths for offline sharing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and release evidence) <br>
+Risk: Prompts and reference images are sent to dLazy-hosted services, and generation may incur usage charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive content, use only reference images you are authorized to upload, review account charges, and keep API keys private.
+
+Risk: Downloaded media and generated book files are written to the local workspace.
+
+Mitigation: Use a dedicated output folder and review generated files before sharing them.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-picture-book)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI homepage listed in skill metadata](https://github.com/dlazy-ai/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Image files, Audio files, HTML]
+
+**Output Format:** [Paginated story data in JSON and a portable HTML picture book with image and music assets.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Defaults to 10 pages; image and music assets use relative paths and can be opened offline when kept with the HTML book.]
+
+## Skill Version(s):
+
+1.3.32 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,63 @@
-## Description: <br>
-Memory Orchestrator provides long-term memory management with semantic search, multimodal processing, knowledge graphs, emotion tagging, proactive recommendations, and automated synchronization. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Memory Orchestrator provides long-term memory management and retrieval across devices, with semantic search, multimodal input processing, emotion tagging, knowledge graph generation, and self-optimization workflows.
 
-## Publisher: <br>
-[822376583-hub](https://clawhub.ai/user/822376583-hub) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[822376583-hub](https://clawhub.ai/user/822376583-hub)
 
-## Use Case: <br>
-Developers and advanced agent users use this skill to give an agent searchable long-term memory, process image and audio inputs, generate memory graphs and reports, and sync memory data across devices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent automation can sync, index, analyze, and push sensitive memory data without enough up-front consent or scoping. <br>
-Mitigation: Review and disable the cron job, Syncthing service, Git remote pushes, hooks, proactive notifications, and media processing unless they are explicitly wanted. <br>
-Risk: Memory files may contain sensitive personal or project information before sync or Git push workflows run. <br>
-Mitigation: Inspect MEMORY.md and memory/ contents, configure encryption and remotes deliberately, and limit what directories are indexed or synchronized. <br>
+## Use Case:
 
+Developers and agent operators use this skill to add searchable long-term memory, multimodal memory ingestion, knowledge graph reporting, emotion tagging, proactive recommendations, and cross-device memory synchronization to a ClawHub agent environment.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/822376583-hub/memory-orchestrator) <br>
-- [Publisher profile](https://clawhub.ai/user/822376583-hub) <br>
-- [Artifact README](README.md) <br>
-- [Artifact skill documentation](SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Command-line text plus generated JSON, Markdown, HTML, FAISS index, and configuration files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May install services, hooks, cron jobs, model dependencies, and synchronization workflows that operate on local memory files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The installer and workflows can enable persistent background behavior through systemd, cron, file-watch triggers, and session hooks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and run in an isolated environment first; remove or gate sudo systemd actions, cron entries, and hooks until the operator has approved them.
+
+Risk: Memory files, recordings, images, and derived state may be committed, pushed, or synchronized across devices.
+
+Mitigation: Validate the Git remote, Syncthing device list, and git-crypt setup before syncing; test with non-sensitive data and restrict synchronized paths.
+
+Risk: Proactive recommendation triggers may inject stored memory into future agent contexts without clear user consent.
+
+Mitigation: Disable proactive triggers by default or require explicit consent and logging before recommendations are surfaced.
+
+Risk: Dependencies are broad and not fully pinned, including a dependency installed from a Git URL.
+
+Mitigation: Pin dependency versions, install in a virtual environment, and review package sources before use with private or work data.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/822376583-hub/skills/memory-orchestrator)
+- [Artifact README](artifact/README.md)
+- [Artifact SKILL.md](artifact/SKILL.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with shell commands, Python scripts, YAML workflows, JSON and HTML reports, and local index files.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create local indexes, logs, reports, scheduled sync jobs, and memory state files when installed or run.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

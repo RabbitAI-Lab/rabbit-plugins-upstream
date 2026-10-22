@@ -1,42 +1,57 @@
-## Description: <br>
-Iaiops Fab helps agents inspect semiconductor and display fab equipment over SECS/GEM and OPC-UA, combining equipment status, alarms, recipes, OEE, asset inventory, data quality, and downtime root-cause workflows with a read-first, MOC-gated write posture. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides read-first diagnostics of semiconductor and display fab equipment using SECS/GEM, OPC-UA, and cross-protocol analysis, with changes gated by management-of-change approval.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Fab engineers, automation engineers, and operations teams use this skill to investigate SECS/GEM and OPC-UA equipment state, alarms, recipes, downtime, quality signals, and cross-protocol asset context in semiconductor or display fabs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Industrial write, export, and publish capabilities can affect production equipment or move fab data outside intended destinations. <br>
-Mitigation: Disable write, export, and publish tools unless they are required; require explicit approvals, destination allowlists, and dry-run review before enabling higher-impact actions. <br>
-Risk: The documented MOC controls may not be enforced by the installed pip package implementation. <br>
-Mitigation: Verify the installed implementation enforces the documented MOC controls before use in or near production fab systems. <br>
-Risk: Diagnostic and root-cause guidance can be misleading when equipment, MES, alarm, or historian signals are incomplete. <br>
-Mitigation: Review results against current fab context and corroborate recommendations with real equipment signals before operational action. <br>
+## Use Case:
 
+Fab engineers and operations teams use this skill to inspect equipment status, alarms, process programs, and control-layer signals, and to investigate downtime and quality issues before considering approved changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-fab) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured diagnostic results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include bounded samples, cited signal values, configuration checks, and MOC-gated action guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: Most operating instructions are in Chinese and may be misunderstood.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Ensure operators can accurately review the instructions before use.
+
+Risk: Fab-profile write tools can change production equipment.
+
+Mitigation: Use read-first diagnostics and require the documented MOC approval flow before any write.
+
+Risk: The skill depends on a separate iaiops[fab] package and configured file access.
+
+Mitigation: Verify the package is trusted and review the configured read and write directories before deployment.
+
+## Reference(s):
+
+- [iaiops-fab on ClawHub](https://clawhub.ai/zw008/skills/iaiops-fab)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline commands and structured tool results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-first diagnostics; equipment writes require approval.]
+
+## Skill Version(s):
+
+0.32.0 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-Identifies plant growth stages from images or videos using a cloud analysis service and returns structured results for precision agriculture decision support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes plant images and videos through a cloud service to identify growth stages and return structured reports.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Developers, agents, and agricultural operators use this skill to submit plant imagery or video for growth-stage recognition and retrieve structured analysis reports and history links for farm-management decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill sends plant images, videos, or submitted URLs to the Lifeemergence cloud service for analysis. <br>
-Mitigation: Use only media and URLs approved for that service, and avoid private farm footage, internal URLs, or regulated business media unless the service's retention and access controls are acceptable. <br>
-Risk: The skill silently creates or reuses an account identity and stores service tokens locally. <br>
-Mitigation: Ask the publisher for permission scoping, opt-out and deletion instructions, and instructions to delete local SQLite data and stored tokens. <br>
-Risk: Historical report listing is tied to the locally resolved account identity. <br>
-Mitigation: Review history access before using shared workspaces and request a way to disable, delete, or opt out of account history if needed. <br>
+## Use Case:
 
+Growers and agricultural advisers use plant images or videos to assess growth stages and review analysis reports for crop-management decisions. Users can also request earlier cloud reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-recognition-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Interface Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, guidance] <br>
-**Output Format:** [Markdown or JSON text with structured analysis results, report links, history lists, and command examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local file paths or public image/video URLs; supports basic, standard, and json detail modes; can write results to a file.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release and frontmatter) <br>
+Risk: Images, videos, or media URLs are sent to lifeemergence.com services for analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only media approved for external processing and review the service's data-handling terms before use.
+
+Risk: The skill silently creates or reuses an internal identity and stores authentication tokens in a local workspace database.
+
+Mitigation: Install only if this account linkage and local token storage are acceptable; restrict workspace access and remove stored credentials when no longer needed.
+
+Risk: Historical report requests retrieve data from the linked cloud account.
+
+Mitigation: Confirm the linked account is appropriate before requesting or sharing previous reports.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-plant-growth-stage-recognition-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API documentation](skills/smyx_analysis/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report or report list, with optional saved text file]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include growth-stage findings, recommendations, and report links.]
+
+## Skill Version(s):
+
+1.0.16 (source: ClawHub release; artifact frontmatter lists 1.0.19)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

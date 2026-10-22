@@ -1,47 +1,59 @@
-## Description: <br>
-Analyzes aquarium or underwater fish images and videos for visible white-spot, hyperemia, and fin-rot symptoms, returning visual classifications, confidence scores, alert levels, recommendations, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes aquarium fish images or videos for visible white spots, hyperemia, and fin damage, then produces symptom reports and alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External aquarists, aquarium operators, and ornamental fish farms use this skill to screen fish media for visible surface symptoms and retrieve structured health reports. It supports early visual triage, not a veterinary diagnosis or medication plan. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Fish images, videos, media URLs, and report history are sent to the Life Emergence cloud service. <br>
-Mitigation: Use only with authorized aquarium media and review the provider's retention, deletion, and sharing terms before deployment. <br>
-Risk: The skill automatically creates or reuses an account identity and stores identity tokens locally. <br>
-Mitigation: Run the skill in an isolated workspace when identity separation matters, and review or clear the workspace data directory and local SQLite database before handoff. <br>
-Risk: Visual symptom screening can be mistaken for a veterinary diagnosis or treatment plan. <br>
-Mitigation: Present outputs as visual triage only, require professional aquarium veterinary review for diagnosis or treatment, and avoid medication names, dosages, or treatment schedules. <br>
-Risk: Reflections, bubbles, substrate particles, or natural fish markings can produce false positives. <br>
-Mitigation: Use clear close-range media, apply species baseline checks, and surface false-positive risk markers in user-facing results. <br>
+## Use Case:
 
+Aquarium keepers and fish-care teams use this skill to review fish imagery for possible surface symptoms, receive severity alerts, and consult historical reports. Visual assessments are not veterinary diagnoses.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-fish-surface-symptom-detection-analysis) <br>
-- [Fish Surface Symptom API Documentation](references/api_doc.md) <br>
-- [Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Guidance] <br>
-**Output Format:** [Markdown text with structured JSON analysis payloads and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports may include detected symptom type, confidence, location, severity, alert level, recommended actions, disclaimers, and cloud report export URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter lists 1.0.6) <br>
+Risk: Fish media or media URLs and account-linked identifiers are sent to a configured cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media approved for cloud processing; avoid sensitive images or workspaces until the publisher clarifies retention, account linkage, and endpoint scope.
+
+Risk: A silent account may be created or reused, and tokens are stored in a shared workspace SQLite database.
+
+Mitigation: Review the account behavior before installation and restrict access to the workspace and its token database.
+
+Risk: Visual symptom classifications can be mistaken for definitive fish-disease diagnoses.
+
+Mitigation: Treat alerts as screening guidance and seek an aquatic veterinarian for diagnosis and treatment decisions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-fish-surface-symptom-detection-analysis)
+- [Fish surface symptom API documentation](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured symptom report or Markdown history table; JSON detail option]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include symptom type, confidence, location, severity, alert level, recommended actions, and an optional saved file.]
+
+## Skill Version(s):
+
+1.0.13 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

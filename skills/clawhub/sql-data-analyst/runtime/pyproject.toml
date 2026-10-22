@@ -1,0 +1,39 @@
+[build-system]
+requires = ["hatchling==1.27.0"]
+build-backend = "hatchling.build"
+
+[project]
+name = "sql-data-analyst-local"
+version = "1.0.0"
+description = "Metered local execution runtime for the SQL Data Analyst OpenClaw skill"
+requires-python = ">=3.12,<3.14"
+dependencies = [
+    "cryptography==50.0.0",
+    "defusedxml==0.7.1",
+    "duckdb==1.5.5",
+    "httpx==0.28.1",
+    "openpyxl==3.1.5",
+    "packaging==26.3",
+    "plotly==6.9.0",
+    "polars==1.43.2",
+    "psutil==7.2.2",
+    "pyarrow==21.0.0",
+    "pydantic==2.13.4",
+    "sqlglot==28.10.1",
+    "XlsxWriter==3.2.9",
+]
+
+[project.optional-dependencies]
+test = [
+    "pytest==8.4.2",
+]
+
+[tool.hatch.build.targets.wheel]
+packages = ["src/sql_data_analyst_local"]
+
+[tool.hatch.build.targets.wheel.force-include]
+"src/sql_data_analyst_local/trusted_keys.json" = "sql_data_analyst_local/trusted_keys.json"
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+addopts = "--strict-markers --strict-config"

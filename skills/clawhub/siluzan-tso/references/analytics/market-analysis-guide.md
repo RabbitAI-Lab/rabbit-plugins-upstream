@@ -1,6 +1,7 @@
 ﻿# 战略市场分析（Market Analysis）
 
 > 对齐 TSO Copilot `getMarketReport` 业务目标；**Skill/CLI 场景**与网页版分工不同：
+>
 > - **TSO 网页**：Copilot 工具内调 `aisearch` 一次生成 HTML
 > - **siluzan-tso Skill**：`collect` 只落盘上下文 → **宿主 Agent** WebSearch/WebFetch 调研 → 写 `market-report.json` → `render` 出 HTML
 
@@ -9,9 +10,11 @@
 与「网站诊断」模式一致：**CLI 拉原料，Agent 写报告，CLI 渲染终稿**。
 
 > **常见入口（仅指定行业）**：用户说「帮我生成一份**电商行业**的行业分析报告」且未给公司名/官网时，**仍须走本流程**——不要改用 WebSearch 直接在聊天里写报告。
+>
 > ```bash
 > siluzan-tso market-analysis collect --industry "电商" --json-out ./snap-market
 > ```
+>
 > 缺目标市场/时间范围时用默认并在 HTML 中写明（全球 / 近12个月）；有客户名或官网时再补 `--customer-name` / `--website`。
 
 ---
@@ -23,7 +26,7 @@
 | **战略市场分析** | `market-analysis collect` + Agent + `render`   | KA 战略报告（公开数据 + Agent 归纳） |
 | **网站诊断**     | `website-diagnosis collect` + Agent + `render` | 落地页 6 模块评分                    |
 | **账户周期报告** | `google-analysis`                              | 广告投放数据                         |
-| **拓词市场指标** | `keyword -k`                               | Keyword Planner 搜索量/CPC           |
+| **拓词市场指标** | `keyword -k`                                   | Keyword Planner 搜索量/CPC           |
 
 ---
 
