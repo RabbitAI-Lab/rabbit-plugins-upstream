@@ -29,7 +29,7 @@ What the tool *does* guarantee is that you can always see what happened:
 | You might be tempted to prompt | Why you don't need to |
 |---|---|
 | "Don't invent a value when a field is missing" | A field the VBR API did not return comes back as `null`, never as `""`. A job with no `lastResult` yet, a session with no verdict, a proxy with no reported host — all report `null`, and only a genuinely empty upstream value comes back as `""`. Absent and empty are distinguishable in the payload. |
-| "Tell me if the output was cut off" | `undo_list` — the one read with a server-side cap — returns `{"undos": [...], "returned": N, "limit": L, "truncated": true/false}`. Truncation is measured (one extra row is fetched), not guessed from a length coincidence. Every other read returns everything VBR returned for that collection; nothing is silently trimmed behind your back. |
+| "Tell me if the output was cut off" | The reads that can be too large to return whole — `restore_list_points`, `session_list`, `undo_list`, and `backup_storage_ranking` — return an envelope such as `{"restorePoints": [...], "returned": N, "limit": L, "truncated": true/false}` (the ranking also says `scoped` / `backupsTruncated` when it covers only a selection or a scanned subset), newest first where time matters. Truncation is measured (one extra row is fetched), not guessed from a length coincidence. Every other list read pages through the whole collection — the VBR server may cap a page at 200 items (Veeam's spec default from revision 1.3) — and refuses with an error rather than returning a partial list if the server stops short. The one exception is `session_log`: Veeam's logs endpoint cannot be paged, so it returns `{records, returned, totalRecords, truncated}` — `truncated` true when the server counted more records than it sent, `null` when it gave no total. |
 | "Preserve the ordering / tell me what's most urgent" | `job_failure_rca` and `repository_capacity_rca` findings carry an explicit 1-based `rank`, worst-first. Priority is in the payload, not implied by list position. |
 | "Explain why you flagged that repository / job" | Every finding carries the measured signal that tripped it — the session `result` and the matched error substring, or the free-space percentage against the threshold — plus a concrete `cause` and `action`. The heuristics are transparent, not a verdict. |
 | "Confirm before anything destructive" | `job_stop`, `session_stop` and `restore start` require a `--dry-run`-able preview plus double confirmation at the CLI; the MCP write tools take `dry_run=True`. `start_vm_restore` is tagged `high` risk. |
@@ -40,7 +40,7 @@ What the tool *does* guarantee is that you can always see what happened:
 ## What still needs a prompt
 
 These are model-behaviour problems the harness cannot fix from the outside.
-Copy this into your agent's system prompt:
+Recommended setup for a local model (adapt it to your agent client):
 
 ```text
 You operate a Veeam Backup & Replication environment through the veeam-aiops
@@ -128,12 +128,11 @@ and what to do about them:
   VM and creation time behind the restore-point GUID. The tool refuses a restore
   whose VM name matches the configured VBR host — an in-place overwrite of the
   backup server itself — but that check compares a display name to a hostname, so
-  **it will miss a VBR server named anything else**, and it fails open when the
-  restore point cannot be read. Confirm the target machine yourself.
-- **Repository capacity is best-effort.** VBR only exposes capacity/free on the
-  repository *states* endpoint, and not for every repository type. When
-  `repository_capacity_rca` cannot compute a free percentage it reports `null`
-  and skips the repository rather than guessing — a null there is not "0% free".
+  **it will miss a VBR server named anything else**. Separately, when the
+  restore point cannot be read at all the restore is REFUSED, because nothing
+  can then say which machine would be overwritten; pass
+  `acknowledge_unresolved=True` only after confirming the target in the Veeam
+  console.
 
 ## If your model still struggles
 

@@ -2,7 +2,7 @@
 name: ai-guardian
 slug: ai-guardian
 displayName: "AI Guardian"
-summary: "Governed local-LLM (Ollama) observability: model policy, prompt scanner, 20 tools."
+summary: "Governed local-LLM observability: model policy, prompt scanner, capture proxy, 21 tools."
 license: MIT
 homepage: https://github.com/AIops-tools/AI-Guardian
 tags: [aiops, mcp, governance, ai-guardian]
@@ -17,7 +17,7 @@ installer:
 argument-hint: "[model name, a prompt to scan, or describe your local-LLM task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":[],"bins":["ai-guardian"],"config":["~/.ai-guardian/config.yaml"]},"optional":{"env":["AI_GUARDIAN_AIOPS_MASTER_PASSWORD"],"config":["~/.ai-guardian/secrets.enc","~/.ai-guardian/usage.db"]},"homepage":"https://github.com/AIops-tools/AI-Guardian","emoji":"🛡️","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["ai-guardian","uvx"]},"optional":{"env":["AI_GUARDIAN_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/AI-Guardian","emoji":"🛡️","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed local-LLM (Ollama) observability + content governance. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   Every tool call is audited to a local SQLite DB at ~/.ai-guardian/audit.db (relocatable via AI_GUARDIAN_AIOPS_HOME); the OBSERVED local-LLM usage log is a SEPARATE DB at ~/.ai-guardian/usage.db.
@@ -34,7 +34,7 @@ compatibility: >
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by Ollama, IGEL, or any AI-security vendor.** Product and trademark names belong to their owners. Source at [github.com/AIops-tools/AI-Guardian](https://github.com/AIops-tools/AI-Guardian) under the MIT license.
 
 Governed observability + governance for **on-endpoint local LLMs (Ollama)** —
-**20 MCP tools**, every one wrapped with the bundled `@governed_tool` harness: a
+**21 MCP tools**, every one wrapped with the bundled `@governed_tool` harness: a
 local unified audit log under `~/.ai-guardian/`, token/runaway budget guard,
 undo-token recording, and descriptive risk tiers. It is the
 **complement to IGEL AI Armor**: AI Armor governs *whether* a local model may run;
@@ -75,6 +75,15 @@ uv tool install ai-guardian-aiops
 ai-guardian doctor          # works zero-config against a local Ollama
 ai-guardian init            # optional: endpoint(s) + optional token + model allowlist
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/ai-guardian
+openclaw skills info ai-guardian          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -200,6 +209,6 @@ separate, product-level control that stays.
 
 ## References
 
-- `references/capabilities.md` — full 20-tool + endpoint reference
+- `references/capabilities.md` — full 21-tool + endpoint reference
 - `references/cli-reference.md` — CLI command reference
 - `references/setup-guide.md` — onboarding, optional token, and connectivity

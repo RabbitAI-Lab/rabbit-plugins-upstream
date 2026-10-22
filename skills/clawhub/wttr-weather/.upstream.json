@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/wttr-weather",
   "slug": "wttr-weather",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1778491977901,
-  "contentHash": "12621468ce3085a9bf17240a72bb6b472abf064cceb0869260afa9b506ae686f",
-  "fetchedAt": "2026-07-26T20:02:29.546Z"
+  "version": "2.0.0",
+  "updatedAt": 1792387909415,
+  "contentHash": "bdac56c5534cf37e6a0308896c3ac19d31670540384f38948df1e8027890dd36",
+  "fetchedAt": "2026-10-22T13:21:10.297Z"
 }

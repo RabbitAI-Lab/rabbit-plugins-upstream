@@ -768,6 +768,8 @@
             { key: "ctr", label: "点击率 CTR", fmt: pct },
             { key: "averageCpc", label: "平均点击费用", fmt: (v) => money(v, currency) },
             { key: "costPerConversion", label: "每次转化费用 CPA", fmt: (v) => money(v, currency) },
+            { key: "activeDays", label: "活跃天数", fmt: int },
+            { key: "averageDailyCost", label: "日均消耗", fmt: (v) => money(v, currency) },
           ];
           const kpiHtml = kpiDefs
             .map((def, i) => {
@@ -797,6 +799,7 @@
     <a href="#sec-campaigns">系列表现</a>
     <a href="#sec-devices">设备分布</a>
     <a href="#sec-geographic">地域分布</a>
+    <a href="#sec-audience">受众分布</a>
     <a href="#sec-keywords">关键词</a>
     <a href="#sec-recommendations">优化建议</a>
   </div>
@@ -999,11 +1002,58 @@
 </section>`;
         }
 
+        function renderAudience(data) {
+          const rows = Array.isArray(data.tables?.audience) ? data.tables.audience : [];
+          const currency = data.meta?.currency || "CNY";
+          const section = data.narrative?.sections?.audience;
+          const head = sectionHead(
+            "07",
+            "受众分布（Top 20）",
+            "AdGroupAudienceData：意向/兴趣/再营销/客户匹配等列表表现，不是年龄×性别",
+          );
+          const sorted = [...rows]
+            .sort((a, b) => (Number(b.spend) || 0) - (Number(a.spend) || 0))
+            .slice(0, 20);
+          const body = sorted
+            .map(
+              (r) => `
+<tr>
+  <td>${escapeHtml(r.audienceName || r.audience || "—")}</td>
+  <td>${escapeHtml(r.audienceType || "—")}</td>
+  <td>${escapeHtml(r.campaignName || "—")}</td>
+  <td class="num">${money(r.spend, currency)}</td>
+  <td class="num">${int(r.impressions)}</td>
+  <td class="num">${int(r.clicks)}</td>
+  <td class="num">${pct(r.ctr)}</td>
+  <td class="num">${int(r.conversions)}</td>
+  <td class="num">${money(r.costPerConversion, currency)}</td>
+</tr>`,
+            )
+            .join("");
+          const table =
+            sorted.length > 0
+              ? `<div id="chart-audience" class="chart-box" style="height:320px"></div>
+<div class="table-wrap"><table>
+  <thead><tr><th>受众</th><th>类型</th><th>广告系列</th><th class="num">消耗</th><th class="num">展示</th><th class="num">点击</th><th class="num">CTR</th><th class="num">转化</th><th class="num">CPA</th></tr></thead>
+  <tbody>${body}</tbody>
+</table></div>
+<div class="card-title-row" style="margin-top:10px"><span class="hint">共 ${rows.length} 个受众，表格展示消耗 Top 20。默认不筛 SystemDefined / UserDefined。</span></div>`
+              : '<div class="empty-note">数据不可用：audience 未拉取或本期间无受众行</div>';
+          return `
+<section id="sec-audience">
+  ${head}
+  <div class="card">
+    ${table}
+    ${analysisBlock(section)}
+  </div>
+</section>`;
+        }
+
         function renderKeywords(data) {
           const rows = Array.isArray(data.tables?.keywords) ? data.tables.keywords : [];
           const currency = data.meta?.currency || "CNY";
           const section = data.narrative?.sections?.keywords;
-          const head = sectionHead("07", "关键词表现（Top 50）", "跨系列合并展示，按消耗排序");
+          const head = sectionHead("08", "关键词表现（Top 50）", "跨系列合并展示，按消耗排序");
           const sorted = [...rows]
             .sort((a, b) => (Number(b.spend) || 0) - (Number(a.spend) || 0))
             .slice(0, 50);
@@ -1060,7 +1110,7 @@
               : '<div class="empty-note">（待 Agent 撰写优化建议）</div>';
           return `
 <section id="sec-recommendations">
-  ${sectionHead("08", "优化建议", "综合以上数据的可执行改进建议")}
+  ${sectionHead("09", "优化建议", "综合以上数据的可执行改进建议")}
   <div class="card">${body}</div>
 </section>`;
         }
@@ -1253,6 +1303,44 @@
             });
           }
 
+          const audienceEl = document.getElementById("chart-audience");
+          const audience = Array.isArray(data.tables?.audience) ? data.tables.audience : [];
+          if (audienceEl && audience.length > 0) {
+            const top = [...audience]
+              .sort((a, b) => (Number(b.spend) || 0) - (Number(a.spend) || 0))
+              .slice(0, 10)
+              .reverse();
+            const chart = echarts.init(audienceEl);
+            chart.setOption({
+              tooltip: Object.assign(
+                { trigger: "axis", formatter: (p) => money(p[0].value, currency) },
+                TOOLTIP_STYLE,
+              ),
+              grid: { left: 160, right: 30, top: 16, bottom: 20 },
+              xAxis: styleAxis({ type: "value" }),
+              yAxis: styleAxis({
+                type: "category",
+                data: top.map((c) => c.audienceName || c.audience || "—"),
+                axisLabel: { color: AXIS_COLOR, width: 140, overflow: "truncate" },
+                splitLine: { show: false },
+              }),
+              series: [
+                {
+                  type: "bar",
+                  data: top.map((c) => Number(c.spend) || 0),
+                  barMaxWidth: 18,
+                  itemStyle: {
+                    borderRadius: [0, 6, 6, 0],
+                    color: new echarts.graphic.LinearGradient(0, 0, 1, 0, [
+                      { offset: 0, color: "rgba(245,158,11,0.55)" },
+                      { offset: 1, color: PALETTE[4] },
+                    ]),
+                  },
+                },
+              ],
+            });
+          }
+
           window.addEventListener("resize", () => {
             document
               .querySelectorAll(".chart-box")
@@ -1295,6 +1383,7 @@
             renderCampaigns(data),
             renderDevices(data),
             renderGeographic(data),
+            renderAudience(data),
             renderKeywords(data),
             renderRecommendations(data),
             renderFooter(data),

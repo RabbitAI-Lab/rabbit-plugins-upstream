@@ -1,51 +1,60 @@
-## Description: <br>
-Helps agents find early IT and Xinchuang business opportunities by scanning proposed digital projects, procurement intentions, and expiring service contracts, then ranking leads by value and urgency. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds early IT procurement opportunities in China across proposed projects, purchasing intentions, and upcoming service renewals, then ranks leads and suggests follow-up actions.
 
-## Publisher: <br>
-[dragonzu](https://clawhub.ai/user/dragonzu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dragonzu](https://clawhub.ai/user/dragonzu)
 
-## Use Case: <br>
-Sales, business-development, and IT solution teams use this skill to identify and prioritize early China IT opportunities across Xinchuang, software development, system integration, cloud, cybersecurity, smart-city, and digital-government projects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill contacts the Zhiliaobiaoxun service and sends search terms for opportunity lookup. <br>
-Mitigation: Use it only when sharing the requested industry, product, region, and budget criteria with that service is acceptable. <br>
-Risk: The skill can store an API key under the user's home directory. <br>
-Mitigation: Review local credential storage expectations before installation and avoid exposing the API key in chat or reports. <br>
-Risk: Trial registration hashes a local MAC address after consent for device de-duplication. <br>
-Mitigation: Proceed with automatic registration only after explicit user consent, or configure ZLBX_API_KEY manually to bypass registration. <br>
-Risk: Generated sk and auto-login links may allow access without a normal login flow. <br>
-Mitigation: Treat generated links and saved HTML reports as sensitive and avoid broad sharing. <br>
+## Use Case:
 
+Sales and business development teams use this skill to identify and prioritize Chinese IT and domestic-technology procurement leads by sector, product, and region, with suggested next steps for each opportunity.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dragonzu/skills/it-project-opportunity-radar) <br>
-- [Publisher profile](https://clawhub.ai/user/dragonzu) <br>
-- [API quick reference](artifact/references/api-quick.md) <br>
-- [Workflow guide](artifact/references/workflow.md) <br>
-- [Report template](artifact/references/report-template.md) <br>
-- [Auto-registration flow](artifact/references/auto-register.md) <br>
-- [Zhiliaobiaoxun agent portal](https://agent.zhiliaobiaoxun.com) <br>
-- [Zhiliaobiaoxun trial and account portal](https://ai.zhiliaobiaoxun.com/?ch=s104) <br>
+### Deployment Geography for Use:
 
+Global (opportunity data focuses on China)
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Analysis, API Calls, Shell commands, Guidance] <br>
-**Output Format:** [Markdown opportunity list with optional local HTML report] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs ranked opportunity lists, next-step recommendations, source links, data notes, and an optional self-contained HTML report.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The third-party service uses an API key and may store it locally or create a trial account using a hashed device identifier.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review account and privacy terms before use; preconfigure ZLBX_API_KEY to avoid auto-registration, and consent before any device collection.
+
+Risk: API queries can consume account credits, and generated HTML reports persist locally.
+
+Mitigation: Confirm expected query costs and review report contents and storage location before sharing.
+
+Risk: The security review flags hidden request instructions and potentially incomplete or misleading opportunity data.
+
+Mitigation: Review the skill before installation and verify material leads against the linked source records before acting.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dragonzu/skills/it-project-opportunity-radar)
+- [API quick reference](artifact/references/api-quick.md)
+- [Opportunity scanning workflow](artifact/references/workflow.md)
+- [Report template](artifact/references/report-template.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, HTML reports, Guidance]
+
+**Output Format:** [Ranked Markdown opportunity list and optional local HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes source links, priority reasons, data gaps, and suggested follow-up actions.]
+
+## Skill Version(s):
+
+1.0.8 (source: skill frontmatter and server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,52 @@
-## Description: <br>
-Software implementation planning with file-based persistence (.plan/) for code changes that touch multiple files, have ambiguous scope, or require architectural decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers plan software implementations and optionally preserve decisions and next steps in local planning files.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this workflow to turn implementation requests into concrete, verifiable plans before coding. It is aimed at multi-file changes, ambiguous scopes, and work that benefits from persistent session notes in `.plan/`. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Starting a new plan can overwrite existing `.plan` files in the current workspace. <br>
-Mitigation: Review or preserve existing `.plan` files before initializing a new plan when those files contain work that must be kept. <br>
+## Use Case:
 
+Developers use this skill to break software work into verifiable phases, record unresolved decisions, and maintain recovery state for multi-phase implementation.
 
-## Reference(s): <br>
-- [ia-planning Specification](SPEC.md) <br>
-- [Execution & Decomposition Patterns](references/execution-and-methodology.md) <br>
-- [Operational Patterns](references/operational-patterns.md) <br>
-- [Plan Deepening](references/plan-deepening.md) <br>
-- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown planning files and inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or update local `.plan/` files and add `.plan/` to `.gitignore` when the initialization script is used.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: An unfinished local plan may be mistaken for the current task or displaced by new planning work.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review an existing .plan/task_plan.md before starting unrelated work and resolve which plan to continue before replacing it.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-planning)
+- [Plan format](references/plan-format.md)
+- [Task design](references/task-design.md)
+- [Execution handoff](references/execution-handoff.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Files, Guidance]
+
+**Output Format:** [Markdown planning guidance and optional local plan files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Plans may be recorded in .plan/task_plan.md or the project's existing plan format.]
+
+## Skill Version(s):
+
+5.1.2 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

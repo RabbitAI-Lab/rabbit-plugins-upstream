@@ -1,0 +1,1173 @@
+---
+name: blender-mcp
+description: "通过官方 Blender MCP Server 连接并操控运行中的 Blender：20+ 内置工具（场景分析、截图/渲染、导航、文档检索）加任意 bpy 代码执行；含 TCP 9876 协议细节、mcporter 用法、后台无头模式、故障排查。需要实时操控 Blender、查场景、跑脚本、截图渲染时使用。"
+homepage: https://www.blender.org/lab/mcp-server/
+author: taosiuman
+version: 3.5.0
+metadata:
+  octop:
+    emoji: "🔌"
+    label:
+      zh: "Blender MCP 连接"
+      en: "Blender MCP"
+    summary:
+      zh: "官方 Blender MCP Server 接入：20+ 工具、bpy 直执行、无头渲染与排障。"
+      en: "Official Blender MCP server: 20+ tools, live bpy execution, headless mode."
+---
+
+# Blender MCP Server Connection Skill
+
+Connect to and control a running Blender instance via the official Blender MCP Server.
+
+通过官方 Blender MCP Server 连接和控制运行中的 Blender 实例。
+
+**Version support**: Blender 5.1+（官方 add-on 的硬性要求）, 5.2.x LTS (current 5.2.2), and **5.3 Beta**（Python API 自 Beta 起稳定；RC 2026-11-04 → 发布 2026-11-10）— API compatibility notes included below
+**Last verified**: **2026-10-20**（每日快扫：add-on 仍 **v1.0.3**（2026-09-11，无 v1.0.4），落地页可比基线连续 11 次一致；MCP open issues **21 → 22**，新增 **#65**（Windows SAC 把**官方 MCPB 扩展自带**的 `blender-mcp.exe` 也拦了 → 旧建议「改用官方通道」被证伪）→ 排障表 SAC 条目重写；完整清单见 `knowledge/blender-mcp/research-tracker.md`）
+
+---
+
+## ⚠️ Security Warning / 安全警告
+
+**English:**
+This skill provides full access to Blender's Python API (`bpy`) through the MCP channel. Code executed via `execute_blender_code` can:
+- Read, modify, or delete files on your system
+- Execute arbitrary Python code (including network requests)
+- Alter or corrupt your Blender project data
+
+**Always review code before execution. Keep backups of important `.blend` files.**
+
+**中文：**
+此技能通过 MCP 通道提供对 Blender Python API (`bpy`) 的完全访问。通过 `execute_blender_code` 执行的代码可以：
+- 读取、修改或删除系统上的文件
+- 执行任意 Python 代码（包括网络请求）
+- 更改或损坏 Blender 项目数据
+
+**执行前请始终审查代码。保持重要 `.blend` 文件的备份。**
+
+---
+
+## Architecture Overview
+
+```
+┌─────────────┐     TCP Socket      ┌──────────────────     MCP Protocol     ┌──────────────
+│  LLM Client │ ◄─────────────────► │  MCP Server      │ ◄──────────────────► │   Blender    │
+│  (OpenClaw) │    stdio / HTTP     │  (Python process) │    port 9876         │   (Addon)    │
+└─────────────┘                     └──────────────────┘                      └──────────────
+```
+
+**Two-component architecture**:
+1. **Blender Addon** — runs inside Blender, provides a TCP Socket Server (default `localhost:9876`)
+2. **MCP Server** — standalone Python process that bridges the LLM client and the Blender Addon
+
+---
+
+## Installation
+
+### 1. Install the Blender Addon
+
+> **Requirements (official)**: **Blender 5.1 or newer**（官方 Lab 页原文）；官方 add-on 当前版本 **v1.0.3**（2026-10-11 复核，与 10-09 / 10-10 一致）。
+
+**Option A: From ZIP** (official release / 官方发布)
+1. Download addon ZIP: `https://projects.blender.org/lab/blender_mcp/releases/download/v1.0.3/mcp-1.0.3.zip`
+   （或从官方落地页 `https://www.blender.org/lab/mcp-server/` 取最新链接）
+2. Blender → Edit → Preferences → Add-ons → Install from Disk
+3. Enable the MCP addon (listed as **MCP**, maintained by Blender Lab)
+4. Confirm Host/Port in addon settings (default `localhost:9876`)
+5. **Optional: Enable "Auto Start"** — ⚠️ 只在 **Blender 启动时**触发；刚装完状态仍是 "Server is stopped"，需手动点一次 **Start MCP Bridge Server**
+
+**Option B: Drag & Drop**
+- Drag the install link/ZIP into the Blender window **twice**: first drop adds the **Blender Lab repository**, second installs the addon
+- 好处：之后能收到 add-on 更新通知
+
+**Option C: From Source**
+- Source code locations: `mcp/blmcp/` and `addon/blender_mcp_addon/`
+
+**Option D: Quick Install via uvx** (Simplest / 最简单)
+```bash
+# Install uv first (safe method / 安全方法)
+# Download installer and verify before running / 下载并验证后再运行
+# Windows: Invoke-WebRequest -Uri "https://astral.sh/uv/install.ps1" -OutFile "$env:TEMP\uv-install.ps1"
+#          Review the script, then: powershell -ExecutionPolicy Bypass -File "$env:TEMP\uv-install.ps1"
+# Mac/Linux: curl -LsSf https://astral.sh/uv/install.sh -o install.sh
+#            Review the script, then: sh install.sh
+
+# Start MCP server with pinned version (auto-downloads dependencies)
+uvx blender-mcp@1.0.0
+```
+
+> ⚠️ **别把两个版本号搞混**（真实高频困惑）：
+> - **Blender add-on**（官方 Lab 发布，装在 Blender 里）：当前 **v1.0.3** —— 见上面 Option A 链接
+> - **MCP Server 包**（`uvx`/`pip` 装的 Python 进程）：本文档 pin 在 **1.0.0**（PyPI 包 `blender-mcp`）
+> 两者版本号各自独立；排障时先确认「哪一半」出问题。
+
+### 2. Start the Blender MCP Server
+
+```bash
+# Install dependencies with pinned versions
+cd path/to/blender_mcp
+pip install mcp==1.8.0 pyyaml==6.0.2 starlette==0.45.0
+
+# Start MCP Server (stdio mode)
+python -m blmcp --transport stdio
+
+# Or HTTP mode (default 127.0.0.1:8000)
+python -m blmcp --transport http --host 127.0.0.1 --port 8000
+```
+
+### 3. Configure mcporter
+
+```bash
+# Add Blender MCP Server config
+mcporter config add blender-mcp --transport stdio --command "python -m blmcp --transport stdio"
+
+# Or use HTTP mode
+mcporter config add blender-mcp --transport http --url "http://127.0.0.1:8000"
+
+# Verify connection
+mcporter list blender-mcp --schema
+```
+
+---
+
+## Usage
+
+### Method 1: Via mcporter (recommended)
+
+```bash
+# List all available tools
+mcporter list blender-mcp --schema
+
+# Call a specific tool
+mcporter call blender-mcp.execute_blender_code code='import bpy; result = {"objects": [o.name for o in bpy.data.objects]}'
+
+mcporter call blender-mcp.get_objects_summary
+mcporter call blender-mcp.get_object_detail_summary object_name="Cube"
+
+# Search API docs
+mcporter call blender-mcp.search_api_docs query="bpy.ops.object.delete"
+
+# Search user manual
+mcporter call blender-mcp.search_manual_docs query="Geometry Nodes"
+
+# Screenshot
+mcporter call blender-mcp.get_screenshot_of_window_as_image
+
+# Render viewport
+mcporter call blender-mcp.render_viewport_to_path output_path="C:\\render.png"
+```
+
+### Method 2: Direct TCP Socket to Blender Addon (lightweight)
+
+⚠️ **Warning**: This mode sends caller-supplied code directly to Blender with no guardrails. Review code before execution.
+
+```python
+import socket
+import json
+
+def send_to_blender(code: str, host="localhost", port=9876, timeout=30.0) -> dict:
+    """Send Python code directly to Blender Addon for execution."""
+    request = json.dumps({
+        "type": "execute",
+        "code": code,
+        "strict_json": False,
+    }) + "\0"
+
+    with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as sock:
+        sock.settimeout(timeout)
+        sock.connect((host, port))
+        sock.sendall(request.encode("utf-8"))
+
+        buf = bytearray()
+        while True:
+            chunk = sock.recv(65536)
+            if not chunk:
+                break
+            buf.extend(chunk)
+            if b"\0" in buf:
+                break
+
+    line, _, _ = buf.partition(b"\0")
+    return json.loads(line.decode("utf-8"))
+
+# Example: get all object names in the scene
+response = send_to_blender(
+    'import bpy\nresult = {"objects": [o.name for o in bpy.data.objects]}'
+)
+print(response)
+# {"status": "ok", "result": {"objects": ["Cube", "Camera", "Light"]}}
+```
+
+### Method 3: Blender Background Mode (headless rendering / batch)
+
+```bash
+# Start Blender background MCP Server
+blender --background myscene.blend --command blender_mcp --host localhost --port 9876
+
+# Or execute code via CLI
+blender --background myscene.blend --python-expr "
+import bpy
+# your code
+result = {'count': len(bpy.data.objects)}
+print('__BLMCP_RESULT__' + str(result))
+"
+```
+
+---
+
+## Built-in Tools (20 total)
+
+### Core
+| Tool | Description | Params |
+|------|-------------|--------|
+| `execute_blender_code` | Execute arbitrary Python code (full bpy access) | `code: str` |
+| `execute_blender_code_for_cli` | Execute code in a background Blender process | `blend_file: str, code: str` |
+
+### Scene Analysis
+| Tool | Description | Params |
+|------|-------------|--------|
+| `get_objects_summary` | Get scene object hierarchy and basic info | none |
+| `get_object_detail_summary` | Get detailed info for a specific object | `object_name: str` |
+| `get_blendfile_summary_datablocks` | Analyze .blend file data-blocks | `blend_file: str` |
+| `get_blendfile_summary_missing_files` | Check for missing external file references | `blend_file: str` |
+| `get_blendfile_summary_of_linked_libraries` | List linked external libraries | `blend_file: str` |
+| `get_blendfile_summary_path_info` | Analyze .blend file path information | `blend_file: str` |
+| `get_blendfile_summary_usage_guess` | Guess the purpose of a .blend file | `blend_file: str` |
+
+### Screenshots & Rendering
+| Tool | Description | Params |
+|------|-------------|--------|
+| `get_screenshot_of_window_as_image` | Capture Blender window screenshot | none |
+| `get_screenshot_of_area_as_image` | Capture specific area screenshot | `area_type: str` |
+| `get_screenshot_of_window_as_json` | Get window layout as JSON description | none |
+| `render_viewport_to_path` | Render viewport to file | `output_path: str` |
+| `render_thumbnail_to_path` | Render thumbnail to file | `output_path: str` |
+
+### Navigation
+| Tool | Description | Params |
+|------|-------------|--------|
+| `jump_to_tab_by_name` | Jump to a named editor tab | `tab_name: str` |
+| `jump_to_tab_by_space_type` | Jump to a space type | `space_type: str` |
+| `jump_to_view3d_object_by_name` | Focus on an object in 3D View | `object_name: str` |
+| `jump_to_view3d_object_data_by_name` | Focus on object data in 3D View | `data_name: str` |
+
+### Documentation Search
+| Tool | Description | Params |
+|------|-------------|--------|
+| `search_api_docs` | Search Blender Python API docs | `query: str` |
+| `search_manual_docs` | Search Blender user manual | `query: str` |
+| `get_python_api_docs` | Get Python API docs | `query: str` |
+
+---
+
+## Communication Protocol
+
+### TCP Socket Protocol
+
+**Request format** (null-byte delimited JSON):
+```json
+{"type": "execute", "code": "import bpy\nresult = {'key': 'value'}", "strict_json": false}\0
+```
+
+**Response format**:
+```json
+// Success
+{"status": "ok", "result": {"key": "value"}, "stdout": "", "stderr": ""}\0
+
+// Error
+{"status": "error", "message": "Traceback...", "stdout": "", "stderr": ""}\0
+```
+
+### Code Execution Conventions
+
+- Assign return value to the `result` variable (must be a dict)
+- `strict_json=True`: strict JSON serialization; non-serializable values will error
+- `strict_json=False`: uses `repr()` as fallback for non-JSON values
+- Supports deferred responses: return a `check_is_finished` callable for long-running tasks
+
+### Example: Get Object Info
+
+```python
+import bpy
+obj = bpy.data.objects.get("Cube")
+if obj:
+    result = {
+        "name": obj.name,
+        "type": obj.type,
+        "location": list(obj.location),
+        "vertices": len(obj.data.vertices) if obj.type == "MESH" else 0,
+    }
+else:
+    result = {"error": "Object not found"}
+```
+
+### Example: Create an Object
+
+```python
+import bpy
+bpy.ops.mesh.primitive_torus_add(
+    align='WORLD',
+    location=(0, 0, 0),
+    major_radius=1.0,
+    minor_radius=0.3,
+)
+result = {"status": "created", "name": bpy.context.active_object.name}
+```
+
+---
+
+## Environment Variables
+
+| Variable | Default | Description |
+|----------|---------|-------------|
+| `BLENDER_MCP_HOST` | `localhost` | Blender Addon host address |
+| `BLENDER_MCP_PORT` | `9876` | Blender Addon port |
+| `BLENDER_PATH` | `blender` | Path to Blender executable |
+| `DISABLE_TELEMETRY` | `false` | Set to `true` to disable anonymous usage telemetry. **English:** Anonymous telemetry may be collected by default. Set to `true` to opt out. **中文：** 默认情况下可能会收集匿名遥测数据。设置为 `true` 可退出。 |
+
+---
+
+## Security Notes
+
+⚠️ **Official security warning**: The MCP Server executes LLM-generated code with **no sandboxing**.
+
+**Built-in weak sandbox** (`WeakSandboxForLLM`):
+- Blocks `sys.exit()` calls
+- Blocks dangerous operators: `wm.quit_blender`, `wm.read_factory_settings`, `wm.read_factory_userpref`, `wm.read_userpref`
+
+### Security Best Practices
+
+1. **Keep server local only** — Always use `localhost` / `127.0.0.1`; never bind to `0.0.0.0`
+2. **Review code before execution** — Prefer scoped built-in tools over raw `execute_blender_code`
+3. **Protect your projects** — Keep backups of important `.blend` files
+4. **Verify external dependencies** — Download addon only from official Blender Lab sources
+
+---
+
+## Troubleshooting
+
+| Error | Cause | Solution |
+|-------|-------|----------|
+| `ConnectionRefusedError` | Blender not running or Addon not started | Start Blender, enable MCP Addon, click "Start Server" |
+| `ConnectionRefusedError`（Blender 开着也没反应） | **Auto Start 只在 Blender 启动时触发** —— 刚装完 add-on 时状态仍是 "Server is stopped" | 手动点一次 **Start MCP Bridge Server**（之后 Auto Start 才会生效） |
+| 端口被占 / 连上却不是自己的 Blender | **两个 MCP add-on 不能同时启用**（官方 Lab add-on 与社区 `blender-mcp` 都监听 **9876**） | 只留一个：Preferences → Add-ons 里禁用另一个；或改端口并同步 `BLENDER_MCP_PORT` |
+| `Online access must be enabled in the system preferences` | Blender 的全局联网开关（官方 add-on 遵守该开关） | Preferences → **System → Network → Allow Online Access** |
+| 装完在 Add-ons 里找不到 | 拖拽安装**需要拖两次**（第一次只加了 Blender Lab 仓库） | 再拖一次；或改用 Install from Disk |
+| `ConnectionError: Empty response` | Network timeout or Addon crashed | Check Blender console output, verify port |
+| `result is not JSON-serializable` | Returned a Blender object | Use `strict_json=False` or manually convert to dict |
+| `Blender executable not found` | Blender command not found | Set `BLENDER_PATH` environment variable |
+| `Deferred responses not supported` | Background mode doesn't support deferred responses | Use synchronous code or switch to GUI mode |
+| **`*_for_cli` 工具在 Windows + stdio 下 120s 超时挂死** | `run_blender_cli()` 调 `subprocess.run()` 未传 `stdin` → 子进程继承 MCP 的 stdio 管道，Windows 上死锁（官方 issue **#58** / **#60**，修复 PR **#48 未合并**） | 仍有问题：给该处补 `stdin=subprocess.DEVNULL`（本地打补丁），或改用非 `*_for_cli` 的交互工具 |
+| `NameError: name 'bpy' is not defined` / 上次的变量不见了 | **`execute_blender_code` 每次调用都是全新 Python 命名空间**（`bpy` 不预导入、局部变量不跨调用保留；官方 issue **#55**/#53） | 每次调用**都写 `import bpy`**；需要跨调用状态就显式写回 `bpy` 数据或文件 |
+| `get_objects_summary` 把上下文撑爆 | 输出随场景复杂度递归增长（1670 对象 ≈ 904 KB ≈ 15.5k+ tokens；官方 issue **#54**） | 大场景先用更轻的检查方式；必要时按集合分批查询 |
+| 缩略图 / 渲染产物**不是**想要的分辨率或不在指定路径 | `render_thumbnail_to_path` 交互模式会用原分辨率渲染（issue **#46**/**#61**）；两个 `*_to_path` 工具**只取文件名的 basename**，实际写进 MCP 临时目录（issue #53） | 用工具返回的 `filepath` 读产物；要确定的分辨率就自己在 `execute_blender_code` 里设渲染参数并阻塞式渲染 |
+| `get_python_api_docs` 查成员文档查不到（`bpy.types.Object.location`） | 成员解析需要**重复类名**（官方 issue **#62**，2026-10-10） | 用 `bpy.types.Object.Object.location`；`bpy.ops.*` 和整类查询正常 |
+| macOS 上 `.mcpb` 装不上（"Operation not permitted"） | Claude Desktop 的 `.mcpb` 安装助手与 uv cache 权限冲突（官方 issue **#57**） | macOS 走 **add-on + `uvx`** 路线，别依赖 `.mcpb` |
+| Windows 上 `blender-mcp.exe` 被拦（`os error 4551` / Claude Desktop "MCP Blender: Server disconnected"） | **Smart App Control（SAC）enforcement 模式只放行「被 Microsoft 应用智能服务识别」或「受信任 CA 签名」的二进制**（Microsoft Learn 原文）→ **未签名的 `blender-mcp.exe` 必被拦**。⚠️ **2026-10-19 起确认：换成官方 MCPB 扩展也躲不过** —— 扩展自带 `.venv\Scripts\blender-mcp.exe` 同样 `NotSigned`、同样触发 Code Integrity event 3077（官方 issue **#56** 走 uv 安装 / **#65** 走官方扩展，两者同因） | **旧建议「改用官方 add-on / MCPB 通道」已被 #65 证伪，不要再用**。可行路径：① 先 `Get-AuthenticodeSignature .venv\Scripts\blender-mcp.exe` 确认是否 `NotSigned`（SAC 场景 100% 是）；② 让用户在 **SAC 状态**（设置 → 隐私和安全性 → Windows 安全中心 → 应用和浏览器控制）上做决定 —— 关闭 SAC 属高风险改动、企业域策略下不要动，**先确认再谈**；③ ⚠️ 待核验：SAC 是否支持「为单个应用加白名单」（据本机观察没有该入口，需查 Microsoft 文档确认后写死） |
+| **Windows 多开 Blender：服务显示"已启动"、客户端却连到别的实例**（改了没反应 / 操作落到另一个窗口） | `mcp_to_blender_server.py` 在 `bind()` **之前**设了 `SO_REUSEADDR`；Windows 语义允许**第二个 socket 绑定已监听端口** → 第二个实例不报错，客户端始终连第一个（官方 issue **#63**，Win11 + Blender 5.2.2 LTS + blender_mcp 1.0.2 实测 20/20 复现；建议官方改用 `SO_EXCLUSIVEADDRUSE`） | **只开一个 Blender 实例**再启服务；或先关掉旧实例再 Start；排查时看端口占用（`netstat -ano \| findstr 9876`）而非只看按钮状态 |
+| `The result variable must be a dict, not list. Wrap your return value: result = {"key": value}` | add-on **只接受 dict**；官方 server instructions / `prompts.yml` L48 声称可返回 "dicts, lists" 属**文案与实现不一致**（官方 issue **#64**） | 返回值**一律包成 dict**：`result = {"items": [...]}`；别按 instructions 返回裸 list |
+
+> **查官方动态的正确姿势（2026-10-13 起，绕开 HTML 403）**：`projects.blender.org` 的**网页**长期 403，但**同一站点的 Gitea REST API 可用**：
+>
+> ```bash
+> # 仓库 / 发布 / issue / PR（实测 2026-10-13 全部 200）
+> https://projects.blender.org/api/v1/repos/lab/blender_mcp
+> https://projects.blender.org/api/v1/repos/lab/blender_mcp/releases?limit=10
+> https://projects.blender.org/api/v1/repos/lab/blender_mcp/issues?state=open&sort=recentupdate&limit=20
+> https://projects.blender.org/api/v1/repos/lab/blender_mcp/pulls?state=open&limit=10
+> ```
+>
+> 官方落地页 `https://www.blender.org/lab/mcp-server/` 一般可访问（给 add-on 版本号与安装要求）。
+> ⚠️ **不要**用搜索摘要代替官方源：本工作区曾据此写下**不存在的 issue 号**（#344/#345/#348 实测 404），已作废。
+
+---
+
+## Blender 5.1 API Compatibility Notes
+
+### Action Layered Structure (Breaking Change)
+
+In Blender 5.1, `Action.fcurves` was removed. The new layered animation system uses:
+
+```python
+# ❌ Old (5.0 and earlier)
+fcurves = action.fcurves
+
+# ✅ Blender 5.1+
+fcurves = action.layers[0].strips[0].channelbags[0].fcurves
+```
+
+### Brush API: `use_*` → `stroke_method` Enum
+
+```python
+# ❌ Old (5.0)
+brush.use_airbrush = True
+
+# ✅ 5.1+
+brush.stroke_method = 'AIRBRUSH'  # Options: AIRBRUSH, SPACE, ANCHORED, LINE, CURVE, DRAG_DOT
+```
+
+### VSE Time Property Renames
+
+| Old (5.0) | New (5.1) |
+|-----------|-----------|
+| `frame_final_duration` | `duration` |
+| `frame_final_start` | `left_handle` |
+| `frame_final_end` | `right_handle` |
+| `frame_duration` | `content_duration` |
+
+### Principled BSDF Input Renames
+
+| Old (5.0) | New (5.1) |
+|-----------|-----------|
+| `inputs['Transmission']` | `inputs['Transmission Weight']` |
+| `inputs['Emission']` | `inputs['Emission Color']` + `inputs['Emission Strength']` |
+
+### Other 5.1 Changes
+- `sculpt.sample_color` → `paint.sample_color`
+- `bpy.app.cachedir` — new standard cache directory
+- `bpy.app.handlers.exit_pre` — new exit handler
+- Python 3.13 runtime
+
+---
+
+## Blender 5.2 LTS Compatibility Notes (Beta)
+
+> Blender 5.2 LTS entered Beta on 2026-06-03. API is frozen; RC expected 2026-07-08, release 2026-07-14.
+
+### 🔴 Breaking Changes (12 total — all Beta confirmed)
+
+#### 1. Geometry Nodes Modifier API Rewrite
+
+```python
+# ❌ 5.1 and earlier
+modifier["SocketName"] = 5.0
+modifier["SocketName_use_attribute"] = True
+modifier["SocketName_attribute_name"] = "some_input"
+
+# ✅ 5.2+
+modifier.properties.inputs.SocketName.value = 5.0
+modifier.properties.inputs.SocketName.type = "ATTRIBUTE"
+modifier.properties.inputs.SocketName.attribute_name = "some_input"
+modifier.properties.outputs.SocketName.attribute_name = "some_output"
+
+# ✅ Compatible pattern
+import bpy
+if bpy.app.version >= (5, 2, 0):
+    val = modifier.properties.inputs.SocketName.value
+else:
+    val = modifier["SocketName"]
+```
+
+#### 2. Principled BSDF Node Renamed
+- `Transmission` → `Transmission Weight`
+- Already applies from 5.1; ensure plugin references match
+
+#### 3. `paint.eraser_brush` API Removed
+- No longer needs manual setting; last eraser brush auto-activates
+
+#### 4. Automasking → MeshAutomaskingSettings (17 properties migrated)
+
+```python
+# ❌ Old
+brush.use_automasking_topology = True
+brush.automasking_cavity_factor = 0.5
+
+# ✅ 5.2+
+brush.mesh_automasking_settings.use_automasking_topology = True
+brush.mesh_automasking_settings.cavity_factor = 0.5
+```
+
+All 17 properties: `use_automasking_topology`, `use_automasking_face_sets`, `use_automasking_boundary_edges`, `use_automasking_boundary_face_sets`, `use_automasking_cavity`, `use_automasking_cavity_inverted`, `use_automasking_start_normal`, `use_automasking_view_normal`, `automasking_boundary_edges_propagation_steps`, `automasking_cavity_factor`, `automasking_cavity_blur_steps`, `automasking_cavity_curve`, `automasking_cavity_curve_op`, `automasking_start_normal_limit`, `automasking_start_normal_falloff`, `automasking_view_normal_limit`, `automasking_view_normal_falloff`
+
+#### 5. VSE `strip.use_linear_modifiers` Removed
+#### 6. VSE `timecode files` Feature Removed
+#### 7. `UILayout.template_palette` `color` Parameter Removed
+#### 8. Compare / Random Value Node Socket Identifiers Changed
+#### 9. Asset Library Index Shift — "All Libraries" and "Essentials" now occupy first two indices
+#### 10. Evaluated Meshes Naming Change — Geo Nodes created meshes no longer share object's original mesh name
+#### 11. Brush `use_*` → `stroke_method` (see 5.1 section above)
+#### 12. VSE Time Property Renames (see 5.1 section above)
+
+---
+
+### 🟢 High-Value New APIs (5.2 LTS)
+
+#### Python API
+| API | Description |
+|-----|-------------|
+| `bpy.data.all_ids` | Single iterator over ALL data-blocks |
+| `WindowManager.reports` | Read-only reports list with session-wide unique uid |
+| `bpy.data.libraries.load()` input | Now exposes nested library paths |
+| `Window.screenshot()` | Get window pixel data without saving to file |
+| `gpu.init()` | Initialize GPU backend in `--background` mode |
+| `mathutils` slice step | `vector[begin:end:step]` for Vector/Matrix/Color/Euler |
+| Blender Arrays slice step | `image.pixels[begin:end:step]` — e.g., `pixels[3::4]` for alpha channel |
+| `path_foreach` options | EXPAND_TOKENS, EXPAND_SEQUENCES, EXPAND_CACHES |
+| Annotations API | `frame.strokes.new()`, `stroke.points.add(count, pressure, strength)`, `stroke.points.remove(index)`, `frame.strokes.remove(stroke)` |
+| `UILayout.link` / `textbox` | Styled link buttons and multi-line text buttons |
+| `imbuf` extended | Pixel-level image access, format conversion, buffer protocol |
+| Node panel collapse | Programmatically open/close node panels from Python |
+| Node Tool input values | Set Node Tool parameters programmatically in 5.2 |
+
+#### Geometry Nodes
+| Node / Feature | Description |
+|----------------|-------------|
+| **Physics (experimental)** | XPBD Solver, Cloth Dynamics modifier, Hair Dynamics, Effector system |
+| **Mesh Bevel** | Long-awaited procedural bevel node |
+| **Geometry Bundles** | Set/Get Geometry Bundle — attach arbitrary data (fields, closures) to geometry |
+| **Lists data type** | New core type alongside single/field/grid — Length, Get, Filter, Sort |
+| **Sample Sound Frequencies** | Audio-driven animation without keyframe baking |
+| **PCA** | Principal Component Analysis for auto-alignment |
+| **Transfer Attributes** | Transfer attributes between two geometries |
+| **3D ↔ Screen Space** | Bundled transform nodes (3D to Screen, Screen to 3D, Project with Depth) |
+| **Collection Children** | Recursive access to collection children as lists |
+| **Empty Objects** | Geo Nodes modifiers on Empty objects |
+| **Capture Attribute Selection** | Selection input for efficiency |
+| **NURBS Order/Weight** | Set NURBS Order and Weight nodes |
+| **Scene Frame default input** | Float/int sockets default to current frame |
+| **Self-object default** | Object sockets can default to self-object |
+| **Merge by Distance split** | Now: Merge Points + Cluster by Distance + Cluster by Connected |
+
+#### Cycles
+| Feature | Description |
+|---------|-------------|
+| **Texture Cache** | `.tx` files reduce memory 34-77% in texture-heavy scenes. Enable: Performance > Texture Cache + Auto Generate. CLI: `blender scene.blend --command maketx` |
+| **Raycast Attributes** | Access attributes at intersection point (Cycles only) |
+| **SSS Negative Anisotropy** | Principled/Subsurface BSDF: -1 to 1 range |
+| **World Cast Shadows** | World can now cast shadows |
+| **OSL GPU** | Texture cache improves OSL performance + adds GPU support |
+| **Simplify Texture Resolution** | Percentage-based texture scaling (50%, 25%) |
+
+#### EEVEE
+| Feature | Description |
+|---------|-------------|
+| **Shader Raycast** | Screen-space raytracing node |
+| **Light Path Intensity** | Global indirect light intensity control |
+| **Texture pool -40%** | Vulkan: 406MB → 245MB |
+
+#### Grease Pencil
+| Feature | Description |
+|---------|-------------|
+| **Fill Tool Delaunay** | New Delaunay solver: precise geometry, auto gap detection, scale-independent, faster |
+| **Draw Tool curves** | Bézier / Catmull-Rom / NURBS curve types |
+| **Line Materials placement** | Count / Density / Radius modes with randomization |
+| **`layer.layer_masks` API** | Add/remove layer masks via Python |
+
+#### Video Sequencer
+| Feature | Description |
+|---------|-------------|
+| **Compositor Effect Strip** | Use compositor node trees for VSE transitions/effects (0/1/2 inputs + fader) |
+| **Compositor GPU acceleration** | In VSE modifiers |
+| **`strip.connections`** | API to find connected strips |
+
+#### Sculpt
+| Feature | Description |
+|---------|-------------|
+| **Scene Project brush** | Displace vertices toward other objects (like Shrinkwrap) |
+| **Add Primitive in Sculpt Mode** | Cube/Cone/Cylinder directly in sculpt |
+| **Color Filter unified color** | Uses scene unified colors; Ctrl-X quick fill |
+| **Dyntopo confirmation removed** | No more confirmation dialog when switching back to Sculpt |
+| **Voxel Remesher attribute interpolation** | Smooth vertex/corner attribute interpolation |
+
+#### Assets
+| Feature | Description |
+|---------|-------------|
+| **Online Asset Library** | Browse and download from remote hosted libraries |
+| **Asset Library index shift** | "All Libraries" and "Essentials" now at indices 0 and 1 |
+
+#### Other
+| Feature | Description |
+|---------|-------------|
+| **LoopTools built-in** | Circle/Space/Flatten now native — no addon needed |
+| **Hydra 2.0 API** | OpenUSD provides abstraction layer |
+| **Animation +125%** | Action evaluation 32.8→74.1 fps (4 threads) |
+| **Gaussian Smooth F-Curve** | Non-destructive curve smoothing modifier |
+
+---
+
+## Blender 5.3 Compatibility Notes (Beta — API 已稳定)
+
+> **5.3 = Beta**（分支 `blender-v5.3-release`）。官方 release notes 首页原文：**"Blender 5.3 is currently in Beta until November 4, 2026"**（= RC 节点）→ **正式发布 2026-11-10**。
+> 官方 release cycle 明确「**Beta 期间 Python API 保持稳定，add-ons 有时间在发布前完成适配**」→ **5.3 兼容代码现在就可以定版**。
+> 生产基准仍是 **5.2.x LTS（当前 5.2.2）**；5.4 处于 Alpha，**不承诺、不跟**。
+> 📝 最后核验：**2026-10-11**（`/api/5.3/` 章节 131 条 + 5.3 release notes 首页/python_api 全页；完整条目与迁移清单见 `knowledge/blender/api-changes-5.3.md`）
+
+### 🔴 5.3 Breaking Changes（8 组，详见知识库）
+
+> 📝 最后扫描：2026-09-07 11:00 — 完整官方 change_log 核实
+
+#### GPU 兼容性变更 (09-06)
+```python
+# ⚠️ gpu.types.GPUBatch.draw_instanced 行为变更
+# 现在优先使用 gpu_InstanceIndex（包含 base_instance）
+# 与 Metal/Vulkan 内部工作方式对齐
+# commit: 6f64632716
+# 影响：使用自定义 GPU 着色器的插件需要测试兼容性
+```
+
+#### 🔴 NodesModifier.panels 移除 (09-07 新发现！关键！)
+```python
+# ❌ 5.2 及更早
+modifier.panels  # 访问 Geo Nodes 修饰器的面板属性
+
+# ✅ 5.3+ — 已移除！
+# Geo Nodes 修饰器不再有 panels 属性
+# 兼容写法：
+import bpy
+if bpy.app.version >= (5, 3, 0):
+    # 使用 modifier.properties.inputs/outputs 替代
+    pass
+else:
+    panels = modifier.panels
+```
+
+#### 🔴 Theme API 移除 (09-07 新发现)
+```python
+# ❌ 以下主题属性在 5.3 中已移除：
+# ThemeFileBrowser.selected_file
+# ThemeSpaceGeneric.header_text / header_text_hi / title
+# ThemeSpaceGradient.header_text / header_text_hi / title
+
+# 影响：自定义主题插件需要移除对这些属性的引用
+```
+
+#### Brush Unified Input 属性重命名 (4 项，09-07 修正映射)
+
+```python
+# ❌ 5.2 及更早
+brush.use_inverse_smooth_pressure = True
+
+# ✅ 5.3+（09-07 官方确认的新名称）
+brush.use_smooth_pressure = True        # ← use_inverse_smooth_pressure 重命名而来
+brush.use_unified_input_samples = True  # ← 新增统一输入属性
+brush.use_unified_strength = True       # ← 新增统一强度属性
+brush.use_unified_weight = True         # ← 新增统一权重属性
+
+# 兼容写法：
+import bpy
+if bpy.app.version >= (5, 3, 0):
+    brush.use_smooth_pressure = True
+else:
+    brush.use_inverse_smooth_pressure = True
+```
+
+#### PreferencesExperimental 重命名 (1 项)
+```python
+# ❌ 5.2
+prefs.experimental.use_sculpt_texture_paint
+
+# ✅ 5.3+
+prefs.experimental.use_3d_texture_paint
+```
+
+#### PreferencesSystem 重命名 (1 项)
+```python
+# ❌ 5.2
+prefs.system.geometry_nodes_stack_limit
+
+# ✅ 5.3+
+prefs.system.nodes_stack_limit
+```
+
+#### 🔴 SpaceOutliner 过滤器重命名 (10 项，09-23 补充来源信息！关键！)
+```python
+# ❌ 5.2 及更早
+outliner.use_sort_alpha = True  # 单个属性控制字母排序
+
+# ✅ 5.3+ — 拆分为 10 个独立过滤器属性！
+# 每个对象类型/数据类型都有独立的过滤器控制
+outliner.use_filter_object_materials = True
+outliner.use_filter_object_modifiers = True
+outliner.use_filter_object_constraints = True
+outliner.use_filter_object_shape_keys = True
+outliner.use_filter_object_vertex_groups = True
+outliner.use_filter_object_data = True
+outliner.use_filter_object_animation = True
+outliner.use_filter_bone_collections = True
+outliner.use_filter_pose_bones = True
+outliner.use_filter_grease_pencil_effects = True
+
+# 兼容写法：
+import bpy
+if bpy.app.version >= (5, 3, 0):
+    # 使用新的独立过滤器
+    outliner.use_filter_object_materials = True
+else:
+    # 旧版本使用 use_sort_alpha
+    outliner.use_sort_alpha = True
+```
+
+#### 🔴 UserAssetLibrary 属性重命名 (3 项，09-23 补充来源信息！)
+```python
+# ❌ 5.2 及更早
+library.path = "/path/to/asset"
+
+# ✅ 5.3+ — 拆分为 3 个独立属性
+library.auth_token = "token"  # 认证令牌
+library.invalid_uuid = "uuid"  # 无效 UUID
+library.uuid = "uuid"  # 资产库 UUID
+
+# 兼容写法：
+import bpy
+if bpy.app.version >= (5, 3, 0):
+    # 使用新的独立属性
+    library.auth_token = token
+    library.uuid = uuid
+else:
+    # 旧版本使用 path
+    library.path = path
+```
+
+#### 🔴 函数签名变更（2026-10-05 新增发现！易静默出错）
+
+```python
+# ❌ 旧签名（≤5.2）
+bpy.types.ObjectConstraints.new(type)                 # 只传 type
+bpy.types.PoseBoneConstraints.new(type)
+layout.textbox(data, property, initial_visible_lines, placeholder, text_ctxt, translate)
+
+# ✅ 5.3+
+bpy.types.ObjectConstraints.new(type, name)           # 多了一个 name
+bpy.types.PoseBoneConstraints.new(type, name)
+layout.textbox(data, property, text, text_ctxt, translate,
+               initial_visible_lines, placeholder)    # ⚠️ 位置参数被重排！
+
+# 安全做法：全部改用关键字传参
+layout.textbox(data, property, text=text, text_ctxt="", translate=False,
+               initial_visible_lines=3, placeholder="")
+
+# WindowManager.popover / popover_begin__internal：新增 auto_keymap 参数
+bpy.context.window_manager.popover(draw_func, ui_units_x=8, keymap="", from_active_button=False, auto_keymap=True)
+```
+
+**影响**：任何按位置传参调用 `textbox` / `textbox_with_state` / `Constraints.new` 的插件，在 5.3 上会**静默传错值**或抛 `TypeError`。
+
+#### 🟢 2026-10-05 其他新增（精选）
+
+| API | 说明 | 插件价值 |
+|-----|------|----------|
+| `BlendFileColorspace.is_failed_opencolorio_config` / `ocio_config_path` / `ocio_config_source` | OCIO 配置诊断 | 色彩管线插件能定位色彩管理失败原因 |
+| `MaterialGPencilStyle.gradient` | GP 材质渐变 | Grease Pencil 材质插件 |
+| `SpaceOutliner.show_users_column` / `sort_method` | 大纲用户列 / 排序方式 | 大纲 UI 插件 |
+| `UILayout.label_markdown` | UI 渲染 Markdown 文本 | 帮助/文档类面板 |
+
+### 🟡 5.3 High-Value New APIs (精选)
+
+#### Python API 新增 (09-11 完整扫描 - 4 项新增，累计 50+ 项)
+
+**🔥 最新新增（09-11）:**
+
+| API | 说明 | 插件开发价值 |
+|-----|------|----------|
+| **RenderEngine.bl_write_viewport_depth** | 自定义渲染引擎写入视口深度缓冲 | 自定义渲染器插件 |
+| **FileHandler.label_with_extensions** | 文件处理器显示带扩展名的标签 | 导入/导出插件 |
+| **UILayout.label_markdown** | UI 布局中渲染 Markdown 格式文本 | UI 插件增强 |
+| **CyclesPreferences.has_dlss_gpu_devices** | DLSS GPU 设备检测 | 渲染设置插件 |
+| **CyclesRenderSettings.preview_denoising_upscale_quality** | 预览降噪升级质量 | 渲染控制插件 |
+| **RegionView3D.use_view_flip_x** | 视口水平翻转 | 视口控制插件 |
+| **SpaceNodeOverlay.show_text_info** | 节点叠加层文本信息 | 节点编辑器插件 |
+
+**📋 之前扫描的高价值新增（插件开发必备）:**
+
+| API | 说明 | 插件开发价值 |
+|-----|------|----------|
+| **Project API** | `BlendData.project` / `project_init()` / `project_clear()` | 项目管理插件 |
+| `Preferences.use_project_auto_save` | 项目自动保存设置 | 项目管理集成 |
+| **Render Pause/Resume** | `RenderEngine.view_pause()` / `view_resume()` | 渲染控制插件 |
+| `RegionView3D.pause_render` / `support_pause_render` | 视口渲染暂停 | 视口控制插件 |
+| `CYCLES.view_pause` / `view_resume` | Cycles 渲染暂停 | 渲染控制插件 |
+| **Scene Compositor Effects** | `Scene.compositor_effects` | 场景级合成效果 |
+| `CompositorNodeTree.allow_usage_in_scene_compositor_effect` | 允许节点树用于场景合成 | 合成插件 |
+| **ID deep_hash** | `ID.deep_hash` 基于内容的哈希 | 数据块去重/缓存 |
+| **Outliner 11 细粒度过滤器** | `use_filter_object_materials/modifiers/constraints/shape_keys/vertex_groups/data/animation` + `use_filter_bone_collections/pose_bones/grease_pencil_effects` | 大纲视图插件 |
+| **⚠️ Outliner 过滤器重命名** | `use_sort_alpha` → 10 个 `use_filter_*` 属性（破坏性变更！） | 大纲插件迁移 |
+| `UILayout.template_compositor_strip_inputs` | 合成器 Strip 输入模板 | VSE 插件 |
+| `UILayout.template_scene_compositor_effects` | 场景合成效果模板 | 合成 UI 插件 |
+| `RegionView3D.view_camera_roll` | 相机旋转控制 | 相机控制插件 |
+| `Window.global_areas` | 全局区域访问 | 窗口管理插件 |
+
+**📦 Asset Library 增强 (09-07 新发现):**
+
+| API | 说明 | 插件开发价值 |
+|-----|------|----------|
+| `UserAssetLibrary.auth_token` | 资产库认证令牌 | 在线资产库插件 |
+| `UserAssetLibrary.use_auth_token` | 启用认证 | 在线资产库插件 |
+| `UserAssetLibrary.uuid` / `invalid_uuid` | 资产库 UUID | 资产库管理 |
+| `UserAssetLibrary.is_project_defined` | 项目定义的资产库 | 项目资产管理 |
+| `AssetMetaData.webpage` | 资产网页链接 | 资产浏览器插件 |
+
+**🎨 Brush 增强 (09-07 新发现):**
+
+| API | 说明 | 插件开发价值 |
+|-----|------|----------|
+| `Brush.curve_auto_smooth` | 自动平滑曲线 | 笔刷插件 |
+| `Brush.curve_hardness` | 硬度曲线 | 笔刷插件 |
+| `Brush.curve_spacing` | 间距曲线 | 笔刷插件 |
+| `Brush.use_unified_color` | 统一颜色 | 笔刷插件 |
+| `Brush.use_unified_size` | 统一尺寸 | 笔刷插件 |
+| `BrushCapabilitiesSculpt.has_tip_roundness` | 笔尖圆润度能力 | 雕刻插件 |
+
+**🔧 其他新增 (09-07 扫描):**
+
+| API | 说明 | 插件开发价值 |
+|-----|------|----------|
+| `Object.convert_rotation_mode()` | 旋转模式转换 | 动画插件 |
+| `PoseBone.convert_rotation_mode()` | 骨骼旋转模式转换 | 动画插件 |
+| `ViewLayerEEVEE.denoising_store_passes` | 降噪存储通道 | EEVEE 渲染插件 |
+| `ViewLayerEEVEE.denoising_pass_use_albedo_roughness_weighting` | 降噪权重 | EEVEE 渲染插件 |
+| `PreferencesEdit.clamp_strips_by_default` | VSE Strip 默认限制 | VSE 插件 |
+| `PreferencesEdit.default_strip_length` | VSE 默认 Strip 长度 | VSE 插件 |
+| `PreferencesSystem.use_rt_shadows` | 光线追踪阴影 | 渲染设置插件 |
+| `Region.search_filter` | 区域搜索过滤 | UI 插件 |
+| `ToolSettings.use_transform_data_pivot` | 变换数据枢轴 | 变换工具插件 |
+| `Collection.importer` | 集合导入器 | 导入插件 |
+| `CollectionImport.filepath` | 导入文件路径 | 导入插件 |
+| `Scene.wrap_timeline_navigation` | 时间线循环导航 | 动画插件 |
+| `SpaceDopeSheetEditor.cache_compositor` | 合成缓存 | 动画/合成插件 |
+| `RenderSettings.use_compositor_frames_cache` | 合成帧缓存 | 渲染插件 |
+| `SceneEEVEE.time_limit` | EEVEE 时间限制 | EEVEE 渲染插件 |
+| `SpaceOutliner.expand_on_focus` | 大纲展开行为 | 大纲 UI 插件 |
+| `SpaceProperties.show_properties_compositor` | 显示合成属性 | 属性 UI 插件 |
+| `BrushGpencilSettings.use_cyclic_stroke` | Grease Pencil 循环笔触 | GP 笔刷插件 |
+| `PointCloud.type` | 点云类型属性 | 点云数据处理插件 |
+
+**🆕 最新新增 (09-23 扫描 - 8 项):**
+
+| API | 说明 | 插件开发价值 |
+|-----|------|----------|
+| `CollectionChild.sort_index` | 集合子对象排序索引 | 集合管理插件 |
+| `CollectionObject.sort_index` | 集合对象排序索引 | 集合管理插件 |
+| `CollectionObject.parented_sort_index` | 集合对象父级排序索引 | 集合管理插件 |
+| `ColorManagedInputColorspaceSettings.interop_id` | 输入色彩空间互操作ID | 色彩管理插件 |
+| `ColorManagedSequencerColorspaceSettings.interop_id` | 序列编辑器色彩空间互操作ID | 色彩管理/序列编辑器插件 |
+| `CompositorNodeConvertColorSpace.from_interop_id` | 色彩空间转换节点源互操作ID | 合成节点插件 |
+| `CompositorNodeConvertColorSpace.to_interop_id` | 色彩空间转换节点目标互操作ID | 合成节点插件 |
+| `SpaceOutliner.sort_method` | 大纲排序方法 | 大纲 UI 插件 |
+
+#### Geometry Nodes 新增 (09-06 扫描)
+| 节点/功能 | 说明 | 插件开发价值 |
+|-----------|------|----------|
+| **Combine List** | 合并多个列表 | 列表数据处理增强 |
+| **Get Vector Component** | 通过整数索引获取 x/y/z 分量 | 向量操作简化 |
+| **Rasterize Points** | 将点转换为栅格（光栅化） | 点云→网格转换 |
+| **Deactivate Voxels** | 从体积栅格中移除活动体素 | 体积数据处理 |
+| **Grid Topology Boolean** | 活动栅格体素的布尔运算 | 体积建模 |
+| **NURBS input nodes** | NURBS 输入节点组 | NURBS 曲线控制 |
+| Curve to Mesh "Miter Scale" | 斜接缩放选项 | 曲线转网格控制 |
+| Curve to Tube "Miter Scale" | 斜接缩放选项 | 管道建模 |
+| Realize Instances "Preserve Normals" | 保留负变换行列式实例的法线 | 实例化处理 |
+| GP data input nodes | Grease Pencil 数据输入节点 | GP 数据处理 |
+| Grid sampling modes | 改进的二次/三次采样模式 | 栅格采样质量 |
+
+### 完整变更记录
+
+详见工作区知识库 `knowledge/blender/api-changes-5.2-lts.md` 与 `knowledge/blender-mcp/research-tracker.md`
+
+---
+
+## OpenClaw Integration
+
+### Configure openclaw.json
+
+```json
+{
+  "plugins": {
+    "entries": {
+      "mcp": {
+        "servers": {
+          "blender-mcp": {
+            "command": "python",
+            "args": ["-m", "blmcp", "--transport", "stdio"],
+            "cwd": "path/to/blender_mcp",
+            "env": {
+              "BLENDER_MCP_HOST": "localhost",
+              "BLENDER_MCP_PORT": "9876"
+            }
+          }
+        }
+      }
+    }
+  }
+}
+```
+
+### Via mcporter CLI
+
+```bash
+# List tools
+mcporter call blender-mcp.get_objects_summary
+
+# Execute code
+mcporter call blender-mcp.execute_blender_code code='import bpy; result = {"count": len(bpy.data.objects)}'
+```
+
+---
+
+## Geometry Nodes MCP Integration
+
+The official Blender MCP Server supports advanced Geometry Nodes inspection and debugging capabilities (Blender 5.2+):
+
+### Querying Data Relations
+```bash
+# Find which objects use a specific material
+mcporter call blender-mcp.execute_blender_code code='
+import bpy
+material_name = "pebbles"
+users = [obj.name for obj in bpy.data.objects if obj.active_material and obj.active_material.name == material_name]
+result = {"material": material_name, "users": users, "count": len(users)}
+'
+```
+
+### Scene Debugging
+```bash
+# Find highest poly-count object in scene
+mcporter call blender-mcp.execute_blender_code code='
+import bpy
+mesh_objects = [(obj.name, len(obj.data.polygons)) for obj in bpy.data.objects if obj.type == "MESH"]
+if mesh_objects:
+    highest = max(mesh_objects, key=lambda x: x[1])
+    result = {"object": highest[0], "faces": highest[1]}
+else:
+    result = {"error": "No mesh objects found"}
+'
+```
+
+### Geometry Node Tree Inspection
+```bash
+# Inspect Geometry Nodes modifier connections
+mcporter call blender-mcp.execute_blender_code code='
+import bpy
+obj = bpy.data.objects["GEO-pebble"]
+if obj.modifiers:
+    mod = obj.modifiers[0]
+    if mod.type == "NODES":
+        node_tree = mod.node_group
+        nodes_info = [{"name": n.name, "type": n.type, "inputs": [i.name for i in n.inputs]} for n in node_tree.nodes]
+        result = {"modifier": mod.name, "node_tree": node_tree.name, "nodes": nodes_info}
+    else:
+        result = {"error": "Not a Geometry Nodes modifier"}
+else:
+    result = {"error": "No modifiers found"}
+'
+```
+
+### Common Geometry Nodes MCP Patterns
+
+| Task | Example Query |
+|------|---------------|
+| Find material users | `"Which objects use the material: [name]"` |
+| Scene density analysis | `"Analyze mesh density distribution in this scene"` |
+| Debug missing data | `"What is the object with the highest poly-count?"` |
+| Node tree structure | `"Show me the Geometry Nodes connections for [object]"` |
+
+---
+
+## Gemini CLI Integration
+
+Blender MCP can be used with Google Gemini CLI (in addition to Claude):
+
+```bash
+# Install Gemini CLI
+npm install -g @google/gemini-cli
+
+# Configure MCP via Gemini CLI's built-in command
+gemini mcp add blender --transport stdio --command "uvx blender-mcp@1.0.0" --env BLENDER_MCP_HOST=localhost --env BLENDER_MCP_PORT=9876
+
+# Start Gemini CLI with Blender MCP
+gemini
+```
+
+**Security Note / 安全说明**: The `gemini mcp add` command automatically creates the configuration in the appropriate location. No manual file editing is required.
+
+---
+
+## Quick Start Checklist
+
+- [ ] Blender 5.1+ installed
+- [ ] MCP Addon installed and enabled
+- [ ] **Auto Start enabled** (optional, recommended)
+- [ ] MCP Server started (`python -m blmcp --transport stdio` or `uvx blender-mcp@1.0.0`)
+- [ ] mcporter installed (`npm install -g mcporter`)
+- [ ] Port 9876 available (default)
+- [ ] `BLENDER_PATH` environment variable set (if needed)
+- [ ] `DISABLE_TELEMETRY=true` (optional, for privacy)
+
+---
+
+## Changelog
+
+### v3.5.0 (2026-10-20) — 排障表 SAC 条目重写（旧建议被官方 issue 证伪）
+
+- 🔴 **纠正一条会误导人的处置建议**：v3.3.0 起排障表写「Windows 上 `blender-mcp.exe` 被 Smart App Control 拦 → **改用官方 add-on 通道**」。**官方 issue #65（2026-10-19）证伪**：用户在**官方 MCPB 扩展**里同样被拦 —— 拦截对象是扩展自带 `.venv\Scripts\blender-mcp.exe`，`Get-AuthenticodeSignature` = `NotSigned`，Claude Desktop 报 "MCP Blender: Server disconnected"，Windows Code Integrity **event 3077**（与 #56 的 uv 安装路径同因）。
+- 🟢 排障条目改为**机制 + 可执行判据**：SAC enforcement 只放行「应用智能服务识别」或「受信任 CA 签名」的二进制（Microsoft Learn 原文，2026-10-06 版）→ 未签名 launcher **必被拦**；处置改为「先验签名 → 把 SAC 决策交还用户（关闭属高风险，企业域策略不动）」。
+- ⚠️ 留了 **待核验**：SAC 是否支持单应用白名单（本次未查到官方入口，不写死）。
+- 📌 MCP 仓库快照（2026-10-20 API 实测）：最新发布仍 **v1.0.3（2026-09-11，无 v1.0.4）**；落地页 add-on 链接 **`mcp-1.0.3.zip` 可比基线连续 11 次一致**；open issues **21 → 22**（新增 #65）；open PR **#48 / #47 / #43 仍全部未合并**；stars **28 → 30**、forks 31、`licenses` = GPL-3.0（第 5 轮一致）
+- ✅ 版本号三处一致：`SKILL.md` frontmatter / README 版本行 / 两处 Changelog = **3.5.0**；**双平台发布待用户确认**（当前远端基线 = v3.4.0）
+
+### v3.4.0 (2026-10-16) — 2 条新官方 issue 工具行为坑（每日快扫）
+- 🟢 排障表新增 **2 条官方 issue 可溯源的工具行为坑**：
+  - **issue #63**：Windows 上 `SO_REUSEADDR` 让**第二个 Blender 实例静默绑定已占用端口** → 服务按钮显示"已启动"但客户端始终连第一个实例（表现：操作落到别的窗口 / 改了没反应）。创建者实测 **20/20 复现**（Win11 + Blender 5.2.2 LTS + blender_mcp 1.0.2），建议官方改用 `SO_EXCLUSIVEADDRUSE` → 技能给处置：**只开一个实例** / 先关旧实例 / `netstat -ano | findstr 9876` 查占用
+  - **issue #64**：`execute_blender_code` 的 `result` **必须为 dict**；官方 `prompts.yml` L48 声称可返回 "dicts, lists" 属**文案与实现不一致**（报错原文 `The result variable must be a dict, not list. Wrap your return value: result = {"key": value}`）→ 技能给处置：**一律包成 dict**
+- 📌 MCP 仓库快照：最新发布仍 **v1.0.3（2026-09-11，无 v1.0.4）**；落地页 add-on 链接**可比基线连续 8 次一致**；Open issues **18 → 21**；Open PR **#48 / #47 / #43 仍全部未合并**
+- ✅ 版本号三处一致：`SKILL.md` frontmatter / README 版本行 / 两处 Changelog = **3.4.0**；**已双平台发布（2026-10-16 10:41）**：GitHub `taosiuman/blender-skill` tag/Release **v3.4.0**（= Latest）＋ ClawHub `@taosiuman/blender-mcp` **latest=3.4.0**（安全扫描 Moderate CLEAN）→ 三方一致
+
+### v3.3.0 (2026-10-13) — 官方 issue/PR 实证取证 + 工具行为排障补强（每日快扫）
+- 🟢 **取证渠道修复**：`projects.blender.org` 的 HTML 页面长期 403，改走 **Gitea REST API**（`/api/v1/repos/lab/blender_mcp/{releases,issues,pulls}`）→ **issue/PR 状态首次拿到官方实证**（此前 10 天只能写"未能核查"）
+- 🟢 **add-on 版本核实**：最新发布仍是 **v1.0.3（2026-09-11）**，无 v1.0.4（官方 releases API + 落地页双向印证）；Open PR = **#48 / #47 / #43**（均未合并）
+- 🟢 排障表新增 **7 条官方 issue 可溯源的工具行为坑**：`*_for_cli` Windows stdio 挂死（#58/#60，PR #48）｜`execute_blender_code` 每次新命名空间（#55）｜`get_objects_summary` 上下文爆炸（#54）｜缩略图分辨率与临时目录语义（#46/#61/#53）｜`get_python_api_docs` 需重复类名（#62）｜macOS `.mcpb` 安装失败（#57）｜Windows SAC 拦截（#56）
+- ⚠️ **更正**：作废追踪表中不存在的 **#344 / #345 / #348**（官方 API 实测 404）；新增"不得用搜索摘要代替官方源"的取证规则
+- 📌 API 侧同步：change_log 本轮 8 条新条目中 7 条实际 5.3 生效（项目系统 + UILayout 模板，见 `api-changes-5.3.md` §7）、1 条 5.4 独有（`Mesh.use_radial_symmetry`，见 §3.6）—— **均不触及 MCP 执行路径**，MCP 侧无兼容性改动
+- ✅ 三处版本号一致：`SKILL.md` frontmatter / README 版本行 / 两处 Changelog = **3.3.0**；**双平台发布仍待用户确认**（v3.2.0 未发布 → 本次发布一并覆盖两版变更）
+
+### v3.2.0 (2026-10-11) — 5.3 Beta 口径 + 官方安装链接 + 排障补强（周度整合）
+- 🟢 5.3 兼容章节标题由「dev — 前瞻」改为「**Beta — API 已稳定**」，并写明 **RC 2026-11-04 → 发布 2026-11-10**（官方 release notes 首页原文）
+- 🟢 安装步骤改用官方 **add-on v1.0.3** 链接（原写 v1.0.0 已过期），补 **Blender ≥ 5.1** 硬性要求与「拖拽要拖两次」说明
+- 🟢 排障表新增 4 条高频真实坑：**Auto Start 只在启动时触发** / **两个 MCP add-on 抢 9876 端口** / **Allow Online Access** / **拖拽安装要拖两次**
+- 📌 同步两条 5.3 生效的 API 变更口径（`use_collection_importer` 移除、资产库进度回调 3 参数）—— 官方已于 2026-10-11 把它们补登进 `/api/5.3/` 章节
+- ✅ 版本号三处一致：`SKILL.md` frontmatter / README 版本行 / 两处 Changelog 均为 **3.2.0**；**双平台发布待用户确认**
+
+### v3.1.1 (2026-10-08) — 文档一致性修复
+- ✅ README 变更日志补齐 v3.0.0 / v3.1.0 / v3.1.1（修复「版本行 3.1.0、正文停在 v2.5.9」的版本漂移）
+- ✅ 核验日期更新至 2026-10-07（每日快扫 10-06 / 10-07 均无 API 增量）
+- ✅ 无 API 内容变更，纯文档版本
+
+### v3.1.0 (2026-10-05) — 5.3 全量核验
+- 🔴 新增破坏性变更：函数签名变更（`ObjectConstraints.new`/`PoseBoneConstraints.new` 增加 `name`；`UILayout.textbox`/`textbox_with_state` **位置参数重排**；`WindowManager.popover*` 新增 `auto_keymap`）
+- 🟢 新增发现：`BlendFileColorspace` OCIO 诊断三项、`MaterialGPencilStyle.gradient`、`SpaceOutliner.show_users_column`/`sort_method`、`UILayout.label_markdown`
+- 📌 完整条目迁移到 `knowledge/blender/api-changes-5.3.md`；本文件保留速览与兼容模板
+
+### v3.0.0 (2026-10-05) — Workspace Rebuild
+- 迁移到 octop 工作区：知识库拆到 `knowledge/blender-mcp/`（research-tracker、auto-publish-workflow）
+- 移除 openclaw 专用安装元数据，改为 octop 技能元数据
+- 研究追踪与发布流程改由 `blender-autolearn` 技能 + 定时任务驱动
+
+### v2.5.9 (2026-09-23) — Security Release
+- 🔒 Removed dangerous `curl | sh` pattern from installation docs
+- 🔒 Added bilingual security warnings (EN/CN) about bpy code execution risks
+- 🔒 Pinned dependency versions: `uvx blender-mcp==1.0.0`, `pip install mcp==1.8.0 pyyaml==6.0.2 starlette==0.45.0`
+- 🔒 Clarified telemetry defaults and opt-out mechanism
+- 🔒 Added bilingual documentation throughout (EN/CN)
+- 🔒 Removed publish scripts from skill directory (unrelated to skill functionality)
+
+### v2.5.8 (2026-09-23)
+- ✅ 5.3 Alpha API 增量更新 (09-23): 基于官方 change_log 第七次扫描
+- ✅ 新增 CollectionChild.sort_index: 集合子对象排序索引
+- ✅ 新增 CollectionObject.sort_index: 集合对象排序索引
+- ✅ 新增 CollectionObject.parented_sort_index: 集合对象父级排序索引
+- ✅ 新增 ColorManagedInputColorspaceSettings.interop_id: 输入色彩空间互操作ID
+- ✅ 新增 ColorManagedSequencerColorspaceSettings.interop_id: 序列编辑器色彩空间互操作ID
+- ✅ 新增 CompositorNodeConvertColorSpace.from_interop_id: 色彩空间转换节点源互操作ID
+- ✅ 新增 CompositorNodeConvertColorSpace.to_interop_id: 色彩空间转换节点目标互操作ID
+- ✅ 新增 SpaceOutliner.sort_method: 大纲排序方法
+- ✅ 补充破坏性变更: SpaceOutliner 的 use_sort_alpha 重命名为 10 个 use_filter_* 属性
+- ✅ 补充破坏性变更: UserAssetLibrary 的 path 重命名为 auth_token/invalid_uuid/uuid
+- ✅ 总计: 8 项新增 API + 2 项重要重命名文档补充 (集合排序/色彩空间互操作/大纲排序)
+
+### v2.5.7 (2026-09-20)
+- ✅ 5.3 Alpha API 增量更新 (09-20): 基于官方 change_log 第六次扫描
+- ✅ 新增 BrushGpencilSettings.use_cyclic_stroke: Grease Pencil 循环笔触设置
+- ✅ 总计: 1 项新增 API (GP 笔刷增强，无破坏性变更)
+
+### v2.5.6 (2026-09-18)
+- ✅ 5.3 Alpha API 增量更新 (09-18): 基于官方 change_log 第五次扫描
+- ✅ 新增 PointCloud.type: 点云类型属性
+- ✅ 总计: 1 项新增 API (点云数据增强，无破坏性变更)
+
+### v2.5.5 (2026-09-16)
+- ✅ 5.3 Alpha API 增量更新 (09-16): 基于官方 change_log 第四次扫描
+- ✅ 新增 RenderEngine.bl_write_viewport_depth: 自定义渲染引擎写入视口深度缓冲
+- ✅ 新增 FileHandler.label_with_extensions: 文件处理器显示带扩展名的标签
+- ✅ 新增 UILayout.label_markdown: UI 布局中渲染 Markdown 格式文本
+- ✅ 总计: 3 项新增 API (均为渲染/文件处理/UI 增强，无破坏性变更)
+
+### v2.5.4 (2026-09-11)
+- ✅ 5.3 Alpha API 增量更新 (09-11): 基于官方 change_log 三次扫描
+- ✅ 新增 CyclesPreferences.has_dlss_gpu_devices: DLSS GPU 设备检测
+- ✅ 新增 CyclesRenderSettings.preview_denoising_upscale_quality: 预览降噪升级质量
+- ✅ 新增 RegionView3D.use_view_flip_x: 视口水平翻转
+- ✅ 新增 SpaceNodeOverlay.show_text_info: 节点叠加层文本信息显示
+- ✅ 总计: 4 项新增 API (均为渲染/视口/节点 UI 增强，无破坏性变更)
+
+### v2.5.3 (2026-09-10)
+- ✅ 5.3 Alpha API 增量更新 (09-10): 基于官方 change_log 二次扫描
+- ✅ 新增 WindowManager.undo_stack: 编程访问撤销栈
+- ✅ 新增 UILayout.property_split_factor: 属性分割系数控制
+- ✅ WindowManager.invoke_popup 参数变更: 新增 `auto_keymap` 参数
+- ✅ WindowManager.popover 参数变更: 新增 `auto_keymap` 参数
+- ✅ WindowManager.popover_begin__internal 参数变更: 新增 `auto_keymap` 参数
+- ✅ 总计: 5 项新增/变更 API (均为 UI/窗口管理增强，无破坏性变更)
+
+### v2.5.2 (2026-09-10)
+- ✅ 版本号同步至 2.5.2（与 GitHub/ClawHub 对齐）
+
+### v2.5.1 (2026-09-09)
+- ✅ 5.3 Alpha API 增量更新 (09-09): 基于官方 change_log 扫描
+- ✅ 新增 Cycles 元数据属性: BatchRenameAction.name, CyclesCurveRenderSettings.name, CyclesCustomCameraSettings.name, CyclesLightSettings.name, CyclesMaterialSettings.name, CyclesMeshSettings.name, CyclesObjectSettings.name, CyclesRenderLayerSettings.name, CyclesRenderSettings.name, CyclesView3DShadingSettings.name, CyclesVisibilitySettings.name, CyclesWorldSettings.name
+- ✅ 新增 GLTF2_filter_action.name
+- ✅ 新增 NodeSetting.name
+- ✅ 新增 Paint 可视化曲线: Paint.show_auto_smooth_curve, Paint.show_hardness_curve, Paint.show_spacing_curve
+- ✅ 新增 CompositorStrip.properties
+- ✅ 新增 SequencerTimelineOverlay.show_thumbnails
+- ✅ 总计: 18 项新增 API (均为小功能增强，无破坏性变更)
+
+### v2.5.0 (2026-09-08)
+- ✅ 跟踪 blender-mcp 社区 PR（3 项重要改进，均为 OPEN 状态）：
+  - 🔴 **PR #348**: Server instructions 机制 - 通过 `FastMCP(instructions=...)` 传递代码正确性指南
+    - 解决 #26（本地化 UI 中 `nodes["Principled BSDF"]` 返回 None）
+    - 解决 #110（渲染引擎标识符在版本间不一致）
+    - 使用 `n.type == "BSDF_PRINCIPLED"` 而非节点名称（跨语言兼容）
+    - 使用 `try/except TypeError` 获取动态枚举的完整值列表
+  - 🟡 **PR #344**: `export_scene` 命令 - 场景导出为第一类工具
+    - 支持 GLB/FBX 格式导出到自定义路径
+    - 参数：`filepath`, `format="glb"`, `object_names=None`, `selection_only=False`, `apply_modifiers=True`
+    - 自动处理选择、修改器烘焙、GLB 标志位
+    - 返回：`{path, bytes, selection_only, exported: [...]}`
+  - 🟡 **PR #345**: 插件自动启动改进 - 延迟启动 + 重试机制
+    - 使用 Blender 持久化定时器延迟启动（避免冷启动时序问题）
+    - 等待场景存在后使用配置的端口
+    - 启动失败后自动重试
+    - 文件加载后重新调度
+    - 手动断开不会被后续文件加载覆盖
+- ✅ Blender API 无新变更（change_log 与 2026-09-07 一致）
+
+### v2.4.0 (2026-09-07)
+- ✅ 5.3 Alpha 完整扫描 (09-07): 基于官方 change_log.html 全量核实
+- 🔴 新增破坏性变更: `NodesModifier.panels` 移除（Geo Nodes 插件关键影响！）
+- 🔴 Theme API 移除: `ThemeFileBrowser.selected_file`, `ThemeSpaceGeneric/Gradient.header_text/header_text_hi/title`
+- ✅ Brush 重命名修正: `use_inverse_smooth_pressure` → `use_smooth_pressure`（非反向）
+- ✅ 新增 Project API: `BlendData.project/project_init/project_clear` + `Preferences.use_project_auto_save`
+- ✅ 新增渲染暂停/恢复: `RenderEngine.view_pause/view_resume`, `RegionView3D.pause_render`
+- ✅ 新增场景合成效果: `Scene.compositor_effects`, `CompositorNodeTree.allow_usage_in_scene_compositor_effect`
+- ✅ 新增 ID.deep_hash: 数据块内容哈希
+- ✅ 新增 Outliner 11 项细粒度过滤器
+- ✅ 新增 UILayout 合成模板: `template_compositor_strip_inputs`, `template_scene_compositor_effects`
+- ✅ 新增 Asset Library 认证: `UserAssetLibrary.auth_token/use_auth_token/uuid`
+- ✅ 新增 Brush 曲线/统一属性: `curve_auto_smooth/curve_hardness/curve_spacing/use_unified_color/use_unified_size`
+- ✅ 新增旋转模式转换: `Object/PoseBone.convert_rotation_mode()`
+- ✅ 新增 EEVEE 降噪: `ViewLayerEEVEE.denoising_store_passes`
+- ✅ 新增 VSE 偏好设置: `PreferencesEdit.clamp_strips_by_default/default_strip_length`
+- ✅ 新增 RT Shadows: `PreferencesSystem.use_rt_shadows`
+- ✅ 新增 Collection Import: `Collection.importer`, `CollectionImport.filepath`
+- ✅ 总计: Python API 50+ 项新增 + 6 项移除 + 5 项重命名
+
+### v2.3.0 (2026-09-06)
+- ✅ 5.3 Alpha 扫描更新 (09-06): Python API 6 项新增 + Geo Nodes 13 项新增 + GPU 兼容性变更
+- ✅ 新增 `NodeTreeInterface.root_panel`, `UILayout.label_multiline()`, `WindowManager.try_activate_rna_button()`
+- ✅ 新增 `mathutils.KDTree` 2D 树支持 + `bpy.data.all_ids` 顺序变更警告
+- ✅ 新增 Geo Nodes: Combine List, Get Vector Component, Rasterize Points, Deactivate Voxels, Grid Topology Boolean, NURBS input nodes, Curve to Mesh/Tube Miter Scale, Realize Instances Preserve Normals, GP data input nodes
+- ✅ 新增 GPU 兼容性变更: `gpu.types.GPUBatch.draw_instanced` 行为变更 (commit 6f64632716)
+
+### v2.2.0 (2026-09-04)
+- ✅ Added Geometry Nodes MCP integration section with debugging examples
+- ✅ Documented Auto Start feature for addon preferences
+- ✅ Added uvx quick installation method
+- ✅ Added DISABLE_TELEMETRY environment variable
+- ✅ Added Gemini CLI integration guide
+- ✅ Enhanced Quick Start Checklist with new options
+
+### v2.1.0 (Previous)
+- Blender 5.2 LTS Beta API compatibility notes
+- 12 breaking changes documented
+- 66 new APIs catalogued
+lender 5.2 LTS Beta API compatibility notes
+- 12 breaking changes documented
+- 66 new APIs catalogued

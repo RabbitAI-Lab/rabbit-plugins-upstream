@@ -1,47 +1,58 @@
-## Description: <br>
-Analyzes rehabilitation training photos or videos to identify patient frustration and giving-up tendency signals, produce a structured assessment, and suggest motivation or escalation actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes rehabilitation training video and optional audio for signs of frustration or disengagement and provides structured findings and encouragement guidance.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External developers, rehabilitation technology teams, and care teams use this skill to analyze authorized rehab training media for frustration or giving-up behaviors, generate structured monitoring results, and support timely encouragement or clinician/caregiver escalation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Patient rehabilitation media and identity data may be sent to a configured cloud service. <br>
-Mitigation: Use only with explicit patient or caregiver authorization, and review backend handling, retention, and access practices before installation. <br>
-Risk: The skill can create local identity or token state in the workspace. <br>
-Mitigation: Run it in a controlled workspace, restrict file access, and review or clear generated identity/token files according to local policy. <br>
-Risk: Historical reports may be queried automatically from the cloud service. <br>
-Mitigation: Limit use to authorized operators and confirm that historical-report access aligns with patient consent and organizational privacy requirements. <br>
-Risk: Frustration and giving-up assessments can be mistaken or incomplete. <br>
-Mitigation: Treat results as supportive behavioral signals, not medical diagnosis, and require qualified human review for clinical decisions or training-plan changes. <br>
+## Use Case:
 
+Rehabilitation clinicians and authorized caregivers use the skill to assess training-session recordings for possible frustration or disengagement, review progress-based encouragement suggestions, and identify when human support may be needed.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-rehab-motivation-encouragement-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Guidance] <br>
-**Output Format:** [Markdown and JSON-style structured text with optional saved result file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May call cloud APIs, query historical reports, and write an optional output file when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Sensitive rehabilitation video or audio may be processed in the cloud and linked to patient identities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit patient or authorized caregiver consent before use and confirm which cloud services receive the media and identity data.
+
+Risk: Patient history, report links, and access tokens may be retained or exposed beyond the intended audience.
+
+Mitigation: Verify the service's retention policy, token storage location, report access controls, and authorized alert recipients before deployment.
+
+Risk: Automatic escalation may notify therapists or family members without human review.
+
+Mitigation: Confirm whether escalation can be disabled or require human approval, and review alert recipients and thresholds before enabling it.
+
+## Reference(s):
+
+- [Rehabilitation motivation API documentation](references/api_doc.md)
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-rehab-motivation-encouragement-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured report or JSON; Markdown table for historical reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include findings, encouragement suggestions, historical report links, and escalation recommendations.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,3 +1,12 @@
+<!-- request-identity:start -->
+**请求身份**：使用已配置的 API Key，并保留本包的 X-Client，携带下列完整身份头；不得沿用其它包的版本或来源。
+```text
+X-Client: opportunity-radar/1.0.3
+X-Skill-Package: ai-sales-lead-radar/1.0.8
+X-Skill-Source: clawhub/dragonzu
+```
+<!-- request-identity:end -->
+
 # 商机雷达清单模板
 
 > 清单用 Markdown 输出在对话中。概览与 Top 机会永远放最前。所有数据标注时间范围（如「2026-04 至今发布」「未来 180 天到期」）。
@@ -79,3 +88,15 @@ JSON 顶层可附 `citations` 字段（数据引用口径，结构同见 render_
 - 有 ⭐⭐⭐ 商机 → 「想深挖某条的话，我可以查它的项目时间线和采购方历史偏好；已进入招标阶段的，可以用投标决策分析（zlbx-bid-decision skill）判断该不该投。」
 - 订阅引导（固定输出）→ 「这套扫描条件可以固化成『商机晨报』每天自动跑增量，想要的话我教你配置。」
 - 通用 → 「清单涉及的采购单位完整档案与更多商机详情，可在知了商机大师查看：https://agent.zhiliaobiaoxun.com」
+
+<!-- package-identity:start -->
+**安装包身份与升级检查**：所有发往知了标讯 API 的请求（包括账户查询）必须额外携带以下两个请求头：
+```text
+X-Skill-Package: ai-sales-lead-radar/1.0.8
+X-Skill-Source: clawhub/dragonzu
+```
+这些值是当前安装包的固定身份，复用已有API Key时也要携带；不要用X-Client产品版本替代包版本，不要将Key的注册渠道当作安装来源。
+请求鉴权：使用已配置的 API Key，并保留本包的 X-Client。每个会话首次使用本Skill时，在已有凭证可用后先调用免费账户接口 `GET https://mcp-server.zhiliaobiaoxun.com/api_v2/account/balance` 检查升级提醒；该查询不扣积分，不触发购买。
+**版本提醒转达**：响应出现 `skill_update_notice` 时，将其中 `message` 原样转达用户；兼容提示只说明检查版本，不能宣称已确认当前包过期。
+**展示后确认**：只有将提醒发送到用户可见对话之后，才使用同一凭证和请求头，按 `display_ack` 提交 POST 回执（MCP客户端可调用 `confirm_skill_update_display`）（`notice_id` 和 `displayed: true`）。只读取工具响应、在思考中提过、尚未转达时不得确认。不能在展示后调用接口则不确认，服务端继续保留待提醒状态。回执免费，不扣积分；失败不影响查询结果，不向用户展示技术回执。同一会话同一 `notice_id` 只展示一次。
+<!-- package-identity:end -->

@@ -1,46 +1,61 @@
-## Description: <br>
-Diagnose and explain Cargo workflow behavior after the fact: trace why a single run produced the wrong output, sweep a batch or play for errors and group them by root cause, and profile where a play's credits go and how to cut the cost. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Diagnoses Cargo workflow runs and batches by tracing execution, grouping failures, and attributing credit usage to workflows, nodes, and providers.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Developers and operators use this skill to diagnose Cargo workflow runs, group batch failures, and analyze credit spend before deciding whether to fix, re-run, report, or optimize a play. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cargo CLI diagnostics can inspect workspace workflow runs, errors, and credit usage. <br>
-Mitigation: Install and run the skill only for Cargo workspaces where this inspection is intended. <br>
-Risk: Billing commands may require an admin token and can expose account usage data. <br>
-Mitigation: Use admin access only for the billing attribution steps that require it, and review those commands before execution. <br>
-Risk: Re-running records or paid nodes can spend Cargo credits. <br>
-Mitigation: Review re-run recommendations, pilot on a small record set, and confirm expected credit spend before broader execution. <br>
+## Use Case:
 
+Developers and operations teams use this skill to explain failed or incorrect Cargo runs, identify recurring batch errors, and find sources of workflow credit spend.
 
-## Reference(s): <br>
-- [Cargo Diagnostics on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-diagnostics) <br>
-- [Cargo Skills Homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Run Trace](references/run-trace.md) <br>
-- [Batch Error Sweep](references/batch-error-sweep.md) <br>
-- [Play Cost Profile](references/play-optimize-credits.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Guidance, Shell commands, Markdown] <br>
-**Output Format:** [Markdown with inline shell commands and compact diagnostic tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Cargo CLI commands, SQL queries, root-cause summaries, cost estimates, and recommended next actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: frontmatter and server release evidence) <br>
+Risk: Installing the CLI from @latest may bring unreviewed changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Pin @cargo-ai/cli to a reviewed version before installation.
+
+Risk: Diagnostics can expose workflow data and billing metrics through the Cargo account.
+
+Mitigation: Use a trusted CLI and a least-privileged token; reserve admin access for billing attribution.
+
+Risk: Re-running failed records can incur additional credits.
+
+Mitigation: Pilot a small sample, estimate cost, and get approval before re-running the full batch.
+
+## Reference(s):
+
+- [Cargo Diagnostics on ClawHub](https://clawhub.ai/cargo-ai/skills/cargo-diagnostics)
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+- [Run trace](artifact/references/run-trace.md)
+- [Batch error sweep](artifact/references/batch-error-sweep.md)
+- [Play cost profile](artifact/references/play-optimize-credits.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Concise diagnosis with evidence summaries and optional CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include failure-group tables, exemplar run IDs, execution paths, and credit breakdowns.]
+
+## Skill Version(s):
+
+1.5.0 (source: skill frontmatter and release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

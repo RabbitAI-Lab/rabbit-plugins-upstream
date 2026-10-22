@@ -1,42 +1,59 @@
-## Description: <br>
-Meta-agent skill for orchestrating complex tasks through autonomous sub-agents by decomposing tasks, generating sub-agent workspaces, coordinating file-based communication, and consolidating results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Meta-agent skill for orchestrating complex tasks through autonomous sub-agents by decomposing macro tasks, coordinating file-based handoffs, and consolidating results.
 
-## Publisher: <br>
-[fuzzyb33s](https://clawhub.ai/user/fuzzyb33s) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[fuzzyb33s](https://clawhub.ai/user/fuzzyb33s)
 
-## Use Case: <br>
-Developers and agent operators use this skill to break complex work into parallel subtasks, dispatch specialized sub-agents, track file-based handoffs, and consolidate deliverables. It is intended for deliberate orchestration workflows where workspace changes, generated files, and cleanup actions are reviewed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill coordinates sub-agents that may create, copy, archive, or clean up workspace files. <br>
-Mitigation: Confirm the target workspace, expected file changes, copied inputs, and cleanup or archive actions before running an orchestration workflow. <br>
-Risk: Task decomposition and sub-agent outputs can introduce incorrect, incomplete, or conflicting guidance into final deliverables. <br>
-Mitigation: Review agent instructions, status files, outbox deliverables, and the consolidated result before using or deploying the output. <br>
+## Use Case:
 
+Developers and technical operators use this skill to break complex work into parallel sub-agent tasks, coordinate file-based communication, and consolidate agent outputs into final deliverables.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/fuzzyb33s/agent-orchestrator) <br>
-- [File-Based Communication Protocol](references/communication-protocol.md) <br>
-- [Sub-Agent Templates](references/sub-agent-templates.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline code blocks, file specifications, and command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces task breakdowns, generated agent instructions, workspace file layouts, status tracking guidance, and consolidation summaries.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.1 (source: server release evidence) <br>
+Risk: Autonomous sub-agent delegation can run broad task plans with limited control gates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the planned agents, task boundaries, workspace paths, tool access, input files, and expected outputs before dispatch.
+
+Risk: Use on sensitive repositories or private data can expose information to generated sub-agent workflows.
+
+Mitigation: Avoid sensitive inputs unless explicit confirmation, scoping controls, and output review are in place.
+
+Risk: Broad automatic triggers may activate the skill when a user only intended ordinary task discussion.
+
+Mitigation: Confirm that macro-task delegation is intentional before using the orchestrator.
+
+## Reference(s):
+
+- [Agent Orchestrator on ClawHub](https://clawhub.ai/fuzzyb33s/skills/agent-orchestrator)
+- [File-Based Communication Protocol](references/communication-protocol.md)
+- [Sub-Agent Templates](references/sub-agent-templates.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with code blocks, file specifications, and JSON status examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces orchestration plans, sub-agent skill templates, workspace instructions, status conventions, and consolidation guidance.]
+
+## Skill Version(s):
+
+0.1.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

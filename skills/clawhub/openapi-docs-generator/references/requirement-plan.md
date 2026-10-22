@@ -2,7 +2,7 @@
 
 ## Live Requirement
 
-Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 3 source families, so it represents broader demand rather than a single isolated request.
+Validated demand: Backend and platform teams need practical help generating, improving, and validating OpenAPI or Swagger documentation for REST APIs. This requirement is supported by 12 separate online signals across 4 source families, so it represents broader demand rather than a single isolated request.
 
 ## Audience
 
@@ -20,30 +20,30 @@ Demand: 70/70
 
 Local feasibility: 30/30
 
-Evidence coverage: 12 signals across 3 source families.
+Evidence coverage: 12 signals across 4 source families.
 
 Scoring rationale:
 
 - Evidence count: 12; required minimum: 3.
-- Distinct source families: 3; sources: csdn, github, segmentfault.
+- Distinct source families: 4; sources: csdn, github, hacker-news, segmentfault.
 - Demand score: 70/70 based on corroboration, source diversity, and professional/community signal.
 - Local feasibility score: 30/30.
 - Implementation is a documentation, workflow, code, or analysis skill that can run on ordinary CPU hardware.
 
 ## Evidence
 
-- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-4-159013081-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- csdn-search (2025-09-05T00:00:00+00:00): [Wiki.js API 文档 ：Swagger/ OpenAPI 文档 生成](https://blog.csdn.net/gitblog_01093/article/details/151205413?ops_request_misc=elastic_search_misc&request_id=7f42ad53003947139685d22e96218e08&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-5-151205413-null-null.142^v102^pc_search_result_base8&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
-- github-issues (2026-07-12T05:32:50+00:00): [Add OpenAPI Documentation Examples](https://github.com/nensii21/devlink/issues/252)
-- github-issues (2026-07-25T08:25:57+00:00): [[FEAT] Generate dynamic interactive OpenAPI 3.1 documentation endpoint at /api-docs for REST integration](https://github.com/PRODHOSH/ossfolio/issues/577)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [javascript](https://segmentfault.com/t/javascript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [typescript](https://segmentfault.com/t/typescript)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [ONES 研发管理](https://ones.cn/?utm_term=ONES%C2%A0%E7%A0%94%E5%8F%91%E7%AE%A1%E7%90%86&utm_campaign=%E9%A6%96%E9%A1%B5%E6%A0%87%E7%AD%BE&_channel_track_key=myqX1C0f&utm_source=%E6%80%9D%E5%90%A6%E8%BD%AC%20ONES)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： swagger发请求的时候如何自动添加Bearer](https://segmentfault.com/q/1010000017381307/a-1020000017382712)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [OpenAPI接口规范：为你的应用程序带来更好的性能与可维护性](https://segmentfault.com/a/1190000043968971)
-- segmentfault-search (2026-07-26T07:03:42.731078+00:00): [答： 如何为 swagger 2.8.0 做友好的基本 url](https://segmentfault.com/q/1010000042921070/a-1020000042921072)
-- github-issues (2026-07-26T05:12:50+00:00): [Make AWS HTTP API throttling configurable and cost-aware](https://github.com/haya-inc/hayasend/issues/44)
+- hacker-news-search (2026-10-13T15:41:00+00:00): [Launch HN: Consus (YC F24) – LLM gateway for companies handling sensitive data](https://news.ycombinator.com/item?id=50073471)
+- github-issues (2026-10-12T08:00:26+00:00): [Acknowledge inbox delivery at the durable acceptance boundary](https://github.com/PerishLab/santi/issues/96)
+- csdn-search (2026-03-13T00:00:00+00:00): [OpenAPI 规范：RESTful API设计](https://blog.csdn.net/2501_94476825/article/details/159013081?ops_request_misc=elastic_search_misc&request_id=b0bff6ca4fad46f1b96f134734a154ca&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~sobaiduend~default-5-159013081-null-null.142^v102^control&utm_term=OpenAPI%20%E6%96%87%E6%A1%A3)
+- github-issues (2026-10-19T15:23:11+00:00): [security: add rate limiting and anti-spam to public API routes](https://github.com/OFFER-HUB/offer-hub-monorepo/issues/1684)
+- github-issues (2026-10-16T18:20:23+00:00): [Document the Default API Page Size](https://github.com/Elcare-care/elcare-care-app/issues/915)
+- github-issues (2026-10-20T14:14:43+00:00): [Algorithmic Smart Order Router between Stellar DEX and Centralized Liquidity](https://github.com/Lumen-Nexora/Nexora/issues/84)
+- github-issues (2026-10-21T10:57:24+00:00): [[F-114] Reject non-public hosts in source_reference URLs and verification endpointHost](https://github.com/StellarCanary/ProtocolCanary-Fixtures/issues/396)
+- github-issues (2026-10-21T12:42:48+00:00): [Preview a personal Document target before sending an agent update](https://github.com/crewship-ai/crewship/issues/3913)
+- github-issues (2026-10-21T10:08:59+00:00): [rest: the API docs viewer page loads a third-party script by an unpinned URL with no integrity check](https://github.com/objectstack-ai/objectstack/issues/25104)
+- segmentfault-search (2026-10-21T13:10:57.870105+00:00): [HarmonyOS 开发者社区](https://segmentfault.com/brand/harmonyos-next)
+- segmentfault-search (2026-10-21T13:10:57.870105+00:00): [javascript](https://segmentfault.com/t/javascript)
+- segmentfault-search (2026-10-21T13:10:57.870105+00:00): [typescript](https://segmentfault.com/t/typescript)
 
 ## How The Skill Meets The Requirement
 

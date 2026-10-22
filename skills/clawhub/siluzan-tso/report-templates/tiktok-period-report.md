@@ -11,14 +11,14 @@
 
 ## 标准四步流程（默认 · 交付 HTML）
 
-| 步骤             | 执行者       | 动作                                                                                                                                                                             |
-| ---------------- | ------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| **1. 拉数**      | Agent 调 CLI | `tiktok-analysis -a <id> --start <s> --end <e> --json-out ./snap-tiktok`（见下方「日期规则」，全 12 维或 `--sections` 指定子集）                                                 |
-| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），做洞察与叙事；表格数字可由 `--snapshot-dir` 按类型自动映射                                                      |
-| **3. 写 JSON**   | Agent        | 撰写 `tiktok-period-report.json`：仅 `meta.accountId` + `narrative` 为必填；`kpis`/`tables` 可省略，由 `--snapshot-dir` 按网关类型自动合并                                         |
-| **4. 渲染 HTML** | CLI          | `tiktok-analysis render` — **校验 narrative 6 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                                                           |
+| 步骤             | 执行者       | 动作                                                                                                                                       |
+| ---------------- | ------------ | ------------------------------------------------------------------------------------------------------------------------------------------ |
+| **1. 拉数**      | Agent 调 CLI | `tiktok-analysis -a <id> --start <s> --end <e> --json-out ./snap-tiktok`（见下方「日期规则」，全 12 维或 `--sections` 指定子集）           |
+| **2. 分析**      | Agent        | 用 **node/python 脚本**读落盘 JSON（勿用 Read 打开业务 `*.json`），做洞察与叙事；表格数字可由 `--snapshot-dir` 按类型自动映射              |
+| **3. 写 JSON**   | Agent        | 撰写 `tiktok-period-report.json`：仅 `meta.accountId` + `narrative` 为必填；`kpis`/`tables` 可省略，由 `--snapshot-dir` 按网关类型自动合并 |
+| **4. 渲染 HTML** | CLI          | `tiktok-analysis render` — **校验 narrative 6 个分析小节必含字段**，缺项报错不生成 HTML；**禁止** Agent 手写/拼接 HTML                     |
 
-> `--snapshot-dir` 自动补全 `meta` / `kpis` / `tables.*`。网关形状见 `src/types/tiktok-analysis-api.ts`（对齐前端 `periodReport/tiktok.js`）：`campaigns` 为 `{ campaigns:[] }`；ad-groups/videos/audience 为 `{ data.list[].metrics }`（snake_case）；ads 为根数组。**本期 KPI 优先 campaigns 累加**。Agent 已填字段不覆盖。
+> `--snapshot-dir` 自动补全 `meta` / `kpis` / `tables.*`。网关形状见 `src/types/tiktok-analysis-api.ts`（对齐前端 `periodReport/tiktok.js`）：`campaigns` 为 `{ campaigns:[] }`；ad-groups/videos/audience 为 `{ data.list[].metrics }`（snake_case）；ads 为根数组。**本期 KPI 优先 campaigns 累加**。**数值一律以 CLI 快照覆盖**（`meta` 仅补空）；Agent 只写 `narrative`。
 
 ### JSON 契约（`tiktok-period-report.json`）
 
@@ -43,9 +43,9 @@
     "previousPeriod": "同结构可选，用于环比",
   },
   "tables": {
-    "campaigns": "[{ campaignName, status, spend, impressions, clicks, ctr, conversions, costPerConversion }]",
+    "campaigns": "[{ campaignName, spend, impressions, clicks, ctr, conversions, costPerConversion }]",
     "adGroups": "[{ adGroupName, campaignName, spend, clicks, ctr, conversions, costPerConversion }]",
-    "ads": "[{ adName, adGroupName, spend, clicks, ctr, conversions }]",
+    "ads": "[{ adName, spend, clicks, ctr, conversions }]",
     "videos": "[{ videoName, spend, impressions, clicks, ctr, conversions, costPerConversion }]",
     "audienceGender": "[{ gender, spend, impressions, clicks, ctr }]",
     "audienceAge": "[{ ageRange, spend, impressions, clicks, ctr }]",
@@ -83,9 +83,9 @@
 
 **数据呈现**：
 
-- 系列：`--sections campaigns` → `CampaignSectionData`（Query：`startDate`、`endDate`、`take`，默认 `take=100`）。写入 JSON `tables.campaigns[]`。
-- 广告组：`--sections ad-groups` → `AdGroupReport`。写入 JSON `tables.adGroups[]`。
-- 广告：`--sections ads` → `AdReport`。写入 JSON `tables.ads[]`。
+- 系列：`--sections campaigns` → `CampaignSectionData`（Query：`startDate`、`endDate`、`take`，默认 `take=100`）。写入 JSON `tables.campaigns[]`。**不展示状态**：网关 `campaignStatus` 恒为 null，HTML 不渲染该列。
+- 广告组：`--sections ad-groups` → `AdGroupReport`。写入 JSON `tables.adGroups[]`（组名 + `metrics.campaign_name`）。
+- 广告：`--sections ads` → `AdReport`。写入 JSON `tables.ads[]`。**不展示所属组**：`AdReport` 无 `adgroup_name`，HTML 不渲染该列。
 
 **分析（必写，三个子块各写一段，不可合并为一句带过）**：
 
@@ -98,6 +98,8 @@
 **数据呈现**：按消耗排序的视频素材表现（消耗、展示、点击、CTR、转化、CPA）。写入 JSON `tables.videos[]`。
 
 - **CLI**：`siluzan-tso tiktok-analysis -a <id> --sections videos [--start … --end …] [--take N] --json-out <dir>`
+
+无 `tables.videos` 行时 **仍渲染「素材/创意」节**，用客户可读空占位说明「当前广告没有视频创意素材」，禁止对客户写 VideoReport/HTTP 500 等接口术语。该维始终存在，不是删节。
 
 **分析（必写）** → 写入 `narrative.sections.videos.{analysis,suggestions}`：
 

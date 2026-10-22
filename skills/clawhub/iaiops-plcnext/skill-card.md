@@ -1,40 +1,52 @@
-## Description: <br>
-PLCnext and virtualized-PLC edition of iaiops that guides agents through read-first OPC-UA and Modbus diagnostics, cross-protocol analysis, and industrial data workflows for Phoenix Contact PLCnext environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides read-first diagnostics and analysis of PLCnext and virtualized PLC systems through OPC UA and Modbus tools, including dataflow, downtime, alarms, maintenance, and OEE.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[zw008](https://clawhub.ai/user/zw008)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Operations engineers and developers use this skill to inspect PLCnext or virtual PLC process data and investigate dataflow issues, downtime, alarms, and equipment health without changing controller settings.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: A production MCP profile could expose write-enabled tools despite this edition's read-only intent.
+
+Mitigation: Confirm the configured iaiops MCP profile is PLCnext/read-only before installation; review any export, historian, UNS, or approval-enabled write profile separately.
+
+Risk: Broad file access could expose or modify operations files outside approved locations.
+
+Mitigation: Limit IAIOPS_AGENT_READ_DIRS and IAIOPS_AGENT_WRITE_DIRS to approved operations folders.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Developers and industrial automation engineers use this skill to route agents toward read-first PLCnext Control and vPLC diagnostics over built-in OPC-UA and Modbus-TCP services. It is suited for connection diagnosis, dataflow triage, downtime root cause analysis, predictive maintenance, OEE, alarm, baseline, and compliance workflows using existing iaiops tools. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Analysis, Guidance, Configuration instructions]
 
-## Known Risks and Mitigations: <br>
-Risk: Unintended access to PLCnext endpoints or operational data destinations. <br>
-Mitigation: Before installation or use, confirm the iaiops MCP tools are configured only for intended PLCnext endpoints and that export, historian, streaming, baseline, and alias-map destinations are approved for the operational data involved. <br>
-Risk: Write-capable profiles could enable controlled changes outside this read-first edition. <br>
-Mitigation: Keep write-capable profiles disabled unless controlled changes are explicitly required; when enabled, apply the documented approval, dry-run, undo, and change-management controls. <br>
+**Output Format:** [Markdown]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-plcnext) <br>
+**Other Properties Related to Output:** [Findings depend on available process data and site configuration; operators should validate conclusions before acting.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown instructions with tool names and command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-first PLCnext OPC-UA and Modbus workflow guidance; no new connector or PLCnext vendor SDK is introduced by the skill text.] <br>
+0.32.0 (source: ClawHub release evidence)
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

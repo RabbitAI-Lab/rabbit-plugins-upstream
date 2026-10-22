@@ -1,47 +1,58 @@
-## Description: <br>
-codexbox runs OpenAI Codex CLI inside an aicodebox container and exposes shell, REST, OpenAI-compatible, MCP, Telegram, and cron interfaces for programmatic Codex use. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install, configure, or run Codex through the codexbox wrapper, or connect to its HTTP, MCP, Telegram, or cron surfaces.
 
-## Publisher: <br>
-[psyb0t](https://clawhub.ai/user/psyb0t) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[psyb0t](https://clawhub.ai/user/psyb0t)
 
-## Use Case: <br>
-Developers and automation engineers use codexbox to run Codex through scripts, CI jobs, OpenAI-compatible clients, MCP-aware agents, Telegram, or scheduled cron jobs instead of only through a local terminal. It is useful when a workflow needs prompt execution, workspace file operations, or schema-constrained Codex responses over networked interfaces. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Networked REST and MCP surfaces can provide run execution and full workspace file access when their bearer tokens are unset. <br>
-Mitigation: Set CODEXBOX_API_MODE_TOKEN and CODEXBOX_MCP_MODE_TOKEN before exposing ports, bind to loopback where possible, or place the service behind an authenticating proxy. <br>
-Risk: Workspace file deletion and prompt-running tools can remove or alter user data. <br>
-Mitigation: Review requested file operations, delete only task-owned files, avoid unauthenticated shared workspaces, and keep mounted workspaces scoped to the intended task. <br>
-Risk: The installer can execute remote shell code when piped directly into bash. <br>
-Mitigation: Download the installer, inspect it, and then run it only after trusting the source and channel. <br>
-Risk: Mounted Codex auth, session, and configuration directories can contain sensitive credentials or account state. <br>
-Mitigation: Treat mounted Codex directories as sensitive, restrict host and container access, and avoid sharing them across untrusted users or workloads. <br>
+## Use Case:
 
+Developers use codexbox to install and run Codex against a workspace, or to connect HTTP, OpenAI-compatible, MCP, Telegram, and scheduled workflows for coding and file-management tasks.
 
-## Reference(s): <br>
-- [ClawHub codexbox page](https://clawhub.ai/psyb0t/skills/codexbox) <br>
-- [codexbox setup](references/setup.md) <br>
-- [OpenAI Codex CLI](https://github.com/openai/codex) <br>
-- [aicodebox](https://github.com/psyb0t/docker-aicodebox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Docker, curl, Python, YAML, and shell examples.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Describes bearer-token setup, workspace file operations, OpenAI-compatible requests, MCP tool access, Telegram operation, cron jobs, and destructive-operation cautions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.4 (source: server release metadata) <br>
+Risk: HTTP and MCP modes can allow unauthenticated run execution and workspace file access when their tokens are unset.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Set separate API and MCP tokens, and bind services to loopback or place them behind an authenticating proxy.
+
+Risk: The wrapper can access the selected workspace and mounted credentials, and the one-line installer executes a remote script.
+
+Mitigation: Use a trusted, dedicated environment; inspect the installer and wrapper before running, and consider pinning the image by digest.
+
+Risk: Telegram access and scheduled jobs can trigger coding or workspace tasks without an interactive user present.
+
+Mitigation: Restrict allowed Telegram chats and enable cron jobs deliberately.
+
+## Reference(s):
+
+- [codexbox setup](references/setup.md)
+- [ClawHub release page](https://clawhub.ai/psyb0t/skills/codexbox)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration instructions, Code, Guidance]
+
+**Output Format:** [Markdown with shell commands, configuration examples, and code/workspace task results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include executable commands and workspace file operations.]
+
+## Skill Version(s):
+
+0.7.5 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

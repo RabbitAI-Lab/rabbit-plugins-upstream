@@ -1,48 +1,57 @@
-## Description: <br>
-HyperFrames routes video, animation, and motion-graphics requests into the right workflow, resumes existing projects, and manages project inspection, validation, preview, rendering, publishing, and batch rendering. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read first to make, edit, animate or render any video with HyperFrames (HTML rendered to video), including launch films, explainers, music videos, charts, maps, vertical clips, title cards, captions and overlays. Holds the render contract, the work loop and what each kind of video needs.
 
-## Publisher: <br>
-[heygen-com](https://clawhub.ai/user/heygen-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[heygen-com](https://clawhub.ai/user/heygen-com)
 
-## Use Case: <br>
-External users, developers, and content teams use this skill as the entry point for creating, editing, validating, rendering, and publishing HyperFrames video projects from briefs, URLs, GitHub PRs, Figma inputs, existing footage, or music. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may run npx-based HyperFrames commands and install or refresh related workflow skills. <br>
-Mitigation: Review command summaries, keep projects under version control, and run HyperFrames validation after upgrades or workflow changes. <br>
-Risk: Site capture, Figma or GitHub inputs, media generation, and publishing can use networked services when requested. <br>
-Mitigation: Confirm external inputs and publishing intent before use, and avoid sending sensitive material to networked services unless approved. <br>
-Risk: Project edits, renders, and publishing actions may create or update video project artifacts. <br>
-Mitigation: Inspect diffs, previews, and validation results before treating generated output as final or public. <br>
+## Use Case:
 
+Developers and video creators use this skill to plan, build, edit, animate, and render videos as editable HyperFrames projects, including explainers, launch films, music videos, charts, maps, and social clips.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/heygen-com/skills/hyperframes) <br>
-- [Publisher profile](https://clawhub.ai/user/heygen-com) <br>
-- [HyperFrames entry point](SKILL.md) <br>
-- [Intent interview](references/intent-interview.md) <br>
-- [Capability menu](references/capability-menu.md) <br>
-- [Skill lifecycle](references/skill-lifecycle.md) <br>
-- [Workflow route contracts](references/routes/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, code, configuration, and project artifact descriptions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include workflow routing decisions, project file changes, validation summaries, preview or render commands, and publishing guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.19 (source: server release metadata) <br>
+Risk: Standalone setup may modify installed agent instructions or an existing CLI pin.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer the versioned plugin installation; for standalone setup, set HYPERFRAMES_SKIP_SKILLS=1 and require approval before changing an existing CLI pin.
+
+Risk: The optional image workflow's auto mode sends the entire image to Google.
+
+Mitigation: Use the local grid workflow for private images.
+
+Risk: Map baking can affect the working environment or replace an existing frame.md.
+
+Mitigation: Run map baking in an isolated environment and preserve an existing frame.md before applying a preset.
+
+## Reference(s):
+
+- [HyperFrames on ClawHub](https://clawhub.ai/heygen-com/skills/hyperframes)
+
+## Skill Output:
+
+**Output Type(s):** [Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance and project files such as HTML, CSS, and JavaScript]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Content and files depend on the requested video task; a rendered video is produced only when requested or approved.]
+
+## Skill Version(s):
+
+1.0.49 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

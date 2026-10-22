@@ -1,5 +1,114 @@
 # Changelog
 
+## [0.11.0](https://github.com/es6kr/skills/compare/todowrite-v0.10.0...todowrite-v0.11.0) (2026-10-17)
+
+
+### Features
+
+* **todowrite,wip:** add session-scoped agent-task CLI and OpenClaw adapter ([#629](https://github.com/es6kr/skills/issues/629)) ([eb4c4d4](https://github.com/es6kr/skills/commit/eb4c4d4ab6a7f7ba9f719b052d8f3761840012c9))
+
+
+### Bug Fixes
+
+* **review:** address Copilot and CodeRabbit feedback for PR [#639](https://github.com/es6kr/skills/issues/639) ([1a70705](https://github.com/es6kr/skills/commit/1a707057736ec8ee5f21ae64e2d0dac38d3a2fe7))
+
+## [0.10.0](https://github.com/es6kr/skills/compare/todowrite-v0.9.4...todowrite-v0.10.0) (2026-10-06)
+
+
+### Features
+
+* **hook-kit:** declarative step-dependency enforcement engine ([9e3d188](https://github.com/es6kr/skills/commit/9e3d18898453d20a947b74b24032e61bf13bc297))
+
+
+### Bug Fixes
+
+* **todowrite:** warn on claude-task resolve_task_dir() mtime fallback ([#599](https://github.com/es6kr/skills/issues/599)) ([948127c](https://github.com/es6kr/skills/commit/948127c3f94883f1122bceae39618d69e8cd8a11))
+
+## [0.9.4](https://github.com/es6kr/skills/compare/todowrite-v0.9.3...todowrite-v0.9.4) (2026-09-30)
+
+
+### Bug Fixes
+
+* **todowrite:** restore exec bit on claude-task.py ([#569](https://github.com/es6kr/skills/issues/569)) ([151c2f7](https://github.com/es6kr/skills/commit/151c2f7feb2675bf6c26c2ad077578c4d2fd1154))
+
+## [0.9.3](https://github.com/es6kr/skills/compare/todowrite-v0.9.2...todowrite-v0.9.3) (2026-09-24)
+
+
+### Bug Fixes
+
+* **todowrite,wip:** clarify session-medium delegation boundary (S6/S7) ([806dcad](https://github.com/es6kr/skills/commit/806dcad0c92a027b9fc89617957510cb52f580ea))
+* **todowrite:** add prune subcommand to claude-task CLI ([#545](https://github.com/es6kr/skills/issues/545)) ([660f03a](https://github.com/es6kr/skills/commit/660f03abdc8792d3d697352ec4346ea044e5c491))
+* **todowrite:** mark session-medium row as delegation-only to /wip ([5bf35b0](https://github.com/es6kr/skills/commit/5bf35b046fd66fa04b115db773458db00a6ac6fd))
+
+## [0.9.2](https://github.com/es6kr/skills/compare/todowrite-v0.9.1...todowrite-v0.9.2) (2026-09-18)
+
+
+### Bug Fixes
+
+* **cleanup:** make the session-end report table self-sufficient ([#487](https://github.com/es6kr/skills/issues/487)) ([c4a0255](https://github.com/es6kr/skills/commit/c4a02557fb8de3b32cf337c549f62535dabf824b))
+
+## [0.9.1](https://github.com/es6kr/skills/compare/todowrite-v0.9.0...todowrite-v0.9.1) (2026-09-08)
+
+
+### Bug Fixes
+
+* **tdd:** scope the Red-only commit ban to shared branches ([fc2e6ec](https://github.com/es6kr/skills/commit/fc2e6ecdd1906c41d47955226e247aeb03a6f367))
+* **todowrite:** use POSIX word boundaries in the PR-number extraction grep ([7307fd2](https://github.com/es6kr/skills/commit/7307fd2e66c608effa411590ca2edf7c01d4e0a9))
+
+## [0.9.0](https://github.com/es6kr/skills/compare/todowrite-v0.8.2...todowrite-v0.9.0) (2026-09-05)
+
+
+### Features
+
+* promote develop (schema, hook-kit, cleanup, wip, todowrite) ([5938cea](https://github.com/es6kr/skills/commit/5938cea0a20eaf93aec4d373298e58ccc3f2a682))
+
+
+### Documentation
+
+* **todowrite:** clarify TaskList pending task registration for residual follow-up work ([851f899](https://github.com/es6kr/skills/commit/851f899a3276727a52202b5e17f80007b89ebf85))
+
+## [0.8.2](https://github.com/es6kr/skills/compare/todowrite-v0.8.1...todowrite-v0.8.2) (2026-08-26)
+
+
+### Bug Fixes
+
+* accumulate 16 patch-level bug fixes and guard enhancements across skills ([d214e5d](https://github.com/es6kr/skills/commit/d214e5dcc7fac1bc07baf3b6cec62999aea732f0))
+* promote next-fix batch (consolidate fabrication guard, session rewind, config-driven PR base) ([7ca0ccb](https://github.com/es6kr/skills/commit/7ca0ccbf13cefafedc33a16a7361756c95f8b8f6))
+* **todowrite:** enforce clickable PR URL matching in AskUserQuestion guard ([aa1c34a](https://github.com/es6kr/skills/commit/aa1c34aa69ea249ec28259a65cc20edc1d969f41))
+* **todowrite:** enforce tasklist ID conversation blocking and media separation ([471ed1c](https://github.com/es6kr/skills/commit/471ed1c780c23e3cc3b596c77ef0e561c80cf5d5))
+
+## [0.8.1](https://github.com/es6kr/skills/compare/todowrite-v0.8.0...todowrite-v0.8.1) (2026-08-17)
+
+
+### Bug Fixes
+
+* promote next-fix staging (30 fixes across 14 skills) ([ee467c0](https://github.com/es6kr/skills/commit/ee467c045d779d7b80d30f160763ec3534a9742b))
+* **todowrite:** require verifiable URL for external-resource completion reports ([4c967eb](https://github.com/es6kr/skills/commit/4c967eb36db6aaecb2fd09944014500ad413394c))
+* **wip:** cross-ref PR-URL and TaskCreate subject repo-qualifier rules ([#186](https://github.com/es6kr/skills/issues/186)) ([4982364](https://github.com/es6kr/skills/commit/49823641a7b08123ebd0325273892bee41bc3280))
+
+## [0.8.0](https://github.com/es6kr/skills/compare/todowrite-v0.7.1...todowrite-v0.8.0) (2026-08-16)
+
+
+### Features
+
+* **hooks:** add root plugin hooks.json, pruned to tracked scripts ([#302](https://github.com/es6kr/skills/issues/302)) ([e37f756](https://github.com/es6kr/skills/commit/e37f756af990ceb0eed7f3d7ec2200bcd4de8b6c))
+
+## [0.7.1](https://github.com/es6kr/skills/compare/todowrite-v0.7.0...todowrite-v0.7.1) (2026-08-09)
+
+
+### Bug Fixes
+
+* declare undeclared skill-to-skill dependencies (7 skills) ([#271](https://github.com/es6kr/skills/issues/271)) ([36a9f9d](https://github.com/es6kr/skills/commit/36a9f9d7c1fac9bb1c4c96b325a067ab92ad0da7))
+* promote accumulated next-fix fixes to main ([95656e9](https://github.com/es6kr/skills/commit/95656e9b551ee0bb77904a0a571d49c53bc01cc9))
+
+## [0.7.0](https://github.com/es6kr/skills/compare/todowrite-v0.6.0...todowrite-v0.7.0) (2026-08-03)
+
+
+### Features
+
+* promote next-feat to main ([4fbe313](https://github.com/es6kr/skills/commit/4fbe31332c58bf24327d819cc9204ebda2d4afa8))
+* **todowrite:** add claude-task CLI topic with usage discipline ([#178](https://github.com/es6kr/skills/issues/178)) ([d7e7cc3](https://github.com/es6kr/skills/commit/d7e7cc364de3f71c5c81344eab29545dc22ae941))
+
 ## [0.6.0](https://github.com/es6kr/skills/compare/todowrite-v0.5.0...todowrite-v0.6.0) (2026-07-23)
 
 

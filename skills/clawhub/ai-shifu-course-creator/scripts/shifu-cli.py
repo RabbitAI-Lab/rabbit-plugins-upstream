@@ -3,26 +3,35 @@
 
 import argparse
 import base64
+import contextlib
 import hashlib
 import json
 import math
 import os
+import platform
+import re
+import shlex
 import shutil
+import socket
 import sys
 import time
 import uuid
-from datetime import datetime
+from datetime import datetime, timezone
 from pathlib import Path
 
 import requests
-from dotenv import load_dotenv, set_key
+from dotenv import load_dotenv
 
-from skill_update import DEV_CACHE_FILE, check_for_update
+import profile_store as profiles
+from agent_detection import AGENT_DISPLAY_NAMES, detect_agent
+
+from skill_update_check import automatic_check_for_update, check_for_update
 
 # ── Constants ──────────────────────────────────────────────────────────────────
 ENV_FILE = Path(__file__).resolve().parent.parent / ".env"
+ENV_EXAMPLE_FILE = ENV_FILE.with_name(".env.example")
 
-DEFAULT_BASE_URL = "https://app.ai-shifu.cn"
+SITE_URLS = profiles.SITE_URLS
 
 # Backend ERROR_CODE["server.shifu.draftConflict"] — the optimistic-lock
 # conflict raised by POST .../mdflow when the cloud draft advanced past the
@@ -38,10 +47,14 @@ DRAFT_CONFLICT_CODE = 4007
 #   0 = success, 1 = hard error (api() default), 2 = conflict auto-pulled, redo
 EXIT_CONFLICT = 2
 
-# Token lifetime (matches backend TOKEN_EXPIRE_TIME = 604800 = 7 days) and the
+# `login --wait` returns this when the request is still valid but nobody has
+# approved it yet, so a caller can distinguish "keep waiting" from a failure.
+EXIT_AUTH_PENDING = 3
+
+# Token lifetime (matches backend TOKEN_EXPIRE_TIME = 2592000 = 30 days) and the
 # backend error codes that mean "token is not usable" — used by `verify` and the
 # resolve_auth() early-expiry hint.
-TOKEN_EXPIRE_SECONDS = 604800
+TOKEN_EXPIRE_SECONDS = 2592000
 _TOKEN_ERROR_CODES = frozenset({1001, 1004, 1005})
 # 1001 = userNotFound, 1004 = userNotLogin, 1005 = userTokenExpired
 
@@ -51,22 +64,146 @@ _TOKEN_ERROR_CODES = frozenset({1001, 1004, 1005})
 COURSE_LIST_PAGE_SIZE = 50
 MAX_COURSE_PAGES = 10
 
+# Detection is a local compatibility hint, never authentication. Capture it
+# before dotenv/profile loading; only the bounded ID and name leave the CLI.
+_CALLER_AGENT_NAMES = {**AGENT_DISPLAY_NAMES, "unknown": "Unknown Agent"}
+_USAGE_METADATA_HEADERS = {}
+
+
+def _detect_caller_agent(environ):
+    """Report only declared/runtime identities; context-only evidence is unknown."""
+    result = detect_agent(environ)
+    if result["evidence"] in {"declared", "runtime-marker"} and result["agent_id"] is not None:
+        return result["agent_id"]
+    return "unknown"
+
+
+def _skill_usage_metadata(caller_agent):
+    """Build optional metadata without changing the business request on failure."""
+    try:
+        if caller_agent not in _CALLER_AGENT_NAMES or os.environ.get("SHIFU_DISABLE_ANALYTICS") == "1":
+            return {}
+        version = _client_version()
+        # Only bounded numeric release versions may leave this process.
+        if not isinstance(version, str) or not re.fullmatch(r"[0-9]{1,6}\.[0-9]{1,6}\.[0-9]{1,6}", version):
+            return {}
+        return {
+            "X-AI-Shifu-Skill": "ai-shifu-course-creator",
+            "X-AI-Shifu-Skill-Version": version,
+            "X-AI-Shifu-Caller-Agent": caller_agent,
+            "X-AI-Shifu-Caller-Agent-Name": _CALLER_AGENT_NAMES[caller_agent],
+        }
+    except Exception:  # noqa: BLE001 - optional usage metadata must fail open
+        return {}
+
+
+def _request_headers(token, *, json_content=True, creator_analytics=False):
+    """Preserve each transport's authentication and add invocation metadata."""
+    if creator_analytics:
+        headers = {"Authorization": f"Bearer {token}", "Token": token}
+    else:
+        headers = {"Cookie": f"token={token}"}
+    if json_content:
+        headers["Content-Type"] = "application/json"
+    headers.update(_USAGE_METADATA_HEADERS)
+    return headers
+
 
 # ── Shared Infrastructure ──────────────────────────────────────────────────────
-def load_env():
-    """Load environment variables from the skill's .env file."""
+def ensure_env_file():
+    """Create the runtime .env from .env.example when it does not exist."""
     if ENV_FILE.exists():
-        load_dotenv(dotenv_path=ENV_FILE, override=False)
+        return
+    if not ENV_EXAMPLE_FILE.exists():
+        print(f"Error: missing environment template: {ENV_EXAMPLE_FILE}",
+              file=sys.stderr)
+        sys.exit(1)
+    shutil.copyfile(ENV_EXAMPLE_FILE, ENV_FILE)
+    os.chmod(ENV_FILE, 0o600)
 
 
-def save_env(token):
-    """Persist token to the skill's .env file."""
-    env_path = str(ENV_FILE)
-    if not ENV_FILE.exists():
-        ENV_FILE.parent.mkdir(parents=True, exist_ok=True)
-        ENV_FILE.touch(mode=0o600)
-    set_key(env_path, "SHIFU_TOKEN", token)
-    os.chmod(env_path, 0o600)
+def load_env():
+    """Ensure and load environment variables from the skill's .env file."""
+    ensure_env_file()
+    load_dotenv(dotenv_path=ENV_FILE, override=False)
+
+
+def profile_store():
+    return profiles.ProfileStore(config_dir(), ENV_FILE)
+
+
+def resolve_context(args, *, named_only=False):
+    """Resolve once per invocation; callers share this exact execution context."""
+    if not hasattr(args, "_profile_context"):
+        args._profile_context = profile_store().resolve(
+            name=getattr(args, "profile", None), environ=os.environ,
+            token=getattr(args, "token", None), named_only=named_only,
+            load_credentials=not named_only,
+        )
+    return args._profile_context
+
+
+def _context_output(context):
+    base_url = context.base_url if context else None
+    return {
+        "status": "configured" if context else "selection_required",
+        "profile": context.name if context else None,
+        "base_url": base_url,
+        "contact_url": (
+            "https://ai-shifu.cn/contact.html" if base_url == SITE_URLS["cn"]
+            else "https://ai-shifu.com/contact.html" if base_url else None
+        ),
+    }
+
+
+def cmd_site(args):
+    """Compatibility entry point for inspecting/configuring a named profile."""
+    store = profile_store()
+    name = getattr(args, "profile", None)
+    selected = SITE_URLS.get(args.set) if args.set else args.url
+    if selected is not None:
+        context = store.configure_site(selected, name=name, environ=os.environ)
+    else:
+        context = store.resolve(name=name, environ=os.environ, allow_unconfigured=True,
+                                token=getattr(args, "token", None), load_credentials=False)
+    print(json.dumps(_context_output(context), ensure_ascii=False))
+
+
+def cmd_profile(args):
+    store = profile_store()
+    if args.profile_command == "list":
+        result = {"profiles": store.list_profiles()}
+    elif args.profile_command == "set":
+        result = _context_output(store.set_profile(args.name, args.base_url))
+    else:
+        result = {"default_profile": store.default_profile(args.name)}
+    print(json.dumps(result, ensure_ascii=False))
+
+
+def cmd_logout(args):
+    context = resolve_context(args, named_only=True)
+    profile_store().logout(context)
+    print(f"Signed out of profile {context.name!r} on this device.")
+
+
+def config_dir():
+    return profiles.config_dir()
+
+
+def credentials_path(context):
+    return profiles.credentials_path(context)
+
+
+def pending_auth_path(context):
+    return profiles.pending_auth_path(context)
+
+
+def _write_private_json(path, payload):
+    return profiles.write_private_json(path, payload)
+
+
+def save_token(token, context):
+    return profile_store().save_token(context, token)
 
 
 def _jwt_payload(token):
@@ -88,34 +225,35 @@ def _jwt_payload(token):
 
 
 def resolve_auth(args):
-    """Resolve token from CLI args or .env. Base URL is fixed to DEFAULT_BASE_URL.
+    """Resolve the service URL and token from CLI args or .env.
 
-    When the JWT carries a ``time_stamp`` older than 7 days, a warning is printed
+    When the JWT carries a ``time_stamp`` older than the token lifetime, a
+    warning is printed
     to stderr (the authoritative expiry check is the backend's DB record, so this
     is only a nudge — the call still proceeds).
     """
-    token = getattr(args, "token", None) or os.environ.get("SHIFU_TOKEN")
+    context = resolve_context(args)
+    token = context.token
     if not token:
-        print("Error: no token available. Run 'shifu-cli.py login' first, "
-              "or use --token / set SHIFU_TOKEN in .env")
+        print(f"Error: no token available. {_auth_recovery(context)}")
         sys.exit(1)
 
     payload = _jwt_payload(token)
     if isinstance(payload, dict):
         ts = payload.get("time_stamp")
         if isinstance(ts, (int, float)) and (time.time() - ts) > TOKEN_EXPIRE_SECONDS:
-            print("Warning: token may be expired (issued > 7 days ago). "
-                  "Run `shifu-cli.py verify` to check, or `shifu-cli.py login` "
-                  "to re-login.",
+            print("Warning: token may be expired "
+                  f"(issued > {TOKEN_EXPIRE_SECONDS // 86400} days ago). "
+                  f"{_auth_recovery(context)}",
                   file=sys.stderr)
 
-    return DEFAULT_BASE_URL, token
+    return context.base_url, token
 
 
 def api(base_url, token, method, path, **kwargs):
     """Make an API call, exit on error."""
     url = f"{base_url}/api/shifu{path}"
-    headers = {"Cookie": f"token={token}", "Content-Type": "application/json"}
+    headers = _request_headers(token)
     kwargs.setdefault("timeout", 30)
     resp = getattr(requests, method)(url, headers=headers, **kwargs)
     if not resp.ok:
@@ -138,7 +276,7 @@ def api_safe(base_url, token, method, path, session=None, **kwargs):
     per-lesson draft-meta), mirroring the pooling in ``_post_creator_analytics``.
     """
     url = f"{base_url}/api/shifu{path}"
-    headers = {"Cookie": f"token={token}", "Content-Type": "application/json"}
+    headers = _request_headers(token)
     kwargs.setdefault("timeout", 30)
     http = session if session is not None else requests
     try:
@@ -170,7 +308,7 @@ def api_conflict_aware(base_url, token, method, path, **kwargs):
     resp.ok is True in that case — we branch on the business code, not status.
     """
     url = f"{base_url}/api/shifu{path}"
-    headers = {"Cookie": f"token={token}", "Content-Type": "application/json"}
+    headers = _request_headers(token)
     kwargs.setdefault("timeout", 30)
     resp = getattr(requests, method)(url, headers=headers, **kwargs)
     if not resp.ok:
@@ -196,7 +334,7 @@ def api_upload(base_url, token, filename, file_bytes, mime, resource_id=None):
     Content-Type (with boundary) itself — api() pins application/json.
     """
     url = f"{base_url}/api/shifu/upfile"
-    headers = {"Cookie": f"token={token}"}
+    headers = _request_headers(token, json_content=False)
     files = {"file": (filename, file_bytes, mime)}
     data = {"resource_id": resource_id} if resource_id else None
     try:
@@ -237,11 +375,7 @@ def _post_creator_analytics(base_url, token, path, body, session=None):
     # otherwise produce "/api/creator-analyticsquery". Flagged on PR #49
     # review.
     url = f"{base_url}/api/creator-analytics/{path.lstrip('/')}"
-    headers = {
-        "Authorization": f"Bearer {token}",
-        "Token": token,
-        "Content-Type": "application/json",
-    }
+    headers = _request_headers(token, creator_analytics=True)
     http = session if session is not None else requests
     try:
         resp = http.post(url, headers=headers, json=body, timeout=30)
@@ -284,39 +418,35 @@ def safe_join_path(base_dir, filename):
 
 
 def fmt_time(ts):
-    """Format an ISO timestamp for display, return '' if missing."""
+    """Format a backend timestamp for display in the local timezone.
+
+    Backend timestamps are UTC; values without an explicit offset are
+    interpreted as UTC, then converted to the machine-local timezone.
+    Returns '' if missing.
+    """
     if not ts:
         return ""
     try:
-        dt = datetime.fromisoformat(ts.replace("Z", "+00:00"))
-        return dt.strftime("%Y-%m-%d %H:%M")
+        dt = datetime.fromisoformat(str(ts).strip().replace("Z", "+00:00"))
+        if dt.tzinfo is None:
+            dt = dt.replace(tzinfo=timezone.utc)
+        return dt.astimezone().strftime("%Y-%m-%d %H:%M")
     except Exception:
         return ts[:16] if len(ts) >= 16 else ts
 
 
 def _print_verification_urls(base_url, shifu_bid, include_published=False):
-    """Print admin + course preview, and (when published) the public URL.
+    """Print labeled admin, preview, and optional public learner URLs.
 
-    Skill docs instruct the Skill-running agent to transcribe these lines
-    verbatim. Do not let that agent reconstruct URLs from a template — that
-    has historically led to wrong path (/shifu vs /c) and wrong param name
-    (outline_bid vs lessonid).
-
-    `include_published=True` adds the public student-facing URL (no preview
-    query param). Callers should set it only when the course is known to be
-    in a published state (e.g. right after `publish`, or in `show` which
-    queries existing courses that are typically already published).
-    Lesson-level URLs are intentionally not printed — they bloat reports for
-    multi-lesson courses; build one on demand via `show <shifu_bid>` if needed.
+    `include_published=True` adds the learner URL. Whole-course `show` with
+    outlines requests it without checking publication status, so its presence does
+    not establish that learners can access the course. Browser navigation is
+    handled by the host agent, not this CLI.
     """
-    print("\nVerification URLs:")
     print(f"  Admin console:    {base_url}/shifu/{shifu_bid}")
-    print("    # 点击会跳转到 AI 师傅管理后台，用于设置章节状态、收费与否，以及手工调整课程细节、调试 AI 一对一授课的效果。调试时会消耗课程创建者在 AI 师傅的积分。")
-    print(f"  Course preview:   {base_url}/c/{shifu_bid}?preview=true")
-    print("    # 点击会跳转到 AI 师傅课程预览页，仅课程作者本人可见，用于正式发布前自测课程草稿的效果；预览会消耗课程创建者在 AI 师傅的积分。")
+    print(f"  Preview URL:      {base_url}/c/{shifu_bid}?preview=true")
     if include_published:
         print(f"  Published URL:    {base_url}/c/{shifu_bid}")
-        print("    # 点击会跳转到 AI 师傅课程学习页，可以发送给学员使用且仅在课程已发布后有效；任何人学习都会消耗课程创建者在 AI 师傅的积分。")
 
 
 # ── Version Sync Manifest (.shifu-sync.json) ────────────────────────────────────
@@ -331,7 +461,7 @@ SYNC_MANIFEST_NAME = ".shifu-sync.json"
 
 def _now_iso():
     """UTC timestamp, second precision, Z-suffixed — matches image-manifest style."""
-    return datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ")
+    return datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
 
 
 def _mask_phone(phone):
@@ -435,44 +565,215 @@ def _login_post(base_url, path, payload, error_prefix):
     return data
 
 
-def cmd_login(args):
-    """SMS login and save token (non-interactive two-step flow)."""
-    base_url = DEFAULT_BASE_URL
+def _friendly_os_name():
+    """Name the operating system the way its owner would.
 
-    phone = args.phone
-    if not phone:
-        print("Error: --phone is required for login")
+    The approval page exists so a person can recognise their own machine, so it
+    must not show what `platform.release()` returns on macOS: that is the Darwin
+    kernel version ("25.5.0"), which no Mac owner recognises.
+    """
+    system = (platform.system() or "").strip()
+    if system == "Darwin":
+        release = ""
+        try:
+            release = (platform.mac_ver()[0] or "").strip()
+        except Exception:  # noqa: BLE001 - display only, never fail login
+            release = ""
+        return f"macOS {release}".strip() if release else "macOS"
+    if system == "Linux":
+        pretty = ""
+        try:
+            pretty = (
+                platform.freedesktop_os_release().get("PRETTY_NAME", "") or ""
+            ).strip()
+        except Exception:  # noqa: BLE001 - not every distro ships os-release
+            pretty = ""
+        if pretty:
+            return pretty
+    release = (platform.release() or "").strip()
+    return f"{system} {release}".strip() or "unknown"
+
+
+def _device_description():
+    """Describe this machine for the approval page. Display only."""
+    try:
+        device_name = socket.gethostname() or "unknown"
+    except OSError:
+        device_name = "unknown"
+    return device_name[:64], _friendly_os_name()[:64]
+
+
+def _client_version():
+    try:
+        from skill_update_check import SKILL_MD, read_skill_metadata
+
+        metadata = read_skill_metadata(SKILL_MD)
+    except Exception:  # noqa: BLE001 - version is cosmetic, never fail login
+        return ""
+    if isinstance(metadata, dict):
+        return str(metadata.get("version") or "")[:32]
+    return ""
+
+
+def _poll_device_authorization(base_url, device_code):
+    """Ask the backend once; transient failures read as "still pending"."""
+    try:
+        resp = requests.post(
+            f"{base_url}/api/user/device/token",
+            json={"device_code": device_code},
+            headers={"Content-Type": "application/json"},
+            timeout=30,
+        )
+    except requests.RequestException:
+        return "pending", ""
+    if not resp.ok:
+        return "pending", ""
+    try:
+        body = resp.json()
+    except ValueError:
+        return "pending", ""
+    if not isinstance(body, dict):
+        return "pending", ""
+    if body.get("code") != 0:
+        # The request is gone: expired, already collected, or never existed.
+        return "expired", ""
+    data = body.get("data")
+    if not isinstance(data, dict):
+        return "pending", ""
+    return str(data.get("status") or "pending"), str(data.get("token") or "")
+
+
+def _login_instruction(context, *, wait=False):
+    if platform.system() == "Windows":
+        # cmd.exe and PowerShell have different expansion/quoting rules. Provide
+        # literal argv, not a shell snippet that can reinterpret a profile name.
+        arguments = ["login", f"--profile={context.name}"]
+        if wait:
+            arguments.append("--wait")
+        return ("Invoke shifu-cli.py with this argument list (JSON, not a shell command): "
+                + json.dumps(arguments, ensure_ascii=False))
+    command = f"shifu-cli.py login --profile={shlex.quote(context.name)}"
+    if wait:
+        command += " --wait"
+    return f"Run `{command}`"
+
+
+def _auth_recovery(context):
+    if context.name is None:
+        return "Supply a valid token for the temporary service configuration."
+    return f"Authorize this profile. {_login_instruction(context)}"
+
+
+def _start_device_authorization(context):
+    base_url = context.base_url
+    device_name, device_os = _device_description()
+    response = _login_post(
+        base_url,
+        "/api/user/device/authorize",
+        {
+            "device_name": device_name,
+            "device_os": device_os,
+            "client_version": _client_version(),
+        },
+        "Failed to start authorization",
+    )
+    data = response.get("data")
+    if not isinstance(data, dict):
+        print(f"Unexpected authorization response: {response}")
         sys.exit(1)
 
-    sms_code = args.sms_code
-    masked = phone[:3] + "****" + phone[-4:] if len(phone) >= 7 else phone
+    device_code = str(data.get("device_code") or "")
+    user_code = str(data.get("user_code") or "")
+    url = str(
+        data.get("verification_uri_complete") or data.get("verification_uri") or ""
+    )
+    if not device_code or not user_code or not url:
+        print(f"Incomplete authorization response: {data}")
+        sys.exit(1)
 
-    if sms_code:
-        # Step 2: Verify code and save token
-        print("Verifying code...")
-        data = _login_post(base_url, "/api/user/login_sms",
-                           {"mobile": phone, "sms_code": sms_code, "login_context": "admin"}, "Verification failed")
+    # The device code can be exchanged for a token once the request is
+    # approved, so it is stored with owner-only permissions rather than
+    # printed: printing would copy it into the calling agent's transcript.
+    profile_store().save_pending_auth(
+        context,
+        {
+            "device_code": device_code,
+            "user_code": user_code,
+            # Remember which host issued this code. Polling a different host
+            # after SHIFU_BASE_URL changed would hand the code to a service
+            # that never issued it.
+            "base_url": base_url,
+            "interval": int(data.get("interval") or 5),
+            "expires_at": time.time() + int(data.get("expires_in") or 600),
+        },
+    )
 
-        token = data.get("data")
-        if not token:
-            print(f"No token in response: {data}")
+    print("Open this link in a browser to authorize this device:")
+    print(f"  {url}")
+    print(f"Pairing code: {user_code}")
+    print(
+        "After approving it there, finish signing in. "
+        f"{_login_instruction(context, wait=True)}"
+    )
+
+
+def _wait_for_device_authorization(context, timeout_seconds):
+    base_url = context.base_url
+    pending = profiles.read_private_json(pending_auth_path(context))
+    if not isinstance(pending, dict) or not pending.get("device_code"):
+        print(f"No authorization is in progress. {_login_instruction(context)}")
+        sys.exit(1)
+
+    issuing_base_url = str(pending.get("base_url") or "")
+    if not issuing_base_url or profiles.normalize_base_url(issuing_base_url) != base_url:
+        print(
+            "Error: the pending authorization does not belong to this profile's service. "
+            f"Start a new request. {_login_instruction(context)}"
+        )
+        sys.exit(1)
+
+    device_code = str(pending.get("device_code") or "")
+    interval = max(1, int(pending.get("interval") or 5))
+    expires_at = float(pending.get("expires_at") or 0)
+    deadline = time.time() + max(1, int(timeout_seconds))
+    if expires_at:
+        deadline = min(deadline, expires_at)
+
+    while True:
+        status, token = _poll_device_authorization(base_url, device_code)
+        if status == "approved" and token:
+            profile_store().finish_pending_auth(context, device_code, token)
+            print(f"Authorization complete for profile {context.name!r}.")
+            return
+        if status == "denied":
+            profile_store().finish_pending_auth(context, device_code)
+            print("The request was denied in the browser. Nothing was authorized.")
             sys.exit(1)
-        # API may return token as a dict (e.g. {"token": "..."}) or a plain string
-        if isinstance(token, dict):
-            token = token.get("token", "")
-        if not token:
-            print(f"No token string found in response data: {data}")
+        if status == "expired":
+            profile_store().finish_pending_auth(context, device_code)
+            print(
+                "The authorization request expired. "
+                f"Start a new request. {_login_instruction(context)}"
+            )
             sys.exit(1)
+        if time.time() + interval >= deadline:
+            break
+        time.sleep(interval)
 
-        save_env(token)
-        print(f"Login successful! Token saved to {ENV_FILE}")
-    else:
-        # Step 1: Send SMS code only, then exit
-        print(f"Sending SMS code to {masked}...")
-        _login_post(base_url, "/api/user/console_send_sms_code",
-                    {"mobile": phone}, "Failed to send SMS")
-        print(f"SMS code sent to {masked}. "
-              f"Run again with --sms-code <4-digit-code> to complete login.")
+    print(
+        "Still waiting for approval in the browser. Approve the request, "
+        f"then retry. {_login_instruction(context, wait=True)}"
+    )
+    sys.exit(EXIT_AUTH_PENDING)
+
+
+def cmd_login(args):
+    """Authorize this device through the browser and store the issued token."""
+    context = resolve_context(args, named_only=True)
+    if getattr(args, "wait", False):
+        _wait_for_device_authorization(context, getattr(args, "timeout", 120))
+        return
+    _start_device_authorization(context)
 
 
 # ── Verify Token ────────────────────────────────────────────────────────────────
@@ -485,6 +786,7 @@ def cmd_verify(args):
       2 — unknown (network / service error — cannot determine)
     """
     base_url, token = resolve_auth(args)
+    recovery = _auth_recovery(resolve_context(args))
     try:
         url = f"{base_url}/api/shifu/shifus?limit=1"
         headers = {"Cookie": f"token={token}", "Content-Type": "application/json"}
@@ -497,7 +799,7 @@ def cmd_verify(args):
         # definitively mean "not authenticated", so report expired (exit 1) so the
         # agent re-logins instead of retrying forever as if it were a network blip.
         if resp.status_code in (401, 403):
-            print("Token is expired or invalid — re-run `shifu-cli.py login`")
+            print(f"Token is expired or invalid. {recovery}")
             sys.exit(1)
         print(f"Token status: unknown (HTTP {resp.status_code})")
         sys.exit(2)
@@ -514,7 +816,7 @@ def cmd_verify(args):
         print("Token is valid")
         sys.exit(0)
     if code in _TOKEN_ERROR_CODES:
-        print("Token is expired or invalid — re-run `shifu-cli.py login`")
+        print(f"Token is expired or invalid. {recovery}")
         sys.exit(1)
     # Any other business code (e.g. no courses) — the token was recognised.
     print(f"Token is valid (API returned code {code})")
@@ -704,6 +1006,7 @@ def cmd_show(args):
         tree = api(base_url, token, "get", f"/shifus/{shifu_bid}/outlines")
         if not tree:
             print("No outlines found.")
+            _print_verification_urls(base_url, shifu_bid)
             return
 
         def print_tree(items, indent=0):
@@ -735,9 +1038,13 @@ def cmd_history(args):
 
     items = result if isinstance(result, list) else result.get("items", [])
     for item in items:
-        rev = item.get("revision", "")
-        ts = fmt_time(item.get("created_at", ""))
-        user = item.get("created_user_bid", "")
+        rev = item.get("version_id", item.get("revision", ""))
+        ts = fmt_time(item.get("updated_at") or item.get("created_at", ""))
+        user = (item.get("updated_user_name") or item.get("updated_user_bid")
+                or item.get("created_user_bid", ""))
+        user = "".join(char if char.isprintable()
+                       else char.encode("unicode_escape").decode("ascii")
+                       for char in str(user))
         print(f"  {rev}  {ts}  by {user}")
 
 
@@ -749,7 +1056,7 @@ def cmd_export(args):
 
     # Backend export API returns a file download (not standard JSON envelope)
     url = f"{base_url}/api/shifu/shifus/{shifu_bid}/export"
-    headers = {"Cookie": f"token={token}"}
+    headers = _request_headers(token, json_content=False)
     resp = requests.get(url, headers=headers, timeout=60)
 
     if resp.status_code != 200:
@@ -794,13 +1101,83 @@ ACCESS_TYPES = ("guest", "trial", "normal")
 # system prompt in course-prompt.md, so they are intentionally NOT duplicated
 # here.
 COURSE_CONFIG_DEFAULTS = {
-    "model": "", "temperature": 0.3, "price": 0, "keywords": [], "avatar": "",
+    "model": "", "price": 0, "keywords": [], "avatar": "",
     "use_learner_language": False,
     "tts_enabled": False, "tts_provider": "", "tts_model": "",
     "tts_voice_id": "", "tts_speed": 1.0, "tts_pitch": 0, "tts_emotion": "",
-    "ask_enabled_status": 5101, "ask_model": "", "ask_temperature": 0.0,
+    "ask_enabled_status": 5101, "ask_model": "",
     "ask_system_prompt": "", "ask_provider_config": {},
 }
+
+
+def _profile_name(args):
+    """Return provenance from the already-resolved invocation context."""
+    context = getattr(args, "_profile_context", None)
+    return getattr(context, "name", None)
+
+
+def _validate_bound_course_dir(course_dir, base_url, *, shifu_bid=None,
+                               new_course=False):
+    """Validate an existing directory binding without reading credentials.
+
+    The URL and course BID are authoritative; profile names are informational.
+    An invalid existing manifest must not be mistaken for an unbound directory.
+    """
+    if not course_dir:
+        return None
+    path = _sync_path(course_dir)
+    if not path.exists() and not path.is_symlink():
+        return None
+    try:
+        with path.open("r", encoding="utf-8") as source:
+            manifest = json.load(source)
+        if not isinstance(manifest, dict):
+            raise ValueError("expected an object")
+        recorded_url = manifest.get("base_url")
+        recorded_bid = manifest.get("shifu_bid")
+        if not isinstance(recorded_url, str) or not recorded_url.strip():
+            raise ValueError("missing base_url")
+        if not isinstance(recorded_bid, str) or not recorded_bid.strip():
+            raise ValueError("missing shifu_bid")
+        if not isinstance(manifest.get("course"), dict):
+            raise ValueError("missing course object")
+        if not isinstance(manifest.get("lessons"), list):
+            raise ValueError("missing lessons list")
+        if any(not isinstance(lesson, dict) for lesson in manifest["lessons"]):
+            raise ValueError("invalid lesson record")
+        normalized_url = profiles.normalize_base_url(recorded_url)
+        selected_url = profiles.normalize_base_url(base_url)
+    except (OSError, UnicodeError, ValueError, TypeError) as exc:
+        print(f"Error: invalid course binding in {path}: {exc}. "
+              "Restore the sync manifest or use a new course directory.",
+              file=sys.stderr)
+        sys.exit(1)
+    if normalized_url != selected_url:
+        print(f"Error: {path} belongs to {normalized_url}, but the selected "
+              f"profile uses {selected_url}. Specify the matching --profile "
+              "or use a different course directory.", file=sys.stderr)
+        sys.exit(1)
+    if new_course:
+        print(f"Error: {path} is already bound to course {recorded_bid}. "
+              "Use an unbound course directory for import --new.",
+              file=sys.stderr)
+        sys.exit(1)
+    if shifu_bid is not None and recorded_bid != shifu_bid:
+        print(f"Error: {path} belongs to course {recorded_bid}, not "
+              f"{shifu_bid}. Use the matching course or a different directory.",
+              file=sys.stderr)
+        sys.exit(1)
+    return manifest
+
+
+def validate_course_binding(args, base_url):
+    """Preflight before network requests or course-directory writes."""
+    return _validate_bound_course_dir(
+        getattr(args, "course_dir", None), base_url,
+        shifu_bid=getattr(args, "shifu_bid", None),
+        new_course=(getattr(args, "command", None) == "import"
+                    and getattr(args, "new", False)),
+    )
 
 
 def _normalize_keywords(value):
@@ -897,8 +1274,38 @@ def _flatten_outline_tree(tree):
     return flat
 
 
-def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True, force=False):
-    """Fetch detail + outline tree + every lesson's mdflow + course draft-meta,
+def _is_valid_revision(value):
+    return type(value) is int and value > 0
+
+
+def _get_lesson_revision(base_url, token, shifu_bid, outline_bid):
+    """Read the lesson revision from its metadata endpoint, not mdflow text."""
+    meta = api(base_url, token, "get",
+               f"/shifus/{shifu_bid}/draft-meta?outline_bid={outline_bid}")
+    revision = meta.get("revision") if isinstance(meta, dict) else None
+    if not _is_valid_revision(revision):
+        print(f"Error: no valid revision for lesson {outline_bid}; "
+              "no unversioned write will be attempted.", file=sys.stderr)
+        sys.exit(1)
+    return revision
+
+
+def _get_lesson_snapshot(base_url, token, shifu_bid, outline_bid):
+    """Read immutable content so it cannot be paired with a different revision."""
+    revision = _get_lesson_revision(base_url, token, shifu_bid, outline_bid)
+    version = api(base_url, token, "get",
+                  f"/shifus/{shifu_bid}/outlines/{outline_bid}/mdflow/history/{revision}")
+    if (not isinstance(version, dict) or version.get("version_id") != revision
+            or not isinstance(version.get("content"), str)):
+        print(f"Error: invalid content snapshot for lesson {outline_bid} "
+              f"at revision {revision}; pull was not saved.", file=sys.stderr)
+        sys.exit(1)
+    return version["content"], revision
+
+
+def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True,
+                   force=False, profile_name=None):
+    """Fetch detail + outline tree + versioned lesson content + draft-meta,
     write them into the course directory, and (re)write .shifu-sync.json.
 
     This is the single "cloud → local" writer, reused by `pull`, by import's
@@ -912,6 +1319,9 @@ def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True, force
             (otherwise README is written only when absent, to preserve any
             author notes beyond the title line).
     """
+    existing = _validate_bound_course_dir(
+        course_dir, base_url, shifu_bid=shifu_bid,
+    )
     course_path = Path(course_dir)
     (course_path / "lessons").mkdir(parents=True, exist_ok=True)
     ts = _now_iso().replace(":", "").replace("-", "")
@@ -923,7 +1333,6 @@ def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True, force
     course_meta = api_safe(base_url, token, "get",
                            f"/shifus/{shifu_bid}/draft-meta") or {}
 
-    existing = _load_sync(course_dir)
     existing_by_bid = {}
     if existing:
         for e in existing.get("lessons", []):
@@ -931,6 +1340,12 @@ def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True, force
                 existing_by_bid[e["outline_bid"]] = e
 
     flat = _flatten_outline_tree(tree)
+    # Fetch every snapshot before changing files. A failed read must not leave
+    # newly written content paired with the previous manifest's revisions.
+    snapshots = {
+        node["bid"]: _get_lesson_snapshot(base_url, token, shifu_bid, node["bid"])
+        for node in flat if not node["is_chapter"]
+    }
 
     # Assign stable lesson filenames: reuse a prior manifest filename for the
     # same outline_bid, otherwise pick the next free lesson-NN.md.
@@ -972,13 +1387,7 @@ def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True, force
                 "is_chapter": True, "content_sha256": None,
             })
             continue
-        md = api(base_url, token, "get",
-                 f"/shifus/{shifu_bid}/outlines/{node['bid']}/mdflow")
-        if isinstance(md, dict):
-            content = md.get("data", "") or ""
-            revision = md.get("revision")
-        else:
-            content, revision = (md or ""), None
+        content, revision = snapshots[node["bid"]]
         prev = existing_by_bid.get(node["bid"])
         relfile = prev["file"] if (prev and prev.get("file")) else _next_free_lesson()
         dest = safe_join_path(str(course_path), relfile)
@@ -1061,7 +1470,7 @@ def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True, force
     manifest = {
         "schema_version": 1,
         "shifu_bid": shifu_bid,
-        "base_url": base_url,
+        "base_url": profiles.normalize_base_url(base_url),
         "course": {
             "revision": course_meta.get("revision"),
             "name": name,
@@ -1073,6 +1482,7 @@ def _pull_into_dir(base_url, token, shifu_bid, course_dir, *, backup=True, force
         "last_pull_at": _now_iso(),
         "last_push_at": existing.get("last_push_at") if existing else None,
     }
+    manifest["profile"] = profile_name
     if existing and existing.get("published"):
         manifest["published"] = existing["published"]
     _write_sync(course_dir, manifest)
@@ -1083,7 +1493,8 @@ def cmd_pull(args):
     """Pull a course from the platform into a local course directory (git pull)."""
     base_url, token = resolve_auth(args)
     manifest = _pull_into_dir(base_url, token, args.shifu_bid, args.course_dir,
-                              backup=not args.force, force=args.force)
+                              backup=not args.force, force=args.force,
+                              profile_name=_profile_name(args))
     lessons = [x for x in manifest["lessons"] if not x.get("is_chapter")]
     chapters = [x for x in manifest["lessons"] if x.get("is_chapter")]
     print(f"Pulled {args.shifu_bid} into {args.course_dir}")
@@ -1109,6 +1520,8 @@ def cmd_status(args):
                            f"/shifus/{shifu_bid}/draft-meta") or {}
     cloud_course_rev = course_meta.get("revision")
     local_course_rev = (manifest.get("course") or {}).get("revision")
+    course_unknown = (not _is_valid_revision(cloud_course_rev)
+                      or not _is_valid_revision(local_course_rev))
 
     tree = api(base_url, token, "get", f"/shifus/{shifu_bid}/outlines")
     cloud_bids = set()
@@ -1122,7 +1535,7 @@ def cmd_status(args):
 
     _collect(tree if isinstance(tree, list) else [tree])
 
-    behind, locally_modified, deleted_remote = [], [], []
+    behind, locally_modified, deleted_remote, unknown = [], [], [], []
     course_locally_modified = []
     manifest_bids = set()
     uptodate = 0
@@ -1161,8 +1574,11 @@ def cmd_status(args):
                             session=session) or {}
             cloud_rev = meta.get("revision")
             local_rev = entry.get("revision")
-            is_behind = (cloud_rev is not None and local_rev is not None
-                         and cloud_rev > local_rev)
+            is_unknown = (not _is_valid_revision(cloud_rev)
+                          or not _is_valid_revision(local_rev))
+            if is_unknown:
+                unknown.append(entry)
+            is_behind = not is_unknown and cloud_rev > local_rev
             if is_behind:
                 behind.append((entry, local_rev, cloud_rev, meta))
             # Local edit detection via content hash.
@@ -1174,19 +1590,26 @@ def cmd_status(args):
                         and cur_hash != entry["content_sha256"]):
                     locally_modified.append(entry)
                     is_local_mod = True
-            if not is_behind and not is_local_mod:
+            if not is_behind and not is_local_mod and not is_unknown:
                 uptodate += 1
     new_remote = sorted(cloud_bids - manifest_bids)
 
     print(f"Course: {manifest['course'].get('name', '')}  (shifu_bid {shifu_bid})")
-    if cloud_course_rev is None:
-        print("Course meta: unknown (failed to fetch cloud revision)")
-    elif local_course_rev is not None and cloud_course_rev > local_course_rev:
+    if not _is_valid_revision(cloud_course_rev):
+        print("Course meta: unknown (missing or invalid cloud revision)")
+    elif not _is_valid_revision(local_course_rev):
+        print("Course meta: unknown (missing or invalid local revision — run `pull`)")
+    elif cloud_course_rev > local_course_rev:
         print(f"Course meta: BEHIND (local rev {local_course_rev} < cloud {cloud_course_rev}) "
               f"— run `pull`")
     else:
         print(f"Course meta: up to date (revision {local_course_rev})")
 
+    if unknown:
+        print("\nUnknown lesson revisions (cannot confirm sync — run `pull`):")
+        for entry in unknown:
+            print(f"  {entry.get('file') or entry.get('outline_bid')}   "
+                  f"{entry.get('name', '')}")
     if behind:
         print("\nBehind (cloud changed — run `pull`; your local copy is stale):")
         for entry, lr, cr, meta in behind:
@@ -1216,17 +1639,17 @@ def cmd_status(args):
     # A locally-modified working tree counts as diverged too, so `status
     # --exit-code` can guard import/push automation against unsynced edits.
     diverged = bool(
-        behind or new_remote or deleted_remote or locally_modified
+        behind or new_remote or deleted_remote or locally_modified or unknown
         or course_locally_modified
-    ) or (cloud_course_rev is not None and local_course_rev is not None
-          and cloud_course_rev > local_course_rev)
+    ) or course_unknown or (not course_unknown and cloud_course_rev > local_course_rev)
     if getattr(args, "exit_code", False) and diverged:
         sys.exit(1)
 
 
 def _auto_pull_overwrite(base_url, token, shifu_bid, course_dir, *, scope,
                          outline_bid=None, attempted_content=None,
-                         local_file=None, intended_meta=None, conflict_meta=None):
+                         local_file=None, intended_meta=None, conflict_meta=None,
+                         profile_name=None):
     """Cloud-wins recovery shared by the version-guarded write commands.
 
     Backs up the local pending work (so nothing is lost), pulls the cloud copy
@@ -1243,6 +1666,7 @@ def _auto_pull_overwrite(base_url, token, shifu_bid, course_dir, *, scope,
               file=sys.stderr)
         return
 
+    _validate_bound_course_dir(course_dir, base_url, shifu_bid=shifu_bid)
     ts = _now_iso().replace(":", "").replace("-", "")
     course_path = Path(course_dir)
     backup_location = None
@@ -1290,7 +1714,8 @@ def _auto_pull_overwrite(base_url, token, shifu_bid, course_dir, *, scope,
     # scope the entire tree was already copied to .conflict-backup-<ts>/ above,
     # so skip the redundant per-file backups. force=False keeps README intact.
     _pull_into_dir(base_url, token, shifu_bid, course_dir,
-                   backup=(scope != "import"), force=False)
+                   backup=(scope != "import"), force=False,
+                   profile_name=profile_name)
 
     cm = conflict_meta or {}
     who = _mask_phone((cm.get("updated_user") or {}).get("phone")) \
@@ -1324,7 +1749,7 @@ def cmd_create(args):
 
 # ── Update Meta ────────────────────────────────────────────────────────────────
 def _check_course_meta_conflict(base_url, token, shifu_bid, course_dir, manifest,
-                                intended_meta):
+                                intended_meta, profile_name=None):
     """Check course-level draft revision conflicts before a detail write."""
     if not (manifest and manifest.get("shifu_bid") == shifu_bid):
         return
@@ -1337,12 +1762,13 @@ def _check_course_meta_conflict(base_url, token, shifu_bid, course_dir, manifest
             and cloud_rev > local_course_rev):
         _auto_pull_overwrite(base_url, token, shifu_bid, course_dir,
                              scope="meta", intended_meta=intended_meta,
-                             conflict_meta=cloud_meta)
+                             conflict_meta=cloud_meta, profile_name=profile_name)
         sys.exit(EXIT_CONFLICT)
 
 
 def _update_course_manifest_after_push(base_url, token, shifu_bid, course_dir,
-                                       manifest, course_updates=None):
+                                       manifest, course_updates=None,
+                                       profile_name=None):
     """Re-read and record the new course-level revision after a detail write."""
     fresh = api_safe(base_url, token, "get", f"/shifus/{shifu_bid}/draft-meta")
     if not isinstance(fresh, dict) or fresh.get("revision") is None:
@@ -1371,6 +1797,7 @@ def _update_course_manifest_after_push(base_url, token, shifu_bid, course_dir,
     if fresh_user is not None:
         course["updated_user_bid"] = fresh_user
     manifest["last_push_at"] = _now_iso()
+    manifest["profile"] = profile_name
     _write_sync(course_dir, manifest)
 
 
@@ -1408,7 +1835,7 @@ def cmd_update_meta(args):
     intended = {"name": args.name, "description": description,
                 "course_prompt_file": args.course_prompt_file}
     _check_course_meta_conflict(base_url, token, shifu_bid, course_dir, manifest,
-                                intended)
+                                intended, profile_name=_profile_name(args))
 
     # Send ONLY the content fields the user is changing. The backend uses PATCH
     # semantics (an omitted field is left unchanged), so we deliberately do NOT
@@ -1443,7 +1870,7 @@ def cmd_update_meta(args):
             course_updates={
                 "name": payload.get("name"),
                 "description": payload.get("description"),
-            })
+            }, profile_name=_profile_name(args))
 
 
 # ── Set Listen Mode ────────────────────────────────────────────────────────────
@@ -1489,10 +1916,17 @@ def _tts_model_options(tts_config):
 
 
 def _filter_tts_voices_for_model(provider, voices, model):
-    if _tts_provider_name(provider) != "volcengine":
-        return voices
     model_key = _string_tts_value(model)
     if not model_key:
+        return voices
+    # Providers whose voices declare a resource_id (volcengine resources,
+    # tencent TextToVoice tiers) require the voice to match the selected
+    # model; providers without the annotation keep their full list. This
+    # mirrors the platform editor's filterTtsVoicesForModel behavior.
+    has_resource_annotations = any(
+        _string_tts_value(v.get("resource_id")) for v in voices
+    )
+    if not has_resource_annotations:
         return voices
     return [
         v for v in voices
@@ -1513,7 +1947,12 @@ def _select_platform_tts_defaults(speed, tts_config):
     """Mirror the platform editor's default provider/model/voice selection."""
     providers = _tts_providers_by_name(tts_config)
     model_options = _tts_model_options(tts_config)
-    default_model_option = model_options[0] if model_options else None
+    # Prefer the option the platform declares as default (is_default); older
+    # backends without the marker fall back to the first option.
+    default_model_option = next(
+        (o for o in model_options if o.get("is_default")),
+        model_options[0] if model_options else None,
+    )
     provider = ""
     model = ""
 
@@ -1604,7 +2043,7 @@ def cmd_set_tts(args):
         tts_config = api_safe(base_url, token, "get", "/tts/config") or {}
     payload = _build_set_tts_payload(args, tts_config)
     _check_course_meta_conflict(base_url, token, shifu_bid, course_dir, manifest,
-                                payload)
+                                payload, profile_name=_profile_name(args))
 
     # Disabling sends only the switch. Enabling sends the full TTS settings that
     # the backend now validates strictly, matching the platform editor payload.
@@ -1623,7 +2062,75 @@ def cmd_set_tts(args):
                   "`pull --course-dir <dir>` to resync.", file=sys.stderr)
 
         _update_course_manifest_after_push(base_url, token, shifu_bid,
-                                           course_dir, manifest)
+                                           course_dir, manifest,
+                                           profile_name=_profile_name(args))
+
+
+def cmd_set_avatar(args):
+    """Upload and bind a JPG/PNG teacher avatar to a course."""
+    src_path = Path(args.file).expanduser().resolve()
+    if src_path.suffix.lower() not in {".jpg", ".jpeg", ".png"}:
+        print("Error: teacher avatar must be a JPG or PNG file.", file=sys.stderr)
+        sys.exit(1)
+
+    from image_preparation import prepare_image  # local import keeps Pillow optional
+    try:
+        prepared = prepare_image(src_path)
+    except ValueError as e:
+        print(f"Error: {e}", file=sys.stderr)
+        sys.exit(1)
+
+    if prepared.original_width != prepared.original_height:
+        print(
+            "Warning: teacher avatars are displayed in a square frame; "
+            f"this image is {prepared.original_width}x{prepared.original_height} "
+            "and may be cropped. A 1:1 image is recommended.",
+            file=sys.stderr,
+        )
+
+    base_url, token = resolve_auth(args)
+    shifu_bid = args.shifu_bid
+    course_dir = getattr(args, "course_dir", None)
+    manifest = _load_sync(course_dir) if course_dir else None
+
+    # Check the local revision before uploading so a known conflict does not
+    # leave an unused resource behind.
+    intended_meta = {"avatar": "<pending local upload>"}
+    _check_course_meta_conflict(base_url, token, shifu_bid, course_dir, manifest,
+                                intended_meta, profile_name=_profile_name(args))
+
+    remote_url = api_upload(
+        base_url, token, prepared.filename, prepared.data, prepared.mime,
+    )
+    if not isinstance(remote_url, str) or not remote_url.startswith("https://"):
+        print("Error: image upload did not return a valid resource URL.",
+              file=sys.stderr)
+        sys.exit(1)
+
+    api(base_url, token, "post", f"/shifus/{shifu_bid}/detail",
+        json={"avatar": remote_url})
+    fresh_detail = api_safe(base_url, token, "get",
+                            f"/shifus/{shifu_bid}/detail")
+    if not isinstance(fresh_detail, dict) or fresh_detail.get("avatar") != remote_url:
+        print(
+            "Error: the image was uploaded, but the course avatar could not be "
+            "verified. The course may be unchanged; run `show` or check the "
+            "admin page before retrying.",
+            file=sys.stderr,
+        )
+        sys.exit(1)
+
+    print(f"Set course {shifu_bid} teacher avatar")
+    print(f"  Resource URL: {remote_url}")
+    print(f"  Source: {prepared.original_width}x{prepared.original_height}, "
+          f"{prepared.original_bytes} bytes")
+    print(f"  Uploaded: {len(prepared.data)} bytes ({prepared.mime})")
+
+    if manifest and manifest.get("shifu_bid") == shifu_bid:
+        _write_course_config(course_dir, _course_config_from_detail(fresh_detail))
+        _update_course_manifest_after_push(base_url, token, shifu_bid,
+                                           course_dir, manifest,
+                                           profile_name=_profile_name(args))
 
 
 # ── Add Chapter ────────────────────────────────────────────────────────────────
@@ -1676,6 +2183,7 @@ def cmd_update_lesson(args):
     When --course-dir points at a directory with a .shifu-sync.json manifest,
     base_revision is the *recorded baseline* for this outline (its revision at
     last pull/push) — so a concurrent edit by someone else is actually detected.
+    A manifest with no valid lesson baseline must be refreshed before a write.
     Without a manifest the command falls back to the legacy behavior of taking
     the current cloud head as the baseline (degraded protection). On conflict it
     auto-pulls the cloud copy, backs up the attempted edit, and exits non-zero.
@@ -1692,12 +2200,14 @@ def cmd_update_lesson(args):
         entry = _sync_lesson_by_bid(manifest, outline_bid)
         if entry:
             base_revision = entry.get("revision")
+        if not _is_valid_revision(base_revision):
+            print("Error: the sync manifest has no valid baseline for this "
+                  "lesson. Run `pull`, reapply your edits, then retry; "
+                  "the existing local files were left unchanged.", file=sys.stderr)
+            sys.exit(1)
     if base_revision is None:
         # Legacy fallback: take the cloud head as baseline (no concurrency guard).
-        current = api(base_url, token, "get",
-                      f"/shifus/{shifu_bid}/outlines/{outline_bid}/mdflow")
-        if isinstance(current, dict):
-            base_revision = current.get("revision")
+        base_revision = _get_lesson_revision(base_url, token, shifu_bid, outline_bid)
         if course_dir and not manifest:
             print("  note: no .shifu-sync.json — version protection degraded; "
                   "run `pull` first for full conflict detection.", file=sys.stderr)
@@ -1717,7 +2227,8 @@ def cmd_update_lesson(args):
         _auto_pull_overwrite(
             base_url, token, shifu_bid, course_dir, scope="lesson",
             outline_bid=outline_bid, attempted_content=content,
-            local_file=(entry or {}).get("file"), conflict_meta=result)
+            local_file=(entry or {}).get("file"), conflict_meta=result,
+            profile_name=_profile_name(args))
         sys.exit(EXIT_CONFLICT)
 
     new_revision = result.get("new_revision")
@@ -1725,6 +2236,7 @@ def cmd_update_lesson(args):
         _set_lesson_revision(manifest, outline_bid, new_revision,
                              content_sha256=_sha256_text(content))
         manifest["last_push_at"] = _now_iso()
+        manifest["profile"] = _profile_name(args)
         _write_sync(course_dir, manifest)
         # Keep the local lesson file in lockstep with what was just pushed, so a
         # subsequent `status` reports clean instead of "locally modified".
@@ -1757,13 +2269,19 @@ def cmd_delete_lesson(args):
 
 # ── Reorder ────────────────────────────────────────────────────────────────────
 def cmd_reorder(args):
-    """Reorder lessons in a course."""
+    """Reorder one complete sibling group without changing the course hierarchy."""
+    bids = [b.strip() for b in args.order.split(",")]
+    if not all(bids) or len(set(bids)) != len(bids):
+        print("Error: --order requires nonempty, unique outline BIDs", file=sys.stderr)
+        sys.exit(1)
     base_url, token = resolve_auth(args)
-    bids = [b.strip() for b in args.order.split(",") if b.strip()]
+    # The server merges this sibling order into the current tree under its
+    # course lock. Sending a client-built full tree can overwrite another group.
+    # Servers without this contract reject the request; do not retry with a tree.
     api(base_url, token, "patch",
         f"/shifus/{args.shifu_bid}/outlines/reorder",
         json={"order": bids})
-    print(f"Reordered {len(bids)} lessons")
+    print(f"Reordered {len(bids)} outlines")
 
 
 # ── Set Access (learning permission) ────────────────────────────────────────────
@@ -1853,11 +2371,91 @@ def _outline_create_payload(item, parent_bid=None):
     return payload
 
 
-def _import_flat(base_url, token, json_file, shifu_bid):
-    """Import from flat JSON file (original shifu-api-import.py logic)."""
-    with open(json_file, "r", encoding="utf-8") as f:
-        import_data = json.load(f)
+def _load_import_data(json_file):
+    """Read the import once so validation and execution use the same content."""
+    try:
+        with open(json_file, "r", encoding="utf-8") as f:
+            return json.load(f)
+    except (OSError, UnicodeError, json.JSONDecodeError) as error:
+        print(f"Error: cannot read import JSON: {error}", file=sys.stderr)
+        sys.exit(1)
 
+
+def _validate_import_data(import_data):
+    """Reject malformed content and unresolvable outlines before platform calls."""
+    def invalid(field, reason):
+        print(f"Error: {field} {reason}", file=sys.stderr)
+        sys.exit(1)
+
+    def require_text(value, field, *, title=False, prompt=False):
+        if not isinstance(value, str):
+            reason = "must be a non-empty string" if title else "must be a string"
+            if prompt:
+                reason += "; use an empty string to clear the Course Prompt."
+            invalid(field, reason)
+        if title and not value.strip():
+            invalid(field, "must be a non-empty string")
+        try:
+            value.encode("utf-8")
+        except UnicodeEncodeError:
+            invalid(field, "must contain valid Unicode text")
+
+    if not isinstance(import_data, dict):
+        invalid("import JSON", "must be an object")
+    shifu_info = import_data.get("shifu")
+    if not isinstance(shifu_info, dict):
+        invalid("shifu", "must be an object")
+    require_text(shifu_info.get("title"), "shifu.title", title=True)
+    if "description" in shifu_info:
+        require_text(shifu_info["description"], "shifu.description")
+
+    # Only the selected prompt is consumed; preserve build/export precedence.
+    prompt_key = next((key for key in ("course_prompt", "llm_system_prompt")
+                       if key in shifu_info), None)
+    if prompt_key is not None:
+        require_text(shifu_info[prompt_key], f"shifu.{prompt_key}", prompt=True)
+
+    outline_items = import_data.get("outline_items")
+    if not isinstance(outline_items, list):
+        invalid("outline_items", "must be an array")
+    outlines_by_bid = {}
+    for index, item in enumerate(outline_items):
+        field = f"outline_items[{index}]"
+        if not isinstance(item, dict):
+            invalid(field, "must be an object")
+        require_text(item.get("title"), f"{field}.title", title=True)
+        if "content" in item:
+            require_text(item["content"], f"{field}.content")
+        item_bid = item.get("outline_item_bid")
+        if item_bid is not None and not isinstance(item_bid, str):
+            invalid(f"{field}.outline_item_bid", "must be a string or null")
+        if item_bid:
+            if not item_bid.strip():
+                invalid(f"{field}.outline_item_bid", "must not be blank")
+            if item_bid in outlines_by_bid:
+                invalid(f"{field}.outline_item_bid", "duplicates another outline ID")
+            outlines_by_bid[item_bid] = item
+        parent_bid = item.get("parent_bid")
+        if parent_bid is not None and not isinstance(parent_bid, str):
+            invalid(f"{field}.parent_bid", "must be a string or null")
+
+    # The importer creates roots first, then their children. An old platform
+    # BID or a nested parent cannot be resolved after the old tree is deleted.
+    for index, item in enumerate(outline_items):
+        parent_bid = item.get("parent_bid")
+        if parent_bid:
+            parent = outlines_by_bid.get(parent_bid)
+            if parent is None or parent is item or parent.get("parent_bid"):
+                invalid(f"outline_items[{index}].parent_bid",
+                        "must reference a different top-level outline in this import")
+    return prompt_key
+
+
+def _import_flat(base_url, token, json_file, shifu_bid, *, import_data=None):
+    """Import validated content from a flat JSON file or its loaded snapshot."""
+    if import_data is None:
+        import_data = _load_import_data(json_file)
+    prompt_key = _validate_import_data(import_data)
     shifu_info = import_data["shifu"]
     outline_items = import_data["outline_items"]
 
@@ -1880,8 +2478,9 @@ def _import_flat(base_url, token, json_file, shifu_bid):
     detail_payload = {
         "name": shifu_info["title"],
         "description": shifu_info.get("description", ""),
-        "system_prompt": shifu_info.get("course_prompt", ""),
     }
+    if prompt_key is not None:
+        detail_payload["system_prompt"] = shifu_info[prompt_key]
     for attempt in range(1, 4):
         result = api_safe(base_url, token, "post", f"/shifus/{shifu_bid}/detail",
                           json=detail_payload)
@@ -1956,7 +2555,7 @@ def _import_flat(base_url, token, json_file, shifu_bid):
         title = item["title"]
         content = item.get("content", "")
         old_parent = item["parent_bid"]
-        new_parent = bid_map.get(old_parent, old_parent)
+        new_parent = bid_map[old_parent]
 
         result = api(base_url, token, "put", f"/shifus/{shifu_bid}/outlines",
                      json=_outline_create_payload(item, parent_bid=new_parent))
@@ -1988,6 +2587,24 @@ def cmd_import(args):
         print("Error: provide <shifu_bid> or use --new")
         sys.exit(1)
 
+    # Validate the complete payload before even a revision lookup can trigger
+    # conflict recovery. Retain this snapshot rather than reopening the file.
+    if args.course_dir:
+        json_file = _build_import_json(
+            course_dir=args.course_dir,
+            title=getattr(args, "title", None),
+            description=getattr(args, "description", None),
+            keywords=getattr(args, "keywords", None),
+            chapter_name=getattr(args, "chapter_name", None),
+        )
+    elif args.json_file:
+        json_file = args.json_file
+    else:
+        print("Error: provide --json-file or --course-dir")
+        sys.exit(1)
+    import_data = _load_import_data(json_file)
+    _validate_import_data(import_data)
+
     base_url, token = resolve_auth(args)
     shifu_bid = None if args.new else args.shifu_bid
 
@@ -2004,32 +2621,20 @@ def cmd_import(args):
             if (cloud_rev is not None and local_rev is not None
                     and cloud_rev > local_rev):
                 _auto_pull_overwrite(base_url, token, shifu_bid, args.course_dir,
-                                     scope="import", conflict_meta=cloud_meta)
+                                     scope="import", conflict_meta=cloud_meta,
+                                     profile_name=_profile_name(args))
                 sys.exit(EXIT_CONFLICT)
 
-    result_bid = None
-    if args.course_dir:
-        # Build JSON first, then import
-        json_file = _build_import_json(
-            course_dir=args.course_dir,
-            title=getattr(args, "title", None),
-            description=getattr(args, "description", None),
-            keywords=getattr(args, "keywords", None),
-            chapter_name=getattr(args, "chapter_name", None),
-        )
-        result_bid = _import_flat(base_url, token, json_file, shifu_bid)
-    elif args.json_file:
-        result_bid = _import_flat(base_url, token, args.json_file, shifu_bid)
-    else:
-        print("Error: provide --json-file or --course-dir")
-        sys.exit(1)
+    result_bid = _import_flat(base_url, token, json_file, shifu_bid,
+                              import_data=import_data)
 
     # Re-seed the sync manifest from the freshly imported cloud state so future
     # edits are version-tracked. Phase 1 import is destructive (all outline bids
     # are regenerated), so a pull is the reliable way to capture them.
     if args.course_dir and result_bid:
         _pull_into_dir(base_url, token, result_bid, args.course_dir,
-                       backup=False, force=False)
+                       backup=False, force=False,
+                       profile_name=_profile_name(args))
         print(f"  Sync manifest seeded: {_sync_path(args.course_dir)}")
 
 
@@ -2111,11 +2716,9 @@ def _build_import_json(course_dir, title=None, description=None,
                 "position": str(ch_idx),
                 "prerequisite_item_bids": "",
                 "llm": "",
-                "llm_temperature": 0,
                 "course_prompt": "",
                 "ask_enabled_status": 5101,
                 "ask_llm": "",
-                "ask_llm_temperature": 0.0,
                 "ask_llm_system_prompt": "",
                 "content": "",
             })
@@ -2144,11 +2747,9 @@ def _build_import_json(course_dir, title=None, description=None,
                     "position": str(ls_idx),
                     "prerequisite_item_bids": "",
                     "llm": "",
-                    "llm_temperature": 0,
                     "course_prompt": course_prompt,
                     "ask_enabled_status": 5101,
                     "ask_llm": "",
-                    "ask_llm_temperature": 0.0,
                     "ask_llm_system_prompt": "",
                     "content": content,
                 })
@@ -2178,11 +2779,9 @@ def _build_import_json(course_dir, title=None, description=None,
             "position": "0",
             "prerequisite_item_bids": "",
             "llm": "",
-            "llm_temperature": 0,
             "course_prompt": "",
             "ask_enabled_status": 5101,
             "ask_llm": "",
-            "ask_llm_temperature": 0.0,
             "ask_llm_system_prompt": "",
             "content": "",
         })
@@ -2207,11 +2806,9 @@ def _build_import_json(course_dir, title=None, description=None,
                 "position": str(idx),
                 "prerequisite_item_bids": "",
                 "llm": "",
-                "llm_temperature": 0,
                 "course_prompt": course_prompt,
                 "ask_enabled_status": 5101,
                 "ask_llm": "",
-                "ask_llm_temperature": 0.0,
                 "ask_llm_system_prompt": "",
                 "content": content,
             })
@@ -2229,7 +2826,7 @@ def _build_import_json(course_dir, title=None, description=None,
 
     import_data = {
         "version": "1.0",
-        "exported_at": datetime.now().isoformat(),
+        "exported_at": _now_iso(),
         "shifu": {
             "shifu_bid": shifu_bid,
             "title": title,
@@ -2237,11 +2834,9 @@ def _build_import_json(course_dir, title=None, description=None,
             "description": description or "",
             "avatar_res_bid": "",
             "llm": "",
-            "llm_temperature": 0,
             "course_prompt": course_prompt,
             "ask_enabled_status": 5101,
             "ask_llm": "",
-            "ask_llm_temperature": 0.0,
             "ask_llm_system_prompt": "",
         },
         "outline_items": outline_items,
@@ -2365,7 +2960,7 @@ def cmd_find_title(args):
     keyword = args.keyword or ""
     needle = keyword.replace(" ", "").lower()
     # Mirror the backend metadata-table `title like` floor (>= 2 non-wildcard
-    # characters, see references/analytics/dsl.md). A 1-character keyword
+    # characters, see references/analytics/query-language.md). A 1-character keyword
     # would substring-match almost every title client-side and rarely help
     # the user; reject early with a clear message rather than fan out a
     # cascade of low-signal API calls.
@@ -2569,15 +3164,23 @@ def _write_manifest(manifest_path, manifest):
 
 
 def _update_manifest(course_dir, entry):
-    """Upsert an image entry by 'local' (file path) or 'source_url' (URL upload)."""
+    """Upsert by deployment URL and source, retaining unknown legacy records."""
     manifest_path = Path(course_dir) / "assets" / "image-manifest.json"
     manifest = _load_manifest(manifest_path)
 
     key_field = "local" if entry.get("local") else "source_url"
     key_value = entry[key_field]
+    entry_url = profiles.normalize_base_url(entry["base_url"])
+    entry["base_url"] = entry_url
     existing_idx = None
     for i, item in enumerate(manifest["images"]):
-        if item.get(key_field) == key_value:
+        if not isinstance(item, dict) or not item.get("base_url"):
+            continue
+        try:
+            item_url = profiles.normalize_base_url(item["base_url"])
+        except (ValueError, TypeError):
+            continue
+        if item_url == entry_url and item.get(key_field) == key_value:
             existing_idx = i
             break
     if existing_idx is None:
@@ -2619,7 +3222,7 @@ def cmd_upload_image(args):
             mime = mime_guess
             original_bytes = len(file_bytes)
         else:
-            from image_utils import prepare_image  # local import keeps Pillow optional
+            from image_preparation import prepare_image  # local import keeps Pillow optional
             try:
                 prepared = prepare_image(src_path)
             except ValueError as e:
@@ -2637,18 +3240,20 @@ def cmd_upload_image(args):
             try:
                 local_rel = str(src_path.relative_to(course_dir))
             except ValueError:
-                local_rel = src_path.name
+                local_rel = str(src_path)
                 print(
                     f"warning: {src_path} is outside --course-dir; "
-                    f"recording only the filename ({local_rel}) in manifest "
-                    "(cross-machine dedup may be imperfect)",
+                    "recording its absolute path in the manifest "
+                    "(this source mapping is machine-specific)",
                     file=sys.stderr,
                 )
             _update_manifest(course_dir, {
                 "local": local_rel,
+                "base_url": base_url,
+                "profile": _profile_name(args),
                 "remote": remote_url,
                 "alt": alt,
-                "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+                "uploaded_at": _now_iso(),
                 "bytes": len(file_bytes),
                 "original_bytes": original_bytes,
                 "mime": mime,
@@ -2663,25 +3268,38 @@ def cmd_upload_image(args):
     if course_dir is not None:
         _update_manifest(course_dir, {
             "source_url": args.url,
+            "base_url": base_url,
+            "profile": _profile_name(args),
             "remote": remote_url,
             "alt": alt,
-            "uploaded_at": datetime.utcnow().strftime("%Y-%m-%dT%H:%M:%SZ"),
+            "uploaded_at": _now_iso(),
         })
 
 
 # ── CLI Entry Point ────────────────────────────────────────────────────────────
+def _maybe_check_for_updates():
+    """Show an optional update notice without changing command output or errors."""
+    try:
+        result = automatic_check_for_update(config_dir())
+        if result and result.get("status") in {"update_recommended", "update_required"}:
+            print(
+                f"AI-Shifu skill update available: {result['latest']}. {result['update_url']}",
+                file=sys.stderr,
+            )
+    except Exception:  # noqa: BLE001 - optional checks never prevent a CLI operation
+        pass
+
+
 def cmd_check_update(args):
     """Print one machine-readable update result and never fail the caller."""
     dev_manifest_url = args.dev_manifest_url
     if dev_manifest_url:
         result = check_for_update(
-            force=True,
-            cache_file=DEV_CACHE_FILE,
             manifest_url=dev_manifest_url,
             allow_loopback=True,
         )
     else:
-        result = check_for_update(force=args.force)
+        result = check_for_update()
     print(json.dumps(result, ensure_ascii=False, separators=(",", ":")))
 
 
@@ -2691,23 +3309,37 @@ def build_parser():
     parent_parser = argparse.ArgumentParser(add_help=False)
     parent_parser.add_argument("--token", default=None,
                                help="JWT token (or SHIFU_TOKEN in .env)")
+    parent_parser.add_argument("--profile", action=UniqueProfileAction,
+                               help="Use this named profile for this command only")
 
     parser = argparse.ArgumentParser(
         prog="shifu-cli",
         description="AI-Shifu Course CLI - Unified tool for course CRUD operations",
     )
+    parser.add_argument("--profile", dest="global_profile", action=UniqueProfileAction,
+                        help="Use this named profile for this command only")
 
     sub = parser.add_subparsers(dest="command", help="Available commands")
+
+    p = sub.add_parser("site", parents=[parent_parser],
+                       help="Show or configure the selected profile")
+    selection = p.add_mutually_exclusive_group()
+    selection.add_argument("--set", choices=tuple(SITE_URLS), help="Select cn or com")
+    selection.add_argument("--url", help="Select a custom service URL")
+
+    p = sub.add_parser("profile", help="Manage independently named service profiles")
+    profile_sub = p.add_subparsers(dest="profile_command", required=True)
+    profile_sub.add_parser("list", help="List profiles without checking authorization")
+    configure = profile_sub.add_parser("set", help="Create or update a profile")
+    configure.add_argument("name")
+    configure.add_argument("--base-url", required=True, help="cn, com, or a complete service URL")
+    default = profile_sub.add_parser("default", help="Show or change the default profile")
+    default.add_argument("name", nargs="?")
 
     # ── check-update (public, no login required) ──
     p = sub.add_parser(
         "check-update",
-        help="Check the public AI-Shifu website manifest for a newer Skill version",
-    )
-    p.add_argument(
-        "--force",
-        action="store_true",
-        help="Revalidate the website manifest even when the local TTL is fresh",
+        help="Check GitHub Releases for a newer Skill version",
     )
     p.add_argument(
         "--dev-manifest-url",
@@ -2720,10 +3352,14 @@ def build_parser():
 
     # ── login ──
     p = sub.add_parser("login", parents=[parent_parser],
-                       help="SMS login and save token")
-    p.add_argument("--phone", required=True, help="Phone number for SMS login")
-    p.add_argument("--sms-code", default=None,
-                   help="4-digit SMS verification code")
+                       help="Authorize this device through the browser")
+    p.add_argument("--wait", action="store_true",
+                   help="Wait for the pending authorization to be approved")
+    p.add_argument("--timeout", type=int, default=120,
+                   help="Seconds to keep polling when used with --wait")
+
+    sub.add_parser("logout", parents=[parent_parser],
+                   help="Clear only the selected profile's local authorization")
 
     # ── verify ──
     sub.add_parser("verify", parents=[parent_parser],
@@ -2846,6 +3482,15 @@ def build_parser():
     p.add_argument("--course-dir", default=None,
                    help=f"Also refresh local {COURSE_CONFIG_NAME} and sync manifest")
 
+    # ── set-avatar ──
+    p = sub.add_parser("set-avatar", parents=[parent_parser],
+                       help="Upload and set a course teacher avatar (JPG/PNG)")
+    p.add_argument("shifu_bid", help="Course BID")
+    p.add_argument("--file", required=True,
+                   help="Local JPG or PNG teacher-avatar path")
+    p.add_argument("--course-dir", default=None,
+                   help=f"Also refresh local {COURSE_CONFIG_NAME} and sync manifest")
+
     # ── delete-lesson ──
     p = sub.add_parser("delete-lesson", parents=[parent_parser],
                        help="Delete a lesson")
@@ -2854,10 +3499,10 @@ def build_parser():
 
     # ── reorder ──
     p = sub.add_parser("reorder", parents=[parent_parser],
-                       help="Reorder lessons")
+                       help="Reorder sibling chapters or lessons")
     p.add_argument("shifu_bid", help="Course BID")
     p.add_argument("--order", required=True,
-                   help="Comma-separated list of outline BIDs in desired order")
+                   help="All outline BIDs under one parent, comma-separated in desired order")
 
     # ── import ──
     p = sub.add_parser("import", parents=[parent_parser],
@@ -2953,19 +3598,37 @@ def build_parser():
     return parser
 
 
-def main():
-    load_env()
+class UniqueProfileAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        if getattr(namespace, self.dest, None) is not None:
+            parser.error("Specify --profile only once per command")
+        setattr(namespace, self.dest, values)
 
+
+def main():
+    global _USAGE_METADATA_HEADERS
+    _USAGE_METADATA_HEADERS = {}
+    try:
+        caller_agent = _detect_caller_agent(os.environ)
+    except Exception:  # noqa: BLE001 - attribution cannot prevent a CLI command
+        caller_agent = None
     parser = build_parser()
     args = parser.parse_args()
+    if args.global_profile is not None:
+        if getattr(args, "profile", None) is not None:
+            parser.error("Specify --profile only once per command")
+        args.profile = args.global_profile
 
     if not args.command:
         parser.print_help()
         sys.exit(1)
 
     commands = {
+        "site": cmd_site,
+        "profile": cmd_profile,
         "check-update": cmd_check_update,
         "login": cmd_login,
+        "logout": cmd_logout,
         "verify": cmd_verify,
         "list": cmd_list,
         "show": cmd_show,
@@ -2981,6 +3644,7 @@ def main():
         "rename-lesson": cmd_rename_lesson,
         "set-access": cmd_set_access,
         "set-tts": cmd_set_tts,
+        "set-avatar": cmd_set_avatar,
         "delete-lesson": cmd_delete_lesson,
         "reorder": cmd_reorder,
         "import": cmd_import,
@@ -2996,7 +3660,41 @@ def main():
 
     handler = commands.get(args.command)
     if handler:
-        handler(args)
+        try:
+            if args.command != "check-update":
+                _maybe_check_for_updates()
+            process_env = dict(os.environ)
+            if args.command != "check-update":
+                load_env()
+            if args.command not in {"check-update", "build"}:
+                profile_store().migrate_legacy(process_env)
+                # Resolve the config root from dotenv before migration, then
+                # discard only dotenv credential values that cleanup may have
+                # removed. Exported process values keep their original priority.
+                for key in ("SHIFU_BASE_URL", "SHIFU_TOKEN"):
+                    if key not in process_env:
+                        os.environ.pop(key, None)
+                load_env()
+            context = None
+            if args.command not in {"site", "profile", "check-update", "build"}:
+                context = resolve_context(args, named_only=args.command in {"login", "logout"})
+                validate_course_binding(args, context.base_url)
+            if args.command not in {"site", "profile", "check-update", "build", "login", "logout", "verify"}:
+                _USAGE_METADATA_HEADERS = _skill_usage_metadata(caller_agent)
+            # Resolve identity from this invocation, never again from a global
+            # token that explicit --profile deliberately ignored.
+            handler(args)
+        except profiles.ProfileError as exc:
+            print(f"Configuration error: {exc}", file=sys.stderr)
+            sys.exit(4)
+        except requests.RequestException as exc:
+            print(f"Network request failed: {exc}", file=sys.stderr)
+            sys.exit(1)
+        except OSError as exc:
+            print(f"Local configuration or file operation failed: {exc}", file=sys.stderr)
+            sys.exit(1)
+        finally:
+            _USAGE_METADATA_HEADERS = {}
     else:
         parser.print_help()
         sys.exit(1)

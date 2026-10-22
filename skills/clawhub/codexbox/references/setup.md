@@ -8,6 +8,10 @@ See [SKILL.md](../SKILL.md#security--safety) for the full destructive-operation 
 - Codex auth: `OPENAI_API_KEY` (pay-as-you-go) or a ChatGPT Plus/Pro/Team subscription (`codexbox login --device-auth`)
 - Optional: SSH key for git-over-SSH inside the container (the installer generates one)
 
+For ordinary agent work, use the installed `codexbox` command from the target
+workspace. Do not replace it with a hand-written Docker invocation. The
+wrapper handles the workspace, state, SSH, image, and nested launch context.
+
 ## Quick Install (wrapper)
 
 The one-liner installer pulls the image, creates persistent Codex/SSH dirs, and installs the `codexbox` wrapper on `PATH`.
@@ -24,7 +28,42 @@ bash install.sh          # minimal image — default
 
 `CODEXBOX_FULL=1` must be set before `install.sh` runs — the installer needs it in `bash`'s environment. The choice is baked into the installed wrapper; you don't need to set it again afterward.
 
+### Install from a local checkout
+
+From this repository, build and install without pulling a published codexbox
+image:
+
+```bash
+make install       # minimal image
+make install-full  # full image
+
+# wrapper only — no build or pull; select full when needed
+make install-wrapper
+CODEXBOX_FULL=1 make install-wrapper
+```
+
+The installer-only `CODEXBOX_SRC_LOCAL=true` flag skips `docker pull` and
+requires the selected local image to already exist. `make install-wrapper`
+uses that existing image without rebuilding it.
+
 **Verify:** `codexbox --version` should print the codex CLI version.
+
+```bash
+codexbox                                  # interactive
+codexbox exec "inspect this workspace"    # one-shot
+CODEXBOX_FULL=1 codexbox exec "run tests" # temporary full image
+```
+
+For a wrapper-started server, use `CODEXBOX_ENV_` before every variable that
+must reach the container. For example,
+`CODEXBOX_ENV_CODEXBOX_API_MODE=1 codexbox` starts API mode.
+
+### Sibling boxes
+
+Install `codexbox`, `claudebox`, and `pibox` in the same command directory,
+normally `/usr/local/bin`, to make the sibling commands available inside a
+box. The parent mounts only the wrapper files read-only. A sibling wrapper then
+runs through the host Docker daemon and mounts its own host data directory.
 
 ## Image Variants
 
@@ -37,7 +76,9 @@ bash install.sh          # minimal image — default
 
 ## Manual Docker Use
 
-Use raw Docker for one-shot runs or long-running API/Telegram/cron services (the wrapper is meant for the interactive per-directory shell case). All the `docker run` shapes for each mode are in [../SKILL.md](../SKILL.md).
+Use raw Docker only for an explicitly requested container deployment. Use the
+wrapper for interactive, one-shot, and local service runs. All direct Docker
+shapes for service deployment are in [../SKILL.md](../SKILL.md).
 
 Minimal foreground-mode boilerplate:
 
@@ -61,7 +102,7 @@ docker run -d --name codexbox \
 | `OPENAI_BASE_URL` | — | Point codex at an OpenAI-compatible endpoint instead of the default API |
 | `CODEXBOX_IMAGE` | installed image | Override the image the wrapper runs |
 | `CODEXBOX_FULL` | installed choice (`0` initially) | `0` forces minimal, `1` forces full |
-| `CODEXBOX_DATA_DIR` | `~/.codex` | Host dir mounted as `CODEX_HOME` (auth + config + sessions) |
+| `CODEXBOX_DATA_DIR` | `~/.codex` | Host dir mounted as `CODEX_HOME` (auth + config + sessions + per-workspace root-session pins) |
 | `CODEXBOX_SSH_DIR` | `~/.ssh/codexbox` | SSH key dir mounted into the container |
 | `CODEXBOX_MAX_MEM` | `10g` | Per-container memory limit |
 | `CODEXBOX_CONTAINER_NAME` | derived from `$PWD` | Override the per-workspace container name |
@@ -78,7 +119,7 @@ Naming convention: `CODEXBOX_<MODE>_MODE=1` is the on/off flag, `CODEXBOX_<MODE>
 | `CODEXBOX_API_MODE` | `0` | Boot the HTTP API server (foreground) |
 | `CODEXBOX_TELEGRAM_MODE` | `0` | Boot the Telegram bot (foreground) |
 | `CODEXBOX_CRON_MODE` | `0` | Boot the cron scheduler (foreground; in-thread when telegram is also on) |
-| `CODEXBOX_MCP_MODE` | `0` | Expose MCP — mounted at `/mcp` in API mode, or as a standalone sidecar elsewhere |
+| `CODEXBOX_MCP_MODE` | `0` | Expose MCP — mounted at `/mcp/` in API mode, or as a standalone sidecar elsewhere |
 
 Foreground modes (API/Telegram/Cron) are mutually exclusive, except Telegram+Cron together (cron runs in-thread inside the telegram process). API wins if set alongside anything else. MCP mode is independent — it coexists with whatever foreground mode is running, or with none at all (shell-only + MCP sidecar).
 
@@ -104,7 +145,7 @@ With `CODEXBOX_API_MODE_TOKEN` unset the API surface (`/run`, `/files/*`, `/open
 | Var | Default | What it does |
 |---|---|---|
 | `CODEXBOX_CRON_MODE_FILE` | — | Path to the cron YAML |
-| `CODEXBOX_CRON_MODE_HISTORY_DIR` | `~/.aicodebox/cron/history` | Where cron writes per-run history dirs (`meta.json`, `stdout.log`, `stderr.log`, `result.txt`, `telegram.json`) |
+| `CODEXBOX_CRON_MODE_HISTORY_DIR` | `~/.aicodebox/cron` | Cron state root. Run history lands under `<root>/history/<workspace>/<timestamp>-<job>/` (`meta.json`, `stdout.log`, `stderr.log`, `result.txt`, `telegram.json`), per-job summaries at `<root>/<job>.jsonl`, and the telegram reply inbox at `<root>/telegram_messages.json` |
 
 ### MCP mode config
 
@@ -112,8 +153,12 @@ With `CODEXBOX_API_MODE_TOKEN` unset the API surface (`/run`, `/files/*`, `/open
 |---|---|---|
 | `CODEXBOX_MCP_MODE_PORT` | `8081` | Port the sidecar MCP server binds to (ignored when mounted inside API mode) |
 | `CODEXBOX_MCP_MODE_TOKEN` | empty | Bearer token for MCP. Empty = no auth. No fallback to `API_MODE_TOKEN` |
+| `CODEXBOX_MCP_MODE_ALLOWED_HOSTS` | loopback hosts | Comma-separated MCP `Host` allowlist. Add each reverse-proxy host name |
+| `CODEXBOX_MCP_MODE_ALLOWED_ORIGINS` | loopback HTTP origins | Comma-separated MCP browser Origin allowlist. Add each reverse-proxy origin |
 
 With `CODEXBOX_MCP_MODE_TOKEN` unset the MCP surface (`run_prompt`, `list_files`, `read_file`, `write_file`, `delete_file`) is unauthenticated — anyone who can reach it gets full workspace file access. This surface has its own bearer; setting `CODEXBOX_API_MODE_TOKEN` does not protect it. Set the token and bind to loopback / behind an authenticating proxy before exposing it beyond localhost.
+
+MCP also keeps DNS rebinding protection enabled. Loopback hosts and origins work by default; a reverse proxy, tunnel, or public DNS name needs its exact `CODEXBOX_MCP_MODE_ALLOWED_HOSTS` and browser `CODEXBOX_MCP_MODE_ALLOWED_ORIGINS` values added before MCP is reachable through it.
 
 ### Workspace & runtime
 
@@ -127,11 +172,15 @@ With `CODEXBOX_MCP_MODE_TOKEN` unset the MCP surface (`run_prompt`, `list_files`
 
 Every `CODEXBOX_X` name above also works as `AICODEBOX_X` (the base image's native naming) — the entrypoint translates `CODEXBOX_X` to `AICODEBOX_X` when only the codexbox-prefixed one is set. If both are set, `AICODEBOX_X` wins.
 
+### Init scripts and user bin
+
+`$HOME/.aicodebox/bin` is on `PATH` ahead of everything else, for codex, for init scripts, and for `docker exec` shells. `$HOME/.aicodebox/init.d/*.sh` run once per container, after the image's own `/aicodebox-init.d/*.sh`, as `aicode` with passwordless sudo; a failing script is logged and the rest still run. Init now runs once per container rather than once per bind-mounted state directory, so scripts placed there need to tolerate re-running on every new container.
+
 ## Ports
 
 | Port | Default var | Service |
 |---|---|---|
-| 8080 | `CODEXBOX_API_MODE_PORT` | HTTP API (`/run`, `/files`, `/openai/v1/*`) + MCP mounted at `/mcp` when `CODEXBOX_MCP_MODE=1` |
+| 8080 | `CODEXBOX_API_MODE_PORT` | HTTP API (`/run`, `/files`, `/openai/v1/*`) + MCP mounted at `/mcp/` when `CODEXBOX_MCP_MODE=1` |
 | 8081 | `CODEXBOX_MCP_MODE_PORT` | Standalone MCP sidecar — only when MCP mode is on and API mode is not |
 
 No port is exposed by default in Telegram-only or cron-only or shell-only deployments (they're outbound-only / no HTTP surface unless MCP mode is also enabled).

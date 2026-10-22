@@ -17,7 +17,7 @@ installer:
 argument-hint: "[session id / table / index name or describe your DBA task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["MYSQL_AIOPS_CONFIG"],"bins":["mysql-aiops"],"config":["~/.mysql-aiops/config.yaml","~/.mysql-aiops/secrets.enc"]},"optional":{"env":["MYSQL_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"MYSQL_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/MySQL-AIops","emoji":"🐬","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["mysql-aiops","uvx"]},"optional":{"env":["MYSQL_AIOPS_CONFIG","MYSQL_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/MySQL-AIops","emoji":"🐬","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed MySQL/MariaDB DBA operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Connects via PyMySQL (30s timeouts) and reads information_schema / performance_schema; the server flavor (mysql vs mariadb) is detected from version() and flavor-dependent statements branch (SHOW REPLICA STATUS vs SHOW SLAVE STATUS; performance_schema.data_lock_waits vs information_schema.innodb_lock_waits).
   All write operations are audited to a local SQLite DB under ~/.mysql-aiops/ (relocatable via MYSQL_AIOPS_HOME).
@@ -63,6 +63,15 @@ uv tool install mysql-aiops
 mysql-aiops init       # interactive wizard: connection + encrypted password
 mysql-aiops doctor     # connectivity + flavor + performance_schema + replica role
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/mysql-aiops
+openclaw skills info mysql-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

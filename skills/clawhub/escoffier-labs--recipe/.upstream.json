@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/recipe",
   "slug": "recipe",
   "ownerHandle": "escoffier-labs",
-  "version": "1.0.0",
-  "updatedAt": 1778486994957,
-  "contentHash": "e8e821d0f7903bb1ce20596c88aae89c9e8108f50797c5c3f2afff79b6b02f7c",
-  "fetchedAt": "2026-07-26T18:26:44.506Z"
+  "version": "1.0.2",
+  "updatedAt": 1792514933049,
+  "contentHash": "428d4cd820cec757dc0a46691ad840e74ff126e1479a2ee52740f8f510150bb2",
+  "fetchedAt": "2026-10-22T13:15:06.508Z"
 }
