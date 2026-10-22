@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/agent-tools",
+  "repo": "inference-sh/skills",
+  "skillId": "agent-tools",
+  "branch": "main",
+  "pushedAt": "2026-10-15T10:38:25Z",
+  "contentHash": "a35a8b1cae0e1045970c8509348ec1ca6ff8cf330c286269af11b11017d4c84e",
+  "fetchedAt": "2026-10-22T13:02:03.472Z"
+}

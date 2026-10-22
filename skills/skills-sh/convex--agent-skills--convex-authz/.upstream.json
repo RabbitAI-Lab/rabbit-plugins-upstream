@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-authz",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-authz",
+  "branch": "main",
+  "pushedAt": "2026-10-13T21:11:27Z",
+  "contentHash": "ba8e66cfc8ac7012fb25036d14d650cac387545214dec4a488b5a5ed09122227",
+  "fetchedAt": "2026-10-22T13:02:05.921Z"
+}

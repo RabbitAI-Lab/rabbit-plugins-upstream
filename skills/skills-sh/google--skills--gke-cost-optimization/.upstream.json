@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-cost-optimization",
+  "repo": "google/skills",
+  "skillId": "gke-cost-optimization",
+  "branch": "main",
+  "pushedAt": "2026-10-22T08:54:18Z",
+  "contentHash": "f71ffd6ff64b56dc7ef4d435f7bf4433a1341b85660f5f382caca762c07c0b6c",
+  "fetchedAt": "2026-10-22T13:03:40.275Z"
+}

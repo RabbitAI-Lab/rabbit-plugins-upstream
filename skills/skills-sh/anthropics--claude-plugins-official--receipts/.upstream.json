@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/receipts",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "receipts",
+  "branch": "main",
+  "pushedAt": "2026-10-22T07:41:13Z",
+  "contentHash": "4bd540cba36b445a39d347e46ab3709804cae31bbe3e0227efebc7e63ad5958b",
+  "fetchedAt": "2026-10-22T13:03:44.051Z"
+}
