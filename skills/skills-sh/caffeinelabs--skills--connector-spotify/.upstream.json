@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/caffeinelabs/skills/connector-spotify",
+  "repo": "caffeinelabs/skills",
+  "skillId": "connector-spotify",
+  "branch": "main",
+  "pushedAt": "2026-10-22T10:17:12Z",
+  "contentHash": "fd050e77fef5c58d3efff00922809775c70cc271afa8063d90086d69738d8601",
+  "fetchedAt": "2026-10-23T12:45:18.450Z"
+}

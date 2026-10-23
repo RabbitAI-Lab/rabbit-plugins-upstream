@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wind-alice/alicemarket/sector_rotation_radar_skill",
+  "repo": "wind-alice/alicemarket",
+  "skillId": "sector_rotation_radar_skill",
+  "branch": "main",
+  "pushedAt": "2026-10-15T11:25:59Z",
+  "contentHash": "e66c4d19724a8cbc58ad686682ec0de67f9636aa1a21378643569f3b18d8b1aa",
+  "fetchedAt": "2026-10-23T12:45:11.509Z"
+}
