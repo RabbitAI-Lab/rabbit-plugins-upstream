@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-troubleshoot-and-report-bugs",
+  "identifier": "NVIDIA/skills/skills/nvshmem-troubleshoot-and-report-bugs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-troubleshoot-and-report-bugs",
+  "branch": "main",
+  "pushedAt": "2026-10-23T12:17:23Z",
+  "contentHash": "c0b26c5b2d807d7271b4f13625dddcd289eded5bcc1997dfed75e91845d51ec9",
+  "fetchedAt": "2026-10-23T12:41:12.164Z"
+}

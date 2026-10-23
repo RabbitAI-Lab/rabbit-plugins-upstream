@@ -22,16 +22,16 @@ Routing for nearby "install" questions:
 
 - *"The binary isn't there — do I need to install something?"*
   → yes. Route to
-  [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
+  `doca-setup ## configure` (`doca-setup/TASKS.md#configure`)
   for the DOCA install or to
-  [`doca-setup ## no-install`](../../doca-setup/TASKS.md#no-install)
+  `doca-setup ## no-install` (`doca-setup/TASKS.md#no-install`)
   for the NGC DOCA container path.
 - *"My device class is not DPA-capable — can I install a
   workaround?"* → no. Per the device-preconditions table in
   [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes),
   BlueField-2 and pre-ConnectX-7 are not in the supported set.
   The right answer is host-side
-  [`doca-flow-perf`](../doca-flow-perf/SKILL.md), not a
+  `doca-flow-perf/SKILL.md`, not a
   workaround.
 
 ## configure
@@ -46,12 +46,12 @@ the agent has to *configure* is the precondition + device-split
 Steps the agent should walk the user through, in order:
 
 1. **Confirm DOCA is installed and the device is DPA-capable.**
-   Run [`doca-setup ## test`](../../doca-setup/TASKS.md#test);
+   Run `doca-setup ## test` (`doca-setup/TASKS.md#test`);
    cross-check against the device-preconditions table in
    [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes).
    If the device is BlueField-2 or pre-ConnectX-7, this is
    the wrong tool — route to
-   [`doca-flow-perf`](../doca-flow-perf/SKILL.md).
+   `doca-flow-perf/SKILL.md`.
 2. **Confirm VNF Flow mode and supported device target.** Per
    the shipped README, VNF mode is required and SFs are not
    supported. PF is recommended; VF is supported. Confirm the
@@ -73,12 +73,16 @@ Steps the agent should walk the user through, in order:
    burst size, queue size, completion threshold, number of
    PSL tables, table size, number of workers, hash pipe algo,
    work policy, warmup, pipeline policy. Defaults belong to
-   the shipped README on the user's install; quote the README,
-   do not infer.
+   the shipped README on the user's install. If the README
+   omits one, check the installed binary's `--help`; if both
+   are silent, stop and request an explicit operator value.
+   Never infer a default.
 6. **Pick the self-test posture.** The self-test path is
-   off by default; enable it only when end-to-end correctness
-   (not just throughput) is the question. The README documents
-   the tcpdump-side verification step.
+   enabled only when end-to-end correctness (not just
+   throughput) is the question. Resolve its default through
+   the shipped README, then installed `--help`; if neither
+   defines it, stop and ask the operator to choose explicitly.
+   The README documents the tcpdump-side verification step.
 7. **Sanity check before any invocation.** Confirm with the
    user: what is the question (throughput? correctness? a
    sweep)? Which device-class? Which workload shape? If any
@@ -86,7 +90,7 @@ Steps the agent should walk the user through, in order:
 
 For the canonical DOCA universal lifecycle that underlies
 program-side configuration (which the tool runs internally),
-see [`doca-programming-guide TASKS.md ## configure`](../../doca-programming-guide/TASKS.md#configure).
+see `doca-programming-guide TASKS.md ## configure` (`doca-programming-guide/TASKS.md#configure`).
 This skill is concerned with the *operator*-side configuration
 of the tool invocation, not the program-side lifecycle of
 `doca-flow` or `doca-dpa` underneath.
@@ -105,10 +109,10 @@ Routing for nearby "build" questions:
   Route to [`## install`](#install).
 - *"I want to build my own DPA-Flow perf harness."* → not a
   `doca_flow_dpa_perf` question. Route to
-  [`doca-programming-guide ## build`](../../doca-programming-guide/TASKS.md#build)
+  `doca-programming-guide ## build` (`doca-programming-guide/TASKS.md#build`)
   plus
   `doca-dpa ## build` and
-  [`doca-flow TASKS.md ## build`](../../libs/doca-flow/TASKS.md#build)
+  `doca-flow TASKS.md ## build` (`doca-flow/TASKS.md#build`)
   for the library-specific build overlays. The tool is the
   shipped harness; a bespoke harness is a different artifact.
 - *"I want to extend the tool with a new workload axis."* →
@@ -140,9 +144,9 @@ Routing for nearby "modify" questions:
   tool to report something else?"* → no. The metric is what
   it is. If the user's question is genuinely outside the
   tool's surface, route to
-  [`doca-flow-tune`](../doca-flow-tune/SKILL.md) for
+  `doca-flow-tune/SKILL.md` for
   optimization-class questions, or to
-  [`doca-flow-perf`](../doca-flow-perf/SKILL.md) for the host
+  `doca-flow-perf/SKILL.md` for the host
   / DPU-CPU path's measurement surface.
 
 ## run
@@ -159,10 +163,12 @@ verbatim command lines (per
    [`## configure`](#configure) steps 1-3. The device must
    be DPA-capable, VNF mode active, not an SF.
 2. **Smoke run — small operations, few iterations, warmup
-   enabled.** Pick the smallest defensible values per the
-   shipped README's defaults (small `num-operations`, small
-   `num-iterations`, warmup on, single worker, identity or
-   random algo). Goal: *the tool binds the devices, the
+   enabled.** Resolve each value from the shipped README's
+   defaults first, then the installed binary's `--help`.
+   If neither defines a needed value, stop and request an
+   explicit value rather than inventing one. Use a small
+   operation count and iteration count only when the selected
+   source or operator explicitly supplies them. Goal: *the tool binds the devices, the
    DPA path starts, and per-iteration stats land in a
    defensible range*. Not a usable performance number.
 3. **Read the printed parameter set.** Per the shipped
@@ -187,7 +193,7 @@ verbatim command lines (per
    default values, ranges, sweep families** read `--help`
    on the installed binary and the shipped README plus the
    public DOCA Flow DPA Perf guide via
-   [`doca-public-knowledge-map ## DOCA tools`](../../doca-public-knowledge-map/SKILL.md#doca-tools).
+   `doca-public-knowledge-map ## DOCA tools` (`doca-public-knowledge-map/SKILL.md#doca-tools`).
    Do **not** invent any of these.
 
 When recording the run for downstream consumers, write down:
@@ -221,10 +227,10 @@ just one workload):
 | Iteration trigger | What it looks like | What changes next iteration |
 | --- | --- | --- |
 | Smoke completed; Kops/sec is far below datasheet headline | Could be cold pipeline, wrong workload shape, wrong device class for this DPA, or actually-right for this install. Do not assume datasheet first. | Confirm warmup applied per [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy) layer 5; re-check the workload-shape axes per [`## configure`](#configure) step 5; only then question hardware. |
-| Per-iteration variance is high (standard deviation > a small fraction of median) | Steady-state not reached or outlier-dominated | Lengthen the run via `num-iterations`; if still volatile, isolate the device from other workloads; consider NUMA pinning. |
+| Per-iteration variance fails the acceptance criterion supplied by the shipped README or the benchmark owner | Steady-state not reached or outlier-dominated | Lengthen the run via the documented `num-iterations` control; if still volatile, isolate the device from other workloads; consider NUMA pinning. Do not invent a variance threshold. |
 | Self-test path-selector sentinel does not appear on the wire | Traffic was not sent during the pause, or the configured ports do not match the operator's traffic generator | Re-walk the README's self-test section; confirm the tcpdump filter matches the configured device. |
-| Same invocation produces different numbers on two hosts at the same DOCA version | NUMA / firmware / driver delta below DOCA | Walk axis 2 environment (cores / threads / NUMA) and the version layer per [`doca-version TASKS.md ## test`](../../doca-version/TASKS.md#test) before blaming the tool. |
-| Same invocation produces different numbers on the same host across DOCA versions | This *is* a regression signal — provided both four-tuples are captured | Cross-link the two baselines, name the changed fields, route to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug) for the version-delta diagnosis. |
+| Same invocation produces different numbers on two hosts at the same DOCA version | NUMA / firmware / driver delta below DOCA | Walk axis 2 environment (cores / threads / NUMA) and the version layer per `doca-version TASKS.md ## test` (`doca-version/TASKS.md#test`) before blaming the tool. |
+| Same invocation produces different numbers on the same host across DOCA versions | This *is* a regression signal — provided both four-tuples are captured | Cross-link the two baselines, name the changed fields, route to `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`) for the version-delta diagnosis. |
 | DPA-perf number vs host-side Flow-perf number are compared without naming the tool | This is the cross-tool apples-to-oranges failure | Restate which number came from which tool; the two are not interchangeable per [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes). |
 
 The agent's rule: every change to the invocation re-opens the
@@ -262,7 +268,7 @@ layers in order:
    units / values are in the documented form.
 2. **Device-binding.** Confirm the active / passive PCI
    addresses exist on the host via
-   [`doca-caps ## run`](../doca-caps/TASKS.md#run);
+   `doca-caps ## run` (`doca-caps/TASKS.md#run`);
    confirm the device class is in the supported set; confirm
    the device target is not an SF.
 3. **DPA-precondition.** Confirm VNF Flow mode; confirm the
@@ -281,11 +287,11 @@ layers in order:
 6. **Self-test.** If self-test was enabled and failed,
    re-walk the README's self-test section.
 7. **Version.** Walk
-   [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug)
+   `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`)
    end-to-end.
 8. **Cross-cutting.** Hand off to
-   [`doca-debug ## debug`](../../doca-debug/SKILL.md) and
-   [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug).
+   `doca-debug ## debug` (`doca-debug/SKILL.md`) and
+   `doca-setup ## debug` (`doca-setup/TASKS.md#debug`).
 
 In every case: **quote what the tool reported**, including
 the iteration-stats block and the self-test output if it
@@ -312,10 +318,10 @@ larger conversation with the user.
    the agent must surface before quoting the number.
 4. **Cross-link to the host-side Flow-perf number** (if
    the user is comparing). Per
-   [`doca-flow-perf`](../doca-flow-perf/SKILL.md), the host
+   `doca-flow-perf/SKILL.md`, the host
    tool's number is *not* directly comparable to a DPA-perf
    number; they measure different paths.
-5. **Route to [`doca-flow-tune`](../doca-flow-tune/SKILL.md)
+5. **Route to `doca-flow-tune/SKILL.md`
    only after the agent confirms the baseline is sound.**
    Optimization on top of an unsound baseline is the
    canonical wasted-iteration failure mode.
@@ -327,24 +333,24 @@ be routed out before the agent does any of them under this
 skill's name.
 
 - **measure the host / DPU-CPU Flow path** ⇒
-  [`doca-flow-perf`](../doca-flow-perf/SKILL.md). This tool
+  `doca-flow-perf/SKILL.md`. This tool
   measures the DPA path only.
 - **optimize a Flow pipeline against a baseline** ⇒
-  [`doca-flow-tune`](../doca-flow-tune/SKILL.md). Optimization
+  `doca-flow-tune/SKILL.md`. Optimization
   is downstream of measurement.
 - **install DOCA** ⇒
-  [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
-  and [`## no-install`](../../doca-setup/TASKS.md#no-install).
+  `doca-setup ## configure` (`doca-setup/TASKS.md#configure`)
+  and `## no-install` (`doca-setup/TASKS.md#no-install`).
 - **write a doca-flow / doca-dpa application** ⇒
-  [`doca-flow`](../../libs/doca-flow/SKILL.md) +
+  `doca-flow/SKILL.md` +
   `doca-dpa`, layered on
-  [`doca-programming-guide`](../../doca-programming-guide/SKILL.md).
+  `doca-programming-guide/SKILL.md`.
   The tool is the shipped harness; a bespoke application is
   a different artifact.
 - **streaming telemetry / live metrics export** ⇒ not a
   feature of this tool. The DOCA Telemetry Service (DTS) is
   the documented telemetry surface; routing belongs in
-  [`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services).
+  `doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`).
 
 ## Command appendix
 
@@ -356,7 +362,7 @@ Flow DPA Perf guide.
 
 **Infra-aware preamble (every row below).** Per the bundle's
 detect → prefer → fall back → report contract documented in
-[`doca-structured-tools-contract ## The agent behavior contract`](../../doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract),
+`doca-structured-tools-contract ## The agent behavior contract` (`doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract`),
 the agent should:
 
 1. Probe for the matching structured helper FIRST
@@ -367,36 +373,38 @@ the agent should:
 3. If the probe fails, fall back to the manual command in
    the row.
 4. The schemas the structured tools emit are defined in
-   [`doca-structured-tools-contract ## Schemas`](../../doca-structured-tools-contract/SKILL.md#schemas);
+   `doca-structured-tools-contract ## Schemas` (`doca-structured-tools-contract/SKILL.md#schemas`);
    the version-handling semantics are owned by
-   [`doca-version`](../../doca-version/SKILL.md).
+   `doca-version/SKILL.md`.
 
 | Purpose (class) | Invocation (shape) | Owning step | Reads as healthy when … |
 | --- | --- | --- | --- |
 | Discover the documented flag surface | `doca_flow_dpa_perf --help` plus the shipped README plus the public DOCA Flow DPA Perf guide | [`## configure`](#configure) step 1 + [`## debug`](#debug) layer 1 | Prints the documented flag inventory; the agent uses this as the only source of truth for flag names. |
-| Confirm device class is DPA-capable | The device-preconditions table in [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes); cross-check via [`doca-caps ## run`](../doca-caps/TASKS.md#run) | [`## configure`](#configure) step 1 + [`## debug`](#debug) layer 3 | The device is ConnectX-7+ or BlueField-3; not BlueField-2 / earlier ConnectX. |
+| Confirm device class is DPA-capable | The device-preconditions table in [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes); cross-check via `doca-caps ## run` (`doca-caps/TASKS.md#run`) | [`## configure`](#configure) step 1 + [`## debug`](#debug) layer 3 | The device is ConnectX-7+ or BlueField-3; not BlueField-2 / earlier ConnectX. |
 | Smoke run — single-worker update | The documented invocation against an active (or active + passive) PCI device with small `num-operations`, small `num-iterations`, warmup enabled | [`## run`](#run) steps 2-4 | The iteration-stats block reports low standard deviation; the Kops/sec rate is in a defensible order of magnitude for the device class. |
 | Self-test correctness | The documented self-test invocation plus the README's tcpdump-side verification | [`## run`](#run) step 5 | The path-selector sentinel `65432` appears on the wire during the pause; the disable step removes it from the wire after the second pause. |
 | Sweep a workload-shape axis | The documented sweep invocation across a planned range (burst, queue, workers, etc.) | [`## run`](#run) step 6 | The smoke for the boundary values passed first; the sweep completes; the resulting series has no implausible discontinuities. |
 | Capture a baseline alongside the iteration stats | Redirect the tool's stdout to a file (`> dpa-perf-session.txt`) plus the four-tuple captured from `doca-env --json` (or its manual fallback) | [`## test`](#test) baseline-capture rule | A captured file is written; the stdout iteration-stats block is preserved verbatim; the four-tuple accompanies the file. |
-| Cross-link to host-side Flow perf | Capture a matching session with [`doca-flow-perf`](../doca-flow-perf/SKILL.md) on the host / DPU-CPU path; quote each number with its tool name | [`## use`](#use) step 4 | The two captures live alongside each other in the bundle the agent saves; the cross-tool comparison is explicit, not implicit. |
+| Cross-link to host-side Flow perf | Capture a matching session with `doca-flow-perf/SKILL.md` on the host / DPU-CPU path; quote each number with its tool name | [`## use`](#use) step 4 | The two captures live alongside each other in the bundle the agent saves; the cross-tool comparison is explicit, not implicit. |
 
 Three cross-cutting rules for this appendix:
 
 - **Never invent a flag, default value, workload-axis name,
-  or output column header.** `--help` on the installed
-  binary, the shipped README on the user's install, and the
-  public DOCA Flow DPA Perf guide are the joint contract.
+  output column header, or acceptance threshold.** For
+  defaults, use the shipped README first, then installed
+  `--help`; if neither defines the value, stop and request it.
+  The public DOCA Flow DPA Perf guide remains supporting
+  documentation, not a license to infer a missing default.
 - **Smoke before bulk.** Every row above presumes the smoke
   row succeeded first.
 - **Cross-link instead of duplicate.** Cross-cutting
   commands (`pkg-config --modversion`, `doca_caps --list-devs`,
   `dmesg`, `mlxconfig -d <bdf> q`, `numactl --hardware`) live
-  in [`doca-debug TASKS.md ## Command appendix`](../../doca-debug/TASKS.md)
+  in `doca-debug TASKS.md ## Command appendix` (`doca-debug/TASKS.md`)
   and
-  [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug);
+  `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`);
   the host-side Flow-perf commands live in
-  [`doca-flow-perf`](../doca-flow-perf/SKILL.md); the DPA
+  `doca-flow-perf/SKILL.md`; the DPA
   programming-side commands live in
   `doca-dpa`; this appendix
   names only DPA-Flow-Perf-specific invocations on top.
@@ -407,8 +415,9 @@ A few rules that apply across every verb in this file:
 
 - The **public DOCA Flow DPA Perf guide** + the installed
   `--help` + the shipped `README.md` are the joint source of
-  truth. When they disagree, the *installed* `--help` plus
-  the shipped README on the user's version win.
+  truth. Resolve defaults in this strict order: shipped README
+  on the user's version, then installed `--help`, then stop and
+  request an explicit value. Do not guess when both are silent.
 - `doca_flow_dpa_perf` *does* drive hardware and *does*
   allocate DPA resources; smoke-before-bulk is mandatory.
 - **Quote the four-tuple AND the tool name.** Command line
@@ -417,7 +426,7 @@ A few rules that apply across every verb in this file:
   from this tool is meaningful in.
 - This skill **assumes DPA-capable hardware and a healthy
   DOCA install**. If either is in doubt, route to
-  [`doca-setup`](../../doca-setup/SKILL.md),
-  [`doca-version`](../../doca-version/SKILL.md), or
-  [`doca-flow-perf`](../doca-flow-perf/SKILL.md) (for the
+  `doca-setup/SKILL.md`,
+  `doca-version/SKILL.md`, or
+  `doca-flow-perf/SKILL.md` (for the
   host / DPU-CPU path) before running anything else here.

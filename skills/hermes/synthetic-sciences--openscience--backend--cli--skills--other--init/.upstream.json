@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/init",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/init",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/init",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "bd11d4777e468b508c324d48788a1bc20c512b7b756ff9855fe4e715d9afdefa",
+  "fetchedAt": "2026-10-23T12:41:10.890Z"
+}

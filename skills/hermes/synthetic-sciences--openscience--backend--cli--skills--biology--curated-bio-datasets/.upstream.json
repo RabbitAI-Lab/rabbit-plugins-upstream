@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/curated-bio-datasets",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/curated-bio-datasets",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/curated-bio-datasets",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "1880670edf5c3e2017036e6a59316c02e9cbf31914f4417273b7b7fa38a87280",
+  "fetchedAt": "2026-10-23T12:41:10.815Z"
+}

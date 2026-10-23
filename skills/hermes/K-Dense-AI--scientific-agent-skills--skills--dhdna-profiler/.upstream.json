@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/dhdna-profiler",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/dhdna-profiler",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/dhdna-profiler",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "02b56384d1e3f99a48cd1be9cfe1241756dcbe32d1335890064575ef521f7137",
+  "fetchedAt": "2026-10-23T12:41:27.128Z"
+}

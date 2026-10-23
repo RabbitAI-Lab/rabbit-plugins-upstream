@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/security/unbroker",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "bbc5f9df52e0893c63557be1fcd14b9d3a28b1075aa517dd83f1816076461653",
-  "fetchedAt": "2026-07-26T17:03:57.025Z"
+  "pushedAt": "2026-10-23T12:22:29Z",
+  "contentHash": "b342dab61816175ce4e1e7ccac56e4b4bb2b11a5aedc2475ff5e2a08fa1e91fb",
+  "fetchedAt": "2026-10-23T12:41:23.967Z"
 }

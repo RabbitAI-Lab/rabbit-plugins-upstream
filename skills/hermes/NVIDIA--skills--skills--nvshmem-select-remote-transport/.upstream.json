@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-select-remote-transport",
+  "identifier": "NVIDIA/skills/skills/nvshmem-select-remote-transport",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-select-remote-transport",
+  "branch": "main",
+  "pushedAt": "2026-10-23T12:17:23Z",
+  "contentHash": "7502430220b58e1e595304d182e897a468b15f0b3ab2b940ae4f0e2f82b54073",
+  "fetchedAt": "2026-10-23T12:41:12.163Z"
+}

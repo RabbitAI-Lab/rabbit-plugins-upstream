@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/anthropics/skills/tree/main/skills/academy-guide",
+  "identifier": "anthropics/skills/skills/academy-guide",
+  "repo": "anthropics/skills",
+  "path": "skills/academy-guide",
+  "branch": "main",
+  "pushedAt": "2026-10-09T18:45:52Z",
+  "contentHash": "61aa370dc88ccef0a3fb0516bc5e025c3ce17627cfa8ee31d84e10d16941d991",
+  "fetchedAt": "2026-10-23T12:41:08.566Z"
+}

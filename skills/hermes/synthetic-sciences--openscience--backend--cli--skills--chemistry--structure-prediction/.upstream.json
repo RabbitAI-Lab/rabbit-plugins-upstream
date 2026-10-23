@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/structure-prediction",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/structure-prediction",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/structure-prediction",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "8af8d0a1e87d4201ad5484d2b1e39e72c0dbcd216f4374a8f834df2b54493277",
+  "fetchedAt": "2026-10-23T12:41:11.013Z"
+}

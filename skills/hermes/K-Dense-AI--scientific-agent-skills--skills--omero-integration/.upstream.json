@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/omero-integration",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/omero-integration",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/omero-integration",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "ab1485a710def5932253c11790dce829e1a5b65f34fed8d65147ab1848f6f68d",
+  "fetchedAt": "2026-10-23T12:41:27.189Z"
+}
