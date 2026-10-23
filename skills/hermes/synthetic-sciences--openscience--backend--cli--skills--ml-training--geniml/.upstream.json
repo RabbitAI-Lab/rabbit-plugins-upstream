@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/geniml",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/geniml",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/geniml",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "a82a0b20dec7e27d5e58bedeb2f565643cbfd63828411e1e0cf658acc764c6fd",
+  "fetchedAt": "2026-10-23T12:41:10.863Z"
+}

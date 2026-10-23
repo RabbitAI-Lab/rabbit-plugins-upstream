@@ -11,6 +11,10 @@ external operator deploying and using DMS. Every step assumes the
 operator has consulted the live public DMS guide on `docs.nvidia.com`
 and is using it as the authoritative reference; this file prescribes
 the *order* and *what to look up where*, not a copy-paste runbook.
+If the version-matched live guide is unavailable, inspect the
+installed `dmsd --help`, SystemD unit, and installed documentation.
+If none is available for the installed release, stop and report the
+version/source gap; do not fall back to remembered flags or paths.
 
 ## configure
 
@@ -19,10 +23,16 @@ Preparing the management endpoint and choosing a deployment shape.
 1. **Confirm the env is healthy first.** This skill expects DOCA to be
    installed at the management endpoint (host, BlueField Arm, or pod
    image base). If that has not been verified, run
-   [`doca-setup ## test`](../../doca-setup/TASKS.md#test) first. If
+   `doca-setup ## test` (`doca-setup/TASKS.md#test`) first. If
    the user has no install yet, route to
-   [`doca-setup ## no-install`](../../doca-setup/TASKS.md#no-install)
-   for the public NGC DOCA container path.
+   `doca-setup ## no-install` (`doca-setup/TASKS.md#no-install`)
+   for the public NGC DOCA container path. Do not return until the
+   `doca-setup ## test` install/version, capability, and smoke checks
+   are green for the management endpoint; run that check once. If it
+   errors or cannot complete under its documented timeout, abort the
+   DMS workflow and route the captured result to
+   `doca-setup ## debug`; do not retry from this skill. A package merely being
+   present is not sufficient.
 2. **Identify the deployment shape.** Read the public DMS guide's
    "Service Deployment" section and map the user's situation to one of
    the documented shapes (Host non-DPU / BlueField Arm / Kubernetes
@@ -39,6 +49,10 @@ Preparing the management endpoint and choosing a deployment shape.
    documented modes (localhost-only / PAM / credentials / mTLS) and
    read the *Security Best Practices* subsection before committing.
    Localhost-only is for development only and must not be exposed.
+   Record the bind scope, credential/certificate source, server trust
+   policy, client-auth requirement, and `-allowed_users` behavior from
+   the live guide; reject a plan that weakens any of those compared
+   with the matching documented recipe.
 5. **Plan user authorization.** Identify the human/service users who
    will issue DMS commands over gRPC and ensure they are in the
    `-allowed_users` list (default `root`; enforced by `isUserAllowed`
@@ -68,7 +82,7 @@ language, the right routing is:
 If the user is instead asking about building **a DOCA application** in
 the general sense (linking against `libdoca-*`), that is *not* a DMS
 question — route them to
-[`doca-programming-guide ## build`](../../doca-programming-guide/TASKS.md#build)
+`doca-programming-guide ## build` (`doca-programming-guide/TASKS.md#build`)
 and the matching `libs/<library>` skill.
 
 ## modify
@@ -90,7 +104,10 @@ deployment recipe to the user's environment**:
    widens the surface for an unintended exposure.
 4. **Re-validate against the Security Best Practices subsection.**
    Each substitution is a chance to accidentally weaken the documented
-   posture (e.g. binding the localhost-only mode to `0.0.0.0`).
+   posture. Re-check the five recorded controls from configure step 4:
+   bind scope, secret/certificate source, server trust, client auth,
+   and `-allowed_users`. Any unapproved widening (for example binding
+   localhost-only mode to `0.0.0.0`) is a stop condition.
 
 ## run
 
@@ -106,9 +123,15 @@ Bringing up `dmsd` and exercising it.
    Method / Security flag families. Quote flags from the live guide;
    do not infer flags from generic gRPC knowledge.
 3. **Verify the daemon is reachable.** Use a documented gNMI `Get`
-   against a known-supported State path as a connectivity probe.
-   "Documented" matters: a `Get` against an unsupported path returns
-   an error from `dmsd` regardless of whether the daemon is healthy.
+   against a known-supported State path as a connectivity probe, and
+   give the operator that command. "Documented" matters: a `Get`
+   against an unsupported path returns an error from `dmsd`
+   regardless of whether the daemon is healthy.
+
+   When the probe fails, name where to look rather than closing with
+   "check the logs": report the gRPC status code it returned, then
+   `journalctl -u dmsd` for frontend transport and auth failures, or
+   the `dmspe` backend log for tool-execution failures.
 4. **Verify authorization works as expected.** Confirm a user in the
    `-allowed_users` list can issue gRPC commands and a user outside it
    cannot. If the test fails, the failure is at the authorization
@@ -125,50 +148,78 @@ the operator should know which sub-operation they are invoking and
 why.
 
 > **⚠️ Destructive and irreversible — confirm before issuing.** `OS
-> install`, `Reboot`, and `Factory-reset` are service-impacting and
+> install`, `Reboot`, `Factory-reset`, and managed-file deletion are service-impacting and
 > cannot be undone: they can take a production BlueField or ConnectX
 > offline or wipe its configuration. Before issuing any of them the
-> agent MUST (1) verify the target device identity and (2) get explicit
-> user confirmation for that specific action. Never issue them
+> agent MUST (1) verify the target device identity and (2) obtain
+> authorization bound to that target and action: an explicit user reply
+> in an interactive session or an approved-system authorization artifact
+> in unattended execution. Otherwise stop with `confirmation_required`. Never issue them
 > speculatively or as an implicit side effect of another task.
 
 ## test
 
 DMS has no "compile and unit-test" workflow — testing is operational.
 
-**`## test` is an iterative loop, not a one-shot pass.** Every
+**`## test` is a bounded iterative loop, not a one-shot pass.** Every
 configuration mutation (auth mode, listener, `-allowed_users`
 membership, persistency setting) re-opens the smoke sweep. Skipping the re-run
-after a mutation is the failure mode this loop replaces.
+after a mutation is the failure mode this loop replaces. Permit one
+mutation-and-rerun cycle total per test invocation, regardless of which
+back-edge or failure class consumes it. If the second sweep reveals any
+failure, including a different failure class, do not take another
+back-edge. Return a diagnostic bundle to the operator containing all
+smoke results, collected debug-layer outputs, and the capability
+snapshot when step 4 completed; otherwise state that the snapshot was
+not reached. Mark the result `requires_human_decision` instead of
+iterating again or invoking another skill automatically.
+
+**Green criteria:** the daemon returns the expected shape for a
+documented `Get`; the configured auth mode rejects the documented
+negative request (or, for localhost-only mode, the listener is
+loopback-only and unreachable remotely); the required isolated
+persistency probe survives restart and
+is rolled back; and the capability snapshot matches the selected
+deployment shape.
 
 The eval-loop overlay (rows apply to every DMS deployment, not just one
 topology):
 
 | Step | Why this is a loop, not a step | Where the substance lives |
 | --- | --- | --- |
-| 1 → 4 → 1 | Capability-snapshot drift (step 4) often reveals an as-deployed gap that needs a configuration change; loop back to step 1 | [`## test`](#test) step 4 |
+| 4 → ## modify → 1 | Capability-snapshot drift often reveals an as-deployed gap that needs a configuration change; apply the minimum documented recipe change in `## modify`, then restart the test sweep at step 1 | [`## test`](#test) step 4 |
 | 2 → ## debug | When the auth-mode smoke does NOT reject what it should, the deployment is unsafe — escalate to `## debug` immediately, do not run later steps | [`## debug`](#debug) |
-| 3 → ## configure → 3 | When persistency does not survive restart, the persistency configuration is wrong — loop back to `## configure` and re-run step 3 | [`## configure`](#configure) |
+| 3 → ## run step 2 → 1 | When persistency does not survive restart, re-check the documented persistency launch flag/state-file configuration in `## run` step 2, then restart the test sweep at step 1 | [`## run`](#run) step 2 |
 | 1..4 → ## run | Each loop iteration ends with a documented smoke; if all four pass, hand off to live `## run` traffic | [`## run`](#run) |
 
 The agent's rule: every mutation re-opens the sweep. A
 configuration change followed by "it probably still works" is exactly
 the failure mode the iterative loop is here to prevent.
 
+The destructive-operation gate remains active inside both `## test`
+and `## debug`: no OS install, reboot, factory reset, or managed-file
+deletion may be used as a probe or recovery action without re-verifying the exact target and
+obtaining confirmation for that specific operation.
+
 1. **Smoke-test the daemon.** After launch (`## run` step 3), confirm
    the daemon answers a documented gNMI `Get` and returns expected
    shape.
-2. **Smoke-test the auth mode.** Confirm the chosen authentication
-   mode rejects unauthenticated/unauthorized requests as documented.
+2. **Smoke-test the auth mode.** For credentialed modes, confirm the
+   chosen mode rejects unauthenticated/unauthorized requests as documented.
    For mTLS, this means an explicit "request without cert is
    rejected" check. For PAM, this means an "user not in `allowed_users`
-   is rejected" check.
-3. **Smoke-test persistency.** If the deployment relies on
-   configuration persistency, set a benign value, restart `dmsd`,
-   and verify the value survives. The documented state restoration
-   mechanism is what is being exercised; if it does not behave as
-   documented, that is a bug to file (against DMS, not DOCA Flow or
-   any library).
+   is rejected" check. Localhost-only has no authentication: its
+   negative test is that `dmsd` is bound only to loopback and cannot be
+   reached through a non-loopback interface.
+3. **Smoke-test persistency only on an isolated test path.** If the
+   deployment relies on persistency, have the operator select a
+   documented, reversible path on a test-only interface/instance,
+   snapshot its current value, set a distinct test value, restart
+   `dmsd`, verify the value survives, then restore and verify the
+   snapshot. If no isolated reversible path exists, skip the mutation
+   and mark persistency `not_tested`; when persistency is required this
+   keeps the sweep not-green and blocks completion. Never improvise a
+   "benign" value on production state.
 4. **Capability snapshot.** Save the *as-deployed* answer to: which
    gNMI paths your environment supports, which gNOI operations your
    environment supports, which auth mode is active, who is in the
@@ -208,8 +259,14 @@ without clearing the layer above.
    reached `dmspe` and the underlying tool (e.g. `mlxconfig`, OS
    installer, file system) returned an error. Resolution: extract
    the underlying-tool error from the response and consult that
-   tool's own documentation. DMS is the conduit, not the source of
-   truth for the underlying tool's failures.
+   tool's own documentation. Preserve the raw gRPC status code,
+   message, and documented details fields verbatim. If the selected
+   release documents no nested error field, capture the complete
+   sanitized response and stop rather than guessing which substring
+   belongs to the backend. Return that response as the diagnostic
+   artifact and mark the diagnosis blocked pending the underlying
+   tool's documentation. DMS is the conduit, not the source of truth
+   for the underlying tool's failures.
 5. **State persistency layer.** Symptoms: a previously-set value
    does not survive a daemon restart. Resolution: confirm automatic
    recording is enabled (it can be disabled per the docs), confirm
@@ -219,7 +276,7 @@ without clearing the layer above.
 6. **Library-level errors.** If DMS is acting as a thin wrapper over
    a DOCA library call and that library returned `DOCA_ERROR_*`, the
    relevant cross-library taxonomy lives in
-   [`doca-programming-guide CAPABILITIES.md ## Error taxonomy`](../../doca-programming-guide/CAPABILITIES.md#error-taxonomy).
+   `doca-programming-guide CAPABILITIES.md ## Error taxonomy` (`doca-programming-guide/CAPABILITIES.md#error-taxonomy`).
    The library-specific overlay (e.g. for Flow) lives in the
    matching `libs/<library>` skill.
 
@@ -236,11 +293,11 @@ SystemD unit file, not prose recall.
 | Daemon lifecycle (SystemD) | `systemctl status dmsd` / `start` / `stop` / `restart` | [`## run`](#run) | `active (running)` with no recent restart loops. |
 | Daemon launch (manual) | `dmsd --help` first, then the documented flag set | [`## run`](#run) | Daemon binds the documented listener and emits the expected startup banner. |
 | Daemon logs (frontend) | `journalctl -u dmsd --since "5 min ago"` or the documented log file | [`## debug`](#debug) layer Transport/Auth | Lines present for the request window; no auth-rejection storm. |
-| Daemon logs (backend) | The documented `dmspe` log destination | [`## debug`](#debug) layer Backend | Backend execution lines present; tool stderr captured. |
-| Sanity gNMI Get | A gNMI `Get` on a documented path (e.g. `/system/state/hostname`) | [`## test`](#test) step 1 | Returns the expected typed value. |
-| Sanity gNMI Set | A gNMI `Set` on a benign path the user controls | [`## test`](#test) step 1 | Returns success; subsequent `Get` reflects the new value. |
+| Daemon logs (backend) | `journalctl -u dmspe --since "5 min ago"`, or the `dmspe` log file the launch flags set | [`## debug`](#debug) layer Backend | Backend execution lines present; tool stderr captured. |
+| Sanity gNMI Get | A gNMI `Get` on a path copied verbatim from the installed/public DMS guide for this release; do not substitute a generic OpenConfig example | [`## test`](#test) step 1 | Returns the expected typed value. |
+| Sanity gNMI Set | A gNMI `Set` on a documented, reversible path selected by the operator on a test-only interface/instance; snapshot first, then restore and verify as in test step 3 | [`## test`](#test) step 3 | Returns success; subsequent `Get` reflects the test value, then the restored snapshot. |
 | gNOI sanity (read-only) | A gNOI `System.Time` (or equivalent read-only op the guide lists) | [`## test`](#test) step 1 | Returns the expected time / status. |
-| Auth-mode negative test | A request *without* credentials | [`## test`](#test) step 2 | Frontend rejects with the documented `PERMISSION_DENIED` / `UNAUTHENTICATED`. |
+| Auth-mode negative test | Credentialed mode: request without credentials. Localhost-only: connection attempt through a non-loopback interface | [`## test`](#test) step 2 | Credentialed mode rejects as documented; localhost-only is unreachable off loopback. |
 | Persistency check | Set a value, restart `dmsd`, re-`Get` | [`## test`](#test) step 3 | The previously set value survives the restart. |
 | Capability snapshot | A documented gNMI `Get` enumerating supported paths / ops | [`## test`](#test) step 4 | Output matches the deployment-shape capability matrix. |
 | Cross-cutting health | `ss -tlnp \| grep dmsd` (port listener), `ps -ef \| grep dmsd` | [`## debug`](#debug) layer Transport | Daemon listens on the documented port; one `dmsd` process. |
@@ -257,21 +314,21 @@ Three cross-cutting rules for this appendix:
   backend.
 - **Cross-link instead of duplicate.** Cross-cutting commands (the
   read-only triple, `dmesg`, `mlxconfig -d <pcie> q`) live in
-  [`doca-debug TASKS.md ## Command appendix`](../../doca-debug/TASKS.md#command-appendix);
+  `doca-debug TASKS.md ## Command appendix` (`doca-debug/TASKS.md#command-appendix`);
   this appendix names only the DMS-specific ones.
 
 ## Deferred task verbs
 
 - **Installing DOCA on the management endpoint** — out of scope here.
-  Route to [`doca-setup ## configure`](../../doca-setup/TASKS.md#configure)
+  Route to `doca-setup ## configure` (`doca-setup/TASKS.md#configure`)
   for env preparation and
-  [`doca-setup ## test`](../../doca-setup/TASKS.md#test) for install
+  `doca-setup ## test` (`doca-setup/TASKS.md#test`) for install
   health verification, or
-  [`doca-setup ## no-install`](../../doca-setup/TASKS.md#no-install)
+  `doca-setup ## no-install` (`doca-setup/TASKS.md#no-install`)
   for the public NGC DOCA container Path 0 if there is no DOCA install
   yet.
 - **Building a custom DOCA application** — not a DMS question. Route
-  to [`doca-programming-guide ## build`](../../doca-programming-guide/TASKS.md#build)
+  to `doca-programming-guide ## build` (`doca-programming-guide/TASKS.md#build`)
   for the canonical build pattern, plus the matching `libs/<library>`
   skill for the API surface.
 - **Turnkey telemetry aggregation** — out of scope for DMS. DMS's own
@@ -279,7 +336,7 @@ Three cross-cutting rules for this appendix:
   only `POLL` / `Aggregation` are Unimplemented); for a productized
   telemetry-aggregation surface, route to the DOCA Telemetry Service
   (DTS), discoverable through
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md).
+  `doca-public-knowledge-map/SKILL.md`.
 - **Library-internal API questions** (Flow pipe construction, RDMA
   queue setup, …) — outside DMS. Route to the matching
   `libs/<library>` skill.
@@ -296,4 +353,4 @@ Three cross-cutting rules for this appendix:
 - All operational guidance must preserve the documented two-process
   separation (`dmsd` low-priv frontend, `dmspe` privileged backend).
 - For URL routing to the DMS guide and other public DOCA documentation,
-  see [doca-public-knowledge-map ## DOCA services](../../doca-public-knowledge-map/SKILL.md#doca-services).
+  see doca-public-knowledge-map ## DOCA services (`doca-public-knowledge-map/SKILL.md#doca-services`).

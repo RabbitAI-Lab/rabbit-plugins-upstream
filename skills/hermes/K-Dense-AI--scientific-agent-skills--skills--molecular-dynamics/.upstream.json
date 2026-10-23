@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/molecular-dynamics",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/molecular-dynamics",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/molecular-dynamics",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "e502e1cb11f508c411bdb4805ff063873b20474fea17e4d35269dd8a9c944e8a",
+  "fetchedAt": "2026-10-23T12:41:27.181Z"
+}

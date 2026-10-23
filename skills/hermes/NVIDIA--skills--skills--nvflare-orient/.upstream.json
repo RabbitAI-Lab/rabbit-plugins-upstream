@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-orient",
+  "identifier": "NVIDIA/skills/skills/nvflare-orient",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-orient",
+  "branch": "main",
+  "pushedAt": "2026-10-23T12:17:23Z",
+  "contentHash": "f0503de57d9319b7c45f67dfc7db8803e95cc1305f1afe926a2ad5f7ed7c7956",
+  "fetchedAt": "2026-10-23T12:41:12.148Z"
+}

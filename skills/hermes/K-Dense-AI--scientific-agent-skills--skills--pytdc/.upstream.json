@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pytdc",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pytdc",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pytdc",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "3a79da3211cd39d2917767dc6c18a050cb2c74564fdca883227177c15b1630bb",
+  "fetchedAt": "2026-10-23T12:41:27.233Z"
+}

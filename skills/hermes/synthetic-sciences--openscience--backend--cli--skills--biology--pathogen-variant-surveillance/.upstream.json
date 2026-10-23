@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pathogen-variant-surveillance",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pathogen-variant-surveillance",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pathogen-variant-surveillance",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "30227f6bb85ed7885a4091563c98fffeaa635857c03e624ef11233956e273967",
+  "fetchedAt": "2026-10-23T12:41:10.948Z"
+}

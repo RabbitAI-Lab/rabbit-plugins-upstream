@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/research/market-research-reports",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/research/market-research-reports",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/research/market-research-reports",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "21d3a8c4aef25861cd0b1918a1f371d6e8bf8429a543f9291fb343fed93cd0af",
+  "fetchedAt": "2026-10-23T12:41:10.910Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-train-dinov3",
+  "identifier": "NVIDIA/skills/skills/tao-train-dinov3",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-train-dinov3",
+  "branch": "main",
+  "pushedAt": "2026-10-23T12:17:23Z",
+  "contentHash": "7ae78ff06cae5cbac83f14480f598b1ffb08d24ade50bd628e267ede817ff63d",
+  "fetchedAt": "2026-10-23T12:41:12.429Z"
+}

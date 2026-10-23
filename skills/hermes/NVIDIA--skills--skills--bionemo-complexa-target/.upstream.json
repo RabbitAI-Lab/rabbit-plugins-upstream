@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-complexa-target",
+  "identifier": "NVIDIA/skills/skills/bionemo-complexa-target",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-complexa-target",
+  "branch": "main",
+  "pushedAt": "2026-10-23T12:17:23Z",
+  "contentHash": "064c1fe03dacd44ad7af5624050dbcae936f2f7a8907f6fa35b3b269ca67d0b3",
+  "fetchedAt": "2026-10-23T12:41:11.817Z"
+}
