@@ -1,0 +1,839 @@
+import sys
+import os
+import json
+import asyncio
+import argparse
+import threading
+
+import anyio
+from typing import Any, Dict, Optional, Tuple
+
+_project_root = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+if _project_root not in sys.path:
+    sys.path.insert(0, _project_root)
+
+from scripts._paths import get_skill_root
+_skill_root = str(get_skill_root())
+if _skill_root not in sys.path:
+    sys.path.insert(0, _skill_root)
+
+from mcp.server import Server
+from mcp.server.stdio import stdio_server
+from mcp.types import Tool, TextContent
+
+TOOLS = [
+
+    Tool(
+        name="get_registered_cameras",
+        description="读取 config.yaml 中所有已注册摄像头配置（含凭据），不扫描网络。会话开始时首先调用。",
+        inputSchema={
+            "type": "object",
+            "properties": {},
+            "required": [],
+        },
+    ),
+    Tool(
+        name="register_camera",
+        description="将摄像头凭据写入 config.yaml 持久化。支持按 IP/SN 匹配自动替换旧条目（重命名）。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "name": {"type": "string", "description": "摄像头唯一名称"},
+                "ip": {"type": "string", "description": "IP 地址"},
+                "port": {"type": "integer", "description": "ONVIF 端口（只传验证过的真实端口；未知请省略，由 connect_device 探测后自动回写）"},
+                "username": {"type": "string", "description": "登录用户名", "default": "admin"},
+                "password": {"type": "string", "description": "登录密码"},
+                "rtsp_port": {"type": "integer", "description": "RTSP 端口", "default": 554},
+                "rtsp_path": {"type": "string", "description": "主流路径", "default": "/stream1"},
+                "device_class": {"type": "string", "description": "设备类型: password_required / direct_connect"},
+                "connection_type": {"type": "string", "description": "连接类型: onvif", "default": "onvif"},
+                "sn_code": {"type": "string", "description": "序列号"},
+                "pkdk": {"type": "string", "description": "设备公钥标识"},
+                "rtsp_sub_path": {"type": "string", "description": "子流路径", "default": "/stream2"},
+            },
+            "required": ["name"],
+        },
+    ),
+    Tool(
+        name="search_devices",
+        description="扫描局域网发现可用摄像头。发现多个设备时必须全部展示给用户，不得省略。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "timeout": {
+                    "type": "number",
+                    "description": "超时秒数",
+                    "default": 15.0,
+                },
+            },
+        },
+    ),
+    Tool(
+        name="connect_device",
+        description="连接摄像头。自动处理凭据缓存、云端授权和密码请求。返回 status 指示结果：success / needs_password / auth_rejected / cloud_pwd_failed。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "password": {"type": "string", "description": "用户密码（可选）"},
+                "ip": {"type": "string", "description": "设备 IP"},
+                "port": {"type": "integer", "description": "ONVIF 端口"},
+                "rtsp_port": {"type": "integer", "description": "RTSP 端口"},
+                "rtsp_path": {"type": "string", "description": "RTSP 路径"},
+                "username": {"type": "string", "description": "登录用户名"},
+                "sn_code": {"type": "string", "description": "设备 SN（发现阶段获取，云端授权必需）"},
+                "device_class": {"type": "string", "description": "设备类型: password_required / direct_connect（发现阶段确定）"},
+                "protocol_type": {"type": "string", "description": "设备协议类型: S=创维私有 / J=JCP / O=第三方 ONVIF 降级接入（通常留空，由连接阶段权威探测确定；省略时工具自动探测）"},
+            },
+            "required": ["camera_name"],
+        },
+    ),
+    Tool(
+        name="disconnect_device",
+        description="断开摄像头连接，释放所有资源。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+            },
+            "required": ["camera_name"],
+        },
+    ),
+
+    Tool(
+        name="get_audio_video_stream",
+        description="获取 RTSP 流地址及元数据（编码、分辨率、帧率），不抓取画面。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "sub_stream": {
+                    "type": "boolean",
+                    "description": "使用子码流（低画质）",
+                    "default": False,
+                },
+                "timeout_seconds": {
+                    "type": "number",
+                    "description": "最长等待秒数（默认 20，上限 120）",
+                },
+            },
+            "required": ["camera_name"],
+        },
+    ),
+    Tool(
+        name="capture_video_screenshot",
+        description="从 RTSP 流截取一帧保存为 JPEG，默认保存到 snapshots/ 目录。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "save_path": {"type": "string", "description": "保存目录"},
+                "timeout_seconds": {
+                    "type": "number",
+                    "description": "最长等待秒数（默认 20，上限 120）",
+                },
+            },
+            "required": ["camera_name"],
+        },
+    ),
+    Tool(
+        name="toggle_recording",
+        description="启动、停止或查询本地 MP4 录像，默认保存到 video/ 目录。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "action": {
+                    "type": "string",
+                    "enum": ["start", "stop", "status"],
+                    "description": "start / stop / status",
+                },
+                "save_path": {"type": "string", "description": "录像保存目录"},
+                "duration": {
+                    "type": "number",
+                    "description": "录像时长（秒），仅 start 有效，设置后自动停止",
+                },
+            },
+            "required": ["camera_name", "action"],
+        },
+    ),
+    Tool(
+        name="manage_storage_status",
+        description="查询磁盘占用与可用空间，或设置存储路径、格式与策略。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "action": {
+                    "type": "string",
+                    "enum": ["query", "set"],
+                    "description": "query / set",
+                    "default": "query",
+                },
+                "path": {"type": "string", "description": "存储路径"},
+                "format": {
+                    "type": "string",
+                    "enum": ["mp4", "avi", "jpg"],
+                    "description": "文件格式",
+                },
+                "policy": {
+                    "type": "string",
+                    "enum": ["overwrite", "stop_when_full", "circular"],
+                    "description": "存储策略",
+                },
+            },
+            "required": ["camera_name"],
+        },
+    ),
+
+    Tool(
+        name="control_ptz",
+        description="控制云台转动方向或变焦，支持 8 方向和变焦。转动量通过 duration_seconds 或 degrees 二选一指定。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "direction": {
+                    "type": "string",
+                    "enum": ["up", "down", "left", "right", "upleft", "upright", "downleft", "downright", "zoom_in", "zoom_out"],
+                    "description": "移动方向（8方向 + 变焦）",
+                },
+                "speed": {
+                    "type": "number",
+                    "description": "速度 0.0–1.0",
+                    "default": 0.5,
+                },
+                "duration_seconds": {
+                    "type": "number",
+                    "description": "转动时长（秒），与 degrees 二选一",
+                },
+                "degrees": {
+                    "type": "number",
+                    "description": "转动角度，与 duration_seconds 二选一",
+                },
+            },
+            "required": ["camera_name", "direction"],
+        },
+    ),
+    Tool(
+        name="get_ptz_parameters",
+        description="读取云台当前位置坐标和运动范围（只读）。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+            },
+            "required": ["camera_name"],
+        },
+    ),
+    Tool(
+        name="calibrate_ptz",
+        description="云台物理校准与归位（硬件校准操作）。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "action": {
+                    "type": "string",
+                    "enum": ["set_home", "go_home"],
+                    "description": "set_home=校准并存储初始位 / go_home=回到存储的初始位",
+                    "default": "set_home",
+                },
+            },
+            "required": ["camera_name"],
+        },
+    ),
+
+    Tool(
+        name="stop_ptz",
+        description="立即紧急停止云台所有正在进行的移动。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+            },
+            "required": ["camera_name"],
+        },
+    ),
+
+    Tool(
+        name="manage_camera_events",
+        description="摄像头告警事件管理：start 启动监听 / stop 停止 / poll 读取事件 / wait 等待新事件。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": ["start", "stop", "poll", "wait"],
+                    "description": "工作模式",
+                },
+                "camera_name": {
+                    "type": "string",
+                    "description": "摄像头名称（start/stop 必填）",
+                },
+                "debounce_seconds": {
+                    "type": "number",
+                    "description": "去重窗口（秒，仅 start）",
+                    "default": 5.0,
+                },
+                "limit": {
+                    "type": "integer",
+                    "description": "单次最多返回的事件数（仅 poll）",
+                    "default": 100,
+                },
+                "timeout_seconds": {
+                    "type": "number",
+                    "description": "阻塞超时（秒，上限 60，仅 wait）",
+                    "default": 60,
+                },
+            },
+            "required": ["action"],
+        },
+    ),
+
+    Tool(
+        name="start_webrtc_stream",
+        description="启动 WebRTC 实时预览，返回浏览器访问地址。可选 video_codec 把设备编码切为 H264（Edge 等浏览器预览卡顿时使用）。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {"type": "string", "description": "摄像头名称"},
+                "sub_stream": {
+                    "type": "boolean",
+                    "description": "使用子码流（低画质）",
+                    "default": False,
+                },
+                "video_codec": {
+                    "type": "string",
+                    "enum": ["h264", "h265"],
+                    "description": "可选：先切换设备视频编码再启动预览。Edge 不支持 H265 WebRTC，预览卡顿/黑屏时可切 h264。属设备级全局设置（主/子码流同改），会短暂中断该设备全部 RTSP 会话；省略则不改设备编码。",
+                },
+                "port": {
+                    "type": "integer",
+                    "description": "Web UI 端口",
+                    "default": 1984,
+                },
+            },
+            "required": ["camera_name"],
+        },
+    ),
+    Tool(
+        name="stop_webrtc_stream",
+        description="停止 WebRTC 实时预览，关闭转流进程。",
+        inputSchema={
+            "type": "object",
+            "properties": {},
+        },
+    ),
+
+    Tool(
+        name="manage_illumination",
+        description="查询或设置补光与夜视模式（daynightmode / filllightmode）。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": ["get", "set"],
+                    "description": "工作模式",
+                },
+                "camera_name": {
+                    "type": "string",
+                    "description": "摄像头名称",
+                },
+                "daynightmode": {
+                    "description": "0白天/1夜晚/2自动/3定时/4智能",
+                },
+                "filllightmode": {
+                    "description": "0全彩/1红外/2智能夜视",
+                },
+            },
+            "required": ["action", "camera_name"],
+        },
+    ),
+
+    Tool(
+        name="manage_image_settings",
+        description="查询或设置画面参数：亮度、对比度、饱和度、锐度、图像翻转。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "action": {
+                    "type": "string",
+                    "enum": ["get", "set"],
+                    "description": "工作模式",
+                },
+                "camera_name": {
+                    "type": "string",
+                    "description": "摄像头名称",
+                },
+                "brightness": {
+                    "type": "integer",
+                    "description": "亮度",
+                },
+                "contrast": {
+                    "type": "integer",
+                    "description": "对比度",
+                },
+                "saturation": {
+                    "type": "integer",
+                    "description": "饱和度",
+                },
+                "sharpness": {
+                    "type": "integer",
+                    "description": "锐度",
+                },
+                "flip": {
+                    "type": "integer",
+                    "enum": [0, 1, 2, 3],
+                    "description": "0正常/1对角/2水平/3垂直",
+                },
+            },
+            "required": ["action", "camera_name"],
+        },
+    ),
+
+    Tool(
+        name="query_tracking_capabilities",
+        description="查询智能侦测与追踪能力（人形/车辆/区域/移动/越界）。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {
+                    "type": "string",
+                    "description": "摄像头名称",
+                },
+                "detect_type": {
+                    "type": "string",
+                    "description": "human / vehicle / area / motion / line / all",
+                    "default": "all",
+                },
+            },
+            "required": ["camera_name"],
+        },
+    ),
+    Tool(
+        name="set_tracking",
+        description="开启或关闭智能侦测与追踪功能，仅传需修改的参数。",
+        inputSchema={
+            "type": "object",
+            "properties": {
+                "camera_name": {
+                    "type": "string",
+                    "description": "摄像头名称",
+                },
+                "detect_type": {
+                    "type": "string",
+                    "description": "human / vehicle / area / motion / line",
+                },
+                "enable": {
+                    "type": "boolean",
+                    "description": "是否开启该侦测功能",
+                },
+                "tracking": {
+                    "type": "boolean",
+                    "description": "是否开启追踪",
+                },
+                "sensitivity_level": {
+                    "type": "integer",
+                    "description": "灵敏度 0-3",
+                },
+            },
+            "required": ["camera_name", "detect_type"],
+        },
+    ),
+]
+
+def _serialize(obj: Any) -> Any:
+    if obj is None:
+        return None
+    if isinstance(obj, (bool, int, float, str)):
+        return obj
+    if isinstance(obj, (list, tuple)):
+        return [_serialize(i) for i in obj]
+    if isinstance(obj, dict):
+        return {str(k): _serialize(v) for k, v in obj.items()}
+    if hasattr(obj, "__dataclass_fields__"):
+        return {f.name: _serialize(getattr(obj, f.name)) for f in obj.__dataclass_fields__.values()}
+    if hasattr(obj, "_value_"):
+        return obj.value
+    return str(obj)
+
+_TOOL_TIMEOUTS: Dict[str, float] = {
+    "capture_video_screenshot": 45.0,
+    "get_audio_video_stream": 45.0,
+    "toggle_recording": 90.0,
+    "connect_device": 360.0,
+    "calibrate_ptz": 90.0,
+    "start_webrtc_stream": 90.0,
+}
+_DEFAULT_TOOL_TIMEOUT = 60.0
+_STREAM_TIMEOUT_ARG_MAX = 120.0
+_STREAM_TIMEOUT_ARG_MARGIN = 25.0
+
+def _resolve_tool_budget(name: str, args: Dict[str, Any]) -> float:
+    if name in ("capture_video_screenshot", "get_audio_video_stream"):
+        ts = args.get("timeout_seconds")
+        if isinstance(ts, (int, float)) and not isinstance(ts, bool) and ts > 0:
+            inner = min(float(ts), _STREAM_TIMEOUT_ARG_MAX)
+            return inner + _STREAM_TIMEOUT_ARG_MARGIN
+        return _TOOL_TIMEOUTS[name]
+    if name == "search_devices":
+        ts = args.get("timeout")
+        base = float(ts) if isinstance(ts, (int, float)) and ts > 0 else 15.0
+        return base + 30.0
+    return _TOOL_TIMEOUTS.get(name, _DEFAULT_TOOL_TIMEOUT)
+
+def _call_tool(name: str, args: Dict[str, Any]) -> Any:
+    import scripts.toolkit as tk
+    from scripts.toolkit.stream import RecordingAction, StorageAction
+    from scripts.toolkit.ptz import PTZDirection
+    from scripts.toolkit.events import EventAction
+    from scripts.toolkit.illumination import IlluminationAction
+    from scripts.toolkit.image_settings import ImageAction
+    from scripts.toolkit.tracking import TrackingAction
+
+    if name == "get_registered_cameras":
+        return _serialize(tk.get_registered_cameras())
+    elif name == "register_camera":
+        return _serialize(tk.register_camera(**args))
+    elif name == "search_devices":
+        result = _serialize(tk.search_devices(**args))
+        if isinstance(result, dict):
+            count = len(result.get("devices", []))
+            result["device_count"] = count
+            if count > 0:
+                result["_display_instruction"] = (
+                    f"共发现 {count} 台设备，必须将上述 {count} 台设备全部展示给用户，禁止省略"
+                )
+        return result
+    elif name == "connect_device":
+        return _serialize(tk.connect_device(**args))
+    elif name == "disconnect_device":
+        return _serialize(tk.disconnect_device(**args))
+
+    elif name in ("get_audio_video_stream", "capture_video_screenshot"):
+
+        args = {k: v for k, v in args.items() if k != "timeout_seconds"}
+        if name == "get_audio_video_stream":
+            return _serialize(tk.get_audio_video_stream(**args))
+        return _serialize(tk.capture_video_screenshot(**args))
+    elif name == "toggle_recording":
+        args = dict(args)
+        if "action" in args:
+            args["action"] = RecordingAction(args["action"])
+        return _serialize(tk.toggle_recording(**args))
+    elif name == "manage_storage_status":
+        args = dict(args)
+        if "action" in args:
+            args["action"] = StorageAction(args.get("action", "query"))
+        return _serialize(tk.manage_storage_status(**args))
+
+    elif name == "control_ptz":
+        args = dict(args)
+        if "direction" in args:
+            args["direction"] = PTZDirection(args["direction"])
+        return _serialize(tk.control_ptz(**args))
+    elif name == "get_ptz_parameters":
+        return _serialize(tk.get_ptz_parameters(**args))
+    elif name == "calibrate_ptz":
+        return _serialize(tk.calibrate_ptz(**args))
+    elif name == "stop_ptz":
+        return _serialize(tk.stop_ptz(**args))
+
+    elif name == "manage_camera_events":
+        args = dict(args)
+        args.pop("protocols", None)
+        args["action"] = EventAction(args["action"])
+        return _serialize(tk.manage_camera_events(**args))
+
+    elif name == "start_webrtc_stream":
+        return _serialize(tk.start_webrtc_stream(**args))
+    elif name == "stop_webrtc_stream":
+        return _serialize(tk.stop_webrtc_stream())
+
+    elif name == "manage_illumination":
+        args = dict(args)
+        args["action"] = IlluminationAction(args["action"])
+        return _serialize(tk.manage_illumination(**args))
+
+    elif name == "manage_image_settings":
+        args = dict(args)
+        if "action" in args:
+            args["action"] = ImageAction(args["action"])
+        return _serialize(tk.manage_image_settings(**args))
+
+    elif name == "query_tracking_capabilities":
+        return _serialize(tk.manage_tracking(action="get", **args))
+    elif name == "set_tracking":
+        return _serialize(tk.manage_tracking(action="set", **args))
+
+    else:
+        raise ValueError(f"Unknown tool: {name}")
+
+server = Server("xpai-camera-control", version="0.7.0")
+
+@server.list_tools()
+async def handle_list_tools() -> list[Tool]:
+    return TOOLS
+
+@server.call_tool()
+async def handle_call_tool(name: str, arguments: Dict[str, Any] | None) -> list[TextContent]:
+    args = arguments or {}
+    if name not in _LOCK_EXEMPT_TOOLS:
+        lock_error = await anyio.to_thread.run_sync(_ensure_camera_lock)
+        if lock_error is not None:
+            return [TextContent(
+                type="text",
+                text=json.dumps(lock_error, ensure_ascii=False, indent=2),
+            )]
+    budget = _resolve_tool_budget(name, args)
+    try:
+
+        with anyio.fail_after(budget):
+            result = await anyio.to_thread.run_sync(
+                _call_tool, name, args, abandon_on_cancel=True,
+            )
+        return [TextContent(
+            type="text",
+            text=json.dumps(result, ensure_ascii=False, indent=2),
+        )]
+    except TimeoutError:
+        return [TextContent(
+            type="text",
+            text=json.dumps({
+                "success": False,
+                "error_code": "timeout",
+                "error_message": f"工具 {name} 执行超时（{budget:.0f}s），已放弃。可传更大的 timeout_seconds 重试。",
+            }, ensure_ascii=False, indent=2),
+        )]
+    except Exception as e:
+        return [TextContent(
+            type="text",
+            text=json.dumps({
+                "success": False,
+                "error": str(e),
+            }, ensure_ascii=False, indent=2),
+        )]
+
+def _resume_event_monitors_async() -> None:
+    def _worker():
+        try:
+            from scripts.toolkit.events import resume_persisted_monitors
+            resume_persisted_monitors()
+        except Exception:
+            pass
+
+    threading.Thread(target=_worker, name="EventMonitorResume", daemon=True).start()
+
+_instance_lock_socket = None
+_lease_file = os.path.join(_skill_root, ".instance_lease.json")
+_lock_mutex = threading.Lock()
+_lock_held = False
+_LOCK_EXEMPT_TOOLS = {"get_registered_cameras", "register_camera", "search_devices"}
+
+def _write_lease(pid: int, port: int) -> None:
+    import time
+    tmp = _lease_file + ".tmp"
+    content = json.dumps({"pid": pid, "port": port, "ts": time.time()})
+    with open(tmp, "w", encoding="utf-8") as f:
+        f.write(content)
+    os.replace(tmp, _lease_file)
+
+def _get_lock_port() -> int:
+    import zlib
+    return 40000 + (
+        zlib.crc32(_skill_root.lower().replace("\\", "/").encode("utf-8")) % 20000
+    )
+
+def _find_pid_on_port(port: int) -> Optional[int]:
+    import subprocess
+    try:
+        if sys.platform == "win32":
+            out = subprocess.check_output(
+                ["netstat", "-ano", "-p", "TCP"],
+                timeout=3, stderr=subprocess.DEVNULL, text=True,
+            )
+            target = f":{port} "
+            for line in out.splitlines():
+                if target in line and "LISTENING" in line:
+                    parts = line.split()
+                    if parts:
+                        try:
+                            return int(parts[-1])
+                        except ValueError:
+                            pass
+        elif sys.platform == "darwin":
+            out = subprocess.check_output(
+                ["lsof", "-i", f":{port}", "-sTCP:LISTEN", "-Fn"],
+                timeout=3, stderr=subprocess.DEVNULL, text=True,
+            )
+            for line in out.splitlines():
+                if line.startswith("n") and "pid" in line.lower():
+                    continue
+                if line.startswith("p"):
+                    try:
+                        return int(line[1:])
+                    except ValueError:
+                        pass
+        else:
+            out = subprocess.check_output(
+                ["ss", "-tlnp", f"sport = :{port}"],
+                timeout=3, stderr=subprocess.DEVNULL, text=True,
+            )
+            for line in out.splitlines():
+                if "users:" in line:
+                    import re
+                    m = re.search(r'pid=(\d+)', line)
+                    if m:
+                        return int(m.group(1))
+    except Exception:
+        pass
+    return None
+
+def _get_process_cmdline(pid: int) -> str:
+    import subprocess
+    try:
+        if sys.platform == "win32":
+            cmd = [
+                "powershell", "-NoProfile", "-Command",
+                f"Get-CimInstance Win32_Process -Filter 'ProcessId={pid}' | Select -Expand CommandLine",
+            ]
+            out = subprocess.check_output(cmd, timeout=5, stderr=subprocess.DEVNULL, text=True)
+            return out.strip()
+        elif sys.platform == "darwin":
+            out = subprocess.check_output(
+                ["ps", "-p", str(pid), "-o", "command="],
+                timeout=3, stderr=subprocess.DEVNULL, text=True,
+            )
+            return out.strip()
+        else:
+            with open(f"/proc/{pid}/cmdline", "r", encoding="utf-8", errors="replace") as f:
+                return f.read().replace("\0", " ")
+    except Exception:
+        return ""
+
+def _is_our_server(cmdline: str, pid: Optional[int] = None) -> bool:
+    norm = os.path.normcase(cmdline).replace("\\", "/")
+    if "mcp_server.py" not in norm:
+        return False
+    if os.path.normcase(_skill_root).replace("\\", "/") in norm:
+        return True
+    # No absolute path in cmdline (e.g. relative-path registration): fall back to the lease pid.
+    if pid is None:
+        return False
+    try:
+        with open(_lease_file, "r", encoding="utf-8") as f:
+            return json.load(f).get("pid") == pid
+    except Exception:
+        return False
+
+def _kill_pid(pid: int) -> bool:
+    import subprocess
+    try:
+        if sys.platform == "win32":
+            subprocess.check_call(
+                ["taskkill", "/F", "/T", "/PID", str(pid)],
+                timeout=5, stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
+            )
+        else:
+            import signal
+            os.kill(pid, signal.SIGKILL)
+        return True
+    except Exception:
+        return False
+
+def _acquire_instance_lock() -> Tuple[Optional[int], str]:
+    global _instance_lock_socket
+    import socket
+
+    port = _get_lock_port()
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    try:
+        s.bind(("127.0.0.1", port))
+    except OSError:
+        s.close()
+        return _try_recover_lock(port)
+    s.listen(1)  # visible in netstat/ss/lsof, required by _find_pid_on_port
+    _instance_lock_socket = s
+    return port, ""
+
+def _try_recover_lock(port: int) -> Tuple[Optional[int], str]:
+    global _instance_lock_socket
+    import socket
+    import time
+
+    pid = _find_pid_on_port(port)
+    if pid is None:
+        return None, f"锁端口 {port} 被占用，但未能定位到监听进程，请稍后重试"
+
+    cmdline = _get_process_cmdline(pid)
+    if not _is_our_server(cmdline, pid):
+        return None, f"锁端口 {port} 被其他程序占用（PID {pid}），请关闭该程序后重试"
+
+    killed = _kill_pid(pid)  # a concurrent starter may have killed it already
+    s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+    for _ in range(10):
+        try:
+            s.bind(("127.0.0.1", port))
+        except OSError:
+            time.sleep(0.5)
+            continue
+        s.listen(1)  # visible in netstat/ss/lsof, required by _find_pid_on_port
+        _instance_lock_socket = s
+        if killed:
+            print(f"[instance-lock] took over from PID {pid}", file=sys.stderr, flush=True)
+        return port, ""
+    s.close()
+    if killed:
+        return None, f"已结束旧实例（PID {pid}），但锁端口 {port} 未在 5 秒内释放，请重试"
+    return None, f"无法结束旧实例（PID {pid}），锁端口 {port} 仍被占用"
+
+def _ensure_camera_lock() -> Optional[dict]:
+    """Take the instance lock on first use; returns None on success, else an error payload."""
+    global _lock_held
+    if _lock_held:
+        return None
+    with _lock_mutex:
+        if _lock_held:
+            return None
+        port, fail_reason = _acquire_instance_lock()
+        if port is None:
+            print(f"[instance-lock] conflict: {fail_reason}", file=sys.stderr, flush=True)
+            return {
+                "success": False,
+                "error_code": "instance_lock_conflict",
+                "error_message": fail_reason,
+                "lock_port": _get_lock_port(),
+            }
+        _lock_held = True
+        try:
+            _write_lease(os.getpid(), port)
+        except Exception:
+            pass
+        _resume_event_monitors_async()
+    return None
+
+async def main():
+    parser = argparse.ArgumentParser(description="XPAI Camera Control MCP Server")
+    parser.add_argument("--transport", default="stdio", choices=["stdio"],
+                        help="Transport to use (default: stdio)")
+    args = parser.parse_args()
+
+    try:
+        import cv2
+    except Exception:
+        pass
+
+    anyio.to_thread.current_default_thread_limiter().total_tokens = 16
+
+    async with stdio_server() as (read_stream, write_stream):
+
+        sys.stdout = sys.stderr
+        init_options = server.create_initialization_options()
+        await server.run(read_stream, write_stream, init_options)
+
+    os._exit(70)
+
+if __name__ == "__main__":
+    asyncio.run(main())

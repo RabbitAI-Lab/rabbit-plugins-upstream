@@ -1,46 +1,54 @@
-## Description: <br>
-Analyzes child activity videos or video URLs to identify happy moments such as laughter, jumping, clapping, and joyful reactions, then returns structured reports with captured moment links and positive-reinforcement actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes child activity videos for joyful moments and returns event reports and suggested positive reinforcement for caregivers.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, parents, caregivers, and developers can use this skill to process child activity media through Life Emergence cloud services and review structured happy-moment reports. Use requires appropriate consent and controls for child photos, videos, report access, retention, and deletion. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child photos, videos, or video URLs are sent to Life Emergence cloud services for analysis and historical report retrieval. <br>
-Mitigation: Use only with explicit guardian consent, documented retention and deletion expectations, and clear limits on who may access generated reports. <br>
-Risk: The skill can create or reuse local account identity records and tokens in the workspace. <br>
-Mitigation: Review workspace data storage before deployment, restrict filesystem access, and rotate or delete local identity data when the skill is removed or transferred. <br>
-Risk: Captured child moments and report links may expose sensitive media if shared beyond authorized caregivers. <br>
-Mitigation: Limit report access to approved guardians or operators, verify deletion controls, and avoid use on shared devices without account separation. <br>
-Risk: Positive-reinforcement outputs can be inappropriate if they over-trigger, misclassify emotional context, or encourage performative behavior. <br>
-Mitigation: Keep human review and opt-out controls in place, apply the documented safety checks before saving clips, and maintain conservative reinforcement frequency. <br>
+## Use Case:
 
+Caregivers and authorized childcare teams use the skill to analyze child activity videos, review joyful-moment reports, and retrieve historical reports. Child footage is sent to a cloud service, so use requires guardian consent and appropriate privacy controls.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-happy-moment-capture-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write an optional output file when the user supplies an output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Child video files or URLs are sent to a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain guardian consent, verify authorization and masking controls before public or childcare use, and confirm retention and deletion policies before sending footage.
+
+Risk: The skill creates or reuses a local identity and stores service tokens in the workspace.
+
+Mitigation: Restrict access to the workspace and review stored identities and tokens before deployment.
+
+## Reference(s):
+
+- [Skill API documentation](references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Text or Markdown reports, with JSON detail available]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include event details, report links, and a Markdown table of historical reports.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release metadata; bundled frontmatter says 1.0.20)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,40 +1,59 @@
-## Description: <br>
-Dlazy Storyboard helps agents use the dLazy storyboard workflow to turn scripts, character details, shot prompts, reference sheets, frames, voice, music, effects, and subtitles into multi-shot animated shorts rendered with Remotion. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates multi-shot animated shorts with consistent characters through script and storyboard development, character references, image-to-video shots, voice, sound, subtitles, and final video rendering.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External creators and developers use this skill to start or continue dLazy storyboard projects for multi-shot animated shorts with consistent characters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and attached reference files are sent to dLazy hosted services. <br>
-Mitigation: Avoid sending sensitive prompts or files unless intended, and use per-invocation API keys when persistent local credentials are not desired. <br>
+## Use Case:
 
+External creators and developers use this skill to plan and produce multi-shot animated shorts, including scripts, consistent character designs, storyboard prompts, video shots, audio, subtitles, and a rendered result.
 
-## Reference(s): <br>
-- [Dlazy Storyboard on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-storyboard) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and streamed CLI text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key and may upload user-selected reference files to dLazy-hosted storage.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached local files are sent to dLazy services for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Attach only files you intend to share with the service.
+
+Risk: The CLI stores the API key in local configuration unless supplied through the documented environment variable.
+
+Mitigation: Use an appropriate dLazy organization account and revoke the key when it is no longer needed.
+
+Risk: Generations may consume account credits.
+
+Mitigation: Consider credit costs before submitting generation requests.
+
+## Reference(s):
+
+- [dLazy CLI source and documentation](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-storyboard)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Text, Prompts, Audio]
+
+**Output Format:** [Rendered video with supporting scripts, storyboard and character prompts, and audio/subtitle assets as applicable]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-based multi-turn workflow; can produce multi-shot animation with consistent characters.]
+
+## Skill Version(s):
+
+1.3.33 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

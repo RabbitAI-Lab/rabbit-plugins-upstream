@@ -66,10 +66,30 @@ Usage:
   python3 peck_listener.py --forward-to os
   python3 peck_listener.py --forward-to os --forward-to telegram
 """
-import argparse, json, os, platform, shlex, subprocess, sys, time
+import argparse, json, os, platform, shlex, signal, subprocess, sys, threading, time
 import urllib.error, urllib.parse, urllib.request
 from http.server import BaseHTTPRequestHandler, ThreadingHTTPServer
 from pathlib import Path
+
+# 2026-09-02 — this process is long-lived and supervised (`directory=<dir>` in
+# supervisord / WorkingDirectory= under systemd). If that directory is later
+# deleted or replaced, the listener keeps running happily on absolute paths but
+# every --on-peck child inherits a cwd pointing at a dead inode, and the claude
+# CLI refuses to start ("current working directory was deleted"). Pecks then
+# land in the inbox and are never answered. Repair once at import so the whole
+# child tree starts from a directory that exists.
+try:
+    sys.path.insert(0, str(Path(__file__).resolve().parent))
+    from _claudebin import ensure_cwd
+    ensure_cwd()
+except Exception:
+    try:
+        os.getcwd()
+    except Exception:
+        try:
+            os.chdir(os.path.expanduser('~'))
+        except Exception:
+            pass
 
 INBOX       = Path.home() / '.space-duck' / 'inbox'
 # Legacy single-path constant — kept for back-compat with anyone importing it.
@@ -95,6 +115,20 @@ SEEN_IDS    = Path.home() / '.space-duck' / 'seen_peck_ids'     # newline ids, l
 POLL_WAKE   = Path.home() / '.space-duck' / 'poll_wake'
 LISTENER_PID = Path.home() / '.space-duck' / 'listener.pid'
 LISTENER_LOG = Path.home() / '.space-duck' / 'listener.log'
+
+
+def _align_inbox_ownership(path):
+    """0.8.6 — F5: when running as root, inbox files default root:600 and a
+    non-root responder's chain history silently skips them. Match the inbox
+    dir's owner so the intended reader keeps access."""
+    try:
+        if hasattr(os, 'geteuid') and os.geteuid() == 0:
+            st = path.parent.stat()
+            if st.st_uid != 0:
+                os.chown(path, st.st_uid, st.st_gid)
+        os.chmod(path, 0o600)
+    except OSError as e:
+        print(f'   warn: inbox ownership align failed: {e}')
 
 # Config search order — matches pair.py CANDIDATE_DIRS so a Docker-mounted
 # /data/.spaceduck and a bare-host ~/.space-duck both work. HOME-first so
@@ -146,6 +180,37 @@ def _peck_summary(event):
 # skill only has beak_key, so until the server adds a beak-key auth-bridge to that
 # endpoint, the GET will 401 — we still surface the metadata (count + filenames)
 # so the receiver isn't blind to attached files.
+def _fetch_media_for_peck(event, listener_cfg, inbox_path=None):
+    """[MEDIA 0.10.0] Auto-download an inbound peck's attachments[] refs to
+    ~/.space-duck/media/ (grant-gated GET via /beak/media/<id>, sha256
+    verified by _media.fetch_attachments). Best-effort — a media failure can
+    never fail receipt; the manifest line in the message text remains the
+    owner's honest record either way. When downloads land and the inbox file
+    is known, local paths are annotated onto it as `attachments_local` so
+    every downstream tool (responder, forwarders, owner) can find the bytes
+    without re-fetching."""
+    atts = event.get('attachments') or []
+    if not isinstance(atts, list) or not atts:
+        return None
+    cfg = listener_cfg or _load_poll_config() or {}
+    if not cfg.get('beak_key'):
+        return None
+    try:
+        from _media import fetch_attachments
+        res = fetch_attachments(cfg, atts, peck_id=event.get('peck_id', ''))
+    except Exception as e:
+        print(f'   warn: media fetch skipped: {e}')
+        return None
+    if res.get('saved') and inbox_path is not None:
+        try:
+            rec = json.loads(Path(inbox_path).read_text())
+            rec['attachments_local'] = res['saved']
+            Path(inbox_path).write_text(json.dumps(rec, indent=2))
+        except Exception as e:
+            print(f'   warn: could not annotate inbox with media paths: {e}')
+    return res
+
+
 def _fetch_shared_mds_for_peck(event, listener_cfg):
     refs = event.get('shared_mds') or []
     if not refs:
@@ -178,6 +243,16 @@ def _fetch_shared_mds_for_peck(event, listener_cfg):
         url = (ref.get('fetch_url') or '').strip()
         if not fn or not url or '..' in fn or '/' in fn:
             failed += 1; errors.append(f'{fn}: bad ref')
+            continue
+        # [TT3] fetch_url arrives inside an unauthenticated peck body — never
+        # attach the Beak Key to an attacker-supplied host. Fail closed.
+        try:
+            from _apiguard import is_allowed_fetch_host
+            _host_ok = is_allowed_fetch_host(url, cfg)
+        except Exception:
+            _host_ok = False
+        if not _host_ok:
+            failed += 1; errors.append(f'{fn}: untrusted fetch_url host')
             continue
         try:
             req = urllib.request.Request(
@@ -333,6 +408,35 @@ FORWARDERS = {
     'email':    _forward_email,
 }
 
+# ── [DELIVERY-A 2026-10-19] event kinds this listener actually handles ──
+# docs/spec/OPENHARNESS-ADOPTION.md §5.4 rule 4. The /peck endpoint used to
+# answer `received: true` to any X-SpaceDuck-Event, so a 200 said nothing
+# about whether anything would act on the peck. These are the kinds the
+# do_POST path below genuinely processes.
+_HANDLED_PECK_EVENTS = frozenset((
+    'peck.received',
+    'peck.approval_request',
+    'telegram.message',
+))
+
+
+def _peck_event_handled_by(evt_hdr):
+    """Return a `handled_by` label for an inbound X-SpaceDuck-Event.
+
+    An absent or empty header maps to the legacy label, NOT to 'none':
+    older platform webhook rows and hand-rolled callers do not set it, and
+    reporting those as unhandled would convert today's working deliveries
+    into reported failures. Only a header that is present and genuinely
+    unknown is 'none'.
+    """
+    kind = str(evt_hdr or '').strip()
+    if not kind or kind == '?':
+        return 'peck_received'
+    if kind in _HANDLED_PECK_EVENTS:
+        return 'peck_received'
+    return 'none'
+
+
 class PeckHandler(BaseHTTPRequestHandler):
     on_peck_cmd = None  # set by main()
     forward_to  = None  # set by main(), list[str]
@@ -373,14 +477,18 @@ class PeckHandler(BaseHTTPRequestHandler):
         evt_hdr = self.headers.get('X-SpaceDuck-Event', '?')
         peck_id = event.get('peck_id') or f'peck_{int(time.time()*1000)}'
         sender  = event.get('sender_name') or event.get('sender_spaceduck_id') or '?'
+        _eo_maybe_unseal(event)  # [EYES-OFF-P3] before any read of message
         msg     = (event.get('message') or '')[:140]
         print(f'📩 peck.received  evt={evt_hdr}  from={sender}  id={peck_id}')
         print(f'   "{msg}"')
 
         # Persist to inbox before any side-effects.
+        inbox_path = None
         try:
             INBOX.mkdir(parents=True, exist_ok=True)
-            (INBOX / f'{peck_id}.json').write_text(json.dumps(event, indent=2))
+            inbox_path = INBOX / f'{peck_id}.json'
+            inbox_path.write_text(json.dumps(event, indent=2))
+            _align_inbox_ownership(inbox_path)  # 0.8.6 — F5
         except Exception as e:
             print(f'   warn: could not write inbox: {e}')
 
@@ -392,10 +500,46 @@ class PeckHandler(BaseHTTPRequestHandler):
             if sm.get('errors'):
                 print(f'      err: {"; ".join(sm["errors"])}')
 
+        # [MEDIA 0.10.0] auto-download attachments[] (best-effort).
+        mr = _fetch_media_for_peck(event, None, inbox_path)
+        if mr:
+            print(f'   🖼 media: {len(mr["saved"])}/{len(event.get("attachments") or [])} '
+                  f'downloaded → {Path.home() / ".space-duck" / "media"}')
+
         # Acknowledge first — backend has a 10s deadline. Forwarders + on-peck
         # run after the ack so a slow Telegram push or shell script can't time
         # the backend out.
-        self._send_json(200, {'received': True, 'peck_id': peck_id})
+        #
+        # ── [DELIVERY-A 2026-10-19] say WHAT handled it ──────────────────
+        # docs/spec/OPENHARNESS-ADOPTION.md §5.4 rule 4. Pre-Phase-A this
+        # returned {received: true} for EVERY event on /peck, including
+        # kinds this listener has no handler for, so a 200 proved only that
+        # the HTTP server was up. The platform recorded 'pushed' and the
+        # sender was told the peck was delivered; the kind-specific work
+        # then failed later, off the wire. That is the silent drop.
+        #
+        # `handled_by: 'none'` + `unhandled_kind` is the honest answer, and
+        # the platform maps it to pushed_unconfirmed:unhandled_kind which
+        # ages into failed:unhandled_kind. Still a 200: the forward itself
+        # succeeded and must not be counted against the BYOB binding
+        # watchdog (3 failures -> DEGRADED).
+        # Deliberately conservative in two ways:
+        #   1. An ABSENT header ('?') is treated as handled. Legacy senders
+        #      and the older webhook rows do not set it, and classifying
+        #      those as unhandled would turn every one of today's working
+        #      deliveries into a reported failure.
+        #   2. The fanout below is NOT skipped on 'none'. The platform
+        #      decides what an unhandled kind means; this listener's job is
+        #      to report, not to start dropping work it used to do. So this
+        #      whole block is additive — one extra response key.
+        _handled_by = _peck_event_handled_by(evt_hdr)
+        _ack_obj = {'received': True, 'peck_id': peck_id,
+                    'handled_by': _handled_by}
+        if _handled_by == 'none':
+            _ack_obj['unhandled_kind'] = str(evt_hdr)[:64]
+            print(f'   ⚠️ no handler for event kind {evt_hdr!r} — reporting '
+                  'handled_by=none to the platform')
+        self._send_json(200, _ack_obj)
 
         # 2026-05-17 — receiver-side mute filter. The connection record's
         # muted_until is a SINGLE field that silences both directions: outbound
@@ -468,6 +612,8 @@ def _load_poll_config():
         except (OSError, json.JSONDecodeError):
             continue
         if cfg.get('beak_key') and cfg.get('spaceduck_id'):
+            from _apiguard import check_api_base  # [HARDEN-071]
+            check_api_base(cfg)
             cfg['_path'] = str(p)
             candidates.append(cfg)
     if not candidates:
@@ -575,30 +721,208 @@ def _http_post_json(url, headers, body, timeout=15):
         return 0, {'error': f'{type(e).__name__}: {e}'}
 
 
-def _deliver(event, forward_to, on_peck_cmd):
-    """Run the same fanout as the HTTP push handler. Reused verbatim from
-    PeckHandler.do_POST so push and poll mode behave identically."""
-    peck_id = event.get('peck_id') or f'peck_{int(time.time()*1000)}'
-    sender  = event.get('sender_name') or event.get('sender_spaceduck_id') or '?'
-    msg     = (event.get('message') or '')[:140]
-    print(f'📩 peck.received  from={sender}  id={peck_id}')
-    print(f'   "{msg}"')
+# [AUTOUP-076] The Spaceduckling release duck (JP / askegor). Update-trigger
+# pecks are honored ONLY from these ids unless config.json "update_senders"
+# overrides. Keep this list short and boring.
+OFFICIAL_UPDATE_SENDERS = ('6249EE82B88241E9',)
 
+
+def _maybe_self_update(event, poll_cfg=None):
+    """[AUTOUP-075] Consent-based self-update trigger.
+
+    A peck whose message contains the literal marker [SPACE-DUCK-UPDATE]
+    is treated as an "check for updates now" signal — never as a command
+    with arbitrary content. The only action ever taken is running the
+    skill's own update.sh, which installs the official latest from the
+    ClawHub registry and no-ops when already up to date, so a forged
+    trigger cannot install anything but the genuine latest release.
+
+    Owner consent model (config.json "auto_update"):
+      "auto" — the duck self-updates in the background and logs to
+               ~/.space-duck/logs/self_update.log
+      "ask" / absent (default) — no action here; the peck still fans out
+               to the owner's forward channels as a normal notification,
+               and the owner runs /update themselves.
+
+    Sender gate [AUTOUP-076]: the auto path only fires for pecks from
+    OFFICIAL_UPDATE_SENDERS (the Spaceduckling release duck) unless the
+    owner overrides via config.json "update_senders". Default-open was a
+    hole: any connected peer could force an update + listener bounce.
+
+    SECURITY INVARIANT: this hook must only ever be called from the POLL
+    path (_deliver), whose transport is beak_key-authenticated against
+    the pinned api_base. NEVER call it from the HTTP push handler
+    (PeckHandler.do_POST) — that surface is unauthenticated and
+    sender_spaceduck_id there is attacker-controlled.
+
+    Debounce: at most one auto-update run per hour.
+    """
+    # [AUTOUP-077] Whole body is exception-proof: a malformed config or odd
+    # event shape must never crash the poll loop (_deliver runs unguarded).
     try:
-        INBOX.mkdir(parents=True, exist_ok=True)
-        (INBOX / f'{peck_id}.json').write_text(json.dumps(event, indent=2))
+        msg = event.get('message') or ''
+        if '[SPACE-DUCK-UPDATE]' not in msg:
+            return
+        # [AUTOUP-077] Prefer the AUTHENTICATED config the poll loop already
+        # resolved — first-path-on-disk can be a stale copy (the Sam/Wayne
+        # multi-path config bug class).
+        cfg = poll_cfg if isinstance(poll_cfg, dict) else None
+        if cfg is None:
+            cfg = {}
+            for p in _POLL_CONFIG_PATHS:
+                try:
+                    if p.exists():
+                        loaded = json.loads(p.read_text())
+                        if isinstance(loaded, dict):
+                            cfg = loaded
+                            break
+                except (OSError, json.JSONDecodeError):
+                    continue
+        mode = str(cfg.get('auto_update') or 'ask').lower()
+        if mode != 'auto':
+            print('   🔔 update trigger received — auto_update is "ask"; '
+                  'owner runs update.sh (or set auto_update:"auto" in config.json)')
+            return
+        # [AUTOUP-077] Type-harden: a bare-string update_senders would make
+        # `in` do SUBSTRING matching — coerce to an exact-match list.
+        raw_allowed = cfg.get('update_senders')
+        if isinstance(raw_allowed, str):
+            allowed = [raw_allowed]
+        elif isinstance(raw_allowed, (list, tuple)) and raw_allowed:
+            allowed = [str(a) for a in raw_allowed]
+        else:
+            allowed = list(OFFICIAL_UPDATE_SENDERS)
+        sender = event.get('sender_spaceduck_id') or ''
+        if sender not in allowed:
+            print(f'   ⚠️ update trigger from {sender or "?"} not in update_senders — ignored')
+            return
+        _run_self_update(sender)
     except Exception as e:
-        print(f'   warn: could not write inbox: {e}')
+        print(f'   ⚠️ self-update hook error (ignored): {type(e).__name__}: {e}')
 
-    # Surface + fetch any inbound shared MDs (Gap D-client). Manifest is
-    # written regardless; content fetch is best-effort and uses beak_key
-    # auth — server-side bridge to that endpoint is the remaining gap.
-    sm = _fetch_shared_mds_for_peck(event, None)
-    if sm:
-        print(f'   📎 shared_mds: {sm["fetched"]}/{sm["count"]} fetched → {sm["dir"]}')
-        if sm.get('errors'):
-            print(f'      err: {"; ".join(sm["errors"])}')
 
+def _run_self_update(sender):
+    update_sh = Path(__file__).resolve().parent / 'update.sh'
+    if not update_sh.exists():
+        print('   ⚠️ update.sh not found — cannot self-update')
+        return
+    stamp = Path.home() / '.space-duck' / 'last_self_update'
+    try:
+        if stamp.exists() and (time.time() - stamp.stat().st_mtime) < 3600:
+            print('   ⏳ self-update debounced (ran <1h ago)')
+            return
+        stamp.parent.mkdir(parents=True, exist_ok=True)
+        stamp.write_text(str(int(time.time())))
+    except OSError:
+        pass
+    log_path = Path.home() / '.space-duck' / 'logs' / 'self_update.log'
+    try:
+        log_path.parent.mkdir(parents=True, exist_ok=True)
+        logf = open(log_path, 'a')
+        logf.write(f'\n== self-update triggered by peck from {sender or "?"} '
+                   f'at {time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime())} ==\n')
+        logf.flush()
+        subprocess.Popen(['bash', str(update_sh)], stdout=logf, stderr=logf,
+                         start_new_session=True)
+        print(f'   ⬆️ auto_update=auto — self-update started (log: {log_path})')
+    except Exception as e:
+        print(f'   ⚠️ self-update spawn failed: {e}')
+
+
+# ── 0.9.0 [F4-CLIENT] — grant-approved auto-resend ──
+# The platform's _notify_grant_approved (lambda_function.py) drops a synthetic
+# system-notice into the requester's inbox when the owner approves a capability
+# grant. Its machine-readable fields survive the /beak/peck/inbox projection
+# (D5 C1 re-attach): notice_kind='grant_approved', request_id, grant_id,
+# capability, scope, grant_target_spaceduck_id, system_notice=True. We match on
+# request_id — the join key _pending_sends queued under — and resend once.
+
+def _is_grant_notice(event):
+    if not isinstance(event, dict):
+        return False
+    if event.get('notice_kind') == 'grant_approved':
+        return True
+    return (event.get('system_notice') is True and
+            event.get('peck_type') == 'system.grant_approved')
+
+
+def _resend_entry(entry):
+    """Reconstruct and resend a queued peck via send_peck.py (argv list — no
+    shell). Returns (ok, detail). --no-auto-grant so a still-blocked resend can
+    never spawn a fresh grant request (which would re-enqueue and loop)."""
+    here = os.path.dirname(os.path.abspath(__file__))
+    argv = [
+        sys.executable, os.path.join(here, 'send_peck.py'),
+        '--spaceduck-id', entry.get('target_spaceduck_id', ''),
+        '--message', entry.get('message', ''),
+        '--purpose', entry.get('purpose', 'connect'),
+        '--peck-type', entry.get('peck_type', 'notify'),
+        '--no-auto-grant',
+    ]
+    pm = entry.get('peck_meta')
+    if pm:
+        argv += ['--peck-meta', json.dumps(pm)]
+    tu = entry.get('tool_use')
+    if tu:
+        argv += ['--tool-use', json.dumps(tu)]
+    try:
+        p = subprocess.run(argv, capture_output=True, text=True, timeout=45)
+        if p.returncode == 0:
+            return True, 'sent'
+        tail = (p.stdout or p.stderr or '').strip().splitlines()[-1:] or ['']
+        return False, f'exit={p.returncode}: {tail[0][:120]}'
+    except Exception as e:
+        return False, f'{type(e).__name__}: {e}'
+
+
+def _try_resend(request_id, grant_id=''):
+    """Shared resend path for BOTH the push (notice) and poll (fallback) legs.
+    _pending_sends.claim() is the idempotency gate — only one caller wins the
+    in-flight slot, so a notice and a status poll racing never double-send.
+    Returns True (sent) / False (attempt failed, will retry) / None (nothing to
+    do — already sent, in-flight elsewhere, in backoff, or no queued entry)."""
+    try:
+        import _pending_sends
+    except Exception:
+        return None
+    entry = _pending_sends.claim(request_id)
+    if not entry:
+        return None
+    ok, detail = _resend_entry(entry)
+    if ok:
+        _pending_sends.mark_done(request_id, grant_id=grant_id)
+        return True
+    _pending_sends.mark_failed(request_id, error=detail)
+    return False
+
+
+def _handle_grant_notice(event):
+    """React to a grant-approved system notice: record the grant id and resend
+    the peck that was blocked on it. Never composes a reply to the notice."""
+    rid = event.get('request_id') or ''
+    gid = event.get('grant_id') or ''
+    cap = event.get('capability') or '?'
+    print(f'   🔓 grant-approved notice: cap={cap} grant={gid[:12] or "?"} '
+          f'request={rid[:12] or "?"}')
+    if rid and gid:
+        try:
+            import _pending_sends
+            _pending_sends.record_grant_id(rid, gid)
+        except Exception:
+            pass
+    if not rid:
+        print('   ℹ notice carries no request_id — nothing to auto-resend')
+        return
+    res = _try_resend(rid, grant_id=gid)
+    if res is True:
+        print(f'   ↻ auto-resent the peck queued for request {rid[:12]}')
+    elif res is False:
+        print(f'   ⚠ auto-resend failed for {rid[:12]} — bounded retry scheduled')
+    else:
+        print(f'   ℹ no queued peck for request {rid[:12]} (already sent / none)')
+
+
+def _run_forwarders(event, forward_to):
     for ch in (forward_to or []):
         fn = FORWARDERS.get(ch)
         if not fn:
@@ -610,6 +934,104 @@ def _deliver(event, forward_to, on_peck_cmd):
             ok, info = False, f'adapter_crash:{type(e).__name__}'
         print(f'   {"✅" if ok else "⚠️"} forward[{ch}]: {info}')
 
+
+def _eo_maybe_unseal(event):
+    """[EYES-OFF-P3] Decrypt a sealed-body peck in place before anything
+    reads event['message'] (docs/spec/PECK-E2EE-EYES-OFF.md §3.3).
+
+    Success → message holds plaintext, `eyes_off_decrypted: True` is set
+    (so the inbox file records that this travelled encrypted).
+    Failure → ciphertext stays as-is, `eyes_off_decrypt_error` records why
+    (typical cause: the peer sealed to a rotated/old key). NEVER raises —
+    a decrypt failure must not take the listener down; the peck still
+    lands in the inbox for the owner, visibly marked unreadable."""
+    if not event.get('body_encrypted'):
+        return
+    try:
+        import _eyesoff
+        event['message'] = _eyesoff.unseal(event.get('message') or '')
+        event['eyes_off_decrypted'] = True
+        print('   🙈 Eyes Off: body decrypted locally')
+    except Exception as e:
+        event['eyes_off_decrypt_error'] = f'{type(e).__name__}: {e}'[:200]
+        print(f'   ⚠ Eyes Off: DECRYPT FAILED — stored as ciphertext '
+              f'({type(e).__name__}). If the sender used an old key, '
+              f're-register keys and ask them to re-send.')
+
+
+def _deliver(event, forward_to, on_peck_cmd, poll_cfg=None):
+    """Run the same fanout as the HTTP push handler. Reused verbatim from
+    PeckHandler.do_POST so push and poll mode behave identically.
+
+    [DELIVERY-A 2026-10-19] Returns the runtime's verdict on this peck as
+    ``{'state': 'delivered'|'failed', 'reason': str}`` — docs/spec/
+    OPENHARNESS-ADOPTION.md §5.4 rule 2. Before this the function returned
+    None and the watermark ack was the only thing the platform ever heard:
+    "I read everything up to T". That cannot express "I read this one and
+    the handler blew up on it", which is exactly the 0.4.10
+    silently-exiting-responder class (memory
+    project_peck_responder_silent_failures.md) — owner-notified locally,
+    invisible to the platform and therefore to the sender.
+
+    The verdict is about THIS runtime taking delivery, not about whether a
+    reply was produced. A forwarder failing is not a delivery failure (the
+    peck is in the inbox and the owner can read it); an --on-peck handler
+    that could not be launched is, because that is the runtime admitting
+    it did not process the peck.
+
+    The return value is advisory — the poll loop posts it best-effort and
+    an older Lambda ignores it, so no caller is obliged to use it.
+    """
+    peck_id = event.get('peck_id') or f'peck_{int(time.time()*1000)}'
+    sender  = event.get('sender_name') or event.get('sender_spaceduck_id') or '?'
+    _eo_maybe_unseal(event)  # [EYES-OFF-P3] before any read of message
+    msg     = (event.get('message') or '')[:140]
+    print(f'📩 peck.received  from={sender}  id={peck_id}')
+    print(f'   "{msg}"')
+
+    # The inbox write IS taking delivery — a peck on disk is one the owner
+    # and every local tool can read. If it fails, the runtime did not take
+    # delivery and must say so rather than let the platform record a
+    # receipt it did not earn.
+    try:
+        INBOX.mkdir(parents=True, exist_ok=True)
+        inbox_path = INBOX / f'{peck_id}.json'
+        inbox_path.write_text(json.dumps(event, indent=2))
+        _align_inbox_ownership(inbox_path)  # 0.8.6 — F5
+    except Exception as e:
+        print(f'   warn: could not write inbox: {e}')
+        return {'state': 'failed', 'reason': f'inbox_write:{type(e).__name__}'}
+
+    # 0.9.0 [F4-CLIENT] — a grant-approved system notice is handled here and
+    # MUST NOT reach the --on-peck auto-responder (a system notice must never
+    # draw a reply; platform doctrine, lambda_function.py note). Resend the
+    # queued peck, forward informationally to the owner, and stop.
+    if _is_grant_notice(event):
+        _handle_grant_notice(event)
+        _run_forwarders(event, forward_to)
+        return {'state': 'delivered', 'reason': 'grant_notice'}
+
+    _maybe_self_update(event, poll_cfg)  # [AUTOUP-075/077]
+
+    # Surface + fetch any inbound shared MDs (Gap D-client). Manifest is
+    # written regardless; content fetch is best-effort and uses beak_key
+    # auth — server-side bridge to that endpoint is the remaining gap.
+    sm = _fetch_shared_mds_for_peck(event, None)
+    if sm:
+        print(f'   📎 shared_mds: {sm["fetched"]}/{sm["count"]} fetched → {sm["dir"]}')
+        if sm.get('errors'):
+            print(f'      err: {"; ".join(sm["errors"])}')
+
+    # [MEDIA 0.10.0] auto-download attachments[] (best-effort).
+    mr = _fetch_media_for_peck(event, poll_cfg, inbox_path)
+    if mr:
+        print(f'   🖼 media: {len(mr["saved"])}/{len(event.get("attachments") or [])} '
+              f'downloaded → {Path.home() / ".space-duck" / "media"}')
+
+    # Forwarder outcomes are deliberately NOT part of the verdict: a dead
+    # Telegram bot token does not mean the peck was not received.
+    _run_forwarders(event, forward_to)
+
     if on_peck_cmd:
         try:
             argv = shlex.split(on_peck_cmd)
@@ -619,7 +1041,140 @@ def _deliver(event, forward_to, on_peck_cmd):
                 stderr=subprocess.PIPE,
             ).communicate(input=json.dumps(event).encode(), timeout=8)
         except Exception as e:
+            # [DELIVERY-A] §5.4 rule 2: "the responder posts
+            # failed:responder_error instead of exiting silently". This is
+            # the launch/timeout half of that — a handler that could not be
+            # started or that hung past the 8s budget did not process the
+            # peck, and the sender is entitled to know. A handler that ran
+            # and failed on its own terms reports through its own exit path.
             print(f'   warn: --on-peck handler failed: {e}')
+            return {'state': 'failed',
+                    'reason': f'responder_error:{type(e).__name__}'}
+
+    return {'state': 'delivered', 'reason': ''}
+
+
+def _pending_resend_sweep_loop(cfg, interval=300):
+    """0.9.0 [F4-CLIENT] — poll fallback. If a grant-approved notice never
+    arrives (push miss, listener down at approve time), a gentle sweep polls
+    grant status via check_pecks.grant_status() and resends any approved-and-
+    queued peck. Shares _pending_sends.claim() with the notice path, so the two
+    can never double-send. Best-effort; never raises out of the thread."""
+    while True:
+        try:
+            import _pending_sends
+            _pending_sends.prune_expired()
+            pending = _pending_sends.active()
+            if pending:
+                try:
+                    import check_pecks
+                except Exception:
+                    check_pecks = None
+                for entry in pending:
+                    rid = entry.get('request_id') or ''
+                    target = entry.get('target_spaceduck_id') or ''
+                    cap = entry.get('capability') or 'send_peck'
+                    scope = entry.get('scope') or None
+                    if not (rid and target and check_pecks):
+                        continue
+                    try:
+                        res = check_pecks.grant_status(cfg, target, cap, scope)
+                    except Exception as e:
+                        print(f'   [resend-sweep] grant_status {rid[:12]} err: {e}')
+                        continue
+                    if res.get('allowed') is True:
+                        r = _try_resend(rid)
+                        if r is True:
+                            print(f'   [resend-sweep] ↻ resent {rid[:12]} '
+                                  f'(grant confirmed via poll)')
+                        elif r is False:
+                            print(f'   [resend-sweep] ⚠ resend {rid[:12]} failed '
+                                  f'— bounded retry')
+        except Exception as e:
+            print(f'   [resend-sweep] guard: {e}')
+        time.sleep(max(30, interval))
+
+
+def _start_liveness_threads(cfg, *, no_pulse, tg_callback_routing, verbose=False):
+    """0.9.0 [P1/P3] — start the pulse-keepalive + version-nudge + grant
+    resend-sweep daemons and return a shutdown callback. Shared by poll and
+    push mode. `cfg` may be None (unpaired push box) → threads are skipped.
+
+    P1: the 90s self-pulse lives in telegram_listener._pulse_loop; we IMPORT it
+    (one implementation, two callers) rather than copy it. --no-pulse disables
+    the pulse but keeps the daily update nudge (VER-0811 lesson: a debug flag
+    must not silently kill an unrelated safety feature).
+    P3: poll-mode boxes declare tg_callback_routing='owner_polling' in the pulse
+    payload; the field is optional and older servers ignore it."""
+    if not cfg:
+        return lambda: None
+    beak_key = cfg.get('beak_key', '')
+    sd_id = cfg.get('spaceduck_id', '')
+    api_base = cfg.get('api_base', 'https://beak.spaceduckling.com').rstrip('/')
+    if not (beak_key and sd_id):
+        return lambda: None
+
+    shutdown_cb = lambda: None
+    try:
+        from telegram_listener import _pulse_loop, _send_shutdown_pulse
+        if no_pulse:
+            # Version-only thread — nudge stays on even without the pulse.
+            from _version_nudge import version_nudge_loop
+            threading.Thread(
+                target=version_nudge_loop,
+                args=(beak_key, sd_id, api_base, verbose),
+                daemon=True).start()
+            print('[VERCHECK] thread started (--no-pulse: update checks still on)')
+        else:
+            threading.Thread(
+                target=_pulse_loop,
+                args=(beak_key, sd_id, api_base, verbose),
+                kwargs={'tg_callback_routing': tg_callback_routing},
+                daemon=True).start()
+            _r = f' routing={tg_callback_routing}' if tg_callback_routing else ''
+            print(f'[PULSE] thread started — listener-status every 90s{_r}')
+
+            def shutdown_cb():
+                try:
+                    _send_shutdown_pulse(beak_key, sd_id, api_base,
+                                         tg_callback_routing=tg_callback_routing)
+                except Exception:
+                    pass
+    except Exception as e:
+        # A box with no telegram_listener sibling still runs fine; it just
+        # won't self-pulse. Keep the version nudge on its own path.
+        print(f'    (pulse-keepalive unavailable: {e})')
+        try:
+            from _version_nudge import version_nudge_loop
+            threading.Thread(
+                target=version_nudge_loop,
+                args=(beak_key, sd_id, api_base, verbose),
+                daemon=True).start()
+        except Exception:
+            pass
+
+    # Grant resend-sweep (P2c) runs in every mode where we have a config.
+    threading.Thread(
+        target=_pending_resend_sweep_loop, args=(cfg,), daemon=True).start()
+    return shutdown_cb
+
+
+def _install_shutdown_signals(shutdown_cb):
+    """0.9.0 [P1] — SIGTERM/SIGINT send a final shutdown pulse so MC flips the
+    duck offline honestly instead of waiting the stale window, then exit."""
+    def _on_signal(signum, _frame):
+        print(f'\n[STOP] signal {signum} — sending shutdown pulse', file=sys.stderr)
+        try:
+            shutdown_cb()
+        finally:
+            _clear_pid_file()
+            os._exit(0)
+    try:
+        signal.signal(signal.SIGTERM, _on_signal)
+        signal.signal(signal.SIGINT, _on_signal)
+    except (ValueError, OSError):
+        # Not on the main thread — skip silently (mirrors telegram_listener).
+        pass
 
 
 def _write_pid_file():
@@ -703,6 +1258,11 @@ def run_poll(interval, forward_to, on_peck_cmd, cold_start_floor_sec=86400,
     INBOX.mkdir(parents=True, exist_ok=True)
     _write_pid_file()
 
+    # 0.9.0 [P1] — the daily update-nudge + 90s self-pulse now start from
+    # _start_liveness_threads() in __main__ (shared by poll and push mode), so
+    # the pulse thread's version check and the standalone nudge no longer both
+    # run here. See NUDGE-0812 / VER-0811 for the history this consolidates.
+
     print(f'🦆 peck_listener (poll)  agent={agent_name}  duck={sd_id[:10]}…')
     print(f'    api: {api_base}')
     print(f'    config: {cfg["_path"]}')
@@ -733,6 +1293,10 @@ def run_poll(interval, forward_to, on_peck_cmd, cold_start_floor_sec=86400,
                 pecks.sort(key=lambda p: int(p.get('timestamp', 0) or 0))
                 processed_max_ts = since_ms
                 delivered = 0
+                # [DELIVERY-A 2026-10-19] per-peck runtime verdicts for the
+                # ack body (spec §5.4 rule 2). Capped at the server's
+                # per-request limit so one busy round cannot balloon the POST.
+                peck_results = {}
                 for peck in pecks:
                     pid = peck.get('peck_id') or ''
                     pts = int(peck.get('timestamp', 0) or 0)
@@ -742,7 +1306,12 @@ def run_poll(interval, forward_to, on_peck_cmd, cold_start_floor_sec=86400,
                         if pts > processed_max_ts:
                             processed_max_ts = pts
                         continue
-                    _deliver(peck, forward_to, on_peck_cmd)
+                    _res = _deliver(peck, forward_to, on_peck_cmd, poll_cfg=cfg)
+                    if pid and isinstance(_res, dict) and len(peck_results) < 50:
+                        peck_results[pid] = {
+                            'state': _res.get('state', 'delivered'),
+                            'reason': str(_res.get('reason') or '')[:120],
+                        }
                     if pid:
                         _append_seen_id(pid, seen_set, seen_list)
                     if pts > processed_max_ts:
@@ -752,13 +1321,33 @@ def run_poll(interval, forward_to, on_peck_cmd, cold_start_floor_sec=86400,
                 if pecks and processed_max_ts > since_ms:
                     # Ack runs after fanout — best-effort, same as forwarders.
                     # Backend stores ms; pass ms straight through.
+                    _ack_body = {'spaceduck_id': sd_id,
+                                 'up_to_timestamp': int(processed_max_ts)}
+                    # [DELIVERY-A] `results` is additive and optional: an
+                    # older Lambda ignores the key entirely and applies the
+                    # watermark exactly as before, so sending it is safe
+                    # against any server version. Only attached when we
+                    # actually have verdicts, keeping the quiet-round body
+                    # byte-identical to pre-Phase-A.
+                    if peck_results:
+                        _ack_body['results'] = peck_results
                     a_status, a_body = _http_post_json(
-                        f'{api_base}/beak/peck/inbox/ack', headers,
-                        {'spaceduck_id': sd_id, 'up_to_timestamp': int(processed_max_ts)},
+                        f'{api_base}/beak/peck/inbox/ack', headers, _ack_body,
                     )
                     if a_status == 200:
                         print(f'   ✅ ack {a_body.get("acked", 0)} up_to={processed_max_ts}'
                               + (f' (delivered {delivered})' if delivered else ' (already-seen)'))
+                        _ra = a_body.get('results_applied')
+                        if _ra is not None:
+                            print(f'      runtime results applied: {_ra}')
+                        _rr = a_body.get('results_rejected')
+                        if _rr:
+                            print(f'      ⚠️ results rejected: {_rr}')
+                        _failed = [p for p, r in peck_results.items()
+                                   if r.get('state') == 'failed']
+                        if _failed:
+                            print(f'      ⚠️ reported FAILED to platform: '
+                                  f'{", ".join(_failed)}')
                     else:
                         print(f'   ⚠️ ack failed: http_{a_status} {a_body}')
                     since_ms = processed_max_ts
@@ -806,6 +1395,14 @@ def run_poll(interval, forward_to, on_peck_cmd, cold_start_floor_sec=86400,
 
 
 if __name__ == '__main__':
+    # 0.8.13 [RUN-0813] — stamp the version actually executing, so update.sh
+    # can prove a bounce took effect instead of trusting that "a process
+    # exists" means "the new code is serving".
+    try:
+        from _version_nudge import record_running_version
+        record_running_version('peck_listener')
+    except Exception:
+        pass
     p = argparse.ArgumentParser(description='Run a peck.received listener (HTTP push or polling)')
     p.add_argument('--poll', action='store_true',
                    help='Polling mode — long-running loop against /beak/peck/inbox. '
@@ -839,6 +1436,10 @@ if __name__ == '__main__':
                    choices=sorted(FORWARDERS.keys()),
                    help='Forward inbound pecks to a built-in adapter (telegram / slack / discord / '
                         'email / os). Built-in Python adapters only — no shell exec, no opt-in flag needed.')
+    p.add_argument('--no-pulse', action='store_true',
+                   help='Disable the 90s self-pulse (listener-status keepalive). '
+                        'The daily update-nudge still runs — a debug flag must '
+                        'not silently turn off an unrelated safety feature.')
     args = p.parse_args()
 
     # --on-peck requires explicit opt-in.
@@ -850,6 +1451,17 @@ if __name__ == '__main__':
             "         python3 peck_listener.py --poll --on-peck '<cmd>' --allow-shell-hook\n"
         )
         sys.exit(2)
+
+    # 0.9.0 [P1/P2c/P3] — start pulse-keepalive + version-nudge + grant
+    # resend-sweep, and install a shutdown-pulse signal handler. Poll-mode
+    # boxes declare tg_callback_routing='owner_polling' in the pulse payload;
+    # push mode leaves it unset (it is not a Telegram-callback owner-polling
+    # box). cfg is best-effort so an unpaired push box still serves.
+    _cfg = _load_poll_config()
+    _routing = 'owner_polling' if args.poll else None
+    _shutdown_cb = _start_liveness_threads(
+        _cfg, no_pulse=args.no_pulse, tg_callback_routing=_routing)
+    _install_shutdown_signals(_shutdown_cb)
 
     if args.poll:
         run_poll(

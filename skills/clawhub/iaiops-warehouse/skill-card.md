@@ -1,40 +1,53 @@
-## Description: <br>
-Iaiops Warehouse helps agents inspect and analyze warehouse and intralogistics operations across EtherNet/IP, Profinet, Modbus, OPC-UA, and MQTT-Sparkplug telemetry, including predictive maintenance, downtime triage, OEE/throughput, alarms, bottlenecks, and sortation health. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps warehouse operations teams analyze conveyor, sorter, and mobile-robot telemetry for maintenance, downtime, throughput, and alarm investigations across industrial protocols.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, engineers, and operations teams use this skill to guide warehouse and material-handling diagnostics, telemetry analysis, predictive maintenance, throughput/OEE review, alarm analysis, and controlled OT change workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release is flagged suspicious because it presents a read-only posture while exposing write-capable control-system tools. <br>
-Mitigation: Review before installing in any warehouse or industrial network; enable it only where write-capable tools are technically gated, approved, logged, and separated from production unless explicitly authorized. <br>
-Risk: Write-capable OT operations such as EtherNet/IP tag writes and Profinet DCP changes can affect warehouse or industrial equipment if executed without authorization. <br>
-Mitigation: Keep dry-run, approval, audit, and change-management gates enabled; restrict credentials and network access to approved maintenance contexts. <br>
+## Use Case:
 
+Warehouse operations engineers and maintenance teams use the skill to investigate material-handling equipment, diagnose downtime and bottlenecks, and plan predictive maintenance using industrial telemetry.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-warehouse) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance, analysis] <br>
-**Output Format:** [Markdown guidance with inline commands, configuration notes, and tool names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include OT diagnostics, read/write gating guidance, and risk notes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release metadata) <br>
+Risk: Despite its read-only description, the skill documents controls that can change production equipment settings.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit operator approval for write tools and enforce dry runs in the runtime; do not rely on the read-only description for access policy.
+
+Risk: Publishing and export tools can send operational messages or write files.
+
+Mitigation: Gate publishing and file-writing tools under operator approval and limit them to approved destinations.
+
+## Reference(s):
+
+- [iaiops-warehouse ClawHub release](https://clawhub.ai/zw008/skills/iaiops-warehouse)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Configuration instructions]
+
+**Output Format:** [Text and structured tool responses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes operational diagnostics, forecasts, and configuration drafts.]
+
+## Skill Version(s):
+
+0.32.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

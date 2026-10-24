@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-compliance",
   "slug": "agent-bom-compliance",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946272778,
-  "contentHash": "6914bf72e339e67b016b21097b9e65e14c6b599df6e778919ca18cfd34492e2a",
-  "fetchedAt": "2026-07-26T18:04:22.649Z"
+  "version": "0.110.0",
+  "updatedAt": 1792704890520,
+  "contentHash": "230ea1de59364a251fb13917f819c4fe26cc773973f9b8c0c5689599e4f58dcc",
+  "fetchedAt": "2026-10-24T12:09:56.937Z"
 }

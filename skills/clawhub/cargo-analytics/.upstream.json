@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-analytics",
   "slug": "cargo-analytics",
   "ownerHandle": null,
-  "version": "1.4.2",
-  "updatedAt": 1783647781935,
-  "contentHash": "8c50b7518911db5581701375cbc24ec16aaaddf38b010fc8fcc591c825ab1e0b",
-  "fetchedAt": "2026-07-26T18:17:16.814Z"
+  "version": "1.7.0",
+  "updatedAt": 1792271777413,
+  "contentHash": "9ab215444233e5e494f5a488a690b5a14299e3f58d4ec1f33765b1c6fdafe2c4",
+  "fetchedAt": "2026-10-24T12:24:01.748Z"
 }

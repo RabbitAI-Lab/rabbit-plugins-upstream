@@ -1,0 +1,29 @@
+# Performance Review Writer - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+employee_role: ""
+manager_role: ""
+review_period_start: ""
+review_period_end: ""
+review_type: "semi-annual or annual"
+goals:
+  - goal: ""
+    target: ""
+    result: ""
+    rating: ""
+    example_date: ""
+    example_behavior: ""
+    evidence_source: ""
+competencies:
+  - competency: ""
+    rating: ""
+    evidence: ""
+strengths:
+  - ""
+growth_areas:
+  - ""
+follow_up_actions:
+  - action: ""
+    owner_role: ""
+    due_date: ""
+flags_for_hr:
+  - ""

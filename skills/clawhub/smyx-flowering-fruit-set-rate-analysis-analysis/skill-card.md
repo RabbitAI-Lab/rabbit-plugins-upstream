@@ -1,43 +1,53 @@
-## Description: <br>
-Analyzes tomato or chili flower and fruit images or videos to count open flowers and young fruits, compute fruit-set rate, and return grower-facing guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes tomato and chili flower or fruit images and videos to estimate fruit-set rates and provide growing guidance.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External growers, horticulture operators, and agent developers use this skill to analyze tomato or chili flower/fruit media, estimate fruit-set rates, receive pollination or environment adjustment guidance, and view prior analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded media or URLs are sent to lifeemergence cloud services for analysis. <br>
-Mitigation: Use only media and URLs suitable for third-party cloud processing; avoid sensitive images or private/internal URLs unless publisher disclosures meet your consent, retention, deletion, and permission requirements. <br>
-Risk: The skill silently creates or reuses an identity, stores tokens locally, and queries cloud report history tied to that identity. <br>
-Mitigation: Review local identity and token storage before installation, run the skill in an isolated workspace, and avoid using it where silent cloud history linkage is unacceptable. <br>
+## Use Case:
 
+Home growers and greenhouse operators use the skill to analyze tomato and chili flower or fruit media, review estimated fruit-set rates, and retrieve past reports to inform cultivation decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API 接口文档](references/api_doc.md) <br>
-- [API接口文档](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON text, including structured analysis reports, report links, and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Accepts local image/video paths or public media URLs; documented media limit is 10 MB.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Uploaded media and report history are handled by a cloud service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive images and private URLs unless the publisher clarifies privacy and retention terms.
+
+Risk: The skill creates or reuses a persistent local identity and cached tokens.
+
+Mitigation: Review the publisher's account-control terms and local identity persistence before installing.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/smyx-sunjinhui/skills/smyx-flowering-fruit-set-rate-analysis-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [JSON analysis results or Markdown report summaries and history tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include report links; results can optionally be saved to a file.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved ClawHub release; bundled SKILL.md states 1.0.19)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

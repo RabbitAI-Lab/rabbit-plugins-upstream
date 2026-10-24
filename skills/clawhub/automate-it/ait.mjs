@@ -27,16 +27,20 @@ export const USAGE = `ait — Automate It CLI for AI agents
 
 Environment:
   AUTOMATE_IT_API_KEY    (required) API key (ak_*), created in Profile → API keys
-  AUTOMATE_IT_API_URL    API base URL (default: ${DEFAULT_API_URL})
+  AUTOMATE_IT_API_URL    API base URL (default: ${DEFAULT_API_URL}). Must be
+                         https:// — plain http:// is only allowed for
+                         localhost, 127.0.0.1, or [::1] (local dev).
   AUTOMATE_IT_WORKSPACE  Default workspace id (else pass --workspace, else
                          auto-resolved when the key has exactly one workspace)
 
 Destructive commands (task delete, task delete-content, task clear-content,
-automation delete, folders delete) permanently remove data and refuse to run
-without --yes. Only pass it when the operator asked for that deletion by name.
+automation delete, folders delete, skills delete) permanently remove data and
+refuse to run without --yes. Only pass it when the operator asked for that
+deletion by name.
 
 Discovery:
-  ait workspaces                       List workspaces the key can access
+  ait workspaces                       List workspaces the key can access,
+                                       each with its memory entries
   ait whoami                           Show the user this key acts as
   ait integrations                     Platforms connected for publishing
 
@@ -55,6 +59,8 @@ Tasks (the review-gate loop):
       skips assigned tasks and the assignee works them.
   ait task submit --title <t> --body <text>
       [--type <contentType>] [--media '<json array>'] [same flags as create]
+      [--link-url <url>] [--link-action learn_more|book|order|buy|sign_up]
+      [--topic <topic>]
       One-shot: creates the task WITH finished content — it skips todo/working
       and lands directly in the human review queue.
   ait task list [--status <s>] [--mine] [--limit <n>] [--offset <n>]
@@ -63,23 +69,75 @@ Tasks (the review-gate loop):
                                        Statuses: todo working review approved
                                        publishing published deleted failed
   ait task get <taskId>                Full task detail, incl. reviewer comments
+                                       and the memory entries to apply
+  ait task update <taskId>             Patch task fields (admin keys)
+      [--title <t>] [--instructions <text>] [--output-types x,linkedin,...]
+      [--publish-mode manual|immediate|scheduled] [--publish-at <ISO date>]
+      [--clear-publish-at] [--review] [--no-review]
+                                       Only provided flags are changed.
+                                       --review turns the gate back on;
+                                       --clear-publish-at drops a scheduled time
+                                       (the task does not need to be approved).
   ait task links <taskId>              Published post URLs for a task
-  ait task claim-next                  Atomically claim the oldest todo task
+  ait task claim-next                  Atomically claim the oldest todo task;
+                                       returns it with its memory entries
   ait task claim <taskId>              Claim a specific todo task
   ait task add-content <taskId>        Add generated content to a claimed task
       [--body <text>] [--type <contentType>] [--title <t>]
       [--media '<json array>'] [--sort-order <n>]
+      [--link-url <url>] [--link-action learn_more|book|order|buy|sign_up]
+      --link-url is where the post sends readers; Google Business Profile
+      publishes it as the post's button, which --link-action names (default
+      learn_more = "Learn more"). Set it to the page the post is about — the
+      blog article it summarizes, a product, booking, or signup page.
+      [--topic <topic>]                Threads only: the post's one topic.
+                                       Threads has no hashtags — set the
+                                       topic here (no #, 1-50 chars, no . or
+                                       &), never as a #tag in the body.
+                                       First post of a thread only.
+      --media items are [{"type":"image|video|audio|document","fileId":"<id>"}]
+      — get a fileId from "ait upload-url"; URLs are not accepted.
+      --items '<json array>'           Several posts in ONE call: each entry
+                                       has the single-post fields (body, type
+                                       as contentType, title, media, sortOrder,
+                                       outputType, linkUrl, linkAction,
+                                       topicTag). A
+                                       thread is one call with
+                                       sortOrder 0, 1, 2...; all-or-nothing —
+                                       a bad item means nothing is added and
+                                       the error names it by index. Items that
+                                       omit sortOrder are numbered by position
+                                       within their contentType. Not combined
+                                       with the single-post flags.
+      For --type youtube, an image in --media alongside the video becomes the
+      video's custom thumbnail (match the video's shape: 16:9, or 9:16 for a
+      Short). Any image format works; it is converted if YouTube won't take it.
   ait task update-content <taskId> <contentItemId>
-      [--body <text>] [--title <t>]    Rewrite a content item in place
+      [--body <text>] [--title <t>] [--media '<json array>']
+      [--link-url <url>] [--link-action learn_more|book|order|buy|sign_up]
+      [--clear-link] [--topic <topic>] [--clear-topic]
+                                       Rewrite a content item in place.
+                                       Omit --media to leave attachments;
+                                       --media '[]' clears them. --clear-link
+                                       removes the item's link and button;
+                                       --clear-topic removes a Threads topic.
   ait task delete-content <taskId> <contentItemId> --yes
   ait task clear-content <taskId> --yes
                                        Remove every content item from a task
   ait task complete <taskId>           Finish work (status → review/approved)
-  ait task comment <taskId> --comment <text>
-                                       Leave a note for the human reviewer
+  ait task comment <taskId> --comment <text> [--file-ids <csv>]
+                                       Leave a note for the human reviewer.
+                                       --file-ids attaches workspace files
+                                       (ids must belong to this workspace).
   ait task next-review                 Next task waiting for human review
   ait task approve <taskId>            Approve (reviewer/admin keys)
+      [--tiktok '<json>']              Required for TikTok tasks: the operator's Post to
+                                       TikTok visibility and interaction choices. Ask for
+                                       them; never pick a privacy level yourself.
   ait task reject <taskId> [--comment <text>]
+  ait task unapprove <taskId> [--comment <text>]
+                                       Undo an approval: back to review, work
+                                       kept. Use reject to have it redone.
   ait task publish <taskId> [--platforms a,b]
   ait task schedule <taskId> --at <ISO date> | --auto | --clear
                                        Schedule an approved task to publish
@@ -90,19 +148,35 @@ Tasks (the review-gate loop):
 
 Skills (workspace voice, formatting rules, bundled reference files):
   ait skills list                      id, name, description for each skill
-  ait skills get <skillId>             Full instructions + bundled file ids
+  ait skills get <skillId>             Full instructions, memory entries,
+                                       bundled file ids
+  ait skills create --name <n>         [--description <text>]
+      [--instructions <text>] [--file-ids <csv>] [--folder-ids <csv>]
+                                       Instructions capped at 24,000 characters;
+                                       name must be unique in the workspace
+  ait skills update <skillId>          [--name <n>] [--description <text>]
+      [--instructions <text>] [--file-ids <csv>] [--folder-ids <csv>]
+                                       Only provided fields are changed
+  ait skills delete <skillId> --yes    Fails if an automation or active task
+                                       still references the skill
 
 Automations:
   ait automation create --name <n>     [--instructions <text>]
       [--output-types x,...] [--schedule <json>] [--no-review]
   ait automation list
-  ait automation get <automationId>
+  ait automation get <automationId>    Full detail, including memory entries
   ait automation update <automationId> [--name <n>] [--instructions <text>]
       [--output-types x,...] [--schedule <json>]
   ait automation delete <automationId> --yes
-                                       Also deletes every task it spawned,
-                                       published ones included
+                                       Also deletes its unfinished tasks (to
+                                       do, in progress, in review); approved
+                                       and published tasks are kept
   ait automation run <automationId>    Trigger now; returns the spawned task
+  ait automation pause <automationId>  Stops new tasks from being created;
+                                       existing tasks still publish, Run Now
+                                       still works
+  ait automation resume <automationId> Resumes at the next slot; missed runs
+                                       are not backfilled
 
 Files:
   ait upload-url --filename <f> --mime-type <m>
@@ -134,11 +208,14 @@ Composing posts:
                                        UTF-8 bytes, Bluesky counts graphemes.
   ait shorten <url> [--title <t>]      Shorten a link for a post
 
-All workspace commands accept --workspace <id>.`;
+All workspace commands accept --workspace <id>.
+
+Output: tool results may include a human-readable status line before the
+JSON. Pass --json to print only the JSON value, pipable to jq.`;
 
 export class CliError extends Error {}
 
-const BOOLEAN_FLAGS = new Set(["no-review", "claim", "mine", "clear", "auto", "help", "yes", "root"]);
+const BOOLEAN_FLAGS = new Set(["no-review", "review", "claim", "mine", "clear", "clear-publish-at", "auto", "help", "yes", "root", "json", "clear-link", "clear-topic"]);
 
 // MCP tools that permanently remove data, keyed to what they destroy. Keyed by
 // tool rather than by command so the gate lives next to the thing that does
@@ -147,8 +224,9 @@ const DESTRUCTIVE_TOOLS = new Map([
   ["delete_task", "delete the task and everything attached to it"],
   ["delete_content_item", "delete the content item"],
   ["clear_task_content", "remove every content item from the task"],
-  ["delete_automation", "delete the automation and every task it ever spawned, published ones included"],
+  ["delete_automation", "delete the automation and its unfinished tasks (to do, in progress, in review); approved and published tasks are kept"],
   ["delete_folder", "delete the folder and every file and folder inside it"],
+  ["delete_skill", "delete the skill"],
 ]);
 
 /** Destructive tools need an explicit --yes; nothing else is affected. */
@@ -195,6 +273,19 @@ function csv(value) {
     .filter(Boolean);
 }
 
+/** --topic as the Threads topicTag field it sets, when given. */
+function topicArgs(flags) {
+  return flags.topic !== undefined ? { topicTag: flags.topic } : {};
+}
+
+/** --link-url / --link-action as the content fields they set, when given. */
+function linkArgs(flags) {
+  return {
+    ...(flags["link-url"] !== undefined ? { linkUrl: flags["link-url"] } : {}),
+    ...(flags["link-action"] !== undefined ? { linkAction: flags["link-action"] } : {}),
+  };
+}
+
 function parseJsonFlag(value, flagName) {
   try {
     return JSON.parse(value);
@@ -223,6 +314,15 @@ export function extractJson(text) {
   }
 }
 
+export function formatOutput(result, jsonOnly) {
+  let output = typeof result === "string" ? result : JSON.stringify(result, null, 2);
+  if (jsonOnly) {
+    const extracted = extractJson(output);
+    if (extracted !== null) output = JSON.stringify(extracted, null, 2);
+  }
+  return output;
+}
+
 function parseRpcResponse(contentType, text) {
   if (contentType.includes("text/event-stream")) {
     for (const line of text.split("\n")) {
@@ -244,15 +344,32 @@ function parseRpcResponse(contentType, text) {
   }
 }
 
+const LOCAL_HOSTNAMES = new Set(["localhost", "127.0.0.1", "[::1]"]);
+
 function baseUrl(ctx) {
-  return (ctx.env.AUTOMATE_IT_API_URL || DEFAULT_API_URL).replace(/\/+$/, "");
+  const raw = (ctx.env.AUTOMATE_IT_API_URL || DEFAULT_API_URL).replace(/\/+$/, "");
+  let url;
+  try {
+    url = new URL(raw);
+  } catch {
+    throw new CliError(`AUTOMATE_IT_API_URL is not a valid URL: "${raw}"`);
+  }
+  const isLocalHttp = url.protocol === "http:" && LOCAL_HOSTNAMES.has(url.hostname);
+  if (url.protocol !== "https:" && !isLocalHttp) {
+    throw new CliError(
+      `AUTOMATE_IT_API_URL must use https:// (plain http:// is only allowed for localhost, ` +
+        `127.0.0.1, or [::1]) to avoid sending the API key to a plaintext endpoint: "${raw}"`
+    );
+  }
+  return raw;
 }
 
 function apiKey(ctx) {
   const key = ctx.env.AUTOMATE_IT_API_KEY;
   if (!key) {
     throw new CliError(
-      "AUTOMATE_IT_API_KEY is not set. Create an API key in Automate It (Profile → API keys) and export it."
+      "AUTOMATE_IT_API_KEY is not set. Ask the operator to create an API key in Automate It (Profile → API keys) " +
+        "and load it from their runtime's secret store or a mode-600 env file — not an interactive shell export."
     );
   }
   return key;
@@ -453,6 +570,8 @@ export async function runCommand(argv, opts = {}) {
             ...(flags.body ? { body: flags.body } : {}),
             ...(flags.type ? { contentType: flags.type } : {}),
             ...(flags.media ? { media: parseJsonFlag(flags.media, "media") } : {}),
+            ...linkArgs(flags),
+            ...topicArgs(flags),
           },
         ],
       });
@@ -469,6 +588,37 @@ export async function runCommand(argv, opts = {}) {
       });
     }
 
+    case "task update": {
+      const taskId = requirePositional(rest, "taskId", "ait task update <taskId> [flags]");
+      const workspaceId = await resolveWorkspace(ctx, flags);
+      const publishMode = flags["publish-mode"];
+      if (publishMode && !PUBLISH_MODES.includes(publishMode)) {
+        throw new CliError(`--publish-mode must be one of: ${PUBLISH_MODES.join(", ")}`);
+      }
+      if (flags.review === true && flags["no-review"] === true) {
+        throw new CliError("Use only one of --review, --no-review");
+      }
+      if (flags["publish-at"] && flags["clear-publish-at"] === true) {
+        throw new CliError("Use only one of --publish-at, --clear-publish-at");
+      }
+      let requiresReview;
+      if (flags.review === true) requiresReview = true;
+      else if (flags["no-review"] === true) requiresReview = false;
+      let publishAt;
+      if (flags["clear-publish-at"] === true) publishAt = null;
+      else if (flags["publish-at"]) publishAt = flags["publish-at"];
+      return callTool(ctx, "update_task", {
+        workspaceId,
+        taskId,
+        ...(flags.title ? { title: flags.title } : {}),
+        ...(flags.instructions !== undefined ? { instructions: flags.instructions } : {}),
+        ...(flags["output-types"] ? { outputTypes: csv(flags["output-types"]) } : {}),
+        ...(publishMode ? { publishMode } : {}),
+        ...(publishAt !== undefined ? { publishAt } : {}),
+        ...(requiresReview !== undefined ? { requiresReview } : {}),
+      });
+    }
+
     case "task get":
     case "task links": {
       const taskId = requirePositional(rest, "taskId", `ait task ${action} <taskId>`);
@@ -480,14 +630,23 @@ export async function runCommand(argv, opts = {}) {
       return shapeLinks(task);
     }
 
+    case "task approve": {
+      const taskId = requirePositional(rest, "taskId", "ait task approve <taskId> [--tiktok '<json>']");
+      requireConfirmation(flags, "approve_task");
+      const workspaceId = await resolveWorkspace(ctx, flags);
+      return callTool(ctx, "approve_task", {
+        workspaceId,
+        taskId,
+        ...(flags.tiktok ? { tiktok: parseJsonFlag(flags.tiktok, "tiktok") } : {}),
+      });
+    }
+
     case "task claim":
     case "task complete":
-    case "task approve":
     case "task delete": {
       const toolByAction = {
         claim: "claim_task",
         complete: "complete_task",
-        approve: "approve_task",
         delete: "delete_task",
       };
       const taskId = requirePositional(rest, "taskId", `ait task ${action} <taskId>`);
@@ -500,6 +659,16 @@ export async function runCommand(argv, opts = {}) {
       const taskId = requirePositional(rest, "taskId", "ait task reject <taskId> [--comment <text>]");
       const workspaceId = await resolveWorkspace(ctx, flags);
       return callTool(ctx, "reject_task", {
+        workspaceId,
+        taskId,
+        ...(flags.comment ? { comment: flags.comment } : {}),
+      });
+    }
+
+    case "task unapprove": {
+      const taskId = requirePositional(rest, "taskId", "ait task unapprove <taskId> [--comment <text>]");
+      const workspaceId = await resolveWorkspace(ctx, flags);
+      return callTool(ctx, "unapprove_task", {
         workspaceId,
         taskId,
         ...(flags.comment ? { comment: flags.comment } : {}),
@@ -538,9 +707,25 @@ export async function runCommand(argv, opts = {}) {
     }
 
     case "task add-content": {
-      const taskId = requirePositional(rest, "taskId", "ait task add-content <taskId> --body <text>");
+      const taskId = requirePositional(rest, "taskId", "ait task add-content <taskId> --body <text> | --items '<json array>'");
+      if (flags.items !== undefined) {
+        // One call for every post; the server validates the batch together
+        // and inserts it as one transaction.
+        const singleFlags = ["body", "media", "type", "title", "sort-order", "link-url", "link-action", "topic"].filter((f) => flags[f] !== undefined);
+        if (singleFlags.length > 0) {
+          throw new CliError(
+            `task add-content takes either --items or the single-post flags (${singleFlags.map((f) => `--${f}`).join(", ")}), not both`
+          );
+        }
+        const items = parseJsonFlag(flags.items, "items");
+        if (!Array.isArray(items) || items.length === 0) {
+          throw new CliError("--items must be a non-empty JSON array of posts");
+        }
+        const workspaceId = await resolveWorkspace(ctx, flags);
+        return callTool(ctx, "add_content_to_task", { workspaceId, taskId, items });
+      }
       if (!flags.body && !flags.media) {
-        throw new CliError("task add-content requires --body and/or --media");
+        throw new CliError("task add-content requires --body and/or --media (or --items for several posts)");
       }
       const workspaceId = await resolveWorkspace(ctx, flags);
       return callTool(ctx, "add_content_to_task", {
@@ -551,6 +736,8 @@ export async function runCommand(argv, opts = {}) {
         ...(flags.type ? { contentType: flags.type } : {}),
         ...(flags.media ? { media: parseJsonFlag(flags.media, "media") } : {}),
         ...(flags["sort-order"] !== undefined ? { sortOrder: Number(flags["sort-order"]) } : {}),
+        ...linkArgs(flags),
+        ...topicArgs(flags),
       });
     }
 
@@ -605,24 +792,46 @@ export async function runCommand(argv, opts = {}) {
       return callTool(ctx, "run_automation", { workspaceId, automationId });
     }
 
+    case "automation pause":
+    case "automation resume": {
+      const automationId = requirePositional(rest, "automationId", `ait automation ${action} <automationId>`);
+      const tool = action === "pause" ? "pause_automation" : "resume_automation";
+      const workspaceId = await resolveWorkspace(ctx, flags);
+      return callTool(ctx, tool, { workspaceId, automationId });
+    }
+
     case "task claim-next": {
       const workspaceId = await resolveWorkspace(ctx, flags);
       return callTool(ctx, "claim_next_task", { workspaceId });
     }
 
     case "task comment": {
-      const taskId = requirePositional(rest, "taskId", 'ait task comment <taskId> --comment "..."');
+      const taskId = requirePositional(rest, "taskId", 'ait task comment <taskId> --comment "..." [--file-ids <csv>]');
       if (!flags.comment) throw new CliError("--comment is required for task comment");
       const workspaceId = await resolveWorkspace(ctx, flags);
-      return callTool(ctx, "add_task_comment", { workspaceId, taskId, comment: flags.comment });
+      return callTool(ctx, "add_task_comment", {
+        workspaceId,
+        taskId,
+        comment: flags.comment,
+        ...(flags["file-ids"] ? { fileIds: csv(flags["file-ids"]) } : {}),
+      });
     }
 
     case "task update-content": {
       const usage = "ait task update-content <taskId> <contentItemId>";
       const taskId = requirePositionalAt(rest, 0, "taskId", usage);
       const contentItemId = requirePositionalAt(rest, 1, "contentItemId", usage);
-      if (flags.body === undefined && flags.title === undefined) {
-        throw new CliError("at least one of --body or --title is required for task update-content");
+      const fieldFlags = ["link-url", "link-action", "clear-link", "topic", "clear-topic"].filter((f) => flags[f] !== undefined);
+      if (flags.body === undefined && flags.title === undefined && flags.media === undefined && fieldFlags.length === 0) {
+        throw new CliError(
+          "at least one of --body, --title, --media, --link-url, --link-action, --clear-link, --topic, or --clear-topic is required for task update-content"
+        );
+      }
+      if (flags["clear-topic"] === true && flags.topic !== undefined) {
+        throw new CliError("--clear-topic removes the topic; don't combine it with --topic");
+      }
+      if (flags["clear-link"] === true && (flags["link-url"] !== undefined || flags["link-action"] !== undefined)) {
+        throw new CliError("--clear-link removes the link; don't combine it with --link-url or --link-action");
       }
       const workspaceId = await resolveWorkspace(ctx, flags);
       return callTool(ctx, "update_content_item", {
@@ -631,6 +840,9 @@ export async function runCommand(argv, opts = {}) {
         contentItemId,
         ...(flags.body !== undefined ? { body: flags.body } : {}),
         ...(flags.title !== undefined ? { title: flags.title } : {}),
+        ...(flags.media !== undefined ? { media: parseJsonFlag(flags.media, "media") } : {}),
+        ...(flags["clear-link"] === true ? { linkUrl: null } : linkArgs(flags)),
+        ...(flags["clear-topic"] === true ? { topicTag: null } : topicArgs(flags)),
       });
     }
 
@@ -659,6 +871,40 @@ export async function runCommand(argv, opts = {}) {
       const skillId = requirePositional(rest, "skillId", "ait skills get <skillId>");
       const workspaceId = await resolveWorkspace(ctx, flags);
       return callTool(ctx, "get_skill", { workspaceId, skillId });
+    }
+
+    case "skills create": {
+      if (!flags.name) throw new CliError("--name is required for skills create");
+      const workspaceId = await resolveWorkspace(ctx, flags);
+      return callTool(ctx, "create_skill", {
+        workspaceId,
+        name: flags.name,
+        ...(flags.description !== undefined ? { description: flags.description } : {}),
+        ...(flags.instructions !== undefined ? { instructions: flags.instructions } : {}),
+        ...(flags["file-ids"] ? { fileIds: csv(flags["file-ids"]) } : {}),
+        ...(flags["folder-ids"] ? { folderIds: csv(flags["folder-ids"]) } : {}),
+      });
+    }
+
+    case "skills update": {
+      const skillId = requirePositional(rest, "skillId", "ait skills update <skillId> [flags]");
+      const workspaceId = await resolveWorkspace(ctx, flags);
+      return callTool(ctx, "update_skill", {
+        workspaceId,
+        skillId,
+        ...(flags.name !== undefined ? { name: flags.name } : {}),
+        ...(flags.description !== undefined ? { description: flags.description } : {}),
+        ...(flags.instructions !== undefined ? { instructions: flags.instructions } : {}),
+        ...(flags["file-ids"] !== undefined ? { fileIds: csv(flags["file-ids"]) } : {}),
+        ...(flags["folder-ids"] !== undefined ? { folderIds: csv(flags["folder-ids"]) } : {}),
+      });
+    }
+
+    case "skills delete": {
+      const skillId = requirePositional(rest, "skillId", "ait skills delete <skillId> --yes");
+      requireConfirmation(flags, "delete_skill");
+      const workspaceId = await resolveWorkspace(ctx, flags);
+      return callTool(ctx, "delete_skill", { workspaceId, skillId });
     }
 
     case "files download-url": {
@@ -768,10 +1014,11 @@ const isMain = (() => {
 })();
 
 if (isMain) {
-  runCommand(process.argv.slice(2))
+  const args = process.argv.slice(2);
+  const jsonOnly = args.includes("--json");
+  runCommand(args)
     .then((result) => {
-      const output = typeof result === "string" ? result : JSON.stringify(result, null, 2);
-      process.stdout.write(`${output}\n`);
+      process.stdout.write(`${formatOutput(result, jsonOnly)}\n`);
     })
     .catch((err) => {
       process.stderr.write(`${JSON.stringify({ error: err?.message || String(err) })}\n`);

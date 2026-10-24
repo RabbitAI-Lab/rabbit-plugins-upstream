@@ -1,43 +1,59 @@
-## Description: <br>
-Versatile video generation with Kling v3 Omni, supporting multi-modal image and prompt inputs for dynamic video generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Versatile video generation with Kling v3 Omni, supporting multimodal inputs such as images and prompts to create videos.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to call the dLazy Kling v3 Omni CLI for text-to-video and image or video reference generation workflows, including synchronous generation and asynchronous task polling. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and local media paths supplied to the CLI can be uploaded to dLazy's hosted service. <br>
-Mitigation: Use the skill only with content approved for dLazy cloud processing and avoid sending sensitive media or confidential prompts unless the user's policy permits it. <br>
-Risk: The dLazy CLI may save an API key in the local user configuration. <br>
-Mitigation: Use the DLAZY_API_KEY environment variable for per-invocation credentials when persistent local storage is not desired, and rotate or revoke keys from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Content creators and developers use the skill to generate videos with Kling v3 Omni from text prompts and supported image or video references, with options for duration, aspect ratio, sound, and generation mode.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3-omni) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated media is returned through dLazy-hosted output URLs or an asynchronous task identifier.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release metadata) <br>
+Risk: Input media is uploaded to dLazy for cloud processing, and the supplied evidence does not establish the service's data-retention practices.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Only submit media you are comfortable sharing with the service; review its terms before sending sensitive content.
+
+Risk: The workflow uses a stored dLazy API key and may incur generation costs.
+
+Mitigation: Protect the saved key, rotate or revoke it when needed, and monitor available credits and usage.
+
+Risk: The supplied artifacts do not establish the external CLI package's runtime security.
+
+Mitigation: Review the CLI package before installing it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-kling-v3-omni)
+- [dLazy](https://dlazy.com)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [video, JSON]
+
+**Output Format:** [Generated video asset returned as a hosted URL or saved file, with JSON task and result metadata.]
+
+**Output Parameters:** [Prompt; optional image or video references; generation mode; aspect ratio; duration; standard or pro mode; optional sound and source-audio settings.]
+
+**Other Properties Related to Output:** [Generation may be asynchronous; results can include a task identifier for later status checks.]
+
+## Skill Version(s):
+
+1.3.32
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
