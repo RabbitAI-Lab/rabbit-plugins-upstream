@@ -1,44 +1,54 @@
-## Description: <br>
-Calendar Extractor reads recent HiJavis audio and keyboard transcripts, extracts likely calendar events, writes them as pending calendar rows, and sends per-event markdown cards to iOS chat. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Extracts calendar plans from recent voice and keyboard transcripts, sends individual event cards to HiJavis chat, and adds events to the calendar as pending until confirmed.
 
-## Publisher: <br>
-[samuel-wei](https://clawhub.ai/user/samuel-wei) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[samuel-wei](https://clawhub.ai/user/samuel-wei)
 
-## Use Case: <br>
-External HiJavis users use this skill to turn recent conversation and keyboard transcript references to meetings, appointments, and plans into pending calendar entries and chat cards they can confirm, discard, or edit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill automatically analyzes completed voice and keyboard transcript units, which may include private content. <br>
-Mitigation: Enable it only when the user accepts this transcript access, and provide controls to disable auto-runs or limit transcript windows. <br>
-Risk: Extracted event details can be surfaced without explicit approval for each run. <br>
-Mitigation: Keep extracted events pending until the user confirms them, and allow users to discard or edit events before treating them as confirmed. <br>
-Risk: Relative or ambiguous time language can produce inaccurate calendar details. <br>
-Mitigation: Resolve dates from the fetched local reference date and timezone, and leave unresolved fields null or ask for clarification when the transcript is ambiguous. <br>
+## Use Case:
 
+HiJavis users use this skill to find meetings and appointments mentioned in recent recordings or typed transcripts, review proposed calendar entries, and receive event cards in chat. It can run on request or after a completed transcript.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/samuel-wei/skills/calendar-extractor) <br>
-- [Route Contract](references/route-contract.md) <br>
-- [HiJavis iPhone App](https://apps.apple.com/us/app/hijavis/id6745134765) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, API calls, configuration] <br>
-**Output Format:** [JSON transcript and anchor payloads, JSON event or update input, per-event Markdown chat cards, and local JSON dedup state.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a 24-hour default transcript window, event-level deduplication, and pending event status until user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.1 (source: server release metadata and package.json) <br>
+Risk: Enabling the skill can automatically process recent voice and keyboard transcripts and send event details to chat without approval before each run.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the HiJavis privacy, retention, and disable controls before enabling it; avoid capturing conversations you do not want processed.
+
+Risk: Extracted plans may be incorrect or include sensitive details, and pending entries are created before confirmation.
+
+Mitigation: Review each event card and pending calendar entry; correct or discard inaccurate entries before relying on them.
+
+## Reference(s):
+
+- [Calendar Extractor on ClawHub](https://clawhub.ai/samuel-wei/skills/calendar-extractor)
+- [HiJavis iPhone app](https://apps.apple.com/us/app/hijavis/id6745134765)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text]
+
+**Output Format:** [Individual markdown event cards and a text reply for on-demand requests]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Extracted entries appear as pending calendar items until confirmed or discarded; chat edits can confirm an entry.]
+
+## Skill Version(s):
+
+0.7.3 (source: ClawHub release metadata, package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

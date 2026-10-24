@@ -1,42 +1,57 @@
-## Description: <br>
-Checks whether a local system and Python environment are ready for AI/ML and RAG development, including tools, packages, workspace structure, and configuration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+CHECK helps agents inspect AI/ML development environments, verify tools and Python packages, manage related development helper workflows, and install missing dependencies.
 
-## Publisher: <br>
-[Tilannlou](https://clawhub.ai/user/Tilannlou) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[tilannlou](https://clawhub.ai/user/tilannlou)
 
-## Use Case: <br>
-Developers use this skill to audit an AI/ML or RAG development environment, identify missing system tools or Python packages, and receive environment-readiness reports or installation-oriented guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The package is presented mainly as an environment checker but also includes code running, arbitrary local command execution, possible elevation paths, and package installation behavior. <br>
-Mitigation: Install only when the full development-skills bundle is intended; review or disable code-runner, permission-manager, universal-command, Docker, Ollama, and elevated-command paths before use. <br>
-Risk: Package installation and generated code execution can alter the local environment or run untrusted code. <br>
-Mitigation: Use a virtual environment or sandbox and require explicit human approval for every package install, generated-code run, Docker or Ollama action, and sudo or administrator path. <br>
-Risk: The bundle can store, modify, or delete local knowledge files through the included RAG management behavior. <br>
-Mitigation: Limit filesystem access to a dedicated workspace and review file write or delete actions before execution. <br>
+## Use Case:
 
+Developers and engineers use CHECK to assess local AI/ML and RAG development readiness, generate or test code snippets, organize RAG content, and troubleshoot package or command permission issues. Because it can execute commands, install packages, write files, and delete files, it is best used in controlled development environments.
 
-## Reference(s): <br>
-- [CHECK ClawHub page](https://clawhub.ai/Tilannlou/check) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON reports with Markdown guidance, code snippets, and shell-command proposals] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose package installation, generated code execution, local file operations, or command execution depending on which bundled skill behavior is invoked.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact package.json) <br>
+Risk: The security summary states that this skill gives agents broad host command execution, package installation, code execution, file mutation, and automatic privilege attempts without clear safety gates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install and run it only in a disposable or tightly sandboxed development environment with no sensitive files, credentials, Docker access, passwordless sudo, or shared Python environments.
+
+Risk: The artifact can install Python packages and run generated or user-supplied code, which can change the local environment or execute untrusted behavior.
+
+Mitigation: Review requested installs, generated code, tests, and command output before allowing execution; prefer isolated virtual environments or containers.
+
+Risk: The artifact includes permission-management behavior that may retry commands with alternate strategies, including sudo on Linux or WSL.
+
+Mitigation: Do not grant elevated privileges unless the command is explicitly reviewed and expected; avoid use on machines with administrative access to important systems.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/tilannlou/skills/check)
+
+## Skill Output:
+
+**Output Type(s):** [text, JSON, code, shell commands, configuration, guidance]
+
+**Output Format:** [JSON results and human-readable guidance, sometimes including generated code and shell command output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include environment reports, command results, generated code, test results, dependency installation results, and permission recommendations.]
+
+## Skill Version(s):
+
+1.0.0 (source: release metadata and package.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

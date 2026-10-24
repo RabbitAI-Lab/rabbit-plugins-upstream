@@ -22,23 +22,101 @@ Usage: python3 setup.py --beak-key bk_XXXX --spaceduck-id XXXXXXXX --duckling-id
        python3 setup.py --show
        python3 setup.py --validate   (test if Beak Key is valid)
 """
-import json, argparse, sys, urllib.request, urllib.error
+import hashlib, json, argparse, secrets, sys, time, urllib.request, urllib.error
 from pathlib import Path
+
+# Canonical envelope helper — same sibling module send_peck.py / chat.py sign
+# with. setup.py may be invoked by absolute path (installers do), so the CWD is
+# not the scripts dir; extend sys.path the same way send_peck.py does.
+import pathlib as _pl
+_script_dir = str(_pl.Path(__file__).resolve().parent)
+if _script_dir not in sys.path:
+    sys.path.insert(0, _script_dir)
+from _envelope import sign_v2 as _v2_sign
 
 CONFIG_DIR = Path.home() / '.space-duck'
 CONFIG_PATH = CONFIG_DIR / 'config.json'
 API_BASE = 'https://beak.spaceduckling.com'
 
 
-def validate_beak_key(beak_key, spaceduck_id):
-    """Validate the Beak Key by sending an identity peck to self."""
-    payload = json.dumps({
+def validate_beak_key(beak_key, spaceduck_id, cfg=None):
+    """Validate the Beak Key by sending a v2-SIGNED identity peck to self.
+
+    The server (lambda_function.py, POST /beak/agent/message) rejects every
+    unsigned peck with 403 "Unsigned peck rejected…", and 410s envelope v1
+    outright (ENVELOPE_V1_SUNSET passed 2026-06-05). An unsigned/versionless
+    probe therefore fails for perfectly good pairings, so this builds the same
+    envelope v2 the real send paths build:
+
+      canonical = json(sorted 8 fields, compact separators) via _envelope.canonical_v2
+      signature = HMAC-SHA256(beak_key, canonical).hexdigest()  via _envelope.sign_v2
+
+    Server counterparts: `_envelope_v2_canonical` / `_envelope_v2_sign` /
+    `_envelope_v2_verify` (lambda_function.py:4728-4753) and the v2 verify
+    branch that rebuilds the envelope from the request body. `message_hash` is
+    recomputed server-side from the top-level `message`, so `message` must be a
+    top-level field (the old code only sent `payload.message` — hashing '').
+
+    Ordering that makes this a truthful test: the server compares the stored
+    beak_key BEFORE checking the signature, so a WRONG key still yields
+    403 {"error": "Invalid Beak Key"}. The bk_OTP_ swap-on-validate branch also
+    runs before signature verification, so install-key rotation is unaffected.
+    """
+    message = 'key validation check'
+    message_hash = hashlib.sha256(message.encode()).hexdigest()
+    peck_id = 'peck_' + secrets.token_urlsafe(12)
+    timestamp = int(time.time())
+    # Self-peck, fresh conversation: conversation_id = peck_id, turn 0, no scopes.
+    env_v2 = {
+        'from_spaceduck_id': spaceduck_id,
+        'to_spaceduck_id':   spaceduck_id,
+        'conversation_id':   peck_id,
+        'turn_index':        0,
+        'intent':            'identity',
+        'scopes_asserted':   [],
+        'timestamp':         timestamp,
+        'message_hash':      message_hash,
+    }
+    body_dict = {
+        'envelope_version':    '2',
         'sender_spaceduck_id': spaceduck_id,
         'target_spaceduck_id': spaceduck_id,
-        'beak_key': beak_key,
-        'peck_type': 'identity',
-        'payload': {'message': 'key validation check'}
-    }).encode()
+        'message':             message,
+        'message_hash':        message_hash,
+        'peck_type':           'identity',
+        'intent':              'identity',
+        'peck_id':             peck_id,
+        'conversation_id':     peck_id,
+        'turn_index':          0,
+        'scopes_asserted':     [],
+        'timestamp':           timestamp,
+        # Kept in the body (not only the X-Beak-Key header) because the
+        # bk_OTP_ swap-on-validate branch reads body.beak_key first.
+        'beak_key':            beak_key,
+        'signature':           _v2_sign(env_v2, beak_key),
+    }
+    # v3-preferred, mirroring send_peck.py: ducks with `v2_sunset_enforced_at`
+    # on their spaceducks row 410 every v2 envelope, so a v2-only probe
+    # false-fails their perfectly good pairing. If a local Ed25519 sign key
+    # exists, sign v3; any hiccup degrades byte-identically to the v2 body.
+    if (cfg or {}).get('envelope_v3', True):
+        try:
+            from _envelope import load_sign_key as _load_sign_key, \
+                sign_v3 as _v3_sign, derive_key_id as _v3_derive_kid  # noqa: F401
+            _v3_priv, _v3_pub, _v3_kid_local = _load_sign_key()
+            if _v3_priv:
+                _v3_kid = (cfg or {}).get('sign_key_id') or _v3_kid_local
+                _v3_env = dict(env_v2, sender_key_id=_v3_kid, protocol_caps=['v3'])
+                body_dict.update({
+                    'envelope_version': '3',
+                    'sender_key_id':    _v3_kid,
+                    'protocol_caps':    ['v3'],
+                    'signature':        _v3_sign(_v3_env, _v3_priv),
+                })
+        except Exception as _v3_err:
+            print(f'WARN: v3 envelope build failed ({_v3_err}); validating with v2.',
+                  file=sys.stderr)
+    payload = json.dumps(body_dict).encode()
     req = urllib.request.Request(
         f'{API_BASE}/beak/agent/message',
         data=payload, method='POST',
@@ -48,11 +126,45 @@ def validate_beak_key(beak_key, spaceduck_id):
             result = json.loads(r.read())
             return True, result
     except urllib.error.HTTPError as e:
-        body = e.read().decode()[:200]
+        body = e.read().decode()[:300]
+        try:
+            server_err = str(json.loads(body).get('error', '')).strip()
+        except Exception:
+            server_err = ''
         if e.code == 403:
-            return False, {'error': 'Invalid Beak Key — check the value and Spaceduck ID'}
+            marker = (server_err or body).lower()
+            # Defense in depth: an unsigned-peck rejection is a SKILL defect,
+            # never evidence that the operator's key is wrong. Never launder it
+            # into "Invalid Beak Key".
+            if 'unsigned peck' in marker:
+                return False, {'error': (
+                    'Server rejected the validation peck as unsigned — your Beak Key '
+                    'was never tested. This is a skill bug, not a bad key. '
+                    'Update the skill (scripts/update.sh) and retry.')}
+            if 'invalid beak key' in marker or 'invalid peck signature' in marker:
+                return False, {'error': 'Invalid Beak Key — check the value and Spaceduck ID'}
+            if 'sign_key_not_registered' in marker:
+                # Local Ed25519 key exists but the server has no pubkey for
+                # this duck (stale key from a previous pairing). Not a bad
+                # beak key — the send paths would hit the same wall.
+                return False, {'error': (
+                    'Local sign key is not registered for this duck — run '
+                    'python3 scripts/sign_key.py setup (or remove the stale '
+                    '~/.space-duck/sign_key.hex) and retry.')}
+            if server_err:
+                # A real server verdict about something OTHER than the key
+                # (birth certificate, grants, mute, …). Report it verbatim.
+                return False, {'error': f'Rejected by server (403): {server_err}'}
+            return False, {'error': f'Invalid Beak Key — check the value and Spaceduck ID (server said: {body})'}
         elif e.code == 401:
             return False, {'error': 'No Beak Key provided'}
+        elif e.code == 410 and 'sunset' in (server_err or body).lower():
+            # Envelope-version sunset (v1 global, or per-duck v2 opt-in) — the
+            # key was never tested; the duck just requires a newer envelope.
+            return False, {'error': (
+                f'Server requires a newer envelope version ({server_err}) — your '
+                'Beak Key was never tested. If this duck is v3-enforced, register '
+                'a sign key (python3 scripts/sign_key.py setup) and retry.')}
         return False, {'error': f'HTTP {e.code}: {body}'}
     except Exception as e:
         return False, {'error': str(e)}
@@ -170,7 +282,7 @@ if __name__ == '__main__':
             print('No config found. Run setup.py --beak-key ... first.')
             sys.exit(1)
         cfg = json.loads(CONFIG_PATH.read_text())
-        valid, result = validate_beak_key(cfg['beak_key'], cfg['spaceduck_id'])
+        valid, result = validate_beak_key(cfg['beak_key'], cfg['spaceduck_id'], cfg=cfg)
         if valid:
             print(f'✅ Beak Key is valid for {cfg.get("agent_name")}')
         else:

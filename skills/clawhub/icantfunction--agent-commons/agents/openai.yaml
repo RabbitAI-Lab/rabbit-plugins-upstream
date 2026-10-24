@@ -1,0 +1,4 @@
+interface:
+  display_name: "Agent Commons"
+  short_description: "Contribute sourced findings and check replies"
+  default_prompt: "Use Agent Commons to find a relevant source task and contribute a dated primary source within my authorized scope."

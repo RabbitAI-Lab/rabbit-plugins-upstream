@@ -1,0 +1,580 @@
+# 分片：与 references/api-*.md 主题一致；路径项由 references/openapi.yaml 引用。
+# 分片：云挂单 / 条件单 / 止盈止损。枚举速查见 references/api-cloud-orders.md。
+OpenV1CloudOrders:
+    get:
+      operationId: list_cloud_orders
+      summary: 云挂单 / 止盈止损 分页查询（条件单改用 GET /open/v1/cloud/orders/condition）
+      description: |
+        建完单**不要**定时回来查有没有触发——用户问了才查，
+        那等于换个接口继续盯盘。
+        **条件单不要用这个接口**：这里是旧口径，状态码和字段与用户在 App 里看到的对不上。
+        查条件单用 GET /open/v1/cloud/orders/condition。
+        orderCategory：0=条件单 1=挂单 2=止盈止损；
+        status：0待触发 1已触发 2委托中 3已成交 4已撤销 5失败 6部分成交。
+        返回项的 id 即后续修改 / 撤销要用的 orderId。
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      parameters:
+        - name: orderCategory
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 0=条件单 1=挂单 2=止盈止损，不传查全部
+        - name: status
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 0待触发 1已触发 2委托中 3已成交 4已撤销 5失败 6部分成交
+        - name: instrumentId
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 合约代码
+        - name: pageNum
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 页码，从 1 开始
+        - name: pageSize
+          in: query
+          required: false
+          schema:
+            type: integer
+          description: 每页条数，默认 20
+      responses:
+        '200':
+          description: 条件单分页
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+                        properties:
+                          list:
+                            type: array
+                            items:
+                              type: object
+                          currentPage: { type: integer }
+                          pageSize: { type: integer }
+                          totalCount: { type: integer }
+                          totalPage: { type: integer }
+
+
+OpenV1CloudOrderActions:
+    get:
+      operationId: get_cloud_order_actions
+      summary: 云条件单动作历史
+      description: |
+        操作日志与状态变更（含触发价、失败原因）。
+        排查「为什么没触发 / 为什么失败」先看这里，比反复查列表有效。
+      parameters:
+        - name: orderId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 条件单 orderId
+      responses:
+        '200':
+          description: 动作历史
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+
+
+OpenV1CloudPendingOrder:
+    post:
+      operationId: create_cloud_pending_order
+      summary: 创建挂单（服务端当前未开放）
+      description: |
+        **服务端当前未开放本接口**，调用必失败，不要重试、不要换域名。
+        收盘后想先把单子挂上，改用 POST /open/v1/cloud/orders/condition
+        （timeCondition=GTC），效果等价。
+        非交易时段先挂上、开盘自动报出。**交易时段服务端直接拒绝**——那时应该用
+        POST /open/v1/orders 直接报单。服务端还会校验限价是否在涨跌停范围内。
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instrumentId: { type: string, description: '合约代码，如 rb2601' }
+                exchangeId: { type: string, description: '交易所代码，如 SHFE' }
+                direction: { type: integer, description: '0=买入，1=卖出' }
+                offsetFlag: { type: integer, description: '0=开仓 1=普通平仓（平昨传 1，不必传 4）3=平今。上期所/能源/中金所平今必须 3，传 1 只平昨' }
+                volume: { type: integer, description: '委托手数' }
+                limitPrice: { type: number, description: '委托限价，须在涨跌停范围内' }
+                timeCondition: { type: string, description: 'GFD=当日有效，GTC=长期有效' }
+                remark: { type: string, description: '备注' }
+              required:
+                - instrumentId
+                - exchangeId
+                - direction
+                - offsetFlag
+                - volume
+                - limitPrice
+      responses:
+        '200':
+          description: 创建结果
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+
+
+OpenV1CloudStopProfitLoss:
+    post:
+      operationId: create_cloud_stop_profit_loss
+      summary: 对已有持仓创建止盈止损
+      description: |
+        **这就是替代智能体自己盯盘的能力**：用户说「跌到 X 就买」「涨到 Y 帮我平」
+        「帮我盯着」「设个止损」时建一张单即可，条件由服务端 cloud-ctp 7×24 盯着，
+        会话关掉也照样生效。**禁止**改用行情 / 持仓接口循环轮询去等价格。
+        任何时间可创建。服务端会查 CTP 实际持仓校验合约 / 方向 / 数量，
+        报「持仓不足」就是真的不足，不要改大数量重试。
+        **禁止传 positionDateType**（立即下单字段，本接口没有）。要指定今/昨传可选 offsetFlag：今=3，昨=1。
+        exchangeId 可不传，服务端按合约代码解析；解析不到会拒绝，向用户确认合约代码，不要猜。
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instrumentId: { type: string, description: '合约代码' }
+                exchangeId: { type: string, description: '交易所代码。不确定就不要传，服务端按合约代码解析；解析不到会拒绝，不要猜' }
+                positionDirection: { type: integer, description: '0=买入持仓，1=卖出持仓' }
+                volume: { type: integer, description: '委托平仓手数' }
+                offsetFlag: { type: integer, description: '可选。1=平仓/平昨，3=平今。整仓不传。禁止传 positionDateType' }
+                conditionType: { type: integer, description: '2=止损，3=止盈' }
+                triggerPrice: { type: number, description: '触发价格' }
+                stopPriceType: { type: integer, description: '1对手价 2最新价 3超价 4排队价 5涨跌停价(默认)' }
+                timeCondition: { type: string, description: 'GFD / GTC。平今（offsetFlag=3）不能传 GTC' }
+                remark: { type: string, description: '备注' }
+              required:
+                - instrumentId
+                - positionDirection
+                - volume
+                - conditionType
+                - triggerPrice
+      responses:
+        '200':
+          description: 创建结果
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+
+
+OpenV1CloudConditionOrder:
+    post:
+      operationId: create_cloud_condition_order
+      summary: 创建条件单（与 App 同一条链路，用户在 App 里看得见）
+      description: |
+        任何时间可创建，由 cloud-ctp 盯行情、条件满足自动报单；**建完这一轮就结束**，不要再轮询等价格。
+        与 App 下单走同一条链路，建出来的单用户能在 App「交易 → 条件单」里看到、自己改、自己撤。
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        触发价**只看最新价**，没有买一价 / 卖一价可选；旧字段 conditionType / triggerPriceType
+        已经不用传了（传 triggerPriceType=2/3 会直接报错，别改成别的值重试）。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                instrumentId: { type: string, description: '合约代码，如 rb2601' }
+                exchangeId: { type: string, description: '交易所代码。不确定就不要传，服务端按合约代码解析；解析不到会拒绝，不要猜' }
+                direction: { type: integer, description: '0=买入，1=卖出。说的是这笔委托本身买还是卖，不是持仓方向' }
+                offsetFlag: { type: integer, description: '0=开仓 1=普通平仓（平昨传 1，不必传 4）3=平今。上期所/能源/中金所平今必须 3，传 1 只平昨' }
+                volume: { type: integer, description: '委托手数' }
+                triggerMode:
+                  type: string
+                  enum: [ge, le, range]
+                  description: 'ge=涨到触发价才动手；le=跌到触发价才动手；range=价格落进 [min,max] 区间才动手'
+                triggerPrice: { type: number, description: '触发价。triggerMode=ge/le 时必填' }
+                triggerPriceMin: { type: number, description: '区间下限。triggerMode=range 时必填' }
+                triggerPriceMax: { type: number, description: '区间上限。triggerMode=range 时必填' }
+                orderPriceType:
+                  type: string
+                  enum: [MARKET, LIMIT, LAST, OPPONENT, QUEUE]
+                  description: '触发后按什么价报单：MARKET 市价 / LIMIT 限价 / LAST 最新价 / OPPONENT 对手价 / QUEUE 排队价'
+                limitPrice: { type: number, description: '委托限价。orderPriceType=LIMIT 时必填，其余类型不要传' }
+                timeCondition: { type: string, enum: [GFD, GTC], description: 'GFD=当日有效（默认）；GTC=撤销前长期有效。平今（offsetFlag=3）不能传 GTC' }
+                validUntil: { type: string, description: '有效期截止日 yyyy-MM-dd。不传由服务端按 timeCondition 算，一般不用传' }
+                stopLossConfig:
+                  type: object
+                  description: '可选。触发成交后自动挂的止损；spread=相对成交价的价差'
+                  properties:
+                    spread: { type: number, description: '价差，正数' }
+                    orderPriceType: { type: string, description: '市价 / MARKET' }
+                takeProfitConfig:
+                  type: object
+                  description: '可选。触发成交后自动挂的止盈，字段同 stopLossConfig'
+                  properties:
+                    spread: { type: number, description: '价差，正数' }
+                    orderPriceType: { type: string, description: '市价 / MARKET' }
+                remark: { type: string, description: '备注' }
+              required:
+                - instrumentId
+                - direction
+                - offsetFlag
+                - volume
+                - orderPriceType
+                - triggerMode
+      responses:
+        '200':
+          description: 创建结果，data 为条件单详情（含 id / status / statusLabel）
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/ConditionOrderDetail'
+    get:
+      operationId: list_cloud_condition_orders
+      summary: 条件单列表（与 App 交易页条件单 Tab 同一份数据）
+      description: |
+        返回**全部盯盘中的条件单**（不限创建日） ∪ 时间窗内创建的任意状态。
+        不传 startTime/endTime 时窗口就是当前交易日（上一交易日 15:00 ～ 当前交易日 15:00）。
+        用户问「我那个单还在吗 / 触发没有」时查这里；**建完单不要定时回来查**，那是换个接口继续盯盘。
+        **仅 X-Trading-Env: live 可用**。
+      parameters:
+        - name: tabType
+          in: query
+          required: false
+          schema: { type: string, enum: [OPEN, CLOSE] }
+          description: OPEN=只看开仓条件单，CLOSE=只看平仓条件单；不传看全部
+        - name: startTime
+          in: query
+          required: false
+          schema: { type: string }
+          description: 创建时间起 yyyy-MM-dd HH:mm:ss，与 endTime 成对使用
+        - name: endTime
+          in: query
+          required: false
+          schema: { type: string }
+          description: 创建时间止 yyyy-MM-dd HH:mm:ss
+      responses:
+        '200':
+          description: 条件单列表
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          $ref: '#/ConditionOrderListItem'
+
+OpenV1CloudConditionOrderDetail:
+    get:
+      operationId: get_cloud_condition_order_detail
+      summary: 条件单详情（含触发条件与动作历史）
+      description: |
+        排查「为什么没触发 / 为什么失败」先看 actions，比反复查列表有效。
+        **仅 X-Trading-Env: live 可用**。
+      parameters:
+        - name: orderId
+          in: query
+          required: true
+          schema: { type: integer }
+          description: 条件单 id（创建返回的 id，列表里的 id）
+      responses:
+        '200':
+          description: 条件单详情
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/ConditionOrderDetail'
+
+
+OpenV1CloudPendingOrderModify:
+    post:
+      operationId: modify_cloud_pending_order
+      summary: 修改挂单（服务端当前未开放）
+      description: |
+        只传 orderId 加要改的字段。**类别不能改**——挂单改不成条件单，要换类别就撤了重建。
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId: { type: integer, description: '挂单 orderId' }
+                limitPrice: { type: number, description: '新的委托限价' }
+                volume: { type: integer, description: '新的委托手数' }
+                direction: { type: integer, description: '0=买入，1=卖出' }
+                offsetFlag: { type: integer, description: '0=开仓 1=普通平仓（平昨传 1，不必传 4）3=平今。上期所/能源/中金所平今必须 3，传 1 只平昨' }
+                orderPriceType: { type: integer, description: '1=市价，2=限价' }
+                timeCondition: { type: string, description: 'GFD / GTC。平今（offsetFlag=3）不能传 GTC' }
+                remark: { type: string, description: '备注' }
+              required:
+                - orderId
+      responses:
+        '200':
+          description: 修改结果
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+
+
+OpenV1CloudStopProfitLossModify:
+    post:
+      operationId: modify_cloud_stop_profit_loss
+      summary: 修改止盈止损
+      description: |
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                orderId: { type: integer, description: '止盈止损单 orderId' }
+                triggerPrice: { type: number, description: '新的触发价格' }
+                volume: { type: integer, description: '新的委托平仓手数' }
+                stopPriceType: { type: integer, description: '1对手价 2最新价 3超价 4排队价 5涨跌停价' }
+                orderPrice: { type: number, description: '触发后的下单价格' }
+                timeCondition: { type: string, description: 'GFD / GTC。平今（offsetFlag=3）不能传 GTC' }
+                remark: { type: string, description: '备注' }
+              required:
+                - orderId
+      responses:
+        '200':
+          description: 修改结果
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+
+
+OpenV1CloudConditionOrderModify:
+    post:
+      operationId: modify_cloud_condition_order
+      summary: 修改条件单（仅盯盘中 / 已暂停可改）
+      description: |
+        只传 id + 要改的字段，没传的保持不变。触发条件是整体重建的：要改触发价就把
+        triggerMode 和 triggerPrice（或 triggerPriceMin/Max）一起传。
+        状态不允许改就是真的不允许（已触发 / 已撤销 / 已失效），**不要换参数重试**，
+        要换条件就撤了重建。
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                id: { type: integer, description: '条件单 id（老字段名 orderId 也收，但别两个都传）' }
+                direction: { type: integer, description: '0=买入 1=卖出；不传保持原方向' }
+                volume: { type: integer, description: '新的委托手数' }
+                triggerMode: { type: string, enum: [ge, le, range], description: '改触发条件时必须连它一起传' }
+                triggerPrice: { type: number, description: '新的触发价（ge/le）' }
+                triggerPriceMin: { type: number, description: '新的区间下限（range）' }
+                triggerPriceMax: { type: number, description: '新的区间上限（range）' }
+                orderPriceType: { type: string, enum: [MARKET, LIMIT, LAST, OPPONENT, QUEUE], description: '触发后报单价格类型' }
+                limitPrice: { type: number, description: '限价，orderPriceType=LIMIT 时必填' }
+                timeCondition: { type: string, enum: [GFD, GTC], description: '有效期类型' }
+                validUntil: { type: string, description: '有效期截止日 yyyy-MM-dd' }
+                remark: { type: string, description: '备注' }
+              required:
+                - id
+      responses:
+        '200':
+          description: 修改结果，data 为修改后的条件单详情
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        $ref: '#/ConditionOrderDetail'
+
+
+OpenV1CloudOrderCancel:
+    post:
+      operationId: cancel_cloud_order
+      summary: 撤销云条件单/挂单/止盈止损（三类通用）
+      description: |
+        **仅 X-Trading-Env: live 可用**：云条件单由 cloud-ctp 托管真实 CTP 账号执行，
+        模拟盘无此机制；sim 下会明确报错并指回 POST /open/v1/orders，不要重试。
+        请求体里的 account / company / sessionId 会被服务端按 Api-Key 覆盖，传了不作数。
+        创建 / 修改 / 撤销都动实盘真钱，**必须有用户明确指令**。
+      parameters:
+        - name: orderId
+          in: query
+          required: true
+          schema:
+            type: integer
+          description: 要撤销的 orderId
+      responses:
+        '200':
+          description: 撤销结果
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+# ==== 条件单 V2 返回结构（创建 / 列表 / 详情共用） ====
+
+ConditionOrderListItem:
+  type: object
+  description: |
+    条件单列表项。type=group 的行是同合约分组，真正的单在它的 orders[] 里，
+    对用户念的时候要展开，不要把分组行当成一张单。
+  properties:
+    type: { type: string, enum: [single, group], description: 'single=一张单；group=同合约分组，看 orders[]' }
+    id: { type: integer, description: '条件单 id，修改 / 撤销 / 查详情都用它' }
+    instrumentId: { type: string, description: '合约代码' }
+    instrumentName: { type: string, description: '合约中文名，如 螺纹钢2601' }
+    productName: { type: string, description: '品种中文名' }
+    exchangeId: { type: string, description: '交易所代码' }
+    direction: { type: integer, description: '0=买入 1=卖出' }
+    offsetFlag: { type: integer, description: '0=开仓 1=普通平仓（平昨传 1，不必传 4）3=平今。上期所/能源/中金所平今必须 3，传 1 只平昨' }
+    volume: { type: integer, description: '委托手数' }
+    triggerPriceText: { type: string, description: '触发条件的中文描述，可直接念给用户' }
+    triggerPriceMin: { type: number, description: '区间下限（range 才有）' }
+    triggerPriceMax: { type: number, description: '区间上限（range 才有）' }
+    status: { type: integer, description: '0 盯盘中 1 已触发 2 已暂停 3 已撤销 4 已失效 5 失败。注意：与 GET /open/v1/cloud/orders 的旧状态码不是一套' }
+    statusLabel: { type: string, description: '状态中文，直接用它，不要自己按 status 猜文案' }
+    orderPriceTypeDesc: { type: string, description: '触发后报单价格类型的中文' }
+    limitPrice: { type: number, description: '限价' }
+    estimatedMargin: { type: number, description: '预估保证金' }
+    estimatedCommission: { type: number, description: '预估手续费' }
+    stopLossText: { type: string, description: '附带止损的中文描述，没设就是 null' }
+    takeProfitText: { type: string, description: '附带止盈的中文描述，没设就是 null' }
+    openAvgPrice: { type: number, description: '开仓均价（平仓类才有）' }
+    expireTime: { type: string, description: '有效期截止' }
+    createTime: { type: string, description: '创建时间' }
+    updateTime: { type: string, description: '更新时间' }
+    orders:
+      type: array
+      description: 'type=group 时的组内单据；type=single 时为 null'
+      items:
+        $ref: '#/ConditionOrderListItem'
+
+ConditionOrderDetail:
+  type: object
+  description: 条件单详情。创建 / 修改成功后返回的也是这个结构。
+  properties:
+    id: { type: integer, description: '条件单 id' }
+    instrumentId: { type: string, description: '合约代码' }
+    instrumentName: { type: string, description: '合约中文名' }
+    exchangeId: { type: string, description: '交易所代码' }
+    direction: { type: integer, description: '0=买入 1=卖出' }
+    offsetFlag: { type: integer, description: '0=开仓 1=普通平仓（平昨传 1，不必传 4）3=平今。上期所/能源/中金所平今必须 3，传 1 只平昨' }
+    volume: { type: integer, description: '委托手数' }
+    statusCode: { type: integer, description: '0 盯盘中 1 已触发 2 已暂停 3 已撤销 4 已失效 5 失败' }
+    statusLabel: { type: string, description: '状态中文，直接念这个' }
+    triggerMode: { type: string, description: 'ge / le / range' }
+    triggerOperator: { type: integer, description: '1=≥ 2=≤' }
+    triggerPrice: { type: number, description: '触发价' }
+    triggerPriceMin: { type: number, description: '区间下限' }
+    triggerPriceMax: { type: number, description: '区间上限' }
+    triggerPriceText: { type: string, description: '触发条件中文描述' }
+    orderPriceType: { type: integer, description: '触发后报单价格类型（持久化码，看 orderPriceTypeDesc 就够了）' }
+    orderPriceTypeDesc: { type: string, description: '触发后报单价格类型的中文' }
+    limitPrice: { type: number, description: '限价' }
+    validType: { type: string, description: 'GFD / GTC' }
+    validUntil: { type: string, description: '有效期截止日' }
+    estimatedMargin: { type: number, description: '预估保证金' }
+    estimatedCommission: { type: number, description: '预估手续费' }
+    stopLossText: { type: string, description: '附带止损的中文描述' }
+    takeProfitText: { type: string, description: '附带止盈的中文描述' }
+    createTime: { type: string, description: '创建时间' }
+    updateTime: { type: string, description: '更新时间' }
+    conditions:
+      type: array
+      description: 触发条件明细（价格条件 / 时间条件各一行）
+      items: { type: object }
+    actions:
+      type: array
+      description: |
+        动作与状态变更历史。查「为什么没触发 / 为什么失败」看这里。
+        这个数组非空也是这张单走的 App 同款链路的标志。
+      items: { type: object }

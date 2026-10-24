@@ -1,0 +1,21 @@
+# Discovery Call Prep - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+account: ""
+contact_name: ""
+contact_role: ""
+call_date: ""
+call_purpose: ""
+buyer_stated_need: ""
+trigger: ""
+timeline: ""
+known_facts:
+  - ""
+unverified:
+  - ""
+decision_roles:
+  - ""
+open_questions:
+  - ""
+qualification_targets:
+  - ""
+next_step_ask: ""

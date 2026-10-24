@@ -1,43 +1,55 @@
-## Description: <br>
-Xiaohongshu Radar lets an agent run Xiaohongshu keyword searches and note-detail lookups for content planning, competitive analysis, KOL screening, and trend research. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+小红书搜索雷达通过关键词检索公开笔记，并查询笔记详情、评论、博主作品及粉丝等互动数据。
 
-## Publisher: <br>
-[um-why](https://clawhub.ai/user/um-why) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[um-why](https://clawhub.ai/user/um-why)
 
-## Use Case: <br>
-External users, marketers, and content analysts use this command-line skill to collect public Xiaohongshu search results and note details for campaign research, content ideation, and structured reporting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Search terms, note URLs, and the GUAIKEI_API_TOKEN are sent to the GuaiKei API service. <br>
-Mitigation: Use only when that data sharing is acceptable, store the token as a protected credential, and rotate it if exposure is suspected. <br>
-Risk: Search and detail results are written to local log files that may contain sensitive queries or returned content. <br>
-Mitigation: Protect or delete the logs directory when outputs contain sensitive research, customer, or campaign information. <br>
-Risk: Some documentation claims are broader than the implemented search and detail commands, and one limitation line names Douyin instead of Xiaohongshu. <br>
-Mitigation: Evaluate the skill as a Xiaohongshu keyword-search and note-detail tool, and verify claims outside those implemented commands before relying on them. <br>
+## Use Case:
 
+小红书创作者、品牌运营和市场研究人员可用它检索公开笔记、评论、博主作品及互动数据，为选题、竞品观察、KOL筛选和舆情梳理收集资料。结果用于个人或团队内部分析，不替代用户判断。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/um-why/xiaohongshu-radar) <br>
-- [Publisher profile](https://clawhub.ai/user/um-why) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [API Calls, Files, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [JSON or Markdown command-line output, with JSON log files written locally] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Node.js and GUAIKEI_API_TOKEN; search output supports json or markdown, while detail output is JSON.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: SKILL.md frontmatter, package.json, release metadata) <br>
+Risk: Search keywords and supplied links are sent to guaikei.com.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated GUAIKEI_API_TOKEN and avoid submitting sensitive keywords or links.
+
+Risk: Successful queries and results are saved locally by default.
+
+Mitigation: Set XHS_GUAIKEI_DISABLE_LOG=1 before running if local log files are not wanted.
+
+## Reference(s):
+
+- [参数与调用说明](references/options.md)
+- [常见问题排查](references/troubleshooting.md)
+- [使用说明](readme.md)
+
+## Skill Output:
+
+**Output Type(s):** [JSON]
+
+**Output Format:** [JSON response envelope containing public note search results, note details, comments, or creator profile and engagement data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only public content; requires GUAIKEI_API_TOKEN. Successful queries and results are saved locally by default; XHS_GUAIKEI_DISABLE_LOG=1 disables local logging.]
+
+## Skill Version(s):
+
+1.2.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

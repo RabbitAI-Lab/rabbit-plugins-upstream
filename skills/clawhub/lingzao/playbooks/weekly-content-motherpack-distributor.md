@@ -319,9 +319,9 @@ Use this structure by default:
 - 下次母题判断依据:
 ```
 
-## Paid Capability Boundary
+## Online Capability Boundary
 
-Free / local playbook work:
+Local playbook work:
 
 - user-provided materials
 - topic selection
@@ -330,7 +330,7 @@ Free / local playbook work:
 - packaging into Word / HTML / Markdown structure
 - review checklist
 
-Paid Lingzao capability may be needed for:
+Lingzao online capability may be needed for:
 
 - searching Xiaohongshu, Douyin, or WeChat public content
 - opening public note/article details or comments
@@ -338,13 +338,13 @@ Paid Lingzao capability may be needed for:
 - creator/account research
 - image generation
 
-Before paid work, confirm:
+Before online work, confirm:
 
 - search topic
 - quantity
 - time range
 - quality gate
-- estimated credits
+- planned external actions
 - first-pass stop point
 
 Default first pass should be small. For example: 3-5 references, one image

@@ -25,7 +25,7 @@ export function isSelfHealEnabled(config, env = process.env) {
 
 export function createOpenClawRuntime({
   logPrefix = "[shieldcortex]",
-  configPath = path.join(homedir(), ".shieldcortex", "config.json"),
+  configPath = path.join(process.env.SHIELDCORTEX_CONFIG_DIR?.trim() || path.join(homedir(), ".shieldcortex"), "config.json"),
 } = {}) {
   let shieldConfig = null;
   let shieldConfigMtime = 0;
@@ -46,6 +46,8 @@ export function createOpenClawRuntime({
 
     if (shieldConfig && mtime === shieldConfigMtime) return shieldConfig;
 
+    // Plain JSON. The CLI HMAC-signs this file, but nothing on this path
+    // verifies the signature: callers must not describe it as signed (#509 r8).
     try {
       shieldConfig = JSON.parse(await fs.readFile(configPath, "utf-8"));
     } catch {
@@ -151,6 +153,12 @@ export function createOpenClawRuntime({
       _openClawExtract = {
         extractSessionMemories: mod.extractSessionMemories,
         extractKeywordMemory: mod.extractKeywordMemory,
+        // L2 candidate screen. Optional: an older installed package has no such
+        // export, and its absence must mean "no screen" (today's behaviour),
+        // never a hook that refuses every capture.
+        loadMemoryCandidateScreen: typeof mod.loadMemoryCandidateScreen === "function"
+          ? mod.loadMemoryCandidateScreen
+          : null,
       };
       return _openClawExtract;
     } catch {

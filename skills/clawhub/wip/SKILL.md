@@ -6,6 +6,7 @@ description: |
   On /wip invocation, when remaining tasks exist, AskUserQuestion is required for the per-item direction (proceed / split / merge / hold / defer-to-checklist / delete) — asking only about start priority is forbidden.
   After a compact, show prior-work summary then AskUserQuestion(multiSelect) for restore selection and re-register via TodoWrite.
   antigravity - task.md artifact-based checklist (Antigravity environment) [antigravity.md],
+  openclaw - explicit session JSON CLI adapter [openclaw.md],
   claude - TodoWrite/TaskCreate API guide (Claude Code environment) [claude.md],
   resume - environment-agnostic task cleanup + remaining-work workflow [resume.md].
   "wip", "track progress", "register tasks", "task register", "step tracking", "compact recovery", "task resume", "resume task", "cleanup + resume" triggers.
@@ -18,11 +19,14 @@ metadata:
 
 Track current session work as a checklist.
 
+OpenClaw runtime: select [openclaw.md](./openclaw.md) first and map native task notation below to the explicit CLI ledger. Claude-only tool diagnostics do not apply.
+
 ## Topics
 
 | Topic | Description | Guide |
 |-------|-------------|-------|
 | antigravity | task.md artifact-based checklist for Antigravity sessions | [antigravity.md](./antigravity.md) |
+| openclaw | Explicit current-session agent-task JSON CLI | [openclaw.md](./openclaw.md) |
 | claude | TodoWrite/TaskCreate API for Claude Code sessions | [claude.md](./claude.md) |
 | resume | Environment-agnostic task cleanup + remaining-work workflow | [resume.md](./resume.md) |
 
@@ -31,6 +35,7 @@ Track current session work as a checklist.
 ```text
 wip (entry — /wip or "task cleanup + remaining work")
   └─→ resume (environment-agnostic workflow)
+        ├─→ openclaw (agent-task + explicit current sessionId)
         ├─→ claude (Claude Code: TaskList/TaskCreate/TaskUpdate/AskUserQuestion)
         └─→ antigravity (Antigravity: task.md artifact + ask.md emulation)
 ```
@@ -61,7 +66,7 @@ Emitting only a text summary without persistent recording does not satisfy `/wip
 
 **Before dispatching to any topic, classify the args intent.** The `/wip` skill has two mutually-exclusive dispatch paths — resume workflow vs new-task registration — and the wrong choice wastes user time and misapplies the resume gate.
 
-Read args + call `TaskList` (Claude Code) or read `task.md` (Antigravity). Then classify:
+Read args + call `TaskList` (Claude Code), list the explicit session ledger (OpenClaw), or read `task.md` (Antigravity). Then classify:
 
 | Signal | Mode | Dispatch |
 |--------|------|----------|
@@ -84,7 +89,7 @@ Read args + call `TaskList` (Claude Code) or read `task.md` (Antigravity). Then 
 
 1. **Cleanup**: immediately delete stale completed/in_progress entries (no user confirmation required)
 2. **Checklist state recovery** (Step 1.5): for tasks whose state cannot be verified from the in-context conversation (post-compact / inherited items), Grep/Read `fix_plan.md` / `checklist.md` to recover their state before asking
-3. **Per-item direction ask**: for each remaining item, decide proceed / split / merge / hold / defer-to-checklist / delete
+3. **Per-item direction ask**: for each remaining item, decide proceed / split / merge / hold / defer-to-checklist / delete. `defer-to-checklist` follows `todowrite`'s `file` medium convention (`fix_plan.md`/`checklist.md`) — write the deferred item there rather than leaving it as an orphaned session task
 4. **Start priority + execute**: among items decided as "proceed", choose start priority, mark in_progress, and execute
 
 ### Step 1 (alt) — Registration path (Registration mode)
@@ -105,8 +110,10 @@ Read args + call `TaskList` (Claude Code) or read `task.md` (Antigravity). Then 
 | 4 | Skip `TaskList` before deciding mode | `TaskList` is the primary source for existing-task count. Guessing from context memory is unreliable |
 | 5 | Mixed mode: register new tasks + immediately mark in_progress without resume Step 2 direction ask on existing | Mixed mode: (a) register new, (b) then run resume on the combined list — old tasks may still need per-item direction |
 | 6 | Treat an explicit `/wip <small edit>` as a Skip-Condition case and go straight to `Read`/`Edit` of the deliverable | Explicit `/wip` = registration requested. Run Step 0 → Registration/Resume path → `TaskCreate` **first**, then execute. Skip Conditions gate self-invocation, not explicit calls |
+| 7 | Interrupt-stacked instructions arrive right after a registration-mode `/wip` (a newer directive: reword, investigate, etc.) → pivot to the newest instruction and never register the original `/wip` args | The original `/wip` args still require `TaskCreate` **first**. Register them before pivoting to any interrupt-stacked instruction — including Bash investigation for the newer directive. The register-before-execute guard hook only covers the case where `/wip` is the *last* user turn; the interrupt-stacked case (a newer non-`/wip` turn follows) is caught only by this discipline |
 
 Environment implementations:
+- OpenClaw → [openclaw.md](./openclaw.md) (agent-task; no Claude tool-error prerequisite)
 - Claude Code → [claude.md](./claude.md) (TaskList/TaskCreate/AskUserQuestion)
 - Antigravity → [antigravity.md](./antigravity.md) (task.md + ask.md)
 

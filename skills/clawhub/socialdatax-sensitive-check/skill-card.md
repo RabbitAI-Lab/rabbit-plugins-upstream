@@ -1,39 +1,54 @@
-## Description: <br>
-用于敏感词检测、违禁词检测、文案发布前检查、内容安全检查、文案合规审核、能不能发判断、平台风险提示和改写建议，支持小红书、抖音、快手和通用文本场景。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Checks text for sensitive and prohibited terms across Xiaohongshu, Douyin, Kuaishou, and general contexts, and provides platform risk indicators and rewrite suggestions.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-Content creators, marketers, and agents use this skill to check draft Chinese social content for sensitive or prohibited wording before publishing. It returns risk status, risk level, matched issue types, highlighted text, and safer rewrite suggestions for generic, Xiaohongshu, Douyin, and Kuaishou contexts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-provided draft text is sent to SocialDataX and may be retained with analysis results for disclosed operational purposes. <br>
-Mitigation: Avoid submitting secrets or highly confidential drafts unless the user's SocialDataX account and policies permit that use. <br>
+## Use Case:
 
+External users and content creators can review copy before publication to identify sensitive or prohibited wording, assess platform-related risk, and consider suggested rewrites.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-sensitive-check) <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [Markdown summary for agent responses; CLI and MCP calls return JSON.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY; avoid echoing the full submitted draft unless the user explicitly asks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.8 (source: server release evidence) <br>
+Risk: Submitted text may be stored by SocialDataX, and use may incur service charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only text you are comfortable having the service store, and consider applicable charges.
+
+Risk: The external npm dependency is not bundled with the reviewed skill and may update automatically.
+
+Mitigation: Prefer a reviewed, fixed CLI version and limit its local permissions.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/devinchen2014/skills/socialdatax-sensitive-check)
+- [SocialDataX](https://socialdatax.com/ai?from=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown report with risk indicators, detected terms, and rewrite suggestions]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include risk level, matched text, and suggested rewrites.]
+
+## Skill Version(s):
+
+0.1.11 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

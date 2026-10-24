@@ -1,42 +1,55 @@
-## Description: <br>
-Read and manage a signed-in Skylight Calendar family hub, including calendar events, chores, reward stars, shared lists, frames, and device information. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an authenticated Skylight Calendar account to read and manage family events, chores and rewards, shared lists, and meal plans.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and household administrators use this skill through an agent to inspect and update their own Skylight Calendar family hub data, including events, chores, reward stars, shared lists, frames, and devices. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The ClawScan security summary reports an unpinned install path and broader live-account tool access than the submitted description discloses. <br>
-Mitigation: Pin and review the npm package version before use, and only enable the server after reviewing the exposed Skylight tools. <br>
-Risk: The skill requires Skylight account credentials and can change live family hub data. <br>
-Mitigation: Use project-scoped configuration, set SKYLIGHT_FRAME_ID when possible, and require explicit user confirmation before deletes, bulk changes, uploads, member or account changes, and calendar changes. <br>
+## Use Case:
 
+External users and families can ask an agent to check or update their Skylight family hub, including calendars, chores, rewards, shared lists, meals, and related frame settings.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/skylight-mcp) <br>
-- [Skylight](https://www.ourskylight.com) <br>
-- [skylight-mcp npm package](https://www.npmjs.com/package/skylight-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration examples, shell commands, and MCP tool guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Skylight email and password environment variables; tool actions are scoped to a Skylight frame.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.6 (source: server release metadata) <br>
+Risk: The connector can access private family information and make changes to the selected Skylight frame.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Protect credential configuration, choose the intended frame, and review confirmation previews before approving sensitive changes.
+
+Risk: Recurrence-wide, access, bulk-delete, external-invite, and sharing actions can affect other occurrences, people, or data.
+
+Mitigation: Keep user approval in the loop, verify each preview and its scope, and pin a reviewed package version.
+
+## Reference(s):
+
+- [Skylight Calendar](https://www.ourskylight.com)
+- [skylight-mcp project documentation](https://github.com/chrischall/skylight-mcp)
+- [skylight-mcp npm package](https://www.npmjs.com/package/skylight-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Structured data, API calls]
+
+**Output Format:** [Structured Skylight data and requested updates, summarized in text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read and write operations depend on the selected tool; some higher-impact changes require confirmation.]
+
+## Skill Version(s):
+
+1.4.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

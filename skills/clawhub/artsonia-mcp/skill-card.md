@@ -1,42 +1,59 @@
-## Description: <br>
-Access Artsonia student-art portfolios, comments, fans, notification preferences, and artwork downloads through an MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Connects an agent to Artsonia student-art portfolios, artwork, comments, fans, and notifications through an authenticated MCP server.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-External users and developers use this skill to let an agent connect to an Artsonia MCP server for linked student artwork portfolios. It supports reviewing portfolios and activity, posting comments, inviting fans, changing notifications, and downloading artwork when the user has supplied Artsonia account credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The MCP server requires Artsonia account credentials and can expose linked student portfolio data to an agent. <br>
-Mitigation: Install only when the user is comfortable granting that access, keep credentials scoped to the intended account, and avoid sharing credential-bearing configuration. <br>
-Risk: Some tools can post comments, invite fans, change notifications, or download artwork to disk. <br>
-Mitigation: Confirm intent before using write, invitation, notification, or download tools, and review downloaded files and manifests before further sharing. <br>
+## Use Case:
 
+Parents and fans with an Artsonia account use an agent to view student artwork and activity, manage comments or fan invitations, and adjust notifications.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/chrischall/artsonia-mcp) <br>
-- [artsonia-mcp npm package](https://www.npmjs.com/package/artsonia-mcp) <br>
-- [Artifact-linked source repository](https://github.com/chrischall/artsonia-mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with JSON configuration and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires Artsonia credentials and an installed MCP server; agent use may access student portfolio data or perform account actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server release metadata) <br>
+Risk: Access to an Artsonia login exposes children's artwork and account information to the MCP server.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only with an account authorized to access the students' data and protect the login credentials.
+
+Risk: Comments and fan invitations can change an account or contact others if confirmation is bypassed; some other actions run without confirmation.
+
+Mitigation: Keep confirmation mode at ask-user or refuse, never auto, and review each write before calling the tool.
+
+Risk: Downloaded artwork, including private pieces and associated metadata, can persist on disk.
+
+Mitigation: Set a constrained output directory, exclude private pieces when unnecessary, and review or delete downloaded files after use.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/chrischall/skills/artsonia-mcp)
+- [artsonia-mcp npm package](https://www.npmjs.com/package/artsonia-mcp)
+- [Project repository linked in skill documentation](https://github.com/chrischall/artsonia-mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Image files]
+
+**Output Format:** [MCP tool responses and optional downloaded artwork images or metadata files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Artwork downloads may include private images and persistent metadata; some account changes run without a confirmation step.]
+
+## Skill Version(s):
+
+1.3.2 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

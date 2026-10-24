@@ -1,42 +1,62 @@
-## Description: <br>
-Configure, verify, and troubleshoot the hosted Mermail MCP server in Codex, Claude Code, Cursor, or another MCP client. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents configure, verify, and troubleshoot a Mermail MCP connection across supported clients.
 
-## Publisher: <br>
-[mermail](https://clawhub.ai/user/mermail) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mermail](https://clawhub.ai/user/mermail)
 
-## Use Case: <br>
-Developers and operators use this skill to configure Mermail MCP access, map MERMAIL_API_KEY to the x-api-key header, verify tool discovery, and troubleshoot common connection errors. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A Mermail API key can be exposed if copied into chat, committed configuration, command-line arguments, or shell history. <br>
-Mitigation: Store MERMAIL_API_KEY in a platform secret store or environment variable, use the narrowest workspace-scoped key available, and revoke any exposed key immediately. <br>
-Risk: Incorrect MCP header mapping or a stale client environment can prevent connection or tool discovery. <br>
-Mitigation: Map MERMAIL_API_KEY to the x-api-key header using the client-specific configuration, restart or reload the client after changes, and run the included connection check. <br>
+## Use Case:
 
+Developers and workspace users use this skill to connect an MCP client to Mermail, choose an appropriate authentication mode and tool profile, verify read-only access, and diagnose connection failures.
 
-## Reference(s): <br>
-- [Platform configuration](references/platforms.md) <br>
-- [Mermail AI skills documentation](https://docs.mermail.app/ai/skills) <br>
-- [Mermail MCP endpoint](https://console.mermail.app/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Configuration, Shell commands, Code] <br>
-**Output Format:** [Markdown with JSON and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MERMAIL_API_KEY and verifies discovery of 63 MCP tools.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: Mermail API keys or OAuth credentials could be exposed in configuration or diagnostics.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer OAuth; keep API keys in a secret store or launch environment and redact credentials from chat, files, and logs.
+
+Risk: An incorrect workspace, profile, or authentication mode could grant broader mail or PayBox access than intended.
+
+Mitigation: Confirm the selected workspace and profile; use the restricted agent-inbox profile when appropriate and enable full-profile PayBox tools only when their authority is intended.
+
+Risk: Connectivity tests or retries could unintentionally modify mailboxes, send mail, or repeat an uncertain write.
+
+Mitigation: Verify with tool discovery and a read-only workspace or mailbox call; never use write tools as smoke tests or replay uncertain writes after reconnecting.
+
+## Reference(s):
+
+- [Mermail agent skill documentation](https://docs.mermail.app/ai/skills)
+- [Mermail agent setup](https://mermail.app/agents)
+- [ClawHub skill release](https://clawhub.ai/mermail/skills/mermail-mcp)
+- [Platform configuration](references/platforms.md)
+- [Connection safety](references/security.md)
+- [Verification and troubleshooting](references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands, Markdown]
+
+**Output Format:** [Markdown with configuration and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Redacts credentials; distinguishes connection status, selected workspace, tool profile, and read-only verification results.]
+
+## Skill Version(s):
+
+1.2.15 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
