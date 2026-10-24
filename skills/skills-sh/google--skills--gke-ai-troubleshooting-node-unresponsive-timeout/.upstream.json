@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-node-unresponsive-timeout",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-node-unresponsive-timeout",
+  "branch": "main",
+  "pushedAt": "2026-10-23T20:04:26Z",
+  "contentHash": "77340b2df70e6b92567f32b9ed8f14a17797e01f8ace9c1264829a15da8c2c3a",
+  "fetchedAt": "2026-10-24T12:05:56.262Z"
+}
