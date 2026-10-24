@@ -16,7 +16,7 @@ Read this file when the loader sent you here from
 capabilities (configure / build / modify / run / test / debug / use /
 log) see [TASKS.md](TASKS.md). For where the underlying public
 documentation and installed package paths live, defer to
-[`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md) —
+`doca-public-knowledge-map/SKILL.md` —
 do not duplicate URLs or install paths in this file.
 
 ## Pattern overview
@@ -88,8 +88,8 @@ table BEFORE writing any code:
 
 | Tier | What it controls | How to set at runtime | Typical default | Symptom when confused |
 | --- | --- | --- | --- | --- |
-| **SDK log level** | Verbosity of DOCA *library internals* — log lines emitted from inside the DOCA libraries themselves as they call into hardware, manage state, validate inputs, … | `--sdk-log-level <level>` CLI flag on any DOCA sample / reference app; `DOCA_LOG_LEVEL_SDK` env var; programmatic SDK setter equivalent | `WARNING` | User sets `--sdk-log-level DEBUG` to see their own DEBUG lines and is flooded with internal DOCA spam instead, or *"my own DEBUG lines do not appear"* despite the flag |
-| **App log level** | Verbosity of *user code* — log lines the user emits via `DOCA_LOG_*` macros from their own source files | App-side global lower-limit setter (`doca_log_level_set_global_lower_limit`); per-source via `doca_logger_set_level` once the source ID is in hand | `INFO` (per release; quote the observed default) | User sets app level to `INFO`, then wonders why their `DOCA_LOG_DBG`-shaped lines never print; or user expects `--sdk-log-level` to reach their own lines and it does not |
+| **SDK log level** | Verbosity of DOCA *library internals* — log lines emitted from inside the DOCA libraries themselves as they call into hardware, manage state, validate inputs, … | `--sdk-log-level <N>` CLI flag on any DOCA sample / reference app (numeric: 10=DISABLE, 20=CRITICAL, 30=ERROR, 40=WARNING, 50=INFO, 60=DEBUG, 70=TRACE); `DOCA_LOG_LEVEL_SDK` env var; programmatic SDK setter equivalent | `WARNING` | User sets `--sdk-log-level 60` (DEBUG) to see their own DEBUG lines and is flooded with internal DOCA spam instead, or *"my own DEBUG lines do not appear"* despite the flag |
+| **App log level** | Verbosity of *user code* — log lines the user emits via `DOCA_LOG_*` macros from their own source files | App-side global lower-limit setter (`doca_log_level_set_global_lower_limit`); per-source via `doca_logger_set_level` once the source ID is in hand | `INFO` at steady state (per release; quote the observed default). A first diagnostic run may explicitly override it to `DEBUG`, then restore `INFO`. | User sets app level to `INFO`, then wonders why their `DOCA_LOG_DBG`-shaped lines never print; or user expects `--sdk-log-level` to reach their own lines and it does not |
 
 The agent's diagnostic rule: when the user reports *"my log levels
 do nothing"*, the FIRST hypothesis is *tier confusion* (setting one
@@ -174,9 +174,10 @@ the handle.
 `buf` from its inventory is still in flight returns
 `DOCA_ERROR_BAD_STATE`; destroying a `doca_dev` while an `mmap` is
 still registered on it returns the same. The teardown order is the
-reverse of bring-up: outstanding tasks drain → contexts stop →
-inventories stop → mmaps stop → devices close → mmaps / inventories /
-devices destroy. See [TASKS.md ## use](TASKS.md#use) for the worked
+canonical dependency order: drain outstanding tasks → stop contexts
+→ destroy library contexts → stop and destroy inventories → stop and
+destroy mmaps → destroy progress engines → close devices → destroy
+devinfo lists. See [TASKS.md ## use](TASKS.md#use) for the worked
 buffer-lifecycle walk.
 
 For the verb-side workflow (configuring buffers, modifying a sample's
@@ -289,6 +290,12 @@ disambiguating among multiple devices on the host. The agent should
 quote these from the user's running `doca_devinfo_create_list`,
 never from memory.
 
+**Link up/down events (DOCA 3.5).** A device can deliver asynchronous
+`DOCA_DEV_EVENT_TYPE_LINK_UP` / `DOCA_DEV_EVENT_TYPE_LINK_DOWN`
+notifications, surfaced through `doca_pe_progress`; gate on
+`doca_devinfo_cap_is_event_notification_supported()` rather than
+polling link state.
+
 For the verb-side device-discovery walk, see
 [TASKS.md ## configure](TASKS.md#configure) and
 [TASKS.md ## use](TASKS.md#use).
@@ -346,7 +353,7 @@ and [TASKS.md ## debug](TASKS.md#debug).
 
 For the canonical DOCA version-detection chain, the four-way match
 rule, NGC container semantics, and the headers-win-over-docs rule,
-see [`doca-version`](../../doca-version/SKILL.md). The body lives
+see `doca-version/SKILL.md`. The body lives
 there; this skill does not duplicate it.
 
 **The doca-common-specific overlay** is:
@@ -354,16 +361,16 @@ there; this skill does not duplicate it.
 - **`pkg-config --modversion doca-common` is the universal DOCA
   install anchor.** It is published by every healthy DOCA install
   regardless of which higher-level libraries are also installed.
-  Per [`doca-version CAPABILITIES.md ## Version compatibility`](../../doca-version/CAPABILITIES.md#version-compatibility),
+  Per `doca-version CAPABILITIES.md ## Version compatibility` (`doca-version/CAPABILITIES.md#version-compatibility`),
   it joins the four-way match against `doca_caps --version`,
   `cat /opt/mellanox/doca/applications/VERSION`, and the BFB anchor
   (where applicable). When the `pkg-config` query for doca-common
   fails, the install is broken — that is a
-  [`doca-setup`](../../doca-setup/SKILL.md) concern, not a Common
+  `doca-setup/SKILL.md` concern, not a Common
   concern.
 - **The set of `doca_*` symbols available is observable from the
   Common header set.** Per the headers-win-over-docs rule in
-  [`doca-version`](../../doca-version/SKILL.md), the headers under
+  `doca-version/SKILL.md`, the headers under
   $(pkg-config --variable=includedir doca-common) (`doca_buf.h`,
   `doca_ctx.h`, `doca_dev.h`, `doca_pe.h`, `doca_log.h`,
   `doca_mmap.h`, …) are the authoritative truth for what the built
@@ -402,7 +409,7 @@ discipline is "read the headers and the matching release notes", not
 
 The cross-library `DOCA_ERROR_*` taxonomy (what each family means
 and which debug layer it routes to) lives in
-[`doca-programming-guide CAPABILITIES.md ## Error taxonomy`](../../doca-programming-guide/CAPABILITIES.md#error-taxonomy).
+`doca-programming-guide CAPABILITIES.md ## Error taxonomy` (`doca-programming-guide/CAPABILITIES.md#error-taxonomy`).
 The Common-specific overlay names the families the agent will see
 most often from `doca_buf_*` / `doca_ctx_*` / `doca_dev_*` /
 `doca_pe_*` / `doca_mmap_*` / `doca_log_*` calls and what they
@@ -410,12 +417,12 @@ specifically indicate at the foundation layer:
 
 | Error | Common subsystem where it shows up | Common-specific cause | First action |
 | --- | --- | --- | --- |
-| `DOCA_ERROR_BAD_STATE` | Any of `doca_ctx_*`, `doca_mmap_*`, `doca_buf_inventory_*`, `doca_pe_*`, `doca_log_*` | Lifecycle violation. The object was operated on outside its allowed window: `ctx_start` before `connect_ctx`; `mmap_add_dev` after `mmap_start`; `buf_inventory_buf_get_by_args` before `buf_inventory_start`; `pe_progress` after `pe_destroy`; `DOCA_LOG_*` emission from a source not yet registered. | Walk the lifecycle in [`## ctx`](#ctx) / [`## buf`](#buf) / [`## progress engine`](#progress-engine) / [`## log`](#log); confirm each call's preconditions BEFORE retrying. Static initializers that emit log lines BEFORE `main()`-time init are a frequent log-subsystem cause. |
+| `DOCA_ERROR_BAD_STATE` | Any of `doca_ctx_*`, `doca_mmap_*`, `doca_buf_inventory_*`, `doca_pe_*` | Lifecycle violation. The object was operated on outside its allowed window: `ctx_start` before `connect_ctx`; `mmap_add_dev` after `mmap_start`; `buf_inventory_buf_get_by_args` before `buf_inventory_start`; `pe_progress` after `pe_destroy`. | Walk the lifecycle in [`## ctx`](#ctx) / [`## buf`](#buf) / [`## progress engine`](#progress-engine); confirm each call's preconditions BEFORE retrying. |
 | `DOCA_ERROR_INVALID_VALUE` | `doca_dev_open` (invalid devinfo), `doca_mmap_set_memrange` (bad range), `doca_buf_*` (out-of-range handle), `doca_log_*` (level enum / unregistered source) | The call's arguments did not pass validation. For `doca_log`, the most common cause is an unregistered source ID passed to a `DOCA_LOG_*` macro; for `doca_mmap`, a memrange that overlaps an existing range; for `doca_dev_open`, a devinfo that was destroyed (the destroy_list call invalidates every devinfo pointer it owned). | Re-check the call's arguments against the headers. The cap-query family is also `INVALID_VALUE`-prone when the devinfo passed in was destroyed — re-fetch from a live `doca_devinfo_create_list`. |
 | `DOCA_ERROR_NOT_SUPPORTED` | Any `doca_*_cap_*` query that returns false at runtime, then the actual call that depends on it. Common examples: `doca_mmap_cap_is_export_pci_supported` returning false followed by `doca_mmap_export_pci`; a `doca_devinfo` that does not advertise hotplug-manager support followed by the corresponding `doca_dev_*` call; an experimental log level (`TRACE`) on a release that does not expose it | The device, firmware, or DOCA version does not support what the user requested. Climb back up: drop the optional capability, choose a different device, or upgrade the install. | Re-run the cap-query against the *active* `doca_devinfo`; if false, that is the answer. Do not retry the same call on the same device. |
-| `DOCA_ERROR_NOT_PERMITTED` | `doca_dev_open` (insufficient permissions to open the device), `doca_mmap_*` (insufficient permissions on the registered memory or the device-side mapping) | Host-side env issue. Common causes: RDMA stack module loads, user not in the right group, ulimits, IOMMU mode mismatch, missing capabilities (`CAP_SYS_RAWIO` / `CAP_NET_ADMIN` depending on the device class). | Route to [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug) — the layer below the Common API is the suspect. This is *not* a Common-spec error. |
+| `DOCA_ERROR_NOT_PERMITTED` | `doca_dev_open` (insufficient permissions to open the device), `doca_mmap_*` (insufficient permissions on the registered memory or the device-side mapping) | Host-side env issue. Common causes: RDMA stack module loads, user not in the right group, ulimits, IOMMU mode mismatch, missing capabilities (`CAP_SYS_RAWIO` / `CAP_NET_ADMIN` depending on the device class). | Route to `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`) — the layer below the Common API is the suspect. This is *not* a Common-spec error. |
 | `DOCA_ERROR_NO_MEMORY` | `doca_buf_inventory_buf_get_by_args` (inventory pool exhausted), `doca_mmap_create` / `_add_dev` (cannot register memory), custom log sink with backpressure | Resource exhaustion. The buffer pool is sized for a maximum number of in-flight handles; exhausting it is normal back-pressure and the right response is `doca_buf_dec_refcount` on completed work before requesting new buffers. | Re-read [`## buf`](#buf) for the inventory sizing rule; do not retry blindly. For the log subsystem this is rare on the default `stderr` sink (which does not queue) and only fires with a custom queueing backend. |
-| `DOCA_ERROR_DRIVER` | Any `doca_dev_*`, `doca_mmap_*`, or `doca_ctx_*` call that returns a kernel-driver-level failure | The kernel driver, firmware, or PCIe path is in a state the Common library cannot recover from. **Stop.** This is not a Common-spec problem. | Capture device state via the platform's diagnostic CLIs (`lspci`, `dmesg`, `ibv_devinfo`, `mlxconfig -d <pcie> q`) and escalate per [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug) driver layer. |
+| `DOCA_ERROR_DRIVER` | Any `doca_dev_*`, `doca_mmap_*`, or `doca_ctx_*` call that returns a kernel-driver-level failure | The kernel driver, firmware, or PCIe path is in a state the Common library cannot recover from. **Stop.** This is not a Common-spec problem. | Capture device state via the platform's diagnostic CLIs (`lspci`, `dmesg`, `ibv_devinfo`, `mlxconfig -d <pcie> q`) and escalate per `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`) driver layer. |
 
 The agent's rule: **never recommend a retry loop on `DOCA_ERROR_*`
 from a Common call without first identifying which row above is the
@@ -424,7 +431,7 @@ not become success on retry.
 
 Quote `doca_error_get_descr()` verbatim — do not paraphrase. The
 cross-cutting debug ladder
-([`doca-debug ## debug`](../../doca-debug/TASKS.md#debug)) is the
+(`doca-debug ## debug` (`doca-debug/TASKS.md#debug`)) is the
 canonical layered diagnosis path that the agent escalates to once
 the Common-specific cause has been narrowed.
 
@@ -447,7 +454,7 @@ consumers can read them.
 
 **Downstream consumers.** DOCA Log output is the input to the DOCA
 Log Service and the DOCA Telemetry Service (per
-[`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)):
+`doca-public-knowledge-map/SKILL.md`):
 when the user pipes / forwards their app's `stderr` (or routes
 through a custom backend), those services can consume the lines
 without any in-app wiring. This is part of *why* DOCA Log is
@@ -458,13 +465,13 @@ is the same as every other DOCA artifact on the host.
 verbosity-escalation surface is owned by [`## log`](#log) (the
 two-tier model). The *layered debug ladder* the Common
 observability surface feeds into is owned by
-[`doca-debug CAPABILITIES.md ## Observability`](../../doca-debug/CAPABILITIES.md#observability) —
+`doca-debug CAPABILITIES.md ## Observability` (`doca-debug/CAPABILITIES.md#observability`) —
 which calls back here for the two-tier mechanics, the PE drive
 loop, and the inflight-task drain on shutdown.
 
 ## Safety policy
 
-> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in [`doca-hardware-safety` CAPABILITIES.md ## Safety policy](../../doca-hardware-safety/CAPABILITIES.md#safety-policy) (specifically [### Per-artifact overlay pattern](../../doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
+> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in `doca-hardware-safety` CAPABILITIES.md ## Safety policy (`doca-hardware-safety/CAPABILITIES.md#safety-policy`) (specifically ### Per-artifact overlay pattern (`doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern`)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
 
 DOCA Common's per-artifact safety surface is the **disciplined
 lifecycle ordering** every higher-level library inherits, plus the

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/rtx-remix-modding",
+  "identifier": "NVIDIA/skills/skills/rtx-remix-modding",
+  "repo": "NVIDIA/skills",
+  "path": "skills/rtx-remix-modding",
+  "branch": "main",
+  "pushedAt": "2026-10-23T22:11:34Z",
+  "contentHash": "82f53a38d3a075e1ba5dd8f709748c286409abaa24839e6eadf1c70c44abade8",
+  "fetchedAt": "2026-10-24T12:04:09.461Z"
+}

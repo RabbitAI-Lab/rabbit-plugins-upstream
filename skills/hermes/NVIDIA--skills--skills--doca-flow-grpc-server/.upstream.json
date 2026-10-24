@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/doca-flow-grpc-server",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "0b32cfbeadf3112c898668ae8accb6ec2e46fe3d8fdb2de7fb5fdb6a80ead65a",
-  "fetchedAt": "2026-07-26T17:03:52.280Z"
+  "pushedAt": "2026-10-23T22:11:34Z",
+  "contentHash": "cb8d185d8509a1fbb994e0ccffa92ac839ead9794a6cd35f9bc01f9eb34b2b56",
+  "fetchedAt": "2026-10-24T12:04:08.945Z"
 }

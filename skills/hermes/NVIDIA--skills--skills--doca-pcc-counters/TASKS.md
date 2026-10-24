@@ -18,7 +18,7 @@ appendix`.
 For the host-side custom-PCC control surface (a SEPARATE
 surface — the firmware counters this script reads are
 independent of any custom kernel), see
-[`doca-pcc`](../../libs/doca-pcc/SKILL.md).
+`doca-pcc/SKILL.md`.
 
 ## configure
 
@@ -31,13 +31,20 @@ Steps the agent should walk the user through, in order:
 
 1. **Confirm DOCA / MFT is installed and the script is
    present.** If the script is absent under the DOCA tools
-   directory, route to
-   [`doca-setup TASKS.md ## install`](../../doca-setup/TASKS.md#configure)
-   (or [`doca-setup TASKS.md ## no-install`](../../doca-setup/TASKS.md#no-install)
+   directory, locate it without guessing with
+   `find /opt/mellanox/doca -type f -name pcc_counters.sh -print`. If that
+   still returns no result, route to
+   `doca-setup TASKS.md ## configure` (`doca-setup/TASKS.md#configure`)
+   (or `doca-setup TASKS.md ## no-install` (`doca-setup/TASKS.md#no-install`)
    for the public NGC DOCA container path).
-2. **Start mst and identify the device path.** Run
-   `sudo mst start` (if not already running) then
-   `sudo mst status -v`, and read off the exact device path
+2. **Start mst and identify the device path.** First check
+   `sudo mst status -v` — if the mst service is not running,
+   `sudo mst start` is a state change to a hardware-adjacent
+   service and follows
+   `doca-hardware-safety ## configure` (`doca-hardware-safety/TASKS.md#configure`)
+   discipline: confirm the device is not mid-firmware-work, note
+   the pre-existing `mst status -v` output, then apply. Read off
+   the exact device path
    for the target NIC (e.g. `/dev/mst/mt41692_pciconf0`). The
    script's second positional argument MUST be a path that
    appears in `mst status -v`; otherwise it prints
@@ -46,6 +53,10 @@ Steps the agent should walk the user through, in order:
    `/sys/kernel/debug/mlx5/<pci>/diag_cnt/`, so debugfs must be
    mounted (`mount | grep debugfs`), the mlx5 driver loaded,
    and the user must have root / sudo.
+4. **Confirm platform and exclusivity.** The tool is not
+   supported on ConnectX-8 and must not run alongside DOCA
+   Ngauge or DOCA Telemetry. On BlueField-3, run it on the Arm
+   side in DPU mode and on the host side in NIC mode.
 
 `pcc_counters.sh` takes **no configuration of its own** — there
 is no config file, no environment knob. "Configure" here means
@@ -64,11 +75,11 @@ Routing for nearby "build" questions:
 
 - *"The script isn't there — do I need to build it?"* → no.
   Route to
-  [`doca-setup TASKS.md ## install`](../../doca-setup/TASKS.md#configure).
+  `doca-setup TASKS.md ## configure` (`doca-setup/TASKS.md#configure`).
 - *"How do I build a custom PCC algorithm whose behaviour
   these counters reflect?"* → that is the host-side +
   DPA-side compile path owned by
-  [`doca-pcc`](../../libs/doca-pcc/SKILL.md) and the DPACC
+  `doca-pcc/SKILL.md` and the DPACC
   compiler — a separate surface from this firmware-counter
   readout script.
 
@@ -84,7 +95,7 @@ should be invented.
   reads a fixed firmware diagnostic counter set; it is not
   user-extensible here. If you need device counters outside
   that set, that is a firmware / driver question — route via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md).
+  `doca-public-knowledge-map/SKILL.md`.
 - *"I want different output formatting / a parser"* → out of
   scope; the script's printed `Counter: ... Value: ...` lines
   are the contract. Parse them on your side if needed, but the
@@ -95,7 +106,9 @@ should be invented.
 
 The canonical flow is **`set` then `query`** against the same
 mst device path. The script takes exactly two positional
-arguments and nothing else.
+arguments and nothing else. Run the examples from the script directory found
+in `## configure`, or replace `./pcc_counters.sh` with that discovered absolute
+path; do not assume the current working directory.
 
 1. **Confirm the configure baseline.** Per
    [`## configure`](#configure): script present, mst device
@@ -109,7 +122,9 @@ sudo ./pcc_counters.sh set /dev/mst/mt41692_pciconf0
    This resolves the device to a PCI address and writes the
    fixed counter-ID list + sampling params to
    `/sys/kernel/debug/mlx5/<pci>/diag_cnt/`, arming the
-   device's diagnostic counter collection.
+   device's diagnostic counter collection. Before executing it, show the
+   resolved mst path and PCI BDF, explain this privileged debugfs write, and
+   obtain the operator's explicit confirmation.
 3. **Read the counters with `query`.** Run:
 
 ```bash
@@ -124,7 +139,10 @@ sudo ./pcc_counters.sh query /dev/mst/mt41692_pciconf0
    armed (one `set`), run `query` before the change, apply the
    controlled change, run `query` after, and diff the two
    captured outputs with standard text tooling — the script
-   has no built-in diff / watch.
+   has no built-in diff / watch. The controlled change is operator-defined
+   and outside this skill; this workflow must not invent or execute a traffic,
+   congestion-control, firmware, or device-state mutation. Apply the owning
+   skill's safety gate independently.
 
 The `query` value of a counter is the device's firmware
 diagnostic value; it is independent of any custom `doca-pcc`
@@ -148,10 +166,12 @@ meaningful*, not unit-testing the bash. The smoke:
    or errors, walk [`## debug`](#debug).
 2. **Sanity against traffic.** On a device carrying RoCE
    traffic that should generate CNPs / RTT / WRED activity,
-   re-run `query` after a controlled interval; the relevant
+   re-run `query` once after a preselected controlled interval; the relevant
    counters should advance. A counter staying at 0 on a port
    with no such events is expected, not a bug — confirm there
-   is relevant traffic before treating a zero as a finding.
+   is relevant traffic before treating a zero as a finding. Do not poll
+   indefinitely: at most one additional query may be taken for this smoke;
+   then record the unchanged value and move to `## debug`.
 
 This skill does **not** ship pre-recorded expected counter
 values; they are device-, firmware-, and traffic-state-specific.
@@ -165,30 +185,37 @@ IN ORDER:
 
 1. **Script-not-present.** The script is not under the DOCA
    tools directory. Confirm DOCA / MFT is installed and route
-   to [`doca-setup TASKS.md ## install`](../../doca-setup/TASKS.md#configure).
+   to `doca-setup TASKS.md ## configure` (`doca-setup/TASKS.md#configure`).
 2. **Bad-device (`ERROR: Bad Device`).** The mst device path
-   does not match `sudo mst status -v`. Run `sudo mst start`,
-   re-list with `sudo mst status -v`, and use the exact path.
+   does not match `sudo mst status -v`. If mst is not running,
+   start it under the same hardware-safety confirmation as
+   [`## configure`](#configure) step 2, re-list with
+   `sudo mst status -v`, and use the exact path.
 3. **Bad-request (`Bad Request: choose 'set' or 'query'`).**
    The first argument was not `set` or `query` (e.g. a guessed
    `list` / `--help`). Use exactly `set` or `query`.
 4. **Not-armed-before-query.** `query` returns stale / zero
    values because `set` was not run first. Run `set` then
-   `query`.
+   `query` once; if it recurs, stop and escalate per
+   [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
+   layer 4 — do not repeat privileged arm/read cycles.
 5. **Debugfs-or-permission.** The script cannot access
    `/sys/kernel/debug/mlx5/<pci>/diag_cnt/`. Confirm sudo,
    `mount | grep debugfs`, and that the mlx5 driver is loaded;
    route env-side issues to
-   [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug).
+   `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`).
 6. **Counter-stuck-at-zero.** Values print but a counter reads
    0 — usually correct (no such events). Confirm relevant
-   traffic before treating it as a finding.
+   traffic before treating it as a finding. If a malformed or non-integer
+   value appears, stop parsing that capture, preserve the full stdout, and
+   treat it as a script/firmware-interface error rather than silently coercing
+   it to zero.
 7. **Cross-cutting.** The question is really about the custom
    `doca-pcc` algorithm, firmware PCC configuration, or
    driver / firmware behaviour. Route to
-   [`doca-pcc TASKS.md ## debug`](../../libs/doca-pcc/TASKS.md#debug),
-   [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md),
-   or [`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug).
+   `doca-pcc TASKS.md ## debug` (`doca-pcc/TASKS.md#debug`),
+   `doca-public-knowledge-map/SKILL.md`,
+   or `doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`).
 
 In every case: **quote what the script printed.** Do not
 paraphrase or reorder the counter lines.
@@ -200,24 +227,24 @@ routed out before the agent does any of them under this
 skill's name.
 
 - **install** ⇒
-  [`doca-setup TASKS.md ## install`](../../doca-setup/TASKS.md#configure)
+  `doca-setup TASKS.md ## configure` (`doca-setup/TASKS.md#configure`)
   (and
-  [`doca-setup TASKS.md ## no-install`](../../doca-setup/TASKS.md#no-install)
+  `doca-setup TASKS.md ## no-install` (`doca-setup/TASKS.md#no-install`)
   for the NGC DOCA container path).
 - **writing / loading a custom PCC algorithm** ⇒
-  [`doca-pcc`](../../libs/doca-pcc/SKILL.md). That is the
+  `doca-pcc/SKILL.md`. That is the
   host-side library + DPA-side compile surface; this script
   only reads the device's firmware diagnostic counters.
 - **firmware PCC algorithm configuration / fleet-wide CC
   tuning** ⇒ out of scope; route the documentation lookup via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md).
+  `doca-public-knowledge-map/SKILL.md`.
   Any CC decision derived from a counter reading must go back
   through the user's own domain analysis per
   [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy).
 - **long-term retention / analytics on PCC counters** ⇒ not a
   feature of this script. The DOCA Telemetry Service (DTS) is
   the documented telemetry surface; route via
-  [`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services).
+  `doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`).
 
 ## Command appendix
 
@@ -245,9 +272,9 @@ Cross-cutting rules for this appendix:
 - **Cross-link instead of duplicate.** Cross-cutting commands
   (`mst status`, `lspci`, `dmesg`) and their interpretation
   live in
-  [`doca-debug TASKS.md ## Command appendix`](../../doca-debug/TASKS.md#command-appendix)
+  `doca-debug TASKS.md ## Command appendix` (`doca-debug/TASKS.md#command-appendix`)
   and
-  [`doca-setup TASKS.md ## Command appendix`](../../doca-setup/TASKS.md#command-appendix);
+  `doca-setup TASKS.md ## Command appendix` (`doca-setup/TASKS.md#command-appendix`);
   this appendix names only `pcc_counters.sh`-specific
   invocations on top.
 
@@ -266,4 +293,4 @@ A few rules that apply across every verb in this file:
 - **Quote, do not paraphrase** the counter lines.
 - This skill **assumes a healthy DOCA / MFT install** (mst
   tools, debugfs, sudo). If in doubt, route to
-  [`doca-setup`](../../doca-setup/SKILL.md) first.
+  `doca-setup/SKILL.md` first.

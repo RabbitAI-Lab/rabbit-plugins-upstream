@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/stop",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/stop",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/stop",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "33f1fccbaa838a52608d4802d5ee2269b5ec5631914af37ffa28da076d870fee",
+  "fetchedAt": "2026-10-24T12:04:10.611Z"
+}

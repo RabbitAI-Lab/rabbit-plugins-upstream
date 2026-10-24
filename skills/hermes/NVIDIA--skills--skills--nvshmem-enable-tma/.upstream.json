@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-enable-tma",
+  "identifier": "NVIDIA/skills/skills/nvshmem-enable-tma",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-enable-tma",
+  "branch": "main",
+  "pushedAt": "2026-10-23T22:11:34Z",
+  "contentHash": "1b1f49de12cf0465ae47c38a580416a7c2369733706cb0698282d54f42c87e2f",
+  "fetchedAt": "2026-10-24T12:04:09.348Z"
+}

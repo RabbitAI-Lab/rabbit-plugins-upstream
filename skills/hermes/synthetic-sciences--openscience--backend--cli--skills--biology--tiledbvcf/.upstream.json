@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/tiledbvcf",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/tiledbvcf",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/tiledbvcf",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "576eb8b9beee3c9d6ea8d46fecb3976a4b8c1861bad389829ae967e4acb308d1",
+  "fetchedAt": "2026-10-24T12:04:10.614Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scientific-visualization",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scientific-visualization",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scientific-visualization",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "192e4c25eb2341a7cab32a3480c184e5cb557f0e78264eb0608c93229ca031a3",
+  "fetchedAt": "2026-10-24T12:04:22.095Z"
+}

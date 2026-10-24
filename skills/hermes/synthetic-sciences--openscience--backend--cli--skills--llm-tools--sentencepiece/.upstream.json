@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/sentencepiece",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/sentencepiece",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/sentencepiece",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "1f7d1c758fd6665b2d698d4fd0813bd43b313983907b8f787a56357834a7dcdd",
+  "fetchedAt": "2026-10-24T12:04:10.604Z"
+}
