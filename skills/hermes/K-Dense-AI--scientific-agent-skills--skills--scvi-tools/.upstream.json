@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scvi-tools",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scvi-tools",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scvi-tools",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "8205a7942e5d27ca13a99546f87dd7789f36382a047ab3cbbc7def457aa201a7",
+  "fetchedAt": "2026-10-24T12:04:22.099Z"
+}

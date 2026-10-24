@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pydeseq2",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pydeseq2",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pydeseq2",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "1ec70863fd271e5e82a0e91aeff1681c974f907e463b3731d4fd13935f0c517d",
+  "fetchedAt": "2026-10-24T12:04:22.074Z"
+}

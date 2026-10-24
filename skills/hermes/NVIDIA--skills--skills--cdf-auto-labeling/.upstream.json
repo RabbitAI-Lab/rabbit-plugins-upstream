@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-auto-labeling",
+  "identifier": "NVIDIA/skills/skills/cdf-auto-labeling",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-auto-labeling",
+  "branch": "main",
+  "pushedAt": "2026-10-23T22:11:34Z",
+  "contentHash": "c527fa8dd40a92c96c833611b1e2d9692e140935c6014c193e08fe9e5d7cd69f",
+  "fetchedAt": "2026-10-24T12:04:08.647Z"
+}

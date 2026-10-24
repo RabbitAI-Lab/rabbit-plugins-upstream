@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/tiledbvcf",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/tiledbvcf",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/tiledbvcf",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "e8a21b58faa45292c7ea487154f28a581eca44d4c7b56e1eb0d6737456b12e6e",
+  "fetchedAt": "2026-10-24T12:04:22.105Z"
+}

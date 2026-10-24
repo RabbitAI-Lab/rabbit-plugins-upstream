@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/bitsandbytes",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/bitsandbytes",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/bitsandbytes",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "c74afce55dd288493361e82ff4a5eebefaa314fa8b5b8dc48057fbea979dc67c",
+  "fetchedAt": "2026-10-24T12:04:10.594Z"
+}
