@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-backup-dr",
+  "repo": "google/skills",
+  "skillId": "gke-backup-dr",
+  "branch": "main",
+  "pushedAt": "2026-10-23T20:04:26Z",
+  "contentHash": "96adfd59419f82b4d137ba1b3449c0e53cf529bb3a2181cb2a30e5a44d6c6fd5",
+  "fetchedAt": "2026-10-24T12:05:55.445Z"
+}
