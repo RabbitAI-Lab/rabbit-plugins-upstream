@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/starchild-ai-agent/official-skills/composio",
+  "repo": "starchild-ai-agent/official-skills",
+  "skillId": "composio",
+  "branch": "main",
+  "pushedAt": "2026-10-22T07:44:02Z",
+  "contentHash": "a4f78a85f873cb4578b94f643e003ace5912050551ece2abb2fc4114c2cf3d4d",
+  "fetchedAt": "2026-10-25T12:39:58.849Z"
+}

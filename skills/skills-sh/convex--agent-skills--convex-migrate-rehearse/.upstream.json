@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-migrate-rehearse",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-migrate-rehearse",
+  "branch": "main",
+  "pushedAt": "2026-10-13T21:11:27Z",
+  "contentHash": "03d1227896bbd047dc941d8942e3a1dbf36c3737ae137320b45223822cfdad0a",
+  "fetchedAt": "2026-10-25T12:37:33.015Z"
+}

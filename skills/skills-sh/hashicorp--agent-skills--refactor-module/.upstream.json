@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/hashicorp/agent-skills/refactor-module",
+  "repo": "hashicorp/agent-skills",
+  "skillId": "refactor-module",
+  "branch": "main",
+  "pushedAt": "2026-10-05T01:21:52Z",
+  "contentHash": "530171285f46e03a839941c3eb6231fa0b9164ceb53e129357e80553552755c9",
+  "fetchedAt": "2026-10-25T12:39:48.754Z"
+}

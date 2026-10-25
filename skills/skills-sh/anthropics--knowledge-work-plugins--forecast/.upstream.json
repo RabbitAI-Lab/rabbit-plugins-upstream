@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/knowledge-work-plugins/forecast",
+  "repo": "anthropics/knowledge-work-plugins",
+  "skillId": "forecast",
+  "branch": "main",
+  "pushedAt": "2026-10-24T07:31:47Z",
+  "contentHash": "a49adef9c3c2b6d739ad1aa4e6c817a8c28482656f600a322b0028835986604b",
+  "fetchedAt": "2026-10-25T12:39:43.880Z"
+}

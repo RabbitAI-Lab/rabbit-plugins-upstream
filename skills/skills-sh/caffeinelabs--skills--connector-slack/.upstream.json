@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/caffeinelabs/skills/connector-slack",
+  "repo": "caffeinelabs/skills",
+  "skillId": "connector-slack",
+  "branch": "main",
+  "pushedAt": "2026-10-22T10:17:12Z",
+  "contentHash": "7b9dbed289c2e8acac989aed6bac6331ddd6ac51d88060c9210780bc9167abd5",
+  "fetchedAt": "2026-10-25T12:37:39.746Z"
+}

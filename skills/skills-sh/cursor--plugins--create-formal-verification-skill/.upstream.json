@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/create-formal-verification-skill",
+  "repo": "cursor/plugins",
+  "skillId": "create-formal-verification-skill",
+  "branch": "main",
+  "pushedAt": "2026-10-25T06:24:27Z",
+  "contentHash": "47368878851112af4816316b9d5a0438092dda37565995ddcf0a088aca55b4fb",
+  "fetchedAt": "2026-10-25T12:37:41.516Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/poteto-help",
+  "repo": "cursor/plugins",
+  "skillId": "poteto-help",
+  "branch": "main",
+  "pushedAt": "2026-10-25T06:24:27Z",
+  "contentHash": "cd2878ca070e77f1676a86f54225d217b4b23f8d80de30521796f0a3348a8d9d",
+  "fetchedAt": "2026-10-25T12:37:41.327Z"
+}
