@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pysam",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pysam",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pysam",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "e1777b40bed333da415122150f7c5c0d9dd670fb346fae19fc1c2c8c0eb7a3f3",
+  "fetchedAt": "2026-10-25T12:37:23.657Z"
+}

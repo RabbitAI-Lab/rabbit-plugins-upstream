@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/writing/hugging-face-paper-publisher",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/writing/hugging-face-paper-publisher",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/writing/hugging-face-paper-publisher",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "486f20ee2131f31ea454a58ce6f82070aebbbaef9d21cb4c2b02dff118ea8301",
+  "fetchedAt": "2026-10-25T12:37:23.561Z"
+}

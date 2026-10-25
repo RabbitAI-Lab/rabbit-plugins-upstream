@@ -7,7 +7,7 @@ window), `## run` (the capture → decode → render
 pipeline), `## test` (iterative tuning of mode / window /
 overhead), `## debug` (layered diagnosis), and `## use`
 (hand the captured trace back to the
-[`doca-dpa`](../../libs/doca-dpa/SKILL.md) debug loop). The
+`doca-dpa/SKILL.md` debug loop). The
 two routing-stub verbs (`build`, `modify`) are kept because
 the agent's task-verb contract is uniform across the
 bundle, and each carries a meaningful pointer to where the
@@ -17,7 +17,7 @@ This file is loaded by [`SKILL.md`](SKILL.md) after
 [`CAPABILITIES.md`](CAPABILITIES.md). It walks the agent
 through the documented invocations of `doca_dpa_hl_tracer`,
 the capture → decode → render workflow, and the hand-off
-back to the [`doca-dpa`](../../libs/doca-dpa/SKILL.md)
+back to the `doca-dpa/SKILL.md`
 debug ladder.
 
 ## install
@@ -29,13 +29,13 @@ operator-side install path:
 
 1. **Confirm DOCA is installed with the DPA Tools
    component.** If the binary is missing, route to
-   [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
+   `doca-setup ## install` (`doca-setup/TASKS.md#configure`)
    to install or repair the host-side DOCA package
    selection; confirm the version per
-   [`doca-version TASKS.md ## configure`](../../doca-version/TASKS.md#configure).
+   `doca-version TASKS.md ## configure` (`doca-version/TASKS.md#configure`).
 2. **Confirm the DPACC compiler is installed and
    version-matched to the DOCA install.** Per the
-   [`doca-dpa`](../../libs/doca-dpa/SKILL.md) overlay,
+   `doca-dpa/SKILL.md` overlay,
    DPA-side images are built by DPACC and the host-side
    `doca-dpa` library is paired with a matching DPACC
    version; the tracer decodes against ELFs produced by
@@ -43,14 +43,14 @@ operator-side install path:
 3. **Confirm a BlueField with a DPA processor is
    physically present and visible to the host through
    DOCA.** Walk
-   [`doca-dpa TASKS.md ## configure`](../../libs/doca-dpa/TASKS.md#configure)
+   `doca-dpa TASKS.md ## configure` (`doca-dpa/TASKS.md#configure`)
    step 1 to enumerate the device and confirm DPA
    support. If the BlueField is not visible or the DPA
    is not exposed, tracing is meaningless.
 4. **Confirm a DPA-side application image exists on
    disk.** The tracer decodes against the same ELF the
    host-side
-   [`doca-dpa`](../../libs/doca-dpa/SKILL.md) lifecycle
+   `doca-dpa/SKILL.md` lifecycle
    loaded into the `doca_dpa_app` context. The user must
    know where their DPA-side ELF lives (the build that
    DPACC produced).
@@ -80,10 +80,11 @@ in order:
 2. **Pick capture mode.** `--mode TRACE` (full per-event,
    higher overhead) vs `--mode CRIT` (critical-events
    only, lower overhead). Default *"start here"* is
-   `CRIT` unless the bug demands per-event detail. The
-   sub-mode variants accepted on `--sub-mode` are
-   authoritative on `--help`; the agent does not invent
-   sub-mode strings. **`--device <mlx5_*>` is mandatory**
+   `CRIT` unless the bug demands per-event detail.
+   `--sub-mode` is valid only with `--mode TRACE`; omit it
+   for `CRIT`. The TRACE-only sub-mode variants accepted
+   by the installed binary are authoritative on `--help`;
+   the agent does not invent strings. **`--device <mlx5_*>` is mandatory**
    (`dpa_hl_tracer_utils.cpp` calls
    `doca_argp_param_set_mandatory(dev_param)`); every
    invocation in `## run` and the Command appendix below
@@ -125,14 +126,14 @@ in order:
 6. **Confirm the host-side `doca-dpa` lifecycle has
    already brought the DPA workload up at least once.**
    Per
-   [`doca-dpa TASKS.md ## run`](../../libs/doca-dpa/TASKS.md#run),
+   `doca-dpa TASKS.md ## run` (`doca-dpa/TASKS.md#run`),
    the workload must be running for events to fire;
    the tracer is observation, not a workload driver.
 
 For the canonical DOCA universal lifecycle on the
 host-side workload this tracer observes, see
-[`doca-programming-guide TASKS.md ## configure`](../../doca-programming-guide/TASKS.md#configure)
-and [`doca-dpa TASKS.md ## configure`](../../libs/doca-dpa/TASKS.md#configure).
+`doca-programming-guide TASKS.md ## configure` (`doca-programming-guide/TASKS.md#configure`)
+and `doca-dpa TASKS.md ## configure` (`doca-dpa/TASKS.md#configure`).
 This skill is concerned with the *operator-side*
 configuration of the tracer invocation.
 
@@ -149,15 +150,15 @@ Routing for nearby "build" questions:
 
 - *"The binary isn't there — do I need to build it?"* → no.
   Route to
-  [`doca-setup ## install`](../../doca-setup/TASKS.md#configure).
+  `doca-setup ## install` (`doca-setup/TASKS.md#configure`).
   The fix is to install (or re-install) the DOCA package
   selection that includes the DPA Tools component.
 - *"I want to build my own DPA-side application that
   emits trace events."* → not a tracer question. Route to
-  [`doca-dpa TASKS.md ## build`](../../libs/doca-dpa/TASKS.md#build)
+  `doca-dpa TASKS.md ## build` (`doca-dpa/TASKS.md#build`)
   for the cross-side build pattern + the public DPACC
   guide via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
+  `doca-public-knowledge-map/SKILL.md`
   for the DPACC-side build flags that enable the
   tracer-instrumentation hooks.
 - *"I want to extend the tracer with new event classes."* →
@@ -189,13 +190,14 @@ the operating mode.
 Routing for nearby "modify" questions:
 
 - *"The trace overhead is too high — can I disable some
-  events?"* → adjust `--mode` and `--sub-mode` per
+  events?"* → adjust `--mode`, and for `TRACE` only
+  `--sub-mode`, per
   [`## configure`](#configure) step 2; raise the
   receiver-thread priority per step 3. If the event
   taxonomy itself is too coarse / too fine, the answer
   is *"this is the documented surface; for other
   granularity, use the raw cycle profiler"* — route via
-  [`doca-public-knowledge-map ## DOCA tools`](../../doca-public-knowledge-map/SKILL.md#doca-tools).
+  `doca-public-knowledge-map ## DOCA tools` (`doca-public-knowledge-map/SKILL.md#doca-tools`).
 - *"Can I change the trace output format?"* → no; the
   binary trace format is documented and the human-
   readable log is its decoded view. If the user needs a
@@ -228,10 +230,12 @@ verbatim command lines (per
    BlueField visible and DPA exposed, DPA-side ELF
    identified, host-side `doca-dpa` lifecycle has
    brought the workload up.
-2. **Capture.** Run
-   `doca_dpa_hl_tracer --device <mlx5_*> --mode <TRACE|CRIT>
-   --sub-mode <variant> --config-file <json> --output-file
-   <bin-path> --log-file <log-path>`. The tracer attaches
+2. **Capture.** For `CRIT`, run
+   `doca_dpa_hl_tracer --device <mlx5_*> --mode CRIT
+   --config-file <json> --output-file <bin-path> --log-file
+   <log-path>`. For `TRACE`, add the installed binary's
+   documented `--sub-mode <variant>`. Never pass
+   `--sub-mode` with `CRIT`. The tracer attaches
    to the named device, opens the JSON config, and writes
    the binary trace + log file while the capture window
    is open. Re-confirm exact flag names against `--help`
@@ -242,14 +246,21 @@ verbatim command lines (per
    end of the chosen window. Note which way the capture
    ended — the two failure modes (stop-on-limit vs
    truncate-and-continue) look different in the trace.
-4. **Decode against the matching ELF.** Run
+4. **Verify the ELF, then decode.** Recompute the SHA of
+   `<dpa-elf>` and compare it with the SHA recorded at
+   capture time **before invoking the parser**. If they
+   differ, abort decode, preserve `<bin-path>` unchanged,
+   and locate the exact capture-time ELF; rebuilding or
+   substituting an ELF cannot repair the trace. Only after
+   the hashes match, run
    `doca_dpa_hl_tracer --input-file <bin-path>
    --parse-file <parsed-output> --elf-file <dpa-elf>`.
    The ELF must be the exact build the `doca_dpa_app`
    context loaded at capture time per the
    ELF-must-match-image rule in
    [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes).
-   Decoding against a different ELF produces noise.
+   Decoding against a different ELF produces noise and is
+   prohibited by this pre-decode gate.
 5. **Read the rendered output.** The human-readable log
    plus the parsed output are the agent's read-side
    surface. Compare event ordering against the DPA-side
@@ -265,10 +276,17 @@ verbatim command lines (per
 When recording the run for downstream consumers, write
 down: the DOCA version, the DPACC compiler version, the
 BlueField identity + firmware version, the DPA-side ELF
-path + SHA, the JSON config used, the mode + sub-mode, the
+path + SHA, the JSON config used, the mode and, for TRACE
+only, sub-mode, the
 capture wall-clock window, and the produced binary trace +
 log files. The downstream [`## test`](#test) and
 [`## debug`](#debug) workflows depend on those fields.
+Classify this artifact set before sharing. Keep the
+unmodified raw trace, ELF/config tuple, logs, and metadata
+in restricted storage; produce a separate redacted copy
+that removes workload-sensitive event arguments, RDMA WR
+fields, comm-call pointers, paths, and identifiers as the
+operator's policy requires.
 
 ## test
 
@@ -294,7 +312,7 @@ session):
 | Decoded trace is empty | Could be install (binary failed to attach), device-binding, image not instrumented, capture window missed the workload, or workload was idle | Walk the error taxonomy in [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy) layers 1–4 in order; do not jump. |
 | `TRACE`-mode capture shifted measured kernel timing materially | Overhead-saturated; per-event interval near the receiver-thread scheduling floor | Drop to `CRIT` mode; raise receiver-thread priority in the JSON config; shrink the capture window. |
 | `bin_file` hit `bin_file_max_size_in_bytes` mid-run | Capture truncated by `file_size_limit_policy=0` (stop-on-limit) | Either raise the limit, or switch to `file_size_limit_policy=1` (truncate-and-continue) if losing the oldest events is acceptable. |
-| Decoded events look like noise / wrong-symbol | ELF mismatch — the `--elf-file` is not the build that produced the trace | Re-confirm the ELF SHA matches the capture-time SHA per [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes) ELF-must-match-image rule; re-decode. |
+| Pre-decode ELF SHA differs from capture-time SHA | ELF mismatch — the candidate `--elf-file` is not the build that produced the trace | Abort decode, preserve the raw binary trace, and locate the exact capture-time ELF per [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes). Do not rebuild or decode against the mismatch. |
 | Same workload, same config, traces look different across runs | Workload non-determinism, mode/sub-mode drift, or capture window straddling different phases | Pin the workload's input, the capture window, and the JSON config; re-run; if still divergent, the workload's non-determinism is the real answer the user came for. |
 | Event ordering disagrees with the kernel source | Could be real (a sync mis-issue, a comm-call ordering bug) or apparent (the renderer's ordering is not source order) | Re-read the public DOCA DPA Tools page's documented event-ordering rules; correlate captured events with the kernel's expected DPA programming events sequence. |
 | Capture completes but the kernel-entry event is missing | Layer 3 (image-not-instrumented) of the error taxonomy | Confirm DPACC build flags enabled instrumentation; re-build the DPA image if not. |
@@ -310,7 +328,7 @@ session is a baseline (vs an ad-hoc question), the
 captured artifact must include the metadata tuple per
 [`CAPABILITIES.md ## Observability`](CAPABILITIES.md#observability)
 — (DOCA version, DPACC version, ELF path + SHA, mode +
-sub-mode, JSON config, capture window, BlueField identity
+TRACE-only sub-mode when applicable, JSON config, capture window, BlueField identity
 + firmware) — alongside the binary trace, the log file,
 and the tool's stderr. Without all of these the baseline
 cannot be regression-tested later.
@@ -320,9 +338,9 @@ runs do not change the picture — the answer is now *"this
 is what the DPA-side workload does at the high-level
 event layer on this image + this BlueField"*. Escalate
 cross-version comparisons to
-[`doca-version TASKS.md ## test`](../../doca-version/TASKS.md#test)
+`doca-version TASKS.md ## test` (`doca-version/TASKS.md#test`)
 or
-[`doca-dpa TASKS.md ## debug`](../../libs/doca-dpa/TASKS.md#debug)
+`doca-dpa TASKS.md ## debug` (`doca-dpa/TASKS.md#debug`)
 with the captured artifacts as evidence.
 
 This skill does NOT ship a "test fixture" or pre-recorded
@@ -343,29 +361,29 @@ in order. The shape of the diagnosis:
    `/opt/mellanox/doca/tools/doca_dpa_hl_tracer` exists,
    is executable, and its loader-dependent shared libs
    are present. Route to
-   [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
+   `doca-setup ## install` (`doca-setup/TASKS.md#configure`)
    if not.
 2. **Device-binding.** Confirm the BlueField the tracer
    is attaching to is visible to DOCA per
-   [`doca-dpa TASKS.md ## configure`](../../libs/doca-dpa/TASKS.md#configure)
+   `doca-dpa TASKS.md ## configure` (`doca-dpa/TASKS.md#configure`)
    step 1 and that the DPA processor is exposed. The
    tracer cannot attach if either is missing.
 3. **Image-not-instrumented.** Confirm the DPA-side
-   application is running (per
-   [`doca-dpa TASKS.md ## run`](../../libs/doca-dpa/TASKS.md#run))
-   and that the DPACC build flags enabled the
+   image's DPACC build flags enabled the
    tracer-instrumentation hooks per the public DPACC
    guide via
-   [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md).
-   An idle DPA produces an empty trace by construction.
+   `doca-public-knowledge-map/SKILL.md`.
 4. **Capture-window.** Confirm the capture window
    actually overlapped the workload phase under
-   investigation. Re-walk [`## configure`](#configure)
-   step 4; widen or re-time the window.
+   investigation and that the workload had not already
+   ended or remained idle. Re-walk
+   [`## configure`](#configure) step 4; widen or re-time
+   the window.
 5. **Decode.** Confirm the ELF passed at decode time is
    the same build that produced the trace. SHA the ELF
-   at capture and decode time; mismatch means re-build
-   or re-locate the right ELF.
+   at capture and immediately before decode; mismatch
+   means abort decode, preserve the raw trace, and
+   re-locate the exact capture-time ELF.
 6. **Overhead-saturated.** If `TRACE` mode produced a
    suspiciously uniform per-event interval, drop to
    `CRIT` and re-capture; if the workload's wall-clock
@@ -373,14 +391,14 @@ in order. The shape of the diagnosis:
    receiver-thread priority + pin its core in the JSON
    config.
 7. **Version.** Walk
-   [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug)
+   `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`)
    end-to-end; the tracer ↔ `doca-dpa` library ↔ DPACC
    triple is the common version mismatch failure.
 8. **Cross-cutting.** Cause is below DOCA — driver,
    firmware, BlueField mode, IOMMU, NUMA. Hand off to
-   [`doca-debug ## debug`](../../doca-debug/SKILL.md)
+   `doca-debug ## debug` (`doca-debug/SKILL.md`)
    and
-   [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug).
+   `doca-setup ## debug` (`doca-setup/TASKS.md#debug`).
 
 In every case: **quote what the tracer reported.** Do not
 paraphrase event names, do not reorder fields, do not
@@ -396,14 +414,14 @@ debug session. The agent's hand-off:
    window, BlueField + firmware) tuple** per
    [`CAPABILITIES.md ## Observability`](CAPABILITIES.md#observability).
 2. **Walk
-   [`doca-dpa TASKS.md ## debug`](../../libs/doca-dpa/TASKS.md#debug)
+   `doca-dpa TASKS.md ## debug` (`doca-dpa/TASKS.md#debug`)
    with the captured trace as the runtime evidence.**
    The host-side library skill owns the *"what to
    change next"* decision; the tracer owns the *"what
    happened on the DPA"* signal.
 3. **Cross-reference with the cross-cutting debug
    ladder** in
-   [`doca-debug ## debug`](../../doca-debug/SKILL.md) when
+   `doca-debug ## debug` (`doca-debug/SKILL.md`) when
    the captured events point at a layer below DOCA
    (driver, firmware, NUMA).
 4. **Retain the captured artifact set** for later
@@ -411,7 +429,7 @@ debug session. The agent's hand-off:
    tuple is unreplicable.
 
 The agent's rule: the tracer captures; the
-[`doca-dpa`](../../libs/doca-dpa/SKILL.md) library skill
+`doca-dpa/SKILL.md` library skill
 acts. Conflating the two is the most common DPA-debug
 first-touch error.
 
@@ -424,19 +442,19 @@ under this skill's name.
 - **DPA-side programming** (writing the DPA kernel,
   using `doca-dpa-comms`, using `doca-dpa-verbs`) →
   route via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
+  `doca-public-knowledge-map/SKILL.md`
   to the public DOCA DPA, DPACC, DPA-Comms, and
   DPA-Verbs guides + the shipped DPA samples. This
   tool traces those events; it does not redefine them.
 - **Raw cycle profiling of the DPA processor** →
   different surface, different tool. Route via
-  [`doca-public-knowledge-map ## DOCA tools`](../../doca-public-knowledge-map/SKILL.md#doca-tools).
+  `doca-public-knowledge-map ## DOCA tools` (`doca-public-knowledge-map/SKILL.md#doca-tools`).
 - **Host-side `doca-dpa` API debugging** →
-  [`doca-dpa TASKS.md ## debug`](../../libs/doca-dpa/TASKS.md#debug).
+  `doca-dpa TASKS.md ## debug` (`doca-dpa/TASKS.md#debug`).
   The tracer's host-side error surface routes back here
   when the cause is host-side, not DPA-side.
 - **Production observability of DPA workloads** →
-  [`doca-telemetry`](../../libs/doca-telemetry/SKILL.md).
+  `doca-telemetry/SKILL.md`.
   The tracer is a diagnostic capture surface, not a
   continuous production observability surface.
 
@@ -450,7 +468,7 @@ and the public DOCA DPA Tools page.
 **Infra-aware preamble (every row below).** Per the
 bundle's detect → prefer → fall back → report contract
 documented in
-[`doca-structured-tools-contract ## The agent behavior contract`](../../doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract),
+`doca-structured-tools-contract ## The agent behavior contract` (`doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract`),
 the agent should:
 
 1. Probe for the matching structured helper FIRST
@@ -463,14 +481,14 @@ the agent should:
 3. If the probe fails, fall back to the manual command
    in the row.
 4. The schemas the structured tools emit are defined in
-   [`doca-structured-tools-contract ## Schemas`](../../doca-structured-tools-contract/SKILL.md#schemas).
+   `doca-structured-tools-contract ## Schemas` (`doca-structured-tools-contract/SKILL.md#schemas`).
 
 | Purpose (class) | Invocation (shape) | Owning step | Reads as healthy when … |
 | --- | --- | --- | --- |
 | Discover the documented flag surface | `doca_dpa_hl_tracer --help` + the public DOCA DPA Tools page | [`## configure`](#configure) step 2; [`## debug`](#debug) layer 1 | Prints the documented inventory of `--device`, `--mode`, `--sub-mode`, `--config-file`, `--input-file`, `--output-file`, `--parse-file`, `--elf-file`, `--log-file`. |
 | Capture a `CRIT`-mode baseline | `doca_dpa_hl_tracer --device <mlx5_*> --mode CRIT --config-file <json> --output-file <bin>` | [`## run`](#run) step 2 (start-here mode) | Binary trace file grows during the capture window; stderr is quiet; on stop, the file size is bounded by `bin_file_max_size_in_bytes`. |
-| Widen to a `TRACE`-mode capture for fine-grained perf | Same as above with `--mode TRACE` (and the relevant `--sub-mode`) | [`## test`](#test) iteration | Captured event stream contains the full per-event detail; overhead is acceptable for the answer the user needs. |
-| Decode a captured trace against the matching ELF | `doca_dpa_hl_tracer --input-file <bin> --parse-file <parsed> --elf-file <dpa-elf>` | [`## run`](#run) step 4 | Parsed output names the documented DPA programming events; symbols resolve cleanly against the ELF. |
+| Widen to a `TRACE`-mode capture for fine-grained perf | Same as above with `--mode TRACE` and the relevant TRACE-only `--sub-mode` | [`## test`](#test) iteration | Captured event stream contains the full per-event detail; overhead is acceptable for the answer the user needs. |
+| Decode a captured trace against the matching ELF | First compare the candidate ELF SHA with the capture-time SHA; only on equality run `doca_dpa_hl_tracer --input-file <bin> --parse-file <parsed> --elf-file <dpa-elf>` | [`## run`](#run) step 4 | Hashes match before decode; parsed output names the documented DPA programming events and symbols resolve cleanly. A mismatch aborts without modifying the raw trace. |
 | Render a quick read of a captured trace | Inspect the human-readable `--log-file` alongside the binary trace | [`## run`](#run) step 5; [`## test`](#test) iteration | The log file shows decoded events with sensible timestamps. |
 
 Three cross-cutting rules for this appendix:
@@ -486,8 +504,8 @@ Three cross-cutting rules for this appendix:
   commands (`pkg-config --modversion doca-dpa`,
   `doca_caps --list-devs`, `dmesg`, `mlxconfig -d
   <bdf> q`) live in
-  [`doca-debug ## debug`](../../doca-debug/SKILL.md) and
-  [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug);
+  `doca-debug ## debug` (`doca-debug/SKILL.md`) and
+  `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`);
   this appendix names only `doca_dpa_hl_tracer`-specific
   invocation classes.
 
@@ -503,7 +521,7 @@ and not buried in [`SKILL.md`](SKILL.md):
   actual run.
 - **Tracing is observation, not workload.** The DPA
   workload must already be up via
-  [`doca-dpa`](../../libs/doca-dpa/SKILL.md); the tracer
+  `doca-dpa/SKILL.md`; the tracer
   does not drive the kernel.
 - **Capture is bounded.** Pick the file-size limit
   policy explicitly; the two failure modes
@@ -514,9 +532,9 @@ and not buried in [`SKILL.md`](SKILL.md):
 - This skill **assumes a healthy DOCA install** with
   the DPA Tools component, a paired DPACC, a BlueField
   with a visible DPA, and the
-  [`doca-dpa`](../../libs/doca-dpa/SKILL.md) host-side
+  `doca-dpa/SKILL.md` host-side
   lifecycle already started. If any of those is in
   doubt, route to
-  [`doca-setup`](../../doca-setup/SKILL.md) or
-  [`doca-dpa`](../../libs/doca-dpa/SKILL.md) before
+  `doca-setup/SKILL.md` or
+  `doca-dpa/SKILL.md` before
   running anything else here.

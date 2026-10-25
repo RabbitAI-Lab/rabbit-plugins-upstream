@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-anomalygennext",
+  "identifier": "NVIDIA/skills/skills/tao-finetune-anomalygennext",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-finetune-anomalygennext",
+  "branch": "main",
+  "pushedAt": "2026-10-24T16:12:22Z",
+  "contentHash": "1031fa31f54d4b260cd8e896a1714d4df117d429dcdb715e09c74fc9e738c21b",
+  "fetchedAt": "2026-10-25T12:37:22.193Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/mlops/inference/llama-cpp",
+  "identifier": "official/mlops/inference/llama-cpp",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/mlops/inference/llama-cpp",
+  "branch": "main",
+  "pushedAt": "2026-10-25T12:34:32Z",
+  "contentHash": "d09d4f8f2774ddd6c28c80900e2b1a4ec78322f8b6512c21c6dedb9231202df7",
+  "fetchedAt": "2026-10-25T12:37:35.401Z"
+}

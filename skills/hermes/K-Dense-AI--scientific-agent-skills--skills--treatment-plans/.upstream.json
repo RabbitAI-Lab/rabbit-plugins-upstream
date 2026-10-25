@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/treatment-plans",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/treatment-plans",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/treatment-plans",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "44460795568a862264c4df49659e439311821db8762fe770e414b3ef5e6d2e91",
+  "fetchedAt": "2026-10-25T12:37:38.802Z"
+}

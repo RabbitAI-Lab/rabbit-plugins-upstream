@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/physical-ai-physics-selection",
+  "identifier": "NVIDIA/skills/skills/physical-ai-physics-selection",
+  "repo": "NVIDIA/skills",
+  "path": "skills/physical-ai-physics-selection",
+  "branch": "main",
+  "pushedAt": "2026-10-24T16:12:22Z",
+  "contentHash": "baf64f6f2dc35d3fc9e44f6f35d6b52e279750fc19077ae71462788f706ed3ba",
+  "fetchedAt": "2026-10-25T12:37:22.146Z"
+}

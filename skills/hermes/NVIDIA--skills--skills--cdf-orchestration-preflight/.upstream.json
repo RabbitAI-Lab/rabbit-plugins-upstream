@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-orchestration-preflight",
+  "identifier": "NVIDIA/skills/skills/cdf-orchestration-preflight",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-orchestration-preflight",
+  "branch": "main",
+  "pushedAt": "2026-10-24T16:12:22Z",
+  "contentHash": "58e307d60d80d3e4446ef3ba9b280e8fa1b7110f59fd91bdf79956601bf8149c",
+  "fetchedAt": "2026-10-25T12:37:21.650Z"
+}

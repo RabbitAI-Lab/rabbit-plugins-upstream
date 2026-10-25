@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/audiocraft-audio-generation",
+  "identifier": "official/creative/audiocraft-audio-generation",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/audiocraft-audio-generation",
+  "branch": "main",
+  "pushedAt": "2026-10-25T12:34:32Z",
+  "contentHash": "b60857a716e73a42f904388d213059338a3fd7c22753a01ef77969c4e23409d9",
+  "fetchedAt": "2026-10-25T12:37:35.326Z"
+}
