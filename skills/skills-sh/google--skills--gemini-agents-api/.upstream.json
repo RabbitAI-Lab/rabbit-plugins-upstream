@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gemini-agents-api",
+  "repo": "google/skills",
+  "skillId": "gemini-agents-api",
+  "branch": "main",
+  "pushedAt": "2026-10-23T20:04:26Z",
+  "contentHash": "9d201b786f837573a6d14b9d5a946a0cace78589e4ef718465d6d6509f863226",
+  "fetchedAt": "2026-10-25T12:39:34.991Z"
+}
