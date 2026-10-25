@@ -1,13 +1,15 @@
 ---
 name: dlazy-video-generate
 version: 1.4.6
-description: 视频生成技能，AI 视频生成，文生视频、图生视频、图片转视频、首尾帧生成视频。根据提示词自动选择最佳视频生成模型（即梦、可灵、Veo、Seedance、万相、PixVerse、数字人、对口型）。Video generation skill that automatically selects the best dlazy CLI video model based on the prompt.
-metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazyai/cli","source":"https://github.com/dlazyai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, use dlazy <subcommand>."}}
+description: "视频生成技能，AI 视频生成，文生视频、图生视频、图片转视频、首尾帧生成视频。根据提示词自动选择最佳视频生成模型（即梦、可灵、Veo、Seedance、万相、PixVerse、数字人、对口型）。Video generation skill that automatically selects the best dlazy CLI video model based on the prompt."
+metadata: {"clawdbot":{"emoji":"🤖","requires":{"bins":["npm","npx"]},"install":"npm install -g @dlazy/cli@1.2.3","installAlternative":"npx @dlazy/cli@1.2.3","homepage":"https://github.com/dlazy-ai/cli","source":"https://github.com/dlazy-ai/cli","author":"dlazyai","license":"see-repo","npm":"https://www.npmjs.com/package/@dlazy/cli","configLocation":"~/.dlazy/config.json","apiEndpoints":["api.dlazy.com","files.dlazy.com"]},"openclaw":{"systemPrompt":"When this skill is called, use dlazy <subcommand>."}}
 ---
 
-# 视频生成技能 Dlazy Video Generate
+# 视频生成 Video Generate
 
 [English](./SKILL.md) · [中文](./SKILL-cn.md)
+
+
 
 
 Video generation skill. Automatically selects the best dlazy CLI video model based on the prompt.
@@ -57,7 +59,7 @@ Each key is scoped to your dLazy organization and can be **rotated or revoked at
 
 ## About & Provenance
 
-- **CLI source code**: [github.com/dlazyai/cli](https://github.com/dlazyai/cli)
+- **CLI source code**: [github.com/dlazy-ai/cli](https://github.com/dlazy-ai/cli)
 - **Maintainer**: dlazyai
 - **npm package**: `@dlazy/cli` (pinned to `1.2.3` in this skill's install spec)
 - **Homepage**: [dlazy.com](https://dlazy.com)
@@ -102,7 +104,7 @@ dlazy seedream-4.5 --prompt "a red fox in snow" \
 
 # Generate an image, then add TTS narration over a still
 dlazy seedream-4.5 --prompt "lighthouse at dawn" \
-  | dlazy keling-tts --text "Welcome to the coast." --image @0.url
+  | dlazy qwen-tts --text "Welcome to the coast." --image @0.url
 
 # Fan-out: pass every upstream output url into a batch step
 dlazy seedream-4.5 --prompt "city skyline" --n 4 \
@@ -123,11 +125,13 @@ This skill handles all video generation requests by selecting the best `dlazy` v
 - `dlazy jimeng-i2v-first`: Jimeng first-frame-to-video model, uses first frame + text to generate video. Suitable for single-shot scenes that naturally animate static images.
 - `dlazy jimeng-i2v-first-tail`: Jimeng first/last-frame video model; constrains shot start/end frames. Good for transitions and clearly resolved action.
 - `dlazy jimeng-omnihuman-1.5`: Jimeng digital human model: combines any-ratio character/subject image with audio to generate high-quality digital human videos.
-- `dlazy kling-v3`: Kling V3 general video model, supports text + up to 4 reference images, suitable for stable short video clips and daily creative workflows.
+- `dlazy kling-v3`: Kling V3 general video model. Supports text-to-video, first-frame, and first/last-frame generation. Suitable for stable short video clips and daily creative workflows.
 - `dlazy kling-v3-omni`: Kling Omni video model, supports multiple reference images, duration, mode (std/pro), and optional audio. Suitable for highly controlled video synthesis tasks.
+- `dlazy minimax-h3`: MiniMax Hailuo omni-modal video model with native stereo audio, producing 5-15 second clips at up to 2K. Supports text-to-video, first/last frame transitions and multi-asset references for character and scene consistency.
 - `dlazy pixverse-c1`: PixVerse C1 video model (strong on action, VFX, and high-motion scenes) — one model covers text-to-video, image-to-video, first/last-frame-to-video, and reference-to-video: t2v when no images, i2v with first frame only, kf2v with first+last frames, r2v with reference images.
 - `dlazy seedance-2.0`: ByteDance's latest video generation model. Supports multi-modal reference (images, video, audio) to generate videos, as well as first/last frame and text-to-video modes.
 - `dlazy seedance-2.0-fast`: Fast version of ByteDance's Seedance 2.0. Generates videos faster with support for multi-modal references, first/last frame, and text-to-video.
+- `dlazy seedance-2.5`: ByteDance's next-generation video model: up to 30 seconds per clip with native 4K, substantially better instruction following and long-form narrative. Supports multi-modal references (image + video + audio) and first/last frame control.
 - `dlazy sync-lipsync-3`: fal.ai sync-lipsync v3 — given an input video and audio, generate a new video where the speaker's lip movement matches the audio. Good for dubbing, localization, and re-syncing virtual presenters.
 - `dlazy veo-3.1`: High-quality video generation model, supports text-to-video and single-image-driven video. Suitable for ad shorts and cinematic sequences (slower speed, higher quality).
 - `dlazy veo-3.1-fast`: Fast video generation model, supports text-to-video and single/multi-image/first-last frame driven. Suitable for time-sensitive previews and rapid iterations.

@@ -1,42 +1,55 @@
-## Description: <br>
-GameClaw helps users identify available terminal games, choose supported Linux or macOS release assets, and run downloaded CLI binaries from GitHub Releases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Install, update, and launch GameClaw terminal games on supported macOS, Linux, and Windows systems.
 
-## Publisher: <br>
-[Arcobalneo](https://clawhub.ai/user/Arcobalneo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arcobalneo](https://clawhub.ai/user/arcobalneo)
 
-## Use Case: <br>
-External users and developers use this prompt-only skill to find GameClaw terminal games, select the correct supported platform package, and receive concise unpack and run instructions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may download and run a third-party game binary from GitHub. <br>
-Mitigation: Confirm the repository, release asset name, and platform before running the binary. <br>
-Risk: Users may request an unsupported platform or a missing release asset. <br>
-Mitigation: Ask for the target platform when unknown, only claim linux-x86_64 and darwin-arm64 support, and state plainly when an asset is unavailable. <br>
+## Use Case:
 
+Players and their agents use this skill to identify supported GameClaw games and platforms, install or update game binaries without deleting saves, and troubleshoot download failures.
 
-## Reference(s): <br>
-- [GameClaw on ClawHub](https://clawhub.ai/Arcobalneo/gameclaw) <br>
-- [GameClaw GitHub repository](https://github.com/Arcobalneo/gameclaw) <br>
-- [GameClaw latest releases](https://github.com/Arcobalneo/gameclaw/releases/latest) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompt-only guidance; no local source files or runtime tools are required by the skill itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: A hosts-file repair can change system-wide DNS behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit approval, review the proposed changes, back up the hosts file, and provide restoration steps before editing.
+
+Risk: A fallback mirror can deliver an untrusted executable.
+
+Mitigation: Use mirrors only with explicit approval; review the download source and independently verify the binary before running it.
+
+## Reference(s):
+
+- [GameClaw on ClawHub](https://clawhub.ai/arcobalneo/skills/gameclaw)
+- [GameClaw releases](https://github.com/Arcobalneo/gameclaw/releases/latest)
+- [GitHub520 hosts project](https://github.com/521xueweihan/GitHub520)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with bash and PowerShell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Platform-specific installation and update steps; game launch instructions.]
+
+## Skill Version(s):
+
+2.0.2 (source: frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

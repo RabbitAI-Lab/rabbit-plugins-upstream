@@ -1,0 +1,366 @@
+# 分片：与 references/api-*.md 主题一致；路径项由 references/openapi.yaml 引用。
+# 注意：本组是「交易所公布的期货公司会员持仓龙虎榜」，不是用户本人持仓（本人持仓见 paths-positions-orders.yaml）。
+OpenV1HoldingMetaDates:
+    get:
+      operationId: get_holding_trade_dates
+      summary: 龙虎榜-可用交易日（倒序）
+      description: |
+        **查快照前必须先调它拿 tradeDate。** 龙虎榜由交易所收盘后公布，盘中当天没有数据，
+        直接用今天的日期查会返回空，据此得出「没人持仓」是错误结论。
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 合约代码，如 rb2601
+        - name: exchange
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 交易所代码，如 SHFE
+        - name: product
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 品种前缀，如 rb
+      responses:
+        '200':
+          description: 可用交易日
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+
+
+OpenV1HoldingMetaContracts:
+    get:
+      operationId: get_holding_contracts
+      summary: 龙虎榜-可选合约
+      parameters:
+        - name: exchange
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 交易所代码
+        - name: product
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 品种前缀
+      responses:
+        '200':
+          description: 可选合约
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+
+
+OpenV1HoldingMetaBrokers:
+    get:
+      operationId: get_holding_brokers
+      summary: 龙虎榜-可选期货公司会员
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 合约代码
+        - name: exchange
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 交易所代码
+        - name: product
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 品种前缀
+        - name: tradeDate
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 交易日 yyyy-MM-dd
+      responses:
+        '200':
+          description: 可选会员
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: array
+                        items:
+                          type: object
+
+
+OpenV1HoldingMetaUpdateTime:
+    get:
+      operationId: get_holding_update_time
+      summary: 龙虎榜-数据最新交易日
+      parameters:
+        - name: symbol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 合约代码
+        - name: exchange
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 交易所代码
+        - name: product
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 品种前缀
+      responses:
+        '200':
+          description: 最新交易日
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+
+
+OpenV1HoldingSnapshot:
+    get:
+      operationId: get_holding_snapshot
+      summary: 龙虎榜-快照（多空占比 + 会员排行）
+      description: |
+        交易所公布的会员持买/持卖仓量、多空占比与会员排行。
+        **这是市场整体多空分布，不是用户本人持仓**（本人持仓用 GET /open/v1/positions）。
+        tradeDate 必须是已公布的交易日，先用 get_holding_trade_dates 取。
+        数据滞后一个交易日，不能当作实时行情；可以辅助判断，但须说明数据滞后。不要解读成某公司看多。
+      parameters:
+        - name: tradeDate
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 交易日 yyyy-MM-dd，须来自 get_holding_trade_dates
+        - name: symbol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 合约代码，summary=false 时使用
+        - name: exchange
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 交易所代码
+        - name: product
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 品种前缀，summary=true 时必填
+        - name: summary
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: true=品种汇总，false=单合约
+      responses:
+        '200':
+          description: 龙虎榜快照
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+
+
+OpenV1HoldingPositionTrend:
+    get:
+      operationId: get_holding_position_trend
+      summary: 龙虎榜-多空持仓趋势（近 90 自然日）
+      description: |
+        返回 categories / longSeries / shortSeries 三个等长数组。
+        **按自然日补全，非交易日与无数据日的值是 null 不是 0**——
+        算变化率或求和时必须跳过 null，当成 0 会凭空造出持仓归零的暴跌。
+      parameters:
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 截止日期 yyyy-MM-dd
+        - name: symbol
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 合约代码，summary=false 时使用
+        - name: exchange
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 交易所代码
+        - name: product
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 品种前缀，summary=true 时必填
+        - name: summary
+          in: query
+          required: false
+          schema:
+            type: boolean
+          description: 是否品种汇总
+      responses:
+        '200':
+          description: 多空持仓趋势
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+
+
+OpenV1HoldingBrokerSummary:
+    get:
+      operationId: get_holding_broker_summary
+      summary: 龙虎榜-单会员在某品种的持仓结构
+      description: |
+        会员持仓含其全部客户的净头寸与套保盘，方向与盈亏没有必然联系；
+        不要解读成「该公司看多」，也不要据此评价任何一家期货公司的优劣。
+      parameters:
+        - name: exchange
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 交易所代码
+        - name: product
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 品种前缀
+        - name: brokerPrefix
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 期货公司会员简称前缀
+        - name: tradeDate
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 交易日 yyyy-MM-dd
+      responses:
+        '200':
+          description: 持仓结构
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+
+
+OpenV1HoldingBrokerVolumeTrend:
+    get:
+      operationId: get_holding_broker_volume_trend
+      summary: 龙虎榜-单会员在某品种的成交量趋势
+      parameters:
+        - name: exchange
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 交易所代码
+        - name: product
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 品种前缀
+        - name: brokerPrefix
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 期货公司会员简称前缀
+        - name: endDate
+          in: query
+          required: true
+          schema:
+            type: string
+          description: 截止日期 yyyy-MM-dd
+        - name: range
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 时间范围 1m / 3m / 6m，默认 1m
+        - name: productName
+          in: query
+          required: false
+          schema:
+            type: string
+          description: 品种展示名
+      responses:
+        '200':
+          description: 成交量趋势
+          content:
+            application/json:
+              schema:
+                allOf:
+                  - $ref: '../openapi.yaml#/components/schemas/SuccessResponse'
+                  - type: object
+                    properties:
+                      data:
+                        type: object
+

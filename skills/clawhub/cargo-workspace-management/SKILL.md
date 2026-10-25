@@ -1,8 +1,8 @@
 ---
 name: cargo-workspace-management
-description: Manage workspace users, API tokens, folders, roles, and submit reports to workspace management using the Cargo CLI. Use when the user wants to invite or manage workspace members, create or rotate API tokens, organize resources into folders, inspect workspace roles and permissions, or submit a report to workspace management when the CLI fails or is misused.
-version: "1.2.0"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Administer a Cargo workspace and talk back to the Cargo team — invite and manage members, mint and rotate API tokens, organize plays, tools, and agents into folders, inspect roles, upload batch input files, and file reports. Triggers: \"invite my teammate\", \"create an API token for CI\", \"who has access\", \"organize these into folders\", \"rotate that token\", \"upload this CSV for a batch\" — and for feedback: \"report this bug to Cargo\", \"send feedback to the Cargo team\", \"this CLI command is broken\", \"share this session with Cargo\", \"request a feature\". Most commands need a token with admin access. Skip when: the question is about credits, plans, or invoices — use cargo-billing."
+version: "1.4.1"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -30,11 +30,18 @@ Workspace administration: managing users, API tokens, folders, roles, workspace-
 > See `references/examples/reports.md` for examples of submitting workspace management reports.
 > See `references/examples/sessions.md` for session tracking — the Cargo installer scaffolds the Claude Code SessionStart + Stop + SessionEnd hooks automatically.
 
-## Prerequisites
+## Bootstrap
 
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
 
-**Admin-only:** user, role, and token writes require a token with admin access on the workspace. Folder writes and `report create` work with non-admin tokens.
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero and print `{"error": "...", "status": ..., "body": ...}` to stderr. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. **Admin-only:** user, role, and envVar writes require workspace-management write (admin) access. Any user can create, list, and remove their own tokens; admin access adds service-user tokens. Folder writes check folder write permission, and `report create` and `session upsert` need none. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
 
 ## Discover resources first
 
@@ -51,7 +58,7 @@ cargo-ai workspaceManagement folder list         # all folders
 ```bash
 cargo-ai whoami
 cargo-ai workspaceManagement user list
-cargo-ai workspaceManagement user create --user-email <email> --role-slug <slug>
+cargo-ai workspaceManagement user create --email <email> --role-slug <slug>
 cargo-ai workspaceManagement token list
 cargo-ai workspaceManagement token create --name <name>
 cargo-ai workspaceManagement token remove <token-uuid>
@@ -59,6 +66,8 @@ cargo-ai workspaceManagement folder list
 cargo-ai workspaceManagement folder create --name <name> --emoji-slug <slug> --kind <kind>
 cargo-ai workspaceManagement report create --title <title> --description <description>
 cargo-ai workspaceManagement session upsert --session-id <id> --title <title> --summary <summary> [--finished]
+cargo-ai workspaceManagement envVar list
+cargo-ai workspaceManagement envVar create --key <KEY> [--value <v>] [--secret]
 ```
 
 ## Current user and workspace
@@ -77,7 +86,7 @@ cargo-ai workspaceManagement user list
 
 # Invite a new user (requires their email and a role)
 cargo-ai workspaceManagement user create \
-  --user-email user@example.com \
+  --email user@example.com \
   --role-slug <role-slug>
 
 # Update a user's role
@@ -103,12 +112,12 @@ Always check available roles before inviting users — use the `slug` from `role
 Each token has a human-readable `name` and a `permissions` field. Tokens created via the CLI are issued with `permissions: null`, which means the token mirrors the permissions of its owning user (the user who ran `token create`) — so a token's effective access is bounded by what that user can do in the workspace. Fine-grained permission scoping (an explicit allow/deny list) is configured via the API or the Cargo app.
 
 ```bash
-# List all API tokens (includes name and permissions of each token)
+# List your API tokens (includes name, permissions, and the token value of each)
 cargo-ai workspaceManagement token list
 
 # Create a new token — --name is required
 cargo-ai workspaceManagement token create --name "CI/CD pipeline"
-# → Returns the token value — store it securely, it won't be shown again
+# → Returns the token value — store it securely
 
 # Remove a token
 cargo-ai workspaceManagement token remove <token-uuid>
@@ -116,7 +125,7 @@ cargo-ai workspaceManagement token remove <token-uuid>
 
 **Naming:** Pick a `--name` that makes the token's purpose obvious in `token list` later (e.g. `"GitHub Actions — production"`, `"Local dev — alice"`, `"Zapier integration"`). The name is the only way to tell tokens apart in the listing.
 
-**Security:** Token values are only shown once at creation. Store them in a secrets manager (e.g. GitHub Secrets, AWS Secrets Manager).
+**Security:** Token values are returned at creation and again by `token list` (your own tokens, plus service-user tokens for admins). Treat both outputs as secrets and store the value in a secrets manager (e.g. GitHub Secrets, AWS Secrets Manager).
 
 ## Folders
 
@@ -126,7 +135,7 @@ Folders organize resources (plays, tools, agents) in the Cargo app.
 # List all folders
 cargo-ai workspaceManagement folder list
 
-# Create a folder (kind: "tool", "play", "agent", or "file")
+# Create a folder (kind: tool, play, agent, file, mcpServer, model, app, worker, alert, or mailbox)
 cargo-ai workspaceManagement folder create --name "Q1 Campaigns" --emoji-slug "rocket" --kind "play"
 
 # Get a folder
@@ -168,7 +177,7 @@ cargo-ai workspaceManagement report create \
 # Example: report a CLI struggle after multiple failed attempts
 cargo-ai workspaceManagement report create \
   --title "segment fetch returns empty results despite matching records in UI" \
-  --description "Ran: cargo-ai segmentation segment fetch --model-uuid <uuid> --filter '{\"conjunction\":\"and\",\"groups\":[...]}'. Got 0 records. The same filter shows 1,200 matches in the app UI. Tried both --filter and --segment-uuid; both return empty. Expected: the same records as the UI."
+  --description "Ran: cargo-ai segmentation segment fetch --model-uuid <uuid> --filter '{\"conjonction\":\"and\",\"groups\":[...]}'. Got 0 records. The same filter shows 1,200 matches in the app UI. Tried both --filter and --segment-uuid; both return empty. Expected: the same records as the UI."
 ```
 
 > Do not silently give up on a failing CLI task. **Send a report.** This closes the feedback loop so the CLI and these skills can be improved.
@@ -194,9 +203,54 @@ cargo-ai workspaceManagement session upsert \
 
 - `--session-id`, `--title`, `--summary` are required on every call. `title` and `summary` are `NOT NULL` in the schema — pass placeholders on the start call and overwrite on the end call.
 - `--finished` stamps `finished_at = now`. Use `--finished-at <iso>` for an explicit timestamp instead.
-- Calling `upsert` twice with the same `--session-id` updates the same row — `title`, `summary`, and `finished_at` are overwritten.
+- Calling `upsert` twice with the same `--session-id` updates the same row — `title` and `summary` are overwritten; `finished_at` only when `--finished` or `--finished-at` is passed.
 
-Returns the upserted session as JSON. The Cargo installer (`curl -fsSL https://api.getcargo.io/install.sh | sh`) wires SessionStart + Stop + SessionEnd hooks that call this command automatically: SessionStart writes a placeholder, the per-turn Stop hook checkpoints the row (no `--finished`), and SessionEnd writes the transcript-driven AI summary with `--finished` — see [`references/examples/sessions.md`](references/examples/sessions.md).
+Returns the upserted session as JSON. The [Cargo installer](https://github.com/getcargohq/cargo-skills#staying-current) wires SessionStart + Stop + SessionEnd hooks that call this command automatically: SessionStart writes a placeholder, the per-turn Stop hook checkpoints the row (no `--finished`), and SessionEnd writes the transcript-driven AI summary with `--finished` — see [`references/examples/sessions.md`](references/examples/sessions.md).
+
+## Environment variables
+
+Workspace environment variables are **injected into every worker, app and agent** in
+the workspace, and a worker- or app-level entry with the same key overrides them. One
+catalog, but *when* it is read depends on the consumer:
+
+- **Agents, and a project's `workspaceEnv("NAME")` pointers**, read the value server-side on each
+  use, so rotating it takes effect with no redeploy.
+- **Hosted workers and apps capture values at deploy time.** A worker's bindings are
+  attached when a deployment is promoted, and non-secret values are compiled into its
+  bundle. An app receives only non-secret entries with a public prefix (`VITE_`,
+  `NEXT_PUBLIC_`, …), baked into its build. After a change, **run `hosting deployment create` + `promote` again**. See
+  [`../cargo-hosting/SKILL.md`](../cargo-hosting/SKILL.md) → Worker env vars and secrets.
+
+```bash
+cargo-ai workspaceManagement envVar list
+
+# Create. Omit --value to read it from the environment variable of the same name.
+cargo-ai workspaceManagement envVar create \
+  --key OPENAI_API_KEY \
+  --value sk-... \
+  --secret \
+  --description "Used by the enrichment worker"
+
+# Update. Omit --value to keep the stored one.
+cargo-ai workspaceManagement envVar update <uuid> --value <new> --description <text>
+
+cargo-ai workspaceManagement envVar remove <uuid>
+```
+
+- **`--secret` encrypts the value at rest and it is never returned again** — `list`
+  and `update` will not echo it back. Use it for credentials; use `--no-secret` on
+  `update` to turn a variable back into plain text (which re-exposes it to `list`).
+- **`--value` is optional on `create`.** Omitted, the CLI reads the environment
+  variable of the same name from your shell, so `export OPENAI_API_KEY=… &&
+  cargo-ai workspaceManagement envVar create --key OPENAI_API_KEY --secret` keeps the
+  value out of your shell history and out of this command line.
+- **`update` takes the uuid, not the key.** Get it from `envVar list`.
+
+**From a project**, reference an entry with `workspaceEnv("NAME")` rather than
+copying the value into code — it is a pointer resolved server-side on every use.
+`secret("NAME")` is the other option and means something different (read from *your*
+environment at deploy time). See
+[`../cargo-project/SKILL.md`](../cargo-project/SKILL.md) → Critical rules.
 
 ## Workspace files
 
@@ -204,7 +258,7 @@ Workspace files are CSVs or other data files uploaded for use in batch runs.
 
 ```bash
 # Upload a file
-cargo-ai workspaceManagement file upload --file-path <path-to-file>
+cargo-ai workspaceManagement file upload --file <path-to-file>
 # → Returns s3Filename
 
 # Inspect a file's columns before running a batch

@@ -1,0 +1,175 @@
+{
+  "version": "0.6.0",
+  "updated": "2026-10-16",
+  "cards": [
+    {
+      "name": "复古印刷信息图",
+      "file": "library/cards/风格卡_复古印刷信息图.md",
+      "reference": null,
+      "vibe": "奶油底+高饱和色块卡片，黑描边扁平插画，高密度多要点",
+      "ratio": "3:4 竖版",
+      "use_cases": [
+        "小红书图文",
+        "知识点合集",
+        "活动复盘",
+        "课程笔记"
+      ],
+      "engine": "html",
+      "verified": true,
+      "verified_with": "免费AI证书攻略选题实测，复现度~90%"
+    },
+    {
+      "name": "手绘白板涂鸦风",
+      "file": "library/cards/风格卡_手绘白板涂鸦风.md",
+      "reference": null,
+      "vibe": "白板手绘线稿+荧光黄唯一强调色，松弛笔记感，讲概念",
+      "ratio": "4:3 横版",
+      "use_cases": [
+        "概念科普",
+        "前后对比",
+        "公式化表达",
+        "流程推演"
+      ],
+      "engine": "imagegen",
+      "verified": true,
+      "verified_with": "RAG科普选题实测，复现度~95%，文字零错"
+    },
+    {
+      "name": "终端风封面",
+      "file": "library/cards/风格卡_终端风封面.md",
+      "reference": null,
+      "vibe": "复古终端窗口+像素彩虹字母，极客retro-tech",
+      "ratio": "16:9 横版",
+      "use_cases": [
+        "文章封面",
+        "单观点海报",
+        "技术主题"
+      ],
+      "engine": "imagegen",
+      "verified": true,
+      "verified_with": "「POETRY/诗遇」实测，复现度~95%，噪点清单生效"
+    },
+    {
+      "name": "像素RPG游戏地图",
+      "file": "library/cards/风格卡_像素RPG游戏地图.md",
+      "reference": null,
+      "vibe": "16-bit像素冒险地图，知识点=游戏窗口，路径=闯关",
+      "ratio": "4:3 横版",
+      "use_cases": [
+        "路径对比",
+        "学习路线",
+        "方法论证",
+        "流程闯关"
+      ],
+      "engine": "imagegen",
+      "verified": true,
+      "verified_with": "「先发出去再说」选题实测，复现度~95%，文字基本零错"
+    },
+    {
+      "name": "技术原理分步动画",
+      "file": "library/cards/风格卡_技术原理分步动画.md",
+      "reference": null,
+      "vibe": "灰白流程图+蓝紫强调，token小药丸沿节点流动，步骤条同步讲解",
+      "ratio": "16:9 / 1:1",
+      "use_cases": [
+        "技术原理讲解",
+        "系统流程",
+        "机制对比",
+        "公众号/小红书动图"
+      ],
+      "engine": "html-anim",
+      "verified": true,
+      "verified_with": "RAG提问旅程demo实测，动画同步正常，双帧截图验证"
+    },
+    {
+      "name": "新粗野主义",
+      "file": "library/cards/风格卡_新粗野主义.md",
+      "reference": "examples/新粗野主义_Neo_Brutalism_风格海报_3_4_竖_2026-10-24T15-31-06.png",
+      "vibe": "粗黑描边+硬阴影+撞色大字，反AI味宣言海报",
+      "ratio": "3:4 竖 / 1:1",
+      "use_cases": [
+        "观点输出",
+        "避坑警告",
+        "高冲击单页"
+      ],
+      "engine": "imagegen",
+      "verified": true,
+      "verified_with": "「每天15分钟」首样~95%"
+    },
+    {
+      "name": "便当盒BentoGrid",
+      "file": "library/cards/风格卡_便当盒BentoGrid.md",
+      "reference": "examples/便当盒BentoGrid_demo_Bonnie的Skill工坊.png",
+      "vibe": "圆角模块拼网格，Apple式清爽现代",
+      "ratio": "1:1 / 4:3",
+      "use_cases": [
+        "作品集",
+        "技能清单",
+        "资源汇总"
+      ],
+      "engine": "html",
+      "verified": true,
+      "verified_with": "Skill工坊demo实测，布局清爽"
+    },
+    {
+      "name": "杂志编辑风",
+      "file": "library/cards/风格卡_杂志编辑风.md",
+      "reference": "examples/杂志编辑风_demo_会赚时间的妈妈书评.png",
+      "vibe": "衬线大标题+细网格+大留白，高端杂志质感",
+      "ratio": "3:4 竖 / 16:9 横",
+      "use_cases": [
+        "深度长文",
+        "书评",
+        "个人IP调性"
+      ],
+      "engine": "html",
+      "verified": true,
+      "verified_with": "书评demo实测，可直接发公众号"
+    },
+    {
+      "name": "极简大字报",
+      "file": "library/cards/风格卡_极简大字报.md",
+      "reference": "examples/极简大字报_Bold_Minimal_风格海报_1_1_方形_2026-10-24T15-31-04.png",
+      "vibe": "超大金句+巨量留白+单一强调色，字即图形",
+      "ratio": "1:1 / 4:5",
+      "use_cases": [
+        "金句卡片",
+        "封面",
+        "单观点"
+      ],
+      "engine": "imagegen",
+      "verified": true,
+      "verified_with": "「完成大于完美」首样~98%"
+    },
+    {
+      "name": "拍立得拼贴",
+      "file": "library/cards/风格卡_拍立得拼贴.md",
+      "reference": "examples/拍立得拼贴_Scrapbook_风格海报_3_4_竖版_奶油_2026-10-24T15-30-59.png",
+      "vibe": "照片+胶带+便签+手写批注，温暖手工感",
+      "ratio": "3:4 竖",
+      "use_cases": [
+        "个人故事",
+        "书评",
+        "复盘感悟"
+      ],
+      "engine": "imagegen",
+      "verified": true,
+      "verified_with": "「种一棵树」首样~95%"
+    },
+    {
+      "name": "暗色霓虹",
+      "file": "library/cards/风格卡_暗色霓虹.md",
+      "reference": "examples/暗色霓虹科技海报_16_9_横版_深空蓝黑背景__0A0E1_2026-10-24T15-31-00.png",
+      "vibe": "深空底+霓虹光晕+细网格，高质感科技海报",
+      "ratio": "16:9 横 / 1:1",
+      "use_cases": [
+        "硬核技术科普",
+        "AI概念",
+        "开发者内容"
+      ],
+      "engine": "imagegen",
+      "verified": true,
+      "verified_with": "「RAG外挂资料库」首样~95%（注释重复坑已回写）"
+    }
+  ]
+}

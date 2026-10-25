@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes fixed-camera walking videos of older adults to estimate gait metrics such as step length, gait speed, trunk sway, and cadence, then returns a low, medium, or high fall-risk level. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes straight-line walking videos to estimate gait measures and report a low, medium, or high fall-risk screening level.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Caregivers, care organizations, rehabilitation teams, and health-platform developers use this skill to screen walking videos for gait instability indicators and generate structured fall-risk reports. The output is intended as auxiliary screening information, not a medical diagnosis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill processes elderly gait videos and report history through an external cloud service, which may involve sensitive health or caregiving footage. <br>
-Mitigation: Use only with appropriate consent and review data retention, access control, and encryption practices before using real footage. <br>
-Risk: The skill silently creates or reuses identity-linked local account tokens for analysis and history lookup. <br>
-Mitigation: Review token storage, identity association, and who can access historical reports before installation or deployment. <br>
-Risk: Gait metrics and fall-risk levels are auxiliary screening outputs and may be inaccurate or incomplete. <br>
-Mitigation: Treat results as decision support and route concerning findings to qualified clinical or rehabilitation professionals. <br>
+## Use Case:
 
+Caregivers and elder-care teams use walking videos to review estimated step length, gait speed, cadence, and trunk sway alongside fall-risk screening results. The reports support monitoring, not medical diagnosis.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-gait-instability-detection-analysis) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [SMYX analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, guidance] <br>
-**Output Format:** [Markdown tables or JSON structured analysis reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes gait metrics, risk factors, fall-risk level, advisory text, and report links when available.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Elderly gait footage or video URLs are sent to a cloud service and may contain sensitive health information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain informed consent from the person or guardian before use and confirm the publisher's retention and access-control policy.
+
+Risk: Analyses and report history are linked to a persistent internal identity, which may be unexpected to users.
+
+Mitigation: Explain this linkage and request explicit confirmation before looking up report history or generating export links.
+
+Risk: Fall-risk scores and estimated gait measurements could be mistaken for a diagnosis.
+
+Mitigation: Present results as screening only and seek a qualified clinical assessment when medically relevant.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-elderly-gait-instability-detection-analysis)
+- [Gait analysis API reference](artifact/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Structured gait report in Markdown or JSON, with screening results and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can display cloud-linked report history or save results to a file.]
+
+## Skill Version(s):
+
+1.0.12 (source: ClawHub release; bundled SKILL.md states 1.0.18)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

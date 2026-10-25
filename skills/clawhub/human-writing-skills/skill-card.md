@@ -1,43 +1,57 @@
-## Description: <br>
-Write, rewrite, or audit natural, genre-aware prose with long-form continuity, explicit reference-style matching, physical and relationship consistency, deterministic AI-pattern linting, and protected fact verification. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Supports genre-aware drafting, rewriting, and editorial audits for multilingual prose while helping preserve voice, factual grounding, and long-form continuity.
 
-## Publisher: <br>
-[whh110112](https://clawhub.ai/user/whh110112) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[whh110112](https://clawhub.ai/user/whh110112)
 
-## Use Case: <br>
-External users and developers use this skill to draft, continue, revise, lint, audit, and verify prose across fiction, webnovels, essays, news, self-media, and academic writing while preserving supplied facts and continuity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Referenced supporting files and commands are not included in the submitted artifact, so parts of the workflow may not work unless those resources are supplied elsewhere. <br>
-Mitigation: Confirm required README, docs, module files, and command implementations are available before relying on the full workflow. <br>
-Risk: Drafts, sources, and continuity ledgers may contain sensitive or unpublished writing material processed by the agent. <br>
-Mitigation: Provide only material appropriate for the agent environment and review outputs before sharing or publication. <br>
-Risk: Writing, audit, or verification guidance can still introduce incorrect edits or misleading conclusions. <br>
-Mitigation: Use deterministic linting and source verification where applicable, then perform human review for factual and editorial decisions. <br>
+## Use Case:
 
+Writers, editors, and writing agents use the skill to draft or revise prose across fiction and factual genres, and to review voice, continuity, structure, and rewrite fidelity. It is intended to support editorial judgment, not to establish authorship or guarantee quality.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/whh110112/skills/human-writing-skills) <br>
-- [Server-resolved GitHub provenance](https://github.com/whh110112/human-writing-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and plain text with optional command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce drafts, revisions, audits, lint findings, verification notes, and workflow guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: release evidence) <br>
+Risk: Confidential drafts or project details may be shared with a hosted model when using prompt packs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts before use and avoid sharing confidential work unless the model and workspace are approved for it.
+
+Risk: Installing an untrusted release or developer archive can execute package code.
+
+Mitigation: Install trusted releases and verify the developer archive before running it.
+
+Risk: Remote MCP access can expose a project if its connection is not properly protected.
+
+Mitigation: Use the documented HTTPS and authentication setup, and keep project files backed up in a dedicated folder.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/whh110112/skills/human-writing-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Generated or revised prose, Markdown editorial reports, and requested code, shell commands, or configuration files.]
+
+**Output Parameters:** [Variable; depends on the supplied draft, style, context, and selected writing or review task.]
+
+**Other Properties Related to Output:** [May include diagnostics, audit findings, continuity notes, and staged project files. Editorial assessments require human review and do not prove authorship.]
+
+## Skill Version(s):
+
+0.17.1
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

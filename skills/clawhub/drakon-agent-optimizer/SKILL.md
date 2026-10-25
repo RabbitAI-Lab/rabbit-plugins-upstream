@@ -1,7 +1,7 @@
 ---
 name: agent-optimizer
 description: >
-  CLI tool that audits Claude Code and OpenClaw config files for
+  CLI tool that audits Claude Code, OpenClaw, and Hermes Agent config files for
   misconfigurations, token waste, security issues, and stale auth. Reads local
   JSON/Markdown config files only. No data leaves the machine unless you
   explicitly enroll in optional daily monitoring (summary counts only — see
@@ -10,7 +10,7 @@ description: >
 license: SEE LICENSE IN LICENSE.md
 metadata:
   author: Drakon Systems
-  version: 0.13.1
+  version: 0.16.2
   category: devtools
   tags:
     - openclaw-audit
@@ -80,7 +80,7 @@ install:
 **Audit, optimize, and secure your Claude Code and OpenClaw AI agent deployments.**
 
 29 auditor modules (25 OpenClaw + 4 Claude Code), 70+ checks. Free to install and run.
-Current to OpenClaw v2026.7.
+Current to OpenClaw v2026.9.8 and Hermes Agent 0.21.2 (named profiles under `~/.hermes/profiles/` audited too).
 
 ## What It Reads (and doesn't)
 
