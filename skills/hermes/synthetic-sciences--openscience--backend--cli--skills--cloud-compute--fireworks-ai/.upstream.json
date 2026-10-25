@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/fireworks-ai",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/fireworks-ai",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/fireworks-ai",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "d780d9b61d41850864446c88ffcdbef3a579b54173fd2ff3675c9d33ab49a0a2",
+  "fetchedAt": "2026-10-25T12:37:23.537Z"
+}

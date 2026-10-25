@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/arbor",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/arbor",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/arbor",
+  "branch": "main",
+  "pushedAt": "2026-10-19T09:33:57Z",
+  "contentHash": "1e1f9ec887d28c638ccbdf10cf40faa5c4b96c2d4a9c96f9d273621a8d92b937",
+  "fetchedAt": "2026-10-25T12:37:38.628Z"
+}

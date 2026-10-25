@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/pkpd-modeling",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/pkpd-modeling",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/pkpd-modeling",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "5b2b3db18a173348f2c9ae173b800548e632bf9dc624cd3b86ae383760f03f5e",
+  "fetchedAt": "2026-10-25T12:37:23.634Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemotron-voice-agent-builder",
+  "identifier": "NVIDIA/skills/skills/nemotron-voice-agent-builder",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemotron-voice-agent-builder",
+  "branch": "main",
+  "pushedAt": "2026-10-24T16:12:22Z",
+  "contentHash": "c3a210afeac3fac1e497b74f7e7ed8057283802454ef25fd88f0b8a92ce83ac9",
+  "fetchedAt": "2026-10-25T12:37:21.982Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/torch_geometric",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/torch_geometric",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/torch_geometric",
+  "branch": "main",
+  "pushedAt": "2026-10-23T04:18:40Z",
+  "contentHash": "a2ace062b8c72702052c539fefda4f97f200442ce763af6ae8fbad621ba3c6b5",
+  "fetchedAt": "2026-10-25T12:37:23.706Z"
+}

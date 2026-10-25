@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-image-attribute-augmentation",
+  "identifier": "NVIDIA/skills/skills/cdf-image-attribute-augmentation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-image-attribute-augmentation",
+  "branch": "main",
+  "pushedAt": "2026-10-24T16:12:22Z",
+  "contentHash": "1ffa69e9427038ac39b41ec60a0e2f542b07fcb8d2bafb95f6a9b48ed39b29d1",
+  "fetchedAt": "2026-10-25T12:37:21.649Z"
+}
