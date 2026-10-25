@@ -1,42 +1,62 @@
-## Description: <br>
-Google Sheets helps agents create, read, update, format, share, and export spreadsheets through AgentPMT-hosted remote tool calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Work with Google Sheets through AgentPMT-hosted remote tool calls to read, create, update, format, share, and export spreadsheets using targeted workflows.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-Developers and agents use this skill to work with Google Sheets through short, schema-defined actions for spreadsheet creation, tab management, safe row and column appends, selected row updates, formatting, sharing, and exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read, edit, share, delete, and export Google Sheets through a remote integration. <br>
-Mitigation: Install only if the publisher is trusted with the relevant spreadsheets, and confirm the exact spreadsheet, recipient, role, and retention need before sharing, domain, anyone, owner, delete, or export actions. <br>
-Risk: Spreadsheet updates or exports may affect business data or expose file contents if the wrong tab, range, recipient, or format is selected. <br>
-Mitigation: Scope inputs to the minimum data needed, prefer schema-defined append and selected-field update actions, and review returned warnings or correction targets before retrying. <br>
+## Use Case:
 
+Developers and teams use this skill to manage Google Sheets through AgentPMT-hosted tool calls, including targeted reads and edits, spreadsheet formatting and sharing, and tab exports.
 
-## Reference(s): <br>
-- [ClawHub Google Sheets skill page](https://clawhub.ai/agentpmt/skills/google-sheets) <br>
-- [AgentPMT Google Sheets marketplace page](https://www.agentpmt.com/marketplace/google-sheets-api) <br>
-- [Google Sheets action schema](artifact/schema.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, API calls, JSON] <br>
-**Output Format:** [Markdown instructions with JSON action examples and schema references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Remote AgentPMT tool calls return JSON responses; CSV, TSV, PDF, XLSX, ODS, HTML, or ZIP exports may be stored in File Manager.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill frontmatter) <br>
+Risk: Connected-account access and paid calls can expose data or incur charges.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit connected-account permissions and spending to what the task requires.
+
+Risk: Edits, row deletions, or sharing changes can affect the wrong data or recipients.
+
+Mitigation: Specify the exact spreadsheet, deletion targets, and sharing recipients; verify targets and keep backups before destructive changes.
+
+Risk: AgentPMT processes requests and stores spreadsheet exports.
+
+Mitigation: Review data-handling expectations before exporting sensitive content and manage stored exports appropriately.
+
+Risk: Separate credential-setup skills have unpinned installation sources.
+
+Mitigation: Review those setup skills and their sources before use, and reassess future updates.
+
+## Reference(s):
+
+- [AgentPMT Google Sheets Marketplace](https://www.agentpmt.com/marketplace/google-sheets-api)
+- [ClawHub Google Sheets Skill](https://clawhub.ai/agentpmt/skills/google-sheets)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Files, Guidance]
+
+**Output Format:** [Structured tool-call inputs, spreadsheet data, and exported CSV, TSV, PDF, XLSX, ODS, HTML, or ZIP files.]
+
+**Output Parameters:** [Varies by action; may include spreadsheet, tab, range, rows, and export options.]
+
+**Other Properties Related to Output:** [Some actions change spreadsheet data or sharing settings; some export formats require Drive access.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

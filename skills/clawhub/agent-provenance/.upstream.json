@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-provenance",
   "slug": "agent-provenance",
   "ownerHandle": null,
-  "version": "2.1.4",
-  "updatedAt": 1778492412046,
-  "contentHash": "8531770f41c3d925f755bc17883de235d87ff366a67475743be26a1a7d2c3305",
-  "fetchedAt": "2026-07-26T19:36:10.938Z"
+  "version": "2.3.0",
+  "updatedAt": 1792344606516,
+  "contentHash": "2eee4c2d07f08374c3d0e552f476e14f91871a164aa936ca6d086ce1a347393b",
+  "fetchedAt": "2026-10-25T13:04:30.139Z"
 }

@@ -324,9 +324,9 @@ Avoid:
 - generic advice without peer evidence
 - long peer lists without explaining why each one matters
 
-## Credit And Packaging Boundary
+## Scope And Packaging Boundary
 
-Use `search-credit-notice.md` before expanding into paid public-content lookup,
+Use `research-scope-guard.md` before expanding into online public-content lookup,
 deep profile analysis, note comments, or broad peer discovery.
 
 If the report is long, do not leave the user with a wall of chat text. Offer:

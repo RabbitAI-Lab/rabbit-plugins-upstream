@@ -201,7 +201,7 @@ Google v21+ 新建 PMax **默认开启** BG：`businessName` / Logo 挂在 **Cam
 
 ## 删除
 
-- **系列**：`ad campaign-delete -a <id> --id <campaignId>`
+- **系列**：用户同意后 `ad campaign-delete -a <id> --id <campaignId> --i-confirm --commit "…"`（`ad pmax-edit --status Removed` 同样须 `--i-confirm`）
 - **资产组**：`ad pmax-asset-group-edit --status REMOVED`
 - **资产**：`ad pmax-assets-update` 的 `unlink`（见模板）
 

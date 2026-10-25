@@ -1,48 +1,59 @@
-## Description: <br>
-Scans agent capabilities, benchmarks them against Rotifer Arena rankings, and presents stronger upgrade alternatives. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Compares an agent's installed Rotifer Genes with Arena rankings and recommends stronger alternatives, installing replacements only with user approval.
 
-## Publisher: <br>
-[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev)
 
-## Use Case: <br>
-Developers and agent operators use this skill to audit local Rotifer agent capabilities, compare them with Arena rankings, discover alternatives, and apply approved capability upgrades. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The runtime MCP server package is fetched with npx and cached locally. <br>
-Mitigation: Install only if the Rotifer MCP package is trusted; inspect the package, source, permissions, and npm integrity before use. <br>
-Risk: Capability upgrades can modify local Rotifer agent configuration under ~/.rotifer/. <br>
-Mitigation: Review the proposed Gene, source, permissions, and expected file changes before approving an upgrade. <br>
-Risk: Arena rankings measure performance and do not guarantee safety or suitability. <br>
-Mitigation: Treat rankings as performance data and run an independent safety and security review before deploying replacements. <br>
+## Use Case:
 
+Developers use this skill to assess installed Rotifer capabilities against Arena rankings, compare replacements, and upgrade or roll back Genes in their projects.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/xiaoba-dev/rotifer-self-evolving-agent) <br>
-- [Rotifer Protocol](https://rotifer.dev) <br>
-- [Rotifer Documentation](https://rotifer.dev/docs) <br>
-- [Rotifer MCP Server Package](https://www.npmjs.com/package/@rotifer/mcp-server/v/0.8.1) <br>
-- [Rotifer MCP Server Source](https://github.com/rotifer-protocol/rotifer-mcp-server) <br>
-- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec) <br>
-- [Capability Marketplace](https://rotifer.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with slash-command examples and MCP tool actions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May recommend or perform local Gene installation under ~/.rotifer/ after user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.2.1 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: Upgrades install unsigned third-party Gene code and may replace existing project capabilities.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the proposed Gene's publisher, safety assessment, and source before approving; use rollback if a replacement causes problems.
+
+Risk: Running an agent executes installed Gene code.
+
+Mitigation: Review Genes before running them and keep execution in the default sandbox.
+
+Risk: Usage logging and install counter updates may send activity to Rotifer.
+
+Mitigation: Set ROTIFER_TELEMETRY=0 if you do not want these updates.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/xiaoba-dev/skills/rotifer-self-evolving-agent)
+- [Rotifer documentation](https://rotifer.dev/docs)
+- [Rotifer MCP server package](https://www.npmjs.com/package/@rotifer/mcp-server/v/0.19.3)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Shell commands, Configuration]
+
+**Output Format:** [Markdown with comparisons and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Upgrades require approval; creating or running agents can write local files or execute Gene code.]
+
+## Skill Version(s):
+
+2.4.10 (source: release metadata and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

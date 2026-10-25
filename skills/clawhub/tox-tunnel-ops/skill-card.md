@@ -1,45 +1,60 @@
-## Description: <br>
-Tox Tunnel Ops helps agents plan, configure, verify, and diagnose encrypted ToxTunnel TCP tunnels for remote SSH, desktop, database, web service, homelab, proxy, metrics, and failover use cases. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through configuring, operating, and troubleshooting encrypted ToxTunnel TCP access to remote services.
 
-## Publisher: <br>
-[agentx-icu](https://clawhub.ai/user/agentx-icu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentx-icu](https://clawhub.ai/user/agentx-icu)
 
-## Use Case: <br>
-Developers, operators, and homelab administrators use this skill to produce ToxTunnel client/server YAML, scoped access-control rules, verification commands, and troubleshooting guidance for encrypted remote TCP access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Remote network exposure and persistent services can create high-impact access paths. <br>
-Mitigation: Review generated rules so they allow only exact friends, hosts, and ports, and avoid enabling persistent services until the configuration is reviewed. <br>
-Risk: Installer shortcuts or unpinned packages can increase supply-chain risk. <br>
-Mitigation: Prefer manually downloaded, version-pinned release packages with checksums over one-line installers. <br>
-Risk: Diagnostic cleanup commands can remove important identity data if the target path is wrong. <br>
-Mitigation: Do not run rm -rf diagnostics without verifying and backing up the exact target path. <br>
+## Use Case:
 
+Developers and operators use this skill to plan remote TCP access, generate scoped server and client configurations, verify deployments, and diagnose tunnel failures for services such as SSH, databases, and web apps.
 
-## Reference(s): <br>
-- [ToxTunnel project homepage](https://github.com/agentx-icu/tox-tcp-tunnel) <br>
-- [ClawHub skill page](https://clawhub.ai/agentx-icu/skills/tox-tunnel-ops) <br>
-- [Diagnose Reference](references/diagnose.md) <br>
-- [Execute Reference](references/execute.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with YAML and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include client/server configs, rules.yaml snippets, diagnostic checklists, and verification commands; requires the toxtunnel binary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.10 (source: server release evidence) <br>
+Risk: Remote access rules could expose more services than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit rules to exact friend keys and host:port pairs; avoid wide local binds unless protected by firewall controls.
+
+Risk: Installing a package may start or persist a remote-access service.
+
+Mitigation: Use version-pinned packages and review service auto-start behavior before installation.
+
+Risk: Reloading access rules does not terminate existing connections.
+
+Mitigation: Revoke active access at the target service or restart the tunnel server, then update rules to block new sessions.
+
+## Reference(s):
+
+- [ToxTunnel project homepage](https://github.com/agentx-icu/tox-tcp-tunnel)
+- [ClawHub skill listing](https://clawhub.ai/agentx-icu/skills/tox-tunnel-ops)
+- [Execution guidance](artifact/references/execute.md)
+- [Diagnostic guidance](artifact/references/diagnose.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Configuration, Shell commands]
+
+**Output Format:** [Markdown with YAML configurations and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes verification, troubleshooting, and rollback guidance.]
+
+## Skill Version(s):
+
+0.5.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -157,6 +157,16 @@ class Workspace:
     """Wraps the agent's working directory with atomic write semantics."""
 
     PROTECTED = frozenset({'.history'})    # never expose; never accept as filename
+    # Dependency/build dirs pruned from recursive listing (Opus 0.8.14 B HOLD):
+    # rglob('*.md') descends into node_modules/venv where README.md files are
+    # dense; sorted() puts them first alphabetically and they eat LIST_CAP
+    # before memory/docs/skills/plans ever render. Pruned by path segment so
+    # nested copies are caught too. Not a security boundary (dotfiles/traversal
+    # are handled separately) — purely a listing-relevance filter.
+    PRUNE_DIRS = frozenset({
+        'node_modules', 'venv', '.venv', 'dist', 'build',
+        '__pycache__', 'site-packages', '.git',
+    })
 
     def __init__(self, root: pathlib.Path) -> None:
         if not root.is_dir():
@@ -167,32 +177,76 @@ class Workspace:
     def _safe(self, filename: str) -> pathlib.Path:
         # NFC normalise; reject path traversal; reject hidden / .history.
         filename = unicodedata.normalize('NFC', filename)
-        if not filename or '/' in filename or '..' in filename \
-                or filename.startswith('.') or filename in self.PROTECTED:
+        # RECURSIVE-SAFE (0.8.14): nested relative paths are now permitted so a
+        # listed subdir file (plans/foo.md) can be read/written, but every
+        # segment is validated — no absolute paths, no traversal, no dotfiles,
+        # no PROTECTED dir at any level.
+        if not filename or filename.startswith('/') or '..' in filename \
+                or '\\' in filename:
             raise ValueError('invalid_filename')
-        p = (self.root / filename).resolve()
+        segs = [seg for seg in filename.split('/') if seg != '']
+        if not segs:
+            raise ValueError('invalid_filename')
+        for seg in segs:
+            if seg.startswith('.') or seg in self.PROTECTED:
+                raise ValueError('invalid_filename')
+        p = (self.root / '/'.join(segs)).resolve()
         # Defence in depth — resolved path must stay under root.
-        if not str(p).startswith(str(self.root)):
+        root_s = str(self.root)
+        if not (str(p) == root_s or str(p).startswith(root_s + '/')):
             raise ValueError('invalid_filename')
         return p
 
     def list_md(self) -> list[dict]:
+        # RECURSIVE-LIST (Opus #2, 0.8.14): was root-level *.md only, which hid
+        # plans/, memory/ and other subdirs once MC routed the panel to the
+        # bridge. Now walks recursively for *.md and returns POSIX-relative
+        # paths. Scope stays .md (spec §/v1/files): rglob('*') pulled every
+        # file type, and alphabetical order let acpx-local/ examples fill the
+        # LIST_CAP before memory/docs/skills ever rendered (Opus 0.8.14 nit).
+        # Every path segment is re-checked against the same rules _safe enforces
+        # (no dotfiles, no .history, no traversal) so nothing hidden leaks.
         out = []
-        for p in sorted(self.root.iterdir()):
-            if not p.is_file() or not p.suffix == '.md': continue
+        # Breadth-first ordering (Opus 0.8.14 B HOLD, part 2): sort by depth
+        # then path so root + shallow files (memory/, plans/, docs/) render
+        # before deep trees exhaust LIST_CAP. Alphabetical-only buried the
+        # important dirs behind early-alphabet subdirs on large workspaces.
+        candidates = sorted(
+            self.root.rglob('*.md'),
+            key=lambda q: (len(q.relative_to(self.root).parts), q.as_posix()),
+        )
+        for p in candidates:
+            if not p.is_file():
+                continue
+            try:
+                rel = p.relative_to(self.root)
+            except ValueError:
+                continue
+            parts = rel.parts
+            # Skip dotfiles/dot-dirs, PROTECTED, and dependency/build dirs at ANY level.
+            if any(seg.startswith('.') or seg in self.PROTECTED or seg in self.PRUNE_DIRS
+                   for seg in parts):
+                continue
             try:
                 stat = p.stat()
-                with open(p, 'rb') as fh: content = fh.read(CONTENT_MAX_BYTES + 1)
-                if len(content) > CONTENT_MAX_BYTES: continue
+                with open(p, 'rb') as fh:
+                    content = fh.read(CONTENT_MAX_BYTES + 1)
+                if len(content) > CONTENT_MAX_BYTES:
+                    continue
                 out.append({
-                    'filename': p.name,
+                    'filename': rel.as_posix(),
                     'size': stat.st_size,
                     'modified_at': int(stat.st_mtime),
                     'etag': etag_of(content),
                 })
             except Exception:
                 continue
-            if len(out) > LIST_CAP: break
+            if len(out) > LIST_CAP:
+                # Collect the (LIST_CAP+1)th as the has_more sentinel; the
+                # handler slices to [:LIST_CAP] and reports has_more via
+                # len(files) > LIST_CAP. A '>=' cap here permanently pins
+                # has_more False (Opus 0.8.14 finding 1).
+                break
         return out
 
     def read(self, filename: str) -> tuple[bytes, dict]:
@@ -205,8 +259,11 @@ class Workspace:
         try: content.decode('utf-8')
         except UnicodeDecodeError:
             raise ValueError('non_utf8_content')
+        # RECURSIVE-ECHO (0.8.14): echo the FULL relative path, not basename —
+        # the Lambda filename echo-back check compares against the requested
+        # 'plans/foo.md', and basename would trip a false 502 mismatch.
         meta = {
-            'filename': p.name,
+            'filename': p.relative_to(self.root).as_posix(),
             'size': len(content),
             'modified_at': int(p.stat().st_mtime),
             'etag': etag_of(content),
@@ -227,6 +284,9 @@ class Workspace:
             raise ValueError('non_utf8_content')
         if len(new_content) > CONTENT_MAX_BYTES:
             raise ValueError('content_too_large')
+        # RECURSIVE-MKDIR (0.8.14): nested writes (plans/foo.md) need their
+        # parent dirs; _safe already proved the path stays under root.
+        p.parent.mkdir(parents=True, exist_ok=True)
         # if_match validation
         if if_match and p.exists():
             with open(p, 'rb') as fh: cur = fh.read(CONTENT_MAX_BYTES + 1)
@@ -603,6 +663,8 @@ def _resolve_spaceduck_id() -> str:
 def run_server(bind: str, workspace_dir: pathlib.Path, beak_key: str,
                *, no_self_pulse: bool = False,
                api_base: str = 'https://beak.spaceduckling.com') -> None:
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base({'api_base': api_base})
     BridgeHandler.workspace = Workspace(workspace_dir)
     BridgeHandler.beak_key = beak_key
     host, port = bind.rsplit(':', 1) if ':' in bind else ('0.0.0.0', bind)
@@ -923,6 +985,8 @@ def cmd_status(args) -> int:
             print('# warn: cannot report — missing beak_key or spaceduck_id',
                   file=sys.stderr)
             return 0
+        from _apiguard import check_api_base  # [HARDEN-071]
+        check_api_base({'api_base': args.api})
         try:
             req = urllib.request.Request(
                 f'{args.api}/beak/me/duck/{sd}/bridge-status',

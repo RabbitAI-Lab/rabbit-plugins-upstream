@@ -1,47 +1,60 @@
-## Description: <br>
-Searches Redfox-backed WeChat Official Account hot articles by keyword, ranks viral content, and helps creators find topic inspiration and trend signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+公众号搜索工具，支持按关键词搜索爆款文章，展示推荐热门文章，助力内容创作者把握趋势与获取灵感；当用户需要搜索公众号文章、查找爆款内容、获取创作灵感时使用。当接口返回积分不足（code=3210）时，自动唤起支付宝完成充值后继续查询。
 
-## Publisher: <br>
-[redfox-data](https://clawhub.ai/user/redfox-data) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[redfox-data](https://clawhub.ai/user/redfox-data)
 
-## Use Case: <br>
-External content creators, WeChat operators, brand teams, and self-media teams use this skill to search recent high-read WeChat articles, compare trends, and plan topics. It can also guide an agent to run the bundled Python script and present the returned data as tables, recommendations, or optional reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search keywords and requests are sent to Redfox. <br>
-Mitigation: Use the skill only when sharing those keywords with Redfox is acceptable, and avoid sensitive search terms. <br>
-Risk: The skill requires a REDFOX_API_KEY. <br>
-Mitigation: Use a revocable key, confirm its scope and validity period, and avoid exposing it in prompts, logs, code, or generated files. <br>
-Risk: Reference documentation includes an apparent plaintext API key. <br>
-Mitigation: Do not reuse the documented key; the publisher should remove and rotate it. <br>
-Risk: The subscription flow can create persistent scheduled pushes. <br>
-Mitigation: Review any calendar subscription before accepting it and confirm how to cancel scheduled pushes. <br>
+## Use Case:
 
+Content creators, social media operators, and publishing teams can find trending WeChat Official Account articles by keyword, review popular recommendations and ranking signals, and use the results for topic research and inspiration.
 
-## Reference(s): <br>
-- [Skill listing](https://clawhub.ai/redfox-data/skills/wechat-explosive-content) <br>
-- [English README](README.en.md) <br>
-- [WeChat trend data format](references/gzh_trend_data_format.md) <br>
-- [RedFox](https://redfox.hk) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown tables and guidance, with optional JSON or HTML report output from the bundled script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires REDFOX_API_KEY; may guide optional calendar subscription creation after search results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Insufficient provider credits can start a payment setup flow, and payment tooling may be installed if missing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep recharge manual or require approval after verifying the payee and exact amount. Use a reviewed, pinned payment CLI and approve installation before proceeding.
+
+Risk: Optional HTML reports may contain unsafe markup or links.
+
+Mitigation: Prefer JSON output; review HTML and validate escaping and links before opening or sharing it.
+
+Risk: Searches consume provider credits, and recurring delivery can create ongoing activity.
+
+Mitigation: Confirm the intended query and credit use; enable recurring delivery only when requested.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/redfox-data/skills/wechat-explosive-content)
+- [Article result format](references/gzh_trend_data_format.md)
+- [Recharge flow reference](references/alipay-recharge.md)
+- [RedFox API key setup](https://redfox.hk/settings/api-keys?source=clawhub)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, HTML reports]
+
+**Output Format:** [JSON search results or an optional HTML report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results include ranked articles and may include popular-topic recommendations; HTML output is saved as a local file.]
+
+## Skill Version(s):
+
+1.0.4 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

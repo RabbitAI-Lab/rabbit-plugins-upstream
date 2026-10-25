@@ -39,7 +39,7 @@ Turn keyword research into a publishable package:
 1. clarify the user's real intent behind the keyword
 2. clarify or infer who the content is for and who will click
 3. confirm the publishing format: graphic note/image, spoken video, or Vlog
-4. confirm search scope and credit tier before lookup
+4. confirm search scope and research depth before lookup
 5. search only the confirmed keywords or references
 6. filter examples by learnability, not only likes
 7. extract topic, title, cover, structure, keyword, and visual formulas
@@ -140,7 +140,7 @@ Do not overdo the deconstruction. The purpose is to prove the output has a
 source, then quickly give one publishable version.
 
 If the user sends only a link or image and Lingzao cannot open the full content
-without paid lookup, login, or missing note type, still produce a rough package
+without online lookup, login, or missing note type, still produce a rough package
 from visible information and clearly mark it as "基于当前可见信息的第一版".
 Then ask the user to paste the title/body/screenshot or enable Lingzao lookup
 for a more accurate version. Do not leave them with only "我看不了".
@@ -187,7 +187,7 @@ captured for the current task, current content package, or current conversation.
 If the runtime has an actual memory or knowledge-base tool and the user asks to
 save it, use `content-knowledge-base-workflow.md`.
 
-## First Response And Credit Scope
+## First Response And Research Scope
 
 If the user gives only one keyword and wants content output, do not start a
 large search silently. Explain that this is a content package workflow, then
@@ -197,64 +197,67 @@ Use this wording:
 
 可以做。这个不是单纯搜关键词，而是把关键词下面的参考内容拆成「选题 + 标题 + 封面 + 图文结构 + 正文方向 + 10 个发布关键词」。
 
-先确认范围，避免一下子花太多积分：
+先确认交付范围：
 
-A. 快速版：只搜主关键词 1 次，先给 3 条内容方向和标题/封面建议，通常约 20 credits。
-B. 标准版：搜主关键词 + 3 个相关词，产出 5 条内容包，每条包含标题、封面、图文结构和关键词，通常约 80 credits；如果继续打开单篇详情会再增加。
-C. 批量版：搜 8-10 个相关词，先做 10-20 条选题库，再精写 3 条内容包，通常约 180-220 credits 起；如果要看完整正文、评论区或逐字稿，会进入深度搜索。
+A. 快速版：只搜主关键词 1 次，先给 3 条内容方向和标题/封面建议。
+B. 标准版：搜主关键词 + 3 个相关词，产出 5 条内容包，每条包含标题、封面、图文结构和关键词。
+C. 批量版：搜 8-10 个相关词，先做 10-20 条选题库，再精写 3 条内容包；如果要看完整正文、评论区或逐字稿，会进入深度搜索。
 
-默认搜索设置：小红书、图文优先、近半年、高赞/高收藏内容优先。如果你只回复 A / B / C，就表示接受这些默认搜索设置；如果你有平台、时间、内容类型或排序偏好，可以和选项一起告诉我。
+默认搜索设置：综合排序、全部类型、全部时间。平台请告诉我（小红书 / 抖音等）；如果你有时间、内容类型或排序偏好，可以和选项一起告诉我，没写的我按默认值处理并在开头说明。
 
 快速版只搜你给的主关键词；标准版和批量版会先把准备搜索的相关词列出来让你确认，不会默认把所有相关词都搜完。
 
 If the user already states both scope and search filters, proceed without asking
 again.
 
-If the user states only the scope, such as "标准版", "B", or "批量版", but the
-current conversation has not visibly shown the default platform, note type,
-time range, and sorting, show those defaults first and ask the user to reply
-"默认" or edits before any paid search.
+If the user states only the scope, such as "标准版", "B", or "批量版", and the
+platform is known, use the default note type, time range, and sorting without
+asking first, and state them in one sentence at the start of the reply. If the
+platform is missing and cannot be inferred, ask only for the platform.
 
-If the user says "用默认" or "你看着来" after the default settings have been
-shown, use Standard Version B unless the keyword is too broad or commercial
+If the user says "用默认" or "你看着来", use Standard Version B unless the keyword is too broad or commercial
 search cost is likely high.
 
 ## Search Scope Rules
 
-Before calling Lingzao search tools, use `search-credit-notice.md` whenever the
-scope involves paid search, multiple keywords, note details, comments, full
+Before calling Lingzao search tools, use `research-scope-guard.md` whenever the
+scope involves online search, multiple keywords, note details, comments, full
 copy, subtitles, or transcripts.
 
-Default search settings:
+Default search settings: when filters are missing, search with `general`,
+`不限`, and `不限` and state them in one sentence at the start of the reply. The
+preferences below apply only when the user's request already states that goal;
+otherwise offer them as a next-step adjustment, never silently:
 
-- Xiaohongshu first unless the user names another platform.
-- Prefer recent content for fast-moving topics: last 1-3 months when available.
+- Platform: use the one the user named or the context shows; if none, ask one
+  short platform question.
+- When the user asks for recent or trending content, prefer the last 1-3 months
+  when available.
 - Prefer 图文 when the user says 图文, no-face, cover, page design, or Xiaohongshu
   graphic note.
-- Prefer most-liked for first discovery; use collect-descending when the user
+- When the user asks for popular or high-like examples, use most-liked; use
+  collect-descending when the user
   wants tutorials, checklists, or knowledge-base material.
 - For beginners or low-follower users, prefer low-follower viral notes,
   same-stage accounts, or easy-to-copy formats. Do not lead with 100k+ or
   200k+ creators unless the task is mature positioning research.
 
-If the user only replies A / B / C after the scope prompt above, treat it as
-acceptance of the visible default settings: Xiaohongshu, 图文优先, 近半年, and
-high-like/high-save discovery. If those exact defaults were not shown in the
-current conversation, do not search yet; show the defaults and ask for "默认" or
-edits before any paid search.
+If the user only replies A / B / C after the scope prompt above and the platform
+is known, search with `general`, `不限`, and `不限` and state them in one sentence
+at the start of the reply; do not stop to ask for "默认" first. If the platform
+is missing and cannot be inferred, ask only for the platform.
 
 For Standard Version B, list the main keyword plus the 3 related keywords before
 searching. Ask the user to reply "默认" to accept or replace any term. Do not
 search hidden related terms.
 
-For Batch Version C, list the 8-10 planned search keywords before spending
-credits. Group them by intent when possible, such as audience, pain, result,
+For Batch Version C, list the 8-10 planned search keywords before searching.
+Group them by intent when possible, such as audience, pain, result,
 scenario, city, format, or product. Ask the user to confirm the list or cut the
 scope.
 
-Do not imply that the user pays per returned search result. Credit grows from
-actual searches, profile analysis, note details, comments, full copy, subtitles,
-and broader scope.
+Do not silently expand a list search into profile analysis, note details,
+comments, full copy, subtitles, or a broader keyword scope.
 
 ## Filtering Rules
 
@@ -743,7 +746,7 @@ want to do spoken video.
 
 The user does not need to write image prompts. If they provide only a broad
 topic such as 女性成长, search or inspect suitable public references within the
-confirmed credit scope, extract the reusable angle, rewrite it into original
+confirmed research scope, extract the reusable angle, rewrite it into original
 graphic-note content, and then route to visual generation when available.
 
 Process:

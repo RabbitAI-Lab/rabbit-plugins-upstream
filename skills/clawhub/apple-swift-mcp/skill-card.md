@@ -1,44 +1,59 @@
-## Description: <br>
-This skill helps an agent work with local Apple app data through a native Swift MCP server for Calendar, Reminders, Contacts, Maps, Mail, Messages, Notes, and Photos on macOS. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill should be used when the user asks about Apple app data via the native Swift MCP — Calendar, Reminders, Contacts, Maps, Mail, Messages, Notes, Photos, or Apple Music playlists on macOS. Triggers on phrases like "check my calendar", "find contact", "send iMessage", "search my notes", "recent emails", "find photos of", "make a playlist", "add this song to my playlist", "sort my playlist", or any macOS-native app automation. Requires macOS 14+ on Apple Silicon; faster than the AppleScript-backed Node variant.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Developers and macOS users use this skill to let an agent search, read, create, update, send, organize, import, export, or delete data in local Apple apps. It is intended for macOS 14+ on Apple Silicon, with some operations requiring Apple TCC permissions or app automation access. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can access sensitive local Apple app data including calendar entries, contacts, emails, messages, notes, photos, and reminders. <br>
-Mitigation: Grant only the app and disk permissions needed for the current task, and review requested data access before allowing the agent to proceed. <br>
-Risk: The skill supports write or state-changing actions such as sending messages or mail, creating or deleting events and reminders, exporting photos, and changing photo metadata. <br>
-Mitigation: Require explicit user confirmation before send, delete, update, export, import, or metadata-changing actions. <br>
-Risk: Messages history may require direct local database access, and AppleScript-backed app automation can operate on personal application data. <br>
-Mitigation: Avoid broad full-disk or automation permissions unless the user understands which local data stores will be readable. <br>
+## Use Case:
 
+macOS users and developers use this skill to read, search, organize, and update data in Apple apps through a native Swift MCP server. It covers Calendar, Reminders, Contacts, Maps, Mail, Messages, Notes, Photos, and Apple Music playlists.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/apple-swift-mcp) <br>
-- [apple-swift-mcp GitHub repository](https://github.com/chrischall/apple-swift-mcp) <br>
-- [apple-swift-mcp GitHub releases](https://github.com/chrischall/apple-swift-mcp/releases) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown responses with tool-use guidance, commands, and configuration notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May depend on macOS 14+, Apple Silicon, local app permissions, and user confirmation for sensitive read or write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: The skill can access sensitive data and make changes across Apple apps.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant only the app permissions and write tools needed; prefer read-only tools when possible.
+
+Risk: Some edits and deletions do not have an additional confirmation gate.
+
+Mitigation: Keep MCP_CONFIRM_MODE set to ask-user and review each proposed change before approving it.
+
+Risk: The reviewed instructions do not verify the downloaded executable, and static scanner coverage was incomplete.
+
+Mitigation: Verify the downloaded release before installing it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/chrischall/skills/apple-swift-mcp)
+- [Project repository (linked in skill documentation)](https://github.com/chrischall/apple-swift-mcp)
+- [GitHub Releases (linked in skill documentation)](https://github.com/chrischall/apple-swift-mcp/releases)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, API Calls]
+
+**Output Format:** [Natural-language responses and Apple app operations via MCP tools]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the requested operation and the connected Apple app data.]
+
+## Skill Version(s):
+
+2.5.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

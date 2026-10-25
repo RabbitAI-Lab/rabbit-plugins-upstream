@@ -1,41 +1,60 @@
-## Description: <br>
-Helps agents discover, vet, recommend, and optionally install agent skills for users who need specialized capabilities. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users discover and install agent skills when they ask questions like "how do I do X", "find a skill for X", "is there a skill that can...", or express interest in extending capabilities.
 
-## Publisher: <br>
-[seanford](https://clawhub.ai/user/seanford) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[seanford](https://clawhub.ai/user/seanford)
 
-## Use Case: <br>
-External users, developers, and agent operators use this skill when a user asks for help finding installable skills for a task. It guides the agent through search, quality review, recommendation, and optional installation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Search results or popular listings can still surface low-quality, untrusted, or mismatched skills. <br>
-Mitigation: Review publisher identity, repository reputation, install count, and source code where practical before recommending or installing a skill. <br>
-Risk: Global installs with confirmation skipped create persistent changes to the agent environment. <br>
-Mitigation: Treat npx skills add with -g -y as a persistent install path; remove -y or ask for explicit confirmation when additional review is desired. <br>
+## Use Case:
 
+Developers, employees, and external users use this skill to discover relevant installable agent skills, assess candidate quality, and optionally install selected skills with the Skills CLI.
 
-## Reference(s): <br>
-- [Find Skills on ClawHub](https://clawhub.ai/seanford/skills/find-skills) <br>
-- [Skills Directory](https://skills.sh/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with inline shell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May suggest Skills CLI commands such as npx skills find, npx skills add, npx skills check, and npx skills update.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: The skill recommends unpinned remote CLI commands, which can change behavior between runs.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use pinned CLI versions or reviewed package sources before running search, install, check, or update commands.
+
+Risk: The skill includes a global install command with confirmation skipping, which can create persistent user-level changes.
+
+Mitigation: Avoid `-g -y` unless the user explicitly accepts the persistent impact; inspect each target skill before installation or update.
+
+Risk: Skill recommendations may point users to third-party packages with unknown source reputation.
+
+Mitigation: Verify install counts, source reputation, repository signals, and skill contents before recommending or installing a candidate.
+
+## Reference(s):
+
+- [Find Skills on ClawHub](https://clawhub.ai/seanford/skills/find-skills)
+- [seanford publisher profile](https://clawhub.ai/user/seanford)
+- [Skills leaderboard](https://skills.sh/)
+- [Example skills.sh skill page](https://skills.sh/vercel-labs/agent-skills/react-best-practices)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Markdown with inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include skill recommendations, install commands, quality checks, and links to skill listings.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

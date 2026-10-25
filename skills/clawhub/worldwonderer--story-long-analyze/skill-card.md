@@ -1,45 +1,57 @@
-## Description: <br>
-Analyzes long-form web novels through a staged pipeline covering opening chapters, character structure, reader-payoff design, pacing, chapter summaries, setting and relationship extraction, summary reports, and style profiling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+分析长篇网络小说的开篇、逐章情节、因果与时间线、节奏、角色情感、设定和文风，并支持复用已有成果与断点续跑。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, editors, and creative-development agents use this skill to break down legally available long-form fiction into structured analysis files for plot, pacing, character, setting, emotional hooks, reusable writing patterns, and prose style. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill copies full novel text into the workspace and stores sizeable source excerpts. <br>
-Mitigation: Use it only with text you own or are authorized to process, and delete retained `原文/`, `文风.md` excerpts, and `/tmp/style-sample.txt` when source text should not remain on disk. <br>
-Risk: The skill can update related project files outside the main analysis folder without a strong confirmation step. <br>
-Mitigation: Run it in a controlled workspace and review diffs after each run before accepting or publishing changes. <br>
+## Use Case:
 
+Authors and writing teams use this skill to analyze a supplied long-form novel, produce chapter-level and cross-chapter reports, and identify reusable storytelling techniques without copying the source work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-analyze) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata link](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Material decomposition reference](references/material-decomposition.md) <br>
-- [Output templates reference](references/output-templates.md) <br>
-- [Style profile protocol reference](references/style-profile-protocol.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Analysis, Guidance] <br>
-**Output Format:** [Markdown files organized under a book-specific analysis directory] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates staged analysis artifacts such as summaries, character files, plot and pacing indexes, setting notes, reports, progress state, and style profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill reads the selected novel and project files and writes analysis outputs in the book workspace, with optional inspiration-library and topic-decision updates.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the selected book workspace and review the files that may be updated before running the analysis.
+
+Risk: Reruns and chapter-index maintenance may move old outputs or call for removal of generated summaries and caches.
+
+Mitigation: Check the target directory and preserve any outputs you need before rerunning or rebuilding the index.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/worldwonderer/skills/story-long-analyze)
+- [Project link supplied in skill metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Opening-chapter analysis](references/stage1-golden-chapters.md)
+- [Plot and pacing analysis](references/stage3-plot-rhythm.md)
+- [Report structure](references/stage5-report.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Text, Guidance]
+
+**Output Format:** [Chinese-language Markdown reports and chapter notes, with a CSV chapter index]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes a progress record and optional inspiration-library outputs for resumable analysis.]
+
+## Skill Version(s):
+
+1.1.31 (source: ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

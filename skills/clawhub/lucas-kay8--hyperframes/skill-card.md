@@ -1,50 +1,65 @@
-## Description: <br>
-Create video compositions, animations, title cards, overlays, captions, voiceovers, audio-reactive visuals, and scene transitions in HyperFrames HTML. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create video compositions, animations, title cards, overlays, captions, voiceovers, audio-reactive visuals, and scene transitions in HyperFrames HTML.
 
-## Publisher: <br>
-[lucas-kay8](https://clawhub.ai/user/lucas-kay8) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[lucas-kay8](https://clawhub.ai/user/lucas-kay8)
 
-## Use Case: <br>
-Developers and creative engineers use this skill to author HTML-based video compositions with timed scenes, motion, overlays, captions, voiceovers, and audio-reactive visual effects. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may create or modify project files while building HyperFrames compositions and design specifications. <br>
-Mitigation: Review generated files and diffs before using them in production or committing them. <br>
-Risk: The design picker workflow can start a local web server. <br>
-Mitigation: Bind the server to 127.0.0.1, serve only the picker directory when possible, and stop the server promptly after use. <br>
-Risk: Composition and picker workflows may load animation or font assets from third-party services. <br>
-Mitigation: Review third-party asset URLs and replace them with approved local or vendor-approved assets when needed. <br>
-Risk: Audio transcription workflows may upload audio to transcription APIs. <br>
-Mitigation: Use approved transcription services only, and avoid sending sensitive audio unless policy permits it. <br>
+## Use Case:
 
+Developers and creative engineers use this skill to author HTML-based video compositions with timing, styling, animation, captions, voiceover guidance, audio-reactive visuals, and scene transitions.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/lucas-kay8/hyperframes) <br>
-- [Video Composition](references/video-composition.md) <br>
-- [Motion Principles](references/motion-principles.md) <br>
-- [Design Picker](references/design-picker.md) <br>
-- [Transcript Guide](references/transcript-guide.md) <br>
-- [Transitions](references/transitions.md) <br>
-- [GSAP CDN](https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with HTML, CSS, JavaScript, JSON, and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce project files, design.md specifications, HyperFrames composition HTML, animation code, captions, narration scripts, and local preview or render commands.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Risk: Generated or user-derived design picker HTML can include unsafe content if treated as trusted input.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the picker only with trusted or sanitized prompt data and inspect generated HTML before opening it.
+
+Risk: Bare npx commands may resolve changing package versions.
+
+Mitigation: Use a pinned local HyperFrames installation or pin command versions before execution.
+
+Risk: External transcription examples may upload audio to third-party providers.
+
+Mitigation: Confirm data handling requirements and user consent before sending audio to external transcription APIs.
+
+## Reference(s):
+
+- [Hyperframes Skill](artifact/SKILL.md)
+- [Video Composition](artifact/references/video-composition.md)
+- [Motion Principles](artifact/references/motion-principles.md)
+- [Typography](artifact/references/typography.md)
+- [Transitions](artifact/references/transitions.md)
+- [Design Picker](artifact/references/design-picker.md)
+- [Transcript Guide](artifact/references/transcript-guide.md)
+- [ClawHub Skill Page](https://clawhub.ai/lucas-kay8/skills/hyperframes)
+- [Publisher Profile](https://clawhub.ai/user/lucas-kay8)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance]
+
+**Output Format:** [Markdown guidance with inline HTML, CSS, JavaScript, JSON, and shell command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May produce HyperFrames HTML composition code, design guidance, caption workflows, transition plans, and command suggestions.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

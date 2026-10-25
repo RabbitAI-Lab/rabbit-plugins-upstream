@@ -8,7 +8,7 @@ The varg API at `api.varg.ai/v2` is a unified REST API for generating images, vi
 Authorization: Bearer varg_xxx
 ```
 
-Get your API key at the varg dashboard (app.varg.ai). Only `GET /v2/pricing` is public.
+Get your API key at https://varg.ai/dashboard/api. Only `GET /v2/pricing` is public.
 
 ## Base URL
 
@@ -75,7 +75,7 @@ Image-to-video (start frame in `files` — varg routes to the model's i2v varian
 }
 ```
 
-Lipsync (video + audio in `files`): `sync_v2`, `veed_fabric_1.0`, `omnihuman_v1.5`. Video upscale: `topaz_video`, `seedvr_video`.
+Lipsync (video + audio in `files`): `sync_v2`, `veed_fabric_1_0`, `omnihuman_v1_5`. Video upscale: `topaz_video`, `seedvr_video`.
 
 ### Generate Speech
 

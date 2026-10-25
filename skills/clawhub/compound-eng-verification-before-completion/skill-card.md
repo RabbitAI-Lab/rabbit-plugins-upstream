@@ -1,42 +1,52 @@
-## Description: <br>
-Enforces fresh verification evidence before any completion claim. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Requires fresh, claim-matched verification evidence before an agent reports engineering work complete.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and engineering agents use this discipline skill to require immediate, command-backed verification before claiming work is complete. It also helps agents confirm ambiguous change scope before editing and select verification strategies suited to the change type. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can cause agents to propose or run broad verification commands on large projects or long-running suites. <br>
-Mitigation: Review proposed verification commands when they touch large projects, long-running test suites, or broad filesystem scope. <br>
-Risk: Incorrect or stale verification guidance could lead an agent to overstate completion confidence. <br>
-Mitigation: Require fresh command output and explicit failure reporting before accepting any completion claim. <br>
+## Use Case:
 
+Developers and engineering agents use this skill to verify changes with fresh, relevant checks before claiming tests pass, a bug is fixed, or work is ready to hand off.
 
-## Reference(s): <br>
-- [Isolated Verification](references/isolated-verification.md) <br>
-- [System-Wide Test Check](references/system-wide-test-check.md) <br>
-- [ClawHub release page](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands] <br>
-**Output Format:** [Markdown guidance with inline shell commands and structured completion reports] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Prompts the agent to provide fresh verification evidence, scope confirmation, and command results before completion claims.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.0 (source: server release evidence) <br>
+Risk: Tests or migrations may change data when run against a non-disposable database or service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm verification targets are disposable before running checks; stop and request a safe environment otherwise.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-verification-before-completion)
+- [Proof integrity](artifact/references/proof-integrity.md)
+- [Verification strategies by change type](artifact/references/change-strategies.md)
+- [Claims and failures](artifact/references/claims-and-failures.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Verification guidance]
+
+**Output Format:** [Markdown with verification commands, outcomes, and remaining risks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Claims are limited to fresh checks actually run; failed or skipped checks are disclosed.]
+
+## Skill Version(s):
+
+5.1.2 (source: ClawHub release record)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

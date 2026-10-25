@@ -1,8 +1,8 @@
 ---
 name: cargo-content
-description: Manage workspace knowledge files and libraries in the Cargo content domain — upload, list, rename, move, and remove files (PDFs, CSVs, text), and create or sync native and connector-backed libraries for retrieval-augmented generation (RAG). Use when the user wants to upload or organize knowledge files, build a knowledge library, or sync an external knowledge source. To attach these to an agent, use the cargo-ai skill.
-version: "1.0.0"
-compatibility: Requires @cargo-ai/cli (npm) and a Cargo account (browser sign-in via --oauth, or an API token)
+description: "Manage the knowledge a Cargo workspace holds — upload files (PDF, CSV, text), rename and organize them, and build native or connector-backed libraries that sync from an external source, so agents can retrieve them (RAG). Triggers: \"upload this PDF\", \"add these docs as knowledge\", \"build a knowledge base\", \"sync our help center into Cargo\", \"what files are in the workspace\", \"index this folder\", \"attach our pricing sheet\". Skip when: wiring the file or library into an agent — use cargo-ai; uploading a CSV that drives a batch run — that is a workspace-management file upload."
+version: "1.1.0"
+compatibility: Requires @cargo-ai/cli (npm). Sign in or create an account with `cargo-ai login --email` (emailed code, no browser), `--oauth`, or an API token
 homepage: https://github.com/getcargohq/cargo-skills
 metadata:
   author: getcargo
@@ -32,9 +32,18 @@ Workspace **knowledge** management: upload and organize **files** (PDFs, CSVs, t
 > See `references/response-shapes.md` for full JSON response structures.
 > See `references/troubleshooting.md` for common errors and how to fix them.
 
-## Prerequisites
+## Bootstrap
 
-See [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) for install, login (`--oauth` / `--token`), JSON output conventions, and error shapes. Verify the session with `cargo-ai whoami` before running any of the commands below.
+Already signed in (`cargo-ai whoami` returns a workspace)? Skip to the next section.
+
+```bash
+npm install -g @cargo-ai/cli            # no global install? prefix every command with `npx @cargo-ai/cli`
+cargo-ai login --email you@company.com  # emailed code, no browser; creates the account on first use
+                                        # alternatives: --oauth (browser) · --token <api-token> (CI)
+cargo-ai whoami                         # confirm the active workspace before any write
+```
+
+Every command prints JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`. Anything that creates a run or a batch is async — pass `--wait-until-finished` or poll the matching `get`. When the full skill bundle is installed, [`../cargo/references/prerequisites.md`](../cargo/references/prerequisites.md) adds the CLI version pin, token scopes, and the admin-only surface.
 
 ## Discover resources first
 
@@ -55,8 +64,8 @@ cargo-ai content file list
 cargo-ai content file get <file-uuid>
 
 # Upload a file (optionally straight into a folder)
-cargo-ai content file upload --file-path ./knowledge-base.pdf
-cargo-ai content file upload --file-path ./knowledge-base.pdf --folder-uuid <folder-uuid>
+cargo-ai content file upload --file ./knowledge-base.pdf
+cargo-ai content file upload --file ./knowledge-base.pdf --folder-uuid <folder-uuid>
 
 # Update a file's name or folder
 cargo-ai content file update --uuid <file-uuid> --name "Q1 Research Notes"
@@ -70,9 +79,9 @@ cargo-ai content file remove <file-uuid>
 
 ## Libraries
 
-A library groups files into one resource an agent can reference. There are two kinds:
+A library groups files. Agent release `resources` take file or folder items, not a library UUID, so an agent reaches a library through its files or the folder they land in. There are two kinds:
 
-- **`native`** — workspace-managed collections of uploaded files.
+- **`native`** — workspace-managed collections of uploaded files (not creatable from the CLI: `library create` is connector-only).
 - **`connector`** — synced from an external source (e.g. a help center or knowledge base) through an unstructured-data extractor (`--extractor-slug`). Get the `connectorUuid` from [`cargo-connection`](../cargo-connection/SKILL.md).
 
 ```bash

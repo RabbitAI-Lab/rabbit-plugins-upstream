@@ -10,7 +10,7 @@ Use this playbook when the user asks:
 - 帮我复盘这条笔记
 - 帮我拆 Brief / 商单
 - 帮我全平台分发
-- 我想省积分
+- 我想先小范围试试
 
 The goal is to make ordinary users paste a scoped prompt instead of triggering
 wide searches, repeated account lookups, or multi-platform generation by
@@ -62,7 +62,7 @@ Deepen-one-account version:
 
 If the user only gives a broad keyword, first narrow:
 
-> 先不要做付费查询，先帮我判断这个赛道应该找什么类型的对标账号。请帮我限定【粉丝量范围、内容形式、城市/是否本地、更新时间、近期爆款要求、首轮搜索数量】，再决定要不要搜索。
+> 先不要做在线查询，先帮我判断这个赛道应该找什么类型的对标账号。请帮我限定【粉丝量范围、内容形式、城市/是否本地、更新时间、近期爆款要求、首轮搜索数量】，再决定要不要搜索。
 
 ## Own Account Diagnosis
 
@@ -209,11 +209,11 @@ scope.
 
 When the user is unsure how to ask:
 
-> 我想用灵造完成【任务】，但我不确定怎么问最省积分。请你先帮我把任务拆成：免费判断、基础搜索、深度搜索三步，并告诉我第一步应该先做什么。
+> 我想用灵造完成【任务】，但我不确定怎么限定范围。请你先帮我把任务拆成：本地判断、基础搜索、深度搜索三步，并告诉我第一步应该先做什么。
 
 Then answer with:
 
-1. free judgment: no paid lookup yet;
+1. local judgment: no online lookup yet;
 2. basic search: limited known objects or 3-account starter round;
 3. deep search: only after user confirms object count, time range, comments,
    full copy, transcript, or image generation scope.

@@ -1,47 +1,61 @@
-## Description: <br>
-Helps agents inspect and manage VMware AVI/NSX Advanced Load Balancer and AKO Kubernetes operations, including virtual services, pool members, SSL expiry, analytics, service engines, ingress diagnostics, sync checks, and guarded state changes. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps operators inspect and manage AVI load balancing and AKO Kubernetes ingress through diagnostics, configuration guidance, and controlled actions.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure operators use this skill to troubleshoot and administer AVI Controller load balancing and AKO Kubernetes ingress workflows from an agent, including read-only diagnostics and confirmation-gated writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can inspect and change AVI or AKO state in infrastructure environments. <br>
-Mitigation: Install only where the agent is authorized for AVI and AKO administration, use read-only service accounts when possible, and require explicit confirmation for write operations. <br>
-Risk: Controller credentials and audit data may be sensitive if stored in local configuration files. <br>
-Mitigation: Keep ~/.vmware-avi/.env and ~/.vmware/audit.db owner-only, prefer a secret manager for passwords, and never commit environment files. <br>
-Risk: Disabling TLS verification can hide connection interception or controller identity problems. <br>
-Mitigation: Keep TLS verification enabled for production and disable it only for lab or self-signed test environments. <br>
+## Use Case:
 
+Infrastructure operators and engineers use this skill to inspect virtual services, pools, certificates, and service engines; troubleshoot AKO ingress and synchronization; and carry out approved AVI or AKO changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/vmware-avi) <br>
-- [Project homepage](https://github.com/zw008/VMware-AVI) <br>
-- [VMware AVI setup guide](references/setup-guide.md) <br>
-- [VMware AVI capabilities](references/capabilities.md) <br>
-- [VMware AVI CLI reference](references/cli-reference.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured CLI or MCP results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include environment-specific AVI, AKO, Kubernetes, and audit details returned by tools; write operations are confirmation-gated and audited.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release metadata) <br>
+Risk: Access to production controllers and AKO clusters can expose sensitive infrastructure or disrupt application traffic.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only for authorized operators; use least-privilege or read-only accounts and scope access to intended environments.
+
+Risk: Enabling or disabling services, draining pool members, restarting AKO, or changing Helm settings can alter live workloads.
+
+Mitigation: Review the target and impact, and obtain explicit approval before confirm=true or CLI double-confirmed write actions.
+
+Risk: Locally stored production credentials may be exposed.
+
+Mitigation: Store production secrets in a secret manager rather than a local .env file.
+
+## Reference(s):
+
+- [Project homepage (skill metadata)](https://github.com/vmware-skills/VMware-AVI)
+- [Setup guide](artifact/references/setup-guide.md)
+- [Capabilities and compatibility](artifact/references/capabilities.md)
+- [CLI reference](artifact/references/cli-reference.md)
+- [Agent guardrails](artifact/references/agent-guardrails.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown with inline commands and structured diagnostic results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only diagnostics and explicitly approved state changes; results depend on the connected controllers and clusters.]
+
+## Skill Version(s):
+
+2.4.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
