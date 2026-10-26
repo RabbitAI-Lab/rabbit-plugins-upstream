@@ -1,43 +1,57 @@
-## Description: <br>
-Github Flow guides agents through GitHub issue, pull request, review, merge, dependency, authentication, and publication workflows using GitHub CLI-first procedures. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps developers manage GitHub issues, pull requests, reviews, and merges with structured checks and guidance.
 
-## Publisher: <br>
-[drumrobot](https://clawhub.ai/user/drumrobot) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[drumrobot](https://clawhub.ai/user/drumrobot)
 
-## Use Case: <br>
-Developers and engineering agents use this skill to convert plans into GitHub issues and PRs, manage review and merge flows, enforce public-repository hygiene, and handle GitHub CLI authentication and scope checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can guide agents through high-impact GitHub actions, including token refreshes, public posting, force-pushes, direct branch pushes, and merges. <br>
-Mitigation: Install only where agent-managed GitHub workflows are intended, and require explicit user confirmation before token refreshes, public posts, force-pushes, direct master pushes, or merges. <br>
-Risk: Hardcoded account mappings and scope rules can cause work to run under the wrong GitHub identity or with broader access than expected. <br>
-Mitigation: Replace the documented accounts and scope rules with the user's own policy, then verify gh CLI identity, repository owner, and token scope before live operations. <br>
-Risk: Home-directory and cache assumptions can affect how credentials or local workflow state are reused between agent runs. <br>
-Mitigation: Review local credential storage, cache dependencies, and gh CLI state before enabling the skill in shared or sensitive environments. <br>
+## Use Case:
 
+Developers use this skill to turn plans into GitHub issues and pull requests, coordinate reviews and dependencies, and check readiness before merging.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/drumrobot/skills/github-flow) <br>
-- [Publisher profile](https://clawhub.ai/user/drumrobot) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and GitHub CLI/API examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires local GitHub repository context and configured gh CLI credentials for live GitHub operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.0 (source: server release metadata and CHANGELOG, released 2026-07-23) <br>
+Risk: GitHub write and merge access may change repositories or publish content unintentionally.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Limit token scopes and require user confirmation before issue or pull request creation and merges.
+
+Risk: Credential and account mapping could select the wrong identity or expose excessive authority.
+
+Mitigation: Review credential handling and verify account mapping files before use.
+
+Risk: The Test Plan parser is not reliable as a merge gate.
+
+Mitigation: Fix and verify the parser before relying on its merge decision.
+
+## Reference(s):
+
+- [github-flow on ClawHub](https://clawhub.ai/drumrobot/skills/github-flow)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Shell commands, Guidance]
+
+**Output Format:** [Markdown with GitHub CLI commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Issue and pull request drafts, review comments, and workflow checklists]
+
+## Skill Version(s):
+
+0.11.4 (source: ClawHub release and CHANGELOG)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

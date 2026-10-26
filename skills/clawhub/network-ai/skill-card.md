@@ -1,43 +1,54 @@
-## Description: <br>
-Local Python orchestration skill for multi-agent workflows using a shared blackboard file, permission gating, token-budget checks, and persistent project context. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coordinates multi-agent work through a local shared blackboard, task budgets, advisory permission checks, and persistent project context.
 
-## Publisher: <br>
-[jovancoding](https://clawhub.ai/user/jovancoding) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[jovancoding](https://clawhub.ai/user/jovancoding)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to coordinate local multi-agent work, share task state, gate sensitive operations, and manage project context within a trusted workspace. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Local coordination files and audit logs can contain user-provided task context, justification text, or other sensitive content. <br>
-Mitigation: Install only in a trusted workspace, avoid secrets or personal data in justifications and blackboard entries, and restrict access to the local data directory. <br>
-Risk: Permission grant tokens are advisory workflow signals and do not prove user or agent identity. <br>
-Mitigation: Require platform authentication or human approval before honoring grants for sensitive actions such as payments, database access, or file export. <br>
-Risk: Persistent project context can influence later agent behavior if untrusted content is injected. <br>
-Mitigation: Review project-context.json before injecting it into an agent prompt and avoid force options unless the context source is trusted. <br>
+## Use Case:
 
+Developers and teams use this skill to coordinate agents within a trusted workspace, track task budgets and shared progress, and assess proposed access to sensitive operations.
 
-## Reference(s): <br>
-- [Network-AI homepage](https://network-ai.org) <br>
-- [ClawHub skill page](https://clawhub.ai/jovancoding/skills/network-ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and local JSON or markdown file outputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Local-only Python scripts write coordination state, audit logs, grants, and project context files in the workspace.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-5.15.0 (source: server release evidence and artifact skill.json) <br>
+Risk: Persistent coordination files can retain sensitive project details or personal data in permission justifications.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a trusted workspace with restricted local file access; omit secrets, credentials, and personal data from justifications and project context.
+
+Risk: Advisory grant tokens could be mistaken for authorization to perform sensitive operations.
+
+Mitigation: Require separate human approval and authenticated identity checks before payments, database access, email, or exports.
+
+## Reference(s):
+
+- [Network-AI skill listing](https://clawhub.ai/jovancoding/skills/network-ai)
+- [Network-AI homepage](https://network-ai.org)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, Markdown]
+
+**Output Format:** [Markdown with shell commands and coordination summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Runs locally and maintains persistent workspace coordination state; permission decisions are advisory.]
+
+## Skill Version(s):
+
+5.16.0 (source: server-resolved release and bundled skill.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

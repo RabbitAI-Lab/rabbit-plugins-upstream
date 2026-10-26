@@ -6,8 +6,10 @@
 // 按 SharedPage 删除，与内容类型无关。
 
 const {
+    emitError,
     CREDENTIAL_MODE_SUDOWORK_PROXY,
     detectCredentialMode,
+    extractShareRef,
     printShareOneScriptError,
     requestShareOneBuffer,
     resolveDirectApiKey,
@@ -16,20 +18,6 @@ const {
 function usage() {
     console.error('Usage: node delete_share.js <share_link_or_ref> [--api-key <key>]');
     console.error('  删除前请与用户确认——软删除后公开链接立即失效。');
-}
-
-function extractShareRef(value) {
-    const raw = String(value || '').trim();
-    if (!raw) return null;
-    try {
-        const parsed = raw.includes('://') ? new URL(raw) : null;
-        const path = parsed ? parsed.pathname : raw.split('?')[0].split('#')[0];
-        const parts = path.split('/').filter(Boolean);
-        if (parts.length === 0) return raw;
-        return parts[parts.length - 1] || raw;
-    } catch (_) {
-        return raw;
-    }
 }
 
 const args = process.argv.slice(2);
@@ -43,33 +31,43 @@ for (let i = 0; i < args.length; i++) {
     } else if (!arg.startsWith('--') && !ref) {
         ref = arg;
     } else {
-        console.error(`ERROR:UNKNOWN_ARGUMENT:${arg}`);
-        usage();
-        process.exit(1);
+        emitError(`ERROR:UNKNOWN_ARGUMENT:${arg}`);
     }
 }
 
 if (!ref) {
     usage();
-    process.exit(1);
+    emitError('BAD_ARGS', 'Required arguments are missing.');
 }
 
 (async () => {
     const credentialMode = await detectCredentialMode();
     if (credentialMode.mode === CREDENTIAL_MODE_SUDOWORK_PROXY && apiKey) {
-        console.error('ERROR:SUDOWORK_MANAGED_KEY');
-        console.error('Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。');
-        process.exit(1);
+        emitError('ERROR:SUDOWORK_MANAGED_KEY', ['Sudowork 模式下不要传 --api-key；请通过本 skill 的 save_api_key.js 或 create_guest_key.js 设置 ShareOne API Key。'].join('\n'));
     }
     if (credentialMode.mode !== CREDENTIAL_MODE_SUDOWORK_PROXY && !resolveDirectApiKey(apiKey)) {
-        console.error('ERROR:KEY_NOT_FOUND');
-        process.exit(1);
+        emitError('ERROR:KEY_NOT_FOUND');
     }
 
     const shareRef = encodeURIComponent(extractShareRef(ref));
-    await requestShareOneBuffer(`/api/v1/pages/${shareRef}`, { method: 'DELETE', apiKey });
+    const raw = await requestShareOneBuffer(`/api/v1/pages/${shareRef}`, { method: 'DELETE', apiKey });
     console.log(`SHARE_DELETED:${extractShareRef(ref)}`);
+
+    // Deleting a share also kills every ShareOne link that pointed at it — those
+    // may belong to other people. The user has to be told which ones died; a
+    // silent cascade is how someone discovers it from a colleague's broken link.
+    let cascaded = [];
+    try {
+        cascaded = JSON.parse(raw.text).cascaded_pointers || [];
+    } catch {
+        cascaded = []; // older backend answered 204 with no body
+    }
+    for (const pointer of cascaded) {
+        console.log(`POINTER_INVALIDATED:${pointer.share_url}`);
+    }
+    if (cascaded.length > 0) {
+        console.log(`HINT:POINTERS_INVALIDATED:${cascaded.length}`);
+    }
 })().catch((error) => {
-    printShareOneScriptError(error);
-    process.exit(1);
+    process.exit(printShareOneScriptError(error));
 });

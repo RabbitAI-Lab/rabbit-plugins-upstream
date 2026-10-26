@@ -1,49 +1,56 @@
-## Description: <br>
-Provides read-only VMware vCenter/ESXi monitoring, inventory, health triage, alarm and event review, performance and capacity checks, and object-centered investigation workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents inspect VMware infrastructure through read-only inventory, health checks, and VM, host, and datastore investigations.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, infrastructure engineers, and operations teams use this skill to query VMware vCenter/ESXi inventory, health, alarms, events, capacity, and object-centered investigations without write operations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: VMware inventory, sessions, events, and host logs can expose sensitive operational information. <br>
-Mitigation: Run the skill with a least-privilege read-only VMware account and restrict local configuration and audit files to authorized users. <br>
-Risk: Continuous monitoring and webhook notifications can send aggregated alert metadata outside the local agent environment when enabled. <br>
-Mitigation: Start the daemon only when continuous monitoring is required and configure Slack, Discord, or webhook URLs only for approved destinations. <br>
-Risk: Per-target VMware credentials are configured through local environment files. <br>
-Mitigation: Keep the environment file access-restricted, avoid plaintext secrets for production deployments where possible, and review configuration before installation. <br>
+## Use Case:
 
+Infrastructure operators and engineers use this skill to triage vCenter and ESXi health, inspect inventory, alarms, events, performance, and capacity, and investigate affected VMs, hosts, or datastores without modifying resources.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zw008/skills/vmware-monitor) <br>
-- [VMware Monitor Repository](https://github.com/zw008/VMware-Monitor) <br>
-- [Setup Guide](references/setup-guide.md) <br>
-- [Capabilities](references/capabilities.md) <br>
-- [CLI Reference](references/cli-reference.md) <br>
-- [Investigation Protocol](references/investigation-protocol.md) <br>
-- [Agent Guardrails](references/agent-guardrails.md) <br>
-- [Cluster Health Summary Display Template](references/health-summary-template.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance, CLI commands, structured JSON-style tool results, rendered tables, and optional self-contained HTML snapshot files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only VMware monitoring output may include inventory, alarms, events, performance samples, capacity checks, suggested actions, and audit-aware command guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.8 (source: server release metadata) <br>
+Risk: Monitoring access can expose sensitive VMware inventory and operational details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a dedicated read-only VMware account and a secret manager rather than storing passwords in .env.
+
+Risk: Optional webhooks and daemon notifications can send hostnames, IPs, usernames, alarms, and event text to external destinations.
+
+Mitigation: Enable notifications only after reviewing the destination and approving disclosure of those operational details.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/zw008/skills/vmware-monitor)
+- [Project homepage listed in skill metadata](https://github.com/vmware-skills/VMware-Monitor)
+- [Setup guide](artifact/references/setup-guide.md)
+- [CLI reference](artifact/references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Concise health summaries, investigation findings, and optional command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Optional local HTML snapshots and user-enabled monitoring notifications.]
+
+## Skill Version(s):
+
+2.4.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

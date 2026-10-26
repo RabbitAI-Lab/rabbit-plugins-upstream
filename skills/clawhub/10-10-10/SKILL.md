@@ -118,6 +118,6 @@ In Coach mode, respond one step at a time. Each [WAIT] is a hard stop — output
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/10-10-10** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/10-10-10** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/10-10-10.json*

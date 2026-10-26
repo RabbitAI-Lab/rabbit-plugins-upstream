@@ -1,41 +1,61 @@
-## Description: <br>
-PubMed citation verifier that detects AI-fabricated PMID references with fuzzy matching against PubMed metadata. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A reference checker for AI-fabricated citations that verifies PMIDs against PubMed and checks whether each identifier points to the paper being claimed.
 
-## Publisher: <br>
-[docsor1212](https://clawhub.ai/user/docsor1212) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[docsor1212](https://clawhub.ai/user/docsor1212)
 
-## Use Case: <br>
-Researchers, medical writers, evidence-based medicine teams, and developers use this skill to batch-verify PMID citations, detect invalid or mismatched references, and produce reports for human review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Private drafts or citation-derived search terms may be sent to PubMed or Crossref when verification, DOI checks, or suggestions are enabled. <br>
-Mitigation: Review the selected source path before running, avoid suggestion or DOI checks for sensitive drafts when appropriate, and sanitize citation text before external lookups. <br>
-Risk: PubMed metadata may be stored in a local SQLite cache. <br>
-Mitigation: Use --no-cache for sensitive projects or clear the local cache after verification. <br>
+## Use Case:
 
+Researchers, developers, and editors can audit PMID, DOI, arXiv, and reference-list citations against scholarly registries, identify mismatches or uncertain results, and prepare verified reference lists or audit reports.
 
-## Reference(s): <br>
-- [PubMed E-utilities API Quick Reference](references/api_examples.md) <br>
-- [ClawHub Pubmed Verifier release](https://clawhub.ai/docsor1212/pubmed-verifier) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, code, guidance, files] <br>
-**Output Format:** [Markdown guidance with CLI commands and optional HTML, JSON, or text report files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May query PubMed and Crossref, may cache PubMed metadata locally, and can generate reports for citation review.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.4 (source: server release evidence) <br>
+Risk: Diagnostic output may expose proxy credentials.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove proxy credentials from --doctor output before sharing it.
+
+Risk: Reports or readiness labels may overstate citation verification, and rejected DOIs may be valid.
+
+Mitigation: Provide expected titles and authors, do not treat bare-PMID exports or readiness labels as proof of citation identity, and manually check rejected DOIs.
+
+Risk: Verification sends citation identifiers and search terms to external registries.
+
+Mitigation: Limit inputs to material you are permitted to disclose.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/docsor1212/skills/pubmed-verifier)
+- [Project homepage](https://github.com/docsor1212/pubmed-verifier)
+- [Usage guide](references/usage_guide.md)
+- [Operations guide](references/operations.md)
+- [API examples](references/api_examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, HTML, CSV, BibTeX/RIS, Shell commands, Guidance]
+
+**Output Format:** [Terminal text, JSON, HTML reports, CSV, BibTeX/RIS, and formatted reference lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes per-citation evidence and verification states; available output depends on the selected command and input.]
+
+## Skill Version(s):
+
+5.5.0 (source: SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

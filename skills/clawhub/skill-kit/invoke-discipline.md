@@ -2,9 +2,11 @@
 
 Discipline rules for invoking skills correctly: slash command → Skill tool, multi-topic topic Read, post-decision auto-invoke, interactive script execution, and vendor dispatch.
 
-## 1. Slash command inject ≠ Skill tool call (HARD STOP)
+## 1. Any route to a skill's procedure — inject, or a self-identified need — requires a Skill tool call (HARD STOP)
 
 System auto-injecting SKILL.md content on `<command-name>/<slug></command-name>` input ≠ Skill tool call completion. Inject = text exposure in context only. The procedure execution obligation starts only with a `Skill` tool call.
+
+The same separation holds when a skill's procedure is needed for a reason other than slash-command receipt — most commonly, recognizing mid-task that some skill's documented steps apply to the current goal. Reading that skill's topic `.md` (via `Read`/`Grep`) to learn "how to do X" is not a substitute for calling `Skill(name, topic)` first, for the same reason inject isn't: having the text in context is not the same act as declaring procedure-entry intent through the tool call.
 
 ### Don't / Do
 
@@ -14,15 +16,15 @@ System auto-injecting SKILL.md content on `<command-name>/<slug></command-name>`
 | 2 | Assume "inject = equivalent to tool call" | Inject = system shows SKILL.md. Tool call = author's explicit act declaring procedure entry intent. No tool call trace = cause for `fix` in next turn |
 | 3 | Avoid tool call thinking "calling Skill again would duplicate SKILL.md exposure, inefficient" | Duplicate exposure is system design — not the author's responsibility domain. Tool call is the forcing function for procedure start |
 | 4 | See inject text and perform Edit/Bash etc. procedure inline directly | Inline before tool call = rule violation. Skill call → return → start from Step 1 is the correct path |
+| 5 | Recognize mid-task (no slash command involved) that a skill's documented procedure applies, then `Read`/`Grep` its topic `.md` directly to learn the steps and act on them | Call `Skill("<name>", "<topic>")` the moment that need is recognized, in the same turn — regardless of whether a slash command triggered the need |
 
-### Self-check (immediately after slash command input)
+### Self-check (immediately after slash command input, or immediately after recognizing a skill's procedure is needed)
 
 1. Does the user's previous input contain `/<slug>` or `<command-name>/<slug></command-name>` pattern? → If match, this rule applies
-2. Does the same response turn include a `Skill("<slug>", ...)` tool call? → If no, call immediately (inline procedure forbidden)
-3. Even if system injected SKILL.md content, tool call is a separate obligation — inject body is for reference only
-4. After tool call returns SKILL.md, re-read and start from Step 1
-
-Violation case reference: `failed-attempts.md` "slash command → Skill tool call missing"
+2. Did I just recognize, through my own task reasoning rather than a slash command, that some skill's documented procedure applies here? → If yes, this rule applies equally
+3. Does the same response turn include a `Skill("<slug>", ...)` tool call? → If no, call immediately (inline procedure, or Reading the topic file directly, is forbidden before that call)
+4. Even if system injected SKILL.md content, tool call is a separate obligation — inject body is for reference only
+5. After tool call returns SKILL.md, re-read and start from Step 1
 
 ## 2. Multi-topic skill — each topic `.md` Read before step execution (HARD STOP)
 
@@ -103,33 +105,48 @@ If any match, this rule applies. Single-topic skills (SKILL.md only, no topic fi
 | 2 | "Doesn't work in Bash, I'll do it manually" decision | `!` prefix = Claude Code feature for user to run interactive commands directly in session |
 | 3 | Enter manual procedure without user confirmation | AskUserQuestion: "script `!` run vs manual handling" — only enter manual path after confirmation |
 
-## 5. Generic skill vendor dispatch auto-supply (HARD STOP)
+## 5. Generic skill vendor dispatch resolution
 
-When a generic skill exposes dispatch flags (`--<verb>=<skill>:<topic>` form), the caller (Claude) must auto-detect available environment receivers + supply them. Even if the user didn't explicitly type it, it's the caller's responsibility.
+When a generic skill exposes dispatch flags (`--<verb>=<skill>:<topic>` form), the binding comes from the **workspace bindings config**, not from a caller-typed flag and not from an environment scan. Resolve it with `bash <hook-kit-skill>/resources/workspace-config.sh --export` and read the exported `WSCFG_<ROLE>_*` values.
 
 ### Don't / Do
 
 | # | Don't | Do |
 |---|-------|----|
-| 1 | User didn't type the flag → skip dispatch | Detect available receivers → auto-supply. User explicit typing = receiver selection override |
-| 2 | "Generic skill, so OK without flag" judgment | No flag invocation = information loss. If receiver available, dispatch is default |
-| 3 | Receiver auto-dispatch judged as ambiguous user intent | Receiver registered in environment = intent stated. Auto-supply is safe |
-| 4 | Multiple candidates → silently pick first without asking | Multiple candidates → AskUserQuestion for user decision |
-| 5 | Receiver presence judged by MCP existence only → silent skip if absent | Receiver can operate as network endpoint without MCP. Scan all 3 axes: MCP + receiver topic + reachability. Uncertain = ask, not silent skip |
+| 1 | Demand a flag, warn, or block because the caller omitted one | The flag is an optional per-call override. Its absence is never an error |
+| 2 | Probe the environment (MCP tool list, endpoint healthchecks) to guess a receiver | Read the resolved binding. The config is the single source of truth |
+| 3 | Read `kind: none` as "something is missing" | `kind: none` = the role is deliberately unconfigured → skip quietly and continue |
+| 4 | Pick a vendor default when the config resolves none | No binding = no dispatch. The primary deliverable (the file write) still stands |
+| 5 | Hardcode a vendor endpoint or collection name inside the generic skill | Keep vendor detail in the config so a swap is a one-line edit; the skill only consumes `WSCFG_*` |
 
-### Auto-detection procedure (caller responsibility, 3-axis)
+### Resolution procedure
 
-Before calling generic skill:
+Before calling a generic skill:
 
-1. Grep calling target skill topic docs — confirm `--<verb>=<skill>:<topic>` or abstract dispatch contract pattern
-2. Available receiver candidate 3-axis scan (check all):
-   - **MCP server**: `mcp__<vendor>__*` → vendor skill candidate
-   - **Skill registry**: whether receiver topic with dispatch protocol declared exists (MCP absent ≠ receiver absent)
-   - **Endpoint reachability**: healthcheck stated in receiver topic (`curl -m 6 <endpoint>/healthz`)
+1. `bash <hook-kit-skill>/resources/workspace-config.sh --export`
+2. Read `WSCFG_<ROLE>_KIND` for the role in question (`RAG`, `BACKLOG`, `CHECKLIST`, …)
 3. Branch:
-   - 0 → omit flag
-   - 1 reachable confirmed → auto-supply
-   - Uncertain → AskUserQuestion (skip vs dispatch). Silent skip forbidden
-   - 2+ → AskUserQuestion for selection
+   - unset / `none` / resolver unavailable → skip quietly, no warning, no ask
+   - set → dispatch using the accompanying `WSCFG_<ROLE>_*` values
+   - caller passed an explicit `--<verb>=<skill>:<topic>` → that override wins
 
-**Self-check**: dispatch flag exposure / 3-axis scan / branch decision / auto-supply default applied.
+**Self-check**: resolver consulted / `kind: none` treated as a quiet skip / no environment guessing / no flag demanded of the caller.
+
+## 6. Verify a skill's own skip/precondition checks before recommending its action (HARD STOP)
+
+**Before offering or recommending a skill's documented action as a next step (e.g., "run Internal Review", "merge now"), check that skill's own skip-condition / precondition section first.** Recommending an action, then discovering later that its own procedure would have skipped it, means the recommendation was composed from the action's name alone rather than from its actual applicability this turn.
+
+### Don't / Do
+
+| # | Don't | Do |
+|---|-------|----|
+| 1 | Recommend "run Internal Review" on a PR, then read the reviewing skill's Step 2 skip conditions afterward | Read the skip-condition section first (e.g., draft-PR check) — only recommend the action if none apply |
+| 2 | Assume a skill's action always applies because it worked the same way last time | Skip conditions are evaluated per invocation (draft state, prior artifacts, branch policy) — re-check every time, not from memory |
+| 3 | Treat "the skill will catch it if it doesn't apply" as sufficient | The skill catching it after the fact still cost a wasted recommendation + user decision cycle. Check before offering, not after |
+
+### Self-check (before composing any AskUserQuestion or report that recommends invoking a skill's specific procedure)
+
+1. Does the target skill document skip conditions / preconditions for this action? Grep for a "Skip Condition" / "Step 2" / precondition section — in the relevant **topic file** for a multi-topic skill, or directly in **SKILL.md** for a single-topic (SKILL.md-only) skill. Don't assume a separate topic file exists; check whichever file actually documents the action.
+2. Have you verified those conditions against the current state (not assumed from a prior session or a similar-looking case)?
+3. If a skip condition applies, do not offer the action — state the blocked reason instead, or route to the skill's actual next applicable step.
+4. If step 1 finds **no documented precondition at all** (neither a topic file nor SKILL.md defines one for this action), that is not the same as "no precondition applies" — it means the skill's own author never specified one. Proceed with the recommendation, but note in the recommendation that no precondition check exists for this action (so the user can catch a case the skill itself doesn't guard against).

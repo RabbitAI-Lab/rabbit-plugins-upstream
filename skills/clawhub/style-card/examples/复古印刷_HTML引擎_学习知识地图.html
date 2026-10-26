@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html data-page-node-id="dhcjLns0qnR0rlGXs0lZaH" lang="zh-CN">
+<head data-page-node-id="wU1eLZkuMUevADapqcDYbu">
+<script data-page-node-id="OGapf010mrWoQXO0z7wlMN" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="pAyRWvMyjMCagv1IJpf7CG" charset="UTF-8">
+<link data-page-node-id="emwB25LB3p29JttYVj4dGI" href="https://fonts.googleapis.com" rel="preconnect">
+<link data-page-node-id="QsehjoXoa43FOdV2Qqn9nO" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&display=swap" rel="stylesheet">
+<style data-page-node-id="5OiFZ2VqX6XlMOKaJJRK0m" data-pnid-children="9h6k80jpWz9uAZeGdHRGTU">
+/* ============================================================
+   html-base.css — style-card HTML 引擎强制底座（全文内联）
+   ============================================================ */
+:root {
+    --card-width: 1170px;   /* 3:4 小红书竖版 */
+    --card-height: 1560px;
+    --bg-page: #F5EFE0;     /* 复古印刷卡底色 */
+    --ink: #1A1A1A;
+    --accent: #F2C230;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+html, body {
+    width: var(--card-width);
+    height: var(--card-height);
+    overflow: hidden;
+    background: var(--bg-page);
+    color: var(--ink);
+    font-family: 'Noto Sans SC', sans-serif;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+}
+.card { position: relative; width: 100%; height: 100%; display: flex; flex-direction: column; overflow: hidden; }
+h1, h2, h3 { font-weight: 900; line-height: 1.25; }
+p, li { line-height: 1.6; }
+p, li, span { overflow-wrap: break-word; }
+.pixelated { image-rendering: pixelated; }
+.pixel-font { font-family: 'ZCOOL QingKe HuangYou', 'Noto Sans SC', sans-serif; letter-spacing: 0.02em; }
+.hand-font  { font-family: 'ZCOOL KuaiLe', 'Noto Sans SC', sans-serif; }
+::selection { background: transparent; }
+
+/* ============================================================
+   === 复古印刷信息图 · AI 学习知识地图 ===
+   配色严格按风格卡：奶油底 + 黄/蓝通栏 + 色板轮换 + 黑粗描边
+   ============================================================ */
+:root {
+    --yellow: #F2C230; --blue: #9BD4E4;
+    --coral: #F08A7E; --sky: #A8D8EA; --mustard: #F5D547; --mint: #A8E6CF;
+    --paper: #F8F4E8; --border: 4px solid #1A1A1A;
+}
+.card { padding: 36px; gap: 22px; }
+
+/* === 区块1：顶部通栏主标题带（芥末黄底） === */
+.title-band {
+    background: var(--yellow); border: var(--border);
+    text-align: center; padding: 26px 10px 30px;
+}
+.title-band h1 { font-size: 84px; letter-spacing: 0.04em; }
+
+/* === 区块2：通栏副标题带（天蓝底） === */
+.subtitle-band {
+    background: var(--blue); border: var(--border);
+    text-align: center; padding: 14px 10px;
+    font-size: 34px; font-weight: 700;
+}
+
+/* === 区块3：2x2 色块卡片网格（四条支线） === */
+.grid2x2 { display: grid; grid-template-columns: 1fr 1fr; gap: 22px; }
+.block {
+    border: var(--border); padding: 24px 26px;
+    display: flex; flex-direction: column; gap: 10px;
+}
+.block .b-title { font-size: 33px; font-weight: 900; display: flex; align-items: center; gap: 12px; }
+.block .b-icon { font-size: 38px; }
+.block ul { list-style: none; font-size: 22.5px; font-weight: 700; }
+.block ul li { padding-left: 26px; position: relative; margin-top: 4px; }
+.block ul li::before { content: "★"; position: absolute; left: 0; font-size: 18px; top: 5px; }
+.block .b-tag {
+    display: inline-block; align-self: flex-start;
+    font-size: 19px; font-weight: 900; background: #1A1A1A; color: #fff;
+    padding: 2px 12px; margin-bottom: 2px;
+}
+.b-coral { background: var(--coral); }
+.b-sky   { background: var(--sky); }
+.b-mustard { background: var(--mustard); }
+.b-mint  { background: var(--mint); }
+
+/* === 区块4：横向大区块（核心数据黄金位） === */
+.big-block {
+    background: var(--coral); border: var(--border);
+    display: flex; align-items: center; gap: 34px; padding: 20px 40px;
+}
+.big-num { font-size: 130px; font-weight: 900; line-height: 1; white-space: nowrap; }
+.big-desc { font-size: 27px; font-weight: 700; line-height: 1.5; }
+.big-desc .hl { background: #fff; padding: 0 8px; border: 3px solid #1A1A1A; }
+
+/* === 区块5：底部三列（成果 / 避坑 / 扩展） === */
+.bottom3 { display: grid; grid-template-columns: 1fr 1.15fr 1fr; gap: 22px; flex: 1; }
+.col { border: var(--border); padding: 22px 24px; display: flex; flex-direction: column; gap: 10px; }
+.col .c-title { font-size: 29px; font-weight: 900; display: flex; gap: 10px; align-items: center; }
+.col p, .col li { font-size: 21.5px; font-weight: 700; }
+.col ul { list-style: none; }
+.col .c-icon { font-size: 40px; }
+.c-paper { background: var(--paper); }
+.c-black { background: #1A1A1A; color: #F5EFE0; }
+.c-black .warn { color: #FF5F57; font-size: 20px; font-weight: 900; letter-spacing: 0.06em; border: 2px solid #FF5F57; padding: 1px 8px; align-self: flex-start; white-space: nowrap; }
+.c-black .row { display: flex; gap: 10px; align-items: baseline; }
+.c-black .no { color: #FF6B6B; font-weight: 900; }
+.c-black .yes { color: #3DDC84; font-weight: 900; }
+.quote { font-style: italic; font-size: 20px !important; margin-top: auto; }
+.quote .en { display: block; font-size: 22px; font-weight: 900; font-style: normal; }
+</style>
+</head>
+<body data-page-node-id="t5fSfm0TyaOpMqfNMhAxek">
+<div data-page-node-id="varusdTyDQ6yjPF0YlM7fF" class="card">
+
+  <!--pnid:TfmPGWe5SZDi4ajS7Z5hp6--><!-- === 区块1：主标题带 === -->
+  <div data-page-node-id="bDgxEpK6mMjQRY1R6Z7qCG" class="title-band"><h1 data-page-node-id="R7a5eUXWbe1x8OutdrGVEg"><!--pnid:qiR3eWXw6bzdB9ZfDY0bKz-->AI 学习知识地图</h1></div>
+
+  <!--pnid:MdXAmgGKalGUfN02kQPSpW--><!-- === 区块2：副标题带 === -->
+  <div data-page-node-id="S2u3KwYCCXjGgIKTpk5hWU" class="subtitle-band"><!--pnid:GQ4rVsKEGGTBYO2W1rUPD6-->4 层知识树 × 5 条并行支线 | 持续更新</div>
+
+  <!--pnid:yicd8wmQ4dyO1I3iYWGteY--><!-- === 区块3：2x2 支线网格 === -->
+  <div data-page-node-id="XzZ5oKyQVqcp3X1iG7LRVi" class="grid2x2">
+    <div data-page-node-id="BorB8zFzuJdh9tnSDAgrpb" class="block b-coral">
+      <span data-page-node-id="Xvirvhfe4uk4hAgnKg02Ig" class="b-tag"><!--pnid:4SQxcDb88dIeAmD27SuZSx-->📍 进行中</span>
+      <div data-page-node-id="RW6p6thnqcfuhGtNGr2seW" class="b-title"><span data-page-node-id="47kxQJ2lk8yn4yT7AMJVEq" class="b-icon"><!--pnid:NpK1sUpUvA5UNngqLXC01f-->🤖</span><!--pnid:6RILZ42W8mgyxgAkeQkTSw-->模块 A · 机器学习主线</div>
+      <ul data-page-node-id="eaGVfvIpFQmJOIZidz6m31">
+        <li data-page-node-id="W6hoVX2qswEIQfX2rd8i6g"><!--pnid:91g2bxBqlBbsbOY6EDL26j-->KNN → 决策树 → 神经网络</li>
+        <li data-page-node-id="4cs5LZQpyzuv2wcpE2OYar"><!--pnid:xAIB5qcNrov5B0LwHbgtMa-->CNN → RNN → CV 实战路</li>
+        <li data-page-node-id="Lwu0LObCJJfosMJJvFM08Q"><!--pnid:gaHVkaJzoPOXuiVlSg3bHa-->已整理 6 篇课程笔记</li>
+      </ul>
+    </div>
+    <div data-page-node-id="EvR2Wz4K1Wk8NuF3CP3cwP" class="block b-sky">
+      <span data-page-node-id="2vYnHLkdngPvw958aKi87l" class="b-tag"><!--pnid:PaBjpZm9gmlQLjlBFWxpBc-->⭐ 有里程碑</span>
+      <div data-page-node-id="Vcmw95b45SSDptHpfXkufW" class="b-title"><span data-page-node-id="sfLcqRCcBtyeu85XWP7X0t" class="b-icon"><!--pnid:6KUrAvwsrFVM8fMRnnIYlE-->⌨️</span><!--pnid:wNUBlThbeu8vEwyNi23X5K-->模块 B · AI 编程主线</div>
+      <ul data-page-node-id="vAp7HiGENBi8b3WsGuRHej">
+        <li data-page-node-id="9bUSXrLXd2L0pOVq2AnkOL"><!--pnid:1OElTyyF58vNm1DdfTYR8L-->Vibe Coding 入门 ✓</li>
+        <li data-page-node-id="BoVJHpqQ12oUTXq545jeyy"><!--pnid:4mWKGo03DqhnkbQi9vZU1J-->游戏化主题页已上线 ✓</li>
+        <li data-page-node-id="pUIA5Owz3j3Syev6z3fyLc"><!--pnid:L6o5pnJAyoVR1F6kTdCJCd-->OpenClaw / MCP / Workflow</li>
+      </ul>
+    </div>
+    <div data-page-node-id="whWcKWxLVWAStsw70dGhwM" class="block b-mustard">
+      <span data-page-node-id="5FYqFPpVSD0xMiUG0wQ9ns" class="b-tag"><!--pnid:niD1zlquBeZVP7koVTjl8r-->🧩 缺啥补啥</span>
+      <div data-page-node-id="s4u03uWKuMRNUknoVtnJr6" class="b-title"><span data-page-node-id="P7PD9aXHgPwhzwW9FRMSv1" class="b-icon"><!--pnid:nyXLKt9dO3YKrOgOmytMV8-->🧮</span><!--pnid:xdldTqVtyV5Dlc1GUO9IbV-->模块 C · 数学 & Python</div>
+      <ul data-page-node-id="jO7gnlk8B2vPPBy6IXBgC0">
+        <li data-page-node-id="HyFMYupHKT1TiBzhXVn3GX"><!--pnid:Hpx6qiyAnAEDLmsd9FzE2O-->语法 → 函数 → NumPy</li>
+        <li data-page-node-id="wqfvB1fo9o90wvm9q8f3A5"><!--pnid:ddj8MsT5NhwTUDwyQZ5ixg-->Pandas 数据处理</li>
+        <li data-page-node-id="jHjOj9aNDDTahZaq6GGxF7"><!--pnid:j0W0QJGj6Ujbtm5rxH17JU-->概率统计与微积分</li>
+      </ul>
+    </div>
+    <div data-page-node-id="2jnDea4H71iiiuZNi2EAyd" class="block b-mint">
+      <span data-page-node-id="LAQHdrKIJJxVh6LHdv8Uzm" class="b-tag"><!--pnid:mJSc736DXbFFNRgSvI2hZk-->🚀 延伸方向</span>
+      <div data-page-node-id="Pnt82hazmWGbZi9v2xfItz" class="b-title"><span data-page-node-id="IN1GJdTDE9fwU75hNG9Wme" class="b-icon"><!--pnid:nzoUAOmbkIVBnufFVjMKKV-->🔗</span><!--pnid:xkkBopySArmJqILNSpyatl-->模块 D · LLM / Agent</div>
+      <ul data-page-node-id="RoJB9VPRoWCVQZCrGJoZkS">
+        <li data-page-node-id="Adtu1UR35ZoDtxan8R0dnP"><!--pnid:mkFXaw0SXnff0dYKgGaov8-->LLM 应用链：Prompt → RAG</li>
+        <li data-page-node-id="Yv5ZwElDyqPmw41VsEXNL6"><!--pnid:UqQbeFta4K0zHj0DiGWIQR-->Transformer 注意力机制</li>
+        <li data-page-node-id="Rx81noyjYVtuwLMqsE5RP7"><!--pnid:HgzTTXIDN80XjaJHglxh8t-->微调 / 多模态 / 负责任 AI</li>
+      </ul>
+    </div>
+  </div>
+
+  <!--pnid:tnCYOhHSuY4fmUQyIqQrMR--><!-- === 区块4：横向大区块（黄金位数据） === -->
+  <div data-page-node-id="rOZEFUjomOqVJDW76MMlHA" class="big-block">
+    <div data-page-node-id="Sv35OHiE5VFvUnnVXJfoxd" class="big-num"><!--pnid:69vZe6oeYweRA0b5EJdKL5-->5 条</div>
+    <div data-page-node-id="4FKMJyrmdeWAtGUNSAQtPo" class="big-desc"><!--pnid:j5l6jtvMwTRUgGnv7N43pD-->并行支线同时推进：<span data-page-node-id="LQ6GNB2PL6n1fOKXOjLXk4" class="hl"><!--pnid:QsKpDXSDM0f78H9B8zwcJB-->A 是主干，B 是再就业主线</span><!--pnid:7VHIjdpRNPtwDPiZz0Aatz-->，C 随缺随补，D 是延伸，E 贯穿全程——产出物喂小红书 / IP 站</div>
+  </div>
+
+  <!--pnid:xbIRKaMtoVCUgD3XkuINBF--><!-- === 区块5：底部三列 === -->
+  <div data-page-node-id="LhTvfIaJnutT6OF5HWirFc" class="bottom3">
+    <div data-page-node-id="oPhLFKi33PmLGNAxgtA3I3" class="col c-paper">
+      <div data-page-node-id="nHiUvCAzqnvhibmoHwFQnL" class="c-title"><span data-page-node-id="ojGo59BiqrgTxgHe6zEAL7" class="c-icon"><!--pnid:8uRpmBaTLASRlMwLhN2xeM-->🏆</span><!--pnid:T9JzsUou39ZiYhyBTdxt2U-->已有成果</div>
+      <ul data-page-node-id="J761wU0VxYcU4BDTmZcrVZ">
+        <li data-page-node-id="19gS6IDzyftwxIHlt1wm67"><!--pnid:sUpdlTHVW8bAEMDgH6U8Rt-->9 篇课程笔记已整理</li>
+        <li data-page-node-id="azk3FuM8ythm6YPeJR6iHu"><!--pnid:Ue9BGSk8OmO09c3YaOOVhv-->2 个实战项目上线</li>
+        <li data-page-node-id="Hdfth6FtfqMfDdLw38dTdJ"><!--pnid:1MtFaFILZg1Vw9Cqf3IDCK-->井字棋 / 麻将游戏上线</li>
+      </ul>
+    </div>
+    <div data-page-node-id="OazeOaktn74LXjPj5S4LbX" class="col c-black">
+      <div data-page-node-id="e0sqKR1QP7QZs4S9C2EufP" class="c-title"><span data-page-node-id="fefOj8XuPgChrzqVpIPU7R" class="c-icon"><!--pnid:c5YPqYStYFZNMer9TbkSiS-->⚠️</span><!--pnid:y0kphw3CJ4c3XZVXkGlKmF-->避坑提醒</div>
+      <span data-page-node-id="fHPCEHFa404MZPrcpfgmKp" class="warn"><!--pnid:UXPLOnxkjryMajQ0AnPwM1-->WARNING ZONE</span>
+      <div data-page-node-id="zapnUJn4Usp6grwivjPPiS" class="row"><span data-page-node-id="Vg21qgRtKum1nCt6jcX1vG" class="no"><!--pnid:HunmVVeFE32wPA8DToew23-->✗</span><span data-page-node-id="525h1HMU6Kky19R0DPZ1Ol"><!--pnid:0427QUgHbzvjFWETYGJsGv-->收藏了等于学会了</span></div>
+      <div data-page-node-id="wLs33G0eFodXwuQE6mLpU1" class="row"><span data-page-node-id="VJok0z9EcrWd5t5tRwzglP" class="no"><!--pnid:vETm6PIA3ZKy54FQCFUqdm-->✗</span><span data-page-node-id="ScovLzum7FiolqapiP9tGv"><!--pnid:SSSiLcYBpXFlZZovLjqbKR-->五条线同时猛冲</span></div>
+      <div data-page-node-id="5cwRRQl6QwbgDWaz1mHHkA" class="row"><span data-page-node-id="szPR0rNjSeVqLkqCI1bh62" class="yes"><!--pnid:EpdKbTTKyLKaeb4PKaDNtZ-->✓</span><span data-page-node-id="u1PduQOFNpCx2TTlqRDc5b"><!--pnid:QDKywc1ZE9HxHIj40upQWP-->跟地图标记，每周更新</span></div>
+      <div data-page-node-id="SQmut8bi42WQKLyfYGc6Wn" class="row"><span data-page-node-id="iXrHKdnM3r0UaHMUx00T2N" class="yes"><!--pnid:res1axQx2nqvX0zIFntBwY-->✓</span><span data-page-node-id="8fe1oCdvRFj7NjQ4NKaFRC"><!--pnid:tQ9Q68UC9hBWvtJBACXhBR-->每天 15 分钟，保持劲头</span></div>
+    </div>
+    <div data-page-node-id="zRhlH7Qrlfg8W60qV6A9zy" class="col c-paper">
+      <div data-page-node-id="82BoOe7qS4tLjvVqbPKHrv" class="c-title"><span data-page-node-id="8JPEqEd5RLhfOieXGT0v6c" class="c-icon"><!--pnid:9TpiYJQdSElXkhwGZSYjyI-->😊</span><!--pnid:FrmTUFMkfSFmV7Tuq8LRPt-->预留扩展</div>
+      <p data-page-node-id="vOyTggY5UZCm9yOiDzrfVi"><!--pnid:JmKU3sd57CKeQKKIpwsMcZ-->F · 得到 AI 学习圈课程</p>
+      <p data-page-node-id="ulwnCZTGmbJ8pWzrIfNBCp"><!--pnid:YQSGDAWPflGq2GmTJGrPFx-->G · 免费课程：Claude Academy、OpenAI Academy、PMI</p>
+      <p data-page-node-id="dzBDH6zSOC97w7nPoVcZts" class="quote"><span data-page-node-id="S50tX1ORSxVxfwMYbNzrjP" class="en"><!--pnid:bDaEqTnOnALfjI8sZ6Kuoy-->"Learning in public"</span><!--pnid:mIoVtbD5EOUUjZea2cT27t-->地图即笔记索引，想学哪块点哪块</p>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>

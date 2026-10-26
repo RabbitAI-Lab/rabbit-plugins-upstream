@@ -1,47 +1,55 @@
-## Description: <br>
-Self-Evolution 3D helps an agent diagnose personal-growth constraints across Height, Width, and Depth and propose one targeted development move. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses a three-dimensional coaching framework to identify a person's current growth constraint and suggest a focused development practice.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, leaders, founders, and coaching-oriented users use this skill to structure personal-development discussions, identify the limiting growth dimension, and choose a concrete 90-day practice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reflective coaching may be inappropriate when the user is in an acute financial, health, relationship, or mental-health crisis. <br>
-Mitigation: Address the acute situation first and do not apply this skill until the user is outside the immediate crisis context. <br>
-Risk: Self-assessment can overstate growth or miss recurring interpersonal patterns, especially in the Depth dimension. <br>
-Mitigation: Require concrete behavioral evidence and calibrate Depth with external feedback before prescribing a development move. <br>
-Risk: Behavior-tracking exercises and development suggestions could be mistaken for professional advice. <br>
-Mitigation: Frame outputs as reflective guidance and have the user review or adapt them with qualified support when stakes are high. <br>
+## Use Case:
 
+Leaders, founders, and other people who feel stalled in their personal or leadership growth can use the skill to assess mission perspective, breadth of thinking, and self-awareness, then choose a focused development action.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/self-evolution-3d) <br>
-- [Primary sources](references/sources.md) <br>
-- [Method in Action: Florence Nightingale](examples/florence-nightingale-1840s-1860s.md) <br>
-- [The Evolving Self](https://www.hup.harvard.edu/books/9780674272316) <br>
-- [Mindset](https://www.penguinrandomhouse.com/books/44330/mindset-by-carol-s-dweck-phd/) <br>
-- [Notes on Nursing](https://digital.library.upenn.edu/women/nightingale/nursing/nursing.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with a structured 3D Growth Audit template and reflective coaching questions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step reflective questions and stop for user responses before continuing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Coaching may prompt users to share personal or business details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only details you are comfortable discussing, and use the framework as a reflection aid.
+
+## Reference(s):
+
+- [Sources — self-evolution-3d](references/sources.md)
+- [Method in Action: Florence Nightingale](examples/florence-nightingale-1840s-1860s.md)
+- [The Evolving Self — Robert Kegan](https://www.hup.harvard.edu/books/9780674272316)
+- [Mindset — Carol S. Dweck](https://www.penguinrandomhouse.com/books/44330/mindset-by-carol-s-dweck-phd/)
+- [Notes on Nursing — Florence Nightingale](https://digital.library.upenn.edu/women/nightingale/nursing/nursing.html)
+- [Self-Evolution 3D on ClawHub](https://clawhub.ai/deciqai/skills/self-evolution-3d)
+- [deciqAI skill overview](https://www.deciqai.com/c/self-evolution-3d)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Coaching prompts and a structured 3D Growth Audit in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide the user one question at a time and wait for responses before continuing.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

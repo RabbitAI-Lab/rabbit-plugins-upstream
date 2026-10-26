@@ -126,14 +126,21 @@ async def main():
     args = parser.parse_args()
 
     if args.command == "search":
-        result = await search(args.keyword, args.platform)
-        # 引流信息（固定输出）
-        print("")
-        print("💡 更多实用 AI 效率工具和技能，领取自媒体 IP&超级个体&一人公司资料，关注公众号「桂皮AI实战」")
-        print("📱 加入自媒体&AI 副业变现交流群：https://e418e2e692454bfaa8b6206e3f0ba789.app.codebuddy.work")
+        await search(args.keyword, args.platform)
     else:
         parser.print_help()
 
 
 if __name__ == "__main__":
     asyncio.run(main())
+
+
+# ── 引流信息（固定输出，prepare_release.py 自动补齐）─────────────
+def _print_leadgen():
+    print("")
+    print("💡 更多实用 AI 效率工具和技能，领取自媒体 IP&超级个体&一人公司资料，关注公众号「桂皮AI实战」")
+    print("📱 加入自媒体&AI 副业变现交流群：https://e418e2e692454bfaa8b6206e3f0ba789.app.codebuddy.work")
+
+
+if __name__ == "__main__":
+    _print_leadgen()

@@ -1,42 +1,61 @@
-## Description: <br>
-Iaiops Energy routes agents to a governed, read-only MCP server for utility and substation telemetry over IEC 60870-5-104, DNP3 / IEEE 1815, and IEC 61850 MMS, plus related Industrial-AIOps diagnostics and analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through read-only utility telecontrol monitoring and diagnostics across IEC 60870-5-104, DNP3, and IEC 61850 MMS.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, automation engineers, and authorized utility operators use this skill to route substation telemetry, SCADA gateway, RTU, and IED monitoring tasks to read-only MCP tools and related diagnostic guidance. It is intended for monitoring and analysis, not breaker operation, setpoints, relay setting changes, or other control actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Connecting to production telecontrol systems without authorization or preparation can create operational risk even when tools are read-only. <br>
-Mitigation: Install only in an authorized utility or lab environment and verify read-only behavior before connecting to production gear. <br>
-Risk: Target credentials or configuration details could be exposed if placed in chat or plain configuration. <br>
-Mitigation: Keep credentials in the documented secret manager path and pass only non-secret target configuration through the skill. <br>
-Risk: DNP3 and IEC 61850 monitor paths are described as manually or Docker verified rather than continuously CI-gated. <br>
-Mitigation: Re-verify those protocol paths in the intended runtime environment before relying on them for production monitoring. <br>
+## Use Case:
 
+Utility engineers and authorized operators use this skill to guide an agent through read-only substation telemetry checks, event analysis, and data-quality diagnostics. It does not support control actions or relay settings changes.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-energy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and JSON configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guides agent routing to read-only MCP tools for telemetry reads, link checks, integrity polls, model browsing, and analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.8 (source: server release evidence) <br>
+Risk: Even read-only polling generates traffic on operational telecontrol links.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Connect only to authorized endpoints and check link status before deeper interrogation.
+
+Risk: Credentials could be exposed through configuration or chat.
+
+Mitigation: Keep IAIOPS_MASTER_PASSWORD in a secret manager; do not place secrets in configuration or chat.
+
+Risk: The installed package is external to the supplied skill artifact.
+
+Mitigation: Review the external package separately when runtime code provenance checks are required.
+
+Risk: Older processes sharing an audit trail can report verification errors after this release.
+
+Mitigation: Upgrade all processes sharing IAIOPS_HOME to iaiops 0.29 or newer together.
+
+## Reference(s):
+
+- [iaiops-energy release on ClawHub](https://clawhub.ai/zw008/skills/iaiops-energy)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Configuration instructions]
+
+**Output Format:** [Markdown with inline commands and configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only monitoring guidance; no control commands.]
+
+## Skill Version(s):
+
+0.2.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

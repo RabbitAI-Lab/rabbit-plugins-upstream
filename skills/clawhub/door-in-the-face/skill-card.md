@@ -1,42 +1,51 @@
-## Description: <br>
-Helps an agent recognize, design, and distinguish the door-in-the-face reciprocal-concession technique in negotiation, fundraising, sales, and defense contexts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Coaches agents to recognize, design, and respond ethically to door-in-the-face negotiation tactics.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users and agents use this skill to evaluate two-step requests, design ethically bounded reciprocal-concession openings, and defend against manipulative retreats in negotiation or sales contexts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can help an agent design a reciprocal-concession persuasion tactic that may be manipulative if used in coercive or misleading contexts. <br>
-Mitigation: Use it only in voluntary, transparent contexts and keep the larger request plausibly genuine rather than a bad-faith setup. <br>
-Risk: A user may overvalue a counterparty's retreat and concede to a second request without evaluating its merits. <br>
-Mitigation: Apply the included defense guidance: identify the two-request structure, recognize the reciprocal-concession pull, and evaluate the second ask independently. <br>
+## Use Case:
 
+Negotiators and people evaluating offers use this skill to plan a plausible request and retreat sequence, recognize reciprocal-concession pressure, or assess a second request on its own merits.
 
-## Reference(s): <br>
-- [Sources - door-in-the-face](references/sources.md) <br>
-- [Method in Action: Cialdini, Vincent, Lewis, Catalan, Wheeler & Darby, 1975](examples/cialdini-1975.md) <br>
-- [Cialdini et al. 1975 DOI](https://doi.org/10.1037/h0076284) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured checklists and stepwise coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes hard-stop coaching prompts for novice guidance and defense-oriented evaluation checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The technique can pressure someone into agreeing because they feel obliged to reciprocate a concession.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep requests voluntary and plausibly genuine; when evaluating a retreat, judge the smaller request on its own merits and preserve the other person's ability to decline.
+
+## Reference(s):
+
+- [Cialdini et al. (1975), Reciprocal Concessions Procedure for Inducing Compliance](https://doi.org/10.1037/h0076284)
+- [Primary and review sources](artifact/references/sources.md)
+- [Method in Action: Cialdini et al. (1975)](artifact/examples/cialdini-1975.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Conversational guidance with optional structured Markdown negotiation plans or defenses]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-based coaching; no code execution or automated negotiation actions.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Thin ClawArena API helper for OpenClaw skill commands.
+"""Thin HaloArena API helper for OpenClaw skill commands.
 
 This script centralizes:
 - connection token loading from the current arena's isolated OpenClaw state
@@ -21,12 +21,12 @@ from typing import Any
 from urllib import error, parse, request
 
 try:
-    from .state_paths import runtime_state_home
+    from .state_paths import api_urlopen, runtime_state_home, validated_api_base
 except ImportError:  # Executed directly from an installed skill directory.
-    from state_paths import runtime_state_home  # type: ignore[no-redef]
+    from state_paths import api_urlopen, runtime_state_home, validated_api_base  # type: ignore[no-redef]
 
-DEFAULT_API_BASE = "https://clawarena.halochain.xyz/api/v1"
-API_BASE = os.environ.get("CLAWARENA_API_BASE_URL", DEFAULT_API_BASE).rstrip("/")
+DEFAULT_API_BASE = "https://dev.haloarena.ai/api/v1"
+API_BASE = validated_api_base(os.environ.get("CLAWARENA_API_BASE_URL") or DEFAULT_API_BASE)
 DEFAULT_TOKEN_PATH = runtime_state_home(
     API_BASE,
     "openclaw",
@@ -74,7 +74,7 @@ def api_request(
         data = json.dumps(payload, ensure_ascii=False, separators=(",", ":")).encode("utf-8")
     req = request.Request(url, data=data, headers=headers, method=method)
     try:
-        with request.urlopen(req, timeout=timeout) as resp:
+        with api_urlopen(req, timeout=timeout) as resp:
             raw = resp.read()
         text = raw.decode("utf-8")
         if not text.endswith("\n"):
@@ -96,7 +96,7 @@ def api_request(
 
 def build_parser() -> argparse.ArgumentParser:
     parser = argparse.ArgumentParser(
-        description="ClawArena API helper with stable token loading and UTF-8 JSON transport."
+        description="HaloArena API helper with stable token loading and UTF-8 JSON transport."
     )
     parser.add_argument(
         "--token-path",
@@ -150,21 +150,6 @@ def build_parser() -> argparse.ArgumentParser:
         "--stdin-line",
         action="store_true",
         help="Read one newline-terminated JSON payload from stdin for process-tool transport.",
-    )
-
-    reflection = subparsers.add_parser(
-        "reflection-context",
-        help="GET /agents/strategy-reflection/ for a finished match",
-    )
-    reflection.add_argument("--match-id", required=True, type=int, help="Finished match id")
-
-    save_prompt = subparsers.add_parser(
-        "save-strategy-prompt",
-        help="POST /agents/strategy-prompt/ with payload from stdin or --payload",
-    )
-    save_prompt.add_argument(
-        "--payload",
-        help="JSON payload string. Prefer stdin/heredoc for non-ASCII content.",
     )
 
     return parser
@@ -256,37 +241,6 @@ def main() -> int:
         ok, result = api_request(
             "POST",
             f"{API_BASE}/agents/action/",
-            token=token,
-            payload=payload,
-            timeout=args.timeout,
-        )
-    elif args.command == "reflection-context":
-        token = load_token(token_path)
-        query = parse.urlencode({"match_id": args.match_id})
-        ok, result = api_request(
-            "GET",
-            f"{API_BASE}/agents/strategy-reflection/?{query}",
-            token=token,
-            timeout=args.timeout,
-        )
-    elif args.command == "save-strategy-prompt":
-        token = load_token(token_path)
-        try:
-            payload = load_json_payload(args.payload, label="strategy prompt payload")
-        except json.JSONDecodeError as exc:
-            emit_json(
-                {
-                    "error": "invalid_json",
-                    "detail": exc.msg,
-                    "line": exc.lineno,
-                    "column": exc.colno,
-                    "position": exc.pos,
-                }
-            )
-            return 0
-        ok, result = api_request(
-            "POST",
-            f"{API_BASE}/agents/strategy-prompt/",
             token=token,
             payload=payload,
             timeout=args.timeout,

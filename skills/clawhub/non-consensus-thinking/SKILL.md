@@ -116,6 +116,6 @@ Domain / Decision:   Date:
 - [ ] The "wrong" case is survivable given the position size taken.
 
 ---
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/non-consensus-thinking** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/non-consensus-thinking** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/non-consensus-thinking.json*

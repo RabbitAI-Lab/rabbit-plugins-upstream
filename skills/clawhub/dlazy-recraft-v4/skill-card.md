@@ -1,43 +1,60 @@
-## Description: <br>
-1MP raster image generation with refined design judgment for everyday creative work and fast iteration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates 1 MP raster images with refined design judgment for everyday creative work and rapid iteration.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and creative users use this skill to generate 1MP raster images through the dLazy Recraft V4 hosted API from prompts and aspect-ratio parameters. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a dLazy API key that may be saved in the local CLI configuration. <br>
-Mitigation: Use DLAZY_API_KEY for temporary per-invocation authentication when local credential persistence is not desired, and rotate or revoke exposed keys from the dLazy dashboard. <br>
-Risk: Prompts and local media paths supplied to the command are sent to dLazy API and media storage endpoints for generation. <br>
-Mitigation: Only pass prompts and media files intended for upload to dLazy, and review the pinned @dlazy/cli package before installation or execution. <br>
+## Use Case:
 
+External users and creative professionals use the skill to generate 1 MP raster images from prompts and iterate quickly on everyday design work.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [@dlazy/cli npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files, Guidance] <br>
-**Output Format:** [JSON responses containing generated image URLs, plus shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Generated images are returned as hosted PNG URLs; asynchronous mode can return a task identifier for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and supplied media are sent to dLazy cloud services for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only prompts and media you are comfortable sharing with the service.
+
+Risk: Image generation may incur charges.
+
+Mitigation: Use the documented dry-run option to preview the request and estimated cost before generating.
+
+Risk: The third-party CLI uses a locally stored organization API key.
+
+Mitigation: Prefer device-code login over putting a key in a shell command, protect the local configuration, and rotate or revoke keys when needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy API key setup](https://dlazy.com/dashboard/organization/api-key)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, JSON]
+
+**Output Format:** [PNG raster image with a JSON result envelope]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated images are returned as hosted URLs and can optionally be saved locally.]
+
+## Skill Version(s):
+
+1.3.33 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

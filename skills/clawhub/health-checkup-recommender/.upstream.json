@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/health-checkup-recommender",
   "slug": "health-checkup-recommender",
   "ownerHandle": null,
-  "version": "4.6.1",
-  "updatedAt": 1779074656320,
-  "contentHash": "549db41e7c9a68d3c326ed1975f4e407ca21682691c528593b1b4f0f5845cc00",
-  "fetchedAt": "2026-07-26T19:01:48.773Z"
+  "version": "4.6.2",
+  "updatedAt": 1792380511476,
+  "contentHash": "de0c11229a9ce21c277e239d71c63781e88f47bce4f70d2c10ee6ee9c63d1c6d",
+  "fetchedAt": "2026-10-26T16:30:57.994Z"
 }

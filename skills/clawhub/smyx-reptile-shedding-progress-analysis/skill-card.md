@@ -1,44 +1,55 @@
-## Description: <br>
-Analyzes reptile enclosure images or videos to classify shedding phase, identify stuck-shed risk signals, and return care-oriented recommendations and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes reptile enclosure images or videos to identify shedding stages, flag possible retained shed, and suggest care steps.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External reptile keepers, breeders, and developers use this skill to submit reptile images, videos, or media URLs for shedding-stage analysis, stuck-shed risk screening, and history/report review. It is intended to support care decisions, not to provide veterinary diagnosis or prescribe treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile images, videos, or media URLs are sent to a third-party cloud service and report history is queried from that service. <br>
-Mitigation: Use only media appropriate for third-party processing, avoid private household details, and confirm the cloud retention model is acceptable before installation. <br>
-Risk: The skill creates or reuses an internal identity and stores service tokens in the workspace data directory. <br>
-Mitigation: Run in a workspace where local token storage is acceptable and remove stored credentials when the skill is no longer needed. <br>
-Risk: Outputs can influence reptile care decisions but are not veterinary diagnoses. <br>
-Mitigation: Treat the analysis as care guidance and consult a reptile veterinarian for persistent stuck shed, eye-cap issues, injury, infection concerns, or other serious symptoms. <br>
+## Use Case:
 
+Reptile keepers and breeders use this skill to assess shedding progress from enclosure media, review potential retained-shed alerts, and consult historical reports and care suggestions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-reptile-shedding-progress-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with report links and optional saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May upload local media or submit media URLs to a third-party cloud API, poll for analysis results, and query cloud report history.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact SKILL.md frontmatter reports 1.0.6) <br>
+Risk: Enclosure media or URLs are sent to a cloud service, with possible exposure through stored reports and history.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive non-reptile media; check the publisher's retention and deletion practices before using cloud history or report links.
+
+Risk: The skill creates or reuses an account-linked identity and stores session tokens locally.
+
+Mitigation: Review this behavior before installation and prefer a dedicated workspace and account.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-reptile-shedding-progress-analysis)
+- [API documentation](artifact/references/api_doc.md)
+- [Skill demo](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON]
+
+**Output Format:** [Structured analysis reports and Markdown report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes shedding-stage assessment, care suggestions, alerts, and optional historical reports.]
+
+## Skill Version(s):
+
+1.0.14 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

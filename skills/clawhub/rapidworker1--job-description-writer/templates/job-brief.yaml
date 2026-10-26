@@ -1,0 +1,34 @@
+# Job Description Writer - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+role_title: ""
+department: ""
+reports_to: ""
+employment_type: "full-time or part-time"
+hours_per_week: ""
+work_location:
+  city: ""
+  state: ""
+  remote_status: "onsite, hybrid or remote"
+pay:
+  range_low_usd: ""
+  range_high_usd: ""
+  pay_period: "hourly or annual"
+  disclosure_line: ""
+  pay_history_allowed: "no unless the state permits it"
+core_outcomes:
+  - ""
+must_have_requirements:
+  - ""
+preferred_requirements:
+  - ""
+requirements_to_cut:
+  - ""
+benefits_summary:
+  - ""
+how_to_apply: ""
+forbidden_phrases:
+  - ""
+channels:
+  - "careers page"
+  - "linkedin"
+  - "job board"

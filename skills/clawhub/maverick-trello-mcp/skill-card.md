@@ -1,45 +1,52 @@
-## Description: <br>
-Search, read, and update Trello boards, lists, cards, checklists, members, and comments through a local MCP wrapper. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Search and review Trello boards, lists, and cards, and create or update cards and comments.
 
-## Publisher: <br>
-[maverick](https://clawhub.ai/user/maverick) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[maverick](https://clawhub.ai/user/maverick)
 
-## Use Case: <br>
-Developers and agent users use this skill to inspect Trello boards and manage lists, cards, checklists, members, and comments from an MCP-compatible workflow. It is appropriate when the user asks to search, read, or make clearly authorized Trello task workflow updates. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses Trello credentials and can read Trello board, list, card, checklist, member, and comment data. <br>
-Mitigation: Install it only with a Trello token scoped to the boards and actions the agent is intended to access. <br>
-Risk: Write tools can create, update, move, comment on, and otherwise change shared Trello cards. <br>
-Mitigation: Confirm clear user intent and read current board, list, or card state before invoking write tools. <br>
-Risk: The artifact installs mcporter without a pinned version by default. <br>
-Mitigation: Pin mcporter in environments that require strict supply-chain controls. <br>
+## Use Case:
 
+External users and developers can use an agent to search and inspect Trello boards, lists, and cards, and to create or update cards and post comments for task coordination.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/maverick/maverick-trello-mcp) <br>
-- [mcporter](https://github.com/steipete/mcporter) <br>
-- [uv documentation](https://docs.astral.sh/uv/) <br>
-- [Trello API](https://api.trello.com/1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [JSON, API Calls, Shell commands, Configuration instructions, Guidance] <br>
-**Output Format:** [JSON from MCP tool calls with concise text guidance and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MAVERICK_TRELLO_MCP_ACCESS_TOKEN and MAVERICK_TRELLO_MCP_API_KEY; write operations may modify Trello board state.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+Risk: An unintended write can change shared Trello board content or post a comment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require clear user intent, read the current board or card state before changing it, and use read-only credentials when only viewing is needed.
+
+## Reference(s):
+
+- [Trello skill on ClawHub](https://clawhub.ai/maverick/skills/maverick-trello-mcp)
+- [Trello API](https://api.trello.com/1)
+- [mcporter](https://github.com/steipete/mcporter)
+- [uv documentation](https://docs.astral.sh/uv/)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [Structured Trello records and operation results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results reflect Trello data and actions requested by the user.]
+
+## Skill Version(s):
+
+1.1.1 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

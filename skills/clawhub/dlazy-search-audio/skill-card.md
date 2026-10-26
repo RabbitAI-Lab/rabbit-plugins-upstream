@@ -1,44 +1,57 @@
-## Description: <br>
-Audio search tool that searches Pixabay Music and returns royalty-free track URLs and metadata for background music selection. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Searches Pixabay Music and returns royalty-free music track URLs and metadata for choosing background music.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Agents and developers use this skill to search for royalty-free background music with short style keywords, then return candidate audio URLs and metadata for selection. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The release evidence flags the skill for review because it uses a dLazy API key and a general-purpose dLazy CLI. <br>
-Mitigation: Review the skill before installing, prefer the pinned npx @dlazy/cli@1.2.3 search_audio command, and use only the intended search_audio options. <br>
-Risk: Passing local files or @path-style input can send that data to dLazy. <br>
-Mitigation: Avoid local file inputs and @path references unless the user explicitly intends to share that data with dLazy. <br>
-Risk: Using --save downloads a returned audio URL to the local filesystem. <br>
-Mitigation: Use --save only when the user explicitly wants to download an audio result and has chosen an appropriate destination path. <br>
+## Use Case:
 
+Developers and content creators can search Pixabay Music for suitable background tracks using short English style keywords, then review track links and metadata.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-search-audio) <br>
-- [dLazy CLI repository](https://github.com/dlazyai/cli) <br>
-- [npm package @dlazy/cli](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, shell commands, guidance] <br>
-**Output Format:** [JSON command output with audio result metadata and URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; supports query, duration, result count, async, dry-run, and save options.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.6 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Search requests use dLazy rather than connecting directly to Pixabay and may consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the query and any applicable credit cost before running the search.
+
+Risk: Authentication stores an organization API key in local CLI configuration, or accepts it through DLAZY_API_KEY.
+
+Mitigation: Use a protected user account, avoid exposing the key, and rotate or revoke it if necessary.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-search-audio)
+- [Publisher profile](https://clawhub.ai/user/dlazyai)
+- [dLazy homepage](https://dlazy.com)
+- [dLazy CLI project](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Audio files]
+
+**Output Format:** [Structured search results containing music track URLs and metadata; optionally a downloaded audio file when a save path is provided.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Searches work best with 2–3 short English style keywords; results may also be saved locally.]
+
+## Skill Version(s):
+
+1.3.34 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
