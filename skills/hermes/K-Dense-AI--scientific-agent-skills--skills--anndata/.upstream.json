@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/anndata",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/anndata",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/anndata",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "262ff7584587bf6b02f30e915989073cc3845c0c5845783085ed97792deccb91",
+  "fetchedAt": "2026-10-26T14:22:30.697Z"
+}

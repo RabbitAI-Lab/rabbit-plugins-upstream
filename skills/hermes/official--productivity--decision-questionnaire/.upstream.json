@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/decision-questionnaire",
+  "identifier": "official/productivity/decision-questionnaire",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/decision-questionnaire",
+  "branch": "main",
+  "pushedAt": "2026-10-26T14:21:49Z",
+  "contentHash": "21ba84692ad42c0dec0aadc33f6d95aed68b64754c92e454b16041fade0c5e61",
+  "fetchedAt": "2026-10-26T14:22:33.119Z"
+}

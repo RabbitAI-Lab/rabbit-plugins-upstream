@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-deft-od-aoi",
+  "identifier": "NVIDIA/skills/skills/tao-run-deft-od-aoi",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-deft-od-aoi",
+  "branch": "main",
+  "pushedAt": "2026-10-26T13:57:48Z",
+  "contentHash": "24674ab7d574605b17047cc3bfb48036e1d59dd968843c7502bbc43e4d7c42e7",
+  "fetchedAt": "2026-10-26T14:22:14.727Z"
+}

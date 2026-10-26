@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-kermt-pretrain-scratch",
+  "identifier": "NVIDIA/skills/skills/bionemo-kermt-pretrain-scratch",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-kermt-pretrain-scratch",
+  "branch": "main",
+  "pushedAt": "2026-10-26T13:57:48Z",
+  "contentHash": "d97c70bd00387767c3042b790e2ef816d18dd1658dcf254e2e7693543f2ec213",
+  "fetchedAt": "2026-10-26T14:22:14.413Z"
+}

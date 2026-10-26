@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/plan",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/plan",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/plan",
+  "branch": "main",
+  "pushedAt": "2026-10-26T05:20:56Z",
+  "contentHash": "5e3a94dae71f0d36767b8eca4e1c8c5040f4791e1bef0efe7c0370256a6520a9",
+  "fetchedAt": "2026-10-26T14:22:16.416Z"
+}

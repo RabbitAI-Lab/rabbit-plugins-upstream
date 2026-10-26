@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/matlab",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/matlab",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/matlab",
+  "branch": "main",
+  "pushedAt": "2026-10-26T05:20:56Z",
+  "contentHash": "91deb8fca452cfa201f495e09e50fdea7e8c69d22deb40f1df7bd33d57bd1a84",
+  "fetchedAt": "2026-10-26T14:22:16.374Z"
+}

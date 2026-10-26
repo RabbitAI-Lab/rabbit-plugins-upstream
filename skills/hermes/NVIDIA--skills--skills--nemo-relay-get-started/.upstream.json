@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nemo-relay-get-started",
+  "identifier": "NVIDIA/skills/skills/nemo-relay-get-started",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nemo-relay-get-started",
+  "branch": "main",
+  "pushedAt": "2026-10-26T13:57:48Z",
+  "contentHash": "b7f9687428390b4e3f1270880be267aba5dffd19f1d2c5245de937aff95b17bf",
+  "fetchedAt": "2026-10-26T14:22:14.444Z"
+}

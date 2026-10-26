@@ -7,11 +7,9 @@ class questions. Pick the pattern first, then drill into the
 H2 that owns the substance. For the *how* of executing each
 pattern, jump to [TASKS.md](TASKS.md). For the `doca-flow`
 API surface behind the pipeline this tool drives, see
-[`doca-flow CAPABILITIES.md`](../../libs/doca-flow/CAPABILITIES.md);
-for the DPA-offloaded path measurement, see
-[`doca-flow-dpa-perf CAPABILITIES.md`](../doca-flow-dpa-perf/CAPABILITIES.md);
+`doca-flow/CAPABILITIES.md`;
 for the optimization-vs-measurement boundary, see
-[`doca-flow-tune CAPABILITIES.md`](../doca-flow-tune/CAPABILITIES.md).
+`doca-flow-tune/CAPABILITIES.md`.
 
 This file is loaded by [`SKILL.md`](SKILL.md). It documents
 *what `doca_flow_perf` is*, *what it measures and what it
@@ -40,13 +38,9 @@ Two non-patterns the agent must NOT collapse into the above:
 
 - *"I want my deployed Flow application to go faster"* —
   that is optimization, not measurement. Route to
-  [`doca-flow-tune`](../doca-flow-tune/SKILL.md). The
+  `doca-flow-tune/SKILL.md`. The
   flow-perf tool does not modify the live application; it
   drives a synthetic pipeline.
-- *"I want to measure the DPA-offloaded Flow path"* — route
-  to [`doca-flow-dpa-perf`](../doca-flow-dpa-perf/SKILL.md).
-  flow-perf measures the path that executes on the host or
-  DPU-CPU.
 
 ## Capabilities and modes
 
@@ -161,9 +155,12 @@ Recurring rules for the JSON the agent must surface:
 
 - the agent NEVER invents JSON keys that are not present in
   the shipped `configs/` files; if the operator needs a
-  field that no shipped policy demonstrates, the agent
-  refuses to invent the spelling and routes to the public
-  DOCA Flow Perf guide;
+  field that no shipped policy demonstrates, the agent checks
+  the public DOCA Flow Perf guide. If neither source defines
+  the field, this is a documentation gap: stop, report the
+  missing field and both sources checked, and request an
+  authoritative schema or known-good policy from the user.
+  Do not continue by guessing a spelling or value;
 - changing `mode: fixed` to `mode: increase` or
   `mode: decrease` is NOT a free change — it changes the
   per-entry uniqueness pattern and is the most common cause
@@ -210,7 +207,7 @@ separate cadence. Specifically:
 
 This skill **does NOT** maintain its own version-handling
 rules in parallel with
-[`doca-version`](../../doca-version/SKILL.md). The agent
+`doca-version/SKILL.md`. The agent
 treats `doca-version` as the source of truth for:
 
 - the four-way DOCA install match (host package, kernel
@@ -230,7 +227,7 @@ The flow-perf-specific overlay on top of that:
   count are first-class methodology variables; changing any
   of them across runs invalidates the comparison.
 - **Report the BlueField mode and firmware version.** Per
-  [`doca-version`](../../doca-version/SKILL.md), the device
+  `doca-version/SKILL.md`, the device
   mode and firmware are load-bearing.
 
 Concretely the agent applies this rule in
@@ -247,8 +244,8 @@ order; this section names them so the agent can route fast.
    JSON library is not present on the user's system —
    either DOCA isn't installed, or the user's DOCA install
    profile didn't include the flow-perf component. Route to
-   [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
-   and [`## no-install`](../../doca-setup/TASKS.md#no-install).
+   `doca-setup ## configure` (`doca-setup/TASKS.md#configure`)
+   and `## no-install` (`doca-setup/TASKS.md#no-install`).
 2. **JSON-policy-malformed.** The policy file doesn't
    parse, or references fields the running binary's version
    does not understand (the canonical
@@ -263,7 +260,7 @@ order; this section names them so the agent can route fast.
    target device, the BlueField mode is wrong, or a Flow
    precondition is not met. Route the underlying library
    diagnosis to
-   [`doca-flow TASKS.md ## debug`](../../libs/doca-flow/TASKS.md#debug).
+   `doca-flow TASKS.md ## debug` (`doca-flow/TASKS.md#debug`).
 4. **Insertion-rate-failure.** `num_failed > 0` during the
    measurement loop — some rules failed to install. This is
    a methodology finding, not a tool bug; common causes are
@@ -279,7 +276,7 @@ order; this section names them so the agent can route fast.
    interrupt routing). The agent does NOT silently average
    high-variance results.
 6. **Version.** Walk
-   [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug)
+   `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`)
    end-to-end. Common flow-perf-specific symptoms:
    firmware doesn't expose the matcher / action the JSON
    asks for, BlueField is in the wrong mode for the
@@ -287,8 +284,8 @@ order; this section names them so the agent can route fast.
    from one DOCA release with a number from another (which
    the four-tuple capture rule prevents).
 7. **Cross-cutting.** Hand off to
-   [`doca-debug ## debug`](../../doca-debug/SKILL.md) and
-   [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug)
+   `doca-debug ## debug` (`doca-debug/SKILL.md`) and
+   `doca-setup ## debug` (`doca-setup/TASKS.md#debug`)
    for the env-side layers (driver loaded, PCIe state,
    hugepages, IOMMU, ulimits, kernel module).
 
@@ -312,7 +309,7 @@ expected to read each:
   during the run — pipe creation success / failure, port
   state, counter values. The `doca-flow` library exposes
   this programmatically per
-  [`doca-flow CAPABILITIES.md`](../../libs/doca-flow/CAPABILITIES.md);
+  `doca-flow/CAPABILITIES.md`;
   flow-perf's measurement is more meaningful when the
   operator cross-checks against the library's own view
   (e.g. via the application's inspector). flow-perf does
@@ -327,8 +324,8 @@ expected to read each:
 
 For the cross-cutting host / device observability surfaces
 (driver, firmware, BlueField mode, PCIe), route to
-[`doca-debug ## Observability`](../../doca-debug/SKILL.md)
-and [`doca-setup TASKS.md ## test`](../../doca-setup/TASKS.md#test).
+`doca-debug ## Observability` (`doca-debug/SKILL.md`)
+and `doca-setup TASKS.md ## test` (`doca-setup/TASKS.md#test`).
 
 The skill explicitly does NOT add streaming-telemetry export
 on top of flow-perf — the tool is a one-shot synthetic
@@ -338,7 +335,7 @@ measurement, not a daemon.
 
 > **Hardware-safety meta-policy applies.** Every operator
 > action below inherits the safety contract defined in
-> [`doca-hardware-safety ## Safety policy`](../../doca-hardware-safety/CAPABILITIES.md#safety-policy):
+> `doca-hardware-safety ## Safety policy` (`doca-hardware-safety/CAPABILITIES.md#safety-policy`):
 > the pre-flight inventory (DOCA version, firmware, kernel
 > module, BlueField mode, OOB access, dataplane co-tenancy),
 > the OOB / blast-radius rules, the change-class
@@ -369,7 +366,7 @@ operational consequences the agent must surface:
   a side-effect. The agent walks the operator to a clean
   device whenever possible.
 - **The smoke-before-bulk rule from
-  [`doca-hardware-safety ## Safety policy`](../../doca-hardware-safety/CAPABILITIES.md#safety-policy)
+  `doca-hardware-safety ## Safety policy` (`doca-hardware-safety/CAPABILITIES.md#safety-policy`)
   applies twice here.** First on the policy: validate one
   iteration on a small `num_inserted_entries` (e.g. a few
   thousand) before running the full-scale policy. Second on
@@ -390,10 +387,10 @@ In addition:
   application.** flow-perf does not patch the operator's
   source; it drives its own synthetic pipeline. If the
   operator wants to change the live application, that is
-  [`doca-flow-tune`](../doca-flow-tune/SKILL.md) territory,
+  `doca-flow-tune/SKILL.md` territory,
   not flow-perf.
 - **Capture before retry.** Per
-  [`doca-hardware-safety ## Error taxonomy`](../../doca-hardware-safety/CAPABILITIES.md#error-taxonomy):
+  `doca-hardware-safety ## Error taxonomy` (`doca-hardware-safety/CAPABILITIES.md#error-taxonomy`):
   if a measurement run fails or returns surprising
   numbers, capture the failed run's full output and the
   four-tuple BEFORE re-running. Retrying without capture is
@@ -403,6 +400,6 @@ The full procedural application of the safety overlay (when
 to abort, when to escalate, what to capture) lives in
 [`TASKS.md ## debug`](TASKS.md#debug) and
 [`TASKS.md ## test`](TASKS.md#test) plus the
-[`doca-debug`](../../doca-debug/SKILL.md) cross-cutting debug
+`doca-debug/SKILL.md` cross-cutting debug
 ladder. This section names the rules that constrain those
 verbs for flow-perf specifically.

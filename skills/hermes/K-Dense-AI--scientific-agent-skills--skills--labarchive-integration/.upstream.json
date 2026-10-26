@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/labarchive-integration",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/labarchive-integration",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/labarchive-integration",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "ba975891339e7914021494d4a978a7e709c629cac13dd353689efab7fddba96c",
+  "fetchedAt": "2026-10-26T14:22:30.785Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/other/hugging-face-trackio",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/other/hugging-face-trackio",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/other/hugging-face-trackio",
+  "branch": "main",
+  "pushedAt": "2026-10-26T05:20:56Z",
+  "contentHash": "59bbd9d795af88bb7c27e32aa3e1309945d8c9a82ccd19bab22cdafdfc88d33a",
+  "fetchedAt": "2026-10-26T14:22:16.346Z"
+}

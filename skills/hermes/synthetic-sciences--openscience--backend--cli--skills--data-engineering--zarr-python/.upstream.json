@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/zarr-python",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/zarr-python",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/zarr-python",
+  "branch": "main",
+  "pushedAt": "2026-10-26T05:20:56Z",
+  "contentHash": "dd69cd07c9af7c27d1ddb78bd60fb147ac086f80255362a6d4d0ee2d85302d2d",
+  "fetchedAt": "2026-10-26T14:22:16.506Z"
+}
