@@ -475,7 +475,7 @@ After upgrade Edit/Write is complete, **commit the changed skill files in the `~
 
 #### Branch guard (HARD STOP): PUBLIC skill → feat/fix branch, never develop/main direct
 
-**For a PUBLIC skill (in `published.json`), the commit MUST land on a dedicated `feat/<slug>-...` or `fix/<slug>-...` branch (worktree-isolated), never directly on `develop`/`master`/`main`.** The es6kr/skills repo flow is feat/fix branch → PR → main (release-please runs on main). `develop` is NOT a change-accumulation branch for published skills. This mirrors `es6kr` `deploy-skill.md` §6 Branch strategy — keep the two consistent.
+**For a PUBLIC skill (in `published.json`), the commit MUST land on a dedicated `feat/<slug>-...` or `fix/<slug>-...` branch (worktree-isolated), never directly on a shared integration branch (`develop`/`master`/`main`).** The PR **base** is a per-workspace customization, not a skill constant — resolve it from the workspace's `staging` role in works-config (see the works-config v0.2.0 schema). Where a two-tier staging is configured (`staging.kind: "branch"`), a `fix/*` branch PRs into the configured `next_fix` staging branch and a `feat/*` branch into the configured `next_feat`, and those staging branches are promoted to the release branch (where release-please runs) via a separate promotion PR. Where no staging layer is configured (`staging.kind: "none"`), `feat/fix` PRs into the repo's default integration branch directly. **Do not hardcode `next-*` or `main` as the base** — the staging convention lives in works-config, not in this skill.
 
 | # | Don't | Do |
 |---|-------|-----|
@@ -494,10 +494,10 @@ After upgrade Edit/Write is complete, **commit the changed skill files in the `~
 1. **Identify modified files**: `git -C ~/.agents status --short skills/<skill-name>/`
 2. **Stage by path** (no `git add .` / `-A`): `git -C ~/.agents add skills/<skill-name>/SKILL.md skills/<skill-name>/<topic>.md ...`
 3. **Verify staging**: `git -C ~/.agents status` — confirm only the intended skill files are staged
-4. **Commit**: `git -C ~/.agents commit -m "skill(<skill-name>): <one-line summary>"`
-   - For new topic addition: `feat(skill-<skill-name>): add <topic-name> topic`
-   - For existing topic edit: `docs(skill-<skill-name>): <what changed>`
-   - For frontmatter/structure: `refactor(skill-<skill-name>): <what changed>`
+4. **Commit**: `git -C ~/.agents commit -m "<type>(<skill-name>): <one-line summary>"` — scope is the bare skill name, no `skill-` prefix (verified against actual `es6kr/skills` and `es6kr/claude-plugins` history: `fix(hook-kit): ...`, `feat(fix-plan): ...`, never `fix(skill-hook-kit): ...`)
+   - For new topic addition: `feat(<skill-name>): add <topic-name> topic`
+   - For existing topic edit: `docs(<skill-name>): <what changed>`
+   - For frontmatter/structure: `refactor(<skill-name>): <what changed>`
 
 #### Don't / Do
 
@@ -555,6 +555,26 @@ User phrases like "commit the deployed state to the worktree first", "publish st
 "commit release as-is" all signal this split. Per the ambiguous-verb principle, the phrase
 "as-deployed / at publish time / release as-is", the default interpretation is **baseline split**,
 not "single commit in some order".
+
+#### Feature relocation split (MANDATORY when moving a topic/feature out of this skill into a different skill/plugin)
+
+When an upgrade **removes** a topic/feature from the target skill because it now lives in a different skill or plugin (a "carve-out" split — e.g. moving session-import tooling out of a general-purpose skill into a dedicated one), the same-session checklist must include a cross-repo documentation sweep, not just the split repo's own tree.
+
+**Why**: a skill split correctly updates every same-repo reference (the moved skill's own SKILL.md, Topics table, scripts) but has no forcing function to check *other* repos' documentation that describes or depends on the old location. A backlog item that records the cross-repo risk as "accepted debt" with no re-check trigger lets the same drift resurface repeatedly — each recurrence found independently by whoever next reads the stale doc, instead of once by the split itself.
+
+##### Don't / Do
+
+| # | Don't | Do |
+|---|-------|-----|
+| 1 | Finish a relocation split once the moved skill's own SKILL.md/Topics/scripts are updated | Also grep this workspace's own `CLAUDE.md`, `.claude/rules/*.md`/`~/.agents/rules/*.md`, and the RAG-registry config's `writer` fields for the old skill/topic's literal filenames or `Skill("<old>","<topic>")` calls |
+| 2 | Register the cross-repo drift risk as an "accepted debt" backlog item with no re-check trigger | Fix the hits found by the grep in the same session/PR as the split. A backlog item is for genuinely out-of-reach references (a different org's repo you don't have access to), not for docs sitting in the same workspace |
+| 3 | Treat "no functional breakage" as sufficient reason to defer | Stale documentation is itself the defect — it misleads the next reader (human or agent) into acting on an outdated location |
+
+##### Self-check (before closing a relocation-split upgrade)
+
+1. Does this upgrade **remove** a topic/feature from the target skill because it moved elsewhere? → If yes, this subsection applies.
+2. Ran the cross-repo grep (workspace `CLAUDE.md`, `.claude/rules/*.md`, RAG-registry config `writer` fields) for the old skill/topic's distinctive filenames and `Skill()` calls?
+3. Fixed every hit found, or — only for references genuinely outside this session's reach — registered a tracked follow-up with an explicit re-check trigger (not just "accepted debt")?
 
 ## Notes
 

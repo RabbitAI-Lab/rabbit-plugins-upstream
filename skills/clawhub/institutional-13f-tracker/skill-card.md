@@ -1,44 +1,59 @@
-## Description: <br>
-13F institutional ownership tracker: quarterly hedge fund and mutual fund holdings from SEC 13F filings, by ticker or by manager, with top institutional holders per stock, quarter-over-quarter buying and selling deltas, and activist investor positions across thousands of managers. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides read-only analysis of quarterly SEC 13F institutional holdings by ticker or manager, including major holders, portfolio changes, aggregate flows, and activist positions.
 
-## Publisher: <br>
-[thesentitrader](https://clawhub.ai/user/thesentitrader) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[thesentitrader](https://clawhub.ai/user/thesentitrader)
 
-## Use Case: <br>
-Developers, agents, and financial research users use this skill to retrieve read-only 13F institutional ownership context by ticker, manager, quarter-over-quarter change, aggregate flow, or activist position. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may mistake delayed 13F context for real-time positions or personalized investment advice. <br>
-Mitigation: State the reportDate and quarterly filing lag, and avoid presenting outputs as trading recommendations. <br>
-Risk: The SENTISENSE_API_KEY grants access to SentiSense financial-data lookups. <br>
-Mitigation: Keep the key in an environment variable or request header, and do not expose it in query strings or user-facing output. <br>
-Risk: Cross-source convergence language may overstate confidence in an investment signal. <br>
-Mitigation: Frame convergence as contextual comparison only and avoid suggesting trades solely from that language. <br>
+## Use Case:
 
+Investors and research analysts use this skill to review institutional ownership, manager portfolios, and quarter-over-quarter changes in SEC 13F filings. Its findings are informational, not personalized investment advice.
 
-## Reference(s): <br>
-- [SentiSense](https://sentisense.ai) <br>
-- [SentiSense API Key](https://app.sentisense.ai/get-api-key) <br>
-- [ClawHub Skill Listing](https://clawhub.ai/thesentitrader/skills/institutional-13f-tracker) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown with financial-data summaries and optional curl commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SENTISENSE_API_KEY and read-only network access to app.sentisense.ai.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Risk: Ticker and manager queries are sent to SentiSense with an API key.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only if this disclosure is acceptable, and keep the key out of URLs and user-facing output.
+
+Risk: Quarterly 13F holdings are delayed and may be mistaken for current positions.
+
+Mitigation: State the reporting date and filing lag; do not present holdings as real-time.
+
+Risk: Cross-source convergence language may be mistaken for an investment signal.
+
+Mitigation: Treat findings as research context, not buy, sell, or confidence advice.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/thesentitrader/skills/institutional-13f-tracker)
+- [SentiSense](https://sentisense.ai)
+- [SentiSense API key](https://app.sentisense.ai/get-api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown research summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only, quarter-dated 13F findings; no trading actions.]
+
+## Skill Version(s):
+
+1.1.8 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

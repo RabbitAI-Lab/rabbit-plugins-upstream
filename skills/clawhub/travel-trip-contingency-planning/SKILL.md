@@ -6,6 +6,7 @@ description: "Activate when: building a complex/high-value itinerary; multi-supp
 # Travel Advisor — Trip Contingency Planning
 
 > **Industry front door for scenario-planning.** Adds domain triggers, example, packs only. Parent Process unchanged.
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
 
 **Activate when:** building a complex/high-value itinerary; multi-supplier or international trip; hurricane/advisory season; client asks "what if something goes wrong?"; designing a group/FIT trip.
 **Do NOT activate when:** single refundable booking with trivial exposure.
@@ -48,6 +49,6 @@ Part of **deciqAI Knowledge Skills**. Core method: scenario-planning.
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-trip-contingency-planning** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-trip-contingency-planning** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/travel-trip-contingency-planning.json*

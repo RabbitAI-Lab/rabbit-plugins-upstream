@@ -153,7 +153,7 @@ Good diagnosis:
 
 ### 3. Public Reference Search
 
-Use `search-credit-notice.md` before paid lookup.
+Use `research-scope-guard.md` before expanding online lookup.
 
 Search should not only search the brand name. Search a mix of:
 
@@ -312,14 +312,14 @@ Use when the user asks for a campaign, batch content, or multi-platform plan:
 6. multi-platform distribution plan
 7. review workflow and post-publish metrics
 
-## Credit Scope Wording
+## Research Scope Wording
 
 If public lookup is needed, use this wording:
 
-我可以先基于 Brief 做不花积分的拆解；如果你想让我看最近小红书同类产品/同类痛点都怎么讲，我会进入公开内容搜索。建议先搜 3-5 个关键词，找 3-5 条近期参考，再产出内容角度和正文。你确认后我再开始查。
+我可以先基于 Brief 做本地拆解；如果你想让我看最近小红书同类产品/同类痛点都怎么讲，我会进入公开内容搜索。建议先搜 3-5 个关键词，找 3-5 条近期参考，再产出内容角度和正文。你确认后我再开始查。
 
 If the user already asks for "找对标" or "看看最近都怎么讲", proceed after
-the normal credit notice.
+the normal scope confirmation.
 
 ## Good Style
 

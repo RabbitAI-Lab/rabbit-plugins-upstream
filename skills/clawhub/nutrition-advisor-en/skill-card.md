@@ -1,42 +1,55 @@
-## Description: <br>
-Provides practical nutrition guidance for calorie and macro estimates, TDEE/BMR calculations, meal planning, food and hydration logging, restaurant meal estimation, cycle-aware nutrition, and related diet topics while excluding medical diagnosis and non-diet advice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+For users explicitly requesting nutrition help, provide English-language calorie and macro estimates, meal planning, food substitutions, restaurant estimates, and requested food or hydration logs without diagnosing or treating medical conditions, managing pregnancy or eating disorders, or accessing health data by default.
 
-## Publisher: <br>
-[yamyeed](https://clawhub.ai/user/yamyeed) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yamyeed](https://clawhub.ai/user/yamyeed)
 
-## Use Case: <br>
-External users use this skill when they explicitly ask for nutrition or diet-related help, including calorie targets, macro planning, meal estimates, food substitutions, hydration tracking, and goal-aligned meal planning. It is not intended for diagnosis, treatment, urgent symptoms, or management of medical conditions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may process personal health-adjacent information, including weight, diet, allergies, and menstrual-cycle details. <br>
-Mitigation: Collect only the information needed for the current task and use optional local logging only after the user confirms they are comfortable storing data under ~/nutrition-data. <br>
-Risk: Nutrition estimates or meal guidance could be mistaken for medical advice in higher-risk situations. <br>
-Mitigation: Keep outputs framed as estimates and direct users to a clinician or registered dietitian for medical conditions, pregnancy, eating disorder history, medication-related glucose issues, severe symptoms, or urgent concerns. <br>
-Risk: Aggressive calorie restriction, unsafe fasting, or extreme diet targets could harm users. <br>
-Mitigation: Use moderate calorie adjustments, avoid unsafe lower intake thresholds without professional supervision, and prioritize food-first, sustainable guidance. <br>
+## Use Case:
 
+External users can request practical nutrition estimates, everyday meal planning, food comparisons, and explicitly requested food or hydration tracking for generally healthy adults. The skill keeps estimates adjustable and directs medical or higher-risk situations to a licensed clinician or registered dietitian.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/yamyeed/skills/nutrition-advisor-en) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Calculations, Configuration] <br>
-**Output Format:** [Markdown with tables, concise dashboards, estimates, and JSON file structures when local logging is requested] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose optional local JSON storage under ~/nutrition-data only after user confirmation; nutrition numbers are framed as estimates.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Persisted food and hydration records are plaintext and may be accessible to local programs or backups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep data in the conversation by default; before persistent tracking, disclose the fields, exact path, purpose, and plaintext risk, then wait for explicit confirmation.
+
+## Reference(s):
+
+- [ClawHub Release](https://clawhub.ai/yamyeed/skills/nutrition-advisor-en)
+- [Calculations and Estimation](references/calculations-and-estimation.md)
+- [Logging and Local Storage](references/logging-and-storage.md)
+- [Special Contexts and High-Risk Boundaries](references/special-contexts.md)
+- [NIH Office of Dietary Supplements](https://ods.od.nih.gov/factsheets/list-all/)
+- [NCCIH Herbs at a Glance](https://www.nccih.nih.gov/health/herbsataglance)
+- [Academy of Nutrition and Dietetics](https://www.eatright.org/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, JSON]
+
+**Output Format:** [Conversational text; JSON for explicitly requested saved logs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Nutrition values are estimates; persistent logs are created only after explicit user confirmation.]
+
+## Skill Version(s):
+
+1.1.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

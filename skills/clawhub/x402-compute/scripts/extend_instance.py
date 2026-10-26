@@ -139,6 +139,16 @@ def extend_instance(instance_id: str, hours: int = 720, network: str = "base", s
             print(f"   TX: {data['tx_hash']}")
         return data
 
+    if response.status_code == 202 or (response.status_code == 409 and "settlement_pending" in response.text):
+        # Paid (or the payment outcome is not known yet). Do NOT pay again: the server checks
+        # the chain and either applies the extension or credits the amount back automatically.
+        print("⏳ Payment is being confirmed. Do NOT pay again. Check the instance expiry shortly.")
+        try:
+            body = response.json()
+        except Exception:
+            body = response.text[:2000]
+        return {"pending": True, "response": body}
+
     return {"error": f"Extension failed: {response.status_code}", "response": response.text[:500]}
 
 
@@ -146,7 +156,7 @@ if __name__ == "__main__":
     parser = argparse.ArgumentParser(description="Extend a compute instance")
     parser.add_argument("instance_id", help="Instance ID to extend")
     parser.add_argument("--hours", type=int, default=720, help="Hours to extend (default: 720 = ~1 month)")
-    parser.add_argument("--network", default="base", choices=["base", "solana", "robinhood"], help="Payment network (base/solana = USDC, robinhood = USDG)")
+    parser.add_argument("--network", default="base", choices=["base", "solana", "robinhood", "arc"], help="Payment network (base/solana/arc = USDC, robinhood = USDG; direct arc payments min $5)")
     parser.add_argument("--yes", "-y", action="store_true", help="Skip payment confirmation prompt")
     parser.add_argument("--max-spend", type=float, help="Max USD spend limit (default: $500 or COMPUTE_MAX_SPEND_USD)")
     args = parser.parse_args()

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html data-page-node-id="H4GXs6ExEsPYbC6cKHeXDd" lang="zh-CN">
+<head data-page-node-id="JKPR1KczMMlZpC2vuuv2HA">
+<script data-page-node-id="3HCFjTxEDotBmLZJAcj21v" src="/page/page_comm/inject.js"></script>
+<meta data-page-node-id="oORp3aq8MHJB0KekY7U68k" charset="UTF-8">
+<link data-page-node-id="jXIAQIaE2HhjK6TDTEjbm8" href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style data-page-node-id="0JFdcGpHo80eFER4L1hH6E" data-pnid-children="WCQfnmZqmjKk5aJq1InZd5">
+/* === html-base.css 底座（按本卡覆盖变量） === */
+:root {
+    --card-width: 1170px; --card-height: 660px;
+    --bg-page: #FFFFFF; --ink: #1A1A1A; --accent: #4B5BDC;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:var(--card-width); height:var(--card-height); overflow:hidden; background:var(--bg-page); color:var(--ink); font-family:'Noto Sans SC',sans-serif; -webkit-font-smoothing:antialiased; }
+.card { position:relative; width:100%; height:100%; overflow:hidden; }
+::selection { background:transparent; }
+
+/* === 区块1：标题 === */
+.title { position:absolute; top:44px; left:0; right:0; text-align:center; font-size:34px; font-weight:900; }
+.title .sub { display:block; font-size:16px; font-weight:400; color:#8A8A93; margin-top:8px; }
+
+/* === 区块2：节点流程链（横排 5 节点） === */
+.node {
+    position:absolute; top:230px; width:150px; height:96px;
+    background:#fff; border:2px solid #D9D9E0; border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    transition:none;
+}
+.node .n-name { font-size:19px; font-weight:700; }
+.node .n-sub { font-size:12.5px; color:#8A8A93; }
+.n1 { left:90px; } .n2 { left:300px; } .n3 { left:510px; } .n4 { left:720px; } .n5 { left:930px; }
+
+/* 知识库（检索节点下方） */
+.kb {
+    position:absolute; top:440px; left:510px; width:150px; height:96px;
+    background:#EEF0FF; border:2px solid #D9D9E0; border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+}
+.kb .n-name { font-size:19px; font-weight:700; }
+.kb .n-sub { font-size:12.5px; color:#6B6B75; }
+
+/* === 区块3：箭头（纯 CSS） === */
+.arrow { position:absolute; top:277px; height:2px; background:#C9C9D2; width:60px; }
+.a1{left:240px;} .a2{left:450px;} .a3{left:660px;} .a4{left:870px;}
+.arrow::after { content:''; position:absolute; right:-1px; top:-4px; border:5px solid transparent; border-left-color:#C9C9D2; }
+.vline { position:absolute; left:584px; top:326px; width:2px; height:114px; background:#C9C9D2; }
+
+/* === 区块4：token 小药丸（沿链流动） === */
+.token {
+    position:absolute; top:196px; left:165px; width:34px; height:22px; margin-left:-17px;
+    background:var(--accent); border-radius:11px; color:#fff;
+    font:700 11px/22px 'JetBrains Mono',monospace; text-align:center;
+    animation:travel 12s linear infinite;
+}
+@keyframes travel {
+    0%,13%   { transform:translateX(0); }         /* 站1 用户 */
+    20%,33%  { transform:translateX(210px); }     /* 站2 Embedding */
+    40%,53%  { transform:translateX(420px); }     /* 站3 检索 */
+    60%,73%  { transform:translateX(630px); }     /* 站4 LLM */
+    80%,96%  { transform:translateX(840px); }     /* 站5 回答 */
+    100%     { transform:translateX(0); opacity:0; }
+}
+
+/* === 区块5：节点高亮（与 token 同一时间轴） === */
+.node,.kb { animation-duration:12s; animation-iteration-count:infinite; }
+.n1{animation-name:hl1;} .n2{animation-name:hl2;} .n3{animation-name:hl3;}
+.n4{animation-name:hl4;} .n5{animation-name:hl5;} .kb{animation-name:hl3;}
+@keyframes hl1 { 0%,20%   { border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 21%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl2 { 0%,19%   { border-color:#D9D9E0; box-shadow:none;} 20%,40%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 41%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl3 { 0%,39%   { border-color:#D9D9E0; box-shadow:none;} 40%,60%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 61%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl4 { 0%,59%   { border-color:#D9D9E0; box-shadow:none;} 60%,80%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 81%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl5 { 0%,79%   { border-color:#D9D9E0; box-shadow:none;} 80%,98%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 99%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+
+/* === 区块6：底部步骤条（5 句说明切换） === */
+.stepbar { position:absolute; left:90px; right:90px; bottom:44px; height:76px; }
+.stepno { position:absolute; left:0; top:0; font:700 14px 'JetBrains Mono',monospace; color:var(--accent); opacity:0; animation-duration:12s; animation-iteration-count:infinite; }
+.s1{animation-name:cap1;} .s2{animation-name:cap2;} .s3{animation-name:cap3;} .s4{animation-name:cap4;} .s5{animation-name:cap5;}
+.cap { position:absolute; left:0; right:0; top:28px; background:#F5F5F7; border-radius:10px;
+       padding:12px 18px; font-size:19px; font-weight:700; opacity:0; animation-duration:12s; animation-iteration-count:infinite; }
+.c1{animation-name:cap1;} .c2{animation-name:cap2;} .c3{animation-name:cap3;} .c4{animation-name:cap4;} .c5{animation-name:cap5;}
+@keyframes cap1 { 0%,20%{opacity:1;} 21%,100%{opacity:0;} }
+@keyframes cap2 { 0%,19%{opacity:0;} 20%,40%{opacity:1;} 41%,100%{opacity:0;} }
+@keyframes cap3 { 0%,39%{opacity:0;} 40%,60%{opacity:1;} 61%,100%{opacity:0;} }
+@keyframes cap4 { 0%,59%{opacity:0;} 60%,80%{opacity:1;} 81%,100%{opacity:0;} }
+@keyframes cap5 { 0%,79%{opacity:0;} 80%,98%{opacity:1;} 99%,100%{opacity:0;} }
+.stepno { animation:stepno 12s linear infinite; }
+@keyframes stepno {
+    0%,20%{content-visibility:visible;}
+}
+</style>
+</head>
+<body data-page-node-id="WbPyZ6Dg7wP5wIUZDppJhv">
+<div data-page-node-id="508NX5jla10OU60KnSXDev" class="card">
+
+  <!--pnid:6ZrMIXPWTyLUuYyjooTaCd--><!-- === 标题 === -->
+  <div data-page-node-id="t74LeDt89zuvrvcZseJiau" class="title"><!--pnid:ijHS0SREbjlL3rvmgcaL7P-->RAG：一次提问的旅程<span data-page-node-id="WHMqCy2q9y5qF54JGupjxA" class="sub"><!--pnid:kONehbjLUrMOlPTlE5EZvu-->检索增强生成 · 把"开卷考试"讲清楚</span></div>
+
+  <!--pnid:xLswZOthYAXGHR49hsHJDo--><!-- === 节点流程链 === -->
+  <div data-page-node-id="24ncSd3Qd4dQoQHINSJSF0" class="node n1"><span data-page-node-id="UJTPk7EiVWrF4ui6mLe4n2" class="n-name"><!--pnid:zjbrupYc5rfqtRYY7jnT9L-->用户</span><span data-page-node-id="ccoZucaekpUsSImEaNZ2R8" class="n-sub"><!--pnid:f1MctuAP1PWktVgW5rGMHb-->提出问题</span></div>
+  <div data-page-node-id="uaExs815ZB4tLXzc2P5rFN" class="node n2"><span data-page-node-id="47mIvzt40OaasAkvrT3gYE" class="n-name"><!--pnid:QZ5c9LimGuPlw8SpZYEatU-->Embedding</span><span data-page-node-id="IhctIurHcK7IM9XSYQeSng" class="n-sub"><!--pnid:Vq6DnRkhfYltgKOjJCDegn-->问题变向量</span></div>
+  <div data-page-node-id="C0G4IxDjvC1FJELmrSaSpA" class="node n3"><span data-page-node-id="ANFcVWvsHheZ0PFGvii5Xe" class="n-name"><!--pnid:jcIYij0dLKoOECKFS0hAny-->向量检索</span><span data-page-node-id="ntcerNKaZHTqTUl2Rfa9kj" class="n-sub"><!--pnid:ezlPcAgx8OF0VKizWro1Kc-->相似度匹配</span></div>
+  <div data-page-node-id="nd9dPM8Ydvhqris2GD2y6s" class="node n4"><span data-page-node-id="tq3bAprbno317QJfSNCAk1" class="n-name"><!--pnid:VW6HhPlga4S32bJEectlLe-->LLM</span><span data-page-node-id="DFXgrycis1IPBMzZRrbKi6" class="n-sub"><!--pnid:kX5lZBPm4GvL6TUKoKZ05Q-->拼接上下文生成</span></div>
+  <div data-page-node-id="dLfpZGIh8AKvVyWHulLS3n" class="node n5"><span data-page-node-id="af2YhhG5iyQ3VUVTD7LR68" class="n-name"><!--pnid:bkaHsdMsURSvMUuDMCjByL-->回答</span><span data-page-node-id="pzNSECTl5nckVtDlnTTbT5" class="n-sub"><!--pnid:mtHLnUaR2kSvTdSjijzJ2o-->带出处可溯源</span></div>
+  <div data-page-node-id="Zg9QeDMuGoAHWcUw2YGRzh" class="kb"><span data-page-node-id="1inJpHu7fjmN1tNVA3T5a3" class="n-name"><!--pnid:3o5Ah5bw98ACGVXW9AWEq9-->知识库</span><span data-page-node-id="JpyRd1sMnqCZYsqNL1UfoU" class="n-sub"><!--pnid:kCyMohkWGndTuIgcyRzfSh-->你的资料切片</span></div>
+
+  <!--pnid:7PGJ7fR8uSnP3LgONpe9Pb--><!-- === 箭头 === -->
+  <div data-page-node-id="Ov2w3SqFAbcxmqttetIETA" class="arrow a1"></div><div data-page-node-id="j28oiEKbCI2XuZFiqWgwrY" class="arrow a2"></div><div data-page-node-id="Xe2fPSf3n0J6F1ena9z8kZ" class="arrow a3"></div><div data-page-node-id="Gdxe3QSHALuzebMgH9Xleg" class="arrow a4"></div>
+  <div data-page-node-id="6mUDCYjHJrbjPi29sin8Y1" class="vline"></div>
+
+  <!--pnid:q4cdDPHKE9mhOjk9dLLvg8--><!-- === 流动的 token === -->
+  <div data-page-node-id="761TuM6OsgQZ4Tiqd8s0NF" class="token"><!--pnid:VLUPUPrNcgYAnadoD7Nzr1-->◆</div>
+
+  <!--pnid:3DQEEEdMA5IubM3VZRwU5H--><!-- === 底部步骤条 === -->
+  <div data-page-node-id="OgRTjBLqgQe2J0gtf0bM8s" class="stepbar">
+    <div data-page-node-id="Dq4lST9wywBdnarjC9ulCw" class="stepno s1"><!--pnid:gwkU0geRxyKFvjIUDVsNmy-->STEP 1 / 5</div>
+    <div data-page-node-id="nCXTqjzOvVHYKm9WJPmfut" class="stepno s2"><!--pnid:nnkzCz26CEWfpessHI8Dtg-->STEP 2 / 5</div>
+    <div data-page-node-id="Lpa5NOiUYkkLQs37O2BI75" class="stepno s3"><!--pnid:8hwHc3w7vBDgV7jx56fawB-->STEP 3 / 5</div>
+    <div data-page-node-id="mTUwBFq2QcDUEKdRcGJjWR" class="stepno s4"><!--pnid:XXIRCyXHLnOOBKDThdBE5T-->STEP 4 / 5</div>
+    <div data-page-node-id="JveOGBs9YQjYSQmk19f3by" class="stepno s5"><!--pnid:kXCfTSuNUfN2IETvi1KFdd-->STEP 5 / 5</div>
+    <div data-page-node-id="aHqvqnAP6AMS7SIkKpy4oQ" class="cap c1"><!--pnid:mb65ZUQRvMVQITp5jjJHTb-->用户发出问题</div>
+    <div data-page-node-id="zH15BsoqjBl6nhZTKskqoR" class="cap c2"><!--pnid:c1eIAu9kHabh7Qkm3iW6BI-->Embedding 把问题变成向量</div>
+    <div data-page-node-id="2ALxLOsNrjFtzRLsjbbmlT" class="cap c3"><!--pnid:dgLJdAD4ZRAbm1auYbNg5B-->去知识库检索最相关的片段</div>
+    <div data-page-node-id="5goaygfaU7vn4a525gcOZY" class="cap c4"><!--pnid:UK8idTjTxUU2INgY5tldGM-->资料拼进上下文，交给 LLM 生成</div>
+    <div data-page-node-id="RKF7kJdGP8wJk08W8O7Hjt" class="cap c5"><!--pnid:koOsJ3HGN1gv6tPxDuOcBR-->答案带出处，可溯源可验证</div>
+  </div>
+
+</div>
+</body>
+</html>

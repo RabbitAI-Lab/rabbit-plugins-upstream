@@ -32,13 +32,55 @@ try:
 except ImportError:
     HAS_REQUESTS = False
 
+PAYMENT_EXIT_CODE = 3
+INSUFFICIENT_CODES = {3210, 3201}
+
+
+def emit_payment_required(resp):
+    data = resp.get("data")
+    data = data if isinstance(data, dict) else {}
+    cashier_url = data.get("cashierUrl")
+    amount = data.get("amount")
+    goods_name = data.get("goodsName")
+    out = sys.stdout.write
+    out(f"\n💳 积分不足，需要充值（API code={resp.get('code')}）\n")
+    out(f"消息：{resp.get('msg', '积分不足')}\n")
+    out(f"商品名称：{goods_name or '-'}\n")
+    out(f"订单金额：{amount if amount is not None else '-'} 元\n")
+    out(f"订单号：{data.get('outTradeNo') or '-'}\n")
+    if data.get("expireTime"):
+        out(f"支付截止：{data.get('expireTime')}\n")
+    out("\n请严格按 references/alipay-recharge.md「支付宝充值接管流程（通用）」处理：\n")
+    out("  1) 将下方 cashierUrl 原文作为支付链接（--payment-link）\n")
+    out("  2) amount=订单金额、goodsName=商品名称，直接用于 --amount / --merchant-info\n")
+    out("  3) alipay-bot trigger-payment-signal 压缩得到支付短链 paymentLink\n")
+    out("  4) alipay-bot submit-payment 用支付短链唤起支付宝，解析查询单号 out-shake-no\n")
+    out("  5) alipay-bot poll-payment-status --out-shake-no 自动监听到账\n")
+    out("  6) 到账（outcome=success）后，用原始查询参数重新运行本脚本\n\n")
+    payload = {
+        "need_payment": True,
+        "code": resp.get("code"),
+        "msg": resp.get("msg", "积分不足"),
+        "cashierUrl": cashier_url,
+        "amount": amount,
+        "goodsName": goods_name,
+        "outTradeNo": data.get("outTradeNo"),
+        "expireTime": data.get("expireTime"),
+        "points": data.get("points"),
+    }
+    out("===PAYMENT_REQUIRED_JSON_START===\n")
+    out(json.dumps(payload, ensure_ascii=False))
+    out("\n===PAYMENT_REQUIRED_JSON_END===\n")
+    sys.stdout.flush()
+
+
 # ─── 配置 ─────────────────────────────────────────────────────────────────────────
 SEARCH_API = "https://redfox.hk/story/api/toutiao/searchWork"
 DETAIL_API = "https://redfox.hk/story/api/toutiao/workDetail"
 CONFIG_DIR = Path.home() / ".qoder" / "apis"
 CONFIG_FILE = CONFIG_DIR / "redfox.json"
 ENV_KEY = "REDFOX_API_KEY"
-SOURCE = "今日头条爆款查询-RedSkill"
+SOURCE = "今日头条爆款查询-ClawHub"
 
 DEFAULT_OUTPUT_DIR = Path.home() / "Downloads" / "QoderToutiaoSearch"
 DEFAULT_PAGES = 3
@@ -117,63 +159,8 @@ def format_number(n):
         return f"{n/1000:.1f}k"
     return str(n)
 
-# ─── 关键词扩展表（主题搜索用）────────────────────────────────────────────────────
-EXPAND_MAP = {
-    "美伊战争":  ["美伊冲突", "美国伊朗", "伊朗导弹", "中东局势"],
-    "中美":      ["中美关系", "中美贸易", "中美博弈", "中美谈判"],
-    "AI":        ["人工智能", "大模型", "ChatGPT", "DeepSeek"],
-    "新能源":    ["新能源汽车", "电动车", "锂电池", "充电桩"],
-    "房地产":    ["楼市", "房价", "地产政策", "房贷"],
-    "股市":      ["A股", "股票", "大盘", "牛市"],
-    "疫苗":      ["新冠疫苗", "疫苗接种", "疫苗研发"],
-    "世界杯":    ["足球", "FIFA", "国家队", "欧冠"],
-    "芯片":      ["半导体", "晶圆", "台积电", "国产芯片"],
-    " inflation": ["CPI", "通胀", "物价"],
-}
-
-
-def expand_keywords(keyword, extra_keywords=None, use_expand=False):
-    """
-    生成搜索关键词列表。
-    - keyword：主关键词
-    - extra_keywords：手动追加的关键词（逗号分隔字符串）
-    - use_expand：是否启用内置扩展词库
-    返回去重后的关键词列表，主词始终在最前。
-    """
-    keywords = [keyword]
-
-    if use_expand:
-        related = EXPAND_MAP.get(keyword, [])
-        if related:
-            keywords.extend(related)
-        else:
-            warn(f"「{keyword}」无内置扩展词，可用 --also 手动追加")
-
-    if extra_keywords:
-        keywords.extend([k.strip() for k in extra_keywords.split(",") if k.strip()])
-
-    # 去重，保持顺序，主词在最前
-    seen = set()
-    result = []
-    for k in keywords:
-        if k and k not in seen:
-            seen.add(k)
-            result.append(k)
-    return result
-
-
-def work_type_str(entry):
-    """
-    根据 workType / hasVideo 返回类型字符串。
-    None = 详情未获取到，显示「未知」，不误判为图文。
-    """
-    wt = entry.get("workType")
-    hv = entry.get("hasVideo")
-    if wt is True or hv is True:
-        return "视频"
-    if wt is None and hv is None:
-        return "未知"
-    return "图文"
+def work_type_str(is_video):
+    return "视频" if is_video else "图文"
 
 
 # ─── 搜索接口 ─────────────────────────────────────────────────────────────────────
@@ -188,6 +175,9 @@ def search_works(session, keyword, offset=0):
         return None, False
 
     code = result.get("code")
+    if code in INSUFFICIENT_CODES:
+        emit_payment_required(result)
+        sys.exit(PAYMENT_EXIT_CODE)
     if code not in (200, 2000):
         msg = result.get("msg", "")
         if "调用次数" in msg:
@@ -208,27 +198,20 @@ def search_works(session, keyword, offset=0):
 
 
 # ─── 详情接口 ─────────────────────────────────────────────────────────────────────
-def fetch_detail(session, opus_id, max_retries=3):
-    """
-    调用 workDetail 接口，返回完整作品数据。
-    失败（异常/状态码不对/数据为空）最多重试 max_retries 次，间隔递增。
-    """
+def fetch_detail(session, opus_id):
+    """调用 workDetail 接口，返回完整作品数据"""
     payload = {"opusId": str(opus_id)}
-    for attempt in range(max_retries):
-        try:
-            resp = session.post(DETAIL_API, json=payload, timeout=15)
-            result = resp.json()
-            code = result.get("code")
-            if code in (200, 2000):
-                data = result.get("data")
-                if data:
-                    return data
-        except Exception:
-            pass
-        # 重试前递增等待：0.5s、1.0s，避免频繁请求
-        if attempt < max_retries - 1:
-            time.sleep(0.5 * (attempt + 1))
-    return None
+    try:
+        resp = session.post(DETAIL_API, json=payload, timeout=15)
+        result = resp.json()
+    except Exception as e:
+        return None
+
+    code = result.get("code")
+    if code not in (200, 2000):
+        return None
+
+    return result.get("data")
 
 
 def fetch_details_batch(session, opus_ids, max_workers=5):
@@ -250,60 +233,52 @@ def fetch_details_batch(session, opus_ids, max_workers=5):
 
 
 # ─── 主搜索流程 ────────────────────────────────────────────────────────────────────
-def run_search(session, keywords, max_pages=3, hours=0, video_only=False):
+def run_search(session, keyword, max_pages=3, hours=0, video_only=False):
     """
-    多关键词搜索主流程。
-    keywords: 关键词列表（第一个为主词，其余为扩展/补充词）
-    每个词独立翻页搜索，结果按 opusId 全局去重。
-    返回 (merged_items, kw_stats)
+    1. searchWork 按关键词翻页搜索
+    2. 收集所有 opusId
+    3. 并发调用 workDetail 获取完整数据
+    4. 过滤（时间/视频）+ 排序
     """
     all_items = []
     seen_ids = set()
-    kw_stats = {}   # {keyword: 贡献的去重后条数}
+    offset = 0
+    page = 0
 
-    for kw_idx, kw in enumerate(keywords):
-        label = "主词" if kw_idx == 0 else "扩展"
-        step(f"搜索[{label}]「{kw}」...")
-        offset = 0
-        page = 0
-        kw_count = 0
+    step(f"正在搜索「{keyword}」...")
+    while page < max_pages:
+        page += 1
+        items, has_next = search_works(session, keyword, offset=offset)
+        if items is None:
+            break
 
-        while page < max_pages:
-            page += 1
-            items, has_next = search_works(session, kw, offset=offset)
-            if items is None:
-                break
+        new_items = []
+        for item in items:
+            oid = item.get("opusId")
+            if oid and oid not in seen_ids:
+                seen_ids.add(oid)
+                new_items.append(item)
 
-            new_items = []
-            for item in items:
-                oid = item.get("opusId")
-                if oid and oid not in seen_ids:
-                    seen_ids.add(oid)
-                    item["_source_kw"] = kw   # 记录来源词
-                    new_items.append(item)
+        if not new_items:
+            break
 
-            if not new_items:
-                break
+        all_items.extend(new_items)
+        offset += 1  # searchWork 的 offset 是页码偏移（从0开始+1）
 
-            all_items.extend(new_items)
-            kw_count += len(new_items)
-            offset += 1
-            step(f"  第 {page} 页: +{len(new_items)} 条（本词 {kw_count} 条，全局 {len(all_items)} 条）")
+        step(f"  第 {page} 页: 获取 {len(new_items)} 条（累计 {len(all_items)} 条）")
 
-            if not has_next:
-                break
-            time.sleep(0.3)
-
-        kw_stats[kw] = kw_count
+        if not has_next:
+            break
+        time.sleep(0.3)
 
     if not all_items:
-        return [], kw_stats
+        return []
 
     # 并发获取详情
     opus_ids = [item.get("opusId") for item in all_items if item.get("opusId")]
     step(f"正在获取 {len(opus_ids)} 条作品详情...")
     details = fetch_details_batch(session, opus_ids, max_workers=5)
-    info(f"成功获取 {len(details)}/{len(opus_ids)} 条详情")
+    info(f"成功获取 {len(details)} 条详情")
 
     # 合并搜索基础数据 + 详情数据
     merged = []
@@ -318,9 +293,8 @@ def run_search(session, keywords, max_pages=3, hours=0, video_only=False):
             "authorName": detail.get("authorName") or item.get("nickname") or "未知作者",
             "publishTime": detail.get("publishTime") or ts_to_str(pub_ts),
             "publishTs": pub_ts,
-            # 关键修复：不给默认值，拿不到详情时保持 None（未知），不误判为图文
-            "workType": detail.get("workType"),   # True=视频 False=图文 None=未知
-            "hasVideo": detail.get("hasVideo"),   # True/False/None
+            "workType": detail.get("workType", False),
+            "hasVideo": detail.get("hasVideo", False),
             "workUrl": detail.get("workUrl") or item.get("opusUrl") or "",
             "viewCount": detail.get("viewCount", 0),
             "likeCount": detail.get("likeCount", 0),
@@ -330,7 +304,6 @@ def run_search(session, keywords, max_pages=3, hours=0, video_only=False):
             "content": detail.get("content", ""),
             "imageList": detail.get("imageList", []),
             "duration": detail.get("duration", ""),
-            "sourceKw": item.get("_source_kw", ""),
         }
         merged.append(entry)
 
@@ -340,20 +313,16 @@ def run_search(session, keywords, max_pages=3, hours=0, video_only=False):
         merged = [e for e in merged if (ts_to_dt(e["publishTs"]) or datetime.min) >= cutoff]
         if not merged:
             warn(f"最近 {hours} 小时内无相关作品")
-            return [], kw_stats
+            return []
 
-    # 视频筛选：只保留确认是视频的；类型未知的排除并明确提示
+    # 视频筛选
     if video_only:
-        confirmed = [e for e in merged if e["workType"] is True or e["hasVideo"] is True]
-        unknown  = [e for e in merged if e["workType"] is None and e["hasVideo"] is None]
-        if unknown:
-            warn(f"{len(unknown)} 条作品类型未能确认（详情获取不完整），已从视频筛选中排除")
-        merged = confirmed
+        merged = [e for e in merged if e["workType"] or e["hasVideo"]]
         if not merged:
-            warn("无确认的视频类作品")
-            return [], kw_stats
+            warn("无视频类作品")
+            return []
 
-    return merged, kw_stats
+    return merged
 
 
 # ─── 排序 ─────────────────────────────────────────────────────────────────────────
@@ -366,25 +335,16 @@ def sort_results(items, sort_by="time"):
 
 
 # ─── 终端表格 ──────────────────────────────────────────────────────────────────────
-def print_terminal_table(items, keywords, kw_stats, sort_by):
+def print_terminal_table(items, keyword, sort_by):
     if not items:
-        main_kw = keywords[0] if keywords else ""
-        print(f"\n{YELLOW}[✗] 关键词「{main_kw}」暂无搜索结果{RESET}")
+        print(f"\n{YELLOW}[✗] 关键词「{keyword}」暂无搜索结果{RESET}")
         return
 
     count = len(items)
     sort_label = "阅读量" if sort_by == "views" else "发布时间"
-    main_kw = keywords[0] if keywords else ""
-
     print(f"\n{BOLD}{'=' * 130}{RESET}")
-    print(f"{BOLD}  今日头条爆款查询 · 「{main_kw}」· 共 {count} 条 · 按{sort_label}降序{RESET}")
+    print(f"{BOLD}  今日头条爆款查询 · 「{keyword}」· 共 {count} 条 · 按{sort_label}降序{RESET}")
     print(f"{BOLD}{'=' * 130}{RESET}")
-
-    # 检索来源说明
-    if len(keywords) > 1:
-        kw_parts = [f"{kw}({kw_stats.get(kw, 0)}条)" for kw in keywords]
-        print(f"  {CYAN}检索词：{' + '.join(kw_parts)}{RESET}")
-        print(f"  {YELLOW}{'─' * 122}{RESET}")
 
     header = (f"  {'序号':<4}{'标题':<28}{'作者':<12}{'类型':<5}"
               f"{'阅读':>8}{'点赞':>6}{'评论':>5}{'转发':>5}{'分享':>5}{'发布时间':<14}{'链接':<38}")
@@ -399,8 +359,7 @@ def print_terminal_table(items, keywords, kw_stats, sort_by):
         author = (e.get("authorName") or "-")[:10]
         if len(e.get("authorName", "")) > 10:
             author += ".."
-        # workType=None → 显示「未知」，不误判为图文
-        wtype = work_type_str(e)
+        wtype = "视频" if (e.get("workType") or e.get("hasVideo")) else "图文"
         views = format_number(e.get("viewCount"))
         likes = format_number(e.get("likeCount"))
         comments = format_number(e.get("commentCount"))
@@ -416,17 +375,8 @@ def print_terminal_table(items, keywords, kw_stats, sort_by):
 
     print(f"  {YELLOW}{'─' * 122}{RESET}")
 
-    # 类型分布统计
-    video_n  = sum(1 for e in items if e.get("workType") is True  or e.get("hasVideo") is True)
-    text_n   = sum(1 for e in items if e.get("workType") is False and e.get("hasVideo") is False)
-    unknown_n= count - video_n - text_n
-    type_parts = [f"图文 {text_n}", f"视频 {video_n}"]
-    if unknown_n:
-        type_parts.append(f"类型未确认 {unknown_n}")
-    print(f"  {CYAN}类型分布：{' | '.join(type_parts)}{RESET}")
-
     if count <= 3:
-        print(f"  {YELLOW}💡 相关结果较少（仅 {count} 条），建议尝试 --expand 扩展搜索{RESET}")
+        print(f"  {YELLOW}💡 相关结果较少（仅 {count} 条），建议尝试更宽泛的关键词{RESET}")
 
     print()
 
@@ -451,7 +401,7 @@ def export_csv(items, keyword, output_dir):
             writer.writerow({
                 "标题": e.get("title", ""),
                 "作者": e.get("authorName", ""),
-                "类型": work_type_str(e),
+                "类型": work_type_str(e.get("workType") or e.get("hasVideo")),
                 "阅读数": e.get("viewCount", 0),
                 "点赞数": e.get("likeCount", 0),
                 "评论数": e.get("commentCount", 0),
@@ -533,7 +483,6 @@ display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hi
 .type-tag{display:inline-block;padding:0.1rem 0.4rem;border-radius:4px;font-size:0.65rem;font-weight:600}
 .type-tag.video{background:rgba(239,68,68,0.15);color:#F87171;border:1px solid rgba(239,68,68,0.3)}
 .type-tag.article{background:rgba(59,130,246,0.15);color:#60A5FA;border:1px solid rgba(59,130,246,0.3)}
-.type-tag.unknown{background:rgba(156,163,175,0.15);color:#9CA3AF;border:1px solid rgba(156,163,175,0.3)}
 .status-message{text-align:center;padding:3rem 1rem;color:var(--text2);font-size:0.9rem}
 .load-more-bar{display:flex;justify-content:center;padding:1.5rem 1rem 3rem}
 .load-more-btn{padding:0.65rem 2.2rem;border:1.5px solid var(--border);border-radius:var(--radius);
@@ -561,9 +510,7 @@ function fmt(n){if(!n)return '0';n=Number(n);if(n>=10000)return(n/10000).toFixed
 function esc(s){const d=document.createElement('div');d.textContent=s||'';return d.innerHTML}
 function renderCard(e){
 const c=document.createElement('a');c.className='article-card';c.href=e.workUrl||'#';c.target='_blank';c.rel='noopener noreferrer';
-const isVideo=e.workType===true||e.hasVideo===true;
-const isUnknown=e.workType===null||e.workType===undefined;
-const tag=isVideo?'<span class="type-tag video">视频</span>':isUnknown?'<span class="type-tag unknown">未知</span>':'<span class="type-tag article">图文</span>';
+const isVideo=e.workType||e.hasVideo;const tag=isVideo?'<span class="type-tag video">视频</span>':'<span class="type-tag article">图文</span>';
 const img=(e.imageList&&e.imageList[0])?`<img src="${e.imageList[0]}" alt="" loading="lazy">`:esc((e.title||'头').charAt(0));
 c.innerHTML=`<div class="card-avatar">${img}</div><div class="card-content"><div class="card-title">${esc(e.title)}</div><div class="card-meta"><span class="author">${esc(e.authorName)}</span>${tag}<span>👁 ${fmt(e.viewCount)}</span><span>👍 ${fmt(e.likeCount)}</span><span>💬 ${fmt(e.commentCount)}</span><span>🔄 ${fmt(e.repostCount)}</span><span class="pub-time">${(e.publishTime||'').slice(0,16)}</span></div></div>`;
 return c}
@@ -690,11 +637,7 @@ Examples:
     parser.add_argument("--pages", type=int, default=DEFAULT_PAGES,
                         help=f"翻页次数（默认 {DEFAULT_PAGES}）")
     parser.add_argument("--video-only", action="store_true",
-                        help="只返回确认的视频类作品（类型未确认的会被排除）")
-    parser.add_argument("--expand", action="store_true",
-                        help="主题扩展模式：自动关联同义词/相关词联合检索")
-    parser.add_argument("--also", default="", metavar="词1,词2",
-                        help="手动追加搜索关键词，逗号分隔（如：--also \"美伊冲突,美国伊朗\"）")
+                        help="只返回视频类作品")
     parser.add_argument("--output-dir",
                         help=f"输出目录（默认 ~/Downloads/QoderToutiaoSearch）")
     parser.add_argument("--api-key", help="API Key")
@@ -744,41 +687,32 @@ Examples:
     output_dir = args.output_dir or str(DEFAULT_OUTPUT_DIR)
     output_dir = os.path.expanduser(output_dir)
 
-    # 生成搜索关键词列表（主词 + 扩展词/手动追加词）
-    keywords = expand_keywords(keyword, extra_keywords=args.also, use_expand=args.expand)
-    if len(keywords) > 1:
-        step(f"主题扩展检索：{' | '.join(keywords)}")
-
     session = requests.Session()
     session.headers.update({"Content-Type": "application/json", "X-API-KEY": api_key})
 
     # ── 搜索 ──
-    items, kw_stats = run_search(session, keywords, max_pages=args.pages,
-                                 hours=args.hours, video_only=args.video_only)
+    items = run_search(session, keyword, max_pages=args.pages,
+                       hours=args.hours, video_only=args.video_only)
 
-    if not items:
+    if items is None or len(items) == 0:
         print(f"\n{YELLOW}[✗] 抱歉，未找到与「{BOLD}{keyword}{RESET}{YELLOW}」相关的今日头条作品{RESET}")
         print(f"  {YELLOW}建议:{RESET} 尝试更短的关键词")
         print(f"  {YELLOW}建议:{RESET} 放宽时间限制（--hours 0）")
-        if not args.expand:
-            print(f"  {YELLOW}建议:{RESET} 试试扩展搜索（--expand）")
-        warn(f"如需更多数据，请访问 https://redfox.hk/settings/api-keys?source=redskill")
+        warn(f"如需更多数据，请访问 https://redfox.hk/settings/api-keys?source=clawhub")
         sys.exit(0)
 
     # ── 排序 ──
     items = sort_results(items, args.sort)
 
     # ── 终端表格 ──
-    print_terminal_table(items, keywords, kw_stats, args.sort)
+    print_terminal_table(items, keyword, args.sort)
 
     # ── 统计 ──
     views_list = [int(e.get("viewCount", 0) or 0) for e in items]
     total_views = sum(views_list)
     max_views = max(views_list) if views_list else 0
-    video_count  = sum(1 for e in items if e.get("workType") is True  or e.get("hasVideo") is True)
-    unknown_count= sum(1 for e in items if e.get("workType") is None  and e.get("hasVideo") is None)
-    unknown_str  = f" | 类型未确认 {unknown_count} 条" if unknown_count else ""
-    print(f"  {BOLD}统计:{RESET} 共 {len(items)} 条 | 视频 {video_count} 条{unknown_str} | "
+    video_count = sum(1 for e in items if e.get("workType") or e.get("hasVideo"))
+    print(f"  {BOLD}统计:{RESET} 共 {len(items)} 条 | 视频 {video_count} 条 | "
           f"总阅读 {format_number(total_views)} | 最高阅读 {format_number(max_views)}")
 
     # ── CSV ──

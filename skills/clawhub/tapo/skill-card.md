@@ -1,46 +1,57 @@
-## Description: <br>
-Control TP-Link Tapo smart-home devices, including lights, plugs, power strips, hubs, sensors, and cameras, through a Tapo MCP server. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Control TP-Link Tapo smart home devices (lights, plugs, power strips, hubs and their child devices, cameras) via [Tapo MCP](https://github.com/mihai-dinculescu/tapo/tree/main/tapo-mcp).
 
-## Publisher: <br>
-[mihai-dinculescu](https://clawhub.ai/user/mihai-dinculescu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[mihai-dinculescu](https://clawhub.ai/user/mihai-dinculescu)
 
-## Use Case: <br>
-Developers and smart-home operators use this skill to connect an agent to a trusted Tapo MCP server, inspect device state, control supported Tapo devices, and capture camera snapshots when configured. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can control physical smart-home devices through the configured Tapo MCP server. <br>
-Mitigation: Install only for trusted servers, run list_devices before control actions, and use device IDs and IPs from recent discovery instead of guessing values. <br>
-Risk: Camera snapshots, trigger logs, device IDs, IP addresses, and sensor records can expose private household data. <br>
-Mitigation: Treat outputs as private data, restrict server exposure to the required network scope, and avoid sharing snapshots or logs outside the intended environment. <br>
-Risk: A reachable unauthenticated server or overly broad host access could allow unintended device access. <br>
-Mitigation: Use bearer authentication, configure TAPO_MCP_ALLOWED_HOSTS for LAN or hostname access, and keep non-loopback binds authenticated. <br>
-Risk: Bearer tokens stored in mcporter configuration can grant access to the Tapo MCP server. <br>
-Mitigation: Protect the mcporter config file, for example with restrictive local file permissions, and rotate credentials if exposure is suspected. <br>
+## Use Case:
 
+External users can discover and inspect Tapo smart-home devices, retrieve device and energy state, control supported devices, and capture camera snapshots through a configured Tapo MCP server.
 
-## Reference(s): <br>
-- [Tapo Skill Setup](references/setup.md) <br>
-- [Setting Up the Tapo MCP Server](references/tapo-mcp-setup.md) <br>
-- [Tapo skill page](https://clawhub.ai/mihai-dinculescu/skills/tapo) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May invoke configured MCP tools that return JSON device data or JPEG camera snapshots.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.5.0 (source: server evidence release.version and SKILL.md frontmatter) <br>
+Risk: Setup sends a device-control and camera-access token over unencrypted local-network connections.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use HTTPS or an encrypted tunnel for network connections, protect the saved token, and keep the server private.
+
+Risk: Device controls can affect physical equipment, and camera snapshots may expose private imagery or access links.
+
+Mitigation: Start with read-only tests, use noncritical equipment for power-control testing, enable camera access only when needed, and treat snapshot links as private until they expire.
+
+## Reference(s):
+
+- [Tapo MCP project](https://github.com/mihai-dinculescu/tapo/tree/main/tapo-mcp)
+- [ClawHub release](https://clawhub.ai/mihai-dinculescu/skills/tapo)
+- [Setup guide](references/setup.md)
+- [Tapo MCP setup and configuration](references/tapo-mcp-setup.md)
+- [Model Context Protocol](https://modelcontextprotocol.io/)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Configuration guidance, Device state and control results, JSON and text, Camera snapshot links]
+
+**Output Format:** [Markdown setup guidance with shell commands; MCP tool results as structured JSON or text.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tool results depend on the configured Tapo MCP server and reachable, supported devices.]
+
+## Skill Version(s):
+
+0.6.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

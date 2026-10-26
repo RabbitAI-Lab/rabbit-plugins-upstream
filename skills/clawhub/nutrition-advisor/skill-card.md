@@ -1,41 +1,55 @@
-## Description: <br>
-科学营养顾问 helps users estimate food calories, calculate BMR/TDEE and macronutrient targets, plan meals, and track nutrition, hydration, habits, menstrual-cycle context, and related wellness patterns. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+提供中文日常营养支持，包括热量与宏量营养素估算、餐食规划、食物替换、外食估算，以及用户明确要求的饮食和饮水记录。仅在用户明确请求营养或饮食帮助时使用；不要因“吃什么”“减肥”“记录”等孤立通用词自动触发。不得用于医疗诊断、疾病治疗、孕期或进食障碍管理，也不得默认读写本地健康数据。
 
-## Publisher: <br>
-[yamyeed](https://clawhub.ai/user/yamyeed) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[yamyeed](https://clawhub.ai/user/yamyeed)
 
-## Use Case: <br>
-External users use this skill for general wellness-oriented nutrition support: calorie lookup, meal planning, macro targets, diet logs, hydration tracking, menstrual-cycle nutrition context, and scenario-specific eating suggestions. It is not a substitute for medical or professional nutrition care. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can store body metrics, cycle information, allergies, meals, hydration, and habit data locally under ~/nutrition-data. <br>
-Mitigation: Install only if comfortable with this local storage, avoid entering unnecessary sensitive data, and review or delete the local files if you stop using the skill. <br>
-Risk: Nutrition calculations and meal suggestions may be incorrect or unsuitable for medical conditions, pregnancy, eating disorders, allergies, or other high-risk contexts. <br>
-Mitigation: Treat outputs as general wellness guidance and consult qualified healthcare or nutrition professionals for medical or high-risk nutrition decisions. <br>
+## Use Case:
 
+面向明确寻求日常饮食帮助的成年人，用于估算食物与餐食的热量和宏量营养素、规划普通餐食、比较食物替换方案，以及在明确授权后整理饮食或饮水记录。它不用于诊断或治疗疾病，也不提供孕期、进食障碍或其他高风险情境的个体化方案。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/yamyeed/skills/nutrition-advisor) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/yamyeed) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with tables, calculations, JSON examples, and local file path references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally read and write local JSON profile and log files under ~/nutrition-data when the user asks to save, update, or track nutrition data.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.2 (source: server release metadata; artifact SKILL.md reports 4.2.0 and artifact _meta.json reports 4.2.1) <br>
+Risk: Saved dietary and body-related records may contain sensitive personal information, and plaintext files may be accessible to other local programs or backups.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep data in the current conversation by default. Before saving, explain the fields, exact path, purpose, and plaintext-storage risk, then wait for confirmation; do not upload or sync the records.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/yamyeed/skills/nutrition-advisor)
+- [Calculation and estimation guidance](references/calculations-and-estimation.md)
+- [Logging and local storage guidance](references/logging-and-storage.md)
+- [Special contexts and safety boundaries](references/special-contexts.md)
+- [NIH Office of Dietary Supplements](https://ods.od.nih.gov/factsheets/list-all/)
+- [NCCIH Herbs at a Glance](https://www.nccih.nih.gov/health/herbsataglance)
+- [Chinese Nutrition Society](https://www.cnsoc.org/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Concise Chinese-language estimates, explanations, and meal suggestions; optional structured summaries of user-provided food and water records.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses ranges and states assumptions and uncertainty. Saved records are not created by default and require explicit user request and confirmation.]
+
+## Skill Version(s):
+
+4.3.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

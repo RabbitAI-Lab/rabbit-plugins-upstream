@@ -1,41 +1,54 @@
-## Description: <br>
-Chrome Use provides CLI-guided browser automation workflows for agents that need live web access, real Chrome sessions, web search, page interaction, screenshots, and specialized automation guides. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automates browser tasks in the user's real, logged-in Chrome and returns information from web pages.
 
-## Publisher: <br>
-[leeguooooo](https://clawhub.ai/user/leeguooooo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leeguooooo](https://clawhub.ai/user/leeguooooo)
 
-## Use Case: <br>
-Developers and AI-agent users use this skill to route live web, authenticated browser, QA, Electron, Slack, and cloud-browser tasks through the chrome-use CLI workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can direct an agent to control a real logged-in Chrome browser and interact with authenticated sites. <br>
-Mitigation: Require explicit confirmation before logins, form submissions, purchases, account changes, private-page scraping, Slack actions, or Electron app actions. <br>
-Risk: The skill installs and relies on remote CLI-provided workflow content. <br>
-Mitigation: Review the installer and CLI-provided skill content before use, and install only when broad browser automation authority is intended. <br>
+## Use Case:
 
+Developers and other users can use the skill to search, read, and verify live web pages, or carry out browser workflows such as form entry and web-app testing using an existing Chrome session.
 
-## Reference(s): <br>
-- [Chrome Use on ClawHub](https://clawhub.ai/leeguooooo/skills/chrome-use) <br>
-- [chrome-use install script](https://raw.githubusercontent.com/leeguooooo/chrome-use/main/install.sh) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown guidance with shell commands and routing tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill primarily tells the agent which chrome-use CLI guide or command to run; the CLI may control real logged-in browser sessions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: The skill recommends automatically running changeable installation scripts and provides updates that may affect other installed tools.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review and verify a fixed release before installing; limit updates to chrome-use unless you explicitly intend to update the wider tool family.
+
+Risk: Browser automation can access accounts available in the active Chrome profile and may perform consequential actions.
+
+Mitigation: Use a profile containing only accounts the agent should access, and explicitly authorize consequential account actions.
+
+## Reference(s):
+
+- [Chrome Use on ClawHub](https://clawhub.ai/leeguooooo/skills/chrome-use)
+- [Publisher profile](https://clawhub.ai/user/leeguooooo)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Browser-derived results]
+
+**Output Format:** [Natural-language instructions and text or structured results from browser tasks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results vary by task and may include extracted page content or screenshots.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

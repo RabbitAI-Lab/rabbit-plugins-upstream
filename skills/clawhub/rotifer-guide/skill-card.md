@@ -1,45 +1,50 @@
-## Description: <br>
-Interactive onboarding for Rotifer Protocol that helps users learn core concepts, scaffold Genes, diagnose issues, explore the ecosystem, and upgrade fidelity. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides developers through Rotifer onboarding, Gene scaffolding, troubleshooting, registry search, and fidelity upgrades.
 
-## Publisher: <br>
-[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[xiaoba-dev](https://clawhub.ai/user/xiaoba-dev)
 
-## Use Case: <br>
-Developers and external users use this skill as a Rotifer Protocol entry point for onboarding, natural-language Gene scaffolding, troubleshooting, ecosystem search, and fidelity migration guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad trigger wording can route unrelated Rotifer or Gene prompts into this skill. <br>
-Mitigation: Use explicit prompts that mention Rotifer or Genes, and confirm the user's intended sub-capability when intent is unclear. <br>
-Risk: Generated scaffolds or repair guidance can introduce incorrect Gene metadata, schemas, or commands. <br>
-Mitigation: Review generated scaffold plans and run Rotifer test and compile checks before publishing or submitting to Arena. <br>
-Risk: The skill suggests npm-based CLI and MCP commands that resolve packages at the latest version. <br>
-Mitigation: Pin npm package versions or Git tags before running install or build commands in sensitive environments. <br>
+## Use Case:
 
+Developers working with Rotifer use this skill to learn the workflow, create Genes, troubleshoot CLI or Gene issues, find existing Genes, and plan fidelity upgrades.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/xiaoba-dev/rotifer-guide) <br>
-- [Rotifer Protocol](https://rotifer.dev) <br>
-- [Rotifer Documentation](https://rotifer.dev/docs) <br>
-- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, shell commands, configuration] <br>
-**Output Format:** [Markdown guidance with inline shell commands, tables, and configuration snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include recommended Rotifer CLI commands, MCP configuration snippets, diagnostic tables, and scaffold plans.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: evidence.release.version and artifact clawhub.json) <br>
+Risk: Using Rotifer CLI or Web Studio workflows can install software, access project files, contact public services, or share descriptions and Gene source.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the pinned npm packages and proposed command effects; prefer the local CLI for private material, and confirm before using Web Studio or publishing content.
+
+## Reference(s):
+
+- [Rotifer Documentation](https://rotifer.dev/docs)
+- [Rotifer Protocol Specification](https://github.com/rotifer-protocol/rotifer-spec)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands, Code, Configuration]
+
+**Output Format:** [Markdown guidance with CLI commands and code or configuration examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Install, publish, and overwrite actions are proposed for approval; public/cloud sharing is identified where applicable.]
+
+## Skill Version(s):
+
+1.2.6 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

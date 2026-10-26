@@ -1,44 +1,56 @@
-## Description: <br>
-Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate realistic digital human broadcast videos from portrait images and audio/text using Jimeng OmniHuman 1.5.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External developers and agent users use this skill to generate digital human broadcast videos through the dLazy hosted Jimeng OmniHuman 1.5 API from supplied portrait images and audio or text prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The pinned CLI may upload selected local media, including during dry-run behavior identified by the security evidence. <br>
-Mitigation: Avoid dry-run with sensitive local images or audio unless the behavior is fixed or confirmed acceptable. <br>
-Risk: Saved API keys may not have the permission hardening claimed by the skill documentation. <br>
-Mitigation: Prefer DLAZY_API_KEY per invocation or manually restrict permissions on ~/.dlazy/config.json when saving a key. <br>
-Risk: Persistent global CLI installation increases exposure to package and update risks. <br>
-Mitigation: Prefer npx for one-off use when a persistent global CLI is not required. <br>
+## Use Case:
 
+External creators and developers use this skill to generate digital-human broadcast videos from a portrait image and audio or text with Jimeng OmniHuman 1.5.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-omnihuman-1-5) <br>
-- [dLazy homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Configuration instructions, Guidance] <br>
-**Output Format:** [Markdown guidance with bash examples and JSON CLI result examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [CLI responses may include generated media URLs or an async task identifier for later polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.4 (source: frontmatter and server release evidence) <br>
+Risk: Portraits, audio, and prompts are sent to dLazy for cloud processing, and generation can consume account credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only media you are comfortable uploading, review the service terms, and check the cost estimate before generation when appropriate.
+
+Risk: Logging in stores an organization API key in the local CLI configuration, including when using the on-demand CLI option.
+
+Mitigation: Protect the local configuration file, review the pinned CLI before installing or running it, and revoke or rotate the key if needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-jimeng-omnihuman-1-5)
+- [dLazy CLI repository (listed in skill documentation; provenance unavailable)](https://github.com/dlazy-ai/cli)
+- [dLazy CLI on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy service homepage](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Video, JSON, Shell commands, Guidance]
+
+**Output Format:** [Generated video asset URL in a JSON response; optionally downloaded as a local file.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports asynchronous generation; a portrait image and audio or text prompt are supplied as inputs.]
+
+## Skill Version(s):
+
+1.3.32 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

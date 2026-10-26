@@ -12,7 +12,7 @@
       "Excel/表格方案：转换脚本按匹配类型分 EXACT/PHRASE/BROAD 块；有方案源时勿压成一律 BROAD",
       "RSA 须同时写 DestinationUrl 与 Finalurl（后端必填 Finalurl；仅有 DestinationUrl 时 validate 可能仍通过）",
       "SITELINK 须写 AssetFieldType: SITELINK（与 typeV2 一致）",
-      "提交前：ad campaign-validate → 用户确认 → ad campaign-create（勿对 validate 加 --json-out）"
+      "提交前：ad campaign-validate → 写代码从 JSON 投影完整审查稿（见 google-ads-launch-plan-template.md）→ 用户确认 → ad campaign-create"
     ]
   },
 
@@ -52,9 +52,9 @@
     "excludedIpAddresses": [],
     "targetedLanguages": [{ "id": 1000 }],
     "targetedPlatforms": [
+      { "id": 30000, "bidModifier": 0 },
       { "id": 30001, "bidModifier": 0 },
-      { "id": 30002, "bidModifier": 0 },
-      { "id": 30000, "bidModifier": 0 }
+      { "id": 30002, "bidModifier": 0 }
     ],
 
     "adSchedules": [
@@ -158,7 +158,10 @@
               "Professional Grade Products",
               "Browse Best Sellers Now",
               "Reliable Supply Partner",
-              "Contact Us For Details"
+              "Contact Us For Details",
+              "Custom Orders Welcome",
+              "Competitive Factory Prices",
+              "Global Delivery Service"
             ],
             "adDescription": "Official products with certified quality. Contact us for pricing.",
             "adDescription2": "Trusted by partners worldwide. Request a quote or browse the catalog.",

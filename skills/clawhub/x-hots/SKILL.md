@@ -1,216 +1,72 @@
 ---
 name: x-hots
-version: 1.4.1
+version: 2.0.1
 description: Fetch trending topics from X (Twitter). Analyze user interests from natural language, retrieve top hot topics per domain, and summarize background, key opinions, and controversies.
 ---
 
 # X (Twitter) Hot Topics Fetcher
 
-Fetch real-time trending topics from X, filter by user interest domains, and analyze the background, popular opinions, and key controversies of each topic.
+Primary source = logged-in browser on x.com (full index, engagement-ranked Top search + Explore trending).
+Fallback = X API free-tier search, which **systematically misses viral tweets** (verified 2026-10-19: a 740K-view tweet was absent from `search_recent` results while low-engagement residue ranked top). Never use API search alone to claim what is "hot".
 
 ## Prerequisites
 
-### Dependencies
+### Browser source (primary; no credentials needed)
+- OpenClaw browser tool with a logged-in x.com session (session cookies persist in the managed browser profile).
+- Session check: `browser action=tabs`; reuse or open tab label `x-login` at `https://x.com/home`. Logged-in = title `(N) Home / X` plus timeline cards. Landing/login page = session expired → restore the session first (cookie import or the assisted-browser-login skill); do not fetch while logged out.
+- Cloudflare "Performing security verification" page: retry the same navigation up to 3 times (~5–10 s apart); it usually clears once `cf_clearance` is set. Still blocked after retries → go to fallback.
 
-- **Python 3.7+**
-- **tweepy** library
-
-Install tweepy:
-```bash
-pip3 install tweepy
-```
-
-### Environment Variables
-
-Only the **Bearer Token** is required. The script uses app-only (OAuth 2.0) auth, which is sufficient for the `search_recent_tweets` endpoint and has broader search access than OAuth 1.0a user credentials — so the consumer key/secret and access token/secret are not needed.
-
-```bash
-export X_BEARER_TOKEN="***"
-```
-
-Obtain this credential from the [X Developer Portal](https://developer.twitter.com/en/portal/dashboard).
-
-**Note**: The Free tier API has limitations:
-- Can only search tweets from the last 7 days
-- Rate limited to 10 requests per 15 minutes for search endpoints
-
-## When to Use
-
-When the user wants to know what's trending on X/Twitter, or asks about hot topics, public opinion, or viral discussions.
+### API fallback (credentials OPTIONAL)
+- `pip3 install tweepy` (only needed for fallback).
+- Env `X_BEARER_TOKEN` — **optional**: required only if the browser source fails and API fallback is desired. If unset and the browser fails, report both sources down; never present API-only output as the complete hot-topic picture.
 
 ## Workflow
 
-### Step 1: Analyze User Interest Domains
+### Step 1: Parse interest domains
+| Domain | Keywords |
+|---|---|
+| International Politics | politics, geopolitics, diplomacy, sanctions, war, NATO, UN |
+| Economy & Finance | economy, stock market, tariff, trade, inflation, crypto, bitcoin |
+| Technology | AI, LLM, GPT, tech, chip, semiconductor, Apple, Google, Microsoft |
+| Sports | football, World Cup, NBA, Olympics, FIFA |
+| Entertainment | movie, music, celebrity, Netflix, Disney |
+| Society | climate, health, education, protest, human rights |
 
-Extract interest domains from the user's natural language input. Common domains include:
+Rules: explicit domain → its keywords; specific topic → that topic's keywords; nothing identifiable → generic hot set via browser Top search (`trending OR breaking OR viral OR news`) plus Explore trending. Pick 2–3 keywords per domain.
 
-- **International Politics**: politics, geopolitics, diplomacy, sanctions, war, NATO, UN
-- **Economy & Finance**: economy, stock market, tariff, trade, inflation, crypto, bitcoin
-- **Technology**: AI, LLM, GPT, tech, chip, semiconductor, Apple, Google, Microsoft
-- **Sports**: football, World Cup, NBA, Olympics, FIFA
-- **Entertainment**: movie, music, celebrity, Netflix, Disney
-- **Society**: climate, health, education, protest, human rights
+### Step 2: Browser fetch (primary)
+**2a Today's trends:** navigate `https://x.com/explore/tabs/trending`, then evaluate:
+` () => Array.from(document.querySelectorAll('[data-testid="trend"]')).map(e => e.innerText.replace(/\n/g, ' | ')) `
 
-**Analysis Rules**:
-1. If the user explicitly mentions a domain (e.g., "what's hot in tech?"), use that domain's keywords directly
-2. If the user mentions a specific topic (e.g., "what's happening with AI?"), use that topic as the keyword
-3. If no specific domain can be identified, use the generic hot topics query (see "Generic Query" below)
-4. Select **2-3 core keywords** per domain to avoid excessive queries
+**2b Keyword Top search:** navigate `https://x.com/search?q=<urlencoded>&f=top`. Operators: `since:YYYY-MM-DD`, `until:`, `min_faves:N`, `min_retweets:N`, `lang:xx`, OR/parentheses. For "today/recent" asks default to `since:` = yesterday. Wait for `article[data-testid="tweet"]`, then evaluate:
+```js
+() => Array.from(document.querySelectorAll('article[data-testid="tweet"]')).slice(0, 10).map(a => {
+  const g = s => { const e = a.querySelector(s); return e ? (e.getAttribute('datetime') || e.getAttribute('href') || e.innerText.replace(/\s+/g, ' ').slice(0, 160)) : null; };
+  const labels = Array.from((a.querySelector('[role="group"]') || a).querySelectorAll('[aria-label]')).map(e => e.getAttribute('aria-label'));
+  return { who: g('[data-testid="User-Name"]'), when: g('time'), text: g('[data-testid="tweetText"]'), stats: labels.slice(0, 5), url: g('a[href*="/status/"]') };
+})
+```
+Stat aria-labels read: "N replies", "N reposts" (= RT + quotes), "N likes", "N views".
 
-### Step 2: Run the Script to Fetch Hot Tweets
+**2c Exact metrics for a known tweet:** open its status URL (same extraction), or API `GET /2/tweets/:id?tweet.fields=public_metrics` (per-ID metrics verified accurate vs web).
 
+### Step 3: Fallback — API search (only if Step 2 unavailable / blocked / empty)
+If `X_BEARER_TOKEN` is set:
 ```bash
-python3 scripts/x_hots.py '<json_queries>'
+cd <this skill dir> && python3 scripts/x_hots.py '["kw1", "kw2"]'
 ```
+Label such results as API-fallback in the answer (partial-index caveat). 429 → wait 15 min or skip fallback. Token unset → report the browser failure; do not fabricate.
 
-**Parameters**:
-- `json_queries`: JSON array of search keywords
-- Each keyword returns up to 10 related hot tweets
+### Step 4: Analyze and present
+Rank by engagement (likes + reposts + replies; views as tiebreak). Per topic give: 📌 Background (origin, timeline, key actors) · 💬 Popular opinions (supporters / opponents / neutral) · ⚔️ Key controversies (where stances diverge). Present as `## 🔥 [Domain] Hot Topics` with `### Topic N` blocks.
 
-**Examples**:
-```bash
-# Tech + Economy domains
-python3 scripts/x_hots.py '["AI", "LLM", "stock market", "tariff"]'
+## Pitfalls (verified 2026-10-19)
+- Web "reposts" = RT + QT; web "views" ≈ API `impression_count`.
+- v1.1 `verify_credentials` is deprecated (404); check login state via Home title/timeline instead.
+- Free-tier `search_recent`: partial index, relevancy-sorted, 7-day window, 10 req/15 min → returns low-engagement residue; cross-validated on France riots / stock market / AI.
+- CF challenge: retry navigation several times before concluding "blocked".
 
-# International politics
-python3 scripts/x_hots.py '["geopolitics", "diplomacy", "sanctions"]'
-
-# Generic hot topics (when no domain can be identified)
-python3 scripts/x_hots.py '["trending", "breaking", "viral"]'
-```
-
-**Output Format**:
-```json
-{
-  "success": true,
-  "timestamp": "2026-07-09T03:58:00Z",
-  "queries": ["AI", "LLM"],
-  "results": {
-    "AI": {
-      "success": true,
-      "count": 10,
-      "tweets": [
-        {
-          "id": "1234567890",
-          "text": "Tweet content...",
-          "created_at": "2026-07-09T03:50:00Z",
-          "metrics": {"like_count": 100, "retweet_count": 50},
-          "url": "https://twitter.com/twitter/status/1234567890"
-        }
-      ]
-    }
-  }
-}
-```
-
-### Step 3: Analyze and Present Results
-
-For each domain/keyword, analyze the returned tweets and extract:
-
-1. **Background**: The origin of the hot topic, timeline, key people/organizations involved
-2. **Popular Opinions**: What are the mainstream views? Core arguments from supporters and opponents
-3. **Key Controversies**: What is the focal point of the debate? Where do different stances diverge?
-
-**Presentation Format**:
-
-```markdown
-## 🔥 [Domain Name] Hot Topics
-
-### Topic 1: [Topic Title]
-
-**📌 Background**
-[Brief description of the event origin, timeline, key figures/organizations]
-
-**💬 Popular Opinions**
-- Supporters: [core argument]
-- Opponents: [core argument]
-- Neutral: [objective analysis]
-
-**⚔️ Key Controversies**
-[Focal point of the debate, divergence between different stances]
-
----
-
-### Topic 2: [Topic Title]
-...
-```
-
-## Generic Query (When No Domain Can Be Identified)
-
-When the user's input cannot be mapped to a specific domain (e.g., "what's hot on X?"), use the following strategy:
-
-1. Run the script with generic hot topic queries:
-   ```bash
-   python3 scripts/x_hots.py '["trending", "breaking", "viral", "news"]'
-   ```
-
-2. Identify the **Top 10 highest-engagement topics** from the returned tweets (based on likes, retweets, replies)
-
-3. Present them ranked by engagement, with a brief background for each topic
-
-## Examples
-
-### Example 1: User Mentions a Specific Domain
-
-**User input**: "What's hot in tech?"
-
-**Analysis**: Domain = Tech, Keywords = ["AI", "LLM", "tech"]
-
-**Execute**:
-```bash
-python3 scripts/x_hots.py '["AI", "LLM", "tech"]'
-```
-
-### Example 2: User Mentions a Specific Topic
-
-**User input**: "What's happening with tariff policy?"
-
-**Analysis**: Topic = Tariff, Keywords = ["tariff", "trade war", "tariff policy"]
-
-**Execute**:
-```bash
-python3 scripts/x_hots.py '["tariff", "trade war", "tariff policy"]'
-```
-
-### Example 3: No Domain Can Be Identified
-
-**User input**: "What's hot on X?"
-
-**Analysis**: No specific domain identified, use generic query
-
-**Execute**:
-```bash
-python3 scripts/x_hots.py '["trending", "breaking", "viral", "news"]'
-```
-
-## Notes
-
-1. **API Limits**: Free-tier API can only search tweets from the last 7 days
-2. **Language Filter**: Defaults to English tweets (`lang:en`); modify the script for other languages
-3. **Deduplication**: Script already filters out retweets (`-is:retweet`), only returns original tweets
-4. **Engagement Ranking**: Popularity is judged by likes, retweets, and replies combined
-5. **Timeliness**: Results are sorted by relevancy, prioritizing popular/high-engagement tweets
-
-## Error Handling
-
-### API Authentication Failure
-```json
-{"success": false, "error": "Missing environment variable: X_BEARER_TOKEN"}
-```
-**Fix**: Ensure the Bearer Token environment variable is set in your shell profile (e.g. `~/.zshrc`):
-```bash
-export X_BEARER_TOKEN="***"
-```
-Obtain the credential from the [X Developer Portal](https://developer.twitter.com/en/portal/dashboard).
-
-### No Results Found
-```json
-{"results": {"AI": {"success": true, "count": 0, "tweets": []}}}
-```
-**Action**: Inform the user that there are no hot topics in this domain currently; suggest trying different keywords
-
-### Rate Limit Exceeded
-```json
-{"success": false, "error": "429 Too Many Requests"}
-```
-**Action**: Wait 15 minutes before retrying, or reduce the number of query keywords
+## Error handling
+- Not logged in → restore session, retry once.
+- CF loop after 3 retries → Step 3.
+- Both sources down → state it explicitly with reasons; never serve stale or API-only data as complete.

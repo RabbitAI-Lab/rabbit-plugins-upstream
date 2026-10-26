@@ -1,42 +1,59 @@
-## Description: <br>
-Fundamental Attribution Error helps an agent audit blame-oriented explanations by balancing dispositional judgments with situational alternatives before making or advising on decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A coaching and analysis skill that helps agents test explanations of other people's behavior for fundamental attribution error by weighing situational and dispositional causes.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to examine performance reviews, post-mortems, churn explanations, interpersonal conflicts, and user-behavior analysis for attribution bias. It guides the agent to produce a balanced FAE audit with situational alternatives, actor-observer checks, intervention implications, and a re-evaluation point. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may influence how an agent frames blame, accountability, performance reviews, post-mortems, or customer explanations. <br>
-Mitigation: Use its output as decision support, preserve accountability for controllable behavior, and review the balanced attribution before relying on it for consequential people or business decisions. <br>
+## Use Case:
 
+Employees and teams use this skill to examine judgments in performance reviews, customer churn, postmortems, product use, and interpersonal conflict. It guides users through situational alternatives and a balanced attribution audit before decisions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/fundamental-attribution-error) <br>
-- [deciqAI Fundamental Attribution Error](https://www.deciqai.com/c/fundamental-attribution-error) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/fundamental-attribution-error.json) <br>
-- [Primary sources](references/sources.md) <br>
-- [Jones-Harris 1967 Castro Study + Ross 1977 Synthesis + Modern Applications](examples/jones-harris-1967-castro-study-ross-1977-synthesis-modern-applications.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Analysis, Guidance] <br>
-**Output Format:** [Markdown guidance with a structured FAE Audit template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces step-by-step coaching prompts when the user needs guidance and a balanced attribution audit when a concrete judgment is supplied.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Situational analysis could be used to excuse behavior or avoid accountability.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the audit alongside evidence and responsibility boundaries; the skill excludes cases where situational framing is being used to avoid accountability.
+
+Risk: Real examples may expose personal details.
+
+Mitigation: Anonymize personal details when adding real examples to the documentation.
+
+Risk: An attribution audit could be mistaken for a definitive judgment.
+
+Mitigation: Treat the skill as a reasoning aid and verify important judgments.
+
+## Reference(s):
+
+- [Sources](references/sources.md)
+- [Method in Action example](examples/jones-harris-1967-castro-study-ross-1977-synthesis-modern-applications.md)
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/fundamental-attribution-error)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Markdown with a structured FAE Audit template]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can guide users one step at a time or analyze a specific judgment.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

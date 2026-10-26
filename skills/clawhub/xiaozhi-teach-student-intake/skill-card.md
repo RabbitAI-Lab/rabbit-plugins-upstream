@@ -1,52 +1,61 @@
-## Description: <br>
-帮助独立教师把试听体验组织为系统化诊断、学员建档、试听记录、转化判断和后续跟进流程。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides teachers through consent-first learner intake, diagnostic trial lessons, and minimal student-profile creation.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External independent teachers use this skill to collect minimal student intake information, guide parent or student needs interviews, plan diagnostic trial lessons, record observations, and prepare formal student profiles. It also helps the teacher draft follow-up timing and wording for conversion, renewal, or attrition cases while keeping teacher confirmation in the loop. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill handles student and minor intake records, which may include identifiable or sensitive information. <br>
-Mitigation: Require guardian consent for identifiable minor data, prefer pseudonyms, and avoid writing real names or contacts into shared dashboards unless strictly necessary. <br>
-Risk: Security evidence notes ambiguity about whether risk labels are stored or only derived. <br>
-Mitigation: Decide before use whether risk markers may be stored or must remain derived-only, and document that choice in the shared workspace policy. <br>
-Risk: Follow-up wording could be mistaken for automatic outreach or pressure to convert. <br>
-Mitigation: Keep all follow-up messages as teacher-reviewed suggestions and require teacher confirmation before any communication is sent. <br>
+## Use Case:
 
+Independent teachers and tutors use this skill to interview families, assess fit through a diagnostic trial lesson, and create a minimal learner profile. It is limited to intake and profile creation; teachers review learner-facing drafts before use.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-student-intake) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Intake interview guide](artifact/references/intake-interview-guide.md) <br>
-- [Student basic information form](artifact/references/student-basic-info-form.md) <br>
-- [Needs interview 5W checklist](artifact/references/needs-interview-5w-checklist.md) <br>
-- [Needs profile card](artifact/references/needs-profile-card.md) <br>
-- [Diagnosis card template](artifact/references/diagnosis-card-template.md) <br>
-- [Trial lesson 5-segment structure](artifact/references/trial-lesson-5-segment-structure.md) <br>
-- [Trial observation record](artifact/references/trial-observation-record.md) <br>
-- [Follow-up scripts for three stages](artifact/references/followup-scripts-three-stages.md) <br>
-- [Formal student profile template](artifact/references/formal-student-profile-template.md) <br>
+### Deployment Geography for Use:
 
+China; localize crisis contacts and confirm applicable local training rules.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown guidance, structured templates, and workspace field guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include student intake templates, interview questions, diagnostic lesson structure, observation notes, follow-up wording, and profile fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Learner records involve minors and personal learning information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use aliases, obtain guardian consent before creating records, and keep sharing optional.
+
+Risk: Initial lesson-package balances may be recorded incorrectly.
+
+Mitigation: Review the starting lesson balance before confirming any write.
+
+Risk: Instructions conflict about retaining single-trial observations.
+
+Mitigation: Ask the publisher to reconcile the conflicting retention guidance before saving those observations.
+
+## Reference(s):
+
+- [5W Needs Interview Checklist](references/needs-interview-5w-checklist.md)
+- [Trial Observation Record](references/trial-observation-record.md)
+- [Formal Student Profile Template](references/formal-student-profile-template.md)
+- [Crisis Exception Guidance](shared/crisis-exception.md)
+- [Off-Campus Training Guidance](shared/off-campus-training.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown, JSON]
+
+**Output Format:** [Markdown, plain text, and structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Teacher-reviewed drafts and minimal learner records; contact details are excluded.]
+
+## Skill Version(s):
+
+2.12.0 (source: frontmatter, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

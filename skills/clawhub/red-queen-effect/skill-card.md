@@ -1,43 +1,53 @@
-## Description: <br>
-Red Queen Effect helps agents diagnose competitive arms races where continuous improvement preserves relative position instead of creating durable advantage. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams diagnose competitive races where continuous improvement preserves relative position, then assess ways to change the game or exit.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Strategy operators, founders, and analysts use this skill to evaluate industries or initiatives where competitors keep matching improvements, margins stay thin, and the decision may be to run faster, change tracks, or exit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may include sensitive competitive or company failure patterns when applying the diagnostic. <br>
-Mitigation: Avoid pasting confidential strategy details into shared or published copies of the skill outputs. <br>
-Risk: Business examples and recommendations may be used as guidance without current market validation. <br>
-Mitigation: Treat outputs as decision support and validate recommendations against current company and market evidence before acting. <br>
+## Use Case:
 
+External business leaders and strategy teams use the skill to assess whether competitors are improving without creating durable advantage. It guides them through imitation speed, escape options, race-versus-escape costs, and a run-faster, change-tracks, or exit recommendation.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/red-queen-effect) <br>
-- [Red Queen Effect](https://www.deciqai.com/c/red-queen-effect) <br>
-- [Red Queen Effect Metadata](https://www.deciqai.com/s/red-queen-effect.json) <br>
-- [Primary Sources](references/sources.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnosis with a structured recommendation template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask stepwise questions in coaching mode before producing the diagnosis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Notes from real sessions may expose confidential company details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep confidential details out of reusable notes; approve additions and use generalized, anonymized wording.
+
+## Reference(s):
+
+- [Primary sources](artifact/references/sources.md)
+- [Van Valen and Intel vs. AMD case study](artifact/examples/van-valen-1973-intel-vs-amd-1990-2010.md)
+- [Frontier AI training race case study](artifact/examples/frontier-ai-labs-training-race-2023-2026.md)
+- [Red Queen Effect skill page](https://www.deciqai.com/c/red-queen-effect)
+- [Machine-readable skill information](https://www.deciqai.com/s/red-queen-effect.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Conversational text or a Markdown diagnostic with an escape-vector comparison and recommendation]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapts between guided, one-question-at-a-time coaching and direct analysis of a specific competitive situation.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

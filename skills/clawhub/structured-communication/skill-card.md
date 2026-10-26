@@ -1,46 +1,51 @@
-## Description: <br>
-Helps agents diagnose communication goals and produce structured blueprints for persuasion, coaching, explanation, argumentation, and praise. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps an agent structure persuasion, coaching, explanation, logical argument, and praise using a goal-matched communication model.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, managers, founders, and agents use this skill to plan high-stakes professional communication, diagnose why a message failed, choose an appropriate communication model, and produce a concrete Communication Blueprint before speaking or writing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive personal or business details could be retained if users paste them into saved examples. <br>
-Mitigation: Avoid adding sensitive details to saved examples unless retention is intended. <br>
-Risk: The framework can be misapplied when the situation requires listening, emergency communication, or more factual grounding. <br>
-Mitigation: Use the skill's fit check and stop-rule before drafting; pause when concrete slot content is missing. <br>
+## Use Case:
 
+Employees and external professionals use this skill to plan high-stakes workplace messages, coaching conversations, feedback, proposals, and praise by choosing a suitable structure and filling it with concrete details.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/structured-communication) <br>
-- [deciqAI Structured Communication Page](https://www.deciqai.com/c/structured-communication) <br>
-- [Structured Communication Sources](artifact/references/sources.md) <br>
-- [Lincoln Cooper Union Example](artifact/examples/lincolns-cooper-union-address-1860.md) <br>
-- [Aristotle Rhetoric](https://classics.mit.edu/Aristotle/rhetoric.1.i.html) <br>
-- [GROW Model](https://www.performanceconsultants.com/grow-model) <br>
-- [Lincoln Cooper Institute Address](https://www.abrahamlincolnonline.org/lincoln/speeches/cooper.htm) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown communication blueprint with selected model, filled slots, resistance handling, arc check, and rehearsal notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only guidance; no executable behavior, credential access, or hidden data handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server-resolved release metadata) <br>
+Risk: Reusable communication examples may expose confidential conversation details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Anonymize examples and remove identifying or sensitive details before reusing them.
+
+## Reference(s):
+
+- [Aristotle, Rhetoric](https://classics.mit.edu/Aristotle/rhetoric.1.i.html)
+- [Whitmore, GROW model](https://www.performanceconsultants.com/grow-model)
+- [Lincoln, Address at Cooper Institute (1860)](https://www.abrahamlincolnonline.org/lincoln/speeches/cooper.htm)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Structured communication blueprint or step-by-step coaching prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a selected model, concrete slot content, likely resistance, an emotional arc check, and rehearsal notes.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
