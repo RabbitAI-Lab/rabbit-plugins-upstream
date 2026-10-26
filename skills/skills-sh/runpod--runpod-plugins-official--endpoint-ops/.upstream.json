@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/runpod/runpod-plugins-official/endpoint-ops",
+  "repo": "runpod/runpod-plugins-official",
+  "skillId": "endpoint-ops",
+  "branch": "main",
+  "pushedAt": "2026-10-23T19:04:32Z",
+  "contentHash": "be1825e269eb8b6668b4c683cd00eb704567ac42db78df4153d821315324aa1a",
+  "fetchedAt": "2026-10-26T14:24:06.572Z"
+}

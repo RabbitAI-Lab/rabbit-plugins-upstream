@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/vercel-deploy",
+  "repo": "openai/skills",
+  "skillId": "vercel-deploy",
+  "branch": "main",
+  "pushedAt": "2026-09-08T20:35:26Z",
+  "contentHash": "9198d3275c912c48464370df1e70739cf750dbd951a92b12b3631ee261f9fc56",
+  "fetchedAt": "2026-10-26T14:24:12.224Z"
+}
