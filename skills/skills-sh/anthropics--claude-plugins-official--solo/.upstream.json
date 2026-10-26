@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/anthropics/claude-plugins-official/solo",
+  "repo": "anthropics/claude-plugins-official",
+  "skillId": "solo",
+  "branch": "main",
+  "pushedAt": "2026-10-26T07:52:27Z",
+  "contentHash": "3552c4ef8a7ab1de3fe7dc394b3a520a94c2142555a3ae8c6060227359aa9584",
+  "fetchedAt": "2026-10-26T14:24:04.546Z"
+}

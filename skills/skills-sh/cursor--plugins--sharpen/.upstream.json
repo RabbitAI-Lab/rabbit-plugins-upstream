@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/sharpen",
+  "repo": "cursor/plugins",
+  "skillId": "sharpen",
+  "branch": "main",
+  "pushedAt": "2026-10-26T14:01:16Z",
+  "contentHash": "06d7cc1950d1a9ac9a04405bc08a1e06bdaa6d415b1540a80ddf47e34cef8b28",
+  "fetchedAt": "2026-10-26T14:22:22.379Z"
+}
