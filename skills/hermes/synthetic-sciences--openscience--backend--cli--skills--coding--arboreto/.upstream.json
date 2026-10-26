@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/coding/arboreto",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/coding/arboreto",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/coding/arboreto",
+  "branch": "main",
+  "pushedAt": "2026-10-26T05:20:56Z",
+  "contentHash": "c106c1f9b06e542b291c4d88b13c469aded721aad34fb006d812074b8cbc6dbb",
+  "fetchedAt": "2026-10-26T14:22:16.254Z"
+}

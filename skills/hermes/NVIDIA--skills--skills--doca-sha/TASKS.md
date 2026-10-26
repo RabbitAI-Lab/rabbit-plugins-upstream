@@ -15,7 +15,7 @@ policy, see [CAPABILITIES.md](CAPABILITIES.md). For the cross-library
 DOCA patterns layered under everything below (the universal
 lifecycle, the cross-library `DOCA_ERROR_*` taxonomy, the
 modify-a-shipped-sample workflow), see
-[`doca-programming-guide`](../../doca-programming-guide/SKILL.md).
+`doca-programming-guide/SKILL.md`.
 
 Each verb below describes the **shape of the workflow**, not a
 copy-paste recipe. The agent's job is to walk the user through the
@@ -31,7 +31,7 @@ sizes the user actually intends to use.
 Steps the agent should walk the user through:
 
 1. **Confirm the installed DOCA version.** Use the procedure in
-   [`doca-version TASKS.md ## configure`](../../doca-version/TASKS.md#configure).
+   `doca-version TASKS.md ## configure` (`doca-version/TASKS.md#configure`).
    Quote the version observed (`pkg-config --modversion doca-sha`,
    then `doca_caps --version`); do not assume "latest".
 2. **Discover the device capability surface for SHA.** Run
@@ -73,16 +73,18 @@ Steps the agent should walk the user through:
    matrix in [CAPABILITIES.md ## Safety policy](CAPABILITIES.md#safety-policy).
 6. **Sanity check before any task submission.** Confirm with the
    user: which algorithm, which task type, source-buffer size, and
-   destination-buffer size. Hash a known input (a published NIST
-   SHA test vector) and verify the digest matches before any user
-   data flows. If any step fails with a `DOCA_ERROR_*`, route
+   destination-buffer size. Select a published NIST SHA test vector
+   and record its expected digest; the actual hash and comparison
+   happen after the binary is built, in [`## run`](#run) step 2 and
+   [`## test`](#test) step 3, before any user data flows. If any
+   step fails with a `DOCA_ERROR_*`, route
    through the error taxonomy in
    [CAPABILITIES.md ## Error taxonomy](CAPABILITIES.md#error-taxonomy)
    before retrying.
 
 For the canonical DOCA universal lifecycle that underlies steps 4-6,
 see
-[`doca-programming-guide TASKS.md ## configure`](../../doca-programming-guide/TASKS.md#configure).
+`doca-programming-guide TASKS.md ## configure` (`doca-programming-guide/TASKS.md#configure`).
 This skill adds the SHA overlay; do not re-explain the lifecycle
 here.
 
@@ -94,7 +96,7 @@ installed DOCA, using the canonical cross-library build pattern.
 The build pattern for any DOCA C/C++ consumer is **identical**
 across libraries — `pkg-config` for include + link flags, meson or
 CMake as the build system — and is fully documented in
-[`doca-programming-guide TASKS.md ## build`](../../doca-programming-guide/TASKS.md#build).
+`doca-programming-guide TASKS.md ## build` (`doca-programming-guide/TASKS.md#build`).
 This skill carries only the SHA-specific overlay:
 
 | Slot | Value for SHA | Why it matters |
@@ -116,7 +118,7 @@ point and apply a minimum-diff modification to express the user's
 intent.
 
 The universal modify-a-shipped-sample workflow lives in
-[`doca-programming-guide TASKS.md ## modify`](../../doca-programming-guide/TASKS.md#modify).
+`doca-programming-guide TASKS.md ## modify` (`doca-programming-guide/TASKS.md#modify`).
 Use it as-is. The SHA-specific overlay is the *modify-from-sample
 schema fill* — the five slots the agent must elicit from the user
 before recommending any code-level edit:
@@ -154,7 +156,7 @@ Steps the agent should walk the user through:
    the cheapest correctness signal. Do not bulk-hash before this
    passes.
 3. **Capture the structured log.** Set `DOCA_LOG_LEVEL=trace` for
-   the first run (see [`doca-debug CAPABILITIES.md ## Observability`](../../doca-debug/CAPABILITIES.md#observability)).
+   the first run (see `doca-debug CAPABILITIES.md ## Observability` (`doca-debug/CAPABILITIES.md#observability`)).
    This is the cheapest way to make the lifecycle and task-submit
    transitions visible on first failure.
 4. **Capture the completion events on the PE.** A run that produces
@@ -171,7 +173,7 @@ and that the algorithm and buffer sizing were right.
 > **Performance harness routing.** For *throughput / latency
 > measurement* on the configured SHA context (or for cross-library
 > comparison against the other DOCA crypto primitives), route the
-> user to [`doca-bench TASKS.md ## test`](../../tools/doca-bench/TASKS.md#test)
+> user to `doca-bench TASKS.md ## test` (`doca-bench/TASKS.md#test`)
 > — `doca-bench` is the cross-library performance harness with
 > documented warm-up / steady-state / outlier semantics, and it
 > explicitly supports SHA. The iteration loop below stays the
@@ -192,10 +194,12 @@ Iteration shape:
    (and `_task_partial_hash_get_supported(devinfo, algorithm)`),
    `doca_sha_cap_get_min_dst_buf_size`, and
    `doca_sha_cap_get_max_src_buf_size` against
-   the active `doca_devinfo`. If any return false / unexpected →
-   that's the answer; the user's device or DOCA version does not
-   support the requested config. Update the intent or update the
-   install.
+   the active `doca_devinfo`. If either task-support query returns
+   anything other than `DOCA_SUCCESS`, that's the answer: the
+   user's device or DOCA version does not support the requested
+   config. If either buffer-size query fails, route its
+   `doca_error_t` through the error taxonomy before changing the
+   intent or install.
 2. **Permission cross-check.** Compare the configured source +
    destination mmap permissions against the matrix in
    [CAPABILITIES.md ## Safety policy](CAPABILITIES.md#safety-policy).
@@ -234,17 +238,26 @@ Eval-loop overlay — why this is a loop, not a one-shot pass:
 
 | Iteration trigger | What it looks like | What changes next iteration |
 | --- | --- | --- |
-| `DOCA_ERROR_NOT_SUPPORTED` on an algorithm we expected to work | The doc page lists the algorithm but the cap query returns false | The agent quoted the *library* surface; the *device* capability per `doca_devinfo` is the real gate. Re-narrow to the device-level query. |
+| `DOCA_ERROR_NOT_SUPPORTED` on an algorithm we expected to work | The doc page lists the algorithm but the cap query returns something other than `DOCA_SUCCESS` | The agent quoted the *library* surface; the *device* capability per `doca_devinfo` is the real gate. Re-narrow to the device-level query. |
 | `DOCA_ERROR_INVALID_VALUE` on first submit | Destination buffer is smaller than `_get_min_dst_buf_size`, OR source buffer is larger than `_get_max_src_buf_size` | Re-size the buffer using the cap-query output. The error is sizing-vs-cap mismatch, not corruption. |
 | Known-vector smoke produces a wrong digest | Configuration accepted but output mismatches the published vector | Algorithm mis-selection (asked for SHA-256, configured SHA-1) or endianness assumption in the comparison. Re-check the algorithm enum in the `_alloc_init` call before any other diagnosis. |
 | Submitted task produces no completion | `doca_task_submit()` returned `DOCA_SUCCESS`; the PE produces nothing | The PE is not being progressed. Add a `doca_pe_progress()` call in the main loop. |
 | Partial-hash misbehaves when finalized on the first buffer | The task was marked final before any intermediate chunk was submitted | This is **undefined behavior**, not a defined `DOCA_ERROR_*` — if a single buffer is all you have, use a non-partial `doca_sha_task_hash` instead; otherwise submit (and complete) at least one intermediate chunk before marking the task final. |
 | Bulk submit returns `DOCA_ERROR_AGAIN` | First N submissions succeed, then `AGAIN` | The task queue is full. Drain completions between bursts via `doca_pe_progress()`, or raise the configured queue depth at configure time. |
 
-Loop termination: stop iterating once two consecutive iterations of
-the same kind do not change anything — that means the cause is
-below DOCA SHA. Escalate to
-[`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug)
+Loop terms are exact: an iteration's **kind** is the `Iteration
+trigger` row selected above; its **prescribed change** is that row's
+`What changes next iteration` action; and its **evidence** is the
+cap-query snapshot, submit / completion result, and digest comparison
+captured before and after that change. The outcome is **resolved**
+when the named smoke turns green, **shape-changed** when the re-run
+selects a different trigger row or materially changes that evidence,
+and **unchanged** when the prescribed change was applied but the
+re-run selects the same trigger row with the same outcome and
+materially unchanged evidence. The baseline occurrence and that
+post-change re-run are the two consecutive iterations; on
+`unchanged`, stop and escalate to
+`doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`)
 with the captured cap-query snapshot + known-vector diff as
 evidence.
 
@@ -255,7 +268,7 @@ produces no completion event), narrow the cause to a specific layer
 and act on it.
 
 The cross-library debug ladder lives in
-[`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug).
+`doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`).
 Walk through it in order — install → version → build → link →
 runtime → program → driver — *before* recommending SHA-specific
 fixes. This skill's overlay names the SHA-specific manifestation at
@@ -285,8 +298,9 @@ layers 5 (runtime) and 6 (program):
   `doca_sha_cap_get_max_src_buf_size(devinfo)`; the fix there is
   to switch to `doca_sha_task_partial_hash`.
 - Algorithm enum drift: an `_alloc_init` call that quotes a
-  `DOCA_SHA_ALGORITHM_*` enum the cap query returns false for
-  returns `DOCA_ERROR_NOT_SUPPORTED`. Re-run the cap query against
+  `DOCA_SHA_ALGORITHM_*` enum for which the cap query returns
+  something other than `DOCA_SUCCESS` returns
+  `DOCA_ERROR_NOT_SUPPORTED`. Re-run the cap query against
   the active `doca_devinfo`; do not assume from prior installs.
 - Partial-hash ordering: marking a `doca_sha_task_partial_hash`
   task final on the first buffer (before any intermediate submit)
@@ -304,12 +318,12 @@ layers 5 (runtime) and 6 (program):
 
 Once the layer is identified, route to the matching debug verb on
 the matching skill: install / build / link / driver to
-[`doca-setup ## debug`](../../doca-setup/TASKS.md#debug); version to
-[`doca-version ## debug`](../../doca-version/TASKS.md#debug);
+`doca-setup ## debug` (`doca-setup/TASKS.md#debug`); version to
+`doca-version ## debug` (`doca-version/TASKS.md#debug`);
 cross-cutting runtime to
-[`doca-debug ## debug`](../../doca-debug/TASKS.md#debug);
+`doca-debug ## debug` (`doca-debug/TASKS.md#debug`);
 program-layer Core-context patterns to
-[`doca-programming-guide TASKS.md ## debug`](../../doca-programming-guide/TASKS.md#debug).
+`doca-programming-guide TASKS.md ## debug` (`doca-programming-guide/TASKS.md#debug`).
 
 ## Deferred task verbs
 
@@ -319,9 +333,9 @@ the agent does not invent guidance:
 
 - **install.** Installing DOCA, choosing packages, post-install
   verification, `pkg-config` wiring — defer to
-  [`doca-setup`](../../doca-setup/SKILL.md) and to the install-tree
+  `doca-setup/SKILL.md` and to the install-tree
   layout in
-  [doca-public-knowledge-map ## Layout of an installed DOCA package](../../doca-public-knowledge-map/SKILL.md#layout-of-an-installed-doca-package).
+  doca-public-knowledge-map ## Layout of an installed DOCA package (`doca-public-knowledge-map/SKILL.md#layout-of-an-installed-doca-package`).
   This skill assumes DOCA is already installed.
 - **deploy.** Deploying SHA-using applications at scale (file
   integrity workers across many hosts, content-addressed storage
@@ -339,7 +353,7 @@ the agent does not invent guidance:
   the underlying ConnectX firmware and BlueField BFB; if the debug
   ladder lands on a driver-layer issue, the fix is via `mlxconfig`
   / `mlxfwreset` / re-imaging the BFB, all of which belong to
-  [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug) layer 5.
+  `doca-setup ## debug` (`doca-setup/TASKS.md#debug`) layer 5.
 
 ## Command appendix
 
@@ -351,7 +365,7 @@ noted. Rows that need elevated privileges call that out explicitly.
 
 **Infra-aware preamble (every row below).** Per the bundle's
 detect → prefer → fall back → report contract documented in
-[`doca-structured-tools-contract ## The agent behavior contract`](../../doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract),
+`doca-structured-tools-contract ## The agent behavior contract` (`doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract`),
 the agent should:
 
 1. Probe for the matching structured helper FIRST (`doca-env --json`
@@ -365,14 +379,14 @@ the agent should:
 3. If the probe fails, fall back to the manual command in the row.
    Report *"falling back to manual chain"*.
 4. The schemas the structured tools emit are defined in
-   [`doca-structured-tools-contract ## Schemas`](../../doca-structured-tools-contract/SKILL.md#schemas);
+   `doca-structured-tools-contract ## Schemas` (`doca-structured-tools-contract/SKILL.md#schemas`);
    the version-handling semantics (four-way match, NGC,
    headers-win) are owned by
-   [`doca-version`](../../doca-version/SKILL.md).
+   `doca-version/SKILL.md`.
 
 | Command (worked example) | Owning step | Class of question it answers | What healthy output looks like |
 | --- | --- | --- | --- |
-| `pkg-config --modversion doca-sha` | `## configure` step 1; `## build` slot 4 | What is the build-time DOCA SHA version? | A semver string matching `doca_caps --version`. Disagreement = partial install (route to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug) layer 2) |
+| `pkg-config --modversion doca-sha` | `## configure` step 1; `## build` slot 4 | What is the build-time DOCA SHA version? | A semver string matching `doca_caps --version`. Disagreement = partial install (route to `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`) layer 2) |
 | `pkg-config --cflags --libs doca-sha` | `## build` | What include + link flags does the linker need? | Trust whatever `pkg-config --cflags --libs` produces on this install. Do not hardcode either the `-I` include path or the `-l<name>` flag form — both can drift between DOCA install profiles and DOCA majors; the on-disk `.so` basenames use underscores on every release where we have ground truth, while the `.pc` package names use hyphens, and `pkg-config` is the only thing that resolves both correctly. Hand-crafted `-l` lines silently break when DOCA upgrades. |
 | `doca_caps --list-devs` | `## configure` step 2 | Which devices on this host can be used as a `doca_dev` for SHA? | One row per visible device with PCIe address and capability flags; the agent must still run `doca_sha_cap_*` per-device to confirm algorithm support |
 | `doca_caps --version` | `## configure` step 1; `## test` step 1 | What is the *runtime* DOCA version on this host? | A semver string matching `pkg-config --modversion doca-sha` |
@@ -380,11 +394,11 @@ the agent should:
 | `ls /opt/mellanox/doca/applications/` (then locate the File Integrity reference app) | `## modify` slot 1 | Is the File Integrity reference application present as a fuller worked example? | A directory whose contents include a SHA-based file-integrity flow |
 | `cat /opt/mellanox/doca/applications/VERSION` | `## configure` step 1; `## debug` layer 1 | What does the install tree itself claim its version is? | A semver string matching the other two version sources |
 | `openssl dgst -sha256 <(printf 'abc')` | `## test` step 3 | What is the CPU-reference digest for the known-vector smoke? | The well-known SHA-256 digest of `"abc"`; compare byte-for-byte against the doca-sha output |
-| `dmesg | tail -n 40` (sudo) | `## debug` layer 7 | What did the kernel / driver log around the last SHA call? | Empty or recent benign messages. Repeated mlx5 / accelerator errors → driver-layer bug; route to [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug) |
+| `dmesg | tail -n 40` (sudo) | `## debug` layer 7 | What did the kernel / driver log around the last SHA call? | Empty or recent benign messages. Repeated mlx5 / accelerator errors → driver-layer bug; route to `doca-setup ## debug` (`doca-setup/TASKS.md#debug`) |
 | `DOCA_LOG_LEVEL=trace ./<binary>` | `## run` step 3 | What did the structured DOCA logger emit for the first failing call? | A trace-level line on every lifecycle transition and every task submission. Silence after submission = PE not progressed |
 
 For commands shared across libraries (`pkg-config --modversion`,
 `doca_caps`, `cat /opt/mellanox/doca/applications/VERSION`,
 `DOCA_LOG_LEVEL`) the cross-library overlay is in
-[`doca-debug TASKS.md ## Command appendix`](../../doca-debug/TASKS.md#command-appendix);
+`doca-debug TASKS.md ## Command appendix` (`doca-debug/TASKS.md#command-appendix`);
 this table adds the SHA-specific rows on top.

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/ovnewton-usage",
+  "identifier": "NVIDIA/skills/skills/ovnewton-usage",
+  "repo": "NVIDIA/skills",
+  "path": "skills/ovnewton-usage",
+  "branch": "main",
+  "pushedAt": "2026-10-26T13:57:48Z",
+  "contentHash": "76235cf8532a19a16d75f72572feba94bbcc405f837c17f65ca06ca24b7bb8d2",
+  "fetchedAt": "2026-10-26T14:22:14.910Z"
+}

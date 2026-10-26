@@ -1,5 +1,5 @@
 ## Description: <br>
-Use this skill when the user is doing hands-on DOCA Telemetry Exporter programming on a host where DOCA is installed — defining schemas, creating sources, picking counter/gauge/event types, running capability queries, registering schemas before the first emit, or debugging DOCA_ERROR_* failures from the exporter API. <br>
+Guides hands-on DOCA Telemetry Exporter programming on a host where DOCA is installed — defining schemas and event types, creating sources, picking a publish surface (typed or opaque events, the metrics counter/gauge/histogram API, OTLP logs, or NetFlow), walking the schema-then-source lifecycle, and debugging DOCA_ERROR_* failures from the exporter API. <br>
 
 This skill is ready for commercial/non-commercial use. <br>
 
@@ -9,14 +9,14 @@ NVIDIA <br>
 ### License/Terms of Use: <br>
 Apache 2.0 AND CC-BY-4.0 <br>
 ## Use Case: <br>
-External developers building applications that emit structured telemetry (counters, gauges, events) through the DOCA Telemetry Exporter C library on hosts with DOCA SDK and BlueField DPU or ConnectX NIC hardware. <br>
+External developers building DOCA applications (in C/C++ or via FFI/bindings from other languages) use this skill to publish structured telemetry — counters, gauges, and events — from their DOCA-using program to an external telemetry consumer through DOCA Telemetry Exporter. <br>
 
 ### Deployment Geography for Use: <br>
 Global <br>
 
 ## Requirements / Dependencies: <br>
-**Requires API Key or External Credential:** [No] <br>
-**Credential Type(s):** [None] <br>
+**Requires API Key or External Credential:** [Not Specified] <br>
+**Credential Type(s):** [None identified] <br>
 
 Do not include secrets in prompts/logs/output; use least-privilege credentials; rotate keys as appropriate. <br>
 
@@ -25,56 +25,58 @@ Risk: Review before execution as proposals could introduce incorrect or misleadi
 Mitigation: Review and scan skill before deployment. <br>
 
 ## Reference(s): <br>
-- [DOCA Telemetry Exporter Programming Guide](https://docs.nvidia.com/doca/sdk/DOCA-Telemetry-Exporter/index.html) <br>
-- [DOCA SDK Documentation](https://docs.nvidia.com/doca/sdk/index.html) <br>
-- [DOCA Samples (GitHub)](https://github.com/NVIDIA-DOCA/doca-samples) <br>
+- [DOCA Telemetry Exporter — public guide](https://docs.nvidia.com/doca/sdk/DOCA-Telemetry-Exporter/index.html) <br>
+- [DOCA SDK documentation](https://docs.nvidia.com/doca/sdk/index.html) <br>
+- [DOCA samples and applications](https://github.com/NVIDIA-DOCA/doca-samples) <br>
+- [CAPABILITIES.md](CAPABILITIES.md) <br>
+- [TASKS.md](TASKS.md) <br>
 
 
 ## Skill Output: <br>
-**Output Type(s):** [Code, Shell commands, Configuration instructions, Analysis] <br>
-**Output Format:** [Markdown with inline bash code blocks] <br>
+**Output Type(s):** [Analysis, Shell commands, Configuration instructions, Code] <br>
+**Output Format:** [Markdown with inline code blocks] <br>
 **Output Parameters:** [1D] <br>
 **Other Properties Related to Output:** [None] <br>
 
 ## Evaluation Agents Used: <br>
-- Claude Code (`claude-code`) <br>
-- Codex (`codex`) <br>
+- Claude Code (`aws/anthropic/bedrock-claude-opus-5-5`) <br>
+- Codex (`openai/openai/gpt-6.1-sol`) <br>
 
 
 
 ## Evaluation Tasks: <br>
-8 evaluation tasks from NVSkills-Eval Tier 3, external profile, evaluated in astra-sandbox environment with 1 attempt per task and 50% pass threshold. <br>
+4 evaluation tasks (3 positive, 1 negative), one attempt per task, each run in an isolated sandbox pod. <br>
 
 ## Evaluation Metrics Used: <br>
 Reported benchmark dimensions: <br>
-- Security: Checks whether skill-assisted execution avoids unsafe behavior such as secret leakage, destructive commands, or unauthorized access. <br>
-- Correctness: Checks whether the agent follows the expected workflow and produces the correct final output. <br>
-- Discoverability: Checks whether the agent loads the skill when relevant and avoids using it when irrelevant. <br>
-- Effectiveness: Checks whether the agent performs measurably better with the skill than without it. <br>
-- Efficiency: Checks whether the agent uses fewer tokens and avoids redundant work. <br>
+- Security: Is it safe to use? Checks for unsafe operations, secret leakage, and unauthorized access. <br>
+- Correctness: Is the answer correct against the reference answer? <br>
+- Discoverability: Was the right skill loaded when needed, and were decoys avoided? <br>
+- Effectiveness: Did the skill help complete the task (equal-weight goal completion plus expected workflow adherence)? <br>
+- Efficiency: Did it avoid wasted tool calls and token usage? <br>
 
 Underlying evaluation signals used in this run: <br>
-- `security`: Checks for unsafe operations, secret leakage, and unauthorized access. <br>
-- `skill_execution`: Verifies that the agent loaded the expected skill and workflow. <br>
-- `skill_efficiency`: Checks routing quality, decoy avoidance, and redundant tool usage. <br>
-- `accuracy`: Grades final-answer correctness against the reference answer. <br>
-- `goal_accuracy`: Checks whether the overall user task completed successfully. <br>
-- `behavior_check`: Verifies expected behavior steps, including safety expectations. <br>
-- `token_efficiency`: Compares token usage with and without the skill. <br>
+- `security`: Unsafe operations, secret leakage, and unauthorized access. <br>
+- `skill_execution`: Whether the expected skill was selected, decoys were avoided, and the workflow executed. <br>
+- `skill_efficiency`: Tool-call productivity (legacy wire id; routing is scored under Discoverability). <br>
+- `accuracy`: Final-answer correctness against the reference answer. <br>
+- `goal_accuracy`: Whether the user's goal was achieved. <br>
+- `behavior_check`: Whether the expected workflow behavior was followed. <br>
 
 
 
 ## Evaluation Results: <br>
-| Dimension | Num | `claude-code` | `codex` |
-|---|---:|---:|---:|
-| Security | 4 | 100% (+0%) | 100% (+0%) |
-| Correctness | 4 | 100% (+56%) | 98% (+43%) |
-| Discoverability | 4 | 100% (+66%) | 96% (+42%) |
-| Effectiveness | 4 | 90% (+58%) | 91% (+50%) |
-| Efficiency | 4 | 93% (+46%) | 91% (+32%) |
+| Measure | Claude Code (Baseline → Skill Uplift) | Codex (Baseline → Skill Uplift) |
+|---|---:|---:|
+| Overall | 95.2% — baseline ran, but no comparable score was available; uplift unavailable | 85.3% — baseline ran, but no comparable score was available; uplift unavailable |
+| Security | 100.0% → 100.0% (±0.0 points) | 87.5% → 100.0% (+12.5 points) |
+| Correctness | 65.0% → 100.0% (+35.0 points) | 70.0% → 100.0% (+30.0 points) |
+| Discoverability | 100.0% — baseline ran, but no comparable score was available; uplift unavailable | 93.3% — baseline ran, but no comparable score was available; uplift unavailable |
+| Effectiveness | 55.0% → 89.8% (+34.8 points) | 51.9% → 77.5% (+25.6 points) |
+| Efficiency | 86.1% — baseline ran, but no comparable score was available; uplift unavailable | 55.6% — baseline ran, but no comparable score was available; uplift unavailable |
 
 ## Skill Version(s): <br>
-59d6e8a (source: git SHA, committed 2026-07-15) <br>
+2a83c6b (source: git SHA, committed 2026-10-24) <br>
 
 ## Ethical Considerations: <br>
 NVIDIA believes Trustworthy AI is a shared responsibility and we have established policies and practices to enable development for a wide array of AI applications. When downloaded or used in accordance with our terms of service, developers should work with their internal team to ensure this skill meets requirements for the relevant industry and use case and addresses unforeseen product misuse. <br>

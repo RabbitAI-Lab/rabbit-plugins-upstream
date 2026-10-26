@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/prime-intellect-lab",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/prime-intellect-lab",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/prime-intellect-lab",
+  "branch": "main",
+  "pushedAt": "2026-10-26T05:20:56Z",
+  "contentHash": "27639a78e33f07b044ed9955fdc69125e4e4b497fb938198b17c76c4422c49fa",
+  "fetchedAt": "2026-10-26T14:22:16.426Z"
+}

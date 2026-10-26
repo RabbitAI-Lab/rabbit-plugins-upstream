@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holoscan-app-debug-build-run",
+  "identifier": "NVIDIA/skills/skills/holoscan-app-debug-build-run",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holoscan-app-debug-build-run",
+  "branch": "main",
+  "pushedAt": "2026-10-26T13:57:48Z",
+  "contentHash": "14df5735704ea684165e1033a111a7b6519a6e88216957a7e551cbd15ed89c8d",
+  "fetchedAt": "2026-10-26T14:22:14.362Z"
+}

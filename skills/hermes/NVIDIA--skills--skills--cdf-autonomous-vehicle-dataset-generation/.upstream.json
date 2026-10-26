@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-autonomous-vehicle-dataset-generation",
+  "identifier": "NVIDIA/skills/skills/cdf-autonomous-vehicle-dataset-generation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-autonomous-vehicle-dataset-generation",
+  "branch": "main",
+  "pushedAt": "2026-10-26T13:57:48Z",
+  "contentHash": "f25cdcf114c64de877631c5c5a433186d47934f4b688b133fffb7f02f8f94f32",
+  "fetchedAt": "2026-10-26T14:22:14.091Z"
+}

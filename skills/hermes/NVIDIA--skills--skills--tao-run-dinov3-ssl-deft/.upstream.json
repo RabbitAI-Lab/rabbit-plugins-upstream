@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-dinov3-ssl-deft",
+  "identifier": "NVIDIA/skills/skills/tao-run-dinov3-ssl-deft",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-dinov3-ssl-deft",
+  "branch": "main",
+  "pushedAt": "2026-10-26T13:57:48Z",
+  "contentHash": "b8ba34e77c7ea66ea5665657d8ad19ea5ddfb5de3f5487bdbdf92cff552c77ff",
+  "fetchedAt": "2026-10-26T14:22:14.734Z"
+}

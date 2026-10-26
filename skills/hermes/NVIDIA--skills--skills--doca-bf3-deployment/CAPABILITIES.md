@@ -6,22 +6,22 @@ Pick the pattern first, then drill into the H2 that owns the
 substance. For the *how* of executing each pattern, jump to
 [TASKS.md](TASKS.md). For the BF4 counterpart of the same lifecycle
 (the BMC-Redfish provisioning path), see the sibling skill
-[`doca-bf4-deployment`](../doca-bf4-deployment/SKILL.md) — the BF4
+`doca-bf4-deployment/SKILL.md` — the BF4
 equivalent. For the cross-cutting safety meta-policy this skill
 overlays (and which owns every mutating burn named below), see
-[`doca-hardware-safety`](../doca-hardware-safety/SKILL.md).
+`doca-hardware-safety/SKILL.md`.
 
 This file enumerates the BF3 platform-bring-up contract as described
 in the public **BlueField Platform Software Manual**, the public
 **DOCA Installation Guide**, and the public **MFT manual** (`flint`,
 `mlxconfig`, `mlxfwmanager`) — all reachable through
-[`doca-public-knowledge-map`](../doca-public-knowledge-map/SKILL.md)
+`doca-public-knowledge-map/SKILL.md`
 — plus the standard Linux primitives the RShim/TMFIFO path inherits
 (`modprobe(8)`, `lspci(8)`, `ip-route(8)`). Treat this file as a
 *map of what is documented*, not a substitute for reading the live
 manuals against the operator's BF3. The BF3 lifecycle facts here are
 the same facts vetted in
-[`doca-bare-metal-deployment ## bluefield-lifecycle`](../doca-bare-metal-deployment/TASKS.md#bluefield-lifecycle);
+`doca-bare-metal-deployment ## bluefield-lifecycle` (`doca-bare-metal-deployment/TASKS.md#bluefield-lifecycle`);
 this skill is their consolidated BF3 home, not a re-derivation.
 
 ## Pattern overview
@@ -36,7 +36,7 @@ landing.
 | 1. Recognise the install side — host-side DOCA-Host vs Arm-side BlueField-OS DOCA | Which package the operator installs where; which side `pkg-config --modversion doca-common` is read on; which side the binary will eventually run | [`## Capabilities and modes`](#capabilities-and-modes) install-side table |
 | 2. Push a BFB over RShim | `bfb-install` streams the BFB to the DPU over the RShim PCIe/USB interface; the Arm side reboots through UEFI to Linux up to first-boot init | [`## Capabilities and modes`](#capabilities-and-modes) RShim/BFB surface |
 | 3. Bring up / recover the TMFIFO channel | `tmfifo_net0` (or the `tm-br` bridge), the documented `192.168.100.x` convention, the `ip route get`-before-`ping` loopback gotcha | [`## Capabilities and modes`](#capabilities-and-modes) TMFIFO surface |
-| 4. Select the DPU mode | DPU / embedded-function vs separated-host / NIC mode, set via `mlxconfig` at BFB-install time — a MUTATING burn | [`## Safety policy`](#safety-policy) + [`doca-hardware-safety`](../doca-hardware-safety/SKILL.md) |
+| 4. Select the DPU mode | DPU / embedded-function vs separated-host / NIC mode, set via `mlxconfig` at BFB-install time — a MUTATING burn | [`## Safety policy`](#safety-policy) + `doca-hardware-safety/SKILL.md` |
 | 5. Map a not-yet-healthy BF3 back to its state | installer-running → uefi-only → linux-up-tmfifo-down → tmfifo-up-ssh-down → arm-ok-host-pfs-unbound → host-bf-version-mismatch | [`## Error taxonomy`](#error-taxonomy) six-state classifier |
 | 6. Verify before declaring healthy | readiness markers (not a timer), `cat /etc/mlnx-release`, host PF rebind, the four-way version match re-close | [`## Observability`](#observability) + [`## Version compatibility`](#version-compatibility) |
 
@@ -50,14 +50,16 @@ Two cross-cutting rules apply to *every* pattern above:
   Inferring them from generic Linux intuition or from a previous
   BF2's behaviour is the most common hallucination failure for this
   skill.
-- **Every mutating burn leaves this skill for the meta-policy.** The
+- **Every mutating burn is governed by the meta-policy alongside this
+  skill.** The
   BFB reflash itself, any `mlxconfig set` (including a DPU-mode
   flip), a firmware burn, and any kernel-boot-parameter change are
   owned by
-  [`doca-hardware-safety`](../doca-hardware-safety/SKILL.md) for the
+  `doca-hardware-safety/SKILL.md` for the
   preflight / OOB-console / maintenance-window / rollback
-  discipline. This skill adds only the BF3-specific *sequencing* on
-  top.
+  discipline. Keep this skill loaded for BF3-specific *sequencing*;
+  `doca-hardware-safety ## modify` owns whether and how the mutation
+  may proceed.
 
 ## Capabilities and modes
 
@@ -68,11 +70,11 @@ operator must be explicit about which one a given step touches.
 
 | Property | Host-side (DOCA-Host) | Arm-side (BlueField-OS DOCA) |
 | --- | --- | --- |
-| What is installed | The DOCA-Host packages on the host x86/Arm OS, per the public DOCA Installation Guide host-side path (reached through [`doca-public-knowledge-map`](../doca-public-knowledge-map/SKILL.md)) | The DOCA userland baked into the BFB image, landed on the BF3 Arm cores by the BFB push |
-| How it lands | `apt` / `dnf` install on the host, routed via [`doca-setup`](../doca-setup/SKILL.md) | `bfb-install` pushing the BFB over RShim (this skill, [`TASKS.md ## run`](TASKS.md#run)) |
+| What is installed | The DOCA-Host packages on the host x86/Arm OS, per the public DOCA Installation Guide host-side path (reached through `doca-public-knowledge-map/SKILL.md`) | The DOCA userland baked into the BFB image, landed on the BF3 Arm cores by the BFB push |
+| How it lands | `apt` / `dnf` install on the host, routed via `doca-setup/SKILL.md` | `bfb-install` pushing the BFB over RShim (this skill, [`TASKS.md ## run`](TASKS.md#run)) |
 | Version read with | `pkg-config --modversion doca-common` + `doca_caps --version` on the host | `cat /etc/mlnx-release` + `bfver` on the BF3 Arm console |
 | What runs there | Host-side binaries/containers talking to the BF3 NIC over PCIe | Arm-side binaries/containers running on the DPU cores directly |
-| Routes onward to | [`doca-bare-metal-deployment`](../doca-bare-metal-deployment/SKILL.md) / [`doca-container-deployment`](../doca-container-deployment/SKILL.md) once healthy | the same two deployment skills, Arm-side leg |
+| Routes onward to | `doca-bare-metal-deployment/SKILL.md` / `doca-container-deployment/SKILL.md` once healthy | the same two deployment skills, Arm-side leg |
 
 The load-bearing recognition: *"is DOCA on the host or on the Arm
 side?"* is the FIRST question for any BF3 deploy. The agent confirms
@@ -126,7 +128,7 @@ reconfiguring the same modes after install typically requires
 another BFB push. Because `mlxconfig set` is a hardware-state change,
 the agent quotes the `bf.cfg`/`mlxconfig` parameter keys from the
 public schema but routes the actual set/burn to
-[`doca-hardware-safety`](../doca-hardware-safety/SKILL.md) — this
+`doca-hardware-safety/SKILL.md` — this
 skill names the *sequencing* (mode decision belongs at BFB-install
 time, not after), the meta-policy owns the burn.
 
@@ -135,7 +137,7 @@ time, not after), the meta-policy owns the burn.
 For the canonical DOCA version-detection chain, the four-way match
 rule (host package ↔ binary build ↔ BlueField firmware ↔
 DOCA-version policy), and the headers-win-over-docs rule, see
-[`doca-version`](../doca-version/SKILL.md). The body lives there;
+`doca-version/SKILL.md`. The body lives there;
 this skill does not duplicate it.
 
 **The BF3-bring-up-specific overlay** is:
@@ -159,14 +161,14 @@ this skill does not duplicate it.
   DOCA-Host alignment lands the `host-bf-version-mismatch` state in
   [`## Error taxonomy`](#error-taxonomy); resolve any
   `/etc/apt/sources.list.d/doca.list` repo-pin drift per
-  [`doca-version TASKS.md ## apt-source consistency`](../doca-version/TASKS.md#apt-source-consistency)
+  `doca-version TASKS.md ## apt-source consistency` (`doca-version/TASKS.md#apt-source-consistency`)
   BEFORE installing anything new, and route any host-side reinstall
-  through [`doca-setup`](../doca-setup/SKILL.md).
+  through `doca-setup/SKILL.md`.
 - **Do NOT substitute `mlxconfig -d <bdf> q` for the FW-version
   leg, and do NOT invent `bfb-info`** (not a real
   NVIDIA-documented tool) for the BFB-image leg — both are common
   hallucinations banned in
-  [`doca-version CAPABILITIES.md ## Version compatibility`](../doca-version/CAPABILITIES.md#version-compatibility).
+  `doca-version CAPABILITIES.md ## Version compatibility` (`doca-version/CAPABILITIES.md#version-compatibility`).
   Capture per-device (`flint -d <bdf> q`), not globally — two BF3s
   from different procurement waves on the same host are independent
   silicon with independent FW levels.
@@ -178,7 +180,7 @@ is *not yet* confirmed healthy is classified by the six-state
 `bluefield-state-classifier`, walked IN ORDER in
 [`TASKS.md ## debug`](TASKS.md#debug). The states are the SAME six
 vetted in
-[`doca-bare-metal-deployment ### bluefield-state-classifier`](../doca-bare-metal-deployment/TASKS.md#bluefield-state-classifier);
+`doca-bare-metal-deployment ### bluefield-state-classifier` (`doca-bare-metal-deployment/TASKS.md#bluefield-state-classifier`);
 this skill is their BF3 home.
 
 1. **`installer-still-running`.** `bfb-install` still resident on
@@ -211,22 +213,26 @@ this skill is their BF3 home.
    PFs, `ip link show` does NOT show the netdevs, `ibv_devinfo` is
    empty, DOCA programs cannot attach by representor name. Root
    cause class: stale host `mlx5` driver-binding state post-push.
-   Recovery: run the documented PF-rebind sequence in
+   Recovery: route the documented PF-rebind sequence through
+   `doca-hardware-safety ## modify` (`doca-hardware-safety/TASKS.md#modify`),
+   then return to the identical readiness smoke in
    [`TASKS.md ## test`](TASKS.md#test); do NOT launch any DOCA
    binary in this state.
 6. **`host-bf-version-mismatch`.** Everything above looks healthy,
    but the four-way version match owned by
-   [`doca-version`](../doca-version/SKILL.md) does not close.
-   Recovery: walk [`doca-version TASKS.md`](../doca-version/TASKS.md)
+   `doca-version/SKILL.md` does not close.
+   Recovery: walk `doca-version/TASKS.md`
    in full, resolve apt-source / repo-pin drift first, route any
-   host-side reinstall through [`doca-setup`](../doca-setup/SKILL.md).
+   host-side reinstall through `doca-setup/SKILL.md`.
 
-Two cross-cutting rules: **match multiple states, do not stop at the
-first** (a BF3 back from a partial install can be `uefi-only` then
-`arm-ok-host-pfs-unbound` after a cold cycle); and **never declare
-healthy from absence of evidence** (a TMFIFO `ping` without
-`ip route get`, an SSH connect without `uptime`/`dmesg`, an `lspci`
-listing without a usable netdev are each NOT proof).
+Three cross-cutting rules: **evaluate all six states and report every
+match before selecting a recovery**; **recover in dependency order**
+(installer → boot/Arm → TMFIFO → SSH → PF binding → version); and
+**never declare healthy from absence of evidence** (a TMFIFO `ping`
+without `ip route get`, an SSH connect without `uptime`/`dmesg`, an
+`lspci` listing without a usable netdev are each NOT proof). Each
+recovery is followed by the identical readiness-smoke tuple defined
+in `TASKS.md ## test`, so before/after evidence remains comparable.
 
 ## Observability
 
@@ -257,11 +263,11 @@ sleep is never a substitute for a documented readiness marker.
   `mlxconfig -d <pci> query` (QUERY only) reads the firmware
   configuration; `flint -d <bdf> q` reads the FW version. Any
   `mlxconfig set` is a hardware-state change owned by
-  [`doca-hardware-safety`](../doca-hardware-safety/SKILL.md).
+  `doca-hardware-safety/SKILL.md`.
 
 Cross-cutting host-side debug (kernel version, driver loaded/not,
 PCIe link state, `dmesg`) lives in
-[`doca-debug TASKS.md ## debug`](../doca-debug/TASKS.md#debug); this
+`doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`); this
 skill names only the BF3-bring-up-specific surfaces.
 
 ## Safety policy
@@ -269,21 +275,23 @@ skill names only the BF3-bring-up-specific surfaces.
 > **Overlay on the bundle-wide hardware-safety meta-policy.** The
 > rules below are this skill's per-artifact overlay on the
 > cross-cutting rules in
-> [`doca-hardware-safety` CAPABILITIES.md ## Safety policy](../doca-hardware-safety/CAPABILITIES.md#safety-policy)
+> `doca-hardware-safety` CAPABILITIES.md ## Safety policy (`doca-hardware-safety/CAPABILITIES.md#safety-policy`)
 > (specifically
-> [### Per-artifact overlay pattern](../doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern)).
+> ### Per-artifact overlay pattern (`doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern`)).
 > When the two layers disagree, the stricter wins; when either layer
 > says STOP, the agent stops.
 
-- **Every mutating burn leaves this skill.** A BFB reflash, any
+- **Every mutating burn loads the safety meta-policy alongside.** A
+  BFB reflash, any
   `mlxconfig set` (including a DPU/separated-host mode flip), a
   firmware burn, and any kernel-boot-parameter change are
   hardware-state changes. The agent hands the change-application
   discipline (preflight inventory, OOB console, maintenance window,
   rollback) to
-  [`doca-hardware-safety ## modify`](../doca-hardware-safety/TASKS.md#modify)
-  and returns here only once the change is complete and verified.
-  This skill owns the *sequencing*, never the burn.
+  `doca-hardware-safety ## modify` (`doca-hardware-safety/TASKS.md#modify`)
+  while retaining this skill for BF3 sequencing. Continue the BF3
+  workflow only after that change is complete and verified. This
+  skill owns the *sequencing*, never the burn discipline.
 - **An OOB path is a precondition, not a nicety.** Before any BFB
   push the operator must have a BMC console / serial-over-LAN /
   physical UART path to reach the BF3 if the push breaks the Arm OS.
@@ -304,7 +312,7 @@ The canonical public sources for BF3 platform bring-up are:
 
 - The **BlueField Platform Software Manual** on `docs.nvidia.com`,
   reachable through
-  [`doca-public-knowledge-map ## Public documentation entry points`](../doca-public-knowledge-map/SKILL.md#public-documentation-entry-points),
+  `doca-public-knowledge-map ## Public documentation entry points` (`doca-public-knowledge-map/SKILL.md#public-documentation-entry-points`),
   for `bfb-install`, the `bf.cfg` schema, RShim/TMFIFO, and the
   readiness markers.
 - The **DOCA Installation Guide** on `docs.nvidia.com`, reachable

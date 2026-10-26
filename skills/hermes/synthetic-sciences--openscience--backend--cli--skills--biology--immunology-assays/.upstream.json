@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/immunology-assays",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/immunology-assays",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/immunology-assays",
+  "branch": "main",
+  "pushedAt": "2026-10-26T05:20:56Z",
+  "contentHash": "84e119d190ce660b032a35c784c761bd3813f87654c34ab13544ee26c8a10bbf",
+  "fetchedAt": "2026-10-26T14:22:16.349Z"
+}
