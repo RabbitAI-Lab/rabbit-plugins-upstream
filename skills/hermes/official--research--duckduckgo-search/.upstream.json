@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/research/duckduckgo-search",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "9fd8a22636750965ee1d0bd53f2466573d71f42d1adb059e4357e0e95b316300",
-  "fetchedAt": "2026-07-26T17:03:56.977Z"
+  "pushedAt": "2026-10-27T13:14:38Z",
+  "contentHash": "029ecb3e9b794e711833e8049aa3367c5fe6a56418db7d4f40985540cc64377e",
+  "fetchedAt": "2026-10-27T13:18:58.443Z"
 }

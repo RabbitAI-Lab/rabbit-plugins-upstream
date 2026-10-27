@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-dataset-annotate",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-dataset-annotate",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-dataset-annotate",
+  "branch": "main",
+  "pushedAt": "2026-10-27T01:28:24Z",
+  "contentHash": "80c94c52cbdcc9bb1ad7536f27bc52bd8526122430abc541f67efff113000b99",
+  "fetchedAt": "2026-10-27T13:18:49.303Z"
+}

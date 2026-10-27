@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/deeptools",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/deeptools",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/deeptools",
+  "branch": "main",
+  "pushedAt": "2026-10-26T18:31:14Z",
+  "contentHash": "527a1755682f8d3bf23977d4984f2c32fc0828a0057e08eaabcaaf002976b496",
+  "fetchedAt": "2026-10-27T13:18:50.962Z"
+}

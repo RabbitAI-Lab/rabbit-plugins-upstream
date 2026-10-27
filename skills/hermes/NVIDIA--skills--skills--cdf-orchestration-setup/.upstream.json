@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-orchestration-setup",
+  "identifier": "NVIDIA/skills/skills/cdf-orchestration-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-orchestration-setup",
+  "branch": "main",
+  "pushedAt": "2026-10-27T01:28:24Z",
+  "contentHash": "94e27bce8c7fe6761a9f12860de1d35b7279f2a3693d156b7bcbc33a2c9e3bca",
+  "fetchedAt": "2026-10-27T13:18:49.091Z"
+}

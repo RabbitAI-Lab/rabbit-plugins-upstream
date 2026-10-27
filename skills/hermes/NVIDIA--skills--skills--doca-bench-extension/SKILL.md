@@ -2,50 +2,69 @@
 license: Apache-2.0
 name: doca-bench-extension
 description: >
-  Use this skill when the operator is authoring, building, loading,
-  or debugging a custom doca-bench plug-in — a versioned shared
-  library with DOCA_EXPERIMENTAL-marked C entry points that
-  doca-bench loads to measure a workload class its built-in modes
-  do not cover, with doca_bench_cuda as the shipped reference
-  exemplar. Trigger even when the user does not say
-  "doca-bench-extension" or "doca_bench_cuda" — typical implicit
-  phrasings include "no built-in doca-bench mode fits my workload",
-  "how do I benchmark a CUDA GPUNetIO RX/TX kernel", "doca-bench
-  cannot find or load my custom .so", "extension exported symbols
-  do not match what the parent expects", "soversion mismatch after
-  a DOCA upgrade", or "my GPU kernel hangs because stop_flag was
+  Use this skill when the operator is authoring, building, loading, or
+  debugging a custom doca-bench plug-in — a versioned shared library
+  with DOCA_EXPERIMENTAL-marked C entry points that doca-bench loads to
+  measure a workload class its built-in modes do not cover, with
+  doca_bench_cuda as the shipped reference exemplar. Trigger even when
+  the user does not say "doca-bench-extension" or "doca_bench_cuda" —
+  typical implicit phrasings include "no built-in doca-bench mode fits
+  my workload", "how do I benchmark a CUDA GPUNetIO RX/TX kernel",
+  "doca-bench cannot find or load my custom .so", "extension exported
+  symbols do not match what the parent expects", "soversion mismatch
+  after a DOCA upgrade", or "my GPU kernel hangs because stop_flag was
   never set". Refuse and route elsewhere for questions about which
-  built-in doca-bench mode to pick, DOCA GPUNetIO programming
-  semantics, CUDA toolkit installation, or contributor work on
-  in-tree extensions — those belong to other skills.
+  built-in doca-bench mode to pick, DOCA GPUNetIO programming semantics,
+  CUDA toolkit installation, or contributor work on in-tree extensions —
+  those belong to other skills.
 metadata:
+  author: NVIDIA <doca@nvidia.com>
   kind: tool
+  doca_version: "3.5"
+  tags:
+    - doca
+    - bench
+    - extension
 compatibility: >
-  Requires DOCA SDK installed at /opt/mellanox/doca on Linux
-  (Ubuntu 22.04/24.04 or RHEL/SLES) with a BlueField DPU or
-  ConnectX NIC. Source tree: `/opt/mellanox/doca/tools/bench_extension/`
-  (underscored, NOT kebab-case); the built shared library
-  `libdoca_bench_cuda_impl.so` lands in the platform libdir on a
-  binary install. Also needs `pkg-config doca-common` and, for
-  the GPU-side reference exemplar (DOCA GPUNetIO RX/TX kernels),
-  an NVIDIA GPU + matching CUDA toolkit.
+  Requires DOCA SDK installed at /opt/mellanox/doca on Linux (Ubuntu
+  22.04/24.04 or RHEL/SLES) with a BlueField DPU or ConnectX NIC. Source
+  tree: `/opt/mellanox/doca/tools/bench_extension/` (underscored, not
+  kebab-case); `libdoca_bench_cuda_impl.so` lands in the platform
+  libdir. Needs `pkg-config doca-common`. GPU reference exemplar needs
+  an NVIDIA GPU and matching CUDA toolkit. The validation steps require
+  a live DOCA install.
 ---
 
 # DOCA Bench Extension
 
+## Examples
+
+- **"My workload class is not a built-in doca-bench mode."** —
+  this is in scope after confirming no built-in mode fits.
+  Do not start here for a stock RDMA throughput run.
+- **"doca-bench cannot find or load my custom .so."** — check
+  discovery, soversion, and exported symbols before rewriting
+  the kernel.
+
+## Instructions
+
+Follow Loading order below. Open the tasks companion for configure /
+build / run / debug. Open the capabilities companion for the
+extension API shape. Do not open every companion file.
+
 **Where to start:** This is a tool skill for the **extension /
 plug-in framework** that augments
-[`doca-bench`](../doca-bench/SKILL.md) — NOT a workload-shape
-skill on its own. Open [`TASKS.md`](TASKS.md) and start at
-[`## configure`](TASKS.md#configure) to commit to the three-axis
+`doca-bench/SKILL.md` — NOT a workload-shape
+skill on its own. Open the tasks companion and start at
+`## configure` to commit to the three-axis
 decision (workload class is genuinely outside doca-bench's
 built-in modes × extension API surface fits × parent-tool
-co-load is acceptable), then [`## build`](TASKS.md#build) for
+co-load is acceptable), then `## build` for
 how a custom extension is compiled and laid out, then
-[`## run`](TASKS.md#run) for how `doca-bench` discovers and
-invokes the extension, then [`## test`](TASKS.md#test) for the
+`## run` for how `doca-bench` discovers and
+invokes the extension, then `## test` for the
 smoke-before-bulk loop the agent applies to every new
-extension. Open [`CAPABILITIES.md`](CAPABILITIES.md) when the
+extension. Open the capabilities companion when the
 question is *what an extension can do that built-in
 `doca-bench` modes cannot*, *what the extension API surface
 looks like in broad strokes (the `DOCA_EXPERIMENTAL` C entry
@@ -53,9 +72,9 @@ points the shipped reference exposes)*, *how the
 build / registration / discovery flow works*, or *how the
 extension's lifetime is bounded by the parent `doca-bench`
 invocation*. If `doca-bench` itself is the question, route to
-[`doca-bench`](../doca-bench/SKILL.md). If the question is
+`doca-bench/SKILL.md`. If the question is
 "which built-in `doca-bench` mode do I pick?", that is also
-[`doca-bench`](../doca-bench/SKILL.md) — extensions are the
+`doca-bench/SKILL.md` — extensions are the
 *exit ramp* for workloads built-in modes do not cover.
 
 ## Example questions this skill answers well
@@ -63,7 +82,7 @@ invocation*. If `doca-bench` itself is the question, route to
 - *"My workload class is `<X>` — does `doca-bench` measure it
   natively, or do I need an extension?"* — the
   extension-vs-built-in decision question. The agent walks
-  the user back to [`doca-bench`](../doca-bench/SKILL.md)'s
+  the user back to `doca-bench/SKILL.md`'s
   built-in mode inventory FIRST and only routes to the
   extension framework when no built-in mode applies.
 - *"I want to benchmark a CUDA / GPU-side workload that
@@ -102,7 +121,7 @@ invocation*. If `doca-bench` itself is the question, route to
 ## Audience
 
 Experienced AI agents and platform / performance engineers
-who already use [`doca-bench`](../doca-bench/SKILL.md) for
+who already use `doca-bench/SKILL.md` for
 the built-in workload modes and now have a workload class
 that the built-in modes do not cover. Readers are expected
 to be comfortable with native build systems (Meson, in this
@@ -117,7 +136,7 @@ This skill is NOT for:
 
 - operators who can express their workload with one of
   `doca-bench`'s built-in modes — that is
-  [`doca-bench`](../doca-bench/SKILL.md);
+  `doca-bench/SKILL.md`;
 - operators who want to benchmark a different DOCA primitive
   (Flow, Comch, RMAX) via that primitive's own
   measurement tool — route to that tool;
@@ -170,7 +189,7 @@ true:
   `doca_bench_cuda_impl` shared library, or any of the
   `DOCA_EXPERIMENTAL` extension entry points;
 - the user has confirmed (via
-  [`doca-bench TASKS.md ## configure`](../doca-bench/TASKS.md#configure))
+  `doca-bench/SKILL.md`)
   that none of `doca-bench`'s built-in workload modes
   measures the class they want, and an extension is the
   exit ramp;
@@ -182,19 +201,19 @@ true:
 
 Co-load this skill with:
 
-- [`doca-bench`](../doca-bench/SKILL.md) (the parent tool —
+- `doca-bench/SKILL.md` (the parent tool —
   ALWAYS co-loaded; extensions only have value as
   plug-ins into `doca-bench`);
-- [`doca-version`](../../doca-version/SKILL.md) (the
+- `doca-version/SKILL.md` (the
   `DOCA_EXPERIMENTAL` surface is versioned with DOCA; the
   extension's `soversion` is the DOCA `soversion`; the
   four-way version match applies);
-- [`doca-gpunetio`](../../libs/doca-gpunetio/SKILL.md) when
+- `doca-gpunetio/SKILL.md` when
   the extension is GPU-side and uses GPUNetIO RX / TX
   queues like the reference exemplar (route the GPUNetIO
   semantics there, not here);
-- [`doca-debug`](../../doca-debug/SKILL.md) and
-  [`doca-setup`](../../doca-setup/SKILL.md) for the
+- `doca-debug/SKILL.md` and
+  `doca-setup/SKILL.md` for the
   env-side debug ladder (driver, firmware, CUDA toolkit,
   dynamic linker).
 
@@ -209,9 +228,9 @@ try.
 Three companion files in this directory, each owning a
 different question shape:
 
-- [`SKILL.md`](SKILL.md) — this file. Audience, scope,
+- this skill — this file. Audience, scope,
   loading order, related skills. Routes everything else.
-- [`CAPABILITIES.md`](CAPABILITIES.md) — *what an extension
+- the capabilities companion — *what an extension
   can do that the built-in modes cannot*, *what the API
   surface looks like in broad strokes*, *how the
   build / registration / discovery flow works*, *what
@@ -219,7 +238,7 @@ different question shape:
   `DOCA_EXPERIMENTAL`-stability overlay on top of
   `doca-version`)*, *the layered error taxonomy*,
   observability, and the safety policy overlay.
-- [`TASKS.md`](TASKS.md) — the procedural verbs
+- the tasks companion — the procedural verbs
   (`configure`, `build`, `run`, `test`, `debug`, etc.) plus
   a `doca-bench-extension`-specific command appendix and
   the agent-side `use` workflow that consumes the captured
@@ -238,7 +257,7 @@ failures when it does not.
 ## What this skill deliberately does not ship
 
 - **Inventory of `doca-bench`'s built-in workload modes.**
-  That belongs to [`doca-bench`](../doca-bench/SKILL.md).
+  That belongs to `doca-bench/SKILL.md`.
   This skill is the exit ramp for what the built-in modes
   do not cover; it does not duplicate the parent's mode
   inventory.
@@ -264,7 +283,7 @@ failures when it does not.
 - **DOCA GPUNetIO programming details.** When the
   extension is GPU-side (as the reference exemplar is),
   the GPUNetIO RX / TX queue semantics live in
-  [`doca-gpunetio`](../../libs/doca-gpunetio/SKILL.md);
+  `doca-gpunetio/SKILL.md`;
   this skill cross-links rather than duplicates.
 - **CUDA toolchain installation guidance.** Route to the
   public NVIDIA CUDA Toolkit documentation on
@@ -272,7 +291,7 @@ failures when it does not.
 - **Library-internal `doca-bench` invocation details
   unrelated to extensions.** The parent's CLI flags,
   pipeline shapes, and built-in workload classes belong
-  to [`doca-bench`](../doca-bench/SKILL.md).
+  to `doca-bench/SKILL.md`.
 
 ## Loading order
 
@@ -280,16 +299,16 @@ When a `doca-bench-extension` question arrives:
 
 1. Confirm DOCA is installed AND `doca-bench` is reachable
    on the user's install — if not, route to
-   [`doca-setup`](../../doca-setup/SKILL.md);
+   `doca-setup/SKILL.md`;
 2. **Confirm none of `doca-bench`'s built-in modes covers
    the workload class** — if any of them does, route back
-   to [`doca-bench TASKS.md ## configure`](../doca-bench/TASKS.md#configure)
+   to `doca-bench/SKILL.md`
    and stop. Extensions are the exit ramp, not the first
    answer;
-3. Read [`CAPABILITIES.md`](CAPABILITIES.md) to commit to
+3. Read the capabilities companion to commit to
    the three-axis decision and walk the reference
    exemplar's API surface shape;
-4. Read [`TASKS.md`](TASKS.md) and walk
+4. Read the tasks companion and walk
    `## configure → ## build → ## run → ## test → ## debug`
    in that order; do NOT start with `## run` without the
    build precondition step.
@@ -299,43 +318,43 @@ When a `doca-bench-extension` question arrives:
 Cross-link conventions follow the bundle's relative path
 contract from `tools/<X>/`:
 
-- [`doca-bench`](../doca-bench/SKILL.md) — the parent tool.
+- `doca-bench/SKILL.md` — the parent tool.
   **ALWAYS co-loaded.** Extensions are plug-ins into
   `doca-bench`; they do not replace it, they do not have a
   standalone CLI, they do not measure anything without the
   parent invoking them. Every question on this skill
   presupposes the parent.
-- [`doca-version`](../../doca-version/SKILL.md) — the
+- `doca-version/SKILL.md` — the
   `DOCA_EXPERIMENTAL` surface is versioned with DOCA; the
   extension's `soversion` matches the DOCA release per
   the shipped `meson.build`. The four-way version match
   applies; rebuilding the extension across DOCA upgrades
   is the rule, not the exception.
-- [`doca-gpunetio`](../../libs/doca-gpunetio/SKILL.md) —
+- `doca-gpunetio/SKILL.md` —
   when the extension is GPU-side and uses GPUNetIO RX /
   TX queues like the reference `doca_bench_cuda`. Route
   the GPUNetIO semantics there.
-- [`doca-setup`](../../doca-setup/SKILL.md) — DOCA install
+- `doca-setup/SKILL.md` — DOCA install
   posture (does `doca-bench` exist? does the
   `doca_bench_cuda_impl` reference library exist? is the
   CUDA toolchain installed when needed?).
-- [`doca-debug`](../../doca-debug/SKILL.md) — the
+- `doca-debug/SKILL.md` — the
   cross-cutting debug ladder for env-side issues (dynamic
   linker, library search path, CUDA driver / toolkit,
   firmware).
-- [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
+- `doca-public-knowledge-map/SKILL.md`
   — routing to the public DOCA Bench / DOCA GPUNetIO pages
   on `docs.nvidia.com` and the release notes for the
   documented extension lifecycle / discovery mechanism.
-- [`doca-structured-tools-contract`](../../doca-structured-tools-contract/SKILL.md)
+- `doca-structured-tools-contract/SKILL.md`
   — the agent's detect → prefer → fall back → report
   contract for the structured helpers
   (`doca-env --json`, `doca-capability-snapshot`,
   `version-matrix.json`) the build / load preconditions
   rely on.
-- [`doca-hardware-safety`](../../doca-hardware-safety/SKILL.md)
+- `doca-hardware-safety/SKILL.md`
   — the canonical hardware-safety meta-policy that
-  [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy)
+  the capabilities companion
   overlays. Extensions are external code loaded into
   `doca-bench`; the safety implications of loading
   experimental code into a benchmark that touches the

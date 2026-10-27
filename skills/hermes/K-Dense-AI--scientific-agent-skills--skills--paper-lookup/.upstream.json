@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/paper-lookup",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/paper-lookup",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/paper-lookup",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "c211b6596ab4ddefa2974d0daf6ef13b532047a595dbe8480bea7c553712e34f",
+  "fetchedAt": "2026-10-27T13:19:05.388Z"
+}
