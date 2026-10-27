@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/bigquery-observability",
+  "repo": "google/skills",
+  "skillId": "bigquery-observability",
+  "branch": "main",
+  "pushedAt": "2026-10-26T20:19:29Z",
+  "contentHash": "0d53bd3421098878407b0f31747dc36267eb94d6968641f4cf83df7a4c3758a9",
+  "fetchedAt": "2026-10-27T13:20:20.976Z"
+}

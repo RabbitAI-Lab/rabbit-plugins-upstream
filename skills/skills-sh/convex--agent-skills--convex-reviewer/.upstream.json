@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-reviewer",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-reviewer",
+  "branch": "main",
+  "pushedAt": "2026-10-27T01:34:32Z",
+  "contentHash": "8fc7e32928eba110d7b54f5f6f92a66e30fa4e52adc8008d0cedc7fbe801bb0e",
+  "fetchedAt": "2026-10-27T13:18:43.535Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gcloud",
+  "repo": "google/skills",
+  "skillId": "gcloud",
+  "branch": "main",
+  "pushedAt": "2026-10-26T20:19:29Z",
+  "contentHash": "1c9975bca551aaf26e4d0b3dd5954178fa3b04214037972b0150df79a7af4d41",
+  "fetchedAt": "2026-10-27T13:20:20.286Z"
+}
