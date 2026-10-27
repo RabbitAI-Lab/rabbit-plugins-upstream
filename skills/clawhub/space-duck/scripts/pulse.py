@@ -19,6 +19,16 @@ Usage: python3 pulse.py
 import json, urllib.request, urllib.error, time, sys, os, subprocess, shutil
 from pathlib import Path
 
+# 0.8.17 — capability truth must match what peck_responder can actually exec.
+# A bare shutil.which() under systemd's minimal PATH reported "no brain" for
+# ducks that have a perfectly good user-local claude, so the platform stopped
+# dispatching to them.
+try:
+    from _claudebin import claude_available
+except Exception:
+    def claude_available():
+        return bool(shutil.which('claude'))
+
 CONFIG_PATH = Path.home() / '.space-duck' / 'config.json'
 API_BASE = 'https://beak.spaceduckling.com'
 
@@ -27,7 +37,10 @@ def load_config():
     if not CONFIG_PATH.exists():
         print('ERROR: No Space Duck config found. Run setup.py first.')
         sys.exit(1)
-    return json.loads(CONFIG_PATH.read_text())
+    cfg = json.loads(CONFIG_PATH.read_text())
+    from _apiguard import check_api_base  # [HARDEN-071]
+    check_api_base(cfg)
+    return cfg
 
 
 def probe_capabilities():
@@ -75,10 +88,10 @@ def probe_capabilities():
     # v0.4.19 (audit F4) — advertise the generic flag; the platform needs
     # posture ("can this duck think?"), not the operator's stack identity.
     # `claude_cli_available` kept during a deprecation window for MC compat.
-    if shutil.which('claude') or os.environ.get('SPACEDUCK_NATIVE_BRAIN_CMD') \
+    if claude_available() or os.environ.get('SPACEDUCK_NATIVE_BRAIN_CMD') \
             or os.environ.get('SPACEDUCK_BRAIN_CMD') or os.environ.get('SPACEDUCK_BRAIN_CHAIN'):
         caps.append('local_brain_available')
-    if shutil.which('claude'):
+    if claude_available():
         caps.append('claude_cli_available')  # DEPRECATED — remove after MC reads local_brain_available
 
     # Dedup + sort

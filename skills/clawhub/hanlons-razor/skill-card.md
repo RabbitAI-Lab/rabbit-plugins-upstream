@@ -1,48 +1,58 @@
-## Description: <br>
-Hanlon's Razor helps an agent analyze conflicts by testing whether mistake, miscommunication, incompetence, or asymmetric information explains hostile-seeming behavior before escalating to malice. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users test a non-malice explanation before attributing harmful or hostile behavior to intent, while treating that explanation as a revisable prior.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and agents use this skill when a person or team is tempted to read harmful or frustrating behavior as intentional malice. It structures a clarifying analysis that states the action and harm, tests non-malice explanations, identifies what malice would additionally require, and sets override signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may be misapplied when concrete evidence of malice already exists. <br>
-Mitigation: Treat Hanlon's Razor as a starting prior only and override it when documented malicious intent or credible intent evidence appears. <br>
-Risk: The skill may underreact in safety-critical, abusive, or serious power-imbalance contexts where assuming non-malice could increase harm. <br>
-Mitigation: Do not use this lens as the primary response in catastrophic-risk or abuse-enabling settings; shift to a protective posture before intent is proven. <br>
-Risk: The analysis can be used to excuse harmful behavior once incompetence is identified. <br>
-Mitigation: Keep attribution separate from accountability: incompetence-caused harm still requires response, remediation, and follow-up. <br>
+## Use Case:
 
+Individuals and teams use this reasoning guide to examine perceived harmful actions, compare mistake-based explanations with evidence of intent, and choose a proportionate first response. It is not intended for situations with concrete evidence of malice or catastrophic costs of wrongly assuming non-malice.
 
-## Reference(s): <br>
-- [Sources - hanlons-razor](references/sources.md) <br>
-- [Hanlon's Submission 1980; Heinlein's 1941 Articulation](examples/hanlons-submission-1980-heinleins-1941-articulation.md) <br>
-- [AI Incidents - Incompetence and Emergent Error as a Prior Over Malice (2024-2026)](examples/ai-incidents-malice-vs-emergent-error-2024-2026.md) <br>
-- [Hanlon's Razor - Quote Investigator](https://quoteinvestigator.com/2016/12/30/not-malice/) <br>
-- [Gemini image generation got it wrong. We'll do better.](https://blog.google/products/gemini/gemini-image-generation-issue/) <br>
-- [deciqAI Hanlon's Razor page](https://www.deciqai.com/c/hanlons-razor) <br>
-- [deciqAI Hanlon's Razor machine-readable metadata](https://www.deciqai.com/s/hanlons-razor.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis with concise structured fields and optional step-by-step coaching questions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause at explicit wait points when coaching a novice through the analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: A mistake-first lens could minimize harm or delay protection in abusive, safety-critical, or strongly asymmetric situations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Apply the skill's fit check; prioritize safety and protective action in high-stakes contexts, and update the attribution when evidence changes.
+
+Risk: Reusable incident examples could expose identifiable details.
+
+Mitigation: Avoid recording identifiable incident details in reusable examples.
+
+## Reference(s):
+
+- [Sources](references/sources.md)
+- [Hanlon's Razor skill overview](https://www.deciqai.com/c/hanlons-razor)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/hanlons-razor.json)
+- [Quote Investigator: Hanlon's Razor](https://quoteinvestigator.com/2016/12/30/not-malice/)
+- [Google: Gemini image generation got it wrong. We'll do better.](https://blog.google/products/gemini/gemini-image-generation-issue/)
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/hanlons-razor)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured incident analysis and stepwise coaching prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Interactive coaching pauses for user input between steps; includes a revisable prior and override signals.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

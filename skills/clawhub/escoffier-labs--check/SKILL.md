@@ -1,5 +1,7 @@
 ---
 name: check
+version: 0.1.2
+license: MIT
 description: Use when about to claim anything works, is fixed, is complete, or passes - before committing, replying to the user, or moving to the next task. Also use when relaying a subagent's or tool's success report, and especially at the end of a long session when the pull to say "done" is strongest.
 ---
 
@@ -12,6 +14,24 @@ description: Use when about to claim anything works, is fixed, is complete, or p
 ## The iron law
 
 No completion claim without fresh verification evidence in this same response. Have not run the proving command since the last change? Then "it works" is not available to you, and neither are its synonyms, paraphrases, or implications.
+
+## Brigade-wired repos: verify with capture
+
+When the repo has `.brigade/` (or `brigade status --target .` succeeds), do not run the proving command raw. Route it through Brigade so the exit code becomes a receipt the outcome ledger can score:
+
+```bash
+brigade work verify run --target . --command "<proving command>" --capture <skill-or-card-id>
+# or after a brigade run that changed code:
+brigade outcome capture <skill-or-card-id> --run-receipt latest
+```
+
+Then, when GraphTrail/MiseLedger are installed, feed the next run:
+
+```bash
+brigade receipts export miseledger --target . --new-only --import
+```
+
+Raw `pytest` / `npm test` proves the claim for this response but leaves Brigade dormant (`outcome rank` says "ranking: none"). The differentiated path is receipts that feed the next run's context with a measured brief hit rate. This skill owns the loop's evidence gate. The full loop and the other gates are defined in the [Brigade process model](../../../docs/brigade-process-model.md).
 
 ## The gate
 

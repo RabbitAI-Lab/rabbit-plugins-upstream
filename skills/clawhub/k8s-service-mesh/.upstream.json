@@ -1,0 +1,10 @@
+{
+  "source": "clawhub",
+  "url": "https://clawhub.ai/skills/k8s-service-mesh",
+  "slug": "k8s-service-mesh",
+  "ownerHandle": null,
+  "version": "2.0.0",
+  "updatedAt": 1792687078545,
+  "contentHash": "726b28ec0d72f2deb3063f765efd3e1c67f453e16bc4cf23902b647109470326",
+  "fetchedAt": "2026-10-27T13:41:13.690Z"
+}

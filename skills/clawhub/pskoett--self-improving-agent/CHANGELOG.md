@@ -7,15 +7,99 @@ agent or user must do when upgrading. Format follows
 
 Read this before upgrading. General upgrade rules:
 
-- **OpenClaw hook changes only take effect after re-copying and restarting.**
-  The hook runs from a copy: re-run
-  `cp -r ~/.openclaw/skills/self-improving-agent/hooks/openclaw ~/.openclaw/hooks/self-improvement`
-  and restart the gateway after upgrading.
+- **OpenClaw hook changes require replacing the active copy and restarting.**
+  Follow [Install or Upgrade the Hook](references/openclaw-integration.md#install-or-upgrade-the-hook):
+  discover the selected paths, diff and merge local patches, and preserve the
+  old hook outside discovery directories before replacement. Repeating the
+  old `cp -r` command can nest `openclaw/` instead of updating the handler.
 - `.learnings/` files are user data and are never migrated or overwritten by
   upgrades; first-use initialisation is idempotent and only creates missing
   files.
 
-## [Unreleased]
+## [4.0.5] - Unreleased
+
+### Fixed
+
+- Disabling the hook no longer recommends deleting learning history. There
+  is no separate reminder-only switch; disable the whole hook and restart.
+- Uninstall instructions select actual installation paths and archive the
+  skill/hook outside discovery roots. Learning files and promoted workspace
+  guidance are preserved. Permanent data deletion requires a separate explicit
+  request, verified paths, and a verified backup.
+- Feature-request detection now requires evidence of a missing capability.
+  Ordinary questions and follow-up tasks are not automatic logging triggers.
+
+### Upgrade notes
+
+Skill instructions and documentation only; hook code is unchanged from 4.0.4.
+Update the installed skill and use a fresh session. No hook replacement or
+learning-data migration is needed for this release.
+
+## [4.0.4] - 2026-10-22
+
+### Fixed
+
+- SQLite session-end capture (#29), including compressed transcript events,
+  through the running OpenClaw host's bounded transcript reader. Tested on
+  OpenClaw 2026.10.4; this private runtime API needs revalidation on upgrades.
+  JSONL remains supported. Scans are capped at 2,000 events/8 MiB, with at
+  most 16 runtime pages; late errors in long sessions can be missed.
+- Hook install/upgrade instructions (#32) now select actual install paths,
+  stage and review changes, preserve local patches and backups outside
+  discovery roots, and replace without nesting directories.
+- Hook documentation and generated entries (#31) distinguish internal
+  `HOOK.md` events from typed plugins, which expose `after_tool_call`.
+- Repository release metadata (#33) now records the published 4.0.3 release;
+  SKILL.md links the maintenance evaluation scenarios. These fixes shipped
+  in 4.0.4 and do not change the existing ClawHub 4.0.3 archive.
+
+## [4.0.3] - 2026-10-04
+
+ClawHub published this release with `version: "4.0.2"` in SKILL.md and the
+maintenance notes still under `[Unreleased]`. The registry's 4.0.3 file
+hashes match those maintenance files. This heading corrects the release
+record; it does not imply the published archive has been replaced. Publish
+the fixes above under a new version, not by reusing 4.0.3.
+
+### Added
+
+- Standalone cause-aware maintenance for saved claims, including one-off and
+  unpromoted entries: four revalidation types, qualitative review rates,
+  scoped evidence, and retain/revise/externalize/retire outcomes.
+- Capture templates, provenance-preserving review examples, and behavioral
+  evaluation cases in `references/maintenance-evals.md`.
+
+### Changed
+
+- Reuse, promotion, and optional skill extraction now distinguish incident
+  resolution from claim validation. Preserve history and two-way source links;
+  do not expire preferences, safeguards, or skill assets by age or disuse.
+- Optional hook reminders mention maintenance; swept claims start unknown and
+  pending until triage. Regex matches do not assign decay classifications.
+- No companion skill, hook, scheduler, or new backend is required. Initialize
+  maintenance metadata on capture/relevant review; no bulk migration. Re-copy
+  the hook and restart only if using the optional hook changes.
+
+## [4.0.2] - 2026-08-06
+
+> 4.0.1 is skipped: that version number was already used by a build
+> published to ClawHub, so it is not reusable here.
+
+### Fixed
+
+- **Install commands and clone URL in the docs were wrong** (#24). The
+  advertised `clawdhub install` command does not exist. The documented
+  commands are now `openclaw skills install @pskoett/self-improving-agent`
+  (built-in, installs into the active workspace) and
+  `clawhub install @pskoett/self-improving-agent` (ClawHub CLI,
+  `npm i -g clawhub`, installs into `./skills` under the current working
+  directory). Both take the `@owner/slug` form — a bare slug is only
+  accepted for already-installed or unambiguous skills. Fixed in
+  `README.md`, `SKILL.md`, and `references/openclaw-integration.md`.
+- The manual `git clone` URL used the wrong owner handle
+  (`peterskoett` → `pskoett`). The old handle only resolved via a web
+  redirect, which `git clone` does not follow, so manual installs failed on
+  a fresh machine.
 
 ### Added
 
@@ -26,7 +110,7 @@ Read this before upgrading. General upgrade rules:
 
 ### Changed
 
-- **Repo restructured for ClawdHub publishing**: the skill package now lives
+- **Repo restructured for ClawHub publishing**: the skill package now lives
   in the repo's `self-improving-agent/` subfolder (SKILL.md, assets, hooks,
   references, scripts, this changelog), keeping repo-level files (README,
   `.github/`) out of the published skill. Install by copying the subfolder,
@@ -36,6 +120,11 @@ Read this before upgrading. General upgrade rules:
   spec requires. The OpenClaw *hook* keeps its `self-improvement` name, so
   existing hook installs and `openclaw hooks enable self-improvement` are
   unaffected.
+
+### Upgrade notes (4.0.x → 4.0.2)
+
+Documentation only — no skill behavior, hook, or `.learnings/` changes. No
+action needed beyond reinstalling if you want the corrected install docs.
 
 ## [4.0.0] - 2026-07-04
 
@@ -54,7 +143,7 @@ Read this before upgrading. General upgrade rules:
   `TOOLS.md`, `AGENTS.md`), with the project's own agent file as the target
   for project-specific patterns.
 - Hook docs and code comments describe the session-end sweep on its own
-  terms (OpenClaw has no per-tool-call event) instead of contrasting with
+  terms (the internal-hook system has no per-tool-call event) instead of contrasting with
   other platforms.
 
 ### Upgrade notes (0.3.0 → 4.0.0)

@@ -1,45 +1,59 @@
-## Description: <br>
-Death Spiral helps agents diagnose self-reinforcing competitive decline by auditing moats, early-warning signals, cascade steps, and intervention windows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users through diagnosing self-reinforcing competitive decline and mapping possible intervention points.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Strategy teams, founders, investors, and agents use this skill to evaluate whether market-share or growth decline is structural, map the competitive cascade, and identify an intervention window before the decline becomes self-reinforcing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strategic or financial conclusions may be incorrect if based on stale, incomplete, or unverified company data. <br>
-Mitigation: Verify market-share, CAC, churn, revenue, and R&D trend claims against current company data before acting on recommendations. <br>
-Risk: The skill can misclassify cyclical decline as structural competitive decline. <br>
-Mitigation: Apply the skill's fit checks and stop rule: test cyclicality, name specific moat-breach scenarios, and stop if the audit is incomplete. <br>
+## Use Case:
 
+Business leaders, strategy teams, founders, and investors use the skill to assess whether deteriorating business metrics form a structural competitive feedback loop, identify warning signals, and consider intervention timing.
 
-## Reference(s): <br>
-- [Death Spiral on ClawHub](https://clawhub.ai/deciqai/skills/death-spiral) <br>
-- [Sources - death-spiral](references/sources.md) <br>
-- [Method in Action: Kodak's Death Spiral (1994-2012)](examples/kodaks-death-spiral-1994-2012.md) <br>
-- [Competitive Advantage](https://www.simonandschuster.com/books/Competitive-Advantage/Michael-E-Porter/9780684841465) <br>
-- [The Innovator's Dilemma](https://www.hbs.edu/faculty/Pages/item.aspx?num=46) <br>
-- [Kodak SEC filings](https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000031235) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with a structured Death Spiral Risk Map] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces analysis guidance only; verify strategic and financial claims with current company data before acting.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Business information shared with the agent may be sensitive, and saved examples may expose confidential details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only business information intended for processing and anonymize saved examples.
+
+Risk: A risk map may be misleading when its assumptions or diagnosis of structural decline are incorrect.
+
+Mitigation: Test for cyclical decline and verify conclusions before acting.
+
+## Reference(s):
+
+- [Skill guide: Death Spiral](https://www.deciqai.com/c/death-spiral)
+- [Primary sources and references](references/sources.md)
+- [Competitive Advantage — Michael E. Porter](https://www.simonandschuster.com/books/Competitive-Advantage/Michael-E-Porter/9780684841465)
+- [The Innovator's Dilemma — Harvard Business School](https://www.hbs.edu/faculty/Pages/item.aspx?num=46)
+- [Kodak SEC filings](https://www.sec.gov/cgi-bin/browse-edgar?action=getcompany&CIK=0000031235)
+- [Chegg Q1 2025 workforce reduction report — CNBC](https://www.cnbc.com/2025/05/12/chegg-to-lay-off-22percent-of-workforce-as-ai-shakes-up-education-tech-industry.html)
+- [Chegg Form 10-Q for quarter ended June 30, 2025 — SEC](https://www.sec.gov/Archives/edgar/data/1364954/000136495425000096/chgg-20250630.htm)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown checklist and structured death spiral risk map]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses user-provided business metrics and assumptions; includes qualitative assessments and timeline estimates.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

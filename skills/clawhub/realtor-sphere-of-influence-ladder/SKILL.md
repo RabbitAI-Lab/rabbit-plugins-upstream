@@ -6,6 +6,7 @@ description: "Activate when: a real estate agent wants repeat + referral busines
 # Real Estate — Sphere-of-Influence Referral Ladder
 
 > **Industry front door for customer-relationship-ladder.** Adds domain triggers, example, packs. Parent Process unchanged.
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
 
 **Activate when:** building repeat/referral pipeline; a database sitting idle; deciding nurture cadence; turning one closing into a lifetime client + referrals.
 **Do NOT activate when:** no existing contacts to nurture.
@@ -40,6 +41,6 @@ Agent closes a buyer, then goes silent until the client resurfaces years later (
 - [ ] Repeat/advocate rung tracked, not just first deal
 
 ---
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/realtor-sphere-of-influence-ladder** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/realtor-sphere-of-influence-ladder** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/realtor-sphere-of-influence-ladder.json*

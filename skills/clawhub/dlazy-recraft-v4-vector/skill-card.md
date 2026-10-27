@@ -1,43 +1,56 @@
-## Description: <br>
-Text-to-vector model that outputs SVG results for logos, icons, and scalable design assets. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates vector graphics from text prompts, producing SVG results suitable for logos, icons, and scalable design assets.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers, designers, and external agents use this skill to invoke the dLazy Recraft V4 Vector model for generating vector-style design assets from text prompts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a third-party dLazy CLI and sends prompts, parameters, and explicitly referenced files to dLazy hosted services. <br>
-Mitigation: Review the dLazy CLI and service terms before use, and avoid sending sensitive prompts or files unless approved for that service. <br>
-Risk: Authentication stores a dLazy API key in local CLI configuration unless a per-invocation environment variable is used. <br>
-Mitigation: Use organization-scoped keys, rotate or revoke keys when needed, and prefer npx @dlazy/cli@1.2.3 when avoiding a persistent global install. <br>
+## Use Case:
 
+External designers and developers can generate logos, icons, and other scalable visual assets from text prompts. They can choose an aspect ratio and save generated assets locally.
 
-## Reference(s): <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-vector) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, JSON, Files] <br>
-**Output Format:** [Shell command output as JSON containing generated media result URLs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May return asynchronous task IDs when --no-wait is used; generated URLs are hosted on files.dlazy.com.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.3.5 (source: evidence.release.version and SKILL.md frontmatter) <br>
+Risk: Prompts and files explicitly submitted for generation are processed by dLazy.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only prompts and files you are authorized to share with the service.
+
+Risk: Login saves an API key locally, and generation can consume paid credits.
+
+Mitigation: Use the documented environment-variable option if you prefer not to save the key, protect any local configuration containing credentials, and check the cost estimate before generation.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-recraft-v4-vector)
+- [CLI project information](https://github.com/dlazy-ai/cli)
+- [CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, Vector graphics]
+
+**Output Format:** [Generated vector graphic (described as SVG and returned as an image result)]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Prompt-driven; supports an optional aspect ratio and local file saving.]
+
+## Skill Version(s):
+
+1.3.31 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

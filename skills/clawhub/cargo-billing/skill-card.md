@@ -1,44 +1,60 @@
-## Description: <br>
-Pull usage metrics, check subscription status, view invoices, and manage credits using the Cargo CLI. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents review Cargo credits, usage, subscriptions, invoices, and payment methods through the Cargo CLI.
 
-## Publisher: <br>
-[cargo-ai](https://clawhub.ai/user/cargo-ai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cargo-ai](https://clawhub.ai/user/cargo-ai)
 
-## Use Case: <br>
-Cargo workspace administrators and operators use this skill to inspect billing usage, subscription state, invoices, credit balances, and billing portal access through the Cargo CLI. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Billing, invoice, card-on-file, and portal-session commands can reveal sensitive workspace billing details. <br>
-Mitigation: Use trusted Cargo CLI credentials, limit use to intended admin workflows, and review commands before running them. <br>
-Risk: Sample workflow-run commands used for cost estimates can consume credits. <br>
-Mitigation: Run only small samples, check available credits before larger batches, and monitor usage during execution. <br>
+## Use Case:
 
+Workspace administrators and developers use this skill to check credit balances, analyze usage and invoices, estimate costs, and manage billing settings with appropriate permissions.
 
-## Reference(s): <br>
-- [Cargo Billing skill page](https://clawhub.ai/cargo-ai/skills/cargo-billing) <br>
-- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills) <br>
-- [Response shapes](references/response-shapes.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
-- [Usage metrics examples](references/examples/usage-metrics.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and JSON response examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires the Cargo CLI and admin-level Cargo billing access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: evidence release metadata and skill frontmatter) <br>
+Risk: Billing commands require administrative access and can change a workspace's payment method.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Grant only necessary billing permissions and obtain explicit user approval before payment changes or billing-management sessions.
+
+Risk: Installing the unpinned external CLI may execute an unreviewed version.
+
+Mitigation: Use a pinned, reviewed Cargo CLI version from a trusted source.
+
+Risk: Entering card details in command-line flags can expose them in shell history or process listings.
+
+Mitigation: Prefer the hosted Stripe form or stdin flow for card entry; do not place card details in command-line arguments.
+
+## Reference(s):
+
+- [Cargo skills homepage](https://github.com/getcargohq/cargo-skills)
+- [Billing response shapes](artifact/references/response-shapes.md)
+- [Usage metrics examples](artifact/references/examples/usage-metrics.md)
+- [Billing troubleshooting](artifact/references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands]
+
+**Output Format:** [Markdown with Cargo CLI command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Billing results depend on the active workspace and its permissions.]
+
+## Skill Version(s):
+
+2.1.0 (source: skill frontmatter and server release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

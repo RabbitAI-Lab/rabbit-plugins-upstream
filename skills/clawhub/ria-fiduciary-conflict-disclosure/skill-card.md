@@ -1,42 +1,52 @@
-## Description: <br>
-Guides agents in identifying and disclosing RIA fiduciary conflicts involving ADV 2A disclosures, compensation differences, affiliated providers, and rollover recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Activate when: identifying/disclosing conflicts in ADV 2A; compensation that varies by product; affiliated custodian/manager; rollover recommendations; 'is this a conflict we must disclose?'. Do NOT activate when: no advisory relationship / no agency duty. More: deciqai.com/c/ria-fiduciary-conflict-disclosure
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External compliance, legal, and advisory operations teams can use this skill with an agent to structure conflict inventories, disclosure checks, rollover rationale review, and red-flag identification for registered investment adviser workflows. It is guidance only, not legal advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat RIA fiduciary conflict guidance as legal advice. <br>
-Mitigation: Use the skill as a reasoning aid only and have qualified legal or compliance professionals confirm applicability before relying on the output. <br>
-Risk: Conflict analysis may be incomplete if compensation arrangements, rollover facts, or affiliated relationships are missing or outdated. <br>
-Mitigation: Verify the conflicts inventory, best-interest rationale, disclosures, and actual advisory practices against current records before use. <br>
+## Use Case:
 
+RIA advisers and compliance staff can use this checklist to identify conflicts of interest, decide whether they can be eliminated or need specific disclosure and mitigation, and document the best-interest rationale for recommendations such as 401(k) rollovers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/ria-fiduciary-conflict-disclosure) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/ria-fiduciary-conflict-disclosure) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/ria-fiduciary-conflict-disclosure.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance with checklists and domain-specific reasoning prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable behavior; compliance guidance should be reviewed by qualified professionals before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: The checklist could be incomplete or lead to inaccurate disclosure or regulatory conclusions; the referenced parent method is not bundled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it as a checklist and have a qualified compliance reviewer verify disclosures and regulatory conclusions.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/ria-fiduciary-conflict-disclosure)
+- [RIA conflict-of-interest guide](https://www.deciqai.com/c/ria-fiduciary-conflict-disclosure)
+- [Project repository](https://github.com/deciqAI/knowledge-skills)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/ria-fiduciary-conflict-disclosure.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Checklist and explanatory guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Human-facing compliance guidance; no code or files are specified as output.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

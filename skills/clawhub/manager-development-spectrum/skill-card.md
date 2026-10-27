@@ -1,42 +1,56 @@
-## Description: <br>
-Manager Development Spectrum helps agents guide coaches, HR leaders, and managers through stage-specific leadership development diagnosis and intervention planning when skill training is not addressing a developmental plateau. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps coaches and organizations assess leadership development needs from behavioral evidence and choose stage-specific developmental moves.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Coaches, HR leaders, and managers use this skill to gather behavioral evidence, identify a leader's likely Action Logic stage, state the stage-specific blind spot, and design a concrete developmental move with a feedback structure and 90-day reassessment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/manager-development-spectrum) <br>
-- [Sources - manager-development-spectrum](references/sources.md) <br>
-- [Method in Action: Abraham Lincoln's Trajectory from Opportunist/Diplomat to Strategist (1834-1865)](examples/abraham-lincoln-1834-1865.md) <br>
-- [Seven Transformations of Leadership](https://hbr.org/2005/04/seven-transformations-of-leadership) <br>
-- [Action Inquiry: The Secret of Timely and Transforming Leadership](https://www.bkconnection.com/books/title/action-inquiry) <br>
-- [Abraham Lincoln Letter to Horace Greeley](https://www.abrahamlincolnonline.org/lincoln/speeches/greeley.htm) <br>
+Coaches, HR leaders, and managers use the skill to interpret leadership behavior, identify a possible Action Logic stage, and plan a concrete development move with feedback and a 90-day reassessment.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown coaching profile and development plan] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Treat stage labels as coaching hypotheses, keep evidence private, and do not use outputs for hiring, promotion, discipline, legal, clinical, or performance-rating decisions.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Leadership stage labels could be mistaken for definitive assessments or employment ratings.
+
+Mitigation: Use this as a coaching aid, ground interpretations in behavioral evidence, and do not use stage labels as selection criteria or performance ratings.
+
+Risk: Workplace examples may reveal sensitive personal or organizational details.
+
+Mitigation: Share only necessary details and anonymize examples retained for future use.
+
+## Reference(s):
+
+- [Sources](references/sources.md)
+- [Rooke and Torbert, Seven Transformations of Leadership](https://hbr.org/2005/04/seven-transformations-of-leadership)
+- [Torbert et al., Action Inquiry](https://www.bkconnection.com/books/title/action-inquiry)
+- [Lincoln's Letter to Horace Greeley (1862)](https://www.abrahamlincolnonline.org/lincoln/speeches/greeley.htm)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance]
+
+**Output Format:** [Structured text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include an Action Logic stage profile, behavioral evidence, a blindspot statement, a developmental move, a feedback source, framework limits, and a 90-day reassessment.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

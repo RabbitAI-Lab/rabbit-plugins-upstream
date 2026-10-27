@@ -1,47 +1,57 @@
-## Description: <br>
-Story Import turns an existing Chinese-language novel or short story into a structured writing project that can be continued with related story-writing skills. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+将已有小说反向整理为可继续写作的项目，按篇幅分别生成长篇或短篇所需的正文、设定与大纲。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers and writing-workflow agents use this skill to import an existing manuscript, analyze it by length, and rebuild it as a long-form or short-form project with settings, outlines, tracking files, benchmark references, and continuation-ready context. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can copy, create, or overwrite manuscript-derived project files in local writing-project directories. <br>
-Mitigation: Invoke it explicitly, point it only at intended manuscript sources, and review overwrite notices and generated files before continuing the writing workflow. <br>
-Risk: Importing a directory that contains unrelated private material could expose that material to the analysis workflow. <br>
-Mitigation: Use a dedicated manuscript file or clean project directory, and avoid selecting folders that contain unrelated sensitive files. <br>
+## Use Case:
 
+小说作者和写作助手使用此技能导入已完成或写到一半的作品，将原稿整理成可供后续写作、审查和续写的项目。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-import) <br>
-- [Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Length Routing Rules](references/length-routing.md) <br>
-- [Long-Form Structure Mapping](references/structure-mapping-long.md) <br>
-- [Short-Form Structure Mapping](references/structure-mapping-short.md) <br>
-- [Character State Reverse Rules](references/character-state-reverse.md) <br>
-- [State Tracking Protocol](references/state-tracking.md) <br>
-- [Text Format and Structure Rules](references/format-and-structure.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with file paths, project-structure plans, status summaries, and command-style workflow handoffs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces or updates local manuscript-derived project files under directories such as 拆文库/, the book project directory, 对标/, 追踪/, and .active-book.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: Importing manuscripts saves their text locally and creates or changes story project files.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the source and destination with the author and review or back up existing project files before import.
+
+Risk: Bundled validation and tracking scripts run locally, and activation changes the selected project.
+
+Mitigation: Review script execution and confirm the intended project before setting .active-book.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/worldwonderer/skills/story-import)
+- [Project link in skill metadata (not verified import provenance)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Length routing rules](references/length-routing.md)
+- [Long-form project mapping](references/structure-mapping-long.md)
+- [Short-form project mapping](references/structure-mapping-short.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text, Project files, Guidance]
+
+**Output Format:** [Local manuscript and writing-project files, plus a Markdown import report]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates or updates local story folders and sets .active-book for the imported project.]
+
+## Skill Version(s):
+
+1.0.32 (source: ClawHub release metadata; bundled SKILL.md frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

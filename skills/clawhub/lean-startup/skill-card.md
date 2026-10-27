@@ -1,46 +1,52 @@
-## Description: <br>
-Lean Startup helps agents coach Build-Measure-Learn experiments by naming the riskiest business-model assumption, designing a small MVP test, measuring real behavior, and deciding whether to pivot or persevere. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides teams through Build–Measure–Learn experiments to test demand assumptions and decide whether to pivot or persevere.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Startup founders, product teams, and business operators use this skill to test uncertain business-model assumptions before committing to a larger build. The skill guides agents to produce experiment cards, pivot-or-persevere thresholds, MVP designs, and concise coaching around validated learning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may disclose confidential assumptions, metrics, thresholds, or experiment results during coaching. <br>
-Mitigation: Avoid pasting confidential business data into the agent session unless that disclosure is acceptable for the deployment environment. <br>
-Risk: Business coaching output could be mistaken for a final strategic decision. <br>
-Mitigation: Review the generated experiment card, metrics, and pivot-or-persevere threshold with accountable stakeholders before acting. <br>
+## Use Case:
 
+Founders, product teams, and developers use the skill to identify a startup's riskiest demand assumption, design a small experiment, measure customer behavior, and make a pivot-or-persevere decision.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/lean-startup) <br>
-- [Lean Startup source references](references/sources.md) <br>
-- [deciqAI Lean Startup page](https://www.deciqai.com/c/lean-startup) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/lean-startup.json) <br>
-- [Why the Lean Start-Up Changes Everything](https://hbr.org/2013/05/why-the-lean-start-up-changes-everything) <br>
-- [Dropbox video MVP example](https://www.youtube.com/watch?v=7QmCUDHpNzE) <br>
-- [Introducing ChatGPT](https://openai.com/index/chatgpt/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured experiment-card templates and checklists] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask follow-up questions and pause for user input when coaching novices.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: release evidence) <br>
+Risk: Experiments may involve customer-facing tests, spending, or confidential customer details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Separately authorize customer-facing tests or spending, and keep confidential customer details out of reusable observations.
+
+## Reference(s):
+
+- [Lean Startup primary sources](artifact/references/sources.md)
+- [Why the Lean Start-Up Changes Everything](https://hbr.org/2013/05/why-the-lean-start-up-changes-everything)
+- [Dropbox 2007 demo video](https://www.youtube.com/watch?v=7QmCUDHpNzE)
+- [Introducing ChatGPT](https://openai.com/index/chatgpt/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown, including a structured experiment card]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapts between step-by-step coaching and direct experiment planning based on whether the user has a concrete hypothesis.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

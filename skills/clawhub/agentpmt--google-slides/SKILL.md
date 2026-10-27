@@ -1,7 +1,7 @@
 ---
 name: google-slides
 description: "Google Slides: Create, edit, and manage Google Slides presentations. Add slides, text boxes, images, tables, and shapes. Use when an agent needs google slides, create presentations from scratch, add slides with predefined layouts, insert text boxes with styled content, embed images into slides, add image, presentation id, page object id through AgentPMT-hosted remote tool calls. Discovery terms: google slides, create presentations from scratch, add slides with predefined layouts."
-version: 1.0.0
+version: 1.0.1
 homepage: https://www.agentpmt.com/marketplace/google-slides
 compatibility: "Agent instructions for AgentPMT-hosted remote tool calls. Follow this skill body for supported account, wallet, and setup routes. No local command runtime is declared."
 metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/marketplace/google-slides"}}
@@ -9,7 +9,7 @@ metadata: {"author":"agentpmt","openclaw":{"homepage":"https://www.agentpmt.com/
 # Google Slides
 
 ## Freshness
-Last updated: `2026-06-24`.
+Last updated: `2026-10-24`.
 
 If the current date is more than 7 days after the last updated date, reinstall this skill from skills.sh or ClawHub before relying on endpoints, schemas, setup steps, or examples.
 
@@ -459,11 +459,17 @@ Fill a template presentation with dynamic data:
 - Search results from `search_presentations` only return Google Slides files (filtered by MIME type)
 - Thumbnail URLs from `get_slide_thumbnail` expire after approximately 30 minutes
 
+##### `rename_presentation`
+Renames the presentation file, not its slides. Required: `presentation_id`, nonblank `new_title`. No optional fields. The presentation ID and URL remain unchanged.
+```json
+{"action":"rename_presentation","presentation_id":"PRES_ID","new_title":"Q4 Report"}
+```
+
 ## When To Use
 - Use this skill for `Google Slides` on AgentPMT.
 - Use it when an agent needs this specific tool's behavior, schema, inputs, outputs, and invocation shape.
 - Search and activation keywords: google slides, create presentations from scratch, add slides with predefined layouts, insert text boxes with styled content, embed images into slides, add image, presentation id, page object id.
-- Supported action names: `add_image`, `add_shape`, `add_slide`, `add_table`, `add_text_box`, `batch_update`, `create_presentation`, `delete_object`, `duplicate_object`, `get_presentation`, `get_slide_thumbnail`, `insert_text`, `reorder_slides`, `replace_all_shapes_with_image`, `replace_all_text`, `search_presentations`, `update_shape_properties`, `update_slide_properties`, `update_text_style`.
+- Supported action names: `add_image`, `add_shape`, `add_slide`, `add_table`, `add_text_box`, `batch_update`, `create_presentation`, `delete_object`, `duplicate_object`, `get_presentation`, `get_slide_thumbnail`, `insert_text`, `rename_presentation`, `reorder_slides`, `replace_all_shapes_with_image`, `replace_all_text`, `search_presentations`, `update_shape_properties`, `update_slide_properties`, `update_text_style`.
 
 ## Use Cases
 - Create presentations from scratch
@@ -482,7 +488,7 @@ No categories or industry tags are published for this tool.
 
 ## Actions And Schema
 Complete generated action schema: `./schema.md`.
-Supported action count: `19`.
+Supported action count: `20`.
 x402 availability: not enabled for this product.
 
 - `add_image` (action slug: `add-image`): Add an image to a slide. Price: `5` credits. Parameters: `element_properties`, `image_url`, `object_id_value`, `page_object_id`, `presentation_id`.
@@ -497,6 +503,7 @@ x402 availability: not enabled for this product.
 - `get_presentation` (action slug: `get-presentation`): Retrieve full details of an existing presentation including all slides and elements. Price: `5` credits. Parameters: `presentation_id`.
 - `get_slide_thumbnail` (action slug: `get-slide-thumbnail`): Generate a PNG thumbnail image of a specific slide. Price: `5` credits. Parameters: `page_object_id`, `presentation_id`, `thumbnail_size`.
 - `insert_text` (action slug: `insert-text`): Insert text into an existing shape or table cell. Price: `5` credits. Parameters: `cell_location`, `object_id_value`, `presentation_id`, `text`, `text_insertion_index`.
+- `rename_presentation` (action slug: `rename-presentation`): Rename an existing Google Slides presentation file without changing its slides or ID. Price: `5` credits. Parameters: `new_title`, `presentation_id`.
 - `reorder_slides` (action slug: `reorder-slides`): Move one or more slides to a new position. Price: `5` credits. Parameters: `new_position`, `presentation_id`, `slide_object_ids`.
 - `replace_all_shapes_with_image` (action slug: `replace-all-shapes-with-image`): Replace all shapes containing specific text with an image. Useful for template image placeholders. Price: `5` credits. Parameters: `image_replace_method`, `image_url`, `match_case`, `presentation_id`, `search_text`.
 - `replace_all_text` (action slug: `replace-all-text`): Find and replace text across the entire presentation. Ideal for template merging with {{tag}} placeholders. Price: `5` credits. Parameters: `match_case`, `presentation_id`, `replace_text`, `search_text`.

@@ -1,42 +1,51 @@
-## Description: <br>
-Guides real estate agents in turning existing sphere and past-client relationships into scheduled nurture, repeat-business, and referral workflows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides real estate agents in nurturing existing clients and sphere contacts to build repeat and referral business.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Real estate agents and teams use this skill to structure sphere-of-influence and past-client follow-up, including nurture cadence, referral timing, and repeat-source tracking. It is intended for agents who already have contacts or clients to nurture. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Using the skill with CRM or content-calendar agents could expose contact data or allow unwanted customer-facing actions. <br>
-Mitigation: Keep control over what contact data is shared and which CRM, messaging, or calendar actions are allowed. <br>
-Risk: Referral and nurture recommendations may be a poor fit for an agent without an existing sphere or past-client database. <br>
-Mitigation: Confirm the workflow matches a real-estate referral-nurture use case before installing or delegating work to another agent. <br>
+## Use Case:
 
+External real estate agents use this guidance to organize follow-up with existing clients and sphere contacts, build a nurture cadence, and encourage repeat and referral business.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/realtor-sphere-of-influence-ladder) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/realtor-sphere-of-influence-ladder) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/realtor-sphere-of-influence-ladder.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown guidance with checklists and workflow recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code, persistence, credential use, or tool calls identified by the security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: A separate CRM or outbound-messaging integration may have access and messaging behavior outside this skill's guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use contacts you choose to provide, and review any separate CRM integration and outbound-messaging automation before enabling it.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/realtor-sphere-of-influence-ladder)
+- [deciqAI skill page](https://www.deciqai.com/c/realtor-sphere-of-influence-ladder)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/realtor-sphere-of-influence-ladder.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Practical client-nurture examples, cadence ideas, and a verification checklist.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

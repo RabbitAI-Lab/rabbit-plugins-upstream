@@ -1,41 +1,60 @@
-## Description: <br>
-用于微博数据助手、微博热搜、微博内容研究、帖子详情、评论分析、评论回复观察、转赞互动、创作者资料和创作者内容列表。覆盖 Weibo post research，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A read-only Weibo research assistant for reviewing trending topics, posts, comments, engagement, and creator profiles or post lists through SocialDataX.
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Users and analysts use this skill to review Weibo trends, discover posts, inspect comments and engagement, and retrieve creator profiles or post lists through SocialDataX. It requires a SocialDataX API key and does not modify Weibo accounts.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Queries and links are sent to SocialDataX for data retrieval.
+
+Mitigation: Use only queries and links you are comfortable sharing with the service.
+
+Risk: The SocialDataX API key could expose account access if disclosed.
+
+Mitigation: Keep SOCIALDATAX_API_KEY private and avoid exposing it in logs or outputs.
+
+Risk: Large data collections may consume service credits.
+
+Mitigation: Check credit costs and set appropriate collection limits before large queries.
+
+Risk: The documented CLI examples install the latest package version, which can change over time.
+
+Mitigation: Prefer a reviewed, fixed package version and limit its access to unrelated files and secrets.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and developers use this skill to retrieve read-only Weibo hot-search, post, comment, reply, engagement, creator profile, and creator post-list data through SocialDataX. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, JSON, Research guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses SOCIALDATAX_API_KEY with a CLI/API workflow. <br>
-Mitigation: Install only when comfortable exposing the API key to SocialDataX, and keep key permissions and billing limits appropriate. <br>
-Risk: The skill runs the npm package socialdatax-skills at latest. <br>
-Mitigation: Review package trust before installation and pin or audit the package where deployment policy requires it. <br>
+**Output Format:** [Structured Weibo research results and concise summaries]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-weibo) <br>
+**Other Properties Related to Output:** [Read-only; results depend on the query and SocialDataX API response.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with inline shell commands and API-key setup guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY and node/npm to call the SocialDataX CLI or matching MCP tools.] <br>
+0.1.20 (source: server-resolved release)
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

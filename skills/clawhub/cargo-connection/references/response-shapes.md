@@ -20,6 +20,7 @@ JSON response structures returned by Cargo CLI commands used in the `cargo-conne
       "toolsCount": 5,
       "modelsCount": 0,
       "useCredits": true,
+      "isManaged": true,
       "config": null,
       "createdAt": "2025-01-01T00:00:00Z",
       "updatedAt": "2025-01-15T00:00:00Z",
@@ -29,9 +30,12 @@ JSON response structures returned by Cargo CLI commands used in the `cargo-conne
 }
 ```
 
-**Key fields:** `uuid`, `name`, `integrationSlug`, `useCredits`, `playsCount`, `toolsCount`.
+**Key fields:** `uuid`, `name`, `integrationSlug`, `useCredits`, `isManaged`, `playsCount`, `toolsCount`.
 
-When `useCredits` is `true`, actions on this connector consume Cargo credits. When `false`, `config` contains the integration-specific credentials.
+- `useCredits`: actions on this connector are billed in Cargo credits.
+- `isManaged`: the connector runs on Cargo's own provider keys, so `config` is `null`. When `false`, `config` holds the integration-specific credentials.
+
+The two usually match. They differ on an integration whose provider bills Cargo per call even on the user's own sign-in (X Account): its connectors are `useCredits: true`, `isManaged: false`.
 
 ## cargo-ai connection connector get
 
@@ -50,6 +54,7 @@ When `useCredits` is `true`, actions on this connector consume Cargo credits. Wh
     "toolsCount": 5,
     "modelsCount": 0,
     "useCredits": true,
+    "isManaged": true,
     "config": null,
     "createdAt": "2025-01-01T00:00:00Z",
     "updatedAt": "2025-01-15T00:00:00Z",
@@ -78,7 +83,7 @@ Each integration in the list is a full integration object (same shape as `integr
       "subCategories": [],
       "documentationPath": "...",
       "connector": { "config": { "jsonSchema": { ... } } },
-      "actions": { "enrichCompanyFromDomain": { ... } },
+      "actions": { "enrichCompany": { ... } },
       "extractors": {},
       "dynamicSchemas": {}
     }
@@ -88,7 +93,7 @@ Each integration in the list is a full integration object (same shape as `integr
 
 **Key fields:** `slug` (used when creating connectors and filtering), `name`, `category`, `actions`, `extractors`.
 
-Supports `--category`, `--slug`, `--search`, `--has-actions`, `--has-extractors` to filter results.
+Supports `--category`, `--slugs`, `--search`, `--has-actions`, `--has-extractors` to filter results.
 
 **Integration categories:** `engagement`, `marketing`, `sales`, `finance`, `analytics`, `freeform`, `success`, `support`, `enrichment`, `storage`, `custom`.
 
@@ -111,11 +116,12 @@ Returns the full integration object, including all actions and extractors with t
     "connector": {
       "config": {
         "jsonSchema": { "type": "object", "properties": { "apiKey": { "type": "string" } } }
-      }
+      },
+      "managed": { "isCompatible": true }
     },
     "actions": {
-      "enrichCompanyFromDomain": {
-        "name": "Enrich Company From Domain",
+      "enrichCompany": {
+        "name": "Enrich Company",
         "description": "Enrich a company by domain",
         "category": "enrichment",
         "icon": "https://...",
@@ -192,10 +198,10 @@ Returns the full integration object, including all actions and extractors with t
 {
   "nativeIntegration": {
     "actions": {
-      "send_email": {
+      "sendEmail": {
         "name": "Send Email",
         "description": "Send an email via the native Cargo email action",
-        "category": "enrichment",
+        "category": "email",
         "icon": "https://...",
         "isSerialized": false,
         "config": {
@@ -236,12 +242,14 @@ Returns the full integration object, including all actions and extractors with t
 | ----- | ----------- |
 | `name` | Display name |
 | `description` | What the action does |
-| `category` | One of: `invisible`, `logic`, `storage`, `ai`, `sales`, `code` |
+| `category` | One of: `invisible`, `logic`, `storage`, `ai`, `sales`, `code`, `email`, `object` |
 | `icon` | Icon URL |
 | `config.jsonSchema` | JSON Schema describing the action's input parameters |
 | `config.uiSchema` | UI hints for each field — check for `IntegrationAutocompleteWidget` to detect autocomplete fields |
 | `childrenCount` | Number of child branches (0 for most actions) |
 | `credits.costs` | Credit cost per execution. Each cost has `type` (`fixed` or `unit`) and `cost` (number) |
+
+On the integration itself, `connector.managed.isCompatible` says a connector can run on Cargo's keys (a managed connector, billed in credits). `connector.credits.isRequired` says every connector is billed in credits, even one holding its own credentials.
 
 **`extractors`** is keyed by extractor slug. Extractors sync data from an integration into a model.
 

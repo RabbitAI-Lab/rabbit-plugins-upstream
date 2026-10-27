@@ -1,6 +1,6 @@
 ---
 name: pibox
-description: pi-coding-agent (earendil-works) running on the network inside an aicodebox container. Exposes seven programmatic surfaces on one image — interactive shell, one-shot exec (`-p "..."`), an HTTP REST API (run/async/cancel, workspace file ops), an OpenAI-compatible `/openai/v1/chat/completions` endpoint (streaming, client-executed tool calling, response_format/JSON-schema), an MCP server at `/mcp` (mounted in API mode or as a sidecar), a Telegram bot, and a cron scheduler that fires pi on a schedule. Foreground modes (API/Telegram/Cron) are mutually exclusive except Telegram+Cron; MCP coexists with any of them. Bearer-token auth per surface (`PIBOX_API_MODE_TOKEN`, `PIBOX_MCP_MODE_TOKEN`), empty = no auth. Use when the user wants to drive pi-coding-agent programmatically over HTTP/MCP/Telegram/cron instead of a local terminal session, or needs to reason about which pibox mode/endpoint fits a given integration.
+description: "Install, configure, or run pi-coding-agent through the pibox wrapper, or connect to its HTTP, MCP, Telegram, or cron surfaces."
 homepage: https://github.com/psyb0t/docker-pibox
 user-invocable: true
 metadata:
@@ -11,14 +11,53 @@ metadata:
 
 [pi-coding-agent](https://github.com/earendil-works/pi-mono/tree/main/packages/coding-agent) inside an [aicodebox](https://github.com/psyb0t/docker-aicodebox) container. One image, seven ways in: interactive shell, one-shot exec, HTTP REST API, OpenAI-compatible endpoint, MCP server, Telegram bot, cron scheduler.
 
-You talk to pibox, pibox talks to pi, pi talks to whatever Anthropic-compatible LLM you point it at (`ANTHROPIC_BASE_URL` / `ANTHROPIC_AUTH_TOKEN`).
+You talk to pibox, pibox talks to pi, and Pi talks to the configured upstream LLM. Use `PIBOX_PROVIDER_*` for Pi's documented custom HTTP APIs, including LiteLLM and Anthropic-compatible endpoints. `ANTHROPIC_*` remains a compatibility shortcut for existing Anthropic Messages deployments.
 
 For installation and configuration, see [references/setup.md](references/setup.md).
+
+## Agent execution
+
+Use `pibox` when it is on `PATH`. Run it from the workspace the user named.
+Do not assemble a new `docker run` command for routine interactive or one-shot
+work. The wrapper owns the workspace mount, `~/.pi`, aicodebox state, SSH
+state, image selection, and container lifecycle.
+
+```bash
+pibox                                      # interactive Pi
+pibox -p "inspect this workspace"           # one-shot work
+pibox -p "review this change" --thinking high
+PIBOX_FULL=1 pibox -p "run the full suite"
+```
+
+Configure the Pi upstream before the first run with `PIBOX_PROVIDER_*` or the
+supported `ANTHROPIC_*` compatibility variables. Use an HTTP or MCP endpoint
+only when the user asks for a service or provides an already-running remote
+URL. MCP plugins connect to a server. They do not replace the local wrapper.
+
+Start a local API and MCP server only when the user asks for one. Set the
+actual model identifiers and distinct bearer tokens:
+
+```bash
+PIBOX_DETACH=1 \
+PIBOX_API_MODE=1 \
+PIBOX_MCP_MODE=1 \
+PIBOX_AVAILABLE_MODELS=your-model-id \
+PIBOX_API_MODE_TOKEN=your-api-token \
+PIBOX_MCP_MODE_TOKEN=your-mcp-token \
+pibox
+```
+
+If `pibox`, `codexbox`, and `claudebox` were installed in the same command
+directory, a box can invoke a sibling command directly. The parent wrapper
+passes the real host paths and the sibling wrapper file. Do not set
+`AICODEBOX_HOST_*`, copy wrapper files, or manually mount another box's state
+directory. If the sibling command is absent, ask the user to install it or to
+choose another approach.
 
 ## Security & safety
 
 - **No auth when `PIBOX_API_MODE_TOKEN` is unset.** With it empty the REST/OpenAI-compatible API surface is UNAUTHENTICATED — anyone who can reach it gets full agent-execution and workspace file-read/write/delete access. NEVER expose such an instance on a network or to untrusted agents; set the token and bind to loopback / behind an authenticating proxy.
-- **No auth when `PIBOX_MCP_MODE_TOKEN` is unset.** Same story for the MCP surface (`/mcp` or the sidecar) — empty token means unauthenticated `run_prompt`/file-tool access, and it does not fall back to `PIBOX_API_MODE_TOKEN`. Set it explicitly.
+- **No auth when `PIBOX_MCP_MODE_TOKEN` is unset.** Same story for the MCP surface (`/mcp/` or the sidecar) — empty token means unauthenticated `run_prompt`/file-tool access, and it does not fall back to `PIBOX_API_MODE_TOKEN`. Set it explicitly.
 - **Destructive & irreversible.** `DELETE /run/{id}`, `DELETE /files/{path}`, and the MCP `delete_file` tool remove state with no undo (canceled runs can't be resumed; deleted files are gone). An agent must NEVER call these unless the user explicitly asked for that exact action; confirm the specific target first, scope it to the current task, and never enumerate-then-bulk-delete. On a shared/multi-tenant instance a deletion can destroy another caller's in-flight run or workspace file — treat these routes as admin-only.
 
 ## When To Use
@@ -39,34 +78,25 @@ For installation and configuration, see [references/setup.md](references/setup.m
 
 ## Interactive shell mode
 
-No mode env var set, no args passed to `docker run`. Falls through to pi's own CLI, invoked directly — a normal interactive pi session inside the container.
+Run `pibox` with no mode variables or arguments. The wrapper starts Pi in the
+current workspace and preserves its host state.
 
 ```bash
-docker run -it --rm \
-  -e ANTHROPIC_AUTH_TOKEN=your-token \
-  -e ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic \
-  -e ANTHROPIC_MODEL=glm-4.6 \
-  -v "$PWD/workspace:/workspace" \
-  psyb0t/pibox:latest
+pibox
 ```
 
-Auth: none at the container boundary — you're inside it. pi itself uses the `ANTHROPIC_*` env vars.
+Auth: none at the container boundary. Pi uses the upstream provider variables in [references/setup.md](references/setup.md#llm-upstream).
 
 ## One-shot exec mode
 
-No mode env var set, args passed after the image name are forwarded verbatim to the `pi` binary (passthrough). `-p "<prompt>"` runs pi non-interactively and prints the result to stdout, then exits.
+`pibox -p "<prompt>"` runs Pi non-interactively and writes the result to
+stdout, then exits. The wrapper forwards Pi flags unchanged.
 
 ```bash
-docker run --rm \
-  -e ANTHROPIC_AUTH_TOKEN=your-token \
-  -e ANTHROPIC_BASE_URL=https://api.z.ai/api/anthropic \
-  -e ANTHROPIC_MODEL=glm-4.6 \
-  -v "$PWD/workspace:/workspace" \
-  psyb0t/pibox:latest \
-  -p "list the files in /workspace"
+pibox -p "list the files in this workspace"
 ```
 
-Any pi CLI flag works here (`--model`, `--thinking`, `--session`, etc.) — the entrypoint just execs `pi "$@"`. Auth: none at the container boundary; pi uses `ANTHROPIC_*`.
+Any Pi CLI flag works here (`--model`, `--thinking`, `--session`, etc.). Auth: none at the container boundary. Pi uses the upstream provider variables in [references/setup.md](references/setup.md#llm-upstream).
 
 ## REST API mode
 
@@ -97,7 +127,7 @@ docker run -d --network host \
 | `DELETE` | `/files/{path}` | delete a file (refuses directories — 400) |
 | `POST` | `/openai/v1/chat/completions` | OpenAI-compatible chat (see below) |
 | `GET` | `/openai/v1/models` | model list, from `PIBOX_AVAILABLE_MODELS` |
-| `POST` | `/mcp` | MCP server (streamable HTTP) — mounted only when `PIBOX_MCP_MODE=1` |
+| `POST` | `/mcp/` | MCP server (streamable HTTP) — mounted only when `PIBOX_MCP_MODE=1`. Slashless `/mcp` reaches the same handler |
 
 All `/files/*` paths resolve against the workspace root with traversal checking — `..` segments that escape the root return 400. Every route except `/healthz` is gated by `Authorization: Bearer <PIBOX_API_MODE_TOKEN>` when that var is set; empty/unset token = no auth.
 
@@ -164,18 +194,18 @@ Extra `x-aicodebox-*` headers (workspace pinning, session continuation, extra ar
 
 | Foreground | MCP placement |
 |---|---|
-| API mode (`PIBOX_API_MODE=1`) | mounted at `/mcp` on the API port — no extra process |
+| API mode (`PIBOX_API_MODE=1`) | mounted at `/mcp/` on the API port — no extra process |
 | Telegram / Cron / passthrough / none | sidecar uvicorn on its own port, `PIBOX_MCP_MODE_PORT` (default `8081`), mounted at the port root |
 
 ```bash
-claude mcp add --transport http pibox http://localhost:8080/mcp \
+claude mcp add --transport http pibox http://localhost:8080/mcp/ \
   --header "Authorization: Bearer your-mcp-token"
 ```
 
 Raw JSON-RPC (debugging, non-MCP-aware callers):
 
 ```bash
-curl -s http://localhost:8080/mcp \
+curl -s http://localhost:8080/mcp/ \
   -H "Content-Type: application/json" \
   -H "Accept: application/json, text/event-stream" \
   -H "Authorization: Bearer your-mcp-token" \
@@ -189,6 +219,8 @@ curl -s http://localhost:8080/mcp \
 Auth: `PIBOX_MCP_MODE_TOKEN=<token>` — bearer via `Authorization: Bearer …`, or `?apiToken=…` query param for clients that can't set headers. Empty = no auth. **No fallback to `PIBOX_API_MODE_TOKEN`.**
 
 **No auth when `PIBOX_MCP_MODE_TOKEN` is unset.** With it empty the MCP surface is UNAUTHENTICATED — anyone who can reach it gets `run_prompt` (arbitrary agent execution) and workspace file read/write/delete access. NEVER expose such an instance on a network or to untrusted agents; set the token and bind to loopback / behind an authenticating proxy.
+
+MCP keeps DNS rebinding protection enabled. Loopback hosts and origins work by default; a reverse proxy, tunnel, or public DNS name needs its exact `Host` and browser `Origin` values allowed with `PIBOX_MCP_MODE_ALLOWED_HOSTS` and `PIBOX_MCP_MODE_ALLOWED_ORIGINS`, or MCP calls through it fail.
 
 ## Telegram bot mode
 
@@ -232,13 +264,13 @@ jobs:
     thinking: low
 ```
 
-Each run gets a history dir at `$HOME/.aicodebox/cron/history/<workspace>/<timestamp>-<job>/` (override root via `PIBOX_CRON_MODE_HISTORY_DIR`) with `meta.json`, `stdout.log`, `stderr.log`, `result.txt`. If telegram is also configured, `telegram.json` lands there too and the next run's prompt gets a "prior run" hint so pi can reference its own history without you wiring it up. Running alongside Telegram mode (`PIBOX_TELEGRAM_MODE=1` + `PIBOX_CRON_MODE=1`) runs cron in-thread inside the telegram process — the only foreground-mode pairing allowed.
+`PIBOX_CRON_MODE_HISTORY_DIR` (default `$HOME/.aicodebox/cron`) is the whole cron state root. Each run gets a history dir at `<root>/history/<workspace>/<timestamp>-<job>/` with `meta.json`, `stdout.log`, `stderr.log`, `result.txt`. If telegram is also configured, `telegram.json` lands there too and the next run's prompt gets a "prior run" hint so pi can reference its own history without you wiring it up. A per-job summary jsonl is appended at `<root>/<job>.jsonl`. Running alongside Telegram mode (`PIBOX_TELEGRAM_MODE=1` + `PIBOX_CRON_MODE=1`) runs cron in-thread inside the telegram process — the only foreground-mode pairing allowed.
 
-Auth: none — this is a scheduled background job, not a request-driven surface. `telegram_chat_id` on a job routes its result through the (already-authenticated) Telegram bot if set.
+Auth: none — this is a scheduled background job, not a request-driven surface. `telegram_chat_id` on a job routes its result through the (already-authenticated) Telegram bot if set; setting it to `0` opts that job out of an inherited default. A successful job with an explicit recipient notifies even when its result text is empty; a failed job sends a failure notice.
 
 ## Auth (LLM upstream)
 
-pi speaks the Anthropic wire protocol. Point it at any Anthropic-compatible endpoint via env vars, forwarded into every mode:
+Use `PIBOX_PROVIDER_*` for Pi's documented custom HTTP APIs, including LiteLLM and Anthropic-compatible endpoints. `ANTHROPIC_*` remains a compatibility path for existing Anthropic Messages endpoints. The full configuration matrix and examples are in [references/setup.md](references/setup.md#llm-upstream).
 
 | Var | Purpose |
 |-----|---------|
@@ -284,7 +316,7 @@ curl -s http://localhost:8080/run -H "Authorization: Bearer $SECRET" \
 **Wire an MCP-aware agent (Claude Code, OpenClaw) to a running pibox:**
 
 ```bash
-claude mcp add --transport http pibox http://localhost:8080/mcp \
+claude mcp add --transport http pibox http://localhost:8080/mcp/ \
   --header "Authorization: Bearer $MCP_TOKEN"
 ```
 

@@ -1,0 +1,7 @@
+{
+  "name": "douyin-commerce-product-research-free",
+  "version": "1.0.2",
+  "private": false,
+  "type": "module",
+  "scripts": { "test": "node scripts/self-test.mjs" }
+}

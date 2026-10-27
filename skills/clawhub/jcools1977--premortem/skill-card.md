@@ -1,41 +1,55 @@
-## Description: <br>
-Cognitive immune system for AI agents. Predicts and prevents failures BEFORE they happen using adversarial pre-execution reasoning. Zero dependencies, zero cost, universal quality improvement. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Cognitive immune system for AI agents. Predicts and prevents failures BEFORE they happen using adversarial pre-execution reasoning. Zero dependencies, zero cost, universal quality improvement.
 
-## Publisher: <br>
-[jcools1977](https://clawhub.ai/user/jcools1977) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jcools1977](https://clawhub.ai/user/jcools1977)
 
-## Use Case: <br>
-Developers, engineers, and agent operators use Premortem to add a lightweight pre-execution review habit before significant responses, code changes, plans, system actions, and other higher-stakes work. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The always-available review habit could be treated as a substitute for normal safeguards on destructive commands, deployments, production changes, or shared systems. <br>
-Mitigation: Keep explicit confirmations, backups, tests, code review, and deployment safeguards in place; use the skill as an additional reasoning check only. <br>
-Risk: A broad premortem process can add unnecessary delay or over-analysis to trivial actions. <br>
-Mitigation: Follow the skill's calibration guidance: skip trivial actions and scale review depth to the stakes of the task. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [Benchmarks](references/benchmarks.md) <br>
-- [The Science Behind Premortem](references/cognitive-science.md) <br>
-- [OpenClaw homepage](https://github.com/jcools1977/Opengnaw) <br>
+## Use Case:
 
+Developers, engineers, and agent users use this skill to add a pre-action failure-prediction checklist before significant responses, code changes, plans, and shared-system actions. It is intended to improve alignment, completeness, confidence calibration, and risk awareness without external tools or services.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Text, Markdown] <br>
-**Output Format:** [Markdown guidance for internal reasoning checks] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only skill with no tool, credential, network, or file-access requirements in the security evidence.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: The skill can broadly influence an agent's reasoning style through always-loaded silent pre-action checks.
+
+Mitigation: Disable automatic activation where supported when minimal behavioral changes are preferred.
+
+Risk: The skill's value depends on the agent applying the premortem checklist proportionally rather than delaying or overcomplicating simple tasks.
+
+Mitigation: Apply the documented intensity scaling and anti-paralysis guard, and review high-stakes outputs before use.
+
+## Reference(s):
+
+- [Premortem Effectiveness: Expected Impact Areas](references/benchmarks.md)
+- [The Science Behind Premortem](references/cognitive-science.md)
+- [ClawHub Skill Page](https://clawhub.ai/jcools1977/skills/premortem)
+- [Project Homepage](https://github.com/jcools1977/Opengnaw)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or plain text guidance produced by the agent after applying an internal premortem reasoning pass]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No external services, API calls, network access, file writes, or persistent runtime state are required by the skill.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

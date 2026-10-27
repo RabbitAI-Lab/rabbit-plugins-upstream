@@ -1,45 +1,50 @@
-## Description: <br>
-Analyzes long-form web novels through a staged pipeline covering opening chapters, character structure, reader-payoff design, pacing, chapter summaries, setting and relationship extraction, summary reports, and style profiling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+本技能分阶段分析长篇网络小说，整理章节摘要、剧情节奏、角色设定与文风，并支持续跑和可选的灵感整理。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, editors, and creative-development agents use this skill to break down legally available long-form fiction into structured analysis files for plot, pacing, character, setting, emotional hooks, reusable writing patterns, and prose style. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill copies full novel text into the workspace and stores sizeable source excerpts. <br>
-Mitigation: Use it only with text you own or are authorized to process, and delete retained `原文/`, `文风.md` excerpts, and `/tmp/style-sample.txt` when source text should not remain on disk. <br>
-Risk: The skill can update related project files outside the main analysis folder without a strong confirmation step. <br>
-Mitigation: Run it in a controlled workspace and review diffs after each run before accepting or publishing changes. <br>
+## Use Case:
 
+网络小说作者可用它分析长篇小说的结构、节奏、人物与文风，并整理可追溯的写作参考。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-analyze) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata link](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Material decomposition reference](references/material-decomposition.md) <br>
-- [Output templates reference](references/output-templates.md) <br>
-- [Style profile protocol reference](references/style-profile-protocol.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Analysis, Guidance] <br>
-**Output Format:** [Markdown files organized under a book-specific analysis directory] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates staged analysis artifacts such as summaries, character files, plot and pacing indexes, setting notes, reports, progress state, and style profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: Topic-validation updates may edit a planning document without confirming the exact target and proposed changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before topic-validation updates, confirm the exact 选题决策.md file and the proposed changes.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/worldwonderer/skills/story-long-analyze)
+- [Project link listed in skill metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, CSV, Images]
+
+**Output Format:** [Markdown analysis documents, a CSV chapter index, and optional SVG or PNG relationship charts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Creates a project-scoped set of analysis files; relationship charts are optional.]
+
+## Skill Version(s):
+
+1.1.33 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

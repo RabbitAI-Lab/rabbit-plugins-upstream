@@ -1,38 +1,56 @@
-## Description: <br>
-Analyze decisions using six perspectives with structured parallel thinking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze decisions using six perspectives with structured parallel thinking.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-External users and teams use this skill to analyze decisions, problems, or ideas through Six Thinking Hats perspectives. It helps an agent produce structured framing, facts, options, benefits, risks, gut checks, recommendations, and next steps. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill may create ~/six-thinking-hats/ and retain decision preferences or recent analyses locally. <br>
-Mitigation: Review or delete that folder, or decline archiving, if local decision history should not be retained. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/ivangdavila/six-thinking-hats) <br>
-- [Skill homepage](https://clawic.com/skills/six-thinking-hats) <br>
+## Use Case:
 
+External users and agents use this skill to analyze decisions, problems, and ideas through De Bono's Six Thinking Hats method. It structures an analysis across facts, intuition, risks, benefits, alternatives, and process control before producing a recommendation and next steps.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown decision analysis with headings, lists, tables, recommendations, and next steps] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May optionally maintain local decision preferences and recent analysis history under ~/six-thinking-hats/.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: frontmatter and server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Local memory may retain decision-analysis preferences or recent analyses that include sensitive context.
+
+Mitigation: Review or delete ~/six-thinking-hats/ when retained history is not desired, and avoid storing sensitive decision details unless needed.
+
+Risk: Structured decision guidance can still be incomplete or based on uncertain facts.
+
+Mitigation: Review the analysis, verify important facts and assumptions, and treat recommendations as decision support rather than automatic conclusions.
+
+## Reference(s):
+
+- [Six Thinking Hats ClawHub page](https://clawhub.ai/ivangdavila/skills/six-thinking-hats)
+- [Six Thinking Hats homepage](https://clawic.com/skills/six-thinking-hats)
+- [Hat details](artifact/hats.md)
+- [Memory template](artifact/memory-template.md)
+- [Setup guide](artifact/setup.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance, Configuration]
+
+**Output Format:** [Markdown decision analysis with headings, lists, and option comparison tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local memory notes in ~/six-thinking-hats/ when the user permits or preferences are learned.]
+
+## Skill Version(s):
+
+1.0.0 (source: frontmatter and server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

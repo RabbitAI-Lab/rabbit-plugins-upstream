@@ -1,45 +1,57 @@
-## Description: <br>
-Helps an agent challenge stale or overtrusted metrics, models, plans, processes, and assumptions by auditing the gap between a map and the reality it claims to represent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a decision-coaching process for checking whether a metric, model, strategy, or process still reflects the reality it is meant to represent.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, operators, strategists, and developers use this skill when a metric, model, benchmark, strategy, process, or plan may no longer match the underlying situation. It guides the agent through a map-territory audit that names omissions, distortions, age, direct territory signals, and update triggers. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the audit as a final business decision even when it recommends updating or replacing a model, metric, process, or plan. <br>
-Mitigation: Review consequential recommendations with accountable stakeholders before acting. <br>
-Risk: Over-applying the method can slow decisions when the map and independent territory observations already agree. <br>
-Mitigation: Use the skill's stop rule: stop auditing when the map and territory are consistent across multiple independent signals. <br>
+## Use Case:
 
+Employees and leaders use this decision-coaching skill to audit metrics, models, strategies, and processes against direct observations, identify omissions and outdated assumptions, and define calibration actions.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/map-is-not-the-territory) <br>
-- [deciqAI live skill page](https://www.deciqai.com/c/map-is-not-the-territory) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/map-is-not-the-territory.json) <br>
-- [Primary sources](references/sources.md) <br>
-- [McNamara and the Vietnam kill-ratio map](examples/mcnamara-vietnam-kill-ratio-map.md) <br>
-- [AI benchmarks as maps of capability](examples/ai-benchmarks-vs-deployment-reality-2024-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown or concise text with a structured Map-Territory Audit] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory output only; the skill contains no executable code or automatic actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Users may treat decision-coaching recommendations as validated conclusions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill as a thinking aid and verify consequential recommendations.
+
+Risk: Real-use examples may expose confidential details.
+
+Mitigation: Avoid confidential details when recording real-use examples in the skill document.
+
+## Reference(s):
+
+- [Primary sources](artifact/references/sources.md)
+- [McNamara and the Vietnam Kill-Ratio Map](artifact/examples/mcnamara-vietnam-kill-ratio-map.md)
+- [AI Benchmarks as Maps of Capability (2024–2026)](artifact/examples/ai-benchmarks-vs-deployment-reality-2024-2026.md)
+- [ClawHub release](https://clawhub.ai/deciqai/skills/map-is-not-the-territory)
+- [deciqAI skill page](https://www.deciqai.com/c/map-is-not-the-territory)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown with a labeled Map-Territory Audit structure]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Covers the map, omissions, distortions, age, direct territory signals, decision, required updates, and update trigger.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
