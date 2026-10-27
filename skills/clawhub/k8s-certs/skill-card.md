@@ -1,41 +1,54 @@
-## Description: <br>
-Kubernetes certificate management with cert-manager. Use when managing TLS certificates, configuring issuers, or troubleshooting certificate issues. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Kubernetes certificate management with cert-manager. Use when managing TLS certificates, configuring issuers, or troubleshooting certificate issues.
 
-## Publisher: <br>
-[rohitg00](https://clawhub.ai/user/rohitg00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[rohitg00](https://clawhub.ai/user/rohitg00)
 
-## Use Case: <br>
-Developers and platform engineers use this skill to manage Kubernetes TLS certificates with cert-manager, including issuers, certificate requests, troubleshooting, and Ingress-based certificate issuance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill includes examples that can make persistent changes to live Kubernetes certificate, issuer, and ingress resources. <br>
-Mitigation: Use least-privileged Kubernetes credentials, confirm the active cluster and namespace, inspect each manifest, prefer staging or dry-run validation, and require explicit approval before kubectl_apply. <br>
-Risk: Production ACME issuer examples can affect real certificate issuance and service availability. <br>
-Mitigation: Start with the staging issuer, verify DNS and solver configuration, and only switch to production after review. <br>
+## Use Case:
 
+Developers and Kubernetes engineers use this skill to inspect, create, and troubleshoot cert-manager certificates, issuers, certificate requests, and ingress TLS configuration.
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/rohitg00/skills/k8s-certs) <br>
-- [Let's Encrypt staging ACME directory](https://acme-staging-v02.api.letsencrypt.org/directory) <br>
-- [Let's Encrypt production ACME directory](https://acme-v02.api.letsencrypt.org/directory) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration] <br>
-**Output Format:** [Markdown with kubectl and cert-manager tool examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Kubernetes manifests for Certificate, ClusterIssuer, and Ingress resources.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server-resolved release metadata) <br>
+Risk: Cluster-wide cert-manager installation and cluster write operations may affect resources beyond the requested certificate changes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the target cluster, namespace, and requested changes before enabling writes; approve installation separately and review a pinned official release manifest.
+
+Risk: Certificate issuance sends the configured email address and domain names to Let's Encrypt.
+
+Mitigation: Check the email address and domain names before issuance, and use a staging issuer for tests.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/rohitg00/skills/k8s-certs)
+- [cert-manager installation manifest](https://github.com/cert-manager/cert-manager/releases/latest/download/cert-manager.yaml)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Code, Configuration, Guidance]
+
+**Output Format:** [Markdown with Python tool-call examples and YAML manifests]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+2.0.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

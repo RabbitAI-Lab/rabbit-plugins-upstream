@@ -1,40 +1,50 @@
-## Description: <br>
-Helps travel advisors turn one-trip bookers into repeat annual clients through profile capture, proactive next-trip timing, referrals, testimonials, and VIP relationship rungs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps travel advisors turn one-trip clients into annual repeat clients through preference profiles, timed follow-ups, and referral asks.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External travel advisors and agencies use this skill to build repeat-client relationship workflows after an initial trip booking. It guides agents toward client profiling, scheduled annual outreach, referral timing, testimonials, and top-client VIP treatment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Client-profile workflows may involve personal details such as birthdays, school calendars, travel preferences, referrals, or testimonials. <br>
-Mitigation: Review privacy and consent requirements before storing or using those details in a CRM. <br>
+## Use Case:
 
+External travel advisors use this skill to plan client profiles, proactive next-trip follow-ups, and well-timed referral requests that support repeat bookings.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/travel-repeat-client-ladder) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/travel-repeat-client-ladder) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/travel-repeat-client-ladder.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance with checklist-style recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable planning guidance; no tool access or installation required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Client details or follow-up outreach could be handled without appropriate permission or in conflict with communication preferences.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep only necessary client details shared with permission, respect communication preferences, and have the advisor approve recipients and messages before outreach; installation alone does not authorize collecting personal information or contacting clients.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/deciqai/skills/travel-repeat-client-ladder)
+- [Travel Repeat-Client Relationship Ladder overview](https://www.deciqai.com/c/travel-repeat-client-ladder)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown prose, examples, and checklists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Relationship-building recommendations and follow-up ideas; no fixed output schema.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,54 @@
-## Description: <br>
-Helps agents analyze repeated-game and reputation-system situations by checking whether cooperation is sustainable, selecting an environment-appropriate strategy, and designing reputation infrastructure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps assess whether cooperation can hold in repeated interactions, choose a fitting strategy, and design reputation systems.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to reason about trust, retaliation, cooperation, and reputation-system design in repeated or publicly observed relationships. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill produces strategic analysis that could be mistaken for automatic authority in business, legal, financial, or relationship decisions. <br>
-Mitigation: Treat outputs as advisory guidance and require human review before acting on consequential recommendations. <br>
-Risk: Repeated-game recommendations can be misleading if the discount factor, observability, noise, or endgame conditions are estimated incorrectly. <br>
-Mitigation: Use the skill's verification checklist to confirm repetition structure, discount-factor threshold, observation quality, forgiveness design, and endgame mitigations. <br>
+## Use Case:
 
+External users, strategists, and marketplace designers can use the skill to evaluate ongoing relationships, cooperation incentives, and reputation systems.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/repeated-games-reputation) <br>
-- [Primary Sources](references/sources.md) <br>
-- [Robert Axelrod's Computer Tournament Example](examples/robert-axelrod-computer-tournament-1979-1981.md) <br>
-- [Trust Reputation as Strategy in the AI Race Example](examples/ai-trust-reputation-enterprise-adoption-2024-2026.md) <br>
-- [Agents Metadata](https://www.deciqai.com/s/repeated-games-reputation.json) <br>
-- [Axelrod and Hamilton, The Evolution of Cooperation](https://doi.org/10.1126/science.7466396) <br>
-- [Fudenberg and Maskin, Folk Theorem](https://doi.org/10.2307/1911307) <br>
-- [EU AI Act Official Text](https://eur-lex.europa.eu/eli/reg/2024/1689/oj) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown repeated-game analysis with structured fields and concise recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask one-step clarification questions before analysis in coach mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Saved failure examples could contain confidential details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review examples and remove confidential information before saving or sharing them.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/repeated-games-reputation)
+- [Source references](references/sources.md)
+- [Axelrod & Hamilton (1981), The Evolution of Cooperation](https://doi.org/10.1126/science.7466396)
+- [Fudenberg & Maskin (1986), The Folk Theorem in Repeated Games](https://doi.org/10.2307/1911307)
+- [Nowak & Sigmund (1992), Tit for Tat in Heterogeneous Populations](https://doi.org/10.1038/355250a0)
+- [European Union AI Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Recommendations]
+
+**Output Format:** [Structured text and Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Situation-specific assessment of repetition, incentives, observability, strategy, reputation infrastructure, and endgame risk.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

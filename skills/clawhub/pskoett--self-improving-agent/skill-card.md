@@ -1,43 +1,57 @@
-## Description: <br>
-Captures learnings, errors, and corrections to enable continuous improvement for the agent. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Captures and maintains learnings, errors, and corrections. Use when a command fails, the user corrects an assumption, a capability is missing, knowledge is outdated, or a better approach is found. Review relevant saved guidance before major tasks, reuse, and promotion; revalidate it according to what could change and how quickly.
 
-## Publisher: <br>
-[pskoett](https://clawhub.ai/user/pskoett) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[pskoett](https://clawhub.ai/user/pskoett)
 
-## Use Case: <br>
-Developers and agent users use this skill to capture corrections, command failures, feature requests, and reusable workflow lessons in local learning files. OpenClaw users can optionally enable a hook that injects reminders and scans ended sessions for error snippets to triage later. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persistent local learning files may contain sensitive project context if users or agents log too much detail. <br>
-Mitigation: Keep .learnings out of version control, review entries before sharing workspaces, and record short redacted summaries rather than secrets, raw transcripts, or full command output. <br>
-Risk: The optional OpenClaw hook can scan ended session transcripts for error snippets. <br>
-Mitigation: Enable the hook only in trusted workspaces, avoid it for sessions containing credentials or customer data, and rely on its opt-in .learnings directory behavior to disable scanning when needed. <br>
+## Use Case:
 
+External developers using OpenClaw use this skill to capture, review, and maintain corrections, errors, and useful learnings in workspace Markdown, then promote verified guidance into workspace memory. An optional hook can scan ended-session transcripts for possible errors.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/pskoett/skills/self-improving-agent) <br>
-- [OpenClaw integration guide](references/openclaw-integration.md) <br>
-- [Entry examples](references/examples.md) <br>
-- [Uninstall guide](references/uninstall.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and file templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or appends local learning files when used; optional OpenClaw hook writes redacted session-end error excerpts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.0.1 (source: server release metadata; artifact frontmatter reports 4.0.0) <br>
+Risk: Captured transcript excerpts may contain sensitive details if redaction misses them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep learning logs private and review captured excerpts for sensitive information.
+
+Risk: Promoted guidance may be incorrect or misleading in future sessions.
+
+Mitigation: Review promoted rules and revalidate relevant claims before reuse.
+
+## Reference(s):
+
+- [Examples](references/examples.md)
+- [Maintenance and Evaluations](references/maintenance-evals.md)
+- [OpenClaw Integration](references/openclaw-integration.md)
+- [Uninstall Instructions](references/uninstall.md)
+- [OpenClaw Plugin Hook Reference](https://docs.openclaw.ai/plugins/hooks/reference)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Shell commands]
+
+**Output Format:** [Markdown files and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+4.0.5 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

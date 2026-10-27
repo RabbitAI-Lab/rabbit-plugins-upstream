@@ -1,43 +1,56 @@
-## Description: <br>
-Story Cover helps agents create Chinese web-novel covers by selecting genre and platform styling, building GPT-Image prompts, calling an image API, and saving the generated cover assets locally. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generates genre- and platform-aware Chinese web-novel covers with the book title and author name.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Authors, editors, and publishing teams use this skill to generate professional-looking Chinese web-novel cover concepts from a title, author name, target platform, and optional reference image. It guides the agent through prompt construction, image generation, local file output, platform-specific resizing, and quality checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Book titles, author names, prompts, and optional reference images may be sent to the configured image API. <br>
-Mitigation: Use only a trusted GPT_IMAGE_BASE_URL endpoint and avoid submitting sensitive or unlicensed reference material. <br>
-Risk: Generated cover images and prompt text are saved locally in the configured book directory. <br>
-Mitigation: Choose a BOOK_DIR appropriate for storing generated cover assets and review outputs before publication or upload. <br>
+## Use Case:
 
+Authors and publishing teams use this skill to create illustrated novel covers tailored to a story's genre and target platform, with the book title and pen name included.
 
-## Reference(s): <br>
-- [Story Cover on ClawHub](https://clawhub.ai/worldwonderer/skills/story-cover) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [Source link from metadata](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Cover style reference](references/cover-styles.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, files, guidance] <br>
-**Output Format:** [Markdown guidance with bash command blocks plus locally saved PNG cover files and prompt text files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires GPT_IMAGE_API_KEY and the curl, jq, and base64 command-line tools; BOOK_DIR controls where generated cover files are saved, with optional GPT_IMAGE_BASE_URL, GPT_IMAGE_MODEL, GPT_IMAGE_SIZE, UPLOAD_SIZE, and REF_IMAGE settings.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.5 (source: release evidence) <br>
+Risk: The skill reads local book-setting files and saves covers, prompts, and optional reference-image details to disk.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the selected book files and output location before use; avoid including sensitive material in saved prompts or references.
+
+Risk: If the API fallback is used, the title, pen name, prompt, and optional reference image are sent to OpenAI or a configured compatible endpoint.
+
+Mitigation: Use the fallback only when intended, confirm the endpoint, and avoid private reference material unless you consent to its transmission.
+
+## Reference(s):
+
+- [Cover styles and genre guidance](references/cover-styles.md)
+- [Image API fallback guide](references/api-fallback.md)
+- [Project URL listed in skill metadata](https://github.com/zenstory-ai/oh-story-claudecode)
+- [ClawHub skill listing](https://clawhub.ai/worldwonderer/skills/story-cover)
+
+## Skill Output:
+
+**Output Type(s):** [Image files, Text]
+
+**Output Format:** [PNG cover images and plain-text prompt/reference files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Versioned covers avoid overwriting prior images; a platform-sized PNG may also be exported.]
+
+## Skill Version(s):
+
+1.1.12 (source: ClawHub release; bundled frontmatter says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

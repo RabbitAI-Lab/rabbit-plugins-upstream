@@ -1,47 +1,58 @@
-## Description: <br>
-Helps agents produce a firm-level value-chain audit that maps activities, estimates cost allocation, identifies differentiation sources, compares competitors, analyzes linkages, and recommends activity-level strategy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides firm-level analysis of activities, costs, differentiation, competitor positioning, and linkages to identify sources of competitive advantage and strategic actions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, consultants, founders, and strategy teams use this skill to diagnose where a firm's competitive advantage, margin pressure, value leakage, or make-versus-buy decision sits across primary and support activities. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may paste confidential financial, margin, supplier, or acquisition details into an agent session while using the skill. <br>
-Mitigation: Avoid sharing confidential business data unless the session and data-handling environment are approved for that information. <br>
-Risk: Strategic recommendations can be misleading when cost allocations, differentiation claims, or competitor comparisons are based on weak estimates. <br>
-Mitigation: Treat the audit as decision support and validate major claims against finance data, customer evidence, and observed competitor behavior before acting. <br>
-Risk: The linear value-chain framework can misfit platform, multisided-market, industry-level, or pre-product-market-fit cases. <br>
-Mitigation: Use the skill's fit checks and switch to a more suitable framework when the case is platform-based, industry-level, portfolio-oriented, or too early-stage. <br>
+## Use Case:
 
+Business analysts, strategy teams, and company leaders use this skill to map a firm's activities, explain margin gaps or competitive advantage, compare activity economics with competitors, and evaluate sourcing or investment choices.
 
-## Reference(s): <br>
-- [Primary Sources](references/sources.md) <br>
-- [Apple Annual Reports](https://investor.apple.com/sec-filings/annual-reports/default.aspx) <br>
-- [Asymco Apple Value Chain Analyses](https://www.asymco.com) <br>
-- [NVIDIA Investor Relations](https://investor.nvidia.com) <br>
-- [TSMC Investor Relations](https://investor.tsmc.com) <br>
-- [Value Chain Analysis Skill Page](https://clawhub.ai/deciqai/skills/value-chain-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown value-chain audit with tables, evidence notes, and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces strategic analysis only; no executable behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: Cost allocations and competitor comparisons may rely on estimates or incomplete information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify estimates against current internal data and relevant competitor evidence before acting on recommendations.
+
+Risk: Business analysis may involve confidential or sensitive information.
+
+Mitigation: Share only appropriate business information and omit confidential details from saved usage lessons.
+
+## Reference(s):
+
+- [Primary and supporting sources](artifact/references/sources.md)
+- [Apple annual reports](https://investor.apple.com/sec-filings/annual-reports/default.aspx)
+- [NVIDIA investor relations](https://investor.nvidia.com)
+- [TSMC investor relations](https://investor.tsmc.com)
+- [ClawHub release](https://clawhub.ai/deciqai/skills/value-chain-analysis)
+- [deciqAI skill page](https://www.deciqai.com/c/value-chain-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown Value Chain Audit with an activity table, cost estimates, differentiation sources, competitor comparisons, linkages, and recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses estimates where activity-level data is unavailable; distinguishes estimated from observed comparisons.]
+
+## Skill Version(s):
+
+1.0.7 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

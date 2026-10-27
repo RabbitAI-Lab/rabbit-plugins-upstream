@@ -1,0 +1,24 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {transact,safePath} from '../scripts/store.mjs';
+import {handle} from '../scripts/core.mjs';
+const slug='mochi-work-reports';
+const root=fs.mkdtempSync(path.join(os.tmpdir(),slug+'-test-'));
+let seq=0;
+const fresh=()=>{const p=path.join(root,'w'+(++seq));fs.mkdirSync(p);return p;};
+const call=(w,i)=>transact(w,slug,i,handle);
+test.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+test('period reports group evidence without inventing missing durations',()=>{const w=fresh();for(const [n,day,status,minutes] of [['a','2026-10-23','done',90],['b','2026-10-24','blocked',undefined],['c','2026-11-01','done',50]])call(w,{action:'add',requestId:n,date:day,title:n,detail:'real user work record',status,evidence:['user-record:'+n],minutes});const r=call(w,{action:'report',from:'2026-10-23',to:'2026-10-24'});assert.equal(r.records.length,2);assert.equal(r.sections.done.length,1);assert.equal(r.sections.blocked.length,1);assert.equal(r.recordedMinutes,90);assert.equal(r.recordsWithoutDuration,1);assert.deepEqual(r.records[0].evidence,['user-record:a']);});
+test('records require evidence and reports require a valid interval',()=>{const w=fresh();assert.throws(()=>call(w,{action:'add',requestId:'bad',date:'2026-10-23',title:'x',detail:'y',status:'done',evidence:[]}));assert.throws(()=>call(w,{action:'report',from:'2026-10-24',to:'2026-10-23'}));});
+
+test('workspace confinement rejects traversal',()=>{const w=fresh();assert.throws(()=>safePath(w,'../outside'));});
+test('two workspace stores do not share data',()=>{const a=fresh(),b=fresh();const h=(i,s)=>{s.records.push(i.value);return {changed:true,result:{records:s.records}};};transact(a,slug,{requestId:'a',value:'first'},h);const out=transact(b,slug,{action:'list'},(i,s)=>({result:{records:s.records}}));assert.equal(out.records.length,0);});
+test('retry returns the saved result and rejects changed input',()=>{const w=fresh();let count=0;const h=()=>{count++;return {changed:true,result:{value:count}};};transact(w,slug,{requestId:'same',v:1},h);assert.equal(transact(w,slug,{requestId:'same',v:1},h).replayed,true);assert.equal(count,1);assert.throws(()=>transact(w,slug,{requestId:'same',v:2},h));});
+test('busy state does not overwrite another operation',()=>{const w=fresh();const d=path.join(w,'.mochilab',slug);fs.mkdirSync(d,{recursive:true});fs.writeFileSync(path.join(d,'write.lock'),'active');assert.throws(()=>call(w,{action:'list'}),/busy/);assert.equal(fs.readFileSync(path.join(d,'write.lock'),'utf8'),'active');});
+test('a failed operation preserves the previous state',()=>{const w=fresh();transact(w,slug,{requestId:'good'},(i,s)=>{s.records.push('saved');return {changed:true,result:{done:true}};});const file=path.join(w,'.mochilab',slug,'state.json'),before=fs.readFileSync(file,'utf8');assert.throws(()=>transact(w,slug,{requestId:'bad'},(i,s)=>{s.records.push('unsaved');throw new Error('failed');}));assert.equal(fs.readFileSync(file,'utf8'),before);});
+test('linked paths are rejected when supported by the host',t=>{const w=fresh(),outside=fresh();try{fs.symlinkSync(outside,path.join(w,'linked'),process.platform==='win32'?'junction':'dir');}catch{t.skip('Host does not allow symlink creation');return;}assert.throws(()=>safePath(w,'linked/secret.txt'));});

@@ -1,40 +1,56 @@
-## Description: <br>
-Guides agents through abductive reasoning by generating competing hypotheses for surprising observations, scoring them by coverage, simplicity, prior plausibility, and predictive power, and naming a discriminating test. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Structures the generation and comparison of competing explanations for surprising observations, then identifies tests that could distinguish them.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, employees, and developers use this skill to diagnose bugs, outages, symptoms, anomalies, or uncertain decisions by comparing multiple explanations before committing to a provisional hypothesis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Abductive judgments can be mistaken or over-applied, especially in decisions about real people or high-stakes domains. <br>
-Mitigation: Treat outputs as provisional hypotheses, require corroborating evidence and an appropriate review process, and avoid using the skill alone for accusations, medical action, financial action, disciplinary action, or confrontation. <br>
+## Use Case:
 
+Developers, analysts, and teams use the skill to compare possible explanations for bugs, symptoms, outages, and other anomalies, and to identify evidence that could distinguish the leading explanation from its rivals.
 
-## Reference(s): <br>
-- [Sources](references/sources.md) <br>
-- [Psychology of Intelligence Analysis](https://www.cia.gov/resources/csi/books-monographs/psychology-of-intelligence-analysis/) <br>
-- [Abductive Reasoning Skill Page](https://clawhub.ai/deciqai/skills/abductive-reasoning) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown abductive inference with a hypothesis table, best explanation, discriminating test, provisional action, and update trigger] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Conclusion should remain provisional and include an update trigger.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: A plausible explanation may be mistaken or misleading if treated as established fact.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Present the leading explanation as provisional, compare it with alternatives, and test it against discriminating evidence before relying on it.
+
+Risk: Real-use examples may expose private or sensitive details.
+
+Mitigation: Omit private or sensitive details when recording examples in skill notes.
+
+## Reference(s):
+
+- [Sources](references/sources.md)
+- [Psychology of Intelligence Analysis](https://www.cia.gov/resources/csi/books-monographs/psychology-of-intelligence-analysis/)
+- [Abductive Reasoning skill page](https://www.deciqai.com/c/abductive-reasoning)
+- [Machine-readable skill details](https://www.deciqai.com/s/abductive-reasoning.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured comparison of candidate explanations and a discriminating test]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provisional conclusions with an update trigger.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

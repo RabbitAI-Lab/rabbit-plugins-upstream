@@ -1,111 +1,74 @@
-# Quality Review Protocol
+# 审核、返修与交付清单
 
-## Status vocabulary
+状态定义统一使用 [降级策略与交付状态](degradation-and-delivery.md)。审核服务于本次交付阶段, 将已经发现的问题和尚未检查的项目分开。
 
-| Status | Meaning |
+## 方案审核
+
+按影响范围检查, 不要求小任务执行无关检查:
+
+| 检查方向 | 判断内容 |
 |---|---|
-| `PASS` | Verified with available evidence or inspection capability |
-| `FAIL` | A specific rule is violated |
-| `BLOCKED` | The check cannot be completed with available evidence or capability |
+| 任务范围 | 工作模式、目标阶段、图数、语言与用户明确要求是否一致 |
+| 商品依据 | 当前采用的产品身份、信息来源、推定与创意设定是否清楚 |
+| 内容分工 | 每张主要问题是否明确, 副图与 A+ 是否有信息递进 |
+| 用户意图 | 手工目标、参考用途和必须保留内容是否得到保留 |
+| 素材可执行性 | 实际附图、顺序、引用标识及容量降级是否可执行 |
+| 整套设计 | 配色、文字层级、光线和允许变化是否足够明确 |
+| 尺寸与模块 | 目标尺寸和来源是否已知, 未知时是否有可继续的候选方案 |
+| 双端关系 | 主题和当前商品依据是否对应, 布局是否分别安排 |
+| 文案 | 本次确切文案、画面语言和声明依据是否明确 |
+| 自包含 | 单独执行每张说明是否仍能理解必要内容 |
 
-Never convert `BLOCKED` into `PASS` to finish the task.
+有问题时先尝试纠正、换表达、换角色、近似、拆分或交预览。未核实平台条件不默认导致方案失败。
 
-## Stage 1: plan review
+## 成图审核
 
-Check every item and name affected slots.
+有实际图片且具备相应能力时执行:
 
-| Gate | Requirement |
+| 检查方向 | 判断内容 |
 |---|---|
-| Scope | Requested deliverables and A+ eligibility are explicit |
-| Facts | Every exact claim maps to an allowed evidence label |
-| Roles | Every slot has one primary decision role |
-| Coverage | Important purchase questions are covered without padding |
-| Dimensions | Every slot has a single delivery size tied to a valid template |
-| MAIN | No added text, confusing props, or unsupported accessories |
-| References | Required product views and states are available |
-| Copy | Exact wording is supplied and claims are defensible |
-| Pairing | Every device-specific A+ slot has the required counterpart |
-| Pair semantics | Paired slots lock the same story, facts, and product state |
-| Self-containment | Every brief is independently executable |
-| Repetition | Later slots add evidence rather than restating earlier slots |
+| 文件与像素 | 可读性、文件归属、实际尺寸、格式与已执行的后处理 |
+| 商品还原 | 轮廓、结构、颜色、数量表达和目标变体, 以及已说明的近似是否可接受 |
+| 状态与场景 | 操作、配件、人物或道具是否符合本次约定或明确的示意安排 |
+| 文字 | 拼写、数字、单位、语言、清晰度和当前稿件文案是否相符 |
+| 信息表达 | 是否回答本图主要问题, 是否出现无意重复或解释不清 |
+| 信息取舍 | 标题、说明和标注是否填补具体理解缺口, 冗余内容是否已删除, 必要条件是否仍可见 |
+| 整套一致性 | 商品依据、设计语言、故事推进和画面质量是否协调 |
+| 双端适配 | 对应关系、语义和布局, 临时裁切或未完成一端是否已说明 |
+| 平台适配 | 需要时核对 MAIN、A+ 模块、替代文本及 AI 人物标记 |
 
-Any failure involving product truth, MAIN compliance, unsupported claims, or unresolved delivery dimensions is a hard failure.
+预览稿的近似还原、示意事实或未完成适配可以接受为降级成果。它们对当前目标是否构成问题要逐项判断, 不设置跨所有阶段的统一硬失败清单。相关发布问题记入上传准备情况。
 
-## Stage 2: final-image review
+能力不足时说明实际检查方式, 可结合用户反馈、人工复核或文字推演推进。用户认可外观不自动证明商品参数或平台审核结果。
 
-Perform only checks supported by the agent’s capabilities.
+## 评分
 
-### Technical
+评分为可选的内部比较工具。需要比较候选时可沿用: 产品还原与事实表达 30、用途与版位适配 20、构图层级 15、文字与可读性 15、整套及双端一致性 10、技术质量 10。
 
-- File is present, readable, and associated with the correct slot.
-- Actual pixel dimensions match delivery requirements.
-- Image is sharp enough at intended display size.
-- No unintended borders, watermarks, corrupted regions, or generation artifacts appear.
+85 分可作为内部参考线, 不作为所有任务的硬门槛或平台官方标准。缺乏可检查图像或检查范围不完整时, 可不评分或只评价可核实部分, 说明覆盖范围, 不编造完整总分。质量、阶段完成度与上传准备分别记录。
 
-### Product fidelity
+## 返修和版本
 
-- Variant, quantity, color, finish, silhouette, controls, and accessories match the fact lock.
-- Product is not deformed, duplicated, merged, or partially replaced.
-- Operating state is physically plausible and supported.
-- The approved MAIN or product reference remains the identity anchor.
+每次返修至少说明当前选中版本、本次修改和应保留的内容。局部修字、改背景或微调构图优先围绕当前图与本次要求进行; 原始素材、旧提示词和旧标注按实际需要引入, 并记录输入。
 
-### Slot compliance
+需要重新策划时可重新使用商品资料、模板和整套设计语言, 重新核对当前事实与假设。新版本建立与原版本的关系, 不把旧图无声替换为另一种商品、主题或包装表达。
 
-- Image answers its assigned customer question.
-- MAIN uses the required clean background and contains no prohibited additions.
-- Measurements and package contents are confirmed.
-- People, props, and scenes do not obscure or misrepresent the product.
+如果 A+ PC 更新了事实、商品状态或主张, 检查手机配对是否也需要更新; 只改该端局部排版时不强制重新制作全部图片。沿用尚未核实的结果时保留原不确定性。
 
-### Text and claims
+## 按阶段交付
 
-- Copy matches the approved wording and language.
-- Spelling, numbers, units, punctuation, and capitalization are correct.
-- Text remains readable at intended device size and inside safe areas.
-- No fabricated badge, certification, rating, testimonial format, or competitor claim appears.
+仅规划时交付方案与必要说明; 仅审核时交付问题和修改优先级。需要图片时, 列出已选素材、版本和缺失项。批量交付可采用以下清单:
 
-### Set coherence
+| 字段 | 内容 |
+|---|---|
+| 版位与版本 | 稳定标识、中文名称、选用版本 |
+| 实际文件 | 存在时提供文件名或可用链接 |
+| 用途与像素 | 主图、副图或具名 A+ 模块, 实际尺寸及目标尺寸 |
+| 双端关系 | 配对标识、两端文件和各自完成情况 |
+| 文案与替代文本 | 目标语言文字和模块需要的元数据 |
+| 来源与处理 | 主要参考、已采用假设和必要的后处理 |
+| 检查与降级 | 已检查结果、待复核项、降级和发布前修改 |
 
-- Visual identity, product appearance, and brand system remain coherent.
-- Each image adds a distinct role.
-- Later images do not show quality decay or generic repetition.
-- Desktop/mobile pairs retain the same narrative, product state, and claims while using independent layouts.
+文件名可用版位标识、中文短名、设备和版本组合, 兼顾实际系统支持。打包时按用户需要组织主图、副图、A+ PC 与 A+ 手机; 暂不能打包时可交付逐文件清单。预览与成品、候选与最终选用版本在清单中明确区分。
 
-## Hard-fail conditions
-
-Mark the set `NEEDS_REVISION` regardless of score when any required image has:
-
-- Wrong product, variant, quantity, or included item.
-- Unsupported measurable claim or certification.
-- MAIN compliance violation.
-- Wrong delivery dimensions.
-- Unreadable or incorrect required copy.
-- Missing required slot.
-- Desktop/mobile semantic mismatch.
-- Material deformation that changes the product.
-
-## Quality score
-
-Use this score only after hard gates pass:
-
-| Dimension | Weight |
-|---|---:|
-| Product fidelity and factual accuracy | 30 |
-| Platform and slot compliance | 20 |
-| Composition and visual hierarchy | 15 |
-| Text, claims, and readability | 15 |
-| Set coherence and device pairing | 10 |
-| Technical quality | 10 |
-
-Qualification threshold: at least `85/100`, no hard failure, and no required check marked `BLOCKED`.
-
-## Review output
-
-Return:
-
-1. Per-slot status with evidence.
-2. Hard failures.
-3. Blocked checks.
-4. Weighted score.
-5. Required revisions in priority order.
-6. Overall status: `QUALIFIED`, `NEEDS_REVISION`, or `BLOCKED`.
-
+首次回复保留规范约定的署名与主页链接, 同一任务后续不重复。其余默认用一句中文说明当前可用范围, 再给出必要的下一步。完整审核表、内部字段、英文状态码与过程记录只在用户需要、交接或系统交换时提供。发布或上传是独立动作, 依据当前用户授权执行, 不由 Skill 的完成状态自动触发。

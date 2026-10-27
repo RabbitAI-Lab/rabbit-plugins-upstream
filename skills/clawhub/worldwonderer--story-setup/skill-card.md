@@ -1,50 +1,64 @@
-## Description: <br>
-Story Setup deploys a web-fiction writing toolbox across Claude Code, OpenCode, Codex, ZCode, OpenClaw, Reasonix, and generic agent environments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Deploys and checks project infrastructure for an online fiction writing toolkit across supported coding agents and generic agent environments.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, writing teams, and developers use this skill to set up project-level story-writing agents, commands, rules, hooks, and reference material for supported CLI and file-based agent environments. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill installs persistent project-level automation that can change future agent behavior. <br>
-Mitigation: Install only when the project needs this writing toolbox, review the selected target platforms, and inspect hook and configuration changes before trusting them. <br>
-Risk: Browser-CDP features can interact with an existing logged-in Chrome session. <br>
-Mitigation: Disable or avoid browser-CDP use unless the user explicitly accepts authenticated browser control in that environment. <br>
-Risk: Automatic update behavior and managed hooks can introduce unexpected changes after setup. <br>
-Mitigation: Consider disabling the automatic update check and re-review managed hooks, commands, and config files after upgrades. <br>
+## Use Case:
 
+Writers and developers use this skill to set up or diagnose a fiction-writing workspace, including agent instructions, writing references, and platform-specific configuration.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-setup) <br>
-- [OpenClaw Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Skill Definition](SKILL.md) <br>
-- [Upgrade Notes](UPGRADING.md) <br>
-- [Agent Reference Bundle](references/agent-references/) <br>
-- [Hook Templates](references/templates/hooks/) <br>
-- [Codex Hook Configuration](references/codex/hooks/hooks.json) <br>
-- [OpenCode Plugin Template](references/opencode/plugin.ts) <br>
-- [ZCode Hook Configuration](references/zcode/hooks/hooks.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with code, shell, and configuration file instructions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or merge project-level agent, hook, rule, command, and reference files depending on the selected target environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.14 (source: ClawHub release metadata; artifact frontmatter reports 1.2.7) <br>
+Risk: Persistent project hooks can run after setup.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Install only in a trusted writing project and review and trust only the hooks you expect.
+
+Risk: Bypassing hook trust or running a remote upgrade script removes important review opportunities.
+
+Mitigation: Do not automate --dangerously-bypass-hook-trust; avoid the curl-to-bash upgrade path.
+
+Risk: Browser control may access an authenticated Chrome session.
+
+Mitigation: Use browser-cdp only when you intend to grant access to that session.
+
+Risk: Automatic GitHub version checks may be unwanted in restricted environments.
+
+Mitigation: Set STORY_NO_UPDATE_CHECK=1 when automatic update checks are not acceptable.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/worldwonderer/skills/story-setup)
+- [Project link listed in skill metadata (not verified import provenance)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Deployment instructions by host](references/deploy-generic.md)
+- [Deployment diagnostics](references/diagnostics.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown, Configuration instructions, Shell commands]
+
+**Output Format:** [Markdown setup or diagnostic report with configuration and command examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or update local project configuration and agent instruction files when deployment is authorized.]
+
+## Skill Version(s):
+
+1.1.40 (source: ClawHub release metadata; bundled skill frontmatter states 1.3.4)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

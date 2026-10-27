@@ -1,44 +1,59 @@
-## Description: <br>
-Scans short-form Chinese web-fiction ranking samples from platforms such as Zhihu Yanyan, Qimao, Black Rock, and Dianzhong to identify current genre, emotion, and topic signals. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes short-fiction listings from Chinese reading platforms to help writers identify promising themes, emotional hooks, and story ideas.
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-External creators, editors, and developers use this skill to collect or review short-story ranking samples, compare platform trends, and turn those observations into topic candidates, risk thresholds, and follow-up validation actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The Black Rock collector can use a logged-in admin browser token to query protected backend APIs. <br>
-Mitigation: Install only when this collection behavior is intended, use a dedicated browser profile or account where possible, and confirm the account is allowed to access the backend API. <br>
-Risk: Ranking-based market signals can become stale quickly and may mislead writing decisions if treated as durable trends. <br>
-Mitigation: Require each report to state the sample date, confidence level, saturation risk, and next rescan time before using it for planning. <br>
-Risk: Browser scraping in a profile with unrelated active sessions can expose sensitive session context to collection scripts. <br>
-Mitigation: Run browser-based collection in a dedicated profile that does not contain unrelated sensitive logins. <br>
+## Use Case:
 
+Short-fiction writers and editors use the skill to review platform listings, compare themes within each platform's own metrics, and choose story directions to test. When current listings are unavailable, it offers historical ideas as hypotheses rather than current trends.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/worldwonderer/skills/story-short-scan) <br>
-- [OpenClaw Metadata Source](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Real Market Data Reference](references/real-market-data.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Guidance] <br>
-**Output Format:** [Markdown reports with tables, ranked recommendations, and optional command guidance for browser-based data collection] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Reports should include sample date, trend confidence, saturation risk, and the next recommended rescan time.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.8 (source: server release metadata; artifact frontmatter reports 1.0.0) <br>
+Risk: The Heiyan workflow uses an authenticated administrative browser session to access management data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing if you use Heiyan. Run it only with an account whose backend access you are comfortable exposing to an agent-controlled Chrome session; skip Heiyan if you only intend to scan public listings.
+
+Risk: Heiyan's book list does not show popularity, and historical notes cannot establish current trends.
+
+Mitigation: Treat Heiyan listings as recently added titles, not a popularity ranking; verify historical ideas against dated current listings before relying on them.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/worldwonderer/skills/story-short-scan)
+- [Project link listed in skill metadata (not verified as release provenance)](https://github.com/zenstory-ai/oh-story-claudecode)
+- [Dianzhong platform guide](artifact/references/platform-dianzhong.md)
+- [Heiyan platform guide](artifact/references/platform-heiyan.md)
+- [Manual listing input guide](artifact/references/manual-rank-input.md)
+- [Historical market notes](artifact/references/real-market-data.md)
+- [Story idea matching guide](artifact/references/topic-match.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Writing guidance, Markdown]
+
+**Output Format:** [Markdown report and story-idea recommendations]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes sample coverage, dates for reassessment, and source-based confidence notes.]
+
+## Skill Version(s):
+
+1.1.20 (source: ClawHub release metadata; bundled SKILL.md says 1.0.0)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

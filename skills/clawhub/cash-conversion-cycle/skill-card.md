@@ -1,38 +1,51 @@
-## Description: <br>
-A business guidance skill that helps an agent analyze how inventory, receivables, and payables can trap cash even when a company is profitable. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps analyze how inventory, receivables, and supplier payment timing affect a business’s cash conversion cycle and growth-related cash needs.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Use when a business is profitable on paper but cash constrained, has material inventory or receivables, or needs to model the cash impact of growth through DIO, DSO, DPO, and cash buffer checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Runs wherever the host agent runs; no deployment region or external service requirement is specified in the evidence. <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/cash-conversion-cycle) <br>
-- [Publisher profile](https://clawhub.ai/user/deciqai) <br>
+External business owners, operators, and finance teams use this skill to calculate the cash conversion cycle, understand cash tied up in working capital, and evaluate how growth plans or operational changes may affect liquidity.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Structured business analysis, checklists, and concise recommendations for cash conversion cycle review.] <br>
-**Output Parameters:** [Business inputs such as DIO, DSO, DPO, daily burn, cash buffer, payment terms, inventory assumptions, receivables, and growth plan assumptions.] <br>
-**Other Properties Related to Output:** [Provides a thinking framework and verification checklist. Evidence.security reports no requested system access or action execution; users should verify financial inputs and consult qualified financial advice before high-impact cash or growth decisions.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Working-capital recommendations may affect billing, inventory, or supplier relationships.
+
+Mitigation: Share only the business figures needed for analysis, and review recommendations before making changes to billing, inventory, or supplier terms.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/cash-conversion-cycle)
+- [Cash conversion cycle overview](https://www.deciqai.com/c/cash-conversion-cycle)
+- [Machine-readable skill details](https://www.deciqai.com/s/cash-conversion-cycle.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Based on business figures supplied for analysis; no account access or automated financial actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

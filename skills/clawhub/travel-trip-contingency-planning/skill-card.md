@@ -1,40 +1,54 @@
-## Description: <br>
-Helps travel advisors pre-plan disruption scenarios for complex, high-value, multi-supplier, international, seasonal, group, or FIT trips. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps travel advisors prepare response plans for disruptions across complex trips.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Travel advisors and agencies use this skill to have an agent name likely disruption scenarios, prepare response paths, and document insurance, refund, advisory, rebooking, and client-contact details before a trip is booked. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Travel contingency guidance may become inaccurate if supplier policies, insurance terms, entry rules, or advisories change after planning. <br>
-Mitigation: Verify current supplier terms, insurance coverage, official advisories, and client disclosures before relying on the plan. <br>
+## Use Case:
 
+External travel advisors use this skill to map likely disruptions for complex trips and prepare rebooking, refund, insurance, and assistance steps before problems occur.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/travel-trip-contingency-planning) <br>
-- [deciqAI travel contingency planning page](https://www.deciqai.com/c/travel-trip-contingency-planning) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/travel-trip-contingency-planning.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown checklist and scenario-planning guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces advisory planning content for agents; it does not execute code or request system access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Travel rules, insurance coverage, and refund terms may vary or change, making a contingency plan inaccurate.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current requirements, coverage, and supplier terms with the relevant authorities and providers before acting, and document the agreed response with the client.
+
+Risk: Planning guidance could be mistaken for legal, financial, insurance, or regulatory advice.
+
+Mitigation: Treat the plan as decision support and have the responsible travel professional confirm jurisdiction- and rate-dependent details before advising the client.
+
+## Reference(s):
+
+- [ClawHub release](https://clawhub.ai/deciqai/skills/travel-trip-contingency-planning)
+- [Travel contingency planning guide](https://www.deciqai.com/c/travel-trip-contingency-planning)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Markdown]
+
+**Output Format:** [Markdown contingency plans, checklists, and playbook guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scenario-based responses for travel disruptions; no automatic booking changes]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

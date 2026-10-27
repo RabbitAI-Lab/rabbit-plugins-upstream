@@ -1,40 +1,56 @@
-## Description: <br>
-Decomposes a firm or industry into primary and support activities to identify where value is created, where margin concentrates, and where competitive advantage can be strengthened. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use when analyzing where profit concentrates across an industry or within a firm, decomposing business activities into primary and support functions to find competitive advantage.
 
-## Publisher: <br>
-[panlm](https://clawhub.ai/user/panlm) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[panlm](https://clawhub.ai/user/panlm)
 
-## Use Case: <br>
-Employees, external consultants, and business analysts use this skill to map a firm or industry value chain, compare activity costs and value drivers, and draft strategic recommendations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Business guidance may rely on unverified market, cost, or margin estimates. <br>
-Mitigation: Independently verify important market, cost, and margin assumptions before using outputs for financial or strategic decisions. <br>
+## Use Case:
 
+Business strategists, analysts, consultants, and product leaders use this skill to decompose a firm or industry into value-creating activities, estimate cost and value contribution, locate profit concentration, and identify cost advantage, differentiation, sourcing, or partnership opportunities.
 
-## Reference(s): <br>
-- [HBS Faculty Page: Competitive Advantage](https://www.hbs.edu/faculty/Pages/item.aspx?num=193) <br>
-- [HBS Institute for Strategy & Competitiveness: The Value Chain](https://www.isc.hbs.edu/strategy/business-strategy/Pages/the-value-chain.aspx) <br>
-- [Wikipedia: Value Chain](https://en.wikipedia.org/wiki/Value_chain) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown narrative with tables and structured recommendation sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include activity maps, cost and value driver assessments, margin-distribution notes, competitor comparisons, and strategic recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Value chain conclusions can be misleading if market facts, cost estimates, or financial assumptions are outdated or unsupported.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify current market facts and financial estimates before using the analysis for high-stakes business decisions.
+
+Risk: Framework-driven analysis can overstate strategic certainty when activity-level margin data is incomplete.
+
+Mitigation: Treat recommendations as decision support and review assumptions, cost allocations, and value contribution estimates with domain experts.
+
+## Reference(s):
+
+- [HBS Faculty Page: Competitive Advantage](https://www.hbs.edu/faculty/Pages/item.aspx?num=193)
+- [HBS Institute for Strategy & Competitiveness: The Value Chain](https://www.isc.hbs.edu/strategy/business-strategy/Pages/the-value-chain.aspx)
+- [Wikipedia: Value Chain](https://en.wikipedia.org/wiki/Value_chain)
+- [ClawHub Skill Page](https://clawhub.ai/panlm/skills/value-chain-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown or structured text analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces strategic analysis guidance and recommendation templates; does not require tools, credentials, API calls, or system access.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

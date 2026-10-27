@@ -1,41 +1,58 @@
-## Description: <br>
-用于小红书内容研究、热门笔记样本、内容角度、关键词调研、选题参考、竞品内容观察和趋势素材整理。覆盖 Xiaohongshu / XHS / RedNote note research，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+面向内容运营、品牌调研和创作者的小红书内容研究辅助技能。适用于 RedNote / XHS / Xiaohongshu（小红书）内容研究、选题分析、关键词观察、趋势判断、竞品内容对比和素材整理。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users, marketers, researchers, and content strategists use this skill to research public Xiaohongshu / XHS / RedNote notes for keyword research, topic ideas, competitor content observation, trend material, sample tables, content angles, and engagement signals. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill depends on the SocialDataX npm package and API service. <br>
-Mitigation: Install and use it only after confirming you trust the package, the API service, and the account tied to SOCIALDATAX_API_KEY. <br>
-Risk: Outputs may include full Xiaohongshu note URLs with xsec_token query parameters. <br>
-Mitigation: Review destinations before displaying, storing, or forwarding returned URLs, especially outside the user's intended workflow. <br>
+## Use Case:
 
+内容运营人员、品牌研究者和创作者可用它按关键词搜索小红书内容，整理内容样本、创作者信息和链接，并分析选题角度、趋势及受众反馈。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/xhs-content-research) <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown research report with sample tables, concise analysis, URLs, note IDs, and optional shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY plus node and npm when using the direct CLI.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.4 (source: server release evidence) <br>
+Risk: Search terms are sent to SocialDataX and may use paid credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid confidential search terms and set page or item limits.
+
+Risk: The SocialDataX API key could be exposed if included in generated content.
+
+Mitigation: Keep the key in the user's environment and out of prompts, output, and generated files.
+
+Risk: The @latest package reference may change after review.
+
+Mitigation: Prefer a reviewed fixed package version for repeatable use.
+
+## Reference(s):
+
+- [SocialDataX skill and API information](https://socialdatax.com/ai?from=clawhub)
+- [ClawHub skill release](https://clawhub.ai/devinchen2014/skills/xhs-content-research)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Shell commands, Guidance]
+
+**Output Format:** [Markdown with structured search-result summaries and optional inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results depend on the query and retrieved pages; preserve returned note_url and note_id values exactly.]
+
+## Skill Version(s):
+
+0.1.12 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

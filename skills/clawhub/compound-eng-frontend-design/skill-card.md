@@ -1,35 +1,51 @@
-## Description: <br>
-ia-frontend-design guides agents in producing frontend design guidance and implementation support for user-facing interfaces. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides visual design and aesthetic direction for frontend pages, dashboards, and applications while adapting to existing design systems.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and agents use this skill to plan and implement frontend experiences with attention to layout, interaction patterns, visual polish, and usability. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
+Frontend developers and designers use this skill to choose coherent visual directions, implement interfaces, and check responsive behavior, interaction states, and accessibility.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with code snippets and command examples when needed] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs should be reviewed before applying changes to production interfaces.] <br>
+Global
 
-## Skill Version(s): <br>
-4.2.0 (source: target metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Suggested styling may conflict with an established brand or theme.
+
+Mitigation: Review the visual direction against existing design tokens and brand guidelines before adopting changes.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/iliaal/skills/compound-eng-frontend-design)
+- [Aesthetics and interaction guidance](references/aesthetics-and-interaction.md)
+- [Mobile and performance guidance](references/mobile-and-performance.md)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Configuration instructions]
+
+**Output Format:** [Markdown with code blocks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a design rationale and viewport verification notes.]
+
+## Skill Version(s):
+
+5.1.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

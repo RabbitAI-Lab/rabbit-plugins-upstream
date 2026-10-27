@@ -1,48 +1,57 @@
-## Description: <br>
-Static hosting via ShipStatic. Use when the user wants to deploy a website, upload files, manage deployments, set up domains, or publish static files to shipstatic.com. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publish static sites and web content to a shareable ShipStatic link, with optional built-in password protection.
 
-## Publisher: <br>
-[shipstatic-com](https://clawhub.ai/user/shipstatic-com) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shipstatic-com](https://clawhub.ai/user/shipstatic-com)
 
-## Use Case: <br>
-Developers and engineers use this skill to deploy static sites and manage ShipStatic deployments, domains, tokens, and account checks from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses API keys and deploy tokens for authenticated hosting operations. <br>
-Mitigation: Use environment variables or a protected config file, and avoid committing or logging API keys or token creation output. <br>
-Risk: Deployment commands upload local files to ShipStatic. <br>
-Mitigation: Use a dedicated build output directory and review the contents before upload. <br>
-Risk: Domain, token, deployment removal, and account commands can make live account changes. <br>
-Mitigation: Treat remove, token, and domain commands as live changes and review targets before execution. <br>
-Risk: Automatic SPA detection may inspect index.html content. <br>
-Mitigation: Use --no-spa-detect when index.html content is sensitive. <br>
+## Use Case:
 
+External users and developers use this skill to publish a static site, page, report, dashboard, slide deck, document, portfolio, or small web app and share a link to it.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/shipstatic-com/shipstatic) <br>
-- [Publisher Profile](https://clawhub.ai/user/shipstatic-com) <br>
-- [ShipStatic Homepage](https://github.com/shipstatic/ship) <br>
-- [ShipStatic Platform](https://shipstatic.com) <br>
-- [API Key Settings](https://my.shipstatic.com/settings) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration instructions, Code, Guidance] <br>
-**Output Format:** [Markdown with inline bash, TypeScript, and JSON examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can produce machine-readable JSON command variants when the ShipStatic CLI supports --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.7.20 (source: server release metadata) <br>
+Risk: Published sites are public unless password protection is requested, so unintended files may be exposed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Check every file in the selected folder before publishing and use built-in password protection for content that should not be public.
+
+Risk: Claim links can transfer site ownership, and saved credentials can make a deployment persistent in an account.
+
+Mitigation: Keep claim links private and confirm the intended account before publishing with saved credentials.
+
+Risk: Publishing an update leaves the earlier version available.
+
+Mitigation: Do not include sensitive content in a published version; treat prior versions as still accessible after updating.
+
+## Reference(s):
+
+- [ShipStatic on ClawHub](https://clawhub.ai/shipstatic-com/skills/shipstatic)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Plain text with a published site link and relevant status or access details]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a claim link, expiration details, or password-protection status when applicable.]
+
+## Skill Version(s):
+
+1.0.1 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

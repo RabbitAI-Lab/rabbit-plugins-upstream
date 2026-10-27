@@ -1,45 +1,59 @@
-## Description: <br>
-Image-to-SVG tool: converts raster images (PNG/JPG) into color vector SVG and returns the URL, suitable for lossless scaling and vectorization of logos, icons, and flat illustrations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Image-to-SVG tool: converts raster images (PNG/JPG) into color vector SVG and returns the URL, suitable for lossless scaling and vectorization of logos, icons, and flat illustrations.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and creative production teams use this skill to convert user-selected raster image assets into scalable vector output through the dLazy CLI and hosted service. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User-selected images may be uploaded to dLazy's hosted service and returned as hosted files. <br>
-Mitigation: Use the skill only with images appropriate for third-party processing and review service terms before sending sensitive assets. <br>
-Risk: The CLI uses an API key saved in local user configuration or supplied through DLAZY_API_KEY. <br>
-Mitigation: Use per-invocation environment variables when persistent local credentials are not desired, and rotate or revoke keys when access is no longer needed. <br>
-Risk: A global CLI install persists a third-party binary on the system. <br>
-Mitigation: Use the pinned npx invocation when a non-persistent install path is preferred. <br>
+## Use Case:
 
+Developers and designers use this skill to convert raster images such as logos, icons, and flat illustrations into scalable vector artwork. It sends the image to dLazy's hosted conversion service and returns an asset URL.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/dlazyai/skills/dlazy-vectorize) <br>
-- [dLazy CLI Source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm Package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy Homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, API Calls, Files, Configuration instructions] <br>
-**Output Format:** [JSON response with hosted output URL; optional downloaded file when --save is used] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a dLazy API key; accepts an image URL or local image path and supports asynchronous task polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.5 (source: frontmatter and server release metadata) <br>
+Risk: Images submitted from local paths are uploaded to dLazy's hosted service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only images you are comfortable sharing with the service.
+
+Risk: The service requires an API key and may consume organization credits.
+
+Mitigation: Protect the saved key or use the environment-variable option, and review the estimated cost before submitting work.
+
+Risk: The example response shows a PNG MIME type despite the skill's SVG conversion description.
+
+Mitigation: Check current command help and confirm the returned file is SVG before using it as vector artwork.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-vectorize)
+- [dLazy website](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Files, URLs, JSON]
+
+**Output Format:** [JSON result containing a generated image asset URL; the intended asset is SVG.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The asset can optionally be saved locally; asynchronous requests may initially return a task identifier. Verify the returned asset format before relying on it.]
+
+## Skill Version(s):
+
+1.2.32 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

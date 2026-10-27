@@ -96,32 +96,26 @@ class CustomerInsightsClient:
     # ==================== 下载管理 ====================
 
     def get_download_links(self) -> Dict[str, Any]:
-        """获取桌面客户端下载链接
+        """获取浏览器扩展下载链接
 
-        从官网下载配置获取各平台的最新下载链接。
+        从官网下载配置获取最新下载链接。
+        注：网站已不再提供桌面客户端下载，downloads 中现仅有 extension 一项。
 
         Returns:
-            Dict[str, Any]: 包含 macos 和 windows 的下载信息
+            Dict[str, Any]: 含 extension 的下载信息（若配置中不存在则为空 url）
         """
         config_url = f"{_WEBSITE_URL}/download-config.json"
         config = self._get(config_url)
 
         downloads = config.get("downloads", {}) or {}
-        macos_info = downloads.get("macos") or {}
-        windows_info = downloads.get("windows") or {}
+        extension_info = downloads.get("extension") or {}
 
         return {
-            "macos": {
-                "name": macos_info.get("name_zh") or macos_info.get("name_en") or "macOS 版",
-                "url": macos_info.get("url") or "",
-                "version": macos_info.get("version") or "",
-                "size": macos_info.get("size") or "",
-            },
-            "windows": {
-                "name": windows_info.get("name_zh") or windows_info.get("name_en") or "Windows 版",
-                "url": windows_info.get("url") or "",
-                "version": windows_info.get("version") or "",
-                "size": windows_info.get("size") or "",
+            "extension": {
+                "name": extension_info.get("name_zh") or extension_info.get("name_en") or "Chrome 扩展",
+                "url": extension_info.get("url") or "",
+                "version": extension_info.get("version") or "",
+                "size": extension_info.get("size") or "",
             },
         }
 
@@ -299,6 +293,42 @@ class CustomerInsightsClient:
             data["polarity"] = polarity
         return self._post("/api/v1/external/analysis/related-comments", data)
 
+
+    # ==================== 商品信息 ====================
+
+    def get_product_detail(
+        self,
+        task_id: str = None,
+        asin: str = None,
+        site: str = "US",
+    ) -> Dict[str, Any]:
+        """获取商品信息（完整字段，含 bullets / description，供二次分析）
+
+        两种查询方式（二选一）：
+        - task_id：按任务查，返回该任务下所有商品
+        - asin + site：按商品直查，无需先建任务
+          ⚠️ 服务端会校验归属：该 ASIN 必须出现在您的某个任务中，
+             否则返回错误（商品数据按 (platform, site, asin) 全局存储）
+
+        Args:
+            task_id: 任务ID（与 asin 二选一）
+            asin: 商品 ASIN（与 task_id 二选一）
+            site: 站点，默认 US
+
+        Returns:
+            含 products 数组，每项包含标题/品牌/评分/星级分布/分类树/
+            价格/bullets/描述/A+ 图片等完整字段
+        """
+        if not task_id and not asin:
+            raise ValueError("task_id 与 asin 至少提供一个")
+        data = {}
+        if task_id:
+            data["task_id"] = task_id
+        if asin:
+            data["asin"] = asin
+            data["site"] = site or "US"
+        return self._post("/api/v1/external/product/detail", data)
+
     # ==================== 账户管理 ====================
 
     def get_points(self) -> int:
@@ -323,7 +353,7 @@ def create_parser() -> argparse.ArgumentParser:
         "--action",
         "-a",
         required=True,
-        help="执行的操作: get_download_links, check_device, create_task, get_task_detail, get_task_list, create_incremental, rename_task, trigger_analysis, get_ai_insights, get_basic_statistics, get_representative_reviews, get_category_tag_distribution, get_negative_reviews, get_trend, get_related_comments, get_comments, get_comments_overview, get_points",
+        help="执行的操作: get_download_links, check_device, create_task, get_task_detail, get_task_list, create_incremental, rename_task, trigger_analysis, get_ai_insights, get_basic_statistics, get_representative_reviews, get_category_tag_distribution, get_negative_reviews, get_trend, get_related_comments, get_comments, get_comments_overview, get_product_detail, get_points",
     )
 
     # 动作参数
@@ -346,10 +376,10 @@ def create_parser() -> argparse.ArgumentParser:
     parser.add_argument("--filter-product", default="all", help="商品筛选: all/ASIN (get_trend)")
     parser.add_argument("--filter-star", default="all", help="评分筛选: 1-5/all (get_comments)")
     parser.add_argument("--filter-verified", default="all", help="筛选已认证评论: all/true/false (get_comments)")
-    parser.add_argument("--association-type", default="tag", help="关联类型: tag/issue (get_related_comments)")
+    parser.add_argument("--association-type", default="tag", help="关联类型: tag/category (get_related_comments)")
     parser.add_argument("--normalized-tag", default=None, help="标准化标签名 (get_related_comments, tag模式)")
     parser.add_argument("--category", default=None, help="标签分类 (get_related_comments, tag模式)")
-    parser.add_argument("--dimension", default=None, help="问题维度 (get_related_comments, issue模式)")
+    parser.add_argument("--dimension", default=None, help="关联维度 (get_related_comments, category模式)")
     parser.add_argument("--polarity", default=None, help="情感极性 (get_representative_reviews, get_related_comments)")
     parser.add_argument("--limit", type=int, default=5, help="返回数量 (get_representative_reviews)")
 
@@ -547,6 +577,23 @@ def execute(params: dict) -> dict:
                 ),
             }
 
+        elif action == "get_product_detail":
+            tid = params.get("task_id")
+            asin = params.get("asin")
+            if not tid and not asin:
+                return {
+                    "status": "error",
+                    "message": "请提供 task_id 或 asin（二者至少一个）",
+                }
+            return {
+                "status": "success",
+                "output": client.get_product_detail(
+                    task_id=tid,
+                    asin=asin,
+                    site=params.get("site", "US"),
+                ),
+            }
+
         elif action == "get_points":
             return {
                 "status": "success",
@@ -569,6 +616,7 @@ def main():
         "api_key": args.api_key or _get_api_key(),
         "action": args.action,
         "submit_content": args.asin,
+        "asin": args.asin,
         "site": args.site,
         "platform": args.platform,
         "is_auto": args.is_auto,
@@ -603,7 +651,7 @@ def check_device_online(api_key: Optional[str] = None) -> Dict[str, Any]:
 
 
 def get_download_links(api_key: Optional[str] = None) -> Dict[str, Any]:
-    """便捷函数：获取桌面客户端下载链接（无需 API Key）"""
+    """便捷函数：获取浏览器扩展下载链接（无需 API Key）"""
     return execute({"api_key": api_key or "", "action": "get_download_links"})
 
 
