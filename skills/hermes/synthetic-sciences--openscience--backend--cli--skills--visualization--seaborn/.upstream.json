@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/visualization/seaborn",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/visualization/seaborn",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/visualization/seaborn",
+  "branch": "main",
+  "pushedAt": "2026-10-26T18:31:14Z",
+  "contentHash": "02594b09355763669e7fc90764ec370747d7465ca8ffd6a1645d49d11a67862d",
+  "fetchedAt": "2026-10-27T13:18:51.144Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-prepare-anomalygennext-inputs",
+  "identifier": "NVIDIA/skills/skills/tao-prepare-anomalygennext-inputs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-prepare-anomalygennext-inputs",
+  "branch": "main",
+  "pushedAt": "2026-10-27T01:28:24Z",
+  "contentHash": "a872305a06d029ca6e2ad35d04b6f87fd237ad3accf560c70efc35ff5ec39d83",
+  "fetchedAt": "2026-10-27T13:18:49.651Z"
+}

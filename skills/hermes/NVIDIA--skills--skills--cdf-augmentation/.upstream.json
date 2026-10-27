@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-augmentation",
+  "identifier": "NVIDIA/skills/skills/cdf-augmentation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-augmentation",
+  "branch": "main",
+  "pushedAt": "2026-10-27T01:28:24Z",
+  "contentHash": "1b797d6ae20ad55fcc8f9511f1729ceb834180c7457085781b2228a0bd6accab",
+  "fetchedAt": "2026-10-27T13:18:49.077Z"
+}

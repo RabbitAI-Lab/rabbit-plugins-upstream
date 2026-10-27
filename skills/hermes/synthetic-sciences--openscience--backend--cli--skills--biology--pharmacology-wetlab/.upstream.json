@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/pharmacology-wetlab",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/pharmacology-wetlab",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/pharmacology-wetlab",
+  "branch": "main",
+  "pushedAt": "2026-10-26T18:31:14Z",
+  "contentHash": "6fb8c206ce1d948f1e3d7367bb33f62c25098f00ec84e82d9ac1b6d01eac0366",
+  "fetchedAt": "2026-10-27T13:18:51.100Z"
+}

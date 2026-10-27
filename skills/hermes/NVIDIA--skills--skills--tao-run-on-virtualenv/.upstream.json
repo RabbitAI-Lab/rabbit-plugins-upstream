@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-on-virtualenv",
+  "identifier": "NVIDIA/skills/skills/tao-run-on-virtualenv",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-on-virtualenv",
+  "branch": "main",
+  "pushedAt": "2026-10-27T01:28:24Z",
+  "contentHash": "bf0ca05a5a2a030a363b267b5cb7cd3061616112ef44fe3554b741ba4d9cbcf0",
+  "fetchedAt": "2026-10-27T13:18:49.702Z"
+}

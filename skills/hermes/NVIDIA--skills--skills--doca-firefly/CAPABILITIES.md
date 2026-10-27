@@ -11,7 +11,7 @@ the public DOCA Firefly Service Guide. Treat it as a *map of what is
 documented*, not a substitute for reading the live page when
 configuring a real deployment. For the public URL itself, route
 through
-[`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services)
+`doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`)
 — this skill does not duplicate the URL routing.
 
 ## Pattern overview
@@ -68,7 +68,7 @@ Three architectural properties the operator must hold throughout:
   start `firefly` as a host binary; they start the Firefly
   container per the public Container Deployment Guide pattern
   (same shape as every other DOCA service container — see the
-  sibling [`doca-dms`](../doca-dms/SKILL.md) for the same shape on
+  sibling `doca-dms/SKILL.md` for the same shape on
   a different per-service domain).
 - **PTP behavior is configured by file, not by CLI flag.** The
   container's PTP role, profile, domain, interface, and transport
@@ -85,19 +85,19 @@ documented runtime (the BlueField OS's container manager per the
 public Container Deployment Guide). For the canonical container-
 deployment recipe shared with the other DOCA service containers,
 route through
-[`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services).
+`doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`).
 
 Two deployment-shape rules:
 
 - **BlueField Arm only.** Firefly is a BlueField-side service; it
   does not run on the host. The host's relationship to Firefly is
   via the network (PTP on the wire) and via the PHC (time follower).
-- **One Firefly per BlueField, on the right port.** Firefly drives
-  the BlueField PHC for the BlueField as a whole; the user picks
-  *which* network interface carries PTP traffic (typically the
-  wire-side port, not the management port). Running two Firefly
-  containers fighting over the same PHC is a configuration error,
-  not a redundancy strategy.
+- **One Firefly container per BlueField, with the interface set the
+  selected role requires.** A single-port role may use one wire-side
+  interface, while a boundary-clock or other multi-port role requires
+  the interface set defined by that role's documented recipe. Never
+  run containers that contend for the same PHC; that is a
+  configuration error, not a redundancy strategy.
 
 ### Four-axis PTP configuration
 
@@ -129,7 +129,7 @@ Firefly alone is not a finished deployment.
 
 | Consumer workload | Why it needs Firefly | Pairing shape |
 | --- | --- | --- |
-| Broadcast SMPTE ST 2110 on Rivermax | SMPTE 2110 mandates PTP-locked time on every endpoint that emits or receives video / audio / ancillary streams; the Rivermax SDK assumes the PHC is being disciplined externally | Firefly drives the PHC with the SMPTE 2059-2 profile; the Rivermax-using workload reads the disciplined PHC via [`doca-rmax`](../../libs/doca-rmax/SKILL.md); the host clock follower wires chrony or `ptp4l` to the PHC so the host OS clock also follows. See [`doca-rmax CAPABILITIES.md ## Safety policy`](../../libs/doca-rmax/CAPABILITIES.md#safety-policy) for the Rivermax-side precondition matrix |
+| Broadcast SMPTE ST 2110 on Rivermax | SMPTE 2110 mandates PTP-locked time on every endpoint that emits or receives video / audio / ancillary streams; the Rivermax SDK assumes the PHC is being disciplined externally | Firefly drives the PHC with the SMPTE 2059-2 profile; the Rivermax-using workload reads the disciplined PHC via `doca-rmax/SKILL.md`; the host clock follower wires chrony or `ptp4l` to the PHC so the host OS clock also follows. See `doca-rmax CAPABILITIES.md ## Safety policy` (`doca-rmax/CAPABILITIES.md#safety-policy`) for the Rivermax-side precondition matrix |
 | 5G UPF (5G User Plane Function) | 5G timing requirements (G.8275.1 / G.8275.2 telecom profiles) demand PTP-grade time | Firefly drives the PHC with the G.8275.x profile; the UPF workload reads disciplined time from the host clock follower wired to the PHC |
 | Financial trading | Regulatory time-stamping requirements (e.g. sub-microsecond time accuracy on trade records) | Firefly drives the PHC with the user's chosen profile; trading process reads disciplined time |
 | Distributed databases needing high-precision time | Conflict ordering, distributed transactions, and externally consistent reads benefit from PTP-grade time | Same shape — Firefly drives PHC; DB process reads disciplined time |
@@ -156,20 +156,20 @@ upstream PTP daemons.
 
 For the canonical DOCA version-detection chain, the four-way match
 rule, NGC container semantics, and the headers-win-over-docs rule,
-see [`doca-version`](../../doca-version/SKILL.md). The body lives
+see `doca-version/SKILL.md`. The body lives
 there; this skill does not duplicate it.
 
 **The Firefly-specific overlay** is:
 
 - **Firefly is a NGC container; the container tag is the runtime
   version anchor.** Same pattern as
-  [`doca-dms`](../doca-dms/SKILL.md): the Firefly container ships
+  `doca-dms/SKILL.md`: the Firefly container ships
   from NGC with its own tag that may lag the host's DOCA package
   version, and the relevant version anchor for an as-deployed
   Firefly is the container tag pulled, not `pkg-config --modversion`
   on the host. Always quote both versions when the user reports a
   Firefly behavior; if they diverge, route to
-  [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug)
+  `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`)
   layer 2 before diagnosing the Firefly behavior itself.
 - **Profile support is version-bound.** Profiles like SMPTE 2059-2 /
   G.8275.1 / G.8275.2 are jointly conditional on the Firefly
@@ -182,6 +182,14 @@ there; this skill does not duplicate it.
   tag the operator is using. A mismatch between the docs version
   and the container tag is the canonical *"my config doesn't work
   even though it matches the docs"* failure mode.
+- **Take the YAML from the NGC Firefly resource.** The shared
+  `doca_container_configs` bundle from the Container Deployment Guide
+  has carried a stale Firefly YAML (image `1.5.0-doca2.9.0`); the NGC
+  Firefly resource carries the YAML for the current release. Check the
+  `image:` tag before deploying. PTP also depends on firmware
+  24.34.1002 or higher, `REAL_TIME_CLOCK_ENABLE`, OVS hardware offload
+  with TX timestamping, and NTP disabled on the BlueField — see
+  [TASKS.md ## configure](TASKS.md#configure) step 2.
 
 ## Error taxonomy
 
@@ -191,11 +199,11 @@ clearing the layer above.
 
 | Layer | Symptom | Root cause class | Where to fix |
 | --- | --- | --- | --- |
-| 1. Container runtime | Container fails to start, restart-loops, exits immediately, image pull fails | Image tag wrong, registry credentials missing, BlueField runtime not configured to run this container, config file mount path wrong | BlueField container runtime + the public Container Deployment Guide via [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md) |
+| 1. Container runtime | Container fails to start, restart-loops, exits immediately, image pull fails | Image tag wrong, registry credentials missing, BlueField runtime not configured to run this container, config file mount path wrong | BlueField container runtime + the public Container Deployment Guide via `doca-public-knowledge-map/SKILL.md` |
 | 2. Four-axis PTP config | Container green, PTP never advances past `LISTENING`; or no peers seen on the wire; or wrong upstream master selected | One or more of the four axes (role / profile / domain / interface) mismatches the upstream PTP infrastructure | [`## Capabilities and modes`](#capabilities-and-modes) four-axis table; the fix is config, not container |
 | 3. Host-side follower | PTP locks (Firefly says synced; PHC offset is tight); host OS clock drifts; `chronyc tracking` or `date` shows seconds-of-drift | Host-side chrony / `ptp4l` / `phc2sys` not configured to follow the PHC; the BlueField PHC is in sync but the host has not been told to read it | Host's chrony / `ptp4l` / `phc2sys` configuration (upstream Linux PTP / chrony docs) — Firefly is correct |
-| 4. PTP-aware path | PTP locks; sync acquired; offset and jitter are wildly past the profile's spec | A non-PTP-aware switch is in the path between Firefly and its peer; the switch silently adds variable latency that PTP cannot correct for | Network-side fix: insert boundary clocks at the non-PTP-aware switch, or replace the switch with a PTP-aware one — Firefly cannot fix a non-PTP-aware path from the endpoint |
-| 5. Consumer workload | Firefly correct; PHC correct; host clock follows PHC; but the consumer workload still reports time drift | The workload reads its own time source instead of the disciplined system clock; e.g., a Rivermax workload that was never wired to the disciplined PHC | The consumer-side skill — for Rivermax, [`doca-rmax CAPABILITIES.md ## Safety policy`](../../libs/doca-rmax/CAPABILITIES.md#safety-policy); for 5G UPF or a distributed DB, the workload's own docs |
+| 4. PTP-aware path | PTP reaches `SLAVE`/`MASTER`, all four axes match the peer, but offset and jitter remain past the profile's spec | First verify domain, transport, profile compatibility, and peer identity from config plus captured PTP traffic. Layer 2 normally stalls at `LISTENING`/`UNCALIBRATED` or sees zero peers; layer 4 reaches a synchronized state with persistently bad metrics, indicating variable path latency from a non-PTP-aware switch. | Network-side fix: insert boundary clocks at the non-PTP-aware switch, or replace the switch with a PTP-aware one — Firefly cannot fix a non-PTP-aware path from the endpoint |
+| 5. Consumer workload | Firefly correct; PHC correct; host clock follows PHC; but the consumer workload still reports time drift | The workload reads its own time source instead of the disciplined system clock; e.g., a Rivermax workload that was never wired to the disciplined PHC | The consumer-side skill — for Rivermax, `doca-rmax CAPABILITIES.md ## Safety policy` (`doca-rmax/CAPABILITIES.md#safety-policy`); for 5G UPF or a distributed DB, the workload's own docs |
 
 The agent's rule: **never recommend a Firefly config change without
 first identifying which of the five layers is the cause**. The most
@@ -249,11 +257,11 @@ question:
 For the cross-library debug-time observability (`DOCA_LOG_LEVEL`,
 `--sdk-log-level`, the trace build flavor — relevant when Firefly
 calls into a DOCA library that emits structured logs), see
-[`doca-debug CAPABILITIES.md ## Observability`](../../doca-debug/CAPABILITIES.md#observability).
+`doca-debug CAPABILITIES.md ## Observability` (`doca-debug/CAPABILITIES.md#observability`).
 
 ## Safety policy
 
-> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in [`doca-hardware-safety` CAPABILITIES.md ## Safety policy](../../doca-hardware-safety/CAPABILITIES.md#safety-policy) (specifically [### Per-artifact overlay pattern](../../doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
+> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in `doca-hardware-safety` CAPABILITIES.md ## Safety policy (`doca-hardware-safety/CAPABILITIES.md#safety-policy`) (specifically ### Per-artifact overlay pattern (`doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern`)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
 
 Firefly's safety surface is **path-selection first**, then the
 END-TO-END discipline, then the smoke-before-scale rule, then the
@@ -296,12 +304,12 @@ operational disciplines around the container itself.
   workload on top. A workload that comes up before the smoke passes
   silently uses a wrong time source, and the bisection across
   Firefly / host / workload is much harder.
-- **One Firefly per BlueField on one interface.** Two Firefly
-  containers on the same BlueField fighting over the same PHC is
-  a configuration error; the agent must NOT recommend it as a
-  redundancy strategy. PTP redundancy is a network-side concern
-  (multiple PTP masters, BMCA election) that does not require
-  multiple Firefly containers.
+- **One Firefly container per BlueField, using the interface set the
+  selected role requires.** A single-port role may use one interface;
+  a boundary-clock or other documented multi-port role may use its
+  required set. Never run containers that contend for the same PHC.
+  PTP redundancy is a network-side concern (multiple PTP masters,
+  BMCA election), not a reason for competing Firefly containers.
 - **Don't paper over a non-PTP-aware path.** When the symptom is
   *"sync acquired but jitter is way past spec"* and the layer is
   *"a non-PTP-aware switch in the path"* per
@@ -316,7 +324,7 @@ operational disciplines around the container itself.
 
 The single canonical public source for Firefly is the **DOCA
 Firefly Service Guide**, reachable through
-[`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services).
+`doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`).
 Verify that the version of the guide matches the Firefly container
 tag pulled on the BlueField — Firefly's config surface, supported
 profiles, and observability output are documented to evolve, so

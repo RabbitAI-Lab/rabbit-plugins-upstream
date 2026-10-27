@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/biopython",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/biopython",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/biopython",
+  "branch": "main",
+  "pushedAt": "2026-10-26T18:31:14Z",
+  "contentHash": "07ac1ed50e2eafb63d0c5a791959c2daede1c58e6e19ae9ebb31562ed2af8cc4",
+  "fetchedAt": "2026-10-27T13:18:50.930Z"
+}

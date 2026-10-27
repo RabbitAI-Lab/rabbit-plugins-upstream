@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/marker-panel-annotation",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/marker-panel-annotation",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/marker-panel-annotation",
+  "branch": "main",
+  "pushedAt": "2026-10-26T18:31:14Z",
+  "contentHash": "2bda91a7370ffbbc64b1719b988578e993313ca0aa5753a9d1c0f0f081dae17b",
+  "fetchedAt": "2026-10-27T13:18:51.039Z"
+}
