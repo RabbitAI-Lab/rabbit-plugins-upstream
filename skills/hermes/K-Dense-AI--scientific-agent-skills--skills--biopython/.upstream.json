@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/biopython",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/biopython",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/biopython",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "871a54334f4214615a8582e87cbb64985daa60e47907b2d00b52ce7edc0d0d27",
+  "fetchedAt": "2026-10-28T14:05:38.210Z"
+}

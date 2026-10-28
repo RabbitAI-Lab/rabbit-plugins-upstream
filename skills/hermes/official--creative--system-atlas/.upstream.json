@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/system-atlas",
+  "identifier": "official/creative/system-atlas",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/system-atlas",
+  "branch": "main",
+  "pushedAt": "2026-10-28T13:16:30Z",
+  "contentHash": "a1c66d8a6cd7b4361bafbaff52130c5a3b68ce3298b96eb7744ec4d7c5e9d74e",
+  "fetchedAt": "2026-10-28T14:05:35.514Z"
+}

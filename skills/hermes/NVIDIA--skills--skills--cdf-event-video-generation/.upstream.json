@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-event-video-generation",
+  "identifier": "NVIDIA/skills/skills/cdf-event-video-generation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-event-video-generation",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "8aed6f5bcd7110a71535da0030ad08b859976722e67ffa9356d6b2c99002cdb7",
+  "fetchedAt": "2026-10-28T14:05:20.626Z"
+}

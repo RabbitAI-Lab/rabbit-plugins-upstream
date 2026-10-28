@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-token-efficient-execution",
+  "identifier": "NVIDIA/skills/skills/tao-token-efficient-execution",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-token-efficient-execution",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "ed3189ccd748b509d55a8625e63dd3fcec3da05f10ebe48fa668ae9f886e632b",
+  "fetchedAt": "2026-10-28T14:05:21.592Z"
+}

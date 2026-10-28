@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/pytorch-fsdp",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/pytorch-fsdp",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/pytorch-fsdp",
+  "branch": "main",
+  "pushedAt": "2026-10-28T08:57:10Z",
+  "contentHash": "56d60d030da9bfd4be33c0e21503517c8158b191d070a130eccc1cd60d47847e",
+  "fetchedAt": "2026-10-28T14:05:22.956Z"
+}

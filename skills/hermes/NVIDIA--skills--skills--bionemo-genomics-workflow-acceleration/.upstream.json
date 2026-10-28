@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-genomics-workflow-acceleration",
+  "identifier": "NVIDIA/skills/skills/bionemo-genomics-workflow-acceleration",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-genomics-workflow-acceleration",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "7fd8193a696ceff768c74949370b083ab5f29f8d25794e04870b2e3bde855d1c",
+  "fetchedAt": "2026-10-28T14:05:20.932Z"
+}

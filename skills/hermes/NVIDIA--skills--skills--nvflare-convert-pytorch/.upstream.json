@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvflare-convert-pytorch",
+  "identifier": "NVIDIA/skills/skills/nvflare-convert-pytorch",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvflare-convert-pytorch",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "329bf1d145dc37ff1567156c0e6b02f75d8909dfd745edd813f29e5ab0e0d6b4",
+  "fetchedAt": "2026-10-28T14:05:21.055Z"
+}

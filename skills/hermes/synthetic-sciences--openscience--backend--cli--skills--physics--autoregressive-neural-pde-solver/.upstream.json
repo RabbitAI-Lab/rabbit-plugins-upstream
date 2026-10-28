@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/autoregressive-neural-pde-solver",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/autoregressive-neural-pde-solver",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/autoregressive-neural-pde-solver",
+  "branch": "main",
+  "pushedAt": "2026-10-28T08:57:10Z",
+  "contentHash": "4fd125f0a92147bb130bd73fab4abdec2fdd298279e642fb2106c0d6ffed074a",
+  "fetchedAt": "2026-10-28T14:05:22.787Z"
+}
