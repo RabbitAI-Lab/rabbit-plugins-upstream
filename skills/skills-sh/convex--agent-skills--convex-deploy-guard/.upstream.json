@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-deploy-guard",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-deploy-guard",
+  "branch": "main",
+  "pushedAt": "2026-10-28T08:52:02Z",
+  "contentHash": "60ec030a159a08ff828b513fcfd1647eb38bcb67a6f4efd525c2cc0d64d0d0dc",
+  "fetchedAt": "2026-10-28T14:05:51.569Z"
+}
