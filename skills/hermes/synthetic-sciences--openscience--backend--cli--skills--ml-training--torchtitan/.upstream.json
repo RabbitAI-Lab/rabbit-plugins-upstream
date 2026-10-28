@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/torchtitan",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/torchtitan",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/torchtitan",
+  "branch": "main",
+  "pushedAt": "2026-10-28T08:57:10Z",
+  "contentHash": "fc61d4f4eb5c68261823089f659b87fb2e7b105def64fec3b44baaf6c2d869fd",
+  "fetchedAt": "2026-10-28T14:05:22.807Z"
+}

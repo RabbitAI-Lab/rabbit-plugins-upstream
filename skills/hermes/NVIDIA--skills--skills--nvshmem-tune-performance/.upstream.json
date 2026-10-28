@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-tune-performance",
+  "identifier": "NVIDIA/skills/skills/nvshmem-tune-performance",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-tune-performance",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "4776768dd17345d0d019aee277f1732997334b7fd50f22696eec060098780ea2",
+  "fetchedAt": "2026-10-28T14:05:21.068Z"
+}

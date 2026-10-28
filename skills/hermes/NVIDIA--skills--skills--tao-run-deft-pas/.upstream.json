@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-deft-pas",
+  "identifier": "NVIDIA/skills/skills/tao-run-deft-pas",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-deft-pas",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "3603edf0277e76d0a9268c2637bf5cfa4596fe7f3a993a84aa15d402d4d20a9e",
+  "fetchedAt": "2026-10-28T14:05:21.573Z"
+}

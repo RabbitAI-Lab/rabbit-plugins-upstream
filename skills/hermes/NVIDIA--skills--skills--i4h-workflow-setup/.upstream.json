@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/i4h-workflow-setup",
+  "identifier": "NVIDIA/skills/skills/i4h-workflow-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/i4h-workflow-setup",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "42eed254a2d15256d0a3708eed28d43c7fbd57e3c05ca421a2749dc473e7bfb7",
+  "fetchedAt": "2026-10-28T14:05:20.959Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pylabrobot",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pylabrobot",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pylabrobot",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "07986fc506f5eb31228edbf022fda88fb3ea0f029b5823a7cd0ddbdabafd1de1",
+  "fetchedAt": "2026-10-28T14:05:38.266Z"
+}

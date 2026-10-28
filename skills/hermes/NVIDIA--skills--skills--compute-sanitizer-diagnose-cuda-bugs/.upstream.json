@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/compute-sanitizer-diagnose-cuda-bugs",
+  "identifier": "NVIDIA/skills/skills/compute-sanitizer-diagnose-cuda-bugs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/compute-sanitizer-diagnose-cuda-bugs",
+  "branch": "main",
+  "pushedAt": "2026-10-28T03:37:22Z",
+  "contentHash": "bc4871962c0b4dbfa7d70069b36a232cd3ab195f5bffa7fae07b42844bf5cd5b",
+  "fetchedAt": "2026-10-28T14:05:20.637Z"
+}

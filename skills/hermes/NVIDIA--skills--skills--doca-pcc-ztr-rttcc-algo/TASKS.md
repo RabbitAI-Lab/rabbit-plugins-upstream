@@ -7,13 +7,13 @@ checklists so the agent can read straight through them
 without inventing intermediate steps. Cross-links return
 the agent to [SKILL.md](SKILL.md), [CAPABILITIES.md](CAPABILITIES.md),
 the host-side framework at
-[`doca-pcc`](../doca-pcc/SKILL.md), the read-only counter
+`doca-pcc/SKILL.md`, the read-only counter
 tool at
-[`doca-pcc-counters`](../../tools/doca-pcc-counters/SKILL.md),
+`doca-pcc-counters/SKILL.md`,
 the DPA two-side-program rule at
-[`doca-dpa`](../doca-dpa/SKILL.md), and the public DOCA
+`doca-dpa/SKILL.md`, and the public DOCA
 PCC programming guide via
-[`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
+`doca-public-knowledge-map/SKILL.md`
 whenever a question is out of scope for this skill.
 
 **Universal precondition.** Every workflow below assumes:
@@ -22,12 +22,12 @@ exposes the DPA processor (per the shipped README, the
 shipped algorithm targets BlueField-3 and runs on its DPA);
 the BlueField firmware has the custom-PCC slot enabled
 (verified through
-[`doca-pcc TASKS.md ## configure`](../doca-pcc/TASKS.md#configure));
+`doca-pcc TASKS.md ## configure` (`doca-pcc/TASKS.md#configure`));
 the matched-version DPACC compiler is installed; the
 attached port carries (or is about to carry) RoCE-v2
 traffic; and the host-side `doca-pcc` framework is
 understood at the lifecycle level covered by
-[`doca-pcc`](../doca-pcc/SKILL.md). If any precondition is
+`doca-pcc/SKILL.md`. If any precondition is
 not met, route to that skill first; do not work around it
 here.
 
@@ -39,9 +39,9 @@ agent walks four checks, then stops:
 
 1. **Is DOCA installed at all?** Run the canonical detection
    chain documented in
-   [`doca-version`](../../doca-version/SKILL.md). If
+   `doca-version/SKILL.md`. If
    nothing is present, route to
-   [`doca-setup`](../../doca-setup/SKILL.md) for the
+   `doca-setup/SKILL.md` for the
    from-scratch install (host package OR public NGC
    container at `nvcr.io/nvidia/doca/`) and STOP — that
    skill is the install authority, not this one.
@@ -54,16 +54,16 @@ agent walks four checks, then stops:
    output verbatim rather than reconstructing flags from
    memory. If the call fails, the algorithm component
    was not selected in the DOCA install — route to
-   [`doca-setup`](../../doca-setup/SKILL.md) to add it.
+   `doca-setup/SKILL.md` to add it.
 3. **Is the matched-version DPACC compiler installed?**
    The algorithm is DPA-side code compiled by DPACC; per
    the DOCA Compatibility Policy at
    <https://docs.nvidia.com/doca/sdk/doca-compatibility-policy/index.html>,
    the DPACC version must match the DOCA version. Inherit
    the verification ladder from
-   [`doca-pcc TASKS.md ## install`](../doca-pcc/TASKS.md#configure)
+   `doca-pcc TASKS.md ## configure` (`doca-pcc/TASKS.md#configure`)
    and
-   [`doca-dpa TASKS.md ## install`](../doca-dpa/TASKS.md#configure).
+   `doca-dpa TASKS.md ## configure` (`doca-dpa/TASKS.md#configure`).
 4. **Are the host-side `doca-pcc` and the DPA-side
    prerequisite chain present?** Per the shipped README's
    build chain (DPACC → flexio-sources → doca-sdk-common →
@@ -74,13 +74,13 @@ agent walks four checks, then stops:
    of the shipped DOCA PCC application sample at
    `/opt/mellanox/doca/applications/pcc/`. If anything is
    missing, route to
-   [`doca-setup`](../../doca-setup/SKILL.md) — do NOT
+   `doca-setup/SKILL.md` — do NOT
    piecewise-install components by hand from this skill.
 
 The agent does not invent install commands beyond what the
 shipped DOCA install procedure documents. If the user is
 mid-install and asking for the right install incantation,
-route to [`doca-setup`](../../doca-setup/SKILL.md).
+route to `doca-setup/SKILL.md`.
 
 ## configure
 
@@ -95,9 +95,9 @@ agent walks four checks before any code change.
    policy, convergence behavior, specific signal source)
    diverge from RTT-based RoCE-v2 congestion control, the
    right answer may be a custom algorithm — route to
-   [`doca-pcc`](../doca-pcc/SKILL.md) and the public PCC
+   `doca-pcc/SKILL.md` and the public PCC
    programming guide via
-   [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md).
+   `doca-public-knowledge-map/SKILL.md`.
 2. **Pick the variant.** Per
    [CAPABILITIES.md ## Capabilities and modes](CAPABILITIES.md#capabilities-and-modes)
    the DPA-side source ships several variants (vanilla /
@@ -110,7 +110,7 @@ agent walks four checks before any code change.
    verify.
 3. **Decide which algo slot the algorithm occupies.** Per
    the README and per the host-side
-   [`doca-pcc CAPABILITIES.md ## Capabilities and modes`](../doca-pcc/CAPABILITIES.md#capabilities-and-modes),
+   `doca-pcc CAPABILITIES.md ## Capabilities and modes` (`doca-pcc/CAPABILITIES.md#capabilities-and-modes`),
    the user picks an `algo_idx` for the algorithm. The
    shipped sample uses algo slot 0 for the rtt-template
    demo; if the user reuses slot 0 for the shipped
@@ -123,15 +123,21 @@ agent walks four checks before any code change.
    take effect". Adjust this only after the
    `doca-pcc-counters` baseline confirms the algorithm is
    running but a documented behavior gap exists; see
-   [`## use`](#use).
+   [`## use`](#use). In DOCA 3.5, when host-side parameter
+   overrides are needed, call the public parameter setter
+   with the port number and algorithm slot before the
+   parameter ID base. Size parameter, counter, and
+   histogram arrays from the public count getter family in
+   the public header for this component instead of
+   hard-coded values.
 
 The agent does NOT do any host-OS-level configuration of
 RDMA (route to
-[`doca-rdma`](../doca-rdma/SKILL.md)), or any firmware-
+`doca-rdma/SKILL.md`), or any firmware-
 level PCC configuration (route to
-[`doca-setup`](../../doca-setup/SKILL.md) and the public
+`doca-setup/SKILL.md` and the public
 firmware-config guide via
-[`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)).
+`doca-public-knowledge-map/SKILL.md`).
 
 ## build
 
@@ -157,7 +163,7 @@ ZTR application" section, the canonical sequence is:
 3. **Build the host application via meson/ninja.** Per the
    README, the canonical invocation is `cd
    /opt/mellanox/doca/applications` then `meson
-   <BUILD_DIR> -D=enable_all_applications=false
+   <BUILD_DIR> -Denable_all_applications=false
    -Denable_pcc=true && ninja -C <BUILD_DIR>`. The
    `enable_pcc=true` flag turns on the PCC application
    inside the DOCA applications meson project; the
@@ -166,9 +172,9 @@ ZTR application" section, the canonical sequence is:
    on-PCC loop.
 4. **Rebuild BOTH SIDES on every algorithm-affecting
    change.** Inherited two-side-program rule from
-   [`doca-pcc CAPABILITIES.md ## Safety policy`](../doca-pcc/CAPABILITIES.md#safety-policy)
+   `doca-pcc CAPABILITIES.md ## Safety policy` (`doca-pcc/CAPABILITIES.md#safety-policy`)
    and
-   [`doca-dpa CAPABILITIES.md ## Safety policy`](../doca-dpa/CAPABILITIES.md#safety-policy):
+   `doca-dpa CAPABILITIES.md ## Safety policy` (`doca-dpa/CAPABILITIES.md#safety-policy`):
    changing the variant, changing the
    `build_device_code.sh` linkage, or changing the
    algorithm dispatch in
@@ -213,22 +219,19 @@ verifies each one before triggering the rebuild in
 4. **`rp_rtt_template_dev_main.c` —
    `doca_pcc_dev_user_set_algo_params()`.** Add the
    set-params call:
-   `doca_pcc_dev_set_ztr_rttcc_params(param_id_base,
-   param_num, new_param_values, params)` per the README's
-   modify step 4. The framework dispatches host-set
-   parameter updates here. (Note: this is the call shape as
-   used from *inside* the `doca_pcc_dev_user_set_algo_params()`
-   callback, where `port_num` and `algo_slot` are already
-   resolved in the surrounding scope. The full public-header
-   signature carries those two as the first two arguments —
    `doca_pcc_dev_set_ztr_rttcc_params(port_num, algo_slot,
-   param_id_base, param_num, new_param_values, params)` — and
-   is what
+   param_id_base, param_num, new_param_values, params)`.
+   Before editing, read the exact prototype from the installed
+   `doca_pcc_dev_ztr_rttcc_algo.h` and preserve its argument
+   order and types verbatim. Do not shorten this to a
+   four-argument form or claim arguments are supplied
+   implicitly unless the installed sample exposes a named,
+   verified wrapper with that exact shorter signature. The
+   six-argument public call shown here is what
    [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes)
    and
    [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy)
-   document. Use whichever form the surrounding context
-   exposes — both are the same call.)
+   document.
 5. **`build_device_code.sh` — DPACC linker flag.** Add
    `-ldoca_pcc_ztr_rttcc_algo_dev` to the `-device-libs`
    option of the DPACC compilation command, per the
@@ -259,7 +262,7 @@ so the host-side `doca-pcc` framework loads the embedded
 DPA-side algorithm onto the BlueField DPA, attaches the
 `doca_pcc` context to the chosen port, and starts the
 algorithm. Most run-side mechanics are owned by
-[`doca-pcc TASKS.md ## run`](../doca-pcc/TASKS.md#run); the
+`doca-pcc TASKS.md ## run` (`doca-pcc/TASKS.md#run`); the
 algorithm-specific overlay is:
 
 1. **Confirm the build is the rebuilt one.** The
@@ -286,7 +289,7 @@ algorithm-specific overlay is:
    the algorithm modulates *existing* traffic — without
    traffic, the algorithm is loaded but idle. Confirm
    with the user; if no traffic, route to
-   [`doca-rdma`](../doca-rdma/SKILL.md) to bring up
+   `doca-rdma/SKILL.md` to bring up
    RoCE-v2 flows or to a fleet operator who can drive
    load.
 
@@ -309,7 +312,7 @@ tests, in order.
    algorithm is receiving CC events and the per-event
    handle counter is incrementing. List counters first
    (per
-   [`doca-pcc-counters TASKS.md ## use`](../../tools/doca-pcc-counters/TASKS.md#run)),
+   `doca-pcc-counters TASKS.md ## use` (`doca-pcc-counters/TASKS.md#run`)),
    snapshot once, run a brief load (RoCE-v2 traffic mix
    representative of the deployment), snapshot again,
    diff. If the per-event handle counter is incrementing
@@ -339,7 +342,7 @@ the user's specific fairness / latency target on the user's
 specific workload), that is workload-level evaluation —
 out of scope for this skill, and the answer when it fails
 is usually "swap in a custom algorithm written against
-[`doca-pcc`](../doca-pcc/SKILL.md)".
+`doca-pcc/SKILL.md`".
 
 ## debug
 
@@ -347,12 +350,21 @@ Debug is layered: most failures are NOT in the algorithm —
 they are in the host-side framework precondition chain or
 in the build. Walk the ladder; do not jump.
 
+Triage by symptom first. If the algorithm loaded (or the
+sample runs) but RoCE-v2 flows are not throttled or the
+sample does not seem to dispatch to the algorithm, start at
+rung 6: discriminate whether CC events reach the algorithm
+at all (wrong algo slot, `doca_pcc` attached to the wrong
+port, or no RoCE-v2 traffic on the port) before tuning
+parameters or rebuilding a variant. Errors at startup or
+load start at rung 1.
+
 1. **`DOCA_ERROR_NOT_PERMITTED` / `DOCA_ERROR_DRIVER` /
    `DOCA_ERROR_INVALID_VALUE` from `doca_pcc` host-side
    calls at startup.** Algorithm wiring has not even
    begun yet — this is a host-side precondition failure.
    Route to
-   [`doca-pcc TASKS.md ## debug`](../doca-pcc/TASKS.md#debug)
+   `doca-pcc TASKS.md ## debug` (`doca-pcc/TASKS.md#debug`)
    first: firmware custom-PCC slot, DOCA + DPACC match,
    BlueField generation, `doca_dev` access. Do NOT
    modify the algorithm to chase a host-side error.
@@ -397,7 +409,7 @@ in the build. Walk the ladder; do not jump.
    the canonical "is the algorithm modulating traffic"
    question and is FIRST an observability problem, not
    an error. Walk the
-   [`doca-pcc-counters TASKS.md ## debug`](../../tools/doca-pcc-counters/TASKS.md#debug)
+   `doca-pcc-counters TASKS.md ## debug` (`doca-pcc-counters/TASKS.md#debug`)
    "loaded but unchanged" recipe to discriminate:
    - **No CC events landing on the algorithm.** The
      algorithm is in the wrong slot, OR the
@@ -417,14 +429,14 @@ in the build. Walk the ladder; do not jump.
      workload-vs-algorithm-fit question, not a wiring
      question — route to the public DOCA PCC
      programming guide via
-     [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
+     `doca-public-knowledge-map/SKILL.md`
      for the algorithm's documented behavior model,
      and consider whether a custom algorithm is
      warranted (route to
-     [`doca-pcc`](../doca-pcc/SKILL.md)).
+     `doca-pcc/SKILL.md`).
 7. **DPA-side hang.** The algorithm's per-event call is
    stuck. Inherit the DPA-side debugging surface from
-   [`doca-dpa TASKS.md ## debug`](../doca-dpa/TASKS.md#debug);
+   `doca-dpa TASKS.md ## debug` (`doca-dpa/TASKS.md#debug`);
    the algorithm is DPA code and the same DPA-side
    developer tools apply.
 
@@ -432,8 +444,8 @@ For cross-cutting debug primitives
 (`--sdk-log-level`, `DOCA_LOG_LEVEL=trace`, the trace
 build flavor, the DOCA debug ladder, the structured-tools
 contract for inspection commands) see
-[`doca-debug`](../../doca-debug/SKILL.md) and
-[`doca-structured-tools-contract`](../../doca-structured-tools-contract/SKILL.md).
+`doca-debug/SKILL.md` and
+`doca-structured-tools-contract/SKILL.md`.
 
 ## use
 
@@ -446,7 +458,7 @@ custom one. Three workflows.
    the DPA-side image.** The host-side flow is: the
    application's set-algo-params path (driven by
    `doca_pcc` per
-   [`doca-pcc CAPABILITIES.md ## Capabilities and modes`](../doca-pcc/CAPABILITIES.md#capabilities-and-modes))
+   `doca-pcc CAPABILITIES.md ## Capabilities and modes` (`doca-pcc/CAPABILITIES.md#capabilities-and-modes`))
    dispatches into the DPA-side `doca_pcc_dev_user_set_algo_params()`
    which calls `doca_pcc_dev_set_ztr_rttcc_params(port_num,
    algo_slot, param_id_base, param_num, new_param_values,
@@ -483,11 +495,11 @@ custom one. Three workflows.
    answer when the workload's latency / fairness /
    convergence requirements diverge from what the
    reference can express with parameter tuning. Route to
-   [`doca-pcc`](../doca-pcc/SKILL.md) for the
+   `doca-pcc/SKILL.md` for the
    framework's user-algo / user-init / user-set-algo-
    params callbacks the custom algorithm fills in, and
    to the public DOCA PCC programming guide via
-   [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
+   `doca-public-knowledge-map/SKILL.md`
    for algorithm-design content. This skill's job is to
    make the *decision* explicit (keep the reference,
    tune the reference, or replace it) and to surface
@@ -504,9 +516,9 @@ than attempting an answer.
   itself).** The library is a *reference* implementation;
   customizing it means writing a new algorithm against
   the host-side `doca-pcc` framework. Route to
-  [`doca-pcc`](../doca-pcc/SKILL.md) plus the public
+  `doca-pcc/SKILL.md` plus the public
   DOCA PCC programming guide via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md).
+  `doca-public-knowledge-map/SKILL.md`.
 - **`benchmark`, `compare-algorithms`,
   `tune-for-workload`.** Workload-level evaluation. Route
   the user to their own measurement discipline plus the
@@ -514,21 +526,21 @@ than attempting an answer.
   <https://docs.nvidia.com/doca/sdk/DOCA+PCC+Application+Guide.md>.
 - **`inspect counters` (deep / read-only).** This is the
   read-only counter CLI side; route to
-  [`doca-pcc-counters`](../../tools/doca-pcc-counters/SKILL.md).
+  `doca-pcc-counters/SKILL.md`.
 - **`provision`, `configure firmware`,
   `mlxconfig`-side configuration.** Firmware-side
   configuration of PCC slots and PCC defaults. Route to
-  [`doca-setup`](../../doca-setup/SKILL.md) and the public
+  `doca-setup/SKILL.md` and the public
   firmware-config guide via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md).
+  `doca-public-knowledge-map/SKILL.md`.
 - **`upgrade DOCA`.** DOCA install / upgrade. Route to
-  [`doca-setup`](../../doca-setup/SKILL.md). The shipped
+  `doca-setup/SKILL.md`. The shipped
   algorithm versions with DOCA itself, so DOCA upgrades
   include algorithm upgrades.
 - **`tune RoCE-v2 traffic`, `bring up RDMA`,
   `configure DCQCN at the firmware level`.** RDMA and
   RoCE-v2 lifecycle. Route to
-  [`doca-rdma`](../doca-rdma/SKILL.md) plus public docs.
+  `doca-rdma/SKILL.md` plus public docs.
 - **`deploy to a fleet`, `multi-host rollout`,
   `Kubernetes integration`.** Fleet-level deployment is
   not algorithm-specific; the algorithm is part of an
