@@ -1,22 +1,27 @@
 # CLI Reference
 
-## Required References
-
-None.
-
 ## Invocation
 
 All commands use:
 
 ```bash
-python3 {skillDir}/scripts/shifu-cli.py <command>
+python3 {skillDir}/scripts/shifu-cli.py <command> [--profile <name>]
 ```
 
-Authenticated commands accept `--token <jwt>` and otherwise read `SHIFU_TOKEN` from `{skillDir}/.env`. The CLI always uses `https://app.ai-shifu.cn`.
+`--profile <name>` selects one named profile for this invocation and may appear before or after the command. Supply it at most once. Authenticated commands also accept `--token <jwt>` as a non-persistent override for this invocation. Selection is resolved once before platform access; platform requests, uploads, and returned course links use that same context. See [Profiles](#profiles) for selection and credential precedence. Use `{skillDir}/.env.example` as the reference when creating or editing `{skillDir}/.env`:
+
+```dotenv
+SHIFU_BASE_URL=
+SHIFU_TOKEN=
+```
+
+Process environment variables take precedence over the corresponding `.env` values. An empty value does not activate temporary configuration. Before commands other than `check-update`, the CLI initializes a missing `.env` from `.env.example` with owner-only permissions; an existing file is never replaced. `check-update` skips `.env` loading and initialization. Browser-issued credentials live in the user's configuration directory rather than `.env`.
 
 ## Contents
 
 - [Update Check](#update-check)
+- [Profiles](#profiles)
+- [Site Selection](#site-selection)
 - [Authentication](#authentication)
 - [Query Commands](#query-commands)
 - [Analytics Query](#analytics-query)
@@ -33,25 +38,105 @@ Authenticated commands accept `--token <jwt>` and otherwise read `SHIFU_TOKEN` f
 ## Update Check
 
 ```bash
-check-update [--force] [--dev-manifest-url <loopback-url>]
+check-update [--dev-manifest-url <loopback-url>]
 ```
 
-`check-update` reads the public Skill-version manifest and prints a compact JSON result. `--force` bypasses the local TTL. `--dev-manifest-url` accepts only a localhost or loopback URL and exists for end-to-end development checks.
+`check-update` prints a compact JSON result for a release lookup or skipped check. Version-source validation and result handling are defined in [session controls](../session-controls.md#version-check). `--dev-manifest-url` accepts only a localhost or loopback URL serving the development manifest format and exists for end-to-end development checks.
+
+Before dispatching any other valid CLI command, the CLI automatically checks whether a release lookup is due. Successful automatic checks are spaced 24 hours apart, and each available version is announced once on stderr. Normal stdout and command exit codes are preserved. Network errors are silent and retry after a short delay; rate-limit retry delays are respected. Automatic lookups have a two-second network budget and skip plugin-managed installations. Help and invalid command lines do not start a check. This internal CLI behavior runs independently of the Agent's decision to invoke explicit `check-update`, whose invocation rules remain in [session controls](../session-controls.md#version-check).
+
+Automatic-check state is kept under `update-check/` in the user configuration directory resolved from the process environment, independently of platform `.env` loading, service selection, profiles, and credentials. It is separated by release source and installed version. If the state directory is unavailable or another process is checking, the command continues normally. Explicit `check-update` always queries immediately and does not use or modify the automatic-check schedule; development lookups do not change production state.
+
+## Profiles
+
+```bash
+profile set Daily --base-url cn
+profile set Demo --base-url com
+profile set "Client A" --base-url https://school.example:8443/training
+profile list
+profile default
+profile default Daily
+list --profile "Client A"
+```
+
+Each profile holds one service URL and independent credentials and pending authorization. Names are arbitrary, case-sensitive Unicode strings; surrounding whitespace is trimmed, and empty names or control characters are rejected. Names do not identify regions or constrain URLs. Multiple profiles may use the same service with separate accounts. The first profile becomes the default; creating or selecting another does not change the default. `profile default [name]` reads or explicitly changes that setting. Unknown names fail without fallback.
+
+`profile set` creates or updates a profile. `cn` and `com` (case-insensitive) expand to `https://app.ai-shifu.cn` and `https://app.ai-shifu.com`; storage contains full URLs, without a region type. Custom URLs support HTTPS, ports, and path prefixes; HTTP is allowed only for loopback development. Embedded credentials, queries, and fragments are rejected. Surrounding whitespace and trailing slashes are removed. Changing a URL with saved credentials or pending authorization requires `logout` for that profile first; setting the same URL preserves authorization.
+
+| Invocation context | Effective service and credentials |
+| --- | --- |
+| Explicit `--profile <name>` | That profile's URL and saved credentials; ignore `SHIFU_BASE_URL` and `SHIFU_TOKEN` from both process environment and `.env`. Explicit `--token` overrides the saved token for this command only. |
+| No explicit profile, with non-empty environment configuration | Temporary mode requires a URL plus a token from `SHIFU_TOKEN` or explicit `--token`. Missing either is an error. Never borrow a saved token, persist temporary credentials, or change the default. |
+| Neither of the above | The default profile's URL and credentials, with an optional non-persistent explicit `--token` override. No configured default means exit `4` before platform access. |
+
+Browser login and continuation require a named profile, so use explicit `--profile` when temporary environment configuration is active. A missing or expired token does not select another profile. Local `build` and version checks need no profile.
+
+### Configuration and Migration
+
+The configuration root is `AI_SHIFU_CONFIG_DIR` when set, otherwise `$XDG_CONFIG_HOME/ai-shifu`, otherwise `~/.config/ai-shifu` on all platforms (including `%USERPROFILE%\.config\ai-shifu` on Windows). Root overrides may come from the process environment or the skill's `.env`, with process values taking precedence for the same variable. The CLI resolves this root before legacy migration and reloads temporary URL/token values after migration cleanup without replacing exported process values. `settings.json` contains:
+
+```json
+{
+  "schema_version": 2,
+  "default_profile": "Daily",
+  "profiles": {
+    "Daily": {
+      "id": "<generated internal ID>",
+      "base_url": "https://app.ai-shifu.cn"
+    }
+  }
+}
+```
+
+Profile IDs are generated opaque identifiers used for safe cross-platform directories, independent of user-facing names. Each `profiles/<id>/` contains its own `credentials.json` and optional `pending-device-auth.json`. Both bind authorization to the normalized issuing `base_url`; mismatches fail before sending credentials. Writes are atomic and use owner-only permissions where supported. `profile list` returns `{"profiles": [...]}` with each entry's `name`, `base_url`, `default`, and `credentials_present`, never tokens; presence does not prove that login is valid. `profile default` returns `{"default_profile": "<name>"}`, or null when unconfigured.
+
+On first use of legacy configuration, the CLI migrates a known saved service and matching credentials into an ordinary profile named `default`. Legacy `.env` configuration is considered with its existing precedence; process-exported tokens are never persisted. A pending request migrates only when its issuing URL matches. Credentials whose source cannot be established remain untouched and require a fresh login to the intended profile. The CLI writes and validates new files before committing version-2 settings, then removes only successfully migrated legacy credentials and `.env` fields. Migration can resume after interruption and is not repeated once completed. New `.env` values after migration remain temporary overrides.
+
+Before committing an interrupted migration, a retry removes staged authorization files whose legacy sources are no longer eligible. Removed credentials or requests cannot be reactivated from the staging directory; foreign-service legacy files remain untouched. A staged-file cleanup failure aborts the commit and remains retryable.
+
+Profile creation/updates, default changes, and migration serialize their complete read-modify-write transactions with a cross-process lock. If another command holds the lock for ten seconds, the CLI reports that configuration is busy; retry after that command finishes. A terminated process releases its lock automatically.
+
+After the service returns a new authorization request, saving it uses the same lock to revalidate the profile's internal ID and URL. If either changed while the request was in flight, login fails without saving or displaying the stale request; retry login for the intended profile. The network request itself does not hold the configuration lock.
+
+Authorization completion and logout also use this lock. Before storing an approved token and consuming its pending request, the CLI rechecks the profile ID, service URL, and device code. A request cleared by logout or replaced by another login cannot restore credentials; delayed denial or expiry responses cannot clear the replacement request. Polling does not hold the lock.
+
+## Site Selection
+
+```bash
+site [--profile <name>]
+site --set cn
+site --set com
+site --url https://your-service.example
+```
+
+`site` is the compatibility entrypoint for inspecting the effective context or configuring the selected/default profile. It prints JSON with `status=configured`, the effective `base_url`, `profile`, and official `contact_url`, or `status=selection_required` with no configured service. `profile` is null for temporary or unconfigured contexts. Contact links depend on the service address: the domestic official service uses the Chinese contact page; the international official service and custom deployments use the international contact page. Profile names do not affect this mapping. Profile inspection and configuration make no platform requests; the shared CLI [automatic update check](#update-check) can query GitHub before dispatch.
+
+`site --set cn/com` and `site --url <URL>` update the selected/default profile using the same URL and authorization rules as `profile set`. With no configured profile, initial setup creates an ordinary profile named `default`. Use explicit `--profile` to configure a named profile when temporary environment configuration is active.
+
+`site` output and setup commands are internal control data. During normal setup, ask the user to select their current region with two options: China or Other countries or regions, then configure silently; do not present these URLs, fields, or commands. Custom deployment is used only when explicitly requested or already configured.
+
+`build`, `check-update`, and `site` do not require site selection. Service selection is defined in `../authentication.md#select-site-before-connecting`.
 
 ## Authentication
 
 ```bash
-verify
-login --phone 13800138000
-login --phone 13800138000 --sms-code 1234
+verify [--profile <name>]
+login [--profile <name>]
+login --wait [--timeout 120] [--profile <name>]
+logout [--profile <name>]
 ```
 
 - `verify` exits `0` when the token is accepted, `1` when it is expired or invalid, and `2` when network, service, or response errors make its state unknown.
-- `login --phone` sends an SMS code and exits without prompting.
-- `login --phone --sms-code` verifies the code and writes `SHIFU_TOKEN=<jwt>` to `{skillDir}/.env`.
-- A saved token is valid for seven days; successful authenticated API calls refresh that expiry.
+- `login` starts a browser authorization request, saves the pending request, prints the verification link and a pairing code, and exits immediately. It does not open a browser. The Agent opens the link in its built-in browser; terminal users open the printed link manually. The CLI prefers `verification_uri_complete`, which carries the pairing code. If unavailable, it prints `verification_uri` instead; users enter the separately printed pairing code if the page requests it.
+- `login --wait` polls the pending request. It exits `0` once the request is approved and the token is stored, `1` when the request was denied, expired, or never started, and `3` while the request is still valid but nobody has approved it yet. Exit `3` means the same command can simply be run again.
+- `--timeout` bounds a single `--wait` invocation in seconds; it does not shorten the request's own lifetime.
+- `login` and `login --wait` use the same named profile and issuing service. Different profiles may authorize concurrently without overwriting one another's pending requests or tokens. Continuation commands carry the profile name.
+- On Windows, continuation and recovery hints give a literal JSON argument list rather than assuming cmd.exe or PowerShell quoting. Pass these arguments directly to the CLI (for example through a subprocess argument array); the JSON is explicitly not a shell command. Other platforms show a POSIX-quoted command.
+- `logout` removes only the selected profile's local credentials and pending request, retaining its URL, name, and default setting. It does not revoke remote tokens or affect another profile.
+- Storage, URL validation, temporary configuration, and legacy migration follow [Profiles](#profiles).
+- A stored token is valid for thirty days; successful authenticated API calls refresh that expiry.
 
-Agent decisions about when to send or resend SMS are defined in `../authentication.md`; this section defines only CLI inputs and effects.
+Agent behavior during a login session is defined in `../authentication.md`; this section defines only CLI inputs and effects.
 
 ## Query Commands
 
@@ -66,11 +151,11 @@ find-title <keyword>
 
 - `list` prints all active courses visible to the authenticated creator.
 - `show <shifu_bid>` prints course detail and the outline tree. `show <shifu_bid> <outline_bid>` prints one lesson's Teaching Prompt.
-- `history` prints one lesson's Teaching Prompt revision history.
+- `history` prints one lesson's Teaching Prompt version ID, update time in the local timezone, and updater display name (or user BID when the name is unavailable). Nonprintable characters in the updater field are escaped so each entry stays on one terminal line; printable Unicode is preserved.
 - `export` writes course JSON to stdout or the path passed with `-o`.
 - `find-title` requires at least two non-whitespace characters, then matches the keyword case-insensitively after whitespace normalization against current draft and published titles. It does not match historical or renamed titles.
 
-`show` without an outline BID prints a `Verification URLs:` block containing admin and preview URLs plus the published URL when available. `create`, `import`, `pull`, and `publish` also print command-appropriate verification URL blocks. Per-lesson preview URLs are not printed.
+Course links are printed one per line with `Admin console`, `Preview URL`, and optional `Published URL` labels, without headings or explanations. `show` without an outline BID prints the admin and course preview URLs even when the outline tree is empty. A non-empty tree also includes the public learner URL, without checking publication state. `create`, `import`, and `pull` print the admin and course preview URLs; `publish` prints all three. Lesson preview URLs are not printed. Agent browser handoff follows `../session-controls.md#course-admin-handoff`.
 
 ## Analytics Query
 
@@ -95,7 +180,7 @@ pull <shifu_bid> --course-dir ./course-a/ [--force]
 status --course-dir ./course-a/ [--exit-code]
 ```
 
-`pull` writes the cloud draft into the course directory: `README.md`, `course-description.md`, `course-prompt.md`, `course-config.json`, lesson files, `structure.json`, and `.shifu-sync.json`. It records course and lesson revision baselines. Before overwriting a divergent local file, it writes `<file>.local-<timestamp>.bak`; `--force` disables these backups.
+`pull` writes the cloud draft into the course directory: `README.md`, `course-description.md`, `course-prompt.md`, `course-config.json`, lesson files, `structure.json`, and `.shifu-sync.json`. It records course and lesson revision baselines. Each lesson revision comes from `draft-meta`; the corresponding immutable history version supplies its content, so a concurrent edit cannot pair content with the wrong baseline. If any lesson snapshot is unavailable or invalid, pull stops before replacing existing files. Before overwriting a divergent local file, it writes `<file>.local-<timestamp>.bak`; `--force` disables these backups.
 
 `status` reads `.shifu-sync.json`, compares it with cloud revisions and local hashes, and reports:
 
@@ -104,10 +189,11 @@ status --course-dir ./course-a/ [--exit-code]
 - locally modified lesson or course description;
 - new lesson on the server;
 - lesson deleted on the server.
+- unknown lesson or course revisions, which cannot be confirmed as up to date.
 
-Without `--exit-code`, divergence is reported while the command exits normally. With `--exit-code`, any divergence exits `1`. A missing sync manifest also exits `1`.
+Without `--exit-code`, divergence is reported while the command exits normally. With `--exit-code`, any divergence or unknown revision exits `1`. A missing sync manifest also exits `1`.
 
-`.shifu-sync.json` is auto-maintained by the CLI. Its schema is defined in `course-directory-spec.md#shifu-syncjson`.
+`.shifu-sync.json` is auto-maintained by the CLI. Its schema and the source-service/course identity checks applied before platform requests with a course directory are defined in `course-directory-spec.md#shifu-syncjson`. `--force` affects local backups only; it never bypasses identity checks.
 
 ## Create Commands
 
@@ -134,12 +220,14 @@ set-access <shifu_bid> <outline_bid> --access guest|trial|normal \
   [--hidden true|false] [--course-dir ./course-a/]
 set-tts <shifu_bid> --enabled true|false [--speed <number>] \
   [--course-dir ./course-a/]
+set-avatar <shifu_bid> --file <teacher.jpg|teacher.png> \
+  [--course-dir ./course-a/]
 reorder <shifu_bid> --order bid1,bid2,bid3
 ```
 
 ### `update-lesson` and `rename-lesson`
 
-`update-lesson` sends the prompt file as lesson content. With a matching `.shifu-sync.json`, it uses the recorded lesson revision as the optimistic-lock baseline and updates the manifest and local file after success. Without that baseline it uses the current cloud head, so concurrent-edit detection is degraded. On a conflict with `--course-dir`, the CLI saves the attempted content as `<file>.conflict`, pulls the cloud course over local, and exits `2`.
+`update-lesson` sends the prompt file as lesson content. With a matching `.shifu-sync.json`, it uses the recorded lesson revision as the optimistic-lock baseline and updates the manifest and local file after success. If the manifest lacks a valid lesson baseline, the command refuses the write and preserves local edits: pull again, then reapply the intended edits before retrying. Without a manifest it reads the current revision from `draft-meta`, so concurrent-edit detection is degraded. An unavailable revision stops the write rather than sending unversioned content. On a conflict with `--course-dir`, the CLI saves the attempted content as `<file>.conflict`, pulls the cloud course over local, and exits `2`.
 
 `rename-lesson` sends only the lesson name and preserves omitted lesson fields.
 
@@ -155,13 +243,23 @@ The command maps `guest`, `trial`, and `normal` to the platform learning-access 
 
 ### `set-tts`
 
-Disabling sends only `tts_enabled=false`. Enabling fetches platform TTS defaults and sends provider, model, voice, speed, normalized pitch `0`, and empty emotion; `--speed` overrides the default. Invalid or incomplete settings exit `1`.
+Disabling sends only `tts_enabled=false`. Enabling fetches the platform TTS configuration and selects the model option the platform declares as default (`is_default`), falling back to the first option on backends without the marker, plus the first voice compatible with that model. It sends provider, model, voice, speed, normalized pitch `0`, and empty emotion; `--speed` overrides the default. Invalid or incomplete settings exit `1`.
 
 With a matching sync manifest, the command checks the course revision before writing, then refreshes `course-config.json` and the manifest after success. On conflict it records the intended metadata, pulls the cloud course, and exits `2`.
 
+### `set-avatar`
+
+The command accepts a local JPG or PNG, corrects EXIF orientation, limits the longest side to 2048 px, and automatically compresses the upload to at most 2 MB. If it cannot reach the limit without excessive loss, it exits `1` so the Skill can request a replacement. A non-square image is accepted with a warning because course cards and learning pages display the avatar in a square frame; 1:1 is recommended.
+
+After upload, the command sends only the returned resource URL as `avatar`, reads course detail back, and exits `1` if the new URL cannot be verified. With a matching sync manifest, it checks the course revision before upload, then refreshes `course-config.json` and the manifest after success. This path uses the platform APIs directly and does not require browser or Chrome control.
+
 ### `reorder`
 
-The command sends the comma-separated outline BID sequence and changes the course outline order.
+`--order` must list every outline BID under one parent exactly once, in the desired order. Use all top-level BIDs to reorder chapters, or all BIDs within one chapter to reorder its lessons. The command sends only that group's ordered BIDs as `order` to `PATCH /shifus/<shifu_bid>/outlines/reorder`. The server applies the order to its current tree under the course lock, preserving other sibling groups and parent-child relationships. It does not move outlines between parents.
+
+Empty or duplicate BIDs exit `1` before any platform request. The server rejects unknown, cross-parent, or incomplete groups without changing the course, and the CLI exits `1` on that error.
+
+The platform must support the atomic `order` request. Older servers that require an `outlines` tree reject it, and the CLI exits `1`; it never retries with a full tree, which could overwrite another group's concurrent edits. Deploy the backend supporting this contract before using this command.
 
 ## Delete Commands
 
@@ -184,14 +282,16 @@ import <shifu_bid> --course-dir ./course-a/ \
 import --new --course-dir ./course-a/ \
   [--title "..."] [--description "..."] [--keywords "..."] [--chapter-name "..."]
 
-# Offline build only
+# Build import JSON locally
 build --course-dir ./course-a/ [-o shifu-import.json] \
   [--title "..."] [--description "..."] [--keywords "..."] [--chapter-name "..."]
 ```
 
-`build` performs no network calls and writes the import JSON to `-o` or `<course-dir>/shifu-import.json`. File discovery, field precedence, directory schemas, and the generated import schema are defined in `course-directory-spec.md`.
+`build` compiles the course locally and writes the import JSON to `-o` or `<course-dir>/shifu-import.json`. The shared CLI [automatic update check](#update-check) can query GitHub before compilation; compilation itself needs no platform connection. File discovery, field precedence, directory schemas, and the generated import schema are defined in `course-directory-spec.md`.
 
 `import --new` creates a new course. `import <shifu_bid>` targets an existing course. Both forms send content fields. Existing-course import leaves omitted platform attributes unchanged; new-course import uses platform defaults for omitted attributes.
+
+Flat JSON imports accept both `build` output and platform `export` output. The complete payload passes [import input validation](course-directory-spec.md#import-input-validation) before any platform request. Course Prompt field precedence, explicit clearing, and omitted-field behavior follow [Course Prompt import compatibility](course-directory-spec.md#course-prompt-import-compatibility).
 
 Importing into an existing course deletes and recreates every outline, so all outline BIDs are regenerated and recreated lessons receive platform-default permissions. With `--course-dir` and a matching sync manifest, an existing-course import checks the course revision first. On conflict it backs up the local tree to `.conflict-backup-<timestamp>/`, pulls the cloud course over local, and exits `2`. After a successful existing-course import it runs an automatic pull to reseed the manifest.
 
@@ -206,8 +306,8 @@ upload-image --url <http-or-https-url> [--course-dir <dir>] [--alt "<description
 
 - A local file is opened with Pillow, has EXIF orientation corrected, is downscaled to a maximum side of 2048 px, and is recompressed to at most 2 MB. Transparent images remain PNG; other accepted images are uploaded as JPEG. Invalid image input exits `1`.
 - A remote URL is sent to the backend for validation and re-hosting.
-- Stdout contains exactly the resulting `https://res.ai-shifu.cn/<uuid32>` URL; diagnostics and manifest messages go to stderr.
-- With `--course-dir`, the CLI upserts an entry in `assets/image-manifest.json`, keyed by `local` or `source_url`.
+- Stdout contains exactly the resource URL returned by the selected deployment (preserve its host and path); diagnostics and manifest messages go to stderr.
+- With `--course-dir`, the CLI upserts an entry in `assets/image-manifest.json`, keyed by service `base_url` plus `local` or `source_url`, and records the selected profile. Different services' uploads and old records without known provenance are preserved. See `course-directory-spec.md#assets`.
 - `--alt` is stored in the manifest.
 - `--no-process` skips local preprocessing and is a debug-only flag.
 
@@ -221,7 +321,7 @@ archive <shifu_bid>
 unarchive <shifu_bid>
 ```
 
-- `publish` publishes the current draft and prints admin, preview, and public verification URLs.
+- `publish` publishes the current draft and prints the course links described in [Query Commands](#query-commands).
 - `archive` archives the course.
 - `unarchive` restores an archived course.
 
@@ -230,6 +330,8 @@ unarchive <shifu_bid>
 - `0`: command completed successfully.
 - `1`: validation, transport, file, authentication, or platform business error; `status --exit-code` also uses `1` for divergence.
 - `2`: `verify` could not determine token state, or a version-aware write found a conflict and auto-pulled the cloud baseline. Interpret the command context before handling this code.
+
+- `4`: service/profile configuration is missing or invalid; no platform request was sent. Inspect `site` or `profile list` and resolve the reported issue before authentication; do not fall back to another profile.
 
 Commands print platform business error payloads before exiting when available.
 
@@ -241,4 +343,4 @@ CLI JSON uses UTF-8 and `ensure_ascii=False`. If an agent subprocess renders Chi
 python3 scripts/shifu-cli.py analytics-query <bid> --dsl '<json>' > /tmp/shifu-result.json
 ```
 
-The saved token remains in `{skillDir}/.env`; authenticated commands load it automatically.
+Saved credentials remain in the selected profile's user-configuration directory; authenticated commands load only that profile's credentials.

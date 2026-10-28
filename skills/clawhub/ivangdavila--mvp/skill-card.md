@@ -1,42 +1,60 @@
-## Description: <br>
-Build, validate, and launch minimum viable products with scope discipline, user signals, and iteration speed. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Build, validate, and launch minimum viable products with scope discipline, user signals, and iteration speed.
 
-## Publisher: <br>
-[ivangdavila](https://clawhub.ai/user/ivangdavila) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ivangdavila](https://clawhub.ai/user/ivangdavila)
 
-## Use Case: <br>
-Founders, product managers, solo builders, investors, and advisors use this skill to define MVP hypotheses, control scope, validate demand, interpret early user signals, and decide whether to iterate, pivot, or stop. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Validation tactics such as fake doors, Wizard of Oz workflows, concierge MVPs, or pre-sales could mislead real customers if presented as finished automated services. <br>
-Mitigation: Use clear disclosures for manual or unfinished services, collect only necessary personal data, and provide a privacy notice. <br>
-Risk: Pre-sales and paid validation can create refund, receipt, or expectation-management issues if payment terms are unclear. <br>
-Mitigation: Use payment flows that provide receipts, clear terms, and easy refunds before collecting money from prospective customers. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [MVP Skill Definition](artifact/SKILL.md) <br>
-- [MVP Scope Management](artifact/scope.md) <br>
-- [MVP Validation Techniques](artifact/validation.md) <br>
-- [MVP Traps and Anti-Patterns](artifact/traps.md) <br>
+## Use Case:
 
+External founders, product managers, advisors, and solo builders use this skill to scope MVPs, validate demand, define launch criteria, and decide when to iterate, pivot, or stop.
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown guidance with checklists, scripts, templates, decision frameworks, and role-specific advice] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only business guidance; no executable behavior.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Validation tactics such as fake doors, Wizard of Oz tests, concierge workflows, and pre-sales can mislead users if availability, manual handling, or payment terms are unclear.
+
+Mitigation: Use transparent wording such as pilot, beta, manually assisted, coming soon, or refundable pre-order, and avoid these tactics where hidden manual handling or ambiguous terms could harm users.
+
+Risk: Following MVP validation playbooks with real users can produce incorrect product decisions if qualitative signals are treated as definitive.
+
+Mitigation: Review recommendations before use, define explicit success and kill criteria, and pair interview findings with observed behavior or measured launch signals.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/ivangdavila/skills/mvp)
+- [MVP Scope Management](artifact/scope.md)
+- [MVP Validation Techniques](artifact/validation.md)
+- [MVP Traps and Anti-Patterns](artifact/traps.md)
+- [Technical Founder MVP Guide](artifact/technical.md)
+- [Non-Technical Founder MVP Guide](artifact/non-technical.md)
+- [Product Manager MVP Guide](artifact/pm.md)
+- [Solo Builder / Indie Hacker MVP Guide](artifact/solo.md)
+- [Investor / Advisor MVP Evaluation Guide](artifact/investor.md)
+
+## Skill Output:
+
+**Output Type(s):** [guidance, markdown, configuration]
+
+**Output Format:** [Markdown guidance with templates, checklists, decision frameworks, and interview scripts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Role-specific guidance for technical founders, non-technical founders, product managers, solo builders, and investors.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

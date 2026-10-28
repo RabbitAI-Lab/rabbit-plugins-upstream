@@ -2,6 +2,8 @@
 
 JSON response structures for the `hosting` domain. All commands output JSON to stdout; failures exit non-zero with `{"errorMessage": "..."}`.
 
+Responses are wrapped in a key: `app get` / `app create` return `{ "app": {…} }`, `app list` returns `{ "apps": [ … ] }`, `worker …` likewise returns `{ "worker": {…} }` / `{ "workers": [ … ] }`, `deployment get` / `get-promoted` / `promote` return `{ "deployment": {…} }`, `deployment list` returns `{ "count": n, "deployments": [ … ] }`, and `deployment create` returns `{ "deployment": {…}, "stats": { "fileCount": n } }`. The objects below are the inner values, so read `.app.url`, not `.url`.
+
 ## App (`hosting app get` / items in `hosting app list`)
 
 ```json
@@ -11,7 +13,7 @@ JSON response structures for the `hosting` domain. All commands output JSON to s
   "name": "My App",
   "description": null,
   "slug": "my-app",
-  "url": "https://my-app.cargo.app",
+  "url": "https://my-app-1a2b3c4d.app.getcargo.run",
   "userUuid": "...",
   "folderUuid": null,
   "promotedDeployment": null,
@@ -26,7 +28,7 @@ JSON response structures for the `hosting` domain. All commands output JSON to s
 
 ## Worker (`hosting worker get` / items in `hosting worker list`)
 
-Identical to an app, with one difference: `promotedDeployment` is a **Worker Deployment** (carries `workerUuid` + `meta`, see below). The `uuid` is passed as `--worker-uuid` to deployment commands.
+Same fields as an app, plus `runAsUserUuid` (the service user whose temporary `CARGO_API_TOKEN` is bound at promote, or `null`) and `triggers` (cron triggers: `type`, `name`, `cron`, `path`, `method`, …). `promotedDeployment` is a **Worker Deployment** (carries `workerUuid` + `meta`, see below). The `uuid` is passed as `--worker-uuid` to deployment commands.
 
 ## Deployment (`hosting deployment get` / items in `hosting deployment list`)
 
@@ -39,7 +41,7 @@ A deployment is a discriminated union on `kind` (`"app"` | `"worker"`). Shared f
   "appUuid": "app-uuid",
   "workspaceUuid": "...",
   "status": "success",
-  "url": "https://my-app.cargo.app",
+  "url": "https://deployment-deployment-uuid.app.getcargo.run",
   "sourceS3Path": "...",
   "bundleS3Path": "...",
   "buildLogS3Filename": "...",
@@ -56,11 +58,12 @@ A deployment is a discriminated union on `kind` (`"app"` | `"worker"`). Shared f
 ```
 
 - **`kind: "app"`** carries `appUuid` and an empty `meta` (`{}`).
-- **`kind: "worker"`** carries `workerUuid` instead of `appUuid`, and `meta: { "bundleSha256": "...", "outboundAllowlist": ["..."] }`.
+- **`kind: "worker"`** carries `workerUuid` instead of `appUuid`, and `meta: { "bundleSha256": "...", "outboundAllowlist": ["..."] }` (plus `"kind": "custom-integration"` for a custom-integration worker).
 
 **Key fields:**
 
 - `uuid` — pass to `deployment promote --uuid`.
+- `url` — this deployment's own preview host (`deployment-<uuid>.<root>`), reachable before promotion. The live URL is the app's/worker's `url`.
 - `appUuid` / `workerUuid` — exactly one is set, matching `kind`.
 - **`status`** — one of `"pending"`, `"building"`, `"success"`, `"error"`, `"cancelled"`. **Terminal** at `success` / `error` / `cancelled`; only a `success` deployment is worth promoting.
 - `errorMessage` — populated when `status` is `error`; `buildLogS3Filename` points at the build log for diagnosing a failed build.
@@ -69,7 +72,7 @@ A deployment is a discriminated union on `kind` (`"app"` | `"worker"`). Shared f
 
 ## get-promoted (`hosting deployment get-promoted`)
 
-Returns the currently-promoted Deployment for the given `--app-uuid` / `--worker-uuid` (same shape as above, with `promotedAt` set), or null/empty if nothing is promoted yet. Equivalent to reading `promotedDeployment` off the app/worker.
+Returns `{ "deployment": {…} }`, the currently-promoted Deployment for the given `--app-uuid` / `--worker-uuid` (same shape as above, with `promotedAt` set). If nothing is promoted yet it fails with a 404 (`deploymentNotFound`) and a non-zero exit. Equivalent to reading `promotedDeployment` off the app/worker.
 
 ## env (`hosting app env`)
 
@@ -80,7 +83,8 @@ Not JSON — `hosting app env <appUuid>` prints `.env.local` lines (Cargo OAuth 
 ```json
 [
   { "slug": "blank", "description": "..." },
-  { "slug": "territories-overview", "description": "..." }
+  { "slug": "territories-overview", "description": "..." },
+  { "slug": "public-site", "description": "..." }
 ]
 ```
 

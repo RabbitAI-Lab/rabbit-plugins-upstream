@@ -17,6 +17,7 @@ Composes with `metacognition`, `confirmation-bias`, `cognitive-load-theory`, `pr
 - Multiple steps where skipping one costs far more than running the checklist
 - Multi-person operations where coordination must be consistent
 - New team members joining a critical workflow
+- Shipping or updating an AI agent / model version in production — evals, guardrails, spend caps, rollback: known steps that skilled teams skip under deadline
 
 **Not when:** operation is simple/one-off; no recurring pattern exists; checklist culture creates false confidence (mechanical checking without thought).
 
@@ -67,6 +68,7 @@ Near-miss tracking:  Quarterly review owner:
 ```
 
 *→ Method in Action: [B-17 1935 + Pronovost ICU + WHO Surgical](examples/b-17-1935-pronovost-icu-who-surgical.md) · [Van Halen's Brown M&M Rider Clause](examples/van-halen-brown-mms-rider-clause.md)*
+*→ 2026 lens: [The AI-agent pre-flight checklist (2023–2026)](examples/ai-agent-preflight-checklists-2023-2026.md) — software became too much airplane for one deploy to eyeball.*
 
 ## Pack: Domain Patterns
 
@@ -117,6 +119,6 @@ Near-miss tracking:  Quarterly review owner:
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/checklist** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/checklist** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/checklist.json*

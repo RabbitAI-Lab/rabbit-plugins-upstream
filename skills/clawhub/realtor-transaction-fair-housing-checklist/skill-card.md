@@ -1,40 +1,52 @@
-## Description: <br>
-Helps real estate agents check transaction steps for agency disclosure, fair-housing-safe advertising, property disclosures, deadlines, and earnest money handling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides real estate agents with a transaction checklist for agency disclosure, fair housing, property disclosures, deadlines, and earnest money handling.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External real estate agents and brokerage teams use this skill as a procedural checklist for listings, offer handling, advertising review, disclosure tracking, and closing coordination. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Procedural real-estate compliance guidance could be mistaken for legal advice or current jurisdiction-specific requirements. <br>
-Mitigation: Treat the skill as a checklist, not legal advice, and verify current federal, state, brokerage, and MLS requirements before relying on it. <br>
+## Use Case:
 
+Real estate agents use this checklist aid while taking listings, preparing advertising, handling offers, and coordinating closings. Verify its steps against current local law and brokerage rules.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/realtor-transaction-fair-housing-checklist) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/realtor-transaction-fair-housing-checklist) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/realtor-transaction-fair-housing-checklist.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown checklist and concise procedural guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable behavior; prompts users to verify current legal, brokerage, and MLS requirements.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence) <br>
+Risk: The referenced parent checklist is not included, and transaction requirements can vary by jurisdiction.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this as a checklist aid and verify requirements against current local law and brokerage rules.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/realtor-transaction-fair-housing-checklist)
+- [Publisher skill overview](https://www.deciqai.com/c/realtor-transaction-fair-housing-checklist)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/realtor-transaction-fair-housing-checklist.json)
+- [Publisher repository linked from the skill](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Checklist]
+
+**Output Format:** [Markdown checklist guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Human-reviewed checklist aid; verify against current local law and brokerage rules.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

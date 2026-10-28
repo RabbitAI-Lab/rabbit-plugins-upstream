@@ -1,42 +1,51 @@
-## Description: <br>
-Guides an agent through surfacing, understanding, and resolving sales objections such as price, timing, missing stakeholders, and soft stalls without using the process for genuinely unqualified prospects. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps sales teams uncover the concern behind a prospect's objection and respond with relevant evidence, while recognizing when to disqualify instead.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Sales teams, founders, and agents use this skill when deals stall on stated objections such as price, timing, or requests for information. It helps identify the real concern, confirm whether it is the last blocker, resolve it with evidence, and re-ask for the next advance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Persuasive sales guidance could be applied where the prospect is genuinely unqualified or where continued objection handling is inappropriate. <br>
-Mitigation: Use the skill only for qualified sales opportunities and follow its stated exclusion for genuinely unqualified prospects. <br>
-Risk: The skill can influence customer-facing sales conversations. <br>
-Mitigation: Review outputs for accuracy, fit, and acceptable persuasion practices before using them in live conversations. <br>
+## Use Case:
 
+External sales teams, founders, and sales professionals use this skill to uncover the concern behind an objection and respond with relevant evidence while deciding whether to advance or disqualify a deal.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/deciqai/skills/objection-handling) <br>
-- [deciqAI objection-handling page](https://www.deciqai.com/c/objection-handling) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/objection-handling.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Text] <br>
-**Output Format:** [Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable sales coaching guidance with process steps, red flags, and verification checks.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Applying objection-handling techniques to a prospect who is genuinely unqualified can waste time and encourage an unsuitable sale.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Follow the skill's activation guidance: disqualify genuinely unqualified prospects instead of handling their objections.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/objection-handling)
+- [Objection Handling guide](https://www.deciqai.com/c/objection-handling)
+- [Machine-readable skill details](https://www.deciqai.com/s/objection-handling.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance]
+
+**Output Format:** [Markdown or conversational text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A concise coaching process with example questions and a verification checklist.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

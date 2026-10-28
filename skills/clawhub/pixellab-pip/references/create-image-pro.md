@@ -1,10 +1,26 @@
 # Create Image Pro
 
-Read this for explicit Create Image Pro wording, REST `generate-image-v2`, exact grid or sheet requests, and small cell-size requests that are not already covered by `icon.md`.
+Read this for explicit Create Image Pro wording, MCP `create_image_pro`/REST `generate-image-v2`, exact grid or sheet requests, small cell-size requests that are not already covered by `icon.md`, and exact hex palettes or color caps on any route.
 
-Create Image Pro / REST `generate-image-v2` is a general image-generation route. It can make attractive sprite sheets and texture sheets, but exact cell layout is prompt-guided rather than structurally guaranteed. A correct output canvas size is not proof that the image contains the requested cell grid. Style is prompt-guided too: there is no `detail`, `outline`, `shading`, `negative_description`, `color_image`, or `coverage_percentage` field, only `style_options` copying from a supplied `style_image`. Route to `create-image-pixen`, `create-image-pixflux`, or `create-image-bitforge` when one of those must be enforced by a field.
+Create Image Pro / MCP `create_image_pro` (+ `get_image`) / REST `generate-image-v2` is a general image-generation route. It can make attractive sprite sheets and texture sheets, but exact cell layout is prompt-guided rather than structurally guaranteed. A correct output canvas size is not proof that the image contains the requested cell grid. Style is prompt-guided too: there is no `detail`, `outline`, `shading`, `negative_description`, `color_image`, or `coverage_percentage` field; MCP accepts a preferred `style_image_url` or inline base64 plus `style_copy`, while REST has `style_image`+`style_options`. Route to `create_image_pixen`/`create-image-pixen`, `create_image_pixflux`/`create-image-pixflux`, or `create-image-bitforge` when another field must be enforced.
 
-`generate-image-v2` removes the background by default (`no_background` defaults to `true`). Send `no_background: false` when the user wants an opaque, full-bleed image, scene, or sheet.
+Prefer Pro when user instructions must be followed closely; it follows the user's description more closely than Pixen/v3/new, at higher cost and with a different character style.
+
+When the layout or composition of a Pro image is uncertain, the approval card may offer a 1-generation `create_image_pixflux` draft first, at the same size or the same aspect ratio within pixflux's 400 px limit. It previews layout and pose, not Pro's style or detail; it is an offer, never a default, and the Pro call keeps its own approval.
+
+MCP `create_image_pro` and REST `generate-image-v2` both remove the background by default (`no_background` defaults to `true`). Send `no_background: false` when the user wants an opaque, full-bleed image, scene, or sheet.
+
+## Exact Palette Control
+
+MCP uses `palette` (2–256 hex colors), optional `palette_name`, and `max_colors` (2–64 per image); REST uses `target_palette.colors`, optional `name`, `max_colors`, and beta `smart`. The palette colors constrain every result pixel; `max_colors` only caps the count. REST `smart` requires `colors`, is for single images, adds about 15–60 seconds, and is refused for animation; MCP documents no `smart` equivalent.
+
+Routes with these fields:
+
+- MCP `palette`/`palette_name`/`max_colors`: `create_image_pro`, the Pro Flash creation tools and `image_to_pixelart_pro_flash`, `create_character`, `create_character_state`, `create_portrait_character`, `create_1_direction_object`, `create_8_direction_object`, `create_object_state`, `animate_object`, `create_topdown_tileset`, `create_tiles_pro`, `create_path_tiles`, `create_building_kit`, `create_ui_asset`, and `transfer_outfit`. MCP lists them without mode limits; on `create_character`, `create_topdown_tileset`, and `animate_object` outside `mode="pro"` (where REST documents them only for Pro), say enforcement is undocumented and check every visible output pixel against `colors` before claiming compliance.
+- REST `target_palette`: `generate-image-v2`, `generate-with-style-v2`, `generate-ui-v2`, `create-ui-asset`, `image-to-pixelart-pro`, the Pro Flash image/character/object creation and `image-to-pixelart-pro-flash` routes, `create-character-pro`, `create-character-with-8-directions` (`mode="pro"` only), `create-character-state`, `portrait-character-pro`, 1/8-direction object creation, object states, `create-tileset`/`tilesets` (`mode="pro"` only), `create-tiles-pro`, `generate-8-rotations-v2`, managed character animation (`pro`, `v3`, and `pixminimax` modes), object animation (`mode="pro"` only), `animate-with-text-v2`, `interpolation-v2`, `edit-animation-v2`, and `transfer-outfit-v2`.
+- Every other route has no `palette`/`target_palette` field; do not send one. MCP `animate_character` lacks it, so use REST managed animation for a palette-constrained character animation.
+
+For multi-direction character or object animation, give `colors`: a `max_colors` cap alone picks different colors per direction; frame-based routes use one palette choice for all frames. Managed character animation and `animate-with-text-v2` put the source frame on the palette first; Pro Flash keeps a supplied `first_frame` or `source_image_id` unchanged; in outfit transfer the palette, not the reference, sets final colors. MCP `style_copy` already omits `color_palette` when a palette is given; with REST `style_image`, set `style_options.color_palette: false` so the palette controls the colors.
 
 ## Sub-32px Cell Requests
 
@@ -24,6 +40,13 @@ Do not call a Create Image Pro result a valid exact tile/icon/sprite grid based 
 ## Native-Size Multi-Output Batches
 
 At small `image_size` values, `generate-image-v2` may return many same-prompt images. Native sizing enforces each returned file's dimensions; it does not assign a different requested concept to each output or guarantee semantic variety. Treat the results as candidates or variations unless the user explicitly requested a multi-asset set and delegated keeping all outputs; follow `reviewable-candidates.md` otherwise.
+
+REST `generate-image-v2` documents the following output counts by maximum dimension:
+
+- `16–32px`: 64; `33–35px`: 49; `36–41px`: 36; `42–50px`: 25.
+- `51–64px`: 16; `65–84px`: 9; `85px`: 16; `86–170px`: 4; above `170px`: 1.
+
+The MCP tool describes several candidates but does not publish these exact bands; inspect the returned results instead of assuming the REST counts. REST `generate-with-style-v2` uses the same count ladder through `170px` and returns one image from `171–512px`; its output size is still derived from the style images (see `style-reference.md`).
 
 Variety requests (route-specific refinement of SKILL.md's "produce one candidate first"): when the user asks for a set, variety, or several `unique` small assets, run exactly one call. `generate-image-v2` at small sizes often returns dozens of distinct candidates from a single generation. Expand to further paid calls only when the first result's candidates are too few or too similar and the user approves the extra scope — or when the user explicitly approved a multi-call plan upfront per SKILL.md's batch-approval rule.
 

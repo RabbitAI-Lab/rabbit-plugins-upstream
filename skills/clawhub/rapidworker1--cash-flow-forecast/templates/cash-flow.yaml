@@ -1,0 +1,44 @@
+# Cash Flow Forecast - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+company: ""
+prepared_by: ""
+prepared_on: ""
+as_of_date: ""
+horizon_weeks: 13
+opening_cash: 0
+bank_accounts:
+  - name: ""
+    balance: 0
+committed_outflows:
+  - item: payroll
+    amount: 0
+    due_date: ""
+  - item: payroll taxes
+    amount: 0
+    due_date: ""
+  - item: sales and use tax
+    amount: 0
+    due_date: ""
+  - item: loan payment
+    amount: 0
+    due_date: ""
+  - item: rent
+    amount: ""
+    due_date: ""
+inflows:
+  - customer: ""
+    amount: 0
+    expected_date: ""
+    basis: ""
+cases:
+  low:
+    inflow_pct_of_base: 0
+    outflow_pct_of_base: 0
+  base:
+    inflow_pct_of_base: 100
+    outflow_pct_of_base: 100
+  high:
+    inflow_pct_of_base: 0
+    outflow_pct_of_base: 0
+assumptions:
+  - ""

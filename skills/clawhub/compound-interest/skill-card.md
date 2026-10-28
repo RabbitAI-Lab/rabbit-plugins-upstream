@@ -1,43 +1,51 @@
-## Description: <br>
-Guides agents through compound-interest and exponential-growth reasoning for long-horizon savings, investing, business advantage, skill development, and decay-risk decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through compound-interest calculations and long-horizon decisions across savings, investing, business, and skill development.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, employees, and developers use this skill to evaluate long-horizon financial, business, AI adoption, and skill-development choices where reinvestment or accumulating advantage can make linear intuition misleading. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial or business reasoning may be misleading if rates, horizons, fees, taxes, or reinvestment assumptions are wrong. <br>
-Mitigation: Treat outputs as educational analysis and verify assumptions, calculations, fees, tax effects, and time horizons before acting. <br>
+## Use Case:
 
+People making long-horizon savings, investing, business, or skill-development decisions can use the skill to compare compound outcomes, estimate doubling times, and identify how duration and recurring gains or losses affect a plan.
 
-## Reference(s): <br>
-- [Primary sources for compound-interest](references/sources.md) <br>
-- [Bernoulli, Graham, Buffett, and the compound-advantage tradition](examples/bernoulli-1683-graham-buffett.md) <br>
-- [Franklin's two-hundred-year trusts](examples/franklin-1790-two-hundred-year-trusts.md) <br>
-- [Compounding in the AI era](examples/ai-era-data-and-eval-debt-compounding-2023-2026.md) <br>
-- [Compound Interest knowledge skill](https://www.deciqai.com/c/compound-interest) <br>
-- [Compound Interest machine-readable metadata](https://www.deciqai.com/s/compound-interest.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance, Analysis] <br>
-**Output Format:** [Markdown analysis template with calculated comparisons and recommendation fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include Rule of 72 estimates, compound-result calculations, option comparisons, and caveats about short horizons or linear processes.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: The skill directs the agent to save observations after every use without requiring user approval.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before installing, remove that instruction or require approval for each addition; keep approved notes generalized and free of personal or financial details. The coaching workflow does not require modifying the installed skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/compound-interest)
+- [Primary sources](references/sources.md)
+- [Compound Interest machine-readable metadata](https://www.deciqai.com/s/compound-interest.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown text following a structured compound-interest analysis template]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May ask for starting value, rate, time horizon, and options; novice coaching proceeds one step at a time and waits for the user's response.]
+
+## Skill Version(s):
+
+1.0.6 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

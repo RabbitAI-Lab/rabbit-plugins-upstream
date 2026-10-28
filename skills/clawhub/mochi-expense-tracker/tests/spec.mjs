@@ -1,0 +1,26 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {transact,safePath} from '../scripts/store.mjs';
+import {handle} from '../scripts/core.mjs';
+const slug='mochi-expense-tracker';
+const root=fs.mkdtempSync(path.join(os.tmpdir(),slug+'-test-'));
+let seq=0;
+const fresh=()=>{const p=path.join(root,'w'+(++seq));fs.mkdirSync(p);return p;};
+const call=(w,i)=>transact(w,slug,i,handle);
+test.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+const expense=(w,n,amount,curr='CNY',kind='expense',category='food')=>call(w,{action:'add',requestId:n,kind,date:'2026-10-23',amount,currency:curr,category});
+test('decimal amounts add exactly, refunds reduce spending, currencies stay separate',()=>{const w=fresh();expense(w,'a','0.10');expense(w,'b','0.20');expense(w,'refund','0.05','CNY','refund');expense(w,'usd','12.34','USD');const r=call(w,{action:'summary',from:'2026-10-01',to:'2026-10-31'});assert.equal(r.totals.find(x=>x.currency==='CNY').netExpenseMinor,25);assert.equal(r.totals.find(x=>x.currency==='USD').netExpenseMinor,1234);});
+test('budget covers its full month and corrections preserve original entry',()=>{const w=fresh();const r=expense(w,'a','32.00');call(w,{action:'budget',requestId:'budget',month:'2026-10',currency:'CNY',category:'food',amount:'100'});const before=call(w,{action:'summary',from:'2026-10-24',to:'2026-10-25'});assert.equal(before.totals.length,0);assert.equal(before.budgets[0].spentMinor,3200);call(w,{action:'void',requestId:'void',id:r.record.id,reason:'duplicate'});assert.equal(call(w,{action:'summary',from:'2026-10-01',to:'2026-10-31'}).totals.length,0);const state=JSON.parse(fs.readFileSync(path.join(w,'.mochilab',slug,'state.json')));assert.equal(state.records[0].voided,true);});
+test('amount precision and category names are handled safely',()=>{const w=fresh();assert.throws(()=>expense(w,'bad','1.001'));expense(w,'proto','1.00','CNY','expense','__proto__');const r=call(w,{action:'summary',from:'2026-10-01',to:'2026-10-31'});assert.equal(r.totals[0].categories.__proto__,100);});
+
+test('workspace confinement rejects traversal',()=>{const w=fresh();assert.throws(()=>safePath(w,'../outside'));});
+test('two workspace stores do not share data',()=>{const a=fresh(),b=fresh();const h=(i,s)=>{s.records.push(i.value);return {changed:true,result:{records:s.records}};};transact(a,slug,{requestId:'a',value:'first'},h);const out=transact(b,slug,{action:'list'},(i,s)=>({result:{records:s.records}}));assert.equal(out.records.length,0);});
+test('retry returns the saved result and rejects changed input',()=>{const w=fresh();let count=0;const h=()=>{count++;return {changed:true,result:{value:count}};};transact(w,slug,{requestId:'same',v:1},h);assert.equal(transact(w,slug,{requestId:'same',v:1},h).replayed,true);assert.equal(count,1);assert.throws(()=>transact(w,slug,{requestId:'same',v:2},h));});
+test('busy state does not overwrite another operation',()=>{const w=fresh();const d=path.join(w,'.mochilab',slug);fs.mkdirSync(d,{recursive:true});fs.writeFileSync(path.join(d,'write.lock'),'active');assert.throws(()=>call(w,{action:'list'}),/busy/);assert.equal(fs.readFileSync(path.join(d,'write.lock'),'utf8'),'active');});
+test('a failed operation preserves the previous state',()=>{const w=fresh();transact(w,slug,{requestId:'good'},(i,s)=>{s.records.push('saved');return {changed:true,result:{done:true}};});const file=path.join(w,'.mochilab',slug,'state.json'),before=fs.readFileSync(file,'utf8');assert.throws(()=>transact(w,slug,{requestId:'bad'},(i,s)=>{s.records.push('unsaved');throw new Error('failed');}));assert.equal(fs.readFileSync(file,'utf8'),before);});
+test('linked paths are rejected when supported by the host',t=>{const w=fresh(),outside=fresh();try{fs.symlinkSync(outside,path.join(w,'linked'),process.platform==='win32'?'junction':'dir');}catch{t.skip('Host does not allow symlink creation');return;}assert.throws(()=>safePath(w,'linked/secret.txt'));});

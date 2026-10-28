@@ -1,45 +1,54 @@
-## Description: <br>
-Premortem helps an agent facilitate a structured pre-commitment exercise where a team imagines a plan has already failed, works backward to identify failure modes, and turns the highest-priority risks into mitigations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides teams through a structured premortem to surface failure causes and plan mitigations before a high-stakes decision.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external teams, and decision facilitators use this skill before high-stakes or hard-to-reverse decisions to surface hidden failure modes, reduce group convergence, assign mitigations, and schedule a follow-up premortem. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may share confidential business plans or internal risk details during the premortem conversation. <br>
-Mitigation: Avoid sharing confidential information unless the user intends the agent to use it in the premortem exercise. <br>
-Risk: External links and market examples may be mistaken for live data or operational instructions. <br>
-Mitigation: Treat external links and examples as reference material, and verify current facts before making time-sensitive business decisions. <br>
+## Use Case:
 
+Teams and facilitators use the skill to stress-test high-stakes, hard-to-reverse plans by imagining failure, identifying causes, and assigning mitigations and monitoring triggers.
 
-## Reference(s): <br>
-- [Premortem ClawHub release page](https://clawhub.ai/deciqai/skills/premortem) <br>
-- [Premortem agent metadata](https://www.deciqai.com/s/premortem.json) <br>
-- [Premortem method page](https://www.deciqai.com/c/premortem) <br>
-- [Sources - premortem](references/sources.md) <br>
-- [Method in Action: Klein 2007 and the Mitchell-Russo-Pennington 1989 Foundation](examples/klein-2007-mitchell-russo-pennington-1989-foundation.md) <br>
-- [Method in Action: Back-Casting a Failed AI Agent Startup 12 Months Out (2024-2026)](examples/backcasting-ai-agent-startup-failure-2024-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown conversation and structured premortem tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [The skill asks the agent to pause at explicit wait points in coach mode and produce a modified-plan template with failure modes, mitigations, owners, triggers, monitoring signals, escalation thresholds, and a re-premortem date.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Project details shared for the exercise may include information the user does not intend the agent to process.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only project details you intend your agent to process.
+
+Risk: Proposed plan changes or calendar entries may be unsuitable for the project.
+
+Mitigation: Review proposed plan changes and calendar entries before applying them.
+
+## Reference(s):
+
+- [Sources — premortem](artifact/references/sources.md)
+- [Premortem skill page](https://www.deciqai.com/c/premortem)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured failure-mode table and action prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Organized around a decision, imagined failure date, failure modes, mitigations, owners, monitoring triggers, and a re-premortem date.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

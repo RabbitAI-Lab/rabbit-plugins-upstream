@@ -1,46 +1,52 @@
-## Description: <br>
-Helps an agent analyze why customers do or do not switch products, diagnose lock-in and stickiness, estimate switching-cost magnitude, and choose incumbent or new-entrant strategy. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze how customer switching costs affect retention, market entry, and competitive strategy.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, developers, founders, product leaders, and investors use this skill to run a switching-cost audit, compare cost to stay versus cost to switch, evaluate moats and churn, and plan ethical entry or retention strategy. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The broad lock-in activation language may steer business discussions toward customer-hostile or adversarial lock-in. <br>
-Mitigation: Use the skill for legitimate retention, competitive, investment, and market-structure analysis; reject requests that rationalize adversarial lock-in and prefer value-focused switching costs. <br>
-Risk: Switching-cost conclusions can be misleading if the agent skips concrete cost estimates or treats all customers as having the same magnitude of cost. <br>
-Mitigation: Require a case-specific audit with dollar or hour estimates, calculate cost-to-stay versus cost-to-switch, and review strategic recommendations before acting on them. <br>
+## Use Case:
 
+Founders, product leaders, investors, and market entrants use this skill to assess how financial, learning, migration, integration, workflow, relationship, and risk costs affect customer retention and competition. It guides a switching-cost audit, compares the cost to stay with the cost to leave, and identifies product or entry strategies.
 
-## Reference(s): <br>
-- [Sources](references/sources.md) <br>
-- [Klemperer, Markets with Consumer Switching Costs](https://doi.org/10.2307/1885068) <br>
-- [Klemperer, Competition When Consumers Have Switching Costs](https://doi.org/10.2307/2298075) <br>
-- [NVIDIA CUDA Zone](https://developer.nvidia.com/cuda-zone) <br>
-- [NVIDIA Investor Relations](https://investor.nvidia.com) <br>
-- [US Bureau of Industry and Security](https://www.bis.gov) <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/switching-costs) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with audit tables, step-by-step prompts, and strategy recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Plain Markdown skill content; no executable behavior or tool calls.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Lessons recorded after real use could expose customer names, confidential pricing, or private business details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed additions and save only generalized lessons without customer names, confidential pricing, or private business details.
+
+## Reference(s):
+
+- [Sources bibliography](artifact/references/sources.md)
+- [Klemperer (1987), Markets with Consumer Switching Costs](https://doi.org/10.2307/1885068)
+- [Switching Costs skill page](https://clawhub.ai/deciqai/skills/switching-costs)
+- [deciqAI skill overview](https://www.deciqai.com/c/switching-costs)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown report with an audit table, estimates, and strategic recommendations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Case-specific estimates should state their assumptions and uncertainty.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

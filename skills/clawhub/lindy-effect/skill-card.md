@@ -1,47 +1,59 @@
-## Description: <br>
-Lindy Effect helps agents evaluate non-perishable ideas, tools, technologies, institutions, and practices by using longevity as evidence for expected durability while checking when the heuristic does not apply. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Applies the Lindy effect to decisions about the durability of non-perishable ideas, technologies, institutions, and practices.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, developers, and decision makers use this skill to structure old-vs-new choices where durability, switching cost, and long time horizons matter. It guides agents through applicability checks, a Lindy prior, this-time-is-different analysis, and reversibility planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may bias recommendations toward older, proven tools or practices. <br>
-Mitigation: Treat the Lindy effect as a decision-making lens rather than an automatic answer, and document conditions that would justify choosing the newer option. <br>
-Risk: Factual source claims or age estimates may affect important decisions. <br>
-Mitigation: Verify source claims, dates, and cited evidence before relying on the output for high-impact decisions. <br>
-Risk: The heuristic can be misapplied to perishable items, deterministic life cycles, or cases where elimination forces are absent. <br>
-Mitigation: Run the skill's applicability checks before using the Lindy prior, including non-perishability, active elimination forces, and changed-condition checks. <br>
+## Use Case:
 
+Decision makers, researchers, and developers use this skill to compare established and newer options, assess whether longevity is meaningful evidence, and record a Lindy-informed decision with conditions that could override the prior.
 
-## Reference(s): <br>
-- [Primary sources](references/sources.md) <br>
-- [Method in Action: Goldman 1964, Mandelbrot 1982, Taleb 2012](examples/goldman-1964-mandelbrot-1982-taleb-2012.md) <br>
-- [Method in Action: Lindy vs. AI-Framework Churn in the 2024-2026 Tech Stack](examples/lindy-vs-ai-framework-churn-2024-2026.md) <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/lindy-effect) <br>
-- [deciqAI Lindy Effect page](https://www.deciqai.com/c/lindy-effect) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/lindy-effect.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown decision assessment with structured fields and optional step-by-step coaching questions] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Markdown-only reasoning skill; does not request system access or perform actions on the user's environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: A Lindy estimate could be treated as a forecast or as a standalone verdict despite limited or changing conditions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the framework as a prior, check whether the item is non-perishable and faces ongoing elimination pressure, assess changed conditions, and verify important claims independently.
+
+Risk: Saved usage examples could contain confidential details.
+
+Mitigation: Keep confidential details out of saved usage examples.
+
+## Reference(s):
+
+- [Sources](artifact/references/sources.md)
+- [Example: Goldman, Mandelbrot, and Taleb](artifact/examples/goldman-1964-mandelbrot-1982-taleb-2012.md)
+- [Example: Lindy and AI framework churn](artifact/examples/lindy-vs-ai-framework-churn-2024-2026.md)
+- [ClawHub release](https://clawhub.ai/deciqai/skills/lindy-effect)
+- [Publisher profile](https://clawhub.ai/user/deciqai)
+- [Lindy Effect skill page](https://www.deciqai.com/c/lindy-effect)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/lindy-effect.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown decision analysis, structured decision records, and step-by-step coaching]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes qualitative or approximate Lindy priors, applicability checks, override reasoning, and reversibility considerations.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

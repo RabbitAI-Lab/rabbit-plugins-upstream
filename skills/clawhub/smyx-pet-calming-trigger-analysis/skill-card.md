@@ -1,45 +1,58 @@
-## Description: <br>
-Automatically triggers soothing mechanisms when pet anxiety, howling, or prolonged loneliness is detected, and produces structured pet behavior analysis reports from video or URL inputs. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes pet monitoring videos for signs of anxiety, howling, or prolonged isolation and returns a structured report with suggested soothing actions.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze pet monitoring videos or media URLs for anxiety-related behavior, generate structured reports, and query prior cloud-hosted analysis reports. It is intended as an intelligent pet-care trigger and reporting assistant, not as a guaranteed animal-care or smart-device control system. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Pet camera media and submitted URLs are processed by the LifeEmergence cloud service. <br>
-Mitigation: Use only media that is appropriate for cloud processing, avoid sensitive household footage, and review service handling before installation. <br>
-Risk: Report history is associated with a hidden local identity and backend tokens may be stored in the workspace. <br>
-Mitigation: Review local workspace storage before and after use, protect generated identity and token files, and clear them when the skill is no longer needed. <br>
-Risk: The release is packaged as an automatic soothing trigger, but evidence does not show reviewed code that directly controls speakers, toys, or smart-home devices. <br>
-Mitigation: Treat device activation as requiring separate reviewed integration code and human validation before connecting any physical pet-care devices. <br>
+## Use Case:
 
+Pet owners and pet care operators use the skill to review monitoring videos for signs of distress and receive behavior observations, suggested responses, and links to reports. It can also retrieve prior analysis reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-pet-calming-trigger-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [Pet Calming Trigger API Documentation](references/api_doc.md) <br>
-- [Shared Analysis API Documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown and JSON-like structured analysis text with optional report links and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports local video files or media URLs, historical report listing, optional detail level, and optional output file path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
+Risk: Private video may be uploaded even when export-only processing is requested.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid private footage until export-only behavior is fixed, and confirm who owns the selected account and how the service retains and deletes videos.
+
+Risk: Account setup may silently register or reuse an account and save login tokens.
+
+Mitigation: Verify account ownership and credential handling; do not use a reusable API secret as an account identity.
+
+Risk: Advertised soothing actions may not work without verified device integration.
+
+Mitigation: Treat results as analysis and suggestions until device integration is verified; supervise any intervention.
+
+## Reference(s):
+
+- [Pet analysis API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Guidance]
+
+**Output Format:** [Structured analysis report; historical report listings can be presented as a Markdown table]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include observations, suggested actions, and report links.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

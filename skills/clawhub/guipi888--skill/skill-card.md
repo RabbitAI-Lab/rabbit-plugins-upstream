@@ -1,40 +1,58 @@
-## Description: <br>
-专门为 Skill 优化在 ClawHub、GitHub、虾评、小红书 RED Skill 和知识星球等平台的发布文案，包括技能名称、description、triggers、slug、displayName 和发布介绍文案，以提升搜索发现率和安装转化。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+优化 Skill 的名称、描述、触发词和多渠道发布介绍，帮助开发者提升可发现性，并提供发布前 SEO 检查清单与文案模板。
 
-## Publisher: <br>
-[guipi888](https://clawhub.ai/user/guipi888) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[guipi888](https://clawhub.ai/user/guipi888)
 
-## Use Case: <br>
-Skill authors and marketplace publishers use this skill to refine names, summaries, descriptions, triggers, slugs, display names, and launch copy before or after publishing. It is intended to make a skill easier for agents and users to find, understand, and install across multiple publishing channels. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires every response to include unrelated promotional text and an external link, which can add unwanted marketing content to agent outputs. <br>
-Mitigation: Review outputs before publishing or installation, and remove the footer requirement from the skill before use if promotional content is not acceptable. <br>
+## Use Case:
 
+Skill developers use this agent to improve discovery across publishing platforms. It drafts optimized names, descriptions, trigger terms, release copy, and a pre-release SEO review.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/guipi888/skill) <br>
-- [Publisher profile](https://clawhub.ai/user/guipi888) <br>
-- [External promotional link found in skill content](https://e418e2e692454bfaa8b6206e3f0ba789.app.codebuddy.work) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured copy recommendations, trigger lists, metadata suggestions, and platform-specific publishing drafts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs may include platform-specific Chinese-language publishing copy and recommended metadata fields.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and skill frontmatter) <br>
+Risk: Generated copy automatically promotes the author's account and external community, even when the user has not asked for promotion.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove the promotional footer or make it optional, and review generated copy before publishing.
+
+Risk: Generic trigger suggestions may activate outside the intended domain.
+
+Mitigation: Narrow trigger suggestions to the intended skill domain.
+
+Risk: The documented pipeline command references a script that is missing from the package.
+
+Mitigation: Do not rely on that command until the missing script is restored or the instructions are updated.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/guipi888/skills/skill)
+- [Publisher profile](https://clawhub.ai/user/guipi888)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration, JSON]
+
+**Output Format:** [Markdown and structured text, including JSON-formatted metadata when appropriate]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Platform-adapted publishing copy and metadata suggestions; review before publishing.]
+
+## Skill Version(s):
+
+1.0.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
