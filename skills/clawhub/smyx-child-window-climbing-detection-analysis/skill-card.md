@@ -1,45 +1,56 @@
-## Description: <br>
-Analyzes fixed-camera images or videos of window and balcony areas to detect child climbing, leaning, railing-crossing, gripping, and other fall-risk behaviors, then returns alerts and structured analysis reports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes submitted videos of window and balcony areas for child climbing or leaning behavior and returns a structured risk report.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, home-safety operators, childcare operators, and smart-camera integrators use this skill to analyze child activity near windows or balconies and receive structured warning results or cloud report history. It is intended as an auxiliary monitoring and alerting tool, not a substitute for adult supervision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child or home video files and URLs are sent to LifeEmergence cloud endpoints for analysis. <br>
-Mitigation: Install and use only in deployments with guardian consent, privacy review, and appropriate retention controls for child-safety media. <br>
-Risk: The skill creates or reuses a local or remote identity and may cache authentication tokens. <br>
-Mitigation: Review identity provisioning before installation, restrict local data directory access, and ensure there is a process to revoke tokens and delete local database records. <br>
-Risk: Cloud report history may expose prior child-safety analyses and report links. <br>
-Mitigation: Limit access to history-listing workflows and confirm that cloud reports can be deleted or governed under the deployment's data policy. <br>
+## Use Case:
 
+Families, childcare centers, and system integrators can submit videos of window or balcony areas to review for child climbing, leaning, or related fall-risk behavior. Use results as an aid to supervision, not as a dependable real-time alarm.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-child-window-climbing-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Child climbing window/balcony API documentation](artifact/references/api_doc.md) <br>
-- [Shared analysis API documentation](artifact/skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text containing structured analysis results, alert levels, report links, or history tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save the rendered result to a local output file when requested; cloud history queries return report lists associated with the resolved identity.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata; artifact frontmatter reports 1.0.6) <br>
+Risk: Privacy controls may not protect private footage, and credential handling is unsafe.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for fixes to destination override, export-only mode, and credential handling before providing private footage or API secrets; confirm provider retention, account isolation, and billing terms.
+
+Risk: The workflow does not establish dependable immediate child-safety alarms.
+
+Mitigation: Treat results as submitted-video analysis and continue adult supervision; do not rely on this skill for real-time alarms.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Analysis API details](skills/smyx_analysis/references/api_doc.md)
+- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-child-window-climbing-detection-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Markdown]
+
+**Output Format:** [Structured analysis results and report links; report listings can be presented as Markdown tables.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analyzes submitted video or image inputs; reports are an aid to supervision and do not provide dependable real-time alarms.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

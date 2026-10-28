@@ -1,46 +1,56 @@
-## Description: <br>
-Guides agents through a value-investing decision checklist that separates quoted market prices from intrinsic value under emotional pressure. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Mr. Market helps users assess market quotes and valuations without letting emotional pressure drive investment or fundraising decisions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, investors, operators, and founders use this skill to slow down decisions driven by market quotes, fundraising valuations, acquisition comparables, or volatility headlines. It helps compare the quoted price with an independent view of business value before deciding to transact, ignore, or wait. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may shape investment, fundraising, acquisition, or other financial decisions. <br>
-Mitigation: Verify current market facts independently and do not treat the output as personalized financial advice or authority to trade. <br>
-Risk: A user may mistake a market quote for a complete assessment of business value. <br>
-Mitigation: Require an independent intrinsic value estimate, confidence level, sensitivity check, and documented rationale before deciding to transact, ignore, or wait. <br>
+## Use Case:
 
+Investors, founders, and decision-makers use this skill to separate market sentiment from changes in a business and to structure a price-versus-value decision. It guides users through valuation, market mood, emotional influence, and a dated review trigger.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/mr-market) <br>
-- [Sources](references/sources.md) <br>
-- [Graham 1949, Buffett 1987 + 2008 Example](examples/graham-1949-buffett-1987-2008.md) <br>
-- [Nvidia Manic-Depressive Quote Example](examples/nvidia-manic-depressive-2023-2026.md) <br>
-- [Berkshire Hathaway 1987 Shareholder Letter](https://www.berkshirehathaway.com/letters/1987.html) <br>
-- [Buy American. I Am.](https://www.nytimes.com/2008/10/17/opinion/17buffett.html) <br>
-- [NVIDIA Newsroom](https://nvidianews.nvidia.com/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown decision checklist with questions, rationale fields, and re-evaluation trigger] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Coach mode uses explicit WAIT stops; no shell commands, code, data access, or persistence are evidenced.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server evidence release.version) <br>
+Risk: Historical examples or market information may be inaccurate or out of date, and users may over-rely on the resulting analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify factual examples and current market information, and keep investment decisions under the user's control. Brokerage credentials are unnecessary.
+
+## Reference(s):
+
+- [Primary sources and further reading](references/sources.md)
+- [Graham and Buffett examples](examples/graham-1949-buffett-1987-2008.md)
+- [NVIDIA market example](examples/nvidia-manic-depressive-2023-2026.md)
+- [Berkshire Hathaway 1987 shareholder letter](https://www.berkshirehathaway.com/letters/1987.html)
+- [Buy American. I Am. (The New York Times)](https://www.nytimes.com/2008/10/17/opinion/17buffett.html)
+- [NVIDIA Newsroom](https://nvidianews.nvidia.com/)
+- [Mr. Market skill page](https://www.deciqai.com/c/mr-market)
+- [Mr. Market machine-readable metadata](https://www.deciqai.com/s/mr-market.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown decision worksheet and conversational prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Structured prompts for quote, business reality, estimated value, market state, decision rationale, and a calendar-based review trigger.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,47 +1,55 @@
-## Description: <br>
-Schedule and manage social media posts across Instagram, X (Twitter), Bluesky, TikTok, Threads, LinkedIn, Facebook, Pinterest, and YouTube using the AdaptlyPost API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Schedule, publish and review social posts through the AdaptlyPost API on Instagram, X (Twitter), Bluesky, Mastodon, TikTok, Threads, LinkedIn, Facebook, Pinterest, YouTube and Google Business Profile accounts connected to AdaptlyPost, and read their analytics. Use only when the user has an AdaptlyPost account and asks to draft, schedule or publish a post on those accounts, upload media for such a post, list the connected accounts, check a post's status, or ask about views, likes, comments, followers or top posts on them. Do not use for writing captions without posting, general social media advice, or accounts that are not connected to AdaptlyPost.
 
-## Publisher: <br>
-[tarasshyn](https://clawhub.ai/user/tarasshyn) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[tarasshyn](https://clawhub.ai/user/tarasshyn)
 
-## Use Case: <br>
-External users, marketers, creators, and developers use this skill to draft, schedule, publish, inspect, and manage social media posts across connected AdaptlyPost accounts. It is intended for agent-assisted social posting workflows that require explicit confirmation before public write actions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Posts can become public, attributable, and difficult to fully retract. <br>
-Mitigation: Require an explicit confirmation covering content, connected accounts, timing, and visibility before each post; prefer drafts when the user is uncertain or content is sensitive. <br>
-Risk: The API token can act on every social account connected to the AdaptlyPost account group. <br>
-Mitigation: Use a dedicated revocable token and connect only the accounts the agent needs for the workflow. <br>
-Risk: Media uploaded through presigned URLs becomes publicly reachable once the upload completes, even if no post is created. <br>
-Mitigation: Confirm exact file paths before upload, avoid broad directories without per-file approval, and upload only files the user named. <br>
-Risk: Bulk or unattended scheduling can amplify mistakes across many accounts or posts. <br>
-Mitigation: Confirm a small first batch for multi-post sessions and default unattended runs to drafts unless the exact recurring workflow was pre-authorized. <br>
+## Use Case:
 
+External users with an AdaptlyPost account can use the skill to manage posts on their connected social accounts, upload media, check post status, and review analytics. It is intended for social publishing workflows, not standalone caption writing or general social media advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/tarasshyn/skills/adaptlypost) <br>
-- [AdaptlyPost homepage](https://adaptlypost.com) <br>
-- [AdaptlyPost API reference](references/api-reference.md) <br>
-- [AdaptlyPost platform configs](references/platform-configs.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown guidance with JSON and bash examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires ADAPTLYPOST_API_KEY; posting and media-upload workflows require explicit user confirmation before write actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata; artifact frontmatter reports 1.2.0) <br>
+Risk: Account-connection links can grant broader access than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Request a private link limited to the intended platform and account count, with a short expiry.
+
+Risk: Persistent webhooks can expose workspace events to their recipient, and uploaded media becomes publicly reachable before posting.
+
+Mitigation: Approve webhooks only for trusted recipients that need ongoing events, remove them when no longer needed, and upload only media the user has approved for public access.
+
+## Reference(s):
+
+- [AdaptlyPost API reference](artifact/references/api-reference.md)
+- [Platform configuration reference](artifact/references/platform-configs.md)
+- [AdaptlyPost](https://adaptlypost.com)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [Concise text or Markdown responses, with curl commands and JSON request or response data when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include post details, status, and analytics returned by the connected service.]
+
+## Skill Version(s):
+
+1.21.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

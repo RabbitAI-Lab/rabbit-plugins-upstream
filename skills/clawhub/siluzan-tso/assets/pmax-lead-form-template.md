@@ -36,19 +36,19 @@ siluzan-tso ad extension update -a <accountId> --id <extensionId> --config-file 
 
 ## 字段说明
 
-| 字段                               | 类型     | 必填 | 说明                                                           |
-| ---------------------------------- | -------- | :--: | -------------------------------------------------------------- |
-| `account`                          | string   |  ✅  | Google 媒体客户 ID                                             |
-| `campaignId`                       | string   |  ✅  | PMax 活动 ID（`channelTypeV2=PERFORMANCE_MAX`）                |
-| `leadForm.businessName`            | string   |  ✅  | 商家名称（≤25 字符）                                           |
-| `leadForm.headline`                | string   |  ✅  | 表单标题（**≤30 字符**，超长网关常直接 HTTP 400）              |
-| `leadForm.description`             | string   |  ✅  | 表单描述（≤200 字符）                                          |
-| `leadForm.privacyPolicyUrl`        | string   |  ✅  | 隐私政策 URL                                                   |
-| `leadForm.finalUrl`                | string   |  ✅  | 落地页 URL                                                     |
-| `leadForm.callToActionType`        | string   |      | 默认 `LEARN_MORE`                                              |
-| `leadForm.callToActionDescription` | string   |      | 默认 `Contact us`（≤30 字符）                                  |
+| 字段                               | 类型     | 必填 | 说明                                                                               |
+| ---------------------------------- | -------- | :--: | ---------------------------------------------------------------------------------- |
+| `account`                          | string   |  ✅  | Google 媒体客户 ID                                                                 |
+| `campaignId`                       | string   |  ✅  | PMax 活动 ID（`channelTypeV2=PERFORMANCE_MAX`）                                    |
+| `leadForm.businessName`            | string   |  ✅  | 商家名称（≤25 字符）                                                               |
+| `leadForm.headline`                | string   |  ✅  | 表单标题（**≤30 字符**，超长网关常直接 HTTP 400）                                  |
+| `leadForm.description`             | string   |  ✅  | 表单描述（≤200 字符）                                                              |
+| `leadForm.privacyPolicyUrl`        | string   |  ✅  | 隐私政策 URL                                                                       |
+| `leadForm.finalUrl`                | string   |  ✅  | 落地页 URL                                                                         |
+| `leadForm.callToActionType`        | string   |      | 默认 `LEARN_MORE`                                                                  |
+| `leadForm.callToActionDescription` | string   |      | 默认 `Contact us`（≤30 字符）                                                      |
 | `leadForm.fields`                  | object[] |  ✅  | 至少 1 项；`inputType` 如 `FULL_NAME`、`EMAIL`、`PHONE_NUMBER`（**无** `MESSAGE`） |
-| `leadForm.webhook`                 | object   |      | 写入 Google 的 Webhook（非平台接收端）                         |
+| `leadForm.webhook`                 | object   |      | 写入 Google 的 Webhook（非平台接收端）                                             |
 
 ---
 

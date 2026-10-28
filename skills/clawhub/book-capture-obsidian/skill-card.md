@@ -1,45 +1,58 @@
-## Description: <br>
-Capture and normalize book metadata into Obsidian Markdown notes from photos or Goodreads CSV exports. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turn a cover photo, a barcode, an ISBN or a whole Goodreads export into clean Obsidian book notes with covers and summaries, plus a library dashboard. Quota-safe: Open Library first, cached lookups, Google Books only to fill gaps. Use when the user wants to catalogue, log or import books into Obsidian.
 
-## Publisher: <br>
-[Ricardodpalmeida](https://clawhub.ai/user/Ricardodpalmeida) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[ricardodpalmeida](https://clawhub.ai/user/ricardodpalmeida)
 
-## Use Case: <br>
-External users and developers use this skill to import book photos or Goodreads CSV exports into an Obsidian vault as normalized, idempotent Markdown notes and dashboards. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Bulk migration or note upsert can change an Obsidian vault. <br>
-Mitigation: Back up or version-control the vault and run migrations with dry-run before live writes. <br>
-Risk: Default Goodreads enrichment may send library metadata to Google Books. <br>
-Mitigation: Disable Google enrichment for sensitive libraries, or use a restricted Google Books API key. <br>
-Risk: Bundled CI or pytest checks may import Python files from an overly broad parent directory. <br>
-Mitigation: Run checks only in a clean sandbox or after constraining tests to import the intended skill modules. <br>
+## Use Case:
 
+Obsidian users use this skill to capture individual books or import Goodreads libraries into consistent vault notes and a library dashboard.
 
-## Reference(s): <br>
-- [Book Capture Obsidian Skill Page](https://clawhub.ai/Ricardodpalmeida/book-capture-obsidian) <br>
-- [Configuration](references/configuration.md) <br>
-- [Data Contracts](references/data-contracts.md) <br>
-- [Migration Runbook](references/migration-runbook.md) <br>
-- [Troubleshooting](references/troubleshooting.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown notes, JSON envelopes, and shell command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces deterministic Obsidian note updates and dashboard content when run against a configured vault.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server release evidence) <br>
+Risk: Imports and reruns can rewrite generated sections in vault notes.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Back up the vault, inspect a dry run, start with a small import, and keep personal writing under User Notes.
+
+Risk: Online enrichment sends book identifiers or titles and authors to metadata providers.
+
+Mitigation: Use --no-enrich for a local-only Goodreads import.
+
+## Reference(s):
+
+- [Project homepage](https://github.com/Ricardodpalmeida/book-capture-obsidian-skill)
+- [ClawHub skill listing](https://clawhub.ai/ricardodpalmeida/skills/book-capture-obsidian)
+- [Configuration](artifact/references/configuration.md)
+- [Data contracts](artifact/references/data-contracts.md)
+- [Goodreads migration runbook](artifact/references/migration-runbook.md)
+- [Troubleshooting](artifact/references/troubleshooting.md)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, JSON, Files]
+
+**Output Format:** [Obsidian Markdown book notes and library dashboard; JSON metadata and status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Updates a user-selected vault and preserves personal content under the User Notes section.]
+
+## Skill Version(s):
+
+1.3.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

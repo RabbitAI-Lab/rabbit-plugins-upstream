@@ -1,42 +1,53 @@
-## Description: <br>
-用直觉代替死记，让物理概念从“背下来”变成“真正懂了”，并通过生活类比、实验想象、公式推导三种解释模型先建直觉再学公式。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Builds intuitive understanding of middle- and high-school physics concepts through everyday analogies, thought experiments, and explanations of what formulas mean.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External learners and tutoring agents use this skill to explain physics concepts by building intuition before formulas through daily-life analogies, thought experiments, formula meaning restoration, and layered understanding checks. It is for conceptual tutoring and validation, not physical experiment operation guidance or problem-solving drill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Physical experiment examples could be mistaken for unsupervised real-world instructions, especially examples involving sunlight, heat, electricity, pressure, or sharp objects. <br>
-Mitigation: Present experiment examples as conceptual unless an appropriate supervisor is involved, and avoid operational safety-sensitive instructions when the goal is concept intuition. <br>
-Risk: The skill describes updates to learning-profile fields and reminder handoffs after repeated concept failures. <br>
-Mitigation: Keep learning-profile updates and reminders visible to the user and under user control. <br>
+## Use Case:
 
+Middle- and high-school students use this skill to understand the meaning and intuition behind physics quantities and laws through everyday analogies, thought experiments, and formula explanations. It focuses on conceptual understanding rather than worked problem solutions, mistake tracking, or experimental data analysis.
 
-## Reference(s): <br>
-- [Physics Analogy Bank](artifact/references/physics-analogy-bank.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or conversational text with structured explanation steps, analogy mappings, formula interpretation, and validation prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; responses draw on the bundled physics analogy bank and should keep experiment examples conceptual unless supervised.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Saved progress, sharing, and reminders can involve learner data.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the learning-profile dependency and platform storage settings; choose “这次不要记忆” to avoid reading or saving records in a session, and enable sharing or reminders only if wanted.
+
+## Reference(s):
+
+- [Physics Analogy Bank](references/physics-analogy-bank.md)
+- [High School Physics: Compulsory Volume 1 Concepts and Misconceptions](references/physics-hs1-misconceptions.md)
+- [High School Physics Concepts: Compulsory Volumes 2–3](references/physics-hs2-concepts.md)
+- [High School Physics Concepts: Selective Compulsory Courses](references/physics-hs3-concepts.md)
+- [ClawHub Skill Release](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-concept-intuition)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Educational guidance]
+
+**Output Format:** [Conversational explanations with everyday analogies, thought experiments, and formula or equation explanations.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Interactive, concept-focused explanations; persistence and sharing are optional.]
+
+## Skill Version(s):
+
+2.12.0 (source: SKILL.md frontmatter, release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,55 @@
-## Description: <br>
-Helps mortgage teams run a premortem on loans in submission or underwriting by identifying likely fallout risks before rate-lock timelines are exhausted. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides mortgage professionals through a premortem checklist to identify and address likely underwriting fallout before a rate lock expires.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Loan officers, brokers, and mortgage operations teams use this skill to identify conditions that could cause a loan to be denied or withdrawn before closing. It is best suited for files in submission or underwriting, especially when rate-lock timing, thin-file borrowers, or borderline qualification issues create fallout risk. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users could share unnecessary borrower personal or financial data while applying the checklist. <br>
-Mitigation: Use only the minimum borrower information needed to assess fallout risks and avoid entering unnecessary personal or financial details. <br>
-Risk: The ECOA adverse-action note could be mistaken for legal advice. <br>
-Mitigation: Treat the note as an operational reminder and confirm adverse-action requirements with qualified compliance or legal reviewers. <br>
+## Use Case:
 
+External mortgage loan officers and brokerage teams use this skill to identify likely causes of loan fallout during underwriting and plan cures or conditions before closing. It is guidance for reviewing a loan scenario, not professional advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/mortgage-loan-fallout-premortem) <br>
-- [deciqAI Mortgage Loan Fallout Premortem](https://www.deciqai.com/c/mortgage-loan-fallout-premortem) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/mortgage-loan-fallout-premortem.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown checklist and domain guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable mortgage premortem guidance; no API calls, shell commands, credential access, persistence, or destructive behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Borrower financial information may be sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only the borrower information needed for the review.
+
+Risk: Financial or compliance guidance may depend on current rates, jurisdiction, or applicable requirements.
+
+Mitigation: Have a qualified professional verify the guidance against current authoritative sources before acting.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/mortgage-loan-fallout-premortem)
+- [Mortgage Loan Fallout Premortem guide](https://www.deciqai.com/c/mortgage-loan-fallout-premortem)
+- [Machine-readable skill information](https://www.deciqai.com/s/mortgage-loan-fallout-premortem.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown checklist with concise scenario-based guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses the loan scenario provided; does not access accounts or change loan records.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,54 +1,64 @@
-## Description: <br>
-PixelLab Pip helps agents set up PixelLab access, choose MCP or REST workflows, generate and edit pixel-art assets, animations, tilesets, UI, icons, and record reproducible blueprints while respecting credential, cost, and destructive-action safeguards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in choosing PixelLab workflows to create, edit, inspect, and repair game art and animation, with practical setup and cost guidance.
 
-## Publisher: <br>
-[shilo](https://clawhub.ai/user/shilo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shilo](https://clawhub.ai/user/shilo)
 
-## Use Case: <br>
-Developers, game creators, and agent users use this skill to configure PixelLab integrations and drive PixelLab asset workflows from setup through generation, editing, animation, packaging, and troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Live PixelLab generation sends prompts and images to PixelLab and may spend credits. <br>
-Mitigation: Review the request before starting paid work, use the skill's cost-routing guidance for budget-sensitive tasks, and ask before extra paid attempts unless the user approved a concrete budget or attempt count. <br>
-Risk: PIXELLAB_SECRET is a bearer token used for live PixelLab API or MCP calls. <br>
-Mitigation: Store the token in a local secret store or environment variable, never paste it into chat, and use it only as an authorization header. <br>
-Risk: Generated outputs, blueprints, and manifests may contain user prompt text or workflow details in the project output folder. <br>
-Mitigation: Review generated files before sharing them and keep private audit or resume data out of shareable blueprints. <br>
-Risk: Remote PixelLab deletions, clears, or overwrites can discard existing assets. <br>
-Mitigation: Require explicit user permission for destructive remote actions and list the affected assets before carrying them out. <br>
+## Use Case:
 
+Developers and game artists use this skill to route PixelLab requests for sprites, characters, tiles, backgrounds, effects, and animation, and to manage setup, costs, and local asset workflows.
 
-## Reference(s): <br>
-- [PixelLab Skill Page](https://clawhub.ai/shilo/skills/pixellab-pip) <br>
-- [Official PixelLab Documentation](references/official-pixellab-documentation.md) <br>
-- [PixelLab REST v2 API Docs](https://api.pixellab.ai/v2/docs) <br>
-- [PixelLab REST v2 OpenAPI Schema](https://api.pixellab.ai/v2/openapi.json) <br>
-- [PixelLab MCP Documentation](https://api.pixellab.ai/mcp/docs) <br>
-- [PixelLab MCP Setup](https://www.pixellab.ai/mcp) <br>
-- [Setup](references/setup.md) <br>
-- [Credentials](references/credentials.md) <br>
-- [Cost Routing](references/cost-routing.md) <br>
-- [Blueprint](references/blueprint.md) <br>
-- [Job Lifecycle](references/job-lifecycle.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, configuration snippets, file paths, and generated asset manifests or blueprints when a PixelLab workflow runs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce project-local files such as generated assets, spritesheets, manifests, and blueprint JSON only when the user requests a workflow that creates or packages assets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata and target metadata) <br>
+Risk: PixelLab generation can spend credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep Auto off or set a run budget, and review the planned paid calls before generation.
+
+Risk: A bearer token could be exposed in conversation.
+
+Mitigation: Keep the token out of chat and configure it in the MCP client or local PIXELLAB_SECRET environment.
+
+Risk: Recipes or copied artwork may be unsuitable to share.
+
+Mitigation: Review recipes and copied images before sharing them.
+
+Risk: Local repair steps can alter image files.
+
+Mitigation: Inspect repaired copies before replacing original assets.
+
+## Reference(s):
+
+- [PixelLab documentation](https://www.pixellab.ai/docs)
+- [PixelLab REST API v2 documentation](https://api.pixellab.ai/v2/docs)
+- [PixelLab MCP documentation](https://api.pixellab.ai/mcp/docs)
+- [PixelLab MCP setup](https://www.pixellab.ai/mcp)
+
+## Skill Output:
+
+**Output Type(s):** [Images and animation assets, Text and Markdown guidance, Code, Shell commands, Configuration]
+
+**Output Format:** [Pixel art image files and animations, plus text, Markdown, code, shell commands, and JSON configuration or recipes]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Generated assets and local helper outputs vary by task; blueprints and setup details are provided when relevant.]
+
+## Skill Version(s):
+
+3.0.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,51 @@
-## Description: <br>
-Helps agents apply fractional-Kelly position sizing and IPS concentration caps for RIA single-name, thematic, and concentrated-stock decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides an educational framework for sizing single-name and thematic positions and managing portfolio concentration within an investment policy statement.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Registered investment advisers and financial-planning agents use this skill to size single-name or thematic positions, cap concentrated holdings within IPS limits, and document suitability-oriented rebalancing decisions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat educational position-sizing guidance as personalized investment advice. <br>
-Mitigation: Apply it only within the client's IPS, suitability obligations, and professional compliance review. <br>
-Risk: Position concentration or full-Kelly sizing could exceed client drawdown tolerance. <br>
-Mitigation: Use fractional Kelly, enforce IPS caps, and document drawdown and suitability checks before acting. <br>
+## Use Case:
 
+Financial advisers and RIA teams use this skill as educational support when sizing single-name or thematic positions, setting IPS-bounded concentration and rebalancing limits, and planning tax-aware unwinds of concentrated stock. It emphasizes fractional Kelly, drawdown tolerance, and suitability documentation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/ria-position-sizing-kelly) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/ria-position-sizing-kelly) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/ria-position-sizing-kelly.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Text] <br>
-**Output Format:** [Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Educational finance-process guidance; no executable code, persistence, credential access, or hidden data handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Position-sizing guidance could be mistaken for individualized investment advice or applied outside a client's investment policy and suitability constraints.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it as educational support, apply it within the IPS and suitability process, and have investment decisions reviewed by a qualified adviser.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/ria-position-sizing-kelly)
+- [RIA position sizing overview](https://www.deciqai.com/c/ria-position-sizing-kelly)
+- [Machine-readable skill details](https://www.deciqai.com/s/ria-position-sizing-kelly.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown guidance and analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Educational decision support; no trade execution.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

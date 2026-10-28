@@ -1,51 +1,62 @@
-## Description: <br>
-PosteAhora helps agents and developers schedule, draft, publish, manage, upload media for, and analyze social media posts across Instagram, TikTok, YouTube, X, Facebook, LinkedIn, Threads, Bluesky, and Discord. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Social media scheduling & publishing CLI — plan, schedule and publish posts across 16 networks: Instagram, TikTok, YouTube, X (Twitter), Facebook, LinkedIn, Threads, Bluesky, Mastodon, Discord, Telegram, WordPress, Dev.to, Tumblr, Pinterest and Google Business, powered by PosteAhora.
 
-## Publisher: <br>
-[sashadiz](https://clawhub.ai/user/sashadiz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sashadiz](https://clawhub.ai/user/sashadiz)
 
-## Use Case: <br>
-Developers, operators, and AI agents use this skill to automate social publishing workflows from the terminal, CI, or agent tooling. It supports authenticated account discovery, media upload, draft creation, scheduled publishing, immediate publishing, post status checks, idea backlog management, and analytics review. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can operate PosteAhora-connected social accounts and publish outward-facing content. <br>
-Mitigation: Prefer drafts or scheduled posts for review, and confirm the caption, target accounts, and timing before any live post. <br>
-Risk: Uploaded media URLs may be public. <br>
-Mitigation: Upload only media intended for public distribution and verify target platform requirements before attaching media to posts. <br>
-Risk: The PosteAhora API key grants account access and may appear in shell history, logs, screenshots, or shared config files if mishandled. <br>
-Mitigation: Keep the API key out of logs and screenshots, avoid echoing it, and prefer the POSTEAHORA_API_KEY environment variable or the CLI's auth storage. <br>
-Risk: Wrong account IDs or stale scheduling details can send content to an unintended platform or time. <br>
-Mitigation: Run posteahora accounts before publishing, use explicit platform:accountId targets, never guess IDs, and ensure scheduled times are future ISO 8601 timestamps. <br>
+## Use Case:
 
+Developers, teams, and AI agents use this skill to manage social content across connected accounts: draft, schedule, publish, and review posts, upload media, organize ideas, and retrieve analytics.
 
-## Reference(s): <br>
-- [Server-resolved GitHub import](https://github.com/SashaDiz/skills/tree/main/skills/posteahora) <br>
-- [ClawHub listing](https://clawhub.ai/sashadiz/skills/posteahora) <br>
-- [PosteAhora website](https://posteahora.com) <br>
-- [PosteAhora documentation](https://posteahora.com/docs) <br>
-- [PosteAhora API reference](https://posteahora.com/docs/api) <br>
-- [PosteAhora CLI on npm](https://www.npmjs.com/package/@posteahora/cli) <br>
-- [PosteAhora CLI on GitHub](https://github.com/posteahora/cli) <br>
-- [PosteAhora MCP server](https://github.com/posteahora/mcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, Guidance, Text, JSON] <br>
-**Output Format:** [Markdown guidance with inline shell commands and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Commands can create drafts, schedule posts, publish live content, upload media to public URLs, list accounts and posts, and return machine-readable output with --json.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server-resolved release metadata) <br>
+Risk: Publishing sends content to external social platforms and may be difficult to undo.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before publishing, get approval for the exact caption, destination accounts, and timing; use draft mode when approval is pending.
+
+Risk: Authentication troubleshooting guidance requests broader account access than may be necessary.
+
+Mitigation: Use a key limited to the intended workspace and required permissions, and investigate authentication errors rather than automatically granting full access.
+
+Risk: Uploaded media receives a public URL, and authentication is saved locally unless removed.
+
+Mitigation: Confirm media is appropriate for public access, protect the local credential store, and remove saved authentication when it is no longer needed.
+
+## Reference(s):
+
+- [PosteAhora website](https://posteahora.com)
+- [PosteAhora documentation](https://posteahora.com/docs)
+- [PosteAhora API reference](https://posteahora.com/docs/api)
+- [PosteAhora CLI on npm](https://www.npmjs.com/package/@posteahora/cli)
+- [PosteAhora MCP server](https://github.com/posteahora/mcp)
+- [ClawHub skill release](https://clawhub.ai/sashadiz/skills/posteahora)
+
+## Skill Output:
+
+**Output Type(s):** [Shell commands, Text, JSON, Guidance]
+
+**Output Format:** [Shell commands for content management and publishing; social captions and structured JSON records or analytics.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Publishing may be immediate, scheduled, or saved as a draft; results depend on connected accounts and platform capabilities.]
+
+## Skill Version(s):
+
+1.0.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

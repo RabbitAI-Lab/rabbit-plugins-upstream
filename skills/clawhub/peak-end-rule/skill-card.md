@@ -1,45 +1,60 @@
-## Description: <br>
-Guides agents through peak-end audits for multi-stage journeys, helping identify memorable peaks, endings, intervention gaps, and verification metrics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Activate when: user says 'how will they remember this,' 'experience design,' 'journey design,' 'memorable moment,' 'end-of-experience,' or 'our NPS is lower than expected'; when designing or auditing a multi-stage customer or user journey; when a competitor with similar quality earns higher recommendation rates.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Product, service, and experience-design teams use this skill to audit customer or user journeys where retrospective memory, NPS, satisfaction, or return behavior matters. It helps agents map emotional intensity over time, diagnose current peaks and endings, propose focused interventions, and define verification metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive customer, patient, or business details could be copied into observed examples or journey audits. <br>
-Mitigation: Use anonymized or synthetic details in examples and review outputs before sharing or storing them. <br>
-Risk: Healthcare examples could be mistaken for medical advice. <br>
-Mitigation: Treat healthcare content as experience-design framing only and defer clinical decisions to qualified medical professionals. <br>
+## Use Case:
 
+Product, customer-experience, and service teams use this skill to map multi-stage journeys, identify memorable high and low points, and prioritize changes to the experience peak and ending. It helps teams structure an audit and choose retrospective measures such as NPS or return rate.
 
-## Reference(s): <br>
-- [Sources - peak-end-rule](references/sources.md) <br>
-- [Redelmeier and Kahneman Colonoscopy Study Example](examples/redelmeier-and-kahneman-colonoscopy-study-1996.md) <br>
-- [When More Pain Is Preferred to Less](https://doi.org/10.1111/j.1467-9280.1993.tb00589.x) <br>
-- [Patients' Memories of Painful Medical Treatments](https://doi.org/10.1016/0304-3959(96)02994-6) <br>
-- [Duration Neglect in Retrospective Evaluations of Affective Episodes](https://doi.org/10.1037/0022-3514.65.1.45) <br>
-- [Evaluations of Pleasurable Experiences: The Peak-End Rule](https://doi.org/10.3758/PBR.15.1.96) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with journey audit tables, diagnostic summaries, intervention recommendations, and verification metrics] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only coaching output; no executable code or external tool calls are produced by the skill.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Reusable journey examples may expose confidential customer details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove or anonymize customer-identifying information before reusing examples.
+
+Risk: The healthcare example could be mistaken for clinical guidance.
+
+Mitigation: Treat it as an illustration of experience evaluation, not as advice about clinical care or treatment.
+
+## Reference(s):
+
+- [ClawHub skill listing](https://clawhub.ai/deciqai/skills/peak-end-rule)
+- [Primary sources and further reading](references/sources.md)
+- [Colonoscopy study example](examples/redelmeier-and-kahneman-colonoscopy-study-1996.md)
+- [When More Pain Is Preferred to Less (1993)](https://doi.org/10.1111/j.1467-9280.1993.tb00589.x)
+- [Patients' Memories of Painful Medical Treatments (1996)](https://doi.org/10.1016/0304-3959(96)02994-6)
+- [Duration Neglect in Retrospective Evaluations (1993)](https://doi.org/10.1037/0022-3514.65.1.45)
+- [Evaluations of Pleasurable Experiences (2008)](https://doi.org/10.3758/PBR.15.1.96)
+- [DeciqAI Peak-End Rule guide](https://www.deciqai.com/c/peak-end-rule)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Structured Markdown Peak-End Audit with a journey timeline, diagnosis, recommendations, and verification measures.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can coach a novice step by step or audit a concrete journey; includes a timeline and a structured set of peak and ending interventions.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

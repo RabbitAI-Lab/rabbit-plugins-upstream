@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/token-safety-checker",
   "slug": "token-safety-checker",
   "ownerHandle": null,
-  "version": "2.0.0",
-  "updatedAt": 1778492302579,
-  "contentHash": "a5a0f8fa7369523853475df8d0c33dddbe052d6b058380965fcf61f303859a1d",
-  "fetchedAt": "2026-07-26T19:42:11.419Z"
+  "version": "3.0.1",
+  "updatedAt": 1793116999317,
+  "contentHash": "0272ae61d6154eb92f2f507f8a3ea152f858992e70904a5e2db45ac2e4536bfb",
+  "fetchedAt": "2026-10-28T14:12:24.121Z"
 }

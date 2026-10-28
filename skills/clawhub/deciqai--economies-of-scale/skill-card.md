@@ -1,44 +1,58 @@
-## Description: <br>
-Helps agents analyze whether a business model has a cost advantage at higher volume, including scale synergies, minimum efficient scale, competitive cost gaps, and capacity decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes whether a business gains a cost advantage as output grows, including scale sources, minimum efficient scale, competitor positions, and diseconomies.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external business users, and strategy analysts use this skill to test whether growth should improve unit economics, identify minimum efficient scale, compare scale positions against competitors, and decide whether to invest for scale or pivot to differentiation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Sensitive business examples or failure patterns could be retained in shared skill files if an agent edits the artifact during use. <br>
-Mitigation: Use the skill as an analysis framework, and do not append confidential company examples to shared files unless that retention is intended and approved. <br>
-Risk: Scale recommendations can be misleading when fixed costs, variable costs, minimum efficient scale, or competitor positions are not quantified. <br>
-Mitigation: Require users or reviewers to validate the cost structure, scale curve, MES estimate, and stop rule before relying on the recommendation. <br>
+## Use Case:
 
+Business leaders, analysts, and strategy teams use this skill to assess whether growth can lower unit costs, locate minimum efficient scale, compare competitors, and identify when coordination costs create diseconomies.
 
-## Reference(s): <br>
-- [Primary Sources](references/sources.md) <br>
-- [Smith 1776, Marshall 1890, and Costco 2024 Example](examples/smith-1776-marshall-1890-costco-2024.md) <br>
-- [Ford Highland Park Model T Example](examples/ford-highland-park-model-t-1908-1927.md) <br>
-- [TSMC Leading-Edge Fab Economics Example](examples/tsmc-leading-edge-fab-economics-2024-2026.md) <br>
-- [Economies of Scale ClawHub Skill](https://clawhub.ai/deciqai/skills/economies-of-scale) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown strategy analysis with structured tables or checklists when useful] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step coaching questions and wait for user input before continuing.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Illustrative example figures may not be accurate or current for the business being analyzed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify figures against current, authoritative data before making major business decisions.
+
+Risk: Saved failure patterns could contain confidential details.
+
+Mitigation: Remove confidential details before saving failure patterns.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/economies-of-scale)
+- [Economies of Scale overview](https://www.deciqai.com/c/economies-of-scale)
+- [Sources bibliography](references/sources.md)
+- [Smith, Marshall, and Costco example](examples/smith-1776-marshall-1890-costco-2024.md)
+- [Ford Model T example](examples/ford-highland-park-model-t-1908-1927.md)
+- [Leading-edge fab economics example](examples/tsmc-leading-edge-fab-economics-2024-2026.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Structured Markdown scale-curve analysis with cost, scale sources, competitor position, and decision guidance.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Qualitative or estimated business analysis; figures should be checked against current, authoritative data.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

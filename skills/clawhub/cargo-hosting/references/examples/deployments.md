@@ -8,7 +8,7 @@ A deployment is one build+upload of a local source directory to an app or worker
 ## Create a deployment
 
 ```bash
-# App: backend runs `npm ci && vite build` in a sandbox
+# App: backend runs `npm ci --ignore-scripts` then the app's `build` script (or the framework default) in a sandbox
 cargo-ai hosting deployment create --app-uuid <app-uuid> --source ./my-app
 
 # Worker: backend bundles the entrypoint
@@ -28,7 +28,7 @@ cargo-ai hosting deployment create --app-uuid <app-uuid> --source ./my-app \
 ```bash
 # Builds are async — poll until the status field is terminal
 cargo-ai hosting deployment get <deployment-uuid>
-# when terminal (built/succeeded), promote:
+# when status is "success", promote:
 cargo-ai hosting deployment promote --uuid <deployment-uuid>
 ```
 
