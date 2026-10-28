@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/setup-pstack",
+  "repo": "cursor/plugins",
+  "skillId": "setup-pstack",
+  "branch": "main",
+  "pushedAt": "2026-10-28T13:48:12Z",
+  "contentHash": "f28388e08cadebfc34d0771158a5d08cc1f8ec52ba0400332e20371d165fac65",
+  "fetchedAt": "2026-10-28T14:05:57.485Z"
+}

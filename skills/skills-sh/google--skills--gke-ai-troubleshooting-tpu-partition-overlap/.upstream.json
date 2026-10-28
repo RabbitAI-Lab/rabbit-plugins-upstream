@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-partition-overlap",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-partition-overlap",
+  "branch": "main",
+  "pushedAt": "2026-10-28T13:33:51Z",
+  "contentHash": "061dcb4d137dcb0f7ac2627e9be4c777ecfdc9a28a13f447041c397d012c84b2",
+  "fetchedAt": "2026-10-28T14:07:44.726Z"
+}

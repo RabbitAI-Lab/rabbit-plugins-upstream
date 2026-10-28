@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/inference-sh/skills/google-veo",
+  "repo": "inference-sh/skills",
+  "skillId": "google-veo",
+  "branch": "main",
+  "pushedAt": "2026-10-15T10:38:25Z",
+  "contentHash": "10331d7f5f90fb3b2a0a33af723e005062494e89acbaa8a375b4fbc8c124ee5f",
+  "fetchedAt": "2026-10-28T14:05:44.809Z"
+}

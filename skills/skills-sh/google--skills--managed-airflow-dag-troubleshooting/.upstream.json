@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/managed-airflow-dag-troubleshooting",
+  "repo": "google/skills",
+  "skillId": "managed-airflow-dag-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-10-28T13:33:51Z",
+  "contentHash": "7a2fc275aef869cec68a7a5f9b6eeb17baacfd3de19cacb17597f18ad2fbfbe0",
+  "fetchedAt": "2026-10-28T14:07:44.359Z"
+}

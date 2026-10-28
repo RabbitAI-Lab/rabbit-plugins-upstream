@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-slice-mig-stuck-updating",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-slice-mig-stuck-updating",
+  "branch": "main",
+  "pushedAt": "2026-10-28T13:33:51Z",
+  "contentHash": "454ff37895dd517f0e962ab0e4112fbd0ed9db46ec48e1c39923bc7847e95ac5",
+  "fetchedAt": "2026-10-28T14:07:44.705Z"
+}
