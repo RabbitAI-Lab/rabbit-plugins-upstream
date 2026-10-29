@@ -1,39 +1,49 @@
-## Description: <br>
-Help salespeople transform objections into opportunities using proven frameworks to clarify value, address concerns, and close more deals effectively. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps salespeople transform objections into opportunities using proven frameworks to clarify value, address buyer concerns, and close more deals effectively.
 
-## Publisher: <br>
-[staybased](https://clawhub.ai/user/staybased) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[staybased](https://clawhub.ai/user/staybased)
 
-## Use Case: <br>
-Salespeople, founders, and sales teams use this skill to diagnose common prospect objections and draft empathetic responses, FAQs, follow-ups, and call preparation notes that clarify value and next steps. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: Generated sales copy may include misleading savings claims, deadlines, guarantees, testimonials, install counts, or competitor comparisons if applied without review. <br>
-Mitigation: Review and substantiate claims before use, and remove or qualify any assertion that is not supported by current business evidence. <br>
-Risk: Persuasion guidance can be misused to pressure prospects who are not a fit or have clearly declined. <br>
-Mitigation: Respect disqualification signals and use the skill's walk-away guidance when budget, fit, scope, or consent is weak. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/staybased/objection-handling) <br>
+## Use Case:
 
+Salespeople, founders, and go-to-market teams use this skill to diagnose buyer objections, prepare responses for sales calls, review lost deals, and write objection-handling content for proposals, FAQs, and sales pages.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with objection categories, response frameworks, examples, and sales copy patterns] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Instruction-only output; generated copy should be reviewed before use with prospects.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Generated objection-handling artifacts can include prospect names, pricing, deal context, or confidential sales details.
+
+Mitigation: Minimize sensitive input and protect or delete generated artifacts after use.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/staybased/skills/objection-handling)
+- [Publisher profile](https://clawhub.ai/user/staybased)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown guidance and sales-response frameworks]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes normal work output to the workspace when artifact generation is used.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

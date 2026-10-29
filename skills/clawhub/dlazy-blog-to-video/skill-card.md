@@ -1,45 +1,50 @@
-## Description: <br>
-Dlazy Blog To Video helps agents invoke the dLazy file-to-video SaaS workflow to turn blog posts or other documents into narrated videos with storyboard, voiceover, and build steps. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Converts a blog post supplied as text or a link into a narrated video with a storyboard and voiceover for social media or YouTube.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and agents can use this skill to start or continue dLazy file-to-video projects for converting blog posts, articles, and documents into narrated videos for social, YouTube, training, courseware, or report-broadcast use. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill advertises blog-to-video but routes agents through a broader file/document-to-video SaaS workflow. <br>
-Mitigation: Treat it as a general file-to-video wrapper and confirm the intended document or file scope before use. <br>
-Risk: Prompts and explicitly attached files may be sent to dLazy API and file storage endpoints. <br>
-Mitigation: Avoid submitting confidential documents unless the dLazy account, data handling terms, and storage behavior are acceptable. <br>
-Risk: The workflow requires a dLazy API key that may be stored in local CLI configuration. <br>
-Mitigation: Use account-scoped keys, keep the local config protected, and rotate or revoke the key when access changes. <br>
+## Use Case:
 
+External users can provide a blog post as text or a link and use the skill to create a narrated video for social media or YouTube.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-blog-to-video) <br>
-- [dLazy CLI homepage](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy website](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline bash commands and CLI guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct an agent to run pinned dLazy CLI commands, attach files, or continue an existing dLazy project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached files may be sent to dLazy's hosted service, and authentication may save an organization API key in the local CLI configuration.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only content you are comfortable sharing, review storage terms and credit costs, select the intended project, and use the DLAZY_API_KEY environment variable if you do not want the key saved in the local configuration.
+
+## Reference(s):
+
+- [Metadata-declared project homepage](https://github.com/dlazy-ai/cli)
+- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Storyboard text, Voiceover]
+
+**Output Format:** [Narrated video with a storyboard and voiceover]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-based sessions can support follow-up work.]
+
+## Skill Version(s):
+
+1.0.34 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

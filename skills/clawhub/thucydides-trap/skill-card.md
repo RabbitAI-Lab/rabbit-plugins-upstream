@@ -1,42 +1,55 @@
-## Description: <br>
-Guides agents through a structured Thucydides's Trap diagnosis for great-power, geopolitical, supply-chain, market-entry, platform, or incumbent-challenger rivalry questions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a structured framework for assessing escalation risks and possible escape paths when a rising power challenges an established power.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, analysts, strategists, and agents use this skill to assess whether a rising-power versus ruling-power dynamic is present, map fear responses and accelerants, and identify available escape paths. Outputs should be treated as analytical framing rather than authoritative current intelligence. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/thucydides-trap) <br>
-- [Primary sources](references/sources.md) <br>
-- [The US-UK Transition (1895-1906)](examples/the-us-uk-transition-1895-1906.md) <br>
-- [US-China Semiconductor Rivalry (2022-2026)](examples/us-china-semiconductor-rivalry-2022-2026.md) <br>
-- [Thucydides's Trap Case File](https://www.belfercenter.org/thucydides-trap/overview) <br>
-- [US Bureau of Industry and Security](https://www.bis.doc.gov) <br>
+Policy, business, and investment analysts use the skill to assess great-power rivalry, geopolitical exposure, or incumbent-challenger competition. It structures the analysis around power shifts, fear responses, escalation factors, and available ways to reduce conflict.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown structured as a Trap Diagnosis] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes structural roles, fear response, accelerants, escape paths, and decision implications; no code execution or tool calls are produced.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The historical war statistic or dated examples could be mistaken for a prediction about a specific rivalry or current conditions.
+
+Mitigation: Use the statistic as historical context, verify current geopolitical facts, and assess the specific case rather than treating conflict as inevitable.
+
+## Reference(s):
+
+- [Sources and further reading](artifact/references/sources.md)
+- [Thucydides, History of the Peloponnesian War](https://archive.org/details/historyofpelop00thuc)
+- [Graham Allison, Destined for War](https://www.houghtonmifflinbooks.com/titles/destined-for-war/)
+- [Harvard Kennedy School, Thucydides's Trap Case File](https://www.belfercenter.org/thucydides-trap/overview)
+- [US Bureau of Industry and Security](https://www.bis.doc.gov)
+- [Skill information](https://www.deciqai.com/c/thucydides-trap)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/thucydides-trap.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Analysis, Guidance]
+
+**Output Format:** [Structured Markdown analysis (Trap Diagnosis)]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Case-specific assessment of structural roles, escalation factors, escape paths, and decision implications.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

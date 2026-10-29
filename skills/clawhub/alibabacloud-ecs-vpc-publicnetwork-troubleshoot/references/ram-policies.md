@@ -6,7 +6,7 @@ This Skill is designed for Alibaba Cloud AIOps troubleshooting scenarios, perfor
 
 | RAM System Policy | Purpose | Related Skill Module |
 |---|---|---|
-| `AliyunECSReadOnlyAccess` | Query ECS instances, security groups, ENIs, images, etc. | scripts/ecs_public_troubleshoot.py, scripts/sg_rule_matcher.py |
+| `AliyunECSReadOnlyAccess` | Query ECS instances, security groups, ENIs, images, etc. | scripts/ecs_public_troubleshoot.py |
 | `AliyunVPCReadOnlyAccess` | Query VPC, VSwitches, NAT gateways, SNAT, route tables, EIPs, IPv4 gateways, network ACLs, etc. | scripts/ecs_public_troubleshoot.py, scripts/vpc_service_public_troubleshoot.py |
 | `AliyunCloudFirewallReadOnlyAccess` | Query Cloud Firewall (CFW) instances and policy status | scripts/ecs_public_troubleshoot.py, scripts/vpc_service_public_troubleshoot.py |
 | `AliyunYundunDDosReadOnlyAccess` | Query DDoS Protection, Anti-DDoS Basic, blackhole status | scripts/ecs_public_troubleshoot.py, scripts/vpc_service_public_troubleshoot.py |
@@ -39,6 +39,7 @@ To further restrict permissions, create the following **custom RAM Policy** and 
       "Effect": "Allow",
       "Action": [
         "vpc:DescribeVpcs",
+        "vpc:DescribeVpcAttribute",
         "vpc:DescribeVSwitches",
         "vpc:DescribeVSwitchAttributes",
         "vpc:DescribeNatGateways",
@@ -63,16 +64,15 @@ To further restrict permissions, create the following **custom RAM Policy** and 
     {
       "Effect": "Allow",
       "Action": [
-        "yundun-ddoscoo:DescribeInstance",
-        "antiddos-public:DescribeInstanceList",
-        "antiddos-public:DescribeIpStatus"
+        "yundun-ddos:DescribeInstanceIpAddress"
       ],
       "Resource": "*"
     },
     {
       "Effect": "Allow",
       "Action": [
-        "bss:QueryAccountBalance"
+        "bss:QueryAccountBalance",
+        "bssapi:QueryAccountBalance"
       ],
       "Resource": "*"
     },
@@ -90,30 +90,21 @@ To further restrict permissions, create the following **custom RAM Policy** and 
 
 ## 3. Authorization Steps
 
+These steps are performed **manually by an administrator in the RAM console** (or
+via the administrator's own separate tooling). This skill is strictly read-only
+and never issues any RAM write command (`create-policy`, `attach-policy-*`, etc.).
+
 ### Method 1: Attach System Policies to RAM User
 
-```bash
-# Login to RAM Console -> Users -> Add Permissions, select the system policies listed above; or use aliyun CLI:
-aliyun ram attach-policy-to-user \
-  --policy-type System \
-  --policy-name AliyunECSReadOnlyAccess \
-  --user-name <ram-user-name>
-```
+In the RAM console: Users -> <ram-user-name> -> Add Permissions, then select the
+system policies listed above (for example `AliyunECSReadOnlyAccess`).
 
 ### Method 2: Attach Custom Policy to RAM Role (Recommended for STS Scenarios)
 
-```bash
-# 1. Create custom policy (save the above JSON as policy.json)
-aliyun ram create-policy \
-  --policy-name QoderSkillNetworkTroubleshootReadOnly \
-  --policy-document "$(cat policy.json)"
-
-# 2. Attach to RAM role
-aliyun ram attach-policy-to-role \
-  --policy-type Custom \
-  --policy-name QoderSkillNetworkTroubleshootReadOnly \
-  --role-name <role-name>
-```
+In the RAM console: Policies -> Create Policy (paste the JSON document above and
+name it `QoderSkillNetworkTroubleshootReadOnly`), then attach the policy to the
+target RAM role. The skill consumes the resulting role's credentials via STS
+AssumeRole and performs only the read-only actions listed in section 1.
 
 ## 4. Permission Verification
 

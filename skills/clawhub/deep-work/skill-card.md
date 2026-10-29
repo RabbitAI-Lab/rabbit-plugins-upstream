@@ -1,44 +1,58 @@
-## Description: <br>
-Helps agents coach knowledge workers through a structured deep-work plan for protecting undistracted focus, reducing shallow-work load, and managing interruptions from communication tools or AI copilots. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps knowledge workers protect focused time and make progress on demanding cognitive work while accounting for interruptions and role constraints.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users and agents use this skill to plan protected focus blocks, choose a deep-work operating style, reduce shallow work, and adapt communication boundaries to role constraints. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can recommend strong email, Slack, or availability boundaries that may not fit every role, team norm, or emergency obligation. <br>
-Mitigation: Treat communication-boundary recommendations as options to adapt to the user's role constraints, team expectations, and true emergency channels. <br>
+## Use Case:
 
+Knowledge workers use this skill to identify high-value work that needs sustained attention, choose a focus-time approach that fits their role, and build a practical plan for protecting it.
 
-## Reference(s): <br>
-- [Primary sources](references/sources.md) <br>
-- [Donald Knuth and the No-Email Policy, 1990](examples/donald-knuth-no-email-policy-1990.md) <br>
-- [Carl Jung's Bollingen Tower Retreats](examples/carl-jung-bollingen-tower-retreats.md) <br>
-- [Protecting Deep Work Amid AI Copilots (2024-2026)](examples/deep-work-amid-ai-copilots-2024-2026.md) <br>
-- [Knuth versus Email](https://www-cs-faculty.stanford.edu/~knuth/email.html) <br>
-- [GitHub Copilot is generally available to all developers](https://github.blog/2022-06-21-github-copilot-is-generally-available-to-all-developers/) <br>
-- [Cal Newport](https://calnewport.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown] <br>
-**Output Format:** [Markdown plan and coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Interactive coaching may pause for user responses at explicit WAIT steps; no executable behavior.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Planning guidance may lead to calendar or communication changes that do not fit the user's role.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Choose changes deliberately and use the skill's fit checks for high-coordination roles and short-term emergencies.
+
+Risk: Examples or planning notes may expose confidential work details if shared.
+
+Mitigation: Avoid including confidential work details in examples that may be shared.
+
+## Reference(s):
+
+- [Deep Work source list](references/sources.md)
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/deep-work)
+- [Deep Work skill page](https://www.deciqai.com/c/deep-work)
+- [Knuth versus Email](https://www-cs-faculty.stanford.edu/~knuth/email.html)
+- [GitHub Copilot is generally available to all developers](https://github.blog/2022-06-21-github-copilot-is-generally-available-to-all-developers/)
+- [Cal Newport](https://calnewport.com)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Conversational coaching and a structured Markdown Deep Work Plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coach mode asks one focused question at a time; engine mode applies the process to a concrete case.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

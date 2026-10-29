@@ -1,48 +1,55 @@
-## Description: <br>
-Guides agents through assessing organic growth trajectory, selecting acquisition types, and sequencing build-versus-buy decisions for extension growth. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams assess organic growth, identify bottlenecks, and plan when to build or acquire capabilities.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, founders, executives, strategy teams, and agents use this skill to diagnose growth ceilings, classify acquisition opportunities, and build a sequenced organic-plus-extension growth portfolio. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat strategy coaching output as legal, antitrust, financial, or board advice. <br>
-Mitigation: Use the skill as decision support and route acquisition, antitrust, financial, and board decisions through qualified reviewers. <br>
-Risk: The skill can involve acquisition strategy or company data that may be confidential. <br>
-Mitigation: Avoid pasting confidential acquisition or company data into shared or public notes created from the skill. <br>
-Risk: Competitor-elimination acquisition ideas can raise regulatory and antitrust concerns. <br>
-Mitigation: Require regulatory analysis before pursuing or presenting that acquisition type. <br>
+## Use Case:
 
+Business leaders and strategy teams use this skill to diagnose organic growth constraints and plan acquisition strategy. It helps classify acquisition opportunities, compare build-versus-buy choices, and map integration risks.
 
-## Reference(s): <br>
-- [Primary Sources](references/sources.md) <br>
-- [Standard Oil Method in Action](examples/standard-oil-1870-1911.md) <br>
-- [Organic + Extension Growth Skill Page](https://www.deciqai.com/c/organic-plus-extension-growth) <br>
-- [Machine-Readable Skill Metadata](https://www.deciqai.com/s/organic-plus-extension-growth.json) <br>
-- [Ansoff, Corporate Strategy](https://archive.org/details/corporatestrateg00anso) <br>
-- [McKinsey, The Granularity of Growth](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/the-granularity-of-growth) <br>
-- [Standard Oil Co. of New Jersey v. United States](https://supreme.justia.com/cases/federal/us/221/1/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown coaching response with a structured Growth Mode Portfolio template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask stepwise intake questions before producing the portfolio.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Strategic recommendations may rely on inaccurate assumptions or claims about a target or market.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate strategic claims against current company and market information before making acquisition decisions.
+
+Risk: Competitor acquisitions may raise regulatory concerns.
+
+Mitigation: Obtain qualified legal and regulatory analysis before pursuing a competitor acquisition.
+
+## Reference(s):
+
+- [Sources — organic-plus-extension-growth](artifact/references/sources.md)
+- [Corporate Strategy (Ansoff, 1965)](https://archive.org/details/corporatestrateg00anso)
+- [The Granularity of Growth (McKinsey, 2007)](https://www.mckinsey.com/capabilities/strategy-and-corporate-finance/our-insights/the-granularity-of-growth)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured text or Markdown, including a Growth Mode Portfolio]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

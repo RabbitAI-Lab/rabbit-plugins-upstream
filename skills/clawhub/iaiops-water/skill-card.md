@@ -1,38 +1,53 @@
-## Description: <br>
-Water-treatment edition of iaiops for waterworks, wastewater plants, and pump stations, covering Modbus-TCP/RTU, OPC-UA, HART-IP instrumentation, downtime root-cause analysis, data quality checks, and OEE guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps water-treatment operators and engineers inspect plant telemetry, assess water quality, and investigate equipment and data-quality issues across Modbus, OPC UA, and HART devices.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, engineers, and operators use this skill to inspect water-treatment telemetry, diagnose dataflow and equipment issues, and produce compliance-oriented analysis for waterworks, wastewater plants, and pump stations. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan says the skill is mostly documentation-only but claims a read-only posture while listing push, export, and publish tools that could move operational data or change external state. <br>
-Mitigation: Install only when the actual MCP runtime is verified to expose read-only tools for this water edition, or when the environment has explicit allowlists and approvals for historian push, export, and stream publishing. <br>
+## Use Case:
 
+Waterworks and wastewater operators, engineers, and developers use the skill to review instrument readings and alarms, check treatment thresholds, investigate downtime, and prepare operational reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/zw008/skills/iaiops-water) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline command examples and named tool references] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [None] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.19.0 (source: server release evidence) <br>
+Risk: Despite its read-only description, some tools can create local files or publish plant telemetry to external destinations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Allowlist read and write directories, review historian and publish destinations, and require approval before exports or pushes involving plant data.
+
+Risk: Automated water-quality and compliance assessments may be mistaken for approved site limits or operational decisions.
+
+Mitigation: Confirm site-specific thresholds and required CT values with responsible personnel before acting on results.
+
+## Reference(s):
+
+- [iaiops-water on ClawHub](https://clawhub.ai/zw008/skills/iaiops-water)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration guidance, Files]
+
+**Output Format:** [Text and structured tool results, with optional reports and exported files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes telemetry summaries, anomaly and root-cause assessments, threshold checks, and optional evidence bundles.]
+
+## Skill Version(s):
+
+0.32.0 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

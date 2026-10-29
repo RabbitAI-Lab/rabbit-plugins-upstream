@@ -1,44 +1,55 @@
-## Description: <br>
-Searches and compares current travel inventory, prices, availability, and booking links for package tours, hotels, flights, and activities through a read-only travel MCP service. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Use while planning a trip when Russian-catalog search is needed: package tours, hotels, flights, trains, excursions, prices, and booking links. Trigger on Russian requests: «спланировать путешествие», «подобрать тур», «найти отель/авиабилеты/жд билеты/экскурсии», «маршрут с актуальными ценами». Not for general advice without live search.
 
-## Publisher: <br>
-[missial](https://clawhub.ai/user/missial) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[missial](https://clawhub.ai/user/missial)
 
-## Use Case: <br>
-External users and developers use this skill when they need an agent to query live travel search data and present concise options for tours, hotels, flights, activities, or destination lookup. It is intended for search and comparison, not booking or general itinerary planning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Travel search criteria are sent to an external BotClaw travel MCP service and may include itinerary, dates, traveler counts, budget, and preferences. <br>
-Mitigation: Avoid entering names, contacts, passport or payment details, credentials, or unnecessary sensitive data. <br>
-Risk: Returned travel comparisons may be incomplete when a provider is unavailable or flight prices are cached. <br>
-Mitigation: Treat results as search guidance, preserve partial results transparently, and refresh selected tour details before booking guidance. <br>
-Risk: The skill searches and compares travel options but does not complete bookings or access private accounts. <br>
-Mitigation: Keep booking actions outside the skill and use only links or details returned by the read-only service. <br>
+## Use Case:
 
+External travelers planning trips use the skill to search Russian-catalog tours, hotels, flights, trains, and activities, then compare prices and booking links. It supports travel planning but does not book trips.
 
-## Reference(s): <br>
-- [Travel Search CLI usage](references/usage.md) <br>
-- [ClawHub skill page](https://clawhub.ai/missial/skills/travel-search-ru) <br>
-- [Travel MCP endpoint](https://mcp.botclaw.ru/travel) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with inline shell commands and JSON command inputs] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Travel search criteria are sent to the external read-only MCP service; command invocations print one JSON document to stdout.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.1.0 (source: frontmatter, package.json, server release evidence) <br>
+Risk: Search criteria, including destinations, dates, traveler counts or ages, budgets, and preferences, are sent to mcp.botclaw.ru; server retention is unspecified.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Send only necessary search criteria and omit names, passport details, payment information, and credentials.
+
+Risk: Prices and availability may change, and some flight and train results are cached.
+
+Mitigation: Verify booking-link destinations, current availability, and final prices with the provider before purchasing.
+
+## Reference(s):
+
+- [Usage reference](references/usage.md)
+- [Travel Search MCP service](https://mcp.botclaw.ru/travel)
+- [ClawHub skill page](https://clawhub.ai/missial/skills/travel-search-ru)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Structured search results summarized as travel guidance with prices and booking links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Searches do not make bookings; some flight and train results may be cached.]
+
+## Skill Version(s):
+
+2.6.0 (source: SKILL.md frontmatter, package.json, server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

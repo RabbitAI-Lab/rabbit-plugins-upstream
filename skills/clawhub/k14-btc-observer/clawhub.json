@@ -1,0 +1,10 @@
+{
+  "requires": {"pip": ["simmer-sdk", "websockets==15.0.1"], "env": []},
+  "envVars": [
+    {"name": "K14_PROBE_SECONDS", "required": false, "description": "Public feed observation duration, 1 to 1800 seconds; default 900."},
+    {"name": "K14_STATE_DIR", "required": false, "description": "Persistent checkpoint directory, default ./state beside the entrypoint."}
+  ],
+  "cron": "*/30 * * * *",
+  "autostart": false,
+  "automaton": {"managed": true, "entrypoint": "observer.py"}
+}

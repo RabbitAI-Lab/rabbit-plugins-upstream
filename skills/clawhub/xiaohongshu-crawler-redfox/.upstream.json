@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/xiaohongshu-crawler-redfox",
   "slug": "xiaohongshu-crawler-redfox",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1782193891977,
-  "contentHash": "948ac5e02a799b95763068ac91ebfe407336c1e6d2c32b610bb7c346d7318b6e",
-  "fetchedAt": "2026-07-26T18:25:03.249Z"
+  "version": "1.0.1",
+  "updatedAt": 1792672346002,
+  "contentHash": "d89b2ae66356b011d8e7bb3f6534299726b26ea7bd83c0ecd54d7990f679098b",
+  "fetchedAt": "2026-10-29T14:55:19.206Z"
 }

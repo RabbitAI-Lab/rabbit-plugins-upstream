@@ -1,45 +1,58 @@
-## Description: <br>
-This skill uses the dLazy CLI to send text, image, and video prompts to dLazy's hosted Claude Sonnet 5 service for reasoning, code generation, and complex tool orchestration. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Anthropic's latest Sonnet — near-Opus quality on coding and long-horizon agentic work at Sonnet cost. Strong at reasoning, code generation, and complex tool orchestration. Supports text, image, and video inputs.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-Developers and external users use this skill to invoke dLazy's Claude Sonnet 5 endpoint for reasoning, coding, multimodal prompt handling, and agentic tool orchestration from an agent workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, parameters, and selected media files are sent to dLazy API and media storage endpoints for hosted inference. <br>
-Mitigation: Install and use the skill only when third-party processing by dLazy is acceptable; avoid sending sensitive data unless approved for that service. <br>
-Risk: A dLazy API key may be stored locally in the CLI configuration file. <br>
-Mitigation: On shared systems, prefer the DLAZY_API_KEY environment variable or verify permissions on ~/.dlazy/config.json; rotate or revoke the key from the dLazy dashboard when needed. <br>
-Risk: The skill depends on a third-party npm CLI package for execution. <br>
-Mitigation: Use the pinned @dlazy/cli version declared by the release metadata and review the package or source before installing in controlled environments. <br>
+## Use Case:
 
+Developers and agent users can submit prompts, images, or videos to use dLazy's hosted Claude Sonnet 5 service for reasoning, coding, and content generation. Results are returned by the CLI as structured JSON and may include generated content or downloadable assets.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/dlazyai/skills/dlazy-claude-sonnet-5) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [JSON result envelope from the dLazy CLI; generated content may include text, markdown, code, or hosted output URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Supports a prompt plus image and video inputs; asynchronous requests may return a generateId for polling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.7 (source: artifact frontmatter and server release evidence) <br>
+Risk: Prompts and parameters are sent to dLazy for hosted inference, and local media supplied as input is uploaded to its media storage.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only prompts and media you intend to share with the service, and review dLazy's pricing and privacy terms before use.
+
+Risk: Installing the CLI runs third-party npm code, and authentication uses a dLazy API key.
+
+Mitigation: Use the pinned CLI version and the environment-variable option if you prefer not to save an API key in the local CLI configuration.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-claude-sonnet-5)
+- [Publisher profile](https://clawhub.ai/user/dlazyai)
+- [dLazy service](https://dlazy.com)
+- [dLazy CLI project link listed in skill metadata](https://github.com/dlazy-ai/cli)
+- [dLazy CLI package on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy API key settings](https://dlazy.com/dashboard/organization/api-key)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Generated content, Media files]
+
+**Output Format:** [JSON CLI response containing generated content or output references; optional saved asset files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts a prompt and optional image or video inputs (up to 10 images and 8 videos); output can be saved to a local path.]
+
+## Skill Version(s):
+
+1.2.37 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

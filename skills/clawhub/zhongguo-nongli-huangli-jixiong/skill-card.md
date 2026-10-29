@@ -1,42 +1,51 @@
-## Description: <br>
-Provides Chinese almanac, lunar calendar conversion, auspicious-day selection, and date-range screening through Huangli API-backed Python and shell tools. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+查询中国农历与黄历信息，包括公历转农历、每日宜忌、吉凶详情和按活动筛选择日。
 
-## Publisher: <br>
-[leocdchina](https://clawhub.ai/user/leocdchina) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[leocdchina](https://clawhub.ai/user/leocdchina)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to answer Huangli and lunar-calendar questions, convert Gregorian dates, and identify auspicious or inauspicious dates for activities such as moving, weddings, business openings, and construction starts. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Calendar query dates and Huangli credentials or tokens are sent to the nongli.skill.4glz.com service. <br>
-Mitigation: Use a unique password for this service, treat HUANGLI_TOKEN like a password, and avoid sending sensitive planning details unless this data sharing is acceptable. <br>
-Risk: Changing HUANGLI_BASE can direct credentials and calendar queries to a different service. <br>
-Mitigation: Keep HUANGLI_BASE set to the official API host unless deliberately testing in a controlled environment. <br>
+## Use Case:
 
+用户可查询指定日期的中国农历、黄历宜忌与吉凶信息，也可按搬家、结婚或开业等活动筛选日期。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/leocdchina/skills/zhongguo-nongli-huangli-jixiong) <br>
-- [Huangli service homepage](https://nongli.skill.4glz.com) <br>
-- [Huangli dashboard](https://nongli.skill.4glz.com/dashboard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, JSON, code, shell commands, configuration, guidance] <br>
-**Output Format:** [JSON API responses with Markdown guidance and shell command examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires HUANGLI_TOKEN and HTTPS access to api.nongli.skill.4glz.com; HUANGLI_BASE is optional and should normally remain on the official API host.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release metadata and SKILL.md frontmatter) <br>
+Risk: The authentication code does not enforce the advertised secure destination for passwords and access tokens.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require HTTPS and origin checks with safe redirect handling before supplying credentials; use a unique service password and keep tokens and passwords out of shared logs.
+
+## Reference(s):
+
+- [Huangli Toolkit Reference](artifact/references/reference.md)
+- [Service homepage](https://nongli.skill.4glz.com)
+- [ClawHub release](https://clawhub.ai/leocdchina/skills/zhongguo-nongli-huangli-jixiong)
+
+## Skill Output:
+
+**Output Type(s):** [Text, JSON, Guidance]
+
+**Output Format:** [Readable JSON query results with concise natural-language guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports single-date, date-range, and keyword queries; results depend on available service data and account quota.]
+
+## Skill Version(s):
+
+2.0.1 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

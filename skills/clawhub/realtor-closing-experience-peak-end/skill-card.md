@@ -1,42 +1,51 @@
-## Description: <br>
-Helps real estate agents design memorable transaction peak and closing experiences that support referrals and returning clients. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides real estate agents in designing memorable closing and post-close client experiences that support referrals and repeat business.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External real estate agents and teams use this skill to plan closing, keys-day, post-close, and anxiety-management moments that make client experiences more memorable and referral-friendly. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may include unnecessary private client or transaction details while seeking closing-experience guidance. <br>
-Mitigation: Use anonymized or minimal transaction context and avoid sharing sensitive client, financial, or contractual information. <br>
-Risk: Advisory suggestions could be treated as guaranteed referral or client-retention outcomes. <br>
-Mitigation: Review recommendations with professional judgment, brokerage policies, and local real estate compliance requirements before use. <br>
+## Use Case:
 
+Real estate agents use this skill to plan the emotional high points, closing handoff, and post-close follow-up across a client transaction, especially when seeking referrals and repeat business.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/realtor-closing-experience-peak-end) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/realtor-closing-experience-peak-end) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/realtor-closing-experience-peak-end.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with checklists and examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable advisory planning output; no tools, API calls, or shell commands are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: release evidence) <br>
+Risk: Client-facing plans may contain guidance that is inaccurate or unsuitable for a particular transaction.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review plans before acting and verify jurisdiction- or rate-dependent details with current authoritative sources; the professional acting retains the decision.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/realtor-closing-experience-peak-end)
+- [Skill overview and guidance](https://www.deciqai.com/c/realtor-closing-experience-peak-end)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/realtor-closing-experience-peak-end.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown or text planning guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored client-experience recommendations and checklists; no automatic actions.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

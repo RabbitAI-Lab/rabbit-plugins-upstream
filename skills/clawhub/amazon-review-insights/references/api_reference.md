@@ -372,40 +372,27 @@ Manually trigger AI analysis for a collection-only task. Applicable to tasks wit
 
 ---
 
-### 4.4 Desktop Client Download Config
+### 4.4 Browser Extension Download Config
 
 **Endpoint**: `GET /download-config.json`
 
-A public config file (no API Key required) for retrieving desktop client download links.
+A public config file (no API Key required) for retrieving browser extension download links.
+Note: the website no longer offers the desktop client for download; `downloads` now contains only the `extension` entry.
 
 **Response**:
 ```json
 {
-  "version": "1.0.0",
-  "last_updated": "2026-04-27T14:31:08.795719Z",
+  "version": "1.5.1",
+  "last_updated": "2026-09-19T00:00:00Z",
   "downloads": {
-    "macos": {
-      "name_zh": "macOS Version",
-      "name_en": "macOS Version",
+    "extension": {
+      "name_zh": "Chrome Extension",
+      "name_en": "Chrome Extension",
       "url": "<actual download URL>",
-      "version": "1.0.0",
-      "size": "156MB",
+      "version": "0.6.11",
+      "size": "150.8 KB",
       "requirements": {
-        "min_version": "10.15",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
-      }
-    },
-    "windows": {
-      "name_zh": "Windows Version",
-      "name_en": "Windows Version",
-      "url": "<actual download URL>",
-      "version": "1.0.0",
-      "size": "142MB",
-      "requirements": {
-        "min_version": "10",
-        "recommended_memory": "8GB",
-        "disk_space": "500MB"
+        "min_chrome_version": "88"
       }
     }
   }
@@ -728,7 +715,6 @@ Get sentiment reviews list — **the same endpoint supports both negative and po
 **⚠️ Positive-side pitfall** (verified 2026-06-23):
 - With `polarity="positive"` the items **may include a few 1★/2★ reviews** — the server side splits by AI sentiment rather than by `review_star` alone
 - Before frequency counts / listing-copy extraction, **filter by `review_star >= 4`**
-- Full V1 self-check + typical usage: see `references/positive-reviews-workflow.md`
 
 **Python Usage**:
 ```python
@@ -1057,7 +1043,112 @@ Drill down to comments associated with a specific **tag** or **category**. `asso
 
 ---
 
-### 14. Points Balance
+### 14. Product Info
+
+**Endpoint**: `POST /api/v1/external/product/detail`
+
+Get full product info (includes bullets / product_description / A+ images, for secondary analysis by Agents).
+
+Two query modes (pick one):
+- **task_id**: query by task, returns all products under that task
+- **asin + site**: query a single product directly, no task needed
+
+**Request Body (mode 1)**:
+```json
+{
+  "task_id": "TSK_xxx"
+}
+```
+
+**Request Body (mode 2)**:
+```json
+{
+  "asin": "B0XXXXXXXX",
+  "site": "US",
+  "platform": "amazon"
+}
+```
+
+**Request Parameters**:
+| Parameter | Type | Required | Description |
+|------|------|------|------|
+| task_id | string | one of task_id / asin | Query by task, returns all products under it |
+| asin | string | one of task_id / asin | Direct product query |
+| site | string | No (recommended for asin mode) | Marketplace code, default `US` |
+| platform | string | No | Platform, default `amazon` |
+
+**Response**:
+```json
+{
+  "code": 0,
+  "msg": "获取 1 个商品信息",
+  "data": {
+    "asin": "B0XXXXXXXX",
+    "site": "US",
+    "queried_by": "asin",
+    "products": [
+      {
+        "asin": "B0XXXXXXXX",
+        "site": "US",
+        "product_title": "...",
+        "brand": "...",
+        "image_main": "https://...",
+        "rating_average": 4.3,
+        "rating_count": 1250,
+        "rating_distribution": {"5": 62, "4": 18, "3": 8, "2": 5, "1": 7},
+        "rating_health": "healthy",
+        "category_path": "...",
+        "category_levels": 4,
+        "category_node_ids": [],
+        "category_leaf_id": "...",
+        "price_current": 29.99,
+        "price_original": 39.99,
+        "price_discount": 25,
+        "price_off_amount": 10.0,
+        "currency": "USD",
+        "bullets": ["bullet 1", "bullet 2"],
+        "product_description": "...or null (see note below)",
+        "has_aplus_content": false,
+        "aplus_image_urls": null,
+        "availability": "In Stock",
+        "date_first_available": "2024-01-15",
+        "featured_badge": null,
+        "is_active": true,
+        "fetched_at": "..."
+      }
+    ]
+  }
+}
+```
+
+**Response Field Notes**:
+| Field | Description |
+|------|------|
+| queried_by | `task_id` or `asin` — which query mode was used |
+| rating_distribution | Star percentage 5→1 (string-number keys); `null` when no data |
+| rating_health | Rating health: `healthy` (5-star ≥80%) / `polarized` (5-star ≥40% and 1-star ≥10%, average score masks polarization) / `poor` (5-star <40%) / `moderate`; `null` when not computable |
+| price_off_amount | Derived: `price_original - price_current` (`null` if either is missing) |
+| bullets / product_description / aplus_image_urls | Returned in full, for secondary analysis such as "negative review vs selling points" semantic alignment |
+
+> ⚠️ **Ownership check (asin mode)**: the product table is a global pool keyed by
+> `(platform, site, asin)` with no user_id. Direct asin queries require the ASIN to
+> appear in **one of the current user's tasks** (`parse_content`), otherwise the server
+> returns `PRODUCT_NOT_ACCESSIBLE` (prevents cross-user data leaks).
+>
+> Note: `product_description` may be `null` — this does **not** mean collection failed.
+> Brand-registry sellers often publish image-only descriptions (A+ content); in that case
+> `has_aplus_content=true` and you can present `aplus_image_urls`.
+
+**Error Codes**:
+| Internal code | Typical msg |
+|------|-------------|
+| INVALID_TASK_ID_ERROR | 请提供 task_id 或 asin |
+| MISSING_REQUIRED_PARAM | 缺少必需参数 |
+| PRODUCT_NOT_ACCESSIBLE | 无权访问该商品信息（该 ASIN 不在您的任何任务中） |
+
+---
+
+### 15. Points Balance
 
 **Endpoint**: `POST /api/v1/external/account/points`
 
@@ -1153,6 +1244,7 @@ Grouped semantically. These are the **server-side internal classifications** —
 | AccessDenied | 无权访问该任务 | Task does not belong to current account (some endpoints) |
 | INSUFFICIENT_POINTS | 积分余额不足 | Points-consuming op failed |
 | DEVICE_NOT_FOUND | 设备未找到 | Endpoint not bound / offline (some endpoints) |
+| PRODUCT_NOT_ACCESSIBLE | 无权访问该商品信息（该 ASIN 不在您的任何任务中） | asin direct product query where the ASIN is not in any of the user's tasks |
 | API_RATE_LIMIT | 请求过于频繁，请稍后再试 | Rate-limit tripped (default 100/min) |
 | UNKNOWN | 未知错误，请稍后重试 | Fallback |
 
@@ -1180,12 +1272,12 @@ Grouped semantically. These are the **server-side internal classifications** —
 
 Before creating a task, ensure:
 
-1. AstrMap desktop client is logged in
-2. Desktop client is logged in with an Amazon buyer account (do not use your seller account)
+1. Collection channel online (Chrome extension installed and connected)
+2. Signed in to an Amazon buyer account in the browser (do not use your seller account)
 3. Amazon access is working
 
 ### Error-handling Guidance
-1. Endpoint offline (`is_alive: false` or msg contains "设备"): check if desktop client is logged in
+1. Endpoint offline (`is_alive: false` or msg contains "设备"): prompt the user to install and sign in to the browser extension
 2. Insufficient points (msg contains "积分"): prompt user to top up
 3. Invalid API Key (HTTP 400 + msg contains "API Key"): verify the API Key
 4. Write op rejected (msg contains "只读"): a read-only key cannot create task / trigger analysis / incremental / rename

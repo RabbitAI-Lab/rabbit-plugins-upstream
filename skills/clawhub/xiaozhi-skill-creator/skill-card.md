@@ -1,42 +1,54 @@
-## Description: <br>
-Guides ClawHub users through creating, testing, and iterating custom SKILLs using a four-layer structure, privacy boundaries, template examples, and health checks. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+写一个新 SKILL 时用的编写工具：四层结构（角色/规则/记忆/输出）、安全与隐私边界、五步落地流程、常见问题诊断。面向 SKILL 开发者与有编程/写提示词基础的高中生，在‘我要新写一个学习类 SKILL’‘帮我把这个 SKILL 的规则写清楚’‘我的 SKILL 行为不稳定怎么排查’‘这个 SKILL 该记哪些字段’时使用。它不替你写具体学科内容、不做学习辅导、不生成练习题；本仓库的词表与阈值一律以 shared/vocab.md 为准。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-External ClawHub users and students use this skill to design personalized learning SKILLs, write and refine prompts, structure memory and output behavior, and test whether a new SKILL is working as intended. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Templates may encourage long-term memory, uploaded learning materials, reminders, or cross-SKILL sharing beyond a user's intent. <br>
-Mitigation: Keep memory, uploads, reminders, and cross-SKILL sharing explicitly opt-in, and scope stored or shared information to the minimum needed for the learning task. <br>
-Risk: Broad activation wording can cause the skill to be invoked for general prompt-writing help outside custom SKILL creation. <br>
-Mitigation: Narrow activation language when installing if the desired use is only SKILL creation, debugging, and iteration. <br>
+## Use Case:
 
+SKILL 开发者和具备编程或提示词基础的高中生可用它规划、编写和排查学习类 SKILL，明确角色、规则、记忆、输出以及安全与隐私边界。
 
-## Reference(s): <br>
-- [Skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [references/skill-templates-library.md](references/skill-templates-library.md) <br>
+### Deployment Geography for Use:
 
+China (mainland; the included educational conventions target Chinese K–12 use)
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Configuration, Text] <br>
-**Output Format:** [Markdown and structured prompt templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes reusable SKILL prompt templates, privacy-boundary guidance, testing steps, iteration advice, and diagnostic checklists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: release evidence and SKILL.md frontmatter) <br>
+Risk: Examples used while drafting skills could expose student information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized examples.
+
+Risk: Generated skills that store student data may be deployed before their security and data controls are complete.
+
+Mitigation: Before deployment, complete the security baseline and schemas, and verify consent and deletion controls.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-skill-creator)
+- [Skill templates library](references/skill-templates-library.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Configuration]
+
+**Output Format:** [Markdown guidance and templates, with JSON Schema examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Text-first authoring guidance; no automatic execution.]
+
+## Skill Version(s):
+
+2.12.0 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

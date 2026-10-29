@@ -1,45 +1,55 @@
-## Description: <br>
-Guides agents through designing minimum viable product experiments that test one specific demand-side assumption with the least possible investment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides teams in designing the smallest MVP that tests a specific customer demand assumption and produces actionable learning.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External founders, product teams, and engineers use this skill to scope MVP experiments, choose a fitting test type, define an actionable metric, time-box the work, and document validated learning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may recommend disposable MVP experiments, broad product-scoping interventions, or customer-facing tests that could discard useful work, take payments, or affect real users. <br>
-Mitigation: Apply judgment before acting on the guidance, especially before discarding production work, collecting payment, or launching a test to customers. <br>
+## Use Case:
 
+Product teams, founders, and engineers use this skill to select an MVP type, define the assumption and success metric, scope a time-boxed test, and capture validated learning.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/mvp) <br>
-- [Primary Sources](references/sources.md) <br>
-- [Zappos Concierge MVP Example](examples/zappos-concierge-mvp-1999.md) <br>
-- [Airbnb Air-Mattress MVP Example](examples/airbnbs-air-mattress-mvp-2007.md) <br>
-- [AI-Era MVP Example](examples/ai-era-mvp-when-building-is-cheap-2023-2026.md) <br>
-- [Steve Blank MVP Learning Article](https://steveblank.com/2013/07/22/an-mvp-is-not-a-cheaper-product-its-about-smart-learning/) <br>
-- [SyncDev Minimum Viable Product](https://www.syncdev.com/minimum-viable-product/) <br>
-- [Harvard Business Review Lean Startup Article](https://hbr.org/2013/05/why-the-lean-start-up-changes-everything) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, configuration] <br>
-**Output Format:** [Markdown coaching responses and MVP Design Card tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask stepwise questions and pause for user input before advancing through the MVP design process.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: ClawHub release evidence) <br>
+Risk: Testing with real customers without authentication can expose private customer information or privileged functions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep authentication and authorization for private data and privileged actions, and use hosted checkout for payment tests.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [Skill page](https://clawhub.ai/deciqai/skills/mvp)
+- [deciqAI MVP guide](https://www.deciqai.com/c/mvp)
+- [Steve Blank: An MVP Is Not a Cheaper Product, It's About Smart Learning](https://steveblank.com/2013/07/22/an-mvp-is-not-a-cheaper-product-its-about-smart-learning/)
+- [Frank Robinson: Minimum Viable Product](https://www.syncdev.com/minimum-viable-product/)
+- [Harvard Business Review: Why the Lean Start-Up Changes Everything](https://hbr.org/2013/05/why-the-lean-start-up-changes-everything)
+- [deciqAI Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured MVP design card, checklists, and examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Adapted to the user's product assumption and chosen MVP type.]
+
+## Skill Version(s):
+
+1.0.7 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

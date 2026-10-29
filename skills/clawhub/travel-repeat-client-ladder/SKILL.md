@@ -6,6 +6,7 @@ description: "Activate when: turning one-trip bookers into annual clients; build
 # Travel Advisor — Repeat-Client Relationship Ladder
 
 > **Industry front door for customer-relationship-ladder.** Adds domain triggers, example, packs only. Parent Process unchanged.
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
 
 **Activate when:** turning one-trip bookers into annual clients; building a client-for-life book; planning post-trip nurture; "how do I stop starting from zero every year?"
 **Do NOT activate when:** pure one-off transactional volume with no repeat intent.
@@ -44,6 +45,6 @@ Part of **deciqAI Knowledge Skills**. Core method: customer-relationship-ladder.
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-repeat-client-ladder** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-repeat-client-ladder** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/travel-repeat-client-ladder.json*

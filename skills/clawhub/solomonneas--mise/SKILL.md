@@ -1,6 +1,8 @@
 ---
 name: mise
-description: Use before any creative or build work - a new feature, component, behavior change, or "let's build X" - to turn an idea into a design the user approved and a written spec, before a line of code. Mise en place for engineering: everything designed and in its place before you cook. Pairs with pressure-test for hardening decisions and hands off to recipe.
+version: 0.1.0
+license: MIT
+description: "Use before any creative or build work - a new feature, component, behavior change, or \"let's build X\" - to turn an idea into a design the user approved and a written spec, before a line of code. Mise en place for engineering: everything designed and in its place before you cook. Pairs with pressure-test for hardening decisions and hands off to recipe."
 ---
 
 # mise
@@ -25,7 +27,7 @@ The split in one line: pressure-test closes the decisions, mise shapes them into
 6. **Write the spec** to `docs/specs/YYYY-MM-DD-<topic>.md` and commit it.
 7. **Self-review the spec** with fresh eyes: placeholders or TBDs, sections that contradict each other, scope that should be decomposed, requirements that read two ways. Fix inline, no second pass needed.
 8. **User reviews the written spec.** Ask them to read it and wait. If they want changes, make them and re-run the self-review.
-9. **Hand off to [recipe](../recipe/SKILL.md).** That is the only skill you invoke next - not a frontend skill, not an implementation skill, not the code itself.
+9. **Hand off to [recipe](../recipe/SKILL.md).** That is the only skill you invoke next - not a build skill, not fire, not the code itself.
 
 ## Rules
 

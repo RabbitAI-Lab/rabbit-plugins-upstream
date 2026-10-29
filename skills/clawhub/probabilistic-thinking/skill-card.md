@@ -1,51 +1,59 @@
-## Description: <br>
-Helps agents turn uncertain forecasts into calibrated probability estimates grounded in base rates, evidence updates, confidence intervals, next evidence, and later scoring. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides probability estimates for uncertain outcomes using base rates, evidence-based updates, confidence ranges, and calibration.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, developers, and agents use this skill to reason about uncertain outcomes such as forecasts, diagnoses, sales conversions, hiring decisions, deal closes, geopolitical events, and AI timelines. It guides the agent to state a precise question, anchor in a base rate, update with evidence, report uncertainty, identify next evidence, and keep a calibration log. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat probability estimates as factual guarantees. <br>
-Mitigation: Present estimates with base rates, evidence, confidence intervals, and caveats, and review important decisions with domain experts. <br>
-Risk: Calibration logs may contain sensitive business or personal forecasts. <br>
-Mitigation: Store calibration logs only in approved locations and avoid including unnecessary sensitive details. <br>
-Risk: Weak or missing base rates can create false precision. <br>
-Mitigation: Use ranges and a Knightian uncertainty caveat when no usable reference class exists. <br>
+## Use Case:
 
+Employees, analysts, and developers use this skill to turn uncertain questions into forecastable outcomes, ground estimates in base rates, update them with evidence, and record results for calibration.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/probabilistic-thinking) <br>
-- [Primary sources](references/sources.md) <br>
-- [Tetlock, IARPA, and the Good Judgment Project example](examples/tetlock-iarpa-good-judgment-project-2011-2015.md) <br>
-- [Forecasting AI timelines and agentic reliability example](examples/forecasting-ai-timelines-agentic-reliability-2023-2026.md) <br>
-- [Bayes, An Essay towards solving a Problem in the Doctrine of Chances](https://royalsocietypublishing.org/doi/10.1098/rstl.1763.0053) <br>
-- [Knight, Risk, Uncertainty, and Profit](https://www.econlib.org/library/Knight/knRUP.html) <br>
-- [Mellers et al., Psychological Strategies for Winning a Geopolitical Forecasting Tournament](https://journals.sagepub.com/doi/10.1177/0956797614524255) <br>
-- [IARPA Aggregative Contingent Estimation program](https://www.iarpa.gov/research-programs/ace) <br>
-- [AI Impacts](https://aiimpacts.org/) <br>
-- [Metaculus forecasting questions](https://www.metaculus.com/questions/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a structured probability estimate with question, base rate, evidence, Bayesian shift, point estimate, confidence interval, next evidence, and calibration log.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Saved forecasts or examples may retain sensitive details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Omit confidential or identifying details from saved forecasts and examples.
+
+Risk: Probability estimates can mislead when their base rates or supporting evidence are weak.
+
+Mitigation: Describe evidence quality, state ranges and caveats when reference classes are sparse, and update estimates as better evidence arrives.
+
+## Reference(s):
+
+- [Probabilistic Thinking on ClawHub](https://clawhub.ai/deciqai/skills/probabilistic-thinking)
+- [deciqAI Probabilistic Thinking guide](https://www.deciqai.com/c/probabilistic-thinking)
+- [Bayes, An Essay towards solving a Problem in the Doctrine of Chances](https://royalsocietypublishing.org/doi/10.1098/rstl.1763.0053)
+- [Knight, Risk, Uncertainty, and Profit](https://www.econlib.org/library/Knight/knRUP.html)
+- [Mellers et al., Psychological Strategies for Winning a Geopolitical Forecasting Tournament](https://journals.sagepub.com/doi/10.1177/0956797614524255)
+- [IARPA Aggregative Contingent Estimation program](https://www.iarpa.gov/research-programs/ace)
+- [Metaculus AI forecasting questions](https://www.metaculus.com/questions/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Structured Markdown with probability estimates, evidence notes, and calibration logs]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include probability ranges, confidence intervals, qualitative evidence updates, and uncertainty caveats; estimates depend on the available base rates and evidence quality.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

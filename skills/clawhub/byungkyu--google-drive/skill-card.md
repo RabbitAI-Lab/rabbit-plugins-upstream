@@ -1,44 +1,65 @@
-## Description: <br>
-Google Drive API integration with managed OAuth for listing, searching, creating, uploading, exporting, updating, deleting, and sharing files and folders. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents find, read, share, organize, upload, and download files and folders in a connected Google Drive account.
 
-## Publisher: <br>
-[byungkyu](https://clawhub.ai/user/byungkyu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[byungkyu](https://clawhub.ai/user/byungkyu)
 
-## Use Case: <br>
-Developers and agents use this skill to work with a user-authorized Google Drive account through Maton, including file discovery, downloads, exports, uploads, metadata updates, deletion, and sharing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Google Drive requests are routed through Maton and require Google OAuth permissions for the connected account. <br>
-Mitigation: Install only if that routing and permission model is acceptable, and verify the intended Google account before use. <br>
-Risk: Write operations can create, update, delete, move, upload, or share Drive resources. <br>
-Mitigation: Confirm the connection, target file or folder, sharing recipient, and intended effect before approving any write operation. <br>
+## Use Case:
 
+People and teams with a connected Google Drive account use this skill to find, read, download, upload, organize, and share their files and folders. It handles whole files rather than editing text within Docs, Sheets, or Slides.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/byungkyu/skills/google-drive) <br>
-- [Google Drive API Reference](https://developers.google.com/drive/api/reference/rest/v3) <br>
-- [Google Drive Uploads Guide](https://developers.google.com/drive/api/guides/manage-uploads) <br>
-- [Google Drive Search Query Syntax](https://developers.google.com/drive/api/guides/search-files) <br>
-- [Maton CLI Manual](https://cli.maton.ai/manual) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands, HTTP endpoints, and Python or JavaScript code examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires MATON_API_KEY and a user-authorized Google Drive connection.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: server release metadata) <br>
+Risk: Connecting the wrong account or granting broader Google Drive access than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Obtain explicit approval for the connection, confirm the account, and select only the required OAuth scopes.
+
+Risk: Sharing, replacing, moving, or deleting the wrong file or folder.
+
+Mitigation: Prefer read-only operations and confirm the exact file IDs and proposed changes before each write.
+
+Risk: Hosted functions, triggers, and destinations can perform continuing or high-impact actions.
+
+Mitigation: Seek separate approval for each automation and remove functions, triggers, and destinations when no longer needed.
+
+Risk: Using an API key instead of OAuth may expose a long-lived credential.
+
+Mitigation: Prefer OAuth login; if an API key is necessary, keep it out of commands, logs, and stored files.
+
+## Reference(s):
+
+- [Google Drive skill release](https://clawhub.ai/byungkyu/skills/google-drive)
+- [Maton homepage](https://maton.ai)
+- [Google Drive API reference](https://developers.google.com/drive/api/reference/rest/v3)
+- [Maton documentation](https://docs.maton.ai)
+- [Time trigger reference](references/time/triggers.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration guidance]
+
+**Output Format:** [Markdown with file information, API examples, and shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [File content and metadata may contain personal information; access is limited to the connected account's permissions.]
+
+## Skill Version(s):
+
+1.2.11 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

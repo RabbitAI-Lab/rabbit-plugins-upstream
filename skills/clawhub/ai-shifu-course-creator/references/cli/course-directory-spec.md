@@ -1,9 +1,5 @@
 # Course Directory Specification
 
-## Required References
-
-None.
-
 ## Directory Layout
 
 ```text
@@ -28,15 +24,15 @@ None.
 | `README.md` | author or `pull` | `build` title resolution | No; directory name is the fallback title. |
 | `course-description.md` | author, `pull`, or `update-meta` | `build`, directory import, `status`, `update-meta` | No; missing means an empty description unless a CLI flag supplies one. |
 | `course-prompt.md` | author or `pull` | `build` and directory import | No; missing means an empty Course Prompt. |
-| `course-config.json` | `pull` or `set-tts --course-dir` | reference only; `build` and `import` ignore it | No. |
+| `course-config.json` | `pull`, `set-tts --course-dir`, or `set-avatar --course-dir` | reference only; `build` and `import` ignore it | No. |
 | `structure.json` | author, `pull`, or `set-access --course-dir` | `build` chapter and lesson mapping | No; missing selects single-chapter discovery. |
 | `shifu-import.json` | `build` | JSON import | Generated output. |
-| `.shifu-sync.json` | `pull` and version-aware writes | `status` and version-aware writes | Required only for full conflict protection. |
+| `.shifu-sync.json` | `pull` and version-aware writes | network commands with a course directory; `status` and version-aware writes | Optional for an unbound directory; when present, its source identity is mandatory. Required for full conflict protection. |
 | `lessons/*` | author or `pull` | `build` and lesson update commands | Yes; at least one discoverable lesson is required by `build`. |
 | `assets/image-manifest.json` | `upload-image --course-dir` | asset lookup | No. |
 | `assets/raw/` | user | no direct build consumer | No; conventional storage only. |
 
-The directory contract above is the complete set of recognized and managed course-directory paths. An author-only run writes only the relevant author-owned inputs; it must not synthesize CLI-managed outputs. Do not add an `authoring-manifest.json` or another root-level file to persist Segmentation or Orchestration handoffs; retain that phase data in the active handoff or report instead. New directory artifacts require an explicit CLI specification update.
+The directory contract above is the complete set of recognized and managed course-directory paths. When writing only author-owned inputs, write only the relevant author-owned files; those writes must not synthesize CLI-managed outputs. Planning and review notes are not managed course-directory artifacts; keep any optional notes outside this directory. Do not add an `authoring-manifest.json` or another unsupported root-level input. New directory artifacts require an explicit CLI specification update.
 
 ## Build Precedence
 
@@ -58,7 +54,7 @@ When `structure.json` is absent or has no chapters, only files matching `lesson-
 
 ## README.md
 
-Only the first line is inspected. If it begins with one or more `#` characters, the remaining trimmed text is the course title. Other README content is not mapped into the import payload. New authoring workflows should write only that title heading; do not duplicate the author, description, audience, or design controls here because their owners and consumers are elsewhere.
+Only the first line is inspected. If it begins with one or more `#` characters, the remaining trimmed text is the course title. Other README content is not mapped into the import payload. When materializing a course title, write only that title heading; do not duplicate the author, description, audience, or design controls here because their owners and consumers are elsewhere.
 
 ## Lesson Files
 
@@ -112,7 +108,6 @@ Fields:
 ```json
 {
   "model": "",
-  "temperature": 0.3,
   "price": 0,
   "keywords": [],
   "avatar": "",
@@ -126,7 +121,6 @@ Fields:
   "tts_emotion": "",
   "ask_enabled_status": 5101,
   "ask_model": "",
-  "ask_temperature": 0.0,
   "ask_system_prompt": "",
   "ask_provider_config": {}
 }
@@ -134,7 +128,7 @@ Fields:
 
 `model`, `llm`, `ask_model`, `ask_llm`, and their related keys are stable machine-facing fields for the underlying models and settings used by the Teaching Agent. Keep those keys unchanged in files and payloads; human-facing explanations identify AI-Shifu ownership on the first Teaching Agent mention and use Teaching Agent thereafter for both course delivery and learner follow-up answers.
 
-`build` and `import` do not read or send this file. `set-tts --course-dir` refreshes it after a successful Listen Mode update.
+`build` and `import` do not read or send this file. `set-tts --course-dir` refreshes it after a successful Listen Mode update, and `set-avatar --course-dir` refreshes it after the uploaded avatar URL is read back successfully.
 
 ## .shifu-sync.json
 
@@ -145,6 +139,7 @@ This file is auto-maintained; its abridged schema is:
   "schema_version": 1,
   "shifu_bid": "a1b2c3",
   "base_url": "https://app.ai-shifu.cn",
+  "profile": "Daily",
   "course": {
     "revision": 42,
     "name": "Course Title",
@@ -178,6 +173,10 @@ This file is auto-maintained; its abridged schema is:
 
 The course and lesson revisions are cloud baselines. `content_sha256` is the last synchronized local-content hash. The CLI writes this file atomically; manual edits are unsupported.
 
+Before any network command using a course directory reads remote state or changes local files, an existing sync manifest must be valid and its normalized `base_url` must match the selected execution context. An explicit target course BID must also match `shifu_bid`, even if two services happen to use the same BID. A malformed manifest or missing source URL is an error, not an unbound directory. `--force` never bypasses these checks. Resolve a mismatch by explicitly selecting the correct profile or an appropriate directory; do not infer a profile from the manifest.
+
+`profile` records provenance only (null for temporary contexts); the source-service identity remains `base_url`. Old manifests with a valid URL but no profile remain supported, and two named profiles for the same service may use the same directory. A new directory without a manifest remains valid for initial pull, authoring, upload, or import; local `build` does not require a profile or enforce this network preflight.
+
 ## assets/
 
 `assets/image-manifest.json` schema:
@@ -187,7 +186,9 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
   "images": [
     {
       "local": "assets/raw/gradient-descent.heic",
-      "remote": "https://res.ai-shifu.cn/abcd",
+      "base_url": "https://app.ai-shifu.cn",
+      "profile": "Daily",
+      "remote": "https://assets.example.com/abcd",
       "alt": "Image description",
       "uploaded_at": "2026-05-23T08:42:31Z",
       "bytes": 612345,
@@ -197,7 +198,9 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
     },
     {
       "source_url": "https://example.com/diagram.png",
-      "remote": "https://res.ai-shifu.cn/efgh",
+      "base_url": "https://school.example/training",
+      "profile": "Client A",
+      "remote": "https://assets.example.com/efgh",
       "alt": "Image description",
       "uploaded_at": "2026-05-23T08:45:02Z"
     }
@@ -205,12 +208,16 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
 }
 ```
 
-- `local` is the source path for file uploads and their upsert key. It is relative to the course directory when possible, otherwise absolute.
-- `source_url` is the source and upsert key for URL uploads.
+- `local` is the source path for file uploads. It is relative to the course directory when possible, otherwise absolute.
+- `source_url` is the original source for URL uploads.
+- `base_url` is the normalized service used for upload. The upsert key is this URL plus `local` or `source_url`, so the same source uploaded to different services keeps separate entries.
+- `profile` records the profile used for upload, or null for temporary configuration. It does not change the service/source upsert key.
 - `remote` is the platform-hosted URL returned by the CLI.
 - `alt` is the value supplied through `--alt`.
 - `uploaded_at` is a UTC ISO 8601 timestamp.
 - `bytes`, `original_bytes`, `mime`, and `filename` describe locally processed uploads and are absent from URL-upload entries.
+
+Legacy entries without `base_url` have unknown provenance. Preserve them as-is; they are neither an upsert match for a known service nor proof that an asset was uploaded to the current service. Match a reusable upload by its known service and source, not by profile name alone.
 
 `build` ignores the entire `assets/` directory.
 
@@ -221,7 +228,7 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
 ```json
 {
   "version": "1.0",
-  "exported_at": "2026-01-01T00:00:00",
+  "exported_at": "2026-01-01T00:00:00Z",
   "shifu": {
     "shifu_bid": "generated_uuid",
     "title": "Course Title",
@@ -229,11 +236,9 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
     "description": "Course description",
     "avatar_res_bid": "",
     "llm": "",
-    "llm_temperature": 0,
     "course_prompt": "Course Prompt content",
     "ask_enabled_status": 5101,
     "ask_llm": "",
-    "ask_llm_temperature": 0.0,
     "ask_llm_system_prompt": ""
   },
   "outline_items": [
@@ -258,3 +263,18 @@ The course and lesson revisions are cloud baselines. `content_sha256` is the las
 ```
 
 Every top-level chapter has an empty `parent_bid` and empty `content`. Every lesson has its chapter BID as `parent_bid`, its file contents in `content`, and the resolved Course Prompt in its `course_prompt` field. Generated BIDs contain UUID characters without hyphens. Positions are zero-based strings.
+
+### Import input validation
+
+Before any platform request, including an existing course's revision lookup, `import` reads and validates the complete JSON payload. Execution uses that same in-memory payload rather than reopening the file after validation. Unreadable or invalid JSON and invalid fields produce a field-specific error on stderr and exit `1` without any platform calls.
+
+- The payload must be an object with a `shifu` object and an `outline_items` array. Course and outline `title` values must be non-empty strings. Optional `shifu.description` and outline `content` values must be strings when supplied; omission defaults to an empty string. All consumed text must be valid UTF-8 Unicode, including the selected Course Prompt. Text is preserved without trimming.
+- An outline's `outline_item_bid` may be omitted, empty, or `null` when no child references it. Non-empty IDs must be unique strings; they need not use the builder's UUID format.
+- An omitted, empty, or `null` `parent_bid` identifies a top-level outline. Each non-empty parent must be a string identifying a different top-level outline in this payload. Missing parents, self-references, cycles, and nesting beyond two levels are rejected before the old course is modified.
+- Both builder and platform-export payloads are accepted. Unused metadata is ignored, top-level outline content remains supported, and an empty `outline_items` array remains a valid request to remove the existing outline tree.
+
+### Course Prompt import compatibility
+
+`import` accepts both the builder's `shifu.course_prompt` and the platform export's `shifu.llm_system_prompt`. When both keys are present, `course_prompt` takes precedence, including an explicit empty string. The selected value must be a string; `null` and other types are rejected before creating or updating a course. Prompt text is sent unchanged, including whitespace.
+
+An explicit empty string clears the Course Prompt. If neither key is present, import omits `system_prompt`: an existing course keeps its current prompt, and a new course keeps the platform default. This distinction prevents an omitted field from silently clearing existing content.

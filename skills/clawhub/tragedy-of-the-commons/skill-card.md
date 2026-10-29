@@ -1,46 +1,59 @@
-## Description: <br>
-Helps agents diagnose shared-resource degradation and design commons-governance interventions using Hardin's commons structure and Ostrom's design principles. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents diagnose shared-resource degradation and design governance using commons analysis and Ostrom’s eight principles.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to analyze commons problems such as API abuse, open-source burnout, shared infrastructure strain, workplace coordination overload, and policy responses. It guides agents through identifying the shared resource, verifying the commons structure, auditing Ostrom's eight principles, proposing institutional interventions, and defining monitoring metrics. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may include sensitive internal examples when adding observed commons patterns or discussing organizational failures. <br>
-Mitigation: Do not paste confidential examples into persistent skill files unless they are intentionally approved for storage. <br>
-Risk: External links are optional references and may lead outside the skill package. <br>
-Mitigation: Review external links before relying on them in restricted or sensitive environments. <br>
+## Use Case:
 
+Product, platform, infrastructure, and community teams use this skill to assess whether a shared resource faces a commons problem and develop governance, monitoring, quotas, or contribution rules grounded in Ostrom’s principles.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/tragedy-of-the-commons) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/tragedy-of-the-commons) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/tragedy-of-the-commons.json) <br>
-- [Sources - tragedy-of-the-commons](references/sources.md) <br>
-- [Hardin 1968 + Ostrom's Empirical Correction + Modern Digital Applications](examples/hardin-1968-ostrom-empirical-correction-modern-digital-applications.md) <br>
-- [The Grand Banks Cod Collapse and the 1992 Moratorium](examples/grand-banks-cod-collapse-and-1992-moratorium.md) <br>
-- [The AI-Era Commons - Open Web, Power, and GPUs (2024-2026)](examples/ai-era-commons-open-web-power-gpus-2024-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown or structured text using the Commons Design template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step coaching questions before producing the final commons design analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: release evidence) <br>
+Risk: Governance proposals may not fit the local resource or community context.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review proposed rules and interventions with affected users before adopting them.
+
+Risk: Reusable examples could expose confidential details if based on real cases.
+
+Mitigation: Keep confidential details out of examples; use public, anonymized, or synthesized details.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/tragedy-of-the-commons)
+- [Skill overview and examples](https://www.deciqai.com/c/tragedy-of-the-commons)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/tragedy-of-the-commons.json)
+- [Primary sources](artifact/references/sources.md)
+- [Hardin, Ostrom, and modern applications example](artifact/examples/hardin-1968-ostrom-empirical-correction-modern-digital-applications.md)
+- [Grand Banks cod collapse example](artifact/examples/grand-banks-cod-collapse-and-1992-moratorium.md)
+- [AI-era commons example](artifact/examples/ai-era-commons-open-web-power-gpus-2024-2026.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown with a commons diagnosis, Ostrom principle audit, interventions, and monitoring plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Coach mode proceeds one step at a time and waits for the user's response at marked checkpoints.]
+
+## Skill Version(s):
+
+1.0.7 (source: evidence.json release.version)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

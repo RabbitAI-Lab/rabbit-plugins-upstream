@@ -1,40 +1,60 @@
-## Description: <br>
-Happy Horse 1.0 video model covers text-to-video, first-frame-to-video, reference-to-video, and video editing through the dLazy CLI and hosted API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Happy Horse 1.0 generates videos from text, a first frame, or reference media, and supports video editing with mode-specific routing.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users, developers, and agents use this skill to generate or edit video with Happy Horse 1.0 from prompts and optional image or video inputs. It is useful when an agent needs to call a cloud video-generation service and return generated media URLs or asynchronous task status. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/dlazyai/skills/dlazy-happyhorse-1-0) <br>
-- [dLazy homepage](https://dlazy.com) <br>
-- [dLazy CLI source](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
+Developers and creators use the skill to generate or edit short videos with Happy Horse 1.0, using text prompts and optional image or video references.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Shell commands, Configuration, JSON, Guidance] <br>
-**Output Format:** [JSON result payloads and Markdown command guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses @dlazy/cli pinned to 1.2.3; prompts and selected parameters are sent to api.dlazy.com, and local media inputs may be uploaded to files.dlazy.com. Mitigate credential and upload risk by reviewing the pinned package/source, using npx or DLAZY_API_KEY for less persistent setup, passing only media suitable for upload, and rotating or revoking API keys from the dLazy dashboard when needed.] <br>
+Global
 
-## Skill Version(s): <br>
-1.3.4 (source: evidence.json release.version and SKILL.md frontmatter) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Image, video, and audio inputs may be uploaded to dLazy for processing.
+
+Mitigation: Only submit media you are comfortable uploading, and review dLazy's service terms.
+
+Risk: Video generation can incur usage costs.
+
+Mitigation: Use --dry-run to review the request and estimated cost before generation.
+
+Risk: The login flow stores an organization API key in the local CLI configuration.
+
+Mitigation: Protect access to the local account, or provide DLAZY_API_KEY per invocation; rotate or revoke keys through the dLazy dashboard when needed.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/dlazyai/skills/dlazy-happyhorse-1-0)
+- [dLazy CLI project](https://github.com/dlazy-ai/cli)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+- [dLazy](https://dlazy.com)
+
+## Skill Output:
+
+**Output Type(s):** [Video, JSON, Guidance]
+
+**Output Format:** [JSON task and result metadata with generated video URLs, or a downloaded video file when saving is requested.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Asynchronous task IDs are available when --no-wait is used.]
+
+## Skill Version(s):
+
+1.3.35 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

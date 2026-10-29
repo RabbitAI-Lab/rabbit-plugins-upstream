@@ -1,41 +1,57 @@
-## Description: <br>
-Helps agents classify growth initiatives as incremental, leap, or split workstreams and align goals, metrics, resources, and governance to the chosen mode. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teams choose between incremental growth and leap growth, then align goals, resources, measures, and execution to that mode.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Business leaders, strategy teams, and AI agents use this skill to decide whether a growth initiative should be managed as incremental improvement, a leap initiative, or split workstreams. It then guides metric, resource, stage-gate, and governance choices for the selected mode. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [Primary sources](references/sources.md) <br>
-- [Method in Action: U.S. Interstate Highway System (1956-1992)](examples/us-interstate-highway-system-1956-1992.md) <br>
-- [Clayton Christensen, The Innovator's Dilemma](https://www.hbs.edu/faculty/Pages/item.aspx?num=46) <br>
-- [John Kotter, Leading Change](https://hbr.org/2007/01/leading-change-why-transformation-efforts-fail) <br>
-- [Federal Highway Administration Interstate Highway History](https://www.fhwa.dot.gov/interstate/history.cfm) <br>
+Leaders, teams, and business planners use this skill to classify a growth initiative, resolve disagreement about whether its goal is incremental or a leap, and create a matching plan with suitable measures and checkpoints.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnostic with fill-in fields and coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code or credential access; avoid persisting sensitive company examples unless intended and sanitized.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: The framework's factual claims or business assumptions may not fit the organization's circumstances.
+
+Mitigation: Use the framework as a planning aid and verify material factual claims and business assumptions before acting.
+
+Risk: Examples based on real organizational use could disclose confidential company details.
+
+Mitigation: Omit confidential company details when recording real-use examples.
+
+## Reference(s):
+
+- [Source notes](artifact/references/sources.md)
+- [U.S. Interstate Highway System example](artifact/examples/us-interstate-highway-system-1956-1992.md)
+- [Federal Highway Administration: Interstate history](https://www.fhwa.dot.gov/interstate/history.cfm)
+- [Harvard Business School: The Innovator's Dilemma](https://www.hbs.edu/faculty/Pages/item.aspx?num=46)
+- [Harvard Business Review: Leading Change](https://hbr.org/2007/01/leading-change-why-transformation-efforts-fail)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured growth mode diagnostic worksheet]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Classifies an initiative as incremental, leap, or split and provides fields for goals, measures, resources, stages, owners, and integration points.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

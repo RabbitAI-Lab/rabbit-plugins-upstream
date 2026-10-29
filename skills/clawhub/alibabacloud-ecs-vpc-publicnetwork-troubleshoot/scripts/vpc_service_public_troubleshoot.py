@@ -48,7 +48,21 @@ if _orig_acs_del is not None:
 # Observability: Skill UA + session-id
 # ============================================================
 SKILL_NAME = "alibabacloud-ecs-vpc-publicnetwork-troubleshoot"
-SKILL_VERSION = "0.1.0"
+def _load_skill_version() -> str:
+    """Read the skill version from references/manifest.json (single source of truth)."""
+    import pathlib as _pl
+    _p = _pl.Path(__file__).resolve().parent.parent / "references" / "manifest.json"
+    try:
+        _d = json.loads(_p.read_text(encoding="utf-8"))
+        _v = _d.get("version")
+    except Exception as _e:
+        raise RuntimeError("references/manifest.json missing or unreadable: %s" % _e)
+    if not (isinstance(_v, str) and _v.strip()):
+        raise RuntimeError("references/manifest.json has no non-empty 'version'")
+    return _v.strip()
+
+
+SKILL_VERSION = _load_skill_version()
 DEFAULT_CONNECT_TIMEOUT = 10
 DEFAULT_READ_TIMEOUT = 30
 
@@ -70,12 +84,12 @@ def _setup_ua(client):
     try:
         client.append_user_agent(
             "AlibabaCloud-Agent-Skills",
-            f"{SKILL_NAME}/{SESSION_ID}",
+            f"{SKILL_NAME}/{SESSION_ID} skill-version/{SKILL_VERSION}",
         )
     except Exception:
         pass
     os.environ["ALIBABACLOUD_USER_AGENT"] = (
-        f"AlibabaCloud-Agent-Skills/{SKILL_NAME}/{SESSION_ID}"
+        f"AlibabaCloud-Agent-Skills/{SKILL_NAME}/{SESSION_ID} skill-version/{SKILL_VERSION}"
     )
     return client
 
@@ -168,8 +182,12 @@ def query_account(client, region_id):
     """Step 2: Check account UID and overdue status"""
     try:
         uid_data = call_api(client, "sts", "2015-04-01", "GetCallerIdentity", region_id=region_id)
-        # Use CLI to call bssopenapi to avoid SDK DNS resolution issues
-        balance_data = call_cli("bssopenapi", "query-account-balance", region_id)
+        # bssopenapi is a CLI built-in metadata-mode product (NOT plugin-style),
+        # so it does not accept kebab-case: the QueryAccountBalance action name is
+        # passed verbatim in PascalCase (KB decision 94cff57 / E12). The former
+        # kebab form made the CLI print help text and exit 0, so json.loads failed
+        # and the account-overdue check silently degraded to "normal".
+        balance_data = call_cli("bssopenapi", "QueryAccountBalance", region_id)
         if "_error" in balance_data:
             raise RuntimeError(balance_data["_error"])
         available = float(balance_data.get("Data", {}).get("AvailableAmount", 0))
@@ -314,10 +332,15 @@ def query_eip(client, region_id, eip_address=None, allocation_id=None):
 
 def query_ddos(region_id, ip, instance_type="eip"):
     """Step 8: Check DDoS blackhole status (CLI call)"""
-    data = call_cli("antiddos-public", "describe-instance-ip-address", region_id, {
-        "ddos-region-id": region_id,
-        "instance-type": instance_type,
-        "instance-ip": ip,
+    # antiddos-public is a CLI built-in metadata-mode product (NOT plugin-style):
+    # action + params must be PascalCase verbatim (official DescribeInstanceIpAddress
+    # params DdosRegionId/InstanceType/InstanceIp; RAM action prefix yundun-ddos).
+    # The former kebab form made the CLI print help and exit 0, so json.loads failed
+    # and the DDoS blackhole check silently degraded to "normal".
+    data = call_cli("antiddos-public", "DescribeInstanceIpAddress", region_id, {
+        "DdosRegionId": region_id,
+        "InstanceType": instance_type,
+        "InstanceIp": ip,
     })
     if "_error" in data:
         return {"ip_status": "unknown", "status": "normal", "error": data["_error"]}
@@ -332,10 +355,15 @@ def query_ddos(region_id, ip, instance_type="eip"):
 
 def query_cfw(region_id, ip):
     """Step 9: Check Cloud Firewall (CFW) traffic diversion (CLI call)"""
-    data = call_cli("cloudfw", "describe-asset-list", region_id, {
-        "current-page": "1",
-        "page-size": "1",
-        "search-item": ip,
+    # cloudfw is a CLI built-in metadata-mode product (NOT plugin-style): action +
+    # params must be PascalCase verbatim (official DescribeAssetList params
+    # CurrentPage/PageSize/SearchItem; RAM action prefix yundun-cloudfirewall).
+    # The former kebab form made the CLI print help and exit 0, so json.loads failed
+    # and the CFW diversion check silently degraded to "normal".
+    data = call_cli("cloudfw", "DescribeAssetList", region_id, {
+        "CurrentPage": "1",
+        "PageSize": "1",
+        "SearchItem": ip,
     })
     if "_error" in data:
         return {"has_cfw": False, "status": "normal", "error": data["_error"]}

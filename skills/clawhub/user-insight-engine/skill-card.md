@@ -1,46 +1,57 @@
-## Description: <br>
-User Insight Engine helps agents diagnose gaps between what users say and what they do by synthesizing surface, behavioral, and deep-layer evidence into a driver and intervention. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides user research teams in comparing what users say, what they do, and the deeper drivers behind behavior gaps.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Product teams, user researchers, and agents use this skill to investigate behavior gaps such as high satisfaction with high churn, failed feature adoption, or conflicting research signals. It guides synthesis from surface statements, behavioral data, and deep-layer evidence into a primary driver and testable intervention. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may guide product or research decisions using user behavior data. <br>
-Mitigation: Apply normal human review before acting on suggested drivers or interventions. <br>
-Risk: Interventions can be unreliable when based on surface statements or behavioral data without deep-layer evidence. <br>
-Mitigation: Use the skill's stop rule: require at least one deep-layer evidence item before proceeding to intervention guidance. <br>
+## Use Case:
 
+Product researchers and teams use this skill to investigate gaps between stated intent and observed behavior, synthesize surface, behavioral, and deep-layer evidence, and design driver-specific experiments. It requires behavioral data and treats analysis without deep-layer evidence as incomplete.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/user-insight-engine) <br>
-- [User Insight Engine product page](https://www.deciqai.com/c/user-insight-engine) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/user-insight-engine.json) <br>
-- [Primary sources](references/sources.md) <br>
-- [Taylor's Behavioral Observation at Bethlehem Steel](examples/taylors-behavioral-observation-at-bethlehem-steel-1898-1901.md) <br>
-- [The Principles of Scientific Management](https://archive.org/details/principlesofscie00taylrich) <br>
-- [Prospect Theory: An Analysis of Decision under Risk](https://www.jstor.org/stable/1914185) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown report card and step-by-step coaching prompts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May stop at WAIT checkpoints and requires behavioral plus deep-layer evidence before intervention guidance.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Research tickets and recordings may contain personal or sensitive details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only research data you are authorized to share, and redact personal or sensitive details before analysis.
+
+Risk: A proposed experiment may be applied without sufficient review.
+
+Mitigation: Review proposed experiments before applying them.
+
+## Reference(s):
+
+- [Sources — user-insight-engine](references/sources.md)
+- [Taylor's behavioral observation example](examples/taylors-behavioral-observation-at-bethlehem-steel-1898-1901.md)
+- [The Principles of Scientific Management — Frederick Winslow Taylor](https://archive.org/details/principlesofscie00taylrich)
+- [Prospect Theory — Daniel Kahneman and Amos Tversky](https://www.jstor.org/stable/1914185)
+- [User Insight Engine project page](https://www.deciqai.com/c/user-insight-engine)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown report card or step-by-step coaching prompts]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Analyzes one behavior gap at a time; interventions require deep-layer evidence.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
