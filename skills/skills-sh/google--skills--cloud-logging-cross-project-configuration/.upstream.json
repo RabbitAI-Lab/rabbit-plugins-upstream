@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-logging-cross-project-configuration",
+  "repo": "google/skills",
+  "skillId": "cloud-logging-cross-project-configuration",
+  "branch": "main",
+  "pushedAt": "2026-10-29T13:32:38Z",
+  "contentHash": "fd31387ee24f651e5873e5f704f7f7a0cfce31f8a010fe29f512d20190e67925",
+  "fetchedAt": "2026-10-29T14:28:56.165Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/speech",
+  "repo": "openai/skills",
+  "skillId": "speech",
+  "branch": "main",
+  "pushedAt": "2026-10-28T17:31:41Z",
+  "contentHash": "875ceee2fb8302d3602ff1314e78f05a66b9f6f5f441c2f54656276ce22c43dc",
+  "fetchedAt": "2026-10-29T14:29:09.023Z"
+}

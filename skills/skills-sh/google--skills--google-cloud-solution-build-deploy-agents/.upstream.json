@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-solution-build-deploy-agents",
+  "repo": "google/skills",
+  "skillId": "google-cloud-solution-build-deploy-agents",
+  "branch": "main",
+  "pushedAt": "2026-10-29T13:32:38Z",
+  "contentHash": "fd763e05476acb342b3bfc3916f3435c44ae107653e40fa6ae61c403b3a51f84",
+  "fetchedAt": "2026-10-29T14:28:56.068Z"
+}
