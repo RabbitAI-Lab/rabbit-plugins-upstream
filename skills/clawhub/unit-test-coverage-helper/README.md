@@ -14,18 +14,18 @@ Evidence coverage: 12 signals across 2 source families.
 
 ## Evidence
 
-- github-issues: [spec: trustworthy centred Mumble experience, performance, and platform parity](https://github.com/mongre25-droid/mumble/issues/12)
-- github-issues: [WAL replay caches a query plan per batch with no eviction — unbounded memory growth on large rebuilds](https://github.com/verveguy/liminis-context-graph/issues/238)
-- github-issues: [[Contract] — Multi-Outcome (Categorical) Markets](https://github.com/Arena1X/InsightArena/issues/1329)
-- github-issues: [[devkit/integration] Add integration test CI job](https://github.com/StellarCommons/stellar-fee-tracker/issues/499)
-- github-issues: [Table UI Definition: derive the "Cell components" list from the SELECT query, not from the whole schema](https://github.com/kitamura-tetsuo/outliner/issues/4238)
-- github-issues: [Reject empty payment batch payloads](https://github.com/mux-labs/mux-backend/issues/597)
-- github-issues: [Document Docker Compose local setup](https://github.com/mux-labs/mux-backend/issues/598)
-- hacker-news-search: [Clinical failure rates over the decades: yikes](https://news.ycombinator.com/item?id=49056211)
-- hacker-news-search: [LLM Usage in Debian: Three Proposals](https://news.ycombinator.com/item?id=49053737)
-- hacker-news-search: [Ask HN: How would you harden AI changes to a 1M-line legacy SaaS before review?](https://news.ycombinator.com/item?id=49053524)
-- hacker-news-search: [Engineering management after the cost of code collapsed](https://news.ycombinator.com/item?id=49050839)
-- hacker-news-search: [Buz – A fork of Bun using modern Zig, with sub-1s incremental builds](https://news.ycombinator.com/item?id=49045975)
+- github-issues: [Implement compensation eligibility rules](https://github.com/MDTechLabs/BridgeWise/issues/1351)
+- github-issues: [Add health check endpoint for WalletAPI](https://github.com/ApexChainx/ApexChainx-Backend/issues/698)
+- github-issues: [Admin-defined provider, models and debate rounds for analyses; only permitted users override them per analysis](https://github.com/ramazangirgin/trading-analysis-platform/issues/198)
+- github-issues: [T-jc45: The integration level's CI bound is 20 minutes, a stopgap until #439](https://github.com/pharzam/layup/issues/442)
+- github-issues: [[Feature] Run-level wall clock: enter closing after 45 min of work and finalize after 10 min of closing](https://github.com/SourceWeft/SourceWeft/issues/329)
+- github-issues: [Card connect-87: the pre-connection script runs, asked for and remembered (F-2108)](https://github.com/remote-oss/remote/issues/1216)
+- hacker-news-search: [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50163508)
+- hacker-news-search: [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50163478)
+- hacker-news-search: [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50163102)
+- hacker-news-search: [Agentic Monitoring](https://news.ycombinator.com/item?id=50162534)
+- hacker-news-search: [Ask HN: How to deal with shipping AI-written code you don't understand?](https://news.ycombinator.com/item?id=50160729)
+- github-issues: [planner: property model does not cover owner/assignees sync](https://github.com/hal-c2/hal-c2/issues/423)
 
 ## How This Skill Meets The Requirement
 

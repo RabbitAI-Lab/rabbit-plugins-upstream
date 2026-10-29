@@ -1,48 +1,60 @@
-## Description: <br>
-Diagnoses the buyer/seller deadlock in information sales and helps select disclosure mechanisms that let buyers estimate value while sellers retain appropriability. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps sellers of information choose disclosure mechanisms that let a buyer estimate its value while the seller retains the ability to charge for it.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, sellers, advisors, and agents use this skill when selling, licensing, pitching, or diligencing proprietary information and need a disclosure plan that proves value without giving away the reproducible core. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat patent, NDA, escrow, or deal-structure guidance as legal advice for a live transaction. <br>
-Mitigation: Use the skill as business strategy framing and involve qualified counsel before relying on it in real transactions. <br>
-Risk: Users may disclose sensitive deal information while seeking advice about what to reveal. <br>
-Mitigation: Share only the minimum facts needed for analysis and avoid entering reproducible cores, trade secrets, or confidential deal terms unless the agent environment is approved for that information. <br>
+## Use Case:
 
+Founders, sellers, licensors, and advisors use this skill to plan how much proprietary information to reveal in a pitch, licensing discussion, due diligence, or consulting sale. It produces a disclosure plan with suitable safeguards and staged commitments.
 
-## Reference(s): <br>
-- [Sources - arrow-information-paradox](references/sources.md) <br>
-- [Arrow, K. J. (1962), Economic Welfare and the Allocation of Resources for Invention](https://www.nber.org/system/files/chapters/c2144/c2144.pdf) <br>
-- [Akerlof, G. A. (1970), The Market for Lemons](https://doi.org/10.2307/1879431) <br>
-- [Spence, A. M. (1973), Job Market Signaling](https://doi.org/10.2307/1882010) <br>
-- [Royal Swedish Academy of Sciences (2001), Markets with Asymmetric Information](https://www.nobelprize.org/prizes/economic-sciences/2001/popular-information/) <br>
-- [The Coca-Cola Company history](https://www.coca-colacompany.com/about-us/history) <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/arrow-information-paradox) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/arrow-information-paradox) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/arrow-information-paradox.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a disclosure plan with appropriability leak, minimum-to-convince signal, mechanism choice, disclosure ladder, walk-away point, and exception log.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Deal discussions may involve sensitive commercial or intellectual property details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only the minimum context needed and redact sensitive details.
+
+Risk: Patent, NDA, and contract choices can have legal consequences.
+
+Mitigation: Have qualified counsel review those decisions before acting.
+
+## Reference(s):
+
+- [Arrow's Information Paradox sources](artifact/references/sources.md)
+- [Arrow (1962), Economic Welfare and the Allocation of Resources for Invention](https://www.nber.org/system/files/chapters/c2144/c2144.pdf)
+- [Akerlof (1970), The Market for Lemons](https://doi.org/10.2307/1879431)
+- [Spence (1973), Job Market Signaling](https://doi.org/10.2307/1882010)
+- [Nobel Prize background on markets with asymmetric information](https://www.nobelprize.org/prizes/economic-sciences/2001/popular-information/)
+- [The Coca-Cola Company history](https://www.coca-colacompany.com/about-us/history)
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/arrow-information-paradox)
+- [Publisher resource page](https://www.deciqai.com/c/arrow-information-paradox)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown disclosure plan with concise explanatory guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tailored to the user's deal context; may include a disclosure ladder, safeguards, and a walk-away point.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,53 @@
-## Description: <br>
-Collaborative task checklist manager for AI agents with sequential, parallel, and looping execution. Features agent coordination, dependencies, deadlock prevention, and loop safety. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Collaborative task checklist manager for AI agents with sequential, parallel, and looping execution. Features agent coordination, dependencies, deadlock prevention, and loop safety.
 
-## Publisher: <br>
-[welliu](https://clawhub.ai/user/welliu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[welliu](https://clawhub.ai/user/welliu)
 
-## Use Case: <br>
-Developers and engineering teams use this skill to create, assign, track, and validate task checklists for multi-agent or multi-step workflows such as deployments, reviews, migrations, incident response, and onboarding. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Checklist entries may contain sensitive incident, deployment, migration, access, or notification details. <br>
-Mitigation: Do not put secrets or sensitive incident details in checklist text, and review checklist contents before sharing or committing local state files. <br>
-Risk: Dependency, deadlock, loop, and validation behavior has reliability caveats. <br>
-Mitigation: Treat these checks as advisory, run validation or dry-run steps where available, and require human review before coordinating high-impact work. <br>
-Risk: Checklist-driven workflows can influence production deployments, migrations, account access, or external communications. <br>
-Mitigation: Require explicit human approval before acting on checklist items that affect production systems, user access, or external stakeholders. <br>
+## Use Case:
 
+Developers and AI agent operators use Checklist to create and track coordinated workflows, assign work across agents, and manage sequential, parallel, or looping checklist execution.
 
-## Reference(s): <br>
-- [ClawHub Checklist Skill](https://clawhub.ai/welliu/checklist) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON-backed checklist state.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses local checklist files under the user's home directory and bundled JSON templates; requires Bash and jq.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.1 (source: server evidence and SKILL.md frontmatter) <br>
+Risk: The release evidence reports that the skill overstates loop limits, deadlock prevention, and validation behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the skill before installing for autonomous multi-agent coordination and verify safety behavior manually before relying on it.
+
+Risk: The release evidence reports local file-handling flaws and cautions that untrusted template names can affect local checklist files.
+
+Mitigation: Use trusted templates and template names, and review local checklist files created by the skill.
+
+## Reference(s):
+
+- [Checklist ClawHub skill page](https://clawhub.ai/welliu/skills/checklist)
+
+## Skill Output:
+
+**Output Type(s):** [text, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline shell commands and local JSON checklist state]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Commands can write local checklist state when the shell script is installed and run.]
+
+## Skill Version(s):
+
+1.2.1 (source: frontmatter and server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

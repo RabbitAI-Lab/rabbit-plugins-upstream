@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/k8s-backup",
   "slug": "k8s-backup",
   "ownerHandle": null,
-  "version": "1.0.0",
-  "updatedAt": 1779076430770,
-  "contentHash": "2988cf11def05189cd088ba6fd498f00b78798598bdacfe7a3d871adfebd37bc",
-  "fetchedAt": "2026-07-26T18:56:48.275Z"
+  "version": "2.0.0",
+  "updatedAt": 1792679234863,
+  "contentHash": "447c905d2370a1ca6bca5be118f9c7ce53691bc6c743f55acb531ccde5a013d1",
+  "fetchedAt": "2026-10-29T14:55:10.948Z"
 }

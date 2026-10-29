@@ -1,42 +1,54 @@
-## Description: <br>
-Definite Optimism helps agents evaluate whether a strategy, company, or career path is a concrete bet on a better future or a hedge built around optionality. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users assess whether a strategy, company, or career plan commits to a concrete future or preserves options, using the definite and indefinite optimism framework.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers and strategy-focused agents use this skill when a user asks whether a plan, company, roadmap, or career decision shows a falsifiable long-term thesis or merely preserves options. It guides the agent through behavioral evidence, quadrant placement, rhetoric-behavior comparison, and conversion into dated milestones and explicit tradeoffs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strategic coaching may overstate commitment when the user has not provided enough dated behavioral evidence. <br>
-Mitigation: Require concrete observables before diagnosing a quadrant, and treat the output as decision support that the user reviews against their own context. <br>
-Risk: The framework can make optionality look like drift even when reversible exploration is appropriate. <br>
-Mitigation: Allow temporary optionality when uncertainty is high and require an expiry date or trigger before forcing commitment. <br>
+## Use Case:
 
+Leaders, founders, teams, and individuals use this skill to evaluate whether a company strategy, plan, or career decision is a concrete bet or an indefinite hedge. It guides a behavioral audit and, when appropriate, helps turn the findings into a falsifiable thesis and dated milestones.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/definite-optimism) <br>
-- [deciqAI Definite Optimism page](https://www.deciqai.com/c/definite-optimism) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/definite-optimism.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with a structured audit template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask clarifying questions or pause in coaching mode before producing the full audit.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server-resolved release metadata) <br>
+Risk: Sharing sensitive business or personal details during an audit could expose more information than needed.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only details needed for the audit and anonymize examples.
+
+Risk: Strategy or career recommendations may be misleading when based on incomplete behavioral evidence.
+
+Mitigation: Use the skill's evidence gates and treat proposed staffing or spending cuts as recommendations for the user's decision.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/definite-optimism)
+- [DeciqAI Definite Optimism guide](https://www.deciqai.com/c/definite-optimism)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Conversational guidance and structured strategy audit summaries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide the user one step at a time and wait for input between coaching steps.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved ClawHub release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

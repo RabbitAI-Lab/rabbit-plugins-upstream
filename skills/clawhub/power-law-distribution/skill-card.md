@@ -1,46 +1,58 @@
-## Description: <br>
-Guides agents in analyzing capital, resource-allocation, customer, deal, employee-performance, risk-model, and venture-return decisions where power-law distributions may make averages or Gaussian assumptions misleading. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users identify power-law distributions and account for concentrated outcomes and tail risk in allocation decisions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, analysts, operators, and decision-makers use this skill to test whether portfolio, revenue, performance, or risk outcomes are power-law distributed and to redesign allocation, risk sizing, and monitoring around upper-tail concentration. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Financial and business examples may be outdated, incomplete, or unsuitable as sole decision inputs. <br>
-Mitigation: Verify current market claims independently and treat outputs as decision-support material rather than a substitute for domain-specific risk review. <br>
-Risk: Users may force power-law framing onto data that is actually Gaussian or otherwise not tail-dominated. <br>
-Mitigation: Apply the skill's empirical stop rule: check top-N share, mean-to-median ratio, tail shape, and log-log fit before redesigning allocation or risk models. <br>
+## Use Case:
 
+Investors, operators, and analysts use this skill to assess whether outcomes are concentrated in a long tail and to shape resource allocation, risk assumptions, and monitoring around that evidence.
 
-## Reference(s): <br>
-- [Sources - power-law-distribution](references/sources.md) <br>
-- [Pareto 1896, Mandelbrot 1963, and VC Return Data](examples/pareto-1896-mandelbrot-1963-and-vc-return-data.md) <br>
-- [AI and Venture Returns Concentration (2023-2026)](examples/ai-venture-returns-concentration-2023-2026.md) <br>
-- [deciqAI Power-Law Distribution Skill Page](https://www.deciqai.com/c/power-law-distribution) <br>
-- [Power-Law Distribution Machine-Readable Metadata](https://www.deciqai.com/s/power-law-distribution.json) <br>
-- [NVIDIA Investor Relations](https://investor.nvidia.com/) <br>
-- [U.S. Bureau of Industry and Security](https://www.bis.gov/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown analysis with structured decision checkpoints] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause for user input during novice coaching before completing the analysis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server-resolved release metadata) <br>
+Risk: Simplified statistical assumptions may be carried into consequential decisions without adequate validation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate the distribution and the guide's assumptions against relevant data before making consequential decisions.
+
+Risk: Examples or analysis may contain confidential information.
+
+Mitigation: Avoid recording confidential information in examples.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [Pareto, Mandelbrot, and venture return data example](examples/pareto-1896-mandelbrot-1963-and-vc-return-data.md)
+- [AI and venture returns concentration example](examples/ai-venture-returns-concentration-2023-2026.md)
+- [Skill overview](https://www.deciqai.com/c/power-law-distribution)
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/power-law-distribution)
+- [Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown analysis with distribution indicators, tail-risk implications, allocation recommendations, and monitoring triggers]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses user-provided data when available and identifies assumptions to verify.]
+
+## Skill Version(s):
+
+1.0.5 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

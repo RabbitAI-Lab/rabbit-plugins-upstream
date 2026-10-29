@@ -1,0 +1,26 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import os from 'node:os';
+import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+import {transact,safePath} from '../scripts/store.mjs';
+import {handle} from '../scripts/core.mjs';
+const slug='mochi-shopping-compare';
+const root=fs.mkdtempSync(path.join(os.tmpdir(),slug+'-test-'));
+let seq=0;
+const fresh=()=>{const p=path.join(root,'w'+(++seq));fs.mkdirSync(p);return p;};
+const call=(w,i)=>transact(w,slug,i,handle);
+test.after(()=>fs.rmSync(root,{recursive:true,force:true}));
+const product=(name,curr='CNY',shipping='0')=>({name,url:'https://example.com/'+name+'?ref=keep',observedOn:'2026-10-23',currency:curr,price:'99.90',shipping,evidence:'user quote'});
+test('costs include shipping and discounts; referral URLs survive',()=>{const w=fresh();const r=call(w,{action:'compare',requestId:'c',asOf:'2026-10-23',items:[{...product('a'),quantity:2,shipping:'5',discount:'10'},product('b')]});assert.equal(r.comparison.items[0].totalMinor,19480);assert.equal(r.comparison.items[0].url,'https://example.com/a?ref=keep');assert.equal(r.comparison.rankings.CNY[0].id,r.comparison.items[1].id);});
+test('unknown shipping is excluded from totals and currencies rank separately',()=>{const w=fresh();const p=product('a');delete p.shipping;const r=call(w,{action:'compare',requestId:'c',asOf:'2026-10-23',items:[p,product('b','USD')]});assert.equal(r.comparison.items[0].totalMinor,undefined);assert.equal(r.comparison.rankings.CNY.length,0);assert.equal(r.comparison.rankings.USD.length,1);});
+test('bad dates, credential URLs and negative totals are rejected',()=>{const w=fresh(),base={action:'compare',requestId:'c',asOf:'2026-10-23'};assert.throws(()=>call(w,{...base,items:[{...product('a'),observedOn:'2026-10-24'},product('b')]}));assert.throws(()=>call(w,{...base,items:[{...product('a'),url:'https://user:secret@example.com'},product('b')]}));assert.throws(()=>call(w,{...base,items:[{...product('a'),discount:'1000'},product('b')]}));});
+
+test('workspace confinement rejects traversal',()=>{const w=fresh();assert.throws(()=>safePath(w,'../outside'));});
+test('two workspace stores do not share data',()=>{const a=fresh(),b=fresh();const h=(i,s)=>{s.records.push(i.value);return {changed:true,result:{records:s.records}};};transact(a,slug,{requestId:'a',value:'first'},h);const out=transact(b,slug,{action:'list'},(i,s)=>({result:{records:s.records}}));assert.equal(out.records.length,0);});
+test('retry returns the saved result and rejects changed input',()=>{const w=fresh();let count=0;const h=()=>{count++;return {changed:true,result:{value:count}};};transact(w,slug,{requestId:'same',v:1},h);assert.equal(transact(w,slug,{requestId:'same',v:1},h).replayed,true);assert.equal(count,1);assert.throws(()=>transact(w,slug,{requestId:'same',v:2},h));});
+test('busy state does not overwrite another operation',()=>{const w=fresh();const d=path.join(w,'.mochilab',slug);fs.mkdirSync(d,{recursive:true});fs.writeFileSync(path.join(d,'write.lock'),'active');assert.throws(()=>call(w,{action:'list'}),/busy/);assert.equal(fs.readFileSync(path.join(d,'write.lock'),'utf8'),'active');});
+test('a failed operation preserves the previous state',()=>{const w=fresh();transact(w,slug,{requestId:'good'},(i,s)=>{s.records.push('saved');return {changed:true,result:{done:true}};});const file=path.join(w,'.mochilab',slug,'state.json'),before=fs.readFileSync(file,'utf8');assert.throws(()=>transact(w,slug,{requestId:'bad'},(i,s)=>{s.records.push('unsaved');throw new Error('failed');}));assert.equal(fs.readFileSync(file,'utf8'),before);});
+test('linked paths are rejected when supported by the host',t=>{const w=fresh(),outside=fresh();try{fs.symlinkSync(outside,path.join(w,'linked'),process.platform==='win32'?'junction':'dir');}catch{t.skip('Host does not allow symlink creation');return;}assert.throws(()=>safePath(w,'linked/secret.txt'));});

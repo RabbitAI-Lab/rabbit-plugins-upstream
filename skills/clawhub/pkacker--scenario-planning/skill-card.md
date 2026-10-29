@@ -1,40 +1,52 @@
-## Description: <br>
-Performs project management what-if analysis to simulate risks, delays, and resource changes for planning schedules, assessing uncertainty, and evaluating project impacts in tools such as Excel, MS Project, or Primavera. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Perform project management what-if scenario analysis to simulate risks, delays, and resource changes for schedules, uncertainty, and project impacts in tools like Excel, MS Project, or Primavera.
 
-## Publisher: <br>
-[pkacker](https://clawhub.ai/user/pkacker) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[pkacker](https://clawhub.ai/user/pkacker)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+External users, developers, and project planning teams use this skill to compare baseline project plans with concise what-if scenarios involving schedule, cost, resource, and critical-path changes. It is best suited for planning and scheduling decisions where the user can provide or validate a project baseline.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Scenario recommendations could lead to incorrect schedule, cost, or resource changes if applied directly to live project files.
+
+Mitigation: Review suggested changes against the baseline plan before applying them, especially when they affect schedules, costs, or resource allocations.
+
+Risk: Missing or incomplete baseline project data can make scenario comparisons misleading.
+
+Mitigation: Require a complete baseline plan and ask for missing schedule, dependency, resource, or cost information before simulating impact.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Project managers, planners, and scheduling teams use this skill to compare baseline project plans against deterministic what-if scenarios involving schedule, cost, resource, and dependency changes. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [text, markdown, guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: Applying scenario recommendations directly to a live project plan could introduce unwanted schedule, resource, dependency, or cost changes. <br>
-Mitigation: Work from a copied baseline and review all proposed changes before applying them to the live plan. <br>
-Risk: Scenario results can be misleading when the baseline lacks tasks, durations, dependencies, resource assignments, or cost estimates. <br>
-Mitigation: Confirm the baseline is complete before simulation and ask for missing planning inputs when needed. <br>
+**Output Format:** [Markdown scenario summary with impact analysis and recommendation]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/pkacker/scenario-planning) <br>
+**Other Properties Related to Output:** [Requires a baseline project plan and limits each scenario to high-impact variables.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown scenario summary, impact analysis, and recommendation] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires a complete baseline plan and asks for missing inputs before analysis.] <br>
+1.0.2 (source: server release evidence)
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

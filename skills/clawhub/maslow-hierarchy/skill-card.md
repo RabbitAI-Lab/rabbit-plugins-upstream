@@ -1,46 +1,55 @@
-## Description: <br>
-Helps an agent diagnose motivation and positioning failures by mapping unmet needs, incentive level, mismatch direction, and a concrete intervention using Maslow's hierarchy as a heuristic. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses Maslow's hierarchy as a coaching heuristic to diagnose unmet needs behind ineffective motivation strategies and suggest matched interventions.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, managers, product teams, and advisors use this skill to diagnose why an incentive, mission, or product message is not motivating the intended audience. It guides the agent to identify the operative need level, test for mismatches, and propose a matched intervention with direct verification. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the framework as formal psychological, HR, or motivational science guidance. <br>
-Mitigation: Present it as an advisory heuristic, consult stronger evidence-based frameworks such as Self-Determination Theory for high-stakes decisions, and verify conclusions through direct conversation. <br>
-Risk: Motivation analysis may involve sensitive employee or personal details. <br>
-Mitigation: Avoid placing sensitive personal details in persistent notes or outputs unless storage is intentional and appropriate for the user's context. <br>
-Risk: A strict or culturally unexamined hierarchy can produce misleading recommendations. <br>
-Mitigation: Acknowledge that the strict hierarchy is empirically limited, check cross-cultural fit, and revise the recommendation when direct evidence contradicts the model. <br>
+## Use Case:
 
+Managers, product teams, and coaches use this skill to diagnose why incentives or strategies are failing, map the needs they address, and choose a matched intervention. It recommends verifying assumptions through direct conversation and consulting Self-Determination Theory for high-stakes or formal motivational analysis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/maslow-hierarchy) <br>
-- [Primary Sources](references/sources.md) <br>
-- [Maslow 1943 and the Subsequent Refinements](examples/maslow-1943-and-the-subsequent-refinements.md) <br>
-- [Motivating a Team Through the AI-Anxiety Era (2024-2026)](examples/motivating-teams-through-ai-anxiety-2024-2026.md) <br>
-- [deciqAI Skill Metadata](https://www.deciqai.com/s/maslow-hierarchy.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown diagnosis template with concise advisory guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a Needs-Hierarchy Diagnosis covering situation, need-state, incentive target level, mismatch direction, intervention owner, and verification date.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: A needs assessment based on the hierarchy can misread an individual's motivation or oversimplify formal or cross-cultural situations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the framework as a coaching heuristic, verify assumptions with the people involved, and consult Self-Determination Theory when formal motivational science is required.
+
+Risk: Reusable coaching examples could expose identifying employee details.
+
+Mitigation: Avoid recording identifying employee details in reusable examples.
+
+## Reference(s):
+
+- [Primary and related sources](artifact/references/sources.md)
+- [Maslow Hierarchy skill guide](https://www.deciqai.com/c/maslow-hierarchy)
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/maslow-hierarchy)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured needs-hierarchy diagnosis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes need states, incentive level, mismatch diagnosis, intervention, and a verification step.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

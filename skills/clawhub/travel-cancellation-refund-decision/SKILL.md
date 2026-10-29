@@ -6,6 +6,7 @@ description: "Activate when: a client needs to cancel/change; deciding refund vs
 # Travel Advisor — Cancellation & Refund Decision
 
 > **Industry front door for decision-tree.** Adds domain triggers, example, packs only. Parent Process unchanged.
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
 
 **Activate when:** a client needs to cancel/change; deciding refund vs credit vs insurance claim; comparing supplier penalties; "what's my best move to recover the most?"
 **Do NOT activate when:** fully refundable booking, no decision needed.
@@ -47,6 +48,6 @@ Part of **deciqAI Knowledge Skills**. Core method: decision-tree.
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-cancellation-refund-decision** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/travel-cancellation-refund-decision** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/travel-cancellation-refund-decision.json*

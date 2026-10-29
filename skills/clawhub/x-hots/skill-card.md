@@ -1,44 +1,53 @@
-## Description: <br>
-Fetch trending topics from X (Twitter). Analyze user interests from natural language, retrieve top hot topics per domain, and summarize background, key opinions, and controversies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Fetch trending topics from X (Twitter), match them to user interests, and summarize their background, opinions, and controversies.
 
-## Publisher: <br>
-[jiangsier-xyz](https://clawhub.ai/user/jiangsier-xyz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[jiangsier-xyz](https://clawhub.ai/user/jiangsier-xyz)
 
-## Use Case: <br>
-External users and agents use this skill to identify current X/Twitter topics for a stated interest area and summarize the topic background, common opinions, and controversies. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill requires an X API bearer token, and mishandling that token could expose account access. <br>
-Mitigation: Store the token in a secure environment or secret manager, avoid committing it to files, and rotate it if exposure is suspected. <br>
-Risk: Chosen search keywords are sent to X and may reveal sensitive interests or investigative intent. <br>
-Mitigation: Avoid private or sensitive queries and use only search terms suitable for processing by the X API. <br>
-Risk: Recent public posts can be incomplete, misleading, or volatile as evidence for public opinion. <br>
-Mitigation: Treat generated summaries as situational context and verify important claims against primary sources before acting on them. <br>
+## Use Case:
 
+People tracking news and social conversations use this skill to identify X trends in their areas of interest and review the background, differing opinions, and controversies behind them.
 
-## Reference(s): <br>
-- [OpenClaw](https://github.com/openclaw/openclaw) <br>
-- [Tweepy documentation](https://docs.tweepy.org/) <br>
-- [X Developer Portal](https://developer.twitter.com/en/portal/dashboard) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries with supporting JSON from the X API query script] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires an X API bearer token and user-selected search keywords; defaults to English, non-retweet recent posts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.4.1 (source: frontmatter, changelog, ClawHub release evidence) <br>
+Risk: Reading X trends requires access to an already logged-in browser session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Enable the skill only if access to that X session is acceptable; restore login before fetching rather than reporting logged-out results.
+
+Risk: Optional API fallback may miss popular posts and only searches English-language results.
+
+Mitigation: Provide an API token only when fallback is wanted, label fallback results as partial, and do not present them as a complete view of hot topics.
+
+## Reference(s):
+
+- [X (Twitter) Hot Topics on ClawHub](https://clawhub.ai/jiangsier-xyz/skills/x-hots)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Text analysis]
+
+**Output Format:** [Markdown topic summaries organized by interest area]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Topics are ranked by engagement; API fallback results are identified as partial.]
+
+## Skill Version(s):
+
+2.0.1 (source: skill frontmatter and release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

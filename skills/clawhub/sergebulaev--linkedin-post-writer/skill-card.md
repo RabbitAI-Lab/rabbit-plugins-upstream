@@ -1,41 +1,55 @@
-## Description: <br>
-Drafts LinkedIn posts from scratch using 16 hook formulas selected by engagement goal, applies a humanizer pass, and prepares scheduling via Publora only after user approval. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drafts new LinkedIn posts from scratch using one of 16 hook formulas selected by engagement goal, runs a humanizer pass, and prepares approved posts for scheduling via Publora.
 
-## Publisher: <br>
-[sergebulaev](https://clawhub.ai/user/sergebulaev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[sergebulaev](https://clawhub.ai/user/sergebulaev)
 
-## Use Case: <br>
-External creators, founders, operators, and marketers use this skill to turn a topic or rough angle into a structured LinkedIn post with a hook formula, humanized draft, posting guidance, and optional scheduling after approval. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated LinkedIn posts may contain inaccurate, off-brand, or unsuitable claims if the user provides incomplete context. <br>
-Mitigation: Review and edit the draft before approving publication or scheduling. <br>
-Risk: The invocation wording may match some general post-writing requests that are not intended for LinkedIn. <br>
-Mitigation: Confirm LinkedIn is the target channel before using the skill for broad post-writing requests. <br>
+## Use Case:
 
+External creators, founders, marketers, and operators use this skill to turn a topic or angle into a polished LinkedIn post, choose a hook by desired engagement outcome, audit the voice, and schedule the approved draft.
 
-## Reference(s): <br>
-- [Humanizer Pre-Publish Checklist](references/humanizer-checklist.md) <br>
-- [ClawHub skill page](https://clawhub.ai/sergebulaev/skills/linkedin-post-writer) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with a LinkedIn post draft, formula choice, character count, suggested posting window, and approval request] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May schedule or publish only after user approval; generated posts should be reviewed before use.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.9 (source: ClawHub release evidence) <br>
+Risk: Approved output can be posted or scheduled publicly on LinkedIn through the configured publishing workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the exact LinkedIn account, final post text, media, and scheduled time before approving publication.
+
+Risk: A draft may be unsuitable for the user's brand, audience, or factual context even when it follows the selected hook formula.
+
+Mitigation: Review the formula choice, final draft, and humanizer or audit output before posting.
+
+## Reference(s):
+
+- [Humanizer Pre-Publish Checklist](artifact/references/humanizer-checklist.md)
+- [Hook formulas](artifact/references/hook-formulas.md)
+- [Algorithm heuristics](artifact/references/algorithm-heuristics.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with a LinkedIn post draft, approval details, and scheduling guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a scheduling request after user approval; users should confirm account, text, media, and timing before publication.]
+
+## Skill Version(s):
+
+1.0.9 (source: ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

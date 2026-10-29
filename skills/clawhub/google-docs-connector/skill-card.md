@@ -1,44 +1,64 @@
-## Description: <br>
-Google Docs Connector helps agents create, edit, format, export, search, and share Google Docs through AgentPMT-hosted remote tool calls. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Enables agents to create, edit, format, export, and share Google Docs through AgentPMT.
 
-## Publisher: <br>
-[agentpmt](https://clawhub.ai/user/agentpmt) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[agentpmt](https://clawhub.ai/user/agentpmt)
 
-## Use Case: <br>
-Agents and developers use this skill to automate Google Docs workflows such as report generation, template creation, collaborative editing, batch document updates, exports, and permission management. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The connector can export document content, including potentially sensitive Google Docs data. <br>
-Mitigation: Confirm the exact document and export format before exporting, keep inputs scoped to the task, and avoid placing secrets or sensitive account details in prompts or logs. <br>
-Risk: The connector can change sharing permissions, including domain-wide or public access. <br>
-Mitigation: Use get_permissions before changing access, verify recipients, roles, domains, and public-access intent, and prefer the least permissive sharing role that satisfies the task. <br>
+## Use Case:
 
+Agents and their users automate Google Docs workflows, including drafting reports, formatting documents, managing collaboration, and exporting files.
 
-## Reference(s): <br>
-- [ClawHub Google Docs Connector listing](https://clawhub.ai/agentpmt/skills/google-docs-connector) <br>
-- [AgentPMT Google Docs Connector marketplace page](https://www.agentpmt.com/marketplace/google-docs-connector) <br>
-- [Google Docs Connector generated schema](artifact/schema.md) <br>
-- [AgentPMT account MCP/REST setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup) <br>
-- [What AgentPMT is](https://clawhub.ai/agentpmt/what-is-agentpmt) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, configuration, shell commands, text, markdown] <br>
-**Output Format:** [Markdown instructions with JSON request examples and setup commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Remote tool calls may return Google Docs content, exported document data, permission details, warnings, or validation results.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and skill frontmatter) <br>
+Risk: Exporting a confidential document may disclose its contents.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval before exporting confidential documents.
+
+Risk: Broad sharing or writer permissions may expose or change a document.
+
+Mitigation: Get explicit approval before sharing, prefer specific user emails and reader or commenter access, and review permissions.
+
+Risk: Raw batch updates or replacements without a tab ID may alter unintended content.
+
+Mitigation: Confirm the target document and tab, preview intended changes, and require approval for broad edits.
+
+Risk: Credentials entered in prompts or logs may be exposed.
+
+Mitigation: Keep AgentPMT and Google credentials out of prompts and logs.
+
+## Reference(s):
+
+- [Google Docs Connector schema](schema.md)
+- [ClawHub skill release](https://clawhub.ai/agentpmt/skills/google-docs-connector)
+- [AgentPMT Google Docs Connector marketplace listing](https://www.agentpmt.com/marketplace/google-docs-connector)
+- [AgentPMT account setup](https://clawhub.ai/agentpmt/agentpmt-account-mcp-rest-api-setup)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, JSON, Files]
+
+**Output Format:** [Document content and JSON tool responses; exports support PDF, DOCX, HTML, and other formats.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Binary exports may be returned as base64.]
+
+## Skill Version(s):
+
+1.0.2 (source: frontmatter and server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
