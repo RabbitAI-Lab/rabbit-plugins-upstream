@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/pva-debug",
+  "identifier": "NVIDIA/skills/skills/pva-debug",
+  "repo": "NVIDIA/skills",
+  "path": "skills/pva-debug",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:19:31Z",
+  "contentHash": "711d0aeeb699aa3372ca7dd355eecb569c29d1ed67294af01a70f5cb6c355036",
+  "fetchedAt": "2026-10-29T14:27:02.082Z"
+}

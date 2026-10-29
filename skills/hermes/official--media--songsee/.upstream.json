@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/media/songsee",
+  "identifier": "official/media/songsee",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/media/songsee",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "84b2eec93a6e5b978e39275a4a0f9df108d6004b03f1284377ce699fda3efc09",
+  "fetchedAt": "2026-10-29T14:27:18.282Z"
+}

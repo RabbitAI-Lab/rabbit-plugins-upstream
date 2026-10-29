@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-pipeline-language-developer-tools",
+  "identifier": "NVIDIA/skills/skills/doca-pipeline-language-developer-tools",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-pipeline-language-developer-tools",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:19:31Z",
+  "contentHash": "bc2796dc2670efa8deeae708ab2e28d19576557d46f07ba612810e68ef13be96",
+  "fetchedAt": "2026-10-29T14:27:01.636Z"
+}

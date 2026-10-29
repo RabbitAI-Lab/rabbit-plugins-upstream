@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/live-dashboard",
+  "identifier": "official/productivity/live-dashboard",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/live-dashboard",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "99dc10f3aac11b2aa45ee8d814f37ecb0474acaa8bae02969c46c69a22dd8a74",
+  "fetchedAt": "2026-10-29T14:27:18.236Z"
+}

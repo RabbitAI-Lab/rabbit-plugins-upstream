@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/long-context",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/long-context",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/long-context",
+  "branch": "main",
+  "pushedAt": "2026-10-29T06:17:43Z",
+  "contentHash": "4f9f49c065166960929a86b591822803bd72d80bc78cf9b058d8533d3b98a342",
+  "fetchedAt": "2026-10-29T14:27:00.717Z"
+}

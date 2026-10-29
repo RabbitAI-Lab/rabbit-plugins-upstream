@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/iso-standards-readiness",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/iso-standards-readiness",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/iso-standards-readiness",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "7df882ed285e45aae5a5738b909a8d20d4813dfb8d7cc83a513fe960d54c1a04",
+  "fetchedAt": "2026-10-29T14:27:16.063Z"
+}

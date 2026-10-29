@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/pva-setup",
+  "identifier": "NVIDIA/skills/skills/pva-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/pva-setup",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:19:31Z",
+  "contentHash": "700172225a9ee1ac1cf7fc97a27b3bd5d8d0466100a9e5a17896cf6ce1b59725",
+  "fetchedAt": "2026-10-29T14:27:02.085Z"
+}

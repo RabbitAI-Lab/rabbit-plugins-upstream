@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/hugging-face-datasets",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/hugging-face-datasets",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/hugging-face-datasets",
+  "branch": "main",
+  "pushedAt": "2026-10-29T06:17:43Z",
+  "contentHash": "95829723bc9c374d03870643addd5bbcd4225c54f764f118f2da5257cac3f3ac",
+  "fetchedAt": "2026-10-29T14:27:00.696Z"
+}

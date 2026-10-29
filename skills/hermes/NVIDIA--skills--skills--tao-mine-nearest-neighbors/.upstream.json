@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-mine-nearest-neighbors",
+  "identifier": "NVIDIA/skills/skills/tao-mine-nearest-neighbors",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-mine-nearest-neighbors",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:19:31Z",
+  "contentHash": "bcd91fc44be4b072755bbc1ec43062f3b32a09bbb68decfbb3909ef2752c6adc",
+  "fetchedAt": "2026-10-29T14:27:02.129Z"
+}

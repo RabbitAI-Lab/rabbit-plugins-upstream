@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-configure-nic-pe-mapping",
+  "identifier": "NVIDIA/skills/skills/nvshmem-configure-nic-pe-mapping",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-configure-nic-pe-mapping",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:19:31Z",
+  "contentHash": "bcbd8ae34fd3aab6c0c470e31163149e6c46800d07becff87efa6a52ee1e97dc",
+  "fetchedAt": "2026-10-29T14:27:02.016Z"
+}

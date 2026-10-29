@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/flowkit",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/flowkit",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/flowkit",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "cf1e583c8ec054ecb626cd6e1d0874fac42321f036b5fcaa48e6cb3463bf686e",
+  "fetchedAt": "2026-10-29T14:27:16.044Z"
+}

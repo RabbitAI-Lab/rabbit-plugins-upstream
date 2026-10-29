@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-video-clip",
+  "identifier": "NVIDIA/skills/skills/tao-finetune-video-clip",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-finetune-video-clip",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:19:31Z",
+  "contentHash": "b3c3b0625eb235b9d6d63b5a4eb86c7f0aff2634cb1276e5beedb12e517b29d1",
+  "fetchedAt": "2026-10-29T14:27:02.119Z"
+}

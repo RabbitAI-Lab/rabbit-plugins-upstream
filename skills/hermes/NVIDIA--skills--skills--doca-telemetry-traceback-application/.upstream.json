@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/doca-telemetry-traceback-application",
+  "identifier": "NVIDIA/skills/skills/doca-telemetry-traceback-application",
+  "repo": "NVIDIA/skills",
+  "path": "skills/doca-telemetry-traceback-application",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:19:31Z",
+  "contentHash": "871f4ed761d2c300332daeb4b25071c73ff98c7687c04e3981842e06d178d7d4",
+  "fetchedAt": "2026-10-29T14:27:01.649Z"
+}

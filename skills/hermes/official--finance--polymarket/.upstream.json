@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/finance/polymarket",
+  "identifier": "official/finance/polymarket",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/finance/polymarket",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "d22ad84f282244da36f3168ed096812b8d74d350d2bff13d23a91dbc94b6d71b",
+  "fetchedAt": "2026-10-29T14:27:18.261Z"
+}

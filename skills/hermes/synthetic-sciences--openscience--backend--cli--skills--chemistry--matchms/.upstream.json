@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/matchms",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/matchms",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/matchms",
+  "branch": "main",
+  "pushedAt": "2026-10-29T06:17:43Z",
+  "contentHash": "82b12c3c22be6d37f1ca659c31d6a77e3faee5c2f8d9289cf052e3f20a3b27e8",
+  "fetchedAt": "2026-10-29T14:27:00.723Z"
+}

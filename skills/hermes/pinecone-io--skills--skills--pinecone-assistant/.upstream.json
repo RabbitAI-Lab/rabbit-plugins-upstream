@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/pinecone-io/skills/tree/main/skills/pinecone-assistant",
+  "identifier": "pinecone-io/skills/skills/pinecone-assistant",
+  "repo": "pinecone-io/skills",
+  "path": "skills/pinecone-assistant",
+  "branch": "main",
+  "pushedAt": "2026-10-28T20:02:35Z",
+  "contentHash": "4a4ff2cb33c5c190f16e2dcccf7117d6f1cd3541f88c5df23721c3151b651613",
+  "fetchedAt": "2026-10-29T14:26:58.018Z"
+}
