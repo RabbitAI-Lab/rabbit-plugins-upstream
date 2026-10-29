@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/social-media/reddit-reading",
+  "identifier": "official/social-media/reddit-reading",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/social-media/reddit-reading",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "f9e9b7e8c5d9ffbd071698b10a38a327a2417f0fbc7ed76895b66466f7259fe3",
+  "fetchedAt": "2026-10-29T14:27:18.267Z"
+}

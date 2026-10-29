@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/box",
+  "identifier": "official/productivity/box",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/box",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "d82ccf0a12946d6a931641206809c5aa95798c46a0ea539a9d4f4eba259e4233",
+  "fetchedAt": "2026-10-29T14:27:18.004Z"
+}

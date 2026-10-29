@@ -26,7 +26,7 @@ The bench's *configuration* is the invocation: there is no
 separate config file, no daemon, no env knob the public guide
 documents as required (DOCA-wide env vars like `DOCA_LOG_LEVEL`
 still apply, but they are owned by
-[`doca-programming-guide CAPABILITIES.md ## Observability`](../../doca-programming-guide/CAPABILITIES.md#observability),
+`doca-programming-guide CAPABILITIES.md ## Observability` (`doca-programming-guide/CAPABILITIES.md#observability`),
 not by bench). What the agent has to *configure* is the three-axis
 decision documented in
 [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes).
@@ -36,9 +36,9 @@ Steps the agent should walk the user through, in order:
 1. **Confirm DOCA ≥ 2.7.0 is installed and the binary is
    present at `/opt/mellanox/doca/tools/doca_bench`.** If
    not, route to
-   [`doca-version TASKS.md ## configure`](../../doca-version/TASKS.md#configure)
+   `doca-version TASKS.md ## configure` (`doca-version/TASKS.md#configure`)
    for the detection chain and
-   [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
+   `doca-setup ## install` (`doca-setup/TASKS.md#configure`)
    for the upgrade path. Do not propose alternative tools; on
    `< 2.7.0` installs the bench is genuinely not there.
 2. **Probe the install's granular build first.** Use the
@@ -48,7 +48,7 @@ Steps the agent should walk the user through, in order:
    this install before committing to a target. An empty
    enumeration for the user's target library means the
    granular build did not include it — route to
-   [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
+   `doca-setup ## install` (`doca-setup/TASKS.md#configure`)
    for the install profile, not to a bench invocation.
 3. **Axis 1 — pick the target library.** Per the cross-library
    table in
@@ -57,7 +57,11 @@ Steps the agent should walk the user through, in order:
    test (e.g. COMPRESS, RDMA, AES-GCM, SHA, DMA, EC, Eth,
    Comch, GPUNetIO). An answer that picks one without naming
    the alternatives has silently narrowed the bench to a
-   single-library tool; surface that to the user.
+   single-library tool; surface that to the user. For
+   GPUNetIO, confirm the GPU prerequisites first (DOCA Bench
+   Extension package, GDRCopy with `GDRCOPY_PATH_L`, root,
+   throughput only) per
+   [`CAPABILITIES.md ## Capabilities and modes`](CAPABILITIES.md#capabilities-and-modes).
 4. **Axis 2 — pick the workload shape.** Direction (e.g.
    send vs receive, encrypt vs decrypt, compress vs
    decompress), data provider (file / file-set / random-data
@@ -70,10 +74,11 @@ Steps the agent should walk the user through, in order:
    not every workload shape is documented for every BlueField
    generation.
 5. **Axis 3 — pick the measurement mode.** Throughput vs
-   bulk-latency vs precision-latency per the public guide's
-   three documented modes. Quote back to the user *why* you
+   bulk-latency vs precision-latency — the three modes the
+   public guide documents; confirm the list with `--help`. Quote back to the user *why* you
    picked the mode — *"throughput because the user asked
-   about bandwidth"*, *"precision-latency because the user
+   about aggregate op-rate"*,
+   *"precision-latency because the user
    asked about per-job tail latency"* — so the user can
    challenge the framing if it does not match intent. The
    modes are not interchangeable; see
@@ -86,11 +91,18 @@ Steps the agent should walk the user through, in order:
    public guide's *"not for production"* warning per
    [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy)
    and confirm a non-production segment is available.
+7. **Predeclare workload tolerance.** Before the first
+   measurement, record the metric being judged and the
+   acceptable run-to-run absolute or percentage delta for this
+   workload. The operator or workload owner supplies this
+   tolerance; the agent must not invent `X%` after seeing the
+   results. No declared tolerance means the run can be captured
+   as exploratory evidence but cannot be called stable.
 
 For the canonical DOCA universal lifecycle that underlies
 program-side configuration (which `doca_bench` itself runs
 internally per library), see
-[`doca-programming-guide TASKS.md ## configure`](../../doca-programming-guide/TASKS.md#configure).
+`doca-programming-guide TASKS.md ## configure` (`doca-programming-guide/TASKS.md#configure`).
 This skill is concerned with the *operator*-side configuration
 of the bench invocation, not the program-side lifecycle of the
 library under test.
@@ -107,18 +119,18 @@ Routing for nearby "build" questions:
 
 - *"The binary isn't there — do I need to build it?"* → no.
   Route to
-  [`doca-setup ## install`](../../doca-setup/TASKS.md#configure).
+  `doca-setup ## install` (`doca-setup/TASKS.md#configure`).
   The fix is to install (or re-install) DOCA at ≥ 2.7.0, or
   use the public NGC DOCA container per
-  [`doca-setup ## no-install`](../../doca-setup/TASKS.md#no-install)
+  `doca-setup ## no-install` (`doca-setup/TASKS.md#no-install`)
   at an equivalent version.
 - *"I want to build my own benchmark program against DOCA
   library X."* → not a `doca_bench` question. Route to
-  [`doca-programming-guide ## build`](../../doca-programming-guide/TASKS.md#build)
+  `doca-programming-guide ## build` (`doca-programming-guide/TASKS.md#build`)
   for the cross-library build pattern and the matching
   `libs/<library>` skill (e.g.
-  [`doca-comch ## build`](../../libs/doca-comch/TASKS.md#build),
-  [`doca-compress`](../../libs/doca-compress/SKILL.md)) for
+  `doca-comch ## build` (`doca-comch/TASKS.md#build`),
+  `doca-compress/SKILL.md`) for
   the library-specific build overlay. The bench is the
   shipped harness; the user's bespoke harness is a
   different artifact.
@@ -163,11 +175,12 @@ Routing for nearby "modify" questions:
 - *"I need a *different measurement* than `doca_bench`
   reports."* → re-examine axis 3 (measurement mode) in
   [`## configure`](#configure) first; the three documented
-  modes cover throughput, latency-distribution, and
-  per-job-latency. If the question is genuinely outside
+  modes cover aggregate throughput, bulk-latency
+  distribution, and per-job precision latency (confirm the
+  full list with `--help`). If the question is genuinely outside
   bench's surface (e.g. application-level end-to-end timing),
   route to
-  [`doca-programming-guide`](../../doca-programming-guide/SKILL.md)
+  `doca-programming-guide/SKILL.md`
   and the matching `libs/<library>` skill — the user's own
   program is the right place to measure end-to-end.
 
@@ -180,17 +193,16 @@ flow, not the verbatim command lines (per
 [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy)
 *"do not invent flags"*).
 
-> **Do-not-invent guard (specific flag names).** Real downstream
-> agents have hallucinated the following plausibly-named but
-> non-existent flags for `doca_bench`: `--pipeline`, `--mode`,
-> `--device`, `--csv-output`, `--target-library`. None of these
-> appear in the bundle or in `doca_bench --help` on the public
-> DOCA release. The flag inventory the bundle DOES name verbatim
-> is `--core-mask`, `--core-list`, `--core-count`,
+> **Do-not-invent guard (specific flag names).** The public
+> DOCA 3.5 DOCA Bench guide documents flags including `--mode`,
+> `--device`, `--pipeline-steps`, `--csv-output-file`, and
+> `--query` (`device-capabilities` | `sweep-properties`).
+> Near-miss spellings such as `--pipeline` or `--csv-output` are
+> not the documented names. Other documented flags
+> include `--core-mask` / `--core-list` / `--core-count`,
 > `--threads-per-core`, the `--run-limit-*` family, `--sweep`,
-> and the `--csv-*` family — and those are named as *classes*,
-> not as ready-to-paste literals; the agent MUST read
-> `doca_bench --help` on the installed bench and use only the
+> and the rest of the `--csv-*` family. Confirm every name and
+> value with `doca_bench --help` on the installed bench and use only the
 > names that appear there. Any example invocation written in
 > this skill MUST keep tokens like `<flag-from-help>` or
 > `<chosen-mode-from-help>` as placeholders for the
@@ -224,7 +236,8 @@ flow, not the verbatim command lines (per
    loop back to [`## debug`](#debug) before sinking time
    into a longer run.
 5. **Plan the bulk / swept run** only after the smoke is
-   green. The public guide documents the `--sweep` family for
+   green and the workload tolerance from `## configure`
+   step 7 is recorded. The public guide documents the `--sweep` family for
    parameter sweeps; the agent's rule for sweep planning is
    *enumerate the swept dimension explicitly, estimate the
    total run time, and confirm the operator is OK with the
@@ -262,10 +275,10 @@ one library × mode):
 | Iteration trigger | What it looks like | What changes next iteration |
 | --- | --- | --- |
 | Smoke completed; number is far below datasheet headline | Could be cold pipeline, wrong workload shape, wrong NUMA, or actually-right for this install. Do not assume datasheet first. | Confirm warm-up applied per [`CAPABILITIES.md ## Error taxonomy`](CAPABILITIES.md#error-taxonomy) layer 5; re-check axis 2 (workload shape) in [`## configure`](#configure) step 4; only then question hardware. |
-| Throughput-mode number swings > X% across short re-runs | Steady-state not reached; outlier-dominated run | Lengthen the run via the documented duration / job-count limit; re-run; if still volatile, switch to bulk-latency mode to surface the distribution. |
+| Throughput-mode result exceeds the workload's predeclared tolerance across re-runs | Steady-state not reached; outlier-dominated run | Lengthen the run via the documented duration / job-count limit and re-run. Do not substitute an after-the-fact tolerance. |
 | Precision-latency mean looks good; 99.99th percentile is huge | Tail-latency story is the actual answer; the mean is misleading | Quote the percentile breakdown, not the mean, per [`CAPABILITIES.md ## Observability`](CAPABILITIES.md#observability) the precision-latency mode's reported distribution. |
-| Same invocation produces different numbers on two hosts at the same DOCA version | NUMA / firmware / driver delta below DOCA | Walk axis 2 environment (cores / threads / NUMA) and the version layer per [`doca-version TASKS.md ## test`](../../doca-version/TASKS.md#test) before blaming bench. |
-| Same invocation produces different numbers on the same host across DOCA versions | This *is* a regression signal — provided both four-tuples are captured | Cross-link the two baselines, name the changed fields, route to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug) for the version-delta diagnosis. |
+| Same invocation produces different numbers on two hosts at the same DOCA version | NUMA / firmware / driver delta below DOCA | Walk axis 2 environment (cores / threads / NUMA) and the version layer per `doca-version TASKS.md ## test` (`doca-version/TASKS.md#test`) before blaming bench. |
+| Same invocation produces different numbers on the same host across DOCA versions | This *is* a regression signal — provided both four-tuples are captured | Cross-link the two baselines, name the changed fields, route to `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`) for the version-delta diagnosis. |
 | `--sweep` of a parameter shows a discontinuity | Could be a real performance cliff (capacity / cache / queue depth) or a measurement artefact at the swept value | Re-run the boundary points without the sweep to confirm; if real, that is the answer the user came for. |
 | Bench reports zero / hung after extended wait | Device-binding or library-precondition layer; not a measurement-soundness issue | Stop iterating on the workload shape; jump to [`## debug`](#debug) layers 2-3. |
 
@@ -284,12 +297,15 @@ alongside the summary and CSV. Without all four, the baseline
 cannot be regression-tested later; quoting a number without the
 four-tuple is the cross-version regression-hunt failure mode.
 
-Loop termination: stop iterating once two consecutive runs do
-not change the picture — the answer is now *"this is what the
-device delivers on this DOCA version / firmware / driver
-stack"*. Escalate cross-version or cross-host comparisons to
-[`doca-version TASKS.md ## test`](../../doca-version/TASKS.md#test)
-or [`doca-debug ## debug`](../../doca-debug/SKILL.md) with the
+Loop termination requires **two consecutive runs within the
+predeclared workload tolerance** for the selected metric. Record
+both values and the tolerance. If two consecutive stable runs
+cannot be obtained after the bounded re-run above, do not report
+a stable benchmark; escalate the captured four-tuples and
+variance to `doca-debug ## debug` (`doca-debug/SKILL.md`)
+or the workload owner. Escalate cross-version or cross-host comparisons to
+`doca-version TASKS.md ## test` (`doca-version/TASKS.md#test`)
+or `doca-debug ## debug` (`doca-debug/SKILL.md`) with the
 captured four-tuples as evidence.
 
 This skill does **not** ship a "test fixture" or pre-recorded
@@ -311,14 +327,14 @@ layers in order. The shape of the diagnosis:
    documented form. Confirm the flag is not mutually
    exclusive with another in the same invocation. Route to
    the public DOCA Bench guide via
-   [`doca-public-knowledge-map ## DOCA tools`](../../doca-public-knowledge-map/SKILL.md#doca-tools);
+   `doca-public-knowledge-map ## DOCA tools` (`doca-public-knowledge-map/SKILL.md#doca-tools`);
    do not infer from generic CLI knowledge.
 2. **Device-binding.** Invocation parses; bench cannot bind
    the target device. Confirm the device is visible to DOCA
    at all via
-   [`doca-caps ## run`](../doca-caps/TASKS.md#run); confirm
+   `doca-caps ## run` (`doca-caps/TASKS.md#run`); confirm
    the driver stack is loaded
-   ([`doca-setup ## debug`](../../doca-setup/TASKS.md#debug)
+   (`doca-setup ## debug` (`doca-setup/TASKS.md#debug`)
    layer Driver); confirm the chosen NUMA / core layout
    matches the device's actual NUMA node. Re-attempt the
    bench invocation only after the device is on the
@@ -331,8 +347,8 @@ layers in order. The shape of the diagnosis:
    [`CAPABILITIES.md ## Version compatibility`](CAPABILITIES.md#version-compatibility);
    walk the per-library skill for library-internal
    capability rules (e.g.
-   [`doca-comch CAPABILITIES.md ## Capabilities and modes`](../../libs/doca-comch/CAPABILITIES.md#capabilities-and-modes),
-   [`doca-compress`](../../libs/doca-compress/SKILL.md) for
+   `doca-comch CAPABILITIES.md ## Capabilities and modes` (`doca-comch/CAPABILITIES.md#capabilities-and-modes`),
+   `doca-compress/SKILL.md` for
    compress-specific capability boundaries).
 4. **Workload-precondition.** Library exercisable; the
    workload shape is invalid. Re-walk axis 2 of the
@@ -349,14 +365,14 @@ layers in order. The shape of the diagnosis:
    distribution reported alongside the single number? —
    before quoting any number.
 6. **Version.** Cross-cutting partial-install / mixed-version.
-   Walk [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug)
+   Walk `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`)
    end-to-end; common bench-specific symptom is a
    companion-app version that does not match the bench host
    version.
 7. **Cross-cutting.** Cause is below DOCA. Hand off to
-   [`doca-debug ## debug`](../../doca-debug/SKILL.md) for
+   `doca-debug ## debug` (`doca-debug/SKILL.md`) for
    the cross-cutting debug ladder and
-   [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug)
+   `doca-setup ## debug` (`doca-setup/TASKS.md#debug`)
    for the env-side layers (driver / firmware / hugepages /
    NUMA).
 
@@ -372,13 +388,13 @@ The four verbs below are not `doca_bench` work and should be
 routed out before the agent does any of them under this skill's
 name.
 
-- **install** ⇒ [`doca-setup ## install`](../../doca-setup/TASKS.md#configure)
-  (and [`## no-install`](../../doca-setup/TASKS.md#no-install)
+- **install** ⇒ `doca-setup ## install` (`doca-setup/TASKS.md#configure`)
+  (and `## no-install` (`doca-setup/TASKS.md#no-install`)
   for the public NGC DOCA container path). The bench is
   shipped by the install at ≥ 2.7.0; this skill does not own
   the install workflow.
 - **build a custom DOCA benchmark or application** ⇒
-  [`doca-programming-guide ## build`](../../doca-programming-guide/TASKS.md#build)
+  `doca-programming-guide ## build` (`doca-programming-guide/TASKS.md#build`)
   for the cross-library pattern, plus the matching
   `libs/<library>` skill for the library-specific build
   details. `doca_bench` is the shipped harness; a bespoke
@@ -387,7 +403,7 @@ name.
   end-to-end measurement, or a library-internal performance
   counter the bench does not expose) ⇒ the matching
   `libs/<library>` skill plus
-  [`doca-programming-guide`](../../doca-programming-guide/SKILL.md).
+  `doca-programming-guide/SKILL.md`.
   Bench is a uniform harness; library-internal performance
   questions go to the library.
 - **streaming telemetry / live metrics from a production
@@ -396,7 +412,7 @@ name.
   [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy).
   The DOCA Telemetry Service (DTS) is the documented telemetry
   surface; routing belongs in
-  [`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services).
+  `doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`).
 
 ## Command appendix
 
@@ -408,16 +424,15 @@ piece; one worked example per class is shown.
 
 **Infra-aware preamble (every row below).** Per the bundle's
 detect → prefer → fall back → report contract documented in
-[`doca-structured-tools-contract ## The agent behavior contract`](../../doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract),
+`doca-structured-tools-contract ## The agent behavior contract` (`doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract`),
 the agent should:
 
 1. Probe for the matching structured helper FIRST (`doca-env --json`
    for version + devices + libraries + drivers + hugepages in one
    shot; `doca-capability-snapshot` for per-device capability
-   flags; `version-matrix.json` for *"available since"* lookups;
-   a future bench-runner / bench-snapshot helper for the
-   four-tuple-capturing baseline pattern when it lands per
-   [`doca-structured-tools-contract ## Relationship to PR2 executables`](../../doca-structured-tools-contract/SKILL.md#relationship-to-pr2-executables)).
+   flags; `version-matrix.json` for *"available since"* lookups —
+   all per
+   `doca-structured-tools-contract ## Relationship to helper executables` (`doca-structured-tools-contract/SKILL.md#relationship-to-helper-executables`)).
 2. If the probe succeeds, the structured tool's output is the
    authoritative answer and the agent SHOULD NOT also run the
    manual command in the row below. Report *"using structured
@@ -425,10 +440,10 @@ the agent should:
 3. If the probe fails, fall back to the manual command in the
    row. Report *"falling back to manual chain"*.
 4. The schemas the structured tools emit are defined in
-   [`doca-structured-tools-contract ## Schemas`](../../doca-structured-tools-contract/SKILL.md#schemas);
+   `doca-structured-tools-contract ## Schemas` (`doca-structured-tools-contract/SKILL.md#schemas`);
    the version-handling semantics (four-way match, NGC,
    headers-win) are owned by
-   [`doca-version`](../../doca-version/SKILL.md).
+   `doca-version/SKILL.md`.
 
 | Purpose (class) | Invocation (shape) | Owning step | Reads as healthy when … |
 | --- | --- | --- | --- |
@@ -453,8 +468,8 @@ Three cross-cutting rules for this appendix:
 - **Cross-link instead of duplicate.** Cross-cutting commands
   (`pkg-config --modversion`, `doca_caps --list-devs`,
   `dmesg`, `mlxconfig -d <bdf> q`, `numactl --hardware`) live
-  in [`doca-debug ## debug`](../../doca-debug/SKILL.md) and
-  [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug);
+  in `doca-debug ## debug` (`doca-debug/SKILL.md`) and
+  `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`);
   this appendix names only `doca_bench`-specific invocation
   classes.
 
@@ -481,7 +496,7 @@ in [`SKILL.md`](SKILL.md):
 - This skill **assumes a healthy DOCA install at ≥ 2.7.0**
   (or the public NGC DOCA container at an equivalent
   version). If the install is in doubt, route to
-  [`doca-version TASKS.md ## configure`](../../doca-version/TASKS.md#configure)
+  `doca-version TASKS.md ## configure` (`doca-version/TASKS.md#configure`)
   and
-  [`doca-setup`](../../doca-setup/SKILL.md) before running
+  `doca-setup/SKILL.md` before running
   anything else here.

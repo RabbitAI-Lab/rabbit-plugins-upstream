@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/visualization/infographics",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/visualization/infographics",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/visualization/infographics",
+  "branch": "main",
+  "pushedAt": "2026-10-29T06:17:43Z",
+  "contentHash": "58f0a764b6b8f0357438cf58bd264756e1ca7a51d3d2301f23db3bffa61d24e2",
+  "fetchedAt": "2026-10-29T14:27:00.705Z"
+}

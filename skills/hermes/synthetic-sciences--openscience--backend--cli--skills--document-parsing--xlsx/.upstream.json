@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/document-parsing/xlsx",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/document-parsing/xlsx",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/document-parsing/xlsx",
+  "branch": "main",
+  "pushedAt": "2026-10-29T06:17:43Z",
+  "contentHash": "eb6044c801efa21038145b58763b63030d783479573a025c4e640385e25e3d98",
+  "fetchedAt": "2026-10-29T14:27:00.855Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/airtable",
+  "identifier": "official/productivity/airtable",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/airtable",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "2297cf0f6f65562b901e6ef526d9bac1e7315dc014a88aa7d701cf4fea6aaf19",
+  "fetchedAt": "2026-10-29T14:27:17.977Z"
+}

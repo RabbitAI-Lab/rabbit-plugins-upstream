@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/ascii-art",
+  "identifier": "official/creative/ascii-art",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/ascii-art",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "85fbed468331e88946c9d8709e4e225597e607acb0a822c780038a137662d79b",
+  "fetchedAt": "2026-10-29T14:27:17.984Z"
+}

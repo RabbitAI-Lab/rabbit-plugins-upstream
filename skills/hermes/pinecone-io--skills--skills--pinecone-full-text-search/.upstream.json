@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/pinecone-io/skills/tree/main/skills/pinecone-full-text-search",
+  "identifier": "pinecone-io/skills/skills/pinecone-full-text-search",
+  "repo": "pinecone-io/skills",
+  "path": "skills/pinecone-full-text-search",
+  "branch": "main",
+  "pushedAt": "2026-10-28T20:02:35Z",
+  "contentHash": "36c5ff4ac63cb66f8ecc333c52fe9009d43ea35535b66a665bb21b6dbfa01568",
+  "fetchedAt": "2026-10-29T14:26:58.019Z"
+}

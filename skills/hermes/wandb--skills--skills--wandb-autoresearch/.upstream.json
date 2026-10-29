@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/wandb/skills/tree/main/skills/wandb-autoresearch",
+  "identifier": "wandb/skills/skills/wandb-autoresearch",
+  "repo": "wandb/skills",
+  "path": "skills/wandb-autoresearch",
+  "branch": "main",
+  "pushedAt": "2026-10-23T16:55:38Z",
+  "contentHash": "2fbcc7bdafc63fbbe6f0259b8b9af7d14748c671e6dfde17e7a7a29fc6a8cf04",
+  "fetchedAt": "2026-10-29T14:26:58.047Z"
+}

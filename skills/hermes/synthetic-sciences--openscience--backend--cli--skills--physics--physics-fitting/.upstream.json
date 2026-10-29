@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/physics-fitting",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/physics-fitting",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/physics-fitting",
+  "branch": "main",
+  "pushedAt": "2026-10-29T06:17:43Z",
+  "contentHash": "37c49e6616cc37a8216b2a90acb6919c2a069516960a935de6bcffd72d41a4ab",
+  "fetchedAt": "2026-10-29T14:27:00.776Z"
+}

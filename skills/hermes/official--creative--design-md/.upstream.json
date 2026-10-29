@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/design-md",
+  "identifier": "official/creative/design-md",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/design-md",
+  "branch": "main",
+  "pushedAt": "2026-10-29T14:23:08Z",
+  "contentHash": "e9039e3a0a82e5c573725abafe6d7238170d2054f386aeddab525a9d38bdeec1",
+  "fetchedAt": "2026-10-29T14:27:18.018Z"
+}
