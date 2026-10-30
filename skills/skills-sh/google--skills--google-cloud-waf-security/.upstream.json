@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-cloud-waf-security",
+  "repo": "google/skills",
+  "skillId": "google-cloud-waf-security",
+  "branch": "main",
+  "pushedAt": "2026-10-30T11:04:25Z",
+  "contentHash": "f8a6048fb7ba1c8b89c365a88701a8ae8808ea4ff900f84dd6da67c95b59d0d1",
+  "fetchedAt": "2026-10-30T14:19:15.645Z"
+}

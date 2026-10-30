@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/openai/skills/screenshot",
+  "repo": "openai/skills",
+  "skillId": "screenshot",
+  "branch": "main",
+  "pushedAt": "2026-10-28T17:31:41Z",
+  "contentHash": "9c5ac885e307dbb85aea5353a04fabc91ad238fae378d5069ba4dfe01eec3339",
+  "fetchedAt": "2026-10-30T14:19:28.552Z"
+}
