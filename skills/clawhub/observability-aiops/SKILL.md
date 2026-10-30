@@ -17,7 +17,7 @@ installer:
 argument-hint: "[a PromQL query, an alert/dashboard uid, or describe your observability task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["OBSERVABILITY_AIOPS_CONFIG"],"bins":["observability-aiops"],"config":["~/.observability-aiops/config.yaml","~/.observability-aiops/secrets.enc"]},"optional":{"env":["OBSERVABILITY_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"OBSERVABILITY_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Observability-AIops","emoji":"📈","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["observability-aiops","uvx"]},"optional":{"env":["OBSERVABILITY_AIOPS_CONFIG","OBSERVABILITY_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Observability-AIops","emoji":"📈","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed observability operations across Prometheus (HTTP API + PromQL, default port 9090, optional bearer token), a companion Alertmanager (/api/v2, default port 9093), Grafana (HTTP API, default port 3000, required bearer token), and Grafana Loki (HTTP API, default port 3100, optional bearer or basic auth, optional multi-tenant X-Scope-OrgID). Loki is READ-ONLY: bounded LogQL reads only (labels, label values, query_range with a hard lookback + line cap and a stream-selector gate, a canned error-tail), with no write surface. Each target in the config names its own platform, so one config can span the whole stack. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.observability-aiops/ (relocatable via OBSERVABILITY_AIOPS_HOME).
@@ -30,6 +30,8 @@ compatibility: >
 ---
 
 # Observability AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by the Prometheus or Grafana projects, Grafana Labs, or the CNCF.** Prometheus, Alertmanager and Grafana are trademarks of their respective owners. Source at [github.com/AIops-tools/Observability-AIops](https://github.com/AIops-tools/Observability-AIops) under the MIT license.
 
@@ -73,7 +75,7 @@ scrape targets and classifies each `lastError`; `alert_noise_and_flap_analysis`
 finds noisy/duplicate alerts and recommends a dedup/rollup. The two **log**
 analyses mirror this: `log_error_burst_rca` compares per-stream error counts
 against a baseline window and classifies each burst (new signature / volume spike
-/ single-instance); `log_volume_analysis` ranks the highest-volume streams and
+/ single-instance / no baseline when the baseline window had no logs at all); `log_volume_analysis` ranks the highest-volume streams and
 warns on high-cardinality (high-churn) labels. `alert_log_context` bridges the two
 signals — it maps a firing Prometheus alert's labels to a Loki stream selector and
 pulls the correlated logs. **Loki is read-only** (no safe write surface).
@@ -85,6 +87,15 @@ uv tool install observability-aiops
 observability-aiops init       # wizard: pick platform (prometheus/grafana) + encrypted token
 observability-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/observability-aiops
+openclaw skills info observability-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -195,7 +206,8 @@ monitoring suites (Datadog, New Relic, enterprise NMS) are out of scope.
 2. `observability-aiops logs errors '{app="api"}' --hours 2 --limit 200` → tail
    the error-level lines for that stream
 3. `log_error_burst_rca <selector>` → per-stream error counts against a baseline
-   window, each burst classified (new signature / volume spike / single instance)
+   window, each burst classified (new signature / volume spike / single instance /
+   no baseline)
 4. `observability-aiops logs query '{app="api"} |= "timeout"' --hours 2` → confirm
    the specific signature the RCA named
 5. `log_volume_analysis <selector>` → the highest-volume streams and any

@@ -1,42 +1,59 @@
-## Description: <br>
-Guides an agent through matching borrowers to mortgage loan programs such as Conventional, FHA, VA, USDA, Jumbo, and Non-QM using borrower attributes, total cost, approval odds, and compliance cautions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Matches borrower attributes to mortgage loan programs, including conventional, FHA, VA, USDA, jumbo, and non-QM options.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Loan officers, brokers, and mortgage operations teams use this skill to compare borrower attributes against eligible loan programs and document a fair program-fit rationale. It is guidance only; users should verify current agency, investor, and legal requirements before relying on the result. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Mortgage agency, investor, and legal requirements may change after the skill was published. <br>
-Mitigation: Verify current program rules, ATR/QM requirements, ECOA/Reg B obligations, and investor overlays before using the guidance in a lending workflow. <br>
-Risk: Program matching could steer a borrower toward an unsuitable or higher-compensation product if rate, mortgage insurance, total cost, and eligibility are not compared fairly. <br>
-Mitigation: Compare eligible options on documented borrower attributes, total cost, approval probability, and fair-lending considerations before presenting a recommendation. <br>
+## Use Case:
 
+Mortgage loan officers and brokers use the skill to compare potentially eligible programs using borrower credit, DTI, LTV, down payment, property, and occupancy details, then weigh total cost and approval likelihood. It supports fair presentation of options and reminds users to verify current program rules.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/mortgage-loan-program-matching) <br>
-- [deciqAI mortgage loan program matching page](https://www.deciqai.com/c/mortgage-loan-program-matching) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/mortgage-loan-program-matching.json) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown guidance with checklists and comparison criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces structured mortgage-program comparison guidance; does not execute code or perform privileged actions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: Program eligibility or loan guidance may be outdated or incomplete.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify recommendations against current agency and lender guidelines.
+
+Risk: Borrower details may include sensitive personal information.
+
+Mitigation: Share only the borrower details necessary for the comparison.
+
+Risk: A comparison focused on rate or compensation could omit total cost or lead to unfair steering.
+
+Mitigation: Compare total cost and approval fit, present options fairly, and document the rationale.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/mortgage-loan-program-matching)
+- [Mortgage Loan Program Matching overview](https://www.deciqai.com/c/mortgage-loan-program-matching)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/mortgage-loan-program-matching.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Text or Markdown with a loan-program comparison and rationale]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Advisory recommendations; eligibility and current guidelines require verification]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

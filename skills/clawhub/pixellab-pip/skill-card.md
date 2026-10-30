@@ -1,54 +1,71 @@
-## Description: <br>
-PixelLab Pip helps agents set up PixelLab access, choose MCP or REST workflows, generate and edit pixel-art assets, animations, tilesets, UI, icons, and record reproducible blueprints while respecting credential, cost, and destructive-action safeguards. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+PixelLab Pip helps agents route PixelLab requests and create, edit, inspect, and assemble pixel art, game assets, animations, and visual effects through documented PixelLab interfaces and local tools.
 
-## Publisher: <br>
-[shilo](https://clawhub.ai/user/shilo) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[shilo](https://clawhub.ai/user/shilo)
 
-## Use Case: <br>
-Developers, game creators, and agent users use this skill to configure PixelLab integrations and drive PixelLab asset workflows from setup through generation, editing, animation, packaging, and troubleshooting. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Live PixelLab generation sends prompts and images to PixelLab and may spend credits. <br>
-Mitigation: Review the request before starting paid work, use the skill's cost-routing guidance for budget-sensitive tasks, and ask before extra paid attempts unless the user approved a concrete budget or attempt count. <br>
-Risk: PIXELLAB_SECRET is a bearer token used for live PixelLab API or MCP calls. <br>
-Mitigation: Store the token in a local secret store or environment variable, never paste it into chat, and use it only as an authorization header. <br>
-Risk: Generated outputs, blueprints, and manifests may contain user prompt text or workflow details in the project output folder. <br>
-Mitigation: Review generated files before sharing them and keep private audit or resume data out of shareable blueprints. <br>
-Risk: Remote PixelLab deletions, clears, or overwrites can discard existing assets. <br>
-Mitigation: Require explicit user permission for destructive remote actions and list the affected assets before carrying them out. <br>
+## Use Case:
 
+Developers and game artists use the skill to plan and generate pixel-art assets, edit and inspect images or animation, and assemble game-ready outputs using PixelLab MCP or REST and local tools.
 
-## Reference(s): <br>
-- [PixelLab Skill Page](https://clawhub.ai/shilo/skills/pixellab-pip) <br>
-- [Official PixelLab Documentation](references/official-pixellab-documentation.md) <br>
-- [PixelLab REST v2 API Docs](https://api.pixellab.ai/v2/docs) <br>
-- [PixelLab REST v2 OpenAPI Schema](https://api.pixellab.ai/v2/openapi.json) <br>
-- [PixelLab MCP Documentation](https://api.pixellab.ai/mcp/docs) <br>
-- [PixelLab MCP Setup](https://www.pixellab.ai/mcp) <br>
-- [Setup](references/setup.md) <br>
-- [Credentials](references/credentials.md) <br>
-- [Cost Routing](references/cost-routing.md) <br>
-- [Blueprint](references/blueprint.md) <br>
-- [Job Lifecycle](references/job-lifecycle.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline code, shell commands, configuration snippets, file paths, and generated asset manifests or blueprints when a PixelLab workflow runs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce project-local files such as generated assets, spritesheets, manifests, and blueprint JSON only when the user requests a workflow that creates or packages assets.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.0 (source: server release metadata and target metadata) <br>
+Risk: Prompts and selected artwork are sent to PixelLab for generation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review prompts and artwork before sending; keep sensitive inputs local.
+
+Risk: Generation may spend PixelLab credits.
+
+Mitigation: Keep Auto off when approval is needed and consult the cost guidance before generation.
+
+Risk: PIXELLAB_SECRET grants access to PixelLab services.
+
+Mitigation: Store the token locally in a secret setting or environment variable; do not paste it into chat.
+
+Risk: Output folders may contain recipes and copied input images.
+
+Mitigation: Review output folders before sharing them.
+
+Risk: User-level MCP setup can make PixelLab available across projects.
+
+Mitigation: Choose project-only MCP setup when access should stay scoped to one project.
+
+## Reference(s):
+
+- [PixelLab API documentation](https://www.pixellab.ai/docs)
+- [PixelLab REST v2 API reference](https://api.pixellab.ai/v2/docs)
+- [PixelLab MCP tool guide](https://api.pixellab.ai/mcp/docs)
+- [PixelLab MCP setup](https://www.pixellab.ai/mcp)
+- [Official PixelLab documentation links and interface guidance](references/official-pixellab-documentation.md)
+- [Setup and credentials guidance](references/setup.md)
+- [Generation cost and routing guidance](references/cost-routing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Pixel art images and sprite assets, Animation and visual effects assets, Markdown guidance, Code and shell commands, Configuration and blueprint files]
+
+**Output Format:** [Image files, Markdown, code, shell commands, and JSON configuration or blueprints]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May involve PixelLab generation credits; outputs can include sprite sheets, animations, VFX, maps, and assembled assets.]
+
+## Skill Version(s):
+
+3.1.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

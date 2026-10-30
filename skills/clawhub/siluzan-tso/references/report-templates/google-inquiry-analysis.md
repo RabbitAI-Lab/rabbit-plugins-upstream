@@ -1,11 +1,11 @@
 ﻿# Google 账户询盘分析（运营固定触发模板）
 
 > **触发话术**（等价即可，命中即走本模板）
+>
 > - `Goog账户询盘分析` / `Google 账户询盘分析`
 > - `分析XXX Google账号的询盘效果`
 > - `我给你询盘信息分析Google账号XXX效果`（附询盘资料 + 账户 ID）
 > - 含「询盘 + 账户 + Google」三要素的近义表述
-
 
 ## Contents
 
@@ -44,9 +44,9 @@
 2. 同时贴出**询盘字段清单 + 1 行示例**，让用户用任意方式补齐再回传：
 
    ```
-   请把近 3 个月（{S} ~ {E}）的询盘记录回贴或上传（Excel / CSV / 截图 / 文本表格均可），字段如下：
-   月份 | 序号(可空) | 国家(中文) | 时间(YYYY-MM-DD 或 Excel 序列) | 产品 | 客户来源 | IP(可空)
-   示例：4月份 | 1 | 印度 | 2026-04-12 | 滴灌带 | WhatsApp(www.extruder.cn)
+   请把近 3 个月（{S} ~ {E}）的询盘记录回贴或上传（Excel / CSV / 截图 / 文本表格均可），字段如下（* 为必填）：
+   序号 | 询盘日期* | 询盘来源关键词 | 目标国家/地区* | 产品/品类* | 客户名称/公司 | 联系方式 | 询盘内容摘要 | 询盘质量分级* | 跟进状态 | 是否成交 | 成交金额(USD)
+   示例：1 | 2026-04-12 | WhatsApp | 印度 | 滴灌带 | | | | 合格 | | |
    ```
 
 3. 拿到资料后由宿主 Agent 解析、落盘 `inquiries.json`，再进入「拉数与写 Excel」节。
@@ -58,8 +58,8 @@
 1. **账户**：`mediaCustomerId` 来自 `list-accounts -m Google -k <id>`，**禁止猜 ID**。
 2. **分析月份**：默认**上一个完整自然月**（例：今天 5/13 → 默认 4 月）。用户未明确时**反问**（A) 上月 B) 本月 1 号到昨天 C) 自定义 YYYY-MM）。
 3. **时间窗口（硬约束）**：**严格 3 个月** = 分析月份 + 向前 2 个完整自然月。例：分析月 = 2026-04 → `--start 2026-02-01 --end 2026-04-30`。**所有月度表只展示 3 行**（不延伸到 7 个月）。
-4. **询盘字段最小集**：`月份 / 国家(中文) / 时间 / 产品 / 客户来源`；可选 `序号 / IP`。
-5. **日期规范化**：`2026.4.1` / `2026/4/1` 等先规范成 `YYYY-MM-DD` 再传 CLI。
+4. **用询盘数据前先看一眼表头**。常见列见上；* 表示通常要有对应含义的列（`询盘日期`≈时间/date，`目标国家/地区`≈国家，`产品/品类`≈产品，`询盘质量分级`有则用）。列名接近即可，不必逐格校验。
+5. **日期规范化**：`2026.4.1` / `2026/4/1` 等先规范成 `YYYY-MM-DD` 再传 CLI。`月份` 可由询盘日期推导。
 
 ---
 
@@ -68,6 +68,7 @@
 - **`siluzan-tso` 不提供**「一键生成询盘分析 Excel」CLI 子命令，**也不要**新增。
 - 需交付 Excel 时：由 **Agent**（宿主或 WorkBuddy 编排）在 CLI `--json-out` 落盘后，自行编写 **Node.js / Python** 脚本（`exceljs` / `xlsx` / `openpyxl`）读 JSON → 写 `.xlsx`。
 - **数值一律来自落盘 JSON 或 `inquiries.json`，禁止在脚本里写死业务数字。**
+- **样式（必须）**：Node 脚本 `import` `report-templates/excel-style-kit.mjs`，用 `createExcelWorkbook({ accent: "google" })` + `titleBar`/`sectionBar`/`tableHeader`/`dataRow`/`noteRow` 组件搭版面（8 个 Sheet 各自的「数据洞察/优化建议」文字块用 `noteRow`），**禁止**裸写无样式单元格。规范见 `report-templates/excel-style-guide.md`。
 
 ---
 
@@ -154,23 +155,30 @@ Sheet 5 整段系列明细读：`./snap-inquiry/campaigns-<accountId>_<S>-<E>.js
 ```json
 [
   {
-    "month": "4月份",
     "seq": 1,
+    "date": "2026-04-12",
+    "sourceKeyword": "WhatsApp",
     "country": "印度",
-    "time": "2026-04-12",
     "product": "滴灌带",
-    "source": "WhatsApp(www.extruder.cn)",
-    "ip": null
+    "company": null,
+    "contact": null,
+    "summary": null,
+    "quality": "合格",
+    "followUp": null,
+    "won": null,
+    "amountUsd": null
   }
 ]
 ```
 
-- `month`：保留运营原文（`1月份` / `4月份` …）。
-- `country`：**中文名**，与 `countryOrRegionZh` 字典对齐（脚本会自动 lookup 大洲）。Agent 解析时遇到英文/缩写应先翻译为中文，未知国家保留原文并在脚本里标 `未知大洲`。
-- `time`：`YYYY-MM-DD`；Excel 日期序列号也接受，由解析方转换。
-- `product`：自由文本（`滴灌带` / `打包带` / `片材` / `滴头` / `模具` / `贴条` / `涂布水带` …），脚本以此作 Sheet 3 产品维度透视分桶 key。
-- `source`：自由文本（`WhatsApp` / `tawk.to` / `info邮箱` / `网站留言` / `微信(xxxx)` / `阿里巴巴` / `made-in-china` / `Youtube` / `TikTok` …），脚本以此作 Sheet 3 客户来源透视分桶 key。
-- `ip`：可空。
+落盘前先看一眼表头，按含义对上即可（`时间`=`询盘日期`，`国家(中文)`=`目标国家/地区`，`产品`=`产品/品类`）。
+
+- `date`：询盘日期，`YYYY-MM-DD`。
+- `country`：目标国家/地区，中文名，与 `countryOrRegionZh` 字典对齐。
+- `product`：产品/品类，Sheet 3 产品分桶。
+- `sourceKeyword` / `source`：来源，Sheet 3 来源分桶（可空）。
+- `quality` / 其余可选列：有则写入，没有就空着。
+- `month`：可由 `date` 推导。**禁止编造**缺失值。
 
 ---
 

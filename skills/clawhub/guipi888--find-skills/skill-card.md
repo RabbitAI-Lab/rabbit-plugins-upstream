@@ -1,44 +1,58 @@
-## Description: <br>
-Find Skills helps an agent match user requests to relevant installed, built-in, and marketplace skills, then recommend or install matching skills when the user confirms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Finds and recommends relevant agent skills from natural-language needs or keywords across local and listed skill catalogs, with installation support.
 
-## Publisher: <br>
-[guipi888](https://clawhub.ai/user/guipi888) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[guipi888](https://clawhub.ai/user/guipi888)
 
-## Use Case: <br>
-WorkBuddy and CodeBuddy users can use this skill to discover relevant agent skills from local directories, built-in skills, and external marketplaces. It is most useful when a user describes a task in natural language and wants ranked recommendations with installation options. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: This skill can search external marketplaces and send task descriptions to third-party services. <br>
-Mitigation: Avoid sensitive task descriptions and review external search results before acting on them. <br>
-Risk: This skill can use GitHub credentials and run commands such as downloads, git clone, npx, unzip, and writes into persistent skill directories. <br>
-Mitigation: Use least-privilege credentials, require explicit user confirmation before installation, and review downloaded skill contents before enabling them. <br>
-Risk: Recommended skills may come from third-party sources with different quality and security properties. <br>
-Mitigation: Manually verify each source, scan installed skills, and prefer known local or built-in skills when they satisfy the request. <br>
+## Use Case:
 
+External users and developers can describe a task or provide keywords to find and compare relevant agent skills across local and remote catalogs. They can use the recommendations to choose skills and, where supported, install them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/guipi888/find-skills) <br>
-- [Artifact README](artifact/README.md) <br>
-- [Artifact skill definition](artifact/SKILL.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown recommendations with inline shell commands and installation guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include ranked skill recommendations, source labels, match rationale, paths, download or install commands, and follow-up prompts for user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: ClawHub release metadata; artifact frontmatter version is 1.7.0) <br>
+Risk: The skill can install additional agent instructions during ordinary requests without a clear approval step.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Require explicit user approval for each installation and review the selected package before activation.
+
+Risk: Search terms may contain confidential information, and discovered skills may be misleading or incompatible with the user's environment.
+
+Mitigation: Avoid confidential search terms; verify recommendations and confirm compatibility before installation.
+
+Risk: Replies are instructed to include unrelated advertising.
+
+Mitigation: Remove the mandatory advertising text before using the skill.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/guipi888/skills/find-skills)
+- [Publisher profile](https://clawhub.ai/user/guipi888)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Guidance]
+
+**Output Format:** [Skill recommendations and installation guidance in conversational text or Markdown; shell commands may be used for supported installation workflows.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations depend on available catalogs and may require review for relevance and compatibility before installation.]
+
+## Skill Version(s):
+
+1.7.0 (source: SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

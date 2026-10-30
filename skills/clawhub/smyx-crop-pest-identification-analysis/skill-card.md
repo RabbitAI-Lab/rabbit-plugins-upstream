@@ -1,45 +1,55 @@
-## Description: <br>
-Identifies common crop pests from crop leaf, bud, or fruit images and videos by sending the media to server-side APIs, then returns pest types, counts, confidence scores, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes crop leaf, bud, and fruit images or videos through a service API and returns likely pest types with confidence scores.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users and developers use this skill to analyze crop imagery for early pest identification and to retrieve structured pest reports for tomato, corn, peanut, cotton, or other supported crops. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Submitted images, videos, or URLs are sent to the provider's cloud service for analysis. <br>
-Mitigation: Review the provider's handling of farm imagery and report history before installing, and submit only media that is approved for cloud processing. <br>
-Risk: The skill can silently create or reuse a backend identity and persist authentication tokens in a local SQLite database. <br>
-Mitigation: Install only in trusted workspaces, review local identity and token persistence, and clear stored credentials according to workspace policy. <br>
-Risk: Pest identification results are advisory and may be incorrect or incomplete. <br>
-Mitigation: Use the output as observation support and confirm treatment decisions with qualified agronomy or local plant-protection guidance. <br>
+## Use Case:
 
+External growers and agricultural workers can submit crop images or videos to identify likely pests and review estimated counts, affected areas, and confidence scores. The results support early observation and reporting; the skill says it does not provide pesticide or treatment recommendations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-crop-pest-identification-analysis) <br>
-- [API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, API Calls, Markdown, JSON, Files, Guidance] <br>
-**Output Format:** [Markdown or JSON text with optional saved output file] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Includes pest labels, estimated counts, confidence scores, report links, and historical report tables when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence; artifact frontmatter states 1.0.2) <br>
+Risk: The configuration-only option may still allow media uploads to lifeemergence.com services.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Do not rely on --export-env-only to prevent uploads. Use a corrected release that honors configuration-only mode, and submit only media intended for cloud processing.
+
+Risk: Account creation and token storage safeguards are not clearly explained, and the --api-url option should not be relied on to change the media destination.
+
+Mitigation: Use a dedicated service account, restrict credential destinations, and confirm account and token handling before use.
+
+## Reference(s):
+
+- [API interface documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-crop-pest-identification-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Structured reports, Markdown]
+
+**Output Format:** [Structured text or JSON reports; Markdown tables for history listings]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Image and video inputs; each file is limited to 10 MB. Results are for reference and do not include pesticide recommendations.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

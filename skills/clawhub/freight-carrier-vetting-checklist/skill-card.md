@@ -1,42 +1,51 @@
-## Description: <br>
-Helps freight brokers vet carrier authority, insurance, safety, identity, and double-brokering risks before tendering a load. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps freight brokers vet carrier authority, insurance, safety, identity, and double-brokering risk before tendering a load.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External freight brokers and brokerage operations teams use this skill as a pre-tender carrier due-diligence checklist for authority, insurance, safety, identity, and double-brokering checks. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat the checklist as legal or regulatory advice. <br>
-Mitigation: Treat it as an operational aid and verify FMCSA, insurance, safety, and broker obligation details from current authoritative sources before making load decisions. <br>
-Risk: The checklist can miss fraud or stale carrier records if users rely only on provided documents. <br>
-Mitigation: Confirm authority, identity, insurance, and hauling-party details directly with authoritative systems or issuers before tendering freight. <br>
+## Use Case:
 
+External freight brokers use this checklist when onboarding or booking a carrier, especially when fraud signals appear. It helps structure pre-tender review of authority, insurance, safety, identity, and double-brokering checks.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/freight-carrier-vetting-checklist) <br>
-- [deciqAI freight carrier vetting checklist](https://www.deciqai.com/c/freight-carrier-vetting-checklist) <br>
-- [Agent machine-readable metadata](https://www.deciqai.com/s/freight-carrier-vetting-checklist.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown checklist guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Operational checklist; does not execute code or independently verify regulatory records.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Carrier authority, safety, and insurance details can change, and the referenced parent checklist and monitoring agents are not included.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify records through current official sources and confirm coverage directly with the insurer; keep tender decisions under broker control.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/freight-carrier-vetting-checklist)
+- [deciqAI carrier-vetting skill page](https://www.deciqai.com/c/freight-carrier-vetting-checklist)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/freight-carrier-vetting-checklist.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Checklist]
+
+**Output Format:** [Markdown checklist and carrier-vetting guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Decision aid; the referenced parent checklist and monitoring agents are not included.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

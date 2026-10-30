@@ -1,43 +1,55 @@
-## Description: <br>
-Guides agents through validating whether a person or team has a true T-shaped connector position by testing vertical depth, cross-domain translation value, and a 90-day occupation and protection plan. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users in evaluating whether their expertise and adjacent-domain fluency support a credible connector role, then planning how to develop and protect that position.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, developers, and team leaders use this skill to evaluate T-shaped claims, identify cross-domain structural holes, and build a practical connector-position plan. It is especially suited for hiring, career design, early startup team design, and cross-functional translation problems. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The coaching flow can ask for career, capability, team, or employer-context information that may be sensitive. <br>
-Mitigation: Share only non-confidential details and avoid personal, employer-confidential, or proprietary information unless it is appropriate for the environment. <br>
-Risk: Connector assessments can be misleading if based only on self-report or untested cross-domain claims. <br>
-Mitigation: Validate vertical depth with objective proxies and test translations with a real domain-B practitioner before relying on the recommendation. <br>
+## Use Case:
 
+People evaluating a T-shaped hire, planning a career move, building an early startup team, or improving translation across functions can use the skill to assess domain depth, map adjacent expertise, test for a real communication gap, and plan a connector position.
 
-## Reference(s): <br>
-- [Method in Action: Claude Shannon's Deliberate T-Shape Construction at Bell Labs (1940s)](examples/claude-shannon-bell-labs-1940s.md) <br>
-- [Sources - t-shaped-connector](references/sources.md) <br>
-- [A Mathematical Theory of Communication](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf) <br>
-- [The Early Days of Information Theory](https://ieeexplore.ieee.org/document/1054812) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown coaching response with structured Connector Position Map fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause at explicit WAIT checkpoints for user input.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Career coaching may involve professional or team details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only details you are comfortable disclosing; treat external links as informational.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [A Mathematical Theory of Communication — Claude Shannon (1948)](https://people.math.harvard.edu/~ctm/home/text/others/shannon/entropy/entropy.pdf)
+- [The Early Days of Information Theory — John R. Pierce (1973)](https://ieeexplore.ieee.org/document/1054812)
+- [Method in Action: Claude Shannon at Bell Labs](examples/claude-shannon-bell-labs-1940s.md)
+- [T-Shaped Connector on ClawHub](https://clawhub.ai/deciqai/skills/t-shaped-connector)
+- [T-Shaped Connector skill page](https://www.deciqai.com/c/t-shaped-connector)
+- [Machine-readable T-Shaped Connector metadata](https://www.deciqai.com/s/t-shaped-connector.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown, including a Connector Position Map]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses stepwise coaching with user-response pauses and explicit scoring gates for domain depth and connector tests.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

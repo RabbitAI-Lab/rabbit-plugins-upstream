@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/firewall-aiops",
   "slug": "firewall-aiops",
   "ownerHandle": null,
-  "version": "0.6.0",
-  "updatedAt": 1784635096827,
-  "contentHash": "e1bc73cdd05fb589d1bc23c1e3b75b4181d33dfdb5af21fa6023aa122a6c3b10",
-  "fetchedAt": "2026-07-26T18:09:07.157Z"
+  "version": "0.16.0",
+  "updatedAt": 1793325194638,
+  "contentHash": "3947adc4f87596c6c82971ac4566e505075ff32e441bede18d948668b94cc40e",
+  "fetchedAt": "2026-10-30T14:21:18.673Z"
 }

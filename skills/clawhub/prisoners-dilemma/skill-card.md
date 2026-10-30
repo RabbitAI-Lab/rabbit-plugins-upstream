@@ -1,49 +1,56 @@
-## Description: <br>
-Guides agents through diagnosing prisoner's-dilemma structures by building payoff matrices, checking dominant strategies and equilibria, and selecting escape mechanisms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps analyze cooperation failures by modeling payoffs, identifying a prisoner's dilemma, and evaluating structural ways to make cooperation rational.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, developers, and business analysts use this skill to decide whether a competitive, negotiation, partnership, or commons-style situation is a true prisoner's dilemma and to design a structural escape. It is especially useful when cooperation would make all parties better off but defection remains individually rational. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may over-rely on advisory game-theory analysis for legal, policy, business, or negotiation decisions. <br>
-Mitigation: Treat outputs as decision support and review recommendations with appropriate domain experts before acting. <br>
-Risk: Examples include discussion of wartime violence. <br>
-Mitigation: Use content discretion for audiences or workflows where historical violence examples are inappropriate. <br>
+## Use Case:
 
+External users and developers can use this skill to diagnose cooperation failures in negotiations, partnerships, markets, and shared-resource problems. It structures the analysis around a payoff matrix and helps evaluate whether repetition, reputation, enforcement, or a changed game structure can support cooperation.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/prisoners-dilemma) <br>
-- [Primary sources](references/sources.md) <br>
-- [deciqAI Prisoner's Dilemma page](https://www.deciqai.com/c/prisoners-dilemma) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/prisoners-dilemma.json) <br>
-- [Flood, Some Experimental Games](https://doi.org/10.1287/mnsc.5.1.5) <br>
-- [Tucker, On Jargon: The Prisoner's Dilemma](https://doi.org/10.2307/3027101) <br>
-- [Nash, Equilibrium Points in n-Person Games](https://doi.org/10.1073/pnas.36.1.48) <br>
-- [Hardin, The Tragedy of the Commons](https://doi.org/10.1126/science.162.3859.1243) <br>
-- [Future of Life Institute, Pause Giant AI Experiments](https://futureoflife.org/open-letter/pause-giant-ai-experiments/) <br>
-- [European Union Artificial Intelligence Act](https://eur-lex.europa.eu/eli/reg/2024/1689/oj) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with a Game Diagnosis template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step follow-up questions in coach mode before completing the diagnosis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: An incorrect payoff model or game classification can lead to ineffective cooperation advice.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Fill in all four payoffs, verify the Prisoner's Dilemma ordering, and rule out other game types before recommending an escape.
+
+Risk: Recording real-use examples may expose confidential details.
+
+Mitigation: Omit confidential details when documenting examples.
+
+## Reference(s):
+
+- [Primary sources and further reading](artifact/references/sources.md)
+- [Flood, Some Experimental Games](https://doi.org/10.1287/mnsc.5.1.5)
+- [Nash, Equilibrium Points in n-Person Games](https://doi.org/10.1073/pnas.36.1.48)
+- [Prisoner's Dilemma skill page](https://clawhub.ai/deciqai/skills/prisoners-dilemma)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown game diagnosis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes players, payoff matrix, game classification, dominant strategies, equilibrium, and escape options with a post-change test.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

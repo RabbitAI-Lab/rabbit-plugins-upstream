@@ -1,47 +1,59 @@
-## Description: <br>
-Generate 3D models, textures, images, rigged characters, animations, and 3D print ready assets through the Meshy AI API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Uses Meshy CLI with browser sign-in to generate and convert 3D models, textures, reference images, rigging, animations, and motion clips, and prepares models for physical printing and slicer handoff.
 
-## Publisher: <br>
-[arlieeee](https://clawhub.ai/user/arlieeee) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[arlieeee](https://clawhub.ai/user/arlieeee)
 
-## Use Case: <br>
-Developers, creators, and 3D printing users use this skill to generate or transform Meshy assets, manage asynchronous API tasks, download model outputs, and prepare files for printing workflows. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Meshy API requests can spend paid credits. <br>
-Mitigation: Require a clear cost summary and explicit user confirmation before creating paid Meshy tasks. <br>
-Risk: Prompts, image URLs, or selected local image data may be sent to Meshy. <br>
-Mitigation: Disclose the data transfer and use only user-provided or user-approved inputs for API calls. <br>
-Risk: Console logs may include an API key prefix. <br>
-Mitigation: Treat logs as sensitive and avoid exposing the full API key in output, files, or shared artifacts. <br>
-Risk: The skill can detect or open local slicer applications. <br>
-Mitigation: Ask for explicit approval before probing for slicers or opening local applications. <br>
+## Use Case:
 
+Developers and 3D creators use this agent to generate or adapt 3D assets with Meshy and prepare selected models for physical printing, including analysis, repair, sizing, and slicer handoff.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/arlieeee/skills/meshy-3d-agent) <br>
-- [Meshy API documentation](https://docs.meshy.ai) <br>
-- [Meshy API reference](artifact/reference.md) <br>
-- [Meshy API endpoint](https://api.meshy.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create Meshy API tasks after user confirmation and save generated assets under meshy_output/.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.4.1 (source: server release metadata) <br>
+Risk: Prompts, input images, and models selected for a task are sent to Meshy for cloud processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only prompts and assets the user is comfortable sharing with Meshy.
+
+Risk: Model generation and related tasks can spend Meshy credits.
+
+Mitigation: Agree on a credit budget before generation and review current pricing for requested work.
+
+Risk: Using the CLI can involve package installation, a reusable Meshy login, and a browser authorization code.
+
+Mitigation: Follow the machine's installation policy, complete authorization only through Meshy's sign-in page, and never expose session tokens or API keys; clarify with the publisher how the displayed authorization code should be handled.
+
+## Reference(s):
+
+- [Meshy 3D Agent on ClawHub](https://clawhub.ai/arlieeee/skills/meshy-3d-agent)
+- [Meshy project homepage (listed in skill metadata)](https://github.com/meshy-dev/meshy-3d-agent)
+- [Meshy API pricing documentation](https://docs.meshy.ai/en/api/pricing)
+
+## Skill Output:
+
+**Output Type(s):** [3D model and texture files, Reference images and animation clips, Print-preparation files, Shell commands and usage guidance]
+
+**Output Format:** [Asset files such as GLB, glTF, OBJ, FBX, STL, 3MF, and images, with shell commands and guidance as needed]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [File formats and processing steps depend on the requested generation, animation, conversion, or printing workflow.]
+
+## Skill Version(s):
+
+0.8.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

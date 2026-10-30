@@ -1,48 +1,58 @@
-## Description: <br>
-Guides an agent through the Feynman Technique to test whether a user genuinely understands a concept by producing a plain-language explanation, diagnosing gaps, and refining the explanation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through testing understanding of a concept by eliciting a plain-language explanation, diagnosing gaps, and refining the explanation.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, developers, and employees use this skill to test understanding of a specific concept before teaching, presenting, or making decisions. It guides an agent to elicit a plain-language explanation, diagnose jargon, circularity, hedges, and unjustified claims, then refine the explanation into a Feynman Understanding Audit. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill directs the agent to fetch a remote replacement instruction file at runtime, which can change behavior after installation. <br>
-Mitigation: Review this behavior before installation; in controlled environments, use the packaged instructions or treat remote content only as optional reference material. <br>
-Risk: Simplifying concepts that are irreducibly formal can remove essential nuance. <br>
-Mitigation: Redirect formal concepts or name the irreducible core instead of forcing a plain-language simplification. <br>
+## Use Case:
 
+Learners, educators, and practitioners use the skill to check whether they can explain, predict, and apply a specific concept, and to identify what they need to study next.
 
-## Reference(s): <br>
-- [Feynman Technique on ClawHub](https://clawhub.ai/deciqai/skills/feynman-technique) <br>
-- [Primary sources](references/sources.md) <br>
-- [Feynman and the Challenger O-Ring Investigation](examples/feynman-challenger-o-ring-1986.md) <br>
-- [Freshman-Lecture Test and Spin-Statistics](examples/feynman-freshman-lecture-spin-statistics-1961.md) <br>
-- [AI Jargon Audit Example](examples/feynman-ai-jargon-audit-2024-2026.md) <br>
-- [The Feynman Lectures on Physics](https://www.feynmanlectures.caltech.edu/) <br>
-- [Rogers Commission Appendix F](https://science.ksc.nasa.gov/shuttle/missions/51-l/docs/rogers-commission/Appendix-F.txt) <br>
-- [Attention Is All You Need](https://arxiv.org/abs/1706.03762) <br>
-- [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with a structured Feynman Understanding Audit] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step questions in coach mode and stop for user responses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release evidence) <br>
+Risk: Automatic startup retrieval can introduce remotely changed instructions without user review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer a reviewed copy with automatic startup retrieval disabled, and approve instruction updates separately.
+
+Risk: The publisher can observe request timing and fetch-client metadata, and learning examples may contain private details.
+
+Mitigation: Avoid private details in learning examples.
+
+## Reference(s):
+
+- [Publisher skill page](https://clawhub.ai/deciqai/skills/feynman-technique)
+- [Primary sources](artifact/references/sources.md)
+- [The Feynman Lectures on Physics](https://www.feynmanlectures.caltech.edu/)
+- [Rogers Commission, Appendix F](https://science.ksc.nasa.gov/shuttle/missions/51-l/docs/rogers-commission/Appendix-F.txt)
+- [Retrieval-Augmented Generation for Knowledge-Intensive NLP Tasks](https://arxiv.org/abs/2005.11401)
+- [Attention Is All You Need](https://arxiv.org/abs/1706.03762)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with a structured Feynman Understanding Audit]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Captures an initial explanation, gap diagnosis, sources consulted, a refined explanation, analogy limits, and an understanding summary.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,59 @@
-## Description: <br>
-Analyzes reptile and arachnid pet media through a cloud API to produce structured Pet Safety Guardian health reports with observed condition, possible disease risks, care suggestions, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes uploaded or linked reptile and arachnid videos for visible health concerns and returns a structured report with potential risks and care suggestions.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents use this skill to submit reptile or arachnid pet videos, files, or URLs for cloud-assisted visual health screening. It can also retrieve cloud report-history lists and return structured health findings, recommendations, and report links. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Reptile media, video URLs, and report-history requests are sent to the Life Emergence cloud service. <br>
-Mitigation: Use the skill only with user-approved media and URLs, and confirm before uploads or report-history queries. <br>
-Risk: The skill can create or reuse a cloud-linked local identity and stores authentication material locally. <br>
-Mitigation: Review local identity and token retention behavior, protect local data files, and avoid placing unrelated secrets in data/smyx-api-key.txt. <br>
-Risk: Generated health analysis is advisory and may be incomplete or incorrect for medical decisions. <br>
-Mitigation: Present results as health reference guidance and direct users to a qualified veterinarian for diagnosis or treatment decisions. <br>
+## Use Case:
 
+Pet owners and caretakers use the skill to request visual health screening of reptile or arachnid videos and retrieve prior analysis reports. Results are for health reference and do not replace diagnosis by a qualified veterinarian.
 
-## Reference(s): <br>
-- [API Interface Documentation](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crawl-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and JSON-formatted structured analysis; optional saved output file.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include report export links, cloud report-history tables, and health reference guidance that should not replace professional veterinary diagnosis.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.8 (source: frontmatter and server release evidence) <br>
+Risk: Account handling may mix reports across different users.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for account-isolation fixes before using the skill with multiple users.
+
+Risk: Videos are sent to the lifeemergence.com service, and the export-only option may still upload them; service retention is not established by the evidence.
+
+Mitigation: Confirm the service's retention policy before sending private footage, and do not treat export-only mode as local-only processing.
+
+Risk: The service may register an account automatically and retain credentials locally.
+
+Mitigation: Use the skill only in a trusted environment and protect the locally retained credentials.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-crawl-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API interface reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Report links]
+
+**Output Format:** [Structured health report with findings, risk notices, care suggestions, and report links; JSON output is supported.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can display a Markdown table of cloud history reports and optionally save output to a file.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

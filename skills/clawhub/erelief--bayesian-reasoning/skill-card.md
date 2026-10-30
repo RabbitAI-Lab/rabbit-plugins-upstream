@@ -1,39 +1,55 @@
-## Description: <br>
-Guides users through Bayesian reasoning with multi-turn dialogue, posterior probability and Bayes factor calculations, sensitivity analysis, and ASCII result visualizations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guide users through Bayesian reasoning via multi-turn dialogue. Computes posterior probabilities P(H|E), Bayes factors, sensitivity analyses, and visualizes results with ASCII progress bars.
 
-## Publisher: <br>
-[erelief](https://clawhub.ai/user/erelief) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[erelief](https://clawhub.ai/user/erelief)
 
-## Use Case: <br>
-External users and developers can use this skill to structure hypotheses and evidence, convert probability estimates, calculate Bayesian updates, compare Bayes factors, and optionally save JSON results for later analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved Bayesian analysis files may contain sensitive hypotheses or evidence if the user chooses to write results to disk. <br>
-Mitigation: Confirm the filename and folder before saving, and avoid shared or synced directories for sensitive analyses. <br>
+## Use Case:
 
+Users and developers use this skill to structure Bayesian probability updates, compare hypotheses against evidence, run sensitivity analysis, and preserve results for iterative review.
 
-## Reference(s): <br>
-- [Bayesian Analysis Result Schema](references/data_schema.md) <br>
-- [ClawHub skill page](https://clawhub.ai/erelief/bayesian-reasoning) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown, shell commands, JSON] <br>
-**Output Format:** [Conversational Markdown with shell command examples, parsed JSON results, and optional saved JSON analysis files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a local Python calculator for probability math and can save Bayesian analysis state when the user chooses.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.0 (source: server release evidence) <br>
+Risk: Saved analysis files may contain sensitive hypothesis or evidence text.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid saving sensitive material unless local JSON storage in the current working directory is acceptable.
+
+Risk: Posterior probabilities depend on user-provided priors, likelihoods, and false-positive rates.
+
+Mitigation: Review assumptions explicitly and use the skill's sensitivity analysis when estimates are uncertain.
+
+## Reference(s):
+
+- [Bayesian Analysis Result Schema](references/data_schema.md)
+- [ClawHub skill page](https://clawhub.ai/erelief/skills/bayesian-reasoning)
+- [Publisher profile](https://clawhub.ai/user/erelief)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with JSON calculator results and optional saved JSON analysis files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses local script output for posterior probabilities, Bayes factors, sensitivity ranges, and ASCII progress bars.]
+
+## Skill Version(s):
+
+0.1.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

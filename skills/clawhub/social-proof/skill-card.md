@@ -1,43 +1,54 @@
-## Description: <br>
-Helps agents analyze when popularity, testimonials, consensus, fake reviews, or FOMO are shaping a decision and decide whether to follow, reject, or seek independent evidence. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users assess whether a consensus is informative, socially driven, or manufactured, and use that evidence in decisions or social-proof design.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, employees, and developers use this skill to evaluate social-proof signals in purchasing, hiring, investment, marketing, product UX, and trend decisions, especially where consensus may be social or manufactured rather than evidentiary. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Decision-support output may influence business, purchasing, hiring, investment, or product-design choices if treated as dispositive. <br>
-Mitigation: Use it as an analysis aid; verify cited claims and compare consensus signals against direct measured evidence before acting. <br>
+## Use Case:
 
+Employees and decision-makers use the skill to evaluate claims based on popularity, peer adoption, testimonials, or consensus, and to spot manufactured social proof. Product and marketing teams can use it to design transparent, evidence-based social-proof patterns.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/social-proof) <br>
-- [deciqAI Social Proof page](https://www.deciqai.com/c/social-proof) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/social-proof.json) <br>
-- [Sources - social-proof](artifact/references/sources.md) <br>
-- [Solomon Asch conformity example](artifact/examples/solomon-asch-conformity-experiments-swarthmore-1951-1956.md) <br>
-- [Enterprise AI copilot FOMO procurement example](artifact/examples/enterprise-ai-copilot-fomo-procurement-2024-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown, Text] <br>
-**Output Format:** [Markdown decision analysis with a structured Social-Proof Analysis template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Interactive coaching mode may pause after one question when the user needs to provide a concrete case.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Consensus claims, testimonials, and popularity metrics may be misleading or manufactured.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify the underlying evidence and seek independent dissent before consequential decisions; omit confidential details when recording observed failure patterns.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/social-proof)
+- [deciqAI Social Proof guide](https://www.deciqai.com/c/social-proof)
+- [Primary sources](artifact/references/sources.md)
+- [Asch, Opinions and Social Pressure (1955)](https://doi.org/10.1038/scientificamerican1155-31)
+- [Asch, Studies of Independence and Conformity (1956)](https://doi.org/10.1037/h0093718)
+- [Bikhchandani, Hirshleifer, and Welch, Informational Cascades (1992)](https://doi.org/10.1086/261849)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured social-proof analysis]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a concrete decision or design case; coaching mode proceeds one step at a time and waits for user input.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

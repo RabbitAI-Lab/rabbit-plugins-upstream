@@ -1,42 +1,51 @@
-## Description: <br>
-Guides early founders to recruit users manually, deliver concierge service, and defer automation until the motion is validated. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides early founders to recruit initial users and deliver manually before automating validated processes.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders and startup operators use this skill to decide when to do direct, manual customer acquisition and service delivery before investing in automation or scale. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: An agent may treat startup strategy as permission to contact customers or operate business accounts. <br>
-Mitigation: Require explicit user direction before outreach, account operation, or customer-facing action; treat the skill output as strategic guidance. <br>
-Risk: Advice to defer automation may be over-applied after a motion is already validated. <br>
-Mitigation: Use the skill's validation checks to confirm whether manual delivery is still needed before delaying systemization. <br>
+## Use Case:
 
+Early stage founders and startup teams use this skill to recruit initial users personally, deliver a concierge experience, and learn which steps are ready to systemize.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/do-things-that-dont-scale) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/do-things-that-dont-scale) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/do-things-that-dont-scale.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown guidance with checklists and decision criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Strategic coaching output; no code execution, tools, credentials, or external account access requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release metadata) <br>
+Risk: Manual outreach or concierge work could be misaligned with the user's intent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill as planning guidance and follow explicit instructions before carrying out customer outreach.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/do-things-that-dont-scale)
+- [deciqAI skill guide](https://www.deciqai.com/c/do-things-that-dont-scale)
+- [Machine-readable skill information](https://www.deciqai.com/s/do-things-that-dont-scale.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance with practical steps and a validation checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Recommendations depend on the startup stage and whether the motion has been validated.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,43 +1,54 @@
-## Description: <br>
-Host HTML/Markdown pages and share PDF, Word, or PowerPoint docs as ShareOne short links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Host HTML/Markdown pages and share PDF, Word, or PowerPoint docs as ShareOne short links. Use for publishing, passwords/watermarks, comments, downloads, updates, or Git-backed remote sources for ShareOne content.
 
-## Publisher: <br>
-[beep879](https://clawhub.ai/user/beep879) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[beep879](https://clawhub.ai/user/beep879)
 
-## Use Case: <br>
-Agents and developers use this skill to publish HTML, Markdown, text, PDF, Word, and PowerPoint content to ShareOne, then manage passwords, watermarks, comments, downloads, refreshes, settings, and deletion for those shares. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish selected local files or conversation-derived text to a publicly reachable ShareOne link. <br>
-Mitigation: Confirm the exact content and intended visibility before publishing, and use passwords or other restrictions for sensitive shares. <br>
-Risk: The skill handles ShareOne API keys, which may be exposed if pasted into normal chat or captured in logs. <br>
-Mitigation: Avoid sharing API keys in ordinary chat, rotate any key that appears in transcripts or logs, and use the documented credential flow. <br>
+## Use Case:
 
+Developers and other ShareOne users use the skill to publish or update HTML, Markdown, and text pages; share PDF, Word, and PowerPoint files; and manage access settings, downloads, and comments through ShareOne links.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/beep879/skills/shareone) <br>
-- [Publishing text and HTML pages workflow](artifact/workflows/publish-text-page.md) <br>
-- [Publishing binary documents workflow](artifact/workflows/publish-binary-file.md) <br>
-- [Environment and credentials workflow](artifact/workflows/environment-and-credentials.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown and terminal command guidance with ShareOne URLs and status messages] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May generate or update public ShareOne links and may instruct the agent to handle API-key based credentials.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.7 (source: server release metadata and frontmatter) <br>
+Risk: Some commands may send a saved ShareOne API key to an unverified website or over an unencrypted connection.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Before using a real API key, require credentials to be restricted to approved HTTPS destinations and reject insecure redirects.
+
+Risk: Publishing, deletion, or a persistent comment watcher may affect content, links, or sessions beyond the intended scope.
+
+Mitigation: Specify which content may be made public, confirm deletion targets, and explicitly select the project, scope, and session for any persistent watcher.
+
+## Reference(s):
+
+- [ShareOne website](https://shareone.vip)
+- [ShareOne ClawHub release](https://clawhub.ai/beep879/skills/shareone)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Share links, HTML pages, Markdown pages, Document files]
+
+**Output Format:** [Text results with ShareOne URLs and operation status]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can publish or retrieve HTML, Markdown, TXT, PDF, Word, and PowerPoint content.]
+
+## Skill Version(s):
+
+1.11.1 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
