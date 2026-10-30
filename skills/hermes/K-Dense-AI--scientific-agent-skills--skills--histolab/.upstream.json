@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/histolab",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/histolab",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/histolab",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "f1cb05c4eff47642ddcc15a73c4f4c77063dd50759823f7aba93e09415ac2546",
+  "fetchedAt": "2026-10-30T14:17:52.660Z"
+}

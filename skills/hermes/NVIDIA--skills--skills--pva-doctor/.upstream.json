@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/pva-doctor",
+  "identifier": "NVIDIA/skills/skills/pva-doctor",
+  "repo": "NVIDIA/skills",
+  "path": "skills/pva-doctor",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "4aa2c01c98aaff9957f31945d078f065fc93662cbb58522786276b22fe996e1d",
+  "fetchedAt": "2026-10-30T14:17:41.004Z"
+}

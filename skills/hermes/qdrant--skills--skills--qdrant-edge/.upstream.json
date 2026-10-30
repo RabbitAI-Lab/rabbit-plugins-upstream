@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-edge",
+  "identifier": "qdrant/skills/skills/qdrant-edge",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-edge",
+  "branch": "main",
+  "pushedAt": "2026-10-27T08:32:19Z",
+  "contentHash": "0ef4bb22ef3a7ee26cd74d728362a9aab1d937d370f827e7b8ec6cd89254b5fd",
+  "fetchedAt": "2026-10-30T14:17:35.318Z"
+}

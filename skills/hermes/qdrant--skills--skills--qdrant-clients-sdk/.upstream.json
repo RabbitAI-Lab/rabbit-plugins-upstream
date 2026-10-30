@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-clients-sdk",
+  "identifier": "qdrant/skills/skills/qdrant-clients-sdk",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-clients-sdk",
+  "branch": "main",
+  "pushedAt": "2026-10-27T08:32:19Z",
+  "contentHash": "89b0c734f510d15aad23f513c4a4fffe881cf40e3be326005882c204e5f9ded6",
+  "fetchedAt": "2026-10-30T14:17:35.317Z"
+}

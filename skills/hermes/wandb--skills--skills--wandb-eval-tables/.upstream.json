@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/wandb/skills/tree/main/skills/wandb-eval-tables",
+  "identifier": "wandb/skills/skills/wandb-eval-tables",
+  "repo": "wandb/skills",
+  "path": "skills/wandb-eval-tables",
+  "branch": "main",
+  "pushedAt": "2026-10-23T16:55:38Z",
+  "contentHash": "aebcc3ca8e6710c2f65c6150de2bfbd54f3d96fc6abee80977a54f16eafff6cf",
+  "fetchedAt": "2026-10-30T14:17:34.961Z"
+}

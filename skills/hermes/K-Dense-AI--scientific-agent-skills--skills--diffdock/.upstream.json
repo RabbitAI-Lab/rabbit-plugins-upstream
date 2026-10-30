@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/diffdock",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/diffdock",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/diffdock",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "893087a3cb96c83f485d83cdf250958a9194b34b96ef2fc592ae7eaf259e32a0",
+  "fetchedAt": "2026-10-30T14:17:52.643Z"
+}

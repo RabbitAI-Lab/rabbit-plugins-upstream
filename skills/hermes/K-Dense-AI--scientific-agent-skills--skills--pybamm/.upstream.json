@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/pybamm",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/pybamm",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/pybamm",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "42ced7340e7269afe464c93080a83ecadf51ce0d73e3faa9a1998bcbbfa8d49b",
+  "fetchedAt": "2026-10-30T14:17:52.715Z"
+}

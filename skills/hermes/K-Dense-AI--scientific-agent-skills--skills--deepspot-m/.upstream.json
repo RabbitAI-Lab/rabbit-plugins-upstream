@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/deepspot-m",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/deepspot-m",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/deepspot-m",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "211187219e0aa989e9e988470c1fb2d7a34a63b19634449382de7eff24b44f82",
+  "fetchedAt": "2026-10-30T14:17:52.641Z"
+}

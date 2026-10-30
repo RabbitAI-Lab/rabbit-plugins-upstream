@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/pva-build-test",
+  "identifier": "NVIDIA/skills/skills/pva-build-test",
+  "repo": "NVIDIA/skills",
+  "path": "skills/pva-build-test",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "64e57f6f50b8fd3342cf36efbd74b9d7692d3c9cb8db85cb8b5f332d12047a17",
+  "fetchedAt": "2026-10-30T14:17:41.002Z"
+}

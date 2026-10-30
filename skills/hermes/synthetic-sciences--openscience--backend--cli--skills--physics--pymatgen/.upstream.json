@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/pymatgen",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/pymatgen",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/pymatgen",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "dd188fea3469374d48ed1c18b9b00918fda8697154f5c34f580fb65c5006b122",
+  "fetchedAt": "2026-10-30T14:17:39.669Z"
+}

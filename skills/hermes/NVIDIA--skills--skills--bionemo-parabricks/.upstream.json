@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-parabricks",
+  "identifier": "NVIDIA/skills/skills/bionemo-parabricks",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-parabricks",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "6e113fddef3b80859ec330a813d9f9d88e890ca24d360278c9ce3120acdb864e",
+  "fetchedAt": "2026-10-30T14:17:40.988Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/physics/symbolic-regression",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/physics/symbolic-regression",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/physics/symbolic-regression",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "f74e09c5f7848e6ad9f30abcf618391638bd9538507fb2ac0a4a09fc7834ce05",
+  "fetchedAt": "2026-10-30T14:17:39.696Z"
+}

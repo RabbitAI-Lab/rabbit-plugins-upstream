@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/wandb/skills/tree/main/skills/wandb-primary",
+  "identifier": "wandb/skills/skills/wandb-primary",
+  "repo": "wandb/skills",
+  "path": "skills/wandb-primary",
+  "branch": "main",
+  "pushedAt": "2026-10-23T16:55:38Z",
+  "contentHash": "fc6123541e1ed8796780bc14e584c8462c75cf90c4e67f82eef7de7cf10fdd72",
+  "fetchedAt": "2026-10-30T14:17:34.964Z"
+}
