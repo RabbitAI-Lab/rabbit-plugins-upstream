@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-vm-repair-stuck",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-vm-repair-stuck",
+  "branch": "main",
+  "pushedAt": "2026-10-30T11:04:25Z",
+  "contentHash": "aabb535a04addfa0afed0dc941f02ae668efcc03de7a5153188acb12f2368aaa",
+  "fetchedAt": "2026-10-30T14:19:16.842Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-sentinel",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-sentinel",
+  "branch": "main",
+  "pushedAt": "2026-10-29T18:08:31Z",
+  "contentHash": "90bd3aa7e19b9299f007dabb4518ea43a0b8f6886c76649b78599cc1af24f172",
+  "fetchedAt": "2026-10-30T14:17:16.989Z"
+}
