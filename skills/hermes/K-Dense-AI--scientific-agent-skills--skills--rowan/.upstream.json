@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/rowan",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/rowan",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/rowan",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "1546214bd6447cefa79ae0288ade1dd1f37dfb1697809bde1ac08b0ed6115065",
+  "fetchedAt": "2026-10-30T14:17:52.732Z"
+}

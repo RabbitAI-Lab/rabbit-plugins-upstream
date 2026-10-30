@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/crewai",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/crewai",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/crewai",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "89e79d68a263e6418633790a709f4bdfcec96c10d640f99e3eb87b6dfb11751b",
+  "fetchedAt": "2026-10-30T14:17:39.550Z"
+}

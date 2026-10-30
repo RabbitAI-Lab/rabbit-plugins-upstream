@@ -5,7 +5,7 @@
   "repo": "NousResearch/hermes-agent",
   "path": "optional-skills/finance/lbo-model",
   "branch": "main",
-  "pushedAt": "2026-07-26T15:43:26Z",
-  "contentHash": "d8717ce9ed4b9e40da2fc4f69a0e72d2872980225574a1a8abf8f48b57929be0",
-  "fetchedAt": "2026-07-26T17:03:56.993Z"
+  "pushedAt": "2026-10-30T14:17:00Z",
+  "contentHash": "7b75a3b312c167009fca0db0a781a8e87779dc6717ccfdc5761f86c261dade84",
+  "fetchedAt": "2026-10-30T14:17:38.274Z"
 }

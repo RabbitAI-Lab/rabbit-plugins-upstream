@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/holoscan-module-lifecycle",
+  "identifier": "NVIDIA/skills/skills/holoscan-module-lifecycle",
+  "repo": "NVIDIA/skills",
+  "path": "skills/holoscan-module-lifecycle",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "d2e2a9d3098c3dc0d6dc9fec871a6239e7ce5540b6a70c37355bb85412bd2d0c",
+  "fetchedAt": "2026-10-30T14:17:40.765Z"
+}

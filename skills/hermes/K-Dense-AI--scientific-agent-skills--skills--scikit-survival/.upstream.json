@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/scikit-survival",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/scikit-survival",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/scikit-survival",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "275bddcbc4006a80a25a5989956bdb8d31920b50add9ac94d33b4c1b3871504c",
+  "fetchedAt": "2026-10-30T14:17:52.743Z"
+}

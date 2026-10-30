@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/bionemo-codonfm-score",
+  "identifier": "NVIDIA/skills/skills/bionemo-codonfm-score",
+  "repo": "NVIDIA/skills",
+  "path": "skills/bionemo-codonfm-score",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "3b45c3558a0c9e931fde077ffc76380c3c4bf52c7cd44587d545c2830891ae65",
+  "fetchedAt": "2026-10-30T14:17:40.560Z"
+}

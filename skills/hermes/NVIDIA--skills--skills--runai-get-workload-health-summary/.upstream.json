@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/runai-get-workload-health-summary",
+  "identifier": "NVIDIA/skills/skills/runai-get-workload-health-summary",
+  "repo": "NVIDIA/skills",
+  "path": "skills/runai-get-workload-health-summary",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "6b6ba26b1aaa9f4388d4bafbe4712c68ac32492427c8491bd1f703b71e3556f1",
+  "fetchedAt": "2026-10-30T14:17:41.017Z"
+}

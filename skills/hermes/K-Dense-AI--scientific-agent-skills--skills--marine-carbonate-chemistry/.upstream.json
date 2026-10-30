@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/marine-carbonate-chemistry",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/marine-carbonate-chemistry",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/marine-carbonate-chemistry",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "455ad008acc5ed1f2cc15d4fc16250171818d5fc3c282d87e2113ffd5d53922a",
+  "fetchedAt": "2026-10-30T14:17:52.674Z"
+}

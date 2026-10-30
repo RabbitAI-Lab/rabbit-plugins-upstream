@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/wandb/skills/tree/main/skills/agentlens-tracing-instrument",
+  "identifier": "wandb/skills/skills/agentlens-tracing-instrument",
+  "repo": "wandb/skills",
+  "path": "skills/agentlens-tracing-instrument",
+  "branch": "main",
+  "pushedAt": "2026-10-23T16:55:38Z",
+  "contentHash": "c90ea86c5739c79e51d678f81a7572ddd98bbc4af17a276b6b1fd47916b745ac",
+  "fetchedAt": "2026-10-30T14:17:34.959Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/pinecone-io/skills/tree/main/skills/pinecone-quickstart",
+  "identifier": "pinecone-io/skills/skills/pinecone-quickstart",
+  "repo": "pinecone-io/skills",
+  "path": "skills/pinecone-quickstart",
+  "branch": "main",
+  "pushedAt": "2026-10-29T18:24:36Z",
+  "contentHash": "7e7f8b95b3225962b44c68413fc40ee7a84cf59f01ffbee3f6da39f7909fa0ab",
+  "fetchedAt": "2026-10-30T14:17:35.231Z"
+}

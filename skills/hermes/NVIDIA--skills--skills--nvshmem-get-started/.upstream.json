@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-get-started",
+  "identifier": "NVIDIA/skills/skills/nvshmem-get-started",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-get-started",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "83c5a9c18d696bdf5c0619d2acdde4197f1b24183b833e18ddd8349ba76a9553",
+  "fetchedAt": "2026-10-30T14:17:40.895Z"
+}

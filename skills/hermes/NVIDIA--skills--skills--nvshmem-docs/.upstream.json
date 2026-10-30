@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/nvshmem-docs",
+  "identifier": "NVIDIA/skills/skills/nvshmem-docs",
+  "repo": "NVIDIA/skills",
+  "path": "skills/nvshmem-docs",
+  "branch": "main",
+  "pushedAt": "2026-10-30T00:24:25Z",
+  "contentHash": "8d8266a0a9c3a10abb9a97ded77d3be838182e531ae32f61e97ffa7d1f0c2a4d",
+  "fetchedAt": "2026-10-30T14:17:40.893Z"
+}

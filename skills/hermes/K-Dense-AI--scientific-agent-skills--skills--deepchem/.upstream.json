@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/deepchem",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/deepchem",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/deepchem",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "ca228edb3e2cd026d1a54aac60fb55690387c70ea87c53696687c05768c28e4b",
+  "fetchedAt": "2026-10-30T14:17:52.640Z"
+}
