@@ -1,42 +1,55 @@
-## Description: <br>
-Discovers GCP-hosted AI agent and MCP-relevant assets from operator-approved projects, emits canonical agent-bom inventory JSON, and can scan that inventory when requested. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Discover GCP-hosted AI and workload assets and create canonical agent-bom inventory for optional scanning.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, cloud engineers, and security reviewers use this skill to inventory Vertex AI, Cloud Run, Cloud Functions, GKE, and related agentic GCP infrastructure with operator-controlled credentials. It helps produce canonical agent-bom inventory and optional scan findings without handing agent-bom long-lived GCP credentials. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache 2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Overbroad GCP credentials could expose more project inventory than intended. <br>
-Mitigation: Use read-only or short-lived GCP credentials, confirm the selected project, and avoid broad production credentials unless they are necessary for the inventory. <br>
-Risk: Inventory output may contain sensitive resource or environment metadata. <br>
-Mitigation: Write inventory only to an operator-selected path, review the JSON before sharing it, and rely on the skill's credential redaction behavior for credential-like values. <br>
+## Use Case:
 
+Developers and cloud security teams use this skill to inventory operator-approved GCP projects for Vertex AI, Cloud Run, Cloud Functions, GKE, and related workloads. It writes canonical JSON locally for review and optional scanning.
 
-## Reference(s): <br>
-- [agent-bom GitHub repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [ClawHub skill page](https://clawhub.ai/msaad00/skills/agent-bom-discover-gcp) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, json] <br>
-**Output Format:** [Markdown with bash command blocks and JSON file paths] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces operator-selected inventory JSON and optional agent-bom scan findings JSON; credentials remain in the operator environment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release evidence and SKILL.md frontmatter) <br>
+Risk: GCP discovery reads operator credential configuration and queries approved projects, so overly broad credentials or project selection can expose more infrastructure inventory than intended.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use read-only credentials scoped to operator-approved projects and do not share credential values in chat.
+
+Risk: The generated inventory may contain sensitive infrastructure details if it is stored or shared carelessly.
+
+Mitigation: Write only to an operator-selected path, protect the inventory, and review redaction before sharing or uploading it.
+
+## Reference(s):
+
+- [agent-bom project repository](https://github.com/koda-ai-studio/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+- [ClawHub skill release](https://clawhub.ai/msaad00/skills/agent-bom-discover-gcp)
+
+## Skill Output:
+
+**Output Type(s):** [Files, JSON, Guidance]
+
+**Output Format:** [Canonical JSON inventory file with concise Markdown guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Writes to an operator-selected path; scanning is optional and requires an explicit request.]
+
+## Skill Version(s):
+
+0.111.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

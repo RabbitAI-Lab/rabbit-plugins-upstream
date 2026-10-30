@@ -114,6 +114,6 @@ High-stakes decision feels obvious and you're not checking it · tired/pressured
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/dual-system-thinking** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/dual-system-thinking** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/dual-system-thinking.json*

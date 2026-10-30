@@ -1,41 +1,57 @@
-## Description: <br>
-Complete guide for using pass, the standard Unix password manager, including terminal password-store setup, GPG-encrypted entries, git synchronization, and common extensions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Complete guide for using pass, the standard Unix password manager, including terminal password management, GPG-encrypted stores, git synchronization, TOTP, imports, and common CLI workflows.
 
-## Publisher: <br>
-[bastos](https://clawhub.ai/user/bastos) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[bastos](https://clawhub.ai/user/bastos)
 
-## Use Case: <br>
-External users, developers, and operators use this skill when they need guidance for installing, initializing, organizing, synchronizing, and troubleshooting a pass password store. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill covers sensitive password and private-key workflows. <br>
-Mitigation: Do not share decrypted passwords, exported vault files, or private-key files with an agent; keep secret handling local and user-directed. <br>
-Risk: Some commands can overwrite or recursively delete password-store entries. <br>
-Mitigation: Double-check entry paths before using recursive delete or force overwrite flags. <br>
-Risk: The guide references third-party pass extensions. <br>
-Mitigation: Review extension source and trustworthiness before cloning or installing extensions. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [pass-update extension](https://github.com/roddhjav/pass-update) <br>
+## Use Case:
 
+Developers, engineers, and terminal users use this skill to set up and operate pass for GPG-backed password storage, password generation, retrieval, organization, git synchronization, and related extensions.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline shell commands and configuration examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Guidance may include commands that operate on encrypted password-store entries, GPG keys, git remotes, clipboard behavior, and pass extensions.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: release evidence) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Commands may create, overwrite, move, or recursively remove password-store entries.
+
+Mitigation: Review each command before execution and use destructive options such as -f and -r only when the target path is correct.
+
+Risk: The workflow handles private GPG keys, TOTP seeds, clipboard contents, and password-manager export files.
+
+Mitigation: Protect private keys and exports, avoid exposing clipboard or terminal output, and clear or delete sensitive files after use.
+
+Risk: Extension installation can execute third-party code in the user's password-store environment.
+
+Mitigation: Install extensions only from trusted sources and prefer verified or pinned versions where possible.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/bastos/skills/pass)
+- [pass-update extension](https://github.com/roddhjav/pass-update)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown with inline shell commands and configuration snippets]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Guidance may include commands that manipulate password-store entries, GPG keys, git remotes, clipboard behavior, and third-party pass extensions.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

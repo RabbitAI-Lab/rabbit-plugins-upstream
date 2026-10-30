@@ -44,6 +44,15 @@ die() { echo "✗ $*" >&2; exit 1; }
 ok()  { echo "✓ $*"; }
 info(){ echo "→ $*"; }
 
+# 0.8.6 — F6: don't hard-require nc; fall back to bash /dev/tcp
+port_open() {
+  if command -v nc >/dev/null 2>&1; then
+    nc -z 127.0.0.1 "$1" 2>/dev/null
+  else
+    (exec 3<>"/dev/tcp/127.0.0.1/$1") 2>/dev/null
+  fi
+}
+
 # ─────────────────────────── args + secrets ───────────────────────────
 SD=""; WS=""
 while [[ $# -gt 0 ]]; do
@@ -111,7 +120,7 @@ ok "selftest passed"
 pick_free_port() {
   local p=$1
   for try in {0..15}; do
-    if ! nc -z 127.0.0.1 "$p" 2>/dev/null; then echo "$p"; return; fi
+    if ! port_open "$p"; then echo "$p"; return; fi  # 0.8.6 — F6
     p=$((p + 1))
   done
   die "no free port near $1 — close something or set BIND_PORT"
@@ -159,7 +168,7 @@ echo "BRIDGE_PID=$BRIDGE_PID" >> "$STATE_FILE"
 # Poll until listening (replaces unreliable sleep-2)
 LISTEN_OK=0
 for i in {1..30}; do
-  if nc -z 127.0.0.1 "$PORT" 2>/dev/null; then LISTEN_OK=1; break; fi
+  if port_open "$PORT"; then LISTEN_OK=1; break; fi  # 0.8.6 — F6
   sleep 0.5
 done
 [[ "$LISTEN_OK" -eq 0 ]] && { tail -20 "$BRIDGE_LOG"; die "bridge never started listening"; }
@@ -186,7 +195,8 @@ done
 # Validate it actually proxies
 info "Verifying tunnel is reachable..."
 TS=$(date +%s)
-SIG=$(python3 "$HMAC_PY" GET /v1/files "$TS" --key "$SPACEDUCK_BEAK_KEY")
+# [HARDEN-071] key via env, not argv (argv is visible in `ps`)
+SIG=$(SPACEDUCK_BEAK_KEY="$SPACEDUCK_BEAK_KEY" python3 "$HMAC_PY" GET /v1/files "$TS")
 HTTP_CODE=$(curl -s -o /dev/null -w '%{http_code}' --max-time 8 \
   -H "Authorization: Bearer $SPACEDUCK_BEAK_KEY" \
   -H "X-Spaceduck-Timestamp: $TS" \
@@ -234,7 +244,7 @@ To stop the bridge + tunnel + flip back to platform-managed:
 Manual verify-curl (uses the persisted state file):
     source $STATE_FILE
     TS=\$(date +%s)
-    SIG=\$(python3 $HMAC_PY GET /v1/files \$TS --key \$SPACEDUCK_BEAK_KEY)
+    SIG=\$(SPACEDUCK_BEAK_KEY=\$SPACEDUCK_BEAK_KEY python3 $HMAC_PY GET /v1/files \$TS)
     curl -s -H "Authorization: Bearer \$SPACEDUCK_BEAK_KEY" \\
          -H "X-Spaceduck-Timestamp: \$TS" -H "X-Spaceduck-Signature: \$SIG" \\
          \$TUNNEL_URL/v1/files | jq .

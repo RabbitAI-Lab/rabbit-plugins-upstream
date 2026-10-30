@@ -1,44 +1,52 @@
-## Description: <br>
-Helps agents query FinXData financial-data APIs for market prices, stock data, financial reports, news, macroeconomic data, quota status, and service health. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Lets agents retrieve and summarize stock quotes, disclosures, market themes, financial and macroeconomic data, commodity prices, FDA recalls, and stock graph summaries, prioritizing key-free queries.
 
-## Publisher: <br>
-[finxdata](https://clawhub.ai/user/finxdata) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[finxdata](https://clawhub.ai/user/finxdata)
 
-## Use Case: <br>
-Agents and end users use this skill to retrieve and summarize FinXData financial data, including stock quotes, market sectors, company reports, macroeconomic indicators, FRED series, tracking feeds, quota status, and API health. It is best suited for information retrieval and structured summaries, not investment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Authenticated commands send FINXDATA_API_KEY to the configured FinXData endpoint. <br>
-Mitigation: Configure FINXDATA_API_KEY deliberately and keep FINXDATA_BASE_URL on the trusted FinXData service unless a trusted alternative endpoint is required. <br>
-Risk: Financial queries may be transmitted to FinXData and returned data may be time-sensitive. <br>
-Mitigation: Use the narrowest query needed, summarize the returned dates and data freshness, and avoid presenting the output as investment advice. <br>
-Risk: Repeated API calls can consume quota or trigger rate limits. <br>
-Mitigation: Batch supported quote and price requests, reuse results within a task, respect 429 responses, and consult quota status only when needed. <br>
+## Use Case:
 
+External users can ask an agent in natural language for market and company data. The agent selects a supported query, reports the returned dates and coverage, and summarizes results without placing trades.
 
-## Reference(s): <br>
-- [FinXData API reference](references/api.md) <br>
-- [FinXData usage guide](references/usage.md) <br>
-- [ClawHub skill page](https://clawhub.ai/finxdata/skills/finxdata-skill) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown summaries, JSON API responses, shell commands, and environment-variable configuration guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include concise explanations of API errors, quota status, retry posture, and data freshness.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.10 (source: server release metadata) <br>
+Risk: FinXData receives query parameters and client type and can observe the caller's IP address.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Prefer key-free queries, configure an API key only when account data is needed, and check usage limits and returned data dates.
+
+## Reference(s):
+
+- [Quickstart](references/quickstart.md)
+- [API Reference](references/api.md)
+- [Usage Guide](references/usage.md)
+- [FinXData](https://www.finxdata.ai)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Guidance]
+
+**Output Format:** [Natural-language summaries of API data returned as JSON or Markdown tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarize key fields and data dates; identify missing or partial results.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

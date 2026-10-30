@@ -1,44 +1,55 @@
-## Description: <br>
-Conducts video safety risk analysis for outdoor sports and endurance events, identifying injuries and sudden health risks and producing structured reports with warnings and recommendations. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes outdoor sports videos to flag possible injuries and sudden health risks, then provides structured reports and timely warnings.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and event operators use this skill to submit outdoor sports videos or URLs for cloud analysis, receive structured risk reports, and query prior reports for follow-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Videos, URLs, and report queries may be sent to the lifeemergence.com cloud service for processing. <br>
-Mitigation: Install and use only when that service relationship and media data flow are approved; avoid submitting sensitive media unless policy allows it. <br>
-Risk: The skill may silently create or reuse an identity and store service tokens in a local SQLite database. <br>
-Mitigation: Run it in an isolated workspace, restrict workspace sharing, and remove local identity or token files when deprovisioning. <br>
-Risk: Generated safety reports can influence medical or emergency decisions. <br>
-Mitigation: Treat outputs as decision support only and escalate urgent participant health concerns to qualified medical personnel. <br>
+## Use Case:
 
+Outdoor event organizers and response teams can submit sports footage to identify possible falls, visible injuries, signs of discomfort, and movement risks, and receive a structured analysis with suggested response steps.
 
-## Reference(s): <br>
-- [Outdoor sports analysis API documentation](artifact/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sport-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown reports and JSON-formatted structured analysis, with optional result files.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include cloud report links and history-query tables; local video uploads are limited to supported video formats and size limits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter reports 1.0.9) <br>
+Risk: Participant footage may be sent to the provider, including when users expect analysis to be disabled.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm authorization to share the footage before running the skill; do not rely on --export-env-only to prevent uploads.
+
+Risk: The skill may provision an account and store access tokens without clear user controls.
+
+Mitigation: Use an approved local identity and review credential storage and account activity when installing and operating the skill.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-sport-analysis)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [API documentation](artifact/references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance, Report links]
+
+**Output Format:** [Structured sports risk analysis report with findings, recommendations, and a report link when available; Markdown for report listings.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Summarizes detected risk indicators and suggested response steps.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

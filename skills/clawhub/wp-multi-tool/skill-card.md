@@ -1,42 +1,60 @@
-## Description: <br>
-WordPress site health audit, performance optimization, database cleanup, autoload tuning, slow query detection, wp-config management, image size control, frontend speed fixes, and server diagnostics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides WordPress site-health and performance diagnostics, database cleanup and optimization guidance, and WP Multitool plugin workflows through WP-CLI.
 
-## Publisher: <br>
-[marcindudekdev](https://clawhub.ai/user/marcindudekdev) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[marcindudekdev](https://clawhub.ai/user/marcindudekdev)
 
-## Use Case: <br>
-Developers, site owners, and WordPress operators use this skill to inspect site health, diagnose performance bottlenecks, and apply WP-CLI based optimization or cleanup actions with confirmation for writes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: WP-CLI commands can inspect or change a live WordPress site. <br>
-Mitigation: Use the skill only on sites where the operator is authorized to run WP-CLI, and review proposed commands before execution. <br>
-Risk: Cleanup, configuration edits, frontend toggles, or plugin activation can modify data or site behavior. <br>
-Mitigation: Require explicit user confirmation for write operations and take a database backup before destructive cleanup commands. <br>
+## Use Case:
 
+WordPress developers and site administrators use this skill to inspect site health and performance, review database and configuration issues, and apply selected optimizations using WP-CLI. Destructive or configuration-changing operations require explicit user confirmation.
 
-## Reference(s): <br>
-- [WP Multitool Homepage](https://wpmultitool.com) <br>
-- [ClawHub Skill Page](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool) <br>
-- [Publisher Profile](https://clawhub.ai/user/marcindudekdev) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, text] <br>
-**Output Format:** [Markdown with WP-CLI command blocks and optional JSON command output] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only diagnostics can be proposed directly; write operations require user confirmation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.8.0 (source: server release metadata) <br>
+Risk: The manual revision-cleanup fallback may delete more history than its stated retention target and may be difficult to reverse.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid that fallback until it is verified to preserve the intended revisions; before any cleanup, confirm a restorable backup, review the exact deletion scope, and obtain explicit user approval.
+
+Risk: A diagnostic query may return more detail than the skill's stated data limits.
+
+Mitigation: Prefer the minimum necessary read-only checks, review and redact results before presenting them, and do not retain or share diagnostic output. Omit profiler URLs.
+
+Risk: Plugin activation, cleanup, and configuration changes can affect site behavior or remove data.
+
+Mitigation: Get explicit user approval for activation and each write operation, including diagnostic-log deletion, after explaining its scope and confirming a recoverable backup where data may be changed.
+
+## Reference(s):
+
+- [WP Multitool Website](https://wpmultitool.com)
+- [ClawHub Skill Release](https://clawhub.ai/marcindudekdev/skills/wp-multi-tool)
+- [Publisher Profile](https://clawhub.ai/user/marcindudekdev)
+- [Author Website](https://marcindudek.dev)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Shell commands, Configuration instructions]
+
+**Output Format:** [Markdown diagnostic summaries and recommendations with WP-CLI command examples; commands may return text or JSON.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only diagnostics and recommendations, plus user-confirmed write operations.]
+
+## Skill Version(s):
+
+1.9.15 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

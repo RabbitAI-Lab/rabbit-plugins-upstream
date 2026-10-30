@@ -1,47 +1,58 @@
-## Description: <br>
-Analyzes child activity-zone images, videos, or URLs to detect contact with dangerous objects or electrical sockets and return structured warning results. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes submitted videos of children's activity areas for possible contact with preset dangerous objects or electrical sockets and returns structured findings.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and developers can use this skill to route child-monitoring media through a cloud analysis service that detects dangerous object contact, socket interaction, and related warning levels. It is intended as an auxiliary alerting workflow for homes, kindergartens, and early-education settings, not as a replacement for adult supervision. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Child-monitoring images, videos, or URLs may be processed by the publisher's cloud service. <br>
-Mitigation: Use only with appropriate guardian consent, confirm the publisher's retention and deletion practices, and avoid submitting media that is not necessary for the safety task. <br>
-Risk: Cloud history queries and generated report links may expose sensitive information about children and monitored locations. <br>
-Mitigation: Limit access to report links, review who can retrieve historical reports, and remove stale reports according to the user's privacy requirements. <br>
-Risk: The skill silently creates or reuses an identity and stores service tokens locally. <br>
-Mitigation: Review token storage, rotation, and revocation expectations before installation, especially on shared systems. <br>
-Risk: Detection results may be incomplete or incorrect and cannot guarantee child safety. <br>
-Mitigation: Treat alerts as auxiliary signals, maintain adult supervision, and test the skill with representative camera angles and lighting before relying on it operationally. <br>
+## Use Case:
 
+Caregivers and childcare staff can review submitted video for possible child contact with hazardous household objects or electrical sockets and receive a structured alert report. Treat the findings as an auxiliary review aid.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-dangerous-object-detection-analysis) <br>
-- [Skill API interface document](references/api_doc.md) <br>
-- [Shared API error-code reference](skills/smyx_analysis/references/api_doc.md) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown tables and structured JSON analysis results with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include alert levels, detected object classes, confidence values, timestamps, snapshot URLs, and cloud report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.3 (source: server release metadata) <br>
+Risk: Private child footage may be processed unexpectedly.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for fixes to identity isolation and the environment-only option before using private footage; confirm the provider's storage and deletion practices.
+
+Risk: Different users may share access to reports.
+
+Mitigation: Avoid shared accounts and use a separate, non-secret identity.
+
+Risk: Continuous safety monitoring and automatic emergency alerts are not established.
+
+Mitigation: Use this for submitted-video analysis only; do not rely on it for continuous protection or emergency alerts.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [ClawHub release](https://clawhub.ai/smyx-sunjinhui/skills/smyx-child-dangerous-object-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Text, Markdown]
+
+**Output Format:** [Structured analysis report in JSON or text; Markdown tables for history queries]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include detected object and action, confidence, event time, alert level, snapshot, and report link when returned by the service.]
+
+## Skill Version(s):
+
+1.0.9 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

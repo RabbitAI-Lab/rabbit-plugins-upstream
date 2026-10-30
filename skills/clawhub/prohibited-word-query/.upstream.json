@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/prohibited-word-query",
   "slug": "prohibited-word-query",
   "ownerHandle": null,
-  "version": "1.0.9",
-  "updatedAt": 1780630076845,
-  "contentHash": "ec2fa45dfcda8afd2aa4f43eaaf890ab0552d001ca7bccc6145304c0d61513f0",
-  "fetchedAt": "2026-07-26T18:35:20.761Z"
+  "version": "1.0.10",
+  "updatedAt": 1792669684085,
+  "contentHash": "1046be07e82a9dc3bf34ba72469ab62fe940be36ce0534dd1e0c78813a1cf0f2",
+  "fetchedAt": "2026-10-30T14:41:41.540Z"
 }

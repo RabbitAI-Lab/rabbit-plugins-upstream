@@ -1,39 +1,51 @@
-## Description: <br>
-Helps agents diagnose weak signup-to-activation conversion and design onboarding paths that get users to a measurable aha moment faster. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides teams in improving user activation by defining an aha moment, simplifying onboarding, and measuring time to value.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Product, growth, and customer-success teams use this skill to identify activation gaps, define the aha moment, remove onboarding friction, and measure activation rate and time-to-value. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills. <br>
-Mitigation: Review and scan skill before deployment. <br>
+## Use Case:
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/activation-onboarding-playbook) <br>
-- [deciqAI activation onboarding playbook](https://www.deciqai.com/c/activation-onboarding-playbook) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/activation-onboarding-playbook.json) <br>
+Product, growth, and customer success teams use this skill to find where new users fail to reach value, design a shorter onboarding path, and track activation and time to value.
 
+### Deployment Geography for Use:
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Markdown] <br>
-**Output Format:** [Markdown guidance with process steps, red flags, and verification checklist items] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable strategic advisory output; no shell commands, code, or automatic actions are requested.] <br>
+Global
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+## Known Risks and Mitigations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Risk: Review before execution as proposals could introduce incorrect or misleading guidance into skills.
+
+Mitigation: Review and scan skill before deployment.
+
+## Reference(s):
+
+- [Activation & Onboarding playbook](https://www.deciqai.com/c/activation-onboarding-playbook)
+- [Machine-readable skill reference](https://www.deciqai.com/s/activation-onboarding-playbook.json)
+- [deciqAI Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Text or Markdown recommendations and onboarding steps]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

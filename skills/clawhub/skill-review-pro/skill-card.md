@@ -1,42 +1,50 @@
-## Description: <br>
-Skill Review Pro evaluates AI skills through static review, scoring, adversarial checks, and improvement guidance. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Evaluates user-selected agent skills through static analysis, assigns a 100-point quality score, and provides review reports and improvement suggestions.
 
-## Publisher: <br>
-[z-zihan](https://clawhub.ai/user/z-zihan) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[z-zihan](https://clawhub.ai/user/z-zihan)
 
-## Use Case: <br>
-Developers and skill authors use this agent to review skill quality, score skills against documented criteria, identify robustness issues, and prepare concrete improvement plans. When explicitly requested, it can guide a user-confirmed fix workflow for the selected skill. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can read local skill files and may propose changes that affect another skill's behavior. <br>
-Mitigation: Use it on intended target files only and review proposed findings before acting on them. <br>
-Risk: The optional fix workflow can edit the selected skill after the user chooses to proceed. <br>
-Mitigation: Review proposed diffs before approving fixes, especially for broad improvement requests. <br>
+## Use Case:
 
+Developers and skill authors use this skill to assess a selected agent skill's quality and resilience, receive a scored review with improvement suggestions, and validate proposed fixes before approving them.
 
-## Reference(s): <br>
-- [Skill Review Pro on ClawHub](https://clawhub.ai/z-zihan/skill-review-pro) <br>
-- [Publisher Profile](https://clawhub.ai/user/z-zihan) <br>
-- [Project Homepage](https://github.com/z-Zihan/awesome-skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown review reports with scores, issue summaries, adversarial-check results, improvement priorities, and fix checklists when applicable] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Outputs follow the user's language and may include user-confirmed skill-edit plans during fix workflows.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.1 (source: frontmatter and server release metadata) <br>
+Risk: Proposed repairs, especially added translations, can introduce incorrect or misleading skill guidance.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Specify the exact skill or repository to review and inspect proposed changes before approving repairs; use the read-only audit as supporting information.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/z-zihan/skills/skill-review-pro)
+- [Declared project homepage](https://github.com/z-Zihan/awesome-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Code]
+
+**Output Format:** [Markdown review reports, improvement plans, and proposed patches]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include a 100-point score, findings, prioritized suggestions, and optional repair proposals.]
+
+## Skill Version(s):
+
+2.1.0 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

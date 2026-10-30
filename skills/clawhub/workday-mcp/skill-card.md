@@ -1,42 +1,55 @@
-## Description: <br>
-Read-only MCP skill for retrieving Workday HR tasks, pay, benefits, and compensation data through the user's signed-in browser session. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Read Workday HR data — including org charts, worker profiles, pay, benefits, compensation, performance, and task or data cards — through the user's signed-in session.
 
-## Publisher: <br>
-[chrischall](https://clawhub.ai/user/chrischall) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chrischall](https://clawhub.ai/user/chrischall)
 
-## Use Case: <br>
-Employees and authorized Workday users use this skill to inspect their own Workday tasks and HR data, including pay, benefits, compensation, and related task details, from an agent. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can expose private HR, pay, benefits, and compensation data available in the user's signed-in Workday browser session. <br>
-Mitigation: Install only when acceptable under employer policy, keep prompts explicit when requesting Workday data, and disable or remove the MCP and extension pairing when it is no longer needed. <br>
-Risk: The browser extension bridge depends on the user's live Workday session and approved local pairing. <br>
-Mitigation: Use the health check to confirm the bridge and session state, approve pairing only for the intended MCP server, and re-authenticate or disconnect when the session is no longer intended for agent access. <br>
+## Use Case:
 
+Employees with an authorized signed-in Workday session use the skill to retrieve org charts, worker profiles, compensation, benefits, performance, and task data as structured JSON.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/chrischall/skills/workday-mcp) <br>
-- [workday-mcp npm package](https://www.npmjs.com/package/workday-mcp) <br>
-- [fetchproxy extension setup](https://github.com/chrischall/fetchproxy) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, json, configuration, guidance] <br>
-**Output Format:** [Structured JSON from MCP tools with Markdown setup and usage guidance.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Read-only Workday access; requires workday-mcp, the fetchproxy browser extension, tenant configuration, and an active signed-in Workday browser session.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.2.1 (source: server-resolved release metadata) <br>
+Risk: Signed-in Workday access can expose sensitive HR information about colleagues whose records are available to the session.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill only where employer policy permits sharing the requested HR information with an agent, and limit access to the necessary Workday domains and capabilities.
+
+Risk: External dependency behavior was not fully audited.
+
+Mitigation: Review the package and browser extension, prefer reviewed versions, verify extension checksums, and approve only the required domains and capabilities.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/chrischall/skills/workday-mcp)
+- [workday-mcp package](https://www.npmjs.com/package/workday-mcp)
+- [ContextMint Bridge releases](https://github.com/nullnet-app/contextmint-bridge/releases)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance]
+
+**Output Format:** [Structured JSON]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only Workday data; returned free-text content may be untrusted.]
+
+## Skill Version(s):
+
+1.1.11 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

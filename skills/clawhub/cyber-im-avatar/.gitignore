@@ -1,0 +1,8 @@
+__pycache__/
+*.py[cod]
+.DS_Store
+.im-standin/
+lark-im-resources/
+*.pos
+*.pos.tmp.*
+*.bad

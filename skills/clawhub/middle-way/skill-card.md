@@ -1,40 +1,56 @@
-## Description: <br>
-The Middle Way guides agents through a Zhongyong-inspired analysis for decisions framed as false binaries, identifying both poles' failure modes and a situation-specific position that avoids them. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps agents assess decisions framed as opposing extremes and identify a situation-specific position that avoids each side’s failure modes.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill to analyze debates or decisions that appear binary but are better treated as a spectrum. It helps the agent name each pole, compare failure modes, choose a context-specific middle position, and define when that position should be revisited. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The middle-way framing can produce false balance if one side is clearly supported by evidence or the decision is genuinely binary. <br>
-Mitigation: Use the skill's fit checks first, compare both pole failure modes explicitly, and review the resulting guidance before relying on it. <br>
+## Use Case:
 
+Employees and external users can use this skill to analyze debates that appear binary, compare the failure modes at each extreme, and choose a context-specific position with clear review triggers.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/middle-way) <br>
-- [Primary sources](references/sources.md) <br>
-- [Method in Action: Zisi Zhongyong and the Third Way Debate](examples/zisi-zhongyong-third-way-debate.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis with structured decision fields] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step clarification questions before producing the final analysis when the user is unfamiliar with the method.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server-resolved release metadata) <br>
+Risk: Saved examples or failure patterns could expose sensitive details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Remove or anonymize sensitive information before saving examples or failure patterns.
+
+Risk: Applying a middle-way lens when evidence clearly favors one side can create false balance.
+
+Mitigation: Check whether the choice is genuinely a spectrum and whether the evidence favors one side before applying the lens.
+
+## Reference(s):
+
+- [Primary Sources](artifact/references/sources.md)
+- [Middle Way overview](https://www.deciqai.com/c/middle-way)
+- [Skill metadata](https://www.deciqai.com/s/middle-way.json)
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/middle-way)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May identify the opposing poles, their failure modes, situation constraints, a reasoned position, counterarguments, and a review trigger.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

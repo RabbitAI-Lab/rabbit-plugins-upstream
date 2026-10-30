@@ -1,40 +1,51 @@
-## Description: <br>
-Helps founders decide whether and when to make early hires by validating repeatable needs, comparing hiring with alternatives, sequencing by leverage, and checking runway. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps founders decide when and what to hire first by assessing business constraints, repeatable needs, alternatives, and runway.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders and early-stage operators use this skill to decide if a first or next hire is justified, whether alternatives such as automation or contractors are better, and which role should be sequenced first for leverage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Hiring and runway recommendations are general advisory guidance and may not fit a company's financial, legal, or operating context. <br>
-Mitigation: Review decisions against company-specific runway, budget, employment obligations, and founder judgment before making hiring commitments. <br>
+## Use Case:
 
+External: founders and early-stage startup operators use this guidance to decide whether to hire, automate, outsource, or eliminate work and to sequence early roles around validated needs and runway.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/when-to-make-first-hires) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/when-to-make-first-hires) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/when-to-make-first-hires.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown advisory guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable business guidance; no code, shell commands, or sensitive access requests.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: An early hire can consume runway before the work or role is validated.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate that the need is repeatable, compare hiring with automation or outsourcing, and model the hire against runway before committing.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/when-to-make-first-hires)
+- [deciqAI hiring guidance](https://www.deciqai.com/c/when-to-make-first-hires)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/when-to-make-first-hires.json)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown guidance with a sequenced hiring framework and verification checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [A single-stream planning framework; no files or external actions are required.]
+
+## Skill Version(s):
+
+1.0.3 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

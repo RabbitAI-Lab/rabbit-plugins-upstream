@@ -1,45 +1,61 @@
-## Description: <br>
-Autonomously edit videos, add captions, and remove silences via BatchEdits. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Edit videos in bulk with BatchEdits - add captions, remove silences, crop to 9:16, zoom and cut long videos into clips with the BatchEdits CLI (or MCP server), then download the results.
 
-## Publisher: <br>
-[chuckwhisler](https://clawhub.ai/user/chuckwhisler) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[chuckwhisler](https://clawhub.ai/user/chuckwhisler)
 
-## Use Case: <br>
-External users and developers use this skill to connect OpenClaw to BatchEdits for video editing workflows, including captions, silence removal, custom style creation, upload processing, status checks, and downloads. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Videos selected for editing are sent to BatchEdits. <br>
-Mitigation: Install and use the skill only when BatchEdits is trusted for the selected video content. <br>
-Risk: API keys can be exposed if placed directly in the MCP URL. <br>
-Mitigation: Prefer the header-based BATCHEDITS_API_KEY setup or OAuth flow, and avoid sharing configuration or logs that contain credentials. <br>
-Risk: The upload workflow asks the agent to execute an upload command returned by BatchEdits. <br>
-Mitigation: Review the command before execution and confirm it is a narrow, expected upload to BatchEdits for the intended file. <br>
+## Use Case:
 
+External video creators and editors use this skill to process requested videos in batches, applying captions, silence removal, reframing, zoom, and clips through BatchEdits. It guides users through CLI or MCP setup and downloading completed edits.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/chuckwhisler/skills/batchedits) <br>
-- [Publisher Profile](https://clawhub.ai/user/chuckwhisler) <br>
-- [BatchEdits MCP Endpoint](https://batchedits.com/api/mcp) <br>
-- [BatchEdits OAuth Registration Endpoint](https://batchedits.com/api/oauth/register) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, shell commands, configuration, API calls] <br>
-**Output Format:** [Markdown with inline shell commands and MCP tool names] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce video IDs, processing status, download guidance, and upload commands for selected local video files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: Selected video files are uploaded to BatchEdits for processing.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm the selected files or folder and intended upload destination before processing.
+
+Risk: Video processing and AI-selected clips may consume account credits.
+
+Mitigation: Review the expected credit use with the user and obtain approval before starting processing.
+
+Risk: A locally stored sign-in token or API key could expose the user's account if mishandled.
+
+Mitigation: Keep credentials out of commands and chat, use the documented environment variable where applicable, and protect the local sign-in token.
+
+## Reference(s):
+
+- [BatchEdits CLI documentation](https://batchedits.com/docs/cli?utm_source=clawhub&utm_medium=skill)
+- [BatchEdits MCP setup guide](https://batchedits.com/docs/mcp?utm_source=clawhub&utm_medium=skill)
+- [BatchEdits on npm](https://www.npmjs.com/package/batchedits)
+- [BatchEdits ChatGPT setup](https://batchedits.com/chatgpt?utm_source=clawhub&utm_medium=skill)
+- [BatchEdits ClawHub release](https://clawhub.ai/chuckwhisler/skills/batchedits)
+
+## Skill Output:
+
+**Output Type(s):** [Files, Shell commands, Configuration instructions]
+
+**Output Format:** [Edited video files with Markdown guidance and inline shell commands]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Processed videos are downloaded to a user-selected location; processing may consume credits.]
+
+## Skill Version(s):
+
+1.0.8 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

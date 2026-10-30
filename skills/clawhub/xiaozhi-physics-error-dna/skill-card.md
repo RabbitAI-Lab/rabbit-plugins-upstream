@@ -1,45 +1,55 @@
-## Description: <br>
-A physics study aid that classifies mistakes into five error dimensions, tracks recurring weak areas, and produces physics error maps and weak-area reports while coordinating with a general correction notebook. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps middle- and high-school students identify the causes of physics mistakes and summarize recurring weaknesses across physical diagrams, concepts, formulas, problem-solving steps, and mathematical tools.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Students and learning-assistant agents use this skill to diagnose physics mistakes, distinguish diagram, concept, formula, process, and math-tool errors, and turn repeated errors into targeted weak-area tracking and review reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill keeps structured physics mistake records and may share summaries with named learning companion skills. <br>
-Mitigation: Use the skill only when users are comfortable with that recordkeeping and summary sharing, and follow the artifact's consent boundaries for long-term archives, reminders, and companion-skill handoffs. <br>
-Risk: Weak-area labels could overstate a student's long-term difficulty if repeated errors are treated as permanent. <br>
-Mitigation: Combine repeated-error signals with verification or student confirmation before marking a persistent weak area, as described in the artifact behavior. <br>
+## Use Case:
 
+Middle- and high-school students use the skill to understand recurring causes of physics errors and review patterns in their weak areas. It focuses on diagnosis and summaries rather than initial mistake capture, step-by-step tutoring, or rebuilding concepts.
 
-## Reference(s): <br>
-- [Physics Error Dimension Table](references/physics-error-dimension-table.md) <br>
-- [Physics Concept Confusion Map](references/physics-concept-confusion-map.md) <br>
-- [Physics Math Tools Checklist](references/physics-math-tools-checklist.md) <br>
-- [Physics Diagram Guide](references/physics-diagram-guide.md) <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-physics-error-dna) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and structured text guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include physics error classifications, weak-area summaries, practice guidance, monthly reports, and handoff summaries for companion learning skills.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Student physics records may contain personal learning information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use a platform that enforces consent controls and keeps updates within the student's physics records; honor requests to pause memory or sharing, and keep saving, sharing, and reminders optional.
+
+## Reference(s):
+
+- [Physics error dimension table](references/physics-error-dimension-table.md)
+- [Physics concept confusion map](references/physics-concept-confusion-map.md)
+- [Physics math tools checklist](references/physics-math-tools-checklist.md)
+- [Student physics profile schema](shared/dna-profile.schema.json)
+- [Cross-skill handover schema](shared/handover-protocol.schema.json)
+- [Student physics profile schema reference](https://xiaozhi-skills.openclaw.dev/schemas/dna-profile.schema.json)
+- [Cross-skill handover schema reference](https://xiaozhi-skills.openclaw.dev/schemas/handover-protocol.schema.json)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON]
+
+**Output Format:** [Conversational explanations, physics-error summaries, and structured learning-record data]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Record updates require student confirmation; saving, sharing, and reminders are optional.]
+
+## Skill Version(s):
+
+2.12.0 (source: server release evidence and frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

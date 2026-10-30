@@ -1,0 +1,50 @@
+# Real Estate Listing Writer - starting point
+# Copy this file, replace every empty value with your own data, keep the field names.
+property:
+  address: ""
+  city: ""
+  state: ""
+  zip: ""
+  beds: 0
+  baths: 0
+  square_feet: 0
+  square_feet_source: ""
+  lot_square_feet: 0
+  property_type: ""
+  stories: 0
+  parking: ""
+  hoa: ""
+  hoa_amount: ""
+  annual_taxes: ""
+  taxes_source: ""
+systems:
+  hvac_year: 0
+  roof_year: 0
+  water_heater_year: 0
+  electrical_panel_year: 0
+kitchen_and_baths:
+  - ""
+exterior:
+  - ""
+neighborhood:
+  boundaries: ""
+  amenities:
+    - ""
+  transit: ""
+  schools: ""
+  schools_source: ""
+seller_notes:
+  - ""
+unverified_claims:
+  - ""
+excluded_from_public_copy:
+  - ""
+disclosures_received:
+  - ""
+listing_agent:
+  name: ""
+  brokerage: ""
+  license_state: ""
+  member_nar: false
+  mls_number: ""
+date_on_market: ""

@@ -1,47 +1,58 @@
-## Description: <br>
-Reciprocity helps agents analyze gifts, concessions, free tiers, free credits, and other generosity-driven situations to identify reciprocity pressure and choose an ethical response. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through analyzing gifts, favors, and negotiation concessions to identify reciprocal pressure and choose a deliberate response.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, business teams, and agents use this skill to evaluate gifts, free samples, concessions, free credits, and vendor pilots for reciprocity pressure. It guides the user toward accepting, declining, restructuring, or evaluating the eventual ask on its own merits. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill discusses influence techniques that can affect people without full awareness. <br>
-Mitigation: Use it for transparent analysis and decision support, especially to recognize pressure, not to coerce people. <br>
-Risk: Reciprocity analysis could be misapplied where legal, procurement, or professional rules already govern gifts or concessions. <br>
-Mitigation: Follow the applicable rule first and use the skill only to support ethical review and documentation. <br>
+## Use Case:
 
+Employees, founders, and business teams use this skill to assess unexpected gifts, favors, and negotiation concessions, then choose whether and how to reciprocate.
 
-## Reference(s): <br>
-- [Sources - reciprocity](references/sources.md) <br>
-- [ClawHub Reciprocity release page](https://clawhub.ai/deciqai/skills/reciprocity) <br>
-- [deciqAI Reciprocity page](https://www.deciqai.com/c/reciprocity) <br>
-- [Regan 1971 - Effects of a Favor and Liking on Compliance](https://doi.org/10.1016/0022-1031(71)90025-4) <br>
-- [Cialdini et al. 1975 - Door-in-the-Face Technique](https://doi.org/10.1037/h0076284) <br>
-- [Gouldner 1960 - The Norm of Reciprocity](https://doi.org/10.2307/2092623) <br>
-- [Wazana 2000 - Physicians and Pharmaceutical Industry Gifts](https://doi.org/10.1001/jama.283.3.373) <br>
-- [Dana and Loewenstein 2003 - Gifts to Physicians](https://doi.org/10.1001/jama.290.2.252) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces a structured Reciprocity Analysis with favor, eventual ask, counterfactual, structure, and decision fields; no files, code, or shell commands are generated.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Gift or favor guidance may intersect with bright-line legal, ethical, or institutional rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Follow applicable rules first; the skill directs users to skip its analysis when such rules apply.
+
+Risk: Recording real examples could expose confidential personal or business details.
+
+Mitigation: Remove confidential details before recording observed lessons.
+
+## Reference(s):
+
+- [Sources (artifact)](artifact/references/sources.md)
+- [Regan (1971), Effects of a Favor and Liking on Compliance](https://doi.org/10.1016/0022-1031(71)90025-4)
+- [Cialdini et al. (1975), Reciprocal Concessions Procedure](https://doi.org/10.1037/h0076284)
+- [ClawHub skill page](https://clawhub.ai/deciqai/skills/reciprocity)
+- [Skill guide](https://www.deciqai.com/c/reciprocity)
+- [Machine-readable skill information](https://www.deciqai.com/s/reciprocity.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured Reciprocity Analysis in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Uses a concrete situation; may ask one step at a time when coaching a novice.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

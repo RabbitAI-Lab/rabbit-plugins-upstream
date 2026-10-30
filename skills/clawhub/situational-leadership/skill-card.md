@@ -1,48 +1,54 @@
-## Description: <br>
-Helps managers match directing, coaching, supporting, or delegating styles to a person's development level on a specific task. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides managers in matching their leadership style to an individual's competence and commitment on a specific task.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Managers, team leads, and agents supporting management coaching use this skill to diagnose a person's competence and commitment on a specific task, then choose an appropriate leadership style and immediate behavior changes. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Management guidance could be incorrect or misleading if the user provides an incomplete task description or infers commitment without direct conversation. <br>
-Mitigation: Require a specific person-task diagnosis, assess competence and commitment separately, and review recommendations before applying them to personnel decisions. <br>
-Risk: Use may involve sensitive employee performance, motivation, or confidence details. <br>
-Mitigation: Keep personnel details minimal and follow workspace policies before sharing private HR or performance information. <br>
+## Use Case:
 
+Managers use this skill to diagnose a person's development level for a specific task and choose practical directing, coaching, supporting, or delegating behaviors. It also helps managers identify when incentive misalignment or an acute crisis calls for a different approach.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/situational-leadership) <br>
-- [deciqAI Situational Leadership page](https://www.deciqai.com/c/situational-leadership) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/situational-leadership.json) <br>
-- [Primary sources](references/sources.md) <br>
-- [Google Project Oxygen example](examples/google-project-oxygen-2009.md) <br>
-- [AI-native teams example](examples/leading-ai-native-teams-2024-2026.md) <br>
-- [How Google Sold Its Engineers on Management](https://hbr.org/2013/12/how-google-sold-its-engineers-on-management) <br>
-- [GitHub Copilot](https://github.com/features/copilot) <br>
-- [Stack Overflow 2024 Developer Survey](https://survey.stackoverflow.co/2024) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, guidance] <br>
-**Output Format:** [Markdown development diagnosis with structured recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step diagnostic questions before producing a recommendation.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Workplace coaching examples may include sensitive employee details, and recommendations may need context-specific judgment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use anonymized employee details, review recommendations yourself, and avoid saving identifiable workplace information in real-use examples.
+
+## Reference(s):
+
+- [Primary Sources](references/sources.md)
+- [Google Project Oxygen example](examples/google-project-oxygen-2009.md)
+- [Leading AI-native engineering teams example](examples/leading-ai-native-teams-2024-2026.md)
+- [How Google Sold Its Engineers on Management](https://hbr.org/2013/12/how-google-sold-its-engineers-on-management)
+- [GitHub Copilot documentation](https://github.com/features/copilot)
+- [2024 Stack Overflow Developer Survey](https://survey.stackoverflow.co/2024)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Text]
+
+**Output Format:** [Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May provide a structured development diagnosis and recommendations, or guide the user one step at a time in Coach mode.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
