@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/chemistry/deepchem",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/chemistry/deepchem",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/chemistry/deepchem",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "7db4bf9b6a55a0d5fd94553777abf98dcf4350a08cc5447f61195c7ffce7fb4a",
+  "fetchedAt": "2026-10-31T13:42:42.139Z"
+}

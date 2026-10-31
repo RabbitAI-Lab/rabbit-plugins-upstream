@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/data-engineering/geomaster",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/data-engineering/geomaster",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/data-engineering/geomaster",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "c7c1ac2d5274f500499ac5d2cefdaaa55f11d8bae4af7fc2341868bade09f60b",
+  "fetchedAt": "2026-10-31T13:42:42.169Z"
+}

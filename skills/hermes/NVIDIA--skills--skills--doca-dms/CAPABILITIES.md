@@ -9,7 +9,10 @@ This file enumerates DMS's documented capabilities, deployment shapes,
 authentication surface, and operational behaviors as described in the
 public DMS guide on `docs.nvidia.com`. Treat it as a *map of what is
 documented*, not a substitute for reading the live page when configuring
-a real deployment.
+a real deployment. If the version-matched page is unavailable, use
+the installed `dmsd --help`, SystemD unit, and installed documentation.
+If none exists for the installed release, stop with a version/source
+gap; this bundle must not be used to guess flags or paths.
 
 ## Pattern overview
 
@@ -66,12 +69,10 @@ DMS exposes two gRPC-based interfaces:
 
 Documented constraints:
 
-- DMS **supports** telemetry streaming via gNMI `Subscribe`: `STREAM`
-  (with `SAMPLE` interval bounds of 1s–60s) and `ONCE` modes are
-  implemented in `gnxi/gnmi/server.go`; only `POLL` and `Aggregation`
-  are Unimplemented. For a turnkey telemetry-aggregation surface
-  separate from DMS's own gNMI Subscribe, the DOCA Telemetry Service
-  (DTS) is the productized answer.
+- DMS does **not** support the gNMI `Subscribe` command (public DMS
+  guide: "DMS currently does not support the Subscribe command").
+  Telemetry streaming is the DOCA Telemetry Service (DTS), owned by
+  `doca-dts/SKILL.md`.
 - DMS does **not** seek full OpenConfig alignment; it uses OpenConfig
   as a framework. Path inventories quoted by the agent must come from
   the live public guide, not be inferred from generic OpenConfig.
@@ -124,38 +125,23 @@ guide; do not infer flags from generic gRPC knowledge.
 
 The public DMS guide documents four authentication modes:
 
-| Method | Security level | Best for | Description |
-|--------|----------------|----------|-------------|
-| Local testing | Low | Development only | No authentication. Server binds to localhost only. |
-| PAM | Medium | Unix user authentication | Uses system user accounts. Requires an `allowed_users` list. |
-| Credentials | per public guide | per public guide | Documented in the public guide; quote, do not paraphrase. |
-| mTLS | per public guide | per public guide | Documented in the public guide; quote, do not paraphrase. |
+| Method | In-bundle invariant | Required live source |
+|--------|---------------------|----------------------|
+| Local testing | No authentication; loopback-only; development only | Installed guide's local-testing recipe |
+| PAM | System-user authentication plus `-allowed_users` authorization | Installed guide's PAM recipe and Security Best Practices |
+| Credentials | Do not infer credential shape, storage, or exposure policy | Installed guide's Credentials recipe and Security Best Practices |
+| mTLS | Do not infer certificate roles, trust roots, or client-auth policy | Installed guide's mTLS recipe and Security Best Practices |
 
 Authorization for **gRPC client callers** is the `-allowed_users` flag
-(default `root`; comma-separated list, enforced by `isUserAllowed` in
-`gnxi/utils/credentials/credentials.go`) applied across ALL auth modes
+(default `root`; comma-separated list) applied across ALL auth modes
 (localhost / PAM / credentials / mTLS) — NOT a Unix-group check. The
 `dmsgroup` Unix group is a **separate** authorization layer used by
-the privileged backend (`dmspe`) for its file-system / IPC handoff
-(see `gnxi/dmspe/dmspe.c` `dmsgroup` membership probe and the
-`Group=dmsgroup` line in `gnxi/scripts/dmsd.service`); it is not the
-boundary the gRPC client sees. The bundle's previous framing that
-"`dmsgroup` is the authorization boundary" was wrong and is now
-disavowed — the `-allowed_users` flag is the gRPC authz boundary,
-and `dmsgroup` is layered orthogonally as the backend-helper unix-
-group surface.
-
-(Legacy `dmsgroup`-only framing follows; treat any sentence below that
-says "the gRPC client must be in `dmsgroup`" or "members of the
-`dmsgroup` Unix group are authorized to execute DMS commands,
-regardless of the chosen authentication mode" as the disavowed
-framing — the agent must use the `-allowed_users` flag as the gRPC
-client allow-list and treat `dmsgroup` only as the dmspe backend-
-helper's unix-group surface. Any "set DMS up for user X" workflow
-must therefore add the user to BOTH the `-allowed_users` list (for
-the gRPC front door) AND the `dmsgroup` Unix group (only if the user
-also needs to invoke the dmspe privileged helper directly on the
-endpoint).)
+the privileged backend (`dmspe`) for its file-system / IPC handoff;
+it is not the
+boundary the gRPC client sees. The authoritative rule is: add a gRPC
+caller to `-allowed_users`; add a local user to `dmsgroup` only when
+that user also needs to invoke the privileged `dmspe` backend helper
+directly. Never describe `dmsgroup` as the gRPC authorization boundary.
 
 ### Configuration persistency
 
@@ -200,12 +186,12 @@ that are not in the documented list.
 
 ## Version compatibility
 
-For the canonical DOCA version-detection chain, the four-way match rule, NGC container semantics, and the headers-win-over-docs rule, see [`doca-version`](../../doca-version/SKILL.md). The body lives there; this skill does not duplicate it.
+For the canonical DOCA version-detection chain, the four-way match rule, NGC container semantics, and the headers-win-over-docs rule, see `doca-version/SKILL.md`. The body lives there; this skill does not duplicate it.
 
 **The DMS-specific overlay** is:
 
-- **DMS is currently in beta**, with General Availability scoped to SPC-X use cases. Flags, supported paths, and gNOI operation lists can change between DOCA releases. Always verify against the live public DMS guide whose version corresponds to the DOCA release confirmed by [`doca-version TASKS.md ## configure`](../../doca-version/TASKS.md#configure).
-- **DMS container tags lag DOCA host-package versions.** The DMS container shipped from NGC carries its own tag that may not match the host's `pkg-config --modversion doca-common`. When the user is using DMS-as-a-container, the relevant version anchor is the container tag pulled, not the host install — confirm both and route to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug) layer 2 if they diverge.
+- **DMS is currently in beta**, with General Availability scoped to SPC-X use cases. Flags, supported paths, and gNOI operation lists can change between DOCA releases. Always verify against the live public DMS guide whose version corresponds to the DOCA release confirmed by `doca-version TASKS.md ## configure` (`doca-version/TASKS.md#configure`).
+- **DMS container tags lag DOCA host-package versions.** The DMS container shipped from NGC carries its own tag that may not match the host's `pkg-config --modversion doca-common`. When the user is using DMS-as-a-container, the relevant version anchor is the container tag pulled, not the host install — confirm both and route to `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`) layer 2 if they diverge.
 DMS-specific check: read the version of the public DMS guide page
 header and confirm it matches the DOCA install version on the target.
 
@@ -223,17 +209,15 @@ DMS errors fall into five layers, each with its own owner:
    `dmsgroup` Unix-group check is `dmspe`-side, not `dmsd`-side, and
    surfaces as a backend-layer error rather than this layer).
 3. **Path / operation layer** — request reached `dmsd` but the path
-   or operation is not in the supported set, or an unsupported gNMI
-   Subscribe MODE was attempted (`STREAM` / `SAMPLE` 1s–60s and
-   `ONCE` ARE supported; `POLL` and `Aggregation` are Unimplemented
-   in `gnxi/gnmi/server.go`).
+   or operation is not in the supported set (for example a gNMI
+   `Subscribe`, which DMS does not support).
 4. **Backend / underlying-tool layer** — request reached `dmspe` and
    the underlying tool (e.g. `mlxconfig`, OS installer, file system)
    returned an error. The underlying tool is the source of truth for
    that error; DMS is the conduit.
 5. **DOCA-library layer** — if DMS internally calls into a DOCA
    library that returns `DOCA_ERROR_*`, the cross-library taxonomy in
-   [`doca-programming-guide CAPABILITIES.md ## Error taxonomy`](../../doca-programming-guide/CAPABILITIES.md#error-taxonomy)
+   `doca-programming-guide CAPABILITIES.md ## Error taxonomy` (`doca-programming-guide/CAPABILITIES.md#error-taxonomy`)
    becomes relevant on the *server* side. The library-specific overlay
    (e.g. for Flow) lives in the matching `libs/<library>` skill.
 
@@ -246,32 +230,30 @@ ultimately failed.
 
 Documented observability surfaces:
 
-- **Service logs.** DMS logs are split across documented components
-  and locations. The public guide also includes a documented example
-  log-rotation configuration. The agent's role on logging questions
-  is to identify the documented log component the user is reading,
-  quote the documented format expectation if it exists, and route to
-  the documented log-rotation example for retention setup.
+- **Service logs.** DMS logs split by component, and the answer to
+  "where do I look" is the component, not the guide. The frontend
+  daemon logs under its own unit — `journalctl -u dmsd` when it runs
+  under SystemD — and the `dmspe` backend logs separately, to the
+  destination its launch flags set. Name the one that matches the
+  layer being debugged: transport and auth failures surface on the
+  frontend, tool-execution failures on the backend. A logging answer
+  that says "check the documented log location" without naming
+  `dmsd` or `dmspe` has told the operator nothing they can act on.
+  For retention setup specifically, route to the public guide's
+  log-rotation example rather than inventing a policy.
 - **gNMI `Get` against State paths** — the documented way to read
   observed device state, separated from desired-Configuration state by
   the OpenConfig convention.
 - **gNOI `System`** — `time`, `ping`, etc., documented as health
   introspection.
 
-DMS provides gNMI Subscribe streaming telemetry — `STREAM` (with
-`SAMPLE` interval bounds of 1s–60s) and `ONCE` modes are implemented
-in `gnxi/gnmi/server.go`; `POLL` and `Aggregation` MODES are
-Unimplemented. The bundle's previous framing that "DMS does not
-provide gNMI Subscribe" was wrong and is now disavowed. For the
-externally-productized **DOCA Telemetry Service (DTS)** — turnkey
-aggregator that is OUT OF SCOPE for this bundle — route via
-[`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
-non-goals; DTS is the right answer when the user wants a productized
-telemetry-aggregation surface separate from DMS's own gNMI Subscribe.
+DMS does not support gNMI `Subscribe`, so it does not stream
+telemetry. Streaming and aggregation are the **DOCA Telemetry Service
+(DTS)** — route to `doca-dts/SKILL.md`.
 
 ## Safety policy
 
-> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in [`doca-hardware-safety` CAPABILITIES.md ## Safety policy](../../doca-hardware-safety/CAPABILITIES.md#safety-policy) (specifically [### Per-artifact overlay pattern](../../doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
+> **Overlay on the bundle-wide hardware-safety meta-policy.** The rules below are this skill's per-artifact overlay on the cross-cutting rules in `doca-hardware-safety` CAPABILITIES.md ## Safety policy (`doca-hardware-safety/CAPABILITIES.md#safety-policy`) (specifically ### Per-artifact overlay pattern (`doca-hardware-safety/CAPABILITIES.md#per-artifact-overlay-pattern`)). When the two layers disagree, the stricter wins; when either layer says STOP, the agent stops.
 
 DMS's safety surface is operational, not programmatic. The documented
 posture:
@@ -284,12 +266,10 @@ posture:
   `dmsgroup` is the dmspe backend-helper unix-group surface, layered
   orthogonally.** Any user that should be allowed to issue DMS
   commands over gRPC must be in the `-allowed_users` comma-separated
-  list (default `root`; enforced by `isUserAllowed` in
-  `gnxi/utils/credentials/credentials.go` across ALL auth modes); the
+  list (default `root`, across ALL auth modes); the
   `dmsgroup` Unix group is a separate gate at the dmspe privileged
   helper for users that also need to invoke the backend directly on
-  the endpoint. The previous "dmsgroup is the authorization
-  boundary" framing is disavowed.
+  the endpoint.
 - **Localhost-only auth is never safe to expose.** The "Local
   testing" mode is for development only and binds to localhost. Do
   not advise binding it to an external interface under any
@@ -305,15 +285,17 @@ posture:
   bullets — route to the live guide.
 - **Underlying-tool destructive operations** (gNOI `OS install`,
   `Reboot`, `Factory-reset`, file-delete) change managed-device state
-  in non-trivial ways. Operators should know which sub-operation they
-  are invoking before issuing it; the agent's safe default is to
-  state the documented effect and ask the user to confirm.
+  in non-trivial ways. Before issuing one, verify the target identity
+  and obtain authorization bound to that target and action: an explicit
+  user reply in an interactive session or an approved-system
+  authorization artifact in unattended execution. Otherwise stop with
+  `confirmation_required`.
 
 ## Public-source pointer
 
 The single canonical public source for DMS is the **DOCA Management
 Service Guide** on `docs.nvidia.com`, reachable through
-[`doca-public-knowledge-map ## DOCA services`](../../doca-public-knowledge-map/SKILL.md#doca-services).
+`doca-public-knowledge-map ## DOCA services` (`doca-public-knowledge-map/SKILL.md#doca-services`).
 Verify that the version of the guide matches the DOCA install on the
 target — DMS surface is documented to evolve, so paths and flags can
 change between releases.

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/simpo",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/simpo",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/simpo",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "405401b1e1c8662fe0c41f731f86b8b3f0305cd888236f471dac5401cc5ede87",
+  "fetchedAt": "2026-10-31T13:42:42.277Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-performance-optimization",
+  "identifier": "qdrant/skills/skills/qdrant-performance-optimization",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-performance-optimization",
+  "branch": "main",
+  "pushedAt": "2026-10-27T08:32:19Z",
+  "contentHash": "b8649aa7b310415549ec4f28afe9f1817daa79325e7ecc6cd9e0ed86740c6614",
+  "fetchedAt": "2026-10-31T13:42:39.574Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/runai-diagnose-failed-workload",
+  "identifier": "NVIDIA/skills/skills/runai-diagnose-failed-workload",
+  "repo": "NVIDIA/skills",
+  "path": "skills/runai-diagnose-failed-workload",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "0eb2b17e39b6fd944a93153c99fb7c29f0bf26dd1db2102880480c41d743cdee",
+  "fetchedAt": "2026-10-31T13:42:43.583Z"
+}

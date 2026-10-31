@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/scikit-survival",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/scikit-survival",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/scikit-survival",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "7ddb90d05f1c51283c1461c077f2712629bffc83496d30d894c6619e1370097c",
+  "fetchedAt": "2026-10-31T13:42:42.273Z"
+}

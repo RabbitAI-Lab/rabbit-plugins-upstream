@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-sizing",
+  "identifier": "qdrant/skills/skills/qdrant-sizing",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-sizing",
+  "branch": "main",
+  "pushedAt": "2026-10-27T08:32:19Z",
+  "contentHash": "7f9e0b2fc2cd695cca5b75974ee5838e6a603c57efee9417f013469915b6122e",
+  "fetchedAt": "2026-10-31T13:42:39.576Z"
+}

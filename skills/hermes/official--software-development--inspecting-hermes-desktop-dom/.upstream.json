@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/inspecting-hermes-desktop-dom",
+  "identifier": "official/software-development/inspecting-hermes-desktop-dom",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/inspecting-hermes-desktop-dom",
+  "branch": "main",
+  "pushedAt": "2026-10-31T12:48:19Z",
+  "contentHash": "5cbce418d62fd45bf54acab1d69fbfd8dd9f5b9531a03c007e96876c3e33b73f",
+  "fetchedAt": "2026-10-31T13:42:49.192Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/anatomy",
+  "identifier": "official/creative/anatomy",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/anatomy",
+  "branch": "main",
+  "pushedAt": "2026-10-31T12:48:19Z",
+  "contentHash": "4e140209e41fd37bdb1515a2d65fcb55b7c58b303c0be88d2dd144c20dc3562a",
+  "fetchedAt": "2026-10-31T13:42:49.133Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/geniml",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/geniml",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/geniml",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "e370190cd0b6e5c35ab1c367ef6c16d9d488651d232b7b491b47b8b3fc413acc",
+  "fetchedAt": "2026-10-31T13:42:55.017Z"
+}

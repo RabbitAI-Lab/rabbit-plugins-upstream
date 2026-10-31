@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/qdrant/skills/tree/main/skills/qdrant-deployment-options",
+  "identifier": "qdrant/skills/skills/qdrant-deployment-options",
+  "repo": "qdrant/skills",
+  "path": "skills/qdrant-deployment-options",
+  "branch": "main",
+  "pushedAt": "2026-10-27T08:32:19Z",
+  "contentHash": "50308e071db3f5591d32313a662a4cbf23c9b485f84a53e67e2eb34d20af0c47",
+  "fetchedAt": "2026-10-31T13:42:39.571Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/pinecone-io/skills/tree/main/skills/pinecone-mcp",
+  "identifier": "pinecone-io/skills/skills/pinecone-mcp",
+  "repo": "pinecone-io/skills",
+  "path": "skills/pinecone-mcp",
+  "branch": "main",
+  "pushedAt": "2026-10-29T18:24:36Z",
+  "contentHash": "79a057e6c4b9f3b511923b88d0db9594eed32f59f3317d7932c2337833b07dec",
+  "fetchedAt": "2026-10-31T13:42:39.549Z"
+}
