@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/cloud-monitoring-chart-generation",
+  "repo": "google/skills",
+  "skillId": "cloud-monitoring-chart-generation",
+  "branch": "main",
+  "pushedAt": "2026-10-31T13:39:40Z",
+  "contentHash": "d5e08f7cb7054343125861270762a653884f61b9494e060cc047217624b68a6c",
+  "fetchedAt": "2026-10-31T13:43:45.128Z"
+}

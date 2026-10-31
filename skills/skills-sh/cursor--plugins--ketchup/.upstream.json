@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/ketchup",
+  "repo": "cursor/plugins",
+  "skillId": "ketchup",
+  "branch": "main",
+  "pushedAt": "2026-10-29T22:51:25Z",
+  "contentHash": "db3c52396100cae768660706cdcf1cf0d4a92f2aa5db582834fcab3e068ad5c9",
+  "fetchedAt": "2026-10-31T13:42:20.982Z"
+}
