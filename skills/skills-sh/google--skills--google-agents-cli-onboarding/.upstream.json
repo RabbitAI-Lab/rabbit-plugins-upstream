@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/google-agents-cli-onboarding",
+  "repo": "google/skills",
+  "skillId": "google-agents-cli-onboarding",
+  "branch": "main",
+  "pushedAt": "2026-10-31T13:39:40Z",
+  "contentHash": "09c88b58b057cfa03f908a942ef0bcdd2b9df7d5a491afd2fdccd346b7f7c180",
+  "fetchedAt": "2026-10-31T13:43:44.941Z"
+}

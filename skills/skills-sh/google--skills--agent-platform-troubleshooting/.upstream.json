@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/agent-platform-troubleshooting",
+  "repo": "google/skills",
+  "skillId": "agent-platform-troubleshooting",
+  "branch": "main",
+  "pushedAt": "2026-10-31T13:39:40Z",
+  "contentHash": "cd6ef97d9736d378f188cd8ef251f12bde4d10c9a9fb21cf2e3c9803b5fbb787",
+  "fetchedAt": "2026-10-31T13:43:45.109Z"
+}

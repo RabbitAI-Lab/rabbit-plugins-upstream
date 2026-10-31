@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-observability",
+  "repo": "google/skills",
+  "skillId": "gke-observability",
+  "branch": "main",
+  "pushedAt": "2026-10-31T13:39:40Z",
+  "contentHash": "67693695ca4d02fd2d0041279294a91538ba483dde1ea522f960bbdcbf668e2b",
+  "fetchedAt": "2026-10-31T13:43:44.896Z"
+}
