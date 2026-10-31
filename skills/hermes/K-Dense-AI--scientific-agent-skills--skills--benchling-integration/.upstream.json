@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/benchling-integration",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/benchling-integration",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/benchling-integration",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "5f3a96d6f4cb64b8782283321fd4411cdfd4be6be5016e4f99725c01919857e4",
+  "fetchedAt": "2026-10-31T13:42:54.986Z"
+}

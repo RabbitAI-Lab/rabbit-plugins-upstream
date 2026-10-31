@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/productivity/notion",
+  "identifier": "official/productivity/notion",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/productivity/notion",
+  "branch": "main",
+  "pushedAt": "2026-10-31T12:48:19Z",
+  "contentHash": "f338cb307f35c832d4bffadf7294215db833b1a851dc4aeaaf5264c9b918529d",
+  "fetchedAt": "2026-10-31T13:42:49.206Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/omniverse-content-services",
+  "identifier": "NVIDIA/skills/skills/omniverse-content-services",
+  "repo": "NVIDIA/skills",
+  "path": "skills/omniverse-content-services",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "358cbe3517df2de8b92f1955ec22c5cca9eaa6a1b948027c3236810a40b53f8b",
+  "fetchedAt": "2026-10-31T13:42:43.497Z"
+}

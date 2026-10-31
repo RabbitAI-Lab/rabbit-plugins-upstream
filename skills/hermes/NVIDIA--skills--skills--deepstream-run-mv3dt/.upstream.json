@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/deepstream-run-mv3dt",
+  "identifier": "NVIDIA/skills/skills/deepstream-run-mv3dt",
+  "repo": "NVIDIA/skills",
+  "path": "skills/deepstream-run-mv3dt",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "c3280468618c5ae5e5b2aa49e360dde7ecf96552745c0f86192d92b2c5fd0eee",
+  "fetchedAt": "2026-10-31T13:42:43.079Z"
+}

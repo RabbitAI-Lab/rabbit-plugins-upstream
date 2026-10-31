@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/medchem",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/medchem",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/medchem",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "4103d0eeea875ed2c88207171b400cd4c9dabc0bbbbdb448c06abea0f1a0a6b3",
+  "fetchedAt": "2026-10-31T13:42:55.047Z"
+}

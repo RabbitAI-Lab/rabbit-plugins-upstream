@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/pva-opgen",
+  "identifier": "NVIDIA/skills/skills/pva-opgen",
+  "repo": "NVIDIA/skills",
+  "path": "skills/pva-opgen",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "abc72528d77196e63d06639076f4e18a0bedc9ec5158b4fdeaf569792270d2dd",
+  "fetchedAt": "2026-10-31T13:42:43.573Z"
+}

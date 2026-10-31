@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/scvelo",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/scvelo",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/scvelo",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "ab9aebfe20b29afc3566462768008861408a311340fa695bbbef086f0555ccd9",
+  "fetchedAt": "2026-10-31T13:42:42.273Z"
+}

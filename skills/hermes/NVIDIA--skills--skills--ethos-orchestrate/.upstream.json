@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/ethos-orchestrate",
+  "identifier": "NVIDIA/skills/skills/ethos-orchestrate",
+  "repo": "NVIDIA/skills",
+  "path": "skills/ethos-orchestrate",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "b2af40bd4c519336c29f1420933f9b574d3c0dda04d790e8ec9d3109056e3a71",
+  "fetchedAt": "2026-10-31T13:42:43.204Z"
+}

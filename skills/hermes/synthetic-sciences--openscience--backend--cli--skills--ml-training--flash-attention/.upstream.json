@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-training/flash-attention",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-training/flash-attention",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-training/flash-attention",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "7b17247a6f8b5c4eeb364adee2895b8fbf8f913d1d27157c5226f5a11510f71e",
+  "fetchedAt": "2026-10-31T13:42:42.229Z"
+}

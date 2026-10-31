@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/K-Dense-AI/scientific-agent-skills/tree/main/skills/13c-metabolic-flux",
+  "identifier": "K-Dense-AI/scientific-agent-skills/skills/13c-metabolic-flux",
+  "repo": "K-Dense-AI/scientific-agent-skills",
+  "path": "skills/13c-metabolic-flux",
+  "branch": "main",
+  "pushedAt": "2026-10-26T09:36:15Z",
+  "contentHash": "a5f52d3af3f105bd3f8f575a8f4697f507a46093548eb60deb6c6820d441e62a",
+  "fetchedAt": "2026-10-31T13:42:54.979Z"
+}

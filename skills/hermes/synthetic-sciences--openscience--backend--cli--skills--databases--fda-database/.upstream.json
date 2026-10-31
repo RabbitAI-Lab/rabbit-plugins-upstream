@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/fda-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/fda-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/fda-database",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "1458eab583642ac7cdbd1fdb4d4875f0f7e86378fe879a3258aa60e17b9ef9b1",
+  "fetchedAt": "2026-10-31T13:42:42.159Z"
+}

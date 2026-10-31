@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-finetune-kumo-forecast",
+  "identifier": "NVIDIA/skills/skills/tao-finetune-kumo-forecast",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-finetune-kumo-forecast",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "ff76e73f6f714baae9ec48cf3cf686ea0d7eef8f31ed2cc9d69dd226e09f062e",
+  "fetchedAt": "2026-10-31T13:42:43.627Z"
+}

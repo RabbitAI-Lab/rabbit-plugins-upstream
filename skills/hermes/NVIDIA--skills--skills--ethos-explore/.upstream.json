@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/ethos-explore",
+  "identifier": "NVIDIA/skills/skills/ethos-explore",
+  "repo": "NVIDIA/skills",
+  "path": "skills/ethos-explore",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "ad9200a5fd94e37d2fbcf4fc32d8a185793657bb48c88327caacc1073ae6a1ef",
+  "fetchedAt": "2026-10-31T13:42:43.204Z"
+}
