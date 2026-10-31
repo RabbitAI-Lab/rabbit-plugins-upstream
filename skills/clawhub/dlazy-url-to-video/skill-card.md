@@ -1,41 +1,54 @@
-## Description: <br>
-Paste a URL and use the dLazy hosted URL-to-video workflow to create a promo, ad, or product demo video. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+url to video, link to video, webpage to video, landing page to video — paste a URL and turn the page into a promo / ad / demo video: capture, derive brand, storyboard, voiceover, build. Use when the user gives a URL or link and wants a video.
 
-## Publisher: <br>
-[dlazyai](https://clawhub.ai/user/dlazyai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[dlazyai](https://clawhub.ai/user/dlazyai)
 
-## Use Case: <br>
-External users and developers use this skill to turn a webpage or landing-page URL into a video by invoking the dLazy website-to-video CLI workflow. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, URLs, and explicitly attached files are sent to dLazy's hosted service, and login stores a local dLazy API key. <br>
-Mitigation: Review the data being submitted before use, prefer npx when avoiding a persistent global install, and rotate or revoke the API key from the dLazy dashboard when needed. <br>
+## Use Case:
 
+Developers, marketers, and product teams use the skill to turn a webpage URL into a promotional, social advertising, or product demonstration video, then continue work in a project session.
 
-## Reference(s): <br>
-- [Dlazy Url To Video on ClawHub](https://clawhub.ai/dlazyai/skills/dlazy-url-to-video) <br>
-- [dLazy CLI GitHub repository](https://github.com/dlazyai/cli) <br>
-- [dLazy CLI npm package](https://www.npmjs.com/package/@dlazy/cli) <br>
-- [dLazy homepage](https://dlazy.com) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Shell commands, Guidance] <br>
-**Output Format:** [Terminal text with shell commands and streamed agent responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference project ids for continuing multi-turn video generation sessions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: frontmatter and server release evidence) <br>
+Risk: Prompts and attached files are sent to dLazy services, and generation uses service credits.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sending sensitive material unless its transfer is authorized, and check the organization’s credit balance before generating.
+
+Risk: A saved dLazy API key grants access within its organization.
+
+Mitigation: Use an account authorized for the relevant projects, review the pinned CLI before installation, and revoke the saved key when access is no longer needed.
+
+## Reference(s):
+
+- [dLazy website](https://dlazy.com)
+- [@dlazy/cli on npm](https://www.npmjs.com/package/@dlazy/cli)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Text, Shell commands]
+
+**Output Format:** [Generated promotional video and project updates through the CLI]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped, multi-turn workflow; attached files are uploaded to the service when provided.]
+
+## Skill Version(s):
+
+1.0.32 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

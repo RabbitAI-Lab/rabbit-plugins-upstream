@@ -26,6 +26,7 @@ CLI for fixture generation:
 """
 import argparse
 import hashlib
+import os
 import hmac
 import sys
 import unicodedata
@@ -66,11 +67,23 @@ def main():
     p.add_argument('method', choices=['GET', 'POST'])
     p.add_argument('path')
     p.add_argument('unix_ts', type=int)
-    p.add_argument('--key', required=True, help='beak_key')
+    # [HARDEN-071] --key on argv leaks the beak_key to `ps`/process lists.
+    # Prefer SPACEDUCK_BEAK_KEY env; --key kept for back-compat with a warning.
+    p.add_argument('--key', default=None,
+                   help='beak_key (DEPRECATED: use SPACEDUCK_BEAK_KEY env)')
     p.add_argument('--body', help='request body (string)')
     args = p.parse_args()
+    key = args.key or os.environ.get('SPACEDUCK_BEAK_KEY', '')
+    if not key:
+        print('byob_hmac: no key — set SPACEDUCK_BEAK_KEY env (preferred) '
+              'or pass --key', file=sys.stderr)
+        return 2
+    if args.key:
+        print('byob_hmac: WARNING — --key on argv is visible in process '
+              'lists; export SPACEDUCK_BEAK_KEY instead. [HARDEN-071]',
+              file=sys.stderr)
     body = args.body.encode('utf-8') if args.body else None
-    print(byob_sign(args.key, args.method, args.path, args.unix_ts, body))
+    print(byob_sign(key, args.method, args.path, args.unix_ts, body))
     return 0
 
 

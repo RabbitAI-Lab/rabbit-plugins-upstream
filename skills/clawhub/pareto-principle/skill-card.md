@@ -1,49 +1,59 @@
-## Description: <br>
-Guides agents through Pareto analysis to identify measured vital-few inputs, avoid unsupported 80/20 claims, and make explicit decisions about lower-contribution items. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through measuring an outcome distribution, identifying its vital few contributors, and making an explicit decision about the long tail.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and agents use this skill to prioritize backlogs, business initiatives, defects, customers, or AI investments by measuring contribution distributions and concentrating effort at the observed elbow. It is not intended for tiny datasets or safety-critical and regulatory contexts where rare or long-tail items must still be addressed. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat an asserted 80/20 split as fact without measuring the distribution. <br>
-Mitigation: Require a precise output metric, enumerate inputs, measure each contribution, rank cumulative contribution, and report the observed ratio rather than assuming 80/20. <br>
-Risk: Users may cut low-contribution items automatically even when they are safety-critical, regulatory, or strategically important. <br>
-Mitigation: Screen for safety-critical and regulatory contexts up front, and require an explicit cut, maintain, or strategic-invest decision for the lower-contribution set. <br>
-Risk: The skill can produce advisory prioritization that is stale as contribution patterns change. <br>
-Mitigation: Include a re-measurement schedule, such as quarterly review or review after material business, product, or market changes. <br>
+## Use Case:
 
+Teams and analysts use this skill to prioritize backlogs, resources, and initiatives by measuring which inputs contribute most to a clearly defined outcome. It guides them to check the actual distribution, document what to do with the long tail, and remeasure over time.
 
-## Reference(s): <br>
-- [Sources - pareto-principle](references/sources.md) <br>
-- [Microsoft Office Bug-Fix Pareto example](examples/microsoft-office-bug-fix-pareto-2002.md) <br>
-- [Realized AI Value Pareto example](examples/ai-value-concentration-2024-2026.md) <br>
-- [deciqAI Pareto Principle skill page](https://www.deciqai.com/c/pareto-principle) <br>
-- [deciqAI Pareto Principle machine-readable metadata](https://www.deciqai.com/s/pareto-principle.json) <br>
-- [Gates WinHEC 2002 keynote transcript](https://news.microsoft.com/source/2002/04/18/gates-winhec-keynote-address-outlines-industrywide-vision-for-continued-vibrant-pc-ecosystem/) <br>
-- [McKinsey The State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai) <br>
-- [Stanford HAI AI Index Report](https://aiindex.stanford.edu/report/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, analysis] <br>
-**Output Format:** [Markdown analysis template and step-by-step coaching responses] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause for user input during coached Pareto analysis; no code execution or external tool access is required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Assuming an 80/20 split without measuring the chosen outcome can lead to poor prioritization.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Measure and rank contributions for one precisely defined outcome, then report the observed ratio rather than assuming a canonical split.
+
+Risk: Applying Pareto triage in safety-critical or regulated settings could leave required obligations unaddressed.
+
+Mitigation: Do not use the method to deprioritize safety-critical obligations; review proposed cuts and verify consequential claims before acting.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/pareto-principle)
+- [Source bibliography](references/sources.md)
+- [Microsoft Office bug-fix example](examples/microsoft-office-bug-fix-pareto-2002.md)
+- [Realized AI value example](examples/ai-value-concentration-2024-2026.md)
+- [McKinsey State of AI](https://www.mckinsey.com/capabilities/quantumblack/our-insights/the-state-of-ai)
+- [Stanford AI Index Report](https://aiindex.stanford.edu/report/)
+- [Microsoft WinHEC 2002 keynote](https://news.microsoft.com/source/2002/04/18/gates-winhec-keynote-address-outlines-industrywide-vision-for-continued-vibrant-pc-ecosystem/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown Pareto Analysis and step-by-step guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [The analysis depends on the user's chosen outcome, input set, contribution measurements, and review interval.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

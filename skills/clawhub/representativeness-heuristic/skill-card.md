@@ -1,46 +1,55 @@
-## Description: <br>
-Helps agents audit profile-driven probability judgments for base-rate neglect, conjunction fallacy, and prototype bias before high-stakes decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents to identify probability judgments driven by resemblance to a prototype and correct them with base rates, Bayesian updates, conjunction checks, and survivorship-bias audits.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and decision-support agents use this skill to challenge candidate, investment, product, and startup judgments where resemblance to a vivid prototype may be replacing base-rate reasoning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Broad activation wording may cause the skill to intervene in hiring, investing, startup, or other profile-based probability discussions where the user did not ask for a bias audit. <br>
-Mitigation: Review and narrow activation language if deployment should be limited to explicit requests for base-rate, conjunction-fallacy, or representativeness analysis. <br>
-Risk: The skill can influence high-stakes judgments by producing calibrated recommendations from user-supplied base rates and profile evidence. <br>
-Mitigation: Use its output as decision-support guidance, verify base rates and likelihood assumptions against domain data, and keep human review in the final decision path. <br>
+## Use Case:
 
+Decision makers and analysts use the skill to audit profile-driven judgments in hiring, investing, and product decisions, then calibrate estimates against reference-class base rates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/representativeness-heuristic) <br>
-- [Sources - representativeness-heuristic](references/sources.md) <br>
-- [Tversky & Kahneman 1972 + 1983 - The Linda Problem](examples/tversky-kahneman-1972-1983-the-linda-problem.md) <br>
-- [The Hot Hand in Basketball](examples/gilovich-vallone-tversky-1985-the-hot-hand-in-basketball.md) <br>
-- [Representativeness in AI-Startup Investing](examples/ai-startup-next-openai-pattern-matching-2023-2026.md) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/representativeness-heuristic) <br>
-- [Agent-readable metadata](https://www.deciqai.com/s/representativeness-heuristic.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Analysis, Markdown] <br>
-**Output Format:** [Markdown coaching responses with calibrated probability summaries] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause at WAIT prompts in novice coaching mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: release evidence) <br>
+Risk: Illustrative percentages and simplified probability calculations could mislead when applied to consequential decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify examples against relevant data and a suitable reference class before acting.
+
+Risk: Confidential case details could be copied into reusable examples.
+
+Mitigation: Keep confidential details out of reusable examples.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/representativeness-heuristic)
+- [Representativeness Heuristic overview](https://www.deciqai.com/c/representativeness-heuristic)
+- [Research sources](references/sources.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Text, Markdown]
+
+**Output Format:** [Concise structured reasoning guidance in Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Applies a stepwise audit; illustrative probabilities should be checked against relevant data.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

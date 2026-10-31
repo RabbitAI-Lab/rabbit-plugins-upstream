@@ -1,45 +1,54 @@
-## Description: <br>
-Helps an agent guide users through a Business Model Canvas audit to map nine business-model blocks, identify unvalidated assumptions, and propose next-week experiments. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent through mapping and auditing a business model across nine interlocking blocks, surfacing assumptions and practical experiments.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and business operators use this skill to design, evaluate, pivot, or compare a business model before making strategic or fundraising decisions. It is especially useful when a concrete customer segment and value proposition exist and the user needs block-level risks converted into testable assumptions. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: External sources and deciqAI promotional links may matter for provenance or trust decisions. <br>
-Mitigation: Review the linked external sources, the ClawHub publisher profile, and deciqAI links before relying on provenance-sensitive claims. <br>
-Risk: The skill provides business-model guidance that can still be incorrect or misleading if users treat unvalidated assumptions as facts. <br>
-Mitigation: Use the skill's own VALIDATED, ASSUMED, and DEPENDENT labels and next-week experiments to test load-bearing claims before acting on them. <br>
+## Use Case:
 
+Founders, operators, and teams use this skill to design, evaluate, compare, or pivot a business model. It helps them make the nine canvas blocks specific, identify assumptions that could undermine the model, and plan small experiments to test them.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/business-model-canvas) <br>
-- [Sources](references/sources.md) <br>
-- [Business Model Ontology Dissertation](https://serval.unil.ch/resource/serval:BIB_R_4210.P001/REF) <br>
-- [Southwest Airlines Investor Relations](https://www.southwestairlinesinvestorrelations.com) <br>
-- [Machine-Readable Skill Metadata](https://www.deciqai.com/s/business-model-canvas.json) <br>
-- [deciqAI Business Model Canvas Page](https://www.deciqai.com/c/business-model-canvas) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown business-model audit with tables, status labels, assumptions, experiments, and comparison notes] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable output; responses should stop at documented wait points during coaching mode.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence) <br>
+Risk: Business analysis may include confidential or customer-identifying information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only necessary business details and anonymize customer information in usage analyses or saved lessons.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/business-model-canvas)
+- [Sources and further reading](references/sources.md)
+- [Osterwalder, The Business Model Ontology (HEC Lausanne, 2004)](https://serval.unil.ch/resource/serval:BIB_R_4210.P001/REF)
+- [Southwest Airlines Investor Relations](https://www.southwestairlinesinvestorrelations.com)
+- [deciqAI Business Model Canvas](https://www.deciqai.com/c/business-model-canvas)
+- [Machine-readable Business Model Canvas resource](https://www.deciqai.com/s/business-model-canvas.json)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown with a nine-block table and concise analysis of assumptions and experiments]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include claim status tags, load-bearing assumptions, next-week experiments, and a block-by-block incumbent comparison.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

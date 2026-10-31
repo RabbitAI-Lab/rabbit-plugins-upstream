@@ -1,44 +1,59 @@
-## Description: <br>
-帮助老师设计科学测评方案，包括确认测评目标、设计双向细目表、控制难度梯度、生成评分标准和提供考后分析建议。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps teachers design and revise assessments using test blueprints, balanced difficulty and cognitive levels, adapted questions, scoring rubrics, and item-review lists.
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Teachers and education-support agents use this skill to plan classroom assessments, build exam blueprints, align items to knowledge points and cognitive levels, draft scoring rubrics, and prepare aggregate post-exam analysis guidance. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Assessment outputs may use classroom context from related teaching skills and write back score-rate or item-quality data. <br>
-Mitigation: Use aggregate score-rate and item-quality data only; avoid publishing named student results, rankings, or individual score records. <br>
-Risk: Exam materials may include copied or insufficiently licensed questions. <br>
-Mitigation: Require each item to include copyrightStatus and use teacher-owned, adapted, publicly citable, or index-only sources rather than unauthorized copied exam questions. <br>
-Risk: Generated scoring or analysis guidance could be treated as final judgment without teacher review. <br>
-Mitigation: Have a teacher review the blueprint, rubric, difficulty targets, and post-exam recommendations before classroom use. <br>
+## Use Case:
 
+Teachers use this skill to draft unit exercises and exams, build two-way test blueprints, balance difficulty and cognitive levels, adapt questions, and prepare scoring rubrics and item-review lists.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer) <br>
-- [Publisher profile](https://clawhub.ai/user/qizhitang) <br>
-- [Exam blueprint reference](references/exam-blueprint.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, configuration] <br>
-**Output Format:** [Markdown guidance, structured tables, templates, and scoring rubric text] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include assessment blueprints, two-way specification tables, item metadata templates, scoring standards, and aggregate post-exam analysis suggestions.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: frontmatter and server release evidence) <br>
+Risk: Generated or adapted assessment questions may be inaccurate or unsuitable for their intended grade level.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Have a teacher review generated questions and check their answers, conditions, and grade-level fit before use.
+
+Risk: Identifiable student information or confidential exam materials could be exposed through use or saved memory.
+
+Mitigation: Avoid including identifiable student data and confidential exam papers; review platform storage and sharing settings before enabling memory.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-exam-designer)
+- [Publisher profile](https://clawhub.ai/user/qizhitang)
+- [Exam blueprint guidance](artifact/references/exam-blueprint.md)
+- [High-school subject standards](artifact/references/hs-subject-standards.md)
+- [AI-generated item review protocol](artifact/shared/ai-item-check.md)
+- [Grade-band guidance](artifact/shared/grade-bands.md)
+- [Crisis referral protocol](artifact/shared/crisis-referral-protocol.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Tables, Assessment questions, Scoring rubrics, Guidance]
+
+**Output Format:** [Markdown prose and tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Draft assessment materials for teacher review; may include blueprints, question sets, difficulty allocations, rubrics, and item-review lists.]
+
+## Skill Version(s):
+
+2.12.0 (source: ClawHub release evidence and skill frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

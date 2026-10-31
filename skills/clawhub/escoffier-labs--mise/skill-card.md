@@ -1,39 +1,49 @@
-## Description: <br>
-Mise guides agents through design approval and written specifications before creative or build work begins. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Turns a request into a user-approved design and implementation-ready specification before any code is written.
 
-## Publisher: <br>
-[escoffier-labs](https://clawhub.ai/user/escoffier-labs) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[escoffier-labs](https://clawhub.ai/user/escoffier-labs)
 
-## Use Case: <br>
-Developers and agent operators use Mise before build or creative work to compare approaches, get user approval, and produce a written spec that can guide later implementation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can add process overhead by requiring a design, written spec, user review, and handoff before implementation. <br>
-Mitigation: Use it for build or creative work where design approval is valuable, and review the generated spec before allowing follow-on implementation. <br>
-Risk: Planning output may encode incorrect assumptions or unsupported requirements if the initial context is incomplete. <br>
-Mitigation: Have the user review and approve the design and written spec before any implementation work begins. <br>
+## Use Case:
 
+Developers use Mise before creative or build work to clarify requirements, compare design approaches, secure user approval, and prepare a written specification for implementation.
 
-## Reference(s): <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with design recommendations and written spec content] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Planning-only output; the security review found no evidence of hidden execution, credential use, or data exfiltration.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release metadata) <br>
+Risk: The workflow hands off to separate pressure-test and recipe skills whose contents are not included in this release.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Confirm those dependencies are available and review their contents before relying on the handoff.
+
+## Reference(s):
+
+- [Mise on ClawHub](https://clawhub.ai/escoffier-labs/skills/mise)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown design proposals and implementation-ready specifications]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Scaled to the task; specifications are presented for user review and approval.]
+
+## Skill Version(s):
+
+1.0.2 (source: ClawHub release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

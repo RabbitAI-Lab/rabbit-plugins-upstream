@@ -1,44 +1,56 @@
-## Description: <br>
-Issues a paid cryptographic proof (PDR) that a specific digital artifact existed at a particular time without uploading the artifact content. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Creates cryptographic proof-of-existence receipts for selected digital artifacts by submitting their SHA-256 hashes to AOTrust and supports receipt verification.
 
-## Publisher: <br>
-[gitserge-crypto](https://clawhub.ai/user/gitserge-crypto) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[gitserge-crypto](https://clawhub.ai/user/gitserge-crypto)
 
-## Use Case: <br>
-Developers and agent operators use this skill to create paid proof-of-existence records for specific artifacts after explicit user consent. It is intended for notarizing hashes of documents, code, AI outputs, datasets, logs, or other digital artifacts through AOTrust. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: A document-derived hash and payment or authentication metadata are sent to AOTrust and payment settlement is irreversible. <br>
-Mitigation: Confirm the exact artifact hash, destination, and $0.01 USDC cost with the user before signing, and use a dedicated low-balance wallet. <br>
-Risk: Public hashes can create linkage risk for sensitive or guessable content even when the artifact itself is not uploaded. <br>
-Mitigation: Avoid notarizing sensitive or easily guessable content unless the user understands that the hash will be public in the PDR. <br>
-Risk: Hashing the wrong bytes would notarize the wrong artifact. <br>
-Mitigation: Hash the artifact content directly in a reproducible format and show the hash to the user before requesting notarization. <br>
+## Use Case:
 
+Developers and agent users use this skill to create and verify a timestamped proof that a specific artifact hash existed, with optional paid evidence bundles or signed time attestations.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/gitserge-crypto/skills/aotrust-pdr-notarization) <br>
-- [AOTrust verification endpoint](https://api.aotrust.link/v1/pdr/verify) <br>
-- [PDR binary specification](https://github.com/GitSerge-crypto/aotrust-skills/blob/main/pdr-spec.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown instructions with JSON examples and shell command snippets] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires explicit user consent, reproducible artifact hashing, and manual approval of the $0.01 USDC payment before notarization.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.7.0 (source: server release metadata and artifact metadata/changelog) <br>
+Risk: The submitted artifact hash can become a permanent public link to a receipt, signatures, or payment activity.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only when explicitly requested; explain that the artifact itself is not uploaded but its hash is public, and retain the receipt.
+
+Risk: Paid notarization and optional paid products involve irreversible USDC payments.
+
+Mitigation: Require user approval for each payment, review the amount, network, and recipient in the wallet, and keep private keys outside the agent.
+
+## Reference(s):
+
+- [AOTrust PDR Verification API](https://api.aotrust.link/v1/pdr/verify)
+- [AOTrust Transparency Documentation](https://docs.aotrust.link/transparency.html)
+- [PDR Specification](https://github.com/GitSerge-crypto/aotrust-skills/blob/main/pdr-spec.md)
+- [Offline PDR Parser](https://github.com/GitSerge-crypto/aotrust-skills/blob/main/pdr_parser.py)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text]
+
+**Output Format:** [JSON proof receipts and verification results with concise text guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Receipts identify the artifact by its hash; paid requests require user approval and payments are irreversible.]
+
+## Skill Version(s):
+
+3.10.1 (source: server-resolved release metadata and artifact frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

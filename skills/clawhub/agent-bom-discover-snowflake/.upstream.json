@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/agent-bom-discover-snowflake",
   "slug": "agent-bom-discover-snowflake",
   "ownerHandle": null,
-  "version": "0.98.0",
-  "updatedAt": 1784946308542,
-  "contentHash": "cae3fceccd4d3aa333c4c8702da96c6f26707021534fa1bdbed936e7ad4e1e92",
-  "fetchedAt": "2026-07-26T18:04:21.909Z"
+  "version": "0.111.0",
+  "updatedAt": 1793171984236,
+  "contentHash": "a01fd77d3f37da6d96c3d453dc86eeebc0ae6f13562427ccdda1e077bc9877cb",
+  "fetchedAt": "2026-10-31T14:00:29.588Z"
 }

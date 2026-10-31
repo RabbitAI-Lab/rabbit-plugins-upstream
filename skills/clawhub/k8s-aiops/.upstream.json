@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/k8s-aiops",
   "slug": "k8s-aiops",
   "ownerHandle": null,
-  "version": "0.8.0",
-  "updatedAt": 1784635222690,
-  "contentHash": "14afeacf8d922920afdb1f24bdf0e86fdcf745412a5ed5bf1adf21a7384c69e3",
-  "fetchedAt": "2026-07-26T18:09:05.766Z"
+  "version": "0.16.0",
+  "updatedAt": 1793325438775,
+  "contentHash": "b905d19c1ccf935dc2f8ae3a955aaeafac8085b77ddf870e5962d129b2734616",
+  "fetchedAt": "2026-10-31T13:50:11.695Z"
 }

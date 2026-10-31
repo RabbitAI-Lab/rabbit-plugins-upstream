@@ -1,50 +1,50 @@
-## Description: <br>
-Helps math teachers turn exam writing into a structured assessment design workflow using goals, assessment blueprints, difficulty gradients, implementation rules, and result analysis. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助初高中数学教师规划测评、编制双向细目表、选编题目、分析逐题统计，并在教师确认后整理写回内容。
 
-## Publisher: <br>
-[qizhitang](https://clawhub.ai/user/qizhitang) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[qizhitang](https://clawhub.ai/user/qizhitang)
 
-## Use Case: <br>
-Math teachers and tutoring staff use this skill to design diagnostic, formative, summative, and selective math assessments. It produces blueprints, difficulty planning, implementation guidance, and post-assessment analysis frameworks without replacing teacher judgment. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: Student assessment records or rankings could expose sensitive education data if used directly in reports or downstream systems. <br>
-Mitigation: Use pseudonyms where possible, confirm before reading student profiles or writing results, and avoid rankings or public score disclosures unless a teacher explicitly authorizes the use. <br>
-Risk: Assessment items could include unauthorized copyrighted textbook or question-bank material. <br>
-Mitigation: Require source and copyright status labels for items, prefer original or authorized material, and do not copy unauthorized question banks. <br>
-Risk: Users may treat generated assessment guidance as a complete exam, grading decision, or final student evaluation. <br>
-Mitigation: Keep outputs as teacher-reviewed design frameworks, analysis templates, and teaching suggestions rather than final exams or automated scores. <br>
+## Use Case:
 
+供初高中数学教师设计诊断性、形成性或终结性测评：制定命题蓝图与双向细目表，选编并标注题目来源与版权，分析逐题 P/D、信度及知识点得分率，并经教师逐项确认后整理写回。该技能不负责学生个体错因诊断、分层或补救教学。
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-exam-designer) <br>
-- [Publisher Profile](https://clawhub.ai/user/qizhitang) <br>
-- [双向细目表模板](references/blueprint-template.md) <br>
-- [数学测评设计流程](references/exam-design-process.md) <br>
-- [数学测评结果分析模板](references/result-analysis-rubric.md) <br>
-- [双向细目表样板](references/blueprint-sample.md) <br>
-- [难度梯度样板](references/difficulty-gradient-sample.md) <br>
-- [测评分析报告模板（班级）](references/class-report-sample.md) <br>
-- [测评分析报告模板（学员）](references/student-report-sample.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, configuration, guidance] <br>
-**Output Format:** [Markdown and structured text templates] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces assessment blueprints, rubrics, report templates, and implementation guidance; it does not generate complete exams or score student work.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-2.0.0 (source: server release evidence and frontmatter) <br>
+Risk: 学生报告模板涉及超出技能声明范围的历史学习信息，可能造成学生记录使用范围不清。
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: 接入真实学生记录前，移除历史报告字段或将其设为单独授权选项；仅使用当前测评与获批的汇总数据，使用学生别名，并保留教师对保存和分享的审批。
+
+## Reference(s):
+
+- [ClawHub 技能页面](https://clawhub.ai/qizhitang/skills/xiaozhi-teach-math-exam-designer)
+- [发布者资料](https://clawhub.ai/user/qizhitang)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, JSON, guidance]
+
+**Output Format:** [Markdown 蓝图、双向细目表、题目与统计报告，以及 JSON-compatible 工作区记录]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [面向教师使用；题目统计与知识点汇总；写回内容须经教师逐项确认。]
+
+## Skill Version(s):
+
+2.12.0
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

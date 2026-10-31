@@ -1,44 +1,59 @@
-## Description: <br>
-Publish HTML, markdown, text, files, or multi-file sites to brewpage.app and return an instant public URL. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Publish HTML, markdown, text, files, or multi-file sites to brewpage.app and return an instant public URL with optional namespace and password choices.
 
-## Publisher: <br>
-[kochetkov-ma](https://clawhub.ai/user/kochetkov-ma) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[kochetkov-ma](https://clawhub.ai/user/kochetkov-ma)
 
-## Use Case: <br>
-Developers and agent users use this skill to publish selected text, files, built static directories, or zip archives to brewpage.app for temporary public sharing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can publish content to a public hosting service, which may expose files or text more broadly than intended. <br>
-Mitigation: Use it only for content intended to become public, avoid secrets and private files, and review the selected content before upload. <br>
-Risk: Broad invocation triggers may cause the skill to be selected for publishing requests where the user has not clearly chosen public hosting. <br>
-Mitigation: Require an explicit confirmation step before calling brewpage.app and confirm namespace, password, TTL, and content type. <br>
-Risk: Publishing a directory can accidentally include source files or generated artifacts. <br>
-Mitigation: Publish built static output only and keep the documented exclusions for secrets, VCS data, dependencies, sourcemaps, logs, and editor files. <br>
+## Use Case:
 
+Developers and agent users invoke this skill when they need to publish local text, markdown, files, or built static sites to brewpage.app for temporary sharing through a public URL.
 
-## Reference(s): <br>
-- [BrewPage homepage](https://brewpage.app) <br>
-- [ClawHub listing](https://clawhub.ai/kochetkov-ma/brewpage-publish) <br>
-- [OpenClaw skills documentation](https://docs.openclaw.ai/tools/skills) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with shell command blocks and a final public URL] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or append a workspace-local brewpage-history.md file containing private owner tokens.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: ClawHub release evidence) <br>
+Risk: The skill can publish arbitrary selected local content to a public hosting service.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use explicit invocations, review the exact file or directory before upload, avoid sensitive or source directories, and prefer password protection when appropriate.
+
+Risk: Deletion owner tokens are stored in ./brewpage-history.md.
+
+Mitigation: Keep the history file private and out of version control, and do not share token contents in conversation or public artifacts.
+
+Risk: Shell-based publishing templates may run upload commands against unintended paths or parameters if invoked carelessly.
+
+Mitigation: Review the resolved path, namespace, TTL, entry file, and password choice before execution.
+
+## Reference(s):
+
+- [BrewPage homepage](https://brewpage.app)
+- [ClawHub skill page](https://clawhub.ai/kochetkov-ma/skills/brewpage-publish)
+- [OpenClaw skills documentation](https://docs.openclaw.ai/tools/skills)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with shell command blocks and public URL output]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May append private deletion tokens to ./brewpage-history.md; conversation output should contain only the public URL.]
+
+## Skill Version(s):
+
+1.0.1 (source: server release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

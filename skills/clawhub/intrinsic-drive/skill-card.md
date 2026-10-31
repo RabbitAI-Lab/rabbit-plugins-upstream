@@ -1,46 +1,58 @@
-## Description: <br>
-Intrinsic Drive helps agents coach users through an intrinsic motivation audit, identify depleted drive sources, and design a bounded 30-day reactivation experiment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users through reflection on intrinsic motivation and a bounded experiment to rebuild drive.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Individuals, coaches, and knowledge workers use this skill when motivation has faded, a goal has stopped providing energy, or early burnout signals call for reflective coaching. It supports non-clinical motivation analysis and should not be used as mental-health care. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat reflective motivation guidance as mental-health care. <br>
-Mitigation: Use it only for non-clinical motivation reflection; seek professional support for clinical depression, serious burnout, or persistent symptoms. <br>
-Risk: The skill can misfit cases where external constraints, scarce resources, or structural barriers are the real blocker. <br>
-Mitigation: Apply the fit checks before coaching and avoid using the process when practical constraints, rather than motivation, are blocking execution. <br>
+## Use Case:
 
+People experiencing low motivation, loss of momentum, or flatness after an achievement can use this skill to reflect on sources of drive, identify a depleted area, and plan one specific 30-day experiment. It is a reflection aid and directs users away from this process when clinical depression or burnout calls for professional care.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/intrinsic-drive) <br>
-- [Intrinsic Drive Sources](references/sources.md) <br>
-- [Deci and Ryan, Intrinsic Motivation and Self-Determination](https://doi.org/10.1007/978-1-4899-2271-7) <br>
-- [Flow: The Psychology of Optimal Experience](https://www.harpercollins.com/products/flow-mihaly-csikszentmihalyi) <br>
-- [Madame Curie: A Biography](https://archive.org/details/madamecurie012961mbp) <br>
-- [Marie Curie Method Example](examples/marie-curie-1891-1934.md) <br>
-- [deciqAI Intrinsic Drive Page](https://www.deciqai.com/c/intrinsic-drive) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown with structured ratings, coaching prompts, and a 30-day experiment plan.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include step-by-step prompts with wait points for user input and a Drive Source Portfolio summary.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Motivation coaching could be mistaken for mental-health treatment.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Frame the process as reflection only and direct users with signs of clinical depression or burnout toward professional care.
+
+Risk: Sensitive personal details could be retained in reusable examples.
+
+Mitigation: Keep sensitive personal details out of examples saved for reuse.
+
+## Reference(s):
+
+- [Primary sources and further reading](references/sources.md)
+- [Intrinsic Drive on ClawHub](https://clawhub.ai/deciqai/skills/intrinsic-drive)
+- [Intrinsic Motivation and Self-Determination in Human Behavior](https://doi.org/10.1007/978-1-4899-2271-7)
+- [Flow: The Psychology of Optimal Experience](https://www.harpercollins.com/products/flow-mihaly-csikszentmihalyi)
+- [Madame Curie: A Biography](https://archive.org/details/madamecurie012961mbp)
+- [Marie Curie's laboratory notebooks](https://gallica.bnf.fr/ark:/12148/btv1b9064022h)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown with a structured drive-source portfolio and a 30-day experiment]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes 1–5 ratings for motivation sources, a bounded experiment, and a follow-up audit date.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

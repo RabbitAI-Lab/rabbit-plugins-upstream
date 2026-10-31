@@ -9,11 +9,21 @@ Use this recipe when the user has a signal-driven segment ready (recent fundrais
 - *"Build a sequence-ready list from job changes this week."*
 - *"Generate first lines for the tech-intent companies."*
 
+## Before you start — basis, suppression, relevance
+
+Blocking, and all three are free. Full spec: [`../references/acceptable-use.md`](../references/acceptable-use.md).
+
+1. **Ask which basis applies** — existing customers, opted-in contacts, event attendees, or a documented legitimate-interest case for this B2B role. A work email in the record is not itself a basis. Purchased lists and data taken from a platform in breach of its terms are a stop.
+2. **Subtract suppression before you enrich.** Filter the segment on the workspace's unsubscribe / do-not-contact / hard-bounce columns *first* — it protects the people who opted out and it stops you paying to enrich rows you can't use. No such column? Flag it as a real gap and offer to add one; don't proceed silently.
+3. **Name the per-recipient reason.** The signal that built the segment is usually it. If the honest answer is "they matched an industry filter", the list isn't ready — tighten it before spending.
+
+This recipe ends at send-ready variables. The user's sequencer sends, under its own limits, domains, and identities; the copy it sends needs an honest sender and subject, a working opt-out, and a postal address where required.
+
 ## Why this recipe exists
 
 Signal recipes (`funding-watch`, `job-change-monitoring`, `tech-intent`, `portfolio-prospecting`) all produce a segment. They stop at *"here's a list with a signal."* The next step — enrich, personalize, hand off — has the same shape regardless of the signal. This recipe captures that shape once.
 
-The handoff target is the workspace's sequencer of choice (Outreach, Salesloft, Apollo, HubSpot Sequences, Salesforce Cadences). The recipe stops at "send-ready variables" and points at `cargo-ai connection integration get <slug>` for the final push.
+The handoff target is the workspace's sequencer of choice (Outreach, Salesloft, Apollo, HubSpot Sequences, Salesforce Cadences). The recipe stops at "send-ready variables" and points at `cargo-ai connection integration get <slug>` for the final push. Cargo's own mailboxes are a fourth option for that final push — see [`../../cargo-mailbox-management/SKILL.md`](../../cargo-mailbox-management/SKILL.md); the gates in [`../references/acceptable-use.md`](../references/acceptable-use.md) are identical either way, and a Cargo-owned mailbox adds its own volume ceiling (the warm-up ramp) on top of them.
 
 ## Recipe
 
@@ -35,34 +45,55 @@ cargo-ai segmentation segment fetch \
 
 If the segment is company-level (e.g. recently funded), pull target personas at each account:
 
+`execute-batch --wait-until-finished` prints the batch object, not rows. Rows come from `batch download`: a signed CSV of each input record's columns plus every output key as `cargo_<key>` (nested objects as dotted columns). This helper turns it into JSON for jq:
+
 ```bash
-# Use salesNavigator for precision, peopleDataLabs for scale.
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads","config":{}}' \
-  --records "$(jq -c '[.records[] | {
-    company_domain: .domain,
-    title_keywords: ["VP", "Director", "Head"],
-    function: ["Sales", "Revenue Operations"]
-  }]' /tmp/signal-segment.json)" \
-  --wait-until-finished > /tmp/contacts.json
+batch_rows() {
+  curl -fsSL "$(cargo-ai orchestration batch download --uuid "$1" | jq -r .url)" \
+    | python3 -c 'import csv,json,sys; json.dump(list(csv.DictReader(sys.stdin)), sys.stdout)'
+}
 ```
 
-If the segment is already contact-level (e.g. job-change MOVED rows), skip this step — use those rows directly.
+searchLeads scopes to a company by its LinkedIn company id (`company.currentCompanyIds`), not a domain. This assumes the segment carries it as `linkedin_id`; when it doesn't, resolve it first with `linkedin.enrichCompanyFromDomain` (0.5, returns `company_id`).
+
+```bash
+# Use salesNavigator for precision, peopleDataLabs for scale.
+# Function codes are LinkedIn's, as strings: "25" Sales, "18" Operations
+# (there is no Revenue Operations function; names like "Sales" match nothing).
+# domain and signal ride along so they come back as CSV columns.
+B=$(cargo-ai orchestration action execute-batch \
+  --action '{"kind":"connector","integrationSlug":"salesNavigator","actionSlug":"searchLeads"}' \
+  --records "$(jq -c '[.records[] | select(.linkedin_id) | {
+    domain, signal,
+    company: {currentCompanyIds: [.linkedin_id]},
+    role: {titleKeywords: ["VP", "Director", "Head"], functions: ["25", "18"]},
+    limit: 5
+  }]' /tmp/signal-segment.json)" \
+  --wait-until-finished | jq -r '.batch.uuid')
+
+# The leads array lands in one `cargo` column as JSON
+batch_rows "$B" | jq '[.[] | {domain, signal} as $c | (.cargo // "" | if . == "" then [] else fromjson end)[] | . + $c]' > /tmp/contacts.json
+```
+
+If the segment is already contact-level (e.g. job-change rows with `job_change_status` = `moved`), skip this step — use those rows directly.
 
 ### Step 3 — Enrich each contact (email + LinkedIn + firmographics)
 
 ```bash
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"enrichProspectDetails","config":{}}' \
-  --records "$(jq -c '[.results[] | {
-    first_name, last_name,
-    company_domain: .company_domain,
-    contact_linkedin: .linkedin_url
+# title, company_name and signal_summary ride along for step 5; the action
+# reads first_name, last_name, domain and linkedin
+B=$(cargo-ai orchestration action execute-batch \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"enrichContact"}' \
+  --records "$(jq -c '[.[] | {
+    first_name, last_name, domain,
+    linkedin: .linkedin_profile_url,
+    title: .job_title, company_name, signal_summary: .signal
   }]' /tmp/contacts.json)" \
-  --wait-until-finished > /tmp/enriched.json
+  --wait-until-finished | jq -r '.batch.uuid')
+curl -fsSL "$(cargo-ai orchestration batch download --uuid "$B" | jq -r .url)" > /tmp/enriched.csv
 ```
 
-Waterfall returns the best-coverage `email`, `phone`, and a normalized contact profile. For premium contact data (mobile direct dials, top-tier accuracy), swap in `FullEnrich.enrichPerson`.
+Waterfall returns a normalized contact profile under `person`: `person.professional_email`, `person.mobile_phone`, `person.title` (CSV columns `cargo_person.professional_email`, …). For premium contact data (mobile direct dials, top-tier accuracy), swap in `FullEnrich.findPhoneAndEmail` (7).
 
 ### Step 4 — Verify emails before personalizing
 
@@ -70,24 +101,27 @@ Cheap insurance against bounces and sender-reputation damage. Free cull → paid
 
 ```bash
 # 4a. FREE pre-cull (QA scripts: ../references/contact-accuracy.md; Node >= 22.18;
-#     execute-batch output is accepted directly)
-node <skill-dir>/scripts/validate-emails.ts --input /tmp/enriched.json --json > /tmp/culled.json
+#     it reads the batch download CSV directly)
+node <skill-dir>/scripts/validate-emails.ts --input /tmp/enriched.csv \
+  --email-column cargo_person.professional_email --json \
+  | jq '[.[] | . + {email: .["cargo_person.professional_email"]}]' > /tmp/culled.json
 
 # 4b. Paid verification — build the batch from the CULLED rows, never the
 #     original list (that's where the credit saving happens)
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail","config":{}}' \
-  --records "$(jq -c '[.[] | select(.recommendation != "skip") | {email}]' /tmp/culled.json)" \
-  --wait-until-finished > /tmp/verified.json
+B=$(cargo-ai orchestration action execute-batch \
+  --action '{"kind":"connector","integrationSlug":"waterfall","actionSlug":"verifyEmail"}' \
+  --records "$(jq -c '[.[] | select(.recommendation != "skip" and (.email // "") != "") | {email}]' /tmp/culled.json)" \
+  --wait-until-finished | jq -r '.batch.uuid')
+batch_rows "$B" > /tmp/verified.json
 
 # 4c. Merge statuses back onto ALL culled rows — do NOT pre-filter to "valid":
 #     the audit needs the catch-all/unknown/invalid rows to issue
 #     VERIFY/REVIEW/REMOVE verdicts (and the receipt needs their counts).
 #     Join on the LOWERCASED email — verify results may re-case the address,
 #     and a missed join leaves emailStatus empty (row degrades to VERIFY).
-#     Read .email_status (waterfall.verifyEmail output schema) — not .status.
+#     Read cargo_email_status (waterfall.verifyEmail's email_status) — not .status.
 jq -c --slurpfile ver /tmp/verified.json '
-  ($ver[0].results | map({key: (.email | ascii_downcase), value: .email_status}) | from_entries) as $st
+  ($ver[0] | map({key: (.email | ascii_downcase), value: .cargo_email_status}) | from_entries) as $st
   | map(. + {emailStatus: ($st[(.email // "" | ascii_downcase)] // "")})
 ' /tmp/culled.json > /tmp/merged.json
 
@@ -100,28 +134,33 @@ jq '[.[] | select(.audit_action == "SEND")]' /tmp/audited.json > /tmp/deliverabl
 ### Step 5 — Generate a personalized first line per contact
 
 ```bash
-cargo-ai orchestration action execute-batch \
-  --action '{"kind":"connector","integrationSlug":"anthropic","actionSlug":"instruct","config":{"model":"claude-3-5-haiku-latest","advancedSettings":{"temperature":0.3,"maxTokens":1024}}}' \
+B=$(cargo-ai orchestration action execute-batch \
+  --action '{"kind":"connector","integrationSlug":"anthropic","actionSlug":"instruct"}' \
   --records "$(jq -c '[.[] | {
-    prompt: ("You are writing the opening line of a cold email. The recipient is " + .first_name + " " + .last_name + ", " + .title + " at " + .company_name + ". Signal triggering this outreach: " + .signal_summary + ". Write ONE sentence that references the signal naturally and ties it to a relevant business outcome. No greeting. No follow-up. ≤30 words.")
+    model: "claude-3-5-haiku-latest",
+    advancedSettings: {temperature: 0.3, maxTokens: 1024},
+    prompt: ("You are writing the opening line of a first-touch email. The recipient is " + .first_name + " " + .last_name + ", " + .title + " at " + .company_name + ". Signal triggering this outreach: " + .signal_summary + ". Write ONE sentence that references the signal naturally and ties it to a relevant business outcome. No greeting. No follow-up. ≤30 words.")
   }]' /tmp/deliverable.json)" \
-  --wait-until-finished > /tmp/personalized.json
+  --wait-until-finished | jq -r '.batch.uuid')
+batch_rows "$B" > /tmp/personalized.json   # the line is in cargo_answer
 ```
+
+`model` is a **required input**, so it belongs in every record alongside `prompt` — the action carries no `config` at all. Put it in `config` and newer backends drop it silently, billing the call at the default model.
 
 More proven prompts (subject lines, follow-ups, job-change angles): [`../references/prompt-library/index.md`](../references/prompt-library/index.md).
 
-For higher quality at higher cost, swap `claude-3-5-haiku-latest` for `claude-sonnet-4-6`. For ~30× cheaper at scale: `openAi` with `gpt-5-nano` (0.006 credits/1k tokens vs Haiku's 0.2) — see [`../provider-playbooks/openAi.md`](../provider-playbooks/openAi.md) for the full tier table.
+For higher quality at higher cost, swap `claude-3-5-haiku-latest` for `claude-sonnet-4-6` (0.2 credits/1k tokens). For ~8× cheaper at scale: `openAi` with `gpt-5-nano` (0.006 credits/1k tokens vs Haiku's 0.05) — see [`../provider-playbooks/openAi.md`](../provider-playbooks/openAi.md) for the full tier table.
 
 ### Step 6 — Hand off to the sequencer
 
 Compose the send-ready payload — one row per contact with email, signal, and the personalized first line:
 
 ```bash
-# deliverable.json is the audited SEND array; personalized.json is batch output
-# ({results: [...]}) in the same order — zip them by index
+# deliverable.json is the audited SEND array; personalized.json holds the batch
+# rows in the same order (one per input record) — zip them by index
 jq -n --slurpfile d /tmp/deliverable.json --slurpfile p /tmp/personalized.json '
   [range(0; ($d[0] | length)) as $i
-   | {email: $d[0][$i].email, first_line: $p[0].results[$i].text, signal: $d[0][$i].signal_summary}]
+   | {email: $d[0][$i].email, first_line: $p[0][$i].cargo_answer, signal: $d[0][$i].signal_summary}]
 ' > /tmp/send-ready.json
 ```
 
@@ -153,20 +192,20 @@ For a 500-contact signal segment (waterfall + verify + Haiku personalization):
 
 | Step | Per record | 500 contacts |
 |---|---|---|
-| `waterfall.enrichProspectDetails` | 1 | 500 |
-| `waterfall.verifyEmail` | 0.5 | 250 |
-| `anthropic.instruct` (Haiku) | 0.2 | 100 |
-| **Total** | **1.7** | **850** |
+| `waterfall.enrichContact` | 2 | 1,000 |
+| `waterfall.verifyEmail` | 0.1 | 50 |
+| `anthropic.instruct` (Haiku, 0.05/1k tokens, ~0.5k tokens per line) | ~0.025 | ~13 |
+| **Total** | **~2.1** | **~1,063** |
 
-Cut personalization ~30× by switching to `openAi.instruct` with `gpt-5-nano` (0.006/1k tokens).
+Cut personalization ~8× by switching to `openAi.instruct` with `gpt-5-nano` (0.006/1k tokens).
 
 ## Action shape
 
-Every action follows: `{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>","config":{}}`. **No `connectorUuid` in `config`** — see [`../../cargo-orchestration/references/examples/actions.md`](../../cargo-orchestration/references/examples/actions.md). Cross-node interpolation in node graphs: `{{nodes.<slug>.<field>}}`.
+Every action follows: `{"kind":"connector","integrationSlug":"<slug>","actionSlug":"<slug>"}`. **No `connectorUuid` in `config`** — see [`../../cargo-orchestration/references/examples/actions.md`](../../cargo-orchestration/references/examples/actions.md). Cross-node interpolation in node graphs: `{{nodes.<slug>.<field>}}`.
 
 ## Output retrieval
 
-For batch runs, use `cargo-ai orchestration run download-outputs --workflow-uuid <uuid> --output-node-slug <slug>`. See [`../references/output-retrieval.md`](../references/output-retrieval.md).
+For batch runs, use `cargo-ai orchestration batch download --uuid <batch-uuid>` (the `batch_rows` helper above): an ad-hoc `execute-batch` has no workflow, so `run download-outputs --workflow-uuid` does not apply. See [`../references/output-retrieval.md`](../references/output-retrieval.md).
 
 ## Related
 

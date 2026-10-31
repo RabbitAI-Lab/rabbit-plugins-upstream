@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;700;900&family=JetBrains+Mono:wght@700&display=swap" rel="stylesheet">
+<style>
+/* === html-base.css 底座（按本卡覆盖变量） === */
+:root {
+    --card-width: 1170px; --card-height: 660px;
+    --bg-page: #FFFFFF; --ink: #1A1A1A; --accent: #4B5BDC;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+html, body { width:var(--card-width); height:var(--card-height); overflow:hidden; background:var(--bg-page); color:var(--ink); font-family:'Noto Sans SC',sans-serif; -webkit-font-smoothing:antialiased; }
+.card { position:relative; width:100%; height:100%; overflow:hidden; }
+::selection { background:transparent; }
+
+/* === 区块1：标题 === */
+.title { position:absolute; top:44px; left:0; right:0; text-align:center; font-size:34px; font-weight:900; }
+.title .sub { display:block; font-size:16px; font-weight:400; color:#8A8A93; margin-top:8px; }
+
+/* === 区块2：节点流程链（横排 5 节点） === */
+.node {
+    position:absolute; top:230px; width:150px; height:96px;
+    background:#fff; border:2px solid #D9D9E0; border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+    transition:none;
+}
+.node .n-name { font-size:19px; font-weight:700; }
+.node .n-sub { font-size:12.5px; color:#8A8A93; }
+.n1 { left:90px; } .n2 { left:300px; } .n3 { left:510px; } .n4 { left:720px; } .n5 { left:930px; }
+
+/* 知识库（检索节点下方） */
+.kb {
+    position:absolute; top:440px; left:510px; width:150px; height:96px;
+    background:#EEF0FF; border:2px solid #D9D9E0; border-radius:14px;
+    display:flex; flex-direction:column; align-items:center; justify-content:center; gap:6px;
+}
+.kb .n-name { font-size:19px; font-weight:700; }
+.kb .n-sub { font-size:12.5px; color:#6B6B75; }
+
+/* === 区块3：箭头（纯 CSS） === */
+.arrow { position:absolute; top:277px; height:2px; background:#C9C9D2; width:60px; }
+.a1{left:240px;} .a2{left:450px;} .a3{left:660px;} .a4{left:870px;}
+.arrow::after { content:''; position:absolute; right:-1px; top:-4px; border:5px solid transparent; border-left-color:#C9C9D2; }
+.vline { position:absolute; left:584px; top:326px; width:2px; height:114px; background:#C9C9D2; }
+
+/* === 区块4：token 小药丸（沿链流动） === */
+.token {
+    position:absolute; top:196px; left:165px; width:34px; height:22px; margin-left:-17px;
+    background:var(--accent); border-radius:11px; color:#fff;
+    font:700 11px/22px 'JetBrains Mono',monospace; text-align:center;
+    animation:travel 12s linear infinite;
+}
+@keyframes travel {
+    0%,13%   { transform:translateX(0); }         /* 站1 用户 */
+    20%,33%  { transform:translateX(210px); }     /* 站2 Embedding */
+    40%,53%  { transform:translateX(420px); }     /* 站3 检索 */
+    60%,73%  { transform:translateX(630px); }     /* 站4 LLM */
+    80%,96%  { transform:translateX(840px); }     /* 站5 回答 */
+    100%     { transform:translateX(0); opacity:0; }
+}
+
+/* === 区块5：节点高亮（与 token 同一时间轴） === */
+.node,.kb { animation-duration:12s; animation-iteration-count:infinite; }
+.n1{animation-name:hl1;} .n2{animation-name:hl2;} .n3{animation-name:hl3;}
+.n4{animation-name:hl4;} .n5{animation-name:hl5;} .kb{animation-name:hl3;}
+@keyframes hl1 { 0%,20%   { border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 21%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl2 { 0%,19%   { border-color:#D9D9E0; box-shadow:none;} 20%,40%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 41%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl3 { 0%,39%   { border-color:#D9D9E0; box-shadow:none;} 40%,60%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 61%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl4 { 0%,59%   { border-color:#D9D9E0; box-shadow:none;} 60%,80%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 81%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+@keyframes hl5 { 0%,79%   { border-color:#D9D9E0; box-shadow:none;} 80%,98%{ border-color:var(--accent); box-shadow:0 0 0 4px rgba(75,91,220,.12);} 99%,100%{ border-color:#D9D9E0; box-shadow:none;} }
+
+/* === 区块6：底部步骤条（5 句说明切换） === */
+.stepbar { position:absolute; left:90px; right:90px; bottom:44px; height:76px; }
+.stepno { position:absolute; left:0; top:0; font:700 14px 'JetBrains Mono',monospace; color:var(--accent); opacity:0; animation-duration:12s; animation-iteration-count:infinite; }
+.s1{animation-name:cap1;} .s2{animation-name:cap2;} .s3{animation-name:cap3;} .s4{animation-name:cap4;} .s5{animation-name:cap5;}
+.cap { position:absolute; left:0; right:0; top:28px; background:#F5F5F7; border-radius:10px;
+       padding:12px 18px; font-size:19px; font-weight:700; opacity:0; animation-duration:12s; animation-iteration-count:infinite; }
+.c1{animation-name:cap1;} .c2{animation-name:cap2;} .c3{animation-name:cap3;} .c4{animation-name:cap4;} .c5{animation-name:cap5;}
+@keyframes cap1 { 0%,20%{opacity:1;} 21%,100%{opacity:0;} }
+@keyframes cap2 { 0%,19%{opacity:0;} 20%,40%{opacity:1;} 41%,100%{opacity:0;} }
+@keyframes cap3 { 0%,39%{opacity:0;} 40%,60%{opacity:1;} 61%,100%{opacity:0;} }
+@keyframes cap4 { 0%,59%{opacity:0;} 60%,80%{opacity:1;} 81%,100%{opacity:0;} }
+@keyframes cap5 { 0%,79%{opacity:0;} 80%,98%{opacity:1;} 99%,100%{opacity:0;} }
+.stepno { animation:stepno 12s linear infinite; }
+@keyframes stepno {
+    0%,20%{content-visibility:visible;}
+}
+</style>
+</head>
+<body>
+<div class="card">
+
+  <!-- === 标题 === -->
+  <div class="title">RAG：一次提问的旅程<span class="sub">检索增强生成 · 把"开卷考试"讲清楚</span></div>
+
+  <!-- === 节点流程链 === -->
+  <div class="node n1"><span class="n-name">用户</span><span class="n-sub">提出问题</span></div>
+  <div class="node n2"><span class="n-name">Embedding</span><span class="n-sub">问题变向量</span></div>
+  <div class="node n3"><span class="n-name">向量检索</span><span class="n-sub">相似度匹配</span></div>
+  <div class="node n4"><span class="n-name">LLM</span><span class="n-sub">拼接上下文生成</span></div>
+  <div class="node n5"><span class="n-name">回答</span><span class="n-sub">带出处可溯源</span></div>
+  <div class="kb"><span class="n-name">知识库</span><span class="n-sub">你的资料切片</span></div>
+
+  <!-- === 箭头 === -->
+  <div class="arrow a1"></div><div class="arrow a2"></div><div class="arrow a3"></div><div class="arrow a4"></div>
+  <div class="vline"></div>
+
+  <!-- === 流动的 token === -->
+  <div class="token">◆</div>
+
+  <!-- === 底部步骤条 === -->
+  <div class="stepbar">
+    <div class="stepno s1">STEP 1 / 5</div>
+    <div class="stepno s2">STEP 2 / 5</div>
+    <div class="stepno s3">STEP 3 / 5</div>
+    <div class="stepno s4">STEP 4 / 5</div>
+    <div class="stepno s5">STEP 5 / 5</div>
+    <div class="cap c1">用户发出问题</div>
+    <div class="cap c2">Embedding 把问题变成向量</div>
+    <div class="cap c3">去知识库检索最相关的片段</div>
+    <div class="cap c4">资料拼进上下文，交给 LLM 生成</div>
+    <div class="cap c5">答案带出处，可溯源可验证</div>
+  </div>
+
+</div>
+</body>
+</html>

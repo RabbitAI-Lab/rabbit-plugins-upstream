@@ -1,41 +1,56 @@
-## Description: <br>
-用于小红书数据助手、小红书搜索热榜、小红书数据分析、小红书笔记搜索、笔记详情、评论分析、博主数据和博主笔记。覆盖 Xiaohongshu / XHS / RedNote，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于小红书数据助手、小红书搜索热榜、小红书数据分析、小红书笔记搜索、笔记详情、评论分析、博主数据和博主笔记。覆盖 Xiaohongshu / XHS / RedNote，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Developers and researchers use this skill to explore Xiaohongshu trends, find notes, review note details and comments, and look up creator profiles and posts through SocialDataX.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: Requests send submitted keywords, links, or share text to SocialDataX, and data calls use the SOCIALDATAX_API_KEY.
+
+Mitigation: Submit only content you are comfortable sending to the service and protect the API key in the runtime environment.
+
+Risk: Using the @latest CLI package can change behavior when the package is updated.
+
+Mitigation: Prefer a reviewed, fixed CLI version and limit its access to unrelated files and secrets.
+
+Risk: Large comment or creator-post requests may consume additional credits.
+
+Mitigation: Keep page and reply requests scoped to the amount of data needed, and review credit usage for large requests.
+
+## Reference(s):
 
 
-## Use Case: <br>
-External users and developers use this skill to retrieve and analyze Xiaohongshu / XHS / RedNote hot searches, notes, comments, creator profiles, and creator note lists through SocialDataX. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Text, JSON, Shell commands, Guidance]
 
-## Known Risks and Mitigations: <br>
-Risk: XHS queries and URLs are sent to SocialDataX using SOCIALDATAX_API_KEY. <br>
-Mitigation: Use the skill only when this data sharing is acceptable, and keep the API key in the environment rather than embedding it in prompts or files. <br>
-Risk: Returned Xiaohongshu note URLs may include token-like xsec_token query parameters. <br>
-Mitigation: Share full note_url values only with intended recipients and avoid placing them in public chats, tickets, logs, or shared documents unless the exact link is needed. <br>
+**Output Format:** [Markdown summaries, JSON service results, and inline Bash CLI examples]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [SocialDataX AI access page](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-xhs) <br>
+**Other Properties Related to Output:** [Read-only research; result coverage depends on query limits, pagination, available credits, and service responses.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and data-result guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses SOCIALDATAX_API_KEY at runtime and may return Xiaohongshu note URLs containing token-like query parameters.] <br>
+0.1.25 (source: server-resolved release metadata)
 
-## Skill Version(s): <br>
-0.1.16 (source: release evidence) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,58 @@
-## Description: <br>
-Inference Aiops helps agents inspect and operate GPU inference serving clusters across vLLM, Ray Serve, SGLang, and TGI, including latency diagnosis, scaling, drain workflows, model operations, GPU utilization, Ray jobs, and cost-per-token estimates. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Operate GPU inference clusters across vLLM, Ray Serve, SGLang, and TGI with observability, latency diagnosis, scaling, and model operations.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers and infrastructure operators use this skill to observe GPU inference clusters, diagnose latency or utilization problems, and perform governed operational changes such as scaling, draining replicas, managing LoRA adapters, and inspecting Ray jobs. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill can perform disruptive inference-cluster write operations and does not enforce a read-only mode or approval gate itself. <br>
-Mitigation: Use observe-only network access when write authority is not intended, expose only metrics or read endpoints where possible, and require separate operator approval, least-privilege credentials, and a rollback plan before production write access. <br>
-Risk: High-risk operations such as scale-to-zero, drain, restart, undeploy, redeploy, sleep, or LoRA unload can interrupt traffic or strand requests. <br>
-Mitigation: Run dry-run previews first, verify current traffic and queue depth, confirm that remaining capacity can absorb load, and keep undo or restore steps ready before applying changes. <br>
-Risk: Bearer tokens and INFERENCE_AIOPS_MASTER_PASSWORD can grant access to inference and Ray control-plane endpoints. <br>
-Mitigation: Treat these values as secrets, avoid broad shell or CI exposure, prefer the encrypted secret store, and scope tokens to the minimum cluster permissions needed. <br>
+## Use Case:
 
+Developers and inference platform engineers use this skill to inspect GPU serving health and performance, diagnose latency or utilization issues, and manage supported Ray Serve and model operations.
 
-## Reference(s): <br>
-- [Project homepage](https://github.com/AIops-tools/Inference-AIops) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown with inline shell commands and structured operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include dry-run recommendations, audit annotations, measured cluster observations, and rollback steps for governed inference operations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release metadata) <br>
+Risk: State-changing operations can interrupt inference services, and MCP commands do not enforce approval checks.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Begin with access restricted to read and metrics endpoints. Before enabling writes, require approval outside the model for the exact target and change; treat audit logs and undo as records and recovery aids, not authorization.
+
+Risk: Developer mode, configured endpoints, and credentials can expose production systems if misconfigured.
+
+Mitigation: Keep developer mode disabled in production, protect endpoints and credentials, and test changes on a non-production cluster.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/zw008/skills/inference-aiops)
+- [Project homepage](https://github.com/AIops-tools/Inference-AIops)
+- [Capabilities](references/capabilities.md)
+- [Agent guardrails](references/agent-guardrails.md)
+- [CLI reference](references/cli-reference.md)
+- [Setup and security guide](references/setup-guide.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Shell commands, Configuration instructions, Guidance]
+
+**Output Format:** [Structured operational results with concise Markdown guidance and shell commands when relevant]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Cost per token is an estimate based on throughput and supplied GPU hourly pricing.]
+
+## Skill Version(s):
+
+0.13.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

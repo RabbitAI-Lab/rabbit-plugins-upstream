@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/cargo-billing",
   "slug": "cargo-billing",
   "ownerHandle": null,
-  "version": "1.0.2",
-  "updatedAt": 1783644946903,
-  "contentHash": "f5ac2e56619775e4121ee484078a730fdf53dbc2bf8c530e7cabae87266618de",
-  "fetchedAt": "2026-07-26T18:17:17.976Z"
+  "version": "2.1.3",
+  "updatedAt": 1793376800120,
+  "contentHash": "77db871915ae29362f05fe71b790eb2d8f4a6b748b86a79aaec16c16f51067a7",
+  "fetchedAt": "2026-10-31T13:47:58.937Z"
 }

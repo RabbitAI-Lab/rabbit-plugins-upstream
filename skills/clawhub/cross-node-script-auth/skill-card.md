@@ -1,41 +1,59 @@
-## Description: <br>
-Zero-exposure cross-device script authorization using MGC Blackbox seal functionality, where scripts are encrypted with a target node's public key, transferred as ciphertext, and decrypted only during execution on the authorized node. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Zero‑exposure cross‑device script authorization using MGC Blackbox, with encrypted capsule delivery, p2p and free modes, link authorization, and self-describing capsules.
 
-## Publisher: <br>
-[zkeviny](https://clawhub.ai/user/zkeviny) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[zkeviny](https://clawhub.ai/user/zkeviny)
 
-## Use Case: <br>
-Developers and security teams use this documentation skill to guide agents through sealing scripts for cross-device execution with MGC Blackbox while keeping script contents encrypted during transfer and storage. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill teaches users to run encrypted scripts they cannot inspect. <br>
-Mitigation: Only run sealed scripts from fully trusted sources, prefer signed or hash-verified payloads, and use a constrained sandbox or least-privilege environment. <br>
-Risk: Users may treat encryption as proof that a hidden script is safe. <br>
-Mitigation: Review provenance and authorization separately from encryption status, and do not execute sealed payloads when the publisher or payload integrity cannot be verified. <br>
+## Use Case:
 
+Developers and operations teams use this skill to seal, transfer, import, and run scripts across MGC nodes while limiting plaintext exposure. It also explains how to choose between node-bound p2p authorization and public free mode.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/zkeviny/skills/cross-node-script-auth) <br>
-- [MGC Blackbox Repository](https://github.com/zkeviny/MGC-Blackbox) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python and JSON examples and shell setup commands.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Documentation-only skill; it does not produce executable artifacts.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence and artifact frontmatter) <br>
+Risk: Imported scripts may be unreadable before execution and can run with the caller's account permissions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the script source or obtain an independently authenticated delivery, require approval before execution, and run it in a separate environment with limited permissions and credentials.
+
+Risk: The skill's origin and tamper-resistance claims may be mistaken for proof that a script is trustworthy.
+
+Mitigation: Verify the owner node's public key through a trusted channel; treat public-key comparison and link authorization as limited integrity checks, not proof of safe behavior.
+
+Risk: Sandbox workarounds could weaken execution boundaries.
+
+Mitigation: Preserve sandbox restrictions and do not bypass them to make tool calls work.
+
+## Reference(s):
+
+- [MGC Blackbox repository](https://github.com/zkeviny/MGC-Blackbox)
+- [MGC Blackbox issues](https://github.com/zkeviny/MGC-Blackbox/issues)
+- [ClawHub skill page](https://clawhub.ai/zkeviny/skills/cross-node-script-auth)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Code, Shell commands, Configuration, Files]
+
+**Output Format:** [Markdown with Python, JSON, and shell examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Procedural guidance and examples for MGC Blackbox 1.5.4 or later; workflows may produce sealed capsule files.]
+
+## Skill Version(s):
+
+1.3.0 (source: SKILL.md frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

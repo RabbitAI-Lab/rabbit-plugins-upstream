@@ -1,47 +1,51 @@
-## Description: <br>
-Guides an agent to diagnose a decision situation using the Cynefin domains and match the response method to the domain. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides an agent to classify a decision situation with the Cynefin domains and choose a response method suited to its cause-and-effect pattern.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and agents use this skill for decision support when routine playbooks fail, experts disagree, or a crisis requires matching action style to Clear, Complicated, Complex, Chaotic, or Confused domains. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Advisory crisis or business framing could be treated as final operational direction. <br>
-Mitigation: Keep normal user confirmation and human review for real operational actions outside the skill. <br>
-Risk: A domain diagnosis can be wrong if the user provides an incomplete or oversimplified situation description. <br>
-Mitigation: Require the output to name diagnostic evidence, mismatch cost, boundary signals, and a re-diagnosis schedule. <br>
+## Use Case:
 
+Leaders, teams, and decision-makers use Cynefin to diagnose whether a situation is clear, complicated, complex, chaotic, or confused, then choose a decision approach suited to its cause-and-effect pattern. It is intended for situations where familiar practices fail, experts disagree, or conditions are changing; routine execution can skip the framework.
 
-## Reference(s): <br>
-- [Cynefin skill page](https://clawhub.ai/deciqai/skills/cynefin) <br>
-- [deciqAI publisher profile](https://clawhub.ai/user/deciqai) <br>
-- [Cynefin source list](references/sources.md) <br>
-- [Snowden at IBM and HBR synthesis example](examples/snowden-at-ibm-1999-and-the-hbr-synthesis-2007.md) <br>
-- [Apollo 13 mission response example](examples/apollo-13-1970-mission-response.md) <br>
-- [Sorting AI decisions by domain example](examples/sorting-ai-decisions-by-domain-2024-2026.md) <br>
-- [deciqAI Cynefin page](https://www.deciqai.com/c/cynefin) <br>
-- [deciqAI Cynefin machine-readable metadata](https://www.deciqai.com/s/cynefin.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown decision-support diagnosis with domain, evidence, method, actions, mismatch cost, and boundary-watch fields.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory output; the skill contains no code, install scripts, credential handling, or persistence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: ClawHub release evidence) <br>
+Risk: A domain diagnosis or proposed crisis or business action may not fit the real situation.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the skill as a decision-coaching aid and review proposed high-stakes actions before implementing them.
+
+## Reference(s):
+
+- [Cynefin primary sources](artifact/references/sources.md)
+- [Cynefin skill page](https://clawhub.ai/deciqai/skills/cynefin)
+- [Cynefin overview](https://www.deciqai.com/c/cynefin)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text]
+
+**Output Format:** [Structured Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Provides a domain diagnosis, a matched decision method, suggested actions, and boundary signals; coaching mode pauses for user responses between steps.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

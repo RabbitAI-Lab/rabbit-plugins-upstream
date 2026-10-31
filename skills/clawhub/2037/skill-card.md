@@ -1,44 +1,60 @@
-## Description: <br>
-2037 helps an agent operate the Earth2037 OpenClaw strategy game by obtaining or applying account keys, issuing authenticated game commands, reading cached state, and preparing gameplay actions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+A Chinese-language Earth2037 player assistant that uses the updated account center and game MCP/CLI to inspect cities, buildings, heroes, tasks, troops, and maps, and carry out player-authorized game actions.
 
-## Publisher: <br>
-[windinwing](https://clawhub.ai/user/windinwing) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[windinwing](https://clawhub.ai/user/windinwing)
 
-## Use Case: <br>
-External Earth2037 players and OpenClaw agents use this skill to register or authenticate accounts, inspect game state, manage cities, send chat, recruit units, build queues, claim resources, query maps, and plan gameplay actions through the Earth2037 API. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses an Earth2037 token to perform game-control actions, including chat, troop movement, building queues, resource claims, key rotation, and inventory use. <br>
-Mitigation: Install only from a trusted publisher and review proposed commands before allowing gameplay-changing actions. <br>
-Risk: Authenticated sync and bootstrap flows can store local game state in JSON cache files. <br>
-Mitigation: Delete userinfo.json, citys.json, and session_cache.json when local game-state retention is no longer wanted. <br>
+## Use Case:
 
+External players use this skill to connect an assistant to their Earth2037 account, inspect their characters and game state, and carry out specifically authorized in-game actions.
 
-## Reference(s): <br>
-- [ClawHub release page](https://clawhub.ai/windinwing/2037) <br>
-- [Publisher profile](https://clawhub.ai/user/windinwing) <br>
-- [Earth2037 map reference](artifact/MAP_FOR_AI.md) <br>
-- [Earth2037 Chinese API endpoint](https://2037cn1.9235.net) <br>
-- [Earth2037 English API endpoint](https://2037en1.9235.net) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, JSON, configuration, guidance] <br>
-**Output Format:** [Markdown and terminal text with inline shell commands and JSON command results] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May write local JSON cache files such as userinfo.json, citys.json, and session_cache.json when authenticated commands are run.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Enabling writes exposes a broad command catalog, including account-deletion and payment-related protocol commands; some raw commands do not provide previews.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep read-only mode enabled until the player authorizes specific actions. Use the documented prepare and preview flow where available, and limit raw commands to clearly authorized requests.
+
+Risk: The local credential file contains a password and rotating authentication tokens, and an unverified replacement account endpoint could expose them.
+
+Mitigation: Protect the credential file and its directory with the documented private permissions, and verify any replacement account endpoint before use.
+
+Risk: Entering a character replaces that character's current phone or web client session.
+
+Mitigation: Enter only the explicitly selected server and character when session takeover is intended; stop after a forced logout instead of reconnecting automatically.
+
+## Reference(s):
+
+- [Setup, permissions, and migration](references/SETUP.md)
+- [Player workflows](references/WORKFLOWS.md)
+- [Earth2037 AI assistant page](https://www.earth2037.com/ai/index-cn.html)
+- [2037 ClawHub release](https://clawhub.ai/windinwing/skills/2037)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Guidance, Shell commands, Configuration instructions]
+
+**Output Format:** [JSON MCP requests and responses, CLI text, and Markdown setup guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Read-only by default; game actions require explicit write enablement and player authorization. Large responses may be paginated.]
+
+## Skill Version(s):
+
+2.0.3 (source: package.json, server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,60 @@
-## Description: <br>
-Skill Factory helps agents create, evaluate, improve, benchmark, analyze, synthesize, package, and publish OpenClaw skills. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Create, evaluate, improve, benchmark, and publish OpenClaw skills.
 
-## Publisher: <br>
-[jeremysommerfeld8910-cpu](https://clawhub.ai/user/jeremysommerfeld8910-cpu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
+## Publisher:
 
+[jeremysommerfeld8910-cpu](https://clawhub.ai/user/jeremysommerfeld8910-cpu)
 
-## Use Case: <br>
-Developers and skill maintainers use this skill to scaffold new OpenClaw skills, run quality evaluations, iterate on skill versions, compare benchmark results, analyze patterns, and prepare skills for publication. <br>
-
-### Deployment Geography for Use: <br>
-Global <br>
-
-## Known Risks and Mitigations: <br>
-Risk: The skill can create and modify persistent skill files and package archives. <br>
-Mitigation: Use it in a dedicated draft workspace and review generated diffs before enabling or publishing a skill. <br>
-Risk: Packaged or published skills may accidentally include secrets or unintended local files. <br>
-Mitigation: Scan generated skill folders and archives for secrets and unnecessary files before packaging or publication. <br>
-Risk: Sync or publish commands can share skills more broadly than intended. <br>
-Mitigation: Run publish or sync steps only after confirming the target account, workspace, version, and changelog. <br>
+### License/Terms of Use:
 
 
-## Reference(s): <br>
-- [ClawHub Skill Factory release page](https://clawhub.ai/jeremysommerfeld8910-cpu/skill-factory) <br>
-- [OpenClaw Skill Patterns](artifact/references/patterns.md) <br>
+## Use Case:
 
+Developers and skill authors use this skill to create new OpenClaw skills, evaluate and improve existing skills, compare versions, analyze reusable patterns, and package skills for publishing.
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands, JSON examples, generated skill files, evaluation reports, and packaged skill artifacts] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May create or modify persistent skill directories, metadata, evaluation history, and packaged archives when the agent follows the workflow.] <br>
+### Deployment Geography for Use:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact _meta.json) <br>
+Global
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+## Known Risks and Mitigations:
+
+Risk: Broad local skill scans can expose file names, tool usage, or patterns from installed skills.
+
+Mitigation: Review scan directories before running pattern analysis and limit scans to verified skill directories.
+
+Risk: Packaging workflows can include unintended files in a published skill archive.
+
+Mitigation: Inspect the full package manifest and generated .skill archive contents before publishing.
+
+Risk: Generated pattern reports or eval results can carry untrusted or low-quality guidance into future skill edits.
+
+Mitigation: Keep generated reports as review inputs and require human approval before rewriting or publishing skills.
+
+Risk: Fallback commands that locate helper scripts through filesystem search can select an unexpected installation path.
+
+Mitigation: Run bundled scripts only from a verified skill installation path.
+
+## Reference(s):
+
+- [OpenClaw Skill Patterns](references/patterns.md)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance]
+
+**Output Format:** [Markdown guidance with inline bash, JSON, and YAML examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May create or modify skill files, eval reports, pattern reports, and packaged .skill archives when directed by the user.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and artifact _meta.json)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
