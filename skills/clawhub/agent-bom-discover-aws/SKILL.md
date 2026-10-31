@@ -7,7 +7,7 @@ description: >-
   inventory AWS Bedrock, ECS, SageMaker, Lambda, EKS, Step Functions, EC2, or
   agentic AWS infrastructure as canonical inventory. Passing that inventory
   to agent-bom is optional and operator-chosen.
-version: 0.98.0
+version: 0.111.0
 license: Apache-2.0
 compatibility: >-
   Requires Python 3.11+, agent-bom installed from this repository or PyPI, and
@@ -15,8 +15,8 @@ compatibility: >-
   short-lived credentials and read-only IAM policy scope.
 metadata:
   author: msaad00
-  homepage: https://github.com/msaad00/agent-bom
-  source: https://github.com/msaad00/agent-bom
+  homepage: https://github.com/koda-ai-studio/agent-bom
+  source: https://github.com/koda-ai-studio/agent-bom
   pypi: https://pypi.org/project/agent-bom/
   openclaw:
     requires:
@@ -31,8 +31,8 @@ metadata:
       - AWS_DEFAULT_REGION
     optional_bins: []
     emoji: "\U0001F50E"
-    homepage: https://github.com/msaad00/agent-bom
-    source: https://github.com/msaad00/agent-bom
+    homepage: https://github.com/koda-ai-studio/agent-bom
+    source: https://github.com/koda-ai-studio/agent-bom
     license: Apache-2.0
     os:
       - darwin

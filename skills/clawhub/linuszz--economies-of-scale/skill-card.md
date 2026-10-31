@@ -1,38 +1,49 @@
-## Description: <br>
-Analyzes scale advantage and cost curves to help evaluate cost structure and competitive positioning. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyze cost advantages from scale. Use for understanding cost structure and competitive positioning.
 
-## Publisher: <br>
-[linuszz](https://clawhub.ai/user/linuszz) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[linuszz](https://clawhub.ai/user/linuszz)
 
-## Use Case: <br>
-Developers, analysts, and strategy teams use this skill to analyze how volume, fixed-cost leverage, purchasing power, and other scale effects may shape unit costs and competitive positioning. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Cost estimates and strategic recommendations may be incorrect or misleading if the input business context is incomplete or unverified. <br>
-Mitigation: Treat outputs as analytical guidance and review assumptions, data sources, and recommendations before using them for financial or strategic decisions. <br>
+## Use Case:
 
+Business analysts, strategists, and operators use this skill to assess scale-driven cost advantages, minimum efficient scale, competitive implications, and recommendations for a business or product.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/linuszz/economies-of-scale) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, guidance] <br>
-**Output Format:** [Markdown with tables and recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Provides cost curve analysis, scale advantage assessment, competitive implications, and recommendations.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release evidence) <br>
+Risk: Incorrect or unsupported cost assumptions may produce misleading scale-analysis recommendations.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review input data, assumptions, and sources before using the analysis for business decisions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/linuszz/skills/economies-of-scale)
+
+## Skill Output:
+
+**Output Type(s):** [text, markdown, guidance]
+
+**Output Format:** [Markdown analysis with tables and recommendation lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Outputs depend on the business or product context and the numerical assumptions supplied by the user.]
+
+## Skill Version(s):
+
+1.0.0 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

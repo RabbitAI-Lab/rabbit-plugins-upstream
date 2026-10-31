@@ -17,7 +17,7 @@ installer:
 argument-hint: "[deployment/model name or describe your inference-cluster task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["INFERENCE_AIOPS_CONFIG"],"bins":["inference-aiops"],"config":["~/.inference-aiops/config.yaml"]},"optional":{"env":["INFERENCE_AIOPS_MASTER_PASSWORD"],"config":["~/.inference-aiops/secrets.enc"]},"primaryEnv":"INFERENCE_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Inference-AIops","emoji":"🚀","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["inference-aiops","uvx"]},"optional":{"env":["INFERENCE_AIOPS_CONFIG","INFERENCE_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Inference-AIops","emoji":"🚀","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed GPU-inference operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.inference-aiops/ (relocatable via INFERENCE_AIOPS_HOME).
@@ -32,6 +32,8 @@ compatibility: >
 ---
 
 # Inference AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by the vLLM or Ray projects or any inference-serving vendor.** Product and trademark names belong to their owners. Source at [github.com/AIops-tools/Inference-AIops](https://github.com/AIops-tools/Inference-AIops) under the MIT license.
 
@@ -61,6 +63,15 @@ uv tool install inference-aiops
 inference-aiops init       # interactive wizard: engine (vllm/sglang/tgi) + host + port + scheme (token optional)
 inference-aiops doctor     # vLLM: probes Ray + vLLM; SGLang/TGI: engine health + inventory
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/inference-aiops
+openclaw skills info inference-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -136,7 +147,7 @@ read/metrics endpoints, a Ray dashboard without its job-submission API — write
 then fail at the server). There is no read-only switch, policy file, or approval
 gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.inference-aiops/audit.db` (relocatable via `INFERENCE_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.inference-aiops/audit.db` (relocatable via `INFERENCE_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `INFERENCE_AUDIT_APPROVED_BY` / `INFERENCE_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker.
 - The fragile prod writes support `--dry-run` / `dry_run=True` and double confirmation at the CLI.

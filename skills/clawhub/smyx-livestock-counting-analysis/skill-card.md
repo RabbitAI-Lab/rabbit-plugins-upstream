@@ -1,43 +1,59 @@
-## Description: <br>
-Automatically detects and counts livestock or poultry individuals from barn or passage camera images/videos, outputting total headcount with confidence for fast inventory. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Automatically detects and counts livestock or poultry individuals from barn or passage camera images/videos, outputting total headcount with confidence for fast inventory. | 自动识别并统计畜禽数量，实现快速存栏盘点。
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-Farm operators and agents use this skill to submit livestock barn, passage, or enclosure images and videos for inventory counts, per-area counts, confidence information, and report links. It can also retrieve prior cloud reports associated with the current identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Barn images, videos, and generated identity information are sent to the vendor cloud service for analysis and report lookup. <br>
-Mitigation: Use only with data you are allowed to share with the vendor service, and review organizational data-handling requirements before deployment. <br>
-Risk: The skill can create or reuse a local identity and keep backend tokens in workspace data for future report access. <br>
-Mitigation: Avoid shared workspaces for this skill, or separate and clear the workspace data directory between users. <br>
+## Use Case:
 
+Farm operators and livestock managers can use the skill to count animals in barn or passage images and videos, review confidence and area counts, and look up previous inventory reports.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-counting-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Livestock counting API documentation](references/api_doc.md) <br>
-- [Shared analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [analysis, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON text containing livestock counts, confidence details, structured analysis, history listings, and report links.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May save the returned report text to a local output file when an output path is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release evidence; artifact frontmatter says 1.0.2) <br>
+Risk: Selected images and videos are uploaded for cloud analysis.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Submit only footage authorized for external processing and avoid including unrelated sensitive material.
+
+Risk: Persisted account and token state can mix users’ reports in a shared workspace.
+
+Mitigation: Use an isolated workspace per user and review or clear persisted account credentials and state.
+
+Risk: The export-only option may submit media unexpectedly, and configured API secrets may be copied into identity fields.
+
+Mitigation: Avoid the export-only option until its behavior is corrected, and keep API secrets out of identity settings.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-livestock-counting-analysis)
+- [Skill introduction video](https://lifeemergence.com/sample.html)
+- [API reference](references/api_doc.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown, Report links]
+
+**Output Format:** [Structured counting reports and Markdown report lists]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports may include total and area counts, confidence, and links to historical reports.]
+
+## Skill Version(s):
+
+1.0.13 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

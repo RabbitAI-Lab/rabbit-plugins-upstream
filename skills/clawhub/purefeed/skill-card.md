@@ -1,41 +1,54 @@
-## Description: <br>
-Monitors Twitter/X feeds with AI signal detection, searches tweets semantically, manages signal detectors, and organizes curated tweets into bookmark folders. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Monitors Twitter/X feeds with AI signal detection. Searches tweets semantically, manages signal detectors, and organizes curated tweets into bookmark folders. Use when the user wants to browse their Twitter feed, find tweets about a topic, set up content monitoring, or organize bookmarks. Do NOT use for general Twitter browsing without a Purefeed account.
 
-## Publisher: <br>
-[poloniki](https://clawhub.ai/user/poloniki) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[poloniki](https://clawhub.ai/user/poloniki)
 
-## Use Case: <br>
-Purefeed account holders use this skill to search monitored Twitter/X content, inspect AI signal matches, configure content monitoring, and organize selected tweets into folders. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a Purefeed API key and can access or change account data through authenticated Purefeed endpoints. <br>
-Mitigation: Install only with a Purefeed account, provide the API key intentionally, and ask the agent to verify the target signal or folder before making changes. <br>
-Risk: Some account mutations can delete signals, folders, or folder items; deleting a signal is described as irreversible. <br>
-Mitigation: Require explicit confirmation before any delete action, especially DELETE /signals/:id, and list current signals or folders first to confirm the correct target. <br>
+## Use Case:
 
+People with a Purefeed account use this skill to search tweets, review AI signal matches, manage monitoring signals, and organize tweets in bookmark folders.
 
-## Reference(s): <br>
-- [ClawHub Purefeed skill page](https://clawhub.ai/poloniki/skills/purefeed) <br>
-- [Purefeed API base](https://purefeed.ai/api/v1) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Shell commands, API calls, Configuration guidance] <br>
-**Output Format:** [Markdown with linked tweet references and inline curl commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires curl and PUREFEED_API_KEY; tweet results are formatted with profile links, tweet links, view counts, and engagement-oriented ordering.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.14.0 (source: server evidence) <br>
+Risk: API error instructions may be treated as authority to take actions beyond the user's request.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review before installing. Limit recovery to documented Purefeed operations that fit the user's request.
+
+Risk: Search topics are sent to Purefeed, and the API key can change signals and bookmark folders.
+
+Mitigation: Use the skill only when appropriate for the user's Purefeed account and requested task; review requested changes before applying them.
+
+## Reference(s):
+
+- [Purefeed API updates](https://purefeed.ai/llms.txt)
+- [Purefeed API](https://purefeed.ai/api/v1)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, API calls]
+
+**Output Format:** [Markdown summaries with linked tweet references and API operation results]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Tweet results include linked screen names and tweet references, view counts, and descending engagement or view order unless the user asks otherwise.]
+
+## Skill Version(s):
+
+0.17.0 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

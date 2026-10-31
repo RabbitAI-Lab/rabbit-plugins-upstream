@@ -3,8 +3,8 @@
   "url": "https://clawhub.ai/skills/subgraph-registry",
   "slug": "subgraph-registry",
   "ownerHandle": null,
-  "version": "0.8.19",
-  "updatedAt": 1785046080463,
-  "contentHash": "d5c946479639c9a3c85887f464519295946a03f946327beb188bbc66c3718663",
-  "fetchedAt": "2026-07-26T18:03:43.554Z"
+  "version": "0.10.13",
+  "updatedAt": 1793433273073,
+  "contentHash": "9088f038b2eeba0bd4787c1de8f0ae9f46b29565096d5bae951518dd14cc166f",
+  "fetchedAt": "2026-10-31T13:45:49.125Z"
 }

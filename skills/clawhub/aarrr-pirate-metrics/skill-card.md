@@ -1,46 +1,53 @@
-## Description: <br>
-Guides agents through an AARRR funnel audit to define product-specific growth stages, measure conversion, identify the bottleneck, and propose the next experiment. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides teams through defining and measuring acquisition, activation, retention, referral, and revenue metrics to locate a product-growth bottleneck and choose an experiment.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users, operators, product teams, and growth teams use this skill to diagnose stalled growth, align teams on shared funnel instrumentation, and choose the highest-leverage AARRR stage to improve next. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may activate for broader metrics-design conversations where a generic analytics planning skill would be more appropriate. <br>
-Mitigation: Use this skill when the task is specifically about AARRR funnel diagnosis, growth-stage instrumentation, or acquisition, activation, retention, referral, and revenue tradeoffs. <br>
-Risk: Funnel advice can be misleading if teams use vague stage definitions or insufficient volume. <br>
-Mitigation: Require product-specific stage definitions, stage-to-stage conversion rates, domain benchmarks, and a re-audit after each experiment. <br>
+## Use Case:
 
+Founders and product, growth, marketing, and sales teams use this skill to define a product-specific growth funnel, compare stage conversions with suitable benchmarks, identify the limiting stage, and plan a measurable experiment.
 
-## Reference(s): <br>
-- [Primary sources for AARRR Pirate Metrics](references/sources.md) <br>
-- [AARRR Pirate Metrics skill page](https://clawhub.ai/deciqai/skills/aarrr-pirate-metrics) <br>
-- [AARRR Pirate Metrics machine-readable metadata](https://www.deciqai.com/s/aarrr-pirate-metrics.json) <br>
-- [Startup Metrics for Pirates](https://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version) <br>
-- [Dropbox Form S-1](https://www.sec.gov/Archives/edgar/data/1467623/000119312518055809/d451946ds1.htm) <br>
-- [OpenAI Introducing ChatGPT](https://openai.com/blog/chatgpt) <br>
-- [Sequoia AI's $600B Question](https://www.sequoiacap.com/article/ais-600b-question/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance, analysis] <br>
-**Output Format:** [Markdown guidance with a structured funnel audit template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Produces stage definitions, conversion comparisons, bottleneck identification, and an experiment proposal; no code execution or tool calls are required.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.6 (source: server release evidence) <br>
+Risk: A mismatched domain benchmark or stage definition could point teams to the wrong growth bottleneck.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Define measurable stages for the product and check benchmark fit against the relevant market and cohort before prioritizing an experiment.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/aarrr-pirate-metrics)
+- [Skill source references](artifact/references/sources.md)
+- [Startup Metrics for Pirates — Dave McClure](https://www.slideshare.net/dmc500hats/startup-metrics-for-pirates-long-version)
+- [Dropbox Form S-1 — SEC](https://www.sec.gov/Archives/edgar/data/1467623/000119312518055809/d451946ds1.htm)
+- [AI's $600B Question — Sequoia Capital](https://www.sequoiacap.com/article/ais-600b-question/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown funnel audit with stage definitions, conversion comparisons, bottleneck, and experiment]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Product-specific metric definitions and benchmark fit should be checked before acting on recommendations.]
+
+## Skill Version(s):
+
+1.0.7 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

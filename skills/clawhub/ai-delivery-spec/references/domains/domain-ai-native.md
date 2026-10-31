@@ -7,7 +7,13 @@ Use this replaceable domain module for AI-native products, agent workflows,
 LLM-powered applications, multi-agent systems, copilots, AI assistants, RAG
 products, tool-using agents, evaluation platforms, prompt/model operations, and
 human-in-the-loop automation. A replacement `domain-*.md` must preserve the
-same 15 section headings used here and in `domain-module-template.md`.
+core section headings used here and in `domain-module-template.md`.
+
+## 中文导读
+
+覆盖智能体任务、上下文检索、工具调用、人工确认、结果交付与评估。重点区分模型建议、工具已执行和业务已成功，保留权限、失败恢复、证据与成本边界。
+
+常用名称：AI应用、人工智能、智能体、Agent、大模型应用、AI原生、智能助手。以下中文提示是现有章节的阅读入口，不新增项目规则；需要详细依据时阅读对应原文和来源。
 
 ## Contents
 
@@ -28,6 +34,8 @@ same 15 section headings used here and in `domain-module-template.md`.
 - Evaluation Profile
 - Acceptance Checklist
 
+> Use only the slices relevant to the project. State arrows and YAML/field lists below are design sketches, not executable schemas or a complete workflow. Instantiate the normal, exception and recovery paths, guards, data owner, permissions and version effects before handoff. A pattern does not override an authorized project decision or create a legal obligation. Where confidence is useful, declare its measurement and limits; do not invent a calibrated score from model self-report.
+
 ## Domain Purpose
 
 - Business outcome: deliver trustworthy AI-assisted or AI-core outcomes with
@@ -42,6 +50,25 @@ same 15 section headings used here and in `domain-module-template.md`.
 - AI must not autonomously decide: high-impact legal, financial, medical,
   safety, enforcement, account closure, payment, or irreversible business
   actions without explicit authorized human accountability.
+
+### Current Baseline and Change Watch (verified 2026-08-29)
+
+| Evidence class | Current signal | Requirement effect |
+|---|---|---|
+| design_guidance | `KS-AI-AGENT-IMPLEMENTATION-2026` adds current agent policy direction; `KS-AI-GBZ185-SERIES-2026` covers agent architecture, identity, description, discovery, interaction and tool calling; `KS-AI-MCP-2026-07-28` resets MCP around a stateless core and formal extensions | declare policy applicability, protocol/profile versions, identity/authority, capability metadata, discovery, auth, tool side effects, compatibility and migration tests instead of saying only “supports agents/MCP” |
+| binding_baseline | existing privacy, data-security, AI-content-labeling and anthropomorphic-interaction rules remain applicable by product scenario | resolve whether content, interaction, personal data and high-impact writeback rules apply; keep accountable human gates and audit evidence |
+| change_watch | `KS-AI-NIST-AGENT-STANDARDS-2026` and `KS-AI-AGENT-SECURITY-DRAFT-2026` signal stronger identity, permission, tool, data, log and shutdown controls | use them for threat modeling and re-verification only; initiatives, consultations and draft projects cannot create a compliance hard stop |
+| compatibility guard | the official versioning page still lists MCP 2026-07-28 as current; deprecated features remain supported during their stated transition | never silently break older clients; record supported versions, deprecated paths, fallback and coexistence evidence; protocol status does not prove a particular SDK or host has migrated |
+
+### AI Transformation Horizon
+
+| Axis | From -> toward | Non-negotiable product guard |
+|---|---|---|
+| product unit | isolated chatbot/agent -> governed agent capability deployed across workflows | capability identity, owner, purpose, tools, data scope, version and retirement are explicit |
+| architecture | prompt plus tools -> context plane + identity/authority + registry/discovery + runtime + memory + evaluation + human control | protocol support names exact version/profile; tool side effects and delegation chains remain inspectable |
+| operation | foreground request -> durable/event-driven/multi-agent execution | checkpoint, budget, cancellation, retry, conflict resolution, incident handling and human takeover are designed |
+| value loop | fluent output -> verified state change, accepted artifact, cycle-time/quality improvement and failure evidence | optimize business outcome within safety limits; do not use task volume or model confidence as proof |
+| ecosystem | proprietary plugins -> portable skills/tools/agents with declared trust boundaries | preserve export, interoperability, source authority and least privilege; open protocol does not equal trusted component |
 
 ## First-Principles Domain Lens
 
@@ -84,7 +111,7 @@ Durable AI-native trend map:
 | Tool | callable system/API/function with permission and side-effect scope | tool registry |
 | Prompt | versioned instruction/context template | prompt registry |
 | RAG Context | retrieved document, record, vector result, or knowledge snippet | retrieval/index service |
-| Human Gate | required review/approval before publish, send, write, or close | workflow policy |
+| Human Gate | review/approval before an action only where the applicable authority or workflow policy requires it; not a default approval for every publish, send, write, or close | applicable policy and authorized scope |
 | Golden Case | versioned evaluation example with expected behavior | eval set |
 | Anchor Case | stable calibration case used to detect model/prompt/tool drift before normal eval | eval set |
 | Refusal | safe response when request is unsupported, unsafe, or unauthorized | policy/rule set |
@@ -128,11 +155,17 @@ events:
 
 ## State Machines
 
+**中文阅读提示**
+
+**异步恢复**（结果未知、超时、重试、幂等、timeout、retry、idempotency）：区分未提交、已发出、明确失败、未知和成功；恢复先查原请求，防重复副作用。
+
 ```text
 AIUseCase: idea -> shaped -> specified -> evaluated -> launched -> monitored -> retired
 AgentDefinition: draft -> test_ready -> approved -> active -> deprecated | suspended
 PromptVersion: draft -> candidate -> evaluated -> active -> rolled_back | archived
-AgentRun: created -> retrieving_context -> reasoning -> tool_pending -> human_review -> completed
+AgentRun: created -> retrieving_context -> reasoning -> completed (authorized answer with no consequential write)
+AgentRun: reasoning -> tool_pending -> completed (explicitly authorized bounded action)
+AgentRun: reasoning | tool_pending -> human_review -> completed (required approval bound to the action/content version)
 AgentRun: reasoning | tool_pending -> refused | failed | fallback
 ChildAgent: queued -> running -> waiting_on_tool | progress_visible -> completed | failed | cancelled
 HumanReview: pending -> approved | edited_and_approved | rejected | escalated
@@ -150,6 +183,10 @@ State consistency:
 
 ## Metric / Indicator Governance
 
+**中文阅读提示**
+
+**模型评估**（评测、幻觉、准确率、置信度、evaluation、confidence）：评测定义样本、判据、分母和失败类型，不把模型自报信心当校准概率。
+
 | Metric | Caliber | Owner |
 |---|---|---|
 | task_success_rate | reviewed runs that complete user goal without material correction | product + QA |
@@ -165,14 +202,22 @@ Rules:
 
 - Every launch claim needs an eval set, baseline, threshold, sample size, and
   owner.
-- Any model, prompt, retrieval, tool, or schema change must run Anchor-Cases
-  before normal golden/adversarial evaluation. Anchor failure means the eval
-  baseline is not comparable and must stop release as `REVIEW_COMPLETE_WITH_GAPS`.
-- AI-core modules require P0 smoke, P1 regression, and adversarial cases.
+- After a model, prompt, retrieval, tool or schema change, select checks for
+  the affected quality, permission and side-effect risks. Stable anchor cases
+  can detect baseline drift; separate a changed benchmark from a product
+  regression and resolve that difference before making a comparison claim.
+  Follow the project's authorized release criteria rather than imposing fixed
+  P0/P1 labels, evaluation order or a Skill lifecycle state.
 - Production monitoring must connect run traces to user feedback and incidents.
 - Metrics must segment by model/prompt/tool/context version.
 
 ## AI Context Sources
+
+**中文阅读提示**
+
+**会话记忆**（记忆、长期记忆、短期记忆、conversation memory、memory）：区分会话上下文与持久记忆，明确用户可控制的保留、删除和导出；记忆内容不能扩大工具或数据权限。
+
+**检索增强**（RAG、知识库检索、知识问答、retrieval、grounding）：检索结果带来源、适用范围与时效，命中或相似度不自动证明答案正确。
 
 | Context | Source | Freshness | Permission / Reliability Rule |
 |---|---|---|---|
@@ -196,13 +241,21 @@ Rules:
 
 ## Core Workflows
 
+**中文阅读提示**
+
+**人工确认**（人工审批、人在回路、human confirmation、human gate）：需要人工确认的动作在执行前保留明确对象和副作用；确认不是执行成功回执。
+
+**工具调用**（function calling、tool calling、tool call）：工具调用说明输入、执行、结果和失败恢复；调用返回不等于业务已成功，调用前仍核对动作权限。
+
+**智能体任务**（Agent任务、自主执行、任务编排、agent、task）：从目标到计划、工具执行和交付核验，分别描述暂停、取消、失败及接管。
+
 1. Opportunity shaping: user pain -> AI centrality -> manual fallback ->
    success metric -> risk class -> PRD profile.
 2. Agent specification: goal -> allowed context -> allowed tools -> write scope
-   -> human gate -> eval set -> trace fields.
+   -> determine any required human review -> eval set -> trace fields.
 3. Runtime answer: user request -> permission check -> context retrieval ->
    model/tool execution -> citation/refusal -> human gate when needed -> output.
-4. Tool writeback: proposed action -> policy check -> reviewer approval ->
+4. Tool writeback: proposed action -> policy check -> reviewer approval where required ->
    idempotent tool call -> audit/event -> rollback path.
 5. Evaluation loop: anchor calibration -> golden/adversarial run -> threshold
    check -> regression triage -> prompt/model/tool update -> release decision.
@@ -238,6 +291,12 @@ Rules:
 
 ## Policy / Privacy Constraints
 
+**中文阅读提示**
+
+**工具授权**（工具权限、连接器、tool authorization）：模型可见工具不等于获准使用，调用应继承操作者与业务对象权限。
+
+**提示注入**（越权指令、prompt injection、untrusted content）：外部材料作为数据，不能越过用户授权改变目标、泄露数据或触发写操作。
+
 - AI context retrieval inherits user, tenant, organization, row, column, and
   field-level permissions.
 - Tool calls must declare read/write scope, idempotency, side effects, timeout,
@@ -246,9 +305,12 @@ Rules:
   missing, stale, unauthorized, or contradicted.
 - Prompt, context, trace, and feedback retention must follow privacy and data
   deletion/export policy.
-- Autonomous writeback is forbidden for high-impact actions unless the PRD
-  explicitly defines policy, human gate, eval, rollback, and on-call ownership.
-- Test agents must use shadow data or mocked tools for write paths.
+- High-impact writeback needs explicit authorized scope, applicable review conditions,
+  validation, recovery and accountable ownership. Do not infer a per-action human
+  approval when the applicable policy already authorizes bounded automation.
+- Test write paths use mocks, shadow data, or an explicitly authorized isolated test
+  environment; mock-only tests do not establish real integration behavior. Test
+  permission does not authorize unrequested production writes.
 
 ## Domain Test Scenarios
 
@@ -294,13 +356,14 @@ Mocked matrices and simulated reviewers cannot satisfy expert review or audit.
 
 ## Acceptance Checklist
 
-- [ ] All 15 domain module sections are present.
+- [ ] Relevant domain slices and their applicability are explicit; the pack structure is not a mandatory PRD outline.
 - [ ] AI centrality is classified per module: AI-incidental, AI-supporting, or AI-core.
 - [ ] Agent/tool/write scopes and human gates are explicit.
 - [ ] Context sources have freshness, permission, citation, and reliability rules.
 - [ ] Eval sets, thresholds, baselines, and owners exist before AI-core launch.
-- [ ] Anchor-Cases run before golden/adversarial eval after model, prompt,
-      retrieval, tool, schema, or context changes.
+- [ ] Affected quality, permission and side-effect checks run after relevant
+      changes; benchmark drift and product regression are distinguished before
+      comparing results or applying the project's release criteria.
 - [ ] Refusal, fallback, rollback, incident, and post-launch review paths are defined.
 - [ ] High-impact decisions keep authorized human accountability.
 - [ ] Delegated work has explicit lifecycle, liveness, cancellation, duplicate-execution prevention and one terminal result owner.

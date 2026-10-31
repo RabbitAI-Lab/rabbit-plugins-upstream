@@ -1,44 +1,57 @@
-## Description: <br>
-Utilitarianism guides agents through stakeholder mapping, welfare impact estimation, aggregation checks, and sensitivity testing for ethical cost-benefit decisions. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Activate when users need to evaluate a policy, product, or organizational decision affecting multiple parties, compare benefits and harms, or conduct cost-benefit or ethical trade-off analysis.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers and users invoke this skill when a policy, product, or organizational decision affects multiple parties differently and needs explicit welfare trade-off analysis. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Utilitarian analysis can embed value judgments when different harms and benefits are converted into a single comparison. <br>
-Mitigation: Require explicit affected-party mapping, conversion assumptions, rights constraints, and sensitivity checks before relying on the conclusion. <br>
-Risk: The skill can produce misleading decision support if users treat a welfare-maximizing result as the final ethical answer. <br>
-Mitigation: Use the output as reviewable guidance and compare it with relevant legal, safety, rights, and organizational constraints. <br>
+## Use Case:
 
+Employees and external decision-makers can use this skill to map affected parties, estimate welfare impacts, examine aggregation assumptions, and compare the net effects of choices. It is intended for multi-party decisions and cost-benefit or ethical trade-off analysis.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/deciqai/skills/utilitarianism) <br>
-- [Utilitarianism Sources](references/sources.md) <br>
-- [Cost-Benefit Analysis of the Clean Air Act (1970)](examples/cost-benefit-analysis-of-the-clean-air-act-1970.md) <br>
-- [Benefits and Costs of the Clean Air Act](https://www.epa.gov/clean-air-act-overview/benefits-and-costs-clean-air-act) <br>
-- [Utilitarianism Metadata](https://www.deciqai.com/s/utilitarianism.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with structured welfare maps and tables] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Non-executable reasoning output; no credentials, tools, or shell commands are requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: Numerical examples or welfare assumptions may lead to misleading conclusions if treated as settled facts.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Verify figures, conversion rates, and assumptions; state uncertainty and test how sensitive the conclusion is to the most contested assumption.
+
+Risk: Aggregating total welfare can obscure severe harms to a smaller affected group or unaddressed rights constraints.
+
+Mitigation: Map cost-bearing and underrepresented parties, identify rights constraints, and report the option with the best minimum welfare alongside the aggregate result.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/utilitarianism)
+- [Primary sources and further reading](artifact/references/sources.md)
+- [EPA Clean Air Act benefits and costs](https://www.epa.gov/clean-air-act-overview/benefits-and-costs-clean-air-act)
+- [Bentham, An Introduction to the Principles of Morals and Legislation](https://archive.org/details/anintroductiont01bentgoog)
+- [Mill, Utilitarianism](https://archive.org/details/utilitarianism00mill)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with a structured Utilitarian Welfare Map]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Maps affected parties and welfare impacts, states aggregation assumptions, ranks options, and identifies a contested assumption for sensitivity analysis.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

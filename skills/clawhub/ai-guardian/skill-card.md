@@ -1,47 +1,65 @@
-## Description: <br>
-AI Guardian helps agents observe and govern single-endpoint local LLM runtimes by inventorying models, scanning prompts, policy-gating generation, recording usage, and surfacing anomalies. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+This skill helps operators inventory and govern local LLMs, scan prompts for sensitive content, enforce model policies, and review usage and model drift.
 
-## Publisher: <br>
-[zw008](https://clawhub.ai/user/zw008) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT <br>
+## Publisher:
 
+[zw008](https://clawhub.ai/user/zw008)
 
-## Use Case: <br>
-Developers, security reviewers, and operations teams use this skill to inspect local LLM endpoints, detect unsanctioned or drifted models, scan prompts for sensitive content, and route approved prompts through a governance guard. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security review reports that installer metadata points to a different package than the documented install command. <br>
-Mitigation: Resolve the package-name mismatch before installation or publication, and verify the package source before running the skill. <br>
-Risk: The security review reports high-impact write actions without built-in authorization gates. <br>
-Mitigation: Expose only scan and observe tools for routine use, and run against a runtime or account that cannot administer model storage unless writes are intended. <br>
-Risk: The security guidance treats local audit and usage databases as sensitive operational records. <br>
-Mitigation: Restrict access to the local state directory and avoid persistent master-password exports for encrypted token storage. <br>
+## Use Case:
 
+Developers and operators use the skill to inspect single-endpoint local LLM deployments, detect unapproved models or digest changes, scan prompts, and apply model policy. It supports Ollama, llama.cpp, LM Studio, and single-node vLLM workflows.
 
-## Reference(s): <br>
-- [AI Guardian ClawHub page](https://clawhub.ai/zw008/skills/ai-guardian) <br>
-- [AI Guardian homepage](https://github.com/AIops-tools/AI-Guardian) <br>
-- [Capabilities reference](references/capabilities.md) <br>
-- [CLI reference](references/cli-reference.md) <br>
-- [Setup and security guide](references/setup-guide.md) <br>
-- [Agent guardrails](references/agent-guardrails.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with CLI commands and MCP tool-call recommendations] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May reference local configuration, audit, usage, and undo records; artifact evidence says raw prompts are not stored.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.6.0 (source: server release evidence) <br>
+Risk: The installer metadata names a different software project, creating a risk of installing an unintended package.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Resolve and verify the installer package identity before installing this release.
+
+Risk: Agent access does not enforce approval for model deletion or policy changes.
+
+Mitigation: Start with read-only tools, require explicit approval for deletion and policy changes, and restrict writes at the API boundary.
+
+Risk: Requests sent directly to a model runtime bypass the prompt guard.
+
+Mitigation: Route prompts through the guarded calls when prompt scanning and policy checks are required.
+
+Risk: Re-downloading a deleted model may return different weights.
+
+Mitigation: Check the restored model against its pinned digest before relying on it.
+
+## Reference(s):
+
+- [AI Guardian release on ClawHub](https://clawhub.ai/zw008/skills/ai-guardian)
+- [AI Guardian project homepage](https://github.com/AIops-tools/AI-Guardian)
+- [Capabilities](artifact/references/capabilities.md)
+- [Setup and security guide](artifact/references/setup-guide.md)
+- [CLI reference](artifact/references/cli-reference.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Configuration, Shell commands]
+
+**Output Format:** [Text and Markdown, including structured findings and configuration guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include model inventory, prompt risk findings, usage summaries, and policy or lifecycle recommendations.]
+
+## Skill Version(s):
+
+0.14.0 (source: server release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

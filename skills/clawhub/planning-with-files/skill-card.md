@@ -1,45 +1,57 @@
-## Description: <br>
-Implements file-based planning so agents can organize complex work with persistent task plans, findings, progress logs, reusable scripts, and session recovery support. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides persistent file-based planning for multi-step agent work, with lifecycle hooks that restore selected project context.
 
-## Publisher: <br>
-[othmanadi](https://clawhub.ai/user/othmanadi) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[othmanadi](https://clawhub.ai/user/othmanadi)
 
-## Use Case: <br>
-Developers and agent users use this skill to keep multi-step tasks, research, and implementation work organized across long sessions. It creates and maintains markdown planning files in the user project, with helper scripts for initialization, active-plan selection, progress summaries, completion checks, and session catch-up. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Automatic hooks can inject persistent planning content into agent turns. <br>
-Mitigation: Review the planning files before use, keep plan directories scoped to the current project, and use attestation when relying on automatic injection or gated workflows. <br>
-Risk: Session catch-up can read local agent session history for the current project. <br>
-Mitigation: Avoid using the skill in projects where prompts, command arguments, or prior tool output may contain secrets. <br>
-Risk: Completion-gated workflows may affect when an agent stops. <br>
-Mitigation: Use gated mode only when the plan file is expected to be the completion source of truth, and keep phase status current in task_plan.md. <br>
+## Use Case:
 
+Developers and agent users use the skill to keep plans, findings, and progress in project files across multi-step tasks and sessions. It is intended for work requiring several tool calls, especially five or more.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/othmanadi/skills/planning-with-files) <br>
-- [Planning with Files reference](references/reference.md) <br>
-- [Planning with Files examples](references/examples.md) <br>
-- [Manus context engineering article](https://manus.im/blog/Context-Engineering-for-AI-Agents-Lessons-from-Building-Manus) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown files with inline shell and PowerShell commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates or updates task_plan.md, findings.md, progress.md, and optional .planning plan directories in the user project.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-3.0.0 (source: SKILL.md frontmatter and server release metadata) <br>
+Risk: Initialization may execute untrusted project code.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid initialization in untrusted projects until Python initialization is isolated.
+
+Risk: PowerShell phase and ledger writers may change another project's planning files.
+
+Mitigation: Avoid these PowerShell writers until their write destinations are validated.
+
+Risk: Copying a template can replace an existing loop.md, while session replay or continuation may expose prior excerpts or continue work unexpectedly.
+
+Mitigation: Back up loop.md before copying the template, and enable replay or continued execution only when intended.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/othmanadi/skills/planning-with-files)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown planning files and concise agent guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Project-scoped planning content that varies with the task.]
+
+## Skill Version(s):
+
+3.25.0 (source: release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

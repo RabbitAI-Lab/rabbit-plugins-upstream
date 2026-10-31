@@ -1,46 +1,64 @@
-## Description: <br>
-AI video generator for text-to-video, image-to-video, and reference-to-video generation through the Veevid API. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Veevid API workflows for generating and editing video, images, and audio, transcribing speech, running video tools, and checking prices and credits.
 
-## Publisher: <br>
-[meigesir](https://clawhub.ai/user/meigesir) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[meigesir](https://clawhub.ai/user/meigesir)
 
-## Use Case: <br>
-External users and developers use this skill to ask an agent to generate videos from prompts or images, compare available Veevid video models, check credit balance, and get quoted costs before generation. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill uses a local Veevid API key and sends selected prompts or images to Veevid. <br>
-Mitigation: Protect ~/.config/veevid/api_key, rotate the key if exposed, and only install the skill if sending selected content to Veevid is acceptable. <br>
-Risk: Video generation can spend Veevid credits. <br>
-Mitigation: Use the quote step to show the exact cost and current balance, then wait for user confirmation before generating. <br>
-Risk: In Discord or group chats, the skill may inspect recent messages to find image attachments. <br>
-Mitigation: Filter attachments by the requesting sender and quote the selected image back for confirmation before upload or generation. <br>
+## Use Case:
 
+Developers and agents use this skill to choose a media model, quote credit costs, prepare approved inputs, and submit Veevid requests for media generation or editing.
 
-## Reference(s): <br>
-- [Veevid API Reference](references/api-reference.md) <br>
-- [Veevid AI](https://veevid.ai) <br>
-- [API Key Management](https://veevid.ai/settings/api-keys) <br>
-- [Pricing and Credits](https://veevid.ai/pricing) <br>
-- [ClawHub Skill Page](https://clawhub.ai/meigesir/veevid) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Shell commands, Configuration, API calls, Markdown, Text] <br>
-**Output Format:** [Markdown guidance with inline shell commands, API request examples, JSON response summaries, and generated video URLs.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Uses a local Veevid API key file at ~/.config/veevid/api_key and requires user confirmation before spending credits.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.2.2 (source: server release evidence) <br>
+Risk: Prompts and selected media inputs are sent to Veevid and the chosen model.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the selected files and approve the upload; ask before uploading private or sensitive material.
+
+Risk: Some models may adjust charges based on actual media lengths, and failed jobs may have refund exceptions.
+
+Mitigation: Quote the exact request, provide real input lengths, and get confirmation of the required credits before generating.
+
+Risk: Deleting a creation is permanent and may also remove uploaded source audio.
+
+Mitigation: Confirm the exact creation to delete before sending the deletion request.
+
+## Reference(s):
+
+- [Veevid API reference](references/api-reference.md)
+- [Video model reference](references/models-video.md)
+- [Image model reference](references/models-image.md)
+- [Audio model reference](references/models-audio.md)
+- [Video tools reference](references/models-tools.md)
+- [Veevid API key settings](https://veevid.ai/settings/api-keys)
+- [Veevid pricing](https://veevid.ai/pricing)
+- [Veevid Skill on ClawHub](https://clawhub.ai/meigesir/skills/veevid)
+
+## Skill Output:
+
+**Output Type(s):** [API Calls, Files, Guidance, Shell commands, Configuration instructions, JSON, Markdown]
+
+**Output Format:** [Markdown guidance with shell commands and JSON request examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Results may be video, image, or audio files; available output fields vary by model.]
+
+## Skill Version(s):
+
+1.3.3 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

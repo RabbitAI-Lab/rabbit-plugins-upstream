@@ -1,49 +1,18 @@
 ---
 artifact: decision_record
-stage: clarify
-schema_version: 5.4.0
-version: "0.1"
-status: draft
-document_language: zh-CN
-project_id: PROJECT-EXAMPLE
-resume_context:
-  completed_stages: [intake]
-  prior_artifacts: []
-  open_threads: []
-  next_stage_options: [clarify, specify]
+artifact_role: supporting
+applicable_stages: [explore, clarify, specify, review, baseline, change]
+applies_when: 确需独立记录选择理由与授权时使用；已有模块内决定优先复用。
 ---
 
-# 决策记录：{需求/决策主题}
+# 决策记录：{议题}
 
-<!-- ADS:decision_log -->
-## 已固化决策
+优先复用现有PRD、变更单或评审记录中的DEC；确有独立记录用途时才使用本文件。同一决定只维护一处。
 
-| ID | 决策 | 选项与取舍 | 依据/来源 | 决策人 | 日期 | 状态 |
-|---|---|---|---|---|---|---|
-| `DEC-001` | {决策} | {选中与未选原因} | `SRC-*` | {有权责任人} | {日期} | confirmed |
+| ID | 建议/决定及理由 | 证据与适用范围 | 状态 | 有权决定者与授权来源 | 复议条件 |
+|---|---|---|---|---|---|
+| DEC-{稳定标识} | {采取/暂缓/不做/继续验证；已选与未选方案的取舍} | {实际证据与受影响范围} | proposed | {未决定时留空或注明待指定，不填“已确认”} | {会改变决定的新证据/到期条件} |
 
-<!-- ADS:rejected_options -->
-## 未采用选项与复议条件
+建议可以是分析任务的完成结果，不自动将需求设为rejected/deferred/cancelled。已获用户授权的范围内决定直接引用，不重复确认。
 
-| 选项 | 未采用原因 | 决策人 | 复议条件 |
-|---|---|---|---|
-| {选项} | {原因} | {责任人} | {新证据/新边界} |
-
-<!-- ADS:unknowns -->
-## 剩余未知项
-
-| ID | 优先级 | 内容 | 责任人 | blocks_stage | 回退路径 | 状态 |
-|---|---|---|---|---|---|---|
-| `UNK-001` | P1 | {未知} | {责任人} | baseline | {退路} | open |
-
-<!-- ADS:accepted_risks -->
-## 接受的风险
-
-| 风险 | 接受人 | 边界/期限 | 理由与证据 |
-|---|---|---|---|
-| {风险} | {责任人} | {范围/到期日} | {依据} |
-
-<!-- ADS:next_step -->
-## 下一步
-
-进入 specify / 继续 clarify / 缩范围 / 暂停；需携带全部 `DEC-*` 与开放 `UNK-*`。
+只记录仍影响当前选择的未知、可继续范围及解除证据；不借退路决定未定政策。需自动检查时按[声明规则](../stages.md)选用已有机器结构，不与本表重复维护。

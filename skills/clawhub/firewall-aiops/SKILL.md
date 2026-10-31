@@ -10,14 +10,14 @@ description: >
   Use this skill whenever the user needs to operate an OPNsense or pfSense firewall — a one-shot overview, firmware/health, interfaces and gateways, firewall rules with hit-counts and shadow analysis, NAT (port-forward/outbound/1:1), aliases and their entries, VPN (WireGuard/OpenVPN/IPsec), DHCP leases and static mappings, the firewall log and state table, three flagship RCAs (gateway health, rule hit/shadow, blocked traffic), and governed writes (toggle a rule, add/remove an alias entry, kill states, restart a service, apply/reconfigure to make edits live, reboot).
   Always use this skill for "OPNsense", "pfSense", "firewall rule", "port forward", "NAT", "alias", "WireGuard", "OpenVPN", "IPsec", "DHCP lease", "firewall log", "blocked traffic", "why is my WAN down", "gateway loss/latency", "unused / shadowed rules", "apply firewall changes", "reboot the firewall" when the context is an OPNsense/pfSense firewall.
   Do NOT use when the target is something other than an OPNsense/pfSense firewall (a hypervisor, storage appliance, backup product, container-orchestration cluster, multi-vendor router/switch config, or OT/industrial equipment) — route those to the appropriate other AIops-tools skill. Cloud security groups and vendor firewall appliances are out of scope.
-  Governed firewall operations with a built-in governance harness (audit, policy, token budget, undo, risk-tiers). Behaviour is validated by a mock-based test suite; see docs/VERIFICATION.md for the live-verification checklist.
+  Governed firewall operations with a built-in governance harness (audit, policy, token budget, undo, risk-tiers). Live-verified against real OPNsense 26.7 and pfSense CE 2.7.2 on top of the mock test suite; see docs/VERIFICATION.md for exactly what each run proved and what is still untested.
 installer:
   kind: uv
   package: firewall-aiops
 argument-hint: "[a rule/alias id, an IP, or describe your firewall task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["FIREWALL_AIOPS_CONFIG"],"bins":["firewall-aiops"],"config":["~/.firewall-aiops/config.yaml","~/.firewall-aiops/secrets.enc"]},"optional":{"env":["FIREWALL_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"FIREWALL_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Firewall-AIops","emoji":"🛡️","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["firewall-aiops","uvx"]},"optional":{"env":["FIREWALL_AIOPS_CONFIG","FIREWALL_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Firewall-AIops","emoji":"🛡️","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed firewall operations across OPNsense (REST API /api/..., API key+secret via HTTP Basic auth) and pfSense (REST API v2 /api/v2/..., API key via X-API-Key header). Each target in the config names its own platform, and a name-keyed platform registry selects the API shape, so the same tools work on both and one config can span a mixed estate. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.firewall-aiops/ (relocatable via FIREWALL_AIOPS_HOME).
@@ -29,6 +29,8 @@ compatibility: >
 ---
 
 # Firewall AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by the OPNsense project, Deciso, Netgate, or the pfSense project.** OPNsense, pfSense and Netgate are trademarks of their respective owners. Source at [github.com/AIops-tools/Firewall-AIops](https://github.com/AIops-tools/Firewall-AIops) under the MIT license.
 
@@ -42,9 +44,10 @@ OPNsense API secret / pfSense API key is stored **encrypted**
 (`~/.firewall-aiops/secrets.enc`, Fernet + scrypt) — never plaintext on disk.
 
 > **Standalone**: the governance harness is bundled in the package
-> (`firewall_aiops.governance`) — no external skill-family dependency. Behaviour is
-> covered by a mock-based test suite; `docs/VERIFICATION.md` is the checklist for a
-> live run against a real firewall (both platforms are free/self-hostable).
+> (`firewall_aiops.governance`) — no external skill-family dependency. Both platform
+> halves have been exercised against real firewalls (OPNsense 26.7, pfSense CE 2.7.2)
+> in addition to the mock suite; `docs/VERIFICATION.md` records what each live run
+> proved, and what remains untested on each platform.
 
 ## What This Skill Does
 
@@ -75,6 +78,15 @@ uv tool install firewall-aiops
 firewall-aiops init       # wizard: pick platform (opnsense/pfsense) + encrypted secret
 firewall-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/firewall-aiops
+openclaw skills info firewall-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -115,7 +127,8 @@ MCP tools (start the server with `firewall-aiops mcp`). Recipes below say which 
    rule count. Down interfaces sort first.
 3. MCP `gateway_health_rca` → gateways ranked worst-first, each row citing its measured
    loss % and RTT, mapped to a cause (last-mile loss / congestion / latency / hard down)
-   and a concrete action.
+   and a concrete action. The ranking is computed on an internal score that is not
+   returned, so weigh each row's own numbers rather than trusting the order.
 4. If the RCA points at a stuck daemon rather than the circuit, MCP
    `restart_service(service="dpinger", dry_run=true)` to preview, then re-run for real
    (medium risk, audited, undo-recorded).

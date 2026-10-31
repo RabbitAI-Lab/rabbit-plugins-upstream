@@ -1,42 +1,52 @@
-## Description: <br>
-Taste Baroque gives agents a Baroque aesthetic style reference for writing, UI design, and branding using tokens, anti-tokens, palette, application rules, and evaluation criteria. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides Baroque visual language, style tokens, and creative direction for writing, interface design, and branding.
 
-## Publisher: <br>
-[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu)
 
-## Use Case: <br>
-Developers, designers, writers, and creative agents use this skill to translate Baroque art language into style direction for prose, interface concepts, branding, and aesthetic feedback. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Generated work may over-apply Baroque aesthetics or shift tone and visual direction away from the user's intent. <br>
-Mitigation: Review outputs for fit, accuracy, accessibility, and brand requirements before publication. <br>
-Risk: The skill includes optional external demo and contact links. <br>
-Mitigation: Use normal link-handling caution and avoid sharing private project details through external pages unless appropriate. <br>
+## Use Case:
 
+Agents and creative practitioners use this skill to apply Baroque visual principles to writing, UI design, and branding. It provides style tokens, patterns to avoid, examples, and evaluation criteria.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/johnnyzijianwu/skills/taste-baroque) <br>
-- [InspiredHub Live Demo](https://inspiredhub.ai/demo?skill=baroque) <br>
-- [InspiredHub](https://inspiredhub.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with style tokens, examples, palette values, application rules, and evaluation criteria] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Text-only skill; no private-data access or direct actions are indicated by the provided security evidence.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: InspiredHub privacy claims could not be independently verified during review.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Treat the linked pages as optional references and avoid sharing information you do not want to disclose.
+
+## Reference(s):
+
+- [Taste Baroque public skill page](https://clawhub.ai/johnnyzijianwu/skills/taste-baroque)
+- [InspiredHub Baroque demo](https://inspiredhub.ai/demo?skill=baroque)
+- [Optional Personal Taste Brief reference](https://inspiredhub.ai/personal-taste-brief#clawhub/taste-baroque)
+- [InspiredHub](https://inspiredhub.ai/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Text, Markdown]
+
+**Output Format:** [Markdown or plain text]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Style tokens, anti-tokens, creative direction, and evaluation criteria.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

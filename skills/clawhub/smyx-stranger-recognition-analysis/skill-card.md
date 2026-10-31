@@ -1,44 +1,55 @@
-## Description: <br>
-Identifies strangers in surveillance images or video through face comparison and returns structured recognition results, warnings, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Identifies unfamiliar people in surveillance images and videos by comparing faces against a known-person database and returns recognition reports and alerts.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Security operators, facilities teams, and developers use this skill to analyze surveillance images or video for unknown faces, compare detections against a known-person database, and review structured warnings or historical reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Biometric surveillance images, videos, or URLs may be sent to the provider's cloud service. <br>
-Mitigation: Use only media the operator is authorized to process, and confirm consent, lawful basis, retention, and deletion responsibilities before deployment. <br>
-Risk: The skill can create or reuse local identity state and store service tokens in the workspace data directory. <br>
-Mitigation: Run it only in controlled workspaces, restrict access to workspace data, and remove or rotate local identity and token files when no longer needed. <br>
-Risk: Face recognition output may be inaccurate or incomplete for consequential security decisions. <br>
-Mitigation: Treat reports as decision support, require human review before action, and document escalation procedures for uncertain matches. <br>
+## Use Case:
 
+Security administrators and operators use the skill to compare faces in submitted surveillance images or videos against a known-person database, review recognition reports and alerts, and query report history.
 
-## Reference(s): <br>
-- [API Reference](references/api_doc.md) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [ClawHub Skill Page](https://clawhub.ai/18072937735/skills/smyx-stranger-recognition-analysis) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, JSON, Shell commands, Files] <br>
-**Output Format:** [Markdown reports with optional JSON payloads and saved output files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return recognition summaries, warning details, historical report tables, and report links.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: SKILL.md frontmatter and server release evidence) <br>
+Risk: The security review reports that the no-analysis option is ignored and credential forwarding has no destination restrictions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Request fixes for both behaviors before using private footage, and confirm destination restrictions before forwarding credentials.
+
+Risk: Face enrollment adds people to a cloud reference database shared under the selected identity.
+
+Mitigation: Confirm the service's retention and deletion policies, use separate workspaces or accounts for different users, and scope enrollment to the intended identity.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release](https://clawhub.ai/18072937735/skills/smyx-stranger-recognition-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Markdown]
+
+**Output Format:** [Structured JSON or human-readable text and Markdown reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reports include recognition results, alerts, and report links; history listings are formatted as Markdown tables.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,56 @@
-## Description: <br>
-Helps agents analyze strategic situations with multiple rational counterparties by specifying the game, identifying best responses and equilibria, evaluating Pareto quality, and planning counterparty responses. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps users analyze strategic situations involving multiple rational players by identifying best responses, Nash equilibria, and possible game redesigns.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and agents use this skill to reason through competitive pricing, negotiation, M&A, regulation, platform launch, auction, marketplace, and capacity-race decisions where rational counterparties respond strategically. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Strategic, policy, investment, or antitrust outputs may be mistaken for professional advice. <br>
-Mitigation: Use the skill as analytical framing and have qualified business, legal, financial, or policy reviewers assess high-impact decisions. <br>
-Risk: Equilibrium analysis can mislead when players, actions, payoffs, information, or rationality assumptions are incomplete or wrong. <br>
-Mitigation: Require explicit game specification, verify assumptions against current evidence, and compare outputs with alternative scenarios before acting. <br>
+## Use Case:
 
+Strategy teams, negotiators, and analysts use this skill to model decisions where competitors, counterparties, bidders, or other rational players react to one another. It guides them through game structure, best responses, equilibrium selection, outcome quality, and response planning.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/nash-equilibrium) <br>
-- [Primary sources](references/sources.md) <br>
-- [Nash 1950-51 and the FCC Auctions 1994](examples/nash-1950-51-and-the-fcc-auctions-1994.md) <br>
-- [Penalty Kicks and the Minimax Test](examples/penalty-kicks-professionals-play-minimax.md) <br>
-- [The AI-Capex Race Among Hyperscalers (2024-2026)](examples/ai-capex-race-among-hyperscalers-2024-2026.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Analysis, Markdown, Guidance] <br>
-**Output Format:** [Markdown] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Structured Nash analysis covering players, actions, payoffs, information structure, best responses, equilibria, Pareto quality, recommended action, redesign options, and counterparty response plan.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: Game-theory analysis may omit important assumptions or be misleading when used for consequential decisions.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the analysis as a decision aid and check its assumptions before acting.
+
+Risk: Confidential case details could be included in reusable skill documentation.
+
+Mitigation: Avoid putting confidential case details into reusable skill documentation.
+
+## Reference(s):
+
+- [Primary sources and further reading](artifact/references/sources.md)
+- [Nash Equilibrium skill page](https://www.deciqai.com/c/nash-equilibrium)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/nash-equilibrium.json)
+- [Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with structured game-analysis sections]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May guide an unfamiliar user one question at a time.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

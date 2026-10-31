@@ -1,40 +1,52 @@
-## Description: <br>
-A literary voice skill that guides an agent to emulate Goethe's aesthetic style through Faustian striving, Bildungsroman depth, and nature as a philosophical mirror. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Provides a Goethe-inspired literary style reference for creative writing, interface design, and branding.
 
-## Publisher: <br>
-[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[johnnyzijianwu](https://clawhub.ai/user/johnnyzijianwu)
 
-## Use Case: <br>
-Writers, designers, and agents use this skill to produce or critique text, interface direction, and brand language in a Goethe-inspired literary voice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may share sensitive text or project details through the external InspiredHub demo or contact email linked by the skill. <br>
-Mitigation: Use those external channels only with text or project details approved for sharing with InspiredHub. <br>
+## Use Case:
 
+Creative teams and agents use this style reference to shape writing, interface design, and branding with Goethean themes such as striving, inward development, and nature as a philosophical mirror.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/johnnyzijianwu/skills/taste-goethe) <br>
-- [InspiredHub Live Demo](https://inspiredhub.ai/demo) <br>
-- [InspiredHub](https://inspiredhub.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown and prose guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code or shell commands are produced by the skill itself.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: The optional InspiredHub Personal Taste Brief is an external service whose handling of information a user chooses to provide is outside this skill's scope.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review InspiredHub's terms before adding a brief and share only information you are comfortable providing.
+
+## Reference(s):
+
+- [Taste Goethe on ClawHub](https://clawhub.ai/johnnyzijianwu/skills/taste-goethe)
+- [InspiredHub public Taste Skill demo](https://inspiredhub.ai/demo)
+- [Optional Personal Taste Brief reference](https://inspiredhub.ai/personal-taste-brief#clawhub/taste-goethe)
+- [InspiredHub](https://inspiredhub.ai/)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Creative guidance]
+
+**Output Format:** [Goethe-inspired writing, interface, and branding guidance in text or Markdown]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Style reference for agent-generated creative work]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

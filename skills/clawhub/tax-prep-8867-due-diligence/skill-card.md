@@ -1,42 +1,58 @@
-## Description: <br>
-Guides paid tax preparers through a Form 8867 due-diligence checklist for returns claiming EITC, CTC/ACTC/ODC, AOTC, or Head-of-Household status. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides paid tax preparers through documenting Form 8867 due diligence for returns claiming EITC, CTC/ACTC/ODC, AOTC, or Head-of-Household status.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External tax-preparation professionals and firm reviewers use this skill to document paid-preparer due diligence for refundable credits and Head-of-Household status before filing or e-file release. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-United States <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Tax due-diligence rules, Form 8867 instructions, Circular 230 duties, and IRC §6695(g) penalty amounts can change. <br>
-Mitigation: Confirm the current IRS Form 8867 instructions, Circular 230 requirements, and penalty amounts before relying on the checklist. <br>
-Risk: The skill can be mistaken for legal or tax advice rather than a checklist aid. <br>
-Mitigation: Use it to structure review and documentation while a qualified preparer remains responsible for final filing decisions. <br>
+## Use Case:
 
+Paid tax preparers and reviewers use this skill to document completion, computation, knowledge, and record-retention checks for covered credits and Head-of-Household claims. It helps identify missing evidence and unresolved inconsistencies before filing.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/tax-prep-8867-due-diligence) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/tax-prep-8867-due-diligence) <br>
-- [deciqAI machine-readable metadata](https://www.deciqai.com/s/tax-prep-8867-due-diligence.json) <br>
+### Deployment Geography for Use:
 
+United States
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown checklist guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include due-diligence gates, documentation prompts, red flags, and verification checklist items.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.1 (source: server release evidence) <br>
+Risk: Taxpayer documents may contain sensitive personal information.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Keep taxpayer documents in approved secure storage.
+
+Risk: Tax requirements and filing guidance may change.
+
+Mitigation: Verify current IRS requirements before relying on the guidance.
+
+Risk: The skill relies on a separate parent checklist for its full process.
+
+Mitigation: Inspect the parent checklist before adding this skill to a workflow.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/tax-prep-8867-due-diligence)
+- [deciqAI skill overview](https://www.deciqai.com/c/tax-prep-8867-due-diligence)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown checklist and procedural guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [No executable code; the full process depends on a separate parent checklist.]
+
+## Skill Version(s):
+
+1.0.2 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

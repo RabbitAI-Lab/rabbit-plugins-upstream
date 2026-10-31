@@ -17,7 +17,7 @@ installer:
 argument-hint: "[ceph question or describe your cluster task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["CEPH_AIOPS_CONFIG"],"bins":["ceph-aiops"],"config":["~/.ceph-aiops/config.yaml","~/.ceph-aiops/secrets.enc"]},"optional":{"env":["CEPH_AIOPS_MASTER_PASSWORD"]},"primaryEnv":"CEPH_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/Ceph-AIops","emoji":"🐙","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["ceph-aiops","uvx"]},"optional":{"env":["CEPH_AIOPS_CONFIG","CEPH_AIOPS_MASTER_PASSWORD"]},"homepage":"https://github.com/AIops-tools/Ceph-AIops","emoji":"🐙","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Ceph operations. The governance harness (audit, policy, token/runaway budget, undo, risk-tiers) is bundled in the package — no external skill-family dependency. Works against vanilla ceph-mgr (cephadm / hypervisor-bundled Ceph / MicroCeph); no croit and no Kubernetes dependency.
   All write operations are audited to a local SQLite DB under ~/.ceph-aiops/ (relocatable via CEPH_AIOPS_HOME).
@@ -30,6 +30,8 @@ compatibility: >
 ---
 
 # Ceph AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: Community-maintained open-source project, **not affiliated with, endorsed by, or sponsored by the Ceph project or any storage vendor.** Product and trademark names belong to their owners. Source at [github.com/AIops-tools/Ceph-AIops](https://github.com/AIops-tools/Ceph-AIops) under the MIT license.
 
@@ -64,6 +66,15 @@ uv tool install ceph-aiops
 ceph-aiops init       # interactive wizard: mgr host/port/username + encrypted Dashboard password
 ceph-aiops doctor
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/ceph-aiops
+openclaw skills info ceph-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 
@@ -128,7 +139,7 @@ of the account you connect it with (a ceph-mgr Dashboard account with a
 read-only role — writes then fail at the mgr). There is no read-only switch,
 policy file, or approval gate.
 
-- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.ceph-aiops/audit.db` (relocatable via `CEPH_AIOPS_HOME`): params, result, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
+- **Audit is the guarantee, and it is not bypassable.** Every operation — MCP and CLI alike — is logged to `~/.ceph-aiops/audit.db` (relocatable via `CEPH_AIOPS_HOME`): params, outcome summary, status, duration, and the risk tier. The CLI writes the same row the MCP path does.
 - `CEPH_AUDIT_APPROVED_BY` / `CEPH_AUDIT_RATIONALE` are optional annotations recorded on the audit row (who/why); they are never required and never block.
 - **Runaway guard** — a safety backstop, not authorization: the same call looped in a tight window trips a circuit breaker. Disable with `CEPH_RUNAWAY_MAX=0`.
 - Destructive writes support `--dry-run` / `dry_run=True` and double confirmation at the CLI.

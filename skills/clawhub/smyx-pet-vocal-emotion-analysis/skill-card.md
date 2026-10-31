@@ -1,44 +1,55 @@
-## Description: <br>
-Recognizes cat and dog vocalizations through pet voiceprint AI and returns emotions and behavioral intentions such as happiness, excitement, anger, anxiety, pain, vigilance, and attention-seeking. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes cat and dog vocalizations to infer emotions and behavioral intentions and returns a structured report.
 
-## Publisher: <br>
-[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[smyx-sunjinhui](https://clawhub.ai/user/smyx-sunjinhui)
 
-## Use Case: <br>
-External users and agents use this skill to analyze cat or dog audio/video files or public media URLs, generate structured pet vocal emotion reports, and retrieve cloud-hosted historical analysis reports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: User pet audio/video or supplied media URLs are sent to Life Emergence cloud APIs for analysis. <br>
-Mitigation: Use the skill only when cloud processing is acceptable, and avoid media that includes sensitive household, personal, or bystander information. <br>
-Risk: The skill can create and reuse a local account identity, tokens, and cloud history without prompting the user. <br>
-Mitigation: Review local identity and token persistence before installation or shared-machine use, and clear stored state when account continuity is not desired. <br>
-Risk: Historical report retrieval depends on cloud-hosted data associated with the resolved local identity. <br>
-Mitigation: Confirm that cloud history access matches the intended user context before using or sharing retrieved reports. <br>
+## Use Case:
 
+Pet owners can submit cat or dog audio or video to review an AI-generated interpretation of vocal emotions and likely behavior, or retrieve previous reports.
 
-## Reference(s): <br>
-- [ClawHub Skill Page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-vocal-emotion-analysis) <br>
-- [Skill Demo](https://lifeemergence.com/sample.html) <br>
-- [API Documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, json, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown or JSON analysis reports, with optional saved text output.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Can return structured recognition results, recommendations, report links, and cloud history lists.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.7 (source: server release metadata; artifact frontmatter states 1.0.8) <br>
+Risk: Account handling may mix reports between users.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid shared workspaces until reliable account separation is available.
+
+Risk: Media may still be submitted when using the advertised option to skip analysis.
+
+Mitigation: Avoid private recordings until a working export-only mode and clear disclosure of account creation and local storage are available.
+
+## Reference(s):
+
+- [API documentation](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub release page](https://clawhub.ai/smyx-sunjinhui/skills/smyx-pet-vocal-emotion-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured analysis report as text or JSON, with a report link when available.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Can list prior analysis reports; report content and interpretation depend on the submitted recording.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

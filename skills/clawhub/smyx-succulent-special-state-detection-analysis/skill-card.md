@@ -1,44 +1,60 @@
-## Description: <br>
-AI-powered succulent special-state detection from plant images or videos that identifies black rot, melting, and stretching, then reports condition type, severity, confidence, and report links. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Analyzes succulent images or videos to identify black rot, water-soaked leaves, or stretching and report severity and confidence.
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-External users, growers, greenhouse operators, and shop staff use this skill to analyze succulent plant images or videos for special abnormal states and review generated analysis reports. Agents can also query prior cloud-hosted reports for the associated internal user identity. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Uploaded plant images, videos, and report-history queries are processed by LifeEmergence remote services. <br>
-Mitigation: Use the skill only when that remote processing is acceptable for the workspace and avoid submitting sensitive media. <br>
-Risk: The skill can create or reuse internal identity state and store token-bearing account records with limited user control. <br>
-Mitigation: Run it in a dedicated workspace where third-party skill code is allowed to consume only intended identity environment variables and local state. <br>
-Risk: The security verdict is suspicious even though no individual risk findings were listed. <br>
-Mitigation: Review the skill and its remote-service behavior before deployment, and monitor any generated local account or token records. <br>
+## Use Case:
 
+Home growers, succulent greenhouses, and flower shops use the skill to screen plant images or videos for black rot, water-soaked leaves, and stretching, with severity and confidence estimates.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/18072937735/skills/smyx-succulent-special-state-detection-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [Succulent special-state API documentation](references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, guidance] <br>
-**Output Format:** [Markdown and JSON-oriented analysis text with report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include condition type, severity, confidence, suggested observations, historical report tables, and remote report URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: frontmatter and server release evidence) <br>
+Risk: The security review reports automatic account creation and unsafe credential handling.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Wait for fixes before installing; if evaluating, use an isolated workspace and non-sensitive plant media.
+
+Risk: Images and videos leave the device, and report retention and deletion details are not established in the supplied guidance.
+
+Mitigation: Use non-sensitive plant media and ask the publisher about report retention and deletion.
+
+Risk: The security review reports that an option intended to prevent analysis is ignored.
+
+Mitigation: Do not rely on that option to prevent analysis; wait for a fix before installing.
+
+## Reference(s):
+
+- [Succulent analysis API documentation](references/api_doc.md)
+- [API response and error documentation](skills/smyx_analysis/references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+- [ClawHub skill release](https://clawhub.ai/18072937735/skills/smyx-succulent-special-state-detection-analysis)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Text, JSON, Markdown]
+
+**Output Format:** [Structured analysis report with detected condition, severity, confidence, and report links]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Accepts plant images or videos; visual assessments may be uncertain.]
+
+## Skill Version(s):
+
+1.0.15 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
