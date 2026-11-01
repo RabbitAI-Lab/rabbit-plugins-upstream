@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/wind-alice/alicemarket/trade_plan_builder_skill",
+  "repo": "wind-alice/alicemarket",
+  "skillId": "trade_plan_builder_skill",
+  "branch": "main",
+  "pushedAt": "2026-10-30T12:01:04Z",
+  "contentHash": "938d18faea34b18eadd58d45cae4c51860dd89a6125d3ea79ec4772ddf158ee2",
+  "fetchedAt": "2026-11-01T14:20:15.008Z"
+}

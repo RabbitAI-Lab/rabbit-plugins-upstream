@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/google/skills/gke-ai-troubleshooting-tpu-reservation-stockout",
+  "repo": "google/skills",
+  "skillId": "gke-ai-troubleshooting-tpu-reservation-stockout",
+  "branch": "main",
+  "pushedAt": "2026-10-31T13:39:40Z",
+  "contentHash": "cf213f9bd7a4c3b1f5e3539ac726f0b2343f9dc8660ef423a75b016ae5c8c915",
+  "fetchedAt": "2026-11-01T14:22:03.573Z"
+}

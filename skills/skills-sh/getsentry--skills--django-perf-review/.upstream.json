@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/django-perf-review",
+  "repo": "getsentry/skills",
+  "skillId": "django-perf-review",
+  "branch": "main",
+  "pushedAt": "2026-10-26T12:26:36Z",
+  "contentHash": "72622bf069606236ef19706e4b8f816a3cd6736968e5c5af8e832fe0f348e5a5",
+  "fetchedAt": "2026-11-01T14:20:32.846Z"
+}

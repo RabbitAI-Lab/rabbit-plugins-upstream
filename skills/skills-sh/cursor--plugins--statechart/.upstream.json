@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/statechart",
+  "repo": "cursor/plugins",
+  "skillId": "statechart",
+  "branch": "main",
+  "pushedAt": "2026-11-01T00:10:38Z",
+  "contentHash": "74667716baf7793833edf797716ba6424e6b6a04f5c647904f550164480a039c",
+  "fetchedAt": "2026-11-01T14:20:22.751Z"
+}

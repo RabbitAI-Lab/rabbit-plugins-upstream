@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/convex/agent-skills/convex-monitor",
+  "repo": "convex/agent-skills",
+  "skillId": "convex-monitor",
+  "branch": "main",
+  "pushedAt": "2026-10-29T18:08:31Z",
+  "contentHash": "5cad8798540c19b09a52719a583b5ec1624e7539dea1b22f8341e6dc2bb3878c",
+  "fetchedAt": "2026-11-01T14:20:15.483Z"
+}

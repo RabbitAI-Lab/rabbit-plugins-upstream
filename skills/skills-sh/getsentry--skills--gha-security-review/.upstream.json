@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/getsentry/skills/gha-security-review",
+  "repo": "getsentry/skills",
+  "skillId": "gha-security-review",
+  "branch": "main",
+  "pushedAt": "2026-10-26T12:26:36Z",
+  "contentHash": "f76f42e08486143c939dc74f64af467704c96433df94c3c94348ef1a05480b11",
+  "fetchedAt": "2026-11-01T14:20:32.838Z"
+}
