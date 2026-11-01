@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/vercel/next.js/next-bundle-optimizer",
+  "repo": "vercel/next.js",
+  "skillId": "next-bundle-optimizer",
+  "branch": "canary",
+  "pushedAt": "2026-11-01T10:52:37Z",
+  "contentHash": "0b1d6bd675b4900ed29c8da4d40c6f95b556ba5bd3bd8306b257149a31ebacdf",
+  "fetchedAt": "2026-11-01T14:20:38.619Z"
+}

@@ -1,0 +1,10 @@
+{
+  "source": "skills-sh",
+  "url": "https://www.skills.sh/cursor/plugins/in-your-own-words",
+  "repo": "cursor/plugins",
+  "skillId": "in-your-own-words",
+  "branch": "main",
+  "pushedAt": "2026-11-01T00:10:38Z",
+  "contentHash": "49d983cb552ece1cc4b6a8e16f48dc90611f3c1a2d834507ec48fa80f30fa044",
+  "fetchedAt": "2026-11-01T14:20:22.632Z"
+}
