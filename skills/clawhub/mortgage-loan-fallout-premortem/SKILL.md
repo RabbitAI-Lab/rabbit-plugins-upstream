@@ -6,6 +6,7 @@ description: "Activate when: a file is submitted or in underwriting; rate lock i
 # Mortgage — Loan Fallout Premortem
 
 > **Industry front door for premortem.** Adds domain triggers, example, packs only. Parent Process unchanged.
+> **Guidance, not professional advice.** No legal, tax, financial or regulatory advice; verify anything jurisdiction- or rate-dependent against current authority. The professional who acts owns the decision.
 
 **Activate when:** a file is submitted or in underwriting; rate lock is ticking; "what could kill this loan before closing?"; thin-file or borderline borrower.
 **Do NOT activate when:** clear-to-close with no open conditions.
@@ -49,6 +50,6 @@ Part of **deciqAI Knowledge Skills**. Core method: premortem.
 
 ---
 
-*Part of **deciqAI Knowledge Skills** — 227 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/mortgage-loan-fallout-premortem** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
+*Part of **deciqAI Knowledge Skills** — 253 open-source thinking skills that make rigor executable for AI agents. The same skills power every deciqAI agent, which runs them autonomously to operate your company. **See it run → https://www.deciqai.com/c/mortgage-loan-fallout-premortem** · ⭐ Star the repo → https://github.com/deciqAI/knowledge-skills · Contributions welcome.*
 
 *Agents: latest version & machine-readable metadata → https://www.deciqai.com/s/mortgage-loan-fallout-premortem.json*

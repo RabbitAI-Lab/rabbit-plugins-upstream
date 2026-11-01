@@ -1,42 +1,51 @@
-## Description: <br>
-Helps founders decide whether to raise venture capital, bootstrap, or use non-dilutive funding by weighing venture-scale potential, founder goals, speed, and cost of capital. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps founders weigh venture funding against self-funding based on growth potential, control, speed, dilution, and alternative financing.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders and startup operators use this skill when deciding whether venture capital, bootstrapping, or non-dilutive funding best matches their business model, goals, and timing. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Funding guidance could be mistaken for legal, tax, investment, or financial advice. <br>
-Mitigation: Use the skill as a decision framework and consult qualified advisors before acting on financing decisions. <br>
-Risk: A funding recommendation can be misleading if the business ceiling, founder goals, or speed constraints are assessed inaccurately. <br>
-Mitigation: Validate the venture-scale case, founder preferences, cost of capital, and burn plan before choosing a funding path. <br>
+## Use Case:
 
+Founders use this framework when deciding whether to raise venture capital, bootstrap, or consider non-dilutive funding, and to align growth plans with founder goals and cash flow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/bootstrapping-vs-raising) <br>
-- [deciqAI skill page](https://www.deciqai.com/c/bootstrapping-vs-raising) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/bootstrapping-vs-raising.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, text, markdown] <br>
-**Output Format:** [Markdown guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Advisory decision framework; no code execution, tool access, or credential handling.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Broad funding heuristics may not fit a company's specific market, finances, or founder goals.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use the framework to structure questions, then validate assumptions with current company data and qualified financial or legal advice.
+
+## Reference(s):
+
+- [ClawHub skill release](https://clawhub.ai/deciqai/skills/bootstrapping-vs-raising)
+- [Bootstrapping vs Raising guide](https://www.deciqai.com/c/bootstrapping-vs-raising)
+- [Machine-readable skill metadata](https://www.deciqai.com/s/bootstrapping-vs-raising.json)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Checklist]
+
+**Output Format:** [Text guidance with a numbered decision framework and checklist]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [None]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

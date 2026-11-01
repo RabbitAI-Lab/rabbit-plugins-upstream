@@ -1,41 +1,54 @@
-## Description: <br>
-Session retrospective and skill audit for reflecting on sessions, reviewing lessons learned, and auditing what went well or wrong. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Session retrospective and skill audit. Use when asked to reflect, do a retrospective, review lessons learned, audit what went well or wrong, or review session effectiveness.
 
-## Publisher: <br>
-[iliaal](https://clawhub.ai/user/iliaal) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[iliaal](https://clawhub.ai/user/iliaal)
 
-## Use Case: <br>
-Developers and agent users use this skill to review a completed session, identify mistakes, friction, wasted effort, and wins, and decide which lessons should be preserved. It also audits invoked skills and proposes concrete improvements or diffs when skill changes are warranted. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Saved memories or skill edits can influence future agent behavior if approved without review. <br>
-Mitigation: Review each proposed memory entry or skill diff before approving persistence. <br>
-Risk: Session retrospectives may quote or summarize sensitive conversation content. <br>
-Mitigation: Do not persist secrets, credentials, private URLs, customer data, unredacted personal information, or machine-specific paths. <br>
+## Use Case:
 
+Developers use this skill to review an agent session, identify evidenced mistakes, friction, wasted effort, and wins, then prioritize concrete improvements. It also audits skills and proposes changes while keeping memory and skill updates subject to user authorization.
 
-## Reference(s): <br>
-- [ia-reflect on ClawHub](https://clawhub.ai/iliaal/skills/compound-eng-reflect) <br>
-- [Skill specification](artifact/SPEC.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, guidance] <br>
-**Output Format:** [Markdown with findings, prioritized improvements, review prompts, and proposed diffs when skill audits are requested.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May propose memory entries or skill edits for user approval; review proposed changes before they are persisted.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-4.2.1 (source: server release evidence) <br>
+Risk: Retrospective findings may be incomplete when conversation or project evidence is missing or truncated.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: State the evidence scope and its gaps, and cite the reviewed exchange or artifact for each finding.
+
+Risk: Proposed memory or skill changes could retain inaccurate guidance or affect locations the user did not intend.
+
+Mitigation: Review concrete proposed items and locations; persist changes only when authorized by the user.
+
+## Reference(s):
+
+- [ClawHub skill page](https://clawhub.ai/iliaal/skills/compound-eng-reflect)
+- [Capture and remedy routing](references/capture-and-routing.md)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Markdown with cited findings and prioritized improvement tables]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Improvement proposals are capped at 10 items.]
+
+## Skill Version(s):
+
+5.1.3 (source: server-resolved ClawHub release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

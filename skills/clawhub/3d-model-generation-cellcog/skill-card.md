@@ -1,44 +1,58 @@
-## Description: <br>
-AI 3D model generation powered by CellCog for text-to-3D and image-to-3D workflows that produce production-ready GLB files for games, AR/VR, e-commerce, 3D printing, and batch asset generation. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI 3D model generation powered by CellCog. Text-to-3D, image-to-3D — production-ready GLB files for games, AR/VR, e-commerce, and 3D printing. Game assets, product visualization, characters, props, environments, and batch generation.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, designers, and creative production teams use this skill to ask CellCog to create GLB 3D models from text prompts, reference images, sketches, product photos, or batch item lists. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts and reference files selected by the user may be sent to CellCog for processing. <br>
-Mitigation: Use only content approved for external processing, and avoid confidential, regulated, or proprietary designs unless organizational policy permits it. <br>
-Risk: CELLCOG_API_KEY could be exposed if copied into source files, logs, or chat messages. <br>
-Mitigation: Store CELLCOG_API_KEY in an environment variable or secrets manager and avoid embedding it in prompts, code snippets, or committed files. <br>
-Risk: Generated GLB assets may not meet production, safety, performance, or brand requirements without review. <br>
-Mitigation: Inspect generated models, textures, polygon counts, and licensing or usage constraints before deployment in games, AR/VR, e-commerce, or 3D printing workflows. <br>
+## Use Case:
 
+Developers, designers, and creators use the skill to generate individual or batch 3D assets from text descriptions, sketches, or reference images for games, product visualization, AR/VR, and 3D printing.
 
-## Reference(s): <br>
-- [CellCog Homepage](https://cellcog.ai) <br>
-- [ClawHub Skill Page](https://clawhub.ai/nitishgargiitd/skills/3d-model-generation-cellcog) <br>
-- [ClawHub Publisher Profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Guidance, Code, API Calls, Configuration, Files] <br>
-**Output Format:** [Markdown guidance with Python code examples and CellCog-generated GLB files] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and CELLCOG_API_KEY for CellCog API access.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.11 (source: server release metadata) <br>
+Risk: Prompts and selected images are sent to CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Upload only material you are authorized to share.
+
+Risk: The supplied instructions do not assess the separately installed CellCog runtime or service-side data practices.
+
+Mitigation: Review the runtime and the service's data practices before use.
+
+Risk: Dependency versions may change during setup.
+
+Mitigation: Review and pin dependency versions before installation.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [3D Model Generation on ClawHub](https://clawhub.ai/cellcog/skills/3d-model-generation-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [3D model files, Guidance]
+
+**Output Format:** [Binary GLB (glTF) files with textures and materials; Markdown guidance and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Supports single or batch generation; model detail, style, and materials depend on the prompt.]
+
+## Skill Version(s):
+
+1.0.16 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

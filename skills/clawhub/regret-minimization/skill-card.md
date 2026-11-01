@@ -1,48 +1,59 @@
-## Description: <br>
-Guides agents through a Regret Audit for major, hard-to-reverse life decisions where the meaningful unit is joy, meaning, identity, security, contribution, or autonomy rather than expected monetary value. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides users through a structured age-80 regret audit for major, hard-to-reverse decisions where money-based expected value is insufficient.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-External users and agents use this skill to structure reflection on major personal or professional forks, such as career pivots, founding a company, relocation, relationship exits, or family decisions. It helps compare livable long-term regrets, name the decision unit, and set a commitment date without substituting for professional advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may treat structured reflection on major personal choices as professional counseling, legal, medical, financial, or relationship advice. <br>
-Mitigation: Present the output as a reflection aid and advise users to seek qualified professional support for regulated, clinical, legal, financial, or high-stakes personal matters. <br>
-Risk: The skill can influence decisions about career, relocation, relationships, and family formation. <br>
-Mitigation: Keep the process grounded in the user's own stated values, require concrete options and dates, and avoid making the decision for the user. <br>
+## Use Case:
 
+Individuals use this coaching skill to examine major personal choices involving meaning, identity, or joy when expected-value analysis alone does not settle the decision. It helps users compare realistic paths and identify their own values without choosing for them.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/regret-minimization) <br>
-- [Primary sources](references/sources.md) <br>
-- [Jeff Bezos, D.E. Shaw to Amazon example](examples/jeff-bezos-de-shaw-amazon-1994.md) <br>
-- [Gilovich and Medvec regret-of-inaction example](examples/gilovich-medvec-regret-of-inaction-1995.md) <br>
-- [Go all-in on AI career example](examples/go-all-in-on-ai-career-2023-2026.md) <br>
-- [Jeff Bezos 1997 Letter to Shareholders](https://www.sec.gov/Archives/edgar/data/1018724/000119312513151836/d511111dex991.htm) <br>
-- [Jeff Bezos 2010 Princeton Baccalaureate address](https://www.princeton.edu/news/2010/05/30/2010-baccalaureate-remarks) <br>
-- [Gilovich and Medvec, The Experience of Regret](https://doi.org/10.1037/0033-295X.102.2.379) <br>
-- [Loomes and Sugden, Regret Theory](https://www.jstor.org/stable/2232669) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown or plain text structured as a Regret Audit with questions, user-provided reflections, comparison of regrets, optimized unit, commitment date, and re-open trigger.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Runs as a coaching flow with hard stops when the user must supply personal decision details.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release metadata) <br>
+Risk: The framework's emphasis on trying and commitment could skew advice for a major decision.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use it only when the decision fits its scope, compare both paths realistically using the user's own values, and set a specific evidence-based trigger for reopening the decision.
+
+Risk: Failure-pattern notes could expose private personal details.
+
+Mitigation: Keep any recorded failure-pattern notes generic and free of private personal details.
+
+## Reference(s):
+
+- [Primary Sources](references/sources.md)
+- [Gilovich & Medvec, The Experience of Regret: What, When, and Why](https://doi.org/10.1037/0033-295X.102.2.379)
+- [Bezos, 1997 Letter to Shareholders](https://www.sec.gov/Archives/edgar/data/1018724/000119312513151836/d511111dex991.htm)
+- [Bezos, 2010 Princeton Baccalaureate Remarks](https://www.princeton.edu/news/2010/05/30/2010-baccalaureate-remarks)
+- [Loomes & Sugden, Regret Theory](https://www.jstor.org/stable/2232669)
+- [Regret Minimization skill page](https://www.deciqai.com/c/regret-minimization)
+- [deciqAI Knowledge Skills repository](https://github.com/deciqAI/knowledge-skills)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Conversational coaching with a structured Markdown regret audit]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [User-led and adaptive; asks one question at a time and waits for the user's response during coaching.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

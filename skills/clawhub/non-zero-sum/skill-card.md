@@ -1,47 +1,54 @@
-## Description: <br>
-Helps agents analyze negotiations, conflicts, and platform dynamics to identify whether mutual gains are possible and design cooperation mechanisms. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through analyzing standoffs and negotiations for mutual-gain opportunities, while identifying situations that are genuinely zero-sum or lack a concrete tradeoff.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Employees, external users, and developers use this skill when a negotiation, conflict, market, platform, contract, or institution feels win-lose and needs a structured test for latent cooperative value. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may steer agents toward a non-zero-sum framing even when a situation is genuinely fixed-pool, one-shot, values-based, or power-asymmetric. <br>
-Mitigation: Apply the documented fit checks and stop rule before using the framework; redirect to a more appropriate strategy when cooperation cannot create net value. <br>
-Risk: Business and market examples may be illustrative rather than verified current market facts. <br>
-Mitigation: Treat examples as guidance and verify time-sensitive claims against current authoritative sources before using them in decisions. <br>
+## Use Case:
 
+People analyzing negotiations, organizational conflicts, or platform relationships use this skill to find possible mutual gains, assess whether cooperation can work, and design a concrete first move.
 
-## Reference(s): <br>
-- [Non-Zero-Sum skill page](https://clawhub.ai/deciqai/skills/non-zero-sum) <br>
-- [Sources - non-zero-sum](references/sources.md) <br>
-- [Axelrod's Computer Tournament example](examples/axelrods-computer-tournament-1980.md) <br>
-- [AI Ecosystem Value Creation example](examples/ai-ecosystem-value-creation-2024-2026.md) <br>
-- [The Evolution of Cooperation](https://www.basicbooks.com/titles/robert-axelrod/the-evolution-of-cooperation/9780465021215/) <br>
-- [Effective Choice in the Prisoner's Dilemma](https://doi.org/10.1177/002200278002400101) <br>
-- [Evolutionary Games and Spatial Chaos](https://doi.org/10.1038/359826a0) <br>
-- [Microsoft and OpenAI extend partnership](https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown analysis with tables and structured sections] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask step-by-step coaching questions and wait for user input when no concrete case is provided.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: server release metadata) <br>
+Risk: A user may share sensitive or confidential details about a negotiation or conflict.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Provide only the situation details needed for analysis, and avoid including confidential information in saved failure-pattern notes.
+
+## Reference(s):
+
+- [Primary sources and further reading](references/sources.md)
+- [Axelrod's Computer Tournament (1980)](examples/axelrods-computer-tournament-1980.md)
+- [The AI Ecosystem — Positive-Sum vs. ‘AI Eats Everything’ (2024–2026)](examples/ai-ecosystem-value-creation-2024-2026.md)
+- [Axelrod, ‘Effective Choice in the Prisoner's Dilemma’](https://doi.org/10.1177/002200278002400101)
+- [The Evolution of Cooperation](https://www.basicbooks.com/titles/robert-axelrod/the-evolution-of-cooperation/9780465021215/)
+- [Microsoft and OpenAI extend partnership](https://blogs.microsoft.com/blog/2023/01/23/microsoftandopenaiextendpartnership/)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, Guidance]
+
+**Output Format:** [Markdown with headings and tables, including a payoff matrix]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Situation-specific analysis of interests, payoffs, repeat interaction, cooperation mechanisms, and a first move.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

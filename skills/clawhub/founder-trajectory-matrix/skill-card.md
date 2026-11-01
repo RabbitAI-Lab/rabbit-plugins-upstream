@@ -1,44 +1,53 @@
-## Description: <br>
-Founder Trajectory Matrix helps agents coach founders through a two-axis behavioral framework for diagnosing trajectory ceilings, decision-making conflict, and scaling-stage friction. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Helps founders assess behavior-based development trajectories and choose a concrete upgrade move.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Founders, founder coaches, investors, and operating teams use this skill to classify a founder's current behavioral trajectory, identify the dominant failure mode, and define a concrete 30- to 90-day upgrade move when founder behavior appears to be the limiting constraint. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Founder classifications can be over-trusted or applied when market, runway, capital, or product-market-fit constraints are the real issue. <br>
-Mitigation: Use the skill's fit checks and red flags, require behavioral evidence, and treat classifications as advisory coaching outputs. <br>
-Risk: Users may share confidential business or interpersonal details during founder coaching. <br>
-Mitigation: Avoid entering sensitive details unless appropriate for the agent session, and keep context limited to what is needed for the trajectory assessment. <br>
+## Use Case:
 
+Founders and their advisors use this framework to identify behavior patterns that may be limiting growth, name a likely failure mode, and commit to a concrete upgrade move with a 90-day reassessment. It is intended for founders with at least six months of operating history when the constraint is behavioral.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/founder-trajectory-matrix) <br>
-- [deciqAI Founder Trajectory Matrix](https://www.deciqai.com/c/founder-trajectory-matrix) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/founder-trajectory-matrix.json) <br>
-- [Primary sources](references/sources.md) <br>
-- [Method in action example](examples/carnegies-trajectory-shift-solo-executor-to-partner-builder-1870s-1880s.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [guidance, markdown, text] <br>
-**Output Format:** [Markdown coaching response with a trajectory table and concise recommendations.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May ask stepwise diagnostic questions and stop for user input before producing the full trajectory assessment.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: server release evidence) <br>
+Risk: The workflow invites retaining observations from real sessions in the reusable skill, which could preserve identifying or confidential details without the founder's consent.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Get explicit permission before retaining observations, remove identifying and confidential details, and review changes before sharing the skill.
+
+## Reference(s):
+
+- [Sources](references/sources.md)
+- [Andrew Carnegie, Autobiography](https://www.gutenberg.org/ebooks/17976)
+- [Andrew Carnegie, The Gospel of Wealth](https://www.jstor.org/stable/25101612)
+- [Founder Trajectory Matrix on ClawHub](https://clawhub.ai/deciqai/skills/founder-trajectory-matrix)
+- [Founder Trajectory Matrix overview](https://www.deciqai.com/c/founder-trajectory-matrix)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Guidance, Markdown]
+
+**Output Format:** [Structured coaching guidance with a trajectory assessment and upgrade plan]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Includes an observable upgrade move and a 90-day reassessment; novice coaching proceeds one step at a time.]
+
+## Skill Version(s):
+
+1.0.5 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

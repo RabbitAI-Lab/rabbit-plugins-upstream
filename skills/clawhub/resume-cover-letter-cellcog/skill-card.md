@@ -1,39 +1,54 @@
-## Description: <br>
-AI resume and cover letter generation powered by CellCog for ATS-optimized resumes, CVs, cover letters, LinkedIn profiles, and career documents in PDF or DOCX, using a research-first approach that analyzes target roles before writing. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI resume and cover letter generation powered by CellCog. ATS-optimized resumes, CVs, cover letters, LinkedIn profiles, career documents — PDF or DOCX. Research-first approach that analyzes target roles before writing.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External users and agents use this skill to create ATS-oriented resumes, CVs, cover letters, LinkedIn profile text, and portfolio documents with CellCog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Resume and career details provided to the skill may be sensitive and are sent to CellCog. <br>
-Mitigation: Provide only information you are comfortable sharing with CellCog, and avoid unnecessary sensitive information such as home addresses, government IDs, private employer data, or confidential metrics unless you have permission to share them. <br>
+## Use Case:
 
+External job seekers and professionals use the skill to create or revise resumes, CVs, cover letters, LinkedIn profiles, and portfolio documents for specific roles. They provide their experience and target-role details to generate tailored career materials.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/resume-cover-letter-cellcog) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration] <br>
-**Output Format:** [Markdown with Python examples and setup commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May produce PDF or DOCX career documents through CellCog when requested.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release evidence) <br>
+Risk: Career and employment details submitted for resume generation may be sensitive.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only career information you are comfortable sending to CellCog; omit unnecessary personal details and confidential employer metrics.
+
+Risk: Installing the CellCog dependency can introduce dependency or supply-chain risk.
+
+Mitigation: Verify dependency sources and prefer reviewed, pinned versions.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [Resume on ClawHub](https://clawhub.ai/cellcog/skills/resume-cover-letter-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Text, PDF documents, DOCX documents]
+
+**Output Format:** [Text responses and career documents in PDF or DOCX format]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Documents are tailored using the career details and target role supplied by the user.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,42 +1,50 @@
-## Description: <br>
-Helps agents analyze insurance product recommendations for suitability, best-interest duties, and principal-agent compensation conflicts. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Activate when: an insurance agent's compensation conflicts with the client's best coverage; 'which product do I recommend', commission-driven product choice, captive vs independent conflicts, best-interest duty. Do NOT activate when: no recommendation is being made (pure servicing) or no conflict exists. More: deciqai.com/c/insurance-suitability-principal-agent
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Insurance agents, agency reviewers, and AI agents use this skill to identify commission, captive-carrier, replacement, and disclosure conflicts before making or reviewing a coverage recommendation. It supports structured reasoning and documentation, not legal or compliance advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users could treat the skill's suitability analysis as legal or compliance advice. <br>
-Mitigation: Use it as general reasoning support and verify recommendations against applicable insurance rules, best-interest requirements, and firm procedures. <br>
-Risk: A commission or captive-carrier conflict could still bias the final recommendation if the user does not document client fit. <br>
-Mitigation: Document the recommendation against the client's needs and finances, disclose material conflicts and capacity, and acknowledge better-fit options outside current appointments where relevant. <br>
+## Use Case:
 
+Insurance agents and agencies use this checklist to evaluate conflicts between compensation and client fit, document the basis for recommendations, and disclose relevant capacity and conflicts. It supports qualified review and does not provide legal advice.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/insurance-suitability-principal-agent) <br>
-- [DeciqAI skill page](https://www.deciqai.com/c/insurance-suitability-principal-agent) <br>
-- [Machine-readable skill metadata](https://www.deciqai.com/s/insurance-suitability-principal-agent.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance with checklists and examples] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable behavior; recommendations should be verified against applicable insurance rules and firm procedures.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.2 (source: server release evidence) <br>
+Risk: Insurance recommendations may involve suitability, best-interest, or legal conclusions that depend on the client and applicable rules.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use this as a reasoning checklist and have qualified insurance or legal professionals review those conclusions.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/deciqai/skills/insurance-suitability-principal-agent)
+- [DeciqAI insurance suitability guide](https://www.deciqai.com/c/insurance-suitability-principal-agent)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Analysis, Markdown]
+
+**Output Format:** [Markdown checklist and concise recommendation guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Reasoning checklist; not legal advice.]
+
+## Skill Version(s):
+
+1.0.3 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,46 +1,54 @@
-## Description: <br>
-Validate and ingest operator-pushed agent-bom inventory JSON to produce local findings, graph, policy, provenance, and auditor-ready exports without direct cloud credentials. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Validate and ingest operator-pushed agent-bom inventory JSON from AWS, Azure, GCP, Snowflake, CMDB, or endpoint collectors. Use when a user has canonical inventory JSON and wants local findings, graph, policy, provenance, or auditor-ready exports without giving agent-bom direct cloud credentials.
 
-## Publisher: <br>
-[msaad00](https://clawhub.ai/user/msaad00) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[msaad00](https://clawhub.ai/user/msaad00)
 
-## Use Case: <br>
-Developers, security engineers, and operators use this skill when they already have canonical inventory JSON from cloud, CMDB, endpoint, or AI-agent collection workflows and need local validation, scanning, graphing, policy checks, provenance review, or exports. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+Apache-2.0
 
-## Known Risks and Mitigations: <br>
-Risk: Inventory-derived security data may leave the local machine when optional push or vulnerability enrichment is enabled. <br>
-Mitigation: Verify the operator-provided push URL and enrichment endpoints before enabling those optional actions. <br>
-Risk: Untrusted or unintended inventory files could produce misleading local findings. <br>
-Mitigation: Run schema validation first and analyze only inventory files the operator intended to provide. <br>
-Risk: Inventory and configuration may contain sensitive tokens, URL credentials, private keys, or environment values. <br>
-Mitigation: Rely on the skill's redaction guidance and do not display or export raw secrets. <br>
+## Use Case:
 
+Developers and security teams use this skill to validate canonical inventory JSON, run local agent-bom scans, and prepare findings, graphs, policy results, provenance, or auditor-ready reports without providing cloud credentials to agent-bom.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/msaad00/skills/agent-bom-ingest) <br>
-- [agent-bom repository](https://github.com/msaad00/agent-bom) <br>
-- [agent-bom PyPI package](https://pypi.org/project/agent-bom/) <br>
-- [OSV vulnerability API](https://api.osv.dev/v1) <br>
-- [GitHub Advisory API](https://api.github.com/advisories) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown with inline bash commands and operational guidance] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May direct the agent-bom CLI to create operator-selected JSON, SARIF, HTML, Markdown, CycloneDX, or SPDX export files.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.98.0 (source: server release metadata and artifact frontmatter) <br>
+Risk: Inventory reports may contain sensitive details.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review exports before sharing and choose report paths deliberately.
+
+Risk: An optional control-plane upload sends inventory to a remote service.
+
+Mitigation: Enable uploads only for a service and destination explicitly chosen by the operator.
+
+## Reference(s):
+
+- [agent-bom project](https://github.com/koda-ai-studio/agent-bom)
+- [agent-bom on PyPI](https://pypi.org/project/agent-bom/)
+
+## Skill Output:
+
+**Output Type(s):** [Guidance, Shell commands, JSON, SARIF, HTML, Markdown]
+
+**Output Format:** [Markdown instructions and shell commands; agent-bom reports can be exported as JSON, SARIF, HTML, or Markdown.]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requires Python 3.11+ and agent-bom 0.84.4+. Optional vulnerability lookups and control-plane uploads use disclosed network endpoints; uploads require an operator-configured destination and token.]
+
+## Skill Version(s):
+
+0.112.1 (source: frontmatter)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

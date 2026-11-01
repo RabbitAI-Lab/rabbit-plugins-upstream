@@ -1,41 +1,54 @@
-## Description: <br>
-AI PDF document generation powered by CellCog for PDF and DOCX output, including resumes, contracts, reports, proposals, invoices, certificates, NDAs, letters, brochures, legal documents, cover letters, and other professional documents. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI PDF document generation powered by CellCog — PDF and DOCX output. Resumes, contracts, reports, proposals, invoices, certificates, NDAs, letters, brochures, legal documents, cover letters, and professional documents. Research-backed content with professional design.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External users, employees, and agents use this skill to generate polished PDF or DOCX business, career, legal, finance, marketing, education, event, and certificate documents from structured prompts and supporting content. It is most useful when a user needs a professionally formatted document and can provide the facts, audience, structure, and design preferences. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Document prompts and contents may be sent to an external CellCog service. <br>
-Mitigation: Do not submit secrets, regulated data, confidential client material, or sensitive legal or financial details unless the user is comfortable sending that information to CellCog. <br>
-Risk: Legal, finance, privacy-policy, and contract documents may contain errors or unsuitable advice. <br>
-Mitigation: Have qualified professionals review those outputs before relying on or distributing them. <br>
+## Use Case:
 
+People using an AI agent can create polished PDF or editable DOCX documents from prompts and supplied details, including business, career, educational, marketing, and other professional materials.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/nitishgargiitd/skills/pdf-document-generation-cellcog) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance, Files] <br>
-**Output Format:** [Markdown guidance with Python code blocks and generated PDF or DOCX files through CellCog] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog package, and CELLCOG_API_KEY; document prompts and contents may be sent to CellCog.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.14 (source: server release evidence) <br>
+Risk: Prompts and supplied document content are sent to CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only information you are authorized to disclose.
+
+Risk: External dependency behavior and service data retention are outside the security review.
+
+Mitigation: Review the separate CellCog SDK and base skill before enabling them, and prefer reviewed, pinned dependency versions.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [PDF Document Generation on ClawHub](https://clawhub.ai/cellcog/skills/pdf-document-generation-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [PDF documents, DOCX documents]
+
+**Output Format:** [PDF by default; DOCX on request]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Professional layouts; PDF is the default format for unspecified requests.]
+
+## Skill Version(s):
+
+1.0.19 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

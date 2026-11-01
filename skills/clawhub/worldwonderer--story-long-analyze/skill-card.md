@@ -1,45 +1,62 @@
-## Description: <br>
-Analyzes long-form web novels through a staged pipeline covering opening chapters, character structure, reader-payoff design, pacing, chapter summaries, setting and relationship extraction, summary reports, and style profiling. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+帮助作者按连续章节块分析长篇网络小说，整理章节摘要、剧情因果、节奏、角色、设定与文风，并支持续跑和按需补全已有成果。
 
-## Publisher: <br>
-[worldwonderer](https://clawhub.ai/user/worldwonderer) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[worldwonderer](https://clawhub.ai/user/worldwonderer)
 
-## Use Case: <br>
-Writers, editors, and creative-development agents use this skill to break down legally available long-form fiction into structured analysis files for plot, pacing, character, setting, emotional hooks, reusable writing patterns, and prose style. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT
 
-## Known Risks and Mitigations: <br>
-Risk: The skill copies full novel text into the workspace and stores sizeable source excerpts. <br>
-Mitigation: Use it only with text you own or are authorized to process, and delete retained `原文/`, `文风.md` excerpts, and `/tmp/style-sample.txt` when source text should not remain on disk. <br>
-Risk: The skill can update related project files outside the main analysis folder without a strong confirmation step. <br>
-Mitigation: Run it in a controlled workspace and review diffs after each run before accepting or publishing changes. <br>
+## Use Case:
 
+面向创作长篇网文的作者：用于拆解小说开篇与逐章内容，梳理故事线、因果、读者情绪、节奏、人物关系和设定，并生成可续跑的分析报告与文风档案。
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/worldwonderer/skills/story-long-analyze) <br>
-- [Publisher profile](https://clawhub.ai/user/worldwonderer) <br>
-- [OpenClaw source metadata link](https://github.com/worldwonderer/oh-story-claudecode) <br>
-- [Material decomposition reference](references/material-decomposition.md) <br>
-- [Output templates reference](references/output-templates.md) <br>
-- [Style profile protocol reference](references/style-profile-protocol.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Markdown, Files, Analysis, Guidance] <br>
-**Output Format:** [Markdown files organized under a book-specific analysis directory] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Creates staged analysis artifacts such as summaries, character files, plot and pacing indexes, setting notes, reports, progress state, and style profiles.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.1.12 (source: ClawHub release metadata; artifact frontmatter lists 1.0.0) <br>
+Risk: The skill can update a separate topic-planning document without confirming that it is the intended target.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Instruct the agent to skip topic-decision updates unless you select the file and approve the change.
+
+## Reference(s):
+
+- [Stage 0–1：概要初稿与黄金三章](artifact/references/stage1-golden-chapters.md)
+- [Stage 2：逐章提取](artifact/references/stage2-extraction.md)
+- [Stage 3：剧情与节奏](artifact/references/stage3-plot-rhythm.md)
+- [Stage 4：角色、设定与关系](artifact/references/stage4-characters-settings.md)
+- [Stage 5：主报告](artifact/references/stage5-report.md)
+- [Stage 6：文风档案](artifact/references/style-profile-generator.md)
+- [阶段合成输入与事实保真](artifact/references/synthesis-inputs.md)
+- [续跑、提交与恢复说明](artifact/references/pipeline-ops.md)
+- [原文变化与索引重建](artifact/references/index-rebuild.md)
+- [灵感库流程](artifact/references/inspiration-library.md)
+- [作者可见的报告与回复规范](artifact/references/author-facing.md)
+- [收尾检查](artifact/references/final-checks.md)
+- [ClawHub skill release page](https://clawhub.ai/worldwonderer/skills/story-long-analyze)
+- [Project link listed in skill metadata (not server-resolved provenance)](https://github.com/zenstory-ai/oh-story-claudecode)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, Markdown, CSV, Files]
+
+**Output Format:** [中文 Markdown 报告与分析文件；章节索引为 CSV，关系图可使用 Mermaid，图片格式可选。]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [支持分阶段续跑和复用已有分析成果；可生成章节索引、分析缓存及可选人物关系图。]
+
+## Skill Version(s):
+
+1.1.34 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

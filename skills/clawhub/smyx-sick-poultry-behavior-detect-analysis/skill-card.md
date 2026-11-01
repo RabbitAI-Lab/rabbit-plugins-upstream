@@ -1,45 +1,58 @@
-## Description: <br>
-Detects morbid behavioral cues in poultry and pigs from continuous barn videos, including difficulty standing, ruffled feathers or piloerection, isolation, drowsiness, and appetite loss, and returns behavior type and risk level for early screening. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Detects morbid behavioral cues in poultry and pigs from continuous barn videos — such as difficulty standing, ruffled feathers/piloerection, isolation, drowsiness and appetite loss — and outputs behavior type with risk level up to 2-3 days ahead of visible clinical signs. | 识别站立困难、羽毛蓬松、离群、嗜睡等病态行为，比人工观察提前2-3天。
 
-## Publisher: <br>
-[18072937735](https://clawhub.ai/user/18072937735) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[18072937735](https://clawhub.ai/user/18072937735)
 
-## Use Case: <br>
-Farm operators, animal-health teams, and developers use this skill to screen poultry or swine barn images and videos for abnormal behavior, produce structured risk reports, and retrieve prior cloud analysis reports. The output is for early behavior screening and does not provide disease diagnosis or treatment advice. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The security scan reports under-disclosed identity, token, account, history, and local persistence behavior. <br>
-Mitigation: Review the publisher's documentation for identity creation, token storage, account reuse, and history retrieval before installation or execution. <br>
-Risk: The skill may upload barn media or submit media URLs to cloud-backed Lifeemergence endpoints. <br>
-Mitigation: Confirm endpoint ownership, media retention, deletion controls, and authorization requirements before processing sensitive farm footage. <br>
-Risk: The skill can query prior reports associated with a local or internal identity. <br>
-Mitigation: Limit use to trusted workspaces and verify that report history access is scoped to the intended user or farm identity. <br>
+## Use Case:
 
+Livestock farm operators and their AI agents can screen poultry or swine barn images and videos for unusual behavior, then review a structured report with observed cues, affected locations, and a risk level. The results support early health checks and do not provide a diagnosis or treatment plan.
 
-## Reference(s): <br>
-- [ClawHub skill listing](https://clawhub.ai/18072937735/skills/smyx-sick-poultry-behavior-detect-analysis) <br>
-- [Skill demo](https://lifeemergence.com/sample.html) <br>
-- [API interface documentation](references/api_doc.md) <br>
-- [Analysis API documentation](skills/smyx_analysis/references/api_doc.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, JSON, shell commands, guidance] <br>
-**Output Format:** [Markdown reports and tables with JSON-backed analysis results and report links] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include behavior categories, abnormal subject locations, group morbidity ratio, risk level, analysis time, and cloud report URLs.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.4 (source: ClawHub release metadata; artifact frontmatter says 1.0.1) <br>
+Risk: Barn footage submitted for analysis is sent to LifeEmergence's service, and the service's retention terms and charges are not established in the supplied evidence.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Avoid sensitive footage until the provider's retention terms and charges are confirmed; use footage approved for external processing.
+
+Risk: The export-only option still runs analysis, and locally stored account credentials lack adequate safeguards.
+
+Mitigation: Do not rely on export-only mode to prevent uploads; request fixes for export-only handling, credential destination checks, token protection, and debug logging before using sensitive footage.
+
+Risk: Behavior screening results may be mistaken for a veterinary diagnosis.
+
+Mitigation: Treat reports as early screening only and consult a veterinarian and laboratory testing for diagnosis or treatment decisions.
+
+## Reference(s):
+
+- [API reference](references/api_doc.md)
+- [Skill demonstration](https://lifeemergence.com/sample.html)
+
+## Skill Output:
+
+**Output Type(s):** [Analysis, JSON, Markdown]
+
+**Output Format:** [Structured behavior analysis reports in JSON or Markdown, plus Markdown tables for historical reports]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [May include behavior cues, animal locations, risk levels, group-level proportions, and report links; results are for screening reference.]
+
+## Skill Version(s):
+
+1.0.10 (source: server-resolved release metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

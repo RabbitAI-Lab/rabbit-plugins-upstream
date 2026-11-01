@@ -1,41 +1,57 @@
-## Description: <br>
-用于快手数据分析、快手作品详情、作品数据、互动指标、内容调研和内容分析，覆盖 Kuaishou / Kwai work details，来自 SocialDataX 社媒数据助手。 <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+用于快手数据分析、快手作品详情、作品数据、互动指标、内容调研和内容分析。覆盖 Kuaishou / Kwai work details，来自 SocialDataX 社媒数据助手。
 
-## Publisher: <br>
-[devinchen2014](https://clawhub.ai/user/devinchen2014) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[devinchen2014](https://clawhub.ai/user/devinchen2014)
 
-## Use Case: <br>
-External users and analysts use this skill to retrieve read-only Kuaishou/Kwai work detail data through SocialDataX, including work metadata, author details, publish time, interaction counts, images, and media summaries when available. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill invokes the SocialDataX npm package and uses SOCIALDATAX_API_KEY for SocialDataX queries. <br>
-Mitigation: Confirm the SocialDataX npm package is trusted before installation and provide SOCIALDATAX_API_KEY only when intending to query SocialDataX. <br>
-Risk: The optional media download command can write files locally. <br>
-Mitigation: Use the download command only with an explicit output path or output directory chosen by the user. <br>
+## Use Case:
 
+External users, content researchers, and developers use a Kuaishou work ID or URL to retrieve work details and interaction metrics for research and analysis. They can optionally save returned media to a chosen local directory.
 
-## Reference(s): <br>
-- [SocialDataX API access](https://socialdatax.com/ai?from=clawhub) <br>
-- [ClawHub skill page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-detail) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with inline shell commands and JSON API results.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires SOCIALDATAX_API_KEY for SocialDataX detail lookups; optional media downloads write only to the user-selected output path.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-0.1.16 (source: server release evidence) <br>
+Risk: The examples use an automatically updated CLI package, so a later package release could change behavior.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review the package and pin a version before repeated or production use.
+
+Risk: SocialDataX detail requests use the configured API key and may consume account credits.
+
+Mitigation: Use the intended API key and account, and check expected credit use before making requests.
+
+Risk: Optional media downloads write files to a local destination.
+
+Mitigation: Choose and check the requested output path or directory before downloading media.
+
+## Reference(s):
+
+- [ClawHub release page](https://clawhub.ai/devinchen2014/skills/socialdatax-kuaishou-detail)
+
+## Skill Output:
+
+**Output Type(s):** [JSON, Text, Markdown, Files]
+
+**Output Format:** [Structured JSON data with a factual text or Markdown summary; optional downloaded media files]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Detail results may include available content, author, publish time, interaction counts, images, and media information. Optional media downloads are saved to the user-selected path.]
+
+## Skill Version(s):
+
+0.1.20 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

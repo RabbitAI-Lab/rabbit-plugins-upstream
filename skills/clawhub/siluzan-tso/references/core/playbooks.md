@@ -1,4 +1,4 @@
-﻿# 工作流目录 · 分析 / 报告类（P1–P9）
+﻿# 工作流目录 · 分析 / 报告类（P1–P10）
 
 > **范围**：CLI 拉数 → 脚本读盘 → Agent 撰稿 → 交付的报告/分析任务。操作/管理类见 `references/core/workflows.md`（W1–W12）。
 > **通用纪律见 `references/core/agent-conventions.md`**（读盘、时间范围、币种、交付自检）；各卡片只写本任务步骤。卡片字段：`触发 / 必读 / 步骤 / 产物`。完整参数表见「必读」指向的命令文档。
@@ -9,13 +9,14 @@
 | P1    | 单账户投放画像         | 单户拉数 + 诊断画像                    |
 | P2    | 多账户余额扫描         | 续航不足/充值预警巡检                  |
 | P3    | 多账户投放画像汇总     | accounts-digest 多户对比表             |
-| P4    | Google 账户周期报告    | 默认 8 维周期汇总                      |
-| P4-FB | Meta/Facebook 周期报告 | facebook-analysis 5–7 维，默认 HTML    |
+| P4    | Google 账户周期报告    | 默认 9 章周期汇总（含受众）            |
+| P4-FB | Meta/Facebook 周期报告 | facebook-analysis 默认 5 维，默认 HTML |
 | P5    | 多账户多维度批处理     | google-analysis-batch，禁外层 for-loop |
-| P6    | OKKI 周报              | 固定模板多 Sheet xlsx                  |
+| P6    | OKKI 周报              | 写 JSON → okki-render 出 5 Sheet xlsx  |
 | P7    | Google 询盘分析        | 严格 3 个月 8 Sheet xlsx               |
 | P8    | 网站诊断               | website-diagnosis，默认 HTML           |
 | P9    | 战略市场分析           | market-analysis，默认 HTML             |
+| P10   | Google 季度经营报告    | 复盘 + 下期规划 HTML（大族版式）       |
 
 ---
 
@@ -43,7 +44,7 @@
 - **步骤**：
   1. 全量巡检：`balance-scan -m <媒体> --threshold-days 7 --json-out ./snap-p2`（可选 `--min-balance 100` / `--target-days 60`）。
   2. 已知子集：`balance-scan -m <媒体> -a id1,id2,id3 --json-out ./snap-p2-subset`（跳过翻页）。
-- **产物**：按 `remainingDays` 升序；`hitReason="none"` 表示未触阈值；消耗过低的僵尸账户不纳入预警。**禁止**逐账户 `balance`。
+- **产物**：`data.items` 为全部已检查账户（按 `remainingDays` 升序）；预警筛 `hitReason !== "none"`；`hitReason="none"` 表示未触阈值；消耗过低的僵尸账户 `remainingDays` 为 null、不纳入预警。向用户贴 Markdown 表时单元格必须把 `|` 换成 `｜`（公司名常含 `|`）。**禁止**逐账户 `balance`。
 
 ---
 
@@ -54,30 +55,36 @@
 - **反模式**：
   - **有 CRM 询盘附件/字段表** → 改 **P7**，不要用本卡片。
   - **禁止**猜 `--period` / `--date-start`；只用 `--start`/`--end`（或 `--start-date`/`--end-date`）。
+  - **禁止**发明 `cpa-risk-scan` / `cpa-scan`（拦截会提示改用本命令）。
   - `conversions`/`cpa` 为 null 时写「转化未返回」，**禁止**对 null 做 `>` 比较导致脚本崩溃。
+  - **禁止**把 `meta.totals` 写成「全部账户」合计（`totalsScope=returned`，只合计命中行）。
+  - **禁止**把 `ctr` 再 `.2%` / `*100`（已是百分数）。
+  - **Google 四项巡检**（CPA、余额、零转化、无 Display/PMax，常带 MCC）：只跑下面这一条，**禁止**再逐户 `ad campaigns` / `google-analysis --sections campaign-types`，**禁止**把 `siluzan-tso` 写进脚本再 subprocess。
 - **步骤**：
-  1. 确认时间范围后执行 `accounts-digest -m <媒体> -a id1,id2,... --start <S> --end <D> --json-out ./snap-p3`（全量则省略 `-a`）。
-  2. **高 CPA 巡检**：加 `--max-cpa <n>`（保留 CPA > n，或有消耗且转化为 0 的账户）。
-  3. **零转化 / 零询盘巡检**：加 `--zero-conversions`（有消耗且转化 = 0 或未返回）。
-  4. 基于落盘 `data.items` 与 `meta.totals` 生成报告，**不要**再逐账户 `stats`。
-- **产物**：向用户交付排序表（或明确「无命中」）；表格覆盖用户请求的**每一个** ID（未返回的占一行标注「未返回」）。**禁止**只落盘不说话。
+  1. 确认时间范围后执行 `accounts-digest -m <媒体> -a id1,id2,... --start <S> --end <D> --json-out ./snap-p3`（全量则省略 `-a`）。指定 MCC 时加 `--login-customer-id <id>`，不要先 `list-accounts` 再把全部 ID 拼进 `-a`。
+  1b. **要系列类型时**（仅 Google）：同一条命令加 `--with-campaign-types`。四项都要时**不要**再加 `--max-cpa` / `--zero-conversions`（那两个开关会丢掉其它行）。脚本读 `data.items`：`cpa`、`balance`、`spend`+`conversions`，以及 `hasDisplay` / `hasPmax`。只有 `campaignTypesStatus=ok` 且两项都为 false 才写入「无展示且无 PMax」；`error` / `skipped-no-spend` 另列。
+  2. **高 CPA / 转化成本巡检**：`--max-cpa <n> --skip-balance`（CPA > n，或零转化且消耗已 > n）。读盘后**只把 `agentBrief.userDelivery` 原样发给用户**（无命中即「全部正常」句；有命中只贴表）。
+  3. **零转化 / 零询盘巡检**（要全部空耗户，含小额）：加 `--zero-conversions`。
+  4. 指定子集对比表：基于 `data.items`；**不要**再逐账户 `stats`。
+- **产物**：巡检任务交付 `agentBrief.userDelivery`（或用户给的固定「全部正常」句）；对比表覆盖用户请求的**每一个** ID（未返回的占一行标注「未返回」）。Markdown 单元格须把 `|` 换成 `｜`。没有系列/关键词数据时**禁止**写暂停关键词、改落地页。**禁止**只落盘不说话。
 
 ---
 
 ## P4 · Google 账户周期报告
 
-- **触发**：Google 账户某区间的周期/月度/季度汇总报告；或用户列出 Sheet/章节要 **Excel**（非 OKKI / 询盘）。
+- **触发**：Google 账户某区间的周期**数据汇总**（只要花费/转化/9 章，或用户列出 Sheet 要 **Excel**）。非 OKKI / 询盘 / **非**客户版经营报告。
+- **不是 P10**：出现「月度报告 / 月总结与规划 / 季度报告 / Q3 汇总 / Q4 规划 / 季度汇报 / 投放季报 / 客户版 / 大族模板 / 下月规划 / 效率+区域询盘+国家明细」→ **P10**（即使带「行业参考」也不改 P9）。
 - **必读**：`report-templates/google-period-report.md` + `references/analytics/account-analytics.md`；**要 Excel** 加 `report-templates/google-period-report-excel.md`（全文）。
 - **步骤**：
   1. **账户核验**：`list-accounts -m Google -k <mediaCustomerId> --json-out <dir>`；无记录则停止并告知用户。
   2. 确认时间范围；区间 > 3 个月时分段（季度/月）。
-  3. **拉数**：用户已指定 Sheet/维度 → 只拉对应 `--sections`（见 `google-period-report-excel.md` 映射表）；未指定 → 按 `google-period-report.md` 默认 8 维，并可并行追问可选追加。
+  3. **拉数**：用户已指定 Sheet/维度 → 只拉对应 `--sections`（见 `google-period-report-excel.md` 映射表）；未指定 → 按 `google-period-report.md` 默认 8 个拉数维（含 `audience`），并可并行追问可选追加。
   4. **门禁**：对每个 section Read `<section>-<accountId>_*.outline.txt` 后再写脚本。
   5. 脚本读盘写产物：默认 **HTML**（`report-template*.html` 版式参考）；用户要 **Excel** → Agent 脚本写 xlsx（**禁止**宿主第三方 xlsx Skill；**无** CLI excel 子命令）。
-  6. 默认 HTML 报告须含：账户概览、投放趋势、Top 关键词/系列/地区分布、优化建议；用户定制 Excel 以用户 Sheet 清单为准。
-- **产物**：按 conventions §七 自检；`accountId` 须与用户给的 `mediaCustomerId` 一致。
+  6. 默认 HTML 报告须含：账户概览、投放趋势、Top 关键词/系列/地区/受众分布、优化建议；用户定制 Excel 以用户 Sheet 清单为准。
+- **产物**：按 conventions §七 自检；`accountId` 须与用户给的 `mediaCustomerId` 一致。HTML 封面按区间写成「季度」或「月度」，对不上则仍是「周期」。不要打开 HTML 改称呼。
 
-> 用户用「OKKI 周报」固定话术 → 改走 **P6**，不按默认 8 维追问。
+> 用户用「OKKI 周报」固定话术 → 改走 **P6**，不按默认 9 章追问。
 > 只要账户级按日 Excel（无多维章节）→ **P4-DAILY**。
 
 ---
@@ -93,16 +100,16 @@
 ## P4-FB · Meta/Facebook 账户周期报告
 
 - **触发**：Meta/Facebook 账户周期/月报/周报或诊断报告。
-- **必读**：`report-templates/meta-period-report.md` + `assets/meta-period-report-rules.md`（内容丰富度必读）+ `references/analytics/facebook-analysis-guide.md`；要 Excel 加 `report-templates/meta-period-report-excel.md`。
-- **默认产物**：**HTML**（`facebook-analysis render`）；用户明确要 Excel 时 Agent 脚本写 xlsx（步骤 1–3 不变，不调 `render`）。
+- **必读**：`report-templates/meta-period-report.md` + `assets/meta-period-report-rules.md` + `references/analytics/facebook-analysis-guide.md`；要 Excel 加 `report-templates/meta-period-report-excel.md`。
+- **默认产物**：**HTML**（`facebook-analysis render`）；用户要表格 / Excel 时 `render --format xlsx`。
 - **步骤**：
   1. `list-accounts -m MetaAd -k <mediaCustomerId> --json-out ./snap-fb` 确认账户与 `currencyCode`。
   2. 确认 `--start` / `--end`（>3 个月可分段）。
-  3. **拉数**（默认 5 维，要创意加 `creative`）：`facebook-analysis -a <id> --start <S> --end <D> --json-out ./snap-fb --sections overview,ad-sets,platform,country,audience`。
+  3. **拉数**（默认 5 维）：`facebook-analysis -a <id> --start <S> --end <D> --json-out ./snap-fb --sections overview,daily,country,campaigns,audience`。
   4. **分析**：脚本读落盘 JSON 聚合（见 `facebook-analysis-guide.md`）。
-  5. **写 JSON**：按 `meta-period-report-rules.md` 落盘 `meta-period-report.json`（`narrative` 4 条建议各 ≥150 字 + `supplementaryRecommendations` 7 维 + HTML 必填扩展）；无按日/关键词等写「接口未提供」，**禁止编造**。
-  6. **交付**：`facebook-analysis render --data ./meta-period-report.json --snapshot-dir ./snap-fb --out ./meta-period-report.html`。
-- **产物**：按 conventions §七 自检。诊断场景改用 `report-templates/meta-account-diagnosis-report.md`，拉数省略 `--sections` 拉全 7 维。
+  5. **写 JSON**：按 `meta-period-report-rules.md` 落盘 `meta-period-report.json`（四问 + 3 张建议卡 + 各章 analysis/advice）；**禁止编造**数字。
+  6. **交付**：`facebook-analysis render --data ./meta-period-report.json --snapshot-dir ./snap-fb --out ./meta-period-report.html`；要表格加 `--format xlsx`。
+- **产物**：按 conventions §七 自检。诊断场景改用 `report-templates/meta-account-diagnosis-report.md`，拉数省略 `--sections` 拉全量。
 
 ---
 
@@ -133,10 +140,12 @@
 - **必读**：`report-templates/okki-weekly-google-client.md`（**全文**）+ `references/analytics/account-analytics.md`；可选 `references/core/subagent-orchestration.md`。
 - **步骤**：
   1. （可选）Read `subagent-orchestration.md` § P6 决定是否分阶段委派。
-  2. 确认 `mediaCustomerId` 与 `--start` / `--end`。
+  2. `list-accounts -m Google -k <用户给的账户号>`（`928-780-1878` 可原样，CLI 去连字符）确认 `mediaCustomerId`；无 `-k` 的默认首页或 `itemCount < total` **禁止**判定未绑定。确认 `--start` / `--end`。
   3. 同一 `--json-out` 目录执行模板命令组合：`stats`、`balance`、`google-analysis --sections overview,campaigns,keywords,search-terms,campaign-device,campaign-geo-matched`。
-  4. 脚本读盘 → 按 `okki-weekly-google-client.md` **默认客户话术**填数交付（用户另有话术/增删条目时从其自定义）；并产出多 Sheet `.xlsx`（无 CLI 写表命令）。
-- **产物**：**不**按 P4 默认 8 维追加；金额读 `*Yuan` 字段；对外话术数值须与 xlsx 一致。
+  4. 脚本读盘 → 只写 `okki-weekly-report.json` 的 `meta` + `narrative`（5 Sheet 表末分析 + 账户 Sheet 固定 5 维数据复盘；表为空也须写）。`deviceType` 是 `Desktop`/`Mobile`，禁止 `.get("DESKTOP")`，按大小写不敏感分类累加后再写设备金额。
+  5. `google-analysis okki-render --data ./okki-weekly-report.json --snapshot-dir ./snap-okki --out <xlsx>`。缺分析 / 缺 5 维复盘 / 缺 `campaign-device` 或 `campaign-geo-matched` 会拒绝出文件；按 stderr 补 JSON 后重跑。**禁止** Agent 手写 xlsx。
+  6. 按 `okki-weekly-google-client.md` **默认 7 条话术**填数，放进代码块，一条一行（第 6 条的 ①②③ 也各占一行）。禁止合成一段，禁止改成「一、二、三、四」。上一轮或其他账户的话术不算本轮骨架；只有用户**本轮**粘贴全文或点名增删某一条时才改被点名的条目。数值与 xlsx 一致。
+- **产物**：`okki-render` 写出的 `.xlsx` 路径（缺文件 = 未完成）+ 对话内客户话术；**不**按 P4 默认 9 章追加。仅用户明确「只要话术 / 不要文件」时才省略 xlsx。
 
 ---
 
@@ -147,7 +156,7 @@
 - **时间窗口强约束**：**严格 3 个月** = 分析月份 + 向前 2 个完整自然月，**禁止**扩展到 7 个月。
 - **步骤**：
   1. （可选）Read `subagent-orchestration.md` § P7。
-  2. 询盘资料入场：用户附文件 → 解析落盘 `./snap-inquiry/inquiries.json`；仅给账户 ID → 反问账户 + 分析月份并贴字段清单，**禁止编造询盘数据**。
+  2. 询盘资料入场：用户附文件 → 先看一眼表头再落盘 `./snap-inquiry/inquiries.json`（列名接近即可）；仅给账户 ID → 反问账户 + 分析月份并贴字段清单，**禁止编造询盘数据**。
   3. CLI 拉数（同一目录）：`list-accounts`、`google-analysis --sections campaigns,keywords,search-terms,campaign-geo`，并按月拉 `m1/m2/m3` 的 `campaigns,geographic`。
   4. 脚本聚合计算 8 Sheet 数据；国家→大洲映射读 `geo-continents.json`，**禁止**硬编码国家名。
 - **产物**：必产 8 Sheet xlsx（版式见模板），**只能**由 Agent 脚本生成，**禁止**假设 `… excel` 子命令存在。
@@ -156,12 +165,13 @@
 
 ## P8 · 网站诊断
 
-- **触发**：对某 URL 做网站/落地页诊断、投放前网站评分；话术含「网站诊断/检测/监测/质量**报告**」「落地页报告」「官网体检」（**非** Google 账户诊断、**非** 行业报告）。同义词见 `intent-routing.md` §二 P8。
+- **触发**：对某 URL 做网站/落地页诊断、投放前网站评分；话术含「网站诊断/检测/监测/质量**报告**」「落地页报告」「官网体检」「**是否符合（Google）广告投放要求**」「**能不能投 / 适不适合投广告**」（**非** Google 账户诊断、**非** 行业报告、**非** 生成搜索广告方案）。同义词见 `intent-routing.md` §零 / §二 P8。
+- **典型误路由**：用户说「诊断网站 https://… 是否符合 Google 广告投放要求」→ **仍是 P8**；须 `website-diagnosis collect --url …`，**禁止**因带「Google 广告」改走 W3，**禁止**只用 WebFetch/浏览器肉眼看页写结论。
 - **必读**：`references/analytics/website-diagnosis-guide.md` + `assets/website-diagnosis-rules.md` + `report-templates/website-diagnosis-report.md`。
 - **默认产物**：**HTML**（`website-diagnosis render`）；**禁止**仅 Markdown 摘要或纯 JSON 充当终稿。
 - **步骤**：
   1. 确认完整 URL（`https://` 可省略，CLI 自动补全）。
-  2. 采集：`website-diagnosis collect --url <url> --json-out ./snap-web --include-html`（落盘含 `signals` / `dataAvailability`）。
+  2. 采集：`website-diagnosis collect --url <url> --json-out ./snap-web`（落盘含 `signals` / `dataAvailability`；`--include-html` 仅增大落盘，不改 signals）。
   3. 脚手架：`website-diagnosis prepare --collect ./snap-web/<collect>.json`（Lighthouse 失败时 m2i1/m5i1 预填 Absent）。
   4. 按 `signals` + `website-diagnosis-rules.md` 补全 `needsAgent=true` 项 → 落盘 `diagnosis.json`。
   5. 出 HTML：`website-diagnosis render --data ./diagnosis.json --collect ./snap-web/<collect>.json --out ./snap-web/website-diagnosis-report.html`。
@@ -181,3 +191,21 @@
   3. 按 `market-analysis-rules.md` 维度表**逐章 WebSearch** 撰写，脚本落盘 `./snap-market/market-report.json`。
   4. 渲染：`market-analysis render --data ./snap-market/market-report.json --out ./snap-market/market-analysis-report.html`；报缺项时**只补缺失维度**后重写 JSON。
 - **产物**：交付 HTML 路径并说明需联网加载 CDN。
+
+---
+
+## P10 · Google 季度经营报告
+
+- **触发**（命中越多越稳）：Google/谷歌广告 **月度报告**、**月总结与规划**、**季度报告**、**Q3 汇总**、**Q4 规划**、**季度汇报**、**投放季报**、客户版/对外、大族模板、下月规划；或要「效率 + 区域询盘 + 国家明细 + 规划」；或「结论→效率→结构→新探索→总结→Q4」。**不是** P1 诊断、**不是** P4「只要花费转化」的周期表。用户提「行业参考」仍走 P10，**禁止编造行业数**（本批无行业章）。
+- **必读**：`report-templates/google-quarterly-report.md`；写 `narrative.plan` 前再 Read `report-templates/google-quarterly-plan.md`。
+- **默认产物**：**HTML**（`google-quarterly render`）。
+- **步骤**：
+  1. 确认账户与区间：季度话术省略日期 → 上一完整自然季；**月度报告 / 下月规划** → 上一完整自然月（或用户指定月）作 `--start/--end`。
+  2. **询盘未入场则先问再停**（话术见 `google-quarterly-report.md`「询盘入场」）。没有表格且用户未说「没有」时，**禁止** collect / 写 narrative / render。用户发来表 → 抽行落盘 `./snap-p10/inquiries.json` 再 `--inquiries`（**禁止**把 xlsx 原文件传给 collect）；用户说没有 → 询盘位留空（可选 `--inquiry-conversion`，须用户点名），**禁止编造**。
+  3. `list-accounts -m Google -k <mediaCustomerId> --json-out ./snap-p10`（取户名、币种）。可与等询盘回复并行，但 collect 必须等询盘问完。
+  4. `google-quarterly collect -a <id> --start <S> --end <D> --json-out ./snap-p10 --account-name "<名>"`（可选 `--keyword-seeds`）。新探索四类并行（视频 / PMax / 发现 / 展示）；视频用 Ads 视频报表，不拉频道订阅总数 / 来源饼 / 视频类型。
+  5. 读 `google-quarterly-collect.json`，只写 `narrative` 到 `google-quarterly.json`（禁止改 kpis / monthly / planDefaults 数字）。
+  6. 下期规划按 `google-quarterly-plan.md` 写九章。预算默认三档（维持本期 / +30% / +50%）+ 建议档月度 30/35/35，标「基于历史数据」，不是已批预算；CPA/询盘不外推；禁止自动调价/暂停指令。
+  7. `google-quarterly render --data ./snap-p10/google-quarterly.json --out ./snap-p10/google-quarterly-report.html`。
+  8. **render 成功即停并交付**该 HTML。封面称呼已按区间写好：完整自然季是「季度」，从 1 号起的同一个月（含未过完的本月）是「月度」，其余是「本期」。**禁止**打开或修改 HTML，**禁止**再把「季度 / 月度」改一遍，**禁止**再 render，**禁止**未要求就转 PDF、截图或用视觉模型验收。
+- **产物**：HTML 路径；新探索（视频 / PMax / 发现 / 展示）全无量则模板自动隐藏该章。

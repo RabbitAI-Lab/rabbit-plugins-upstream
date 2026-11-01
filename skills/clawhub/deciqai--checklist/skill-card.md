@@ -1,45 +1,51 @@
-## Description: <br>
-Helps agents design concise operational checklists for complex repeated work where skipped steps create meaningful risk. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents in designing concise checklists for complex, repeated operations and embedding them into the workflow.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[deciqai](https://clawhub.ai/user/deciqai)
 
-## Use Case: <br>
-Developers, operators, managers, and other teams use this skill to turn high-stakes recurring workflows into 6-10 item DO-CONFIRM or READ-DO checklists with clear triggers, owners, and review loops. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Users may apply generated checklists to high-stakes domains without expert review. <br>
-Mitigation: Have qualified domain owners review checklist items, triggers, consequences, and update cadence before operational use. <br>
-Risk: Historical examples and external links may be mistaken for complete domain guidance. <br>
-Mitigation: Use examples only as design references and validate the resulting checklist against current domain standards and local procedures. <br>
+## Use Case:
 
+Operators, team leads, and developers use this skill to design concise, verifiable checklists for repeated high-stakes workflows, choose a READ-DO or DO-CONFIRM format, and integrate review and iteration into the workflow.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/checklist) <br>
-- [Primary sources](artifact/references/sources.md) <br>
-- [B-17, Pronovost ICU, and WHO Surgical example](artifact/examples/b-17-1935-pronovost-icu-who-surgical.md) <br>
-- [Van Halen Brown M&M rider clause example](artifact/examples/van-halen-brown-mms-rider-clause.md) <br>
-- [deciqAI checklist page](https://www.deciqai.com/c/checklist) <br>
-- [Agent metadata](https://www.deciqai.com/s/checklist.json) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [markdown, guidance, configuration] <br>
-**Output Format:** [Markdown checklist design with structured prompts and a reusable checklist template] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May pause for user input during novice coaching before drafting the final checklist.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.5 (source: release evidence) <br>
+Risk: A checklist may omit context-specific requirements or create false confidence in a high-impact workflow.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Validate checklist items with the people responsible for the operation, especially in medical, financial, or deployment workflows, and retain explicit approval for irreversible actions.
+
+## Reference(s):
+
+- [Primary sources](references/sources.md)
+- [NIST AI Risk Management Framework](https://www.nist.gov/itl/ai-risk-management-framework)
+- [Model Cards for Model Reporting](https://doi.org/10.1145/3287560.3287596)
+
+## Skill Output:
+
+**Output Type(s):** [Markdown, Guidance]
+
+**Output Format:** [Markdown checklist drafts and coaching guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Checklist items are tailored to the operation and should be validated by its responsible people.]
+
+## Skill Version(s):
+
+1.0.6 (source: server-resolved release)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

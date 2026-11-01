@@ -17,7 +17,7 @@ installer:
 argument-hint: "[resource name or describe your Kubernetes task]"
 allowed-tools:
   - Bash
-metadata: {"openclaw":{"requires":{"env":["K8S_AIOPS_CONFIG"],"bins":["k8s-aiops"],"config":["~/.k8s-aiops/config.yaml"]},"optional":{"env":["KUBECONFIG","K8S_AIOPS_HOME"]},"primaryEnv":"K8S_AIOPS_CONFIG","homepage":"https://github.com/AIops-tools/K8s-AIops","emoji":"☸️","os":["macos","linux"]}}
+metadata: {"openclaw":{"requires":{"anyBins":["k8s-aiops","uvx"]},"optional":{"env":["K8S_AIOPS_CONFIG","KUBECONFIG","K8S_AIOPS_HOME"]},"homepage":"https://github.com/AIops-tools/K8s-AIops","emoji":"☸️","os":["macos","linux"]}}
 compatibility: >
   Standalone, self-governed Kubernetes operations. The governance harness (audit, token/runaway budget, undo, risk-tier labels) is bundled in the package — no external skill-family dependency.
   All write operations are audited to a local SQLite DB under ~/.k8s-aiops/ (relocatable via K8S_AIOPS_HOME).
@@ -29,6 +29,8 @@ compatibility: >
 ---
 
 # k8s AIops
+
+> **Audit availability:** Real writes require a durable audit intent. Reads and previews can continue if audit storage fails; check the warning and audit health before relying on their audit trail.
 
 > **Disclaimer**: This is a community-maintained open-source project and is **not affiliated with, endorsed by, or sponsored by the Cloud Native Computing Foundation, the Kubernetes project, or k3s/Rancher.** "Kubernetes" and "k3s" are trademarks of their respective owners. Source code is publicly auditable at [github.com/AIops-tools/K8s-AIops](https://github.com/AIops-tools/K8s-AIops) under the MIT license.
 
@@ -64,6 +66,15 @@ uv tool install k8s-aiops
 k8s-aiops init            # friendly wizard: register your kube contexts as targets
 k8s-aiops doctor          # or skip init — works with your current kube-context too
 ```
+
+Or as an OpenClaw plugin, which installs this skill and its MCP server together:
+
+```bash
+openclaw plugins install clawhub:@zw008/k8s-aiops
+openclaw skills info k8s-aiops          # expect: Visible to model: yes
+```
+
+Needs `uvx` on `PATH`: the MCP server is fetched with uv, pinned to this release.
 
 ## When to Use This Skill
 

@@ -7,6 +7,12 @@ Use this file for CRM, sales pipeline, customer service, partner service, custom
 
 This file validates that the domain module contract can migrate beyond traffic safety.
 
+## 中文导读
+
+覆盖线索、客户、商机、合同、回款、服务工单与续约。重点检查对象转化、归属与协作、金额和状态的一致性，避免把签约、开票、回款及收入确认当成同一结果。
+
+常用名称：客户管理、销售管理、CRM、客户关系、销售漏斗。以下中文提示是现有章节的阅读入口，不新增项目规则；需要详细依据时阅读对应原文和来源。
+
 ## Contents
 
 - Domain Purpose
@@ -27,6 +33,8 @@ This file validates that the domain module contract can migrate beyond traffic s
 - Multi-Module PRD Quality Gate
 - Acceptance Checklist
 
+> Use only the slices relevant to the project. State arrows and YAML/field lists below are design sketches, not executable schemas or a complete workflow. Instantiate the normal, exception and recovery paths, guards, data owner, permissions and version effects before handoff. A pattern does not override an authorized project decision or create a legal obligation. Where confidence is useful, declare its measurement and limits; do not invent a calibrated score from model self-report.
+
 ## Domain Purpose
 
 - Business outcome: prevent missed opportunities, delayed customer responses, unresolved issues, and invisible product feedback.
@@ -37,11 +45,25 @@ This file validates that the domain module contract can migrate beyond traffic s
 - Capability scope may include marketing lead acquisition, SFA pipeline,
   Customer 360, CPQ/quotation, contract/payment, service tickets, customer
   success/renewal, partner/channel operations, and product-feedback loops.
-- Product Truth must lock module/view/region/action ownership when CRM spans
-  lead, opportunity, customer, ticket, contract, payment, multiple roles, or a
-  cross-module lifecycle.
-- Keep shared CRM fields canonical as `FLD-*`; projections show only relevant
-  scenario, state, rule, permission, exception, and acceptance differences.
+- Identify authoritative objects and module/action ownership across the in-scope lifecycle in the existing specification. Use Product Truth only when a machine consumer needs it.
+- Define shared fields once and reference them; reuse existing IDs rather than requiring a new field dictionary. Views explain only relevant scenario, state, permission and exception differences.
+
+### Current Baseline and Change Watch (verified 2026-08-29)
+
+| Evidence class | Current signal | Requirement effect |
+|---|---|---|
+| design_guidance | `KS-CRM-COMPLAINT-10002` | complaint intake, response, escalation, closure and learning need accountable ownership and evidence when this standard is adopted |
+| product_pattern | `KS-CRM-MICROSOFT-ACTION-2026`, `KS-CRM-SALESFORCE-CONTACT-CENTER-2026`, `KS-CRM-HUBSPOT-SMART-CRM` | current leaders are shifting from passive records to action-centric CRM with unified context, governed agents and explicit AI-to-human handoff |
+| change_watch | vendor roadmaps and AI claims change faster than customer lifecycle physics | never copy a vendor module list or claim “best practice” without project evidence; customer truth, state ownership and human commitments remain primary |
+
+### AI Transformation Horizon
+
+| Axis | From -> toward | Non-negotiable product guard |
+|---|---|---|
+| CRM role | passive system of record -> customer/revenue/service system of action | every AI action resolves to a customer object, lifecycle state, owner, deadline and observable result |
+| context | scattered notes -> permissioned longitudinal customer memory | distinguish recorded facts, inferred intent, stale data and external signals; preserve source links |
+| execution | next-best-action text -> bounded research, follow-up drafting, routing, renewal/service playbooks and exception escalation | binding financial, contract and customer-right decisions retain accountable authority; routine reversible actions may follow explicitly authorized automation rules |
+| learning loop | activity count -> conversion, response, retention, service resolution and override evidence | do not optimize spammy outreach or hide agent failure behind generated activity |
 
 ## First-Principles Domain Lens
 
@@ -54,7 +76,7 @@ operating response, not from a list of tables or fashionable AI features.
 | Response accountability | Who must respond, by when, and what closes the response? | SLA task, owner, close guard, and audit are explicit |
 | Customer truth | Which module is the source of truth for customer, contact, contract, ticket, and follow-up facts? | Customer 360 can explain every aggregate with source links |
 | Exception closure | Which stuck, overdue, rejected, lost, or escalated case must be visible to a manager? | alert/response task links to the business object and real closure action |
-| Boundary of automation | Which sales, finance, service, or roadmap actions cannot be automatic? | payment, contract approval, final commitment, and ticket closure keep human gates |
+| Boundary of automation | Which sales, finance, service, or roadmap actions cannot be automatic? | identify required human gates for financial/contract commitments and disputed closure; state separately which routine actions may be automated |
 | Domain breadth | Which CRM family is in scope: SFA, service, customer success, CPQ, campaign, channel, data/BI, AI assistant? | included/deferred modules and external systems are explicit |
 
 ## Vocabulary
@@ -73,6 +95,10 @@ operating response, not from a list of tables or fashionable AI features.
 | Demand | product request created from service or sales feedback | product/R&D module |
 
 ## Aggregates and Entities
+
+**中文阅读提示**
+
+**客户去重**（重复客户、合并客户、deduplication、dedupe、customer deduplication、customer dedupe、customer dedup、dedup）：合并客户前确定身份依据与关联数据归属，名称相同不等于同一客户。
 
 | Aggregate | Owns | Key States | Notes |
 |---|---|---|---|
@@ -113,6 +139,10 @@ events:
 
 ## State Machines
 
+**中文阅读提示**
+
+**商机阶段**（商机、销售阶段、赢单、丢单、opportunity、pipeline）：阶段变化要说明允许者、必要条件和结果；概率不是已经实现的收入。
+
 ```text
 Lead: new -> assigned -> contacted -> converted | invalid
 Opportunity: qualified -> proposal -> poc -> negotiation -> won | lost
@@ -126,6 +156,12 @@ Demand: new -> reviewed -> scheduled -> released | rejected
 ```
 
 ## Metric / Indicator Governance
+
+**中文阅读提示**
+
+**客户续约**（续费、流失、续签、renewal、churn）：明确到期范围、续约窗口、客户去重与合同金额，不把活跃等同续约。
+
+**合同回款**（应收、收款、回款核销、payment、collection）：合同额、已收款、应收余额与收入分别计算，退款和撤销需回到原交易核对。
 
 | Metric | Caliber | Source | Owner |
 |---|---|---|---|
@@ -166,6 +202,12 @@ Demand: new -> reviewed -> scheduled -> released | rejected
 
 ## Core Workflows
 
+**中文阅读提示**
+
+**客户工单**（售后、客诉、投诉、服务单、ticket、complaint）：服务请求从受理到分派、解决、关闭应有责任人与可核验结果。
+
+**销售线索**（线索、潜客、潜在客户、lead）：说明线索如何分配、去重、转为客户或商机，失败与重复转化不能制造重复对象。
+
 | Workflow | Trigger | End State |
 |---|---|---|
 | lead response | lead imported/created | contacted or invalid |
@@ -178,6 +220,10 @@ Demand: new -> reviewed -> scheduled -> released | rejected
 | renewal/churn intervention | renewal risk signal appears | renewal plan closed as renewed/churned |
 
 ## Role Path Patterns
+
+**中文阅读提示**
+
+**客户归属**（客户负责人、客户池、公海池、customer ownership、account hierarchy）：客户负责人、共享协作与可见范围分别定义，转交后核对旧负责人权限。
 
 | Role | Entry | Core Actions | Forbidden Actions | Exit |
 |---|---|---|---|---|
@@ -217,10 +263,9 @@ Demand: new -> reviewed -> scheduled -> released | rejected
 - customer contacts and contract amounts are masked by role;
 - export requires audit;
 - cross-tenant/customer access requires explicit authorization;
-- AI suggestions must show source and confidence;
-- AI cannot confirm payment, approve contract, or close customer issue without human confirmation.
-- AI cannot approve quote discounts, decide churn status, modify payment amount,
-  or publish product roadmap commitments without accountable human approval.
+- AI suggestions show sources and uncertainty; a confidence number requires a declared basis.
+- AI cannot invent payment confirmation, approve binding contract/discount commitments, alter confirmed financial amounts or publish roadmap promises without accountable authorization and required human approval.
+- Routine classification, routing or undisputed consultation closure may be automated when the project explicitly authorizes the trigger, evidence, exception and reopen path. Reading a message is not confirmation of resolution; disputed/rights-affecting closure stays with the responsible role. Risk prediction is not an authoritative churn decision.
 
 ## Domain Test Scenarios
 
@@ -268,10 +313,8 @@ Mocked matrices and simulated reviewers cannot satisfy expert review or audit.
 - [ ] Every SLA exception has owner, action, and closure rule.
 - [ ] Customer 360 shows business data, not only metadata.
 - [ ] Role/data isolation is explicit.
-- [ ] AI suggestions remain suggestions unless explicitly human-approved.
-- [ ] If CRM spans multiple modules or roles, Product Truth locks shared
-      objects, state owners, views, actions, events, permissions, and flows.
-- [ ] Common CRM fields use canonical `FLD-*` definitions; projections do not
-      duplicate or redefine them.
+- [ ] AI execution follows explicit authorization; required human gates and routine automation exceptions are distinguishable.
+- [ ] Shared objects, state owners, actions, events, permissions and flows have one authoritative definition; Product Truth is optional unless a consumer requires it.
+- [ ] Shared field definitions are referenced without conflicting copies.
 - [ ] Coding-agent delivery package paths are explicit when implementation by
       Claude Code, Cursor, Codex, or Copilot is expected.

@@ -1,40 +1,52 @@
-## Description: <br>
-Guides agents through HTSUS classification using MECE decomposition, the General Rules of Interpretation, and documented reasoning for defensible customs classifications. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Guides agents through HTSUS classification of ambiguous or multifunction merchandise using the General Rules of Interpretation and documented reasoning.
 
-## Publisher: <br>
-[deciqai](https://clawhub.ai/user/deciqai) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
+
+[deciqai](https://clawhub.ai/user/deciqai)
+
+### License/Terms of Use:
+
+MIT-0
+
+## Use Case:
+
+Customs brokers and import professionals use this skill to classify merchandise under the HTSUS, especially when goods are ambiguous or have multiple functions. It guides a documented review of the applicable GRI sequence and when to consider a binding ruling.
+
+### Deployment Geography for Use:
+
+Global
+
+## Known Risks and Mitigations:
+
+Risk: A classification may be incorrect or incomplete for the product facts, creating customs compliance risk.
+
+Mitigation: Verify consequential decisions against the HTSUS, applicable section and chapter notes, CBP CROSS rulings, or a binding ruling, and record the GRI reasoning.
+
+Risk: The parent “mece” method referenced by this variant is not included in the package.
+
+Mitigation: Use the included HTSUS and GRI workflow as the available method, and consult the parent method separately if its additional process is needed.
+
+## Reference(s):
 
 
-## Use Case: <br>
-Customs brokers, trade compliance teams, and agents use this skill to reason through ambiguous or multi-function merchandise classifications under the HTSUS and document a single defensible heading. <br>
+## Skill Output:
 
-### Deployment Geography for Use: <br>
-Global <br>
+**Output Type(s):** [Analysis, Guidance, Text]
 
-## Known Risks and Mitigations: <br>
-Risk: HTS classification is compliance-sensitive and can be wrong if product facts, section or chapter notes, CBP rulings, or binding-ruling needs are missed. <br>
-Mitigation: Use the skill as a reasoning aid and verify final classifications against official HTSUS or CBP sources, or seek a binding ruling when needed. <br>
+**Output Format:** [Markdown]
 
+**Output Parameters:** [1D]
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/deciqai/skills/customs-hts-classification-mece) <br>
-- [deciqAI customs HTS classification page](https://www.deciqai.com/c/customs-hts-classification-mece) <br>
-- [deciqAI machine-readable skill metadata](https://www.deciqai.com/s/customs-hts-classification-mece.json) <br>
+**Other Properties Related to Output:** [Product-specific classification reasoning; treat results as guidance and verify consequential decisions against authoritative customs sources or binding rulings.]
 
+## Skill Version(s):
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, guidance] <br>
-**Output Format:** [Markdown guidance and checklists with documented classification reasoning] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [No executable code; outputs should be reviewed against official customs sources before use.] <br>
+1.0.2 (source: server-resolved release evidence)
 
-## Skill Version(s): <br>
-1.0.1 (source: server evidence release.version) <br>
+## Ethical Considerations:
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

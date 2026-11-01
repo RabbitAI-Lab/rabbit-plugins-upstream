@@ -1,44 +1,54 @@
-## Description: <br>
-Generates CellCog-powered UI prototypes and wireframes, including interactive HTML prototypes, app mockups, landing pages, mobile screens, SaaS dashboards, design systems, and user flows. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Generate interactive HTML UI prototypes, wireframes, app mockups, landing pages, mobile screens, dashboards, design systems, and user flows from a written prompt using CellCog.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-Developers, designers, and product teams use this skill to ask an agent to create clickable UI prototypes, wireframes, app mockups, landing pages, mobile screens, SaaS dashboards, design systems, and user flows with CellCog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: Prompts, uploaded assets, mock data, branding, and generated live prototype URLs may be shareable with CellCog or stakeholders. <br>
-Mitigation: Do not include production secrets, real customer data, or confidential plans unless the service access and hosting model is acceptable for the deployment. <br>
-Risk: The skill depends on CELLCOG_API_KEY for CellCog access. <br>
-Mitigation: Store CELLCOG_API_KEY as an environment secret and avoid embedding it in prompts, prototypes, repositories, or shared artifacts. <br>
-Risk: Generated prototypes may include shareable hosted URLs and realistic sample content. <br>
-Mitigation: Review generated prototypes before sharing and replace sensitive or misleading content with safe mock data. <br>
+## Use Case:
 
+Developers and product or design teams use this skill to turn a written brief into clickable UI prototypes, wireframes, and app or web mockups. It supports exploring page layouts, user flows, and reusable design systems.
 
-## Reference(s): <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/ui-prototype-wireframe-cellcog) <br>
-- [Publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
-- [CellCog homepage](https://cellcog.ai) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Code, Shell commands, Configuration, Guidance] <br>
-**Output Format:** [Markdown guidance with Python SDK snippets; CellCog tasks may return hosted interactive HTML prototype links, static images, or PDF artifacts.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [Requires python3, the cellcog dependency, and a CELLCOG_API_KEY environment secret.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.12 (source: server release metadata) <br>
+Risk: Prototype prompts may contain confidential material sent to CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Use only content authorized for CellCog and avoid confidential material in shareable prototypes; check hosting access and retention terms.
+
+Risk: The external CellCog SDK and prerequisite skill are not included with this release.
+
+Mitigation: Review and pin installation dependencies, and inspect the CellCog SDK guidance before use.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [Wireframe on ClawHub](https://clawhub.ai/cellcog/skills/ui-prototype-wireframe-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [HTML, Static images, PDF, Guidance]
+
+**Output Format:** [Interactive HTML prototype by default; static images or PDF when requested]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Interactive prototypes may be hosted at shareable live URLs.]
+
+## Skill Version(s):
+
+1.0.17 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

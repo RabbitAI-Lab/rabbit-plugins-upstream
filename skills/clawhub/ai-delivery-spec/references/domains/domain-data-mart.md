@@ -7,6 +7,12 @@ Use this replaceable domain module for data-resource inventory and registration,
 
 This module is intentionally broader than a data mart checklist. It treats data products as an end-to-end system: source acquisition -> processing -> governance -> storage/retrieval -> semantic/ontology layer -> analytics/BI -> AI agents -> action/decision loop -> operations/evaluation.
 
+## 中文导读
+
+覆盖数据接入、清洗治理、数仓与检索、指标语义、报表分析、数据服务和智能问数。关注来源、粒度、维度、质量、权限与消费链路，避免列名相同就被当成同一业务含义。
+
+常用名称：数据、数据底座、数仓、数据中台、数据治理、数据产品、数据湖、BI、ChatBI。以下中文提示是现有章节的阅读入口，不新增项目规则；需要详细依据时阅读对应原文和来源。
+
 ## Contents
 
 - Domain Purpose
@@ -25,6 +31,8 @@ This module is intentionally broader than a data mart checklist. It treats data 
 - Domain Test Scenarios
 - Evaluation Profile
 - Acceptance Checklist
+
+> Use only the slices relevant to the project. State arrows and YAML/field lists below are design sketches, not executable schemas or a complete workflow. Instantiate the normal, exception and recovery paths, guards, data owner, permissions and version effects before handoff. A pattern does not override an authorized project decision or create a legal obligation. Where confidence is useful, declare its measurement and limits; do not invent a calibrated score from model self-report.
 
 ## Domain Purpose
 
@@ -63,6 +71,24 @@ as mandatory features for every project.
 | high-quality industry datasets | data governance extends from BI correctness to AI fitness | intended model/scenario, data rights, coverage, labeling, split, quality, bias, contamination and benchmark are versioned |
 | model-data-scene flywheel | dataset delivery becomes continuous supply and evaluation | model/evaluation/app feedback creates traceable dataset changes without polluting held-out tests |
 | asset and value management | registration, accounting, valuation and financing become connected but separate workflows | no credential or appraisal automatically becomes accounting recognition, ownership judgment, or guaranteed value |
+
+### Current Baseline and Change Watch (verified 2026-08-29)
+
+| Evidence class | Current signal | Requirement effect |
+|---|---|---|
+| binding_baseline | `KS-DATA-CIRCULATION-SERVICES-2026` extends the current data-resource, trusted-space, authorized-operation and high-quality-dataset policy chain | identify provider/operator/user roles, data/right/purpose proof, product/service disclosure, safety, evaluation and exit before designing circulation or agent services |
+| product_pattern | `KS-DATASET-PLATFORM-2026`, `KS-DATA-SECURITY-CASES-2026`, `KS-DATA-COMPLIANCE-SANDBOX-2026` | learn dataset cards, participant identity, digital contracts, usage control, audit, bounded experiments and exit; cases do not prove a universal architecture |
+| change_watch | sector rules, regional exchange mechanics, price/settlement, accounting and cross-border scope remain project-specific | register jurisdiction and accountable-source gaps; never let a dataset card, sandbox or registration credential silently prove rights, quality, value or lawful use |
+
+### AI Transformation Horizon
+
+| Axis | From -> toward | Non-negotiable product guard |
+|---|---|---|
+| platform role | warehouse/BI backend -> governed context, semantic and action substrate for people and agents | source/right/purpose, lineage, quality, freshness and permission travel with every consumption path |
+| interface | dashboard/query builder -> conversational analysis plus inspectable semantic/query plan | resolve metrics/objects first; cite source/caliber and keep deterministic query/export paths |
+| operation | manual catalog/quality work -> bounded data engineering, governance and quality agents | production writes, grants, schema/metric changes and destructive repair keep review, audit and rollback |
+| supply loop | one-off dataset delivery -> model/application feedback driving versioned data products | protect evaluation isolation; no automatic ingestion of conversations, feedback or synthetic derivatives |
+| value | data volume/asset labels -> measurable decision, model, public-service or commercial outcomes | registration, valuation, accounting, rights and fitness remain separate accountable claims |
 
 ## First-Principles Domain Lens
 
@@ -112,6 +138,10 @@ warehouse, or chatbot label.
 
 ## Aggregates and Entities
 
+**中文阅读提示**
+
+**维度建模**（维度列、维度、事实表、聚合根、dimension、grain、entity）：标识列用于定位主体，维度用于分组和过滤；维度相同不代表同一事实粒度。
+
 | Layer | Aggregates / Entities | Key Invariants |
 |---|---|---|
 | Source and ingestion | DataSource, Connector, SyncJob, StreamTopic, FileImport, Credential, BackfillTask | every ingest path has owner, auth, schema, cadence, idempotency, retry, and failure quarantine |
@@ -154,6 +184,10 @@ warehouse, or chatbot label.
 
 ## State Machines
 
+**中文阅读提示**
+
+**历史快照**（快照、历史取值、历史口径、snapshot、version）：区分当前定义、当时证据与当前观察；历史是否重算和变更何时生效由项目决定。
+
 Data source:
 
 ```text
@@ -161,13 +195,20 @@ draft -> connected -> syncing -> active -> degraded -> suspended -> retired
 syncing -> failed -> syncing
 ```
 
-Pipeline:
+Pipeline definition (versioned configuration):
 
 ```text
-draft -> test_run -> scheduled -> running -> succeeded
-running -> failed -> retrying -> running
-scheduled -> paused -> scheduled
+draft -> tested -> active -> paused -> active | retired
 ```
+
+Pipeline run (one execution; retries preserve their attempts):
+
+```text
+created -> running -> succeeded | failed | cancelled
+failed -> retry_scheduled -> running
+```
+
+Keep definition version, run ID, source checkpoint, attempt, event time and outcome traceable. A successful run neither retires the definition nor overwrites a previous run. Late arrival is not the same as a duplicate event.
 
 Data asset:
 
@@ -196,11 +237,15 @@ Data agent:
     draft -> evaluated -> pilot -> production -> degraded -> disabled -> retired
     pilot/production -> rollback_pending -> previous_version
 
-Data registration:
+Data registration (separate the selected regime):
 
-    draft -> submitted -> accepted_for_review -> reviewing -> public_notice -> issued -> changed/renewed/transferred -> cancelled/expired
-    submitted/reviewing/public_notice -> returned/rejected
-    public_notice -> objection_pending -> reviewing
+    PublicResourceRegistration: draft -> submitted -> accepted -> formal_review -> public_notice -> query_code_issued
+    PublicResourceRegistration: submitted -> correction_requested -> resubmitted; public_notice -> objection_review -> terminated | query_code_issued
+    PublicResourceRegistration: query_code_issued -> changed | corrected | renewed | cancelled
+    DataPropertyRegistration: draft -> submitted -> accepted_for_review -> reviewing -> notice_or_authorized_exception -> credential_issued
+    DataPropertyRegistration: credential_issued -> transferred | changed | renewed | cancelled
+
+For `KS-DATA-PUBLIC-REGISTER-2025`, use the public-resource procedure and query code; do not add a property-transfer step. Article 5 distinguishes required and encouraged categories; also reconcile the authorized-operation registration duties and applicable local rules. The property sketch follows `KS-DATA-PROPERTY-REGISTER-2026` and remains conditional on full-text verification, including notice exceptions and objection handling. A common UI must preserve the selected regime's distinct states, result type and permitted actions.
 
 Authorization and trusted use:
 
@@ -213,9 +258,15 @@ AI dataset:
     quality_review -> rejected -> processing/labeling
     released/in_use -> contamination_hold -> corrected_new_version
 
-Every state transition must define role/tool permission, data/right/purpose guard, quality/freshness guard, audit event, notification, retry/idempotency, affected consumers, and rollback or correction behavior.
+For each in-scope transition, define authority, preconditions, resulting data/state and failure recovery. Where relevant, add quality/freshness, event/notification, retry/idempotency, affected consumers and correction behavior; explain an important non-applicable facet rather than inventing a notification or impossible rollback.
 
 ## Metric / Indicator Governance
+
+**中文阅读提示**
+
+**数据质量**（缺数、空值、缺失、异常值、时效、quality、freshness）：区分零、缺失、异常、陈旧和无权限；有效性与业务正常是两个判断。
+
+**指标口径**（指标库、指标、指标值列、统计主体列、统计口径、单值、多值、metric、indicator、metric definition、indicator definition）：明确统计主体、粒度、指标值、维度、单位、周期和空零；配置保存后必须由实际查询或判定消费。
 
 AI+Data PRDs must separate data correctness from business meaning. For every trusted metric, specify all layers below.
 
@@ -272,6 +323,10 @@ AI+Data PRDs must separate data correctness from business meaning. For every tru
 
 ## AI Context Sources
 
+**中文阅读提示**
+
+**数据血缘**（依赖分析、影响分析、血缘、lineage、data lineage）：来源、变换、指标和报表之间保留依赖，定义变化后核对实际消费者。
+
 Data agents and ChatBI must be grounded in governed context rather than raw table guessing.
 
 | AI Scenario | Required Context | Guard |
@@ -300,13 +355,14 @@ dataset status. For every released dataset version, specify:
 | splits | train/validation/test/preference/benchmark purpose, isolation key, leakage and contamination checks |
 | quality and fitness | intrinsic quality plus model/scenario benchmark, threshold, failure slices, bias/safety tests and reviewer |
 | release and lineage | immutable version, parent/derived datasets, sample hash, code/rule version, model consumers and retirement |
-| feedback | application/evaluation signal, sampling criteria, human approval, label correction and target next version |
+| feedback | signal, authorized sampling/acceptance policy, human review where required, label correction and target next version |
 | value | public/operational/commercial outcome, baseline, cost, attributable benefit and renewal/exit decision |
 
 SFT, preference optimization, DPO, reward learning and reinforcement-learning
 datasets require separate schemas and quality evidence. Production conversations
-or user feedback never enter training automatically; collection purpose,
-authorization, filtering, approval and versioned lineage must be explicit.
+or user feedback do not enter training merely because they were collected. Establish
+permitted purpose, rights, filtering, acceptance/release authority and versioned lineage;
+approved automated selection is possible within that scope and does not mutate held-out evaluation.
 
 Minimum AI data runtime contract:
 
@@ -327,6 +383,12 @@ data_agent_contract:
 ```
 
 ## Content / Knowledge Assets
+
+**中文阅读提示**
+
+**高质量数据集**（数据标注、训练集、测试集、dataset、annotation）：训练、验证、测试与反馈样本分开，记录来源、授权、标注和评估污染边界。
+
+**数据资产**（数据目录、元数据、数据登记、catalog、metadata、registration）：登记和目录有助定位来源，不自动证明权属、质量或可用范围。
 
 | Asset | Required Metadata |
 |---|---|
@@ -352,6 +414,12 @@ data_agent_contract:
 
 ## Core Workflows
 
+**中文阅读提示**
+
+**智能问数**（自然语言查数、问数、NL2SQL、ChatBI、Data Agent）：问题先对应已确认的指标与维度，展示来源和口径，写入动作另校验权限和确认。
+
+**数据接入**（取数、SQL、数据源、批量扫描、刷新频率、ingestion、connector、batch）：取数计划、增量或全量、失败重试和后续消费分开描述，查询失败不能当作零值。
+
 | Workflow | Minimum Steps |
 |---|---|
 | multi-source onboarding | register source -> classify -> approve credential -> profile schema -> test sync -> publish source asset |
@@ -362,7 +430,7 @@ data_agent_contract:
 | report/fill-in delivery | create template -> mark sys/ext -> set scope/period -> collect fill -> aggregate -> export/audit |
 | ChatBI enablement | prepare semantic model -> add glossary/examples -> evaluate golden questions -> authorize users -> monitor feedback |
 | data agent launch | define tools/write scope -> evaluate -> pilot -> monitor traces -> rollback/iterate |
-| public-data resource registration | inventory object -> prove provider/catalog/update/quality -> submit -> review/correct -> issue -> change/cancel |
+| public-data resource registration | establish required/encouraged applicability -> inventory/evidence -> submit -> acceptance/formal review/correction -> notice/objection -> query code -> change/correction/renewal/cancel |
 | data-property registration | choose type -> prove source/right boundary -> submit -> accept/review -> public notice/objection -> issue -> transfer/change/renew/cancel |
 | authorized operation | justify scenario/value -> approve plan -> select operator -> sign agreement -> register resource/product/service -> controlled delivery -> disclose/supervise/evaluate -> renew/exit |
 | trusted data use | onboard participant -> verify identity/qualification -> negotiate digital contract -> authorize purpose/action -> execute in controlled environment -> meter/audit -> settle/revoke |
@@ -419,6 +487,10 @@ data_agent_contract:
 
 ## Policy / Privacy Constraints
 
+**中文阅读提示**
+
+**数据权限**（行权限、列权限、数据范围、租户、机构隔离、row-level、column-level、RBAC、ABAC）：数据范围在查询、导出、缓存和智能回答中保持一致，不能只在前端隐藏。
+
 - Apply row-level, column-level, action-level, and agent-tool-level permissions before query generation, aggregation, export, or writeback.
 - Do not let agents bypass semantic model, source freshness, lineage, sensitivity labels, or user data scope.
 - Record who changed source schemas, pipelines, metrics, dimensions, ontology actions, permissions, prompts, eval sets, and report scopes.
@@ -427,9 +499,11 @@ data_agent_contract:
 - For ontology/action agents, define human accountability for consequential state changes.
 - For public-sector delivery, specify private deployment, network boundaries, domestic database/OS constraints, and external model/data-exit restrictions when applicable.
 - Keep public-data resource registration, data-property registration, accounting recognition, appraisal/valuation, authorization, transaction and financing as linked but separately accountable decisions.
+- Public-data authorized operation: determine direct application, application by reference and the public-utility procedure option under `KS-DATA-PUBLIC-AUTH-2025`. For the stated implementing/operating roles, `KS-DATA-PUBLIC-DISCLOSURE-2026` requires prior-year disclosure by the end of March through the applicable registration platform. Keep role-specific disclosures distinct; verify its annexes before defining all fields.
+- EU AI scope: read `KS-DATA-EU-AI-ACT-2024` together with `KS-DATA-EU-AI-AMEND-2026`. Article 10 has changed and high-risk application dates depend on Article 6 category; do not apply the original general 2026 date to all data-governance obligations. Resolve jurisdiction, role, classification and transition before deriving a project gate.
 - Do not directly or indirectly release uncontrolled non-public raw public data into the market; deliver approved products/services through the confirmed environment and scope.
 - Bind every participant and use to purpose, product, action, quantity, time, location, onward-transfer, retention, revocation and audit rules; a download permission alone is not a usage contract.
-- Training, validation, testing, preference and application-feedback data require provenance, rights, purpose, isolation and version lineage. Production feedback is opt-in/authorized and human-gated before dataset inclusion.
+- Training, validation, testing, preference and application-feedback data require provenance, rights, purpose, isolation and version lineage. Production feedback requires a valid purpose/right basis and governed inclusion; consent where applicable and human review where required by risk or policy. Authorized automated selection does not waive release controls or held-out isolation.
 - Protect held-out evaluation from training contamination, including retrieval corpora, synthetic derivatives, cached prompts, agent memory and human feedback.
 - Copyright/license, personal information, trade secrets, state/public interest, export/cross-border and sector rules are project-specific P0 questions; a dataset card does not cure an unlawful source.
 - Model performance gain does not by itself prove data-product value. Tie renewal, price or public benefit claims to an agreed baseline, measurement window and attribution boundary.
@@ -500,7 +574,7 @@ Mocked matrices and simulated reviewers cannot satisfy expert review or audit.
 - [ ] Every report/fill workflow declares sys/ext fields, validation, submit/review/return state, deadline, and audit.
 - [ ] Every Data Agent/ChatBI feature has allowed sources/tools, permission inheritance, citations, freshness handling, refusal rules, eval sets, and human gate.
 - [ ] Every insight-to-action flow identifies who is accountable for final business decision and what the agent may not write.
-- [ ] Every registration flow declares object/type, applicant/agent, source/right evidence, review/return/reject, notice/objection, credential validity, change/renewal/transfer/cancellation and audit.
+- [ ] Each in-scope registration flow identifies its legal regime and applicable applicant/object, evidence, review/return/reject, notice/objection or permitted exception, result type/validity, allowed change/correction/renewal/transfer/cancellation and audit; it does not inherit unsupported actions from another regime.
 - [ ] Every authorization operation declares approving/implementing/operating roles, resource-product-service scope, agreement/term, controlled environment, price/settlement, disclosure/supervision, evaluation and exit.
 - [ ] Every trusted use declares participant identity, product/purpose/action, digital contract, usage controls, metering/evidence, revocation and incident/liability path.
 - [ ] Every AI dataset version has intended use, provenance/right basis, population/coverage, processing, labeling, split isolation, quality/benchmark, risks/gaps, lineage, consumers and retirement.

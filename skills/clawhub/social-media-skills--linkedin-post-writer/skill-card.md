@@ -1,43 +1,61 @@
-## Description: <br>
-Writes LinkedIn posts for professional, thought-leadership, founder, or B2B social content, with hooks, formatting, comment prompts, and link handling tuned for LinkedIn mechanics. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+Drafts LinkedIn posts for professional, thought-leadership, founder, and B2B social content, with guidance for hooks, readability, comments, links, hashtags, voice, and anti-engagement-bait safeguards.
 
-## Publisher: <br>
-[social-media-skills](https://clawhub.ai/user/social-media-skills) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[social-media-skills](https://clawhub.ai/user/social-media-skills)
 
-## Use Case: <br>
-Marketing, founder, and professional communications users use this skill to draft single LinkedIn posts that fit a brand voice, earn the see-more expansion, invite meaningful comments, and avoid engagement bait. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: The skill may use local brand, voice, and audience notes when drafting posts, which can expose sensitive business or client details if those files include them. <br>
-Mitigation: Provide only approved context files for drafting, and remove secrets or private client details unless they are intended for use in the post. <br>
-Risk: Generated marketing copy can include claims, results, or anecdotes that need factual and compliance review before publication. <br>
-Mitigation: Review each post for accuracy, required disclosures, confidentiality, and brand or regulatory guardrails before publishing. <br>
+## Use Case:
 
+Marketing teams, founders, operators, and agents use this skill to turn a real idea, story, announcement, or professional point of view into 2-3 LinkedIn-ready post options. It emphasizes brand voice, readable formatting, genuine comment prompts, link handling, and avoidance of fabricated stories or engagement bait.
 
-## Reference(s): <br>
-- [LinkedIn Mechanics](references/linkedin-mechanics.md) <br>
-- [LinkedIn Post Formats](references/post-formats.md) <br>
-- [Avoiding LinkedIn Cringe](references/avoiding-cringe.md) <br>
-- [Examples - LinkedIn posts that work](references/examples.md) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [Text, Markdown, Guidance] <br>
-**Output Format:** [Markdown with two to three post options, a recommendation, and concise posting notes.] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May include first-comment link guidance, hashtag suggestions, and carousel handoff guidance when relevant.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.0 (source: server release metadata and artifact metadata) <br>
+Risk: Generated posts can contain inaccurate claims, regulated statements, or confidential client details if the user provides or requests them.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Review posts before publishing, verify claims and results, preserve required disclaimers, and remove confidential or unapproved information.
+
+Risk: Broad LinkedIn triggers may cause the skill to activate for requests where another social or strategy skill is a better fit.
+
+Mitigation: Confirm the intended channel and task; route growth strategy, company-page strategy, general captions, threads, or carousel slides to the appropriate related skill.
+
+Risk: Requests for fabricated stories, engagement bait, or hard-sell copy can harm credibility and produce misleading content.
+
+Mitigation: Use the skill's built-in guidance to redirect toward real stories, defensible points of view, value-first copy, and genuine discussion questions.
+
+## Reference(s):
+
+- [ClawHub Skill Page](https://clawhub.ai/social-media-skills/skills/linkedin-post-writer)
+- [LinkedIn Mechanics](artifact/references/linkedin-mechanics.md)
+- [LinkedIn Post Formats](artifact/references/post-formats.md)
+- [Avoiding LinkedIn Cringe](artifact/references/avoiding-cringe.md)
+- [Examples - LinkedIn posts that work](artifact/references/examples.md)
+
+## Skill Output:
+
+**Output Type(s):** [Text, Markdown, Guidance]
+
+**Output Format:** [Markdown with LinkedIn post drafts, recommendation notes, and publishing guidance]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Produces 2-3 post options and recommends one; does not post to LinkedIn or access credentials.]
+
+## Skill Version(s):
+
+1.0.0 (source: server release metadata and artifact metadata)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.

@@ -1,44 +1,58 @@
-## Description: <br>
-AI YouTube content creation powered by CellCog. YouTube videos, Shorts, thumbnails, video scripts, tutorials, vlogs, educational videos, product reviews, video essays. From script to finished video with voiceover and music. <br>
+## Description:
 
-This skill is ready for commercial/non-commercial use. <br>
+AI YouTube content creation powered by CellCog. YouTube videos, Shorts, thumbnails, video scripts, tutorials, vlogs, educational videos, product reviews, video essays. From script to finished video with voiceover and music.
 
-## Publisher: <br>
-[nitishgargiitd](https://clawhub.ai/user/nitishgargiitd) <br>
+This skill is ready for commercial/non-commercial use.
 
-### License/Terms of Use: <br>
-MIT-0 <br>
+## Publisher:
 
+[cellcog](https://clawhub.ai/user/cellcog)
 
-## Use Case: <br>
-External creators, marketers, educators, and developers use this skill to ask an agent to create YouTube videos, Shorts, thumbnails, scripts, outlines, tutorials, reviews, and essays through CellCog. <br>
+### License/Terms of Use:
 
-### Deployment Geography for Use: <br>
-Global <br>
+MIT-0
 
-## Known Risks and Mitigations: <br>
-Risk: YouTube content requests are sent to CellCog and require a CELLCOG_API_KEY. <br>
-Mitigation: Use the skill only when your organization permits sending the requested content to CellCog, and avoid including secrets, regulated data, or proprietary material in prompts. <br>
-Risk: AI video generation can consume significant credits and may not produce usable results. <br>
-Mitigation: Start with smaller or lower-risk prompts, monitor credit usage, and review outputs before publication. <br>
-Risk: Generated videos, scripts, thumbnails, and outlines may be inaccurate, misleading, or unsuitable for the intended audience. <br>
-Mitigation: Review and edit generated content for factual accuracy, policy compliance, rights, and brand fit before use. <br>
+## Use Case:
 
+Content creators and marketing teams use this skill to plan scripts and request YouTube Shorts, long-form videos, and thumbnails through CellCog.
 
-## Reference(s): <br>
-- [CellCog homepage](https://cellcog.ai) <br>
-- [ClawHub skill page](https://clawhub.ai/nitishgargiitd/skills/youtube-video-cellcog) <br>
-- [ClawHub publisher profile](https://clawhub.ai/user/nitishgargiitd) <br>
+### Deployment Geography for Use:
 
+Global
 
-## Skill Output: <br>
-**Output Type(s):** [text, markdown, code, shell commands, configuration, guidance] <br>
-**Output Format:** [Markdown guidance with Python code snippets and shell setup commands] <br>
-**Output Parameters:** [1D] <br>
-**Other Properties Related to Output:** [May initiate CellCog agent tasks that generate video, thumbnail, script, outline, or content-planning outputs. Requires CELLCOG_API_KEY and python3.] <br>
+## Known Risks and Mitigations:
 
-## Skill Version(s): <br>
-1.0.13 (source: server release evidence) <br>
+Risk: Prompts and included content are sent to CellCog.
 
-## Ethical Considerations: <br>
-Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment. <br>
+Mitigation: Share only material you are authorized to send.
+
+Risk: Video generation can consume credits without producing a usable result.
+
+Mitigation: Set a generation budget and review results before relying on or publishing them.
+
+Risk: The separately installed CellCog dependency and API key require care.
+
+Mitigation: Review the dependency and its provenance before supplying your API key.
+
+## Reference(s):
+
+- [CellCog](https://cellcog.ai)
+- [YouTube Video on ClawHub](https://clawhub.ai/cellcog/skills/youtube-video-cellcog)
+
+## Skill Output:
+
+**Output Type(s):** [Video, Images, Text, Markdown, Code]
+
+**Output Format:** [Generated video and thumbnail assets, plus scripts, outlines, and code examples]
+
+**Output Parameters:** [1D]
+
+**Other Properties Related to Output:** [Requested content and results vary; generated videos may require iteration and may not meet expectations.]
+
+## Skill Version(s):
+
+1.0.18 (source: server-resolved release evidence)
+
+## Ethical Considerations:
+
+Users should evaluate whether this skill is appropriate for their environment, review any generated or modified files before relying on them, and apply their organization's safety, security, and compliance requirements before deployment.
