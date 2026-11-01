@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-run-deft-cr-its-mining",
+  "identifier": "NVIDIA/skills/skills/tao-run-deft-cr-its-mining",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-run-deft-cr-its-mining",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "e4b51460c4c5763953e4252d6f5373cb1626b767fd6008ec2ca3b870db3e7864",
+  "fetchedAt": "2026-11-01T14:20:07.310Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/creative/sketch",
+  "identifier": "official/creative/sketch",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/creative/sketch",
+  "branch": "main",
+  "pushedAt": "2026-11-01T14:08:41Z",
+  "contentHash": "c7324e3f86c8e16fe09b5cbffde7d039fb779d752bbbca264d0851415cd9bc18",
+  "fetchedAt": "2026-11-01T14:20:03.710Z"
+}

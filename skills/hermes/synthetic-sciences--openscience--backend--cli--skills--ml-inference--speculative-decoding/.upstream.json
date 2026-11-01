@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/ml-inference/speculative-decoding",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/ml-inference/speculative-decoding",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/ml-inference/speculative-decoding",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "abaa81d4389849ccab735951766815207d467cf87d955d11e3f206568238f1e2",
+  "fetchedAt": "2026-11-01T14:20:05.159Z"
+}

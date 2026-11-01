@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/dgx-spark-skills",
+  "identifier": "NVIDIA/skills/skills/dgx-spark-skills",
+  "repo": "NVIDIA/skills",
+  "path": "skills/dgx-spark-skills",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "331b7510907cde214f989393388b02d02da14d54b6b5aee4b20f0a81d37800fa",
+  "fetchedAt": "2026-11-01T14:20:06.850Z"
+}

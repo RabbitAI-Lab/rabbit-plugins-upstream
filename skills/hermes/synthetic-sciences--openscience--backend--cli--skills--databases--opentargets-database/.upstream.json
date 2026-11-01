@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/opentargets-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/opentargets-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/opentargets-database",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "fe191c1484e855f259124e6fc6152ea6ea475aba07ed6e5de2880cbf54472ac7",
+  "fetchedAt": "2026-11-01T14:20:05.109Z"
+}

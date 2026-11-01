@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-validate-recipe-transfer",
+  "identifier": "NVIDIA/skills/skills/tao-validate-recipe-transfer",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-validate-recipe-transfer",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "49dd58969de20f277437295ce5d5f0c50b0e1f40b12be77ce7a58e6408a8d087",
+  "fetchedAt": "2026-11-01T14:20:07.500Z"
+}

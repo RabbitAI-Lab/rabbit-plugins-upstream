@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/tao-setup",
+  "identifier": "NVIDIA/skills/skills/tao-setup",
+  "repo": "NVIDIA/skills",
+  "path": "skills/tao-setup",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "e304e91111167ed1ece1b74f1ec9f28f0ec15391ed2ca50abce0147d4377d44a",
+  "fetchedAt": "2026-11-01T14:20:07.333Z"
+}

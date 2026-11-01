@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/biology/clinical-imaging",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/biology/clinical-imaging",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/biology/clinical-imaging",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "4172995c6658d3c445d3910effc45fc0c0bd5b224233a1c2018f5aa03b07ef88",
+  "fetchedAt": "2026-11-01T14:20:04.983Z"
+}

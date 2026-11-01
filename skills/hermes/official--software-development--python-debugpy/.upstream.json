@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/software-development/python-debugpy",
+  "identifier": "official/software-development/python-debugpy",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/software-development/python-debugpy",
+  "branch": "main",
+  "pushedAt": "2026-11-01T14:08:41Z",
+  "contentHash": "3aa94bf7c187a98d033c6e5bb45514d4e3bd81d336ec9bc3129ad6df123c1a36",
+  "fetchedAt": "2026-11-01T14:20:03.692Z"
+}

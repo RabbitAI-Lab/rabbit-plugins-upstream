@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/pinecone-io/skills/tree/main/skills/pinecone-cli",
+  "identifier": "pinecone-io/skills/skills/pinecone-cli",
+  "repo": "pinecone-io/skills",
+  "path": "skills/pinecone-cli",
+  "branch": "main",
+  "pushedAt": "2026-10-29T18:24:36Z",
+  "contentHash": "0469d62a7903c490fe28f75d41009ed7bb257d1b3b2d9466b1f4d3fd00c4d336",
+  "fetchedAt": "2026-11-01T14:20:00.125Z"
+}

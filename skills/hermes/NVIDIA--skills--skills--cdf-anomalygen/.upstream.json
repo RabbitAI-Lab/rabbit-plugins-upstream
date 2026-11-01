@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-anomalygen",
+  "identifier": "NVIDIA/skills/skills/cdf-anomalygen",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-anomalygen",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "df061bb8bea0eb0fd92bc06cf68f1957185918942293687ad69f22a64d2298e8",
+  "fetchedAt": "2026-11-01T14:20:06.404Z"
+}
