@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/cloud-compute/vast-ai",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/cloud-compute/vast-ai",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/cloud-compute/vast-ai",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "faf2a541bdcad23828b8d84a006581d77d676fa71dbdb8dc261b64850e642e08",
+  "fetchedAt": "2026-11-01T14:20:05.184Z"
+}

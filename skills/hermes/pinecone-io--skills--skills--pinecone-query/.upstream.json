@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/pinecone-io/skills/tree/main/skills/pinecone-query",
+  "identifier": "pinecone-io/skills/skills/pinecone-query",
+  "repo": "pinecone-io/skills",
+  "path": "skills/pinecone-query",
+  "branch": "main",
+  "pushedAt": "2026-10-29T18:24:36Z",
+  "contentHash": "99c3f4f4e2dd23160d098c0072c4dc4377ae134fed1689c65f59c8ed48b2eaa7",
+  "fetchedAt": "2026-11-01T14:20:00.128Z"
+}

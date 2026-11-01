@@ -5,7 +5,7 @@
   "repo": "NVIDIA/skills",
   "path": "skills/tao-train-mask-grounding-dino",
   "branch": "main",
-  "pushedAt": "2026-07-24T21:26:54Z",
-  "contentHash": "12aa253bf73239d051b852c4f55246117c2fdd554c6b43ce7d9bb29be5f976bd",
-  "fetchedAt": "2026-07-26T17:03:52.435Z"
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "f1b4061c0d152ea59385db7ad9ee152003a2815fb5a2768f862b5ba349f2f351",
+  "fetchedAt": "2026-11-01T14:20:07.402Z"
 }

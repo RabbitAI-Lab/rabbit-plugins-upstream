@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/databases/openalex-database",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/databases/openalex-database",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/databases/openalex-database",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "6e798addbfbbf62bd5245371ddac12b904855dc72c59977ce59b2d4e00f8616c",
+  "fetchedAt": "2026-11-01T14:20:05.107Z"
+}

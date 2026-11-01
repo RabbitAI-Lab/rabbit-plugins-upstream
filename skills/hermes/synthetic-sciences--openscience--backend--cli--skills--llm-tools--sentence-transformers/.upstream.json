@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/synthetic-sciences/openscience/tree/main/backend/cli/skills/llm-tools/sentence-transformers",
+  "identifier": "synthetic-sciences/openscience/backend/cli/skills/llm-tools/sentence-transformers",
+  "repo": "synthetic-sciences/openscience",
+  "path": "backend/cli/skills/llm-tools/sentence-transformers",
+  "branch": "main",
+  "pushedAt": "2026-10-30T08:56:11Z",
+  "contentHash": "0a2a97c685a387b777dd1d8d5a9f95b1f3020536c9b85ef5fd4d515a9616733a",
+  "fetchedAt": "2026-11-01T14:20:05.154Z"
+}

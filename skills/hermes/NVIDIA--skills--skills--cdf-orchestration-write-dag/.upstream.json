@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-orchestration-write-dag",
+  "identifier": "NVIDIA/skills/skills/cdf-orchestration-write-dag",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-orchestration-write-dag",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "a30850ee3c09a03a1c7b94c66c10d696c4cf5ea0713280c90264078f9ac46c6a",
+  "fetchedAt": "2026-11-01T14:20:06.418Z"
+}

@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NVIDIA/skills/tree/main/skills/cdf-defect-image-generation",
+  "identifier": "NVIDIA/skills/skills/cdf-defect-image-generation",
+  "repo": "NVIDIA/skills",
+  "path": "skills/cdf-defect-image-generation",
+  "branch": "main",
+  "pushedAt": "2026-10-30T18:10:11Z",
+  "contentHash": "d3e1bfb131b8bb654d3432cc473e8e9c99f85f1ed67b1c15e5555e5d01a45acd",
+  "fetchedAt": "2026-11-01T14:20:06.412Z"
+}

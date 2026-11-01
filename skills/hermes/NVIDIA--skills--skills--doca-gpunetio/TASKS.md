@@ -17,12 +17,44 @@ surface, and the safety policy, see
 patterns layered under everything below (the universal lifecycle,
 the cross-library `DOCA_ERROR_*` taxonomy, the modify-a-shipped-
 sample workflow), see
-[`doca-programming-guide`](../../doca-programming-guide/SKILL.md).
+`doca-programming-guide/SKILL.md`.
 
 Each verb below describes the **shape of the workflow**, not a
 copy-paste recipe. The agent's job is to walk the user through
 the steps in order, verifying preconditions before recommending
 the next call.
+
+## DOCA 3.5 field notes
+
+**GPU memory registration: dmabuf first, `nvidia-peermem` only as a
+fallback** (DOCA 3.5 GPUNetIO installation and setup page). dmabuf is
+the default and preferred method; it needs Linux kernel 6.2 or later,
+`libibverbs` 1.14.44 or later, and the open NVIDIA kernel driver
+(`nvidia-open`; CUDA 12.5 or older must be installed with
+`-m=kernel-open`). Get the descriptor with `doca_gpu_dmabuf_fd()`; on
+success use `doca_mmap_set_dmabuf_memrange()`, otherwise
+`doca_mmap_set_memrange()`. Without dmabuf, `doca_mmap_start()` falls
+back to legacy registration through `nvidia-peermem`
+(`sudo modprobe nvidia-peermem`) and logs `Registration using dmabuf
+is not supported, falling back to legacy registration`, which is
+harmless if peermem is acceptable. A missing `nvidia-peermem` module is
+therefore only a problem when dmabuf is unavailable.
+
+**DOCA 3.5 public API changes** (public GPUNetIO header,
+`doca_gpunetio.h`). Update code that uses the GPUNetIO Verbs API:
+
+- Stop reading QP/CQ fields directly from `struct doca_gpu_verbs_qp`.
+  Use the new `doca_gpu_verbs_get_qp_*` getter family to obtain the
+  underlying QP, send CQ, and receive CQ.
+- Use `doca_gpu_verbs_req_notify_cq()` for CQ notification instead of
+  the previous notification path.
+- Use `doca_gpu_nic_handler_to_string()` when a NIC handler name is
+  needed.
+- Update constant usage to the DOCA 3.5 `DOCA_GPUNETIO_VERBS_*` and
+  `DOCA_GPUNETIO_ETH_*` families from the public header.
+
+See the public GPUNetIO header for the exact declarations and constant
+families.
 
 ## configure
 
@@ -38,15 +70,16 @@ Steps the agent should walk the user through:
    [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy):
    `nvcc --version` returns a CUDA toolkit version listed as
    compatible with the installed DOCA release by the DOCA
-   Compatibility Policy; `lsmod | grep nvidia_peermem` shows the
-   module loaded (or `sudo modprobe nvidia_peermem` to load it);
+   Compatibility Policy; GPU memory registration is available —
+   dmabuf first (see *DOCA 3.5 field notes* below), and only when
+   dmabuf is unavailable `lsmod | grep nvidia_peermem` shows the
+   fallback module loaded (or `sudo modprobe nvidia_peermem`);
    `nvidia-smi -L` enumerates the candidate GPU; the underlying
-   doca-eth queues exist (route via
-   [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
-   to the public DOCA Ethernet guide for the upstream verb). If
+   doca-eth queues exist (route to
+   `doca-eth/SKILL.md` for the upstream verb). If
    ANY of these fails, this is an env / version problem to fix
-   via [`doca-setup TASKS.md ## configure`](../../doca-setup/TASKS.md#configure)
-   + [`doca-version TASKS.md ## configure`](../../doca-version/TASKS.md#configure),
+   via `doca-setup TASKS.md ## configure` (`doca-setup/TASKS.md#configure`)
+   + `doca-version TASKS.md ## configure` (`doca-version/TASKS.md#configure`),
    NOT a code change in the GPUNetIO program.
 2. **Bring up doca-eth FIRST.** GPUNetIO sits on top of doca-eth:
    the user must have a configured `doca_eth_rxq` (and
@@ -75,8 +108,9 @@ Steps the agent should walk the user through:
    The receive payload pool lives in GPU memory: allocate via
    `cudaMalloc` (or the CUDA allocator the user's app already
    uses) on the target device, then register the buffer with
-   DOCA via the `doca_buf_arr_create_*` family BEFORE
-   `doca_ctx_start()`. Per the safety policy in
+   DOCA via the `doca_buf_arr_create_*` family before starting
+   the parent doca-eth context with `doca_ctx_start()`. Per the
+   safety policy in
    [`CAPABILITIES.md ## Safety policy`](CAPABILITIES.md#safety-policy),
    a missing or out-of-order registration surfaces as
    `DOCA_ERROR_BAD_STATE` from the first device-side submit, not
@@ -103,7 +137,7 @@ Steps the agent should walk the user through:
 
 For the canonical DOCA universal lifecycle that underlies steps
 2-5, see
-[`doca-programming-guide TASKS.md ## configure`](../../doca-programming-guide/TASKS.md#configure).
+`doca-programming-guide TASKS.md ## configure` (`doca-programming-guide/TASKS.md#configure`).
 This skill adds the GPUNetIO overlay; do not re-explain the
 lifecycle here.
 
@@ -116,7 +150,7 @@ joint sources of truth for include + link flags.
 
 The build pattern for any DOCA C/C++ consumer is fully documented
 in
-[`doca-programming-guide TASKS.md ## build`](../../doca-programming-guide/TASKS.md#build).
+`doca-programming-guide TASKS.md ## build` (`doca-programming-guide/TASKS.md#build`).
 GPUNetIO adds a CUDA layer on top: the device-side code lives in
 `.cu` files compiled by `nvcc`, and the link line pulls in both
 the DOCA libraries and the CUDA runtime. This skill carries only
@@ -129,7 +163,8 @@ the GPUNetIO-specific overlay:
 | Link flags | `pkg-config --libs doca-gpunetio` plus the CUDA runtime link line (`-lcudart`) | Pulls in whatever `pkg-config --libs` resolves on this install (do not predict the `-l<name>` form by hand — `.so` basenames use underscores, `.pc` names use hyphens, and `pkg-config` is the only correct translator) and the CUDA runtime |
 | Companion DOCA libs | `doca-eth` (mandatory; GPUNetIO is layered on top); `doca-argp` for arg parsing in samples | Adding `doca-eth` to the build is mandatory because every shipped GPUNetIO sample includes the underlying Ethernet queue setup |
 | CUDA compile rule | `.cu` translation units compiled by `nvcc`; host-side C/C++ compiled by the system compiler; linked together | A common partial-build failure is compiling everything with the system C compiler — the `.cu` file silently degrades to host-only code and the device-side primitives never execute |
-| Minimum DOCA version | Query with `pkg-config --modversion doca-gpunetio`; never hardcode | Cross-version build/runtime mixing breaks per [CAPABILITIES.md ## Version compatibility](CAPABILITIES.md#version-compatibility) |
+| Device-code build gate | Every `.cu` translation unit is compiled by `nvcc`, and `cuobjdump` on the resulting artifact confirms device code is present | A successful host link is not sufficient evidence that the persistent kernel was emitted |
+| DOCA version gate | Compare `pkg-config --modversion doca-gpunetio` with `pkg-config --modversion doca-common`; require them to match, never hardcode either | Cross-version build/runtime mixing breaks per [CAPABILITIES.md ## Version compatibility](CAPABILITIES.md#version-compatibility) |
 | Minimum CUDA version | Query with `nvcc --version`; cross-check against the DOCA Compatibility Policy linked from [CAPABILITIES.md ## Version compatibility](CAPABILITIES.md#version-compatibility) | Mismatched CUDA + DOCA combos fail at link time or runtime with `DOCA_ERROR_DRIVER` |
 
 For non-C host-side consumers (Rust, Go, Python) that drive
@@ -146,7 +181,7 @@ the verified starting point and apply a **minimum diff** to make
 it match the user's intent, without rewriting from scratch.
 
 The universal modify-a-shipped-sample workflow is in
-[`doca-programming-guide TASKS.md ## modify`](../../doca-programming-guide/TASKS.md#modify);
+`doca-programming-guide TASKS.md ## modify` (`doca-programming-guide/TASKS.md#modify`);
 this skill provides the GPUNetIO-specific slot fill.
 
 | Slot | What the agent asks the user | GPUNetIO-specific consideration |
@@ -196,14 +231,14 @@ Steps the agent should walk the user through:
    wondering why state transitions are not reported.
 4. **Capture the structured log on first failure.** Set
    `DOCA_LOG_LEVEL=trace` for the first run (see
-   [`doca-debug CAPABILITIES.md ## Observability`](../../doca-debug/CAPABILITIES.md#observability));
+   `doca-debug CAPABILITIES.md ## Observability` (`doca-debug/CAPABILITIES.md#observability`));
    pair it with `nvidia-smi -q -d UTILIZATION` while the kernel
    runs to confirm the GPU is actually busy. A persistent kernel
    that reports 0% util is stuck on a queue drain.
 
 For the runtime version + `LD_LIBRARY_PATH` cross-checks that
 underlie *"the program built but does nothing"*, see
-[`doca-version TASKS.md ## run`](../../doca-version/TASKS.md#run).
+`doca-version TASKS.md ## run` (`doca-version/TASKS.md#run`).
 
 ## test
 
@@ -213,12 +248,9 @@ and that the env-precondition + capability set was sized right.
 
 This is **a loop, not a one-shot pass.** Each iteration narrows
 either the env-precondition set, the capability set, the
-persistent-kernel design, or the buffer sizing. The loop
-terminates when either (a) the persistent kernel processes
-packets at the user's intended rate with the expected accuracy,
-or (b) the agent has narrowed the failure cause to a layer
-outside GPUNetIO itself (CUDA driver / doca-eth queue / NIC
-firmware / network) and escalated to the matching skill.
+persistent-kernel design, or the buffer sizing. Termination and
+the iteration-identity tuple are defined once under *Loop
+termination* below.
 
 Iteration shape:
 
@@ -260,15 +292,22 @@ Eval-loop overlay — why this is a loop, not a one-shot pass:
 | Iteration trigger | What it looks like | What changes next iteration |
 | --- | --- | --- |
 | `DOCA_ERROR_NOT_SUPPORTED` on a GPU we expected to work | DOCA cap-query succeeded but the device fails | The CUDA-side axis was missed; re-run `cudaGetDeviceProperties` against the device ordinal and check `nvidia_peermem` is loaded |
-| `DOCA_ERROR_DRIVER` on `doca_gpu_create` | DOCA + CUDA versions are skewed | Re-run the version chain per [`doca-version TASKS.md ## test`](../../doca-version/TASKS.md#test); cross-check against the DOCA Compatibility Policy |
+| `DOCA_ERROR_DRIVER` on `doca_gpu_create` | DOCA + CUDA versions are skewed | Re-run the version chain per `doca-version TASKS.md ## test` (`doca-version/TASKS.md#test`); cross-check against the DOCA Compatibility Policy |
 | Single-packet smoke passed; burst loop hangs | The persistent kernel is not draining the queue fast enough OR the buffer pool is too small | Raise the buffer pool size in [`## modify`](#modify) slot 5; or restructure the persistent kernel to drain in larger batches |
 | Persistent kernel runs but reports 0% GPU util | The kernel is stuck on a queue drain or the doca-eth queue is not receiving | Confirm the peer is generating traffic per [`## run`](#run) step 1; then re-run the dual capability discovery |
 | `doca_ctx_stop` blocks on teardown | The persistent kernel is still running because the termination signal was never set | Walk the host-side flag write that the kernel polls per [`## modify`](#modify) slot 6 |
 
-Loop termination: stop iterating once two consecutive iterations
-of the same kind don't change anything — that means the cause is
-below GPUNetIO (CUDA driver, NIC firmware, network). Escalate to
-[`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug)
+Loop termination: the loop ends when either (a) the persistent
+kernel processes packets at the user's intended rate with the
+expected accuracy — success — or (b) two consecutive iterations
+produce the same iteration-identity tuple (trigger-table row,
+`doca-gpunetio` / `doca-common` / CUDA version results, DOCA and
+CUDA capability results, parent doca-eth queue identity and counter
+outcome, persistent-kernel state, and packet / drain outcome).
+Matching evidence across both iterations requires escalation, never
+success; the cause is below GPUNetIO (CUDA driver, NIC firmware,
+network). Escalate to
+`doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`)
 with the captured layer-1-through-5 evidence including BOTH the
 DOCA log and the `nvidia-smi` output.
 
@@ -279,7 +318,7 @@ returns a `DOCA_ERROR_*` or does not make forward progress,
 narrow the cause to a specific layer and act on it.
 
 The cross-library debug ladder lives in
-[`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug).
+`doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`).
 Walk through it in order — install → version → build → link →
 runtime → program → driver — *before* recommending
 GPUNetIO-specific fixes. This skill's overlay names the
@@ -331,32 +370,33 @@ GPUNetIO-specific manifestation at layers 5 (runtime), 6
 - `nvidia_peermem` not loaded silently degrades GPUDirect RDMA
   and surfaces as `DOCA_ERROR_NOT_SUPPORTED` at create time.
   Route to
-  [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug)
+  `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`)
   layer 5 (driver) for the kernel-module fix.
 
 Once the layer is identified, route to the matching debug verb
 on the matching skill: install / build / link / driver to
-[`doca-setup ## debug`](../../doca-setup/TASKS.md#debug); version
-to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug);
+`doca-setup ## debug` (`doca-setup/TASKS.md#debug`); version
+to `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`);
 cross-cutting runtime to
-[`doca-debug ## debug`](../../doca-debug/TASKS.md#debug);
+`doca-debug ## debug` (`doca-debug/TASKS.md#debug`);
 program-layer Core-context patterns to
-[`doca-programming-guide TASKS.md ## debug`](../../doca-programming-guide/TASKS.md#debug).
+`doca-programming-guide TASKS.md ## debug` (`doca-programming-guide/TASKS.md#debug`).
 
 **5-phase universal debug-loop instantiation (GPUNetIO).** Layer
 identification above is phase 1 of the
-[universal debug-loop contract](../../doca-debug/CAPABILITIES.md#universal-debug-loop-contract).
+universal debug-loop contract (`doca-debug/CAPABILITIES.md#universal-debug-loop-contract`).
 The agent MUST walk the remaining four phases on every GPUNetIO
 debug answer before declaring done:
 
 1. **Layer identification** — above (RX / lifecycle / driver).
-2. **Triple capture (READ-ONLY).** Capture (a) `doca_eth_rxq`
-   parent state via `doca_caps --list-devs` and
-   `ethtool -S <netdev>` (rx queue counters), (b) DOCA log lines
-   at `DOCA_LOG_LEVEL=DEBUG` for the offending submit / drain,
-   (c) GPU-side state via `nvidia-smi -q` + `cuda-memcheck`
-   (or `compute-sanitizer`) on the persistent kernel. Capture
-   ALL THREE before mutating; the triple is the rollback target.
+2. **Triple capture (READ-ONLY).** Capture (a) the saved
+   configure-time `doca_devinfo`, parent `doca_eth_rxq` identity,
+   `doca_eth_rxq_cap_is_type_supported(...)` result, and
+   `ethtool -S <netdev>` RX counters, (b) DOCA log lines at
+   `DOCA_LOG_LEVEL=DEBUG` for the offending submit / drain, and
+   (c) GPU-side state via `nvidia-smi -q` + `cuda-memcheck` (or
+   `compute-sanitizer`) on the persistent kernel. Capture ALL
+   THREE before mutating; the triple is the rollback target.
 3. **Single-variable mutation SMALLER than the original
    change.** Examples: drop the kernel's per-iteration drain
    width by half (not refactor to per-packet); register one
@@ -372,7 +412,7 @@ debug answer before declaring done:
    GPU buffer holds the bytes; no `compute-sanitizer` errors;
    stop-flag termination clean. If two consecutive iterations
    don't change anything, the cause is below GPUNetIO — escalate
-   to [`doca-debug TASKS.md ## debug`](../../doca-debug/TASKS.md#debug)
+   to `doca-debug TASKS.md ## debug` (`doca-debug/TASKS.md#debug`)
    with the captured triple.
 
 ## rollback
@@ -381,7 +421,7 @@ GPUNetIO contexts are stateful (persistent kernel + GPU buffer
 registration + doca-eth queue) and the agent's failure mode is
 to leave half-registered GPU buffers behind after a botched
 configure → start sequence. The
-[universal verification contract](../../doca-setup/CAPABILITIES.md#universal-verification-contract)
+universal verification contract (`doca-setup/CAPABILITIES.md#universal-verification-contract`)
 step 1 (preconditions) requires *"the rollback path is
 documented"* on every change-recommending answer; this is the
 GPUNetIO instantiation.
@@ -389,19 +429,27 @@ GPUNetIO instantiation.
 **Snapshot before mutate.** Before any change-recommending
 GPUNetIO answer, capture the GPU-side allocation map (`nvidia-smi
 -q -d MEMORY` + `cudaGetDeviceProperties`), the doca-eth queue
-attachment map (`doca_caps --list-devs` + the eth RXQ identity),
+attachment map (the saved configure-time `doca_devinfo`, eth RXQ
+identity, and `doca_eth_rxq_cap_is_type_supported(...)` result),
 and the persistent-kernel stop-flag location. The triple IS the
 rollback target.
 
 1. **Signal the persistent kernel to drain and stop FIRST.**
    Flip the host-side termination flag from
    [`## modify`](#modify) slot 6 *before* any context destroy.
-   `cudaDeviceSynchronize()` until the kernel returns; if it
-   does not return within the expected drain window, the kernel
+   Before flipping it, record a fixed drain deadline. Poll
+   `cudaStreamQuery` on the kernel's stream until it reports
+   completion or that predeclared deadline expires; do not call
+   `cudaDeviceSynchronize` for this drain. If the deadline expires, the kernel
    is hung — that is the
-   [deploy-loop bridge](../../doca-setup/CAPABILITIES.md#deploy-loop-bridge--step-5-not-green-is-the-debug-loop-trigger)
+   deploy-loop bridge (`doca-setup/CAPABILITIES.md#deploy-loop-bridge--step-5-not-green-is-the-debug-loop-trigger`)
    trigger, not a rollback trigger; fire the debug-loop on the
-   hung-kernel symptom before continuing the rollback.
+   hung-kernel symptom. Fail closed: do not continue to steps
+   2-4 or call `doca_buf_arr_destroy`, `doca_ctx_stop`,
+   `doca_gpu_destroy`, or `cudaFree` while kernel completion is
+   unconfirmed. Preserve the rollback snapshot and escalate with
+   the captured debug triple. Resume rollback only after
+   `cudaStreamQuery` reports completion.
 2. **Unregister GPU buffers in reverse-register order.**
    `doca_buf_arr_destroy` on every array created with
    `doca_buf_arr_create_*`. Buffers MUST be unregistered before
@@ -417,17 +465,18 @@ rollback target.
    `CUDA_ERROR_LAUNCH_FAILED` on the next program run with the
    same NUMA-pinned GPU.
 5. **Re-verify the doca-eth parent is intact.** Re-run the
-   eth RXQ smoke from [`doca-eth TASKS.md ## test`](../doca-eth/TASKS.md#test)
+   eth RXQ smoke from `doca-eth TASKS.md ## test` (`doca-eth/TASKS.md#test`)
    to confirm the parent queue still receives packets at the
    pre-GPUNetIO rate. If not, the GPUNetIO rollback corrupted
    the parent — that is a bug to surface, not a retry trigger.
-6. **Document the rollback verb in the verification contract
-   preconditions block.** The step 1 line for a GPUNetIO add
-   reads: *"the rollback path is the five-step reversal in
-   [`## rollback`](#rollback); the agent has captured the GPU
-   allocation map and persistent-kernel stop-flag location."*
-   Without that line, the contract is incomplete and the agent
-   is NOT eligible to declare done.
+
+**Verification-contract requirement.** Document the rollback verb
+in the verification contract preconditions block. The step 1 line
+for a GPUNetIO add reads: *"the rollback path is the five-step
+reversal in [`## rollback`](#rollback); the agent has captured the
+GPU allocation map and persistent-kernel stop-flag location."*
+Without that line, the contract is incomplete and the agent is
+NOT eligible to declare done.
 
 The rollback is bounded — on the second non-green re-verify at
 step 5, the agent MUST surface the unresolved residual gap
@@ -442,32 +491,28 @@ so the agent does not invent guidance:
 - **install.** Installing DOCA, installing the CUDA toolkit,
   choosing matched versions, post-install verification,
   `pkg-config` wiring, loading `nvidia_peermem` — defer to
-  [`doca-setup`](../../doca-setup/SKILL.md) and to the
+  `doca-setup/SKILL.md` and to the
   install-tree layout in
-  [`doca-public-knowledge-map ## Layout of an installed DOCA package`](../../doca-public-knowledge-map/SKILL.md#layout-of-an-installed-doca-package).
+  `doca-public-knowledge-map ## Layout of an installed DOCA package` (`doca-public-knowledge-map/SKILL.md#layout-of-an-installed-doca-package`).
   This skill assumes DOCA + CUDA are already installed and
   matched.
 - **deploy.** Deploying GPUNetIO-using applications at scale
   (multi-GPU multi-NIC clusters, Kubernetes operator workflows
   for GPU + DPU workloads, multi-tenant GPU sharing for
-  GPU-initiated networking) — out of scope for Phase 1 and
-  reserved for a future platform skill. For single-host
+  GPU-initiated networking) — out of scope for this skill. For single-host
   first-run testing, the right verb in this skill is `## run`;
   do not invent a "deploy" workflow.
 - **CUDA kernel design and tuning.** Block / thread sizing,
   warp-level optimization, shared memory layout inside the
   persistent kernel — out of scope. Route to the upstream CUDA
   toolkit documentation via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md);
+  `doca-public-knowledge-map/SKILL.md`;
   this skill prescribes that the user *uses* the persistent-kernel
   pattern, not how to tune it.
 - **DOCA Ethernet queue setup.** Bringing up the underlying
   `doca_eth_rxq` / `doca_eth_txq`, RSS configuration,
   representor selection — GPUNetIO depends on it but does not
-  redefine it. Route via
-  [`doca-public-knowledge-map`](../../doca-public-knowledge-map/SKILL.md)
-  to the public DOCA Ethernet guide; no library skill yet ships
-  for it in this bundle.
+   redefine it. Route to `doca-eth/SKILL.md`.
 
 ## Command appendix
 
@@ -479,7 +524,7 @@ unprivileged user unless noted. Rows that need elevated privileges call that out
 
 **Infra-aware preamble (every row below).** Per the bundle's
 detect → prefer → fall back → report contract documented in
-[`doca-structured-tools-contract ## The agent behavior contract`](../../doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract),
+`doca-structured-tools-contract ## The agent behavior contract` (`doca-structured-tools-contract/SKILL.md#the-agent-behavior-contract`),
 the agent should:
 
 1. Probe for the matching structured helper FIRST (`doca-env --json`
@@ -493,26 +538,26 @@ the agent should:
 3. If the probe fails, fall back to the manual command in the
    row. Report *"falling back to manual chain"*.
 4. The schemas the structured tools emit are defined in
-   [`doca-structured-tools-contract ## Schemas`](../../doca-structured-tools-contract/SKILL.md#schemas);
+   `doca-structured-tools-contract ## Schemas` (`doca-structured-tools-contract/SKILL.md#schemas`);
    the version-handling semantics (four-way match, NGC,
    headers-win) are owned by
-   [`doca-version`](../../doca-version/SKILL.md).
+   `doca-version/SKILL.md`.
 
 | Command (worked example) | Owning step | Class of question it answers | What healthy output looks like |
 | --- | --- | --- | --- |
-| `pkg-config --modversion doca-gpunetio` | `## configure` step 1; `## build` minimum-version slot | What is the build-time DOCA GPUNetIO version? | A semver string matching `doca_caps --version`. Disagreement = partial install (route to [`doca-version TASKS.md ## debug`](../../doca-version/TASKS.md#debug) layer 2) |
-| `pkg-config --cflags --libs doca-gpunetio` | `## build` | What include + link flags does the linker need? | Trust whatever `pkg-config --cflags --libs` produces on this install. Do not hardcode either the `-I` include path or the `-l<name>` flag form — both can drift between DOCA install profiles and DOCA majors; the on-disk `.so` basenames use underscores on every release where we have ground truth, while the `.pc` package names use hyphens, and `pkg-config` is the only thing that resolves both correctly. Hand-crafted `-l` lines silently break when DOCA upgrades. |
+| `pkg-config --modversion doca-gpunetio` + `pkg-config --modversion doca-common` | `## configure` step 1; `## build` DOCA-version gate | Do the GPUNetIO and common package surfaces come from the same DOCA install? | Two matching semver strings. Disagreement = partial install (route to `doca-version TASKS.md ## debug` (`doca-version/TASKS.md#debug`) layer 2); then compare the matched DOCA version with `nvcc --version` per the compatibility policy |
+| `pkg-config --cflags --libs doca-gpunetio` | `## build` | What include + link flags does the linker need? | Trust whatever `pkg-config --cflags --libs` produces on this install. Do not hardcode either the `-I` include path or the `-l<name>` flag form — both can drift between DOCA install profiles and DOCA majors; the on-disk `.so` basenames use underscores, while the `.pc` package names use hyphens, and `pkg-config` is the only thing that resolves both correctly. Hand-crafted `-l` lines silently break when DOCA upgrades. |
 | `nvcc --version` | `## configure` step 1; `## build` minimum-CUDA slot | What is the installed CUDA toolkit version? | A release string the agent compares against the DOCA Compatibility Policy linked from [`CAPABILITIES.md ## Version compatibility`](CAPABILITIES.md#version-compatibility) |
-| `nvidia-smi -L` | `## configure` step 1; `## test` step 4 | Which CUDA devices are enumerable on this host? | One row per GPU with device ordinal, name, and UUID. Empty = NVIDIA driver not loaded; route to [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug) |
+| `nvidia-smi -L` | `## configure` step 1; `## test` step 4 | Which CUDA devices are enumerable on this host? | One row per GPU with device ordinal, name, and UUID. Empty = NVIDIA driver not loaded; route to `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`) |
 | `lsmod \| grep nvidia_peermem` | `## configure` step 1; `## debug` layer 7 | Is the `nvidia_peermem` module loaded for GPUDirect RDMA? | One line showing the module loaded. Empty = `sudo modprobe nvidia_peermem` (env-side fix, not a code change) |
 | `ls /opt/mellanox/doca/samples/doca_gpunetio/` | `## modify` slot 1 | Which GPUNetIO samples ship in this install, and which is the closest starting point? | A list of sample directories named after the RX / TX / persistent-kernel pattern they demonstrate |
 | `nvidia-smi -q -d UTILIZATION` | `## run` step 4; `## debug` layer 5 | Is the persistent kernel actually busy on the GPU? | Non-zero GPU util while the kernel runs. 0% = stuck on a queue drain or the doca-eth queue is not receiving |
-| `dmesg \| tail -n 40` (sudo) | `## debug` layer 7 | What did the kernel / driver log around the last GPUNetIO call? | Empty or recent benign messages. Repeated mlx5 / nvidia errors → driver-layer bug; route to [`doca-setup ## debug`](../../doca-setup/TASKS.md#debug) |
+| `dmesg \| tail -n 40` (sudo) | `## debug` layer 7 | What did the kernel / driver log around the last GPUNetIO call? | Empty or recent benign messages. Repeated mlx5 / nvidia errors → driver-layer bug; route to `doca-setup ## debug` (`doca-setup/TASKS.md#debug`) |
 | `DOCA_LOG_LEVEL=trace ./<binary>` | `## run` step 4 | What did the structured DOCA logger emit for the first failing call? | A trace-level line on every lifecycle transition. Silence after the persistent kernel launches = host-side PE not progressed |
-| `cat /usr/local/cuda/version.txt` | `## configure` step 1; `## debug` layer 2 | What does the CUDA install tree itself claim its version is? | A version string matching `nvcc --version`. Disagreement = partial CUDA install; route to [`doca-setup TASKS.md ## debug`](../../doca-setup/TASKS.md#debug) |
+| `cat /usr/local/cuda/version.txt` | `## configure` step 1; `## debug` layer 2 | What does the CUDA install tree itself claim its version is? | A version string matching `nvcc --version`. Disagreement = partial CUDA install; route to `doca-setup TASKS.md ## debug` (`doca-setup/TASKS.md#debug`) |
 
 For commands shared across libraries (`pkg-config --modversion`,
 `doca_caps`, `cat /opt/mellanox/doca/applications/VERSION`,
 `DOCA_LOG_LEVEL`) the cross-library overlay is in
-[`doca-debug TASKS.md ## Command appendix`](../../doca-debug/TASKS.md#command-appendix);
+`doca-debug TASKS.md ## Command appendix` (`doca-debug/TASKS.md#command-appendix`);
 this table adds the GPUNetIO-specific rows on top.

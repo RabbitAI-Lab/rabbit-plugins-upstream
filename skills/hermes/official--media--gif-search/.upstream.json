@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/NousResearch/hermes-agent/tree/main/optional-skills/media/gif-search",
+  "identifier": "official/media/gif-search",
+  "repo": "NousResearch/hermes-agent",
+  "path": "optional-skills/media/gif-search",
+  "branch": "main",
+  "pushedAt": "2026-11-01T14:08:41Z",
+  "contentHash": "770eb818f6a1d27a5bb6c2b6adf2d211890e24e88a35d78179849edc34b99230",
+  "fetchedAt": "2026-11-01T14:20:03.644Z"
+}

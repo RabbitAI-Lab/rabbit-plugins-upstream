@@ -1,0 +1,11 @@
+{
+  "source": "hermes",
+  "url": "https://github.com/garrytan/gstack/tree/main/eval-plan",
+  "identifier": "garrytan/gstack/eval-plan",
+  "repo": "garrytan/gstack",
+  "path": "eval-plan",
+  "branch": "main",
+  "pushedAt": "2026-11-01T14:18:58Z",
+  "contentHash": "ff8eaba93e4dfb73957fc769a9b47a02abfd5e017c3408cf97de0a21171872cf",
+  "fetchedAt": "2026-11-01T14:20:08.399Z"
+}
